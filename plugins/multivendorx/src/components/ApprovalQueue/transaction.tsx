@@ -169,7 +169,6 @@ const Transactions: React.FC = () => {
         
     ];
 
-
     return (
         <>
             <div className="admin-table-wrapper">

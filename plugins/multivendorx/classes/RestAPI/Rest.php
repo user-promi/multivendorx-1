@@ -41,6 +41,7 @@ class Rest {
         add_filter('woocommerce_rest_shop_coupon_object_query', array($this, 'filter_coupons_by_meta_exists'), 10, 2);
         add_filter('woocommerce_analytics_products_query_args', array($this, 'filter_low_stock_by_meta_exists'), 10, 1);
         add_filter('woocommerce_rest_prepare_shop_order_object', array($this, 'filter_orders_by_meta_exists'), 10, 3);
+        add_filter('woocommerce_rest_prepare_shop_coupon_object', array($this, 'filter_coupons_by_meta_exists_response'), 10, 3);
     }
 
     /**
@@ -281,7 +282,25 @@ class Rest {
         
         return $response;
     }
-    
+
+    public function filter_coupons_by_meta_exists_response( $response, $object, $request ) {
+        $store_id = $object->get_meta('multivendorx_store_id');
+        if ($store_id) {
+            // Get store information
+            $store      = new Store( $store_id );
+            $store_name = $store->get('name');
+            $store_slug = $store->get('slug');
+            
+            // Add store data to API response
+            $response->data['store_name'] = $store_name ?: '';
+            $response->data['store_slug'] = $store_slug ?: '';
+            $response->data['store_id'] = $store_id;
+
+        }
+
+        return $response;
+    }
+
     /**
      * Initialize all REST API controller classes.
      */

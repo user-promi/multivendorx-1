@@ -102,6 +102,7 @@ const CustomerServices = () => {
             id: "support-ticket",
             label: "Support Ticket",
             icon: "adminlib-vacation",
+            module:'customer-support',
             des: "Flagged for abuse review",
             count: abuseCount,
             content: <div className="row"><div className="column"><h1>Upcoming Feature</h1></div></div>,

@@ -74,21 +74,21 @@ const AdminDashboard = () => {
   const installOrActivatePlugin = async (slug: string) => {
     if (!slug || installing) return; // prevent multiple clicks
     setInstalling(slug);
-  
+
     try {
       // Step 1: Get current plugins
       const { data: plugins } = await axios.get(`${appLocalizer.apiUrl}/wp/v2/plugins`, {
         headers: { 'X-WP-Nonce': appLocalizer.nonce },
       });
-  
+
       // Step 2: Find if plugin exists
       const existingPlugin = plugins.find((plugin: any) => plugin.plugin.includes(slug));
       const pluginFilePath = existingPlugin?.plugin || `${slug}/${slug}.php`;
-  
+
       // Step 3: Determine action
       let apiUrl = `${appLocalizer.apiUrl}/wp/v2/plugins`;
       let requestData: any = { status: 'active' }; // default request for activation
-  
+
       if (!existingPlugin) {
         // Plugin not installed → install & activate
         requestData.slug = slug;
@@ -101,15 +101,15 @@ const AdminDashboard = () => {
         const encodedFile = encodeURIComponent(pluginFilePath);
         apiUrl += `/${encodedFile}`;
       }
-  
+
       // Step 4: Call API
       await axios.post(apiUrl, requestData, {
         headers: { 'X-WP-Nonce': appLocalizer.nonce },
       });
-  
+
       // Step 5: Refresh status
       await checkPluginStatus(slug);
-  
+
       setSuccessMsg(`Plugin "${slug}" ${existingPlugin ? 'activated' : 'installed & activated'} successfully!`);
     } catch (error) {
       console.error(error);
@@ -119,7 +119,7 @@ const AdminDashboard = () => {
       setInstalling('');
     }
   };
-  
+
 
   const handleOnChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -318,6 +318,18 @@ const AdminDashboard = () => {
   ];
 
   const [activeTab, setActiveTab] = useState("dashboard");
+  const isPro = !!appLocalizer.khali_dabba;
+  const renderUpgradeButton = (label = "Upgrade Now") => {
+    if (isPro) return null; // Already Pro → hide button completely
+    return (
+      <a href={appLocalizer.shop_url} target="_blank" className="admin-btn btn-purple">
+        <i className="adminlib-pro-tag"></i>
+        {label}
+        <i className="adminlib-arrow-right icon-pro-btn"></i>
+      </a>
+    );
+  };
+
   let tabs = [
     {
       id: "dashboard",
@@ -335,11 +347,14 @@ const AdminDashboard = () => {
 
                     <div className="button-wrapper">
 
-                      <a href='https://multivendorx.com/pricing/' target="blank" className="admin-btn btn-purple">
+                      {/* <a href='https://multivendorx.com/pricing/' target="blank" className="admin-btn btn-purple">
                         <i className="adminlib-pro-tag"></i>
                         Upgrade Now
                         <i className="adminlib-arrow-right icon-pro-btn"></i>
-                      </a>
+                      </a> */}
+
+                      {renderUpgradeButton("Upgrade Now")}
+
                       <div
                         className="admin-btn"
                         onClick={() => (window.location.href = '?page=multivendorx#&tab=setup')}
@@ -359,48 +374,54 @@ const AdminDashboard = () => {
 
             </div>
 
-            <div className="row">
-              <div className="column">
-                <div className="card-header">
-                  <div className="left">
-                    <div className="title">
-                      Build a professional marketplace
-                      <span className="admin-badge blue">
-                        Starting at $299/year
-                      </span>
-                    </div>
-                    <div className="des">
-                      Unlock advanced features and premium modules to create a marketplace that stands out.
-                    </div>
-                  </div>
-                </div>
-                <div className="features-wrapper">
-                  {featuresList.map((res, index) => (
-                    <div className="feature" key={index}>
-                      <i className={res.iconClass}></i>
-                      <div className="content">
-                        <h3>{res.title}</h3>
-                        <p>{res.desc}</p>
+            {!appLocalizer.khali_dabba &&
+              (
+                <div className="row">
+                  <div className="column">
+                    <div className="card-header">
+                      <div className="left">
+                        <div className="title">
+                          Build a professional marketplace
+                          <span className="admin-badge blue">
+                            Starting at $299/year
+                          </span>
+                        </div>
+                        <div className="des">
+                          Unlock advanced features and premium modules to create a marketplace that stands out.
+                        </div>
                       </div>
                     </div>
-                  ))}
-                </div>
+                    <div className="features-wrapper">
+                      {featuresList.map((res, index) => (
+                        <div className="feature" key={index}>
+                          <i className={res.iconClass}></i>
+                          <div className="content">
+                            <h3>{res.title}</h3>
+                            <p>{res.desc}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
 
-                <div className="pro-banner">
-                  <div className="text">
-                    Join 8,000+ successful marketplace owners
-                  </div>
-                  <div className="des">Create, manage, and grow your marketplace with confidence. Trusted by thousands of entrepreneurs worldwide.</div>
-                  <a href='https://multivendorx.com/pricing/' target="blank" className="admin-btn btn-purple">
+                    <div className="pro-banner">
+                      <div className="text">
+                        Join 8,000+ successful marketplace owners
+                      </div>
+                      <div className="des">Create, manage, and grow your marketplace with confidence. Trusted by thousands of entrepreneurs worldwide.</div>
+                      {/* <a href='https://multivendorx.com/pricing/' target="blank" className="admin-btn btn-purple">
                     <i className="adminlib-pro-tag"></i>
                     Upgrade now
                     <i className="adminlib-arrow-right icon-pro-btn"></i>
-                  </a>
-                  <div className="des">15-day money-back guarantee</div>
-                </div>
-              </div>
-            </div>
+                  </a> */}
 
+                      {renderUpgradeButton("Upgrade Now")}
+
+                      <div className="des">15-day money-back guarantee</div>
+                    </div>
+                  </div>
+                </div>
+              )
+            }
             <div className="row">
               <div className="column">
                 <div className="card-header">
@@ -725,11 +746,13 @@ const AdminDashboard = () => {
               ))}
             </div>
             <div className="right">
-              <a href='https://multivendorx.com/pricing/' target="black" className="admin-btn btn-purple">
+              {/* <a href='https://multivendorx.com/pricing/' target="black" className="admin-btn btn-purple">
                 <i className="adminlib-pro-tag"></i>
                 Upgrade Now
                 <i className="adminlib-arrow-right icon-pro-btn"></i>
-              </a>
+              </a> */}
+              {renderUpgradeButton("Upgrade Now")}
+
             </div>
           </div>
         </div>

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { CalendarInput, Table, TableCell, CommonPopup, TextArea } from 'zyra';
+import { CalendarInput, Table, TableCell, CommonPopup, TextArea, getApiLink } from 'zyra';
 import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
 import DefaultStore from "../../../assets/images/default-store.jpg";
 
@@ -25,6 +25,8 @@ type FilterData = {
     typeCount?: any;
     store?: string;
     date?: { start_date?: Date; end_date?: Date };
+    orderBy?:string;
+    order?:string;
 };
 
 export interface RealtimeFilter {
@@ -44,12 +46,65 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
     const [rejectReason, setRejectReason] = useState('');
     const [rejectProductId, setRejectProductId] = useState<number | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false); // prevent multiple clicks
+    const [store, setStore] = useState<any[] | null>(null);
+
+    useEffect(() => {
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'store'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        })
+            .then((response) => {
+                setStore(response.data.stores);
+            })
+            .catch(() => {
+                setStore([]);
+            });
+    }, []);
 
     const formatDateToISO8601 = (date: Date) => date.toISOString().slice(0, 19);
 
+    // const requestData = (
+    //     rowsPerPage = 10,
+    //     currentPage = 1,
+    //     store = '',
+    //     startDate?: Date,
+    //     endDate?: Date
+    // ) => {
+    //     const now = new Date();
+    //     const formattedStartDate = formatDateToISO8601(startDate || new Date(now.getFullYear(), now.getMonth() - 1, now.getDate()));
+    //     const formattedEndDate = formatDateToISO8601(endDate || now);
+
+    //     setData(null);
+
+    //     axios
+    //         .get(`${appLocalizer.apiUrl}/wc/v3/products`, {
+    //             headers: { 'X-WP-Nonce': appLocalizer.nonce },
+    //             params: {
+    //                 page: currentPage,
+    //                 per_page: rowsPerPage,
+    //                 meta_key: 'multivendorx_store_id',
+    //                 status: 'pending',
+    //                 after: formattedStartDate,
+    //                 before: formattedEndDate,
+    //                 // Ensure all fields are included
+    //                 _fields: 'id,name,sku,price,price_html,status,images,categories,meta_data,store_name,store_slug'
+    //             },
+    //         })
+    //         .then((response) => {
+    //             const totalCount = parseInt(response.headers['x-wp-total'], 10) || 0;
+    //             setTotalRows(totalCount);
+    //             setPageCount(Math.ceil(totalCount / pagination.pageSize));
+    //             setData(response.data || []);
+    //         })
+    //         .catch(() => setData([]));
+    // };
     const requestData = (
         rowsPerPage = 10,
         currentPage = 1,
+        store = '',
+        orderBy='',
+        order='',
         startDate?: Date,
         endDate?: Date
     ) => {
@@ -59,19 +114,30 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 
         setData(null);
 
+        const params: any = {
+            page: currentPage,
+            per_page: rowsPerPage,
+            meta_key: 'multivendorx_store_id',
+            status: 'pending',
+            after: formattedStartDate,
+            before: formattedEndDate,
+            _fields: 'id,name,sku,price,price_html,status,images,categories,meta_data,store_name,store_slug,date_created'
+        };
+
+        //Add `store` only if not empty
+        if (store) {
+            params.value = store;
+        }
+        if (orderBy) {
+            params.orderby = orderBy; // e.g. 'date', 'title', 'price'
+        }
+        if (order) {
+            params.order = order; // 'asc' or 'desc'
+        }
         axios
             .get(`${appLocalizer.apiUrl}/wc/v3/products`, {
                 headers: { 'X-WP-Nonce': appLocalizer.nonce },
-                params: {
-                    page: currentPage,
-                    per_page: rowsPerPage,
-                    meta_key: 'multivendorx_store_id',
-                    status: 'pending',
-                    after: formattedStartDate,
-                    before: formattedEndDate,
-                    // Ensure all fields are included
-                    _fields: 'id,name,sku,price,price_html,status,images,categories,meta_data,store_name,store_slug'
-                },
+                params,
             })
             .then((response) => {
                 const totalCount = parseInt(response.headers['x-wp-total'], 10) || 0;
@@ -81,6 +147,7 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
             })
             .catch(() => setData([]));
     };
+
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
         requestData(pagination.pageSize, currentPage);
@@ -138,7 +205,7 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 
     const requestApiForData = (rowsPerPage: number, currentPage: number, filterData: FilterData) => {
         setData(null);
-        requestData(rowsPerPage, currentPage, filterData?.date?.start_date, filterData?.date?.end_date);
+        requestData(rowsPerPage, currentPage, filterData?.store,filterData?.orderBy,filterData?.order, filterData?.date?.start_date, filterData?.date?.end_date);
     };
 
     // Columns
@@ -163,7 +230,9 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                             className="product-wrapper"
                         >
                             <img src={image} alt={product.name} />
-                            <span>{product.name || '-'}</span>
+                            <div className="details">
+                                <span className="title">{product.name || '-'}</span>
+                            </div>
                         </a>
                     </TableCell>
                 );
@@ -178,21 +247,21 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
             },
         },
         {
-            header: __('Sold By', 'multivendorx'),
+            header: __('Store', 'multivendorx'),
             cell: ({ row }) => {
                 const storeName = row.original.store_name || [];
                 return <TableCell title={storeName}>{storeName}</TableCell>;
             },
         },
+        // {
+        //     header: __('SKU', 'multivendorx'),
+        //     cell: ({ row }) => <TableCell title={row.original.sku || ''}>{row.original.sku || '-'}</TableCell>,
+        // },
         {
-            header: __('SKU', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.sku || ''}>{row.original.sku || '-'}</TableCell>,
-        },
-        {
-            id: 'price',
-            accessorKey: 'price',
-            accessorFn: (row) => parseFloat(row.price || '0'),
-            enableSorting: true,
+            // id: 'price',
+            // accessorKey: 'price',
+            // accessorFn: (row) => parseFloat(row.price || '0'),
+            // enableSorting: true,
             header: __('Price', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.price || ''}>
@@ -201,21 +270,40 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
             ),
         },
         {
-            header: __('Status', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.status || ''}>
-                {row.original.status === "active" && (
-                    <span className="admin-badge green">Active</span>
-                )}
-                {row.original.status === "pending" && (
-                    <span className="admin-badge yellow">Pending</span>
-                )}
-            </TableCell>,
+            id: 'date',
+            accessorKey: 'date',
+            enableSorting: true,
+            header: __('Date Created', 'multivendorx'),
+            cell: ({ row }) => {
+                const rawDate = row.original?.date_created;
+                if (!rawDate) return <TableCell>-</TableCell>;
+    
+                const date = new Date(rawDate);
+                const formatted = date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                });
+    
+                return <TableCell title={formatted}>{formatted}</TableCell>;
+            },
         },
+        // {
+        //     header: __('Status', 'multivendorx'),
+        //     cell: ({ row }) => <TableCell title={row.original.status || ''}>
+        //         {row.original.status === "active" && (
+        //             <span className="admin-badge green">Active</span>
+        //         )}
+        //         {row.original.status === "pending" && (
+        //             <span className="admin-badge yellow">Pending</span>
+        //         )}
+        //     </TableCell>,
+        // },
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) =>
                 <TableCell title={row.original.status || ''}>
-                     <span className="admin-btn btn-purple" onClick={() => { handleSingleAction('approve_product', row.original.id!)}}><i className="adminlib-check"></i> Approve</span>
+                    <span className="admin-btn btn-purple" onClick={() => { handleSingleAction('approve_product', row.original.id!) }}><i className="adminlib-check"></i> Approve</span>
 
                     <span className="admin-btn btn-red" onClick={() => handleSingleAction('reject_product', row.original.id!)}><i className="adminlib-close"></i> Reject</span>
                 </TableCell>,
@@ -223,6 +311,27 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
     ];
 
     const realtimeFilter: RealtimeFilter[] = [
+        {
+            name: 'store',
+            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
+                <div className="   group-field">
+                    <select
+                        name="store"
+                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
+                        value={filterValue || ''}
+                        className="basic-select"
+                    >
+                        <option value="">All Store</option>
+                        {store?.map((s: any) => (
+                            <option key={s.id} value={s.id}>
+                                {s.store_name.charAt(0).toUpperCase() + s.store_name.slice(1)}
+                            </option>
+                        ))}
+                    </select>
+
+                </div>
+            ),
+        },
         {
             name: 'date',
             render: (updateFilter) => (

@@ -25,6 +25,8 @@ export const TransactionHistory: React.FC = () => {
     const [storeData, setStoreData] = useState<any>(null);
     const [optionList, setOptionList] = React.useState([]);
     const [paymentMethod, setPaymentMethod] = useState<any | "">("");
+    const [validationErrors, setValidationErrors] = useState<{ amount?: string; paymentMethod?: string }>({});
+    const [recentDebits, setRecentDebits] = useState<any[]>([]);
 
 
     // 🔹 Fetch stores on mount
@@ -72,38 +74,55 @@ export const TransactionHistory: React.FC = () => {
             .then((response) => {
                 setStoreData(response.data || {});
             })
-    }, [selectedStore]);
 
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'transaction'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: {
+                page: 1,
+                row: 3,
+                store_id: selectedStore.value,
+                filter_status: 'Dr',
+                orderBy: 'created_at',
+                order: 'DESC',
+            },
+        })
+            .then((response) => {
+                setRecentDebits(response.data.transaction || []);
+            })
+            .catch((error) => {
+                console.error('Error fetching recent debit transactions:', error);
+                setRecentDebits([]);
+            });
+    }, [selectedStore]);
+    console.log("rd", recentDebits)
     useEffect(() => {
         if (!storeData) return;
 
-        // Get all enabled payment methods from global options
+        // 🔹 If store has its own payment method, show only that
+        if (storeData.payment_method) {
+            const defaultOption = {
+                value: storeData.payment_method,
+                label: `Store Default - ${storeData.payment_method}`,
+            };
+            setOptionList([defaultOption]);
+            setPaymentMethod(storeData.payment_method);
+            return;
+        }
+
+        // 🔹 Otherwise, show globally enabled methods
         const enabledMethods = Object.entries(appLocalizer.payout_payment_options)
-            .filter(([key, value]: [string, any]) => value.enable) // only enable=true
+            .filter(([key, value]: [string, any]) => value.enable)
             .map(([key, value]) => ({
                 value: key,
-                label: key.charAt(0).toUpperCase() + key.slice(1) // Capitalize
+                label: key.charAt(0).toUpperCase() + key.slice(1),
             }));
 
-        // Store default option
-        const defaultOption = {
-            value: storeData.payment_method,
-            label: `Store Default - ${storeData.payment_method}`
-        };
-
-        // Merge default with enabled options
-        const mergedOptions = [defaultOption, ...enabledMethods];
-
-        setOptionList(mergedOptions);
-
-        // Set default selected value
-        // If store default is enabled globally, use it; else fallback to first enabled method
-        const defaultSelected = enabledMethods.find(opt => opt.value === storeData.payment_method)
-            ? storeData.payment_method
-            : (enabledMethods[0]?.value || storeData.payment_method);
-
-        setPaymentMethod(defaultSelected);
+        setOptionList(enabledMethods);
+        setPaymentMethod(enabledMethods[0]?.value || "");
     }, [storeData]);
+
 
 
     const handleAmountChange = (value: number) => {
@@ -127,29 +146,60 @@ export const TransactionHistory: React.FC = () => {
     };
 
     const handleWithdrawal = () => {
-        if (amount > data.availableBalance) {
-            setError(`Amount cannot be greater than available balance (${data.availableBalance})`);
-            setRequestWithdrawal(true);
+        // Clear all old errors first
+        setValidationErrors({});
+
+        const newErrors: { amount?: string; paymentMethod?: string } = {};
+
+        // Amount validations
+        if (!amount || amount <= 0) {
+            newErrors.amount = "Please enter a valid amount.";
+        } else if (amount > (data.available_balance ?? 0)) {
+            newErrors.amount = `Amount cannot be greater than available balance (${formatCurrency(data.available_balance)})`;
+        }
+
+        // Payment method validation
+        if (!paymentMethod) {
+            newErrors.paymentMethod = "Please select a payment processor.";
+        }
+
+        // If any validation errors exist, show them and stop
+        if (Object.keys(newErrors).length > 0) {
+            setValidationErrors(newErrors);
             return;
         }
 
+        // Clear old generic error
+        setError("");
+
+        // ✅ Submit request
         axios({
             method: 'PUT',
             url: getApiLink(appLocalizer, `transaction/${selectedStore?.value}`),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             data: {
                 disbursement: true,
-                amount: amount,
+                amount,
                 store_id: selectedStore?.value,
                 method: paymentMethod,
-                note: note
+                note,
             },
-        }).then((res) => {
-            if (res.data.success) {
-                setRequestWithdrawal(false);
-            }
-        });
+        })
+            .then((res) => {
+                if (res.data.success) {
+                    setRequestWithdrawal(false);
+                    resetWithdrawalForm();
+                } else if (res.data?.message) {
+                    setError(`Server: ${res.data.message}`);
+                }
+            })
+            .catch((err) => {
+                setError("Server: Failed to submit withdrawal. Please try again.");
+                console.error(err);
+            });
     };
+
+
 
     const tabs = [
         {
@@ -166,7 +216,13 @@ export const TransactionHistory: React.FC = () => {
         },
     ];
 
-    console.log(storeData)
+    const resetWithdrawalForm = () => {
+        setAmount(0);
+        setNote("");
+        setError("");
+        setValidationErrors({});
+    };
+
     return (
         <>
             <AdminBreadcrumbs
@@ -215,7 +271,7 @@ export const TransactionHistory: React.FC = () => {
                         <div className="col w-35">
                             <div className="data-card-wrapper">
                                 <div className="data-card">
-                                    <div className="title">Available balance</div>
+                                    <div className="title">Wallet balance</div>
                                     <div className="number">{formatCurrency(data.wallet_balance)} <i className="adminlib-dollar"></i></div>
                                 </div>
                                 <div className="data-card">
@@ -223,13 +279,13 @@ export const TransactionHistory: React.FC = () => {
                                     <div className="number">{formatCurrency(data.reserve_balance)} <i className="adminlib-bank"></i></div>
                                 </div>
                                 <div className="data-card">
-                                    <div className="title">Locked balance</div>
+                                    <div className="title">Clearance balance</div>
                                     <div className="number">{formatCurrency(data.locking_balance)} <i className="adminlib-home "></i></div>
                                 </div>
-                                <div className="data-card">
+                                {/* <div className="data-card">
                                     <div className="title">Available balance</div>
                                     <div className="number">{formatCurrency(data.wallet_balance)} <i className="adminlib-cart blue"></i></div>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                         <div className="column w-65">
@@ -267,7 +323,52 @@ export const TransactionHistory: React.FC = () => {
                                 )}
                             </div>
 
+
+
+
+                            {recentDebits.length > 0 ? (
+                                <div className="recent-debits">
+                                    <div className="card-header">
+                                        <div className="left">
+                                            <div className="title">Recent Debit Transactions</div>
+                                        </div>
+                                    </div>
+                                    <div className="data-card-wrapper">
+                                        {recentDebits.map((txn) => (
+                                            <div key={txn.id} className="data-card">
+                                                <div className="title">
+                                                    {new Date(txn.date).toLocaleDateString("en-US", {
+                                                        month: "short",
+                                                        day: "2-digit",
+                                                        year: "numeric",
+                                                    })}
+                                                </div>
+
+                                                <div className="number">
+                                                    {formatCurrency(txn.balance)}{" "}
+                                                    <span className="txn-status">({txn.status})</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="recent-debits">
+                                    <div className="card-header">
+                                        <div className="left">
+                                            <div className="title">Recent payouts</div>
+                                        </div>
+                                    </div>
+                                    <div className="des">
+                                        No recent payouts transactions found.
+                                    </div>
+                                </div>
+                            )}
+
+
+
                         </div>
+
 
                     </div>
                 )}
@@ -284,8 +385,12 @@ export const TransactionHistory: React.FC = () => {
                                 </div>
                                 <i
                                     className="icon adminlib-close"
-                                    onClick={() => setRequestWithdrawal(false)}
+                                    onClick={() => {
+                                        setRequestWithdrawal(false);
+                                        resetWithdrawalForm(); //reset form on close
+                                    }}
                                 ></i>
+
                             </>
                         }
                         footer={
@@ -313,19 +418,27 @@ export const TransactionHistory: React.FC = () => {
                                         value={amount}
                                         onChange={(e) => handleAmountChange(Number(e.target.value))}
                                     />
-                                    {error && <p className="error-message">{error}</p>}
+                                    {validationErrors.amount && (
+                                        <div className="invalid-massage">{validationErrors.amount}</div>
+                                    )}
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="payment_method">Payment Processor</label>
                                     <ToggleSetting
                                         wrapperClass="setting-form-input"
                                         descClass="settings-metabox-description"
-                                        description="Choose your preferred payment processor."
+                                        description={
+                                            optionList.length > 0
+                                                ? "Choose your preferred payment processor."
+                                                : "No payment methods are available for this store."
+                                        }
                                         options={optionList}
                                         value={paymentMethod || ""}
                                         onChange={(value) => setPaymentMethod(value)}
                                     />
-
+                                    {validationErrors.paymentMethod && (
+                                        <div className="invalid-massage">{validationErrors.paymentMethod}</div>
+                                    )}
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="note">Note</label>

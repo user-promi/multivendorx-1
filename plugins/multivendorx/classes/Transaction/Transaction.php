@@ -194,11 +194,18 @@ class Transaction {
     public static function get_transaction_information( $args ) {
         global $wpdb;
     
-        $where = array();
+        $where = [];
+    
+        //Extract and sanitize order/orderBy early so they don't go into WHERE
+        $orderBy = isset( $args['orderBy'] ) ? esc_sql( $args['orderBy'] ) : '';
+        $order   = isset( $args['order'] ) ? strtoupper( esc_sql( $args['order'] ) ) : 'ASC';
+    
+        //Remove non-column keys
+        unset( $args['orderBy'], $args['order'] );
     
         // Filter by id(s)
         if ( isset( $args['id'] ) ) {
-            $ids     = is_array( $args['id'] ) ? $args['id'] : array( $args['id'] );
+            $ids     = is_array( $args['id'] ) ? $args['id'] : [ $args['id'] ];
             $ids     = implode( ',', array_map( 'intval', $ids ) );
             $where[] = "id IN ($ids)";
         }
@@ -223,55 +230,63 @@ class Transaction {
             $where[] = " ( transaction_type = '" . esc_sql( $args['transaction_type'] ) . "' ) ";
         }
     
-        // Filter by status
+        // Filter by entry_type (Cr/Dr)
         if ( isset( $args['entry_type'] ) ) {
             $where[] = " ( entry_type = '" . esc_sql( $args['entry_type'] ) . "' ) ";
         }
-        
+    
         // Filter by status
         if ( isset( $args['status'] ) ) {
             $where[] = " ( status = '" . esc_sql( $args['status'] ) . "' ) ";
         }
-        // 🔹 Filter by date range on created_at
+    
+        // Filter by date range
         if ( isset( $args['start_date'] ) ) {
             $where[] = " ( created_at >= '" . esc_sql( $args['start_date'] ) . "' ) ";
         }
-    
         if ( isset( $args['end_date'] ) ) {
             $where[] = " ( created_at <= '" . esc_sql( $args['end_date'] ) . "' ) ";
         }
     
         $table = $wpdb->prefix . Utill::TABLES['transaction'];
     
-        // Count query
+        // Base query (count or select)
         if ( isset( $args['count'] ) ) {
             $query = "SELECT COUNT(*) FROM $table";
         } else {
             $query = "SELECT * FROM $table";
         }
     
-        // Add WHERE conditions
+        // Add WHERE
         if ( ! empty( $where ) ) {
             $condition = $args['condition'] ?? ' AND ';
             $query    .= ' WHERE ' . implode( $condition, $where );
         }
     
-        // Add limit & offset
-        if ( isset( $args['limit'] ) && isset( $args['offset'] ) ) {
-            $limit  = esc_sql( intval( $args['limit'] ) );
-            $offset = esc_sql( intval( $args['offset'] ) );
-            $query .= " LIMIT $limit OFFSET $offset";
+        //Add ORDER BY (only for non-count queries)
+        if ( ! isset( $args['count'] ) && ! empty( $orderBy ) ) {
+            // Only allow ASC or DESC
+            if ( ! in_array( $order, [ 'ASC', 'DESC' ], true ) ) {
+                $order = 'ASC';
+            }
+            $query .= " ORDER BY {$orderBy} {$order}";
         }
     
-        // Execute query
-        if ( isset( $args['count'] ) ) {
-            $results = $wpdb->get_var( $query ); // phpcs:ignore
-            return $results ?? 0;
-        } else {
-            $results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore
-            return $results ?? array();
+        //Add limit & offset (only for non-count)
+        if ( ! isset( $args['count'] ) && isset( $args['limit'], $args['offset'] ) ) {
+            $limit  = intval( $args['limit'] );
+            $offset = intval( $args['offset'] );
+            $query .= " LIMIT {$limit} OFFSET {$offset}";
         }
+    
+        //Run query
+        if ( isset( $args['count'] ) ) {
+            return (int) ( $wpdb->get_var( $query ) ?? 0 );
+        }
+    
+        return $wpdb->get_results( $query, ARRAY_A ) ?? [];
     }
+    
 
     public static function get_balances_for_store( $store_id ) {
         global $wpdb;

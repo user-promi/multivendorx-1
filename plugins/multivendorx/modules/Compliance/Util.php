@@ -47,68 +47,54 @@ class Util {
 	}
 	
     
-	public static function get_report_abuse_information( $args = array() ) {
+	public static function get_report_abuse_information( $args = [] ) {
 		global $wpdb;
 	
-		$where = array();
+		$where = [];
 	
-		// Filter by report IDs
-		if ( isset( $args['id'] ) ) {
-			$ids     = is_array( $args['id'] ) ? $args['id'] : array( $args['id'] );
-			$ids     = implode( ',', array_map( 'intval', $ids ) );
-			$where[] = "id IN ($ids)";
-		}
+		$table = $wpdb->prefix . Utill::TABLES['report_abuse'];
 	
-		// Filter by product IDs
-		if ( isset( $args['product_ids'] ) && is_array( $args['product_ids'] ) && ! empty( $args['product_ids'] ) ) {
-			$product_ids = implode( ',', array_map( 'intval', $args['product_ids'] ) );
-			$where[]     = "product_id IN ($product_ids)";
-		}
-	
-		// Filter by store IDs
-		if ( isset( $args['store_ids'] ) && is_array( $args['store_ids'] ) && ! empty( $args['store_ids'] ) ) {
+		// Existing filters
+		if ( isset( $args['store_ids'] ) && ! empty( $args['store_ids'] ) ) {
 			$store_ids = implode( ',', array_map( 'intval', $args['store_ids'] ) );
 			$where[]   = "store_id IN ($store_ids)";
 		}
 	
-		// Filter by reporter email
-		if ( isset( $args['email'] ) && ! empty( $args['email'] ) ) {
-			$email = esc_sql( $args['email'] );
-			$where[] = "email = '$email'";
+		// 🔹 Date range filter
+		if ( isset( $args['date_range'] ) ) {
+			$start = esc_sql( $args['date_range']['start'] );
+			$end   = esc_sql( $args['date_range']['end'] );
+			$where[] = "DATE(created_at) BETWEEN '$start' AND '$end'";
 		}
 	
-		$table = $wpdb->prefix . Utill::TABLES['report_abuse']; // abuse reports table
+		// Build base query
+		$query = isset( $args['count'] ) && $args['count']
+			? "SELECT COUNT(*) FROM $table"
+			: "SELECT * FROM $table";
 	
-		// Count query
-		if ( isset( $args['count'] ) && $args['count'] ) {
-			$query = "SELECT COUNT(*) FROM $table";
-		} else {
-			// Select all columns
-			$query = "SELECT * FROM $table";
-		}
-	
-		// Add WHERE conditions
 		if ( ! empty( $where ) ) {
-			$condition = $args['condition'] ?? ' AND ';
-			$query    .= ' WHERE ' . implode( " $condition ", $where );
+			$query .= ' WHERE ' . implode( ' AND ', $where );
+		}
+	
+		// 🔹 Order by
+		if ( empty( $args['count'] ) && ! empty( $args['order_by'] ) ) {
+			$order_by = esc_sql( $args['order_by'] );
+			$order    = esc_sql( $args['order'] ?? 'DESC' );
+			$query   .= " ORDER BY $order_by $order";
 		}
 	
 		// Limit & offset
-		if ( isset( $args['limit'] ) && isset( $args['offset'] ) && empty( $args['count'] ) ) {
-			$limit  = esc_sql( intval( $args['limit'] ) );
-			$offset = esc_sql( intval( $args['offset'] ) );
+		if ( isset( $args['limit'], $args['offset'] ) && empty( $args['count'] ) ) {
+			$limit  = intval( $args['limit'] );
+			$offset = intval( $args['offset'] );
 			$query .= " LIMIT $limit OFFSET $offset";
 		}
 	
-		// Execute query
-		if ( isset( $args['count'] ) && $args['count'] ) {
-			$result = $wpdb->get_var( $query );
-			return $result ?? 0;
-		} else {
-			$result = $wpdb->get_results( $query, ARRAY_A );
-			return $result ?? array();
-		}
+		return isset( $args['count'] ) && $args['count']
+			? (int) $wpdb->get_var( $query )
+			: (array) $wpdb->get_results( $query, ARRAY_A );
 	}
+	
 	
 
 	public static function delete_report_abuse( $id ) {
