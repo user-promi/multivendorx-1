@@ -184,6 +184,9 @@ class CommissionManager {
                 $commission_amount = (float) $commission_amount - (float) $total_discount;
             }
 
+            if ($commission_amount > $order->get_total()) {
+                $commission_amount = $order->get_total();
+            }
             // $order->save(); // Avoid using save() if it will save letter in same flow.
 
             // && !get_user_meta($vendor_id, '_vendor_give_shipping', true)
@@ -257,7 +260,7 @@ class CommissionManager {
                 'discount_amount'       => $order->get_discount_total(),
                 'commission_total'      => $commission_total,
                 'currency'              => get_woocommerce_currency(),
-                'status'                => $order->get_status() == 'cancelled' ? 'cancelled' : 'paid',
+                'status'                => $order->get_status() == 'cancelled' ? 'cancelled' : 'unpaid',
                 'rules_applied'         => serialize( $rules_array )
             ];
             $format = [ "%d", "%d", "%d", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%s", "%s", "%s" ];

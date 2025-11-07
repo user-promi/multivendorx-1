@@ -91,7 +91,7 @@ class Install {
             `commission_total` float(20, 2) NOT NULL DEFAULT 0,
             `commission_refunded` float(20, 2) NOT NULL DEFAULT 0,
             `currency` varchar(10) NOT NULL,
-            `status` enum('paid','refunded','partially_refunded','cancelled') DEFAULT 'paid',
+            `status` enum('unpaid', 'paid','refunded','partially_refunded','cancelled') DEFAULT 'unpaid',
             `commission_note`  longtext NULL,
             `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
             `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
