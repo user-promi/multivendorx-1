@@ -123,7 +123,6 @@ const ToggleSetting: React.FC<ToggleSettingProps> = ({
                     })}
                 </div>
                 {postText && <span className="after">{postText}</span>}
-                {proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>}
             </div>
             {description && (
                 <p

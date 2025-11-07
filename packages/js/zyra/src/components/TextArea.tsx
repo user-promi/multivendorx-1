@@ -89,12 +89,6 @@ const TextArea: React.FC<TextAreaProps> = ({
                 />
             )}
 
-            {proSetting && (
-                <span className="admin-pro-tag">
-                    <i className="adminlib-pro-tag"></i>Pro
-                </span>
-            )}
-
             {description && (
                 <p className={descClass} dangerouslySetInnerHTML={{ __html: description }}></p>
             )}

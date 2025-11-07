@@ -298,14 +298,14 @@ const Commission: React.FC = () => {
                 </>
             ),
         },
-        {
-            name: 'exportAll',
-            render: () => (
-                <div className="action-icons">
-                    <i className="adminlib-more-vertical"></i>
-                </div>
-            ),
-        },
+        // {
+        //     name: 'exportAll',
+        //     render: () => (
+        //         <div className="action-icons">
+        //             <i className="adminlib-more-vertical"></i>
+        //         </div>
+        //     ),
+        // },
     ];
 
     // Export All CSV Button Component - Downloads ALL filtered data

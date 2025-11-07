@@ -178,9 +178,9 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                         Manage your weekly schedule and special hours
                                     </div>
                                 </div>
-                                <div className="des">
+                                {/* <div className="des">
                                     Manage your weekly schedule and special hours
-                                </div>
+                                </div> */}
                             </div>
 
                             {/* <div className="store-owner-details">

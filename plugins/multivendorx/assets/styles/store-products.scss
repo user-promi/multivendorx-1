@@ -40,12 +40,12 @@
      .banner-img {
          width: 100%;
          background: #5756561f;
-         text-align: center;
+         display: flex;
+         justify-content: center;
 
          img {
              max-height: 25rem;
          }
-
      }
 
      .banner-right {
@@ -67,7 +67,10 @@
              }
          }
      }
-
+     .buttons-wrapper{
+        display: flex;
+        gap: 0.313rem;
+     }
      .container {
          padding-top: 0.5rem;
          display: flex;
@@ -125,10 +128,17 @@
      }
 
      &.template2 {
+        .banner-img{
+            display: flex;
+            justify-content: center;
+        }
          .store-details {
              text-align: center;
              margin-top: -4%;
-
+            .profile{
+                display: flex;
+                justify-content: center;
+            }
 
              .row {
                  justify-content: center;
@@ -375,7 +385,7 @@
                      color: #00000091;
                  }
 
-                 .star {
+                 .stars {
                      display: flex;
                      gap: 0.313rem;
                      padding: 0.125rem;
@@ -509,7 +519,18 @@
                          }
                      }
                  }
+                 .review-images{
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 0.313rem;
 
+                    a{
+                        img{
+                            height: 5rem;
+                            width: auto;
+                        }
+                    }
+                 }
                  .mvx-review-reply {
                      padding: 0.625rem;
                      background: #8f8f8f1f;
@@ -528,8 +549,12 @@
      #review-form-wrapper {
          margin-top: 1rem;
 
-         .commentform {
+         .comment-form {
              margin-top: 1rem;
+
+             .form-wrapper{
+                margin: 0.5rem 0;
+             }
          }
      }
 
@@ -545,11 +570,8 @@
          font-size: 1.25rem;
          transition: color 0.2s;
      }
-
-     .rating i.hover,
-     .rating i.active {
+     .rating .adminlib-star {
          color: #ffcc00;
-         /* gold */
      }
 
      .rating i.inactive {

@@ -574,9 +574,10 @@
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
+    padding-bottom: 1rem;
 
     .data-card {
-        width: 48%;
+        width: 32%;
         background: #fff;
         padding: 1.5rem;
         border-radius: 0.313rem;

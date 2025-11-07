@@ -58,7 +58,7 @@ body:has(.admin-main-wrapper) {
     min-height: 2.213rem !important; // for overwrite wordpress style
   }
 
-
+}
   // button style start
   .admin-btn {
     outline: none;
@@ -1515,6 +1515,6 @@ body:has(.admin-main-wrapper) {
     animation: animate 2.5s ease-in-out infinite;
     border: $border-theme-small;
   }
-}
+
 
 // highlight section end
