@@ -7,7 +7,8 @@ export default {
     desc: __('Facilitators are users who assist stores and earn a commission or fee for their role. You can define a global facilitator, assign store-specific facilitators, and configure payment rules for each.', 'mvx-pro'),
     icon: 'adminlib-facilitator',
     submitUrl: 'settings',
-    moduleEnabled: 'min-max',
+    moduleEnabled: 'facilitator',
+	proSetting: true,
     modal: [
          {
             key: 'facilitator',

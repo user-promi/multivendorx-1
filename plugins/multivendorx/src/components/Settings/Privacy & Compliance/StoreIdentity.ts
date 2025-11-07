@@ -73,8 +73,8 @@ export default {
             key: 'verification_methods',
             type: 'multi-string',
             label: __('Verification methods', 'multivendorx'),
-            moduleEnabled: 'marketplace-compliance',
-            // proSetting: true,
+            moduleEnabled: 'identity-verification',
+            proSetting: true,
             requiredEnable: true,
             // name: 'abuse_report_reasons',
             defaultValues: [

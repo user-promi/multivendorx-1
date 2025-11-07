@@ -14,6 +14,7 @@ export default {
             label: __( 'Store branding', 'multivendorx' ),
             settingDescription: __( 'Decide which details appear with products and on store pages.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
+			moduleEnabled: 'privacy-settings',
             options: [
                 {
                     key: 'show_store_name',
@@ -48,6 +49,7 @@ export default {
             label: __( 'Store contact informations', 'multivendorx' ),
             settingDescription: __( 'Choose the contact details visible to customers.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
+			moduleEnabled: 'privacy-settings',
             options: [
                 {
                     key: 'show_store_owner_info',
@@ -76,6 +78,7 @@ export default {
             label: __( 'Store-wise order display', 'multivendorx' ),
             settingDescription: __( 'Control whether customers see orders grouped by vendor in cart, checkout, and confirmation emails.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
+			moduleEnabled: 'privacy-settings',
             options: [
                 {
                     key: 'group_items_by_store_in_cart',
@@ -92,6 +95,7 @@ export default {
             label: __( 'Store policy override', 'multivendorx' ),
             settingDescription: __( 'Give stores the option to create their own policies instead of using marketplace defaults.', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
+			moduleEnabled: 'privacy-settings',
             options: [
                 {
                     key: 'store',
@@ -126,6 +130,7 @@ export default {
             label: __( 'Customer information access', 'multivendorx' ),
             settingDescription: __( 'Choose what stores can see about customers', 'multivendorx' ),
             class: 'mvx-toggle-checkbox',
+			moduleEnabled: 'privacy-settings',
             options: [
                 {
                     key: 'name',

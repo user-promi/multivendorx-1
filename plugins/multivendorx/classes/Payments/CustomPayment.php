@@ -21,12 +21,12 @@ class CustomPayment {
             'label'     => 'Custom Gateway',
             'disableBtn'=> true,
             'enableOption' => true,
-            'desc'      => '',
+            'desc'      => 'Connect a custom or third-party payout method tailored to your marketplace needs.',
             'formFields' => [
                 [
                     'key'         => 'custom_gateway_name',
                     'type'        => 'text',
-                    'label'       => 'Gateway Name',
+                    'label'       => 'Gateway name',
                     'placeholder' => 'Enter Name',
                 ],
             ]

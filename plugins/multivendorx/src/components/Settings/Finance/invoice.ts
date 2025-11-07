@@ -18,7 +18,7 @@ export default {
             label: __( 'Invoice number format', 'multivendorx' ),            
             placeholder: 'Invoice number format',
             moduleEnabled: 'invoice',
-            //proSetting:true
+            proSetting:true
         },
         {
             key: 'mvx_tinymce_api_section',
@@ -27,7 +27,7 @@ export default {
             label: __( 'Starting invoice number', 'multivendorx' ),            
             placeholder: 'Starting invoice number',
             moduleEnabled: 'invoice',
-            //proSetting:true
+            proSetting:true
         },
         {
             key: 'commission_type',
@@ -53,7 +53,7 @@ export default {
                     value: 'per_store',
                 },
             ],
-            //proSetting:true
+            proSetting:true
         },
         {
             key: 'commission_type',
@@ -74,7 +74,7 @@ export default {
                     value: 'landscape',
                 },
             ],
-            //proSetting:true
+            proSetting:true
         },
         {
             key: 'type_options',
@@ -106,7 +106,7 @@ export default {
                     value: 'downloadable',
                 },
             ],
-            //proSetting:true,
+            proSetting:true,
             selectDeselect: true,
         },
         {
@@ -122,7 +122,7 @@ export default {
             label: __( 'GST number', 'multivendorx' ),            
             placeholder: 'Enter GST registration number',
             moduleEnabled: 'invoice',
-            //proSetting:true
+            proSetting:true
         },
         {
             key: 'mvx_tinymce_api_section',
@@ -131,7 +131,7 @@ export default {
             label: __( 'Tax ID number', 'multivendorx' ),            
             placeholder: 'Enter tax ID number',
             moduleEnabled: 'invoice',
-            //proSetting:true
+            proSetting:true
         },
         {
             key: 'separator_content',

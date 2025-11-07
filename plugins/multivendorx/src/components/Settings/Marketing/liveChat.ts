@@ -31,7 +31,7 @@ export default {
                     value: 'none',
                 },
             ],
-            // moduleEnabled: 'live-chat',
+            moduleEnabled: 'live-chat',
             proSetting: true,
         },
         {
@@ -66,13 +66,13 @@ export default {
             desc: __('Pick a theme color for your Facebook Messenger chat window.', 'multivendorx'),
             moduleEnabled: 'live-chat',
             value: '#5007aa',
-            // dependent: {
-            //     key: 'chat_provider',
-            //     set: true,
-            //     value: 'facebook',
-            // },
-            // moduleEnabled: 'live-chat',
-            // proSetting: true,
+            dependent: {
+                 key: 'chat_provider',
+                 set: true,
+                 value: 'facebook',
+             },
+            moduleEnabled: 'live-chat',
+            proSetting: true,
         },
         {
             key: 'whatsapp_opening_pattern',
@@ -96,8 +96,8 @@ export default {
                 set: true,
                 value: 'whatsapp',
             },
-            // moduleEnabled: 'live-chat',
-            // proSetting: true,
+             moduleEnabled: 'live-chat',
+             proSetting: true,
         },
         {
             key: 'whatsapp_pre_filled',
@@ -109,8 +109,8 @@ export default {
                 set: true,
                 value: 'whatsapp',
             },
-            // moduleEnabled: 'live-chat',
-            // proSetting: true,
+             moduleEnabled: 'live-chat',
+             proSetting: true,
         },
         {
             key: 'app_id',
@@ -122,8 +122,8 @@ export default {
                 set: true,
                 value: 'talkjs',
             },
-            // moduleEnabled: 'live-chat',
-            // proSetting: true,
+             moduleEnabled: 'live-chat',
+             proSetting: true,
         },
         {
             key: 'app_secret',
@@ -138,8 +138,8 @@ export default {
                 set: true,
                 value: 'talkjs',
             },
-            // moduleEnabled: 'live-chat',
-            // proSetting: true,
+             moduleEnabled: 'live-chat',
+             proSetting: true,
         },
     ],
 };
