@@ -638,7 +638,7 @@
                     p {
                         margin: 0;
                         font-weight: 500;
-                        font-size: 1rem;
+                        font-size: 1.125rem;
                         line-height: 1rem;
                     }
 
@@ -652,6 +652,15 @@
                         background: $theme-color;
                         color: #fff;
                     }
+                }
+
+                .tab-heading {
+                    font-size: 1.063rem;
+                    color: #0000008f;
+                    font-weight: 600;
+                    padding-bottom: 0.313rem;
+                    border-bottom: $border-light-small;
+                    margin: 0.5rem 0;
                 }
             }
         }

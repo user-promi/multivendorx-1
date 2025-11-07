@@ -160,6 +160,7 @@
               margin: 0;
             }
 
+            .item,
             a {
               display: flex;
               gap: 0.813rem;
@@ -182,7 +183,9 @@
                   font-size: 1.5rem;
                 }
               }
-
+              .check-icon{
+                font-size: 1.125rem;
+              }
               .details {
                 span {
                   display: block;
@@ -432,7 +435,7 @@
 
   .tabs-wrapper {
     // margin: 0 2rem;
-    padding: 0 1rem 1rem ;
+    padding: 0 1rem 1rem;
   }
 
   &.show-menu {
@@ -609,11 +612,11 @@
       font-size: 1rem;
       font-weight: 500;
     }
+  }
 
-    &.color-red {
-      color: red;
-      background: #ff00000d;
-    }
+  &.color-red {
+    color: red;
+    background: #ff00000d;
   }
 }
 
