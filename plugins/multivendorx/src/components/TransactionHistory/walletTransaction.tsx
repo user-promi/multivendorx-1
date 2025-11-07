@@ -355,6 +355,8 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
         typeCount = '',
         transactionType = '',
         transactionStatus = '',
+        orderBy='',
+        order='',
     ) {
         if (!storeId) return;
 
@@ -374,7 +376,9 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                 end_date: endDate.toISOString().split('T')[0],
                 filter_status: typeCount == 'all' ? '' : typeCount,
                 transaction_status: transactionStatus,
-                transaction_type: transactionType
+                transaction_type: transactionType,
+                orderBy,
+                order,
             },
         }).then((response) => {
             setData(response.data.transaction || []);
@@ -414,6 +418,8 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             filterData?.typeCount,
             filterData?.transactionType,
             filterData?.transactionStatus,
+            filterData?.orderBy,
+            filterData?.order,
         );
     };
 
@@ -444,9 +450,6 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             cell: ({ row }) => <TableCell>#{row.original.id}</TableCell>,
         },
         {
-            id: 'status',
-            accessorKey: 'status',
-            enableSorting: true, // Enable sorting for status column
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.status || ''}>
@@ -457,8 +460,8 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             ),
         },
         {
-            id: 'transaction',
-            accessorKey: 'transaction_type',
+            id: 'order_id',
+            accessorKey: 'order_id',
             enableSorting: true,
             header: __('Transaction Type', 'multivendorx'),
             cell: ({ row }) => {
@@ -501,8 +504,8 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             },
         },
         {
-            id: 'date',
-            accessorKey: 'date',
+            id: 'created_at',
+            accessorKey: 'created_at',
             enableSorting: true,
             header: __('Date', 'multivendorx'),
             cell: ({ row }) => {
@@ -520,9 +523,9 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             },
         },
         {
-            id: 'credit',
-            accessorKey: 'credit',
-            enableSorting: true,
+            // id: 'credit',
+            // accessorKey: 'credit',
+            // enableSorting: true,
             accessorFn: row => parseFloat(row.credit || '0'),
             header: __('Credit', 'multivendorx'),
             cell: ({ row }) => {
@@ -531,9 +534,9 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             },
         },
         {
-            id: 'debit',
-            accessorKey: 'debit',
-            enableSorting: true,
+            // id: 'debit',
+            // accessorKey: 'debit',
+            // enableSorting: true,
             accessorFn: row => parseFloat(row.debit || '0'),
             header: __('Debit', 'multivendorx'),
             cell: ({ row }) => {

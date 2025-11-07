@@ -143,7 +143,9 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         $end_date   = $request->get_param('end_date');
         $transaction_type   = $request->get_param('transaction_type');
         $transaction_status   = $request->get_param('transaction_status');
-    
+        $orderBy = sanitize_text_field( $request->get_param('orderBy') );
+        $order   = strtoupper( sanitize_text_field( $request->get_param('order') ) );
+
         if ( $start_date ) {
             $start_date = date('Y-m-d H:i:s', strtotime($start_date));
         }
@@ -169,7 +171,10 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         if ( $transaction_type )   $args['transaction_type']   = $transaction_type;
         $args['limit']  = $limit;
         $args['offset'] = $offset;
-    
+        
+        if ( ! empty( $orderBy ) ) $args['orderBy'] = $orderBy;
+        if ( in_array( $order, ['ASC', 'DESC'], true ) ) $args['order'] = $order;
+
         $transactions = Transaction::get_transaction_information( $args );
     
         $formatted = array_map(function($row) {
