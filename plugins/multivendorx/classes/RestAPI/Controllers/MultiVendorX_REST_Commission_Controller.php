@@ -133,7 +133,6 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
     
             return rest_ensure_response( (int) $total_count );
         }
-    
         // Rest of your existing code remains the same...
         $commissions = CommissionUtil::get_commissions(
             $filter,
@@ -175,7 +174,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
 
         // Prepare base filter (for store-specific counts)
         $base_filter = [];
-        if ( ! empty( $storeId ) ) {
+        if ( ! empty( $storeId ) && !current_user_can('manage_options') ) {
             $base_filter['store_id'] = intval( $storeId );
         }
 

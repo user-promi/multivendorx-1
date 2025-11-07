@@ -71,69 +71,55 @@ const AdminDashboard = () => {
     }
   };
 
-  const installOrActivatePlugin = async (slug: string, status = 'active') => {
+  const installOrActivatePlugin = async (slug: string) => {
     if (!slug || installing) return; // prevent multiple clicks
     setInstalling(slug);
-
+  
     try {
-      // Step 1: Fetch all plugins to check status
+      // Step 1: Get current plugins
       const { data: plugins } = await axios.get(`${appLocalizer.apiUrl}/wp/v2/plugins`, {
         headers: { 'X-WP-Nonce': appLocalizer.nonce },
       });
-
-      // Find the existing plugin object. The 'plugin' property holds the full file path.
+  
+      // Step 2: Find if plugin exists
       const existingPlugin = plugins.find((plugin: any) => plugin.plugin.includes(slug));
-
-      // Determine the full file path for activation, assuming {slug}/{slug}.php as fallback.
       const pluginFilePath = existingPlugin?.plugin || `${slug}/${slug}.php`;
-
-      // Step 2: Determine action
-      let action: 'install' | 'activate' | 'none' = 'none';
-      if (existingPlugin && existingPlugin.status !== 'active') {
-        action = 'activate';
-      } else if (!existingPlugin) {
-        action = 'install';
-      }
-
-      if (action === 'none') {
+  
+      // Step 3: Determine action
+      let apiUrl = `${appLocalizer.apiUrl}/wp/v2/plugins`;
+      let requestData: any = { status: 'active' }; // default request for activation
+  
+      if (!existingPlugin) {
+        // Plugin not installed → install & activate
+        requestData.slug = slug;
+      } else if (existingPlugin.status === 'active') {
         setSuccessMsg(`Plugin "${slug}" is already active.`);
         await checkPluginStatus(slug);
         return;
+      } else {
+        // Plugin installed but inactive → just activate
+        const encodedFile = encodeURIComponent(pluginFilePath);
+        apiUrl += `/${encodedFile}`;
       }
-
-      let apiUrl = `${appLocalizer.apiUrl}/wp/v2/plugins`; // Default endpoint for INSTALLATION
-      let requestData: { slug?: string; status: string } = { slug, status: 'active' }; // Default body for INSTALLATION
-
-      if (action === 'activate') {
-        // For activation, the endpoint MUST target the specific file path.
-        const encodedFilePath = encodeURIComponent(pluginFilePath);
-        apiUrl = `${appLocalizer.apiUrl}/wp/v2/plugins/${encodedFilePath}`;
-
-        // The body only needs the 'status' when updating an existing plugin.
-        requestData = { status: 'active' };
-      }
-
-      // Step 3: Call the correct API endpoint
+  
+      // Step 4: Call API
       await axios.post(apiUrl, requestData, {
         headers: { 'X-WP-Nonce': appLocalizer.nonce },
       });
-
-      // Step 4: Update local status
+  
+      // Step 5: Refresh status
       await checkPluginStatus(slug);
-
-      setSuccessMsg(
-        action === 'install'
-          ? `Plugin "${slug}" installed and activated successfully!`
-          : `Plugin "${slug}" activated successfully!`
-      );
-
+  
+      setSuccessMsg(`Plugin "${slug}" ${existingPlugin ? 'activated' : 'installed & activated'} successfully!`);
     } catch (error) {
-      setSuccessMsg(`Failed to install or activate plugin "${slug}". Please try again.`);
+      console.error(error);
+      setSuccessMsg(`Failed to install/activate plugin "${slug}".`);
     } finally {
       setTimeout(() => setSuccessMsg(''), 3000);
       setInstalling('');
     }
   };
+  
 
   const handleOnChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
