@@ -4,6 +4,8 @@ const columns = appLocalizer?.custom_roles
     ? Object.entries(appLocalizer.custom_roles).map(([key, value]) => ({
           key,
           label: value,
+          proSetting: key === 'store_owner' ? false : true,
+          moduleEnabled: key != 'store_owner' && 'staff-manager',
       }))
     : [];
 
