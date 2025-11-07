@@ -28,22 +28,58 @@ import HeaderNotification from './components/Notifications/HeaderNotifications';
 localStorage.setItem('force_multivendorx_context_reload', 'true');
 
 const profileItems = [
+  // {
+  //   title: "What's New",
+  //   icon: "adminlib-person",
+  //   link: appLocalizer?.pro_data?.manage_plan_url??'',
+  //   targetBlank: true,
+  // },
+  // {
+  //   title: "Get Support",
+  //   icon: "adminlib-person",
+  //   link: appLocalizer?.pro_data?.manage_plan_url??'',
+  //   targetBlank: true,
+  // },
+  // {
+  //   title: "FAQ",
+  //   icon: "adminlib-person",
+  //   link: appLocalizer?.pro_data?.manage_plan_url??'',
+  //   targetBlank: true,
+  // },
   {
     title: "What's New",
-    icon: "adminlib-person",
-    link: appLocalizer?.pro_data?.manage_plan_url??'',
+    icon: "adminlib-bell",
+    link: "https://multivendorx.com/latest-release/?utm_source=settings&utm_medium=plugin&utm_campaign=promotion",
     targetBlank: true,
   },
   {
     title: "Get Support",
-    icon: "adminlib-person",
-    link: appLocalizer?.pro_data?.manage_plan_url??'',
+    icon: "adminlib-life-ring",
+    link: "https://multivendorx.com/support-forum/?utm_source=settings&utm_medium=plugin&utm_campaign=promotion",
     targetBlank: true,
   },
   {
-    title: "FAQ",
-    icon: "adminlib-person",
-    link: appLocalizer?.pro_data?.manage_plan_url??'',
+    title: "Community",
+    icon: "adminlib-users",
+    link: "https://multivendorx.com/community/?utm_source=settings&utm_medium=plugin&utm_campaign=promotion",
+    targetBlank: true,
+  },
+  {
+    title: "Documentation",
+    icon: "adminlib-book",
+    link: "https://multivendorx.com/docs/knowledgebase/?utm_source=settings&utm_medium=plugin&utm_campaign=promotion",
+    targetBlank: true,
+  },
+  // {
+  //   title: "FAQ",
+  //   icon: "adminlib-question-circle",
+  //   link: "https://multivendorx.com/docs/faqs/?utm_source=settings&utm_medium=plugin&utm_campaign=promotion",
+  //   targetBlank: true,
+  // },
+  {
+    title: "Request a Feature",
+    icon: "adminlib-plus-circle",
+    link: "https://github.com/multivendorx/multivendorx/issues",
     targetBlank: true,
   },
 ];

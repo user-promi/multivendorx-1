@@ -494,7 +494,68 @@ const Table: React.FC<TableProps> = ({
     const end = totalRows === 0 ? 0 : Math.min(start + pageSize - 1, totalRows);
     return (
         <>
-            {(typeCounts?.length > 0 || searchFilter) && (
+
+
+            <div className="admin-top-filter">
+                {typeCounts?.length > 0 &&
+                    <div className="filter-wrapper">
+                        {typeCounts ? (
+                            typeCounts.length > 0 ? (
+                                <>
+                                    {typeCounts.map((countInfo, index) => (
+                                        <div
+                                            key={index}
+                                            role="button"
+                                            tabIndex={0}
+                                            onClick={() => setFilterData({ typeCount: countInfo.key })}
+                                            className={
+                                                countInfo.key === typeCountActive
+                                                    ? "filter-item active"
+                                                    : "filter-item"
+                                            }
+                                        >
+                                            {`${countInfo.name} (${countInfo.count})`}
+                                        </div>
+                                    ))}
+                                </>
+                            ) : (
+                                <span>No types found</span>
+                            )
+                        ) : (
+                            <>
+                                <Skeleton variant="text" width={100} />
+                                <Skeleton variant="text" width={120} />
+                                <Skeleton variant="text" width={90} />
+                            </>
+                        )}
+
+                    </div>
+                }
+                {searchFilter &&
+                    <div className="table-action-wrapper">
+                        {searchFilter && (
+                            <div className="search-field">
+                                {searchFilter?.map((filter) => (
+                                    <React.Fragment key={filter.name}>
+                                        {filter.render(handleFilterChange, filterData[filter.name])}
+                                    </React.Fragment>
+                                ))}
+                            </div>
+                        )}
+                        {actionButton && (
+                            <div className="action-wrapper">
+                                {actionButton?.map((filter) => (
+                                    <React.Fragment key={filter.name}>
+                                        {filter.render(handleFilterChange, filterData[filter.name])}
+                                    </React.Fragment>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                }
+            </div>
+
+            {/* {(typeCounts?.length > 0 || searchFilter) && (
                 <div className="admin-top-filter">
                     <div className="filter-wrapper">
                         {typeCounts ? (
@@ -549,7 +610,8 @@ const Table: React.FC<TableProps> = ({
                         )}
                     </div>
                 </div>
-            )}
+            )} */}
+
             {loading ? (
                 <LoadingTable />
             ) : (

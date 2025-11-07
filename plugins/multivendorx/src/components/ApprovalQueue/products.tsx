@@ -232,7 +232,6 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                             <img src={image} alt={product.name} />
                             <div className="details">
                                 <span className="title">{product.name || '-'}</span>
-                                <span><b>SKU:</b> {product.sku || '-'}</span>
                             </div>
                         </a>
                     </TableCell>
