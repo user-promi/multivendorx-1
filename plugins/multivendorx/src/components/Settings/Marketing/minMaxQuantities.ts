@@ -30,7 +30,7 @@ export default {
                     type: 'number',
                 },
             ],
-            moduleEnabled: 'marketplace-refund',
+            moduleEnabled: 'min-max',
         },
     ],
 };

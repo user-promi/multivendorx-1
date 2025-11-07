@@ -26,7 +26,8 @@ export default {
                     value: 'manual',
                 },
             ],
-            //proSetting:true
+            moduleEnabled: 'wholesale',
+			proSetting:true
         },
         {
             key: 'wholesale_price_access',
@@ -46,7 +47,8 @@ export default {
                     value: 'wholesale_only',
                 },
             ],
-            //proSetting:true
+			moduleEnabled: 'wholesale',
+            proSetting:true
         },
         {
             key: 'wholesale_price_display',
@@ -66,7 +68,8 @@ export default {
                     value: 'wholesale_only',
                 },
             ],
-            //proSetting:true
+			moduleEnabled: 'wholesale',
+            proSetting:true
         },
     ],
 };
