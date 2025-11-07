@@ -72,38 +72,65 @@ const AdminDashboard = () => {
   };
 
   const installOrActivatePlugin = async (slug: string, status = 'active') => {
-    if (!slug || installing) {
-      return; // Prevent multiple clicks
-    }
-
+    if (!slug || installing) return; // prevent multiple clicks
     setInstalling(slug);
 
     try {
-      const response = await axios({
-        method: 'POST',
-        url: `${appLocalizer.apiUrl}/wp/v2/plugins`,
-        headers: {
-          'X-WP-Nonce': appLocalizer.nonce,
-        },
-        data: {
-          slug,
-          status,
-        },
+      // Step 1: Fetch all plugins to check status
+      const { data: plugins } = await axios.get(`${appLocalizer.apiUrl}/wp/v2/plugins`, {
+        headers: { 'X-WP-Nonce': appLocalizer.nonce },
       });
 
-      console.log(`Plugin "${slug}" ${status} successfully:`, response.data);
+      // Find the existing plugin object. The 'plugin' property holds the full file path.
+      const existingPlugin = plugins.find((plugin: any) => plugin.plugin.includes(slug));
 
-      // Verify installation was successful
+      // Determine the full file path for activation, assuming {slug}/{slug}.php as fallback.
+      const pluginFilePath = existingPlugin?.plugin || `${slug}/${slug}.php`;
+
+      // Step 2: Determine action
+      let action: 'install' | 'activate' | 'none' = 'none';
+      if (existingPlugin && existingPlugin.status !== 'active') {
+        action = 'activate';
+      } else if (!existingPlugin) {
+        action = 'install';
+      }
+
+      if (action === 'none') {
+        setSuccessMsg(`Plugin "${slug}" is already active.`);
+        await checkPluginStatus(slug);
+        return;
+      }
+
+      let apiUrl = `${appLocalizer.apiUrl}/wp/v2/plugins`; // Default endpoint for INSTALLATION
+      let requestData: { slug?: string; status: string } = { slug, status: 'active' }; // Default body for INSTALLATION
+
+      if (action === 'activate') {
+        // For activation, the endpoint MUST target the specific file path.
+        const encodedFilePath = encodeURIComponent(pluginFilePath);
+        apiUrl = `${appLocalizer.apiUrl}/wp/v2/plugins/${encodedFilePath}`;
+
+        // The body only needs the 'status' when updating an existing plugin.
+        requestData = { status: 'active' };
+      }
+
+      // Step 3: Call the correct API endpoint
+      await axios.post(apiUrl, requestData, {
+        headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      });
+
+      // Step 4: Update local status
       await checkPluginStatus(slug);
 
-      setSuccessMsg(`Plugin "${slug}" installed successfully!`);
-      setTimeout(() => setSuccessMsg(''), 3000);
+      setSuccessMsg(
+        action === 'install'
+          ? `Plugin "${slug}" installed and activated successfully!`
+          : `Plugin "${slug}" activated successfully!`
+      );
 
     } catch (error) {
-      console.error(`Failed to ${status} plugin "${slug}":`, error.response?.data || error);
-      setSuccessMsg(`Failed to install plugin "${slug}". Please try again.`);
-      setTimeout(() => setSuccessMsg(''), 3000);
+      setSuccessMsg(`Failed to install or activate plugin "${slug}". Please try again.`);
     } finally {
+      setTimeout(() => setSuccessMsg(''), 3000);
       setInstalling('');
     }
   };
@@ -162,7 +189,7 @@ const AdminDashboard = () => {
       href: "https://www.facebook.com/groups/226246620006065/",
     },
   ];
-  const featuresList = [    
+  const featuresList = [
     {
       title: "Membership rewards & commission",
       desc: "Charge your sellers a monthly or yearly membership fee to sell on your marketplace - predictable revenue every month.",
@@ -427,7 +454,7 @@ const AdminDashboard = () => {
                             ></label>
                           </div>
                         ) : (
-                          <span className="admin-pro-tag" onclick="">
+                          <span className="admin-pro-tag">
                             <i className="adminlib-pro-tag"></i>Pro
                           </span>
                         )}
