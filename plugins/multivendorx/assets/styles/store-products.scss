@@ -231,6 +231,20 @@
              }
          }
      }
+
+     .login-wrapper {
+         padding: 1rem;
+         border: 0.063rem solid #00000029;
+         border-radius: 0.313rem;
+
+         .description {
+             font-size: 1.813rem;
+             margin-bottom: 0.5rem;
+         }
+         span{
+            font-size: 1.125rem;
+         }
+     }
  }
 
  //  single product qna end
@@ -513,8 +527,9 @@
 
      #review-form-wrapper {
          margin-top: 1rem;
-         .commentform{
-            margin-top: 1rem;
+
+         .commentform {
+             margin-top: 1rem;
          }
      }
 
@@ -550,6 +565,5 @@
 
  //  review page end
  #commentform {
-    display: none;
-  }
-  
+     display: none;
+ }
