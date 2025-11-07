@@ -1636,7 +1636,10 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                 }
                             }}
                             moduleChange={(moduleEnabled) => {
-                                setModelOpen(true);
+                                moduleEnabledChanged(
+                                    String(moduleEnabled ?? '')
+                                )
+                                // setModelOpen(true);
                             }}
                             proChanged={() => setModelOpen(true)}
                         />
