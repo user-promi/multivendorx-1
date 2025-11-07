@@ -21,7 +21,7 @@ interface EmailBadge {
     isValid: boolean;
 }
 
-const StoreSettings = ({ id, data }: { id: string | null; data: any }) => {
+const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; onUpdate:any }) => {
     const [formData, setFormData] = useState<FormData>({});
     const [emailBadges, setEmailBadges] = useState<EmailBadge[]>([]);
     const [newEmailValue, setNewEmailValue] = useState('');
@@ -191,7 +191,6 @@ const StoreSettings = ({ id, data }: { id: string | null; data: any }) => {
                 <i
                     className="adminlib-delete remove-btn"
                     onClick={() => onRemove(badge.id)}
-                // style={{ cursor: 'pointer', marginLeft: '8px' }}
                 ></i>
             </div>
         );
@@ -679,7 +678,9 @@ const StoreSettings = ({ id, data }: { id: string | null; data: any }) => {
         const { name, value } = e.target;
         const updated = { ...formData, [name]: value };
         setFormData(updated);
-
+        if (name == "slug") {
+            onUpdate({ slug: value });
+        }
         if (name === "phone") {
             const isValidPhone = /^\+?[0-9\s\-]{7,15}$/.test(value);
             if (isValidPhone) {
@@ -717,14 +718,14 @@ const StoreSettings = ({ id, data }: { id: string | null; data: any }) => {
         if (!id) return;
         // Format email data for backend
         const formattedData = { ...updatedData };
-
-        if (formattedData.email && typeof formattedData.email === 'string') {
-            // Convert newline-separated emails to array for backend
-            formattedData.emails = formattedData.email
-                .split('\n')
-                .map((email: string) => email.trim())
-                .filter((email: string) => email !== '');
-        }
+        
+        // if (formattedData.email && typeof formattedData.email === 'string') {
+        //     // Convert newline-separated emails to array for backend
+        //     formattedData.emails = formattedData.email
+        //         .split('\n')
+        //         .map((email: string) => email.trim())
+        //         .filter((email: string) => email !== '');
+        // }
 
         axios({
             method: 'PUT',
@@ -1008,6 +1009,7 @@ const StoreSettings = ({ id, data }: { id: string | null; data: any }) => {
                                         if (!newValue || Array.isArray(newValue)) return;
 
                                         const updated = { ...formData, status: newValue.value };
+                                        onUpdate({ status: newValue.value });
                                         setFormData(updated);
                                         autoSave(updated);
                                     }}
@@ -1034,7 +1036,7 @@ const StoreSettings = ({ id, data }: { id: string | null; data: any }) => {
                                     value={formData.slug}
                                     onChange={handleChange}
                                 />
-                                <div className="settings-metabox-description">Your Site Url : {appLocalizer.store_page_url + '/' + formData.slug}</div>
+                                <div className="settings-metabox-description">Store Url : {appLocalizer.store_page_url + '/' + formData.slug}</div>
                             </div>
                         </div>
                     </div>

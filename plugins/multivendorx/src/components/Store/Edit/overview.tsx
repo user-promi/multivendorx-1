@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
-import { BasicInput, SelectInput, getApiLink, SuccessNotice } from 'zyra';
+import { BasicInput, SelectInput, getApiLink, SuccessNotice, useModules } from 'zyra';
 import { Skeleton } from '@mui/material';
 import { formatCurrency } from '../../../services/commonFunction';
 
@@ -12,6 +12,8 @@ interface OverviewProps {
 
 const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
     const navigate = useNavigate();
+    const { modules } = useModules();
+
     // const [data, setData] = useState<any[]>([]);
     // const [storeData, setStoreData] = useState<any[]>([]);
 
@@ -165,51 +167,53 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                     </div>
                 </div>
                 <div className="card-wrapper w-35">
-                    <div className="card-content">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    Store hours
+                    {appLocalizer.khali_dabba && (
+                        <div className="card-content">
+                            <div className="card-header">
+                                <div className="left">
+                                    <div className="title">
+                                        Store hours
+                                    </div>
+                                    <div className="des">
+                                        Manage your weekly schedule and special hours
+                                    </div>
                                 </div>
                                 <div className="des">
                                     Manage your weekly schedule and special hours
                                 </div>
                             </div>
-                            <div className="right">
-                                <i className="adminlib-external"></i>
-                            </div>
-                        </div>
 
-                        {/* <div className="store-owner-details">
-                            <div className="profile">
-                                <div className="avater">
-                                    <span className="adminlib-calendar"></span>
+                            {/* <div className="store-owner-details">
+                                <div className="profile">
+                                    <div className="avater">
+                                        <span className="adminlib-calendar"></span>
+                                    </div>
+                                    <div className="details">
+                                        <div className="name">$5,420</div>
+                                        <div className="des">Oct 15, 2024</div>
+                                    </div>
                                 </div>
-                                <div className="details">
-                                    <div className="name">$5,420</div>
-                                    <div className="des">Oct 15, 2024</div>
+                                <div className="right-details">
+                                    <div className="price">$356 .35</div>
+                                    <div className="div">Lorem, ipsum dolor.</div>
                                 </div>
-                            </div>
-                            <div className="right-details">
-                                <div className="price">$356 .35</div>
-                                <div className="div">Lorem, ipsum dolor.</div>
-                            </div>
-                        </div> */}
+                            </div> */}
 
-                        <div className="store-time-wrapper">
+                            <div className="store-time-wrapper">
 
-                            <div className="row">
-                                <div className="time-wrapper">
-                                    <div className="des">Current status</div>
-                                    <div className="time"><span className="admin-badge green">Open</span></div>
-                                </div>
-                                <div className="time-wrapper">
-                                    <div className="des">Next opening</div>
-                                    <div className="time">Mon 9:00 AM</div>
+                                <div className="row">
+                                    <div className="time-wrapper">
+                                        <div className="des">Current status</div>
+                                        <div className="time"><span className="admin-badge green">Open</span></div>
+                                    </div>
+                                    <div className="time-wrapper">
+                                        <div className="des">Next opening</div>
+                                        <div className="time">Mon 9:00 AM</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    )}
                     <div className="card-content">
                         <div className="card-header">
                             <div className="left">
@@ -249,23 +253,27 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="items">
+                            {appLocalizer.khali_dabba && (
+                                <div className="items">
+                                    <div className="title">
+                                        Vacation mode
+                                    </div>
+                                    <div className="details">
+                                        <span className="admin-badge red">Inactive</span>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                        {appLocalizer.khali_dabba && (
+                            <div className="description-wrapper">
                                 <div className="title">
-                                    Vacation mode
+                                    <i className="adminlib-error"></i>
+                                    Gold plan
+                                    <span className="admin-badge green">Active</span>
                                 </div>
-                                <div className="details">
-                                    <span className="admin-badge red">Inactive</span>
-                                </div>
+                                <div className="des">Renews on Dec 15, 2024</div>
                             </div>
-                        </div>
-                        <div className="description-wrapper">
-                            <div className="title">
-                                <i className="adminlib-error"></i>
-                                Gold plan
-                                <span className="admin-badge green">Active</span>
-                            </div>
-                            <div className="des">Renews on Dec 15, 2024</div>
-                        </div>
+                        )}
                     </div>
                     <div className="card-content">
                         <div className="card-header">
@@ -302,6 +310,47 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                             </ul>
                         </div>
                     </div>
+                    {modules.includes('store-review') && (
+                        <div className="card-content">
+                            <div className="card-header">
+                                <div className="left">
+                                    <div className="title">
+                                        Latest Reviews
+                                    </div>
+                                </div>
+                                <div className="right">
+                                    <i className="adminlib-external"
+                                        onClick={() => { navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`) }}
+                                    ></i>
+                                </div>
+                            </div>
+
+                            <div className="store-owner-details owner">
+                                
+                            </div>
+                        </div>
+                    )}
+                    {modules.includes('marketplace-refund') && (
+                        <div className="card-content">
+                            <div className="card-header">
+                                <div className="left">
+                                    <div className="title">
+                                        Refund Requests
+                                    </div>
+                                </div>
+                                <div className="right">
+                                    <i className="adminlib-external"
+                                        onClick={() => { navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`) }}
+                                    ></i>
+                                </div>
+                            </div>
+
+                            <div className="store-owner-details owner">
+                                
+                            </div>
+                        </div>
+                    )}
+
                     {/* <div className="card-content">
                         <div className="card-header">
                             <div className="left">

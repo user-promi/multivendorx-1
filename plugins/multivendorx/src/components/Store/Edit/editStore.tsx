@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ToggleSetting, getApiLink, SelectInput, Tabs, RadioInput, CommonPopup } from 'zyra';
+import { ToggleSetting, getApiLink, SelectInput, Tabs, RadioInput, CommonPopup, useModules } from 'zyra';
 import { Skeleton } from '@mui/material';
 
 import StoreSettings from './storeSettings';
@@ -15,6 +15,8 @@ import axios from 'axios';
 import Overview from './overview';
 import Membership from './membership';
 import Financial from './financial';
+import StoreReview from './storeReview';
+import StoreRefund from './storeRefund';
 import "../viewStore.scss";
 
 const statusOptions = [
@@ -84,6 +86,7 @@ const EditStore = () => {
     const currentTab = hashParams.get('subtab');
     const prepareUrl = (tabId: string) => `?page=multivendorx#&tab=stores&edit/${editId}/&subtab=${tabId}`;
     const navigate = useNavigate();
+    const { modules } = useModules();
 
     const autoSave = (updatedData: { [key: string]: string }) => {
         if (!editId) return;
@@ -208,16 +211,20 @@ const EditStore = () => {
                 icon: 'adminlib-credit-card',
             },
         },
-        {
-            type: 'file',
-            content: {
-                id: 'store-policy',
-                name: 'Policy',
-                desc: 'Policy',
-                hideTabHeader: true,
-                icon: 'adminlib-credit-card',
-            },
-        },
+        ...(modules.includes('store-policy')
+            ? [
+                {
+                    type: 'file',
+                    content: {
+                        id: 'store-policy',
+                        name: 'Policy',
+                        desc: 'Policy',
+                        hideTabHeader: true,
+                        icon: 'adminlib-credit-card',
+                    },
+                },
+            ]
+            : []),
         {
             type: 'file',
             content: {
@@ -238,17 +245,54 @@ const EditStore = () => {
                 icon: 'adminlib-credit-card',
             },
         },
-        {
-            type: 'file',
-            content: {
-                id: 'store-facilitator',
-                name: 'Facilitator',
-                desc: 'Facilitator',
-                hideTabHeader: true,
-                icon: 'adminlib-credit-card',
-            },
-        },
+        ...(modules.includes('facilitator')
+            ? [
+                {
+                    type: 'file',
+                    content: {
+                        id: 'store-facilitator',
+                        name: 'Facilitator',
+                        desc: 'Facilitator',
+                        hideTabHeader: true,
+                        icon: 'adminlib-credit-card',
+                    },
+                },
+            ]
+            : []),
+        ...(modules.includes('store-review')
+            ? [
+                {
+                    type: 'file',
+                    content: {
+                        id: 'store-review',
+                        name: 'Reviews',
+                        desc: 'reviews',
+                        hideTabHeader: true,
+                        icon: 'adminlib-credit-card',
+                    },
+                },
+            ]
+            : []),
+        ...(modules.includes('marketplace-refund')
+            ? [
+                {
+                    type: 'file',
+                    content: {
+                        id: 'store-refund',
+                        name: 'Refunds',
+                        desc: 'refunds',
+                        hideTabHeader: true,
+                        icon: 'adminlib-credit-card',
+                    },
+                },
+            ]
+            : []),
     ];
+
+
+    const handleUpdateData = (updatedFields: any) => {
+        setData(prev => ({ ...prev, ...updatedFields }));
+    };
 
     const visibleTabs =
         data?.status === 'pending' || data?.status === 'rejected' || data?.status === 'permanently_rejected'
@@ -260,7 +304,7 @@ const EditStore = () => {
             case 'store-overview':
                 return <Overview id={editId} storeData={data} />;
             case 'store':
-                return <StoreSettings id={editId} data={data} />;
+                return <StoreSettings id={editId} data={data} onUpdate={handleUpdateData} />;
             case 'staff':
                 return <StoreSquad id={editId} />;
             case 'payment':
@@ -273,6 +317,10 @@ const EditStore = () => {
                 return <StoreRegistration id={editId} />;
             case 'store-facilitator':
                 return <Facilitator id={editId} data={data} />;
+            case 'store-review':
+                return <StoreReview id={editId} data={data} />;
+            case 'store-refund':
+                return <StoreRefund id={editId} data={data} />;
             default:
                 return <div></div>;
         }

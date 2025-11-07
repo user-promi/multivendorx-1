@@ -44,7 +44,7 @@ $login_url = add_query_arg('redirect_to', $current_url, $myaccount_url);
                     </div>
                 </li>
             <?php endforeach; ?>
-            
+
         <?php endif; ?>
     </ul>
 
@@ -59,10 +59,14 @@ $login_url = add_query_arg('redirect_to', $current_url, $myaccount_url);
             <button type="button" id="qna-show-form">Post your Question</button>
         </div>
     <?php else: ?>
-        <div class="qna-cta">
-        <a href="<?php echo esc_url($login_url); ?>">
-                Log in to Ask
+        <div class="login-wrapper">
+            <div class="description">
+                Can’t find your answer?
+            </div>
+            <a class="button" href="<?php echo esc_url($login_url); ?>">
+                Log in
             </a>
+            <span>to share your question with us.</span>
         </div>
     <?php endif; ?>
 

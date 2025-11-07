@@ -263,22 +263,24 @@ class StripeConnect
                 ],
             ];
             
-            if ($is_onboarded) {
-                $fields[] = [
-                    'type'  => 'button',
-                    'key'   => 'disconnect_account',
-                    'label' => __('Disconnect Stripe Account', 'multivendorx'),
-                    'action'=> 'disconnect_stripe_account',
-                    'class' => 'mvx-stripe-disconnect-btn',
-                ];
-            } else {
-                $fields[] = [
-                    'type'  => 'button',
-                    'key'   => 'create_account',
-                    'label' => __('Connect with Stripe', 'multivendorx'),
-                    'action'=> 'create_stripe_account',
-                    'class' => 'mvx-stripe-connect-btn',
-                ];
+            if (!is_admin()) {
+                if ($is_onboarded) {
+                    $fields[] = [
+                        'type'  => 'button',
+                        'key'   => 'disconnect_account',
+                        'label' => __('Disconnect Stripe Account', 'multivendorx'),
+                        'action'=> 'disconnect_stripe_account',
+                        'class' => 'mvx-stripe-disconnect-btn',
+                    ];
+                } else {
+                    $fields[] = [
+                        'type'  => 'button',
+                        'key'   => 'create_account',
+                        'label' => __('Connect with Stripe', 'multivendorx'),
+                        'action'=> 'create_stripe_account',
+                        'class' => 'mvx-stripe-connect-btn',
+                    ];
+                }
             }
             
             return [

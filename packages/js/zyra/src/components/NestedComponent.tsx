@@ -11,12 +11,13 @@ interface NestedFieldOption {
   value: string;
   label: string;
   proSetting?: boolean;
+  check?: boolean;
 }
 
 interface NestedField {
   look?: string;
   key: string;
-  type: "number" | "select" | "text" | "url" | "dropdown" | "time" | "checkbox" | "textarea" | "devider";
+  type: "number" | "select" | "text" | "url" | "dropdown" | "time" | "checkbox" | "textarea" | "checklist" | "setup" | "devider";
   label?: string;
   placeholder?: string;
   options?: NestedFieldOption[];
@@ -44,6 +45,9 @@ interface NestedField {
   moduleEnabled?: string;
   dependentSetting?: string;
   dependentPlugin?: string;
+
+  hideCheckbox?: boolean;
+  link?: string;
 }
 
 declare const appLocalizer: { khali_dabba?: boolean };
@@ -75,7 +79,7 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
   wrapperClass,
 }) => {
   const [rows, setRows] = useState<Record<string, any>[]>([]);
-
+  
   // sync value → state
   useEffect(() => {
     setRows(single ? (value.length ? [value[0]] : [{}]) : value.length ? value : [{}]);
@@ -223,9 +227,9 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
               options={
                 Array.isArray(field.options)
                   ? field.options.map((opt) => ({
-                      value: String(opt.value),
-                      label: opt.label ?? String(opt.value),
-                    }))
+                    value: String(opt.value),
+                    label: opt.label ?? String(opt.value),
+                  }))
                   : []
               }
               value={typeof val === "object" ? val.value : val}
@@ -264,8 +268,8 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
                 look === "toggle"
                   ? "toggle-btn"
                   : field.selectDeselect === true
-                  ? "checkbox-list-side-by-side"
-                  : "simple-checkbox"
+                    ? "checkbox-list-side-by-side"
+                    : "simple-checkbox"
               }
               descClass="settings-metabox-description"
               description={field.desc}
@@ -309,7 +313,54 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
           </div>
         );
       }
+      case "checklist":
+        return (
+          <ul className="checklist" key={field.key}>
+            {Array.isArray(field.options) &&
+              field.options.map((opt, i) => (
+                <li key={i}>
+                  <i
+                    className={
+                      opt.check
+                        ? "check adminlib-icon-yes"
+                        : "close adminlib-cross"
+                    }
+                  ></i>
+                  {opt.label ?? opt.value}
+                </li>
+              ))}
+          </ul>
+        );
 
+      case "setup":
+        return (
+          <>
+            <div className="wizard-step">
+              <div className="step-info">
+
+                {/* {!field.hideCheckbox && (
+                  <div className="default-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={!!fieldValue}
+                      onChange={(e) =>
+                        handleInputChange(methodId, field.key, e.target.checked)
+                      }
+                    />
+                    <label htmlFor={`step-checkbox-${methodId}-${field.key}`}></label>
+                  </div>
+                )} */}
+                <div className="step-text">
+                  <span className="step-title">{field.label}</span>
+                  <span className="step-desc">{field.desc}</span>
+                </div>
+              </div>
+              {field.link && (
+                <a href={field.link} className="admin-btn btn-purple">Set Up <i className="adminlib-arrow-right"></i> </a>
+              )}
+            </div>
+          </>
+        );
       case "devider":
         return <span className="devider" key={field.key}></span>;
 
