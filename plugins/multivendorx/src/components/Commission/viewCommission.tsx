@@ -303,13 +303,13 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
                 </div>
               )}
 
-              {orderData?.payment_method_title && (
+              {/* {orderData?.payment_method_title && (
                 <div className="method">
                   <i className="adminlib-form-paypal-email"></i>
                   <b>Payment Method:</b>{" "}
                   <span className="admin-badge blue">{orderData.payment_method_title}</span>
                 </div>
-              )}
+              )} */}
 
             </div>
           </div>
