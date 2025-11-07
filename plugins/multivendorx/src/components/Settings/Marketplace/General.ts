@@ -54,7 +54,7 @@ export default {
             type: 'text',
             label: __( 'Store base', 'multivendorx' ),
             desc: __(
-                'Set a custom slug for your store URL. For example, in the URL: https://yourdomain.com/store/sample-store, the default word [store] can be replaced with any slug you define here.',
+                'Set a custom slug for your store URL. For example, in the URL: https://yourdomain.com/store/sample-store/, the default word [store] can be replaced with any slug you define here.',
                 'multivendorx'
             ),
             size:"8rem",

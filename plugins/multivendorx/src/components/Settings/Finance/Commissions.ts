@@ -85,7 +85,7 @@ export default {
                 'Set your default commission rate that will apply to all orders. You can choose between a fixed amount ($) or a percentage (%) of the order value. Additionally, you can create advanced commission rules below to automatically adjust rates based on specific conditions like product price, quantity, or total order value.',
                 'multivendorx'
             ),
-            addButtonLabel: 'Add new',
+            addButtonLabel: 'Add New',
             deleteButtonLabel: 'Remove',
             nestedFields: [
                 {
@@ -294,8 +294,8 @@ export default {
                 'Define a fee to cover platform costs. Apply a fixed, percentage, or combined rate. Choose whether it’s paid by the customer at checkout or deducted from the store’s commission.',
                 'multivendorx'
             ),
-            desc: __('<strong>Example setup:</strong><br>Product price = $100<br>Marketplace fee = $2 + 10%<ul><li><strong>Case 1 – Fee added to the customer’s order total:</strong><br>Customer pays = $100 + ($2 + 10% of $100) = $112<li><strong>Case 2 – Fee deducted from the store’s commission:</strong><br>Customer pays = $100<br>Marketplace fee = $2 + 10% of $100 = $12<br>Store receives = $100 - $12 = $88</li></ul>', 'multivendorx'),
-                 nestedFields: [
+            desc: __('<strong>Example setup:</strong><br>Order total = $100<br>Store commission = 80%<br>Marketplace fee = $2 + 10% = $12<ul><li><strong>Case 1 – Fee added to the customer’s order total:</strong><br>Customer pays = $100 + $12 = $112</li><li><strong>Case 2 – Fee deducted from the store’s commission:</strong><br>Customer pays = $100<br>Final store payout = 80% of $100 - $12 = $68</li></ul>', 'multivendorx'),
+            nestedFields: [
                 {
                     key: 'commission_fixed',
                     type: 'text',
@@ -352,10 +352,10 @@ export default {
             key: 'gateway_fees',
             type: 'nested',
             label: __('Gateway fees', 'multivendorx'),
-            settingDescription: __('Define the default fee that will be deducted from the store commission. If you want to charge different fees for each payment method, set the amounts here for gateways, bank transfers, or cash on delivery.', 'multivendorx'),
+            settingDescription: __('Set up gateway fees to recover the transaction costs charged by your payment provider. These fees are deducted from the store’s commission so your earnings remain unaffected.', 'multivendorx'),
             rowClass: 'single-line',
             single: true,
-            desc: __('', 'multivendorx'),
+            desc: __('Use this setting to manage transaction fees for different payment methods. You can define a default fee or set individual fees for each payment mode, such as bank transfer or cash on delivery.<br><strong>Example setup:</strong><br>Product price = $100<br>Store commission = 30%<br>Gateway fee = 10%<ul><li><strong>Customer pays:</strong> $100</li><li><strong>Store commission:</strong> 30% of $100 = $30</li><li><strong>Gateway fee:</strong> 10% of $100 = $10</li><li><strong>Final store earning:</strong> $30 - $10 = $20</li><li><strong>Admin earning:</strong> $70</li></ul>', 'multivendorx'),
             nestedFields
         },
     ],
