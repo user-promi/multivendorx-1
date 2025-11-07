@@ -68,7 +68,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 
             <div className="container-wrapper ">
                 <div className="card-wrapper w-65">
-                    <div className="card-content">
                         <div className="analytics-container">
                             {overviewData.map((item, idx) => (
                                 <div key={idx} className="analytics-item">
@@ -83,7 +82,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                             ))}
 
                         </div>
-                    </div>
                     <div className="row">
                         <div className="column">
                             <div className="card-header">
@@ -235,7 +233,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                     <div
                                         className="sku"
                                         onClick={() => {
-                                            navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=store-application`);
+                                            navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=application-details`);
                                         }}
                                     >
                                         <i className="adminlib-external"></i>
