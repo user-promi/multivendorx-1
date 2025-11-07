@@ -165,7 +165,7 @@ const Coupons: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
             cell: ({ row }) => <TableCell title={row.original?.amount ?? '-'}>{formatCurrency(row.original?.amount)}</TableCell>
         },
         {
-            header: __('Duration', 'multivendorx'),
+            header: __('Expiry', 'multivendorx'),
             accessorFn: (row) => row.date_created ? new Date(row.date_created).getTime() : 0, // sorting date
             enableSorting: true,
             cell: ({ row }) => {
