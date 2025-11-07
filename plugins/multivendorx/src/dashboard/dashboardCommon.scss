@@ -108,121 +108,121 @@ $border-radius-button: 8rem;
     flex-direction: column;
 }
 
-.card-content {
-    box-shadow: 0 1px 3px #364a630d;
-    background: #fff;
-    padding: 1.5rem;
+// .card-content {
+//     box-shadow: 0 1px 3px #364a630d;
+//     background: #fff;
+//     padding: 1.5rem;
 
-    .card-title {
-        font-size: 1.25rem;
-        margin-bottom: 1.313rem;
-    }
+//     .card-title {
+//         font-size: 1.25rem;
+//         margin-bottom: 1.313rem;
+//     }
 
-    .admin-badge {
-        width: fit-content;
-    }
+//     .admin-badge {
+//         width: fit-content;
+//     }
 
-    .address {
-        margin-bottom: 1.5rem;
-    }
+//     .address {
+//         margin-bottom: 1.5rem;
+//     }
 
-    .form-group-wrapper {
-        display: flex;
-        gap: 1rem;
-        align-items: end;
+//     .form-group-wrapper {
+//         display: flex;
+//         gap: 1rem;
+//         align-items: end;
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            margin-bottom: 1rem;
+//         .form-group {
+//             display: flex;
+//             flex-direction: column;
+//             width: 100%;
+//             margin-bottom: 1rem;
 
-            label {
-                font-size: .875rem;
-                font-weight: 500;
-                color: #344357;
-                margin-bottom: .5rem;
-            }
+//             label {
+//                 font-size: .875rem;
+//                 font-weight: 500;
+//                 color: #344357;
+//                 margin-bottom: .5rem;
+//             }
 
-            i {
-                font-size: 1.125rem;
-                color: #5007aa;
-            }
-        }
-    }
+//             i {
+//                 font-size: 1.125rem;
+//                 color: #5007aa;
+//             }
+//         }
+//     }
 
-    .form-details {
-        display: flex;
-        margin-bottom: 1rem;
+//     .form-details {
+//         display: flex;
+//         margin-bottom: 1rem;
 
-        label {
-            font-size: 1rem;
-            width: 15%;
-        }
+//         label {
+//             font-size: 1rem;
+//             width: 15%;
+//         }
 
-        .value {
-            width: 85%;
-        }
-    }
+//         .value {
+//             width: 85%;
+//         }
+//     }
 
-    .name-list {
-        ul {
-            display: flex;
-            gap: 0.5rem;
+//     .name-list {
+//         ul {
+//             display: flex;
+//             gap: 0.5rem;
 
-            li {
-                padding: 0.5rem 1rem;
-                border: 0.063rem solid #e0e4e9;
-                border-radius: 0.313rem;
-                color: $theme-color;
-                background: $theme-background-color;
+//             li {
+//                 padding: 0.5rem 1rem;
+//                 border: 0.063rem solid #e0e4e9;
+//                 border-radius: 0.313rem;
+//                 color: $theme-color;
+//                 background: $theme-background-color;
 
-                i {
-                    color: #f06b4f;
-                    background: #fde8e4;
-                    padding: 0.125rem;
-                    border-radius: 50%;
-                    font-size: 0.85rem;
-                    margin-left: 0.5rem;
-                }
-            }
-        }
-    }
+//                 i {
+//                     color: #f06b4f;
+//                     background: #fde8e4;
+//                     padding: 0.125rem;
+//                     border-radius: 50%;
+//                     font-size: 0.85rem;
+//                     margin-left: 0.5rem;
+//                 }
+//             }
+//         }
+//     }
 
-    .details {
-        display: flex;
-        gap: 0.5rem;
-        margin: 01rem 0;
-        align-items: center;
+//     .details {
+//         display: flex;
+//         gap: 0.5rem;
+//         margin: 01rem 0;
+//         align-items: center;
 
-        img {
-            width: 2.5rem;
-            border-radius: 50%;
-        }
+//         img {
+//             width: 2.5rem;
+//             border-radius: 50%;
+//         }
 
-        .icon {
-            width: 10%;
+//         .icon {
+//             width: 10%;
 
-            i {
-                padding: 0.5rem;
-                font-size: 1.4rem;
-                border-radius: 50%;
-            }
-        }
+//             i {
+//                 padding: 0.5rem;
+//                 font-size: 1.4rem;
+//                 border-radius: 50%;
+//             }
+//         }
 
-        .content {
+//         .content {
 
-            .title {
-                font-size: 1.125rem;
-                color: #000;
-                font-weight: 500;
-                margin-bottom: 0.313rem;
-            }
-        }
+//             .title {
+//                 font-size: 1.125rem;
+//                 color: #000;
+//                 font-weight: 500;
+//                 margin-bottom: 0.313rem;
+//             }
+//         }
 
-    }
+//     }
 
-}
+// }
 
 // card styles start
 
@@ -677,6 +677,4 @@ $border-radius-button: 8rem;
         }
     }
 }
-
-
 // horizental menu end -- move to component

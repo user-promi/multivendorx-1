@@ -156,11 +156,11 @@ class Frontend {
         }
         if( !in_array( $order->get_status(), MultiVendorX()->setting->get_setting('customer_refund_status', []) ))  {
             $message['type'] = 'info';
-            $message['msg'] = isset( $default_msg['order_status_not_allowed'] ) ? $default_msg['order_status_not_allowed'] : __( 'Your Refund is not allowed for this order status', 'multivendorx' );
+            $message['msg'] = isset( $default_msg['order_status_not_allowed'] ) ? $default_msg['order_status_not_allowed'] : __( 'Refund is not allowed for this order status', 'multivendorx' );
         }
         if( $cust_refund_status == 'refund_reject' ) {
             $message['type'] = 'error';
-            $message['msg'] = isset( $default_msg['order_refund_rejected'] ) ? $default_msg['order_refund_rejected'] : __( 'Sorry!! Your Request Is Reject', 'multivendorx' );
+            $message['msg'] = isset( $default_msg['order_refund_rejected'] ) ? $default_msg['order_refund_rejected'] : __( 'Sorry!! Your Request Is Rejected', 'multivendorx' );
         }elseif( $cust_refund_status == 'refund_request' ) {
             $message['type'] = 'warning';
             $message['msg'] = isset( $default_msg['order_refund_request_pending'] ) ? $default_msg['order_refund_request_pending'] : __( 'Your Request Is pending', 'multivendorx' );
