@@ -98,6 +98,16 @@ class Transaction {
 
         $transaction_id = $wpdb->insert_id;
 
+        if ($transaction_id) {
+            $wpdb->update(
+                $wpdb->prefix . Utill::TABLES['commission'],
+                array( 'status' => 'paid' ),
+                array( 'id' => $commission_id ),
+                array( '%s' ),
+                array( '%d' )
+            );
+        }
+
         do_action('multivendorx_after_create_transaction', $transaction_id, $commission);
         return $transaction_id;
     }
