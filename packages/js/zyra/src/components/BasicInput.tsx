@@ -185,6 +185,10 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                                     readOnly={readOnly}
                                     required={required}
                                 />
+                                {type === 'color' && (
+                                    <div className="color-value">{value}</div>
+                                )}
+
                                 {postInsideText && (
                                     <span
                                         className="parameter"

@@ -389,6 +389,24 @@ body:has(.admin-main-wrapper) {
   padding: 0;
 }
 
+.settings-color-picker {
+  .input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: $border-light-small;
+    width: 10rem !important;
+    border-radius: 0.313rem;
+    background: $theme-background-color;
+
+    .color-value {
+      font-size: 1rem;
+
+    }
+  }
+}
+
+
 input[type="color"] {
   cursor: pointer;
 }
