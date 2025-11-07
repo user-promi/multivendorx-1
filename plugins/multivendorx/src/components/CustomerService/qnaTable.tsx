@@ -12,6 +12,8 @@ export interface RealtimeFilter {
     name: string;
     render: (updateFilter: (key: string, value: any) => void, filterValue: any) => React.ReactNode;
 }
+import DefaultStore from "../../../assets/images/default-store.jpg";
+
 // QnA Row Type
 type QnaRow = {
     id: number;
@@ -230,15 +232,31 @@ const Qna: React.FC = () => {
             cell: ({ row }) => <input type="checkbox" checked={row.getIsSelected()} onChange={row.getToggleSelectedHandler()} />
         },
         {
-            header: __('Product Name', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.product_name || ''}>
-                    {row.original.product_name ? (
-                        <a href={row.original.product_link} target="_blank" rel="noreferrer">{row.original.product_name}</a>
-                    ) : '-'}
-                </TableCell>
-            )
+            id: 'product',
+            header: __('Product', 'multivendorx'),
+            cell: ({ row }) => {
+                const product = row.original;
+                const image = product.product_image || DefaultStore; 
+                return (
+                    <TableCell title={product.product_name || ''}>
+                        <a
+                            href={product.product_link || '#'}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="product-wrapper"
+                        >
+                            <img src={image} alt={product.product_name} />
+                            <div className="details">
+                                <span className="title">{product.product_name || '-'}</span>
+                                {/* SKU not available in your current data, remove or leave placeholder */}
+                                <span><b>SKU:</b> {product.sku || '-'}</span>
+                            </div>
+                        </a>
+                    </TableCell>
+                );
+            },
         },
+
         {
             header: __('Question', 'multivendorx'),
             cell: ({ row }) => {
@@ -260,7 +278,7 @@ const Qna: React.FC = () => {
             cell: ({ row }) => <TableCell title={row.original.author_name || ''}>{row.original.author_name ?? '-'}</TableCell>
         },
         {
-            id:'question_date',
+            id: 'question_date',
             header: __('Date', 'multivendorx'),
             accessorFn: row => row.question_date ? new Date(row.question_date).getTime() : 0, // numeric timestamp for sorting
             enableSorting: true,
