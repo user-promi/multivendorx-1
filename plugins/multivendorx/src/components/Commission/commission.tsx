@@ -230,6 +230,8 @@ const Commission: React.FC = () => {
         currentPage = 1,
         typeCount = '',
         store = '',
+        orderBy = '',
+        order = '',
         startDate = new Date(0),
         endDate = new Date(),
     ) {
@@ -243,6 +245,8 @@ const Commission: React.FC = () => {
                 row: rowsPerPage,
                 status: typeCount === 'all' ? '' : typeCount,
                 store_id: store,
+                orderBy,
+                order,
                 startDate,
                 endDate
             },
@@ -391,6 +395,8 @@ const Commission: React.FC = () => {
             currentPage,
             filterData?.typeCount,
             filterData?.store,
+            filterData?.orderBy,
+            filterData?.order,
             filterData?.date?.start_date,
             filterData?.date?.end_date
         );
@@ -416,16 +422,15 @@ const Commission: React.FC = () => {
             ),
         },
         {
-            id: 'id',
-            accessorKey: 'id',
-            accessorFn: row => parseFloat(row.id || '0'),
+            id: 'ID',
+            accessorKey: 'ID',
             enableSorting: true,
             header: __('ID', 'multivendorx'),
             cell: ({ row }) => <TableCell >#{row.original.id}</TableCell>,
         },
         {
-            id: 'orderId',
-            accessorKey: 'orderId',
+            id: 'order_id',
+            accessorKey: 'order_id',
             enableSorting: true,
             header: __('Order', 'multivendorx'),
             cell: ({ row }) => {
@@ -448,17 +453,16 @@ const Commission: React.FC = () => {
             },
         },
         {
-            id: 'totalOrderAmount',
-            accessorKey: 'totalOrderAmount',
-            accessorFn: row => parseFloat(row.totalOrderAmount || '0'),
+            id: 'total_order_amount',
+            accessorKey: 'total_order_amount',
             enableSorting: true,
             header: __('Order Amount', 'multivendorx'),
             cell: ({ row }) => <TableCell title={row.original.totalOrderAmount ? `${row.original.totalOrderAmount}` : '-'}>{formatCurrency(row.original.totalOrderAmount)}</TableCell>,
         },
         {
-            id: 'commissionSummary',
-            accessorKey: 'commissionAmount',
-            accessorFn: row => parseFloat(row.commissionAmount || '0'),
+            // id: 'commissionSummary',
+            // accessorKey: 'commissionAmount',
+            // accessorFn: row => parseFloat(row.commissionAmount || '0'),
             enableSorting: true,
             header: __('Commission Summary', 'multivendorx'),
             cell: ({ row }) =>
@@ -499,12 +503,11 @@ const Commission: React.FC = () => {
                 </TableCell>,
         },
         {
-            id: 'totalEarned',
-            accessorKey: 'facilitatorFee',
-            accessorFn: row => parseFloat(row.facilitatorFee || '0'),
+            id: 'commission_total',
+            accessorKey: 'commission_total',
             enableSorting: true,
             header: __('Total Earned', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.facilitatorFee ? `${appLocalizer.currency_symbol}${row.original.facilitatorFee}` : '-'}>{formatCurrency(row.original.facilitatorFee)}</TableCell>,
+            cell: ({ row }) => <TableCell title={''}>{formatCurrency(row.original.commissionTotal)}</TableCell>,
         },
         // {
         //     id: 'facilitatorFee',
@@ -560,8 +563,8 @@ const Commission: React.FC = () => {
             ),
         },
         {
-            id: 'createdAt',
-            accessorKey: 'createdAt',
+            id: 'created_at',
+            accessorKey: 'created_at',
             enableSorting: true,
             header: __('Date', 'multivendorx'),
             cell: ({ row }) => {

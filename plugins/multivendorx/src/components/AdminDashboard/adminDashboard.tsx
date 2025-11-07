@@ -71,42 +71,55 @@ const AdminDashboard = () => {
     }
   };
 
-  const installOrActivatePlugin = async (slug: string, status = 'active') => {
-    if (!slug || installing) {
-      return; // Prevent multiple clicks
-    }
-
+  const installOrActivatePlugin = async (slug: string) => {
+    if (!slug || installing) return; // prevent multiple clicks
     setInstalling(slug);
-
+  
     try {
-      const response = await axios({
-        method: 'POST',
-        url: `${appLocalizer.apiUrl}/wp/v2/plugins`,
-        headers: {
-          'X-WP-Nonce': appLocalizer.nonce,
-        },
-        data: {
-          slug,
-          status,
-        },
+      // Step 1: Get current plugins
+      const { data: plugins } = await axios.get(`${appLocalizer.apiUrl}/wp/v2/plugins`, {
+        headers: { 'X-WP-Nonce': appLocalizer.nonce },
       });
-
-      console.log(`Plugin "${slug}" ${status} successfully:`, response.data);
-
-      // Verify installation was successful
+  
+      // Step 2: Find if plugin exists
+      const existingPlugin = plugins.find((plugin: any) => plugin.plugin.includes(slug));
+      const pluginFilePath = existingPlugin?.plugin || `${slug}/${slug}.php`;
+  
+      // Step 3: Determine action
+      let apiUrl = `${appLocalizer.apiUrl}/wp/v2/plugins`;
+      let requestData: any = { status: 'active' }; // default request for activation
+  
+      if (!existingPlugin) {
+        // Plugin not installed → install & activate
+        requestData.slug = slug;
+      } else if (existingPlugin.status === 'active') {
+        setSuccessMsg(`Plugin "${slug}" is already active.`);
+        await checkPluginStatus(slug);
+        return;
+      } else {
+        // Plugin installed but inactive → just activate
+        const encodedFile = encodeURIComponent(pluginFilePath);
+        apiUrl += `/${encodedFile}`;
+      }
+  
+      // Step 4: Call API
+      await axios.post(apiUrl, requestData, {
+        headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      });
+  
+      // Step 5: Refresh status
       await checkPluginStatus(slug);
-
-      setSuccessMsg(`Plugin "${slug}" installed successfully!`);
-      setTimeout(() => setSuccessMsg(''), 3000);
-
+  
+      setSuccessMsg(`Plugin "${slug}" ${existingPlugin ? 'activated' : 'installed & activated'} successfully!`);
     } catch (error) {
-      console.error(`Failed to ${status} plugin "${slug}":`, error.response?.data || error);
-      setSuccessMsg(`Failed to install plugin "${slug}". Please try again.`);
-      setTimeout(() => setSuccessMsg(''), 3000);
+      console.error(error);
+      setSuccessMsg(`Failed to install/activate plugin "${slug}".`);
     } finally {
+      setTimeout(() => setSuccessMsg(''), 3000);
       setInstalling('');
     }
   };
+  
 
   const handleOnChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -162,7 +175,7 @@ const AdminDashboard = () => {
       href: "https://www.facebook.com/groups/226246620006065/",
     },
   ];
-  const featuresList = [    
+  const featuresList = [
     {
       title: "Membership rewards & commission",
       desc: "Charge your sellers a monthly or yearly membership fee to sell on your marketplace - predictable revenue every month.",
@@ -427,7 +440,7 @@ const AdminDashboard = () => {
                             ></label>
                           </div>
                         ) : (
-                          <span className="admin-pro-tag" onclick="">
+                          <span className="admin-pro-tag">
                             <i className="adminlib-pro-tag"></i>Pro
                           </span>
                         )}

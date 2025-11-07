@@ -59,71 +59,84 @@ class CommissionUtil {
     public static function get_commissions( $filter = [], $object = true, $count = false ) {
         global $wpdb;
     
-        // Remove the fields key from filter if object is set
+        // Remove 'fields' if object requested
         if ( $object && isset( $filter['fields'] ) ) {
             unset( $filter['fields'] );
         }
     
-        // Handle fields separately if present in filter
+        // Handle fields separately
         if ( isset( $filter['fields'] ) && is_array( $filter['fields'] ) && ! $count ) {
             $fields = implode( ", ", $filter['fields'] );
         } else {
             $fields = $count ? "COUNT(*) as total" : "*";
         }
     
-        // Handle limit and offset separately
-        $page       = $filter['page'] ?? 0;
-        $perpage    = $filter['perpage'] ?? 0;
+        // Extract pagination
+        $page    = $filter['page'] ?? 0;
+        $perpage = $filter['perpage'] ?? 0;
     
-        unset( $filter['page'], $filter['perpage'] );
+        //Extract sorting
+        $orderBy = $filter['orderBy'] ?? '';
+        $order   = strtoupper( $filter['order'] ?? 'ASC' );
     
-        // Prepare predicate
+        //Remove non-column keys so they don’t appear in WHERE clause
+        unset( $filter['page'], $filter['perpage'], $filter['orderBy'], $filter['order'] );
+    
+        // Build WHERE conditions
         $predicate = [];
         foreach ( $filter as $column => $value ) {
             if ( is_array( $value ) ) {
-                if ( isset($value['compare']) && $value['compare'] === "BETWEEN" ) {
+                if ( isset( $value['compare'] ) && $value['compare'] === "BETWEEN" ) {
                     $start_value = Utill::add_single_quots( $value['value'][0] );
                     $end_value   = Utill::add_single_quots( $value['value'][1] ); 
                     $predicate[] = "{$column} BETWEEN {$start_value} AND {$end_value}";
-                }
-                if ( isset($value['compare']) && ( $value['compare'] === "IN" || $value['compare'] === "NOT IN" ) ) {
-                    $compare    = $value['compare'];
-                    $in_touple  = " (" . implode( ', ', array_map( [Utill::class, 'add_single_quots'], $value['value'] ) ) . ") ";
-                    $predicate[] = "{$column} {$compare} {$in_touple}";
+                } elseif ( isset( $value['compare'] ) && in_array( $value['compare'], [ "IN", "NOT IN" ], true ) ) {
+                    $compare   = $value['compare'];
+                    $in_tuple  = "(" . implode( ', ', array_map( [ Utill::class, 'add_single_quots' ], $value['value'] ) ) . ")";
+                    $predicate[] = "{$column} {$compare} {$in_tuple}";
                 }
             } else {
-                $value       = Utill::add_single_quots( $value );
+                $value = Utill::add_single_quots( $value );
                 $predicate[] = "{$column} = {$value}";
             }
         }
     
-        // Prepare query
+        // Start query
         $query = "SELECT {$fields} FROM `" . $wpdb->prefix . Utill::TABLES['commission'] . "`";
     
         if ( ! empty( $predicate ) ) {
             $query .= " WHERE " . implode( " AND ", $predicate );
         }
     
-        // Pagination support
+        //Sorting (safe & only if not count)
+        if ( ! $count && ! empty( $orderBy ) ) {
+            $orderBy = esc_sql( $orderBy );
+            if ( ! in_array( $order, [ 'ASC', 'DESC' ], true ) ) {
+                $order = 'ASC';
+            }
+            $query .= " ORDER BY {$orderBy} {$order}";
+        }
+    
+        //Pagination
         if ( ! $count && $page && $perpage && $perpage != -1 ) {
-            $limit  = $perpage;
-            $offset = ( $page - 1 ) * $perpage;
+            $limit  = intval( $perpage );
+            $offset = ( $page - 1 ) * $limit;
             $query .= " LIMIT {$limit} OFFSET {$offset}";
         }
     
-        // If count query requested
+        // If only count requested
         if ( $count ) {
             return (int) $wpdb->get_var( $query ) ?? 0;
         }
-        // Database query for commissions
+    
+        // Execute query
         $commissions = $wpdb->get_results( $query );
     
-        // If return type is not object of Commission class return raw results
+        // Return object or raw array
         if ( ! $object ) {
             return $commissions;
         }
     
-        // Return array of Commission objects
         return array_map( function( $commission ) {
             return new Commission( $commission );
         }, $commissions );
