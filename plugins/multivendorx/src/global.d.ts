@@ -62,6 +62,7 @@ declare global {
         store_page_url:string;
         pro_data: any;
         all_shippings:any;
+        shop_url:any;
     }
     interface Color{
         color: any;

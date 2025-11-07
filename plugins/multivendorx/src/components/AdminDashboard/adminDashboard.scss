@@ -949,7 +949,7 @@
             }
 
             .admin-pro-tag {
-                position: relative;
+                position: relative !important;
                 transform: translateY(0);
                 font-size: 0.75rem;
                 display: flex;

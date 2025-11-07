@@ -2,8 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { Table, getApiLink, TableCell } from 'zyra';
+import { Table, getApiLink, TableCell, CalendarInput } from 'zyra';
 import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
+
+export interface RealtimeFilter {
+    name: string;
+    render: (updateFilter: (key: string, value: any) => void, filterValue: any) => React.ReactNode;
+}
 
 type ReportRow = {
     ID: number;
@@ -23,7 +28,20 @@ type ReportRow = {
 interface Props {
     onUpdated?: () => void;
 }
-
+type FilterData = {
+    searchAction?: string;
+    searchField?: string;
+    typeCount?: any;
+    store?: string;
+    order?: any;
+    orderBy?: any;
+    date?: {
+        start_date: Date;
+        end_date: Date;
+    };
+    transactionType?: string;
+    transactionStatus?: string;
+};
 const ReportAbuseTable: React.FC<Props> = ({ onUpdated }) => {
     const [data, setData] = useState<ReportRow[] | null>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -34,6 +52,21 @@ const ReportAbuseTable: React.FC<Props> = ({ onUpdated }) => {
         pageSize: 10,
     });
     const [pageCount, setPageCount] = useState(0);
+    const [store, setStore] = useState<any[] | null>(null);
+
+    useEffect(() => {
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'store'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        })
+            .then((response) => {
+                setStore(response.data.stores);
+            })
+            .catch(() => {
+                setStore([]);
+            });
+    }, []);
 
     // Fetch total count on mount
     useEffect(() => {
@@ -144,6 +177,17 @@ const ReportAbuseTable: React.FC<Props> = ({ onUpdated }) => {
             ),
         },
         {
+            id: 'created_at',
+            accessorKey: 'created_at',
+            enableSorting: true,
+            header: __('Date created', 'multivendorx'),
+            cell: ({ row }) => {
+                const rawDate = row.original.created_at;
+                const formattedDate = rawDate ? new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(rawDate)) : '-';
+                return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
+            }
+        },
+        {
             id: 'action',
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
@@ -181,6 +225,95 @@ const ReportAbuseTable: React.FC<Props> = ({ onUpdated }) => {
         },
     ];
 
+    // 🔹 Fetch data from backend
+    function requestData(
+        rowsPerPage = 10,
+        currentPage = 1,
+        store = '',
+        orderBy = '',
+        order = '',
+        startDate?: Date,
+        endDate?: Date
+    ) {
+
+        setData(null);
+
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'report-abuse'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: {
+                page: currentPage,
+                row: rowsPerPage,
+                store_id: store,
+                start_date: startDate,
+                end_date:endDate,
+                orderBy,
+                order,
+            },
+        }).then((response) => {
+            setData(response.data || []);
+        })
+            .catch(() => setData([]));
+    }
+
+    // 🔹 Handle pagination & date changes
+    useEffect(() => {
+        const currentPage = pagination.pageIndex + 1;
+        requestData(pagination.pageSize, currentPage);
+        setPageCount(Math.ceil(totalRows / pagination.pageSize));
+    }, [pagination]);
+
+    const requestApiForData = (rowsPerPage: number, currentPage: number, filterData: FilterData) => {
+        requestData(
+            rowsPerPage,
+            currentPage,
+            filterData?.store,
+            filterData?.orderBy,
+            filterData?.order,
+            filterData?.date?.start_date, 
+            filterData?.date?.end_date
+        );
+    };
+
+
+    const realtimeFilter: RealtimeFilter[] = [
+        {
+            name: 'store',
+            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
+                <div className="   group-field">
+                    <select
+                        name="store"
+                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
+                        value={filterValue || ''}
+                        className="basic-select"
+                    >
+                        <option value="">All Store</option>
+                        {store?.map((s: any) => (
+                            <option key={s.id} value={s.id}>
+                                {s.store_name.charAt(0).toUpperCase() + s.store_name.slice(1)}
+                            </option>
+                        ))}
+                    </select>
+
+                </div>
+            ),
+        },
+        {
+            name: 'date',
+            render: (updateFilter, filterValue) => (
+                <div className="right">
+                    <CalendarInput
+                        wrapperClass=""
+                        inputClass=""
+                        onChange={(range: any) => updateFilter('date', { start_date: range.startDate, end_date: range.endDate })}
+                        value={filterValue}
+                    />
+                </div>
+            ),
+        },
+    ];
+
     return (
         <>
             <div className="card-header">
@@ -204,9 +337,10 @@ const ReportAbuseTable: React.FC<Props> = ({ onUpdated }) => {
                     pageCount={pageCount}
                     pagination={pagination}
                     onPaginationChange={setPagination}
-                    handlePagination={fetchData}
+                    handlePagination={requestApiForData}
                     perPageOption={[10, 25, 50]}
                     totalCounts={totalRows}
+                    realtimeFilter={realtimeFilter}
                 />
             </div>
         </>
