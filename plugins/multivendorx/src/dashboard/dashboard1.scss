@@ -6,7 +6,7 @@ ul{
     padding: 0;
 }
 body:has(#store-dashboard) {
-    background: #f8f7fa;
+    background: rgb(145 145 193 / 19%);
     font-family: "Figtree", sans-serif;
     font-weight: 400;
     font-size: 0.95rem;
@@ -26,7 +26,7 @@ a {
     position: fixed;
     left: 0;
     top: 0;
-    background: #fff;
+    background: #ffffff9d;
     border-right: 0.063rem solid #ebeef2;
     z-index: 9999;
 
@@ -326,7 +326,7 @@ a {
 
     .content-wrapper {
         min-height: 100vh;
-        background-color: #f5f6fa;
+        // background-color: #f5f6fa;
         padding-top: 7rem;
         padding-bottom: 4rem;
 
@@ -363,27 +363,27 @@ a {
 
     .card-content {
         box-shadow: 0 1px 3px #364a630d;
-        background: #fff;
+        // background: #ffffff9d;
         padding: 1.5rem;
     }
 
     .row {
         display: flex;
         gap: 1.25rem;
-        padding-bottom: 2rem;
+        padding-bottom: 1.5rem;
     }
 
     .column {
         padding: 1.625rem;
-        border-radius: 0.313rem;
-        box-shadow: 0 0.125rem 0.5rem 0 rgba(47, 43, 61, 0.12);
-        background: #fff;
+        border-radius: 0.5rem;
+        // box-shadow: 0 0.125rem 0.5rem 0 rgba(47, 43, 61, 0.12);
+        background: #ffffff9d;
         width: 100%;
 
         .action-btn-wrapper {
             display: flex;
             flex-wrap: wrap;
-            gap: 1rem;
+            gap: 1.5rem;
         }
 
         h3 {
@@ -396,7 +396,7 @@ a {
         }
 
         &.theme-bg {
-            background: color-mix(in srgb, var(--themeColor) 45%, transparent);
+            // background: color-mix(in srgb, var(--themeColor) 45%, transparent);
         }
     }
     .cards {
