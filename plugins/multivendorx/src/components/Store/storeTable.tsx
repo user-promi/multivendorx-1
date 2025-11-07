@@ -223,7 +223,7 @@ const StoreTable: React.FC = () => {
                     <div className="table-content">
                         {row.original.email && (
                             <div>
-                                <i className="adminlib-mail"></i> {row.original.email}
+                                <i className="adminlib-mail"></i> {row.original.email?.split('\n')[0].trim()}
                             </div>
                         )}
                         {row.original.phone && (
