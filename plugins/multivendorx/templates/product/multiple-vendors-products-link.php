@@ -18,7 +18,7 @@ global $product;
 
 $more_products = $args['more_products'];
 if ( count( $more_products ) >= 1 ) {
-    $button_text = apply_filters( 'mvx_more_vendors', __('More Vendors', 'multivendorx') );
+    $button_text = apply_filters( 'mvx_more_vendors', __('More Stores', 'multivendorx') );
     $button_text = apply_filters( 'mvx_single_product_more_vendors_text', $button_text, $product );
     echo '<a  href="#" class="goto_more_offer_tab button">' . esc_html($button_text) . '</a>';
 }

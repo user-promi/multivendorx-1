@@ -87,27 +87,49 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
         $page   = max( intval( $request->get_param( 'page' ) ), 1 );
         $offset = ( $page - 1 ) * $limit;
     
+        // Get filters
+        $store_id  = $request->get_param( 'store_id' );
+        $start_date = $request->get_param( 'start_date' );
+        $end_date   = $request->get_param( 'end_date' );
+        $order_by   = $request->get_param( 'orderBy' ) ?: 'created_at';
+        $order      = strtoupper( $request->get_param( 'order' ) ) === 'ASC' ? 'ASC' : 'DESC';
+    
         // Count only
         if ( $request->get_param( 'count' ) ) {
             $total_count = Util::get_report_abuse_information( [ 'count' => true ] );
             return rest_ensure_response( (int) $total_count );
         }
     
+        // Prepare args
+        $args = [
+            'limit'     => $limit,
+            'offset'    => $offset,
+            'order_by'  => $order_by,
+            'order'     => $order,
+        ];
+    
+        if ( ! empty( $store_id ) ) {
+            $args['store_ids'] = [ intval( $store_id ) ];
+        }
+    
+        if ( ! empty( $start_date ) && ! empty( $end_date ) ) {
+            $args['date_range'] = [
+                'start' => $start_date,
+                'end'   => $end_date,
+            ];
+        }
+    
         // Fetch reports
-        $reports = Util::get_report_abuse_information( [
-            'limit'  => $limit,
-            'offset' => $offset,
-        ] );
+        $reports = Util::get_report_abuse_information( $args );
     
         $formatted = array_map( function( $r ) {
-            // Get store info
             $store = new \MultiVendorX\Store\Store( $r['store_id'] );
             $store_name = $store->data['name'] ?? '';
     
-            // Get product info
             $product = wc_get_product( $r['product_id'] );
             $product_name = $product ? $product->get_name() : '';
             $product_link = $product ? get_permalink( $product->get_id() ) : '';
+    
             return [
                 'ID'           => (int) $r['ID'],
                 'store_id'     => (int) $r['store_id'],
@@ -117,7 +139,7 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
                 'product_link' => $product_link,
                 'name'         => $r['name'],
                 'email'        => $r['email'],
-                'reason'      => $r['message'],
+                'reason'       => $r['message'],
                 'created_at'   => $r['created_at'],
                 'updated_at'   => $r['updated_at'],
             ];
@@ -125,7 +147,6 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
     
         return rest_ensure_response( $formatted );
     }
-    
     
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );

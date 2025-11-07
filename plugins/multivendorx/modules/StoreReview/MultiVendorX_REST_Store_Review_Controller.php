@@ -166,6 +166,11 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
         // --- Step 8: Get Status Counters ---
         $base_args = $args;
         unset( $base_args['limit'], $base_args['offset'], $base_args['status'] );
+
+        if( current_user_can( 'manage_options' ) ){
+            unset( $base_args['store_id'] );
+        }
+        
         $base_args['count'] = true;
 
         $all_args = $base_args;
