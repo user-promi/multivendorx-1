@@ -151,15 +151,15 @@ const Coupons: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
             cell: ({ row }) => <input type="checkbox" checked={row.getIsSelected()} onChange={row.getToggleSelectedHandler()} />
         },
         {
-            header: __('Name', 'multivendorx'),
+            header: __('Code', 'multivendorx'),
             cell: ({ row }) => <TableCell title={row.original?.code ?? '-'}>{row.original?.id ? <a href={`${appLocalizer.site_url}/wp-admin/post.php?post=${row.original.id}&action=edit`} target="_blank" rel="noreferrer">{row.original.code}</a> : row.original?.code ?? '-'}</TableCell>
         },
         {
-            header: __('Coupon Type', 'multivendorx'),
+            header: __('Discount Type', 'multivendorx'),
             cell: ({ row }) => <TableCell title={row.original?.discount_type ?? '-'}>{row.original?.discount_type ?? '-'}</TableCell>
         },
         {
-            header: __('Coupon Amount', 'multivendorx'),
+            header: __('Amount', 'multivendorx'),
             accessorFn: (row) => parseFloat(row.amount || '0'), // sorting numeric
             enableSorting: true,
             cell: ({ row }) => <TableCell title={row.original?.amount ?? '-'}>{formatCurrency(row.original?.amount)}</TableCell>
