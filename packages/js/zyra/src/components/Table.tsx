@@ -690,7 +690,7 @@ const Table: React.FC<TableProps> = ({
                                                 {`Showing ${pagination.pageIndex * pagination.pageSize + 1} to ${Math.min(
                                                     (pagination.pageIndex + 1) * pagination.pageSize,
                                                     totalCounts
-                                                )} of ${totalCounts} entries `}
+                                                )} of ${totalCounts} entries. `}
                                             </div>
                                             <div className="showing-number">
                                                 Show

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CommonPopup, getApiLink } from 'zyra';
 import axios from 'axios';
+import { Skeleton } from '@mui/material';
 
 const HeaderNotifications = () => {
 
@@ -60,34 +61,28 @@ const HeaderNotifications = () => {
                                             <span className="time">{item.time}</span>
                                         </div>
 
-                                        <span
-                                            className="admin-badge red"
-                                            onClick={() => dismissNotification(item.id)}
-                                            title="Dismiss"
-                                        >
-                                            <i className="adminlib-close"></i>
-                                        </span>
+
+                                        <i className="check-icon adminlib-check"></i>
                                     </div>
                                     {/* </a> */}
                                 </li>
                             ))) : (
-                            <li className="empty-state">
-                                <div className="no-notifications">
-                                    <i className="adminlib-info"></i>
-                                    <span>No notifications</span>
-                                </div>
+                            <li>
+                                <Skeleton variant="text" width={150} height={30} />
+                                <Skeleton variant="text" width={150} height={30} />
+                                <Skeleton variant="text" width={150} height={30} />
+                                <Skeleton variant="text" width={150} height={30} />
+                                <Skeleton variant="text" width={150} height={30} />
                             </li>
                         )}
                     </ul>
                 </div>
+                <div className="footer">
+                    <a className="admin-btn btn-purple">
+                        <i className="adminlib-eye"></i> View all notifications
+                    </a>
+                </div>
             </div>
-            {/* {notificationsLink && (
-            <div className="footer">
-                <a href={notificationsLink} className="admin-btn btn-purple">
-                <i className="adminlib-eye"></i> View all notifications
-                </a>
-            </div>
-            )} */}
         </>
     );
 
