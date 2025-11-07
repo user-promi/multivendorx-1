@@ -120,14 +120,6 @@ class Admin {
                     'name'   => __( 'Customer Support', 'multivendorx' ),
                     'subtab' => '',
                 ),
-                'announcement' => array(
-                    'name'   => __( 'Announcement', 'multivendorx' ),
-                    'subtab' => '',
-                ),
-                'knowledgebase' => array(
-                    'name'   => __( 'Knowledgebase', 'multivendorx' ),
-                    'subtab' => '',
-                ),
                 // 'advertisement' => array(
                 //     'name'   => __( 'Advertisement', 'multivendorx' ),
                 //     'subtab' => '',
