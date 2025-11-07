@@ -4,7 +4,7 @@ export default {
     id: 'review-management',
     priority: 4,
     name: __( 'Store Reviews', 'multivendorx' ),
-    desc: __( 'Manage product and store review settings.', 'multivendorx' ),
+    desc: __( 'Manage how customers rate and review stores on your marketplace.', 'multivendorx' ),
     icon: 'adminlib-store-review',
     submitUrl: 'settings',
     modal: [
@@ -13,7 +13,7 @@ export default {
             type: 'blocktext',
             label: __( 'no_label', 'multivendorx' ),
             blocktext: __(
-                '<b>Store and product reviews are separate. Enable product reviews from <a href="/wp-admin/admin.php?page=wc-settings&tab=products" target="_blank">WooCommerce settings</a>.</b>',
+                '<b>Store reviews are managed separately from product reviews. You can configure product reviews directly from your <a href="/wp-admin/admin.php?page=wc-settings&tab=products" target="_blank">WooCommerce settings</a>.</b>',
                 'multivendorx'
             ),            
         },
