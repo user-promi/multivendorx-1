@@ -253,7 +253,7 @@ export const TransactionHistory: React.FC = () => {
                                             <br />
                                             Please clear the pending request before disbursing new payments.
                                         </div>
-                                        <div className="admin-btn btn-purple disabled" zz>
+                                        <div className="admin-btn btn-purple disabled" style={{ opacity: 0.5, pointerEvents: 'none' }}>
                                             Disburse payment
                                         </div>
                                     </>
