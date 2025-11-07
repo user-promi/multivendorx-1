@@ -137,11 +137,11 @@ class Frontend {
     public function mvx_get_customer_refund_order_msg( $order, $settings = array() ) {
         if( !$order ) return false;
         $default_msg = apply_filters( 'mvx_customer_my_account_refund_order_messages', array(
-            'order_status_not_allowed' => __( 'Your Refund is not allowed for this order status', 'multivendorx' ),
-            'order_refund_period_overed' => __( 'Your Refund Period is over. Please contact with your seller for further information' , 'multivendorx' ),
-            'order_refund_rejected' => __( '*** Your Request Is Rejected ***', 'multivendorx' ),
-            'order_refund_request_pending' => __( 'Your Request Is pending', 'multivendorx' ),
-            'order_refund_request_accepted' => __( '*** Your Request is Accepted *** ', 'multivendorx' ),
+            'order_status_not_allowed' => __( 'Refund is not allowed for the current order status.', 'multivendorx' ),
+            'order_refund_period_overed' => __( 'Your refund period has expired' , 'multivendorx' ),
+            'order_refund_rejected' => __( '*** Your request has been rejected ***', 'multivendorx' ),
+            'order_refund_request_pending' => __( 'Your request is pending.', 'multivendorx' ),
+            'order_refund_request_accepted' => __( '*** Your request has been accepted. *** ', 'multivendorx' ),
         ), $order, $settings );
 
         $cust_refund_status = $order->get_meta('_customer_refund_order', true ) ?  $order->get_meta('_customer_refund_order', true ) : '';
@@ -152,21 +152,21 @@ class Frontend {
 
         if( abs( round( $order_place_days / 86400 ) ) > $refund_days_limit ) {
             $message['type'] = 'info';
-            $message['msg'] = isset( $default_msg['order_refund_period_overed'] ) ? $default_msg['order_refund_period_overed'] : __( 'Your Refund Period is over. Please contact with your seller for further information', 'multivendorx' );
+            $message['msg'] = isset( $default_msg['order_refund_period_overed'] ) ? $default_msg['order_refund_period_overed'] : __( 'Your refund period has expired.', 'multivendorx' );
         }
         if( !in_array( $order->get_status(), MultiVendorX()->setting->get_setting('customer_refund_status', []) ))  {
             $message['type'] = 'info';
-            $message['msg'] = isset( $default_msg['order_status_not_allowed'] ) ? $default_msg['order_status_not_allowed'] : __( 'Refund is not allowed for this order status', 'multivendorx' );
+            $message['msg'] = isset( $default_msg['order_status_not_allowed'] ) ? $default_msg['order_status_not_allowed'] : __( 'Refund is not allowed for the current order status.', 'multivendorx' );
         }
         if( $cust_refund_status == 'refund_reject' ) {
             $message['type'] = 'error';
-            $message['msg'] = isset( $default_msg['order_refund_rejected'] ) ? $default_msg['order_refund_rejected'] : __( 'Sorry!! Your Request Is Rejected', 'multivendorx' );
+            $message['msg'] = isset( $default_msg['order_refund_rejected'] ) ? $default_msg['order_refund_rejected'] : __( 'Sorry!! Your request has been rejected', 'multivendorx' );
         }elseif( $cust_refund_status == 'refund_request' ) {
             $message['type'] = 'warning';
-            $message['msg'] = isset( $default_msg['order_refund_request_pending'] ) ? $default_msg['order_refund_request_pending'] : __( 'Your Request Is pending', 'multivendorx' );
+            $message['msg'] = isset( $default_msg['order_refund_request_pending'] ) ? $default_msg['order_refund_request_pending'] : __( 'Your request is pending.', 'multivendorx' );
         }elseif( $cust_refund_status == 'refund_accept' ) {
             $message['type'] = 'success';
-            $message['msg'] = isset( $default_msg['order_refund_request_accepted'] ) ? $default_msg['order_refund_request_accepted'] : __( 'Congratulation: *** Your Request is Accepted *** ', 'multivendorx' );
+            $message['msg'] = isset( $default_msg['order_refund_request_accepted'] ) ? $default_msg['order_refund_request_accepted'] : __( 'Congratulation: *** Your request has been accepted. *** ', 'multivendorx' );
         }
 
         return $message;
