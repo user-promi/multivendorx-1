@@ -275,12 +275,28 @@ const StoreReviews: React.FC = () => {
         {
             id: 'customer',
             header: __('Customer', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.customer_name}>
-                    {row.original.customer_name} (#{row.original.customer_id})
-                </TableCell>
-            ),
-        },
+            cell: ({ row }) => {
+                const { customer_id, customer_name } = row.original;
+                const editLink = `${window.location.origin}/wp-admin/user-edit.php?user_id=${customer_id}`;
+        
+                return (
+                    <TableCell title={customer_name}>
+                        {customer_id ? (
+                            <a
+                                href={editLink}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="customer-link"
+                            >
+                                {customer_name}
+                            </a>
+                        ) : (
+                            '-'
+                        )}
+                    </TableCell>
+                );
+            },
+        },     
         {
             id: 'rating',
             header: __('Rating', 'multivendorx'),
@@ -306,6 +322,33 @@ const StoreReviews: React.FC = () => {
                 );
             },
         },
+        {
+            header: __('Store', 'multivendorx'),
+            cell: ({ row }) => {
+                const { store_id, store_name } = row.original;
+                const baseUrl = `${window.location.origin}/wp-admin/admin.php?page=multivendorx#&tab=stores`;
+                const storeLink = store_id
+                    ? `${baseUrl}&edit/${store_id}/&subtab=application-details`
+                    : '#';
+
+                return (
+                    <TableCell title={store_name || ''}>
+                        {store_id ? (
+                            <a
+                                href={storeLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-purple-600 hover:underline"
+                            >
+                                {store_name || '-'}
+                            </a>
+                        ) : (
+                            store_name || '-'
+                        )}
+                    </TableCell>
+                );
+            },
+        },   
         {
             id: 'title',
             header: __('Title', 'multivendorx'),
@@ -356,33 +399,6 @@ const StoreReviews: React.FC = () => {
                 const formattedDate = rawDate ? new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(rawDate)) : '-';
                 return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
             }
-        },
-        {
-            header: __('Store', 'multivendorx'),
-            cell: ({ row }) => {
-                const { store_id, store_name } = row.original;
-                const baseUrl = `${window.location.origin}/wp-admin/admin.php?page=multivendorx#&tab=stores`;
-                const storeLink = store_id
-                    ? `${baseUrl}&edit/${store_id}/&subtab=application-details`
-                    : '#';
-
-                return (
-                    <TableCell title={store_name || ''}>
-                        {store_id ? (
-                            <a
-                                href={storeLink}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-purple-600 hover:underline"
-                            >
-                                {store_name || '-'}
-                            </a>
-                        ) : (
-                            store_name || '-'
-                        )}
-                    </TableCell>
-                );
-            },
         },
         {
             id: 'action',
