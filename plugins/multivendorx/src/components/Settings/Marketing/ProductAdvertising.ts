@@ -17,6 +17,8 @@ export default {
             settingDescription: __('Define how many products a store can promote for free and the cost for additional paid promotions.', 'multivendorx'),
             type: 'nested',
             single: true,
+			moduleEnabled: 'advertisement',
+            proSetting: true,
             nestedFields: [
                 {
                     key: 'paid_promotion_limit',
