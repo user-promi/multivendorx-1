@@ -1978,7 +1978,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                 <i className="adminlib-lock"></i>
                             </span>
                         )}
-                    {inputField.proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>}
+                    {inputField.proSetting && !appLocalizer.khali_dabba && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>}
 
                 </div>
             );
