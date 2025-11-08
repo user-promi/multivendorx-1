@@ -295,7 +295,7 @@ export default {
                 'Define a fee to cover platform costs. Apply a fixed, percentage, or combined rate. Choose whether it’s paid by the customer at checkout or deducted from the store’s commission.',
                 'multivendorx'
             ),
-            desc: __('<strong>Example setup:</strong><br>Order total = $100<br>Store commission = 80%<br>Marketplace fee = $2 + 10% = $12<ul><li><strong>Case 1 – Fee added to the customer’s order total:</strong><br>Customer pays = $100 + $12 = $112<br>The $12 will be displayed at checkout as <em>Marketplace fee</em>.</li><li><strong>Case 2 – Fee deducted from the store’s commission:</strong><br>Customer pays = $100<br>Store commission = 80% of $100 = $80<br>Marketplace fee = $2 + 10% of $80 = $10<br>Final store payout = $80 - $10 = $70</li></ul>', 'multivendorx'),
+            desc: __('<strong>Example setup:</strong><br>Order total = $100<br>Store commission = 80%<ul><li><strong>Case 1 – Fee added to the customer’s order total:</strong><br>Marketplace fees = $2 + 10% of 100 = $12<br>Customer pays = $100 + $12 = $112<br>The $12 will be displayed at checkout as <em>Marketplace fees</em>.</li><li><strong>Case 2 – Fee deducted from the store’s commission:</strong><br>Customer pays = $100<br>Store commission = 80% of $100 = $80<br>Marketplace fees = $2 + 10% of $80 = $10<br>Final store payout = $80 - $10 = $70</li></ul>', 'multivendorx'),
             nestedFields: [
                 {
                     key: 'commission_fixed',
@@ -331,8 +331,8 @@ export default {
             label: 'Facilitator fees',
             single: true,
             proSetting: true,
-            settingDescription: __('Set the facilitator fee as a fixed amount, a percentage, or both, deducted from the store commission. Store-wise fees can also be configured from the store edit page.', 'multivendorx'),
-            desc: __(' <strong>Global facilitator:</strong> Assign a single facilitator for the entire marketplace from <a href="#">here</a>.<br> <strong>Individual facilitators:</strong> Set facilitators for specific stores from the <em>Facilitator Settings</em> section or the <em>Store Edit</em> page.<br> <strong>Example:</strong> If a store earns $1000 commission and the facilitator fee is $50 + 5%, then total facilitator fee = $50 + (5% of 1000) = $100 → the store receives $900 after facilitator deductions. ', 'multivendorx'),
+            settingDescription: __('Set the facilitator fees as a fixed amount, a percentage, or both, deducted from the store commission. Store-wise fees can also be configured from the store edit page.', 'multivendorx'),
+            desc: __(' <strong>Global facilitator:</strong> Assign a single facilitator for the entire marketplace from <a href="#">here</a>.<br> <strong>Individual facilitators:</strong> Set facilitators for specific stores from the <em>Facilitator Settings</em> section or the <em>Store Edit</em> page.<br> <strong>Example:</strong> If a store earns $1000 commission and the facilitator fees is $50 + 5%, then total facilitator fees = $50 + (5% of 1000) = $100 → the store receives $900 after facilitator deductions. ', 'multivendorx'),
             nestedFields: [
                 {
                     key: 'facilitator_fixed',
@@ -357,7 +357,7 @@ export default {
             settingDescription: __('Set up gateway fees to recover the transaction costs charged by your payment provider. These fees are deducted from the store’s commission so your earnings remain unaffected.', 'multivendorx'),
             rowClass: 'single-line',
             single: true,
-            desc: __('Use this setting to manage transaction fees for different payment methods. You can define a default fee or set individual fees for each payment mode, such as bank transfer or cash on delivery.<br><strong>Example setup:</strong><br>Product price = $100<br>Store commission = 30%<br>Gateway fee = 10%<ul><li><strong>Customer pays:</strong> $100</li><li><strong>Store commission:</strong> 30% of $100 = $30</li><li><strong>Gateway fee:</strong> 10% of $100 = $10</li><li><strong>Final store earning:</strong> $30 - $10 = $20</li><li><strong>Admin earning:</strong> $70</li></ul>', 'multivendorx'),
+            desc: __('<strong>Use this setting</strong> to manage transaction fees for different payment methods. You can set a default fee or define specific fees for each payment mode, such as bank transfer or cash on delivery.<br><br><strong>Example setup:</strong><br>Product price = $100<br>Store commission = 80%<br>Gateway fees = $10 + 5%<ul><li>Customer pays = $100</li><li>Store commission = 80% of $100 = $80</li><li>Gateway fees = $10 + 5% of $80 = $14</li><li>Final store earning = $80 - $14 = $66</li><li>Admin earning = ($100 - $80) + $14 = $34</li></ul>', 'multivendorx'),
             nestedFields
         },
     ],

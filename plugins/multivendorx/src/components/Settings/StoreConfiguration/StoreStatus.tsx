@@ -96,8 +96,8 @@ const StoreStatus: React.FC = () => {
             type: 'file',
             content: {
                 id: 'deactivated',
-                name: 'Deactivated',
-                desc: 'Permanently closed',
+                name: 'Permanently deactivated',
+                desc: 'Permanently closed stores with no access or privileges.',
                 // hideTabHeader: true,
                 icon: 'form-address',
             },
