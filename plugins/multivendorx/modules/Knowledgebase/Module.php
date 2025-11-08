@@ -5,7 +5,7 @@
  * @package MultiVendorX
  */
 
-namespace MultiVendorXPro\Knowledgebase;
+namespace MultiVendorX\Knowledgebase;
 
 /**
  * MultiVendorX Store Policy Module class

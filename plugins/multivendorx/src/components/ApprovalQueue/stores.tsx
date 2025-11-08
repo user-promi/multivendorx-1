@@ -173,7 +173,6 @@ const Stores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 
                             <div className="details">
                                 <span className="title">{store_name || '-'}</span>
-                                <span><b>SKU:</b> </span>
                             </div>
                         </a>
                         ) : (

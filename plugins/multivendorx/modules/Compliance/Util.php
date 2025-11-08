@@ -59,7 +59,11 @@ class Util {
 			$store_ids = implode( ',', array_map( 'intval', $args['store_ids'] ) );
 			$where[]   = "store_id IN ($store_ids)";
 		}
-	
+
+	    if ( isset( $args['email'] ) && ! empty( $args['email'] ) ) {
+			$where[] = $wpdb->prepare( "email = %s", sanitize_email( $args['email'] ) );
+		}
+		
 		// 🔹 Date range filter
 		if ( isset( $args['date_range'] ) ) {
 			$start = esc_sql( $args['date_range']['start'] );

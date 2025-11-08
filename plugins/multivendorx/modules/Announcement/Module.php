@@ -5,7 +5,7 @@
  * @package MultiVendorX
  */
 
-namespace MultiVendorXPro\Announcement;
+namespace MultiVendorX\Announcement;
 
 /**
  * MultiVendorX Store Policy Module class

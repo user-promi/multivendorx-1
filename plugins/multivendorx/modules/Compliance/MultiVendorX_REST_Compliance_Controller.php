@@ -107,11 +107,11 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
             'order_by'  => $order_by,
             'order'     => $order,
         ];
-    
-        if ( ! empty( $store_id ) ) {
+
+        if ( isset( $store_id ) && $store_id !== '' ) {
             $args['store_ids'] = [ intval( $store_id ) ];
-        }
-    
+        }        
+
         if ( ! empty( $start_date ) && ! empty( $end_date ) ) {
             $args['date_range'] = [
                 'start' => $start_date,
@@ -125,25 +125,30 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
         $formatted = array_map( function( $r ) {
             $store = new \MultiVendorX\Store\Store( $r['store_id'] );
             $store_name = $store->data['name'] ?? '';
-    
+        
             $product = wc_get_product( $r['product_id'] );
             $product_name = $product ? $product->get_name() : '';
             $product_link = $product ? get_permalink( $product->get_id() ) : '';
-    
+            $product_sku  = $product ? $product->get_sku() : '';
+            $product_image = $product ? wp_get_attachment_image_url( $product->get_image_id(), 'thumbnail' ) : '';
+        
             return [
-                'ID'           => (int) $r['ID'],
-                'store_id'     => (int) $r['store_id'],
-                'store_name'   => $store_name,
-                'product_id'   => (int) $r['product_id'],
-                'product_name' => $product_name,
-                'product_link' => $product_link,
-                'name'         => $r['name'],
-                'email'        => $r['email'],
-                'reason'       => $r['message'],
-                'created_at'   => $r['created_at'],
-                'updated_at'   => $r['updated_at'],
+                'ID'            => (int) $r['ID'],
+                'store_id'      => (int) $r['store_id'],
+                'store_name'    => $store_name,
+                'product_id'    => (int) $r['product_id'],
+                'product_name'  => $product_name,
+                'product_link'  => $product_link,
+                'product_sku'   => $product_sku,
+                'product_image' => $product_image,
+                'name'          => $r['name'],
+                'email'         => $r['email'],
+                'reason'        => $r['message'],
+                'created_at'    => $r['created_at'],
+                'updated_at'    => $r['updated_at'],
             ];
         }, $reports );
+        
     
         return rest_ensure_response( $formatted );
     }

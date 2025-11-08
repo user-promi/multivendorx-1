@@ -32,15 +32,42 @@ class Frontend {
         FrontendScripts::localize_scripts( 'multivendorx-qna-frontend-script' );
     }
 
+    // public function product_questions_answers_tab($tabs) {
+    //     $tabs['product_qna'] = [
+    //         'title'    => __( 'Questions & Answers', 'multivendorx' ),
+    //         'priority' => 50,
+    //         'callback' => array($this, 'multivendorx_product_qna_tab_content'),
+    //     ];
+    //     return $tabs;
+    // }
+
     public function product_questions_answers_tab($tabs) {
+        global $product;
+    
+        $qna_count = 0;
+    
+        if ( isset( $product ) && $product instanceof \WC_Product ) {
+            $product_id = $product->get_id();
+    
+            $qna_count = Util::get_question_information([
+                'product_ids'         => [$product_id],
+                'question_visibility' => 'public',
+                'has_answer'          => true,
+                'count'               => true,
+            ]);
+    
+            $qna_count = intval($qna_count); // ensure integer
+        }
+    
         $tabs['product_qna'] = [
-            'title'    => __( 'Questions & Answers', 'multivendorx' ),
+            'title'    => sprintf( __( 'Questions & Answers (%d)', 'multivendorx' ), $qna_count ),
             'priority' => 50,
             'callback' => array($this, 'multivendorx_product_qna_tab_content'),
         ];
+    
         return $tabs;
     }
-
+    
     /**
      * Add Question and answer tab html
      *

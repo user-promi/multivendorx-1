@@ -232,6 +232,7 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                             <img src={image} alt={product.name} />
                             <div className="details">
                                 <span className="title">{product.name || '-'}</span>
+                                {product.sku && <span><b>SKU:{product.sku}</b> </span>}
                             </div>
                         </a>
                     </TableCell>
@@ -348,7 +349,7 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 
     return (
         <>
-            {/* <div className="card-header">
+            <div className="card-header">
                 <div className="left">
                     <div className="title">
                         Products
@@ -358,7 +359,7 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                 <div className="right">
                     <i className="adminlib-more-vertical"></i>
                 </div>
-            </div> */}
+            </div>
             <Table
                 data={data}
                 columns={columns as ColumnDef<Record<string, any>, any>[]}
