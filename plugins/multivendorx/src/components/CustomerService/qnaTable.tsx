@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { Table, getApiLink, TableCell, CalendarInput, CommonPopup, TextArea, ToggleSetting } from 'zyra';
+import { Table, getApiLink, TableCell, CalendarInput, CommonPopup, TextArea, ToggleSetting, BasicInput } from 'zyra';
 import {
     ColumnDef,
     RowSelectionState,
@@ -62,6 +62,7 @@ const Qna: React.FC = () => {
     const [error, setError] = useState<string>();
     const [selectedQna, setSelectedQna] = useState<StoreQnaRow | null>(null);
     const [answer, setAnswer] = useState("");
+    const [qna, setQna] = useState("");
     const [saving, setSaving] = useState(false);
     const [data, setData] = useState<QnaRow[] | null>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -196,6 +197,7 @@ const Qna: React.FC = () => {
             await axios.put(
                 getApiLink(appLocalizer, `qna/${selectedQna.id}`),
                 {
+                    question_text:qna,
                     answer_text: answer,
                     question_visibility: selectedQna.question_visibility || 'public',
                 },
@@ -214,6 +216,7 @@ const Qna: React.FC = () => {
                         : q
                 )
             );
+            requestData(pagination.pageSize, pagination.pageIndex + 1);
             setSelectedQna(null);
             setAnswer("");
         } catch (err) {
@@ -236,7 +239,7 @@ const Qna: React.FC = () => {
             header: __('Product', 'multivendorx'),
             cell: ({ row }) => {
                 const product = row.original;
-                const image = product.product_image || DefaultStore; 
+                const image = product.product_image || DefaultStore;
                 return (
                     <TableCell title={product.product_name || ''}>
                         <a
@@ -249,7 +252,7 @@ const Qna: React.FC = () => {
                             <div className="details">
                                 <span className="title">{product.product_name || '-'}</span>
                                 {/* SKU not available in your current data, remove or leave placeholder */}
-                                {product.sku && <span><b>SKU:</b> {product.sku }</span>}
+                                {product.sku && <span><b>SKU:</b> {product.sku}</span>}
                             </div>
                         </a>
                     </TableCell>
@@ -336,6 +339,7 @@ const Qna: React.FC = () => {
                                 icon: 'adminlib-eye', // you can change the icon
                                 onClick: (rowData: any) => {
                                     setSelectedQna(rowData);
+                                    setQna(rowData.question_text);
                                     setAnswer(rowData.answer_text || '');
                                 },
                                 hover: true,
@@ -475,7 +479,13 @@ const Qna: React.FC = () => {
                     <div className="content">
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="question">{__("Question", "multivendorx")}: {selectedQna.question_text}</label>
+                                <label htmlFor="question">{__("Question", "multivendorx")}</label>
+                                <BasicInput name="phone" value={qna} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={(e) => setQna(e.target.value)} />
+                            </div>
+                        </div>
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="ans">{__("Ans", "multivendorx")}</label>
                                 <TextArea
                                     name="answer"
                                     inputClass="textarea-input"
