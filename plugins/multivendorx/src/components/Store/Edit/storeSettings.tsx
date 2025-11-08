@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { BasicInput, TextArea, FileInput, getApiLink, SuccessNotice, SelectInput, useModules } from 'zyra';
 import { useLocation } from "react-router-dom";
+import { __ } from '@wordpress/i18n';
 
 declare global {
     interface Window {
@@ -38,7 +39,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
     const [imagePreviews, setImagePreviews] = useState<{ [key: string]: string }>({});
     const [stateOptions, setStateOptions] = useState<{ label: string; value: string }[]>([]);
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
-    const [errorMsg, setErrorMsg] = useState<string | null>(null);
+    const [errorMsg, setErrorMsg] = useState<{ [key: string]: string }>({})
 
     // Map states
     const [map, setMap] = useState<any>(null);
@@ -138,7 +139,11 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
         const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmailValue.trim());
 
         if (!isValidEmail) {
-            setErrorMsg("Invalid email format");
+            setErrorMsg(prev => ({
+                ...prev,
+                email : __('Invalid email format', 'multivendorx'),
+            }));
+            
             return;
         }
 
@@ -157,7 +162,11 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
         setFormData(updatedFormData);
 
         setNewEmailValue('');
-        setErrorMsg(null);
+        setErrorMsg(prev => ({
+                ...prev,
+                email : "",
+            }));
+            
         autoSave(updatedFormData);
     };
 
@@ -623,76 +632,62 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
         })
     };
 
-    // const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    //     const { name, value } = e.target;
-    //     const updated = { ...formData, [name]: value };
-    //     setFormData(updated);
-
-    //     // if (name === "email") {
-    //     //     const emails = value.split(',').map(email => email.trim());
-
-    //     //     // Allow empty field (when user is deleting)
-    //     //     if (value === '' || emails.length === 0) {
-    //     //         updated.email = '';
-    //     //         autoSave(updated);
-    //     //         setErrorMsg(null);
-    //     //         return;
-    //     //     }
-
-    //     //     const isValidEmail = emails.every(email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
-
-    //     //     if (isValidEmail && emails.length > 0) {
-    //     //         // Update the email field with the validated comma-separated emails
-    //     //         updated.email = emails.join(', ');
-    //     //         autoSave(updated);
-    //     //         setErrorMsg(null);
-    //     //     } else {
-    //     //         setErrorMsg("Invalid email format. Please enter valid email(s) separated by commas.");
-    //     //     }
-    //     // }
-    //     if (name === "email") {
-    //         const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-    //         if (isValidEmail) {
-    //             autoSave(updated);
-    //             setErrorMsg(null);
-    //         } else {
-    //             setErrorMsg("Invalid email");
-    //         }
-    //     } 
-    //     else if (name === "phone") {
-    //         // ✅ Basic international phone pattern: allows +, spaces, hyphens, and digits (7–15 length)
-    //         const isValidPhone = /^\+?[0-9\s\-]{7,15}$/.test(value);
-    //         if (isValidPhone) {
-    //             autoSave(updated);
-    //             setErrorMsg(null);
-    //         } else {
-    //             setErrorMsg("Invalid phone number");
-    //         }
-    //     } else {
-    //         autoSave(updated);
-    //     }
-
-    // };
+    const checkSlugExists = async (slug: string) => {
+        try {
+            const response = await axios.get(
+                getApiLink(appLocalizer, 'store'),
+                {
+                    params: { slug,
+                        id: id
+                     },
+                    headers: { 'X-WP-Nonce': appLocalizer.nonce },
+                }
+            );
+            return response.data.exists;
+        } catch (err) {
+            return false;
+        }
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         const updated = { ...formData, [name]: value };
         setFormData(updated);
-        if (name == "slug") {
-            onUpdate({ slug: value });
-        }
-        if (name === "phone") {
+
+        if (name === "slug") {
+            (async () => {
+                const trimmedValue = value.trim();
+                const exists = await checkSlugExists(trimmedValue);
+
+                if (exists) {
+                    setErrorMsg(prev => ({
+                        ...prev,
+                        slug: `Slug "${trimmedValue}" already exists.`,
+                    }));
+                    return;
+                }
+                setErrorMsg(prev => ({ ...prev, slug: "" }));
+                autoSave(updated);
+                onUpdate({ slug: trimmedValue });
+            })();
+
+            return;
+        }else if (name === "phone") {
             const isValidPhone = /^\+?[0-9\s\-]{7,15}$/.test(value);
             if (isValidPhone) {
                 autoSave(updated);
-                setErrorMsg(null);
+                setErrorMsg(prev => ({ ...prev, phone: "" }));
             } else {
-                setErrorMsg("Invalid phone number");
+                setErrorMsg(prev => ({
+                    ...prev,
+                    phone: __("Invalid phone number", "multivendorx"),
+                }));
             }
-        } else if (name !== "email") { // Skip auto-save for email as we handle it separately
+        } else if (name !== "email") {
             autoSave(updated);
         }
     };
+
 
     const runUploader = (key: string) => {
         const frame = (window as any).wp.media({
@@ -836,6 +831,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                 <div className="settings-metabox-description">
                                     Add multiple email addresses. Press "Enter" or click "Add" after each email.
                                 </div>
+                                {errorMsg.email && <p className="invalid-massage">{errorMsg.email}</p>}
                             </div>
                         </div>
 
@@ -845,6 +841,8 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                 <BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
                                 {errorMsg && <p className="invalid-massage">{errorMsg}</p>}
                             </div>
+                            {errorMsg.phone && <p className="invalid-massage">{errorMsg.phone}</p>}
+
                         </div>
 
                         {/* Hidden coordinates */}
@@ -921,7 +919,9 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                             </div>
                         </div>
 
-                        {modules.includes('geo-location') &&
+                        {modules.includes('geo-location') && 
+                            !!(appLocalizer?.settings_databases_value?.geolocation?.google_api_key?.trim() ||
+                                appLocalizer?.settings_databases_value?.geolocation?.mapbox_api_key?.trim()) &&
                             <div>
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
@@ -1038,6 +1038,8 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                 />
                                 <div className="settings-metabox-description">Store Url : {appLocalizer.store_page_url + '/' + formData.slug}</div>
                             </div>
+                            {errorMsg.slug && <p className="invalid-massage">{errorMsg.slug}</p>}
+
                         </div>
                     </div>
 

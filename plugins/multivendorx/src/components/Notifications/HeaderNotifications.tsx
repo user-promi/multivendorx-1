@@ -78,7 +78,8 @@ const HeaderNotifications = () => {
                     </ul>
                 </div>
                 <div className="footer">
-                    <a className="admin-btn btn-purple">
+                    <a href={`?page=multivendorx#&tab=notifications`}
+                        className="admin-btn btn-purple">
                         <i className="adminlib-eye"></i> View all notifications
                     </a>
                 </div>

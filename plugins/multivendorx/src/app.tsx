@@ -24,6 +24,7 @@ import Advertisement from './components/Advertisement/Advertisement';
 import HelpSupport from './components/HelpSupport/HelpSupport';
 import ApprovalQueue from './components/ApprovalQueue/approvalQueue';
 import HeaderNotification from './components/Notifications/HeaderNotifications';
+import Notifications from './components/Notifications/Notifications';
 
 localStorage.setItem('force_multivendorx_context_reload', 'true');
 
@@ -123,6 +124,7 @@ const Route = () => {
       {tab === 'reports' && <Analytics />}
       {tab === 'advertisement' && <Advertisement />}
       {tab === 'help-support' && <HelpSupport />}
+      {tab === 'notifications' && <Notifications />}
     </>
   );
 };
