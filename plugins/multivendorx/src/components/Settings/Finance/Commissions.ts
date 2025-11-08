@@ -295,7 +295,7 @@ export default {
                 'Define a fee to cover platform costs. Apply a fixed, percentage, or combined rate. Choose whether it’s paid by the customer at checkout or deducted from the store’s commission.',
                 'multivendorx'
             ),
-            desc: __('<strong>Example setup:</strong><br>Order total = $100<br>Store commission = 80%<br>Marketplace fee = $2 + 10% = $12<ul><li><strong>Case 1 – Fee added to the customer’s order total:</strong><br>Customer pays = $100 + $12 = $112</li><li><strong>Case 2 – Fee deducted from the store’s commission:</strong><br>Customer pays = $100<br>Final store payout = 80% of $100 - $12 = $68</li></ul>', 'multivendorx'),
+            desc: __('<strong>Example setup:</strong><br>Order total = $100<br>Store commission = 80%<br>Marketplace fee = $2 + 10% = $12<ul><li><strong>Case 1 – Fee added to the customer’s order total:</strong><br>Customer pays = $100 + $12 = $112<br>The $12 will be displayed at checkout as <em>Marketplace fee</em>.</li><li><strong>Case 2 – Fee deducted from the store’s commission:</strong><br>Customer pays = $100<br>Store commission = 80% of $100 = $80<br>Marketplace fee = $2 + 10% of $80 = $10<br>Final store payout = $80 - $10 = $70</li></ul>', 'multivendorx'),
             nestedFields: [
                 {
                     key: 'commission_fixed',
