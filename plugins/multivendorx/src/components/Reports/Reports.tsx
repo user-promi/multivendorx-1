@@ -142,7 +142,7 @@ const Reports = () => {
       <AdminBreadcrumbs
         activeTabIcon="adminlib-report"
         tabTitle="Reports"
-        description={'Manage all pending administrative actions including approvals, payouts, and notifications.'}
+        description={'Track sales, earnings, and store performance with real-time marketplace insights.'}
 
       />
       <div className="general-wrapper tab">
