@@ -332,7 +332,14 @@ export default {
             single: true,
             proSetting: true,
             settingDescription: __('Set the facilitator fees as a fixed amount, a percentage, or both, deducted from the store commission. Store-wise fees can also be configured from the store edit page.', 'multivendorx'),
-            desc: __(' <strong>Global facilitator:</strong> Assign a single facilitator for the entire marketplace from <a href="#">here</a>.<br> <strong>Individual facilitators:</strong> Set facilitators for specific stores from the <em>Facilitator Settings</em> section or the <em>Store Edit</em> page.<br> <strong>Example:</strong> If a store earns $1000 commission and the facilitator fees is $50 + 5%, then total facilitator fees = $50 + (5% of 1000) = $100 → the store receives $900 after facilitator deductions. ', 'multivendorx'),
+            desc: __(
+                '<strong>Global facilitator:</strong> Assign a single facilitator for the entire marketplace from <a href="' +
+                appLocalizer.site_url +
+                '/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-capability">here</a>.<br>' +
+                '<strong>Individual facilitators:</strong> Set facilitators for specific stores from the <em>Facilitator Settings</em> section or the <em>Store Edit</em> page.<br>' +
+                '<strong>Example:</strong> If a store earns $1000 commission and the facilitator fees is $50 + 5%, then total facilitator fees = $50 + (5% of 1000) = $100 → the store receives $900 after facilitator deductions.',
+                'multivendorx'
+            ),
             nestedFields: [
                 {
                     key: 'facilitator_fixed',
