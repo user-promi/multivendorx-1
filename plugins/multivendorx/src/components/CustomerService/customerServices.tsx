@@ -114,6 +114,13 @@ const CustomerServices = () => {
         },
     ].filter(tab => !tab.module || modules.includes(tab.module));
     const [activeTab, setActiveTab] = useState(() => tabs?.[0]?.id ?? "");
+    // Update URL hash when activeTab changes
+    useEffect(() => {
+        if (activeTab) {
+            const baseHash = '#&tab=customer-support';
+            window.location.hash = `${baseHash}&subtab=${activeTab}`;
+        }
+    }, [activeTab]);
 
 
     return (

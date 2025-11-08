@@ -1,0 +1,145 @@
+/* global appLocalizer */
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { __ } from '@wordpress/i18n';
+import { ColumnDef } from '@tanstack/react-table';
+import { formatCurrency } from '@/services/commonFunction';
+import { getApiLink, Table, TableCell } from 'zyra';
+
+type RefundRow = {
+    id: number;
+    order_id: number;
+    customer_name: string;
+    store_name: string;
+    amount: string;
+    reason: string;
+    date: string;
+    status: string;
+};
+
+interface LatestRefundRequestProps {
+    store_id: number;
+}
+
+const LatestRefundRequest: React.FC<LatestRefundRequestProps> = ({ store_id }) => {
+    const [data, setData] = useState<RefundRow[]>([]);
+
+    useEffect(() => {
+        if (store_id) {
+            requestData(3, 1, store_id);
+        }
+    }, [store_id]);
+
+    // Column definitions
+    const columns: ColumnDef<RefundRow>[] = [
+        {
+            header: __('Order', 'multivendorx'),
+            cell: ({ row }: any) => {
+                const orderId = row.original.order_id;
+                const url = orderId
+                    ? `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${orderId}&action=edit`
+                    : '#';
+
+                return (
+                    <TableCell title={orderId ? `#${orderId}` : '-'}>
+                        {orderId ? (
+                            <a href={url} target="_blank" rel="noopener noreferrer" className="order-link">
+                                #{orderId}
+                            </a>
+                        ) : (
+                            '-'
+                        )}
+                    </TableCell>
+                );
+            },
+        },
+        {
+            header: __('Customer', 'multivendorx'),
+            cell: ({ row }: any) => (
+                <TableCell title={row.original.customer_name || ''}>
+                    {row.original.customer_name === "" ? row.original.customer_name: '-'}
+                </TableCell>
+            ),
+        },
+        {
+            header: __('Refund Amount', 'multivendorx'),
+            cell: ({ row }: any) => (
+                <TableCell title={row.original.amount || ''}>
+                    {formatCurrency(row.original.amount)}
+                </TableCell>
+            ),
+        },
+        {
+            header: __('Refund Reason', 'multivendorx'),
+            cell: ({ row }: any) => (
+                <TableCell title={row.original.reason || ''}>
+                    {row.original.reason || '-'}
+                </TableCell>
+            ),
+        },
+        {
+            header: __('Status', 'multivendorx'),
+            cell: ({ row }: any) => (
+                <TableCell title={row.original.status || ''}>
+                    {row.original.status
+                        ? row.original.status.charAt(0).toUpperCase() + row.original.status.slice(1)
+                        : '-'}
+                </TableCell>
+            ),
+        },
+        {
+            header: __('Date', 'multivendorx'),
+            cell: ({ row }: any) => {
+                const date = row.original.date;
+                if (!date) return <TableCell>-</TableCell>;
+
+                const formattedDate = new Date(date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                });
+
+                return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
+            },
+        },
+    ];
+
+    // Fetch data from backend
+    function requestData(
+        rowsPerPage = 3,
+        currentPage = 1,
+        store_id?: number,
+        orderBy = 'date',
+        order = 'desc',
+    ) {
+        if (!store_id) return;
+
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'refund'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: {
+                page: currentPage,
+                row: rowsPerPage,
+                store_id,
+                orderBy,
+                order,
+            },
+        })
+            .then((response) => {
+                setData(response.data || []);
+            })
+            .catch(() => {
+                setData([]);
+            });
+    }
+
+    return (
+        <Table
+            data={data}
+            columns={columns as any}
+        />
+    );
+};
+
+export default LatestRefundRequest;
