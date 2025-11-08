@@ -3,7 +3,6 @@ import { ToggleSetting, getApiLink, SelectInput, Tabs, RadioInput, CommonPopup, 
 import { Skeleton } from '@mui/material';
 
 import StoreSettings from './storeSettings';
-
 import PaymentSettings from './paymentSettings';
 import StoreSquad from './storeStaff';
 import PolicySettings from './policySettings';
@@ -15,8 +14,6 @@ import axios from 'axios';
 import Overview from './overview';
 import Membership from './membership';
 import Financial from './financial';
-import StoreReview from './storeReview';
-import StoreRefund from './storeRefund';
 import "../viewStore.scss";
 
 const statusOptions = [
@@ -317,10 +314,6 @@ const EditStore = () => {
                 return <StoreRegistration id={editId} />;
             case 'store-facilitator':
                 return <Facilitator id={editId} data={data} />;
-            case 'store-review':
-                return <StoreReview id={editId} data={data} />;
-            case 'store-refund':
-                return <StoreRefund id={editId} data={data} />;
             default:
                 return <div></div>;
         }
@@ -603,14 +596,17 @@ const EditStore = () => {
                                                     {data?.slug ? (
                                                         <>
                                                             {data.slug}{' '}
+                                                            
+                                                            {(data?.status != 'pending' || data?.status != 'rejected' || data?.status != 'permanently_rejected') && (
 
-                                                            <span className="edit-icon admin-badge blue" onClick={() => {
-                                                                navigate(`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`, {
-                                                                    state: { highlightTarget: "store-slug" },
-                                                                });
-                                                            }}>
-                                                                <i className="adminlib-create" ></i>
-                                                            </span>
+                                                                <span className="edit-icon admin-badge blue" onClick={() => {
+                                                                    navigate(`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`, {
+                                                                        state: { highlightTarget: "store-slug" },
+                                                                    });
+                                                                }}>
+                                                                    <i className="adminlib-create" ></i>
+                                                                </span>
+                                                            )}
                                                         </>
                                                     ) : (
                                                         <Skeleton

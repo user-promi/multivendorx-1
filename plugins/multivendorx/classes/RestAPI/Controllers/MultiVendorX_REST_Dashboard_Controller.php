@@ -115,12 +115,12 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
                 'icon' => 'adminlib-wallet',
                 'slug' => 'store-wallet',
                 'submenu' => array(
-                    'transactions' => array(
+                    array(
                         'key' => 'transactions',
                         'name' => 'Transactions',
                         'slug' => 'transactions',
                     ),
-                    'withdrawls' => array(
+                    array(
                         'key' => 'withdrawls',
                         'name' => 'Withdrawls',
                         'slug' => 'withdrawls',

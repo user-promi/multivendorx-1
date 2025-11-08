@@ -269,7 +269,8 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
             $slug = $request->get_param( 'slug' );
             if (!empty($slug)) {
-                $exists =Store::store_slug_exists($slug);
+                $id = $request->get_param( 'id' );
+                $exists =Store::store_slug_exists($slug, $id ?? 0);
                 return rest_ensure_response(['exists' => $exists > 0]);
             }
             
