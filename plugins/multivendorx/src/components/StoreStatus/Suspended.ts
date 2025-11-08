@@ -41,7 +41,7 @@ export default {
         {
             key: 'pending_msg',
             label: 'Message shown to pending stores',
-            type: 'text',
+            type: 'textarea',
             value: 'Your store is suspended due to a policy issue. Contact admin to resolve it.',
             des: 'What pending stores can do',
         },

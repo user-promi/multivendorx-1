@@ -387,7 +387,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
                         }}
                     />
                     <Elements
-                        label="Store setup details"
+                        label="Let’s get your store ready!"
                         selectOptions={selectOptionsStore}
                         onClick={(type) => {
                             const option = selectOptionsStore.find(o => o.value === type);

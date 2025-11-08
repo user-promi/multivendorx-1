@@ -44,7 +44,7 @@ export default {
         {
             key: 'pending_msg',
             label: 'Message shown to pending stores',
-            type: 'text',
+            type: 'textarea',
             value: 'Your store is under review. Sales and payouts are temporarily paused.',
             des: 'What pending stores can do',
         },
