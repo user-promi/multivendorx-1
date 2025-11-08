@@ -32,15 +32,15 @@ export default {
                             check: true,
                         },
                         {
-                            label: __('Modify store settings', 'multivendorx'),
+                            label: __('Cannot modify store settings', 'multivendorx'),
                             check: false,
                         },
                         {
-                            label: __('Add or edit products', 'multivendorx'),
+                            label: __('Denied from adding or editing products', 'multivendorx'),
                             check: false,
                         },
                         {
-                            label: __('Process or fulfill orders', 'multivendorx'),
+                            label: __('Cannot process or fulfill orders', 'multivendorx'),
                             check: false,
                         },
                     ]

@@ -31,7 +31,6 @@ export default {
                     value: 'none',
                 },
             ],
-            moduleEnabled: 'live-chat',
             proSetting: true,
         },
         {

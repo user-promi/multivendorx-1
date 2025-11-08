@@ -331,11 +331,16 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
         }
     
         // Fields that can be updated
+        $question_text = $request->get_param( 'question_text' );
         $answer_text = $request->get_param( 'answer_text' );
         $visibility  = $request->get_param( 'question_visibility' );
     
         $data_to_update = [];
-    
+
+        if ( isset( $answer_text ) ) {
+            $data_to_update['question_text'] = sanitize_textarea_field( $question_text );
+        }
+
         if ( isset( $answer_text ) ) {
             $data_to_update['answer_text'] = sanitize_textarea_field( $answer_text );
         }
