@@ -17,6 +17,7 @@ export default {
                 'Select who is responsible for paying affiliate referral commissions:<ul><li>Admin - The marketplace admin pays affiliates for referrals.</li><li>Store - Individual stores pay affiliates for referrals generated through their products.</li></ul>',
                 'multivendorx'
             ),
+			proSetting: true,
             options: [
                 {
                     key: 'admin',
