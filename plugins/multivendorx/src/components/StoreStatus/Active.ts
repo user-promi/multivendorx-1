@@ -26,8 +26,8 @@ export default {
                 {
                     key: 'paid_promotion_limit',
                     type: 'setup',
-                    label: 'Dashboard access settings',
-                    desc: 'Configure store permissions',
+                    label: 'Configure store permissions',
+                    desc: 'Control what dashboard sections and tools are available to active stores.',
                     link: '#',
                 },
             ],
