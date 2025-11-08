@@ -513,62 +513,61 @@ const Table: React.FC<TableProps> = ({
 
 
             <div className="admin-top-filter">
-                {typeCounts?.length > 0 &&
-                    <div className="filter-wrapper">
-                        {typeCounts ? (
-                            typeCounts.length > 0 ? (
-                                <>
-                                    {typeCounts.map((countInfo, index) => (
-                                        <div
-                                            key={index}
-                                            role="button"
-                                            tabIndex={0}
-                                            onClick={() => setFilterData({ typeCount: countInfo.key })}
-                                            className={
-                                                countInfo.key === typeCountActive
-                                                    ? "filter-item active"
-                                                    : "filter-item"
-                                            }
-                                        >
-                                            {`${countInfo.name} (${countInfo.count})`}
-                                        </div>
-                                    ))}
-                                </>
-                            ) : (
-                                <span>No types found</span>
-                            )
-                        ) : (
-                            <>
-                                <Skeleton variant="text" width={100} />
-                                <Skeleton variant="text" width={120} />
-                                <Skeleton variant="text" width={90} />
-                            </>
-                        )}
+                <div className="filter-wrapper">
 
-                    </div>
-                }
-                {searchFilter &&
-                    <div className="table-action-wrapper">
-                        {searchFilter && (
-                            <div className="search-field">
-                                {searchFilter?.map((filter) => (
-                                    <React.Fragment key={filter.name}>
-                                        {filter.render(handleFilterChange, filterData[filter.name])}
-                                    </React.Fragment>
+                    {typeCounts ? (
+                        typeCounts.length > 0 ? (
+                            <>
+                                {typeCounts.map((countInfo, index) => (
+                                    <div
+                                        key={index}
+                                        role="button"
+                                        tabIndex={0}
+                                        onClick={() => setFilterData({ typeCount: countInfo.key })}
+                                        className={
+                                            countInfo.key === typeCountActive
+                                                ? "filter-item active"
+                                                : "filter-item"
+                                        }
+                                    >
+                                        {`${countInfo.name} (${countInfo.count})`}
+                                    </div>
                                 ))}
-                            </div>
-                        )}
-                        {actionButton && (
-                            <div className="action-wrapper">
-                                {actionButton?.map((filter) => (
-                                    <React.Fragment key={filter.name}>
-                                        {filter.render(handleFilterChange, filterData[filter.name])}
-                                    </React.Fragment>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                }
+                            </>
+                        ) : (
+                            <span>No types found</span>
+                        )
+                    ) : (
+                        <>
+                            <Skeleton variant="text" width={100} />
+                            <Skeleton variant="text" width={120} />
+                            <Skeleton variant="text" width={90} />
+                        </>
+                    )}
+
+                    {searchFilter &&
+                        <div className="table-action-wrapper">
+                            {searchFilter && (
+                                <div className="search-field">
+                                    {searchFilter?.map((filter) => (
+                                        <React.Fragment key={filter.name}>
+                                            {filter.render(handleFilterChange, filterData[filter.name])}
+                                        </React.Fragment>
+                                    ))}
+                                </div>
+                            )}
+                            {actionButton && (
+                                <div className="action-wrapper">
+                                    {actionButton?.map((filter) => (
+                                        <React.Fragment key={filter.name}>
+                                            {filter.render(handleFilterChange, filterData[filter.name])}
+                                        </React.Fragment>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    }
+                </div>
             </div>
 
             {/* {(typeCounts?.length > 0 || searchFilter) && (
