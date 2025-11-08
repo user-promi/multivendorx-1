@@ -35,7 +35,7 @@ export default {
         {
             key: 'section',
             type: 'section',
-            hint: __( 'Setup wizard for', 'multivendorx' ),
+            hint: __( 'Setup wizard for stores', 'multivendorx' ),
         }, 
         {
             key: 'disable_setup_wizard',

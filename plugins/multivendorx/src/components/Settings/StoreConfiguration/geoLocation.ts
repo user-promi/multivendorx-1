@@ -45,7 +45,7 @@ export default {
             options: [
                 {
                     key: 'google_map_set',
-                    label: __('Google map', 'multivendorx'),
+                    label: __('Google', 'multivendorx'),
                     value: __('google_map_set', 'multivendorx'),
                     img: google,
                 },
