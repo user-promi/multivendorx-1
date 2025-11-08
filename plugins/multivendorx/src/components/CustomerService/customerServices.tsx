@@ -14,7 +14,6 @@ const CustomerServices = () => {
     const [refundCount, setRefundCount] = useState(0);
     const [storeCount, setStoreCount] = useState(0);
     const [storeReviewCount, setStoreReviewCount] = useState(0);
-    const [activeTab, setActiveTab] = useState("products");
 
     // Modules from global store
 
@@ -22,6 +21,12 @@ const CustomerServices = () => {
     /**
      * Fetch counts on mount
      */
+    useEffect(() => {
+        if (tabs.length > 0) {
+            setActiveTab(tabs[0].id);
+        }
+    }, [modules]);
+
     useEffect(() => {
         axios
             .get(getApiLink(appLocalizer, 'report-abuse'), {
@@ -102,12 +107,13 @@ const CustomerServices = () => {
             id: "support-ticket",
             label: "Support Ticket",
             icon: "adminlib-vacation",
-            module:'customer-support',
+            module: 'customer-support',
             des: "Flagged for abuse review",
             count: abuseCount,
             content: <div className="row"><div className="column"><h1>Upcoming Feature</h1></div></div>,
         },
     ].filter(tab => !tab.module || modules.includes(tab.module));
+    const [activeTab, setActiveTab] = useState(() => tabs?.[0]?.id ?? "");
 
 
     return (

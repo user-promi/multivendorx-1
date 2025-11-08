@@ -153,18 +153,20 @@ const ReportAbuseTable: React.FC<Props> = ({ onUpdated }) => {
                             <img src={image} alt={productName} className="product-image" />
                             <div className="details">
                                 <span className="title">{productName}</span>
-                                {sku && <span className="sku"><b>SKU: {sku}</b></span>}
-                                {storeName !== '' && <>
-                                    <div>by</div>
-                                    <a
-                                        href={storeLink}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        className="store-link"
-                                    >
-                                        {storeName}
-                                    </a>
-                                </>}
+                                {sku && <span className="des">
+                                    SKU: {sku} 
+                                    {storeName !== '' && <>
+                                       | By:
+                                        <a
+                                            href={storeLink}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="store-link"
+                                        >
+                                            {storeName}
+                                        </a>
+                                    </>}
+                                </span>}
 
 
                             </div>

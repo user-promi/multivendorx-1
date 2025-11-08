@@ -71,17 +71,17 @@ jQuery(function($){
             },
             success: function(res){
                 if(res.success){
-                    $btn.replaceWith('<span class="report-sent" style="color:green; font-weight:bold;">Report has been sent ✅</span>');
-                    $msgBox.html('<span style="color:green;">'+res.data+'</span>');
+                    $btn.replaceWith('');
+                    $msgBox.html('<span>'+res.data+'</span>');
                 } else {
-                    $msgBox.html('<span style="color:red;">'+res.data+'</span>');
+                    $msgBox.html('<span>'+res.data+'</span>');
                     $btn.prop('disabled', false);
                     $btn.find('.btn-text').show();
                     $btn.find('.btn-spinner').hide();
                 }
             },
             error: function(){
-                $msgBox.html('<span style="color:red;">Something went wrong. Try again.</span>');
+                $msgBox.html('<span>Something went wrong. Try again.</span>');
                 $btn.prop('disabled', false);
                 $btn.find('.btn-text').show();
                 $btn.find('.btn-spinner').hide();
