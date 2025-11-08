@@ -172,7 +172,7 @@
     display: flex;
     gap: 1.313rem;
     // padding-top: 1.313rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2.5rem;
     padding-bottom: 0.5rem;
     border-bottom: $border-light-small;
 
@@ -188,6 +188,7 @@
         padding: 1rem 1rem 0.313rem 1rem;
         // border-radius: 0.313rem;
         min-width: 10%;
+        border-radius: 0.313rem;
 
 
         .icon {
@@ -1349,7 +1350,7 @@
         position: relative;
         border: none;
         border-collapse: collapse;
-        border: .063rem solid #d0d1d3;
+        border: $border-light-small;
         border-bottom: 0;
         // border-top-left-radius: 0.625rem;
         // border-top-right-radius: 0.625rem;
@@ -1528,6 +1529,23 @@
 
                     .details {
                         margin: 0;
+                        position: relative;
+
+                        .more-btn {
+                            position: absolute;
+                            bottom: 0;
+                            left: 50%;
+                            background: $theme-background-color;
+                            font-size: 0.813rem;
+                            padding: 0.125rem 0.5rem;
+                            color: $theme-color;
+                            border-radius: 0.313rem;
+                        }
+
+                        &.overflow {
+                            height: 3rem;
+                            overflow: hidden;
+                        }
 
                         li {
                             // display: flex;
@@ -1688,7 +1706,7 @@
     min-height: 3.125rem;
     // border-bottom-left-radius: 0.625rem;
     // border-bottom-right-radius: 0.625rem;
-    border: .063rem solid #d0d1d3;
+    border: $border-light-small;
     border-top: 0;
 
     .pagination-arrow {

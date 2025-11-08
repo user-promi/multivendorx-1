@@ -510,20 +510,23 @@ const EditStore = () => {
 
                                                     {/* <span className="admin-badge green">{data.status}</span> */}
                                                     {data.status === 'active' ? (
-                                                        <span className="admin-badge green">Active</span>
+                                                        <span className="status admin-badge green">Active</span>
                                                     ) : data.status === 'pending' ? (
-                                                        <span className="admin-badge yellow">Pending</span>
-                                                    ) : data.status === 'rejected' ? (
-                                                        <span className="admin-badge red">Rejected</span>
-                                                    ) : data.status === 'suspended' ? (
-                                                        <span className="admin-badge blue">Suspended</span>
+                                                        <span className="status  admin-badge yellow">Pending</span>
                                                     ) : data.status === 'permanently_rejected' ? (
-                                                        <span className="admin-badge red">Permanently Rejected</span>
+                                                        <span className="status  admin-badge red">Rejected</span>
+                                                    ) : data.status === 'suspended' ? (
+                                                        <span className="status  admin-badge blue">Suspended</span>
+                                                    ) : data.status === 'permanently_rejected' ? (
+                                                        <span className="status  admin-badge red">Permanently Rejected</span>
+                                                    ) : data.status === 'under_review' ? (
+                                                        <span className="status  admin-badge yellow">Under Review</span>
+                                                    ) : data.status === 'deactivated' ? (
+                                                        <span className="status  admin-badge red">Deactivated</span>
                                                     ) : (
                                                         <Skeleton variant="text" width={100} />
                                                     )}
-
-
+                                                    
                                                     <div className="admin-badge green"><i className="adminlib-store-inventory"></i></div>
                                                     <div className="admin-badge blue"><i className="adminlib-geo-my-wp"></i></div>
                                                     <div className="admin-badge yellow"><i className="adminlib-staff-manager"></i></div>

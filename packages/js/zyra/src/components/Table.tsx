@@ -238,25 +238,39 @@ export const TableCell: React.FC<TableCellProps> = ({
             content = (
                 <div className="action-section">
                     <div className="action-icons">
-                        <i
-                            className="adminlib-more-vertical"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                toggleDropdown(rowId)
-                            }}
-                        ></i>
-                        <div className={`action-dropdown ${showDropdown === rowId ? 'show' : 'hover'}`}>
-                            <ul>
-                                {header.actions?.map((action: {
-                                    label: string;
-                                    icon: string;
-                                    onClick: (row: any) => void;
-                                    className?: string;
-                                    hover?: boolean;
-                                }) => (
-                                    <li
+                        {header.actions && header.actions.length > 2 ? (
+                            <>
+                                <i
+                                    className="adminlib-more-vertical"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        toggleDropdown(rowId);
+                                    }}
+                                ></i>
+                                <div className={`action-dropdown ${showDropdown === rowId ? "show" : "hover"}`}>
+                                    <ul>
+                                        {header.actions.map(action => (
+                                            <li
+                                                key={action.label}
+                                                className={`${action.className || ""} ${action.hover ? "hover" : ""}`}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    action.onClick(rowData);
+                                                }}
+                                            >
+                                                <i className={action.icon}></i>
+                                                <span>{action.label}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </>
+                        ) : (
+                            <div className="inline-actions">
+                                {header.actions?.map(action => (
+                                    <div
                                         key={action.label}
-                                        className={`${action.className || ''} ${action.hover ? 'hover' : ''}`}
+                                        className={`inline-action-btn ${action.className || ""}`}
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             action.onClick(rowData);
@@ -264,15 +278,17 @@ export const TableCell: React.FC<TableCellProps> = ({
                                     >
                                         <i className={action.icon}></i>
                                         <span>{action.label}</span>
-                                    </li>
+                                    </div>
                                 ))}
-                            </ul>
-                        </div>
+                            </div>
+                        )}
                     </div>
+
+
                 </div>
+
             );
             break;
-
         default:
             content = (
                 <div
@@ -495,66 +511,66 @@ const Table: React.FC<TableProps> = ({
     return (
         <>
 
-
-            <div className="admin-top-filter">
-                {typeCounts?.length > 0 &&
-                    <div className="filter-wrapper">
-                        {typeCounts ? (
-                            typeCounts.length > 0 ? (
-                                <>
-                                    {typeCounts.map((countInfo, index) => (
-                                        <div
-                                            key={index}
-                                            role="button"
-                                            tabIndex={0}
-                                            onClick={() => setFilterData({ typeCount: countInfo.key })}
-                                            className={
-                                                countInfo.key === typeCountActive
-                                                    ? "filter-item active"
-                                                    : "filter-item"
-                                            }
-                                        >
-                                            {`${countInfo.name} (${countInfo.count})`}
-                                        </div>
-                                    ))}
-                                </>
+            {(typeCounts?.length > 0 || searchFilter) && (
+                <div className="admin-top-filter">
+                    {typeCounts?.length > 0 &&
+                        <div className="filter-wrapper">
+                            {typeCounts ? (
+                                typeCounts.length > 0 ? (
+                                    <>
+                                        {typeCounts.map((countInfo, index) => (
+                                            <div
+                                                key={index}
+                                                role="button"
+                                                tabIndex={0}
+                                                onClick={() => setFilterData({ typeCount: countInfo.key })}
+                                                className={
+                                                    countInfo.key === typeCountActive
+                                                        ? "filter-item active"
+                                                        : "filter-item"
+                                                }
+                                            >
+                                                {`${countInfo.name} (${countInfo.count})`}
+                                            </div>
+                                        ))}
+                                    </>
+                                ) : (
+                                    <span>No types found</span>
+                                )
                             ) : (
-                                <span>No types found</span>
-                            )
-                        ) : (
-                            <>
-                                <Skeleton variant="text" width={100} />
-                                <Skeleton variant="text" width={120} />
-                                <Skeleton variant="text" width={90} />
-                            </>
-                        )}
+                                <>
+                                    <Skeleton variant="text" width={100} />
+                                    <Skeleton variant="text" width={120} />
+                                    <Skeleton variant="text" width={90} />
+                                </>
+                            )}
 
-                    </div>
-                }
-                {searchFilter &&
-                    <div className="table-action-wrapper">
-                        {searchFilter && (
-                            <div className="search-field">
-                                {searchFilter?.map((filter) => (
-                                    <React.Fragment key={filter.name}>
-                                        {filter.render(handleFilterChange, filterData[filter.name])}
-                                    </React.Fragment>
-                                ))}
-                            </div>
-                        )}
-                        {actionButton && (
-                            <div className="action-wrapper">
-                                {actionButton?.map((filter) => (
-                                    <React.Fragment key={filter.name}>
-                                        {filter.render(handleFilterChange, filterData[filter.name])}
-                                    </React.Fragment>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                }
-            </div>
-
+                        </div>
+                    }
+                    {searchFilter &&
+                        <div className="table-action-wrapper">
+                            {searchFilter && (
+                                <div className="search-field">
+                                    {searchFilter?.map((filter) => (
+                                        <React.Fragment key={filter.name}>
+                                            {filter.render(handleFilterChange, filterData[filter.name])}
+                                        </React.Fragment>
+                                    ))}
+                                </div>
+                            )}
+                            {actionButton && (
+                                <div className="action-wrapper">
+                                    {actionButton?.map((filter) => (
+                                        <React.Fragment key={filter.name}>
+                                            {filter.render(handleFilterChange, filterData[filter.name])}
+                                        </React.Fragment>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    }
+                </div>
+            )}
             {/* {(typeCounts?.length > 0 || searchFilter) && (
                 <div className="admin-top-filter">
                     <div className="filter-wrapper">

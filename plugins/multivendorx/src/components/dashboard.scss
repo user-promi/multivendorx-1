@@ -123,6 +123,7 @@
 .w-40 {
     width: 40% !important;
 }
+
 .w-60 {
     width: 60% !important;
 }
@@ -264,7 +265,10 @@
         }
     }
 
-
+    .settings-metabox-note {
+        padding: 0;
+        padding-bottom: 1rem;
+    }
 
 }
 
@@ -365,6 +369,7 @@
 
     &.tab {
         cursor: pointer;
+        padding-bottom: 1.5rem;
 
         .tab-action {
             width: 24%;
@@ -583,9 +588,10 @@
     gap: 1rem;
     flex-wrap: wrap;
     padding-bottom: 1rem;
+    justify-content: space-between;
 
     .data-card {
-        width: 32%;
+        width: 31%;
         background: #fff;
         padding: 1.5rem;
         border-radius: 0.313rem;
@@ -618,7 +624,7 @@
     display: flex;
 
     .horizontal-title-section {
-        width: 20%;
+        width: 25%;
         height: auto;
         margin-top: 2.5rem;
 
@@ -676,7 +682,7 @@
     }
 
     .general-wrapper {
-        width: 80%;
+        width: 75%;
         background: #fff;
 
         .card-content {
@@ -686,7 +692,6 @@
         .tab-content {
             padding: 1.5rem;
             box-sizing: border-box;
-
             .divider-wrapper:first-child {
                 .divider-section {
                     margin: 0;

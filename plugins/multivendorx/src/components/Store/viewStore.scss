@@ -30,6 +30,7 @@
         color: #0000007d;
     }
 }
+
 .store-header {
     background: #fff;
     border-radius: 0.313rem;
@@ -119,7 +120,15 @@
 
                     .store-name {
                         position: relative;
-                        padding-right: 2rem;
+                        // padding-right: 2rem;
+                        display: flex;
+                        gap: 0.313rem;
+                        align-items: end;
+                    }
+
+                    .status {
+                        padding: 0.5rem;
+                        font-size: 1rem;
                     }
                 }
 
@@ -127,7 +136,9 @@
                     padding: 0.313rem 0;
                     font-size: 1rem;
                     position: relative;
-                    display: inline-block;
+                    display: flex;
+                    gap: 0.313rem;
+                    align-items: end;
 
 
                     .edit-icon {
@@ -137,9 +148,9 @@
                 }
 
                 .edit-icon {
-                    position: absolute;
-                    right: 0;
-                    top: -0.2rem;
+                    // position: absolute;
+                    // right: 0;
+                    // top: -0.2rem;
                     opacity: 0;
                     transition: all 0.4s ease;
                 }
@@ -280,10 +291,12 @@
 
 .edit-wrapper {
     position: relative;
-    .action-icon{
+
+    .action-icon {
         font-size: 1.25rem;
         cursor: pointer;
     }
+
     ul {
         position: absolute;
         top: 100%;
