@@ -137,7 +137,7 @@ export default {
         },
         { type: 'separator', id: 'store_management', label: 'Store Management' },
         {
-            id: 'spmv',
+            id: 'SPMV',
             name: __('Single Product Multiple Vendor', 'multivendorx'),
             desc: "Allows more than one store to sell the same product with their own price and stock.",
             icon: 'adminlib-spmv',

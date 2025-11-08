@@ -485,6 +485,7 @@ const MultiCheckboxTable: React.FC<MultiCheckboxTableProps> = ({
                                                         onChange(column.key, updatedSelection);
                                                     }}
                                                 />
+                                                
                                             )}
                                         </td>
                                     );
