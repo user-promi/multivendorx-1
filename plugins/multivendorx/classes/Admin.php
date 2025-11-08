@@ -165,6 +165,10 @@ class Admin {
                     'name'   => __( 'Setup', 'multivendorx' ),
                     'subtab' => '',
                 ),
+                'notifications' => array(
+                    'name'   => '',
+                    'subtab' => '',
+                ),
             ));
             
             foreach ( $submenus as $slug => $submenu ) {
@@ -215,6 +219,7 @@ class Admin {
             }
 
             remove_submenu_page( 'multivendorx', 'multivendorx' );
+            remove_submenu_page('multivendorx', 'multivendorx#&tab=notifications');
         }
     }
 
