@@ -1,5 +1,5 @@
 <?php
-namespace MultiVendorXPro\Knowledgebase;
+namespace MultiVendorX\Knowledgebase;
 
 class Frontend {
     public function __construct() {
