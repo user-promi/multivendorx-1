@@ -143,7 +143,13 @@ class Util {
     
         $update_data   = [];
         $update_format = [];
-    
+
+        // Update answer text
+        if ( isset( $data['question_text'] ) ) {
+            $update_data['question_text'] = sanitize_textarea_field( $data['question_text'] );
+            $update_format[] = '%s';
+        }
+
         // Update answer text
         if ( isset( $data['answer_text'] ) ) {
             $update_data['answer_text'] = sanitize_textarea_field( $data['answer_text'] );
