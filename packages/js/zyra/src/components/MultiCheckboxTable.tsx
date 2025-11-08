@@ -412,7 +412,7 @@ const MultiCheckboxTable: React.FC<MultiCheckboxTableProps> = ({
                         {columns.map((column) => (
                             <th key={column.key}>{column.label}
                                 {(column?.proSetting && !khali_dabba) && (
-                                    <span>
+                                    <span className='admin-pro-tag'>
                                         <i className="adminlib-pro-tag"></i>Pro
                                     </span>
                                 )}

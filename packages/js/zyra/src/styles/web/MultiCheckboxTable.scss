@@ -26,9 +26,15 @@
                 flex: 1 0 0;
                 font-weight: 500;
                 font-size: 1rem;
+                position: relative;
 
                 &:first-child {
                     max-width: 9.375rem;
+                }
+                .admin-pro-tag{
+                    position: relative;
+                    top: 0;
+                    right: 0;
                 }
             }
         }

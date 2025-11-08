@@ -684,11 +684,14 @@
     .general-wrapper {
         width: 75%;
         background: #fff;
+        border: $border-light-small;
 
         .card-content {
             padding: 0;
         }
-
+        .middle-child-container{
+            border: none;
+        }
         .tab-content {
             padding: 1.5rem;
             box-sizing: border-box;
