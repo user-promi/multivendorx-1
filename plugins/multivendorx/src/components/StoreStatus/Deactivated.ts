@@ -13,7 +13,7 @@ export default {
             type: 'blocktext',
             label: __('no_label', 'multivendorx'),
             blocktext: __(
-                'The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
+                'The store has been permanently deactivated. Stores have read-only access to historical data, but the storefront is removed from public view and no changes can be made.',
                 'multivendorx'
             ),
         },
@@ -28,22 +28,15 @@ export default {
                     type: 'checklist',
                     options: [
                         {
-                            label: __('Log in to dashboard', 'multivendorx'),
+                            label: __('Cannot log in to dashboard', 'multivendorx'),
                             check: false,
                         },
                         {
-                            label: __('Access selling privileges', 'multivendorx'),
+                            label: __('Cannot access selling privileges', 'multivendorx'),
                             check: false,
                         },
                         {
-                            label: __('Submit reapplication or appeal', 'multivendorx'),
-                            check: false,
-                        },
-                        {
-                            label: __('View or manage product listings', 'multivendorx'),
-                            check: false,
-                        },{
-                            label: __('Retain any marketplace privileges', 'multivendorx'),
+                            label: __('Cannot view or manage product listings', 'multivendorx'),
                             check: false,
                         },
                     ]

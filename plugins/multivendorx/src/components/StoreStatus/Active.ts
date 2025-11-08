@@ -13,7 +13,7 @@ export default {
             type: 'blocktext',
             label: __('no_label', 'multivendorx'),
             blocktext: __(
-                'The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
+                'The store is active and fully operational. Stores have complete access to manage products, process orders, receive payouts, and configure all store settings.',
                 'multivendorx'
             ),
         },
@@ -32,12 +32,6 @@ export default {
                 },
             ],
         },
-        {
-            key: 'pending_msg',
-            label: 'Message shown to pending stores',
-            type: 'text',
-            value: 'Message shown to pending stores:',
-            des: 'What pending stores can do',
-        },
+
     ],
 };

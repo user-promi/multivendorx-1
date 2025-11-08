@@ -410,8 +410,14 @@ const MultiCheckboxTable: React.FC<MultiCheckboxTableProps> = ({
                     <tr>
                         <th></th>
                         {columns.map((column) => (
-                            <th key={column.key}>{column.label}</th>
-                        ))}
+                            <th key={column.key}>{column.label}
+                                {(column?.proSetting && !khali_dabba) && (
+                                    <span>
+                                        <i className="adminlib-pro-tag"></i>Pro
+                                    </span>
+                                )}
+                            </th>
+                         ))}
                     </tr>
                 </thead>
 
@@ -509,12 +515,10 @@ const MultiCheckboxTable: React.FC<MultiCheckboxTableProps> = ({
                                                 <tr key={capKey}>
                                                     <td>{capLabel}</td>
                                                     {columns.map((column) => {
-                                                        const hasExists =
-                                                            Object.values(
-                                                                storeTabSetting
-                                                            ).some((arr) =>
-                                                                arr?.includes(capKey)
-                                                            );
+                                                        const hasExists = storeTabSetting &&
+                                                                Object.values(storeTabSetting).some(
+                                                                (arr) => arr?.includes(capKey)
+                                                                );
 
                                                         return (
                                                             <td
