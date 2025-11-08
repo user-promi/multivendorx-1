@@ -4,6 +4,7 @@ import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { Table, getApiLink, TableCell, CalendarInput } from 'zyra';
 import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
+import DefaultStore from "../../../assets/images/default-store.jpg";
 
 export interface RealtimeFilter {
     name: string;
@@ -129,37 +130,51 @@ const ReportAbuseTable: React.FC<Props> = ({ onUpdated }) => {
             ),
         },
         {
-            header: __('Store Name', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.store_name || '-'}>
-                    {row.original.store_name ? (
+            id: 'product',
+            header: __('Product', 'multivendorx'),
+            cell: ({ row }) => {
+                const product = row.original;
+                const image = product.product_image || DefaultStore; // fallback to default
+                const productName = product.product_name || '-';
+                const productId = product.product_id; // use ID for admin edit link
+                const productLink = `${window.location.origin}/wp-admin/post.php?post=${productId}&action=edit`;
+                const sku = product.product_sku || '';
+                const storeName = product.store_name;
+                const storeLink = `${window.location.origin}/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${product.store_id}`;
+
+                return (
+                    <TableCell title={`${productName} - ${storeName}`}>
                         <a
-                            href={`${window.location.origin}/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${row.original.store_id}`}
+                            href={productLink}
                             target="_blank"
                             rel="noreferrer"
+                            className="product-wrapper"
                         >
-                            {row.original.store_name}
+                            <img src={image} alt={productName} className="product-image" />
+                            <div className="details">
+                                <span className="title">{productName}</span>
+                                {sku && <span className="sku"><b>SKU: {sku}</b></span>}
+                                {storeName !== '' && <>
+                                    <div>by</div>
+                                    <a
+                                        href={storeLink}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="store-link"
+                                    >
+                                        {storeName}
+                                    </a>
+                                </>}
+
+
+                            </div>
                         </a>
-                    ) : (
-                        '-'
-                    )}
-                </TableCell>
-            ),
+                    </TableCell>
+                );
+            },
         },
-        {
-            header: __('Product Name', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.product_name || '-'}>
-                    {row.original.product_name ? (
-                        <a href={row.original.product_link} target="_blank" rel="noreferrer">
-                            {row.original.product_name}
-                        </a>
-                    ) : (
-                        '-'
-                    )}
-                </TableCell>
-            ),
-        },
+
+
         {
             header: __('Reported By', 'multivendorx'),
             cell: ({ row }) => (
@@ -247,7 +262,7 @@ const ReportAbuseTable: React.FC<Props> = ({ onUpdated }) => {
                 row: rowsPerPage,
                 store_id: store,
                 start_date: startDate,
-                end_date:endDate,
+                end_date: endDate,
                 orderBy,
                 order,
             },
@@ -271,7 +286,7 @@ const ReportAbuseTable: React.FC<Props> = ({ onUpdated }) => {
             filterData?.store,
             filterData?.orderBy,
             filterData?.order,
-            filterData?.date?.start_date, 
+            filterData?.date?.start_date,
             filterData?.date?.end_date
         );
     };
@@ -289,6 +304,7 @@ const ReportAbuseTable: React.FC<Props> = ({ onUpdated }) => {
                         className="basic-select"
                     >
                         <option value="">All Store</option>
+                        <option value="0">Admin</option>
                         {store?.map((s: any) => (
                             <option key={s.id} value={s.id}>
                                 {s.store_name.charAt(0).toUpperCase() + s.store_name.slice(1)}

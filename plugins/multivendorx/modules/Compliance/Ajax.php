@@ -26,10 +26,7 @@ class Ajax {
         }
 
         // Get store_id from product meta
-        $store_id = get_post_meta($product_id, 'multivendorx_store_id', true);
-        if ( empty($store_id) ) {
-            wp_send_json_error("Invalid product/store.");
-        }
+        $store_id = get_post_meta($product_id, 'multivendorx_store_id', true) ?? 0;
 
         // Save the report using Util function
         $report_id = Util::create_report_abuse([
