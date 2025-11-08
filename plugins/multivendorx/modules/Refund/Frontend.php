@@ -28,7 +28,13 @@ class Frontend {
     public function mvx_refund_btn_customer_my_account( $order ){
         if( !is_wc_endpoint_url( 'view-order' ) ) return;
         if( !MultiVendorX()->order->is_multivendorx_order( $order->get_id() ) ) return;
-
+        $allowed_statuses = MultiVendorX()->setting->get_setting( 'customer_refund_status', [] );
+        // Get current order status
+        $order_status = $order->get_status(); // e.g., 'pending', 'completed'
+        // Check if current order status is allowed
+        if ( ! in_array( $order_status, $allowed_statuses, true ) ) {
+            return; // don't show button
+        }
         $refund_settings = MultiVendorX()->setting->get_option( 'multivendorx_order_actions_refunds_settings', [] );
         $refund_reason_options = MultiVendorX()->setting->get_setting('refund_reasons', []);
         $refund_button_text = apply_filters( 'mvx_customer_my_account_refund_request_button_text', __( 'Request a refund', 'multivendorx' ), $order );
