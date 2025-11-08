@@ -9,7 +9,7 @@ import PolicySettings from './policySettings';
 import ShippingSettings from './shippingSettings';
 import StoreRegistration from './storeRegistrationForm';
 import Facilitator from './facilitator';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import Overview from './overview';
 import Membership from './membership';
@@ -38,6 +38,17 @@ const EditStore = () => {
     const [editDesc, setEditDesc] = useState(false);
     const [selectedOwner, setSelectedOwner] = useState(null);
     const location = useLocation();
+    const [prevName, setPrevName] = useState("");
+    const [prevDesc, setPrevDesc] = useState("");
+
+    useEffect(() => {
+        if (editName) {
+            setPrevName(data?.name || "");
+        }
+        if (editDesc) {
+            setPrevDesc(data?.description || "");
+        }
+    }, [editName, editDesc]);
 
     useEffect(() => {
         const handleOutsideClick = (e: MouseEvent) => {
@@ -167,7 +178,7 @@ const EditStore = () => {
         });
     };
 
-    const tabData = [
+    const tabData = useMemo(() => [
         {
             type: 'file',
             content: {
@@ -256,18 +267,44 @@ const EditStore = () => {
                 },
             ]
             : []),
-    ];
+    ], [modules]);
 
-    const handleUpdateData = (updatedFields: any) => {
+    
+    const handleUpdateData = useCallback((updatedFields: any) => {
         setData(prev => ({ ...prev, ...updatedFields }));
-    };
+    }, []);
 
-    const visibleTabs =
-        data?.status === 'pending' || data?.status === 'rejected' || data?.status === 'permanently_rejected'
-            ? tabData.filter(tab => tab.content.id === 'application-details') // show only Application tab
-            : tabData; // show all tabs
+    const visibleTabs = useMemo(() => {
+        if (data?.status === 'pending' || data?.status === 'rejected' || data?.status === 'permanently_rejected') {
+            return tabData.filter(tab => tab.content.id === 'application-details');
+        }
+        return tabData;
+    }, [tabData, data?.status]);
 
-    const getForm = (tabId: string) => {
+    // const getForm = (tabId: string) => {
+    //     switch (tabId) {
+    //         case 'store-overview':
+    //             return <Overview id={editId} storeData={data} />;
+    //         case 'store':
+    //             return <StoreSettings id={editId} data={data} onUpdate={handleUpdateData} />;
+    //         case 'staff':
+    //             return <StoreSquad id={editId} />;
+    //         case 'payment':
+    //             return <PaymentSettings id={editId} data={data} />;
+    //         case 'shipping':
+    //             return <ShippingSettings id={editId} data={data} />;
+    //         case 'store-policy':
+    //             return <PolicySettings id={editId} data={data} />;
+    //         case 'application-details':
+    //             return <StoreRegistration id={editId} />;
+    //         case 'store-facilitator':
+    //             return <Facilitator id={editId} data={data} />;
+    //         default:
+    //             return <div></div>;
+    //     }
+    // };
+
+    const getForm = useCallback((tabId: string) => {
         switch (tabId) {
             case 'store-overview':
                 return <Overview id={editId} storeData={data} />;
@@ -288,35 +325,7 @@ const EditStore = () => {
             default:
                 return <div></div>;
         }
-    };
-
-
-    // const getForm = (tabId: string) => {
-    //     switch (tabId) {
-    //         case 'store-overview':
-    //             return <Overview id={editId} storeData={data} />;
-    //         case 'store':
-    //             return <StoreSettings id={editId} data={data} />;
-    //         case 'staff':
-    //             return <StoreSquad id={editId} />;
-    //         case 'payment':
-    //             return <PaymentSettings id={editId} data={data} />;
-    //         case 'shipping':
-    //             return <ShippingSettings id={editId} data={data} />;
-    //         case 'store-policy':
-    //             return <PolicySettings id={editId} data={data} />;
-    //         case 'application-details':
-    //             return <StoreRegistration id={editId} />;
-    //         case 'store-facilitator':
-    //             return <Facilitator id={editId} data={data} />;
-    //         // case 'membership':
-    //         //     return <Membership id={editId} />;
-    //         // case 'financial':
-    //         //     return <Financial id={editId} />;
-    //         default:
-    //             return <div></div>;
-    //     }
-    // };
+    }, [editId, data, handleUpdateData]);
 
     return (
         <>
@@ -331,38 +340,6 @@ const EditStore = () => {
                     premium={false}
                     tabTitleSection={
                         <>
-                            {/* <div className="tab-title">
-                            <div className="content">
-                                <div className="tab-wrapper">
-                                    <div className="title"><i className="adminlib-storefront"></i>{data.name}</div>
-                                    <div className="dsc">{data.description}</div>
-                                </div>
-                                <div className="status-wrapper">
-                                    
-                                    {editId && (
-                                        <>
-                                            <a
-                                                href={`?page=multivendorx#&tab=stores&view&id=${editId}`}
-                                                className="tooltip-btn admin-badge green"
-                                            >
-                                                <i className="adminlib-storefront"></i>
-                                                <span className="tooltip">Store Details</span>
-                                            </a>
-                                            {data.status == 'active' &&
-                                                <a
-                                                    href={`${appLocalizer.site_url}/store/${data.slug}`}
-                                                    target="_blank"
-                                                    className="tooltip-btn admin-badge yellow"
-                                                >
-                                                    <i className="adminlib-eye"></i>
-                                                    <span className="tooltip">View Public Store</span>
-                                                </a>
-                                            }
-                                        </>
-                                    )}
-                                </div>
-                            </div>
-                        </div> */}
                             <div className="general-wrapper">
                                 <div className="store-header">
                                     <div
@@ -459,6 +436,12 @@ const EditStore = () => {
                                                                 type="text"
                                                                 value={data?.name || ""}
                                                                 onChange={(e) => setData({ ...data, name: e.target.value })}
+                                                                onBlur={() => {
+                                                                    if (!data?.name?.trim()) {
+                                                                        setData({ ...data, name: prevName });
+                                                                    }
+                                                                    setEditName(false);
+                                                                }}
                                                                 className="basic-input"
                                                                 autoFocus
                                                             />
@@ -472,6 +455,10 @@ const EditStore = () => {
                                                             className={`edit-icon  ${editName ? '' : 'admin-badge blue'}`}
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
+                                                                if (editName && !data?.name?.trim()) {
+                                                                    // if closing edit and input empty, restore previous name
+                                                                    setData({ ...data, name: prevName });
+                                                                }
                                                                 setEditName(!editName);
                                                             }}
                                                         >
@@ -509,6 +496,12 @@ const EditStore = () => {
                                                         <textarea
                                                             value={data.description || ""}
                                                             onChange={(e) => setData({ ...data, description: e.target.value })}
+                                                            onBlur={() => {
+                                                                if (!data?.description?.trim()) {
+                                                                setData({ ...data, description: prevDesc });
+                                                                }
+                                                                setEditDesc(false);
+                                                            }}
                                                             className="textarea-input"
                                                             autoFocus
                                                         />
@@ -522,24 +515,15 @@ const EditStore = () => {
                                                         className={`edit-icon ${editDesc ? '' : 'admin-badge blue'}`}
                                                         onClick={(e) => {
                                                             e.stopPropagation();
+                                                            if (editDesc && !data?.description?.trim()) {
+                                                                setData({ ...data, description: prevDesc });
+                                                            }
                                                             setEditDesc(!editDesc);
                                                         }}
                                                     >
                                                         <i className={editDesc ? "" : "adminlib-create"}></i>
                                                     </span>
                                                 </div>
-                                                {/* <ul className="contact-details">
-                                                    <li>
-                                                        <div className="reviews-wrapper">
-                                                            <i className="review adminlib-star"></i>
-                                                            <i className="review adminlib-star"></i>
-                                                            <i className="review adminlib-star"></i>
-                                                            <i className="review adminlib-star"></i>
-                                                            <i className="review adminlib-star"></i>
-                                                            5 Review
-                                                        </div>
-                                                    </li>
-                                                </ul> */}
                                                 <ul className="contact-details">
                                                     <li>
                                                         <div className="reviews-wrapper">
@@ -602,22 +586,6 @@ const EditStore = () => {
                                             <div className="tag-wrapper">
 
                                             </div>
-                                            {/* <div className="status-wrapper">
-                                                <span>Status: </span>
-                                                <SelectInput
-                                                    name="status"
-                                                    value={data.status}
-                                                    options={statusOptions}
-                                                    type="single-select"
-                                                    onChange={(newValue: any) => {
-                                                        if (!newValue || Array.isArray(newValue)) return;
-
-                                                        const updated = { ...data, status: newValue.value };
-                                                        setData(updated);
-                                                        autoSave(updated);
-                                                    }}
-                                                />
-                                            </div> */}
                                         </div>
                                     </div>
                                 </div>
