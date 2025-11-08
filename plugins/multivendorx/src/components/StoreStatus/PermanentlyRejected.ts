@@ -13,7 +13,7 @@ export default {
             type: 'blocktext',
             label: __('no_label', 'multivendorx'),
             blocktext: __(
-                'The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
+                'The store application has been permanently rejected. Sellers can view their dashboard in read-only mode but cannot make changes or reapply without admin intervention.',
                 'multivendorx'
             ),
         },
@@ -32,15 +32,11 @@ export default {
                             check: true,
                         },
                         {
-                            label: __('Modify store settings', 'multivendorx'),
+                            label: __('Cannot modify store settings', 'multivendorx'),
                             check: false,
                         },
                         {
-                            label: __('Add or edit products', 'multivendorx'),
-                            check: false,
-                        },
-                        {
-                            label: __('Process or fulfill orders', 'multivendorx'),
+                            label: __('Cannot add or edit products', 'multivendorx'),
                             check: false,
                         },
                     ]
