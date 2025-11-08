@@ -295,7 +295,7 @@ const EditStore = () => {
         //         },
         //     ]
         //     : []),
-    ];
+    ]);
 
     
     const handleUpdateData = useCallback((updatedFields: any) => {

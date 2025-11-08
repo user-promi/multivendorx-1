@@ -1,6 +1,5 @@
 import { AdminBreadcrumbs, getApiLink, useModules } from 'zyra';
 import RefundRequest from './refundRequest';
-import AbuseReports from './abuseReports';
 import './customerServices.scss';
 import '../AdminDashboard/adminDashboard.scss';
 import Qna from './qnaTable';
@@ -80,7 +79,7 @@ const CustomerServices = () => {
             id: "questions",
             label: "Questions",
             module: "question-answer",
-            icon: "adminlib-quote",
+            icon: "adminlib-question",
             des: "Waiting for your response",
             count: qnaCount,
             content: <Qna />
@@ -98,7 +97,7 @@ const CustomerServices = () => {
             id: "refund-requests",
             label: "Refund Requests",
             module: "marketplace-refund",
-            icon: "adminlib-follow-store",
+            icon: "adminlib-refund",
             des: "Need your decision",
             count: refundCount,
             content: <RefundRequest />
