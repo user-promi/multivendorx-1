@@ -63,7 +63,11 @@ class Util {
         if ( isset( $args['store_id'] ) ) {
             $where[] = "store_id = " . intval( $args['store_id'] );
         }
-    
+
+        if ( isset( $args['question_visibility'] ) ) { // remove any tab/space
+            $where[] = "question_visibility = '" . esc_sql( $args['question_visibility'] ) . "'";
+        }
+
         //Only apply start/end date filters when NOT ordering manually
         if ( empty( $args['orderBy'] ) && empty( $args['order'] ) ) {
             if ( ! empty( $args['start_date'] ) ) {
@@ -127,7 +131,6 @@ class Util {
         }
         return $wpdb->get_results( $query, ARRAY_A ) ?: [];
     }
-    
 
     public static function update_question( $id, $data ) {
         global $wpdb;
