@@ -586,12 +586,12 @@
 .data-card-wrapper {
     display: flex;
     gap: 1rem;
-    flex-wrap: wrap;
+    // flex-wrap: wrap;
     padding-bottom: 1rem;
     justify-content: space-between;
 
     .data-card {
-        width: 31%;
+        width: 100%;
         background: #fff;
         padding: 1.5rem;
         border-radius: 0.313rem;

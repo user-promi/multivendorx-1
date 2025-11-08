@@ -268,16 +268,16 @@ export const TransactionHistory: React.FC = () => {
                 </div>
                 {activeTab === "products" && (
                     <div className="row">
-                        <div className="col w-60">
+                        <div className="col">
                             <div className="data-card-wrapper">
                                 <div className="data-card">
                                     <div className="title">Wallet balance</div>
                                     <div className="number">{formatCurrency(data.wallet_balance)} <i className="adminlib-dollar"></i></div>
                                 </div>
-                                <div className="data-card">
+                                {/* <div className="data-card">
                                     <div className="title">Reserve balance</div>
                                     <div className="number">{formatCurrency(data.reserve_balance)} <i className="adminlib-bank"></i></div>
-                                </div>
+                                </div> */}
                                 <div className="data-card">
                                     <div className="title">Clearance balance</div>
                                     <div className="number">{formatCurrency(data.locking_balance)} <i className="adminlib-home "></i></div>
@@ -323,7 +323,7 @@ export const TransactionHistory: React.FC = () => {
                                 </div>
                             )}
                         </div>
-                        <div className="column w-40">
+                        <div className="column">
                             <div className="card-header">
                                 <div className="left">
                                     <div className="title">
@@ -350,7 +350,7 @@ export const TransactionHistory: React.FC = () => {
                                     </>
                                 ) : (
                                     <>
-                                        <div className="des">Current available balance ready to transfer to stores.</div>
+                                        <div className="des">Current available balance ready to transfer, 'Excluding Reserve Balance' {formatCurrency(data.reserve_balance)}</div>
                                         <div className="admin-btn btn-purple" onClick={() => setRequestWithdrawal(true)}>
                                             Disburse payment
                                         </div>
