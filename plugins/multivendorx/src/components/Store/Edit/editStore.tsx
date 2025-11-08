@@ -505,11 +505,14 @@ const EditStore = () => {
                                                             className="textarea-input"
                                                             autoFocus
                                                         />
+                                                    ) : Object.keys(data).length === 0 ? (
+                                                        <Skeleton variant="text" width={150} />
                                                     ) : data?.description ? (
                                                         data.description
                                                     ) : (
-                                                        <Skeleton variant="text" width={150} />
+                                                        <span>&nbsp;</span>
                                                     )}
+                                                    
 
                                                     <span
                                                         className={`edit-icon ${editDesc ? '' : 'admin-badge blue'}`}
