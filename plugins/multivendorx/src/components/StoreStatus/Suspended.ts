@@ -13,14 +13,14 @@ export default {
             type: 'blocktext',
             label: __('no_label', 'multivendorx'),
             blocktext: __(
-                'The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
+                'The store has been suspended due to policy violations. Products are hidden, payouts are frozen, and selling is disabled. Sellers can appeal through support.',
                 'multivendorx'
             ),
         },
         {
             key: 'disbursement_order_status',
             type: 'checkbox',
-            label: __('Eligible order statuses for commission payout', 'multivendorx'),
+            label: __('Store promotion limit', 'multivendorx'),
             class: 'mvx-toggle-checkbox',
             options: [
                 {
@@ -37,6 +37,13 @@ export default {
                 },
             ],
             selectDeselect: true,
+        },                
+        {
+            key: 'pending_msg',
+            label: 'Message shown to pending stores',
+            type: 'text',
+            value: 'Your store is suspended due to a policy issue. Contact admin to resolve it.',
+            des: 'What pending stores can do',
         },
     ],
 };

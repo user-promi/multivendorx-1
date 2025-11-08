@@ -33,7 +33,7 @@ const StoreStatus: React.FC = () => {
             content: {
                 id: 'pending-approval',
                 name: 'Pending Approval',
-                desc: 'Stores awaiting admin review',
+                desc: 'New stores waiting for your approval to start selling.',
                 // hideTabHeader: true,
                 icon: 'tools',
             },
