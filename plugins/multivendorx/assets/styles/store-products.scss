@@ -589,3 +589,13 @@
  #commentform {
      display: none;
  }
+
+ .order-refund-product-list{
+    display: flex;
+    gap: 0.125rem;
+    padding-top: 0.313rem;
+
+    img{
+        width: 5rem;
+    }
+ }

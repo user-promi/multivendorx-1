@@ -70,6 +70,7 @@ const DownloadCSVButton: React.FC<{
 }> = ({ selectedRows, data, filterData, isLoading = false }) => {
     const [isDownloading, setIsDownloading] = useState(false);
 
+
     const handleDownload = async () => {
         setIsDownloading(true);
         try {
@@ -178,6 +179,10 @@ const Commission: React.FC = () => {
     const [viewCommission, setViewCommission] = useState(false);
     const [selectedCommissionId, setSelectedCommissionId] = useState<number | null>(null);
     const [currentFilterData, setCurrentFilterData] = useState<FilterData>({});
+    const [showMore, setShowMore] = useState(false);
+    const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>({});
+
+
 
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: 0,
@@ -461,46 +466,62 @@ const Commission: React.FC = () => {
         },
         {
             id: 'commission-summary',
-            // accessorKey: 'commissionAmount',
-            // accessorFn: row => parseFloat(row.commissionAmount || '0'),
             enableSorting: true,
             header: __('Commission Summary', 'multivendorx'),
-            cell: ({ row }) =>
-                <TableCell title={row.original.commissionAmount ? `${row.original.commissionAmount}` : '-'}>
-                    <>
-                        <ul className="details">
+            cell: ({ row }) => {
+                const isExpanded = expandedRows[row.original.id!];
+
+                return (
+                    <TableCell>
+                        <ul className={`details ${isExpanded ? '' : 'overflow'}`}>
                             <li>
                                 <div className="item">
                                     <div className="des">Commission Earned</div>
                                     <div className="title">{formatCurrency(row.original.commissionAmount)}</div>
                                 </div>
                             </li>
-                            {/* <li>
-                                
-                            </li> */}
+
                             <li>
                                 <div className="item">
                                     <div className="des">Shipping</div>
-                                    <div className="title">+ {formatCurrency(row.original.shippingAmount)} </div>
+                                    <div className="title">+ {formatCurrency(row.original.shippingAmount)}</div>
                                 </div>
                                 <div className="item">
                                     <div className="des">Tax</div>
                                     <div className="title">+ {formatCurrency(row.original.taxAmount)}</div>
                                 </div>
                             </li>
+
                             <li>
                                 <div className="item">
                                     <div className="des">Facilitator Fee</div>
                                     <div className="title">- {formatCurrency(row.original.facilitatorFee)}</div>
                                 </div>
                                 <div className="item">
-                                    <div className="des">Marketplace free</div>
+                                    <div className="des">Marketplace Fee</div>
                                     <div className="title">- {formatCurrency(row.original.facilitatorFee)} (d)</div>
                                 </div>
                             </li>
+
+                            <span
+                                className="more-btn"
+                                onClick={() =>
+                                    setExpandedRows(prev => ({
+                                        ...prev,
+                                        [row.original.id!]: !prev[row.original.id!]
+                                    }))
+                                }
+                            >
+                                {isExpanded ? (
+                                    <>Less <i className="adminlib-arrow-up"></i></>
+                                ) : (
+                                    <>More <i className="adminlib-arrow-down"></i></>
+                                )}
+                            </span>
                         </ul>
-                    </>
-                </TableCell>,
+                    </TableCell>
+                );
+            },
         },
         {
             id: 'commission_total',

@@ -14,17 +14,19 @@ export default {
         {
             key: 'store_rating_page',
             type: 'blocktext',
-            label: __( 'no_label', 'multivendorx' ),
+            label: __('no_label', 'multivendorx'),
             blocktext: __(
                 '<b>Note: </b>You can configure or customize the notification templates for these alerts from the <b><a href="#&tab=settings&subtab=notifications">Notification Settings</a> </b> section.',
                 'multivendorx'
-            ),            
+            ),
         },
         {
             key: 'low_stock_notifications', // changed key
             type: 'nested',
             label: __('Low stock alerts', 'multivendorx'),
             single: true,
+            proSetting: true,
+            moduleEnabled: 'store-inventory',
             nestedFields: [
                 {
                     key: 'low_stock_alert',
@@ -36,8 +38,6 @@ export default {
                         },
                     ],
                     look: 'toggle',
-                    moduleEnabled: 'store-inventory',
-                    proSetting: true,
                 },
                 {
                     key: 'low_stock_alert_threshold',
@@ -58,6 +58,8 @@ export default {
             type: 'nested',
             label: __('Out of stock alerts', 'multivendorx'),
             single: true,
+            moduleEnabled: 'store-inventory',
+            proSetting: true,
             nestedFields: [
                 {
                     key: 'out_of_stock_alert',
@@ -68,9 +70,7 @@ export default {
                             value: 'out_of_stock_alert',
                         },
                     ],
-                    look: 'toggle',                    
-                    moduleEnabled: 'store-inventory',
-                    proSetting: true,
+                    look: 'toggle',
                 },
                 {
                     key: 'out_of_stock_alert_threshold',
@@ -86,7 +86,7 @@ export default {
                 },
             ],
         },
-        
+
 
 
 

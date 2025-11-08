@@ -172,7 +172,7 @@
     display: flex;
     gap: 1.313rem;
     // padding-top: 1.313rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2.5rem;
     padding-bottom: 0.5rem;
     border-bottom: $border-light-small;
 
@@ -1528,6 +1528,23 @@
 
                     .details {
                         margin: 0;
+                        position: relative;
+
+                        .more-btn {
+                            position: absolute;
+                            bottom: 0;
+                            left: 50%;
+                            background: $theme-background-color;
+                            font-size: 0.813rem;
+                            padding: 0.125rem 0.5rem;
+                            color: $theme-color;
+                            border-radius: 0.313rem;
+                        }
+
+                        &.overflow {
+                            height: 3rem;
+                            overflow: hidden;
+                        }
 
                         li {
                             // display: flex;

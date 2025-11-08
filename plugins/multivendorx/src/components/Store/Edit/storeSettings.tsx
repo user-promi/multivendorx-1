@@ -833,7 +833,6 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                         </button>
                                     </div>
                                 </div>
-                                {errorMsg && <p className="invalid-massage">{errorMsg}</p>}
                                 <div className="settings-metabox-description">
                                     Add multiple email addresses. Press "Enter" or click "Add" after each email.
                                 </div>
@@ -844,6 +843,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                             <div className="form-group">
                                 <label htmlFor="product-name">Phone</label>
                                 <BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
+                                {errorMsg && <p className="invalid-massage">{errorMsg}</p>}
                             </div>
                         </div>
 
