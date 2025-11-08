@@ -28,7 +28,7 @@ export default {
                     type: 'setup',
                     label: 'Configure store permissions',
                     desc: 'Control what dashboard sections and tools are available to active stores.',
-                    link: '#',
+                    link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-capability`,
                 },
             ],
         },
