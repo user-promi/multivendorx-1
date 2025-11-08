@@ -1,0 +1,207 @@
+/* global appLocalizer */
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { __ } from '@wordpress/i18n';
+import { Table, TableCell, getApiLink, ToggleSetting, CalendarInput } from 'zyra';
+import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
+
+type Review = {
+    review_id: number;
+    store_id: number;
+    customer_id: number;
+    customer_name: string;
+    order_id: number;
+    overall_rating: number;
+    review_title: string;
+    review_content: string;
+    status: string;
+    reported: number;
+    reply: string;
+    reply_date: string;
+    date_created: string;
+    date_modified: string;
+    review_images: string[];
+    time_ago: string;
+    store_name?: string;
+};
+
+type FilterData = {
+    searchField: string;
+    typeCount?: any;
+    store?: string;
+    orderBy?: any;
+    order?: any;
+};
+
+export interface RealtimeFilter {
+    name: string;
+    render: (updateFilter: (key: string, value: any) => void, filterValue: any) => React.ReactNode;
+}
+interface LatestReviewProps {
+    store_id?: number; // or required: store_id: number;
+}
+
+const LatestReview: React.FC<LatestReviewProps> = ({ store_id }) => {
+    const [data, setData] = useState<Review[]>([]);
+    const [totalRows, setTotalRows] = useState<number>(0);
+
+    const [pagination, setPagination] = useState<PaginationState>({
+        pageIndex: 0,
+        pageSize: 10,
+    });
+
+    useEffect(() => {
+        const currentPage = pagination.pageIndex + 1;
+        const rowsPerPage = pagination.pageSize;
+        requestData(rowsPerPage, currentPage);
+    }, [pagination]);
+
+
+    // Fetch data from backend.
+    function requestData(
+        rowsPerPage = 3,
+        currentPage = 1,
+        orderBy = 'date_created',
+        order = 'desc',
+    ) {
+        setData([]);
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'review'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: {
+                page: currentPage,
+                row: rowsPerPage,
+                store_id,
+                orderBy,
+                order,
+            },
+        })
+            .then((response) => {
+                const items = response.data.items || [];
+                setData(items);
+
+                //Calculate total rows using array length
+                const total = items.length;
+                setTotalRows(total);
+            })
+            .catch(() => {
+                setData([]);
+                setTotalRows(0);
+            });
+    }
+
+    // 🔹 Table Columns
+    const columns: ColumnDef<Review>[] = [
+        {
+            id: 'customer',
+            header: __('Customer', 'multivendorx'),
+            cell: ({ row }) => {
+                const { customer_id, customer_name } = row.original;
+                const editLink = `${window.location.origin}/wp-admin/user-edit.php?user_id=${customer_id}`;
+
+                return (
+                    <TableCell title={customer_name}>
+                        {customer_id ? (
+                            <a
+                                href={editLink}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="customer-link"
+                            >
+                                {customer_name}
+                            </a>
+                        ) : (
+                            '-'
+                        )}
+                    </TableCell>
+                );
+            },
+        },
+        {
+            id: 'rating',
+            header: __('Rating', 'multivendorx'),
+            cell: ({ row }) => {
+                const rating = row.original.overall_rating ?? 0;
+                return (
+                    <TableCell title={rating.toString()}>
+                        <div className="rating-wrapper">
+                            {rating > 0 ? (
+                                <>
+                                    {[...Array(Math.round(rating))].map((_, i) => (
+                                        <i key={`filled-${i}`} className="adminlib-star"></i>
+                                    ))}
+                                    {[...Array(5 - Math.round(rating))].map((_, i) => (
+                                        <i key={`empty-${i}`} className="adminlib-star-o"></i>
+                                    ))}
+                                </>
+                            ) : (
+                                '-'
+                            )}
+                        </div>
+                    </TableCell>
+                );
+            },
+        },
+        {
+            id: 'title',
+            header: __('Title', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.review_title}>
+                    {row.original.review_title || '-'}
+                </TableCell>
+            ),
+        },
+        {
+            id: 'content',
+            header: __('Review', 'multivendorx'),
+            cell: ({ row }) => {
+                const content = row.original.review_content || '';
+                const shortText = content.length > 40 ? content.substring(0, 40) + '...' : content;
+
+                return (
+                    <TableCell title={content}>
+                        {shortText || '-'}
+                    </TableCell>
+                );
+            },
+        },
+        {
+            id: 'status',
+            header: __('Status', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.status}>
+                    {row.original.status === "Approved" && (
+                        <span className="admin-badge green">Active</span>
+                    )}
+                    {row.original.status === "Pending" && (
+                        <span className="admin-badge yellow">Pending</span>
+                    )}
+                    {row.original.status === "Rejected" && (
+                        <span className="admin-badge red">Rejected</span>
+                    )}
+                </TableCell>
+            ),
+        },
+        {
+            id: 'date_created',
+            header: __('Date', 'multivendorx'),
+            cell: ({ row }) => {
+                const rawDate = row.original.date_created;
+                const formattedDate = rawDate ? new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(rawDate)) : '-';
+                return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
+            }
+        },
+    ];
+
+    return (
+        <>
+            <Table
+                data={data || []}
+                columns={columns as ColumnDef<Record<string, any>, any>[]}
+            />
+        </>
+    );
+};
+
+export default LatestReview;
