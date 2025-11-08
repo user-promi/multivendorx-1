@@ -124,28 +124,36 @@ const CustomerServices = () => {
                 description={'Manage store reviews, support requests, financial transactions, and reported issues.'}
             />
             <div className="general-wrapper">
-                <div className="tab-titles">
-                    {tabs.map((tab) => (
-                        <div
-                            key={tab.id}
-                            className={`title ${activeTab === tab.id ? "active" : ""}`}
-                            onClick={() => setActiveTab(tab.id)}
-                        >
-                            <i className={`icon ${tab.icon}`}></i><p>{tab.label}</p>
-                        </div>
-                    ))}
-                </div>
-                <div className="tab-content">
-                    {tabs.map(
-                        (tab) =>
-                            activeTab === tab.id && (
-                                <div key={tab.id} className="tab-panel">
-                                    {tab.content}
+                {tabs.length > 0 ? (
+                    <>
+                        <div className="tab-titles">
+                            {tabs.map((tab) => (
+                                <div
+                                    key={tab.id}
+                                    className={`title ${activeTab === tab.id ? "active" : ""}`}
+                                    onClick={() => setActiveTab(tab.id)}
+                                >
+                                    <i className={`icon ${tab.icon}`}></i>
+                                    <p>{tab.label}</p>
                                 </div>
-                            )
-                    )}
-                </div>
-            </div >
+                            ))}
+                        </div>
+
+                        <div className="tab-content">
+                            {tabs.map(
+                                (tab) =>
+                                    activeTab === tab.id && (
+                                        <div key={tab.id} className="tab-panel">
+                                            {tab.content}
+                                        </div>
+                                    )
+                            )}
+                        </div>
+                    </>
+                ) : (
+                    <div className="no-tabs">No module available</div>
+                )}
+            </div>
         </>
     );
 };

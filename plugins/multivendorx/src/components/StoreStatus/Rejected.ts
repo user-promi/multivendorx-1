@@ -54,7 +54,7 @@ export default {
         {
             key: 'pending_msg',
             label: 'Message shown to pending stores',
-            type: 'text',
+            type: 'textarea',
             value: 'Your application was not approved. Please review feedback and reapply.',
             des: 'What pending stores can do',
         },

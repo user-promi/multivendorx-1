@@ -110,10 +110,10 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
                 'capability' => array('read_shop_orders'),
 
             ),
-            'store_wallet' => array(
+            'wallet' => array(
                 'name' => 'Wallet',
                 'icon' => 'adminlib-wallet',
-                'slug' => 'store-wallet',
+                'slug' => 'wallet',
                 'submenu' => array(
                     array(
                         'key' => 'transactions',
@@ -146,9 +146,9 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
                         'capability' => array('read_shop_coupons', 'edit_shop_coupons'),
                     ),
                     array(
-                        'key' => 'store-follower',
-                        'name' => 'Store Follower',
-                        'slug' => 'store-follower',
+                        'key' => 'store-followers',
+                        'name' => 'Store Followers',
+                        'slug' => 'store-followers',
                         'capability' => array('read_products', 'edit_products', 'delete_products'),
                     ),
                 ),
