@@ -37,6 +37,7 @@ const EditStore = () => {
     const [editName, setEditName] = useState(false);
     const [editDesc, setEditDesc] = useState(false);
     const [selectedOwner, setSelectedOwner] = useState(null);
+    const location = useLocation();
 
     useEffect(() => {
         const handleOutsideClick = (e: MouseEvent) => {
@@ -73,7 +74,6 @@ const EditStore = () => {
         };
     }, []);
 
-    const location = useLocation();
     const hash = location.hash.replace(/^#/, '');
 
     const editParts = hash.match(/edit\/(\d+)/);
@@ -285,7 +285,6 @@ const EditStore = () => {
             ]
             : []),
     ];
-
 
     const handleUpdateData = (updatedFields: any) => {
         setData(prev => ({ ...prev, ...updatedFields }));
@@ -526,7 +525,8 @@ const EditStore = () => {
                                                     ) : (
                                                         <Skeleton variant="text" width={100} />
                                                     )}
-                                                    
+
+
                                                     <div className="admin-badge green"><i className="adminlib-store-inventory"></i></div>
                                                     <div className="admin-badge blue"><i className="adminlib-geo-my-wp"></i></div>
                                                     <div className="admin-badge yellow"><i className="adminlib-staff-manager"></i></div>
@@ -606,6 +606,12 @@ const EditStore = () => {
                                                                     navigate(`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`, {
                                                                         state: { highlightTarget: "store-slug" },
                                                                     });
+
+                                                                    setTimeout(() => {
+                                                                        navigate(`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`, {
+                                                                            replace: true,
+                                                                        });
+                                                                    }, 500);
                                                                 }}>
                                                                     <i className="adminlib-create" ></i>
                                                                 </span>

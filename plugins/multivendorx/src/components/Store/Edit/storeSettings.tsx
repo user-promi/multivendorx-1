@@ -234,8 +234,9 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                 };
                 setTimeout(() => {
                     document.addEventListener("click", handleClick);
-                }, 200);
+                }, 100);
             }
+
         }
     }, [location.state]);
 
@@ -689,24 +690,6 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
     };
 
 
-    const runUploader = (key: string) => {
-        const frame = (window as any).wp.media({
-            title: 'Select or Upload Image',
-            button: { text: 'Use this image' },
-            multiple: false,
-        });
-
-        frame.on('select', function () {
-            const attachment = frame.state().get('selection').first().toJSON();
-            const updated = { ...formData, [key]: attachment.url };
-
-            setFormData(updated);
-            setImagePreviews((prev) => ({ ...prev, [key]: attachment.url }));
-            autoSave(updated);
-        });
-
-        frame.open();
-    };
 
     // Then update your autoSave function:
     const autoSave = (updatedData: any) => {
@@ -741,49 +724,6 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
             <SuccessNotice message={successMsg} />
             <div className="container-wrapper ">
                 <div className="card-wrapper w-65">
-
-                    {/* <div className="card-content">
-                        <div className="card-title">
-                            Basic Details
-                        </div>
-
-                        {errorMsg && <p className="error-text" style={{ color: "red", marginTop: "5px" }}>{errorMsg}</p>}
-
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="product-name">Name</label>
-                                <BasicInput name="name" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.name} onChange={handleChange} />
-                            </div>
-                        </div>
-
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="product-name">Slug</label>
-                                <BasicInput
-                                    name="slug"
-                                    wrapperClass="setting-form-input"
-                                    descClass="settings-metabox-description"
-                                    value={formData.slug}
-                                    onChange={handleChange}
-                                />
-                                <p>Your Site Url : {appLocalizer.store_page_url + '/' + formData.slug}</p>
-                            </div>
-                        </div>
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="description">Description</label>
-                                <TextArea name="description" wrapperClass="setting-from-textarea"
-                                    inputClass="textarea-input"
-                                    descClass="settings-metabox-description"
-                                    value={formData.description}
-                                    onChange={handleChange}
-                                    usePlainText={false}
-                                    tinymceApiKey={appLocalizer.settings_databases_value['marketplace-settings']['tinymce_api_section'] ?? ''}
-                                />
-                            </div>
-                        </div>
-                    </div> */}
-
                     <div className="card-content">
                         <div className="card-header">
                             <div className="left">
@@ -839,7 +779,6 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                             <div className="form-group">
                                 <label htmlFor="product-name">Phone</label>
                                 <BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
-                                {errorMsg && <p className="invalid-massage">{errorMsg}</p>}
                             </div>
                             {errorMsg.phone && <p className="invalid-massage">{errorMsg.phone}</p>}
 
