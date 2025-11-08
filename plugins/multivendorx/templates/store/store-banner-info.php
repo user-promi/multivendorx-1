@@ -90,17 +90,17 @@ $selectedTemplate = isset($template['selectedPalette']) ? $template['selectedPal
                         echo '<div class="store-address"> <i class="adminlib-location"></i>' . esc_html($address) . '</div>';
                     }
                     ?>
+                    <?php if (!empty($description)) { ?>
+                        <div class="description_data">
+                            <?php echo wp_kses_post($description); ?>
+                        </div>
+                    <?php } ?>
                 </div>
                 <?php
 
                 do_action('mvx_after_vendor_information', $store_id);
                 ?>
             </div>
-            <?php if (!empty($description)) { ?>
-                <div class="description_data">
-                    <?php echo wp_kses_post($description); ?>
-                </div>
-            <?php } ?>
         </div>
 
         <div class="multivendorx_vendor_rating">

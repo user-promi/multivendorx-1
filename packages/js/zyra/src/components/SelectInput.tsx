@@ -149,7 +149,6 @@ const SelectInput: React.FC<SelectInputProps> = ({
                 />
                 {postText && (<div className="after">{postText}</div>)}
             </div>
-            {proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>}
             {description && (
                 <p
                     className={descClass}

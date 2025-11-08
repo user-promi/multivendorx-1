@@ -290,6 +290,7 @@ export default {
             type: 'nested',
             label: __('Marketplace fees', 'multivendorx'),
             single: true,
+            proSetting: true,
             settingDescription: __(
                 'Define a fee to cover platform costs. Apply a fixed, percentage, or combined rate. Choose whether it’s paid by the customer at checkout or deducted from the store’s commission.',
                 'multivendorx'
@@ -329,8 +330,9 @@ export default {
             type: 'nested',
             label: 'Facilitator fees',
             single: true,
+            proSetting: true,
             settingDescription: __('Set the facilitator fee as a fixed amount, a percentage, or both, deducted from the store commission. Store-wise fees can also be configured from the store edit page.', 'multivendorx'),
-            desc: __(' <strong>Global facilitator:</strong> Assign a single facilitator for the entire marketplace from <a href="#">here</a>.<br><br> <strong>Individual facilitators:</strong> Set facilitators for specific stores from the <em>Facilitator Settings</em> section or the <em>Store Edit</em> page.<br><br> <strong>Example:</strong> If a store earns $1000 commission and the facilitator fee is $50 + 5%, then total facilitator fee = $50 + (5% of 1000) = $100 → the store receives $900 after facilitator deductions. ', 'multivendorx'),
+            desc: __(' <strong>Global facilitator:</strong> Assign a single facilitator for the entire marketplace from <a href="#">here</a>.<br> <strong>Individual facilitators:</strong> Set facilitators for specific stores from the <em>Facilitator Settings</em> section or the <em>Store Edit</em> page.<br> <strong>Example:</strong> If a store earns $1000 commission and the facilitator fee is $50 + 5%, then total facilitator fee = $50 + (5% of 1000) = $100 → the store receives $900 after facilitator deductions. ', 'multivendorx'),
             nestedFields: [
                 {
                     key: 'facilitator_fixed',

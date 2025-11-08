@@ -268,7 +268,7 @@ export const TransactionHistory: React.FC = () => {
                 </div>
                 {activeTab === "products" && (
                     <div className="row">
-                        <div className="col w-35">
+                        <div className="col w-60">
                             <div className="data-card-wrapper">
                                 <div className="data-card">
                                     <div className="title">Wallet balance</div>
@@ -282,13 +282,48 @@ export const TransactionHistory: React.FC = () => {
                                     <div className="title">Clearance balance</div>
                                     <div className="number">{formatCurrency(data.locking_balance)} <i className="adminlib-home "></i></div>
                                 </div>
-                                {/* <div className="data-card">
-                                    <div className="title">Available balance</div>
-                                    <div className="number">{formatCurrency(data.wallet_balance)} <i className="adminlib-cart blue"></i></div>
-                                </div> */}
                             </div>
+
+                            {recentDebits.length > 0 ? (
+                                <div className="column">
+                                    <div className="card-header">
+                                        <div className="left">
+                                            <div className="title">Recent Debit Transactions</div>
+                                        </div>
+                                    </div>
+                                    <div className="data-card-wrapper">
+                                        {recentDebits.map((txn) => (
+                                            <div key={txn.id} className="data-card">
+                                                <div className="title">
+                                                    {new Date(txn.date).toLocaleDateString("en-US", {
+                                                        month: "short",
+                                                        day: "2-digit",
+                                                        year: "numeric",
+                                                    })}
+                                                </div>
+
+                                                <div className="number">
+                                                    {formatCurrency(txn.balance)}{" "}
+                                                    <span className="txn-status">({txn.status})</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="column">
+                                    <div className="card-header">
+                                        <div className="left">
+                                            <div className="title">Recent payouts</div>
+                                        </div>
+                                    </div>
+                                    <div className="des">
+                                        No recent payouts transactions found.
+                                    </div>
+                                </div>
+                            )}
                         </div>
-                        <div className="column w-65">
+                        <div className="column w-40">
                             <div className="card-header">
                                 <div className="left">
                                     <div className="title">
@@ -322,51 +357,6 @@ export const TransactionHistory: React.FC = () => {
                                     </>
                                 )}
                             </div>
-
-
-
-
-                            {recentDebits.length > 0 ? (
-                                <div className="recent-debits">
-                                    <div className="card-header">
-                                        <div className="left">
-                                            <div className="title">Recent Debit Transactions</div>
-                                        </div>
-                                    </div>
-                                    <div className="data-card-wrapper">
-                                        {recentDebits.map((txn) => (
-                                            <div key={txn.id} className="data-card">
-                                                <div className="title">
-                                                    {new Date(txn.date).toLocaleDateString("en-US", {
-                                                        month: "short",
-                                                        day: "2-digit",
-                                                        year: "numeric",
-                                                    })}
-                                                </div>
-
-                                                <div className="number">
-                                                    {formatCurrency(txn.balance)}{" "}
-                                                    <span className="txn-status">({txn.status})</span>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="recent-debits">
-                                    <div className="card-header">
-                                        <div className="left">
-                                            <div className="title">Recent payouts</div>
-                                        </div>
-                                    </div>
-                                    <div className="des">
-                                        No recent payouts transactions found.
-                                    </div>
-                                </div>
-                            )}
-
-
-
                         </div>
 
 

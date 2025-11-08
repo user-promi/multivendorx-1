@@ -117,6 +117,8 @@
           gap: 0.125rem;
           flex-wrap: wrap;
           padding-top: 0.625rem;
+          min-height: 2.313rem;
+          align-items: end;
 
           .requires-title {
             font-size: 0.9rem;

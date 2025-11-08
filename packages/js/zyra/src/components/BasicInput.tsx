@@ -185,6 +185,10 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                                     readOnly={readOnly}
                                     required={required}
                                 />
+                                {type === 'color' && (
+                                    <div className="color-value">{value}</div>
+                                )}
+
                                 {postInsideText && (
                                     <span
                                         className="parameter"
@@ -270,8 +274,6 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                         dangerouslySetInnerHTML={{ __html: description }}
                     />
                 )}
-
-                {proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>}
                 {msg && <div className={msg.type}>{msg.message}</div>}
             </>
         );

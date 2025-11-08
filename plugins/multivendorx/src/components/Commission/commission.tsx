@@ -298,14 +298,14 @@ const Commission: React.FC = () => {
                 </>
             ),
         },
-        {
-            name: 'exportAll',
-            render: () => (
-                <div className="action-icons">
-                    <i className="adminlib-more-vertical"></i>
-                </div>
-            ),
-        },
+        // {
+        //     name: 'exportAll',
+        //     render: () => (
+        //         <div className="action-icons">
+        //             <i className="adminlib-more-vertical"></i>
+        //         </div>
+        //     ),
+        // },
     ];
 
     // Export All CSV Button Component - Downloads ALL filtered data
@@ -460,7 +460,7 @@ const Commission: React.FC = () => {
             cell: ({ row }) => <TableCell title={row.original.totalOrderAmount ? `${row.original.totalOrderAmount}` : '-'}>{formatCurrency(row.original.totalOrderAmount)}</TableCell>,
         },
         {
-            // id: 'commissionSummary',
+            id: 'commission-summary',
             // accessorKey: 'commissionAmount',
             // accessorFn: row => parseFloat(row.commissionAmount || '0'),
             enableSorting: true,
@@ -471,8 +471,8 @@ const Commission: React.FC = () => {
                         <ul className="details">
                             <li>
                                 <div className="item">
-                                    <div className="title">{formatCurrency(row.original.commissionAmount)}</div>
                                     <div className="des">Commission Earned</div>
+                                    <div className="title">{formatCurrency(row.original.commissionAmount)}</div>
                                 </div>
                             </li>
                             {/* <li>
@@ -480,22 +480,22 @@ const Commission: React.FC = () => {
                             </li> */}
                             <li>
                                 <div className="item">
-                                    <div className="title">+ {formatCurrency(row.original.shippingAmount)} </div>
                                     <div className="des">Shipping</div>
+                                    <div className="title">+ {formatCurrency(row.original.shippingAmount)} </div>
                                 </div>
                                 <div className="item">
-                                    <div className="title">+ {formatCurrency(row.original.taxAmount)}</div>
                                     <div className="des">Tax</div>
+                                    <div className="title">+ {formatCurrency(row.original.taxAmount)}</div>
                                 </div>
                             </li>
                             <li>
                                 <div className="item">
-                                    <div className="title">- {formatCurrency(row.original.facilitatorFee)}</div>
                                     <div className="des">Facilitator Fee</div>
+                                    <div className="title">- {formatCurrency(row.original.facilitatorFee)}</div>
                                 </div>
                                 <div className="item">
-                                    <div className="title">- {formatCurrency(row.original.facilitatorFee)} (d)</div>
                                     <div className="des">Marketplace free</div>
+                                    <div className="title">- {formatCurrency(row.original.facilitatorFee)} (d)</div>
                                 </div>
                             </li>
                         </ul>

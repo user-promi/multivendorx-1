@@ -204,28 +204,44 @@ jQuery(document).ready(function ($) {
         var $rating = $(this).closest('.rating');
 
         $rating.find('i').each(function () {
-            $(this).toggleClass('hover', $(this).data('value') <= value);
+            // Change to 'adminlib-star' on hover for the stars up to the hovered value, else 'adminlib-star-o'
+            $(this).toggleClass('adminlib-star', $(this).data('value') <= value);
+            $(this).toggleClass('adminlib-star-o', $(this).data('value') > value);
         });
     });
 
     $('.rating').on('mouseleave', function () {
-        $(this).find('i').removeClass('hover');
+        var $rating = $(this);
+        $rating.find('i').each(function () {
+            // Reset back to 'adminlib-star-o' after mouse leaves
+            if ($(this).data('value') > $rating.attr('data-selected')) {
+                $(this).removeClass('adminlib-star').addClass('adminlib-star-o');
+            } else {
+                $(this).addClass('adminlib-star').removeClass('adminlib-star-o');
+            }
+        });
     });
 
     $('.rating i').on('click', function () {
         var value = $(this).data('value');
         var $rating = $(this).closest('.rating');
 
+        // Set the selected rating value on click
         $rating.attr('data-selected', value);
 
+        // Apply the 'adminlib-star' class for the selected stars
         $rating.find('i').each(function () {
-            $(this).toggleClass('active', $(this).data('value') <= value);
-            $(this).toggleClass('inactive', $(this).data('value') > value);
+            if ($(this).data('value') <= value) {
+                $(this).addClass('adminlib-star').removeClass('adminlib-star-o');
+            } else {
+                $(this).addClass('adminlib-star-o').removeClass('adminlib-star');
+            }
         });
 
-        // update hidden input value
+        // Update hidden input value to match the selected rating
         $rating.find('input[type="hidden"]').val(value);
     });
+
 
     $(document).on('click', '#write-review-btn', function () {
         const $form = $('#commentform');

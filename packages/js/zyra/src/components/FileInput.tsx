@@ -101,7 +101,6 @@ const FileInput: React.FC<FileInputProps> = (props) => {
                         onBlur={props.onBlur}
                         // DO NOT control value with props.value (file input cannot be controlled)
                     />
-                    {props.proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>}
                     <span className="title">Drag and drop your file here</span>
                     <span>Or</span>
                     <button
