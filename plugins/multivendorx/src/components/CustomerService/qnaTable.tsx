@@ -249,7 +249,7 @@ const Qna: React.FC = () => {
                             <div className="details">
                                 <span className="title">{product.product_name || '-'}</span>
                                 {/* SKU not available in your current data, remove or leave placeholder */}
-                                <span><b>SKU:</b> {product.sku || '-'}</span>
+                                {product.sku && <span><b>SKU:</b> {product.sku }</span>}
                             </div>
                         </a>
                     </TableCell>

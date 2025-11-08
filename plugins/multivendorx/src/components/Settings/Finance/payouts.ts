@@ -28,20 +28,22 @@ export default {
                     label: __('Completed', 'multivendorx'),
                     value: 'completed',
                 },
+                {
+                    key: 'delivered',
+                    label: __('Delivered', 'multivendorx'),
+                    value: 'delivered',
+                    proSetting:true,
+                },
 				{
                     key: 'processing',
                     label: __('Processing', 'multivendorx'),
                     value: 'processing',
                 },
                 {
-                    key: 'delivered',
-                    label: __('Delivered', 'multivendorx'),
-                    value: 'delivered',
-                },
-                {
                     key: 'shipped',
                     label: __('Shipped', 'multivendorx'),
                     value: 'shipped',
+                    proSetting:true,
                 },                
             ],
             selectDeselect: true,

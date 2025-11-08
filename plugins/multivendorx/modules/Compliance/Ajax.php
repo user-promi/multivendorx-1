@@ -14,21 +14,31 @@ class Ajax {
     public function handle_report_abuse() {
         // Verify nonce
         check_ajax_referer('report_abuse_ajax_nonce', 'nonce');
-
+    
         // Get and sanitize inputs
         $name       = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $email      = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
         $message    = filter_input(INPUT_POST, 'message', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $product_id = filter_input(INPUT_POST, 'product_id', FILTER_VALIDATE_INT);
-
+    
         if ( empty($name) || empty($email) || empty($message) || !$product_id ) {
             wp_send_json_error("All fields are required.");
         }
-
+    
         // Get store_id from product meta
         $store_id = get_post_meta($product_id, 'multivendorx_store_id', true) ?? 0;
-
-        // Save the report using Util function
+    
+        // 🔹 Check if this user (email) already reported this product
+        $existing_reports = Util::get_report_abuse_information([
+            'product_id' => $product_id,
+            'email'      => $email,
+        ]);
+    
+        if ( ! empty( $existing_reports ) ) {
+            wp_send_json_error("You have already submitted a report for this product.");
+        }
+    
+        // 🔹 Save the report using Util function
         $report_id = Util::create_report_abuse([
             'store_id'   => $store_id,
             'product_id' => $product_id,
@@ -36,13 +46,14 @@ class Ajax {
             'email'      => $email,
             'message'    => $message
         ]);
-
-        if (!$report_id) {
+    
+        if ( ! $report_id ) {
             wp_send_json_error("Something went wrong, please try again.");
         }
-
+    
         wp_send_json_success("Your report has been submitted. Thank you!");
     }
+    
 
     public function get_report_reasons() {
         // Get the saved reasons from settings

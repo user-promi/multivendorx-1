@@ -1,5 +1,5 @@
 <?php
-namespace MultiVendorXPro\Announcement;
+namespace MultiVendorX\Announcement;
 
 class Frontend {
     public function __construct() {

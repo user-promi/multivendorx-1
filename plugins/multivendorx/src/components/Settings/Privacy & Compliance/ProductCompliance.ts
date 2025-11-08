@@ -74,7 +74,7 @@ export default {
             type: 'setting-toggle',
             label: __('Who can report', 'multivendorx'),
             settingDescription: __('Decide if only logged-in customers can submit abuse reports, or if reporting is open to everyone.', 'multivendorx'),
-            desc: __('<ul><li>logged-in customers - Only registered and logged-in customers can report products.This helps prevent spam and ensures accountability.</li><li>Guests - Visitors who are not logged in can submit reports. Useful if you want to make reporting quick and easy without requiring sign-up.</li><li>Anyone - Both logged-in customers and guests can report products. This gives the widest access but may increase the risk of spam submissions.</li></ul>', 'multivendorx'),
+            desc: __('<ul><li>logged-in customers - Only registered and logged-in customers can report products.This helps prevent spam and ensures accountability.</li><li>Anyone - Both logged-in customers and guests can report products. This gives the widest access but may increase the risk of spam submissions.</li></ul>', 'multivendorx'),
                 moduleEnabled: 'marketplace-compliance',
             options: [
                 {
@@ -82,11 +82,11 @@ export default {
                     label: __('logged-in customers', 'multivendorx'),
                     value: 'logged_in',
                 },
-                {
-                    key: 'guests',
-                    label: __('Guests', 'multivendorx'),
-                    value: 'guests',
-                },
+                // {
+                //     key: 'guests',
+                //     label: __('Guests', 'multivendorx'),
+                //     value: 'guests',
+                // },
                 {
                     key: 'anyone',
                     label: __('Anyone', 'multivendorx'),
