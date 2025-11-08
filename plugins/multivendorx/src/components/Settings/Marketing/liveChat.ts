@@ -31,7 +31,6 @@ export default {
                     value: 'none',
                 },
             ],
-            moduleEnabled: 'live-chat',
             proSetting: true,
         },
         {
@@ -66,11 +65,11 @@ export default {
             desc: __('Pick a theme color for your Facebook Messenger chat window.', 'multivendorx'),
             // moduleEnabled: 'live-chat',
             value: '#5007aa',
-            // dependent: {
-            //      key: 'chat_provider',
-            //      set: true,
-            //      value: 'facebook',
-            //  },
+            dependent: {
+                 key: 'chat_provider',
+                 set: true,
+                 value: 'facebook',
+             },
             // proSetting: true,
         },
         {
