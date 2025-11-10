@@ -362,8 +362,6 @@ export const TransactionHistory: React.FC = () => {
                                 )}
                             </div>
                         </div>
-
-
                     </div>
                 )}
                 {requestWithdrawal && (
