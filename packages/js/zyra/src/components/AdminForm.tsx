@@ -1247,7 +1247,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                     }
                     input = (
                         <MultiCheckBox
-                            khali_dabba={appLocalizer?.khali_dabba ?? false}
+                            khali_dabba={appLocalizer?.khali_dabba === "1"}
                             wrapperClass={
                                 inputField.look === 'toggle' ? 'toggle-btn' : inputField.selectDeselect === true ? 'checkbox-list-side-by-side' : 'simple-checkbox'
                             }
