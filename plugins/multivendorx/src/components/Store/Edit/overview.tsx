@@ -197,9 +197,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                 <div className="right">
                                     <i
                                         className="adminlib-external"
-                                        // onClick={() => {
-                                        //     navigate(`?page=multivendorx#&tab=products`);
-                                        // }}
                                         onClick={() => {
                                             window.location.href = `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/edit.php?post_type=product`;
                                         }}
@@ -238,7 +235,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                                         </a>
                                                     </div>
                                                     <div className="des">
-                                                        {product.date_created
+                                                        {/* {product.date_created
                                                             ? new Date(product.date_created).toLocaleDateString(
                                                                 "en-US",
                                                                 {
@@ -247,7 +244,8 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                                                     year: "numeric",
                                                                 }
                                                             )
-                                                            : "-"}
+                                                            : "-"} */}
+                                                             sku: {product.sku}
                                                     </div>
                                                 </div>
                                             </div>
@@ -255,7 +253,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                             {/* Right side */}
                                             <div className="right-details">
                                                 <div
-                                                    className="admin-badge"
+                                                    className="price"
                                                     dangerouslySetInnerHTML={{ __html: product.price_html }}
                                                 />
                                             </div>

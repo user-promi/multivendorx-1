@@ -46,6 +46,14 @@
                 padding: 0.313rem;
             }
         }
+
+        &.transaction {
+            background: $theme-background-color;
+        }
+
+        // &.debit-transactions {
+        //     background: #00800052;
+        // }
     }
 
     .col {
@@ -374,6 +382,21 @@
         .tab-action {
             width: 24%;
             box-sizing: border-box;
+
+
+            &.active {
+                background: $theme-color;
+                color: #fff;
+
+                .details-wrapper {
+                    color: #fff;
+
+                    i {
+                        background: #fff;
+                        color: $theme-color;
+                    }
+                }
+            }
         }
 
         .details-wrapper {
@@ -550,25 +573,25 @@
         line-height: 1.125;
     }
 
-    &.active {
-        border: 0.063rem solid;
+    // &.active {
+    //     border: 0.063rem solid;
 
-        &:has(.red) {
-            border-color: #f06b4f;
-        }
+    //     &:has(.red) {
+    //         border-color: #f06b4f;
+    //     }
 
-        &:has(.green) {
-            border-color: #06be9f;
-        }
+    //     &:has(.green) {
+    //         border-color: #06be9f;
+    //     }
 
-        &:has(.yellow) {
-            border-color: #ff9f43;
-        }
+    //     &:has(.yellow) {
+    //         border-color: #ff9f43;
+    //     }
 
-        &:has(.blue) {
-            border-color: #003d66de;
-        }
-    }
+    //     &:has(.blue) {
+    //         border-color: #003d66de;
+    //     }
+    // }
 }
 
 // tab action cart end
@@ -616,6 +639,48 @@
             font-size: 0.95rem;
             color: #00000094;
         }
+    }
+}
+
+// transaction debit list
+.debit-list {
+    .data-card {
+        margin-bottom: 0.75rem;
+        display: flex;
+        justify-content: space-between;
+
+        .title {
+            .name {
+                font-size: 1.063rem;
+                margin-bottom: 0.125rem;
+            }
+
+            .date {
+                color: #0000007d;
+            }
+        }
+    }
+
+    .number {
+        display: flex;
+        align-items: center;
+        gap: 0.313rem;
+        font-size: 1.063rem;
+        color: rgba(0, 128, 0, 0.842);
+    }
+}
+
+.payout-notice {
+    background: #ffff;
+    padding: 0.5rem;
+    border-radius: 0.313rem;
+    font-size: 1rem;
+    width: fit-content;
+    margin-bottom: 1rem;
+
+    i {
+        padding-right: 0.313rem;
+        color: #ff0000eb;
     }
 }
 
@@ -689,12 +754,15 @@
         .card-content {
             padding: 0;
         }
-        .middle-child-container{
+
+        .middle-child-container {
             border: none;
         }
+
         .tab-content {
             padding: 1.5rem;
             box-sizing: border-box;
+
             .divider-wrapper:first-child {
                 .divider-section {
                     margin: 0;
