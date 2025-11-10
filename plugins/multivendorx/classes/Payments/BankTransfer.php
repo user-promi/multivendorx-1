@@ -7,83 +7,134 @@ defined('ABSPATH') || exit;
 use MultiVendorX\Store\Store;
 
 
-class BankTransfer {
-    public function __construct(){
+class BankTransfer
+{
+    public function __construct()
+    {
         add_action('multivendorx_process_bank-transfer_payment', array($this, 'process_payment'), 10, 5);
     }
 
-    public function get_id() {
+    public function get_id()
+    {
         return 'bank-transfer';
     }
 
-    public function get_settings() {
+    public function get_settings()
+    {
         return [
-            'icon'      => 'adminlib-bank',
-            'id'        => $this->get_id(),
-            'label'     => 'Bank Transfer',
+            'icon' => 'adminlib-bank',
+            'id' => $this->get_id(),
+            'label' => 'Bank Transfer',
             'enableOption' => true,
-            'disableBtn'=> true,
-            'desc'      => 'Transfer payouts directly to store’s bank accounts.',
+            'disableBtn' => true,
+            'desc' => 'Transfer payouts directly to store’s bank accounts.',
             'formFields' => [
                 [
-                    'key'         => 'bank_name',
-                    'type'        => 'text',
-                    'label'       => 'Bank Name',
-                    'placeholder' => 'Enter Bank Name',
+                    'key' => 'bank_name',
+                    'type' => 'multi-checkbox',
+                    'selectDeselect' => true,
+
+                    'label' => __('Bank Name', 'mvx-pro'),
+                    'options' => [
+                        [
+                            'key' => 'bank_name',
+                            'label' => __('Bank Name', 'mvx-pro'),
+                            'value' => 'bank_account_details',
+                            'edit' => true,
+                        ],
+                        [
+                            'key' => 'routing_number',
+                            'label' => __('ABA Routing Number)', 'mvx-pro'),
+                            'value' => 'routing_number',
+                            'edit' => true,
+                        ],
+                        [
+                            'key' => 'destination_currency',
+                            'label' => __('Destination Currency', 'mvx-pro'),
+                            'value' => 'destination_currency',
+                            'edit' => true,
+                        ],
+                        [
+                            'key' => 'bank_address',
+                            'label' => __('Bank Address', 'mvx-pro'),
+                            'value' => 'bank_address',
+                            'edit' => true,
+                        ],
+                        [
+                            'key' => 'IBAN',
+                            'label' => __('IBAN', 'mvx-pro'),
+                            'value' => 'IBAN',
+                            'edit' => true,
+                        ],
+                        [
+                            'key' => 'account_holder_name',
+                            'label' => __('Account Holder Name', 'mvx-pro'),
+                            'value' => 'account_holder_name',
+                            'edit' => true,
+                        ],
+                        [
+                            'key' => 'account_number',
+                            'label' => __('Account Number', 'mvx-pro'),
+                            'value' => 'account_number',
+                            'edit' => true,
+                        ],
+                    ],
                 ],
-                [
-                    'key'         => 'abr_routing_number',
-                    'type'        => 'text',
-                    'label'       => 'ABA Routing Number',
-                    'placeholder' => 'Enter ABA Routing Number',
-                ],
-                [
-                    'key'         => 'destination_currency',
-                    'type'        => 'text',
-                    'label'       => 'Destination Currency',
-                    'placeholder' => 'Enter Destination Currency',
-                ],
-                [
-                    'key'         => 'bank_address',
-                    'type'        => 'text-area',
-                    'label'       => 'Bank Address',
-                    'placeholder' => 'Enter Bank Address',
-                ],
-                [
-                    'key'         => 'iban',
-                    'type'        => 'text',
-                    'label'       => 'IBAN',
-                    'placeholder' => 'Enter IBAN',
-                ],
-                [
-                    'key'         => 'account_holder_name',
-                    'type'        => 'text',
-                    'label'       => 'Account Holder Name',
-                    'placeholder' => 'Enter Account Holder Name',
-                ],
-                [
-                    'key'         => 'account_number',
-                    'type'        => 'text',
-                    'label'       => 'Account Number',
-                    'placeholder' => 'Enter Account Number',
-                ]
+
+                // [
+                //     'key' => 'abr_routing_number',
+                //     'type' => 'text',
+                //     'label' => 'ABA Routing Number',
+                //     'placeholder' => 'Enter ABA Routing Number',
+                // ],
+                // [
+                //     'key' => 'destination_currency',
+                //     'type' => 'text',
+                //     'label' => 'Destination Currency',
+                //     'placeholder' => 'Enter Destination Currency',
+                // ],
+                // [
+                //     'key' => 'bank_address',
+                //     'type' => 'text-area',
+                //     'label' => 'Bank Address',
+                //     'placeholder' => 'Enter Bank Address',
+                // ],
+                // [
+                //     'key' => 'iban',
+                //     'type' => 'text',
+                //     'label' => 'IBAN',
+                //     'placeholder' => 'Enter IBAN',
+                // ],
+                // [
+                //     'key' => 'account_holder_name',
+                //     'type' => 'text',
+                //     'label' => 'Account Holder Name',
+                //     'placeholder' => 'Enter Account Holder Name',
+                // ],
+                // [
+                //     'key' => 'account_number',
+                //     'type' => 'text',
+                //     'label' => 'Account Number',
+                //     'placeholder' => 'Enter Account Number',
+                // ]
             ]
         ];
     }
 
-    public function get_store_payment_settings() {
-        $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', [] );
+    public function get_store_payment_settings()
+    {
+        $payment_admin_settings = MultiVendorX()->setting->get_setting('payment_methods', []);
 
         $settings = !empty($payment_admin_settings['bank-transfer']) ? $payment_admin_settings['bank-transfer'] : [];
-        
+
         if ($settings) {
             return [
-                'id'    => $this->get_id(),
+                'id' => $this->get_id(),
                 'label' => __('Bank Transfer', 'multivendorx'),
                 'fields' => [
                     [
-                        'key'   => 'account_type',
-                        'type'  => 'setting-toggle',
+                        'key' => 'account_type',
+                        'type' => 'setting-toggle',
                         'label' => __('Account type', 'multivendorx'),
                         'options' => [
                             ['key' => 'current', 'label' => __('Current', 'multivendorx'), 'value' => 'current'],
@@ -91,45 +142,45 @@ class BankTransfer {
                         ]
                     ],
                     [
-                        'key'         => 'bank_name',
-                        'type'        => 'text',
-                        'label'       => 'Bank Name',
+                        'key' => 'bank_name',
+                        'type' => 'text',
+                        'label' => 'Bank Name',
                         'placeholder' => 'Enter Bank Name',
                     ],
                     [
-                        'key'         => 'abr_routing_number',
-                        'type'        => 'text',
-                        'label'       => 'ABA Routing Number',
+                        'key' => 'abr_routing_number',
+                        'type' => 'text',
+                        'label' => 'ABA Routing Number',
                         'placeholder' => 'Enter ABA Routing Number',
                     ],
                     [
-                        'key'         => 'destination currency',
-                        'type'        => 'text',
-                        'label'       => 'Destination Currency',
+                        'key' => 'destination currency',
+                        'type' => 'text',
+                        'label' => 'Destination Currency',
                         'placeholder' => 'Enter Destination Currency',
                     ],
                     [
-                        'key'         => 'bank_address',
-                        'type'        => 'text-area',
-                        'label'       => 'Bank Address',
+                        'key' => 'bank_address',
+                        'type' => 'text-area',
+                        'label' => 'Bank Address',
                         'placeholder' => 'Enter Bank Address',
                     ],
                     [
-                        'key'         => 'iban',
-                        'type'        => 'text',
-                        'label'       => 'IBAN',
+                        'key' => 'iban',
+                        'type' => 'text',
+                        'label' => 'IBAN',
                         'placeholder' => 'Enter IBAN',
                     ],
                     [
-                        'key'         => 'account_holder_name',
-                        'type'        => 'text',
-                        'label'       => 'Account Holder Name',
+                        'key' => 'account_holder_name',
+                        'type' => 'text',
+                        'label' => 'Account Holder Name',
                         'placeholder' => 'Enter Account Holder Name',
                     ],
                     [
-                        'key'         => 'account_number',
-                        'type'        => 'text',
-                        'label'       => 'Account Number',
+                        'key' => 'account_number',
+                        'type' => 'text',
+                        'label' => 'Account Number',
                         'placeholder' => 'Enter Account Number',
                     ]
                 ]
@@ -138,24 +189,26 @@ class BankTransfer {
 
     }
 
-    public function process_payment($store_id, $amount, $order_id = null, $transaction_id = null, $note = null) {
+    public function process_payment($store_id, $amount, $order_id = null, $transaction_id = null, $note = null)
+    {
 
         // quick autoload/class check (helps debugging)
-        $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', [] );
-        $store   = new Store( $store_id );
+        $payment_admin_settings = MultiVendorX()->setting->get_setting('payment_methods', []);
+        $store = new Store($store_id);
 
-        $status ='success';
+        $status = 'success';
         do_action(
             'multivendorx_after_payment_complete',
             $store_id,
             'Bank Transfer',
             $status,
-            $order_id, 
+            $order_id,
             $transaction_id,
-            $note, $amount
+            $note,
+            $amount
         );
 
-        
+
     }
 
 }

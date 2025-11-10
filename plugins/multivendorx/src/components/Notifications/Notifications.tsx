@@ -7,7 +7,7 @@ import ActivityTable from './ActivityTable';
 
 const Notifications = () => {
     const location = new URLSearchParams(useLocation().hash.substring(1));
-    const initialTab = location.get('subtab') || 'notifications';
+    const initialTab = location.get('tab') || 'notifications';
 
     const tabData = [
         {
@@ -35,7 +35,8 @@ const Notifications = () => {
     const getForm = (tabId: string) => {
         switch (tabId) {
             case 'notifications':
-                return <NotificationTable />;
+                // return <NotificationTable />;
+                return;
             case 'activities':
                 return <ActivityTable />;
             default:
@@ -49,7 +50,7 @@ const Notifications = () => {
             currentTab={initialTab}
             getForm={getForm}
             prepareUrl={ ( tabid: string ) =>
-                        `?page=multivendorx#&tab=settings&subtab=${ tabid }`}
+                        `?page=multivendorx#&tab=${ tabid }`}
             appLocalizer={appLocalizer}
             premium={false}
             Link={Link}

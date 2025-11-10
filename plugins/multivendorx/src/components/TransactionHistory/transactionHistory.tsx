@@ -10,7 +10,7 @@ import { formatCurrency } from '../../services/commonFunction';
 
 export const TransactionHistory: React.FC = () => {
     const [data, setData] = useState<any[]>([]);
-    const [activeTab, setActiveTab] = useState("products");
+    const [activeTab, setActiveTab] = useState("wallet-transaction");
     const [allStores, setAllStores] = useState<any[]>([]);
     const [filteredStores, setFilteredStores] = useState<any[]>([]);
     const [selectedStore, setSelectedStore] = useState<any>(null);
@@ -203,15 +203,15 @@ export const TransactionHistory: React.FC = () => {
 
     const tabs = [
         {
-            id: "products",
+            id: "wallet-transaction",
             label: "Wallet transaction",
-            icon: "adminlib-dollar",
+            icon: "adminlib-wallet",
             content: <TransactionHistoryTable storeId={selectedStore?.value} dateRange={dateRange} />
         },
         {
-            id: "stores",
+            id: "direct-ttransaction",
             label: "Direct transaction",
-            icon: "adminlib-calendar",
+            icon: "adminlib-direct-transaction",
             content: <TransactionDataTable storeId={selectedStore?.value} dateRange={dateRange} />
         },
     ];
@@ -266,13 +266,13 @@ export const TransactionHistory: React.FC = () => {
                         </div>
                     ))}
                 </div>
-                {activeTab === "products" && (
+                {activeTab === "wallet-transaction" && (
                     <div className="row">
                         <div className="col">
                             <div className="data-card-wrapper">
                                 <div className="data-card">
                                     <div className="title">Wallet balance</div>
-                                    <div className="number">{formatCurrency(data.wallet_balance)} <i className="adminlib-dollar"></i></div>
+                                    <div className="number">{formatCurrency(data.wallet_balance)} <i className="adminlib-wallet"></i></div>
                                 </div>
                                 {/* <div className="data-card">
                                     <div className="title">Reserve balance</div>
@@ -280,7 +280,7 @@ export const TransactionHistory: React.FC = () => {
                                 </div> */}
                                 <div className="data-card">
                                     <div className="title">Clearance balance</div>
-                                    <div className="number">{formatCurrency(data.locking_balance)} <i className="adminlib-home "></i></div>
+                                    <div className="number">{formatCurrency(data.locking_balance)} <i className="adminlib-cash "></i></div>
                                 </div>
                             </div>
 

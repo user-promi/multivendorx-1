@@ -267,7 +267,35 @@ const EditStore = () => {
                 },
             ]
             : []),
-    ], [modules]);
+        // ...(modules.includes('store-review')
+        //     ? [
+        //         {
+        //             type: 'file',
+        //             content: {
+        //                 id: 'store-review',
+        //                 name: 'Reviews',
+        //                 desc: 'reviews',
+        //                 hideTabHeader: true,
+        //                 icon: 'adminlib-credit-card',
+        //             },
+        //         },
+        //     ]
+        //     : []),
+        // ...(modules.includes('marketplace-refund')
+        //     ? [
+        //         {
+        //             type: 'file',
+        //             content: {
+        //                 id: 'store-refund',
+        //                 name: 'Refunds',
+        //                 desc: 'refunds',
+        //                 hideTabHeader: true,
+        //                 icon: 'adminlib-credit-card',
+        //             },
+        //         },
+        //     ]
+        //     : []),
+    ]);
 
     
     const handleUpdateData = useCallback((updatedFields: any) => {
@@ -505,11 +533,14 @@ const EditStore = () => {
                                                             className="textarea-input"
                                                             autoFocus
                                                         />
+                                                    ) : Object.keys(data).length === 0 ? (
+                                                        <Skeleton variant="text" width={150} />
                                                     ) : data?.description ? (
                                                         data.description
                                                     ) : (
-                                                        <Skeleton variant="text" width={150} />
+                                                        <span>&nbsp;</span>
                                                     )}
+                                                    
 
                                                     <span
                                                         className={`edit-icon ${editDesc ? '' : 'admin-badge blue'}`}

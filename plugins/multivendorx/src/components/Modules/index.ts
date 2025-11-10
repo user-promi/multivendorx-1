@@ -441,10 +441,10 @@ export default {
         },
         { type: 'separator', id: 'marketplace_boosters', label: 'Marketplace Boosters' },
         {
-            id: 'marketplace-compliance',
+            id: 'compliance',
             name: __('Compliance', 'multivendorx'),
             desc: "Ensure stores meet marketplace requirements with automated policy checks.",
-            icon: 'adminlib-marketplace-compliance',
+            icon: 'adminlib-compliance',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/marketplace-memberhsip',
             settings_link: '${appLocalizer.settings_page_url}non-compliance',
             // pro_module: true,
