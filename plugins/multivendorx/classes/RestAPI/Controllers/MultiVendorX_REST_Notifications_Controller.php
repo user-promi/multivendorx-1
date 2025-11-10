@@ -2,6 +2,7 @@
 
 namespace MultiVendorX\RestAPI\Controllers;
 use MultiVendorX\Utill;
+use MultiVendorx\Store\Store as Store;
 
 defined('ABSPATH') || exit;
 
@@ -67,6 +68,7 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
             );
         }
         $header_notifications = $request->get_param('header');
+        $events_notifications = $request->get_param('events');
 
         if ($header_notifications) {
             $store_id = $request->get_param('store_id');
@@ -88,66 +90,102 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
             return rest_ensure_response( $formated_notifications);
         }
 
-        $results = MultiVendorX()->notifications->get_all_events();
-
-        $formated_notifications = [];
-
-        foreach ($results as $row) {
-
-            $custom_emails = !empty($row->custom_emails)
-                ? json_decode($row->custom_emails, true)
-                : [];
-
-            // Build recipients array
-            $recipients = [];
-            $id = 1;
-
-            $recipients[] = [
-                'id' => $id++,
-                'type' => 'Store',
-                'label' => 'Store',
-                'enabled' => (bool) $row->store_enabled,
-                'canDelete' => false,
-            ];
-        
-            $recipients[] = [
-                'id' => $id++,
-                'type' => 'Admin',
-                'label' => 'Admin',
-                'enabled' => (bool) $row->admin_enabled,
-                'canDelete' => false,
-            ];
-
-            // Add any custom emails
-            foreach ($custom_emails as $email) {
+        if ($events_notifications) {
+            $results = MultiVendorX()->notifications->get_all_events();
+    
+            $formated_notifications = [];
+    
+            foreach ($results as $row) {
+    
+                $custom_emails = !empty($row->custom_emails)
+                    ? json_decode($row->custom_emails, true)
+                    : [];
+    
+                // Build recipients array
+                $recipients = [];
+                $id = 1;
+    
                 $recipients[] = [
                     'id' => $id++,
-                    'type' => 'extra',
-                    'label' => $email,
-                    'enabled' => true,
-                    'canDelete' => true,
+                    'type' => 'Store',
+                    'label' => 'Store',
+                    'enabled' => (bool) $row->store_enabled,
+                    'canDelete' => false,
+                ];
+            
+                $recipients[] = [
+                    'id' => $id++,
+                    'type' => 'Admin',
+                    'label' => 'Admin',
+                    'enabled' => (bool) $row->admin_enabled,
+                    'canDelete' => false,
+                ];
+    
+                // Add any custom emails
+                foreach ($custom_emails as $email) {
+                    $recipients[] = [
+                        'id' => $id++,
+                        'type' => 'extra',
+                        'label' => $email,
+                        'enabled' => true,
+                        'canDelete' => true,
+                    ];
+                }
+    
+                $channels = [
+                    'mail'   => (bool) $row->email_enabled,
+                    'sms'    => (bool) $row->sms_enabled,
+                    'system' => (bool) $row->system_enabled,
+                ];
+    
+                $formated_notifications[] = [
+                    'id'          => (int) $row->id,
+                    'icon'        => 'adminlib-cart',
+                    'event'       => $row->event_name,
+                    'description' => $row->description,
+                    'tag' => $row->tag,
+                    'category' => $row->category,
+                    'recipients'  => $recipients,
+                    'channels'    => $channels,
                 ];
             }
-
-            $channels = [
-                'mail'   => (bool) $row->email_enabled,
-                'sms'    => (bool) $row->sms_enabled,
-                'system' => (bool) $row->system_enabled,
-            ];
-
-            $formated_notifications[] = [
-                'id'          => (int) $row->id,
-                'icon'        => 'adminlib-cart',
-                'event'       => $row->event_name,
-                'description' => $row->description,
-                'tag' => $row->tag,
-                'category' => $row->category,
-                'recipients'  => $recipients,
-                'channels'    => $channels,
-            ];
+    
+            return rest_ensure_response( $formated_notifications);
         }
 
-        return rest_ensure_response( $formated_notifications);
+        $count = $request->get_param( 'count' );
+
+        if ( $count ) {
+            return MultiVendorX()->notifications->get_all_notifications(null, ['count' => true, 'category' => $request->get_param('notification') ? 'notification' : 'activity']);
+        }
+
+        $limit          = max( intval( $request->get_param( 'row' ) ), 10 );
+        $page           = max( intval( $request->get_param( 'page' ) ), 1 );
+        $offset         = ( $page - 1 ) * $limit;
+
+        $args = [
+            'limit'  => $limit,
+            'offset' => $offset,
+            'category' => $request->get_param('notification') ? 'notification' : 'activity'
+        ];
+
+        $all_notifications = MultiVendorX()->notifications->get_all_notifications(null, $args);
+        $notifications = array();
+        foreach ( $all_notifications as $notification ) {
+            $store = new Store((int) $notification['store_id']);
+            $notifications[] = apply_filters(
+                'multivendorx_stores',
+                array(
+                    'store_id'   => (int) $notification['store_id'],
+                    'store_name'   => $store->get('name'),
+                    'type' => $notification['type'],
+                    'title' => $notification['title'],
+                    'date'     => date( 'M j, Y', strtotime( $notification['created_at'] ) ),
+                )
+            );
+        }
+
+        return rest_ensure_response( $notifications);   
     }
 
     public function time_ago($datetime) {

@@ -844,7 +844,7 @@ class Notifications
     }
 
 
-    public function get_all_notifications($store_id = null)
+    public function get_all_notifications($store_id = null, $args = [])
     {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['notifications'];
@@ -866,6 +866,54 @@ class Notifications
             );
         }
 
+        if (!empty($args)) {
+            $where = [];
+    
+            if ( isset( $args['ID'] ) ) {
+                $ids     = is_array( $args['ID'] ) ? $args['ID'] : [ $args['ID'] ];
+                $ids     = implode( ',', array_map( 'intval', $ids ) );
+                $where[] = "ID IN ($ids)";
+            }
+        
+            if ( isset( $args['category'] ) ) {
+                $where[] = "category = '" . esc_sql( $args['category'] ) . "'";
+            }
+        
+            
+        
+            if ( isset( $args['start_date'] ) && isset( $args['end_date'] ) ) {
+                $where[] = "create_time BETWEEN '" . esc_sql( $args['start_date'] ) . "' AND '" . esc_sql( $args['end_date'] ) . "'";
+            }
+        
+            $table = $wpdb->prefix . Utill::TABLES['notifications'];
+        
+            if ( isset( $args['count'] ) ) {
+                $query = "SELECT COUNT(*) FROM {$table}";
+            } else {
+                $query = "SELECT * FROM {$table}";
+            }
+        
+            if ( ! empty( $where ) ) {
+                $condition = $args['condition'] ?? ' AND ';
+                $query    .= ' WHERE ' . implode( $condition, $where );
+            }
+        
+            //Keep your pagination logic
+            if ( isset( $args['limit'] ) && isset( $args['offset'] ) && empty( $args['count'] ) ) {
+                $limit  = intval( $args['limit'] );
+                $offset = intval( $args['offset'] );
+                $query .= " LIMIT $limit OFFSET $offset";
+            }
+        
+            if ( isset( $args['count'] ) ) {
+                $results = $wpdb->get_var( $query );
+                return $results ?? 0;
+            } else {
+                $results = $wpdb->get_results( $query, ARRAY_A );
+                return $results ?? [];
+            }
+        }
+    
         return $events;
     }
 

@@ -35,8 +35,7 @@ const Notifications = () => {
     const getForm = (tabId: string) => {
         switch (tabId) {
             case 'notifications':
-                // return <NotificationTable />;
-                return;
+                return <NotificationTable />;
             case 'activities':
                 return <ActivityTable />;
             default:
