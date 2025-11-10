@@ -313,7 +313,7 @@ const AdminDashboard = () => {
     { id: 'paypal-marketplace', name: 'PayPal marketplace', iconClass: 'adminlib-paypal-marketplace', pro: true },
     { id: 'stripe-marketplace', name: 'Stripe marketplace', iconClass: 'adminlib-stripe-marketplace', pro: true },
     { id: 'facilitator', name: 'Facilitator', iconClass: 'adminlib-facilitator', pro: true },
-    { id: 'notifications', name: 'Notifications', iconClass: 'adminlib-notifications', pro: true },
+    { id: 'notifications', name: 'Notifications', iconClass: 'adminlib-notification', pro: true },
     { id: 'invoice', name: 'Invoice & packing slip', iconClass: 'adminlib-invoice', pro: true },
   ];
 

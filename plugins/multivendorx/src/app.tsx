@@ -55,13 +55,13 @@ const profileItems = [
   },
   {
     title: "Get Support",
-    icon: "adminlib-life-ring",
+    icon: "adminlib-support",
     link: "https://multivendorx.com/support-forum/?utm_source=settings&utm_medium=plugin&utm_campaign=promotion",
     targetBlank: true,
   },
   {
     title: "Community",
-    icon: "adminlib-users",
+    icon: "adminlib-user",
     link: "https://multivendorx.com/community/?utm_source=settings&utm_medium=plugin&utm_campaign=promotion",
     targetBlank: true,
   },

@@ -498,11 +498,10 @@ $border-radius-button: 8rem;
     }
 
     .des {
-        font-size: 0.95rem;
+        font-size: 1.063rem;
         margin-bottom: 1rem;
     }
 }
-
 
 // varification-wrapper start
 .varification-wrapper {
@@ -672,9 +671,10 @@ $border-radius-button: 8rem;
         width: 70%;
         background: #fff;
 
-        .card-content{
+        .card-content {
             padding: 0;
         }
     }
 }
+
 // horizental menu end -- move to component
