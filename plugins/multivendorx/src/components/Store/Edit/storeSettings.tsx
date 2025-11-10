@@ -67,6 +67,17 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
         timezone: ''
     });
 
+    useEffect(() => {
+        if (appLocalizer) {
+            setMapProvider(appLocalizer.map_providor);
+            if (appLocalizer.map_providor === 'google_map_set') {
+                setApiKey(appLocalizer.google_api_key);
+            } else {
+                setApiKey(appLocalizer.mapbox_api_key);
+            }
+        }
+    }, []);
+
     // Initialize email badges from form data
     useEffect(() => {
         if (formData.email) {
@@ -379,6 +390,13 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
             log('Google Map initialized successfully');
         } catch (error) {
             log('Error initializing Google Map:', error);
+        }
+    };
+
+    // Debug logger
+    const log = (...args: any[]) => {
+        if (process.env.NODE_ENV !== "production") {
+            console.log("%c[StoreSettings LOG]", "color: #4CAF50; font-weight: bold;", ...args);
         }
     };
 
