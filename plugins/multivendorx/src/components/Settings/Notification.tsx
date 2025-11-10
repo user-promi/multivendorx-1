@@ -64,6 +64,9 @@ const Notification: React.FC = () => {
             method: 'GET',
             url: getApiLink(appLocalizer, 'notifications'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: {
+                events: true
+            }
         }).then((response) => {
             setNotifications(response.data || []);
         });

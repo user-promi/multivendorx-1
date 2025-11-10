@@ -292,6 +292,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             if( $follower ){
                 return $this->get_store_follower( $request );
             }
+
             $count          = $request->get_param( 'count' );
 
             if ( $count ) {
@@ -611,6 +612,17 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             'store_email'   => $store_email,
             'store_id'      => $insert_id,
             'category'   => 'activity'
+        ];
+    
+        do_action('multivendorx_notify_new_store_approval', 'new_store_approval', $parameters);
+
+        $admin_email = get_option('admin_email');
+        $store_email = 'test@gmail.com';
+        $parameters = [
+            'admin_email'   => $admin_email,
+            'store_email'   => $store_email,
+            'store_id'      => $insert_id,
+            'category'   => 'notification'
         ];
     
         do_action('multivendorx_notify_new_store_approval', 'new_store_approval', $parameters);

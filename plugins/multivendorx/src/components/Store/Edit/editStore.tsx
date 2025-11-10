@@ -267,35 +267,7 @@ const EditStore = () => {
                 },
             ]
             : []),
-        // ...(modules.includes('store-review')
-        //     ? [
-        //         {
-        //             type: 'file',
-        //             content: {
-        //                 id: 'store-review',
-        //                 name: 'Reviews',
-        //                 desc: 'reviews',
-        //                 hideTabHeader: true,
-        //                 icon: 'adminlib-credit-card',
-        //             },
-        //         },
-        //     ]
-        //     : []),
-        // ...(modules.includes('marketplace-refund')
-        //     ? [
-        //         {
-        //             type: 'file',
-        //             content: {
-        //                 id: 'store-refund',
-        //                 name: 'Refunds',
-        //                 desc: 'refunds',
-        //                 hideTabHeader: true,
-        //                 icon: 'adminlib-credit-card',
-        //             },
-        //         },
-        //     ]
-        //     : []),
-    ]);
+    ], [modules]);
 
     
     const handleUpdateData = useCallback((updatedFields: any) => {

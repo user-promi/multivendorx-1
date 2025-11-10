@@ -49,6 +49,7 @@ declare global {
         decimals:any;
         edit_order_capability:any;
         add_product_link:any;
+        view_notifications_link:any;
         map_providor:any;
         google_api_key:any;
         mapbox_api_key:any;
