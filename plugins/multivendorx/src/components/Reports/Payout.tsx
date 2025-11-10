@@ -219,23 +219,23 @@ const Transactions: React.FC = () => {
   const currencySymbol = appLocalizer?.currency_symbol;
 
   const columns: ColumnDef<StoreRow>[] = [
-    {
-      id: 'select',
-      header: ({ table }) => (
-        <input
-          type="checkbox"
-          checked={table.getIsAllRowsSelected()}
-          onChange={table.getToggleAllRowsSelectedHandler()}
-        />
-      ),
-      cell: ({ row }) => (
-        <input
-          type="checkbox"
-          checked={row.getIsSelected()}
-          onChange={row.getToggleSelectedHandler()}
-        />
-      ),
-    },
+    // {
+    //   id: 'select',
+    //   header: ({ table }) => (
+    //     <input
+    //       type="checkbox"
+    //       checked={table.getIsAllRowsSelected()}
+    //       onChange={table.getToggleAllRowsSelectedHandler()}
+    //     />
+    //   ),
+    //   cell: ({ row }) => (
+    //     <input
+    //       type="checkbox"
+    //       checked={row.getIsSelected()}
+    //       onChange={row.getToggleSelectedHandler()}
+    //     />
+    //   ),
+    // },
     {
       // id: 'store_name',
       // accessorKey: 'store_name',
@@ -268,12 +268,12 @@ const Transactions: React.FC = () => {
                   alt={row.original.store_name}
                 />
               ) : (
-                <i className="adminlib-store-inventory"></i>
+                <i className="item-icon adminlib-store-inventory"></i>
               )}
 
               <div className="details">
                 <span className="title">{row.original.store_name || '-'}</span>
-                <span>Since {formattedDate}</span>
+                <span className="des">Since {formattedDate}</span>
               </div>
             </a>
           </TableCell>
@@ -353,6 +353,8 @@ const Transactions: React.FC = () => {
               return <span className="admin-badge red">Rejected</span>;
             case 'locked':
               return <span className="admin-badge blue">Locked</span>;
+            case 'deactivated':
+              return <span className="admin-badge blue">Deactivated</span>;
             default:
               return <span className="admin-badge gray">{status}</span>;
           }
@@ -423,29 +425,13 @@ const Transactions: React.FC = () => {
 
   return (
     <>
-      {/* <div className="row">
-        <div className="column"> */}
-      {/* <div className="card-header">
-            <div className="left">
-              <div className="title">
-                Account Overview
-              </div>
-            </div>
-            {/* <div className="right">
-              <span>Updated 1 month ago</span>
-            </div> */}
-          </div>
-          <div className="card-body">
-            <div className="analytics-container">
-              {overviewData.map((item, idx) => (
-                <div key={idx} className="analytics-item">
-                  <div className="analytics-icon">
-                    <i className={item.icon}></i>
-                  </div>
-                  <div className="details">
-                    <div className="number">{item.count}</div>
-                    <div className="text">{item.label}</div>
-                  </div>
+      <div className="row">
+        <div className="col">
+          <div className="analytics-container report">
+            {overviewData.map((item, idx) => (
+              <div key={idx} className="analytics-item">
+                <div className="analytics-icon">
+                  <i className={item.icon}></i>
                 </div>
                 <div className="details">
                   <div className="number">{item.count}</div>
@@ -455,8 +441,6 @@ const Transactions: React.FC = () => {
             ))}
           </div>
         </div>
-        {/* </div>
-        </div> */}
         <div className="column">
           <div className="card-header">
             <div className="left">

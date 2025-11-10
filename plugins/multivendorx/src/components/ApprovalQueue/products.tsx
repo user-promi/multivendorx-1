@@ -229,7 +229,7 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                             rel="noreferrer"
                             className="product-wrapper"
                         >
-                            <img src={image} alt={product.name} />
+                            {/* <img src={image} alt={product.name} /> */}
                             <div className="details">
                                 <span className="title">{product.name || '-'}</span>
                                 {product.sku && <span className="des">SKU:{product.sku} </span>}
