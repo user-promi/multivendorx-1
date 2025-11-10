@@ -16,7 +16,7 @@ type NotificationStore = {
     date?: string; // Add date field
 };
 
-const NotificationTable = React.FC = () => {
+const NotificationsTable = React.FC = () => {
 
     const [data, setData] = useState<NotificationStore[] | null>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -34,7 +34,7 @@ const NotificationTable = React.FC = () => {
             method: 'GET',
             url: getApiLink(appLocalizer, 'notifications'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true, notification: true },
+            params: { count: true, notification: true, store_id: appLocalizer?.store_id },
         })
             .then((response) => {
                 setTotalRows(response.data || 0);
@@ -44,7 +44,7 @@ const NotificationTable = React.FC = () => {
                 setError(__('Failed to load total rows', 'multivendorx'));
             });
     }, []);
-console.log(data)
+
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
         const rowsPerPage = pagination.pageSize;
@@ -67,7 +67,8 @@ console.log(data)
                 page: currentPage,
                 row: rowsPerPage,
                 filter_status: typeCount === 'all' ? '' : typeCount,
-                notification: true
+                notification: true,
+                store_id: appLocalizer?.store_id
             },
         })
             .then((response) => {
@@ -110,14 +111,6 @@ console.log(data)
                     checked={row.getIsSelected()}
                     onChange={row.getToggleSelectedHandler()}
                 />
-            ),
-        },
-        {
-            header: __('Store Name', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.store_name || ''}>
-                    {row.original.store_name || ''}
-                </TableCell>
             ),
         },
         {
@@ -177,4 +170,4 @@ console.log(data)
         );
 }
 
-export default NotificationTable;
+export default NotificationsTable;
