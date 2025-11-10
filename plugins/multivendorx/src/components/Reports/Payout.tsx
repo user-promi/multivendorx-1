@@ -273,33 +273,35 @@ const Transactions: React.FC = () => {
 
               <div className="details">
                 <span className="title">{row.original.store_name || '-'}</span>
-                <span className="des">Since {formattedDate}</span>
+                <div className="des">
+                  {row.original.email && (
+                    <div>
+                      <b><i className="adminlib-mail"></i></b> {row.original.email}
+                    </div>
+                  )}
+                  {row.original.phone && (
+                    <div>
+                      <b><i className="adminlib-form-phone"></i></b>
+                      {row.original.phone ? row.original.phone : '-'}
+                    </div>
+                  )}
+                </div>
               </div>
             </a>
           </TableCell>
         );
       },
     },
-    {
-      header: __('Contact', 'multivendorx'),
-      cell: ({ row }) => (
-        <TableCell title={row.original.email || ''}>
-          <div className="table-content">
-            {row.original.email && (
-              <div>
-                <b><i className="adminlib-mail"></i></b> {row.original.email}
-              </div>
-            )}
-            {row.original.phone && (
-              <div>
-                <b><i className="adminlib-form-phone"></i></b>
-                {row.original.phone ? row.original.phone : '-'}
-              </div>
-            )}
-          </div>
-        </TableCell>
-      ),
-    },
+    // {
+    //   header: __('Contact', 'multivendorx'),
+    //   cell: ({ row }) => (
+    //     <TableCell title={row.original.email || ''}>
+    //       <div className="table-content">
+
+    //       </div>
+    //     </TableCell>
+    //   ),
+    // },
     {
       // id: 'primary_owner',
       // accessorKey: 'primary_owner',
@@ -363,6 +365,7 @@ const Transactions: React.FC = () => {
         return (
           <TableCell title={`${status} - ${formattedDate}`}>
             {getStatusBadge(status)}
+            <div className="des">Since {formattedDate}</div>
           </TableCell>
         );
       },
@@ -426,7 +429,7 @@ const Transactions: React.FC = () => {
   return (
     <>
       <div className="row">
-        <div className="col">
+        <div className="column transparent">
           <div className="analytics-container report">
             {overviewData.map((item, idx) => (
               <div key={idx} className="analytics-item">

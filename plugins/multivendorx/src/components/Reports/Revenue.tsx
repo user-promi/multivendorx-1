@@ -511,13 +511,13 @@ const Revenue: React.FC = () => {
               <span className="title">
                 {row.original.title}
               </span>
+              <div className="des">{row.original.sku}</div>
             </div>
           </a>
         </TableCell>
       ),
     },
     { header: __("Store", "multivendorx"), cell: ({ row }) => <TableCell>{row.original.store_name}</TableCell> },
-    { header: __("SKU", "multivendorx"), cell: ({ row }) => <TableCell>{row.original.sku}</TableCell> },
     { header: __("Items sold", "multivendorx"), cell: ({ row }) => <TableCell>{row.original.itemsSold}</TableCell> },
     { header: __("Net sales", "multivendorx"), cell: ({ row }) => <TableCell>{row.original.netSales}</TableCell> },
     { header: __("Category", "multivendorx"), cell: ({ row }) => <TableCell>{row.original.category}</TableCell> },
@@ -745,7 +745,7 @@ const Revenue: React.FC = () => {
             </LineChart>
           </ResponsiveContainer>
         </div> */}
-        <div className="col">
+        <div className="column transparent">
           <div className="analytics-container report">
             {overview.map((item, idx) => (
               <div key={idx} className="analytics-item">
