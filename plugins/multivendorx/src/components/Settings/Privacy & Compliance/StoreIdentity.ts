@@ -78,8 +78,10 @@ export default {
             requiredEnable: true,
             // name: 'abuse_report_reasons',
             defaultValues: [
-                { value: "Passport",  iconClass: "adminlib-check", description: "Order is received by store", required: true },
-                { value: "Driving licence",  iconClass: "adminlib-clock", description: "Order is being processed",required: true },
+                { value: "Business registration certificate",  iconClass: "adminlib-check", description: "Confirms the store is legally registered as a business entity.", required: true },
+                { value: "Trade license or permit",  iconClass: "adminlib-clock", description: "Validates that the store is authorized to operate and conduct business legally.",required: true },
+                { value: "Address proof of business location",  iconClass: "adminlib-clock", description: "Confirms the store’s physical or operational business address.",required: true },
+            
             ],
             iconOptions: ["adminlib-check", "adminlib-clock", "adminlib-cart", "adminlib-store"], // dropdown options
             maxItems: 10,
