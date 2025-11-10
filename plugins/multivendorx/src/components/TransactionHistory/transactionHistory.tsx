@@ -285,26 +285,28 @@ export const TransactionHistory: React.FC = () => {
                             </div>
 
                             {recentDebits.length > 0 ? (
-                                <div className="column">
+                                <div className="column debit-transactions">
                                     <div className="card-header">
                                         <div className="left">
                                             <div className="title">Recent Debit Transactions</div>
                                         </div>
                                     </div>
-                                    <div className="data-card-wrapper">
+                                    <div className="debit-list">
                                         {recentDebits.map((txn) => (
                                             <div key={txn.id} className="data-card">
                                                 <div className="title">
-                                                    {new Date(txn.date).toLocaleDateString("en-US", {
-                                                        month: "short",
-                                                        day: "2-digit",
-                                                        year: "numeric",
-                                                    })}
+                                                    <div className="name">Bank Transfer</div>
+                                                    <div className="date">
+                                                        {new Date(txn.date).toLocaleDateString("en-US", {
+                                                            month: "short",
+                                                            day: "2-digit",
+                                                            year: "numeric",
+                                                        })} 
+                                                    </div>
                                                 </div>
-
                                                 <div className="number">
                                                     {formatCurrency(txn.balance)}{" "}
-                                                    <span className="txn-status">({txn.status})</span>
+                                                    {/* <span className="admin-badge green">({txn.status})</span> */}
                                                 </div>
                                             </div>
                                         ))}
@@ -323,7 +325,7 @@ export const TransactionHistory: React.FC = () => {
                                 </div>
                             )}
                         </div>
-                        <div className="column">
+                        <div className="column transaction">
                             <div className="card-header">
                                 <div className="left">
                                     <div className="title">
@@ -341,25 +343,25 @@ export const TransactionHistory: React.FC = () => {
                                         <div className="des">
                                             Last withdrawal request:
                                             {formatCurrency(storeData.request_withdrawal_amount)}, is <strong>Pending</strong>.
-                                            <br />
+                                        </div>
+                                        <div className="payout-notice">
+                                            <i className="adminlib-error"></i>
                                             Please clear the pending request before disbursing new payments.
                                         </div>
-                                        <div className="admin-btn btn-purple disabled" style={{ opacity: 0.5, pointerEvents: 'none' }}>
+                                        <div className="admin-btn btn-purple-bg disabled" style={{ opacity: 0.5, pointerEvents: 'none' }}>
                                             Disburse payment
                                         </div>
                                     </>
                                 ) : (
                                     <>
                                         <div className="des">Current available balance ready to transfer, 'Excluding Reserve Balance' {formatCurrency(data.reserve_balance)}</div>
-                                        <div className="admin-btn btn-purple" onClick={() => setRequestWithdrawal(true)}>
+                                        <div className="admin-btn btn-purple-bg" onClick={() => setRequestWithdrawal(true)}>
                                             Disburse payment
                                         </div>
                                     </>
                                 )}
                             </div>
                         </div>
-
-
                     </div>
                 )}
                 {requestWithdrawal && (

@@ -232,7 +232,7 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                             <img src={image} alt={product.name} />
                             <div className="details">
                                 <span className="title">{product.name || '-'}</span>
-                                {product.sku && <span><b>SKU:{product.sku}</b> </span>}
+                                {product.sku && <span className="des">SKU:{product.sku} </span>}
                             </div>
                         </a>
                     </TableCell>
