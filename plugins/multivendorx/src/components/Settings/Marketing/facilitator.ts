@@ -8,17 +8,22 @@ export default {
     icon: 'adminlib-facilitator',
     submitUrl: 'settings',
     moduleEnabled: 'facilitator',
-	proSetting: true,
+    proSetting: true,
     modal: [
-         {
+        {
             key: 'facilitator',
             type: 'select',
-            label: __( 'Facilitators', 'multivendorx' ),
-           settingDescription: __('Assign a user as a facilitator who will receive the facilitator fee.', 'multivendorx'),
-           desc: __('Configure the facilitator fee structure directly from <a href="#">this section</a>.', 'multivendorx'),
-           moduleEnabled: 'facilitator',
-           className:"select-class",
-           size: "40%",
+            label: __('Facilitators', 'multivendorx'),
+            settingDescription: __('Assign a user as a facilitator who will receive the facilitator fee.', 'multivendorx'),
+            desc: __(
+                'Configure the facilitator fee structure directly from <a href="' +
+                appLocalizer.site_url +
+                '/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-commissions">this section</a>.',
+                'multivendorx'
+            ), 
+            moduleEnabled: 'facilitator',
+            className: "select-class",
+            size: "40%",
             options: appLocalizer.facilitators_list,
         },
     ],
