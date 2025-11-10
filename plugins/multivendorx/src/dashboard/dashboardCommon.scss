@@ -36,7 +36,10 @@ body{
     background: var(--themeColor) !important;
     color: #fff;
 }
-
+.btn-white{
+    background: #fff;
+    color: var(--themeColor);
+}
 // no permission section start
 .permission-wrapper {
     height: 80vh;
