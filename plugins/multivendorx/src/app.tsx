@@ -120,7 +120,6 @@ const Route = () => {
       {tab === 'knowledgebase' && <Knowledgebase />}
       {tab === 'transaction-history' && <TransactionHistory />}
       {tab === 'blogs' && <Blogs />}
-      {tab === 'setup' && <SetupWizard />}
       {tab === 'reports' && <Analytics />}
       {tab === 'advertisement' && <Advertisement />}
       {tab === 'help-support' && <HelpSupport />}

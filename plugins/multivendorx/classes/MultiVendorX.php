@@ -73,8 +73,12 @@ final class MultiVendorX
      */
     public function activate()
     {
-        update_option('multivendorx_installed', 1);
         $this->container['install'] = new Install();
+
+        if ( ! get_option( 'multivendorx_installed' ) ) {
+            add_option( 'multivendorx_installed', true );
+            add_option( 'multivendorx_plugin_activated', true );
+        }
     }
 
     /**
@@ -108,6 +112,9 @@ final class MultiVendorX
     {
         $this->load_plugin_textdomain();
         $this->init_classes();
+
+        add_action( 'init', array( $this, 'multivendorx_register_setup_wizard' ) );
+
         add_filter('woocommerce_email_classes', array($this, 'setup_email_class'));
 
         do_action('multivendorx_loaded');
@@ -149,6 +156,15 @@ final class MultiVendorX
 
         flush_rewrite_rules();
 
+    }
+
+    public function multivendorx_register_setup_wizard() {
+        new SetupWizard();
+        if ( get_option( 'multivendorx_plugin_activated' ) ) {
+            delete_option( 'multivendorx_plugin_activated' );
+            wp_safe_redirect( admin_url( 'admin.php?page=multivendorx-setup' ) );
+            exit;
+        }
     }
 
     /**
