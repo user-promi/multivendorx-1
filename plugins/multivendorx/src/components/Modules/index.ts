@@ -562,7 +562,7 @@ export default {
         {
             id: 'geo-my-wp',
             name: __('GEOmyWP', 'multivendorx'),
-            desc: "Adds product location data so customers can search by proximity.",
+            desc: "Lets stores pinpoint their location on an interactive map, making it easy for customers to discover nearby stores",
             icon: 'adminlib-geo-my-wp',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/geo-my-wp',
             pro_module: true,
