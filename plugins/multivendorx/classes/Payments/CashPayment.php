@@ -16,7 +16,7 @@ class CashPayment {
 
     public function get_settings() {
         return [
-            'icon'      => 'adminlib-payment',
+            'icon'      => 'adminlib-cash',
             'id'        => $this->get_id(),
             'label'     => 'Cash',
             'enableOption' => true,

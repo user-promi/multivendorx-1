@@ -171,7 +171,7 @@ const TopSellers: React.FC = () => {
                                             (window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
                                         }
                                     >
-                                        <i className="adminlib-eye"></i>
+                                        <i className="adminlib-preview"></i>
                                         {__('View Store', 'multivendorx')}
                                     </li>
                                     <li
@@ -179,7 +179,7 @@ const TopSellers: React.FC = () => {
                                             (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
                                         }
                                     >
-                                        <i className="adminlib-create"></i>
+                                        <i className="adminlib-edit"></i>
                                         {__('Edit Store', 'multivendorx')}
                                     </li>
                                 </ul>

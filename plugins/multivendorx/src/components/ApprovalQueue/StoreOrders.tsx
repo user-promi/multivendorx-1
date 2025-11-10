@@ -309,7 +309,7 @@ const StoreOrders: React.FC<Props> = ({ onUpdated }) => {
               actions: [
                 {
                   label: __('View Order', 'multivendorx'),
-                  icon: 'adminlib-eye',
+                  icon: 'adminlib-preview',
                   onClick: () => {
                     window.open(orderUrl, '_blank', 'noopener,noreferrer');
                   },

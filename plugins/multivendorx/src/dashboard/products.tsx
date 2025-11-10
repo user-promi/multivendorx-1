@@ -332,7 +332,7 @@ const AllProduct: React.FC = () => {
                         actions: [
                             {
                                 label: __('Edit', 'multivendorx'),
-                                icon: 'adminlib-create',
+                                icon: 'adminlib-edit',
                                 onClick: (rowData) => {
                                     window.location.href = `${appLocalizer.add_product_link}/${rowData.id}`;
                                 },
@@ -340,7 +340,7 @@ const AllProduct: React.FC = () => {
                             },
                             {
                                 label: __('View', 'multivendorx'),
-                                icon: 'adminlib-eye',
+                                icon: 'adminlib-preview',
                                 onClick: (rowData) => {
                                     window.location.href = `${row.original.permalink}`;
                                 },

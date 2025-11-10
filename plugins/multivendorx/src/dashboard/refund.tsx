@@ -247,7 +247,7 @@ const Refund: React.FC = () => {
                         actions: [
                             {
                                 label: __('View', 'multivendorx'),
-                                icon: 'adminlib-eye',
+                                icon: 'adminlib-preview',
                                 hover: true,
                                 onClick: (rowData) => handleViewDetails(rowData),
                             },

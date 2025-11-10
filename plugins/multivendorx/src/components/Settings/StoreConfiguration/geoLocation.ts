@@ -1,6 +1,4 @@
 import { __ } from '@wordpress/i18n';
-import google from '../../../assets/images/google.png';
-import mapbox from '../../../assets/images/mapbox-logo.png';
 
 export default {
     id: 'geolocation',
@@ -47,13 +45,13 @@ export default {
                     key: 'google_map_set',
                     label: __('Google', 'multivendorx'),
                     value: __('google_map_set', 'multivendorx'),
-                    img: google,
+                    icon: 'adminlib-google',
                 },
                 {
                     key: 'mapbox_api_set',
                     label: __('Mapbox', 'multivendorx'),
                     value: __('mapbox_api_set', 'multivendorx'),
-                    img: mapbox,
+                    icon: 'adminlib-mapbox',
                 },
             ],
             moduleEnabled: 'geo-location',
@@ -81,7 +79,7 @@ export default {
                 '<a href="https://docs.mapbox.com/help/getting-started/access-tokens/" target="_blank">Click here to generate access token.</a>',
                 'multivendorx'
             ),
-			moduleEnabled: 'geo-location',
+            moduleEnabled: 'geo-location',
             dependent: {
                 key: 'choose_map_api',
                 set: true,

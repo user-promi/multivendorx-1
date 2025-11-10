@@ -5,7 +5,7 @@ export default {
     priority: 6,
     name: __('Min/Max Quantities', 'multivendorx'),
     desc: __('Set purchase limits to control inventory and bulk ordering.', 'multivendorx'),
-    icon: 'adminlib-form-section',
+    icon: 'adminlib-min-max',
     submitUrl: 'settings',
     modal: [
         {

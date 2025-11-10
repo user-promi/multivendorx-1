@@ -252,7 +252,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
                   {messagesLink && (
                     <div className="footer">
                       <a href={messagesLink} className="admin-btn btn-purple">
-                        <i className="adminlib-eye"></i> View all messages
+                        <i className="adminlib-preview"></i> View all messages
                       </a>
                     </div>
                   )}

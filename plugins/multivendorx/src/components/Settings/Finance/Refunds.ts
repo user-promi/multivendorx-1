@@ -8,7 +8,7 @@ export default {
         'Control refund rules, eligibility stages, and valid claim periods.',
         'multivendorx'
     ),
-    icon: 'adminlib-order',
+    icon: 'adminlib-marketplace-refund',
     submitUrl: 'settings',
     modal: [
         {

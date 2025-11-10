@@ -18,7 +18,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import React, { useState, useEffect } from "react";
 import "../components/dashboard.scss";
 import '../dashboard/dashboard1.scss';
-import Mascot from "../assets/images/multivendorx-mascot-scaled.png";
+import Mascot from "../assets/images/multivendorx-mascot-scale.png";
 
 type StoreRow = {
   id?: number;

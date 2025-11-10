@@ -638,7 +638,7 @@ const Commission: React.FC = () => {
                         actions: [
                             {
                                 label: __('View Commission', 'multivendorx'),
-                                icon: 'adminlib-eye',
+                                icon: 'adminlib-preview',
                                 onClick: (rowData: any) => {
                                     setSelectedCommissionId(rowData.id ?? null);
                                     setViewCommission(true);
