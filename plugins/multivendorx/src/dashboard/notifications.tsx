@@ -79,6 +79,12 @@ const Notifications = () => {
                         )}
                     </ul>
                 </div>
+                <div className="footer">
+                    <a href={appLocalizer.view_notifications_link}
+                        className="admin-btn btn-purple">
+                        <i className="adminlib-eye"></i> View all notifications
+                    </a>
+                </div>
             </div>
         </>
     )

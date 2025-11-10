@@ -114,7 +114,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
             return rest_ensure_response( count( $refund_ids ) );
         }
 
-        // ⚙️ Build full query (for listing)
+        //Build full query (for listing)
         $args = [
             'type'        => 'shop_order_refund',
             'meta_query'  => $meta_query,
@@ -162,25 +162,40 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
         $refund_list = array_map( function( $refund ) {
             /** @var WC_Order_Refund $refund */
             $store_id = $refund->get_meta( 'multivendorx_store_id' );
-            $store      = new Store( $store_id );
+            $store    = new Store( $store_id );
             $store_name = $store ? $store->get('name') : '';
-
+        
             $order = wc_get_order( $refund->get_parent_id() );
-            return [
-                'refund_id'      => $refund->get_id(),
-                'store_id'       => $store_id,
-                'store_name'     => $store_name,
-                'order_id'       => $refund->get_parent_id(),
-                'amount'         => $refund->get_amount(),
-                'reason'         => $refund->get_reason(),
-                'currency'       => $refund->get_currency(),
-                'date'           => $refund->get_date_created() ? $refund->get_date_created()->date_i18n( 'Y-m-d H:i:s' ) : '',
-                'status'         => $refund->get_status(),
-                'customer_name'  => $order ? $order->get_formatted_billing_full_name() : '',
-                'customer_email' => $order ? $order->get_billing_email() : '',
-            ];
+        
+            $customer_id    = $order ? $order->get_customer_id() : 0;
+            $customer_name  = $order ? $order->get_formatted_billing_full_name() : '';
+            $customer_email = $order ? $order->get_billing_email() : '';
+        
+            // Build admin edit link if the customer exists
+            $customer_edit_link = $customer_id
+                ? admin_url( 'user-edit.php?user_id=' . $customer_id )
+                : '';
+        
+                return [
+                    'refund_id'           => $refund->get_id(),
+                    'store_id'            => $store_id,
+                    'store_name'          => $store_name,
+                    'order_id'            => $refund->get_parent_id(),
+                    'amount'              => $refund->get_amount(),
+                    'reason'              => $refund->get_reason(),
+                    'customer_reason'     => $order ? $order->get_meta( '_customer_refund_reason', true ) : '',
+                    'currency'            => $refund->get_currency(),
+                    'date'                => $refund->get_date_created()
+                                                ? $refund->get_date_created()->date_i18n( 'Y-m-d H:i:s' )
+                                                : '',
+                    'status'              => $refund->get_status(),
+                    'customer_id'         => $customer_id,
+                    'customer_name'       => $customer_name,
+                    'customer_email'      => $customer_email,
+                    'customer_edit_link'  => $customer_edit_link,
+                ];          
         }, $refunds );
-
+        
         //Sort by order_id manually if needed
         if ( $order_by === 'order_id' ) {
             usort( $refund_list, fn( $a, $b ) => ( $order === 'ASC' ? $a['order_id'] <=> $b['order_id'] : $b['order_id'] <=> $a['order_id'] ) );

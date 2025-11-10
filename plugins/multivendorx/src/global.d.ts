@@ -13,7 +13,7 @@ declare global {
         restUrl: string;
         nonce: string;
         woo_nonce:string,
-        khali_dabba: boolean;
+        khali_dabba: any;
         tab_name: string;
         settings_databases_value: any;
         pages_list: any;
@@ -49,6 +49,7 @@ declare global {
         decimals:any;
         edit_order_capability:any;
         add_product_link:any;
+        view_notifications_link:any;
         map_providor:any;
         google_api_key:any;
         mapbox_api_key:any;

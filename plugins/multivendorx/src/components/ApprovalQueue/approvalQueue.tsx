@@ -26,7 +26,7 @@ const ApprovalQueue = () => {
                 axios.get(getApiLink(appLocalizer, 'store'), { params: { count: true, status: 'pending' }, headers: { 'X-WP-Nonce': appLocalizer.nonce } }),
                 axios.get(`${appLocalizer.apiUrl}/wc/v3/products`, { params: { per_page: 1, meta_key: 'multivendorx_store_id', status: 'pending' }, headers: { 'X-WP-Nonce': appLocalizer.nonce } }),
                 axios.get(`${appLocalizer.apiUrl}/wc/v3/coupons`, { params: { per_page: 1, meta_key: 'multivendorx_store_id', status: 'pending' }, headers: { 'X-WP-Nonce': appLocalizer.nonce } }),
-                axios.get(`${appLocalizer.apiUrl}/wc/v3/orders`, { params: { meta_key: 'multivendorx_store_id', refund_status: 'refund_request' }, headers: { 'X-WP-Nonce': appLocalizer.nonce } }),
+                axios.get(`${appLocalizer.apiUrl}/wc/v3/orders`, { params: { meta_key: 'multivendorx_store_id', status: 'refund-requested' }, headers: { 'X-WP-Nonce': appLocalizer.nonce } }),
                 axios.get(getApiLink(appLocalizer, 'report-abuse'), { params: { count: true }, headers: { 'X-WP-Nonce': appLocalizer.nonce } }),
                 axios.get(getApiLink(appLocalizer, 'store'), { params: { count: true, pending_withdraw: true }, headers: { 'X-WP-Nonce': appLocalizer.nonce } })
             ]);

@@ -8,7 +8,7 @@ import {
     PaginationState,
 } from '@tanstack/react-table';
 
-type NotificationStore = {
+type ActivitiesStore = {
     id?: number;
     store_name?: string;
     title?: string;
@@ -16,9 +16,9 @@ type NotificationStore = {
     date?: string; // Add date field
 };
 
-const NotificationTable = React.FC = () => {
+const ActivitiesTable = React.FC = () => {
 
-    const [data, setData] = useState<NotificationStore[] | null>(null);
+    const [data, setData] = useState<ActivitiesStore[] | null>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
     const [pagination, setPagination] = useState<PaginationState>({
@@ -34,7 +34,7 @@ const NotificationTable = React.FC = () => {
             method: 'GET',
             url: getApiLink(appLocalizer, 'notifications'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true, notification: true },
+            params: { count: true, store_id: appLocalizer?.store_id },
         })
             .then((response) => {
                 setTotalRows(response.data || 0);
@@ -44,7 +44,7 @@ const NotificationTable = React.FC = () => {
                 setError(__('Failed to load total rows', 'multivendorx'));
             });
     }, []);
-console.log(data)
+
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
         const rowsPerPage = pagination.pageSize;
@@ -67,7 +67,7 @@ console.log(data)
                 page: currentPage,
                 row: rowsPerPage,
                 filter_status: typeCount === 'all' ? '' : typeCount,
-                notification: true
+                store_id: appLocalizer?.store_id
             },
         })
             .then((response) => {
@@ -94,7 +94,7 @@ console.log(data)
     };
 
     // Column definitions with sorting enabled
-    const columns: ColumnDef<NotificationStore>[] = [
+    const columns: ColumnDef<ActivitiesStore>[] = [
         {
             id: 'select',
             header: ({ table }) => (
@@ -110,14 +110,6 @@ console.log(data)
                     checked={row.getIsSelected()}
                     onChange={row.getToggleSelectedHandler()}
                 />
-            ),
-        },
-        {
-            header: __('Store Name', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.store_name || ''}>
-                    {row.original.store_name || ''}
-                </TableCell>
             ),
         },
         {
@@ -177,4 +169,4 @@ console.log(data)
         );
 }
 
-export default NotificationTable;
+export default ActivitiesTable;

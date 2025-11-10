@@ -292,6 +292,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             if( $follower ){
                 return $this->get_store_follower( $request );
             }
+
             $count          = $request->get_param( 'count' );
 
             if ( $count ) {
@@ -413,12 +414,18 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             $all = StoreUtil::get_store_information(['count' => true]);
             $active = StoreUtil::get_store_information(['status' => 'active','count' => true]);
             $pending = StoreUtil::get_store_information(['status' => 'pending','count' => true]);
+            $under_review = StoreUtil::get_store_information(['status' => 'under_review','count' => true]);
+            $suspended = StoreUtil::get_store_information(['status' => 'suspended','count' => true]);
+            $deactivated= StoreUtil::get_store_information(['status' => 'deactivated','count' => true]);
 
             $response = [
                 'stores'  => $formatted_stores,
                 'all'     => $all,
                 'active'  => $active,
                 'pending' => $pending,
+                'under_review'=>$under_review,
+                'suspended'=>$suspended,
+                'deactivated'=>$deactivated,
             ];
             return rest_ensure_response( $response);
 
@@ -611,6 +618,17 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             'store_email'   => $store_email,
             'store_id'      => $insert_id,
             'category'   => 'activity'
+        ];
+    
+        do_action('multivendorx_notify_new_store_approval', 'new_store_approval', $parameters);
+
+        $admin_email = get_option('admin_email');
+        $store_email = 'test@gmail.com';
+        $parameters = [
+            'admin_email'   => $admin_email,
+            'store_email'   => $store_email,
+            'store_id'      => $insert_id,
+            'category'   => 'notification'
         ];
     
         do_action('multivendorx_notify_new_store_approval', 'new_store_approval', $parameters);

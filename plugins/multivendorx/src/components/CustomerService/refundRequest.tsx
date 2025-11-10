@@ -73,39 +73,14 @@ const RefundRequest: React.FC = () => {
             .catch(() => {
                 setError(__('Failed to load total rows', 'multivendorx'));
             });
-    }, [pagination.pageSize]);
+    }, []);
 
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
         const rowsPerPage = pagination.pageSize;
         requestData(rowsPerPage, currentPage);
         setPageCount(Math.ceil(totalRows / rowsPerPage));
-    }, [pagination, totalRows]);
-
-    // Handle View Details - Redirect to order page
-    const handleViewDetails = (rowData: RefundRow) => {
-        setSelectedRefund(rowData);
-        setRejectReason("");
-    };
-
-    // Handle Approve Refund
-    const handleApproveRefund = async (rowData: RefundRow) => {
-        try {
-            await updateRefundStatus(rowData.id, 'approved');
-            // Refresh data after approval
-            const currentPage = pagination.pageIndex + 1;
-            const rowsPerPage = pagination.pageSize;
-            requestData(rowsPerPage, currentPage);
-        } catch (err) {
-            console.error('Error approving refund:', err);
-        }
-    };
-
-    // Handle Reject Refund - Open popup instead of immediate rejection
-    const handleRejectRefund = (rowData: RefundRow) => {
-        setSelectedRefund(rowData);
-        setRejectReason("");
-    };
+    }, []);
 
     // Handle reject with reason
     const handleRejectWithReason = async () => {
@@ -202,19 +177,54 @@ const RefundRequest: React.FC = () => {
         },
         {
             header: __('Customer', 'multivendorx'),
-            cell: ({ row }: any) => (
-                <TableCell title={row.original.customer_name || ''}>
-                    {row.original.customer_name || '-'}
-                </TableCell>
-            ),
+            cell: ({ row }: any) => {
+                const name = row.original.customer_name?.trim();
+                const link = row.original.customer_edit_link;
+
+                return (
+                    <TableCell title={name || '-'}>
+                        {name
+                            ? link
+                                ? <a
+                                    href={link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-blue-600 hover:underline"
+                                >
+                                    {name}
+                                </a>
+                                : name
+                            : '-'}
+                    </TableCell>
+                );
+            },
         },
         {
             header: __('Store', 'multivendorx'),
-            cell: ({ row }: any) => (
-                <TableCell title={row.original.store_name || ''}>
-                    {row.original.store_name || '-'}
-                </TableCell>
-            ),
+            cell: ({ row }) => {
+                const { store_id, store_name } = row.original;
+                const baseUrl = `${window.location.origin}/wp-admin/admin.php?page=multivendorx#&tab=stores`;
+                const storeLink = store_id
+                    ? `${baseUrl}&edit/${store_id}/&subtab=store-overview`
+                    : '#';
+
+                return (
+                    <TableCell title={store_name || ''}>
+                        {store_id ? (
+                            <a
+                                href={storeLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-purple-600 hover:underline"
+                            >
+                                {store_name || '-'}
+                            </a>
+                        ) : (
+                            store_name || '-'
+                        )}
+                    </TableCell>
+                );
+            },
         },
         {
             header: __('Refund Amount', 'multivendorx'),
@@ -227,8 +237,8 @@ const RefundRequest: React.FC = () => {
         {
             header: __('Refund Reason', 'multivendorx'),
             cell: ({ row }: any) => (
-                <TableCell title={row.original.reason || ''}>
-                    {row.original.reason || '-'}
+                <TableCell title={row.original.customer_reason || ''}>
+                    {row.original.customer_reason || '-'}
                 </TableCell>
             ),
         },
@@ -260,38 +270,38 @@ const RefundRequest: React.FC = () => {
                 return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
             },
         },
-        {
-            id: 'action',
-            header: __('Action', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell
-                    type="action-dropdown"
-                    rowData={row.original}
-                    header={{
-                        actions: [
-                            {
-                                label: __('View', 'multivendorx'),
-                                icon: 'adminlib-preview',
-                                hover: true,
-                                onClick: (rowData) => handleViewDetails(rowData),
-                            },
-                            {
-                                label: __('Approve', 'multivendorx'),
-                                icon: 'adminlib-check',
-                                hover: true,
-                                onClick: (rowData) => handleApproveRefund(rowData),
-                            },
-                            {
-                                label: __('Reject', 'multivendorx'),
-                                icon: 'adminlib-close',
-                                hover: true,
-                                onClick: (rowData) => handleRejectRefund(rowData),
-                            },
-                        ],
-                    }}
-                />
-            ),
-        },
+        // {
+        //     id: 'action',
+        //     header: __('Action', 'multivendorx'),
+        //     cell: ({ row }) => (
+        //         <TableCell
+        //             type="action-dropdown"
+        //             rowData={row.original}
+        //             header={{
+        //                 actions: [
+        //                     {
+        //                         label: __('View', 'multivendorx'),
+        //                         icon: 'adminlib-eye',
+        //                         hover: true,
+        //                         onClick: (rowData) => handleViewDetails(rowData),
+        //                     },
+        //                     {
+        //                         label: __('Approve', 'multivendorx'),
+        //                         icon: 'adminlib-check',
+        //                         hover: true,
+        //                         onClick: (rowData) => handleApproveRefund(rowData),
+        //                     },
+        //                     {
+        //                         label: __('Reject', 'multivendorx'),
+        //                         icon: 'adminlib-close',
+        //                         hover: true,
+        //                         onClick: (rowData) => handleRejectRefund(rowData),
+        //                     },
+        //                 ],
+        //             }}
+        //         />
+        //     ),
+        // },
     ];
 
     // Fetch data from backend
@@ -449,69 +459,6 @@ const RefundRequest: React.FC = () => {
                 perPageOption={[10, 25, 50]}
                 totalCounts={totalRows}
             />
-
-            {/* Reject Refund Popup */}
-            {selectedRefund && (
-                <CommonPopup
-                    open={!!selectedRefund}
-                    onClose={() => setSelectedRefund(null)}
-                    width="500px"
-                    header={
-                        <>
-                            <div className="title">
-                                <i className="adminlib-close"></i>
-                                Reject Refund Request
-                            </div>
-                            <p>Provide a reason for rejecting this refund request. The customer will be notified with this reason.</p>
-                        </>
-                    }
-                    footer={
-                        <>
-                            <button
-                                type="button"
-                                onClick={() => setSelectedRefund(null)}
-                                className="admin-btn btn-red"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={handleRejectWithReason}
-                                disabled={rejecting || !rejectReason.trim()}
-                                className="admin-btn btn-purple"
-                            >
-                                {rejecting ? "Rejecting..." : "Reject Refund"}
-                            </button>
-                        </>
-                    }
-                >
-                    <div className="content">
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="rejectReason">
-                                    Rejection Reason
-                                </label>
-                                <TextArea
-                                    name="rejectReason"
-                                    inputClass="textarea-input"
-                                    value={rejectReason}
-                                    onChange={(e) => setRejectReason(e.target.value)}
-                                    placeholder="Enter reason for rejecting this refund request..."
-                                />
-                            </div>
-                            <div className="form-group">
-                                <div className="refund-details">
-                                    <strong>Store:</strong> {selectedRefund.store_name}<br />
-                                    <strong>Order ID:</strong> {selectedRefund.orderNumber}<br />
-                                    <strong>Customer:</strong> {selectedRefund.customer}<br />
-                                    <strong>Amount:</strong> <span dangerouslySetInnerHTML={{ __html: selectedRefund.amount }} /><br />
-                                    <strong>Original Reason:</strong> {selectedRefund.reason}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </CommonPopup>
-            )}
-
         </>
     );
 };
