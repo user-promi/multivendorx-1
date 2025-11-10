@@ -382,9 +382,11 @@
         .tab-action {
             width: 24%;
             box-sizing: border-box;
+            transition: all 0.4s ease;
 
 
-            &.active {
+            &.active,
+            &:hover {
                 background: $theme-color;
                 color: #fff;
 

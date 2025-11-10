@@ -174,7 +174,7 @@
     // padding-top: 1.313rem;
     margin-bottom: 2.5rem;
     padding-bottom: 0.5rem;
-    border-bottom: $border-light-small;
+    // border-bottom: $border-light-small;
 
     .title {
         padding-bottom: 0.313rem;
@@ -189,6 +189,7 @@
         // border-radius: 0.313rem;
         min-width: 10%;
         // border-radius: 0.313rem;
+        transition: all 0.4s ease;
 
 
         .icon {
@@ -207,12 +208,14 @@
             }
         }
 
-        &.active {
-            color: $theme-color;
-            border-bottom: 0.126rem solid $theme-color;
+        &.active,
+        &:hover {
+            color: #fff;
+            // border-bottom: 0.126rem solid $theme-color;
+            background: $theme-color;
 
             p {
-                color: $theme-color;
+                color: #fff;
             }
         }
     }
