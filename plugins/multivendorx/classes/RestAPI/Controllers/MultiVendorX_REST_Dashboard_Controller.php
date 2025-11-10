@@ -267,6 +267,14 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
                 // ),
                 'capability' => array('manage_products'),
             ),
+
+            'view-notifications' => array(
+                'name' => '',
+                'icon' => '',
+                'slug' => 'view-notifications',
+                'submenu' => array(),
+                'capability' => array('edit_products'),
+            ),
         );
 
         $saved_endpoints = MultiVendorX()->setting->get_setting('menu_manager');

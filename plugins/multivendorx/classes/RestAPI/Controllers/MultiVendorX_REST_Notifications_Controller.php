@@ -156,7 +156,12 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
         $count = $request->get_param( 'count' );
 
         if ( $count ) {
-            return MultiVendorX()->notifications->get_all_notifications(null, ['count' => true, 'category' => $request->get_param('notification') ? 'notification' : 'activity']);
+            return MultiVendorX()->notifications->get_all_notifications(null, 
+                    [
+                        'count' => true, 
+                        'category' => $request->get_param('notification') ? 'notification' : 'activity',
+                        'store_id'  => $request->get_param('store_id') ?: ''
+                    ]);
         }
 
         $limit          = max( intval( $request->get_param( 'row' ) ), 10 );
@@ -166,7 +171,8 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
         $args = [
             'limit'  => $limit,
             'offset' => $offset,
-            'category' => $request->get_param('notification') ? 'notification' : 'activity'
+            'category' => $request->get_param('notification') ? 'notification' : 'activity',
+            'store_id'  => $request->get_param('store_id') ?: ''
         ];
 
         $all_notifications = MultiVendorX()->notifications->get_all_notifications(null, $args);

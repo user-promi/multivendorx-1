@@ -878,8 +878,10 @@ class Notifications
             if ( isset( $args['category'] ) ) {
                 $where[] = "category = '" . esc_sql( $args['category'] ) . "'";
             }
-        
-            
+
+            if ( isset( $args['store_id'] ) ) {
+                $where[] = "store_id = '" . esc_sql( $args['store_id'] ) . "'";
+            }   
         
             if ( isset( $args['start_date'] ) && isset( $args['end_date'] ) ) {
                 $where[] = "create_time BETWEEN '" . esc_sql( $args['start_date'] ) . "' AND '" . esc_sql( $args['end_date'] ) . "'";

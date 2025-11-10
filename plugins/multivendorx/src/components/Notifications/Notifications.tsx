@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { CommonPopup, getApiLink, Tabs } from 'zyra';
-import axios from 'axios';
+import { Tabs } from 'zyra';
 import { Link, useLocation } from 'react-router-dom';
 import NotificationTable from './NotificationTable';
 import ActivityTable from './ActivityTable';
