@@ -482,9 +482,9 @@ const Notification: React.FC = () => {
                         <>
                             <div className="title">
                                 <i className="adminlib-cart"></i>
-                                Manage Recipients
+                                Notification preferences
                             </div>
-                            <p>Edit and control notification recipients for this event.</p>
+                            <p>Edit and control notification method and recipients for this event.</p>
                             <i
                                 className="icon adminlib-close"
                                 onClick={() => setEditingNotification(null)}
@@ -494,7 +494,7 @@ const Notification: React.FC = () => {
                 >
                     <div className="content">
                         <div className="title">
-                            System
+                            Delivery method
                         </div>
                         <div className="drawer-recipients">
                             {Object.entries(notifications.find(n => n.id === editingNotification)?.channels || {}).map(
@@ -517,7 +517,7 @@ const Notification: React.FC = () => {
                                                 </span>
                                                 <div className="details">
                                                     <span>{label}</span>
-                                                    <div className="description">Lorem, ipsum.</div>
+                                                    
                                                 </div>
                                                 <i onClick={() => toggleChannel(editingNotification, channel)} className={enabled ? 'adminlib-eye' : 'adminlib-eye-blocked'}></i>
                                             </div>
