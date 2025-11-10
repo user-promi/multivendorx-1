@@ -31,7 +31,7 @@ class Admin {
         return [
             [
                 'id' => 'zone-wise-shipping',
-                'icon' => 'adminlib-google',
+                'icon' => 'adminlib-zone-wise-shipping',
                 'label' => 'Zone based shipping',
                 'openForm' => true,
                 'desc' => 'Stores set different rates for different regions (like "East Coast" or "California").',
@@ -52,7 +52,7 @@ class Admin {
             ],
             [
                 'id' => 'country-wise-shipping',
-                'icon' => 'adminlib-twitter',
+                'icon' => 'adminlib-country-shipping',
                 'label' => 'Country-wise shipping',
                 'openForm' => true,
                 'desc' => 'Let store set specific shipping rates based on destination countries.',
@@ -61,7 +61,7 @@ class Admin {
             ],
             [
                 'id' => 'distance-based-shipping',
-                'icon' => 'adminlib-facebook',
+                'icon' => 'adminlib-distance-shipping',
                 'label' => 'Distance-based shipping',
                 'openForm' => true,
                 'desc' => 'Calculate shipping costs based on actual distance between locations.',

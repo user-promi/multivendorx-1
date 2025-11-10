@@ -49,19 +49,19 @@ const profileItems = [
   // },
   {
     title: "What's New",
-    icon: "adminlib-bell",
+    icon: "adminlib-new",
     link: "https://multivendorx.com/latest-release/?utm_source=settings&utm_medium=plugin&utm_campaign=promotion",
     targetBlank: true,
   },
   {
     title: "Get Support",
-    icon: "adminlib-support",
+    icon: "adminlib-customer-support",
     link: "https://multivendorx.com/support-forum/?utm_source=settings&utm_medium=plugin&utm_campaign=promotion",
     targetBlank: true,
   },
   {
     title: "Community",
-    icon: "adminlib-user",
+    icon: "adminlib-global-community",
     link: "https://multivendorx.com/community/?utm_source=settings&utm_medium=plugin&utm_campaign=promotion",
     targetBlank: true,
   },
@@ -79,7 +79,7 @@ const profileItems = [
   // },
   {
     title: "Request a Feature",
-    icon: "adminlib-plus-circle",
+    icon: "adminlib-blocks",
     link: "https://github.com/multivendorx/multivendorx/issues",
     targetBlank: true,
   },

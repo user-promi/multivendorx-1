@@ -18,7 +18,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import React, { useState, useEffect } from "react";
 import "../components/dashboard.scss";
 import '../dashboard/dashboard1.scss';
-import Mascot from "../assets/images/multivendorx-mascot-scaled.png";
+import Mascot from "../assets/images/multivendorx-mascot-scale.png";
 
 type StoreRow = {
   id?: number;
@@ -116,7 +116,7 @@ const Dashboard: React.FC = () => {
               </div>
               <div className="details">58% of sales target</div>
             </div>
-            <div className="admin-btn btn-purple">
+            <div className="admin-btn btn-purple-bg">
               View Details
             </div>
 

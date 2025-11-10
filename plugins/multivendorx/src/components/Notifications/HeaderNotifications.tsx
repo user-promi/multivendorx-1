@@ -80,7 +80,7 @@ const HeaderNotifications = () => {
                 <div className="footer">
                     <a href={`?page=multivendorx#&tab=notifications`}
                         className="admin-btn btn-purple">
-                        <i className="adminlib-eye"></i> View all notifications
+                        <i className="adminlib-preview"></i> View all notifications
                     </a>
                 </div>
             </div>

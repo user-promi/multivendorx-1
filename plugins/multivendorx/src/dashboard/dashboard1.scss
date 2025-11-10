@@ -2,12 +2,13 @@
 @use './product.scss' as *;
 
 
+
 ul {
     padding: 0;
 }
 
 body:has(#store-dashboard) {
-    background: #f8f7fa;
+    background: #f5f1ff;
     font-family: "Figtree", sans-serif;
     font-weight: 400;
     font-size: 0.95rem;
@@ -27,7 +28,8 @@ a {
     position: fixed;
     left: 0;
     top: 0;
-    background: color-mix(in srgb, var(--themeColor) 15%, transparent);
+    // background: color-mix(in srgb, var(--themeColor) 80%, transparent);
+    background: var(--themeColor);
     // border-right: 0.063rem solid #ebeef2;
     z-index: 9999;
 
@@ -108,7 +110,8 @@ a {
             // }
             &.active {
                 background: var(--themeColor);
-                border-right: 0.25rem solid var(--themeColor); color: #fff;
+                border-right: 0.25rem solid var(--themeColor);
+                color: #fff;
 
                 a {
                     // background-color: var(--themeColor);
@@ -125,11 +128,13 @@ a {
     margin: 0 4rem 0 20rem;
 
     .top-navbar-wrapper {
-        position: fixed;
-        width: calc(100% - 24rem);
+        // position: fixed;
+        // width: calc(100% - 24rem);
         // backdrop-filter: saturate(200%) blur(6px);
         z-index: 999;
         padding-top: 1rem;
+        width: 100%;
+        // background: color-mix(in srgb, var(--themeColor) 15%, transparent);
 
         .top-navbar {
             // background: #fff;
@@ -327,8 +332,8 @@ a {
 
     .content-wrapper {
         min-height: 100vh;
-        background-color: #f5f6fa;
-        padding-top: 7rem;
+        // background-color: #f5f6fa;
+        padding-top: 2rem;
         padding-bottom: 4rem;
 
         .title-wrapper {
@@ -370,7 +375,7 @@ a {
 
     .row {
         display: flex;
-        gap: 1.25rem;
+        gap: 2rem;
         padding-bottom: 2rem;
     }
 
@@ -399,6 +404,14 @@ a {
         &.theme-bg {
             // background: color-mix(in srgb, var(--themeColor) 45%, transparent);
         }
+    }
+
+    .w-35 {
+        width: 35%;
+    }
+
+    .w-65 {
+        width: 65%;
     }
 
     .cards {

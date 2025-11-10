@@ -35,7 +35,7 @@ const StoreStatus: React.FC = () => {
                 name: 'Pending Approval',
                 desc: 'New stores waiting for your approval to start selling.',
                 // hideTabHeader: true,
-                icon: 'tools',
+                icon: 'pending',
             },
         },
         {
@@ -45,7 +45,7 @@ const StoreStatus: React.FC = () => {
                 name: 'Rejected',
                 desc: 'Applications needing revision',
                 // hideTabHeader: true,
-                icon: 'tools',
+                icon: 'rejecte',
             },
         },
         {
@@ -55,7 +55,7 @@ const StoreStatus: React.FC = () => {
                 name: 'Permanently Rejected',
                 desc: 'Permanently denied applications.',
                 // hideTabHeader: true,
-                icon: 'form-address',
+                icon: 'rejected',
             },
         },
         {
@@ -69,7 +69,7 @@ const StoreStatus: React.FC = () => {
                 name: 'Active',
                 desc: 'Fully operational stores.',
                 // hideTabHeader: true,
-                icon: 'form-address',
+                icon: 'active',
             },
         },
         {
@@ -79,7 +79,7 @@ const StoreStatus: React.FC = () => {
                 name: 'Under Review',
                 desc: 'Temporary compliance check.',
                 // hideTabHeader: true,
-                icon: 'form-address',
+                icon: 'under-review',
             },
         },
         {
@@ -89,7 +89,7 @@ const StoreStatus: React.FC = () => {
                 name: 'Suspended',
                 desc: 'Policy violation enforcement',
                 // hideTabHeader: true,
-                icon: 'form-address',
+                icon: 'error',
             },
         },
         {
@@ -99,7 +99,7 @@ const StoreStatus: React.FC = () => {
                 name: 'Permanently deactivated',
                 desc: 'Permanently closed stores with no access or privileges.',
                 // hideTabHeader: true,
-                icon: 'form-address',
+                icon: 'close-delete',
             },
         },
     ];

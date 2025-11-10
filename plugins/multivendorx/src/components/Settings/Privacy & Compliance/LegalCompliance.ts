@@ -5,7 +5,7 @@ export default {
     priority: 4,
     name: __('Legal Compliance', 'mvx-pro'),
     desc: __('Stores must submit signed agreements, accept platform terms & conditions, consent to the privacy policy, and set up their refund & return policy. Anti-counterfeit or copyright declarations must be submitted for regulated products.', 'mvx-pro'),
-    icon: 'adminlib-wholesale',
+    icon: 'adminlib-legal-compliance',
     submitUrl: 'settings',
     modal: [
         {
