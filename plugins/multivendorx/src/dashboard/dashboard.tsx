@@ -116,7 +116,7 @@ const Dashboard: React.FC = () => {
               </div>
               <div className="details">58% of sales target</div>
             </div>
-            <div className="admin-btn btn-purple">
+            <div className="admin-btn btn-purple-bg">
               View Details
             </div>
 

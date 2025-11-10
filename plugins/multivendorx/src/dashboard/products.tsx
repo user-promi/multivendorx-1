@@ -692,21 +692,21 @@ const AllProduct: React.FC = () => {
                 </div>
                 <div className="buttons-wrapper">
                     <div
-                        className="admin-btn btn-purple"
+                        className="admin-btn btn-purple-bg"
                         onClick={() => setAddProduct(true)}
                     >
                         <i className="adminlib-import"></i>
                         import
                     </div>
                     <div
-                        className="admin-btn btn-purple"
+                        className="admin-btn btn-purple-bg"
                         onClick={() => setAddProduct(true)}
                     >
                         <i className="adminlib-export"></i>
                         Export
                     </div>
                     <div
-                        className="admin-btn btn-purple"
+                        className="admin-btn btn-purple-bg"
                         onClick={() => window.location.href = appLocalizer.add_product_link}
                     >
                         <i className="adminlib-plus-circle-o"></i>
