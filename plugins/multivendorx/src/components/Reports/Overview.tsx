@@ -1,4 +1,3 @@
-import { ColumnDef } from "@tanstack/react-table";
 import React, { useEffect, useState } from "react";
 import { __ } from '@wordpress/i18n';
 import {
@@ -16,7 +15,6 @@ import {
   Pie,
   Cell,
 } from "recharts";
-import { Table, TableCell } from "zyra";
 import axios from "axios";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
@@ -66,114 +64,7 @@ const products: Product[] = [
     price: "$855552",
   },
 ];
-const demoData: StoreRow[] = [
-  { id: 54211, vendor: "John's Electronics", amount: "$1200", commission: "$120", date: "2025-09-01", status: "Paid" },
-  { id: 84211, vendor: "Jane's Apparel", amount: "$850", commission: "$85", date: "2025-09-02", status: "Unpaid" },
-  { id: 84211, vendor: "Tech Hub", amount: "$2300", commission: "$230", date: "2025-09-03", status: "Paid" },
-  { id: 84211, vendor: "Gadget World", amount: "$670", commission: "$67", date: "2025-09-04", status: "Unpaid" },
-  { id: 84211, vendor: "Fashion Store", amount: "$980", commission: "$98", date: "2025-09-05", status: "Paid" },
-  { id: 64211, vendor: "Mobile Planet", amount: "$1500", commission: "$150", date: "2025-09-06", status: "Unpaid" },
-  { id: 54211, vendor: "Home Essentials", amount: "$720", commission: "$72", date: "2025-09-07", status: "Paid" },
-  { id: 8211, vendor: "Office Supplies Co.", amount: "$430", commission: "$43", date: "2025-09-08", status: "Unpaid" },
-  { id: 4211, vendor: "Luxury Bags", amount: "$1250", commission: "$125", date: "2025-09-09", status: "Paid" },
-  { id: 84211, vendor: "Kitchen King", amount: "$980", commission: "$98", date: "2025-09-10", status: "Unpaid" },
-];
-const columns: ColumnDef<StoreRow>[] = [
-  {
-    id: 'select',
-    header: ({ table }) => (
-      <input
-        type="checkbox"
-        checked={table.getIsAllRowsSelected()}
-        onChange={table.getToggleAllRowsSelectedHandler()}
-      />
-    ),
-    cell: ({ row }) => (
-      <input
-        type="checkbox"
-        checked={row.getIsSelected()}
-        onChange={row.getToggleSelectedHandler()}
-      />
-    ),
-  },
-  {
-    header: __('Product title', 'multivendorx'),
-    cell: ({ row }) => (
-      <TableCell title={row.original.store_name || ''}>
-        #{row.original.id || '-'}
-      </TableCell>
-    ),
-  },
-  {
-    header: __('SKU', 'multivendorx'),
-    cell: ({ row }) => (
-      <TableCell title={row.original.status || ''}>
-        {row.original.status === "Paid" && (
-          <span className="admin-badge green">Paid</span>
-        )}
-        {row.original.status === "Unpaid" && (
-          <span className="admin-badge red">Unpaid</span>
-        )}
-      </TableCell>
-    ),
-  },
-  {
-    header: __('Items sold', 'multivendorx'),
-    cell: ({ row }) => (
-      <TableCell title={row.original.store_slug || ''}>
-        {row.original.date || '-'}
-      </TableCell>
-    ),
-  },
-  {
-    header: __('Net sales', 'multivendorx'),
-    cell: ({ row }) => (
-      <TableCell title={row.original.store_name || ''}>
-        {row.original.vendor || '-'}
-      </TableCell>
-    ),
-  },
-  {
-    header: __('Orders', 'multivendorx'),
-    cell: ({ row }) => (
-      <TableCell title={row.original.store_slug || ''}>
-        {row.original.amount || '-'}
-      </TableCell>
-    ),
-  },
-  {
-    header: __('Category', 'multivendorx'),
-    cell: ({ row }) => (
-      <TableCell title={row.original.store_slug || ''}>
-        {row.original.commission || '-'}
-      </TableCell>
-    ),
-  },
-  {
-    header: __('Variations', 'multivendorx'),
-    cell: ({ row }) => (
-      <TableCell title={row.original.store_slug || ''}>
-        {row.original.amount || '-'}
-      </TableCell>
-    ),
-  },
-  {
-    header: __('Status', 'multivendorx'),
-    cell: ({ row }) => (
-      <TableCell title={row.original.store_slug || ''}>
-        {row.original.commission || '-'}
-      </TableCell>
-    ),
-  },
-  {
-    header: __('Stock', 'multivendorx'),
-    cell: ({ row }) => (
-      <TableCell title={row.original.store_slug || ''}>
-        {row.original.commission || '-'}
-      </TableCell>
-    ),
-  },
-];
+
 const Overview: React.FC<OverviewProps> = ({
   overview,
   data,
