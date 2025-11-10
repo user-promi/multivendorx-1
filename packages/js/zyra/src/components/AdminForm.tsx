@@ -258,7 +258,7 @@ interface InputField {
         sidebarActiveBg?: string;
     };
     modal?: { icon: string; id: string; label: string; connected: boolean; desc: string; formFields: { key: string; type: 'text' | 'password' | 'number' | 'checkbox'; label: string; placeholder?: string }[] }[];
-
+    link?: string;
 }
 
 type Center = {
@@ -993,6 +993,10 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                     proSetting={isProSetting(
                                         inputField.proSetting ?? false
                                     )}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        window.open(inputField.link, '_blank');
+                                    }}
                                 />
                             </div>
                         </div>
@@ -1317,6 +1321,12 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                 )
                             }
                             proChanged={() => setModelOpen(true)}
+                            modules={modules} //Active module list for dependency validation.
+                            moduleChange={(moduleEnabled) => {
+                                moduleEnabledChanged(
+                                    String(moduleEnabled ?? '')
+                                )
+                            }}
                         />
                     );
                     break;

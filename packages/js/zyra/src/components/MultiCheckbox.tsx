@@ -9,6 +9,7 @@ interface Option {
     img2?: string;
     name?: string;
     proSetting?: boolean;
+    moduleEnabled?: string;
     hints?: string;
     desc?: string;
     edit?: boolean;
@@ -35,6 +36,8 @@ interface MultiCheckBoxProps {
     type?: 'checkbox' | 'radio' | 'checkbox-custom-img';
     onChange?: (e: ChangeEvent<HTMLInputElement> | string[]) => void;
     proChanged?: () => void;
+    moduleChange: (module: string) => void;
+    modules: string[];
     proSetting?: boolean;
     hintOuterClass?: string;
     description?: string;
@@ -146,6 +149,14 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                                     handleCheckboxChange(option.value, !checked);
                                 } else if (option.proSetting && !props.khali_dabba) {
                                     props.proChanged?.();
+                                } else if (
+                                    option.moduleEnabled &&
+                                    !props.modules.includes(
+                                        option.moduleEnabled
+                                    )
+                                ) {
+                                    props.moduleChange?.(option.moduleEnabled);
+                                    return;
                                 } else {
                                     const syntheticEvent = {
                                         target: { value: option.value, checked: !checked },
@@ -176,6 +187,14 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                                             handleCheckboxChange(option.value, e.target.checked);
                                         } else if (option.proSetting && !props.khali_dabba) {
                                             props.proChanged?.();
+                                        } else if (
+                                            option.moduleEnabled &&
+                                            !props.modules.includes(
+                                                option.moduleEnabled
+                                            )
+                                        ) {
+                                            props.moduleChange?.(option.moduleEnabled);
+                                            return;
                                         } else {
                                             props.onChange?.(e);
                                         }
