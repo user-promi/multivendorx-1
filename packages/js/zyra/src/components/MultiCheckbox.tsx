@@ -226,7 +226,21 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                                     <>
                                         <label htmlFor={`${props.idPrefix}-${option.key}`}>
                                             {option.label}
-                                            { option.proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span> }
+                                            { (option.proSetting && !props.khali_dabba) && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span> }
+                                            {(
+                                                ((option.proSetting && props?.khali_dabba) || (!option.proSetting)) &&
+                                                option.moduleEnabled &&
+                                                !props.modules.includes(option.moduleEnabled)
+                                            ) && (
+                                                    <span className="admin-pro-tag module">
+                                                        <i className={`adminlib-${option.moduleEnabled}`}></i>
+                                                        {String(option.moduleEnabled)
+                                                            .split('-')
+                                                            .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+                                                            .join(' ')}
+                                                        <i className="adminlib-lock"></i>
+                                                    </span>
+                                                )}
                                             <div className="label-des">{option.desc}</div>
                                         </label>
                                         {option.edit && (
