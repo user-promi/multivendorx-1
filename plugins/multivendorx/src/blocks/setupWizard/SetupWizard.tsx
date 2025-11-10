@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './SetupWizard.scss';
+import 'zyra/build/index.css';
 
 interface Step {
     title: string;
