@@ -70,10 +70,221 @@ const Revenue: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [openCards, setOpenCards] = useState<ToggleState>({});
   const [toReviewedProduct, setToReviewedProduct] = useState<any[]>([]);
+  const [toSellingProduct, setToSellingProduct] = useState<any[]>([]);
+  const [openReviewedCards, setOpenReviewedCards] = useState<ToggleState>({});
+  const [openSellingCards, setOpenSellingCards] = useState<ToggleState>({});
+  const [chartData, setChartData] = useState<any[]>([]);
+  const [inStockCount, setInStockCount] = useState(0);
+  const [outOfStockCount, setOutOfStockCount] = useState(0);
+  const [onBackorderCount, setOnBackorderCount] = useState(0);
+  const [lowStockCount, setLowStockCount] = useState(0);
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [newProducts, setNewProducts] = useState(0);
+
+
+  const toggleReviewedCard = (key: string) => {
+    setOpenReviewedCards((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const toggleSellingCard = (key: string) => {
+    setOpenSellingCards((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
 
   /**
    * Fetch store list on mount
    */
+  // useEffect(() => {
+  //   // Fetch store list
+  //   axios
+  //     .get(getApiLink(appLocalizer, 'store'), {
+  //       headers: { 'X-WP-Nonce': appLocalizer.nonce },
+  //     })
+  //     .then((response) => setStore(response.data.stores || []))
+  //     .catch(() => {
+  //       setError(__('Failed to load stores', 'multivendorx'));
+  //       setStore([]);
+  //     });
+
+  //   // Fetch total orders count
+  //   axios({
+  //     method: 'GET',
+  //     url: `${appLocalizer.apiUrl}/wc/v3/products`,
+  //     headers: { 'X-WP-Nonce': appLocalizer.nonce },
+  //     params: { meta_key: 'multivendorx_store_id' },
+  //   })
+  //     .then((response) => {
+  //       const total = Number(response.headers['x-wp-total']) || 0;
+  //       setTotalRows(total);
+  //       setPageCount(Math.ceil(total / pagination.pageSize));
+  //     })
+  //     .catch(() => {
+  //       setError(__('Failed to load total rows', 'multivendorx'));
+  //     });
+
+  //   axios({
+  //     method: "GET",
+  //     url: `${appLocalizer.apiUrl}/wc/v3/products`,
+  //     headers: { "X-WP-Nonce": appLocalizer.nonce },
+  //     params: { meta_key: "multivendorx_store_id", per_page: 20 },
+  //   })
+  //     .then((response) => {
+  //       const products = response.data || [];
+
+  //       const data = products
+  //         .filter((p: any) => Number(p.total_sales) > 0)
+  //         .map((p: any) => ({
+  //           name: p.name,
+  //           net_sales:
+  //             parseFloat(p.price || 0) * parseInt(p.total_sales || 0),
+  //           items_sold: parseInt(p.total_sales || 0),
+  //         }));
+
+  //       setChartData(data);
+  //     })
+  //     .catch(() => {
+  //       setError("Failed to load product sales data");
+  //     });
+
+  //   axios({
+  //     method: 'GET',
+  //     url: `${appLocalizer.apiUrl}/wc/v3/products`,
+  //     headers: { 'X-WP-Nonce': appLocalizer.nonce },
+  //     params: {
+  //       per_page: 5,
+  //       meta_key: 'multivendorx_store_id',
+  //       orderby: 'rating',
+  //       order: 'desc',
+  //     },
+  //   })
+  //     .then(response => {
+  //       const filtered = response.data.filter(
+  //         (product: any) => parseFloat(product.average_rating) > 0
+  //       );
+  //       console.log("Top reviewed products:", filtered);
+  //       setToReviewedProduct(filtered);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error fetching top reviewed products:', error);
+  //     });
+
+  //   axios({
+  //     method: 'GET',
+  //     url: `${appLocalizer.apiUrl}/wc/v3/products`,
+  //     headers: { 'X-WP-Nonce': appLocalizer.nonce },
+  //     params: {
+  //       per_page: 5,
+  //       meta_key: 'multivendorx_store_id',
+  //       orderby: 'popularity',
+  //       order: 'desc',
+  //     },
+  //   })
+  //     .then(response => {
+  //       const filtered = response.data.filter(
+  //         (product: any) => Number(product.total_sales) > 0
+  //       );
+  //       console.log("Top selling products:", filtered);
+  //       setToSellingProduct(filtered);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error fetching top selling products:', error);
+  //     });
+
+  //   axios({
+  //     method: 'GET',
+  //     url: `${appLocalizer.apiUrl}/wc/v3/products`,
+  //     headers: { 'X-WP-Nonce': appLocalizer.nonce },
+  //     params: {
+  //       per_page: 1, // Get only 1 product, but retrieve the count of all matching products
+  //       stock_status: 'outofstock', // Filter for out-of-stock products
+  //     },
+  //   })
+  //     .then(response => {
+  //       // 2. Get the Count from the Header
+  //       const outOfStockCount = response.headers['x-wp-total'];
+
+  //       console.log("Total Out of Stock Count:", outOfStockCount);
+  //       // You can set this count to a state variable here, e.g., setOutOfStockCount(outOfStockCount);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error fetching out of stock count:', error);
+  //     });
+  //   axios({
+  //     method: 'GET',
+  //     url: `${appLocalizer.apiUrl}/wc/v3/products`,
+  //     headers: { 'X-WP-Nonce': appLocalizer.nonce },
+  //     params: {
+  //       per_page: 1, // Crucial: only request 1 item to minimize data transfer
+  //       stock_status: 'onbackorder', // Filter for products available for backorder
+  //       // Include this if you need to filter by a specific store/vendor:
+  //       // meta_key: 'multivendorx_store_id', 
+  //     },
+  //   })
+  //     .then(response => {
+  //       // 💡 The total count is provided in the 'X-WP-Total' response header
+  //       const onBackorderCount = response.headers['x-wp-total'];
+
+  //       console.log("Total On Backorder Count:", onBackorderCount);
+
+  //       // You can now use this variable to update your UI or state
+  //       // setOnBackorderCount(onBackorderCount);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error fetching on backorder count:', error);
+  //     });
+  //   axios({
+  //     method: 'GET',
+  //     url: `${appLocalizer.apiUrl}/wc/v3/products`,
+  //     headers: { 'X-WP-Nonce': appLocalizer.nonce },
+  //     params: {
+  //       per_page: 1, // Only need 1 result to retrieve the total count from the header
+  //       stock_status: 'instock', // <-- Filter for in-stock products
+  //       // Include this if you are filtering by a specific store/vendor ID:
+  //       // meta_key: 'multivendorx_store_id', 
+  //     },
+  //   })
+  //     .then(response => {
+  //       // Access the total count from the custom header 'x-wp-total'
+  //       const inStockCount = response.headers['x-wp-total'];
+
+  //       console.log("Total In Stock Count:", inStockCount);
+
+  //       // You can set this value to a state variable here, e.g., setInStockCount(inStockCount);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error fetching in stock count:', error);
+  //     });
+
+  //   // Define your low stock threshold (e.g., 2)
+  //   const lowStockThreshold = 2;
+
+  //   axios({
+  //     method: 'GET',
+  //     url: `${appLocalizer.apiUrl}/wc/v3/products`,
+  //     headers: { 'X-WP-Nonce': appLocalizer.nonce },
+  //     params: {
+  //       per_page: 1,
+  //       stock_status: 'instock',         // Must be in stock
+  //       min_stock_quantity: 1,           // Stock must be greater than or equal to 1
+  //       max_stock_quantity: lowStockThreshold, // Stock must be less than or equal to the threshold
+  //       // meta_key: 'multivendorx_store_id', // Keep if filtering by vendor
+  //     },
+  //   })
+  //     .then(response => {
+  //       // Access the total count from the 'X-WP-Total' header
+  //       const lowStockCount = response.headers['x-wp-total'];
+
+  //       console.log(`Total Low Stock Count (Stock <= ${lowStockThreshold}):`, lowStockCount);
+
+  //       // setLowStockCount(lowStockCount);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error fetching low stock count:', error);
+  //     });
+
+  // }, []);
+
+
+
   useEffect(() => {
     // Fetch store list
     axios
@@ -102,6 +313,31 @@ const Revenue: React.FC = () => {
         setError(__('Failed to load total rows', 'multivendorx'));
       });
 
+    // Chart data for revenue trend
+    axios({
+      method: "GET",
+      url: `${appLocalizer.apiUrl}/wc/v3/products`,
+      headers: { "X-WP-Nonce": appLocalizer.nonce },
+      params: { meta_key: "multivendorx_store_id", per_page: 20 },
+    })
+      .then((response) => {
+        const products = response.data || [];
+
+        const data = products
+          .filter((p: any) => Number(p.total_sales) > 0)
+          .map((p: any) => ({
+            name: p.name,
+            net_sales: parseFloat(p.price || 0) * parseInt(p.total_sales || 0),
+            items_sold: parseInt(p.total_sales || 0),
+          }));
+
+        setChartData(data);
+      })
+      .catch(() => {
+        setError("Failed to load product sales data");
+      });
+
+    // Top reviewed products
     axios({
       method: 'GET',
       url: `${appLocalizer.apiUrl}/wc/v3/products`,
@@ -110,27 +346,132 @@ const Revenue: React.FC = () => {
         per_page: 5,
         meta_key: 'multivendorx_store_id',
         orderby: 'rating',
-        order: 'desc'
+        order: 'desc',
       },
     })
       .then(response => {
-        console.log("Top reviewed products:", response.data);
-        setToReviewedProduct(response.data); // ✅ store in state
+        const filtered = response.data.filter(
+          (product: any) => parseFloat(product.average_rating) > 0
+        );
+        console.log("Top reviewed products:", filtered);
+        setToReviewedProduct(filtered);
       })
       .catch(error => {
         console.error('Error fetching top reviewed products:', error);
       });
 
+    // Top selling products
+    axios({
+      method: 'GET',
+      url: `${appLocalizer.apiUrl}/wc/v3/products`,
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      params: {
+        per_page: 5,
+        meta_key: 'multivendorx_store_id',
+        orderby: 'popularity',
+        order: 'desc',
+      },
+    })
+      .then(response => {
+        const filtered = response.data.filter(
+          (product: any) => Number(product.total_sales) > 0
+        );
+        console.log("Top selling products:", filtered);
+        setToSellingProduct(filtered);
+      })
+      .catch(error => {
+        console.error('Error fetching top selling products:', error);
+      });
+
+    // Count: Out of stock
+    axios({
+      method: 'GET',
+      url: `${appLocalizer.apiUrl}/wc/v3/products`,
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      params: {
+        per_page: 1,
+        stock_status: 'outofstock',
+      },
+    })
+      .then(response => {
+        const outOfStockCount = Number(response.headers['x-wp-total']) || 0;
+        console.log("Total Out of Stock Count:", outOfStockCount);
+        setOutOfStockCount(outOfStockCount);
+      })
+      .catch(error => {
+        console.error('Error fetching out of stock count:', error);
+      });
+
+    // Count: On backorder
+    axios({
+      method: 'GET',
+      url: `${appLocalizer.apiUrl}/wc/v3/products`,
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      params: {
+        per_page: 1,
+        stock_status: 'onbackorder',
+      },
+    })
+      .then(response => {
+        const onBackorderCount = Number(response.headers['x-wp-total']) || 0;
+        console.log("Total On Backorder Count:", onBackorderCount);
+        setOnBackorderCount(onBackorderCount);
+      })
+      .catch(error => {
+        console.error('Error fetching on backorder count:', error);
+      });
+
+    // Count: In stock
+    axios({
+      method: 'GET',
+      url: `${appLocalizer.apiUrl}/wc/v3/products`,
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      params: {
+        per_page: 1,
+        stock_status: 'instock',
+      },
+    })
+      .then(response => {
+        const inStockCount = Number(response.headers['x-wp-total']) || 0;
+        console.log("Total In Stock Count:", inStockCount);
+        setInStockCount(inStockCount);
+      })
+      .catch(error => {
+        console.error('Error fetching in stock count:', error);
+      });
+
+    // Count: Low stock
+    const lowStockThreshold = 2;
+    axios({
+      method: 'GET',
+      url: `${appLocalizer.apiUrl}/wc/v3/products`,
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      params: {
+        per_page: 1,
+        stock_status: 'instock',
+        min_stock_quantity: 1,
+        max_stock_quantity: lowStockThreshold,
+      },
+    })
+      .then(response => {
+        const lowStockCount = Number(response.headers['x-wp-total']) || 0;
+        console.log(`Total Low Stock Count (Stock <= ${lowStockThreshold}):`, lowStockCount);
+        setLowStockCount(lowStockCount);
+      })
+      .catch(error => {
+        console.error('Error fetching low stock count:', error);
+      });
+
   }, []);
 
-
-
-
-  const toggleCard = (key: string) => {
-    setOpenCards((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
-
-  // ✅ Fixed table columns for WooCommerce products
+  const overview = [
+    { id: "sales", label: "Total Products", count: totalRows, icon: "adminlib-star red" },
+    { id: "earnings", label: "In Stock", count: inStockCount, icon: "adminlib-support green" },
+    { id: "Vendors", label: "Low Stock", count: lowStockCount, icon: "adminlib-global-community yellow" },
+    { id: "free", label: "Out of Stock", count: outOfStockCount, icon: "adminlib-global-community blue" },
+  ];
+  
+  //Fixed table columns for WooCommerce products
   const columns: ColumnDef<ProductRow>[] = [
     {
       id: "select",
@@ -190,10 +531,7 @@ const Revenue: React.FC = () => {
 
   ];
 
-  /**
-       * ✅ Fetch WooCommerce products (with explicit UTC offset for reliable server filtering)
-       * FIX: Adjusts the UTC time to align with a UTC+05:30 (IST) server's day start/end.
-       */
+
   const requestData = async (
     rowsPerPage = 10,
     currentPage = 1,
@@ -215,7 +553,7 @@ const Revenue: React.FC = () => {
         search: searchField,
       };
 
-      // ✅ Add Date Filtering (only if both are valid Date objects)
+      //Add Date Filtering (only if both are valid Date objects)
       if (startDate instanceof Date && endDate instanceof Date) {
         if (!isNaN(startDate.getTime()) && !isNaN(endDate.getTime())) {
 
@@ -256,13 +594,13 @@ const Revenue: React.FC = () => {
         }
       }
 
-      // ✅ Sorting
+      //Sorting
       if (orderBy) {
         params.orderby = orderBy;
         params.order = order || "asc";
       }
 
-      console.log("🕒 Filter params (Forced IST to UTC):", params);
+      console.log("Filter params (Forced IST to UTC):", params);
 
       const response = await axios({
         method: "GET",
@@ -295,13 +633,12 @@ const Revenue: React.FC = () => {
 
       setData(formattedData);
     } catch (error) {
-      console.error("❌ Product fetch failed:", error);
+      console.error("Product fetch failed:", error);
       const errorMessage = (error as any).response?.data?.message || __("Failed to load product data", "multivendorx");
       setError(errorMessage);
       setData([]);
     }
   };
-
 
   useEffect(() => {
     const currentPage = pagination.pageIndex + 1;
@@ -387,33 +724,11 @@ const Revenue: React.FC = () => {
     },
   ];
 
-  // --- Static UI below remains unchanged ---
-  const bestSellingCategories = ["Electronics", "Clothing", "Home & Garden"];
-  const leadingBrands = ["Apple", "Nike", "Samsung"];
-  const renderTopItems = () => (
-    <>
-      <div className="items">
-        <div className="left-side">
-          <div className="icon"><span className="admin-icon"><i className="adminlib-catalog"></i></span></div>
-          <div className="details"><div className="item-title">Lather & Loom</div><div className="sub-text">3 orders</div></div>
-        </div>
-        <div className="right-side"><div className="price">$380</div></div>
-      </div>
-      <div className="items">
-        <div className="left-side">
-          <div className="icon"><span className="admin-icon"><i className="adminlib-bulk-action"></i></span></div>
-          <div className="details"><div className="item-title">Lather & Loom</div><div className="sub-text">3 orders</div></div>
-        </div>
-        <div className="right-side"><div className="price">$380</div></div>
-      </div>
-    </>
-  );
-
   return (
     <div className="dashboard-overview">
       {/* Keep entire top dashboard layout */}
       <div className="row">
-        <div className="column">
+        {/* <div className="column">
           <div className="card-header">
             <div className="left"><div className="title">Revenue Trend Analysis</div></div>
           </div>
@@ -429,12 +744,39 @@ const Revenue: React.FC = () => {
               <Line type="monotone" dataKey="admin_amount" stroke="#00c49f" strokeWidth={3} />
             </LineChart>
           </ResponsiveContainer>
+        </div> */}
+
+        <div className="column">
+          <div className="card-header">
+            <div className="left">
+              <div className="title">Revenue & Sales Comparison</div>
+            </div>
+          </div>
+
+          {error ? (
+            <p className="text-red-500">{error}</p>
+          ) : chartData.length > 0 ? (
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="net_sales" fill="#5007aa" name="Net Sales" />
+                <Bar dataKey="items_sold" fill="#00c49f" name="Items Sold" />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <p className="text-gray-500 p-2">No product sales data found.</p>
+          )}
         </div>
+
 
         <div className="column">
           <div className="card-header">
             <div className="left"><div className="title">Account Overview</div></div>
-            <div className="right"><span>Updated 1 month ago</span></div>
+            {/* <div className="right"><span>Updated 1 month ago</span></div> */}
           </div>
           <div className="card-body">
             <div className="analytics-container">
@@ -451,19 +793,7 @@ const Revenue: React.FC = () => {
 
       {/* Keep categories and brands */}
       <div className="row">
-        {/* <div className="column">
-          <div className="card-header"><div className="left"><div className="title">Best-Selling Categories</div></div></div>
-          {bestSellingCategories.map((category) => (
-            <div className="column" key={category}>
-              <div className="card-header" onClick={() => toggleCard(category)}>
-                <div className="left"><div className="product-name">{category}</div><div className="price"><b>Total Sales:</b> $125,000</div></div>
-                <div className="right"><i className="adminlib-pagination-right-arrow"></i></div>
-              </div>
-              {openCards[category] && <div className="top-items">{renderTopItems()}</div>}
-            </div>
-          ))}
-        </div> */}
-        {/* 🔥 Top Reviewed Products Section */}
+        {/*Top Reviewed Products Section */}
         <div className="column">
           <div className="card-header">
             <div className="left">
@@ -473,10 +803,10 @@ const Revenue: React.FC = () => {
 
           {toReviewedProduct.length > 0 ? (
             toReviewedProduct.map((product: any) => (
-              <div className="column" key={product.id}>
+              <div className="column" key={`review-${product.id}`}>
                 <div
                   className="card-header cursor-pointer"
-                  onClick={() => toggleCard(product.id.toString())}
+                  onClick={() => toggleReviewedCard(product.id.toString())}
                 >
                   <div className="left">
                     <div className="product-name font-medium">{product.name}</div>
@@ -486,13 +816,13 @@ const Revenue: React.FC = () => {
                   </div>
                   <div className="right">
                     <i
-                      className={`adminlib-pagination-right-arrow ${openCards[product.id] ? "rotate-90 transition-transform" : ""
+                      className={`adminlib-pagination-right-arrow ${openReviewedCards[product.id] ? "rotate-90 transition-transform" : ""
                         }`}
                     ></i>
                   </div>
                 </div>
 
-                {openCards[product.id] && (
+                {openReviewedCards[product.id] && (
                   <div className="top-items">
                     <div className="items">
                       <div className="left-side flex items-center gap-3 p-2">
@@ -525,8 +855,7 @@ const Revenue: React.FC = () => {
                           </div>
                           <div>
                             <b>Category:</b>{" "}
-                            {product.categories?.map((c: any) => c.name).join(", ") ||
-                              "-"}
+                            {product.categories?.map((c: any) => c.name).join(", ") || "-"}
                           </div>
                         </div>
                       </div>
@@ -538,24 +867,79 @@ const Revenue: React.FC = () => {
           ) : (
             <p className="text-gray-500 p-2">No reviewed products found.</p>
           )}
-        </div>
 
+        </div>
 
         <div className="column">
-          <div className="card-header"><div className="left"><div className="title">Leading Brands</div></div></div>
-          {leadingBrands.map((brand) => (
-            <div className="column" key={brand}>
-              <div className="card-header" onClick={() => toggleCard(brand)}>
-                <div className="left"><div className="product-name">{brand}</div><div className="price"><b>Total Sales:</b> $125,000</div></div>
-                <div className="right"><i className="adminlib-pagination-right-arrow"></i></div>
-              </div>
-              {openCards[brand] && <div className="top-items">{renderTopItems()}</div>}
+          <div className="card-header">
+            <div className="left">
+              <div className="title">Top Selling Products</div>
             </div>
-          ))}
+          </div>
+
+          {toSellingProduct.length > 0 ? (
+            toSellingProduct.map((product: any) => (
+              <div className="column" key={`selling-${product.id}`}>
+                <div
+                  className="card-header"
+                  onClick={() => toggleSellingCard(product.id.toString())}
+                >
+                  <div className="left">
+                    <div className="product-name">{product.name}</div>
+                    <div className="price">
+                      <b>Total Sales:</b> {product.total_sales || 0}
+                    </div>
+                  </div>
+                  <div className="right">
+                    <i
+                      className={`adminlib-pagination-right-arrow ${openSellingCards[product.id] ? "rotate-90 transition-transform" : ""
+                        }`}
+                    ></i>
+                  </div>
+                </div>
+
+                {openSellingCards[product.id] && (
+                  <div className="top-items">
+                    <div className="items">
+                      <div className="left-side">
+                        {product.images?.[0]?.src ? (
+                          <img
+                            src={product.images[0].src}
+                            alt={product.name}
+                            style={{ width: 50, height: 50, borderRadius: 6 }}
+                          />
+                        ) : (
+                          <i className="adminlib-store-inventory"></i>
+                        )}
+                        <div className="details">
+                          <div>
+                            <b>Price:</b>{" "}
+                            <span
+                              dangerouslySetInnerHTML={{
+                                __html: product.price_html || product.price || "—",
+                              }}
+                            />
+                          </div>
+                          <div>
+                            <b>Category:</b>{" "}
+                            {product.categories?.map((c: any) => c.name).join(", ") || "-"}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))
+          ) : (
+            <p>No top selling products found.</p>
+          )}
+
         </div>
+
       </div>
 
-      {/* ✅ Fixed Table Section */}
+      {/*Fixed Table Section */}
       <div className="row">
         <div className="column">
           <div className="card-header"><div className="left"><div className="title">Revenue Distribution</div></div></div>
