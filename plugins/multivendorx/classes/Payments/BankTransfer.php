@@ -34,7 +34,7 @@ class BankTransfer
                     'type' => 'multi-checkbox',
                     'selectDeselect' => true,
 
-                    'label' => __('Bank Name', 'multivendorx'),
+                    'label' => __('Bank details required from the store', 'multivendorx'),
                     'options' => [
                         [
                             'key' => 'bank_name',

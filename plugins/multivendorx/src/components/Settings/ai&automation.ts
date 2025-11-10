@@ -5,7 +5,7 @@ export default {
     priority: 10,
     name: 'AI & Automation',
     desc: __('Help customers discover stores and products near them by enabling location-based search and maps.', 'multivendorx'),
-    icon: 'adminlib-form-section',
+    icon: 'adminlib-automation',
     submitUrl: 'settings',
     modal: [
         {

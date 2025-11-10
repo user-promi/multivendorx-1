@@ -336,7 +336,7 @@ const Notification: React.FC = () => {
                                     </td>
                                     <td className="admin-column action">
                                         <div className="table-row-custom">
-                                            <i className="adminlib-create"></i>
+                                            <i className="adminlib-edit"></i>
                                         </div>
                                     </td>
                                 </tr>
@@ -630,7 +630,7 @@ const Notification: React.FC = () => {
                                 </div>
 
                                 <div className="admin-btn btn-purple" onClick={() => setEditingNotification(notif.id)}>
-                                    Manage <i className="adminlib-create"></i>
+                                    Manage <i className="adminlib-edit"></i>
                                 </div>
                             </div>
                         </div>

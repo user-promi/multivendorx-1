@@ -332,7 +332,7 @@ const AllProduct: React.FC = () => {
                         actions: [
                             {
                                 label: __('Edit', 'multivendorx'),
-                                icon: 'adminlib-create',
+                                icon: 'adminlib-edit',
                                 onClick: (rowData) => {
                                     window.location.href = `${appLocalizer.add_product_link}/${rowData.id}`;
                                 },
@@ -340,7 +340,7 @@ const AllProduct: React.FC = () => {
                             },
                             {
                                 label: __('View', 'multivendorx'),
-                                icon: 'adminlib-eye',
+                                icon: 'adminlib-preview',
                                 onClick: (rowData) => {
                                     window.location.href = `${row.original.permalink}`;
                                 },
@@ -692,21 +692,21 @@ const AllProduct: React.FC = () => {
                 </div>
                 <div className="buttons-wrapper">
                     <div
-                        className="admin-btn btn-purple"
+                        className="admin-btn btn-purple-bg"
                         onClick={() => setAddProduct(true)}
                     >
                         <i className="adminlib-import"></i>
                         import
                     </div>
                     <div
-                        className="admin-btn btn-purple"
+                        className="admin-btn btn-purple-bg"
                         onClick={() => setAddProduct(true)}
                     >
                         <i className="adminlib-export"></i>
                         Export
                     </div>
                     <div
-                        className="admin-btn btn-purple"
+                        className="admin-btn btn-purple-bg"
                         onClick={() => window.location.href = appLocalizer.add_product_link}
                     >
                         <i className="adminlib-plus-circle-o"></i>

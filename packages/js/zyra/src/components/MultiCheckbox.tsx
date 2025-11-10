@@ -218,7 +218,7 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                                                     setEditValue(option.label || option.value);
                                                 }}
                                                 className="edit-icon ">
-                                                    <span className="admin-badge yellow adminlib-create"></span>
+                                                    <span className="admin-badge yellow adminlib-edit"></span>
                                             </span>
                                         )}
 

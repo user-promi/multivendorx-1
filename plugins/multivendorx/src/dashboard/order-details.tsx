@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { __ } from '@wordpress/i18n';
-import productImage from "../assets/images/default.png";
 import { BasicInput, SelectInput, getApiLink } from "zyra";
 import axios from "axios";
 

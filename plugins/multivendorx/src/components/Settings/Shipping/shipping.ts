@@ -9,7 +9,7 @@ export default {
     desc: __(
         'Choose whether stores follow a step-by-step guided process through the category hierarchy or freely select multiple categories & subcategories without restrictions.', 'multivendorx'
     ),
-    icon: 'adminlib-general-tab',
+    icon: 'adminlib-shipping',
     submitUrl: 'settings',
     modal: [
         {

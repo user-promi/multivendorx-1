@@ -269,7 +269,7 @@ const ViewStore = () => {
           },
           {
             label: '',
-            iconClass: 'adminlib-create',
+            iconClass: 'adminlib-edit',
             onClick: () =>
               window.location.href = `?page=multivendorx#&tab=stores&edit/${viewId}`,
             className: 'admin-badge yellow',
@@ -277,7 +277,7 @@ const ViewStore = () => {
           },
           {
             label: '',
-            iconClass: 'adminlib-eye',
+            iconClass: 'adminlib-preview',
             onClick: () =>
               data.slug && window.open(`${appLocalizer.site_url}/store/${data.slug}/`, '_blank'),
             className: 'admin-badge green',

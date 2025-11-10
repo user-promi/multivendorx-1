@@ -411,7 +411,7 @@ const StoreReviews: React.FC = () => {
                         actions: [
                             {
                                 label: __('Reply / Edit', 'multivendorx'),
-                                icon: 'adminlib-create',
+                                icon: 'adminlib-edit',
                                 onClick: () => {
                                     setSelectedReview(row.original);
                                     setReplyText(row.original.reply || '');

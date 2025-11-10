@@ -252,7 +252,7 @@ const History: React.FC = () => {
 
                     <div className="buttons-wrapper">
                         <div className="admin-btn btn-purple">
-                            <i className="adminlib-eye"></i>
+                            <i className="adminlib-preview"></i>
                             View transaction history
                         </div>
                     </div>
