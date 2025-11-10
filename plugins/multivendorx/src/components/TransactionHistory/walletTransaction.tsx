@@ -483,7 +483,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                 if (type === 'commission') {
                     displayValue = `Commission #${orderId || '-'}`;
                     if (orderId) {
-                        const editLink = `${window.location.origin}/wp-admin/post.php?post=${orderId}&action=edit`;
+                        const editLink = `${appLocalizer.site_url}/wp-admin/post.php?post=${orderId}&action=edit`;
                         content = (
                             <a href={editLink} target="_blank" rel="noopener noreferrer">
                                 {displayValue}
