@@ -350,7 +350,12 @@ export const TransactionHistory: React.FC = () => {
                                     </>
                                 ) : (
                                     <>
-                                        <div className="des">Current available balance ready to transfer, 'Excluding Reserve Balance' {formatCurrency(data.reserve_balance)}</div>
+                                        <div className="des">
+                                            Current available balance ready to transfer
+                                            {data?.reserve_balance ? (
+                                                <>,&nbsp;'Excluding Reserve Balance' {formatCurrency(data.reserve_balance)}</>
+                                            ) : null}
+                                        </div>
                                         <div className="admin-btn btn-purple" onClick={() => setRequestWithdrawal(true)}>
                                             Disburse payment
                                         </div>

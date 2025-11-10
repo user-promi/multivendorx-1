@@ -55,12 +55,28 @@ const LatestRefundRequest: React.FC<LatestRefundRequestProps> = ({ store_id }) =
         },
         {
             header: __('Customer', 'multivendorx'),
-            cell: ({ row }: any) => (
-                <TableCell title={row.original.customer_name || ''}>
-                    {row.original.customer_name === "" ? row.original.customer_name: '-'}
-                </TableCell>
-            ),
-        },
+            cell: ({ row }: any) => {
+                const name = row.original.customer_name?.trim();
+                const link = row.original.customer_edit_link;
+        
+                return (
+                    <TableCell title={name || '-'}>
+                        {name
+                            ? link
+                                ? <a
+                                      href={link}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-blue-600 hover:underline"
+                                  >
+                                      {name}
+                                  </a>
+                                : name
+                            : '-'}
+                    </TableCell>
+                );
+            },
+        },        
         {
             header: __('Refund Amount', 'multivendorx'),
             cell: ({ row }: any) => (
@@ -69,14 +85,14 @@ const LatestRefundRequest: React.FC<LatestRefundRequestProps> = ({ store_id }) =
                 </TableCell>
             ),
         },
-        {
-            header: __('Refund Reason', 'multivendorx'),
-            cell: ({ row }: any) => (
-                <TableCell title={row.original.reason || ''}>
-                    {row.original.reason || '-'}
-                </TableCell>
-            ),
-        },
+        // {
+        //     header: __('Refund Reason', 'multivendorx'),
+        //     cell: ({ row }: any) => (
+        //         <TableCell title={row.original.reason || ''}>
+        //             {row.original.reason || '-'}
+        //         </TableCell>
+        //     ),
+        // },
         {
             header: __('Status', 'multivendorx'),
             cell: ({ row }: any) => (

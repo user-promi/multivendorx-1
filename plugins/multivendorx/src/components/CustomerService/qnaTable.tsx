@@ -297,7 +297,7 @@ const Qna: React.FC = () => {
                 const { store_id, store_name } = row.original;
                 const baseUrl = `${window.location.origin}/wp-admin/admin.php?page=multivendorx#&tab=stores`;
                 const storeLink = store_id
-                    ? `${baseUrl}&edit/${store_id}/&subtab=application-details`
+                    ? `${baseUrl}&edit/${store_id}/&subtab=store-overview`
                     : '#';
 
                 return (
