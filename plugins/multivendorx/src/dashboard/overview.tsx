@@ -108,11 +108,11 @@ const Overview: React.FC = () => {
     };
     return (
         <>
-            <div className="page-title-wrapper">
+            {/* <div className="page-title-wrapper">
                 <div className="page-title">
                     <div className="title">Overview</div>
                 </div>
-            </div>
+            </div> */}
 
             <div className="row">
                 <div className="column">

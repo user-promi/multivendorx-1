@@ -80,12 +80,12 @@ const AdditionalInformation = () => {
         <>
             <SuccessNotice message={successMsg} />
 
-            <div className="page-title-wrapper">
+            {/* <div className="page-title-wrapper">
                 <div className="page-title">
                     <div className="title">Additional Information</div>
                     <div className="des">Manage your store information and preferences</div>
                 </div>
-            </div>
+            </div> */}
 
             <div className="container-wrapper">
                 <div className="card-wrapper w-65">

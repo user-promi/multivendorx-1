@@ -147,7 +147,7 @@
         gap: 1rem;
         align-items: center;
         background: #fff;
-        padding: 1rem 1.5rem;
+        padding: 1rem;
         width: 100%;
         border-radius: 0.313rem;
 
@@ -177,6 +177,30 @@
     }
 
     // Wallet Transaction table
+
+    // report
+    &.report {
+        flex-wrap: wrap;
+
+        .analytics-item {
+            width: 49%;
+            box-sizing: border-box;
+
+            i{
+                font-size: 2.5rem;
+                padding: 0.625rem;
+                line-height: 4rem;
+            }
+            .details{
+                .number{
+                    font-size: 2.063rem;
+                }
+                .text{
+
+                }
+            }
+        }
+    }
 }
 
 .red {
@@ -382,10 +406,10 @@
         .tab-action {
             width: 24%;
             box-sizing: border-box;
-            transition: all 0.4s ease;
 
-
-            &.active,
+            // &.active{
+            //     border: 0.063rem solid;
+            // }
             &:hover {
                 background: $theme-color;
                 color: #fff;
@@ -575,25 +599,25 @@
         line-height: 1.125;
     }
 
-    // &.active {
-    //     border: 0.063rem solid;
+    &.active {
+        border: 0.063rem solid;
 
-    //     &:has(.red) {
-    //         border-color: #f06b4f;
-    //     }
+        &:has(.red) {
+            border-color: #f06b4f;
+        }
 
-    //     &:has(.green) {
-    //         border-color: #06be9f;
-    //     }
+        &:has(.green) {
+            border-color: #06be9f;
+        }
 
-    //     &:has(.yellow) {
-    //         border-color: #ff9f43;
-    //     }
+        &:has(.yellow) {
+            border-color: #ff9f43;
+        }
 
-    //     &:has(.blue) {
-    //         border-color: #003d66de;
-    //     }
-    // }
+        &:has(.blue) {
+            border-color: #003d66de;
+        }
+    }
 }
 
 // tab action cart end
@@ -646,6 +670,9 @@
 
 // transaction debit list
 .debit-list {
+    height: 9rem;
+    overflow: auto;
+
     .data-card {
         margin-bottom: 0.75rem;
         display: flex;

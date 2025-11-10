@@ -186,14 +186,6 @@ $page_info = MultiVendorX()->rest->dashboard->get_current_page_and_submenu();
                     </div>
 
                 <?php } else { ?>
-                    <div class="page-title-wrapper">
-                        <div class="page-title">
-                            <div class="title"><?php echo esc_html($page_info['id']); ?></div>
-                            <div class="des">
-                                <?php echo esc_html__('Manage your store information and preferences', 'multivendorx'); ?>
-                            </div>
-                        </div>
-                    </div>
                     <?php
                     if (!empty($page_info['content'])) {
                         echo $page_info['content'];
