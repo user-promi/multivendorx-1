@@ -18,7 +18,7 @@ import { __ } from "@wordpress/i18n";
 import { CalendarInput, getApiLink, Table, TableCell } from "zyra";
 import axios from "axios";
 import { PaginationState, RowSelectionState, ColumnDef } from "@tanstack/react-table";
-import {formatCurrency} from '../../services/commonFunction';
+import { formatCurrency } from '../../services/commonFunction';
 
 const overview = [
   { id: "sales", label: "Total Products", count: 15, icon: "adminlib-star red" },
@@ -69,6 +69,8 @@ const Revenue: React.FC = () => {
   const [store, setStore] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [openCards, setOpenCards] = useState<ToggleState>({});
+  const [toReviewedProduct, setToReviewedProduct] = useState<any[]>([]);
+
   /**
    * Fetch store list on mount
    */
@@ -100,20 +102,30 @@ const Revenue: React.FC = () => {
         setError(__('Failed to load total rows', 'multivendorx'));
       });
 
-    // Fetch total orders count
     axios({
       method: 'GET',
-      url: `${appLocalizer.apiUrl}/wc/v3/reports/products/totals`,
+      url: `${appLocalizer.apiUrl}/wc/v3/products`,
       headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      params: {
+        per_page: 5,
+        meta_key: 'multivendorx_store_id',
+        orderby: 'rating',
+        order: 'desc'
+      },
     })
-      .then((response) => {
-        console.log("report",response)
+      .then(response => {
+        console.log("Top reviewed products:", response.data);
+        setToReviewedProduct(response.data); // ✅ store in state
       })
-      .catch(() => {
-        setError(__('Failed to load total rows', 'multivendorx'));
+      .catch(error => {
+        console.error('Error fetching top reviewed products:', error);
       });
 
   }, []);
+
+
+
+
   const toggleCard = (key: string) => {
     setOpenCards((prev) => ({ ...prev, [key]: !prev[key] }));
   };
@@ -439,7 +451,7 @@ const Revenue: React.FC = () => {
 
       {/* Keep categories and brands */}
       <div className="row">
-        <div className="column">
+        {/* <div className="column">
           <div className="card-header"><div className="left"><div className="title">Best-Selling Categories</div></div></div>
           {bestSellingCategories.map((category) => (
             <div className="column" key={category}>
@@ -450,7 +462,84 @@ const Revenue: React.FC = () => {
               {openCards[category] && <div className="top-items">{renderTopItems()}</div>}
             </div>
           ))}
+        </div> */}
+        {/* 🔥 Top Reviewed Products Section */}
+        <div className="column">
+          <div className="card-header">
+            <div className="left">
+              <div className="title">Top Reviewed Products</div>
+            </div>
+          </div>
+
+          {toReviewedProduct.length > 0 ? (
+            toReviewedProduct.map((product: any) => (
+              <div className="column" key={product.id}>
+                <div
+                  className="card-header cursor-pointer"
+                  onClick={() => toggleCard(product.id.toString())}
+                >
+                  <div className="left">
+                    <div className="product-name font-medium">{product.name}</div>
+                    <div className="price text-sm text-gray-600">
+                      <b>Rating:</b> {product.average_rating || "0"} ⭐
+                    </div>
+                  </div>
+                  <div className="right">
+                    <i
+                      className={`adminlib-pagination-right-arrow ${openCards[product.id] ? "rotate-90 transition-transform" : ""
+                        }`}
+                    ></i>
+                  </div>
+                </div>
+
+                {openCards[product.id] && (
+                  <div className="top-items">
+                    <div className="items">
+                      <div className="left-side flex items-center gap-3 p-2">
+                        {product.images?.[0]?.src ? (
+                          <img
+                            src={product.images[0].src}
+                            alt={product.name}
+                            style={{
+                              width: 50,
+                              height: 50,
+                              borderRadius: 6,
+                              objectFit: "cover",
+                            }}
+                          />
+                        ) : (
+                          <i className="adminlib-store-inventory text-xl"></i>
+                        )}
+
+                        <div className="details text-sm leading-6">
+                          <div>
+                            <b>Price:</b>{" "}
+                            <span
+                              dangerouslySetInnerHTML={{
+                                __html: product.price_html || product.price || "—",
+                              }}
+                            />
+                          </div>
+                          <div>
+                            <b>Total Sales:</b> {product.total_sales || 0}
+                          </div>
+                          <div>
+                            <b>Category:</b>{" "}
+                            {product.categories?.map((c: any) => c.name).join(", ") ||
+                              "-"}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-500 p-2">No reviewed products found.</p>
+          )}
         </div>
+
 
         <div className="column">
           <div className="card-header"><div className="left"><div className="title">Leading Brands</div></div></div>

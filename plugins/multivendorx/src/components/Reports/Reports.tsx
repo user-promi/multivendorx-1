@@ -22,10 +22,10 @@ const Reports = () => {
 
     axios({
       method: "GET",
-      url: `${appLocalizer.apiUrl}/wc-analytics/reports/stock/stats`,
+      url: `${appLocalizer.apiUrl}/wc/v3/reports`,
       headers: { "X-WP-Nonce": appLocalizer.nonce },
     })
-      .then(response => console.log("stock stats", response.data))
+      .then(response => console.log("reposrts", response.data))
       .catch(error => console.error(error));
 
     axios({
@@ -43,6 +43,9 @@ const Reports = () => {
       .catch(error => {
         console.error('Error fetching orders:', error);
       });
+
+
+
 
   }
 
@@ -72,6 +75,7 @@ const Reports = () => {
     { name: "Jul", orders: 200, sold_out: 45 },
     { name: "Aug", orders: 160, sold_out: 30 },
   ];
+
   const overview = [
     {
       id: 'earnings',
@@ -112,7 +116,8 @@ const Reports = () => {
     { name: "Sub Total", value: 200 },
     { name: "Shipping", value: 200 },
   ];
-  const [activeTab, setActiveTab] = useState("payout");
+
+  const [activeTab, setActiveTab] = useState("overview");
   const tabs = [
     { id: "overview", label: "Marketplace", icon: "adminlib-marketplace-membership", content: <Overview overview={overview} data={data} overviewData={overviewData} pieData={pieData} /> },
     { id: "revenue", label: "Products", icon: "adminlib-multi-product", content: <Revenue /> },
