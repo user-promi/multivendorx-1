@@ -480,12 +480,12 @@ const Orders: React.FC = () => {
         <>
             {!isViewOrder && !selectedOrder && (
                 <>
-                    <div className="page-title-wrapper">
+                    {/* <div className="page-title-wrapper">
                         <div className="page-title">
                             <div className="title">Orders</div>
                             <div className="des">Manage your store information and preferences</div>
                         </div>
-                    </div>
+                    </div> */}
                     <div className="row">
                         <div className="column">
                             <Table

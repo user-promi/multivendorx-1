@@ -172,7 +172,7 @@ const RevenueOld: React.FC = () => {
           <div className="card-header">
             <div className="left">
               <div className="title">
-                Account Overview
+                {/* Account Overview */}
               </div>
             </div>
             <div className="right">

@@ -434,9 +434,9 @@ const Transactions: React.FC = () => {
 
   return (
     <>
-      <div className="row">
-        <div className="column">
-          <div className="card-header">
+      {/* <div className="row">
+        <div className="column"> */}
+      {/* <div className="card-header">
             <div className="left">
               <div className="title">
                 Account Overview
@@ -445,23 +445,25 @@ const Transactions: React.FC = () => {
             <div className="right">
               <span>Updated 1 month ago</span>
             </div>
-          </div>
-          <div className="card-body">
-            <div className="analytics-container">
-              {overview.map((item, idx) => (
-                <div key={idx} className="analytics-item">
-                  <div className="analytics-icon">
-                    <i className={item.icon}></i>
-                  </div>
-                  <div className="details">
-                    <div className="number">{item.count}</div>
-                    <div className="text">{item.label}</div>
-                  </div>
+          </div> */}
+      <div className="row">
+        <div className="col">
+          <div className="analytics-container report">
+            {overview.map((item, idx) => (
+              <div key={idx} className="analytics-item">
+                <div className="analytics-icon">
+                  <i className={item.icon}></i>
                 </div>
-              ))}
-            </div>
+                <div className="details">
+                  <div className="number">{item.count}</div>
+                  <div className="text">{item.label}</div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
+        {/* </div>
+        </div> */}
         <div className="column">
           <div className="card-header">
             <div className="left">
@@ -484,9 +486,9 @@ const Transactions: React.FC = () => {
         </div>
       </div>
 
-      <div className="row">
-        <div className="column">
-          {/* <div className="card-header">
+      {/* <div className="row">
+        <div className="column"> */}
+      {/* <div className="card-header">
             <div className="left">
               <div className="title">
                 Account Overview
@@ -496,24 +498,24 @@ const Transactions: React.FC = () => {
               <span>Updated 1 month ago</span>
             </div>
           </div> */}
-          <Table
-            data={data}
-            columns={columns as ColumnDef<Record<string, any>, any>[]}
-            rowSelection={rowSelection}
-            onRowSelectionChange={setRowSelection}
-            defaultRowsPerPage={10}
-            pageCount={pageCount}
-            pagination={pagination}
-            onPaginationChange={setPagination}
-            handlePagination={requestApiForData}
-            perPageOption={[10, 25, 50]}
-            typeCounts={storeStatus as StoreStatus[]}
-            totalCounts={totalRows}
-            searchFilter={searchFilter}
-            realtimeFilter={realtimeFilter}
-          />
-        </div>
-      </div>
+      <Table
+        data={data}
+        columns={columns as ColumnDef<Record<string, any>, any>[]}
+        rowSelection={rowSelection}
+        onRowSelectionChange={setRowSelection}
+        defaultRowsPerPage={10}
+        pageCount={pageCount}
+        pagination={pagination}
+        onPaginationChange={setPagination}
+        handlePagination={requestApiForData}
+        perPageOption={[10, 25, 50]}
+        typeCounts={storeStatus as StoreStatus[]}
+        totalCounts={totalRows}
+        searchFilter={searchFilter}
+        realtimeFilter={realtimeFilter}
+      />
+      {/* </div>
+      </div> */}
     </>
   );
 };
