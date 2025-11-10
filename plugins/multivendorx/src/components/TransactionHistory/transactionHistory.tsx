@@ -84,19 +84,21 @@ export const TransactionHistory: React.FC = () => {
                 row: 3,
                 store_id: selectedStore.value,
                 filter_status: 'Dr',
+                transaction_type: 'Withdrawal',
                 orderBy: 'created_at',
                 order: 'DESC',
             },
         })
             .then((response) => {
                 setRecentDebits(response.data.transaction || []);
+                console.log("last 3", response.data.transaction)
             })
             .catch((error) => {
                 console.error('Error fetching recent debit transactions:', error);
                 setRecentDebits([]);
             });
     }, [selectedStore]);
-    console.log("rd", recentDebits)
+
     useEffect(() => {
         if (!storeData) return;
 
@@ -292,24 +294,38 @@ export const TransactionHistory: React.FC = () => {
                                         </div>
                                     </div>
                                     <div className="debit-list">
-                                        {recentDebits.map((txn) => (
-                                            <div key={txn.id} className="data-card">
-                                                <div className="title">
-                                                    <div className="name">Bank Transfer</div>
-                                                    <div className="date">
-                                                        {new Date(txn.date).toLocaleDateString("en-US", {
-                                                            month: "short",
-                                                            day: "2-digit",
-                                                            year: "numeric",
-                                                        })} 
+                                        {recentDebits.map((txn) => {
+                                            // Format payment method nicely (e.g., "stripe-connect" -> "Stripe Connect")
+                                            const formattedPaymentMethod = txn.payment_method
+                                                ? txn.payment_method
+                                                    .replace(/[-_]/g, ' ')                // replace - and _ with spaces
+                                                    .replace(/\b\w/g, char => char.toUpperCase()) // capitalize each word
+                                                : 'N/A';
+
+                                            return (
+                                                <div key={txn.id} className="data-card">
+                                                    <div className="title">
+                                                        <div className="name">{formattedPaymentMethod}</div>
+                                                        <div className="date">
+                                                            {new Date(txn.date).toLocaleDateString("en-US", {
+                                                                month: "short",
+                                                                day: "2-digit",
+                                                                year: "numeric",
+                                                            })}
+                                                        </div>
                                                     </div>
+
+                                                    <div
+                                                        className={`number ${parseFloat(txn.balance) < 0 ? 'negative' : 'positive'
+                                                            }`}
+                                                    >
+                                                        {formatCurrency(txn.balance)}{" "}
+                                                        {/* <span className="admin-badge green">({txn.status})</span> */}
+                                                    </div>
+
                                                 </div>
-                                                <div className="number">
-                                                    {formatCurrency(txn.balance)}{" "}
-                                                    {/* <span className="admin-badge green">({txn.status})</span> */}
-                                                </div>
-                                            </div>
-                                        ))}
+                                            );
+                                        })}
                                     </div>
                                 </div>
                             ) : (
