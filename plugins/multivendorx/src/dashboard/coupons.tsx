@@ -766,7 +766,7 @@ const AllCoupon: React.FC = () => {
                         actions: [
                             {
                                 label: __('Edit', 'multivendorx'),
-                                icon: 'adminlib-create',
+                                icon: 'adminlib-edit',
                                 onClick: (rowData: any) => {
                                     handleEditCoupon(rowData.id);
                                 },

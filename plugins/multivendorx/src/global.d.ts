@@ -13,7 +13,7 @@ declare global {
         restUrl: string;
         nonce: string;
         woo_nonce:string,
-        khali_dabba: boolean;
+        khali_dabba: any;
         tab_name: string;
         settings_databases_value: any;
         pages_list: any;

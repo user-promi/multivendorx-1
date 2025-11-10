@@ -414,12 +414,18 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             $all = StoreUtil::get_store_information(['count' => true]);
             $active = StoreUtil::get_store_information(['status' => 'active','count' => true]);
             $pending = StoreUtil::get_store_information(['status' => 'pending','count' => true]);
+            $under_review = StoreUtil::get_store_information(['status' => 'under_review','count' => true]);
+            $suspended = StoreUtil::get_store_information(['status' => 'suspended','count' => true]);
+            $deactivated= StoreUtil::get_store_information(['status' => 'deactivated','count' => true]);
 
             $response = [
                 'stores'  => $formatted_stores,
                 'all'     => $all,
                 'active'  => $active,
                 'pending' => $pending,
+                'under_review'=>$under_review,
+                'suspended'=>$suspended,
+                'deactivated'=>$deactivated,
             ];
             return rest_ensure_response( $response);
 

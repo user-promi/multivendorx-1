@@ -116,7 +116,7 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                                 checked={allSelected}
                                 onChange={(e) => {
                                     // If locked, show popup and stop
-                                    if (props.proSetting || !props.khali_dabba || !props.moduleEnabled) {
+                                    if ((props.proSetting && !props.khali_dabba) || !props.moduleEnabled) {
                                         e.preventDefault();
                                         props.proChanged?.();
                                         return;
@@ -218,7 +218,7 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                                                     setEditValue(option.label || option.value);
                                                 }}
                                                 className="edit-icon ">
-                                                    <span className="admin-badge yellow adminlib-create"></span>
+                                                    <span className="admin-badge yellow adminlib-edit"></span>
                                             </span>
                                         )}
 

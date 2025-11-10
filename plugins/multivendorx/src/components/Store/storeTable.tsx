@@ -118,9 +118,19 @@ const StoreTable: React.FC = () => {
                         count: response.data.active || 0,
                     },
                     {
-                        key: 'pending',
-                        name: 'Pending',
-                        count: response.data.pending || 0,
+                        key: 'under_review',
+                        name: 'Under Review',
+                        count: response.data.under_review || 0,
+                    },
+                    {
+                        key: 'suspended',
+                        name: 'Suspended',
+                        count: response.data.suspended || 0,
+                    },
+                    {
+                        key: 'deactivated',
+                        name: 'Deactivated',
+                        count: response.data.deactivated || 0,
                     },
                 ]);
             })
@@ -289,8 +299,8 @@ const StoreTable: React.FC = () => {
                     }).format(dateObj);
                 }
                 const formattedStatus = status
-                    ?.replace(/[-_]/g, " ")         
-                    .toLowerCase()                   
+                    ?.replace(/[-_]/g, " ")
+                    .toLowerCase()
                     .replace(/^\w/, c => c.toUpperCase());
 
                 const getStatusBadge = (status: string) => {

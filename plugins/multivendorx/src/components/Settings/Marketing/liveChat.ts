@@ -5,7 +5,7 @@ export default {
     priority: 5,
     name: __('Live Chat', 'multivendorx'),
     desc: __('Set up and manage live chat options for customer interaction.', 'multivendorx'),
-    icon: 'adminlib-wholesale',
+    icon: 'adminlib-live-chat',
     submitUrl: 'settings',
     modal: [
         {

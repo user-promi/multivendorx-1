@@ -351,7 +351,7 @@ const Orders: React.FC = () => {
                                 ? [
                                     {
                                         label: __('View', 'multivendorx'),
-                                        icon: 'adminlib-eye',
+                                        icon: 'adminlib-preview',
                                         onClick: (rowData) => {
                                             setSelectedOrder(rowData);
                                             // window.location.href = `view/${rowData.id}`;

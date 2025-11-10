@@ -5,7 +5,7 @@ export default {
     priority: 2,
     name: __('Compliance Management', 'mvx-pro'),
     desc: __('Control store access based on verification status. Ensure only compliant stores can operate fully on your marketplace.', 'mvx-pro'),
-    icon: 'adminlib-wholesale',
+    icon: 'adminlib-compliance',
     submitUrl: 'settings',
     modal: [
 
@@ -17,7 +17,7 @@ export default {
             modal: [
                 {
                     id: 'seller-verification',
-                    icon: "adminlib-google",
+                    icon: "adminlib-seller-verification",
                     label: 'Seller verification',
                     connected: true,
                     disableBtn: true,
@@ -210,7 +210,7 @@ export default {
                 },
                 {
                     id: 'financial-compliance',
-                    icon: "adminlib-import",
+                    icon: "adminlib-dollar",
                     label: 'Financial compliance',
                     disableBtn: true,
                     moduleEnabled: 'marketplace-compliance',

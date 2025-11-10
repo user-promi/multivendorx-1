@@ -170,7 +170,7 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
               {endpoint.visible !== false && (
                 <i
                   onClick={() => startEdit(key, endpoint)}
-                  className="adminlib-create"
+                  className="adminlib-edit"
                 ></i>
               )}
               <div>
@@ -234,7 +234,7 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
                         <i className="adminlib-drag"></i>
                         {sub.name}
                         <i
-                          className="adminlib-create"
+                          className="adminlib-edit"
                           onClick={() => {
                             setEditKey(subKey);
                             setEditName(sub.name);

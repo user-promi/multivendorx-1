@@ -24,68 +24,29 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-.adminlib-geo-location:before {
-  content: "\e909";
-}
-.adminlib-product-addon1:before {
-  content: "\e90a";
-}
-.adminlib-advertise-product:before {
-  content: "\e90b";
-}
-.adminlib-marketplace-gateway:before {
-  content: "\e90c";
-}
-.adminlib-marketplace-fee:before {
-  content: "\e90d";
-}
-.adminlib-compliance:before {
-  content: "\e90e";
-}
-.adminlib-question-answer:before {
-  content: "\e915";
-}
-.adminlib-zone-wise-shipping:before {
-  content: "\e916";
-}
-.adminlib-approval:before {
-  content: "\e917";
-}
-.adminlib-cash:before {
-  content: "\e918";
-}
-.adminlib-view-files:before {
-  content: "\e919";
-}
-.adminlib-file-view:before {
-  content: "\e91a";
-}
-.adminlib-recycle:before {
+.adminlib-mapbox:before {
   content: "\e900";
 }
-.adminlib-resources:before {
+.adminlib-google:before {
   content: "\e901";
 }
-.adminlib-coupon:before {
+.adminlib-close-delete:before {
   content: "\e902";
 }
-.adminlib-wallet:before {
+.adminlib-under-review:before {
   content: "\e903";
 }
-.adminlib-sales:before {
+.adminlib-rejected:before {
   content: "\e904";
 }
-.adminlib-question:before {
+.adminlib-rejecte:before {
   content: "\e905";
 }
-.adminlib-facilitator:before {
+.adminlib-pending:before {
   content: "\e906";
 }
-.adminlib-edit:before {
+.adminlib-active:before {
   content: "\e907";
-}
-.adminlib-direct-transaction:before {
-  content: "\e908";
 }
 .adminlib-cart:before {
   content: "\8907";
@@ -159,23 +120,110 @@
 .adminlib-plus-circle-o:before {
   content: "\e8f7";
 }
-.adminlib-lock:before {
+.adminlib-recycle:before {
+  content: "\e908";
+}
+.adminlib-resources:before {
+  content: "\e909";
+}
+.adminlib-coupon:before {
+  content: "\e90a";
+}
+.adminlib-wallet:before {
+  content: "\e90b";
+}
+.adminlib-sales:before {
+  content: "\e90c";
+}
+.adminlib-question:before {
+  content: "\e90d";
+}
+.adminlib-facilitator:before {
+  content: "\e90e";
+}
+.adminlib-edit:before {
   content: "\e90f";
 }
-.adminlib-pros-and-cons:before {
+.adminlib-direct-transaction:before {
   content: "\e910";
 }
-.adminlib-like:before {
+.adminlib-geo-location:before {
   content: "\e911";
 }
-.adminlib-home:before {
+.adminlib-product-addon1:before {
   content: "\e912";
 }
-.adminlib-dollar:before {
+.adminlib-advertise-product:before {
   content: "\e913";
 }
-.adminlib-bank:before {
+.adminlib-marketplace-gateway:before {
   content: "\e914";
+}
+.adminlib-marketplace-fee:before {
+  content: "\e915";
+}
+.adminlib-compliance:before {
+  content: "\e916";
+}
+.adminlib-lock:before {
+  content: "\e917";
+}
+.adminlib-pros-and-cons:before {
+  content: "\e918";
+}
+.adminlib-like:before {
+  content: "\e919";
+}
+.adminlib-home:before {
+  content: "\e91a";
+}
+.adminlib-dollar:before {
+  content: "\e91b";
+}
+.adminlib-bank:before {
+  content: "\e91c";
+}
+.adminlib-question-answer:before {
+  content: "\e91d";
+}
+.adminlib-zone-wise-shipping:before {
+  content: "\e91e";
+}
+.adminlib-approval:before {
+  content: "\e91f";
+}
+.adminlib-cash:before {
+  content: "\e920";
+}
+.adminlib-view-files:before {
+  content: "\e921";
+}
+.adminlib-automation:before {
+  content: "\e922";
+}
+.adminlib-shipping:before {
+  content: "\e923";
+}
+.adminlib-delivery-person:before {
+  content: "\e924";
+}
+.adminlib-delivery:before {
+  content: "\e925";
+}
+.adminlib-tax-compliance:before {
+  content: "\e926";
+}
+.adminlib-legal-compliance:before {
+  content: "\e927";
+}
+.adminlib-seller-verification:before {
+  content: "\e928";
+}
+.adminlib-new:before {
+  content: "\e929";
+}
+.adminlib-feature:before {
+  content: "\e92a";
 }
 .adminlib-accommodation:before {
   content: "\ef35";
@@ -273,7 +321,7 @@
 .adminlib-per-product-shipping:before {
   content: "\ef54";
 }
-.adminlib-product-addon:before {
+.adminlib-woocommerce:before {
   content: "\ef55";
 }
 .adminlib-razorpay:before {
@@ -408,7 +456,7 @@
 .adminlib-finance:before {
   content: "\ef81";
 }
-.adminlib-google:before {
+.adminlib-google1:before {
   content: "\ef82";
 }
 .adminlib-cohort:before {
