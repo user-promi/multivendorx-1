@@ -116,7 +116,7 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                                 checked={allSelected}
                                 onChange={(e) => {
                                     // If locked, show popup and stop
-                                    if (props.proSetting || !props.khali_dabba || !props.moduleEnabled) {
+                                    if ((props.proSetting && !props.khali_dabba) || !props.moduleEnabled) {
                                         e.preventDefault();
                                         props.proChanged?.();
                                         return;

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { __ } from '@wordpress/i18n';
 import { CalendarInput, getApiLink, Table, TableCell } from 'zyra';
 import axios from 'axios';
-import {formatCurrency} from '../../services/commonFunction';
+import { formatCurrency } from '../../services/commonFunction';
 
 export interface RealtimeFilter {
   name: string;
@@ -90,7 +90,7 @@ const RefundedOrderOld: React.FC = () => {
     setPageCount(Math.ceil(totalRows / rowsPerPage));
   }, [pagination, totalRows]);
 
-  const columns = [
+  const columns: ColumnDef<RefundRow>[] = [
     {
       id: 'select',
       header: ({ table }: any) => (
@@ -134,19 +134,54 @@ const RefundedOrderOld: React.FC = () => {
     },
     {
       header: __('Customer', 'multivendorx'),
-      cell: ({ row }: any) => (
-        <TableCell title={row.original.customer_name || ''}>
-          {row.original.customer_name || '-'}
-        </TableCell>
-      ),
+      cell: ({ row }: any) => {
+        const name = row.original.customer_name?.trim();
+        const link = row.original.customer_edit_link;
+
+        return (
+          <TableCell title={name || '-'}>
+            {name
+              ? link
+                ? <a
+                  href={link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
+                  {name}
+                </a>
+                : name
+              : '-'}
+          </TableCell>
+        );
+      },
     },
     {
       header: __('Store', 'multivendorx'),
-      cell: ({ row }: any) => (
-        <TableCell title={row.original.store_name || ''}>
-          {row.original.store_name || '-'}
-        </TableCell>
-      ),
+      cell: ({ row }) => {
+        const { store_id, store_name } = row.original;
+        const baseUrl = `${window.location.origin}/wp-admin/admin.php?page=multivendorx#&tab=stores`;
+        const storeLink = store_id
+          ? `${baseUrl}&edit/${store_id}/&subtab=store-overview`
+          : '#';
+
+        return (
+          <TableCell title={store_name || ''}>
+            {store_id ? (
+              <a
+                href={storeLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-purple-600 hover:underline"
+              >
+                {store_name || '-'}
+              </a>
+            ) : (
+              store_name || '-'
+            )}
+          </TableCell>
+        );
+      },
     },
     {
       header: __('Refund Amount', 'multivendorx'),
@@ -159,8 +194,8 @@ const RefundedOrderOld: React.FC = () => {
     {
       header: __('Refund Reason', 'multivendorx'),
       cell: ({ row }: any) => (
-        <TableCell title={row.original.reason || ''}>
-          {row.original.reason || '-'}
+        <TableCell title={row.original.customer_reason || ''}>
+          {row.original.customer_reason || '-'}
         </TableCell>
       ),
     },
@@ -192,7 +227,144 @@ const RefundedOrderOld: React.FC = () => {
         return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
       },
     },
+    // {
+    //     id: 'action',
+    //     header: __('Action', 'multivendorx'),
+    //     cell: ({ row }) => (
+    //         <TableCell
+    //             type="action-dropdown"
+    //             rowData={row.original}
+    //             header={{
+    //                 actions: [
+    //                     {
+    //                         label: __('View', 'multivendorx'),
+    //                         icon: 'adminlib-eye',
+    //                         hover: true,
+    //                         onClick: (rowData) => handleViewDetails(rowData),
+    //                     },
+    //                     {
+    //                         label: __('Approve', 'multivendorx'),
+    //                         icon: 'adminlib-check',
+    //                         hover: true,
+    //                         onClick: (rowData) => handleApproveRefund(rowData),
+    //                     },
+    //                     {
+    //                         label: __('Reject', 'multivendorx'),
+    //                         icon: 'adminlib-close',
+    //                         hover: true,
+    //                         onClick: (rowData) => handleRejectRefund(rowData),
+    //                     },
+    //                 ],
+    //             }}
+    //         />
+    //     ),
+    // },
   ];
+
+  
+  // const columns = [
+  //   {
+  //     id: 'select',
+  //     header: ({ table }: any) => (
+  //       <input
+  //         type="checkbox"
+  //         checked={table.getIsAllRowsSelected()}
+  //         onChange={table.getToggleAllRowsSelectedHandler()}
+  //       />
+  //     ),
+  //     cell: ({ row }: any) => (
+  //       <input
+  //         type="checkbox"
+  //         checked={row.getIsSelected()}
+  //         onChange={row.getToggleSelectedHandler()}
+  //       />
+  //     ),
+  //   },
+  //   {
+  //     id: 'order_id',
+  //     accessorKey: 'order_id',
+  //     enableSorting: true,
+  //     header: __('Order', 'multivendorx'),
+  //     cell: ({ row }: any) => {
+  //       const orderId = row.original.order_id;
+  //       const url = orderId
+  //         ? `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${orderId}&action=edit`
+  //         : '#';
+
+  //       return (
+  //         <TableCell title={orderId ? `#${orderId}` : '-'}>
+  //           {orderId ? (
+  //             <a href={url} target="_blank" rel="noopener noreferrer" className="order-link">
+  //               #{orderId}
+  //             </a>
+  //           ) : (
+  //             '-'
+  //           )}
+  //         </TableCell>
+  //       );
+  //     },
+  //   },
+  //   {
+  //     header: __('Customer', 'multivendorx'),
+  //     cell: ({ row }: any) => (
+  //       <TableCell title={row.original.customer_name || ''}>
+  //         {row.original.customer_name || '-'}
+  //       </TableCell>
+  //     ),
+  //   },
+  //   {
+  //     header: __('Store', 'multivendorx'),
+  //     cell: ({ row }: any) => (
+  //       <TableCell title={row.original.store_name || ''}>
+  //         {row.original.store_name || '-'}
+  //       </TableCell>
+  //     ),
+  //   },
+  //   {
+  //     header: __('Refund Amount', 'multivendorx'),
+  //     cell: ({ row }: any) => (
+  //       <TableCell title={row.original.amount || ''}>
+  //         {formatCurrency(row.original.amount)}
+  //       </TableCell>
+  //     ),
+  //   },
+  //   {
+  //     header: __('Refund Reason', 'multivendorx'),
+  //     cell: ({ row }: any) => (
+  //       <TableCell title={row.original.reason || ''}>
+  //         {row.original.reason || '-'}
+  //       </TableCell>
+  //     ),
+  //   },
+  //   {
+  //     header: __('Status', 'multivendorx'),
+  //     cell: ({ row }: any) => (
+  //       <TableCell title={row.original.status || ''}>
+  //         {row.original.status
+  //           ? row.original.status.charAt(0).toUpperCase() + row.original.status.slice(1)
+  //           : '-'}
+  //       </TableCell>
+  //     ),
+  //   },
+  //   {
+  //     id: 'date',
+  //     accessorKey: 'date',
+  //     enableSorting: true,
+  //     header: __('Date', 'multivendorx'),
+  //     cell: ({ row }: any) => {
+  //       const date = row.original.date;
+  //       if (!date) return <TableCell>-</TableCell>;
+
+  //       const formattedDate = new Date(date).toLocaleDateString('en-US', {
+  //         year: 'numeric',
+  //         month: 'short',
+  //         day: 'numeric',
+  //       });
+
+  //       return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
+  //     },
+  //   },
+  // ];
 
   // Fetch data from backend
   function requestData(
@@ -324,21 +496,21 @@ const RefundedOrderOld: React.FC = () => {
   ];
 
   return (
-        <Table
-          data={data}
-          columns={columns as any}
-          rowSelection={rowSelection}
-          onRowSelectionChange={setRowSelection}
-          defaultRowsPerPage={10}
-          pageCount={pageCount}
-          pagination={pagination}
-          searchFilter={searchFilter}
-          onPaginationChange={setPagination}
-          realtimeFilter={realtimeFilter}
-          handlePagination={requestApiForData}
-          perPageOption={[10, 25, 50]}
-          totalCounts={totalRows}
-        />
+    <Table
+      data={data}
+      columns={columns as any}
+      rowSelection={rowSelection}
+      onRowSelectionChange={setRowSelection}
+      defaultRowsPerPage={10}
+      pageCount={pageCount}
+      pagination={pagination}
+      searchFilter={searchFilter}
+      onPaginationChange={setPagination}
+      realtimeFilter={realtimeFilter}
+      handlePagination={requestApiForData}
+      perPageOption={[10, 25, 50]}
+      totalCounts={totalRows}
+    />
   );
 };
 
