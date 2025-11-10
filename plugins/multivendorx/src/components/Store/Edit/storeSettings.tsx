@@ -499,13 +499,24 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
 
         setAddressData(newAddressData);
 
+        const foundCountry = (appLocalizer.country_list || []).find(
+            (item) => item.label === newAddressData.country || item.value === newAddressData.country
+        );
+        
+        const foundState = stateOptions.find(
+            (item) => item.label === newAddressData.state || item.value === newAddressData.state
+        );
+
         // Merge with existing form data
         const updatedFormData = {
             ...formData,
-            ...newAddressData
+            ...newAddressData,
+            country: foundCountry ? foundCountry.value : newAddressData.country,
+            state: foundState ? foundState.value : newAddressData.state,
         };
 
         setFormData(updatedFormData);
+        setAddressData(newAddressData);
         autoSave(updatedFormData);
     };
 
@@ -624,20 +635,24 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
         };
 
         setFormData(updated);
+        setAddressData(prev => ({ ...prev, country: newValue.label }));
+
         autoSave(updated);
         fetchStatesByCountry(newValue.value);
     };
 
     // Handle state select change (from old code)
-    const handleStateChange = (newValue: any) => {
+    const handleStateChange = (newValue) => {
         if (!newValue || Array.isArray(newValue)) return;
-
+    
         const updated = {
             ...formData,
             state: newValue.value
         };
-
+    
         setFormData(updated);
+        setAddressData(prev => ({ ...prev, state: newValue.label }));
+    
         autoSave(updated);
     };
 
