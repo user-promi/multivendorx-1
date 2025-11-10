@@ -67,7 +67,7 @@ const StoreOrders: React.FC<Props> = ({ onUpdated }) => {
       method: 'GET',
       url: `${appLocalizer.apiUrl}/wc/v3/orders`,
       headers: { 'X-WP-Nonce': appLocalizer.nonce },
-      params: { meta_key: 'multivendorx_store_id', refund_status: 'refund_request' },
+      params: { meta_key: 'multivendorx_store_id', status: 'refund-requested', page: 1, per_page: 1 },
     })
       .then((response) => {
         const total = Number(response.headers['x-wp-total']) || 0;
@@ -84,7 +84,7 @@ const StoreOrders: React.FC<Props> = ({ onUpdated }) => {
     const rowsPerPage = pagination.pageSize;
     requestData(rowsPerPage, currentPage);
     setPageCount(Math.ceil(totalRows / rowsPerPage));
-  }, [pagination.pageIndex, pagination.pageSize, totalRows]);
+  }, []);
 
   /**
    * Fetch data from backend (WooCommerce Orders)
@@ -108,7 +108,7 @@ const StoreOrders: React.FC<Props> = ({ onUpdated }) => {
       meta_key: 'multivendorx_store_id',
       value: store_id,
       search: searchField,
-      refund_status: 'refund_request'
+      status: 'refund-requested'
     };
 
     //Add Date Filtering — only if both are valid Date objects
@@ -131,26 +131,45 @@ const StoreOrders: React.FC<Props> = ({ onUpdated }) => {
       params,
     })
       .then((response) => {
-        const orders: StoreRow[] = response.data.map((order: any) => ({
-          id: order.id,
-          store_name: order.store_name || '-',
-          amount: formatCurrency(order.total),
-          commission_amount: order.commission_amount
-            ? formatCurrency(order.commission_amount)
-            : '-',
-          date: new Date(order.date_created).toLocaleDateString(undefined, {
-            year: 'numeric',
-            month: 'short',
-            day: '2-digit',
-          }),
-          status: order.status,
-          currency_symbol: order.currency_symbol,
-        }));
+        const orders: StoreRow[] = response.data.map((order: any) => {
+          const metaData = order.meta_data || [];
+        
+          //Extract store ID
+          const storeMeta = metaData.find(
+            (meta: any) => meta.key === 'multivendorx_store_id'
+          );
+          const store_id = storeMeta ? storeMeta.value : null;
+        
+          //Extract refund reason
+          const reasonMeta = metaData.find(
+            (meta: any) => meta.key === '_customer_refund_reason'
+          );
+          const refundReason = reasonMeta ? reasonMeta.value : '-';
+        
+          return {
+            id: order.id,
+            store_id, // ✅ added
+            store_name: order.store_name || '-', // fallback
+            amount: formatCurrency(order.total),
+            commission_amount: order.commission_amount
+              ? formatCurrency(order.commission_amount)
+              : '-',
+            date: new Date(order.date_created).toLocaleDateString(undefined, {
+              year: 'numeric',
+              month: 'short',
+              day: '2-digit',
+            }),
+            status: order.status,
+            currency_symbol: order.currency_symbol,
+            reason: refundReason,
+          };
+        });
+        
+
 
         setData(orders);
       })
       .catch((error) => {
-        console.error('❌ Order fetch failed:', error);
         setError(__('Failed to load order data', 'multivendorx'));
         setData([]);
       });
@@ -257,7 +276,30 @@ const StoreOrders: React.FC<Props> = ({ onUpdated }) => {
     },
     {
       header: __('Store', 'multivendorx'),
-      cell: ({ row }) => <TableCell>{row.original.store_name}</TableCell>,
+      cell: ({ row }) => {
+        const { store_id, store_name } = row.original;
+        const baseUrl = `${window.location.origin}/wp-admin/admin.php?page=multivendorx#&tab=stores`;
+        const storeLink = store_id
+          ? `${baseUrl}&edit/${store_id}/&subtab=store-overview`
+          : '#';
+
+        return (
+          <TableCell title={store_name || ''}>
+            {store_id ? (
+              <a
+                href={storeLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-purple-600 hover:underline"
+              >
+                {store_name || '-'}
+              </a>
+            ) : (
+              store_name || '-'
+            )}
+          </TableCell>
+        );
+      },
     },
     {
       header: __('Amount', 'multivendorx'),
@@ -266,6 +308,14 @@ const StoreOrders: React.FC<Props> = ({ onUpdated }) => {
     {
       header: __('Commission', 'multivendorx'),
       cell: ({ row }) => <TableCell>{row.original.commission_amount}</TableCell>,
+    },
+    {
+      header: __('Refund Reason', 'multivendorx'),
+      cell: ({ row }: any) => (
+        <TableCell title={row.original.reason || ''}>
+          {row.original.reason || '-'}
+        </TableCell>
+      ),
     },
     {
       id: 'date',

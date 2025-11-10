@@ -182,6 +182,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
     
             return [
                 'id'             => $row['id'],
+                'commission_id'  => $row['commission_id'],
                 'store_name'     => $store ? $store->get('name') : '-',
                 'amount'         => $row['amount'],
                 'balance'        => $row['balance'],

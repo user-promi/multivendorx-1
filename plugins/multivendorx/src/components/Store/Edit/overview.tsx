@@ -296,7 +296,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                 <div className="card-header">
                                     <div className="left">
                                         <div className="title">
-                                            Refund Requests
+                                            Latest Refund
                                         </div>
                                     </div>
                                     <div className="right">

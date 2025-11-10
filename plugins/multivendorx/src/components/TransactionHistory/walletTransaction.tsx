@@ -9,6 +9,7 @@ import {
     PaginationState,
 } from '@tanstack/react-table';
 import { formatCurrency } from '../../services/commonFunction';
+import ViewCommission from '../Commission/viewCommission';
 
 type StoreRow = {
     id?: number;
@@ -300,6 +301,8 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
     const [overview, setOverview] = useState<any[]>([]);
     const [transactionStatus, setTransactionStatus] = useState<TransactionStatus[] | null>(null);
     const [currentFilterData, setCurrentFilterData] = useState<FilterData>({});
+    const [viewCommission, setViewCommission] = useState(false);
+    const [selectedCommissionId, setSelectedCommissionId] = useState<number | null>(null);
 
     // Add search filter with export button
     const actionButton: RealtimeFilter[] = [
@@ -355,8 +358,8 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
         typeCount = '',
         transactionType = '',
         transactionStatus = '',
-        orderBy='',
-        order='',
+        orderBy = '',
+        order = '',
     ) {
         if (!storeId) return;
 
@@ -443,9 +446,9 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             ),
         },
         {
-            id: 'id',
-            accessorKey: 'id',
-            enableSorting: true,
+            // id: 'id',
+            // accessorKey: 'id',
+            // enableSorting: true,
             header: __("ID", "multivendorx"),
             cell: ({ row }) => <TableCell>#{row.original.id}</TableCell>,
         },
@@ -459,54 +462,103 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                 </TableCell>
             ),
         },
+        // {
+        //     // id: 'order_id',
+        //     // accessorKey: 'order_id',
+        //     // enableSorting: true,
+        //     header: __('Transaction Type', 'multivendorx'),
+        //     cell: ({ row }) => {
+        //         const type = row.original.transaction_type?.toLowerCase();
+        //         const orderId = row.original.order_details;
+        //         const paymentMethod = row.original.payment_method;
+
+        //         // Format helper → makes text human-readable
+        //         const formatText = (text) =>
+        //             text
+        //                 ?.replace(/-/g, ' ')                // replace hyphens with spaces
+        //                 ?.replace(/\b\w/g, (c) => c.toUpperCase()) // capitalize each word
+        //             || '-';
+
+        //         let displayValue = '-';
+        //         let content = displayValue;
+
+        //         // Dynamic output
+        //         if (type === 'commission') {
+        //             displayValue = `Commission #${orderId || '-'}`;
+        //             if (orderId) {
+        //                 const editLink = `${appLocalizer.site_url}/wp-admin/post.php?post=${orderId}&action=edit`;
+        //                 content = (
+        //                     <a href={editLink} target="_blank" rel="noopener noreferrer">
+        //                         {displayValue}
+        //                     </a>
+        //                 );
+        //             } else {
+        //                 content = displayValue;
+        //             }
+        //         } else if (type === 'withdrawal') {
+        //             displayValue = `Withdrawal - ${formatText(paymentMethod)}`;
+        //             content = displayValue;
+        //         } else if (row.original.transaction_type) {
+        //             displayValue = formatText(row.original.transaction_type);
+        //             content = displayValue;
+        //         }
+
+        //         return <TableCell title={displayValue}>{content}</TableCell>;
+        //     },
+        // },
         {
-            id: 'order_id',
-            accessorKey: 'order_id',
-            enableSorting: true,
             header: __('Transaction Type', 'multivendorx'),
             cell: ({ row }) => {
                 const type = row.original.transaction_type?.toLowerCase();
-                const orderId = row.original.order_details;
+                const commissionId = row.original.commission_id;
                 const paymentMethod = row.original.payment_method;
-
-                // Format helper → makes text human-readable
+        
                 const formatText = (text) =>
                     text
-                        ?.replace(/-/g, ' ')                // replace hyphens with spaces
-                        ?.replace(/\b\w/g, (c) => c.toUpperCase()) // capitalize each word
+                        ?.replace(/-/g, ' ')
+                        ?.replace(/\b\w/g, (c) => c.toUpperCase())
                     || '-';
-
+        
                 let displayValue = '-';
                 let content = displayValue;
-
-                // Dynamic output
+        
+                //Commission Transaction — clickable number
                 if (type === 'commission') {
-                    displayValue = `Commission #${orderId || '-'}`;
-                    if (orderId) {
-                        const editLink = `${window.location.origin}/wp-admin/post.php?post=${orderId}&action=edit`;
+                    displayValue = `Commission #${commissionId || '-'}`;
+                    if (commissionId) {
                         content = (
-                            <a href={editLink} target="_blank" rel="noopener noreferrer">
+                            <span
+                                className="clickable-text"
+                                onClick={() => {
+                                    setSelectedCommissionId(commissionId);
+                                    setViewCommission(true);
+                                }}
+                            >
                                 {displayValue}
-                            </a>
+                            </span>
                         );
                     } else {
                         content = displayValue;
                     }
-                } else if (type === 'withdrawal') {
+                }
+                // 🟣 Withdrawal Transaction
+                else if (type === 'withdrawal') {
                     displayValue = `Withdrawal - ${formatText(paymentMethod)}`;
                     content = displayValue;
-                } else if (row.original.transaction_type) {
+                }
+                // 🟠 Refund / Other
+                else if (row.original.transaction_type) {
                     displayValue = formatText(row.original.transaction_type);
                     content = displayValue;
                 }
-
+        
                 return <TableCell title={displayValue}>{content}</TableCell>;
             },
-        },
+        },        
         {
-            id: 'created_at',
-            accessorKey: 'created_at',
-            enableSorting: true,
+            // id: 'created_at',
+            // accessorKey: 'created_at',
+            // enableSorting: true,
             header: __('Date', 'multivendorx'),
             cell: ({ row }) => {
                 const rawDate = row.original.date;
@@ -526,7 +578,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             // id: 'credit',
             // accessorKey: 'credit',
             // enableSorting: true,
-            accessorFn: row => parseFloat(row.credit || '0'),
+            // accessorFn: row => parseFloat(row.credit || '0'),
             header: __('Credit', 'multivendorx'),
             cell: ({ row }) => {
                 const credit = row.original.credit;
@@ -537,7 +589,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             // id: 'debit',
             // accessorKey: 'debit',
             // enableSorting: true,
-            accessorFn: row => parseFloat(row.debit || '0'),
+            // accessorFn: row => parseFloat(row.debit || '0'),
             header: __('Debit', 'multivendorx'),
             cell: ({ row }) => {
                 const debit = row.original.debit;
@@ -545,10 +597,9 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             },
         },
         {
-            id: 'balance',
-            accessorKey: 'balance',
-            enableSorting: true,
-            accessorFn: row => parseFloat(row.balance || '0'),
+            // id: 'balance',
+            // accessorKey: 'balance',
+            // enableSorting: true,
             header: __('Balance', 'multivendorx'),
             cell: ({ row }) => {
                 const balance = row.original.balance;
@@ -697,6 +748,14 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                     )}
                 />
             </div>
+            {viewCommission && selectedCommissionId !== null && (
+                <ViewCommission
+                    open={viewCommission}
+                    onClose={() => setViewCommission(false)}
+                    commissionId={selectedCommissionId}
+                />
+            )}
+
         </>
     );
 };
