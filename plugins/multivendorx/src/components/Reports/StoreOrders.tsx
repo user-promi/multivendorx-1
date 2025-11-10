@@ -3,7 +3,7 @@ import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { CalendarInput, getApiLink, Table, TableCell } from 'zyra';
 import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
-import {formatCurrency} from '../../services/commonFunction';
+import { formatCurrency } from '../../services/commonFunction';
 
 interface StoreRow {
   id: number;
@@ -126,21 +126,30 @@ const StoreOrders: React.FC = () => {
       params,
     })
       .then((response) => {
-        const orders: StoreRow[] = response.data.map((order: any) => ({
-          id: order.id,
-          store_name: order.store_name || '-',
-          amount: formatCurrency(order.total),
-          commission_amount: order.commission_amount
-            ? formatCurrency(order.commission_amount)
-            : '-',
-          date: new Date(order.date_created).toLocaleDateString(undefined, {
-            year: 'numeric',
-            month: 'short',
-            day: '2-digit',
-          }),
-          status: order.status,
-          currency_symbol: order.currency_symbol,
-        }));
+        const orders: StoreRow[] = response.data.map((order: any) => {
+          const metaData = order.meta_data || [];
+          const storeMeta = metaData.find(
+            (meta: any) => meta.key === 'multivendorx_store_id'
+          );
+          const store_id = storeMeta ? storeMeta.value : null;
+
+          return {
+            id: order.id,
+            store_id,
+            store_name: order.store_name || '-',
+            amount: formatCurrency(order.total),
+            commission_amount: order.commission_amount
+              ? formatCurrency(order.commission_amount)
+              : '-',
+            date: new Date(order.date_created).toLocaleDateString(undefined, {
+              year: 'numeric',
+              month: 'short',
+              day: '2-digit',
+            }),
+            status: order.status,
+            currency_symbol: order.currency_symbol,
+          };
+        });
 
         setData(orders);
       })
@@ -252,7 +261,30 @@ const StoreOrders: React.FC = () => {
     },
     {
       header: __('Store', 'multivendorx'),
-      cell: ({ row }) => <TableCell>{row.original.store_name}</TableCell>,
+      cell: ({ row }) => {
+        const { store_id, store_name } = row.original;
+        const baseUrl = `${window.location.origin}/wp-admin/admin.php?page=multivendorx#&tab=stores`;
+        const storeLink = store_id
+          ? `${baseUrl}&edit/${store_id}/&subtab=store-overview`
+          : '#';
+
+        return (
+          <TableCell title={store_name || ''}>
+            {store_id ? (
+              <a
+                href={storeLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-purple-600 hover:underline"
+              >
+                {store_name || '-'}
+              </a>
+            ) : (
+              store_name || '-'
+            )}
+          </TableCell>
+        );
+      },
     },
     {
       header: __('Amount', 'multivendorx'),
@@ -269,27 +301,63 @@ const StoreOrders: React.FC = () => {
       header: __('Date', 'multivendorx'),
       cell: ({ row }) => <TableCell>{row.original.date}</TableCell>,
     },
+    // {
+    //   header: __('Status', 'multivendorx'),
+    //   cell: ({ row }) => {
+    //     const status = row.original.status;
+    //     const badgeClass =
+    //       status === 'completed'
+    //         ? 'green'
+    //         : status === 'processing'
+    //           ? 'blue'
+    //           : status === 'refunded'
+    //             ? 'red'
+    //             : 'yellow';
+    //     return (
+    //       <TableCell>
+    //         <span className={`admin-badge ${badgeClass}`}>
+    //           {status.charAt(0).toUpperCase() + status.slice(1)}
+    //         </span>
+    //       </TableCell>
+    //     );
+    //   },
+    // },
     {
       header: __('Status', 'multivendorx'),
       cell: ({ row }) => {
-        const status = row.original.status;
-        const badgeClass =
-          status === 'completed'
-            ? 'green'
-            : status === 'processing'
-              ? 'blue'
-              : status === 'refunded'
-                ? 'red'
-                : 'yellow';
+        const rawStatus = row.original.status || '';
+        const status = rawStatus.toLowerCase();
+
+        // Define color mapping for known statuses
+        const statusColorMap: Record<string, string> = {
+          completed: 'green',
+          processing: 'blue',
+          refunded: 'red',
+          'on-hold': 'yellow',
+          cancelled: 'gray',
+          pending: 'orange',
+          failed: 'dark-red',
+          'refund-requested': 'purple', // 👈 Added for Refund Requested
+        };
+
+        const badgeClass = statusColorMap[status] || 'gray';
+
+        // Format status for display (refund-requested → Refund Requested)
+        const displayStatus =
+          status
+            ?.replace(/-/g, ' ')
+            ?.replace(/\b\w/g, (c) => c.toUpperCase()) || '-';
+
         return (
-          <TableCell>
+          <TableCell title={displayStatus}>
             <span className={`admin-badge ${badgeClass}`}>
-              {status.charAt(0).toUpperCase() + status.slice(1)}
+              {displayStatus}
             </span>
           </TableCell>
         );
       },
-    },
+    }
+
   ];
 
   return (
@@ -306,21 +374,21 @@ const StoreOrders: React.FC = () => {
     //       </div>
     //     </div>
 
-        <Table
-          data={data}
-          columns={columns as ColumnDef<Record<string, any>, any>[]}
-          rowSelection={rowSelection}
-          onRowSelectionChange={setRowSelection}
-          defaultRowsPerPage={pagination.pageSize}
-          pageCount={pageCount}
-          pagination={pagination}
-          onPaginationChange={setPagination}
-          handlePagination={requestApiForData}
-          perPageOption={[10, 25, 50]}
-          realtimeFilter={realtimeFilter}
-          searchFilter={searchFilter}
-          totalCounts={totalRows}
-        />
+    <Table
+      data={data}
+      columns={columns as ColumnDef<Record<string, any>, any>[]}
+      rowSelection={rowSelection}
+      onRowSelectionChange={setRowSelection}
+      defaultRowsPerPage={pagination.pageSize}
+      pageCount={pageCount}
+      pagination={pagination}
+      onPaginationChange={setPagination}
+      handlePagination={requestApiForData}
+      perPageOption={[10, 25, 50]}
+      realtimeFilter={realtimeFilter}
+      searchFilter={searchFilter}
+      totalCounts={totalRows}
+    />
     //   </div>
     // </div>
   );

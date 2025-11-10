@@ -5,7 +5,7 @@ import { Bar, BarChart, CartesianGrid, Cell, Legend, Line, LineChart, Pie, PieCh
 import { Tooltip } from 'react-leaflet';
 import axios from 'axios';
 import { PaginationState, RowSelectionState } from '@tanstack/react-table';
-import {formatCurrency} from '../../services/commonFunction';
+import { formatCurrency } from '../../services/commonFunction';
 
 const overview = [
   {
@@ -146,9 +146,19 @@ const Transactions: React.FC = () => {
             count: response.data.active || 0,
           },
           {
-            key: 'pending',
-            name: 'Pending',
-            count: response.data.pending || 0,
+            key: 'under_review',
+            name: 'Under Review',
+            count: response.data.under_review || 0,
+          },
+          {
+            key: 'suspended',
+            name: 'Suspended',
+            count: response.data.suspended || 0,
+          },
+          {
+            key: 'deactivated',
+            name: 'Deactivated',
+            count: response.data.deactivated || 0,
           },
         ]);
       })
@@ -238,9 +248,9 @@ const Transactions: React.FC = () => {
       ),
     },
     {
-      id: 'store_name',
-      accessorKey: 'store_name',
-      enableSorting: true,
+      // id: 'store_name',
+      // accessorKey: 'store_name',
+      // enableSorting: true,
       header: __('Store', 'multivendorx'),
       cell: ({ row }) => {
         const status = row.original.status || '';
@@ -302,24 +312,24 @@ const Transactions: React.FC = () => {
       ),
     },
     {
-      id: 'primary_owner',
-      accessorKey: 'primary_owner',
-      enableSorting: true,
-      accessorFn: (row) => row.primary_owner?.name || row.primary_owner?.email || '',
+      // id: 'primary_owner',
+      // accessorKey: 'primary_owner',
+      // enableSorting: true,
+      // accessorFn: (row) => row.primary_owner?.data.display_name || row.primary_owner?.data.user_email || '',
       header: __('Primary Owner', 'multivendorx'),
       cell: ({ row }) => {
         const primaryOwner = row.original.primary_owner;
         return (
-          <TableCell title={primaryOwner?.name || primaryOwner?.email || ''}>
+          <TableCell title={primaryOwner?.data?.display_name || primaryOwner?.data?.user_email || ''}>
             {primaryOwner ? (
               <a
-                href={`/wp-admin/user-edit.php?user_id=${primaryOwner.id}`}
+                href={`/wp-admin/user-edit.php?user_id=${primaryOwner.ID}`}
                 onClick={(e) => {
                   e.preventDefault();
-                  window.location.href = `/wp-admin/user-edit.php?user_id=${primaryOwner.id}`;
+                  window.location.href = `/wp-admin/user-edit.php?user_id=${primaryOwner.ID}`;
                 }}
               >
-                {primaryOwner.name || primaryOwner.email}
+                {primaryOwner.data?.display_name || primaryOwner.data?.user_email}
               </a>
             ) : (
               <span>-</span>
@@ -422,8 +432,6 @@ const Transactions: React.FC = () => {
     },
   ];
 
-
-
   return (
     <>
       <div className="row">
@@ -478,7 +486,7 @@ const Transactions: React.FC = () => {
 
       <div className="row">
         <div className="column">
-          <div className="card-header">
+          {/* <div className="card-header">
             <div className="left">
               <div className="title">
                 Account Overview
@@ -487,7 +495,7 @@ const Transactions: React.FC = () => {
             <div className="right">
               <span>Updated 1 month ago</span>
             </div>
-          </div>
+          </div> */}
           <Table
             data={data}
             columns={columns as ColumnDef<Record<string, any>, any>[]}
