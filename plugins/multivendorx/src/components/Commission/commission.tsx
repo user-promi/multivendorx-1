@@ -577,7 +577,7 @@ const Commission: React.FC = () => {
                     <span className={`admin-badge ${row.original.status === 'paid' ? 'green' : 'red'}`}>
                         {row.original.status
                             ? row.original.status.charAt(0).toLocaleUpperCase() + row.original.status.slice(1)
-                            : '-'}
+                            : ''}
 
                     </span>
                 </TableCell>

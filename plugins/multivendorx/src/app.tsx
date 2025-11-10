@@ -61,7 +61,7 @@ const profileItems = [
   },
   {
     title: "Community",
-    icon: "adminlib-user",
+    icon: "adminlib-global-community",
     link: "https://multivendorx.com/community/?utm_source=settings&utm_medium=plugin&utm_campaign=promotion",
     targetBlank: true,
   },
