@@ -30,10 +30,10 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
         // { label: "Pending approval", value: "pending" },
         // { label: "Rejected", value: "rejected" },
         // { label: "Permanently Rejected", value: "permanently_rejected" },
-        { label: "Under review", value: "under_review" },
+        { label: "Under Review", value: "under_review" },
         { label: "Suspended", value: "suspended" },
         { label: "Active", value: "active" },
-        { label: "Deactivated", value: "deactivated" },
+        { label: "Permanently Deactivated", value: "deactivated" },
     ];
 
     const [imagePreviews, setImagePreviews] = useState<{ [key: string]: string }>({});
@@ -691,6 +691,13 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
         if (name === "slug") {
             (async () => {
                 const trimmedValue = value.trim();
+                if (!trimmedValue) {
+                    setErrorMsg(prev => ({
+                        ...prev,
+                        slug: __("Slug cannot be blank", "multivendorx"),
+                    }));
+                    return;
+                }
                 const exists = await checkSlugExists(trimmedValue);
 
                 if (exists) {
@@ -708,7 +715,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
             return;
         }else if (name === "phone") {
             const isValidPhone = /^\+?[0-9\s\-]{7,15}$/.test(value);
-            if (isValidPhone) {
+            if (isValidPhone || value == '') {
                 autoSave(updated);
                 setErrorMsg(prev => ({ ...prev, phone: "" }));
             } else {
@@ -915,13 +922,6 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                         <label>Location Map *</label>
                                         <div
                                             id="location-map"
-                                        // style={{
-                                        //     height: '300px',
-                                        //     width: '100%',
-                                        //     borderRadius: '8px',
-                                        //     border: '1px solid #ddd',
-                                        //     marginTop: '8px'
-                                        // }}
                                         ></div>
                                         <span className="settings-metabox-description">
                                             Click on the map or drag the marker to set your exact location

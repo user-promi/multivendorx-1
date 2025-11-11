@@ -60,19 +60,28 @@ const HeaderNotifications = () => {
                                             <span className="message">{item.message}</span>
                                             <span className="time">{item.time}</span>
                                         </div>
-
-
                                         <i className="check-icon adminlib-check"></i>
                                     </div>
                                     {/* </a> */}
                                 </li>
                             ))) : (
                             <li>
-                                <Skeleton variant="text" width={150} height={30} />
-                                <Skeleton variant="text" width={150} height={30} />
-                                <Skeleton variant="text" width={150} height={30} />
-                                <Skeleton variant="text" width={150} height={30} />
-                                <Skeleton variant="text" width={150} height={30} />
+                                <div className="item">
+                                    <Skeleton variant="text" width={400} height={70} />
+
+                                </div>
+                                <div className="item">
+                                    <Skeleton variant="text" width={400} height={70} />
+
+                                </div>
+                                <div className="item">
+                                    <Skeleton variant="text" width={400} height={70} />
+
+                                </div>
+                                <div className="item">
+                                    <Skeleton variant="text" width={400} height={70} />
+
+                                </div>
                             </li>
                         )}
                     </ul>

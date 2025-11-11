@@ -1487,7 +1487,7 @@ input[type="checkbox"]:focus {
   position: relative;
   padding-left: 1.125rem;
   font-weight: 500;
-  padding-top: 0.313rem;
+  padding-top: 0.125rem;
 
   &:before {
     position: absolute;
@@ -1505,7 +1505,7 @@ input[type="checkbox"]:focus {
   position: relative;
   padding-left: 1.125rem;
   font-weight: 500;
-  padding-top: 0.313rem;
+  padding-top: 0.125rem;
 
 
   &:before {
@@ -1563,8 +1563,9 @@ input[type="checkbox"]:focus {
   flex-wrap: wrap;
 
   li {
-    font-size: 1.063rem;
+    font-size: 0.95rem;
     width: 50%;
+    color: #000000db;
 
     i {
       font-size: 1.125rem;

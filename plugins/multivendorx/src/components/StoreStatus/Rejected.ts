@@ -9,15 +9,6 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
-            key: 'registration page',
-            type: 'blocktext',
-            label: __('no_label', 'multivendorx'),
-            blocktext: __(
-                'The store application has been rejected. Sellers can view the rejection reason and resubmit their application after addressing the issues.',
-                'multivendorx'
-            ),
-        },
-        {
             key: 'store_promotion_limit',
             label: __('Store promotion limit', 'multivendorx'),
             type: 'nested',
@@ -53,7 +44,7 @@ export default {
         },
         {
             key: 'pending_msg',
-            label: 'Message shown to pending stores',
+            label: 'Message shown rejected stores',
             type: 'textarea',
             value: 'Your application was not approved. Please review feedback and reapply.',
             des: 'What pending stores can do',

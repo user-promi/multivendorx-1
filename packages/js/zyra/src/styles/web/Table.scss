@@ -336,6 +336,8 @@
                     display: flex;
                     flex: 1 0 0;
                     border: none;
+                    // box-sizing: border-box;
+                    overflow: hidden;
 
                     .admin-badge {
                         padding: 0.45rem;
@@ -473,6 +475,9 @@
                 .admin-column:has(.single-column) {
                     flex-grow: 1;
                 }
+                .admin-column:has(.action-section){
+                    overflow: visible;
+                }
             }
 
             .admin-row:has(input[type="checkbox"]:checked) {
@@ -558,22 +563,20 @@
             }
 
             img {
-                width: 3rem;
-                height: 3rem;
+                width: 2rem;
+                height: 2rem;
                 object-fit: cover;
             }
 
             .item-icon {
-                width: 3rem;
-                height: 3rem;
+                width: 2rem;
+                height: 2rem;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                // background: #e5e4e496;
-                // color: #444141;
                 background: $theme-background-color;
                 color: $theme-color;
-                font-size: 1.813rem;
+                font-size: 1.313rem;
             }
         }
     }

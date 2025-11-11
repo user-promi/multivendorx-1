@@ -312,8 +312,10 @@ class Transaction {
             ];
         }
 
+        $minimum_wallet_amount = MultiVendorX()->setting->get_setting( 'wallet_threshold_amount', 0 );
+
         return [
-            'balance' => floatval($result->balance),
+            'balance' => floatval(max(0, $result->balance - $minimum_wallet_amount)),
             'locking_balance' => floatval($result->locking_balance),
         ];
     }

@@ -118,6 +118,10 @@
             }
         }
     }
+    &.p-top{
+        padding-top: 2rem;
+        margin-bottom: 1.5rem;
+    }
 }
 
 .w-65 {
@@ -145,7 +149,7 @@
     justify-content: space-between;
     gap: 1rem;
     margin-bottom: 1rem;
-    flex-wrap: wrap;
+    // flex-wrap: wrap;
 
     .analytics-item {
         display: flex;

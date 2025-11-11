@@ -215,14 +215,21 @@
                 color: $theme-color;
             }
         }
-        &:hover{
-            background: $theme-color;
-            
-            i{
-                color: #fff;
-            }
-            p{
-                color: #fff;
+    }
+
+    &.hover {
+        .title {
+
+            &:hover {
+                background: $theme-color;
+
+                i {
+                    color: #fff;
+                }
+
+                p {
+                    color: #fff;
+                }
             }
         }
     }
@@ -643,14 +650,6 @@
     }
 }
 
-// recent-activities end
-
-// pro banner start
-// .column:has(.pro-banner-wrapper){
-//     background: transparent;
-// }
-
-
 .right-pro-banner {
     .title {
         font-size: 1.45rem;
@@ -667,10 +666,11 @@
 
     .image-wrapper {
         text-align: center;
-        margin: 1rem;
+        margin: 0;
+        margin-bottom: 1.5rem;
 
         img {
-            height: 16rem;
+            height: 20rem;
         }
     }
 
@@ -1117,7 +1117,7 @@
     width: 100%;
 
     &:after {
-        content: "400 x 400";
+        content: "80 x 80";
         left: 0;
         // position: absolute;
         top: 0;
@@ -1134,7 +1134,57 @@
 
 
 // video section start
-.video-section{
-    
+.video-section {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+
+    .details-wrapper {
+        width: 33%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 1.25rem;
+
+        .title {
+            font-size: 1.625rem;
+            line-height: 1rem;
+            text-align: center;
+        }
+
+        .des {
+            font-size: 0.95rem;
+            color: #616060ee;
+            text-align: center;
+
+        }
+    }
+
+    .video-wrapper {
+        width: 33%;
+        padding: 1rem;
+        border: $border-light-small;
+        border-radius: 0.313rem;
+
+        iframe {
+            width: 100%;
+            max-height: 500px;
+            height: 12rem;
+        }
+
+        .title {
+            font-size: 1.125rem;
+            line-height: 1.5rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+        }
+
+        .des {
+            color: #616060ee;
+            padding: 0 1rem;
+        }
+    }
 }
+
 // video section end

@@ -277,11 +277,16 @@ class StoreUtil {
         );
     
         // Build map: field_name => field_label
-        $name_label_map = [];
+        $name_label_map = $option_label_map = [];
         if ( isset($form_settings['store_registration_from']['formfieldlist']) ) {
             foreach ( $form_settings['store_registration_from']['formfieldlist'] as $field ) {
                 if ( !empty($field['name']) && !empty($field['label']) ) {
                     $name_label_map[$field['name']] = $field['label'];
+                }
+                if ( !empty($field['options']) ) {
+                    foreach ($field['options'] as $key => $options) {
+                        $option_label_map[$options['value']] = $options['label'];
+                    }
                 }
             }
         }
@@ -298,14 +303,18 @@ class StoreUtil {
             'store_application_note' => unserialize($store->get_meta('store_reject_note')),
             'store_permanent_reject' => $store->get('status') === 'permanently_rejected',
         ];
-    
+        
         foreach ( $submitted_data as $field_name => $field_value ) {
             $label = $name_label_map[$field_name] ?? $field_name;
+            $value = is_array($field_value)
+                    ? implode(', ', array_values(array_intersect_key($option_label_map, array_flip($field_value))))
+                    : ($option_label_map[$field_value] ?? $field_value);
+
             $response['all_registration_data'][$field_name] = $field_value;
             if ( in_array($field_name, $meta_keys) ) {
                 $response['core_data'][$label] = $field_value;
             } else {
-                $response['registration_data'][$label] = $field_value;
+                $response['registration_data'][$label] = $value;
             }
                 
         }

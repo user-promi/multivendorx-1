@@ -5,7 +5,7 @@ export default {
     priority: 1,
     name: __( 'System Status', 'multivendorx' ),
     desc: __(
-        'Controls how stores are onboarded and what access they get.',
+        'Website technical details are displayed to ensure optimal performance and compatibility.',
         'multivendorx'
     ),
     icon: 'adminlib-general-tab',

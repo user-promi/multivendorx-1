@@ -1,6 +1,23 @@
 import { AdminBreadcrumbs } from "zyra";
 
 const HelpSupport: React.FC = () => {
+    const videos = [
+        {
+            link: "https://www.youtube.com/watch?v=TL1HegIe0jE",
+            title: "How to Set Up MultiVendorX Marketplace",
+            des: "A step-by-step guide to setting up your multivendor marketplace."
+        },
+        {
+            link: "https://www.youtube.com/watch?v=TL1HegIe0jE",
+            title: "Vendor Dashboard Overview",
+            des: "Learn everything about the vendor dashboard and features."
+        },
+        {
+            link: "https://www.youtube.com/watch?v=TL1HegIe0jE",
+            title: "Enable Vendor Subscriptions",
+            des: "Understand how to set up subscription-based vendor plans."
+        }
+    ];
     return (
         <>
             <AdminBreadcrumbs
@@ -114,31 +131,36 @@ const HelpSupport: React.FC = () => {
                         <div className="video-section">
                             <div className="details-wrapper">
                                 <div className="title">
-                                    Lorem ipsum dolor sit amet consectetur.
+                                    Master MultiVendorX in minutes!
                                 </div>
-                                <div className="des">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Corporis laborum nesciunt voluptate vitae animi laboriosam!</div>
-                                <div className="admin-btn btn-purple">View More</div>
+                                <div className="des">Watch our top tutorial videos and learn how to set up your marketplace, manage vendors, and enable subscriptions - all in just a few easy steps.</div>
+                                <div className="admin-btn btn-purple">Watch All Tutorials</div>
                             </div>
 
-                            {[
-                                "https://www.youtube.com/watch?v=TL1HegIe0jE",
-                                "https://www.youtube.com/watch?v=TL1HegIe0jE",
-                                "https://www.youtube.com/watch?v=TL1HegIe0jE"
-                            ].map((link, index) => {
-                                const videoId = new URL(link).searchParams.get("v");
-                                return (
-                                    <div className="video-wrapper">
-                                        <iframe
-                                            key={index}
-                                            src={`https://www.youtube.com/embed/${videoId}`}
-                                            title={`YouTube video ${index + 1}`}
-                                            frameBorder="0"
-                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                            allowFullScreen
-                                        ></iframe>
+                            <div className="row">
+                                <div className="column">
+                                    <div className="video-section">
+                                        {videos.map((video, index) => {
+                                            const videoId = new URL(video.link).searchParams.get("v");
+                                            return (
+                                                <div key={index} className="video-wrapper">
+                                                    <iframe
+                                                        src={`https://www.youtube.com/embed/${videoId}`}
+                                                        title={video.title}
+                                                        frameBorder="0"
+                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                        allowFullScreen
+                                                    ></iframe>
+
+                                                    <div className="title">{video.title}</div>
+                                                    <div className="des">{video.des}</div>
+                                                </div>
+                                            );
+                                        })}
                                     </div>
-                                );
-                            })}
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
