@@ -47,7 +47,7 @@ const DeactivateRequests: React.FC<Props> = ({ onUpdated }) => {
                 setError(__('Failed to load total rows', 'multivendorx'));
             });
     }, []);
-
+console.log(totalRows)
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
         const rowsPerPage = pagination.pageSize;
@@ -162,7 +162,7 @@ const DeactivateRequests: React.FC<Props> = ({ onUpdated }) => {
             method: 'PUT',
             url: getApiLink(appLocalizer, `store/${storeId}`),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            data: { deactivate: true, action, store_id: row.id },
+            data: { deactivate: true, action, id: row.id },
         })
             .then(() => {
                 requestData(pagination.pageSize, pagination.pageIndex + 1);
@@ -176,9 +176,9 @@ const DeactivateRequests: React.FC<Props> = ({ onUpdated }) => {
             <div className="card-header">
                 <div className="left">
                     <div className="title">
-                        Deactivate Requests
+                        Ready to process
                     </div>
-                    <div className="des">Waiting for your response</div>
+                    <div className="des">These requests are queued for deactivation.</div>
                 </div>
                 <div className="right">
                     <i className="adminlib-more-vertical"></i>
@@ -193,6 +193,7 @@ const DeactivateRequests: React.FC<Props> = ({ onUpdated }) => {
                     defaultRowsPerPage={10}
                     pageCount={pageCount}
                     pagination={pagination}
+                    totalCounts={totalRows}
                     onPaginationChange={setPagination}
                     handlePagination={requestApiForData}
                     perPageOption={[10, 25, 50]}
