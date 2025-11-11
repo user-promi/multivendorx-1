@@ -336,6 +336,7 @@
                     display: flex;
                     flex: 1 0 0;
                     border: none;
+                    box-sizing: border-box;
 
                     .admin-badge {
                         padding: 0.45rem;
@@ -564,16 +565,14 @@
             }
 
             .item-icon {
-                width: 3rem;
-                height: 3rem;
+                width: 2rem;
+                height: 2rem;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                // background: #e5e4e496;
-                // color: #444141;
                 background: $theme-background-color;
                 color: $theme-color;
-                font-size: 1.813rem;
+                font-size: 1.313rem;
             }
         }
     }

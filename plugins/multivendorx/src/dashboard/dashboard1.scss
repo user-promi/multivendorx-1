@@ -125,16 +125,18 @@ a {
 .tab-wrapper {
     width: 100%;
     min-height: 100vh;
-    margin: 0 4rem 0 20rem;
+    margin-left: 16rem;
 
     .top-navbar-wrapper {
-        // position: fixed;
+        position: fixed;
         // width: calc(100% - 24rem);
         // backdrop-filter: saturate(200%) blur(6px);
         z-index: 999;
-        padding-top: 1rem;
         width: 100%;
         // background: color-mix(in srgb, var(--themeColor) 15%, transparent);
+        background: #fff;
+        border-bottom: $border-light-small;
+        right: 0;
 
         .top-navbar {
             // background: #fff;
@@ -333,8 +335,7 @@ a {
     .content-wrapper {
         min-height: 100vh;
         // background-color: #f5f6fa;
-        padding-top: 2rem;
-        padding-bottom: 1rem;
+        padding: 7rem 3rem;
 
         .title-wrapper {
             display: flex;

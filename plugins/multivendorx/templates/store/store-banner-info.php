@@ -20,7 +20,11 @@ $selectedTemplate = isset($template['selectedPalette']) ? $template['selectedPal
 
 <div class="multivendorx-banner <?php echo esc_attr($selectedTemplate); ?>">
     <div class="banner-img">
-        <img src="<?php echo esc_url($banner); ?>" alt="">
+        <?php if (!empty($banner)): ?>
+            <img src="<?php echo esc_url($banner); ?>" alt="">
+        <?php else: ?>
+            <div class="no-banner">1500 X 900</div>
+        <?php endif; ?>
     </div>
     <div class='banner-right'>
         <div class="social-profile">
@@ -63,7 +67,14 @@ $selectedTemplate = isset($template['selectedPalette']) ? $template['selectedPal
     </div>
     <div class='store-details'>
         <div class='profile'>
-            <img src='<?php echo esc_attr($profile); ?>' class='multivendorx-profile-imgcls' />
+            <?php if (!empty($profile)): ?>
+                <div class="multivendorx-profile-img">
+                <img src="<?php echo esc_url($profile); ?>" alt="">
+                </div>
+            <?php else: ?>
+                <div class="multivendorx-profile-img placeholder">400 x 400</div>
+            <?php endif; ?>
+
         </div>
         <div class="details">
             <div class="heading"><?php echo esc_html($store->get('name')); ?></div>
@@ -103,7 +114,7 @@ $selectedTemplate = isset($template['selectedPalette']) ? $template['selectedPal
             </div>
         </div>
 
-        <div class="multivendorx_vendor_rating">
+        <div class="multivendorx-vendor-rating">
             <!-- You can insert vendor rating stars here -->
         </div>
     </div>
