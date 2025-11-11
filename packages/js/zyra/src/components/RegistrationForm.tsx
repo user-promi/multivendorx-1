@@ -65,7 +65,8 @@ export interface FormField {
     column?: number;
     filesize?: number;
     disabled?: boolean;
-
+    parentId?:any;
+    
     // new for grouped/compound fields like address
     fields?: Array<{
         id: string | number;
@@ -180,7 +181,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
             settingHasChanged.current = false;
             onChange({ formfieldlist: formFieldList, butttonsetting: buttonSetting });
         }
-    }, [buttonSetting, formFieldList, onChange]);
+    }, [buttonSetting, formFieldList]);
 
     const getUniqueName = () => Date.now().toString(36);
 
@@ -253,12 +254,62 @@ const CustomForm: React.FC<CustomFormProps> = ({
         }
     };
 
-    const handleFormFieldChange = (index: number, key: string, value: any) => {
+    // const handleFormFieldChange = (index: number, key: string, value: any) => {
+    //     if (proSettingChange()) return;
+    //     const newFormFieldList = [...formFieldList];
+    //     newFormFieldList[index] = { ...newFormFieldList[index], [key]: value };
+    //     settingHasChanged.current = true;
+    //     setFormFieldList(newFormFieldList);
+
+    //     // Update opened input if it's the same field
+    //     if (opendInput?.id === newFormFieldList[index].id) {
+    //         setOpendInput(newFormFieldList[index]);
+    //     }
+    // };
+
+    const handleFormFieldChange = (
+        index: number,
+        key: string,
+        value: any,
+        parentId?: number
+    ) => {
         if (proSettingChange()) return;
+
         const newFormFieldList = [...formFieldList];
+
+        if (parentId !== undefined) {
+            // Handle subfield
+            const parentIndex = newFormFieldList.findIndex(f => f.id === parentId);
+            if (parentIndex >= 0) {
+                const parentField = { ...newFormFieldList[parentIndex] };
+                parentField.fields = parentField.fields?.map(f =>
+                    f.id === index ? { ...f, [key]: value } : f
+                );
+
+                // Update parent value object
+                parentField.value = parentField.value || {};
+                const changedSubField = parentField.fields?.find(f => f.id === index);
+                if (changedSubField?.key) {
+                    parentField.value[changedSubField.key] = value;
+                }
+
+                newFormFieldList[parentIndex] = parentField;
+                setFormFieldList(newFormFieldList);
+                settingHasChanged.current = true;
+
+                // Update opened input if it's the same subfield
+                if (opendInput?.id === index) {
+                    setOpendInput({ ...opendInput, [key]: value });
+                }
+
+                return;
+            }
+        }
+
+        // Top-level field
         newFormFieldList[index] = { ...newFormFieldList[index], [key]: value };
-        settingHasChanged.current = true;
         setFormFieldList(newFormFieldList);
+        settingHasChanged.current = true;
 
         // Update opened input if it's the same field
         if (opendInput?.id === newFormFieldList[index].id) {
@@ -627,14 +678,30 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                 opened={{ click: true }}
                                 metaType="setting-meta"
                                 inputTypeList={[]} // hide type dropdown
+                                // onChange={(key, value) => {
+                                //     if (key !== 'label' && key !== 'placeholder') return; // only allow label & placeholder
+                                //     const index = formFieldList.findIndex(f => f.id === opendInput.id);
+                                //     if (index >= 0) {
+                                //         handleFormFieldChange(index, key, value);
+                                //         setOpendInput({ ...formFieldList[index], [key]: value });
+                                //     }
+                                // }}
                                 onChange={(key, value) => {
                                     if (key !== 'label' && key !== 'placeholder') return; // only allow label & placeholder
-                                    const index = formFieldList.findIndex(f => f.id === opendInput.id);
-                                    if (index >= 0) {
-                                        handleFormFieldChange(index, key, value);
-                                        setOpendInput({ ...formFieldList[index], [key]: value });
+
+                                    if (opendInput?.parentId) {
+                                        // Subfield case
+                                        handleFormFieldChange(opendInput.id, key, value, opendInput.parentId);
+                                    } else {
+                                        // Top-level field case
+                                        const index = formFieldList.findIndex(f => f.id === opendInput.id);
+                                        if (index >= 0) {
+                                            handleFormFieldChange(index, key, value);
+                                            setOpendInput({ ...formFieldList[index], [key]: value });
+                                        }
                                     }
                                 }}
+
                             />
                         ) : (
                             // Normal fields: full edit box
@@ -642,6 +709,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                 formField={opendInput}
                                 opened={{ click: true }}
                                 onChange={(key, value) => {
+                                    console.log()
                                     const index = formFieldList.findIndex(f => f.id === opendInput.id);
                                     if (index >= 0) {
                                         handleFormFieldChange(index, key, value);
