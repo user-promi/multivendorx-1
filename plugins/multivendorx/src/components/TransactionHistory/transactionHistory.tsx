@@ -126,7 +126,6 @@ export const TransactionHistory: React.FC = () => {
     }, [storeData]);
 
 
-
     const handleAmountChange = (value: number) => {
         if (value > data.available_balance) {
             setError(`Amount cannot be greater than available balance (${data.available_balance})`);
@@ -191,6 +190,9 @@ export const TransactionHistory: React.FC = () => {
                 if (res.data.success) {
                     setRequestWithdrawal(false);
                     resetWithdrawalForm();
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 200);
                 } else if (res.data?.message) {
                     setError(`Server: ${res.data.message}`);
                 }
@@ -316,10 +318,10 @@ export const TransactionHistory: React.FC = () => {
                                                     </div>
 
                                                     <div
-                                                        className={`number ${parseFloat(txn.balance) < 0 ? 'negative' : 'positive'
+                                                        className={`number ${parseFloat(txn.debit) < 0 ? 'negative' : 'positive'
                                                             }`}
                                                     >
-                                                        {formatCurrency(txn.balance)}{" "}
+                                                        {formatCurrency(txn.debit)}{" "}
                                                         {/* <span className="admin-badge green">({txn.status})</span> */}
                                                     </div>
 
