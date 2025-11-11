@@ -14,11 +14,11 @@ body:has(.admin-main-wrapper) {
 
 a {
   text-decoration: none;
-  color: $color-black;
+  color: $theme-color !important;
 
   &:hover,
   &:focus {
-    color: $color-active;
+    color: $color-active !important;
     outline: none
   }
 }

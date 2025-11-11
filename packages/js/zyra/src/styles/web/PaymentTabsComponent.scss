@@ -391,6 +391,22 @@
 
 
 // setup wizard start (clean unuse css)
+.welcome-wrapper {
+    text-align: center;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+
+    img {
+        width: 11rem;
+    }
+
+    .des {
+        font-size: 0.95rem;
+        text-align: center;
+        padding: 0 3rem;
+    }
+}
+
 .wizard-container {
     width: 100%;
     max-width: 50rem;
@@ -435,7 +451,7 @@
     font-size: 1.313rem;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.5rem 0 1.5rem 0;
+    padding: 0.5rem;
 
     span {
         font-size: 1.4rem;

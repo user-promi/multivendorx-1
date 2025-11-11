@@ -132,7 +132,7 @@ const CustomerServices = () => {
             <div className="general-wrapper">
                 {tabs.length > 0 ? (
                     <>
-                        <div className="tab-titles">
+                        <div className="tab-titles hover">
                             {tabs.map((tab) => (
                                 <div
                                     key={tab.id}
