@@ -166,6 +166,11 @@ class Modules {
                         'module_file'=> MultiVendorX()->plugin_path . 'modules/Knowledgebase/Module.php',
                         'module_class' => 'MultiVendorX\Knowledgebase\Module',
                     ),
+                    'privacy'=> array(
+                        'id'=> 'privacy',
+                        'module_file'=> MultiVendorX()->plugin_path . 'modules/Privacy/Module.php',
+                        'module_class' => 'MultiVendorX\Privacy\Module',
+                    ),
 				)
             );
         }

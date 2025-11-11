@@ -387,6 +387,7 @@ const Revenue: React.FC = () => {
       url: `${appLocalizer.apiUrl}/wc/v3/products`,
       headers: { 'X-WP-Nonce': appLocalizer.nonce },
       params: {
+        meta_key:'multivendorx_store_id',
         per_page: 1,
         stock_status: 'outofstock',
       },
@@ -405,6 +406,7 @@ const Revenue: React.FC = () => {
       url: `${appLocalizer.apiUrl}/wc/v3/products`,
       headers: { 'X-WP-Nonce': appLocalizer.nonce },
       params: {
+        meta_key:'multivendorx_store_id',
         per_page: 1,
         stock_status: 'onbackorder',
       },
@@ -423,6 +425,7 @@ const Revenue: React.FC = () => {
       url: `${appLocalizer.apiUrl}/wc/v3/products`,
       headers: { 'X-WP-Nonce': appLocalizer.nonce },
       params: {
+        meta_key:'multivendorx_store_id',
         per_page: 1,
         stock_status: 'instock',
       },
@@ -443,6 +446,7 @@ const Revenue: React.FC = () => {
       headers: { 'X-WP-Nonce': appLocalizer.nonce },
       params: {
         per_page: 1,
+        meta_key:'multivendorx_store_id',
         stock_status: 'instock',
         min_stock_quantity: 1,
         max_stock_quantity: lowStockThreshold,
@@ -461,7 +465,7 @@ const Revenue: React.FC = () => {
   const overview = [
     { id: "sales", label: "Total Products", count: totalRows, icon: "adminlib-star red" },
     { id: "earnings", label: "In Stock", count: inStockCount, icon: "adminlib-support green" },
-    { id: "Vendors", label: "Low Stock", count: lowStockCount, icon: "adminlib-global-community yellow" },
+    { id: "Vendors", label: "On backorder", count: onBackorderCount, icon: "adminlib-global-community yellow" },
     { id: "free", label: "Out of Stock", count: outOfStockCount, icon: "adminlib-global-community blue" },
   ];
 

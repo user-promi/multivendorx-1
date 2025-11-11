@@ -137,7 +137,7 @@ export default {
         },
         { type: 'separator', id: 'store_management', label: 'Store Management' },
         {
-            id: 'SPMV',
+            id: 'spmv',
             name: __('Single Product Multiple Vendor', 'multivendorx'),
             desc: "Allows more than one store to sell the same product with their own price and stock.",
             icon: 'adminlib-spmv',
@@ -409,7 +409,7 @@ export default {
         },
         { type: 'separator', id: 'marketplace_boosters', label: 'Marketplace Boosters' },
         {
-            id: 'compliance',
+            id: 'marketplace-compliance',
             name: __('Compliance', 'multivendorx'),
             desc: "Ensure stores meet marketplace requirements with automated policy checks.",
             icon: 'adminlib-compliance',

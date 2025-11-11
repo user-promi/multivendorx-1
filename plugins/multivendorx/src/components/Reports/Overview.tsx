@@ -39,45 +39,13 @@ type OverviewProps = {
   COLORS?: string[];
 };
 
-const Overview: React.FC<OverviewProps> = ({
-  data,
-  COLORS = ["#5007aa", "#00c49f", "#ff7300", "#d400ffff", "#004ec4ff"],
-}) => {
+const Overview: React.FC<OverviewProps> = ({ }) => {
   const [commissionDetails, setCommissionDeatils] = useState<any[]>([]);
   const [earningSummary, setEarningSummary] = useState<any[]>([]);
   const [pieData, setPieData] = useState<any>([]);
-
-  const salesByLocations = [
-    { name: "USA", coordinates: [40, -100], sales: 12000 },
-    { name: "India", coordinates: [22, 78], sales: 8500 },
-    { name: "UK", coordinates: [54, -2], sales: 6700 },
-    { name: "Germany", coordinates: [51, 10], sales: 5400 },
-    { name: "Australia", coordinates: [-25, 133], sales: 4300 },
-  ];
-  const salesIcon = new L.DivIcon({
-    className: "custom-marker",
-    html: `<div style="background:#5007aa;color:#fff;border-radius:50%;padding:6px 0.625rem;font-size:0.75rem;">$</div>`,
-  });
-
-  const [leaderboard, setLeaderboard] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchLeaderboards = async () => {
-    try {
-      setLoading(true);
-      const response = await axios({
-        method: "GET",
-        url: `${appLocalizer.apiUrl}/wc-analytics/leaderboards`,
-        headers: { "X-WP-Nonce": appLocalizer.nonce },
-      });
-      setLeaderboard(response.data || []);
-    } catch (err: any) {
-      setError("Failed to fetch leaderboard data");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [topCoupons, setTopCoupons] = useState<any[]>([]);
+  const [topCustomers, setTopCustomers] = useState<any[]>([]);
+  const [topStores, setTopStores] = useState<any[]>([]);
 
   const fetchCommissionDetails = async () => {
     axios({
@@ -179,13 +147,74 @@ const Overview: React.FC<OverviewProps> = ({
       .catch(() => {
         // Handle error gracefully
       });
+
+    axios({
+      method: 'GET',
+      url: getApiLink(appLocalizer, 'commission'),
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      params: { format: 'reports', top_stores: 3 },
+    })
+      .then((response) => {
+        setTopStores(response.data)
+      })
+      .catch(() => {
+        // Handle error gracefully
+      });
   };
 
   useEffect(() => {
-    fetchCommissionDetails();
-    fetchLeaderboards();
-  }, []);
+    // Top selling coupons
+    axios({
+      method: 'GET',
+      url: `${appLocalizer.apiUrl}/wc/v3/coupons`,
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      params: {
+        meta_key: 'multivendorx_store_id',
+        per_page: 50, // get more so we can sort later
+        orderby: 'date', // valid param, required by API
+        order: 'desc',
+      },
+    })
+      .then(response => {
+        // Sort coupons manually by usage_count (descending)
+        const sortedCoupons = response.data
+          .sort((a, b) => b.usage_count - a.usage_count)
+          .slice(0, 5); // take top 5 only
 
+        console.log("Top 5 Coupons:", sortedCoupons);
+        setTopCoupons(sortedCoupons);
+      })
+      .catch(error => {
+        console.error('Error fetching top coupons:', error);
+      });
+
+    axios({
+      method: 'GET',
+      url: `${appLocalizer.apiUrl}/wc-analytics/customers`,
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      params: {
+        per_page: 50,       // fetch more customers so we can sort manually
+        orderby: 'total_spend',
+        order: 'desc',
+      },
+    })
+      .then((response) => {
+        // Sort by total_spend manually in case API doesn't enforce order
+        const sortedCustomers = response.data
+          .sort((a, b) => b.total_spend - a.total_spend)
+          .slice(0, 5); // Top 5 customers only
+
+        console.log("Top 5 Customers:", sortedCustomers);
+        setTopCustomers(sortedCustomers);
+      })
+      .catch((error) => {
+        console.error('Error fetching top customers:', error);
+      });
+
+
+    fetchCommissionDetails();
+  }, []);
+  console.log('site_url', appLocalizer.site_url)
   return (
     <>
       <div className="row">
@@ -286,7 +315,7 @@ const Overview: React.FC<OverviewProps> = ({
       </div>
 
 
-      <div className="row">
+      {/* <div className="row">
         {leaderboard.map((section: any, sectionIndex: number) => (
           <div className="column" key={sectionIndex}>
             <div className="card-header">
@@ -342,8 +371,6 @@ const Overview: React.FC<OverviewProps> = ({
             </div>
           </div>
         ))}
-
-
         <div className="column">
           <div className="card-header">
             <div className="left">
@@ -383,7 +410,190 @@ const Overview: React.FC<OverviewProps> = ({
             </div>
           </div>
         </div>
+      </div> */}
+
+      {/* Keep categories and brands */}
+      <div className="row">
+
+        <div className="column">
+          <div className="card-header">
+            <div className="left">
+              <div className="title">Top Selling Coupons</div>
+            </div>
+          </div>
+
+          {topCoupons.length > 0 ? (
+            topCoupons.map((coupon: any) => (
+              <div className="store-owner-details" key={`coupon-${coupon.id}`}>
+                <div className="profile">
+                  <div className="avater">
+                    <a
+                      href={`${appLocalizer.site_url}/wp-admin/post.php?post=${coupon.id}&action=edit`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <span className="adminlib-coupon"></span>
+                    </a>
+                  </div>
+
+                  <div className="details">
+                    <div className="name">
+                      <a
+                        href={`${appLocalizer.site_url}/wp-admin/post.php?post=${coupon.id}&action=edit`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {coupon.code}
+                      </a>
+                    </div>
+                    <div className="des">Used {coupon.usage_count || 0} times</div>
+                    {coupon.description && (
+                      <div className="small-text">{coupon.description}</div>
+                    )}
+                    {coupon.store_name && (
+                      <div className="small-text">
+                        Store: {coupon.store_name}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="right-details">
+                  <div className="price">
+                    <span>
+                      {coupon.amount
+                        ? coupon.discount_type === 'percent'
+                          ? `${coupon.amount}%`
+                          : formatCurrency(coupon.amount)
+                        : '—'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>No top coupons found.</p>
+          )}
+        </div>
+
+        <div className="column">
+          <div className="card-header">
+            <div className="left">
+              <div className="title">Top Customers</div>
+            </div>
+          </div>
+
+          {topCustomers.length > 0 ? (
+            topCustomers.map((customer: any) => (
+              <div className="store-owner-details" key={`customer-${customer.user_id}`}>
+                <div className="profile">
+                  <div className="avater">
+                    <a
+                      href={`${appLocalizer.site_url}/wp-admin/user-edit.php?user_id=${customer.user_id}&wp_http_referer=%2Fwp-admin%2Fusers.php`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <img
+                        src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                          customer.name?.trim() || customer.username
+                        )}&background=5007aa&color=fff`}
+                        alt={customer.name || customer.username}
+                      />
+                    </a>
+                  </div>
+
+                  <div className="details">
+                    <div className="name">
+                      <a
+                        href={`${appLocalizer.site_url}/wp-admin/user-edit.php?user_id=${customer.user_id}&wp_http_referer=%2Fwp-admin%2Fusers.php`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {customer.name?.trim() || customer.username}
+                      </a>
+                    </div>
+                    <div className="des">Orders: {customer.orders_count || 0}</div>
+                    <div className="small-text">{customer.email || 'No email'}</div>
+                  </div>
+                </div>
+
+                <div className="right-details">
+                  <div className="price">
+                    <span>{formatCurrency(customer.total_spend || 0)}</span>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>No top customers found.</p>
+          )}
+        </div>
+
+
+
+        <div className="column">
+          <div className="card-header">
+            <div className="left">
+              <div className="title">Top Stores</div>
+            </div>
+          </div>
+
+          {topStores.length > 0 ? (
+            topStores.map((store: any) => (
+              <div className="store-owner-details" key={`store-${store.store_id}`}>
+                <div className="profile">
+                  <div className="avater">
+                    <a
+                      href={`${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${store.store_id}/&subtab=store-overview`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <img
+                        src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                          store.store_name || 'Store'
+                        )}&background=0073aa&color=fff`}
+                        alt={store.store_name}
+                      />
+                    </a>
+                  </div>
+
+                  <div className="details">
+                    <div className="name">
+                      <a
+                        href={`${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${store.store_id}/&subtab=store-overview`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {store.store_name}
+                      </a>
+                    </div>
+                    <div className="des">
+                      Commission: {formatCurrency(store.commission_total || 0)}
+                    </div>
+                    <div className="small-text">
+                      Refunded: {formatCurrency(store.commission_refunded || 0)}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="right-details">
+                  <div className="price">
+                    <span>{formatCurrency(store.total_order_amount || 0)}</span>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>No top stores found.</p>
+          )}
+
+        </div>
+
       </div>
+
+
+
+
     </>
   );
 };
