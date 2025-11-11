@@ -619,11 +619,14 @@ const EditStore = () => {
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                 >
-                                                    <i className="adminlib-storefront"></i> Storefront
+                                                    <i className="adminlib-storefront"></i> View Storefront
                                                 </a>
                                             </li>
                                         }
-                                        <li onClick={handleStoreDelete}><i className="adminlib-delete"></i> Store Delete</li>
+                                        <li><i className="adminlib-delete"></i> Manage status</li>
+                                        <li><i className="adminlib-delete"></i> Products</li>
+                                        <li><i className="adminlib-delete"></i> Orders</li>
+                                        <li onClick={handleStoreDelete}><i className="adminlib-delete"></i> Delete store</li>
                                     </ul>
                                 )}
                             </div>

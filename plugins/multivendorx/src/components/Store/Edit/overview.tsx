@@ -139,40 +139,46 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                     ></i>
                                 </div>
                             </div>
-                            {recentDebits.map((txn) => (
-                                <div key={txn.id} className="store-owner-details">
-                                    <div className="profile">
-                                        <div className="avater">
-                                            <span className="adminlib-calendar"></span>
-                                        </div>
-                                        <div className="details">
-                                            <div className="name">
-                                                {formatCurrency(txn.balance)}
+                            {recentDebits && recentDebits.length > 0 ? (
+                                recentDebits.map((txn) => (
+                                    <div key={txn.id} className="store-owner-details">
+                                        <div className="profile">
+                                            <div className="avater">
+                                                <span className="adminlib-calendar"></span>
                                             </div>
-                                            <div className="des">
-                                                {new Date(txn.date).toLocaleDateString("en-US", {
-                                                    month: "short",
-                                                    day: "2-digit",
-                                                    year: "numeric",
-                                                })}
+                                            <div className="details">
+                                                <div className="name">
+                                                    {formatCurrency(txn.balance)}
+                                                </div>
+                                                <div className="des">
+                                                    {new Date(txn.date).toLocaleDateString("en-US", {
+                                                        month: "short",
+                                                        day: "2-digit",
+                                                        year: "numeric",
+                                                    })}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div className="right-details">
-                                        <div
-                                            className={`admin-badge ${txn.status?.toLowerCase() === "completed"
-                                                ? "green"
-                                                : txn.status?.toLowerCase() === "pending"
-                                                    ? "yellow"
-                                                    : "red"
+                                        <div className="right-details">
+                                            <div
+                                                className={`admin-badge ${
+                                                    txn.status?.toLowerCase() === "completed"
+                                                        ? "green"
+                                                        : txn.status?.toLowerCase() === "pending"
+                                                        ? "yellow"
+                                                        : "red"
                                                 }`}
-                                        >
-                                            {txn.status}
+                                            >
+                                                {txn.status}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))
+                            ) : (
+                                <div className="no-products">No recent payout</div>
+                            )}
+
                         </div>
 
                         {/* <div className="column">
