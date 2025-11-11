@@ -541,12 +541,10 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                         content = displayValue;
                     }
                 }
-                // 🟣 Withdrawal Transaction
                 else if (type === 'withdrawal') {
                     displayValue = `Withdrawal - ${formatText(paymentMethod)}`;
                     content = displayValue;
                 }
-                // 🟠 Refund / Other
                 else if (row.original.transaction_type) {
                     displayValue = formatText(row.original.transaction_type);
                     content = displayValue;

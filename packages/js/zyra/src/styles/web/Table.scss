@@ -531,7 +531,9 @@
             display: flex;
             gap: 0.625rem;
             cursor: pointer;
-
+            a{
+                color: #00000062;
+            }
             .details {
                 display: flex;
                 flex-direction: column;
@@ -547,6 +549,11 @@
                 .des {
                     color: #00000073;
                     font-size: 0.813rem;
+
+                    i{
+                        padding-right: 0.313rem;
+                        color: $theme-color;
+                    }
                 }
             }
 

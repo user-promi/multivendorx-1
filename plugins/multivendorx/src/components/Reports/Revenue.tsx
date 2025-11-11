@@ -470,7 +470,7 @@ const Revenue: React.FC = () => {
     { id: "Vendors", label: "Low Stock", count: lowStockCount, icon: "adminlib-global-community yellow" },
     { id: "free", label: "Out of Stock", count: outOfStockCount, icon: "adminlib-global-community blue" },
   ];
-  
+
   //Fixed table columns for WooCommerce products
   const columns: ColumnDef<ProductRow>[] = [
     {
@@ -511,13 +511,13 @@ const Revenue: React.FC = () => {
               <span className="title">
                 {row.original.title}
               </span>
+              <div className="des">{row.original.sku}</div>
             </div>
           </a>
         </TableCell>
       ),
     },
     { header: __("Store", "multivendorx"), cell: ({ row }) => <TableCell>{row.original.store_name}</TableCell> },
-    { header: __("SKU", "multivendorx"), cell: ({ row }) => <TableCell>{row.original.sku}</TableCell> },
     { header: __("Items sold", "multivendorx"), cell: ({ row }) => <TableCell>{row.original.itemsSold}</TableCell> },
     { header: __("Net sales", "multivendorx"), cell: ({ row }) => <TableCell>{row.original.netSales}</TableCell> },
     { header: __("Category", "multivendorx"), cell: ({ row }) => <TableCell>{row.original.category}</TableCell> },
@@ -745,6 +745,16 @@ const Revenue: React.FC = () => {
             </LineChart>
           </ResponsiveContainer>
         </div> */}
+        <div className="column transparent">
+          <div className="analytics-container report">
+            {overview.map((item, idx) => (
+              <div key={idx} className="analytics-item">
+                <div className="analytics-icon"><i className={item.icon}></i></div>
+                <div className="details"><div className="number">{item.count}</div><div className="text">{item.label}</div></div>
+              </div>
+            ))}
+          </div>
+        </div>
 
         <div className="column">
           <div className="card-header">
@@ -770,24 +780,6 @@ const Revenue: React.FC = () => {
           ) : (
             <p className="text-gray-500 p-2">No product sales data found.</p>
           )}
-        </div>
-
-
-        <div className="column">
-          <div className="card-header">
-            <div className="left"><div className="title">Account Overview</div></div>
-            {/* <div className="right"><span>Updated 1 month ago</span></div> */}
-          </div>
-          <div className="card-body">
-            <div className="analytics-container">
-              {overview.map((item, idx) => (
-                <div key={idx} className="analytics-item">
-                  <div className="analytics-icon"><i className={item.icon}></i></div>
-                  <div className="details"><div className="number">{item.count}</div><div className="text">{item.label}</div></div>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
 
@@ -879,57 +871,31 @@ const Revenue: React.FC = () => {
 
           {toSellingProduct.length > 0 ? (
             toSellingProduct.map((product: any) => (
-              <div className="column" key={`selling-${product.id}`}>
-                <div
-                  className="card-header"
-                  onClick={() => toggleSellingCard(product.id.toString())}
-                >
-                  <div className="left">
-                    <div className="product-name">{product.name}</div>
-                    <div className="price">
-                      <b>Total Sales:</b> {product.total_sales || 0}
+              // <div className="column" key={`selling-${product.id}`}>
+
+                <div className="store-owner-details" key={`selling-${product.id}`}>
+                  <div className="profile">
+                    <div className="avater">
+                      <img
+                        src={product.images[0].src}
+                        alt={product.name}
+                      />
+                    </div>
+                    <div className="details">
+                      <div className="name">{product.name}</div>
+                      <div className="des">Total Sales: {product.total_sales || 0}</div>
                     </div>
                   </div>
-                  <div className="right">
-                    <i
-                      className={`adminlib-pagination-right-arrow ${openSellingCards[product.id] ? "rotate-90 transition-transform" : ""
-                        }`}
-                    ></i>
+                  <div className="right-details">
+                    {/* <div className="price">$356 .35</div>
+                                <div className="div">Lorem, ipsum dolor.</div> */}
+                    <div className="price"><span
+                      dangerouslySetInnerHTML={{
+                        __html: product.price_html || product.price || "—",
+                      }}
+                    /></div>
                   </div>
                 </div>
-
-                {openSellingCards[product.id] && (
-                  <div className="top-items">
-                    <div className="items">
-                      <div className="left-side">
-                        {product.images?.[0]?.src ? (
-                          <img
-                            src={product.images[0].src}
-                            alt={product.name}
-                            style={{ width: 50, height: 50, borderRadius: 6 }}
-                          />
-                        ) : (
-                          <i className="adminlib-store-inventory"></i>
-                        )}
-                        <div className="details">
-                          <div>
-                            <b>Price:</b>{" "}
-                            <span
-                              dangerouslySetInnerHTML={{
-                                __html: product.price_html || product.price || "—",
-                              }}
-                            />
-                          </div>
-                          <div>
-                            <b>Category:</b>{" "}
-                            {product.categories?.map((c: any) => c.name).join(", ") || "-"}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
             ))
           ) : (
             <p>No top selling products found.</p>
@@ -940,26 +906,22 @@ const Revenue: React.FC = () => {
       </div>
 
       {/*Fixed Table Section */}
-      <div className="row">
-        <div className="column">
-          <div className="card-header"><div className="left"><div className="title">Revenue Distribution</div></div></div>
-          <Table
-            data={data}
-            columns={columns as ColumnDef<Record<string, any>, any>[]}
-            rowSelection={rowSelection}
-            onRowSelectionChange={setRowSelection}
-            defaultRowsPerPage={pagination.pageSize}
-            pageCount={pageCount}
-            pagination={pagination}
-            onPaginationChange={setPagination}
-            handlePagination={requestApiForData}
-            perPageOption={[10, 25, 50]}
-            realtimeFilter={realtimeFilter}
-            searchFilter={searchFilter}
-            totalCounts={totalRows}
-          />
-        </div>
-      </div>
+      <div className="card-header"><div className="left"><div className="title">Revenue Distribution</div></div></div>
+      <Table
+        data={data}
+        columns={columns as ColumnDef<Record<string, any>, any>[]}
+        rowSelection={rowSelection}
+        onRowSelectionChange={setRowSelection}
+        defaultRowsPerPage={pagination.pageSize}
+        pageCount={pageCount}
+        pagination={pagination}
+        onPaginationChange={setPagination}
+        handlePagination={requestApiForData}
+        perPageOption={[10, 25, 50]}
+        realtimeFilter={realtimeFilter}
+        searchFilter={searchFilter}
+        totalCounts={totalRows}
+      />
     </div>
   );
 };
