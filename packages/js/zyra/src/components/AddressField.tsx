@@ -12,6 +12,7 @@ interface SubField {
     placeholder?: string;
     options?: string[];
     required?: boolean;
+    readonly?: boolean;
 }
 
 interface AddressFormField {
@@ -20,6 +21,7 @@ interface AddressFormField {
     label: string;
     fields?: SubField[];
     value?: Record<string, any>;
+    readonly?:boolean;
 }
 
 interface AddressFieldProps {
@@ -68,14 +70,13 @@ const AddressField: React.FC<AddressFieldProps> = ({ formField, onChange, opendI
                         className={`address-subfield ${opendInput?.id === f.id ? 'active' : ''}`}
                         onClick={(e) => {
                             e.stopPropagation();
-                            setOpendInput({ ...f, parentId: formField.id } as unknown as FormField);
+                            setOpendInput({ ...f, readonly:formField.readonly, parentId: formField.id } as unknown as FormField);
                         }}
                     >
                         <div className="address-subfield-header">
                             <span className="admin-badge gray drag-handle" style={{ cursor: 'grab' }}>
                                 <i className="admin-font adminlib-drag"></i>
                             </span>
-                            <label>{f.label}</label>
                         </div>
 
                         {f.type === 'text' && (
