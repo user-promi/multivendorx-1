@@ -59,7 +59,7 @@ class Payment {
 
         $paypal_settings = !empty($payment_admin_settings['paypal-payout']) ? $payment_admin_settings['paypal-payout'] : [];
         
-        if ($paypal_settings && $paypal_settings['enable']) {
+        if ($paypal_settings && !$paypal_settings['enable']) {
             return [
                 'id'    => $this->get_id(),
                 'label' => __('Paypal Payout', 'multivendorx'),

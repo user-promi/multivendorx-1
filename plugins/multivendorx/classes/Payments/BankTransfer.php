@@ -127,7 +127,7 @@ class BankTransfer
 
         $settings = !empty($payment_admin_settings['bank-transfer']) ? $payment_admin_settings['bank-transfer'] : [];
 
-        if ($settings) {
+        if (!empty($settings) && !$settings['enable']) {
             return [
                 'id' => $this->get_id(),
                 'label' => __('Bank Transfer', 'multivendorx'),
