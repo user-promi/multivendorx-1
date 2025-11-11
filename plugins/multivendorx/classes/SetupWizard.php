@@ -60,7 +60,7 @@ class SetupWizard {
         if ( 'dashboard_page_multivendorx-setup' === $current_screen->id ) {
             wp_enqueue_script( 'setup-wizard-script', MultiVendorX()->plugin_url . FrontendScripts::get_build_path_name() . 'js/block/setupWizard/index.js', array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'react-jsx-runtime' ), MultiVendorX()->version, true );
             wp_set_script_translations( 'setup-wizard-script', 'multivendorx' );
-            wp_enqueue_style( 'setup-wizard-style', MultiVendorX()->plugin_url . FrontendScripts::get_build_path_name() . 'styles/block/setupWizard/index.css', array(), MultiVendorX()->version );
+            // wp_enqueue_style( 'setup-wizard-style', MultiVendorX()->plugin_url . FrontendScripts::get_build_path_name() . 'styles/block/setupWizard/index.css', array(), MultiVendorX()->version );
             wp_localize_script(
                 'setup-wizard-script',
                 'appLocalizer',

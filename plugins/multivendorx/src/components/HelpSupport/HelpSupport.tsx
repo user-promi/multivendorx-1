@@ -108,6 +108,41 @@ const HelpSupport: React.FC = () => {
                         </div>
                     </div>
                 </div>
+
+                <div className="row">
+                    <div className="column">
+                        <div className="video-section">
+                            <div className="details-wrapper">
+                                <div className="title">
+                                    Lorem ipsum dolor sit amet consectetur.
+                                </div>
+                                <div className="des">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Corporis laborum nesciunt voluptate vitae animi laboriosam!</div>
+                                <div className="admin-btn btn-purple">View More</div>
+                            </div>
+
+                            {[
+                                "https://www.youtube.com/watch?v=TL1HegIe0jE",
+                                "https://www.youtube.com/watch?v=TL1HegIe0jE",
+                                "https://www.youtube.com/watch?v=TL1HegIe0jE"
+                            ].map((link, index) => {
+                                const videoId = new URL(link).searchParams.get("v");
+                                return (
+                                    <div className="video-wrapper">
+                                        <iframe
+                                            key={index}
+                                            src={`https://www.youtube.com/embed/${videoId}`}
+                                            title={`YouTube video ${index + 1}`}
+                                            frameBorder="0"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                            allowFullScreen
+                                        ></iframe>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </>
     );
