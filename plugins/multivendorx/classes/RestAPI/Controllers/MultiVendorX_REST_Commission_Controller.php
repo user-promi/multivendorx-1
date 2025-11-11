@@ -77,7 +77,11 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         if ( $format === 'csv' ) {
             return $this->download_csv( $request );
         }
-    
+
+        if ( $format === 'reports' ) {
+            return CommissionUtil::get_commission_summary_for_store();
+        }
+
         $limit   = max( intval( $request->get_param( 'row' ) ), 10 );
         $page    = max( intval( $request->get_param( 'page' ) ), 1 );
         $offset  = ( $page - 1 ) * $limit;
