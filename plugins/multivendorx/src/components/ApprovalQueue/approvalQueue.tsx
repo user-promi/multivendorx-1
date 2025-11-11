@@ -7,6 +7,7 @@ import Stores from './stores';
 import ReportAbuseTable from './pendingAbuseReports';
 import WithdrawalRequests from './withdrawalRequests';
 import StoreOrders from './StoreOrders';
+import DeactivateRequests from './deactivateRequests';
 
 const ApprovalQueue = () => {
     const [storeCount, setStoreCount] = useState<number>(0);
@@ -15,6 +16,7 @@ const ApprovalQueue = () => {
     const [refundCount, setRefundCount] = useState<number>(0);
     const [reportAbuseCount, setReportAbuseCount] = useState<number>(0);
     const [withdrawCount, setWithdrawCount] = useState<number>(0);
+    const [deactivateCount, setDeactivateCount] = useState<number>(0);
 
     const { modules } = useModules();
     const [activeTab, setActiveTab] = useState("");
@@ -22,13 +24,15 @@ const ApprovalQueue = () => {
 
     const refreshCounts = async () => {
         try {
-            const [storeRes, productRes, couponRes, refundRes, abuseRes, withdrawRes] = await Promise.all([
+            const [storeRes, productRes, couponRes, refundRes, abuseRes, withdrawRes, deactivateRes] = await Promise.all([
                 axios.get(getApiLink(appLocalizer, 'store'), { params: { count: true, status: 'pending' }, headers: { 'X-WP-Nonce': appLocalizer.nonce } }),
                 axios.get(`${appLocalizer.apiUrl}/wc/v3/products`, { params: { per_page: 1, meta_key: 'multivendorx_store_id', status: 'pending' }, headers: { 'X-WP-Nonce': appLocalizer.nonce } }),
                 axios.get(`${appLocalizer.apiUrl}/wc/v3/coupons`, { params: { per_page: 1, meta_key: 'multivendorx_store_id', status: 'pending' }, headers: { 'X-WP-Nonce': appLocalizer.nonce } }),
                 axios.get(`${appLocalizer.apiUrl}/wc/v3/orders`, { params: { meta_key: 'multivendorx_store_id', status: 'refund-requested' }, headers: { 'X-WP-Nonce': appLocalizer.nonce } }),
                 axios.get(getApiLink(appLocalizer, 'report-abuse'), { params: { count: true }, headers: { 'X-WP-Nonce': appLocalizer.nonce } }),
-                axios.get(getApiLink(appLocalizer, 'store'), { params: { count: true, pending_withdraw: true }, headers: { 'X-WP-Nonce': appLocalizer.nonce } })
+                axios.get(getApiLink(appLocalizer, 'store'), { params: { count: true, pending_withdraw: true }, headers: { 'X-WP-Nonce': appLocalizer.nonce } }),
+                axios.get(getApiLink(appLocalizer, 'store'), { params: { count: true, deactivate: true }, headers: { 'X-WP-Nonce': appLocalizer.nonce } })
+
             ]);
     
             setStoreCount(storeRes.data || 0);
@@ -37,12 +41,12 @@ const ApprovalQueue = () => {
             setRefundCount(parseInt(refundRes.headers['x-wp-total'], 10) || 0);
             setReportAbuseCount(abuseRes.data || 0);
             setWithdrawCount(withdrawRes.data || 0);
+            setDeactivateCount(deactivateRes.data || 0);
     
         } catch (err) {
             console.error(err);
         }
     };
-    
 
     const tabs = [
         {
@@ -107,6 +111,14 @@ const ApprovalQueue = () => {
             condition: settings?.disbursement?.withdraw_type === "manual",
             count: withdrawCount,
             content: <WithdrawalRequests onUpdated={refreshCounts} />
+        },
+        {
+            id: "deactivate-requests",
+            label: "Deactivate Requests",
+            icon: "adminlib-bank blue",
+            des: "Queued for deactivated requests",
+            count: deactivateCount,
+            content: <DeactivateRequests onUpdated={refreshCounts} />
         },
     ].filter(
         (tab) =>

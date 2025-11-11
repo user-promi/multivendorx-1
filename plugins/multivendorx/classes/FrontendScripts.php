@@ -455,6 +455,8 @@ class FrontendScripts {
             );
         }
 
+        $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', [] );
+
         $capability_pro = [
             'export_shop_report' => [
                 'prosetting' => true,

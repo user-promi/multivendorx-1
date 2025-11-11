@@ -277,6 +277,10 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             if ( $request->get_param( 'pending_withdraw' ) ) {
                 return rest_ensure_response( $this->get_stores_with_pending_withdraw( $request ) );
             }
+
+            if ( $request->get_param( 'deactivate' ) ) {
+                return rest_ensure_response( $this->get_stores_with_deactivate_requests( $request ) );
+            }
             
             $options = $request->get_param( 'options' );
             if( $options ){
@@ -761,6 +765,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             }
         }
         
+
         // Handle registration & core data
         if (!empty($data['registration_data']) || !empty($data['core_data'])) {
 
@@ -837,6 +842,9 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             foreach ($data as $key => $value) {
                 if (!in_array($key, ['id','name','slug','description','who_created','status'], true)) {
                     $store->update_meta($key, $value);
+                    if ($key == 'deactivation_reason') {
+                        $store->update_meta('deactivation_request_date', time());
+                    }
                 }
             }
         }
@@ -1029,6 +1037,37 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         $offset = ( $page - 1 ) * $limit;
     
         return array_slice( $stores_with_withdraw, $offset, $limit );
+    }
+
+
+    private function get_stores_with_deactivate_requests( $request ) {
+        $all_stores = StoreUtil::get_store_information(); // get all stores
+        $stores_deactivate_requests = [];
+    
+        foreach ( $all_stores as $store ) {
+            $store_meta = Store::get_store_by_id( (int) $store['ID'] );
+    
+            // Check if request_withdrawal_amount exists and is non-zero
+            if ( ! empty( $store_meta->meta_data['deactivation_reason'] ) ) {
+                $stores_deactivate_requests[] = [
+                    'id'              => (int) $store['ID'],
+                    'store_name'      => $store['name'],
+                    'reason' => $store_meta->meta_data['deactivation_reason'],
+                    'date'      => $store_meta->meta_data['deactivation_request_date'],
+                ];
+            }
+        }
+
+        if ( $request->get_param( 'count' ) ) {
+            return count( $stores_deactivate_requests );
+        }
+    
+        // ✅ Pagination
+        $page = max( 1, intval( $request->get_param( 'page' ) ) );
+        $limit = max( 1, intval( $request->get_param( 'row' ) ) );
+        $offset = ( $page - 1 ) * $limit;
+    
+        return array_slice( $stores_deactivate_requests, $offset, $limit );
     }
     
 
