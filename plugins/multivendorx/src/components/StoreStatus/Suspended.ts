@@ -30,10 +30,9 @@ export default {
             selectDeselect: true,
         },                
         {
-            key: 'pending_msg',
+            key: 'suspended_msg',
             label: 'Message shown to suspended stores',
             type: 'textarea',
-            value: 'Your store is suspended due to a policy issue. Contact admin to resolve it.',
             des: 'What pending stores can do',
         },
     ],

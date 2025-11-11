@@ -35,10 +35,9 @@ export default {
             ],
         },
         {
-            key: 'pending_msg',
+            key: 'permanent_rejected_msg',
             label: 'Message shown to permantly rejected stores',
             type: 'textarea',
-            value: 'Your application has been permanently rejected. Contact admin for clarification.',
             des: 'What pending stores can do',
         },
     ],
