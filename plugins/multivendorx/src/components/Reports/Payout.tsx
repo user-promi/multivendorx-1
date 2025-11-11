@@ -476,7 +476,7 @@ const Transactions: React.FC = () => {
 
       {/* <div className="row">
         <div className="column"> */}
-      {/* <div className="card-header">
+      <div className="card-header p-top">
             <div className="left">
               <div className="title">
                 Account Overview
@@ -485,7 +485,7 @@ const Transactions: React.FC = () => {
             <div className="right">
               <span>Updated 1 month ago</span>
             </div>
-          </div> */}
+          </div>
       <Table
         data={data}
         columns={columns as ColumnDef<Record<string, any>, any>[]}

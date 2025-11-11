@@ -427,7 +427,7 @@ const Commission: React.FC = () => {
             ),
         },
         {
-            id: 'ID',
+            id: 'id',
             accessorKey: 'ID',
             enableSorting: true,
             header: __('ID', 'multivendorx'),

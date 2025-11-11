@@ -33,7 +33,7 @@ const StoreStatus: React.FC = () => {
             content: {
                 id: 'pending-approval',
                 name: 'Pending Approval',
-                desc: 'New stores waiting for your approval to start selling.',
+                desc: 'The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
                 // hideTabHeader: true,
                 icon: 'pending',
             },
@@ -43,7 +43,7 @@ const StoreStatus: React.FC = () => {
             content: {
                 id: 'rejected',
                 name: 'Rejected',
-                desc: 'Applications needing revision',
+                desc: 'The store application has been rejected. Sellers can view the rejection reason and resubmit their application after addressing the issues.',
                 // hideTabHeader: true,
                 icon: 'rejecte',
             },
@@ -53,7 +53,7 @@ const StoreStatus: React.FC = () => {
             content: {
                 id: 'permanently-rejected',
                 name: 'Permanently Rejected',
-                desc: 'Permanently denied applications.',
+                desc: 'The store application has been permanently rejected. Sellers can view their dashboard in read-only mode but cannot make changes or reapply without admin intervention.',
                 // hideTabHeader: true,
                 icon: 'rejected',
             },
@@ -67,7 +67,7 @@ const StoreStatus: React.FC = () => {
             content: {
                 id: 'active',
                 name: 'Active',
-                desc: 'Fully operational stores.',
+                desc: 'The store is active and fully operational. Stores have complete access to manage products, process orders, receive payouts, and configure all store settings.',
                 // hideTabHeader: true,
                 icon: 'active',
             },
@@ -77,7 +77,7 @@ const StoreStatus: React.FC = () => {
             content: {
                 id: 'under-review',
                 name: 'Under Review',
-                desc: 'Temporary compliance check.',
+                desc: 'The store is under review due to compliance concerns. Selling is paused, payouts are held, and new product uploads are restricted until the review is complete.',
                 // hideTabHeader: true,
                 icon: 'under-review',
             },
@@ -87,7 +87,7 @@ const StoreStatus: React.FC = () => {
             content: {
                 id: 'suspended',
                 name: 'Suspended',
-                desc: 'Policy violation enforcement',
+                desc: 'The store has been suspended due to policy violations. Products are hidden, payouts are frozen, and selling is disabled. Sellers can appeal through support.',
                 // hideTabHeader: true,
                 icon: 'error',
             },
@@ -97,7 +97,7 @@ const StoreStatus: React.FC = () => {
             content: {
                 id: 'deactivated',
                 name: 'Permanently deactivated',
-                desc: 'Permanently closed stores with no access or privileges.',
+                desc: 'The store has been permanently deactivated. Stores have read-only access to historical data, but the storefront and its product is removed from public view and no changes can be made.',
                 // hideTabHeader: true,
                 icon: 'close-delete',
             },

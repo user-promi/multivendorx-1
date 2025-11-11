@@ -9,15 +9,6 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
-            key: 'registration page',
-            type: 'blocktext',
-            label: __('no_label', 'multivendorx'),
-            blocktext: __(
-                'The store application has been permanently rejected. Sellers can view their dashboard in read-only mode but cannot make changes or reapply without admin intervention.',
-                'multivendorx'
-            ),
-        },
-        {
             key: 'store_promotion_limit',
             label: __('Store promotion limit', 'multivendorx'),
             type: 'nested',

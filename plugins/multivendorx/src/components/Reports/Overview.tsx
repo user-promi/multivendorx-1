@@ -73,7 +73,7 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
             id: 'facilitator_fee',
             label: 'Facilitator Fee',
             count: formatCurrency(data.facilitator_fee),
-            icon: 'adminlib-wallet blue',
+            icon: 'adminlib-facilitator blue',
           },
           {
             id: 'gateway_fee',
@@ -85,25 +85,25 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
             id: 'shipping_amount',
             label: 'Shipping Amount',
             count: formatCurrency(data.shipping_amount),
-            icon: 'adminlib-vendor-shipping green',
+            icon: 'adminlib-shipping green',
           },
           {
             id: 'tax_amount',
             label: 'Tax Amount',
             count: formatCurrency(data.tax_amount),
-            icon: 'adminlib-commission blue',
+            icon: 'adminlib-tax-compliance blue',
           },
           {
             id: 'shipping_tax_amount',
             label: 'Shipping Tax Amount',
             count: formatCurrency(data.shipping_tax_amount),
-            icon: 'adminlib-calendar purple',
+            icon: 'adminlib-per-product-shipping purple',
           },
           {
             id: 'commission_total',
             label: 'Commission Total',
             count: formatCurrency(data.commission_total),
-            icon: 'adminlib-earning yellow',
+            icon: 'adminlib-commission yellow',
           },
           {
             id: 'commission_refunded',
@@ -218,29 +218,20 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
   return (
     <>
       <div className="row">
-        <div className="column w-65">
-          <div className="card-header">
-            <div className="left">
-              <div className="title">
-                Account Overview
-              </div>
-            </div>
-          </div>
-          <div className="card-body">
-            <div className="analytics-container">
-              {commissionDetails.map((item, idx) => (
-                <div key={idx} className="analytics-item">
-                  <div className="analytics-icon">
-                    <i className={item.icon}></i>
-                  </div>
-                  <div className="details">
-                    <div className="number">{item.count}</div>
-                    <div className="text">{item.label}</div>
-                  </div>
+        <div className="column w-65 transparent">
+          <div className="analytics-container report">
+            {commissionDetails.map((item, idx) => (
+              <div key={idx} className="analytics-item">
+                <div className="analytics-icon">
+                  <i className={item.icon}></i>
                 </div>
-              ))}
+                <div className="details">
+                  <div className="number">{item.count}</div>
+                  <div className="text">{item.label}</div>
+                </div>
+              </div>
+            ))}
 
-            </div>
           </div>
         </div>
         <div className="column w-35">
