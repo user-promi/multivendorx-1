@@ -115,7 +115,7 @@ export const TransactionHistory: React.FC = () => {
 
         // 🔹 Otherwise, show globally enabled methods
         const enabledMethods = Object.entries(appLocalizer.payout_payment_options)
-            .filter(([key, value]: [string, any]) => value.enable)
+            .filter(([key, value]: [string, any]) => !value.enable)
             .map(([key, value]) => ({
                 value: key,
                 label: key.charAt(0).toUpperCase() + key.slice(1),
@@ -124,7 +124,6 @@ export const TransactionHistory: React.FC = () => {
         setOptionList(enabledMethods);
         setPaymentMethod(enabledMethods[0]?.value || "");
     }, [storeData]);
-
 
 
     const handleAmountChange = (value: number) => {
@@ -191,6 +190,9 @@ export const TransactionHistory: React.FC = () => {
                 if (res.data.success) {
                     setRequestWithdrawal(false);
                     resetWithdrawalForm();
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 200);
                 } else if (res.data?.message) {
                     setError(`Server: ${res.data.message}`);
                 }
@@ -316,10 +318,10 @@ export const TransactionHistory: React.FC = () => {
                                                     </div>
 
                                                     <div
-                                                        className={`number ${parseFloat(txn.balance) < 0 ? 'negative' : 'positive'
+                                                        className={`number ${parseFloat(txn.debit) < 0 ? 'negative' : 'positive'
                                                             }`}
                                                     >
-                                                        {formatCurrency(txn.balance)}{" "}
+                                                        {formatCurrency(txn.debit)}{" "}
                                                         {/* <span className="admin-badge green">({txn.status})</span> */}
                                                     </div>
 
