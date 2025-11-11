@@ -244,9 +244,9 @@ const Stores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
             <div className="card-header">
                 <div className="left">
                     <div className="title">
-                        Stores
+                        Let’s review!
                     </div>
-                    <div className="des">Waiting for your response</div>
+                    <div className="des">Approve or reject store join requests.</div>
                 </div>
                 <div className="right">
                     <i className="adminlib-more-vertical"></i>

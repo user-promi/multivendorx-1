@@ -183,9 +183,9 @@ const WithdrawalRequests: React.FC<Props> = ({ onUpdated }) => {
             <div className="card-header">
                 <div className="left">
                     <div className="title">
-                        withdrawal Requests
+                        Ready to release
                     </div>
-                    <div className="des">Waiting for your response</div>
+                    <div className="des">These withdrawals are queued for disbursement.</div>
                 </div>
                 <div className="right">
                     <i className="adminlib-more-vertical"></i>
