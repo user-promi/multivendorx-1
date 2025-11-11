@@ -712,6 +712,24 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
         $store = new \MultiVendorX\Store\Store( $id );
 
+        if ($data['deactivate']) {
+            $action = $data['action'] ?: '';
+            if ($action == 'approve') {
+                $store->set('status', 'deactivated');
+                $store->delete_meta('deactivation_reason');
+                $store->delete_meta('deactivation_request_date');
+            }
+
+            if ($action == 'reject') {
+                $store->delete_meta('deactivation_reason');
+                $store->delete_meta('deactivation_request_date');
+            }
+
+            $store->save();
+            return rest_ensure_response([ 'success' => true ]);
+
+        }
+
         if ( ! empty( $data['delete'] ) ) {
             $delete_option = $data['deleteOption'] ?? '';
 
@@ -835,15 +853,15 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         $store->set('description', $data['description'] ?? $store->get('description'));
         $store->set('who_created', 'admin');
         $store->set('status',      $data['status'] ?? $store->get('status'));
-        $store->set('create_time',      $data['create_time'] ?? $store->get('create_time'));
+        $store->set('create_time', $data['create_time'] ?? $store->get('create_time'));
     
         // Save all other meta dynamically
         if (is_array($data)) {
             foreach ($data as $key => $value) {
-                if (!in_array($key, ['id','name','slug','description','who_created','status'], true)) {
+                if (!in_array($key, ['id','name','slug','description','who_created','status', 'create_time'], true)) {
                     $store->update_meta($key, $value);
                     if ($key == 'deactivation_reason') {
-                        $store->update_meta('deactivation_request_date', time());
+                        $store->update_meta('deactivation_request_date', current_time( 'mysql' ));
                     }
                 }
             }
@@ -1047,13 +1065,12 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         foreach ( $all_stores as $store ) {
             $store_meta = Store::get_store_by_id( (int) $store['ID'] );
     
-            // Check if request_withdrawal_amount exists and is non-zero
             if ( ! empty( $store_meta->meta_data['deactivation_reason'] ) ) {
                 $stores_deactivate_requests[] = [
                     'id'              => (int) $store['ID'],
                     'store_name'      => $store['name'],
                     'reason' => $store_meta->meta_data['deactivation_reason'],
-                    'date'      => $store_meta->meta_data['deactivation_request_date'],
+                    'date'      => date( 'M j, Y', strtotime( $store_meta->meta_data['deactivation_request_date'] )),
                 ];
             }
         }
