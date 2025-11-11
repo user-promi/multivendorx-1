@@ -1188,3 +1188,30 @@
 }
 
 // video section end
+
+
+#store-location-autocomplete-container {
+    .mapboxgl-ctrl-geocoder {
+        max-width: 100%;
+        width: 100%;
+        box-shadow: none;
+
+        input {
+            border: 0.063rem solid #dbdfea !important; // for overwrite wordpress style
+            border-radius: 0.25rem;
+            padding: 0.313rem 0.5rem;
+            background: transparent !important; // for overwrite theme style
+            font-size: 0.875rem;
+            line-height: 1.5;
+            box-shadow: none;
+            box-sizing: border-box;
+            padding-left: 2rem;
+
+            &:focus {
+                outline: none;
+                box-shadow: 0 0 0 3px #5007aa1c !important;
+                border-color: $theme-color !important; // for overwrite wordpress style
+            }
+        }
+    }
+}

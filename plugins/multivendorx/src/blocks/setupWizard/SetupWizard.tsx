@@ -97,7 +97,7 @@ const SetupWizard: React.FC = () => {
                     key: 'multi_vendor_products',
                     type: 'checkbox',
                     label: 'Single Product Multiple Vendors',
-                    desc: 'Allow multiple vendors to sell the same product.',
+                    desc: 'Allows more than one store to sell the same product with their own price and stock.',
                     default: false
                 },
                 {
@@ -119,12 +119,20 @@ const SetupWizard: React.FC = () => {
             isWizardMode: true,
             formFields: [
                 {
-                    key: 'commission_mode',
-                    type: 'select',
-                    label: 'Revenue Sharing Mode',
+                    key: 'approve_store',
+                    type: 'setting-toggle',
+                    label: __('New store registration approval', 'multivendorx'),
                     options: [
-                        { label: 'Admin fees', value: 'admin_fees' },
-                        { label: 'Vendor commissions', value: 'vendor_commissions' },
+                        {
+                            key: 'manually',
+                            label: __('Manual', 'multivendorx'),
+                            value: 'manually',
+                        },
+                        {
+                            key: 'automatically',
+                            label: __('Automatic', 'multivendorx'),
+                            value: 'automatically',
+                        },
                     ],
                 },
                 {
@@ -141,6 +149,56 @@ const SetupWizard: React.FC = () => {
                     type: 'number',
                     label: 'Commission Percentage',
                     default: 80,
+                },
+                {
+                    key: 'wizardButtons',
+                    type: 'buttons',
+                    options: [
+                        { label: "Back", action: "back", btnClass: "admin-btn btn-red" },
+                        { label: "Next", action: "next", btnClass: "admin-btn btn-purple" }
+                    ]
+                },
+            ],
+        },
+        {
+            id: "store_setup",
+            label: "Commission Setup",
+            icon: "adminlib-storefront",
+            desc: 'Configure basic settings for vendor stores.',
+            countBtn: true,
+            isWizardMode: true,
+            formFields: [
+                {
+                    key: 'approve_store',
+                    type: 'setting-toggle',
+                    label: __('New store registration approval', 'multivendorx'),
+                    options: [
+                        {
+                            key: 'manually',
+                            label: __('Manual', 'multivendorx'),
+                            value: 'manually',
+                        },
+                        {
+                            key: 'automatically',
+                            label: __('Automatic', 'multivendorx'),
+                            value: 'automatically',
+                        },
+                    ],
+                },
+                {
+                    key: 'commission_percent',
+                    type: 'number',
+                    label: 'Commission Percentage',
+                    default: 80,
+                },
+                {
+                    key: 'commission_type',
+                    type: 'select',
+                    label: 'Commission Type',
+                    options: [
+                        { label: 'Percentage', value: 'percentage' },
+                        { label: 'Fixed', value: 'fixed' },
+                    ],
                 },
                 {
                     key: 'wizardButtons',
@@ -246,6 +304,11 @@ const SetupWizard: React.FC = () => {
                     wizardIndex={currentStep}
                     setWizardIndex={setCurrentStep}
                 />
+
+                <div className="welcome-wrapper">
+                    <div className="wizard-title">! Well Done</div>
+                    <div className="des">Thank you for choosing MultiVendorX!</div>
+                </div>
             </div>
         </div>
     );

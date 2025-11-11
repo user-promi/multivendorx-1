@@ -71,7 +71,7 @@ class PaypalPayout {
     }
 
     public function process_payment($store_id, $amount, $order_id = null, $transaction_id = null, $note = null) {
-        $log_file = plugin_dir_path(__FILE__) . "/paypal_payment_processing.log";
+        // $log_file = plugin_dir_path(__FILE__) . "/paypal_payment_processing.log";
         
         // Log payment process start
         file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": PAYPAL_PAYMENT_PROCESS_STARTED\n", FILE_APPEND);
@@ -218,7 +218,7 @@ class PaypalPayout {
      * Get PayPal access token using client credentials
      */
     private function get_paypal_access_token($client_id, $client_secret, $sandbox = false) {
-        $log_file = plugin_dir_path(__FILE__) . "/paypal_payment_processing.log";
+        // $log_file = plugin_dir_path(__FILE__) . "/paypal_payment_processing.log";
         
         $base_url = $sandbox 
             ? 'https://api.sandbox.paypal.com' 
@@ -277,7 +277,7 @@ class PaypalPayout {
      * Create PayPal payout
      */
     private function create_paypal_payout($access_token, $receiver_email, $amount, $currency, $store_id, $sandbox = false) {
-        $log_file = plugin_dir_path(__FILE__) . "/paypal_payment_processing.log";
+        // $log_file = plugin_dir_path(__FILE__) . "/paypal_payment_processing.log";
         
         $base_url = $sandbox 
             ? 'https://api.sandbox.paypal.com' 
@@ -359,7 +359,7 @@ class PaypalPayout {
      * Get payout batch status (optional - for checking payout status later)
      */
     public function get_payout_status($payout_batch_id, $client_id, $client_secret, $sandbox = false) {
-        $log_file = plugin_dir_path(__FILE__) . "/paypal_payment_processing.log";
+        // $log_file = plugin_dir_path(__FILE__) . "/paypal_payment_processing.log";
         
         try {
             file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": GETTING_PAYOUT_STATUS - Batch ID: {$payout_batch_id}\n", FILE_APPEND);

@@ -266,7 +266,7 @@ const EditStore = () => {
             : []),
     ], [modules]);
 
-    
+
     const handleUpdateData = useCallback((updatedFields: any) => {
         setData(prev => ({ ...prev, ...updatedFields }));
     }, []);
@@ -498,7 +498,7 @@ const EditStore = () => {
                                                             onChange={(e) => setData({ ...data, description: e.target.value })}
                                                             onBlur={() => {
                                                                 if (!data?.description?.trim()) {
-                                                                setData({ ...data, description: prevDesc });
+                                                                    setData({ ...data, description: prevDesc });
                                                                 }
                                                                 setEditDesc(false);
                                                             }}
@@ -512,7 +512,7 @@ const EditStore = () => {
                                                     ) : (
                                                         <span>&nbsp;</span>
                                                     )}
-                                                    
+
 
                                                     <span
                                                         className={`edit-icon ${editDesc ? '' : 'admin-badge blue'}`}
@@ -558,7 +558,7 @@ const EditStore = () => {
                                                     {data?.slug ? (
                                                         <>
                                                             {data.slug}{' '}
-                                                            
+
                                                             {(data?.status != 'pending' || data?.status != 'rejected' || data?.status != 'permanently_rejected') && (
 
                                                                 <span className="edit-icon admin-badge blue" onClick={() => {
@@ -601,7 +601,6 @@ const EditStore = () => {
                     hideTitle={true}
                     hideBreadcrumb={true}
                     action={
-
                         <>
                             <div className="edit-wrapper" ref={wrapperRef}>
                                 <span className="" onClick={(e) => {
@@ -619,13 +618,25 @@ const EditStore = () => {
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                 >
-                                                    <i className="adminlib-storefront"></i> View Storefront
+                                                    <i className="adminlib-storefront"></i> View Storefront <i className="external adminlib-external"></i>
                                                 </a>
                                             </li>
                                         }
-                                        <li><i className="adminlib-delete"></i> Manage status</li>
-                                        <li><i className="adminlib-delete"></i> Products</li>
-                                        <li><i className="adminlib-delete"></i> Orders</li>
+                                        <li onClick={() => {
+                                            navigate(`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`, {
+                                                state: { highlightTarget: "store-slug" },
+                                            });
+
+                                            setTimeout(() => {
+                                                navigate(`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`, {
+                                                    replace: true,
+                                                });
+                                            }, 500);
+                                        }}>
+                                            <i className="adminlib-form-multi-select"></i> Manage status
+                                        </li>
+                                        <li><i className="adminlib-single-product"></i> Products</li>
+                                        <li><i className="adminlib-order"></i> Orders</li>
                                         <li onClick={handleStoreDelete}><i className="adminlib-delete"></i> Delete store</li>
                                     </ul>
                                 )}
