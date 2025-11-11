@@ -363,32 +363,34 @@ const StoreOrders: React.FC = () => {
   return (
     // <div className="row">
     //   <div className="column">
-    //     <div className="card-header">
-    //       <div className="left">
-    //         <div className="title">
-    //           {__('Revenue Distribution', 'multivendorx')}
-    //         </div>
-    //         <div className="des">
-    //           {__('Total Orders:', 'multivendorx')} {totalRows}
-    //         </div>
-    //       </div>
-    //     </div>
+    <>
+      <div className="card-header p-top">
+        <div className="left">
+          <div className="title">
+            {__('Revenue Distribution', 'multivendorx')}
+          </div>
+          <div className="des">
+            {__('Total Orders:', 'multivendorx')} {totalRows}
+          </div>
+        </div>
+      </div>
 
-    <Table
-      data={data}
-      columns={columns as ColumnDef<Record<string, any>, any>[]}
-      rowSelection={rowSelection}
-      onRowSelectionChange={setRowSelection}
-      defaultRowsPerPage={pagination.pageSize}
-      pageCount={pageCount}
-      pagination={pagination}
-      onPaginationChange={setPagination}
-      handlePagination={requestApiForData}
-      perPageOption={[10, 25, 50]}
-      realtimeFilter={realtimeFilter}
-      searchFilter={searchFilter}
-      totalCounts={totalRows}
-    />
+      <Table
+        data={data}
+        columns={columns as ColumnDef<Record<string, any>, any>[]}
+        rowSelection={rowSelection}
+        onRowSelectionChange={setRowSelection}
+        defaultRowsPerPage={pagination.pageSize}
+        pageCount={pageCount}
+        pagination={pagination}
+        onPaginationChange={setPagination}
+        handlePagination={requestApiForData}
+        perPageOption={[10, 25, 50]}
+        realtimeFilter={realtimeFilter}
+        searchFilter={searchFilter}
+        totalCounts={totalRows}
+      />
+    </>
     //   </div>
     // </div>
   );

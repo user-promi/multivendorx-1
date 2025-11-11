@@ -9,15 +9,6 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
-            key: 'registration page',
-            type: 'blocktext',
-            label: __('no_label', 'multivendorx'),
-            blocktext: __(
-                'The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
-                'multivendorx'
-            ),
-        },
-        {
             key: 'store_promotion_limit',
             label: __('Store promotion limit', 'multivendorx'),
             type: 'nested',

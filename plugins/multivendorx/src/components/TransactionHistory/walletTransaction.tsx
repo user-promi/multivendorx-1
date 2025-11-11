@@ -449,7 +449,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             // id: 'id',
             // accessorKey: 'id',
             // enableSorting: true,
-            header: __("ID", "multivendorx"),
+            header: __("id", "multivendorx"),
             cell: ({ row }) => <TableCell>#{row.original.id}</TableCell>,
         },
         {
@@ -461,6 +461,38 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                     </span>
                 </TableCell>
             ),
+        },
+        {
+            id: 'status',
+            header: __('Status', 'multivendorx'),
+            cell: ({ row }) => {
+                const status = row.original.status || '';
+                const formattedStatus = status
+                    ?.replace(/[-_]/g, " ")
+                    .toLowerCase()
+                    .replace(/^\w/, c => c.toUpperCase());
+
+                const getStatusBadge = (status: string) => {
+                    switch (status) {
+                        case 'Completed':
+                            return <span className="admin-badge green">Completed</span>;
+                        case 'Processed':
+                            return <span className="admin-badge yellow">Processed</span>;
+                        case 'Pending':
+                            return <span className="admin-badge blue">Pending</span>;
+                        case 'Failed':
+                            return <span className="admin-badge red">Failed</span>;
+                        default:
+                            return <span className="admin-badge gray">{formattedStatus}</span>;
+                    }
+                };
+
+                return (
+                    <TableCell title={`${status}`}>
+                        {getStatusBadge(status)}
+                    </TableCell>
+                );
+            },
         },
         // {
         //     // id: 'order_id',
@@ -512,23 +544,23 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                 const type = row.original.transaction_type?.toLowerCase();
                 const commissionId = row.original.commission_id;
                 const paymentMethod = row.original.payment_method;
-        
+
                 const formatText = (text) =>
                     text
                         ?.replace(/-/g, ' ')
                         ?.replace(/\b\w/g, (c) => c.toUpperCase())
                     || '-';
-        
+
                 let displayValue = '-';
                 let content = displayValue;
-        
+
                 //Commission Transaction — clickable number
                 if (type === 'commission') {
                     displayValue = `Commission #${commissionId || '-'}`;
                     if (commissionId) {
                         content = (
                             <span
-                                className="clickable-text"
+                                className="admin-btn btn-purple"
                                 onClick={() => {
                                     setSelectedCommissionId(commissionId);
                                     setViewCommission(true);
@@ -549,10 +581,10 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                     displayValue = formatText(row.original.transaction_type);
                     content = displayValue;
                 }
-        
+
                 return <TableCell title={displayValue}>{content}</TableCell>;
             },
-        },        
+        },
         {
             // id: 'created_at',
             // accessorKey: 'created_at',

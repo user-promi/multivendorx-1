@@ -261,7 +261,7 @@ const RefundedOrderOld: React.FC = () => {
     // },
   ];
 
-  
+
   // const columns = [
   //   {
   //     id: 'select',
@@ -496,21 +496,33 @@ const RefundedOrderOld: React.FC = () => {
   ];
 
   return (
-    <Table
-      data={data}
-      columns={columns as any}
-      rowSelection={rowSelection}
-      onRowSelectionChange={setRowSelection}
-      defaultRowsPerPage={10}
-      pageCount={pageCount}
-      pagination={pagination}
-      searchFilter={searchFilter}
-      onPaginationChange={setPagination}
-      realtimeFilter={realtimeFilter}
-      handlePagination={requestApiForData}
-      perPageOption={[10, 25, 50]}
-      totalCounts={totalRows}
-    />
+    <>
+      <div className="card-header p-top">
+        <div className="left">
+          <div className="title">
+            {__('Revenue Distribution', 'multivendorx')}
+          </div>
+          <div className="des">
+            {__('Total Orders:', 'multivendorx')} {totalRows}
+          </div>
+        </div>
+      </div>
+      <Table
+        data={data}
+        columns={columns as any}
+        rowSelection={rowSelection}
+        onRowSelectionChange={setRowSelection}
+        defaultRowsPerPage={10}
+        pageCount={pageCount}
+        pagination={pagination}
+        searchFilter={searchFilter}
+        onPaginationChange={setPagination}
+        realtimeFilter={realtimeFilter}
+        handlePagination={requestApiForData}
+        perPageOption={[10, 25, 50]}
+        totalCounts={totalRows}
+      />
+    </>
   );
 };
 

@@ -336,7 +336,8 @@
                     display: flex;
                     flex: 1 0 0;
                     border: none;
-                    box-sizing: border-box;
+                    // box-sizing: border-box;
+                    overflow: hidden;
 
                     .admin-badge {
                         padding: 0.45rem;
@@ -474,6 +475,9 @@
                 .admin-column:has(.single-column) {
                     flex-grow: 1;
                 }
+                .admin-column:has(.action-section){
+                    overflow: visible;
+                }
             }
 
             .admin-row:has(input[type="checkbox"]:checked) {
@@ -559,8 +563,8 @@
             }
 
             img {
-                width: 3rem;
-                height: 3rem;
+                width: 2rem;
+                height: 2rem;
                 object-fit: cover;
             }
 

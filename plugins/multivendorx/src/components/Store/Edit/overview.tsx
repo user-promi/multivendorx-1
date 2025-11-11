@@ -85,14 +85,9 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 
     const overviewData = [
         {
-            icon: "adminlib-tools green",
-            number: formatCurrency(storeData.commission?.commission_total ?? 0),
-            text: "Lifetime earnings",
-        },
-        {
             icon: "adminlib-book red",
             number: formatCurrency(storeData.transactions?.balance ?? 0),
-            text: "Available balance",
+            text: "Wallet balance",
         },
         {
             icon: "adminlib-global-community yellow",
@@ -162,13 +157,12 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 
                                         <div className="right-details">
                                             <div
-                                                className={`admin-badge ${
-                                                    txn.status?.toLowerCase() === "completed"
-                                                        ? "green"
-                                                        : txn.status?.toLowerCase() === "pending"
+                                                className={`admin-badge ${txn.status?.toLowerCase() === "completed"
+                                                    ? "green"
+                                                    : txn.status?.toLowerCase() === "pending"
                                                         ? "yellow"
                                                         : "red"
-                                                }`}
+                                                    }`}
                                             >
                                                 {txn.status}
                                             </div>
@@ -251,7 +245,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                                                 }
                                                             )
                                                             : "-"} */}
-                                                             sku: {product.sku}
+                                                        sku: {product.sku}
                                                     </div>
                                                 </div>
                                             </div>
@@ -380,21 +374,14 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                         </div>
 
                         <div className="overview-wrapper">
-                            <div className="items">
+                            {/* <div className="items">
                                 <div className="title">
                                     View application
                                 </div>
                                 <div className="details">
-                                    <div
-                                        className="sku"
-                                        onClick={() => {
-                                            navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=application-details`);
-                                        }}
-                                    >
-                                        <i className="adminlib-external"></i>
-                                    </div>
+
                                 </div>
-                            </div>
+                            </div> */}
 
                             <div className="items">
                                 <div className="title">
@@ -403,6 +390,24 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                 <div className="details">
                                     <div className="sku">
                                         {storeData.create_time}
+                                        <div
+                                            className="sku"
+                                            onClick={() => {
+                                                navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=application-details`);
+                                            }}
+                                        >
+                                            <i className="adminlib-external"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="items">
+                                <div className="title">
+                                    Lifetime earnings
+                                </div>
+                                <div className="details">
+                                    <div className="sku">
+                                        {formatCurrency(storeData.commission?.commission_total ?? 0)}
                                     </div>
                                 </div>
                             </div>
@@ -417,6 +422,19 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                 </div>
                             )}
                         </div>
+
+                        {/* <div className="analytics-container">
+                            <div className="analytics-item">
+                                <div className="analytics-icon">
+                                    <i className="adminlib-tools green"></i>
+                                </div>
+                                <div className="details">
+                                    <div className="number">{formatCurrency(storeData.commission?.commission_total ?? 0)}</div>
+                                    <div className="text">Lifetime earnings</div>
+                                </div>
+                            </div>
+                        </div> */}
+
                         {appLocalizer.khali_dabba && (
                             <div className="description-wrapper">
                                 <div className="title">
