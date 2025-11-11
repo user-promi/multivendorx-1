@@ -131,10 +131,10 @@ const HelpSupport: React.FC = () => {
                         <div className="video-section">
                             <div className="details-wrapper">
                                 <div className="title">
-                                    Lorem ipsum dolor sit.
+                                    Master MultiVendorX in minutes!
                                 </div>
-                                <div className="des">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Corporis laborum nesciunt voluptate vitae animi laboriosam!</div>
-                                <div className="admin-btn btn-purple">View More</div>
+                                <div className="des">Watch our top tutorial videos and learn how to set up your marketplace, manage vendors, and enable subscriptions - all in just a few easy steps.</div>
+                                <div className="admin-btn btn-purple">Watch All Tutorials</div>
                             </div>
 
                             <div className="row">
