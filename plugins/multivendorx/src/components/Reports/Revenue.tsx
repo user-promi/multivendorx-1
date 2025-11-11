@@ -353,7 +353,6 @@ const Revenue: React.FC = () => {
         const filtered = response.data.filter(
           (product: any) => parseFloat(product.average_rating) > 0
         );
-        console.log("Top reviewed products:", filtered);
         setToReviewedProduct(filtered);
       })
       .catch(error => {
@@ -376,7 +375,6 @@ const Revenue: React.FC = () => {
         const filtered = response.data.filter(
           (product: any) => Number(product.total_sales) > 0
         );
-        console.log("Top selling products:", filtered);
         setToSellingProduct(filtered);
       })
       .catch(error => {
@@ -395,7 +393,6 @@ const Revenue: React.FC = () => {
     })
       .then(response => {
         const outOfStockCount = Number(response.headers['x-wp-total']) || 0;
-        console.log("Total Out of Stock Count:", outOfStockCount);
         setOutOfStockCount(outOfStockCount);
       })
       .catch(error => {
@@ -414,7 +411,6 @@ const Revenue: React.FC = () => {
     })
       .then(response => {
         const onBackorderCount = Number(response.headers['x-wp-total']) || 0;
-        console.log("Total On Backorder Count:", onBackorderCount);
         setOnBackorderCount(onBackorderCount);
       })
       .catch(error => {
@@ -433,7 +429,6 @@ const Revenue: React.FC = () => {
     })
       .then(response => {
         const inStockCount = Number(response.headers['x-wp-total']) || 0;
-        console.log("Total In Stock Count:", inStockCount);
         setInStockCount(inStockCount);
       })
       .catch(error => {
@@ -455,7 +450,6 @@ const Revenue: React.FC = () => {
     })
       .then(response => {
         const lowStockCount = Number(response.headers['x-wp-total']) || 0;
-        console.log(`Total Low Stock Count (Stock <= ${lowStockThreshold}):`, lowStockCount);
         setLowStockCount(lowStockCount);
       })
       .catch(error => {
@@ -600,8 +594,6 @@ const Revenue: React.FC = () => {
         params.order = order || "asc";
       }
 
-      console.log("Filter params (Forced IST to UTC):", params);
-
       const response = await axios({
         method: "GET",
         url: `${appLocalizer.apiUrl}/wc/v3/products`,
@@ -723,7 +715,6 @@ const Revenue: React.FC = () => {
       ),
     },
   ];
-
   return (
     <div className="dashboard-overview">
       {/* Keep entire top dashboard layout */}
@@ -871,35 +862,38 @@ const Revenue: React.FC = () => {
 
           {toSellingProduct.length > 0 ? (
             toSellingProduct.map((product: any) => (
-              // <div className="column" key={`selling-${product.id}`}>
-
-                <div className="store-owner-details" key={`selling-${product.id}`}>
-                  <div className="profile">
-                    <div className="avater">
-                      <img
-                        src={product.images[0].src}
-                        alt={product.name}
-                      />
-                    </div>
-                    <div className="details">
-                      <div className="name">{product.name}</div>
-                      <div className="des">Total Sales: {product.total_sales || 0}</div>
-                    </div>
+              <div className="store-owner-details" key={`selling-${product.id}`}>
+                <div className="profile">
+                  <div className="avater">
+                    <img
+                      src={
+                        product.images?.length
+                          ? product.images[0].src
+                          : "https://via.placeholder.com/100?text=No+Image"
+                      }
+                      alt={product.name}
+                    />
                   </div>
-                  <div className="right-details">
-                    {/* <div className="price">$356 .35</div>
-                                <div className="div">Lorem, ipsum dolor.</div> */}
-                    <div className="price"><span
+                  <div className="details">
+                    <div className="name">{product.name}</div>
+                    <div className="des">Total Sales: {product.total_sales || 0}</div>
+                  </div>
+                </div>
+                <div className="right-details">
+                  <div className="price">
+                    <span
                       dangerouslySetInnerHTML={{
                         __html: product.price_html || product.price || "—",
                       }}
-                    /></div>
+                    />
                   </div>
                 </div>
+              </div>
             ))
           ) : (
             <p>No top selling products found.</p>
           )}
+
 
         </div>
 

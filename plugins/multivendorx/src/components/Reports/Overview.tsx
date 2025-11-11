@@ -17,6 +17,8 @@ import {
 } from "recharts";
 import axios from "axios";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { getApiLink } from "zyra";
+import { formatCurrency } from "@/services/commonFunction";
 
 type Stat = {
   id: string | number;
@@ -37,41 +39,14 @@ type OverviewProps = {
   COLORS?: string[];
 };
 
-const products: Product[] = [
-  {
-    id: 1,
-    title: "Admin Net Earning",
-    price: "$5,072.31",
-  },
-  {
-    id: 1,
-    title: "Store Net Earning",
-    price: "$1,713.85",
-  },
-  {
-    id: 1,
-    title: "Shipping",
-    price: "$75",
-  },
-  {
-    id: 1,
-    title: "Tax",
-    price: "$1,713.85",
-  },
-  {
-    id: 1,
-    title: "Total",
-    price: "$855552",
-  },
-];
-
 const Overview: React.FC<OverviewProps> = ({
-  overview,
   data,
-  overviewData,
-  pieData,
   COLORS = ["#5007aa", "#00c49f", "#ff7300", "#d400ffff", "#004ec4ff"],
 }) => {
+  const [commissionDetails, setCommissionDeatils] = useState<any[]>([]);
+  const [earningSummary, setEarningSummary] = useState<any[]>([]);
+  const [pieData, setPieData] = useState<any>([]);
+
   const salesByLocations = [
     { name: "USA", coordinates: [40, -100], sales: 12000 },
     { name: "India", coordinates: [22, 78], sales: 8500 },
@@ -104,10 +79,112 @@ const Overview: React.FC<OverviewProps> = ({
     }
   };
 
+  const fetchCommissionDetails = async () => {
+    axios({
+      method: 'GET',
+      url: getApiLink(appLocalizer, 'commission'),
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      params: { format: 'reports' },
+    })
+      .then((response) => {
+        const data = response.data;
+
+        // Basic calculations
+        const adminEarning = data.total_order_amount - data.commission_total;
+        const storeEarning = data.commission_total;
+
+        // Overview data (optional if you use it elsewhere)
+        const overviewData = [
+          {
+            id: 'total_order_amount',
+            label: 'Total Order Amount',
+            count: formatCurrency(data.total_order_amount),
+            icon: 'adminlib-order green',
+          },
+          {
+            id: 'facilitator_fee',
+            label: 'Facilitator Fee',
+            count: formatCurrency(data.facilitator_fee),
+            icon: 'adminlib-wallet blue',
+          },
+          {
+            id: 'gateway_fee',
+            label: 'Gateway Fee',
+            count: formatCurrency(data.gateway_fee),
+            icon: 'adminlib-credit-card red',
+          },
+          {
+            id: 'shipping_amount',
+            label: 'Shipping Amount',
+            count: formatCurrency(data.shipping_amount),
+            icon: 'adminlib-vendor-shipping green',
+          },
+          {
+            id: 'tax_amount',
+            label: 'Tax Amount',
+            count: formatCurrency(data.tax_amount),
+            icon: 'adminlib-commission blue',
+          },
+          {
+            id: 'shipping_tax_amount',
+            label: 'Shipping Tax Amount',
+            count: formatCurrency(data.shipping_tax_amount),
+            icon: 'adminlib-calendar purple',
+          },
+          {
+            id: 'commission_total',
+            label: 'Commission Total',
+            count: formatCurrency(data.commission_total),
+            icon: 'adminlib-earning yellow',
+          },
+          {
+            id: 'commission_refunded',
+            label: 'Commission Refunded',
+            count: formatCurrency(data.commission_refunded),
+            icon: 'adminlib-marketplace-refund red',
+          },
+        ];
+
+
+        // Just Admin + Store + Total for Revenue Breakdown
+        const earningSummary = [
+          {
+            id: 'admin_earning',
+            title: 'Admin Net Earning',
+            price: formatCurrency(adminEarning),
+          },
+          {
+            id: 'store_earning',
+            title: 'Store Net Earning',
+            price: formatCurrency(storeEarning),
+          },
+          {
+            id: 'total',
+            title: 'Total',
+            price: formatCurrency(data.total_order_amount),
+          },
+        ];
+        const pieChartData = [
+          { name: 'Admin Net Earning', value: adminEarning },
+          { name: 'Store Net Earning', value: storeEarning },
+          { name: 'Commission Refunded', value: data.commission_refunded },
+        ];
+
+
+        setCommissionDeatils(overviewData);
+        setEarningSummary(earningSummary);
+        setPieData(pieChartData);
+
+      })
+      .catch(() => {
+        // Handle error gracefully
+      });
+  };
+
   useEffect(() => {
+    fetchCommissionDetails();
     fetchLeaderboards();
   }, []);
-
 
   return (
     <>
@@ -119,13 +196,10 @@ const Overview: React.FC<OverviewProps> = ({
                 Account Overview
               </div>
             </div>
-            <div className="right">
-              <span>Updated 1 month ago</span>
-            </div>
           </div>
           <div className="card-body">
             <div className="analytics-container">
-              {overview.map((item, idx) => (
+              {commissionDetails.map((item, idx) => (
                 <div key={idx} className="analytics-item">
                   <div className="analytics-icon">
                     <i className={item.icon}></i>
@@ -136,6 +210,7 @@ const Overview: React.FC<OverviewProps> = ({
                   </div>
                 </div>
               ))}
+
             </div>
           </div>
         </div>
@@ -148,7 +223,7 @@ const Overview: React.FC<OverviewProps> = ({
             </div>
           </div>
           <div className="top-items">
-            {products.map((product) => (
+            {earningSummary.map((product) => (
               <div className="items" key={product.id}>
                 <div className="left-side">
                   <div className="details">
@@ -164,59 +239,53 @@ const Overview: React.FC<OverviewProps> = ({
         </div>
       </div>
       <div className="row">
-        <div className="column w-65">
+        <div className="column w-100">
           <div className="card-header">
             <div className="left">
               <div className="title">
-                Revenue trade
+                Revenue Breakdown
               </div>
             </div>
           </div>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={data}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="revenue" stroke="#5007aa" strokeWidth={3} name="Top Category" />
-              <Line type="monotone" dataKey="net_sale" stroke="#ff7300" strokeWidth={3} name="Top Brand" />
-              <Line type="monotone" dataKey="admin_amount" stroke="#00c49f" strokeWidth={3} name="Top Store" />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-        <div className="column w-35">
-          <div className="card-header">
-            <div className="left">
-              <div className="title">
-                Sales by Locations
-              </div>
-            </div>
+
+          <div style={{ width: '100%', height: 400 }}>
+            <ResponsiveContainer>
+              <PieChart>
+                <Pie
+                  data={pieData}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={140}
+                  innerRadius={80}
+                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(1)}%`}
+                  labelLine={false}
+                  isAnimationActive={true}
+                >
+                  {pieData.map((_, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={['#0088FE', '#00C49F', '#FF8042'][index % 3]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip
+                  formatter={(value) => formatCurrency(value)}
+                  contentStyle={{
+                    backgroundColor: '#fff',
+                    borderRadius: '8px',
+                    border: '1px solid #ddd',
+                  }}
+                />
+                <Legend verticalAlign="bottom" height={36} />
+              </PieChart>
+            </ResponsiveContainer>
           </div>
-          <MapContainer
-            center={[20, 0]}
-            zoom={2}
-          >
-            <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            />
-            {salesByLocations.map(({ name, coordinates, sales }) => (
-              <Marker
-                key={name}
-                position={coordinates as [number, number]}
-                icon={salesIcon}
-              >
-                <Popup>
-                  <strong>{name}</strong>
-                  <br />
-                  Sales: ${sales}
-                </Popup>
-              </Marker>
-            ))}
-          </MapContainer>
         </div>
       </div>
+
+
       <div className="row">
         {leaderboard.map((section: any, sectionIndex: number) => (
           <div className="column" key={sectionIndex}>
