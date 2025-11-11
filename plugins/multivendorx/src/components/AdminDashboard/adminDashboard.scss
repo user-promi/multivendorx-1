@@ -215,16 +215,21 @@
                 color: $theme-color;
             }
         }
+    }
 
-        &:hover {
-            background: $theme-color;
+    &.hover {
+        .title {
 
-            i {
-                color: #fff;
-            }
+            &:hover {
+                background: $theme-color;
 
-            p {
-                color: #fff;
+                i {
+                    color: #fff;
+                }
+
+                p {
+                    color: #fff;
+                }
             }
         }
     }
@@ -669,10 +674,11 @@
 
     .image-wrapper {
         text-align: center;
-        margin: 1rem;
+        margin: 0;
+        margin-bottom: 1.5rem;
 
         img {
-            height: 16rem;
+            height: 20rem;
         }
     }
 
@@ -1190,10 +1196,3 @@
 }
 
 // video section end
-
-// setup
-.welcome-wrapper{
-    img{
-        
-    }
-}

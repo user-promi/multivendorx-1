@@ -397,7 +397,6 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
           </>
         );
 
-
       default:
         return (
           <input

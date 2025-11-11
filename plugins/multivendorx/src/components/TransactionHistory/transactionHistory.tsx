@@ -257,7 +257,7 @@ export const TransactionHistory: React.FC = () => {
 
             <div className="general-wrapper">
                 {/* Tab Titles */}
-                <div className="tab-titles">
+                <div className="tab-titles hover">
                     {tabs.map((tab) => (
                         <div
                             key={tab.id}
