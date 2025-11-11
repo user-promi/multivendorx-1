@@ -113,9 +113,13 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
           },
         ];
 
-
         // Just Admin + Store + Total for Revenue Breakdown
         const earningSummary = [
+          {
+            id: 'total_order_amount',
+            title: 'Total Order Amount',
+            price: formatCurrency(data.total_order_amount),
+          },
           {
             id: 'admin_earning',
             title: 'Admin Net Earning',
@@ -127,11 +131,56 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
             price: formatCurrency(storeEarning),
           },
           {
-            id: 'total',
-            title: 'Total',
-            price: formatCurrency(data.total_order_amount),
+            id: 'facilitator_fee',
+            title: 'Facilitator Fee',
+            price: formatCurrency(data.facilitator_fee),
+          },
+          {
+            id: 'gateway_fee',
+            title: 'Gateway Fee',
+            price: formatCurrency(data.gateway_fee),
+          },
+          {
+            id: 'shipping_amount',
+            title: 'Shipping Amount',
+            price: formatCurrency(data.shipping_amount),
+          },
+          {
+            id: 'tax_amount',
+            title: 'Tax Amount',
+            price: formatCurrency(data.tax_amount),
+          },
+          {
+            id: 'shipping_tax_amount',
+            title: 'Shipping Tax Amount',
+            price: formatCurrency(data.shipping_tax_amount),
+          },
+          {
+            id: 'commission_total',
+            title: 'Commission Total',
+            price: formatCurrency(data.commission_total),
+          },
+          {
+            id: 'commission_refunded',
+            title: 'Commission Refunded',
+            price: formatCurrency(data.commission_refunded),
+          },
+          {
+            id: 'grand_total',
+            title: 'Grand Total',
+            price: formatCurrency(
+              data.total_order_amount +
+              data.facilitator_fee +
+              data.gateway_fee +
+              data.shipping_amount +
+              data.tax_amount +
+              data.shipping_tax_amount
+            ),
           },
         ];
+        
+        
+
         const pieChartData = [
           { name: 'Admin Net Earning', value: adminEarning },
           { name: 'Store Net Earning', value: storeEarning },
