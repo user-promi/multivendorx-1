@@ -456,9 +456,17 @@ class FrontendScripts {
         }
 
         $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', [] );
-        $settings = !empty($payment_admin_settings['custom-gateway']) ? $payment_admin_settings['custom-gateway'] : [];
-        
-        $gateway_name = $settings && !empty($settings['custom_gateway_name']) ? $settings['custom_gateway_name'] : 'Custom Gateway';
+
+        $capability_pro = [
+            'export_shop_report' => [
+                'prosetting' => true,
+                'module'    => 'store-analytics'
+            ],
+            'edit_stock_alerts' => [
+                'prosetting' => true,
+                'module'    => 'store-inventory'
+            ]
+        ];
 
         $localize_scripts = apply_filters(
             'multivendorx_localize_scripts',
@@ -483,6 +491,7 @@ class FrontendScripts {
                         'tinymceApiKey'            => MultiVendorX()->setting->get_setting( 'tinymce_api_section' ),
                         'default_logo'             => MultiVendorX()->plugin_url.'assets/images/WP-stdavatar.png',
                         'capabilities'             => StoreUtil::get_store_capability(),
+                        'capability_pro'           => $capability_pro,
                         'custom_roles'             => Roles::multivendorx_get_roles(),
                         'all_payments'             => MultiVendorX()->payments->get_all_payment_settings(),
                         'all_shippings'            => apply_filters( 'multivendorx_get_all_shipping_methods',[]),
@@ -502,6 +511,7 @@ class FrontendScripts {
                         'payout_payment_options'   => $payment_admin_settings,
 						'module_page_url'          => admin_url( 'admin.php?page=multivendorx#&tab=modules' ),
 						'plugin_url'               => admin_url( 'admin.php?page=multivendorx#&tab=' ),
+						'setup_wizard_url'         => admin_url( 'index.php?page=multivendorx-setup' ),
 						'store_page_url'           => trailingslashit( site_url() ) . untrailingslashit( MultiVendorX()->setting->get_setting( 'store_url', 'store' ) ),
                         'map_providor'             => MultiVendorX()->setting->get_setting( 'choose_map_api' ),
                         'google_api_key'           => MultiVendorX()->setting->get_setting( 'google_api_key' ),

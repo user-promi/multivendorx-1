@@ -1,6 +1,6 @@
 import notifima from "../../assets/images/brand-icon.png";
 import catalogx from "../../assets/images/catalogx.png";
-import Mascot from "../../assets/images/multivendorx-mascot-scaled.png";
+import Mascot from "../../assets/images/multivendorx-mascot-scale.png";
 import freePro from "../../assets/images/dashboard-1.png";
 
 interface Section {
@@ -434,7 +434,7 @@ const AdminDashboard = () => {
                     <div
                       className="admin-btn btn-purple"
                       onClick={() => window.location.href = `?page=multivendorx#&tab=modules`}
-                    ><i className="adminlib-eye"></i>
+                    ><i className="adminlib-preview"></i>
                       View All
                     </div>
                   </div>

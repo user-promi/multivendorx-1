@@ -360,7 +360,7 @@ const EditStore = () => {
                                                     e.stopPropagation();
                                                     setBannerMenu(true);
                                                     setLogoMenu(false);
-                                                }}><i className="adminlib-create"></i>Edit banner image</span>
+                                                }}><i className="adminlib-edit"></i>Edit banner image</span>
                                                 {bannerMenu && (
                                                     <ul>
                                                         {/* <li><i className="adminlib-cloud-upload"></i> Upload</li> */}
@@ -402,7 +402,7 @@ const EditStore = () => {
                                                             e.stopPropagation();
                                                             setLogoMenu((prev) => !prev);
                                                             setBannerMenu(false);
-                                                        }}><i className="adminlib-create"></i></span>
+                                                        }}><i className="adminlib-edit"></i></span>
                                                         {logoMenu && (
                                                             <ul>
                                                                 <li
@@ -462,7 +462,7 @@ const EditStore = () => {
                                                                 setEditName(!editName);
                                                             }}
                                                         >
-                                                            <i className={editName ? "" : "adminlib-create"}></i>
+                                                            <i className={editName ? "" : "adminlib-edit"}></i>
                                                         </span>
                                                     </div>
 
@@ -524,7 +524,7 @@ const EditStore = () => {
                                                             setEditDesc(!editDesc);
                                                         }}
                                                     >
-                                                        <i className={editDesc ? "" : "adminlib-create"}></i>
+                                                        <i className={editDesc ? "" : "adminlib-edit"}></i>
                                                     </span>
                                                 </div>
                                                 <ul className="contact-details">
@@ -572,7 +572,7 @@ const EditStore = () => {
                                                                         });
                                                                     }, 500);
                                                                 }}>
-                                                                    <i className="adminlib-create" ></i>
+                                                                    <i className="adminlib-edit" ></i>
                                                                 </span>
                                                             )}
                                                         </>

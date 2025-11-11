@@ -239,6 +239,7 @@
 .store-owner-details {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 0.313rem;
 
     .contact-details {
         flex-direction: column;
@@ -249,7 +250,7 @@
         text-align: right;
 
         .price {
-            font-size: 1.313rem;
+            font-size: 1.063rem;
             font-weight: 600;
             line-height: 1.5rem;
             padding-bottom: 0.125rem;

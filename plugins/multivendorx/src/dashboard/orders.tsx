@@ -351,7 +351,7 @@ const Orders: React.FC = () => {
                                 ? [
                                     {
                                         label: __('View', 'multivendorx'),
-                                        icon: 'adminlib-eye',
+                                        icon: 'adminlib-preview',
                                         onClick: (rowData) => {
                                             setSelectedOrder(rowData);
                                             // window.location.href = `view/${rowData.id}`;
@@ -480,12 +480,12 @@ const Orders: React.FC = () => {
         <>
             {!isViewOrder && !selectedOrder && (
                 <>
-                    <div className="page-title-wrapper">
+                    {/* <div className="page-title-wrapper">
                         <div className="page-title">
                             <div className="title">Orders</div>
                             <div className="des">Manage your store information and preferences</div>
                         </div>
-                    </div>
+                    </div> */}
                     <div className="row">
                         <div className="column">
                             <Table

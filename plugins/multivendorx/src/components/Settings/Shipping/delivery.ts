@@ -10,7 +10,7 @@ export default {
     desc: __(
         'Define the steps orders follow from purchase to completion. Set what customers see in tracking and choose whether orders complete automatically or after customer confirmation.', 'multivendorx'
     ),
-    icon: 'adminlib-general-tab',
+    icon: 'adminlib-delivery',
     submitUrl: 'settings',
     modal: [
         // {

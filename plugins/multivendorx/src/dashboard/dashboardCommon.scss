@@ -22,6 +22,9 @@ $border-radius-large: 0.5rem;
 $border-radius-button: 8rem;
 
 
+body{
+    margin: 0;
+}
 .basic-input,
 .basic-select,
 .rmdp-input,
@@ -29,6 +32,14 @@ $border-radius-button: 8rem;
     // min-height: 1.5rem !important;
 }
 
+.btn-purple-bg {
+    background: var(--themeColor) !important;
+    color: #fff;
+}
+.btn-white{
+    background: #fff;
+    color: var(--themeColor);
+}
 // no permission section start
 .permission-wrapper {
     height: 80vh;

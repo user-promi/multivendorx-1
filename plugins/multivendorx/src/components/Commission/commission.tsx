@@ -577,7 +577,7 @@ const Commission: React.FC = () => {
                     <span className={`admin-badge ${row.original.status === 'paid' ? 'green' : 'red'}`}>
                         {row.original.status
                             ? row.original.status.charAt(0).toLocaleUpperCase() + row.original.status.slice(1)
-                            : '-'}
+                            : ''}
 
                     </span>
                 </TableCell>
@@ -638,7 +638,7 @@ const Commission: React.FC = () => {
                         actions: [
                             {
                                 label: __('View Commission', 'multivendorx'),
-                                icon: 'adminlib-eye',
+                                icon: 'adminlib-preview',
                                 onClick: (rowData: any) => {
                                     setSelectedCommissionId(rowData.id ?? null);
                                     setViewCommission(true);

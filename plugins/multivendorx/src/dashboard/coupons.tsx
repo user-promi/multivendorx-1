@@ -766,7 +766,7 @@ const AllCoupon: React.FC = () => {
                         actions: [
                             {
                                 label: __('Edit', 'multivendorx'),
-                                icon: 'adminlib-create',
+                                icon: 'adminlib-edit',
                                 onClick: (rowData: any) => {
                                     handleEditCoupon(rowData.id);
                                 },
@@ -859,10 +859,10 @@ const AllCoupon: React.FC = () => {
     return (
         <>
             <div className="page-title-wrapper">
-                <div className="page-title">
+                {/* <div className="page-title">
                     <div className="title">Coupons</div>
                     <div className="des">Manage your store information and preferences</div>
-                </div>
+                </div> */}
                 <div className="button-wrapper">
                     <div
                         className="admin-btn btn-purple"

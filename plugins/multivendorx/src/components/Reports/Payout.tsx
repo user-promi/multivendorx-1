@@ -7,32 +7,6 @@ import axios from 'axios';
 import { PaginationState, RowSelectionState } from '@tanstack/react-table';
 import { formatCurrency } from '../../services/commonFunction';
 
-const overview = [
-  {
-    id: 'sales',
-    label: 'Active Stores',
-    count: 15,
-    icon: 'adminlib-star red',
-  },
-  {
-    id: 'earnings',
-    label: 'Stores with Sales',
-    count: 625,
-    icon: 'adminlib-support green',
-  },
-  {
-    id: 'Vendors',
-    label: 'New Stores',
-    count: 8,
-    icon: 'adminlib-global-community blue',
-  },
-  {
-    id: 'free',
-    label: 'Pending Store',
-    count: 758,
-    icon: 'adminlib-global-community yellow',
-  },
-];
 type StoreRow = {
   id: number;
   vendor: string;
@@ -41,13 +15,6 @@ type StoreRow = {
   date: string;
   status: "Paid" | "Unpaid";
 };
-const pieData = [
-  { name: "Store 1(300)", value: 300 },
-  { name: "Store 2(2400)", value: 2400 },
-  { name: "Store 3(800)", value: 800 },
-  { name: "Store 4(200)", value: 200 },
-  { name: "Store 5(400)", value: 400 },
-];
 
 const COLORS = ["#5007aa", "#00c49f", "#ff7300", "#d400ffff", "#00ff88ff"];
 
@@ -73,6 +40,7 @@ const Transactions: React.FC = () => {
   const [data, setData] = useState<any[] | null>(null);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [storeStatus, setStoreStatus] = useState<StoreStatus[] | null>(null);
+  const [overviewData, setOverviewData] = useState<any[]>([]);
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -81,6 +49,8 @@ const Transactions: React.FC = () => {
   const [totalRows, setTotalRows] = useState<number>(0);
   const [pageCount, setPageCount] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
+  const [pieData, setPieData] = useState<{ name: string; value: number }[]>([]);
+
   // Fetch total rows on mount
   useEffect(() => {
     axios({
@@ -133,34 +103,53 @@ const Transactions: React.FC = () => {
       },
     })
       .then((response) => {
-        setData(response.data.stores || []);
+        const stores = response.data.stores || [];
+        setData(stores);
+
+        //Dynamic pie chart data from API
+        const pieChartData = stores
+          .filter(store => store.commission && store.commission.commission_total > 0)
+          .map((store) => ({
+            name: `${store.store_name} (${formatCurrency(store.commission.commission_total)})`,
+            value: store.commission.commission_total,
+          }));
+
+        setPieData(pieChartData);
+
         setStoreStatus([
+          { key: 'all', name: 'All', count: response.data.all || 0 },
+          { key: 'active', name: 'Active', count: response.data.active || 0 },
+          { key: 'under_review', name: 'Under Review', count: response.data.under_review || 0 },
+          { key: 'suspended', name: 'Suspended', count: response.data.suspended || 0 },
+          { key: 'deactivated', name: 'Deactivated', count: response.data.deactivated || 0 },
+        ]);
+        setOverviewData([
           {
-            key: 'all',
-            name: 'All',
+            id: 'all',
+            label: 'All Stores',
             count: response.data.all || 0,
+            icon: 'adminlib-global-community blue',
           },
           {
-            key: 'active',
-            name: 'Active',
+            id: 'active',
+            label: 'Active Stores',
             count: response.data.active || 0,
+            icon: 'adminlib-star green',
           },
           {
-            key: 'under_review',
-            name: 'Under Review',
-            count: response.data.under_review || 0,
+            id: 'pending',
+            label: 'Pending Stores',
+            count: response.data.pending || 0,
+            icon: 'adminlib-support yellow',
           },
           {
-            key: 'suspended',
-            name: 'Suspended',
-            count: response.data.suspended || 0,
-          },
-          {
-            key: 'deactivated',
-            name: 'Deactivated',
+            id: 'deactivated',
+            label: 'Deactivated Stores',
             count: response.data.deactivated || 0,
+            icon: 'adminlib-store-inventory red',
           },
         ]);
+
       })
       .catch(() => {
         setError(__('Failed to load stores', 'multivendorx'));
@@ -230,23 +219,23 @@ const Transactions: React.FC = () => {
   const currencySymbol = appLocalizer?.currency_symbol;
 
   const columns: ColumnDef<StoreRow>[] = [
-    {
-      id: 'select',
-      header: ({ table }) => (
-        <input
-          type="checkbox"
-          checked={table.getIsAllRowsSelected()}
-          onChange={table.getToggleAllRowsSelectedHandler()}
-        />
-      ),
-      cell: ({ row }) => (
-        <input
-          type="checkbox"
-          checked={row.getIsSelected()}
-          onChange={row.getToggleSelectedHandler()}
-        />
-      ),
-    },
+    // {
+    //   id: 'select',
+    //   header: ({ table }) => (
+    //     <input
+    //       type="checkbox"
+    //       checked={table.getIsAllRowsSelected()}
+    //       onChange={table.getToggleAllRowsSelectedHandler()}
+    //     />
+    //   ),
+    //   cell: ({ row }) => (
+    //     <input
+    //       type="checkbox"
+    //       checked={row.getIsSelected()}
+    //       onChange={row.getToggleSelectedHandler()}
+    //     />
+    //   ),
+    // },
     {
       // id: 'store_name',
       // accessorKey: 'store_name',
@@ -279,38 +268,40 @@ const Transactions: React.FC = () => {
                   alt={row.original.store_name}
                 />
               ) : (
-                <i className="adminlib-store-inventory"></i>
+                <i className="item-icon adminlib-store-inventory"></i>
               )}
 
               <div className="details">
                 <span className="title">{row.original.store_name || '-'}</span>
-                <span>Since {formattedDate}</span>
+                <div className="des">
+                  {row.original.email && (
+                    <div>
+                      <b><i className="adminlib-mail"></i></b> {row.original.email}
+                    </div>
+                  )}
+                  {row.original.phone && (
+                    <div>
+                      <b><i className="adminlib-form-phone"></i></b>
+                      {row.original.phone ? row.original.phone : '-'}
+                    </div>
+                  )}
+                </div>
               </div>
             </a>
           </TableCell>
         );
       },
     },
-    {
-      header: __('Contact', 'multivendorx'),
-      cell: ({ row }) => (
-        <TableCell title={row.original.email || ''}>
-          <div className="table-content">
-            {row.original.email && (
-              <div>
-                <b><i className="adminlib-mail"></i></b> {row.original.email}
-              </div>
-            )}
-            {row.original.phone && (
-              <div>
-                <b><i className="adminlib-form-phone"></i></b>
-                {row.original.phone ? row.original.phone : '-'}
-              </div>
-            )}
-          </div>
-        </TableCell>
-      ),
-    },
+    // {
+    //   header: __('Contact', 'multivendorx'),
+    //   cell: ({ row }) => (
+    //     <TableCell title={row.original.email || ''}>
+    //       <div className="table-content">
+
+    //       </div>
+    //     </TableCell>
+    //   ),
+    // },
     {
       // id: 'primary_owner',
       // accessorKey: 'primary_owner',
@@ -364,6 +355,8 @@ const Transactions: React.FC = () => {
               return <span className="admin-badge red">Rejected</span>;
             case 'locked':
               return <span className="admin-badge blue">Locked</span>;
+            case 'deactivated':
+              return <span className="admin-badge blue">Deactivated</span>;
             default:
               return <span className="admin-badge gray">{status}</span>;
           }
@@ -372,6 +365,7 @@ const Transactions: React.FC = () => {
         return (
           <TableCell title={`${status} - ${formattedDate}`}>
             {getStatusBadge(status)}
+            <div className="des">Since {formattedDate}</div>
           </TableCell>
         );
       },
@@ -435,31 +429,19 @@ const Transactions: React.FC = () => {
   return (
     <>
       <div className="row">
-        <div className="column">
-          <div className="card-header">
-            <div className="left">
-              <div className="title">
-                Account Overview
-              </div>
-            </div>
-            <div className="right">
-              <span>Updated 1 month ago</span>
-            </div>
-          </div>
-          <div className="card-body">
-            <div className="analytics-container">
-              {overview.map((item, idx) => (
-                <div key={idx} className="analytics-item">
-                  <div className="analytics-icon">
-                    <i className={item.icon}></i>
-                  </div>
-                  <div className="details">
-                    <div className="number">{item.count}</div>
-                    <div className="text">{item.label}</div>
-                  </div>
+        <div className="column transparent">
+          <div className="analytics-container report">
+            {overviewData.map((item, idx) => (
+              <div key={idx} className="analytics-item">
+                <div className="analytics-icon">
+                  <i className={item.icon}></i>
                 </div>
-              ))}
-            </div>
+                <div className="details">
+                  <div className="number">{item.count}</div>
+                  <div className="text">{item.label}</div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
         <div className="column">
@@ -472,7 +454,14 @@ const Transactions: React.FC = () => {
           </div>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
-              <Pie data={pieData} cx="50%" cy="50%" outerRadius={100} dataKey="value" label>
+              <Pie
+                data={pieData}
+                cx="50%"
+                cy="50%"
+                outerRadius={100}
+                dataKey="value"
+                label
+              >
                 {pieData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
@@ -481,12 +470,13 @@ const Transactions: React.FC = () => {
               <Legend />
             </PieChart>
           </ResponsiveContainer>
+
         </div>
       </div>
 
-      <div className="row">
-        <div className="column">
-          {/* <div className="card-header">
+      {/* <div className="row">
+        <div className="column"> */}
+      {/* <div className="card-header">
             <div className="left">
               <div className="title">
                 Account Overview
@@ -496,24 +486,24 @@ const Transactions: React.FC = () => {
               <span>Updated 1 month ago</span>
             </div>
           </div> */}
-          <Table
-            data={data}
-            columns={columns as ColumnDef<Record<string, any>, any>[]}
-            rowSelection={rowSelection}
-            onRowSelectionChange={setRowSelection}
-            defaultRowsPerPage={10}
-            pageCount={pageCount}
-            pagination={pagination}
-            onPaginationChange={setPagination}
-            handlePagination={requestApiForData}
-            perPageOption={[10, 25, 50]}
-            typeCounts={storeStatus as StoreStatus[]}
-            totalCounts={totalRows}
-            searchFilter={searchFilter}
-            realtimeFilter={realtimeFilter}
-          />
-        </div>
-      </div>
+      <Table
+        data={data}
+        columns={columns as ColumnDef<Record<string, any>, any>[]}
+        rowSelection={rowSelection}
+        onRowSelectionChange={setRowSelection}
+        defaultRowsPerPage={10}
+        pageCount={pageCount}
+        pagination={pagination}
+        onPaginationChange={setPagination}
+        handlePagination={requestApiForData}
+        perPageOption={[10, 25, 50]}
+        typeCounts={storeStatus as StoreStatus[]}
+        totalCounts={totalRows}
+        searchFilter={searchFilter}
+        realtimeFilter={realtimeFilter}
+      />
+      {/* </div>
+      </div> */}
     </>
   );
 };

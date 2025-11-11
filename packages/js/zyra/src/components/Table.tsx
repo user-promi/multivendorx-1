@@ -873,60 +873,59 @@ const Table: React.FC<TableProps> = ({
                                 </>
                             )}
 
+                            <div className="admin-filter-wrapper ">
+                                {Object.keys(rowSelection || {}).length >= 2 ? (
 
+                                    <div className="wrap-bulk-all-date bulk">
+                                        <span className="count">{Object.keys(rowSelection).length} rows selected</span>
+                                        <span className="select count"
+                                            onClick={() => table.toggleAllRowsSelected(true)}>
+                                            Select all
+                                        </span>
+                                        {bulkActionComp && bulkActionComp()}
+                                        <div
+                                            className="close-btn"
+                                            onClick={() => onRowSelectionChange?.({})}
+                                        >
+                                            <i className="adminlib-vendor-form-delete"></i>
+                                            Delete
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <>
+                                        {data?.length !== 0 && realtimeFilter && realtimeFilter.length > 0 && (
+                                            <div className="wrap-bulk-all-date filter">
+                                                <span className="title">
+                                                    <i className="adminlib-filter"></i> Filter
+                                                </span>
+                                                {realtimeFilter?.map((filter) => (
+                                                    <React.Fragment key={filter.name}>
+                                                        {filter.render(handleFilterChange, filterData[filter.name])}
+                                                    </React.Fragment>
+                                                ))}
+                                            </div>
+                                        )}
+
+                                        {/* Show Reset button only if filters are applied */}
+                                        {Object.keys(filterData).length > 0 && (
+                                            <div className="reset-btn">
+                                                <span
+                                                    onClick={() => {
+                                                        setFilterData({});            // clear all filters
+                                                        onRowSelectionChange?.({});   // clear row selection if any
+                                                        handlePagination?.(defaultRowsPerPage, 1, {}); // reload data
+                                                    }}
+                                                    className="admin-badge red"
+                                                >
+                                                    <i className="adminlib-refresh"></i> Reset
+                                                </span>
+                                            </div>
+                                        )}
+                                    </>
+                                )}
+                            </div>
                         </div>
                     )}
-                    <div className="admin-filter-wrapper ">
-                        {Object.keys(rowSelection || {}).length >= 2 ? (
-
-                            <div className="wrap-bulk-all-date bulk">
-                                <span className="count">{Object.keys(rowSelection).length} rows selected</span>
-                                <span className="select count"
-                                    onClick={() => table.toggleAllRowsSelected(true)}>
-                                    Select all
-                                </span>
-                                {bulkActionComp && bulkActionComp()}
-                                <div
-                                    className="close-btn"
-                                    onClick={() => onRowSelectionChange?.({})}
-                                >
-                                    <i className="adminlib-vendor-form-delete"></i>
-                                    Delete
-                                </div>
-                            </div>
-                        ) : (
-                            <>
-                                {data?.length !== 0 && realtimeFilter && realtimeFilter.length > 0 && (
-                                    <div className="wrap-bulk-all-date filter">
-                                        <span className="title">
-                                            <i className="adminlib-filter"></i> Filter
-                                        </span>
-                                        {realtimeFilter?.map((filter) => (
-                                            <React.Fragment key={filter.name}>
-                                                {filter.render(handleFilterChange, filterData[filter.name])}
-                                            </React.Fragment>
-                                        ))}
-                                    </div>
-                                )}
-
-                                {/* Show Reset button only if filters are applied */}
-                                {Object.keys(filterData).length > 0 && (
-                                    <div className="reset-btn">
-                                        <span
-                                            onClick={() => {
-                                                setFilterData({});            // clear all filters
-                                                onRowSelectionChange?.({});   // clear row selection if any
-                                                handlePagination?.(defaultRowsPerPage, 1, {}); // reload data
-                                            }}
-                                            className="admin-badge red"
-                                        >
-                                            <i className="adminlib-refresh"></i> Reset
-                                        </span>
-                                    </div>
-                                )}
-                            </>
-                        )}
-                    </div>
                     {successMsg && (
                         <div className="admin-notice-display-title">
                             <i className="admin-font adminlib-icon-yes"></i>

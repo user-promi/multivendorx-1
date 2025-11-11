@@ -1,4 +1,4 @@
-import { AdminBreadcrumbs, SelectInput } from 'zyra';
+import { AdminBreadcrumbs, getApiLink, SelectInput } from 'zyra';
 import { useEffect, useRef, useState } from 'react';
 
 import "../../dashboard/dashboardCommon.scss";
@@ -10,46 +10,6 @@ import RefundedOrderOld from './RefundedOrderOld';
 import axios from 'axios';
 
 const Reports = () => {
-
-  function requestOrders() {
-    axios({
-      method: "GET",
-      url: `${appLocalizer.apiUrl}/wc-analytics/`,
-      headers: { "X-WP-Nonce": appLocalizer.nonce },
-    })
-      .then(response => console.log("analytics", response.data))
-      .catch(error => console.error(error));
-
-    axios({
-      method: "GET",
-      url: `${appLocalizer.apiUrl}/wc-analytics/reports/stock/stats`,
-      headers: { "X-WP-Nonce": appLocalizer.nonce },
-    })
-      .then(response => console.log("stock stats", response.data))
-      .catch(error => console.error(error));
-
-    axios({
-      method: 'GET',
-      url: `${appLocalizer.apiUrl}/wc/v3/products`,
-      headers: { 'X-WP-Nonce': appLocalizer.nonce },
-      params: {
-        per_page: 100,                  // Number of orders to fetch
-        meta_key: 'multivendorx_store_id', // The meta key you want to check
-      },
-    })
-      .then(response => {
-        const ordersWithMeta = response.data;
-      })
-      .catch(error => {
-        console.error('Error fetching orders:', error);
-      });
-
-  }
-
-  useEffect(() => {
-    requestOrders();
-  });
-
   // Dummy chart data
   const data = [
     { month: "Jan", revenue: 4000, net_sale: 2400, admin_amount: 1200 },
@@ -72,6 +32,7 @@ const Reports = () => {
     { name: "Jul", orders: 200, sold_out: 45 },
     { name: "Aug", orders: 160, sold_out: 30 },
   ];
+
   const overview = [
     {
       id: 'earnings',
@@ -112,7 +73,9 @@ const Reports = () => {
     { name: "Sub Total", value: 200 },
     { name: "Shipping", value: 200 },
   ];
-  const [activeTab, setActiveTab] = useState("overview");
+
+  const [activeTab, setActiveTab] = useState("revenue");
+  
   const tabs = [
     { id: "overview", label: "Marketplace", icon: "adminlib-marketplace-membership", content: <Overview overview={overview} data={data} overviewData={overviewData} pieData={pieData} /> },
     { id: "revenue", label: "Products", icon: "adminlib-multi-product", content: <Revenue /> },
@@ -120,21 +83,6 @@ const Reports = () => {
     { id: "StoreOrders", icon: "adminlib-order", label: "Store Orders", content: <StoreOrders /> },
     { id: "RefundedOrderOld", icon: "adminlib-marketplace-refund", label: "Refunded Orders", content: <RefundedOrderOld /> },
   ];
-
-  const COLORS = ["#5007aa", "#00c49f", "#ff7300", "#d400ffff", "#004ec4ff"];
-  const [open, setOpen] = useState(false);
-  const dropdownRef = useRef(null);
-
-  // Close when clicking outside
-  useEffect(() => {
-    function handleClickOutside(e) {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   return (
 

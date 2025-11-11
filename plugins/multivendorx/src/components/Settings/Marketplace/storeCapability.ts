@@ -7,11 +7,21 @@ const capabilityOptions = appLocalizer?.capabilities
               type: 'checkbox',
               label: group.label,
               desc: group.desc,
-              options: Object.entries(group.capability || {}).map(([capKey, capLabel]) => ({
-                  key: capKey,
-                  label: capLabel,
-                  value: capKey,
-              })),
+            //   options: Object.entries(group.capability || {}).map(([capKey, capLabel]) => ({
+            //       key: capKey,
+            //       label: capLabel,
+            //       value: capKey,
+            //   })),
+             options: Object.entries(group.capability || {}).map(([capKey, capLabel]) => {
+                  const proData = appLocalizer.capability_pro?.[capKey] || {};
+                  return {
+                      key: capKey,
+                      label: capLabel,
+                      value: capKey,
+                      proSetting: proData.prosetting === true,
+                      moduleEnabled: proData.module || null,
+                  };
+              }),
               selectDeselect: true,
           };
       })

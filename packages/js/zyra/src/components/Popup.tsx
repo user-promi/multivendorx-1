@@ -156,7 +156,7 @@ const ProPopup: React.FC<PopupProps> = (props) => {
                                         className="admin-btn btn-purple"
                                         href={props.modulePageUrl}
                                     >
-                                        <i className="adminlib-eye"></i> {props.moduleButton}
+                                        <i className="adminlib-preview"></i> {props.moduleButton}
                                     </a>
                                 </div>
                             </div>

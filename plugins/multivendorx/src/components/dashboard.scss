@@ -25,7 +25,7 @@
         border-radius: 0.313rem;
         box-shadow: 0 0.125rem 0.5rem 0 rgb(223 222 225 / 43%);
         background: #fff;
-        width: 100%;
+        width: 50%;
         box-sizing: border-box;
 
         h3 {
@@ -46,7 +46,11 @@
                 padding: 0.313rem;
             }
         }
-
+        &.transparent{
+            background: transparent;
+            box-shadow: none;
+            padding: 0;
+        }
         &.transaction {
             background: $theme-background-color;
         }
@@ -141,13 +145,14 @@
     justify-content: space-between;
     gap: 1rem;
     margin-bottom: 1rem;
+    flex-wrap: wrap;
 
     .analytics-item {
         display: flex;
         gap: 1rem;
         align-items: center;
         background: #fff;
-        padding: 1rem 1.5rem;
+        padding: 1rem;
         width: 100%;
         border-radius: 0.313rem;
 
@@ -177,6 +182,30 @@
     }
 
     // Wallet Transaction table
+
+    // report
+    &.report {
+        flex-wrap: wrap;
+
+        .analytics-item {
+            width: 48%;
+            box-sizing: border-box;
+
+            i{
+                font-size: 2.5rem;
+                padding: 0.625rem;
+                line-height: 4rem;
+            }
+            .details{
+                .number{
+                    font-size: 2.063rem;
+                }
+                .text{
+
+                }
+            }
+        }
+    }
 }
 
 .red {
@@ -383,8 +412,10 @@
             width: 24%;
             box-sizing: border-box;
 
-
-            &.active {
+            // &.active{
+            //     border: 0.063rem solid;
+            // }
+            &:hover {
                 background: $theme-color;
                 color: #fff;
 
@@ -573,25 +604,25 @@
         line-height: 1.125;
     }
 
-    // &.active {
-    //     border: 0.063rem solid;
+    &.active {
+        border: 0.063rem solid;
 
-    //     &:has(.red) {
-    //         border-color: #f06b4f;
-    //     }
+        &:has(.red) {
+            border-color: #f06b4f;
+        }
 
-    //     &:has(.green) {
-    //         border-color: #06be9f;
-    //     }
+        &:has(.green) {
+            border-color: #06be9f;
+        }
 
-    //     &:has(.yellow) {
-    //         border-color: #ff9f43;
-    //     }
+        &:has(.yellow) {
+            border-color: #ff9f43;
+        }
 
-    //     &:has(.blue) {
-    //         border-color: #003d66de;
-    //     }
-    // }
+        &:has(.blue) {
+            border-color: #003d66de;
+        }
+    }
 }
 
 // tab action cart end
@@ -644,6 +675,9 @@
 
 // transaction debit list
 .debit-list {
+    height: 9rem;
+    overflow: auto;
+
     .data-card {
         margin-bottom: 0.75rem;
         display: flex;

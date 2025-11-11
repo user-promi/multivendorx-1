@@ -67,6 +67,17 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
         timezone: ''
     });
 
+    useEffect(() => {
+        if (appLocalizer) {
+            setMapProvider(appLocalizer.map_providor);
+            if (appLocalizer.map_providor === 'google_map_set') {
+                setApiKey(appLocalizer.google_api_key);
+            } else {
+                setApiKey(appLocalizer.mapbox_api_key);
+            }
+        }
+    }, []);
+
     // Initialize email badges from form data
     useEffect(() => {
         if (formData.email) {
@@ -382,6 +393,13 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
         }
     };
 
+    // Debug logger
+    const log = (...args: any[]) => {
+        if (process.env.NODE_ENV !== "production") {
+            console.log("%c[StoreSettings LOG]", "color: #4CAF50; font-weight: bold;", ...args);
+        }
+    };
+
     const initializeMapboxMap = () => {
         log('Initializing Mapbox Map...');
         if (!(window as any).mapboxgl || !autocompleteInputRef.current) return;
@@ -481,13 +499,24 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
 
         setAddressData(newAddressData);
 
+        const foundCountry = (appLocalizer.country_list || []).find(
+            (item) => item.label === newAddressData.country || item.value === newAddressData.country
+        );
+        
+        const foundState = stateOptions.find(
+            (item) => item.label === newAddressData.state || item.value === newAddressData.state
+        );
+
         // Merge with existing form data
         const updatedFormData = {
             ...formData,
-            ...newAddressData
+            ...newAddressData,
+            country: foundCountry ? foundCountry.value : newAddressData.country,
+            state: foundState ? foundState.value : newAddressData.state,
         };
 
         setFormData(updatedFormData);
+        setAddressData(newAddressData);
         autoSave(updatedFormData);
     };
 
@@ -606,20 +635,24 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
         };
 
         setFormData(updated);
+        setAddressData(prev => ({ ...prev, country: newValue.label }));
+
         autoSave(updated);
         fetchStatesByCountry(newValue.value);
     };
 
     // Handle state select change (from old code)
-    const handleStateChange = (newValue: any) => {
+    const handleStateChange = (newValue) => {
         if (!newValue || Array.isArray(newValue)) return;
-
+    
         const updated = {
             ...formData,
             state: newValue.value
         };
-
+    
         setFormData(updated);
+        setAddressData(prev => ({ ...prev, state: newValue.label }));
+    
         autoSave(updated);
     };
 

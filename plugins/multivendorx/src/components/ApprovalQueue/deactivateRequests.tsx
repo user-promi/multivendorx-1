@@ -12,12 +12,15 @@ import {
 type StoreRow = {
     id?: number;
     store_name?: string;
-    store_slug?: string;
-    status?: string;
+    reason?: string;
+    date?: string;
 };
 
-const BestSellingProducts: React.FC = () => {
+interface Props {
+    onUpdated?: () => void;
+}
 
+const DeactivateRequests: React.FC<Props> = ({ onUpdated }) => {
     const [data, setData] = useState<StoreRow[] | null>(null);
 
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -34,7 +37,7 @@ const BestSellingProducts: React.FC = () => {
             method: 'GET',
             url: getApiLink(appLocalizer, 'store'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true },
+            params: { count: true, deactivate: true },
         })
             .then((response) => {
                 setTotalRows(response.data || 0);
@@ -51,35 +54,29 @@ const BestSellingProducts: React.FC = () => {
         requestData(rowsPerPage, currentPage);
         setPageCount(Math.ceil(totalRows / rowsPerPage));
     }, [pagination]);
-    const [ showDropdown, setShowDropdown ] = useState( false );
 
-    const toggleDropdown = ( id: any ) => {
-        if ( showDropdown === id ) {
-            setShowDropdown( false );
-            return;
-        }
-        setShowDropdown( id );
-    };
+
     // Fetch data from backend.
     function requestData(
         rowsPerPage = 10,
         currentPage = 1,
     ) {
-        setData(null);
+        setData([]);
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, 'store'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params: {
+                deactivate: true,
                 page: currentPage,
                 row: rowsPerPage,
             },
         })
             .then((response) => {
-                setData(response.data || []);
+                setData(Array.isArray(response.data) ? response.data : []);
             })
+
             .catch(() => {
-                setError(__('Failed to load stores', 'multivendorx'));
                 setData([]);
             });
     }
@@ -95,7 +92,7 @@ const BestSellingProducts: React.FC = () => {
             currentPage,
         );
     };
-
+    
     // Column definitions
     const columns: ColumnDef<StoreRow>[] = [
         {
@@ -124,68 +121,69 @@ const BestSellingProducts: React.FC = () => {
             ),
         },
         {
-            header: __('Slug', 'multivendorx'),
+            header: __('Reason', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.store_slug || ''}>
-                    {row.original.store_slug || '-'}
+                <TableCell title={row.original.reason || ''}>
+                    {row.original.reason || '-'}
                 </TableCell>
             ),
         },
         {
-            header: __('Status', 'multivendorx'),
+            header: __('Date', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.status || ''}>
-                    {row.original.status || '-'}
+                <TableCell title={row.original.date || ''}>
+                    {row.original.date || '-'}
                 </TableCell>
             ),
         },
         {
+            id: 'action',
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title="Action">
-                    <div className="action-section">
-                        <div className="action-icons">
-                            <i
-                                className="adminlib-more-vertical"
-                                onClick={() =>
-                                    toggleDropdown(row.original.order_id)
-                                }
-                            ></i>
-                            <div
-                                className={`action-dropdown ${showDropdown === row.original.order_id
-                                        ? 'show'
-                                        : ''
-                                    }`}
-                            >
-
-                                <ul>
-                                    <li
-                                        onClick={() =>
-                                            (window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
-                                        }
-                                    >
-                                        <i className="adminlib-preview"></i>
-                                        {__('View Store', 'multivendorx')}
-                                    </li>
-                                    <li
-                                        onClick={() =>
-                                            (window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
-                                        }
-                                    >
-                                        <i className="adminlib-edit"></i>
-                                        {__('Edit Store', 'multivendorx')}
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </TableCell>
+                <TableCell
+                    type="action-dropdown"
+                    rowData={row.original}
+                    header={{
+                        actions: [
+                            { label: __('Approve', 'multivendorx'), icon: 'adminlib-check', onClick: (row: any) => handleSingleAction('approve', row), hover: true },
+                            { label: __('Reject', 'multivendorx'), icon: 'adminlib-close', onClick: (row: any) => handleSingleAction('reject', row), hover: true },
+                        ],
+                    }}
+                />
             ),
-        }
+        },
     ];
+
+    const handleSingleAction = (action: string, row: any) => {
+        let storeId = row.id;
+        if (!storeId) return;
+
+        axios({
+            method: 'PUT',
+            url: getApiLink(appLocalizer, `store/${storeId}`),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            data: { deactivate: true, action, store_id: row.id },
+        })
+            .then(() => {
+                requestData(pagination.pageSize, pagination.pageIndex + 1);
+                onUpdated?.();
+            })
+            .catch(console.error);
+    };
 
     return (
         <>
+            <div className="card-header">
+                <div className="left">
+                    <div className="title">
+                        Deactivate Requests
+                    </div>
+                    <div className="des">Waiting for your response</div>
+                </div>
+                <div className="right">
+                    <i className="adminlib-more-vertical"></i>
+                </div>
+            </div>
             <div className="admin-table-wrapper">
                 <Table
                     data={data}
@@ -205,4 +203,4 @@ const BestSellingProducts: React.FC = () => {
     );
 };
 
-export default BestSellingProducts;
+export default DeactivateRequests;

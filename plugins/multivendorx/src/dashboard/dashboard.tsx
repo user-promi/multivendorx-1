@@ -18,7 +18,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import React, { useState, useEffect } from "react";
 import "../components/dashboard.scss";
 import '../dashboard/dashboard1.scss';
-import Mascot from "../assets/images/multivendorx-mascot-scaled.png";
+import Mascot from "../assets/images/multivendorx-mascot-scale.png";
 
 type StoreRow = {
   id?: number;
@@ -93,12 +93,12 @@ const Dashboard: React.FC = () => {
   const items = tabData[activeTab];
   return (
     <>
-      <div className="page-title-wrapper">
+      {/* <div className="page-title-wrapper">
         <div className="page-title">
           <div className="title">Dashboard</div>
           <div className="des">Manage your store information and preferences</div>
         </div>
-      </div>
+      </div> */}
 
       <div className="row">
         <div className="column w-35 theme-bg">
@@ -116,12 +116,12 @@ const Dashboard: React.FC = () => {
               </div>
               <div className="details">58% of sales target</div>
             </div>
-            <div className="admin-btn btn-purple">
+            <div className="admin-btn btn-white">
               View Details
             </div>
 
             <div className="image">
-              <img src={Mascot} alt="" />
+              {/* <img src={Mascot} alt="" /> */}
             </div>
           </div>
         </div>
@@ -140,7 +140,7 @@ const Dashboard: React.FC = () => {
             <div className="card-body">
               <div className="analytics-container">
 
-                {analyticsData.map((item, idx) => (
+                {/* {analyticsData.map((item, idx) => (
                   <div key={idx} className="analytics-item">
                     <div className="analytics-icon">
                       <i className={item.icon}></i>
@@ -150,7 +150,7 @@ const Dashboard: React.FC = () => {
                       <div className="text">{item.text}</div>
                     </div>
                   </div>
-                ))}
+                ))} */}
 
               </div>
             </div>

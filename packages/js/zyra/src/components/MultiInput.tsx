@@ -236,7 +236,7 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
                   <ul>
                     {!item.editDisabled && (
                       <li className="hover" onClick={() => handleEdit(index)}>
-                        <i className="adminlib-create"></i>
+                        <i className="adminlib-edit"></i>
                         <span>Edit</span>
                       </li>
                     )}

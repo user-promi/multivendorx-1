@@ -5,7 +5,7 @@ export default {
     priority: 6,
     name: __('Tax Compliance', 'mvx-pro'),
     desc: __('Stores must provide valid bank account details and tax documents (PAN, GST, VAT, TIN) to receive payouts. Payment processor verification may be required. Non-compliant stores may be restricted from payouts.', 'mvx-pro'),
-    icon: 'adminlib-wholesale',
+    icon: 'adminlib-tax-compliance',
     submitUrl: 'settings',
     modal: [
         {

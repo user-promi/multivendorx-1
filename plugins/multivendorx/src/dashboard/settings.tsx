@@ -11,6 +11,7 @@ import Privacy from './settings/Privacy';
 import Verification from './settings/Verification';
 import ShippingDelivery from './settings/ShippingDelivery';
 import LiveChat from './settings/LiveChat';
+import DeactivateRequest from './settings/DeactivateRequest';
 
 const settings = () => {
     const id = appLocalizer.store_id;
@@ -74,132 +75,6 @@ const settings = () => {
             }
         })
     };
-
-    // const [activeTab, setActiveTab] = useState("general");
-
-    // const settingTabs = [
-    //     { id: "general", label: "General", icon: "tools", content: <GeneralSettings /> },
-    //     { id: "appearance", label: "Appearance", icon: "appearance", content: <Appearance /> },
-    //     { id: "business-address", label: "Business Address", icon: "form-address", content: <BusinessAddress /> },
-    //     { id: "contact-information", label: "Contact Information", icon: "form-phone", content: <ContactInformation /> },
-    //     { id: "social-media", label: "Social Media", icon: "cohort", content: <SocialMedia /> },
-
-
-    //     { id: "payout", label: "Payout", icon: "tools", content: <Withdrawl /> },
-
-    //     { id: "privacy", label: "Privacy", icon: "security", content: <Privacy /> },
-    //     {
-    //         id: "seo-visibility", label: "SEO & visibility", icon: "bulk-action", content:
-    //             <>
-    //                 <div className="card-wrapper">
-    //                     <div className="card-content">
-    //                         <div className="card-title">SEO & Visibility</div>
-    //                         <div className="form-group-wrapper">
-    //                             <div className="form-group">
-    //                                 <label htmlFor="product-name">Meta Title</label>
-    //                                 <BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
-    //                             </div>
-    //                         </div>
-
-    //                         <div className="form-group-wrapper">
-    //                             <div className="form-group">
-    //                                 <label htmlFor="product-name">Description</label>
-    //                                 <TextArea
-    //                                     name="content"
-    //                                     inputClass="textarea-input"
-    //                                     // value={formData.content}
-    //                                     // onChange={handleChange}
-    //                                 />
-    //                             </div>
-    //                         </div>
-    //                         <div className="form-group-wrapper">
-    //                             <div className="form-group">
-    //                                 <label htmlFor="product-name">Keywords</label>
-    //                                 <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
-    //                             </div>
-    //                         </div>
-    //                         <div className="form-group-wrapper">
-    //                             <div className="form-group">
-    //                                 <label htmlFor="product-name">Tracking ID</label>
-    //                                 <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
-    //                             </div>
-    //                         </div>
-    //                     </div>
-    //                 </div>
-    //             </>
-    //     },
-    //     // {
-    //     //     id: "Shipping", label: "Shipping", icon: "cart", content:
-    //     //         <>
-    //     //             <div className="card-wrapper">
-    //     //                 <div className="card-content">
-    //     //                     <div className="card-title">Shipping & Delivery</div>
-    //     //                     <div className="form-group-wrapper">
-    //     //                         <div className="form-group">
-    //     //                             <label htmlFor="product-name">Shipping Zones</label>
-    //     //                             <BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
-    //     //                         </div>
-    //     //                     </div>
-
-    //     //                     <div className="form-group-wrapper">
-    //     //                         <div className="form-group">
-    //     //                             <label htmlFor="product-name">Shipping Methods</label>
-    //     //                             <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
-    //     //                         </div>
-    //     //                     </div>
-    //     //                     <div className="form-group-wrapper">
-    //     //                         <div className="form-group">
-    //     //                             <label htmlFor="product-name">Delivery Preferences</label>
-    //     //                             <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
-    //     //                         </div>
-    //     //                     </div>
-    //     //                 </div>
-    //     //             </div>
-    //     //         </>
-    //     // },
-    //     { id: "shipping", label: "Shipping & Delivery", icon: "tools", content: <ShippingDelivery /> },
-    //     { id: "verification", label: "Verification", icon: "tools", content: <Verification /> },
-    //     { id: "livechat", label: "Livechat", icon: "tools", content: <Livechat /> },
-    // ];
-    // return (
-    //     <>
-    //         {successMsg && (
-    //             <>
-    //                 <div className="admin-notice-wrapper">
-    //                     <i className="admin-font adminlib-icon-yes"></i>
-    //                     <div className="notice-details">
-    //                         <div className="title">Great!</div>
-    //                         <div className="desc">{successMsg}</div>
-    //                     </div>
-    //                 </div>
-    //             </>
-    //         )}
-
-    //         <div className="settings-tab-wrapper">
-    //             <div className="left-side">
-    //                 {settingTabs.map((tab) => (
-    //                     <div
-    //                         key={tab.id}
-    //                         className={`title ${activeTab === tab.id ? "active" : ""}`}
-    //                         onClick={() => setActiveTab(tab.id)}
-    //                     >
-    //                         <p><i className={`adminlib-${tab.icon}`}></i>{tab.label}</p>
-    //                     </div>
-    //                 ))}
-    //             </div>
-    //             <div className="content">
-    //                 {settingTabs.map(
-    //                     (tab) =>
-    //                         activeTab === tab.id && (
-    //                             <div key={tab.id} className="tab-panel">
-    //                                 {tab.content}
-    //                             </div>
-    //                         )
-    //                 )}
-    //             </div>
-    //         </div>
-    //     </>
-    // );
 
     const SimpleLink = ({ to, children, onClick, className }: any) => (
         <a href={to} onClick={onClick} className={className}>
@@ -325,6 +200,16 @@ const settings = () => {
                 icon: 'tools',
             },
         },
+        {
+            type: 'file',
+            content: {
+                id: 'deactivate',
+                name: 'Deactivated Request',
+                desc: 'Deactivated Request',
+                hideTabHeader: true,
+                icon: 'tools',
+            },
+        },
     ];
 
     const getForm = (tabId: string) => {
@@ -349,6 +234,8 @@ const settings = () => {
                 return <Verification />;
             case 'livechat':
                 return <LiveChat/>;
+            case 'deactivate':
+                return <DeactivateRequest/>;
             default:
                 return <div></div>;
         }

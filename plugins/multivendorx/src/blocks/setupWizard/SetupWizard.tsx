@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import './SetupWizard.scss';
+import 'zyra/build/index.css';
+import { PaymentTabsComponent } from 'zyra';
+// import PaymentTabsComponent from '../path/to/PaymentTabsComponent';
 
 interface Step {
     title: string;
@@ -13,29 +16,12 @@ interface Section {
     steps: Step[];
 }
 
-// Initial sections data
 const sectionsData: Section[] = [
     {
         title: 'Set Up The Basics',
         steps: [
             { title: 'Set Site Title & Tagline', description: 'Give your site a name and tagline.', completed: true, actionText: 'Set Up' },
             { title: 'Review Admin Email', description: 'Ensure your admin email is correct.', completed: false, actionText: 'Review' },
-            { title: 'Choose Page Links', description: 'Decide how page links appear.', completed: false, actionText: 'Set Up' },
-            { title: 'Search Engine Visibility', description: 'Control search engine indexing.', completed: false, actionText: 'Review' },
-        ],
-    },
-    {
-        title: 'Design, Style & Theme',
-        steps: [
-            { title: 'Pick a Color Scheme', completed: false, actionText: 'Set Up' },
-            { title: 'Choose Typography', completed: false, actionText: 'Set Up' },
-        ],
-    },
-    {
-        title: 'Design, Style & Theme',
-        steps: [
-            { title: 'Color Scheme', completed: false, actionText: 'Set Up' },
-            { title: 'Choose Typography', completed: false, actionText: 'Set Up' },
         ],
     },
 ];
@@ -44,70 +30,109 @@ const SetupWizard: React.FC = () => {
     const [sections, setSections] = useState<Section[]>(sectionsData);
     const [expandedSection, setExpandedSection] = useState<number | null>(0);
 
-    // Toggle section open/close
+    // Required for PaymentTabsComponent
+    const [value, setValue] = useState({});
+    const settingChanged = useRef(false);
+
+    const appLocalizer = (window as any).appLocalizer; // If needed
+
+    const inputField = {
+        key: "payment_gateway",
+        proSetting: true,
+        apiLink: "/wp-json/payments/v1/settings",
+        moduleEnabled: "yes",
+        dependentSetting: "",
+        dependentPlugin: "",
+        modal: ["paypal", "stripe", "razorpay"],
+        buttonEnable: true,
+    };
+
+    const isProSetting = (pro: boolean) => pro === true;
+    const methods = [
+        {
+            id: "paypal",
+            label: "Welcome to the MultivendorX family!",
+            icon: "adminlib-advertise-product",
+            desc: 'Thank you for choosing MultiVendorX! This quick setup wizard will help you configure the basic settings and have your marketplace ready in no time. It’s completely optional and shouldn’t take longer than five minutes.',
+            // connected: false,
+            // enableOption: true,
+            formFields: [
+                {
+                    key: 'enable_advertisement_in_subscription',
+                    type: 'setup',
+                    title: 'Identity verification',
+                    des: 'Control what dashboard sections and tools are available to active stores.',
+                    link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=identity-verification`,
+                },
+            ],
+        },
+        {
+            id: "stripe",
+            label: "Configure Your Store",
+            icon: "adminlib-stripe",
+            desc: 'Configure Your Store',
+            connected: true,
+            enableOption: true,
+            formFields: [
+                {
+                    key: 'enable_advertisement_in_subscription',
+                    type: 'text',
+                    label: 'Store URL',
+                    placeholder: 'Define vendor store URL',
+                },
+            ],
+        },
+        {
+            id: "razorpay",
+            label: "Commission Setup",
+            icon: "adminlib-commission",
+            desc: 'Verify store identity and business legitimacy',
+            connected: false,
+            enableOption: false,
+        },
+    ];
+
+
+    const proSettingChanged = (pro: boolean) => {
+        console.log("Pro setting change triggered", pro);
+    };
+
+    const updateSetting = (key: string, data: any) => {
+        setValue(data);
+    };
+
+    const hasAccess = () => true;
+
     const toggleSection = (index: number) => {
         setExpandedSection(expandedSection === index ? null : index);
     };
 
-    // Toggle step completion
-    const toggleStepCompletion = (sectionIdx: number, stepIdx: number) => {
-        const newSections = [...sections];
-        newSections[sectionIdx].steps[stepIdx].completed = !newSections[sectionIdx].steps[stepIdx].completed;
-        setSections(newSections);
-    };
-
     return (
         <div className="wizard-container">
-            <h5>Set Up The Basics</h5>
-            {sections.map((section, sIdx) => {
-                const totalSteps = section.steps.length;
-                const completedSteps = section.steps.filter(step => step.completed).length;
 
-                return (
-                    <div key={sIdx} className={`wizard-section ${expandedSection === sIdx ? 'expanded' : ''}`}>
-                        {/* Section Header */}
-                        <div className="wizard-header" onClick={() => toggleSection(sIdx)}>
-                            <div className="wizard-title">
-                                <span className={`adminlib-pagination-right-arrow ${expandedSection === sIdx ? 'rotate' : ''}`}></span>
-                                {section.title}
-                            </div>
-                            <div className={`admin-badge ${completedSteps === totalSteps ? 'green' : 'blue'}`}>
-                                {completedSteps === totalSteps && <i className="adminlib-check"></i>}
-                                {completedSteps}/{totalSteps}
-                            </div>
-                        </div>
+            {/* Add PaymentTabsComponent */}
+            <div style={{ marginTop: "30px" }}>
+                <h4>Payment Setup</h4>
 
-                        {/* Steps */}
-                        {expandedSection === sIdx && (
-                            <div className="wizard-steps">
-                                {section.steps.map((step, stepIdx) => (
-                                    <div key={stepIdx} className="wizard-step">
-                                        <div className="step-info">
-                                            <div className="default-checkbox">
-                                                <input
-                                                    type="checkbox"
-                                                    className="mvx-toggle-checkbox"
-                                                    id={`step-checkbox-${sIdx}-${stepIdx}`}
-                                                    checked={step.completed}
-                                                    onChange={() => toggleStepCompletion(sIdx, stepIdx)}
-                                                />
-                                                <label htmlFor={`step-checkbox-${sIdx}-${stepIdx}`}></label>
-                                            </div>
+                <PaymentTabsComponent
+                    key={inputField.key}
+                    name={inputField.key}
+                    proSetting={isProSetting(inputField.proSetting ?? false)}
+                    proSettingChanged={() => proSettingChanged(inputField.proSetting ?? false)}
+                    apilink={String(inputField.apiLink)}
+                    appLocalizer={appLocalizer}
+                    methods={methods} // static methods object
+                    buttonEnable={inputField.buttonEnable}
+                    value={value}
+                    onChange={(data: any) => {
+                        if (hasAccess()) {
+                            settingChanged.current = true;
+                            updateSetting(inputField.key, data);
+                        }
+                    }}
+                />
 
-                                            <div className="step-text">
-                                                <span className="step-title">{step.title}</span>
-                                                {step.description && <span className="step-desc">{step.description}</span>}
-                                            </div>
-                                        </div>
-
-                                        <button className="admin-btn btn-purple">{step.actionText} <i className="adminlib-arrow-right"></i> </button>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                );
-            })}
+            </div>
         </div>
     );
 };
