@@ -92,7 +92,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
         {
             icon: "adminlib-global-community yellow",
             number: formatCurrency(storeData.transactions?.locking_balance ?? 0),
-            text: "Pending balance",
+            text: "Upcoming balance",
         },
         {
             icon: "adminlib-global-community blue",

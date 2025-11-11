@@ -56,7 +56,7 @@ class StripeConnect
     }
 
     public function handle_oauth_callback() {
-        $log_file = plugin_dir_path(__FILE__) . "/error.log";
+        // $log_file = plugin_dir_path(__FILE__) . "/error.log";
         
         // Log initial callback
         file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": OAUTH_CALLBACK_STARTED\n", FILE_APPEND);
@@ -293,7 +293,7 @@ class StripeConnect
 
     public function process_payment($store_id, $amount, $order_id = null, $transaction_id = null, $note = null)
     {
-        $log_file = plugin_dir_path(__FILE__) . "/payment_processing.log";
+        // $log_file = plugin_dir_path(__FILE__) . "/payment_processing.log";
         
         // Log payment process start
         file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": PAYMENT_PROCESS_STARTED\n", FILE_APPEND);
@@ -373,7 +373,7 @@ class StripeConnect
     }
 
     public function create_transfer($amount, $destination, $order_id) {
-        $log_file = plugin_dir_path(__FILE__) . "/payment_processing.log";
+        // $log_file = plugin_dir_path(__FILE__) . "/payment_processing.log";
         
         try {
             file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": TRANSFER_CREATION_STARTED - Amount: {$amount}, Destination: {$destination}, Order ID: {$order_id}\n", FILE_APPEND);

@@ -45,11 +45,11 @@ class Payment
         ]);
     }
     public function handle_oauth_callback() {
-        $log_file = plugin_dir_path(__FILE__) . "/error.log";
+        // $log_file = plugin_dir_path(__FILE__) . "/error.log";
         
         // Log initial callback
-        file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": OAUTH_CALLBACK_STARTED\n", FILE_APPEND);
-        file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": GET_PARAMS: " . var_export($_GET, true) . "\n", FILE_APPEND);
+        // file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": OAUTH_CALLBACK_STARTED\n", FILE_APPEND);
+        // file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": GET_PARAMS: " . var_export($_GET, true) . "\n", FILE_APPEND);
         
         if (!isset($_GET['code'], $_GET['state'])) {
             file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": ERROR: Missing code or state parameters\n", FILE_APPEND);
@@ -60,8 +60,8 @@ class Payment
         $state = sanitize_text_field($_GET['state']);
         $vendor_id = get_transient('mvx_stripe_oauth_state_' . $state);
         
-        file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": STATE: " . $state . "\n", FILE_APPEND);
-        file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": VENDOR_ID_FROM_TRANSIENT: " . var_export($vendor_id, true) . "\n", FILE_APPEND);
+        // file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": STATE: " . $state . "\n", FILE_APPEND);
+        // file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": VENDOR_ID_FROM_TRANSIENT: " . var_export($vendor_id, true) . "\n", FILE_APPEND);
         
         delete_transient('mvx_stripe_oauth_state_' . $state);
         

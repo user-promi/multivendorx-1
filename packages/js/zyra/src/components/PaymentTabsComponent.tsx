@@ -176,13 +176,16 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
 
       case "checkbox":
         return (
-          <input
-            type="checkbox"
-            checked={!!fieldValue}
-            onChange={(e) =>
-              handleInputChange(methodId, field.key, e.target.checked)
-            }
-          />
+          <>
+            <input
+              type="checkbox"
+              checked={!!fieldValue}
+              onChange={(e) =>
+                handleInputChange(methodId, field.key, e.target.checked)
+              }
+            />
+            <div className="settings-metabox-description">{field.desc}</div>
+          </>
         );
 
       case "textarea":
@@ -399,15 +402,18 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
 
       default:
         return (
-          <input
-            type={field.type}
-            placeholder={field.placeholder}
-            value={fieldValue || ""}
-            className="basic-input"
-            onChange={(e) =>
-              handleInputChange(methodId, field.key, e.target.value)
-            }
-          />
+          <>
+            <input
+              type={field.type}
+              placeholder={field.placeholder}
+              value={fieldValue || ""}
+              className="basic-input"
+              onChange={(e) =>
+                handleInputChange(methodId, field.key, e.target.value)
+              }
+            />
+            <div className="settings-metabox-description">{field.desc}</div>
+          </>
         );
     }
   };

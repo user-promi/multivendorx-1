@@ -406,12 +406,17 @@
         padding: 0 3rem;
     }
 }
-
+.finish-wrapper{
+    padding: 1rem;
+    .title{
+        font-size: 1.125rem;
+    }
+}
 .wizard-container {
     width: 100%;
     max-width: 50rem;
     margin: 2rem auto;
-    padding: 1rem;
+    padding: 1.5rem;
     background: #fff;
     border-radius: 0.313rem;
 
@@ -448,7 +453,7 @@
     display: flex;
     align-items: center;
     font-weight: bold;
-    font-size: 1.313rem;
+    font-size: 1.45rem;
     justify-content: center;
     gap: 0.5rem;
     padding: 0.5rem;

@@ -99,7 +99,7 @@ class StoreGeolocation {
     }
     
     private function log($message) {
-        $log_file = plugin_dir_path(__FILE__) . "/geolocation-data.log";
+        // $log_file = plugin_dir_path(__FILE__) . "/geolocation-data.log";
         file_put_contents($log_file, date("d/m/Y H:i:s") . ": " . $message . "\n", FILE_APPEND);
     }
 }
