@@ -299,7 +299,7 @@ const ViewStore = () => {
                     <div className="store-details">
 
                       <div className="profile">
-                        <img src={data.image || ''} alt={data.name || 'Store'} className="multivendorx-profile-imgcls" />
+                        <img src={data.image || ''} alt={data.name || 'Store'} className="multivendorx-profile-img" />
                       </div>
                       <div className="details">
                         <div className="heading">store 1fgfgfghhghghh</div>
@@ -316,7 +316,7 @@ const ViewStore = () => {
                     <div className="store-details">
 
                       <div className="profile">
-                        <img src={data.image || ''} alt={data.name || 'Store'} className="multivendorx-profile-imgcls" />
+                        <img src={data.image || ''} alt={data.name || 'Store'} className="multivendorx-profile-img" />
                       </div>
                       <div className="details">
                         <div className="heading">store 1fgfgfghhghghh</div>

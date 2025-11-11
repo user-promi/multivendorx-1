@@ -42,9 +42,25 @@
          background: #5756561f;
          display: flex;
          justify-content: center;
+         height: 25rem;
+         position: relative;
 
          img {
              max-height: 25rem;
+         }
+
+         .no-banner {
+             position: absolute;
+             content: "1500 x 900";
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 100%;
+             display: flex;
+             justify-content: center;
+             align-items: center;
+             font-size: 8rem;
+             color: #0000007d;
          }
      }
 
@@ -67,10 +83,12 @@
              }
          }
      }
-     .buttons-wrapper{
-        display: flex;
-        gap: 0.313rem;
+
+     .buttons-wrapper {
+         display: flex;
+         gap: 0.313rem;
      }
+
      .container {
          padding-top: 0.5rem;
          display: flex;
@@ -103,6 +121,33 @@
          .buttons-wrapper {
              align-items: start;
          }
+
+         .profile {
+             .multivendorx-profile-img {
+                 background: #fff;
+                 box-shadow: 0 0.125rem 0.5rem 0 rgba(66, 62, 78, 0.12);
+                 display: flex;
+                 justify-content: center;
+                 align-items: center;
+                 width: 5rem;
+                 height: 5rem;
+                 padding: 0.313rem;
+
+
+                 .placeholder {
+                     left: 0;
+                     top: 0;
+                     width: 100%;
+                     height: 100%;
+                     background: #dfdcdc;
+                     color: #0000007d;
+                     font-size: 0.7rem;
+                     display: flex;
+                     justify-content: center;
+                     align-items: center;
+                 }
+             }
+         }
      }
 
      .follow-wrapper {
@@ -128,17 +173,19 @@
      }
 
      &.template2 {
-        .banner-img{
-            display: flex;
-            justify-content: center;
-        }
+         .banner-img {
+             display: flex;
+             justify-content: center;
+         }
+
          .store-details {
              text-align: center;
              margin-top: -4%;
-            .profile{
-                display: flex;
-                justify-content: center;
-            }
+
+             .profile {
+                 display: flex;
+                 justify-content: center;
+             }
 
              .row {
                  justify-content: center;
@@ -202,7 +249,7 @@
      .header {
          display: flex;
          justify-content: space-between;
-         align-items: center;
+         flex-direction: column;
      }
 
      #qna-list {
@@ -251,8 +298,9 @@
              font-size: 1.813rem;
              margin-bottom: 0.5rem;
          }
-         span{
-            font-size: 1.125rem;
+
+         span {
+             font-size: 1.125rem;
          }
      }
  }
@@ -519,18 +567,20 @@
                          }
                      }
                  }
-                 .review-images{
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 0.313rem;
 
-                    a{
-                        img{
-                            height: 5rem;
-                            width: auto;
-                        }
-                    }
+                 .review-images {
+                     display: flex;
+                     flex-wrap: wrap;
+                     gap: 0.313rem;
+
+                     a {
+                         img {
+                             height: 5rem;
+                             width: auto;
+                         }
+                     }
                  }
+
                  .mvx-review-reply {
                      padding: 0.625rem;
                      background: #8f8f8f1f;
@@ -552,8 +602,8 @@
          .comment-form {
              margin-top: 1rem;
 
-             .form-wrapper{
-                margin: 0.5rem 0;
+             .form-wrapper {
+                 margin: 0.5rem 0;
              }
          }
      }
@@ -570,6 +620,7 @@
          font-size: 1.25rem;
          transition: color 0.2s;
      }
+
      .rating .adminlib-star {
          color: #ffcc00;
      }
@@ -590,14 +641,14 @@
      display: none;
  }
 
- .order-refund-product-list{
-    display: flex;
-    gap: 0.125rem;
-    padding-top: 0.313rem;
+ .order-refund-product-list {
+     display: flex;
+     gap: 0.125rem;
+     padding-top: 0.313rem;
 
-    img{
-        width: 5rem;
-    }
+     img {
+         width: 5rem;
+     }
  }
 
-// report-abuse-msg-box  
+ // report-abuse-msg-box  
