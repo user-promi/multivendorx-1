@@ -475,6 +475,9 @@
                 .admin-column:has(.single-column) {
                     flex-grow: 1;
                 }
+                .admin-column:has(.action-section){
+                    overflow: visible;
+                }
             }
 
             .admin-row:has(input[type="checkbox"]:checked) {
