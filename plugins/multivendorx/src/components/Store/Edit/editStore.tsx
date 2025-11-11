@@ -32,8 +32,6 @@ const EditStore = () => {
     const [deleteModal, setDeleteModal] = useState(false);
     const [deleteOption, setDeleteOption] = useState('');
     const wrapperRef = useRef<HTMLDivElement>(null);
-    const [editInfo, setEditInfo] = useState(false);
-
     const [editName, setEditName] = useState(false);
     const [editDesc, setEditDesc] = useState(false);
     const [selectedOwner, setSelectedOwner] = useState(null);
@@ -67,8 +65,7 @@ const EditStore = () => {
 
         document.addEventListener("click", handleOutsideClick);
         return () => document.removeEventListener("click", handleOutsideClick);
-    }, [editName, editDesc, data]);
-
+    }, [data]);
 
     // Close dropdown on click outside
     useEffect(() => {
@@ -485,10 +482,13 @@ const EditStore = () => {
                                                         <Skeleton variant="text" width={100} />
                                                     )}
 
-
-                                                    <div className="admin-badge green"><i className="adminlib-store-inventory"></i></div>
-                                                    <div className="admin-badge blue"><i className="adminlib-geo-my-wp"></i></div>
-                                                    <div className="admin-badge yellow"><i className="adminlib-staff-manager"></i></div>
+                                                    {modules.includes('compliance') && (
+                                                        <>
+                                                            <div className="admin-badge green"><i className="adminlib-store-inventory"></i></div>
+                                                            <div className="admin-badge blue"><i className="adminlib-geo-my-wp"></i></div>
+                                                            <div className="admin-badge yellow"><i className="adminlib-staff-manager"></i></div>
+                                                        </>
+                                                    )}
                                                 </div>
 
                                                 <div className="des" onClick={() => setEditDesc(true)}>
