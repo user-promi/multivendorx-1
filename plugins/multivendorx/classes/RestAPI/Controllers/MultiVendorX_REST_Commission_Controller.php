@@ -79,6 +79,10 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         }
 
         if ( $format === 'reports' ) {
+            $top_stores = $request->get_param( 'top_stores' );
+            
+            if( $top_stores ) return CommissionUtil::get_commission_summary_for_store( null, $top_stores, $top_stores);
+
             return CommissionUtil::get_commission_summary_for_store();
         }
 

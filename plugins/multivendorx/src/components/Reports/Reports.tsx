@@ -74,7 +74,7 @@ const Reports = () => {
     { name: "Shipping", value: 200 },
   ];
 
-  const [activeTab, setActiveTab] = useState("revenue");
+  const [activeTab, setActiveTab] = useState("overview");
   
   const tabs = [
     { id: "overview", label: "Marketplace", icon: "adminlib-marketplace-membership", content: <Overview overview={overview} data={data} overviewData={overviewData} pieData={pieData} /> },
