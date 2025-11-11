@@ -5,7 +5,7 @@ export default {
     priority: 7,
     name: __( 'Custom CSS', 'multivendorx' ),
     desc: __(
-        'Controls how stores are onboarded and what access they get.',
+        'Custom CSS can be added here to modify and style the dashboard.',
         'multivendorx'
     ),
     icon: 'adminlib-general-tab',
@@ -16,7 +16,7 @@ export default {
             key: 'custom_css_product_page',
             type: 'textarea',
             desc: __(
-                'Put your custom css here, to customize the enquiry form.',
+                'Put your custom css here, to customize the store dashbaord.',
                 'multivendorx'
             ),
             label: __( 'Addional CSS', 'multivendorx' ),
