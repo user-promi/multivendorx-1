@@ -507,7 +507,7 @@ const Qna: React.FC = () => {
         <>
             <div className="card-header">
                 <div className="left">
-                    <div className="title">Questions</div>
+                    <div className="title">Product questions in queue</div>
                     <div className="des">Waiting for your response</div>
                 </div>
                 <div className="right">

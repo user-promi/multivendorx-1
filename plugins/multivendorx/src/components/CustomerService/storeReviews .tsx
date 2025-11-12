@@ -513,7 +513,7 @@ const StoreReviews: React.FC = () => {
                         <>
                             <div className="title">
                                 <i className="adminlib-store-review"></i>
-                                {__('Reply to Review', 'multivendorx')} — {selectedReview.customer_name}
+                                {__('Reply to Review', 'multivendorx')} - {selectedReview.customer_name}
                             </div>
                             <p>Review customer inquiries and reply directly. You can choose to display answers publicly or keep them private.
 </p>
