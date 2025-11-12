@@ -271,12 +271,40 @@ const EditStore = () => {
         setData(prev => ({ ...prev, ...updatedFields }));
     }, []);
 
+    // const visibleTabs = useMemo(() => {
+    //     if (data?.status === 'pending' || data?.status === 'rejected' || data?.status === 'permanently_rejected') {
+    //         return tabData.filter(tab => tab.content.id === 'application-details');
+    //     }
+    //     return tabData;
+    // }, [tabData, data?.status]);
+
     const visibleTabs = useMemo(() => {
-        if (data?.status === 'pending' || data?.status === 'rejected' || data?.status === 'permanently_rejected') {
-            return tabData.filter(tab => tab.content.id === 'application-details');
+        const updatedTabs = tabData.map(tab =>
+            tab.content.id === 'application-details'
+                ? {
+                    ...tab,
+                    content: {
+                        ...tab.content,
+                        name:
+                            data?.status === 'active'
+                                ? 'Archive Data'
+                                : 'Application Details',
+                    },
+                }
+                : tab
+        );
+
+        if (
+            data?.status === 'pending' ||
+            data?.status === 'rejected' ||
+            data?.status === 'permanently_rejected'
+        ) {
+            return updatedTabs.filter(tab => tab.content.id === 'application-details');
         }
-        return tabData;
+
+        return updatedTabs;
     }, [tabData, data?.status]);
+
 
     // const getForm = (tabId: string) => {
     //     switch (tabId) {
