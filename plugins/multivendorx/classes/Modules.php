@@ -156,6 +156,11 @@ class Modules {
                         'module_file'=> MultiVendorX()->plugin_path . 'modules/DistanceShipping/Module.php',
                         'module_class' => 'MultiVendorX\DistanceShipping\Module',
                     ),
+                    'store-shipping'=> array(
+                        'id'=> 'store-shipping',
+                        'module_file'=> MultiVendorX()->plugin_path . 'modules/StoreShipping/Module.php',
+                        'module_class' => 'MultiVendorX\StoreShipping\Module',
+                    ),
                     'announcement'=> array(
                         'id'=> 'announcement',
                         'module_file'=> MultiVendorX()->plugin_path . 'modules/Announcement/Module.php',
