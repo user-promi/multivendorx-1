@@ -1674,6 +1674,7 @@
 
                     .order-link {
                         color: $theme-color;
+                        cursor: pointer;
                     }
 
                     .details {
@@ -1878,11 +1879,14 @@
 
             .rating-details-wrapper {
                 .title-wrapper {
-                    display: flex;
-                    gap: 0.625rem;
+
+                    // display: flex;
+                    .rating-wrapper {
+                        padding-bottom: 0.45rem;
+                    }
 
                     .title {
-                        font-size: 1.125rem;
+                        font-size: 1rem;
                         font-weight: 500;
                     }
                 }
@@ -2129,3 +2133,35 @@
 }
 
 // table end
+
+
+// review-popup-wrapper
+.review-popup-wrapper {
+    .customer-wrapper {
+        display: flex;
+        gap: 0.5rem;
+
+        .avater {
+            i {
+                color: #fff;
+                font-size: 1.5rem;
+            }
+        }
+
+        .name {
+            font-size: 1.125rem;
+            font-weight: 500;
+            padding-bottom: 0.45rem;
+        }
+
+    }
+
+    .review {
+        padding-top: 0.95rem;
+        font-size: 0.95rem;
+        line-height: 1.45rem;
+        color: #000000c7;
+    }
+}
+
+// review-popup-wrapper end

@@ -201,13 +201,30 @@ const RefundedOrderOld: React.FC = () => {
     },
     {
       header: __('Status', 'multivendorx'),
-      cell: ({ row }: any) => (
-        <TableCell title={row.original.status || ''}>
-          {row.original.status
-            ? row.original.status.charAt(0).toUpperCase() + row.original.status.slice(1)
-            : '-'}
-        </TableCell>
-      ),
+      cell: ({ row }) => {
+        const status = row.original.status || '';
+        const formattedStatus = status
+          ?.replace(/[-_]/g, " ")
+          .toLowerCase()
+          .replace(/^\w/, c => c.toUpperCase());
+
+        const getStatusBadge = (status: string) => {
+          switch (status) {
+            case 'completed':
+              return <span className="admin-badge green">Completed</span>;
+            case 'private':
+              return <span className="admin-badge yellow">Private</span>;
+            default:
+              return <span className="admin-badge gray">{formattedStatus}</span>;
+          }
+        };
+
+        return (
+          <TableCell title={`${status}`}>
+            {getStatusBadge(status)}
+          </TableCell>
+        );
+      },
     },
     {
       id: 'date',
@@ -497,7 +514,7 @@ const RefundedOrderOld: React.FC = () => {
 
   return (
     <>
-      <div className="card-header p-top">
+      <div className="card-header">
         <div className="left">
           <div className="title">
             {__('Revenue Distribution', 'multivendorx')}

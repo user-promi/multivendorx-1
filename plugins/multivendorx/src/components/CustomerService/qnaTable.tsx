@@ -360,11 +360,7 @@ const Qna: React.FC = () => {
         },
         {
             header: __('Visibility', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.question_visibility || ''}>
-                {row.original.question_visibility ?? '-'}</TableCell>
-        },
-        {
-            header: __('Visibility', 'multivendorx'),
+            enableSorting: true,
             cell: ({ row }) => {
                 const visibility = row.original.question_visibility || '';
                 const formattedvisibility = visibility
@@ -507,7 +503,7 @@ const Qna: React.FC = () => {
         <>
             <div className="card-header">
                 <div className="left">
-                    <div className="title">Questions</div>
+                    <div className="title">Product questions in queue</div>
                     <div className="des">Waiting for your response</div>
                 </div>
                 <div className="right">

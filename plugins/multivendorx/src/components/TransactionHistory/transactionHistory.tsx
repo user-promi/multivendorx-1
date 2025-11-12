@@ -390,8 +390,8 @@ export const TransactionHistory: React.FC = () => {
                 {requestWithdrawal && (
                     <CommonPopup
                         open={requestWithdrawal}
-                        width="400px"
-                        height="80%"
+                        width="500px"
+                        height="70%"
                         header={
                             <>
                                 <div className="title">
@@ -415,7 +415,6 @@ export const TransactionHistory: React.FC = () => {
                                     onClick={() => handleWithdrawal()}
                                 >
                                     Disburse
-                                    <i className="adminlib-check"></i>
                                 </div>
 
                             </>

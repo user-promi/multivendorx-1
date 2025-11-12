@@ -364,7 +364,7 @@ const StoreOrders: React.FC = () => {
     // <div className="row">
     //   <div className="column">
     <>
-      <div className="card-header p-top">
+      <div className="card-header">
         <div className="left">
           <div className="title">
             {__('Revenue Distribution', 'multivendorx')}

@@ -24,8 +24,8 @@ type FilterData = {
     typeCount?: any;
     store?: string;
     date?: { start_date?: Date; end_date?: Date };
-    orderBy?:string;
-    order?:string;
+    orderBy?: string;
+    order?: string;
 };
 
 export interface RealtimeFilter {
@@ -102,8 +102,8 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
         rowsPerPage = 10,
         currentPage = 1,
         store = '',
-        orderBy='',
-        order='',
+        orderBy = '',
+        order = '',
         startDate?: Date,
         endDate?: Date
     ) => {
@@ -204,7 +204,7 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 
     const requestApiForData = (rowsPerPage: number, currentPage: number, filterData: FilterData) => {
         setData(null);
-        requestData(rowsPerPage, currentPage, filterData?.store,filterData?.orderBy,filterData?.order, filterData?.date?.start_date, filterData?.date?.end_date);
+        requestData(rowsPerPage, currentPage, filterData?.store, filterData?.orderBy, filterData?.order, filterData?.date?.start_date, filterData?.date?.end_date);
     };
 
     // Columns
@@ -220,6 +220,7 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
             cell: ({ row }) => {
                 const product = row.original;
                 const image = product.images?.[0]?.src;
+                const storeName = row.original.store_name || [];
                 return (
                     <TableCell title={product.name || ''}>
                         <a
@@ -229,9 +230,18 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                             className="product-wrapper"
                         >
                             {/* <img src={image} alt={product.name} /> */}
+                            {image ? (
+                                <img
+                                    src={image}
+                                    alt={product.name}
+                                />
+                            ) : (
+                                <i className="item-icon adminlib-multi-product"></i>
+                            )}
                             <div className="details">
                                 <span className="title">{product.name || '-'}</span>
-                                {product.sku && <span className="des">SKU:{product.sku} </span>}
+                                {product.sku && <span className="des">SKU: {product.sku} </span>}
+                                <div className="des">By: {storeName}</div>
                             </div>
                         </a>
                     </TableCell>
@@ -246,13 +256,13 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                 return <TableCell title={categoryNames}>{categoryNames}</TableCell>;
             },
         },
-        {
-            header: __('Store', 'multivendorx'),
-            cell: ({ row }) => {
-                const storeName = row.original.store_name || [];
-                return <TableCell title={storeName}>{storeName}</TableCell>;
-            },
-        },
+        // {
+        //     header: __('Store', 'multivendorx'),
+        //     cell: ({ row }) => {
+        //         const storeName = row.original.store_name || [];
+        //         return <TableCell title={storeName}></TableCell>;
+        //     },
+        // },
         // {
         //     header: __('SKU', 'multivendorx'),
         //     cell: ({ row }) => <TableCell title={row.original.sku || ''}>{row.original.sku || '-'}</TableCell>,
@@ -277,14 +287,14 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
             cell: ({ row }) => {
                 const rawDate = row.original?.date_created;
                 if (!rawDate) return <TableCell>-</TableCell>;
-    
+
                 const date = new Date(rawDate);
                 const formatted = date.toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'short',
                     day: 'numeric',
                 });
-    
+
                 return <TableCell title={formatted}>{formatted}</TableCell>;
             },
         },
