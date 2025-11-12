@@ -157,7 +157,11 @@ const CustomerServices = () => {
                         </div>
                     </>
                 ) : (
-                    <div className="no-tabs">No module available</div>
+                    <div className="permission-wrapper">
+                        <i className="adminlib-info red"></i>
+                        <div className="title">No module available</div>
+                        <a href={appLocalizer.module_page_url} className="admin-btn btn-purple" >Enable Now</a>
+                    </div>
                 )}
             </div>
         </>

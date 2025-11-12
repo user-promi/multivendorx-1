@@ -14,7 +14,7 @@
 
         .form-heading {
             position: relative;
-
+            margin-bottom: 1rem;
             i {
                 position: absolute;
                 top: 0.313rem;
@@ -22,6 +22,19 @@
                 font-size: 1.063rem;
                 cursor: pointer;
                 color: rgb(5, 5, 226);
+
+            }
+
+            &.disable{
+                opacity: 0.3;
+
+                i{
+                    color: #2423237c;
+                }
+                input:focus{
+                    border: none;
+                    outline: none;
+                }
             }
         }
 
@@ -245,6 +258,7 @@
             min-height: 80vh;
             max-height: 80vh;
             overflow-y: auto;
+            overflow-x: hidden;
             scrollbar-width: thin;
             scrollbar-color: #abaaac57 #f1f1f1;
         }
@@ -300,10 +314,11 @@
         background: #fff;
         width: 50%;
     }
-
+    .registration-edit-form-wrapper{
+        width: 25%;
+    }
     .registration-edit-form {
         background: #fff;
-        width: 25%;
         padding: 1.5rem;
         position: sticky;
         top: 3rem;
