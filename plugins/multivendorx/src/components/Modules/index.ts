@@ -602,7 +602,7 @@ export default {
         {
             id: 'geo-location',
             name: __('Geo Location', 'multivendorx'),
-            desc: "Geo Location",
+            desc: "Lets stores pinpoint their location on an interactive map, making it easy for customers to discover nearby stores and shop locally.",
             icon: 'adminlib-geo-location',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/shipstation/',
             settings_link: '${appLocalizer.settings_page_url}geolocation',
