@@ -136,14 +136,6 @@ const WithdrawalRequests: React.FC<Props> = ({ onUpdated }) => {
             ),
         },
         {
-            header: __('Slug', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.store_slug || ''}>
-                    {row.original.store_slug || '-'}
-                </TableCell>
-            ),
-        },
-        {
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.status || ''}>

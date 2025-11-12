@@ -271,12 +271,40 @@ const EditStore = () => {
         setData(prev => ({ ...prev, ...updatedFields }));
     }, []);
 
+    // const visibleTabs = useMemo(() => {
+    //     if (data?.status === 'pending' || data?.status === 'rejected' || data?.status === 'permanently_rejected') {
+    //         return tabData.filter(tab => tab.content.id === 'application-details');
+    //     }
+    //     return tabData;
+    // }, [tabData, data?.status]);
+
     const visibleTabs = useMemo(() => {
-        if (data?.status === 'pending' || data?.status === 'rejected' || data?.status === 'permanently_rejected') {
-            return tabData.filter(tab => tab.content.id === 'application-details');
+        const updatedTabs = tabData.map(tab =>
+            tab.content.id === 'application-details'
+                ? {
+                    ...tab,
+                    content: {
+                        ...tab.content,
+                        name:
+                            data?.status === 'active'
+                                ? 'Archive Data'
+                                : 'Application Details',
+                    },
+                }
+                : tab
+        );
+
+        if (
+            data?.status === 'pending' ||
+            data?.status === 'rejected' ||
+            data?.status === 'permanently_rejected'
+        ) {
+            return updatedTabs.filter(tab => tab.content.id === 'application-details');
         }
-        return tabData;
+
+        return updatedTabs;
     }, [tabData, data?.status]);
+
 
     // const getForm = (tabId: string) => {
     //     switch (tabId) {
@@ -468,7 +496,7 @@ const EditStore = () => {
                                                         <span className="status admin-badge green">Active</span>
                                                     ) : data.status === 'pending' ? (
                                                         <span className="status  admin-badge yellow">Pending</span>
-                                                    ) : data.status === 'permanently_rejected' ? (
+                                                    ) : data.status === 'rejected' ? (
                                                         <span className="status  admin-badge red">Rejected</span>
                                                     ) : data.status === 'suspended' ? (
                                                         <span className="status  admin-badge blue">Suspended</span>
@@ -477,12 +505,12 @@ const EditStore = () => {
                                                     ) : data.status === 'under_review' ? (
                                                         <span className="status  admin-badge yellow">Under Review</span>
                                                     ) : data.status === 'deactivated' ? (
-                                                        <span className="status  admin-badge red">Deactivated</span>
+                                                        <span className="status  admin-badge red">Permanently Deactivated</span>
                                                     ) : (
                                                         <Skeleton variant="text" width={100} />
                                                     )}
 
-                                                    {modules.includes('compliance') && (
+                                                    {modules.includes('marketplace-compliance') && (
                                                         <>
                                                             <div className="admin-badge green"><i className="adminlib-store-inventory"></i></div>
                                                             <div className="admin-badge blue"><i className="adminlib-geo-my-wp"></i></div>

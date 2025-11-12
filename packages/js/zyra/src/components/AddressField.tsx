@@ -44,18 +44,6 @@ const AddressField: React.FC<AddressFieldProps> = ({ formField, onChange, opendI
         onChange('fields', updated);
     };
 
-    // Subfield value change
-    const handleSubFieldChange = (id: number, key: string, value: any) => {
-        const updated = subFields.map(f => f.id === id ? { ...f, [key]: value } : f);
-        setSubFields(updated);
-        // Update parent value object
-        const valueObj = formField.value || {};
-        const changedField = updated.find(f => f.id === id);
-        if (changedField) {
-            onChange('value', { ...valueObj, [changedField.key]: value });
-        }
-    };
-
     return (
         <div className="address-field-wrapper">
             <ReactSortable
@@ -67,14 +55,14 @@ const AddressField: React.FC<AddressFieldProps> = ({ formField, onChange, opendI
                 {subFields.map(f => (
                     <div
                         key={f.id}
-                        className={`address-subfield ${opendInput?.id === f.id ? 'active' : ''}`}
+                        className={`form-field ${opendInput?.id === f.id ? 'active' : ''}`}
                         onClick={(e) => {
                             e.stopPropagation();
                             setOpendInput({ ...f, readonly:formField.readonly, parentId: formField.id } as unknown as FormField);
                         }}
                     >
-                        <div className="address-subfield-header">
-                            <span className="admin-badge gray drag-handle" style={{ cursor: 'grab' }}>
+                        <div className="meta-menu">
+                            <span className="admin-badge blue drag-handle">
                                 <i className="admin-font adminlib-drag"></i>
                             </span>
                         </div>
@@ -82,7 +70,6 @@ const AddressField: React.FC<AddressFieldProps> = ({ formField, onChange, opendI
                         {f.type === 'text' && (
                             <SimpleInput
                                 formField={{ label: f.label, placeholder: f.placeholder }}
-                                onChange={(key, value) => handleSubFieldChange(f.id, key, value)}
                             />
                         )}
 
@@ -95,7 +82,6 @@ const AddressField: React.FC<AddressFieldProps> = ({ formField, onChange, opendI
                                 }}
                                 type="dropdown"
                                 selected={false}
-                                onChange={(key, value) => handleSubFieldChange(f.id, key, value)}
                             />
                         )}
                     </div>

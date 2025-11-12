@@ -19,7 +19,9 @@ const Store = () => {
     const [addStore, setaddStore] = useState(false);
     const [formData, setFormData] = useState<Record<string, string>>({});
     const [imagePreview, setImagePreview] = useState<string>('');
-    const [error, setError] = useState<{ type: string; message: string } | null>(null);
+    // const [error, setError] = useState<{ type: string; message: string } | null>(null);
+    const [error, setError] = useState<{[key: string]: { type: string; message: string };}>({});
+
 
     const hash = location.hash;
     const navigate = useNavigate();
@@ -74,37 +76,53 @@ const Store = () => {
         const exists = await checkSlugExists(formData.slug);
         if (exists) 
             // setError(`Slug "${formData.slug}" already exists.`);
-            setError({
-                type: 'invalid-massage',
-                message: `Slug "${formData.slug}" already exists.`,
-            });
-
+            setError((prev) => ({
+                    ...prev,
+                    slug: {
+                        type: 'invalid-message',
+                        message: `Slug "${formData.slug}" already exists.`,
+                    },
+                }));
         else 
-            setError({
-                type: 'success-massage',
-                message: 'Available',
-            });
+            setError((prev) => ({
+                    ...prev,
+                    slug: {
+                        type: 'invalid-message',
+                        message: 'Available',
+                    },
+                }));
     };
 
     const handleSubmit = async () => {
         if (!formData || Object.keys(formData).length === 0) return;
 
-        const { name, slug } = formData;
+        const { name, slug, email } = formData;
+
+        if ( !email?.trim()) {
+            setError((prev) => ({
+                ...prev,
+                email: {
+                    type: 'invalid-message',
+                    message: 'Store email is required.',
+                },
+            }));
+            return;
+        }
 
         // Check again before submit (in case slug manually changed)
         const exists = await checkSlugExists(slug);
         if (exists) {
-            setError({
-                type: 'invalid-massage',
-                message: `Slug "${formData.slug}" already exists.`,
-            });
+            setError((prev) => ({
+                ...prev,
+                slug: {
+                    type: 'invalid-message',
+                    message: `Slug "${formData.slug}" already exists.`,
+                },
+            }));
             return;
         }
 
-        setError({
-            type: '',
-            message: ''
-        });
+        setError({});
 
         const payload = { ...formData, status: 'active' };
 
@@ -123,10 +141,13 @@ const Store = () => {
                 );
             }
         } catch (err) {
-            setError({
-                type: 'invalid-massage',
-                message: 'Something went wrong while saving the store.'
-            });
+            setError((prev) => ({
+                ...prev,
+                name: {
+                    type: 'invalid-message',
+                    message: 'Something went wrong while saving the store.',
+                },
+            }));
         }
     };
 
@@ -253,7 +274,7 @@ const Store = () => {
                                         />
                                     </div>
 
-                                    <div className={`form-group`}>
+                                    <div className="form-group">
                                         <label htmlFor="store-url">
                                             Store slug
                                         </label>
@@ -266,7 +287,21 @@ const Store = () => {
                                             required={true}
                                             clickBtnName='Check Slug'
                                             onclickCallback={handleNameBlur}
-                                            msg={error}
+                                            msg={error.slug}
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label htmlFor="store-name">
+                                            Store Email
+                                        </label>
+                                        <BasicInput
+                                            type="text"
+                                            name="email"
+                                            value={formData.email || ''}
+                                            onChange={handleChange}
+                                            required={true}
+                                            msg={error.email}
                                         />
                                     </div>
 

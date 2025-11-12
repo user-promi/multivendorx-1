@@ -406,6 +406,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                         'email'      => $store_meta->meta_data['email'] ?? '',
                         'phone'      => $store_meta->meta_data['phone'] ?? $store_meta->meta_data['_phone'] ?? $store_meta->meta_data['contact_number'] ?? '',
                         'primary_owner' => $primary_owner,
+                        'primary_owner_image' =>get_avatar($primary_owner->ID, 48),
                         'applied_on' => $store['create_time'],
                         'store_image' => $store_image, // Add store image
                         'store_banner' => $store_banner, // Add store banner

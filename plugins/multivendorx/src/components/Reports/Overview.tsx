@@ -169,18 +169,12 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
             id: 'grand_total',
             title: 'Grand Total',
             price: formatCurrency(
-              data.total_order_amount +
-              data.facilitator_fee +
-              data.gateway_fee +
-              data.shipping_amount +
-              data.tax_amount +
-              data.shipping_tax_amount
+              adminEarning +
+              storeEarning
             ),
           },
         ];
         
-        
-
         const pieChartData = [
           { name: 'Admin Net Earning', value: adminEarning },
           { name: 'Store Net Earning', value: storeEarning },

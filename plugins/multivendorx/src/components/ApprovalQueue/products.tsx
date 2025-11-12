@@ -353,7 +353,7 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                     <div className="title">
                         Products awaiting review
                     </div>
-                    <div className="des">Finalize approvals for new listings.</div>
+                    <div className="des">Approve these listings to start generating sales in your marketplace.</div>
                 </div>
                 <div className="right">
                     <i className="adminlib-more-vertical"></i>

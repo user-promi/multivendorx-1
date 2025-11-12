@@ -64,6 +64,7 @@ declare global {
         pro_data: any;
         all_shippings:any;
         shop_url:any;
+        admin_url:any;
         setup_wizard_url:any;
         capability_pro:any;
     }
