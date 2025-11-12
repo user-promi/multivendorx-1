@@ -137,28 +137,24 @@ const HelpSupport: React.FC = () => {
                                 <div className="admin-btn btn-purple"><a href="https://www.youtube.com/@MultiVendorX/videos" target="_blank" rel="noopener noreferrer">Watch All Tutorials</a></div>
                             </div>
 
-                            <div className="row">
-                                <div className="column">
-                                    <div className="video-section">
-                                        {videos.map((video, index) => {
-                                            const videoId = new URL(video.link).searchParams.get("v");
-                                            return (
-                                                <div key={index} className="video-wrapper">
-                                                    <iframe
-                                                        src={`https://www.youtube.com/embed/${videoId}`}
-                                                        title={video.title}
-                                                        frameBorder="0"
-                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                        allowFullScreen
-                                                    ></iframe>
+                            <div className="video-section">
+                                {videos.map((video, index) => {
+                                    const videoId = new URL(video.link).searchParams.get("v");
+                                    return (
+                                        <div key={index} className="video-wrapper">
+                                            <iframe
+                                                src={`https://www.youtube.com/embed/${videoId}`}
+                                                title={video.title}
+                                                frameBorder="0"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                allowFullScreen
+                                            ></iframe>
 
-                                                    <div className="title">{video.title}</div>
-                                                    <div className="des">{video.des}</div>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
+                                            <div className="title">{video.title}</div>
+                                            <div className="des">{video.des}</div>
+                                        </div>
+                                    );
+                                })}
                             </div>
 
                         </div>

@@ -200,6 +200,26 @@ const StoreReviews: React.FC = () => {
             ),
         },
         {
+            name: 'store',
+            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
+                <div className="   group-field">
+                    <select
+                        name="store"
+                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
+                        value={filterValue || ''}
+                        className="basic-select"
+                    >
+                        <option value="">5 Star</option>
+                        <option value="">4 Star</option>
+                        <option value="">3 Star</option>
+                        <option value="">2 Star</option>
+                        <option value="">1 Star</option>
+                    </select>
+
+                </div>
+            ),
+        },
+        {
             name: 'date',
             render: (updateFilter) => (
                 <div className="right">
@@ -516,7 +536,7 @@ const StoreReviews: React.FC = () => {
                                 {__('Reply to Review', 'multivendorx')} - {selectedReview.customer_name}
                             </div>
                             <p>Review customer inquiries and reply directly. You can choose to display answers publicly or keep them private.
-</p>
+                            </p>
                             <i
                                 onClick={() => setSelectedReview(null)}
                                 className="icon adminlib-close"

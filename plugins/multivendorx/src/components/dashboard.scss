@@ -211,6 +211,12 @@
             }
         }
     }
+
+    &.column-3{
+        .analytics-item{
+            width: 24%;
+        }
+    }
 }
 
 .red {

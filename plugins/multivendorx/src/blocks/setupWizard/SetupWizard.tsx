@@ -144,7 +144,7 @@ const SetupWizard: React.FC = () => {
                 {
                     key: 'paid_promotion_limit',
                     type: 'setup',
-                    label: 'Advanced commission rules',
+                    title: 'Advanced commission rules',
                     desc: 'Set detailed commission rules by product, order, or store, including fees, taxes, and shipping.',
                     link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
                 },

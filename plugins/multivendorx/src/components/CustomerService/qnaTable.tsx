@@ -360,11 +360,7 @@ const Qna: React.FC = () => {
         },
         {
             header: __('Visibility', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.question_visibility || ''}>
-                {row.original.question_visibility ?? '-'}</TableCell>
-        },
-        {
-            header: __('Visibility', 'multivendorx'),
+            enableSorting: true,
             cell: ({ row }) => {
                 const visibility = row.original.question_visibility || '';
                 const formattedvisibility = visibility
