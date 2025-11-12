@@ -496,7 +496,7 @@ const EditStore = () => {
                                                         <span className="status admin-badge green">Active</span>
                                                     ) : data.status === 'pending' ? (
                                                         <span className="status  admin-badge yellow">Pending</span>
-                                                    ) : data.status === 'permanently_rejected' ? (
+                                                    ) : data.status === 'rejected' ? (
                                                         <span className="status  admin-badge red">Rejected</span>
                                                     ) : data.status === 'suspended' ? (
                                                         <span className="status  admin-badge blue">Suspended</span>
@@ -505,12 +505,12 @@ const EditStore = () => {
                                                     ) : data.status === 'under_review' ? (
                                                         <span className="status  admin-badge yellow">Under Review</span>
                                                     ) : data.status === 'deactivated' ? (
-                                                        <span className="status  admin-badge red">Deactivated</span>
+                                                        <span className="status  admin-badge red">Permanently Deactivated</span>
                                                     ) : (
                                                         <Skeleton variant="text" width={100} />
                                                     )}
 
-                                                    {modules.includes('compliance') && (
+                                                    {modules.includes('marketplace-compliance') && (
                                                         <>
                                                             <div className="admin-badge green"><i className="adminlib-store-inventory"></i></div>
                                                             <div className="admin-badge blue"><i className="adminlib-geo-my-wp"></i></div>

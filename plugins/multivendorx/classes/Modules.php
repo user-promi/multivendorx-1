@@ -171,6 +171,11 @@ class Modules {
                         'module_file'=> MultiVendorX()->plugin_path . 'modules/Privacy/Module.php',
                         'module_class' => 'MultiVendorX\Privacy\Module',
                     ),
+                    'marketplace-gateway'=> array(
+                        'id'=> 'marketplace-gateway',
+                        'module_file'=> MultiVendorX()->plugin_path . 'modules/GatewayFee/Module.php',
+                        'module_class' => 'MultiVendorX\GatewayFee\Module',
+                    ),
 				)
             );
         }

@@ -45,7 +45,7 @@ class CommissionManager {
 
             $commission_type = MultiVendorX()->setting->get_setting( 'commission_type' );
 
-            $commission_amount = $shipping_amount = $tax_amount = $shipping_tax_amount = $gateway_fee = 0;
+            $commission_amount = $shipping_amount = $tax_amount = $shipping_tax_amount = 0;
             $commission_rates = $rules_array = [];
 
             if ( $commission_type == 'per_item' ) {
@@ -215,35 +215,8 @@ class CommissionManager {
                 }
             }
 
-            //gateway fee calculation
-            if (!empty( MultiVendorX()->setting->get_setting('gateway_fees') )) {
-                $fixed_fee      = 0;
-                $percentage_fee = 0;
-                $gateway_settings = reset(MultiVendorX()->setting->get_setting('gateway_fees', []));
-                $parent_order = wc_get_order($order->get_parent_id());
-
-                $payment_method = $parent_order->get_payment_method();
-                $fixed_fee = (float) (
-                    $gateway_settings[ $payment_method . '_fixed' ]
-                    ?? $gateway_settings['default_fixed']
-                    ?? 0
-                );
-
-                $percentage_fee = (float) (
-                    $gateway_settings[ $payment_method . '_percentage' ]
-                    ?? $gateway_settings['default_percentage']
-                    ?? 0
-                );
-
-                $gateway_fee = (float) $commission_amount * ((float) $percentage_fee / 100) + (float) $fixed_fee;
-                $rules_array['gateway_fee'] = [
-                    'fixed'      => (float) $fixed_fee,
-                    'percentage' => (float) $percentage_fee,
-                ];
-            }
-
             // in commission total add facilitator_fee and gateway fee.
-            $commission_total = (float) $commission_amount + (float) $shipping_amount + (float) $tax_amount + (float) $shipping_tax_amount - (float) $gateway_fee;
+            $commission_total = (float) $commission_amount + (float) $shipping_amount + (float) $tax_amount + (float) $shipping_tax_amount;
             $commission_total = apply_filters( 'mvx_commission_total_amount', $commission_total, $commission_id );
 
             // insert | update commission into commission table.
@@ -253,7 +226,6 @@ class CommissionManager {
                 'customer_id'           => $order->get_customer_id(),
                 'total_order_amount'    => $order->get_total(),
                 'commission_amount'     => $commission_amount,
-                'gateway_fee'           => $gateway_fee ?? 0,
                 'shipping_amount'       => $shipping_amount,
                 'tax_amount'            => $tax_amount,
                 'shipping_tax_amount'   => $shipping_tax_amount,
@@ -271,7 +243,7 @@ class CommissionManager {
                     'data'   => $data,
                     'format' => $format,
                 ],
-                $vendor, $commission_amount
+                $vendor, $commission_amount, $order
             );
             
             $data   = $filtered['data'];
@@ -490,7 +462,7 @@ class CommissionManager {
                 // Get the last refund (most recent one)
                 $_refund = end( $refunds );
                 $commission_type = MultiVendorX()->setting->get_setting( 'commission_type' );
-                $commission_amount = $shipping_amount = $tax_amount = $shipping_tax_amount = $gateway_fee = 0;
+                $commission_amount = $shipping_amount = $tax_amount = $shipping_tax_amount = 0;
 
                 $commission_rates = [];
 
@@ -587,28 +559,6 @@ class CommissionManager {
                 $refund_total += $_refund->get_amount();
             }
 
-            if (!empty( MultiVendorX()->setting->get_setting('gateway_fees') )) {
-                $fixed_fee      = 0;
-                $percentage_fee = 0;
-                $gateway_settings = reset(MultiVendorX()->setting->get_setting('gateway_fees', []));
-                $parent_order = wc_get_order($vendor_order->get_parent_id());
-
-                $payment_method = $parent_order->get_payment_method();
-                $fixed_fee = (float) (
-                    $gateway_settings[ $payment_method . '_fixed' ]
-                    ?? $gateway_settings['default_fixed']
-                    ?? 0
-                );
-
-                $percentage_fee = (float) (
-                    $gateway_settings[ $payment_method . '_percentage' ]
-                    ?? $gateway_settings['default_percentage']
-                    ?? 0
-                );
-
-                $gateway_fee = (float) $commission_amount * ((float) $percentage_fee / 100) + (float) $fixed_fee;
-            }
-
             $commission = CommissionUtil::get_commission_db($commission_id);
             $amount = $commission->commission_amount - $commission_amount;
 
@@ -650,7 +600,7 @@ class CommissionManager {
                 }
             }
 
-            $commission_total = (float) $commission_amount + (float) $shipping_amount + (float) $tax_amount + (float) $shipping_tax_amount - (float) $gateway_fee;
+            $commission_total = (float) $commission_amount + (float) $shipping_amount + (float) $tax_amount + (float) $shipping_tax_amount;
 
             $data = [
                 'order_id'              => $vendor_order->get_id(),
@@ -658,7 +608,6 @@ class CommissionManager {
                 'customer_id'           => $vendor_order->get_customer_id(),
                 'total_order_amount'    => $vendor_order->get_total(),
                 'commission_amount'     => $commission_amount,
-                'gateway_fee'           => $gateway_fee,
                 'shipping_amount'       => $shipping_amount,
                 'tax_amount'            => $tax_amount,
                 'shipping_tax_amount'   => $shipping_tax_amount,
