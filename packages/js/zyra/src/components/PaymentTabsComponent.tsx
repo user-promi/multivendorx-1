@@ -111,7 +111,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
 
   const toggleEnable = (methodId: string, enable: boolean, icon?: string) => {
     handleInputChange(methodId, "enable", enable);
-    if (!enable) {
+    if (enable) {
       setActiveTabs((prev) => prev.filter((id) => id !== methodId));
     }
   };
@@ -454,7 +454,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
     <>
       <div className="payment-tabs-component">
         {methods.map((method, index) => {
-          const isEnabled = value?.[method.id]?.enable ?? true;
+          const isEnabled = value?.[method.id]?.enable ?? false;
           const isActive = activeTabs.includes(method.id);
 
           if (isWizardMode && index > wizardIndex) return null;
