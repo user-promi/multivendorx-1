@@ -176,9 +176,9 @@ console.log(totalRows)
             <div className="card-header">
                 <div className="left">
                     <div className="title">
-                        Ready to process
+                        Stores requesting deactivation
                     </div>
-                    <div className="des">These requests are queued for deactivation.</div>
+                    <div className="des">Approve or reject marketplace joiners.</div>
                 </div>
                 <div className="right">
                     <i className="adminlib-more-vertical"></i>
