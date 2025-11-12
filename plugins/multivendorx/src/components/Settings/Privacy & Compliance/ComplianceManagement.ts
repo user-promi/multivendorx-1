@@ -30,21 +30,21 @@ export default {
                             key: 'enable_advertisement_in_subscription',
                             type: 'setup',
                             title: 'Identity verification',
-                            des: 'Control what dashboard sections and tools are available to active stores.',
+                            des: 'The identity of each store or seller is verified through official business documents like trade license or permit etc , .',
                             link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=identity-verification`,
                         },
                         {
                             key: 'display_advertised_product_on_top',
                             type: 'setup',
                             title: 'Social verification',
-                            des: 'Control what dashboard sections and tools are available to active stores.',
+                            des: 'Store authenticity is validated using connected social media accounts.',
                             link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=identity-verification`,
                         },
                         {
                             key: 'out_of_stock_visibility',
                             type: 'setup',
                             title: 'Email verification',
-                            des: 'Control what dashboard sections and tools are available to active stores.',
+                            des: 'The registered email address is verified to confirm the authenticity of store ownership.',
                             link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=identity-verification`,
                         },
                         {
@@ -231,13 +231,6 @@ export default {
                             title: 'Bank account details',
                             des: 'Collect verified bank details to ensure secure and accurate payouts.',
                             link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=tax-compliance`,
-                        },
-                        {
-                            key: 'commission_transparency',
-                            type: 'setup',
-                            title: 'Commission transparency',
-                            des: 'Maintain clear visibility of fee deductions and payout transactions.',
-                           link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=tax-compliance`,
                         },
                         {
                             key: 'non_compliance_action',
