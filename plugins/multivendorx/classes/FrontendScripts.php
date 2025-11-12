@@ -503,6 +503,7 @@ class FrontendScripts {
                         'freeVersion'              => MultiVendorX()->version,
                         'marketplace_site'         => get_bloginfo(),
                         'site_url'                 => site_url(),
+                        'admin_url'                 => admin_url(),
                         'woocommerce_currency'     => get_woocommerce_currency(),
                         'user_id'                  => get_current_user_id(),
                         'currency'                 => get_woocommerce_currency(),       // e.g., USD

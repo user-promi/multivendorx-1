@@ -128,7 +128,7 @@ class StoreUtil {
 
         $store_data    = new Store( $store_id );
         $store_slug    = $store_data ? $store_data->get('slug') : '';
-        $custom_store_url = 'store';
+        $custom_store_url =  MultiVendorX()->setting->get_setting( 'store_url', 'store' );
 
         $path = '/' . $custom_store_url . '/' . $store_slug . '/';
         if ( $tab ) {
