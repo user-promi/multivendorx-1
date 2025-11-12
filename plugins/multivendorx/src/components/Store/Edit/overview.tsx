@@ -159,7 +159,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                             <div
                                                 className={`admin-badge ${txn.status?.toLowerCase() === "completed"
                                                     ? "green"
-                                                    : txn.status?.toLowerCase() === "pending"
+                                                    : txn.status?.toLowerCase() === "upcoming"
                                                         ? "yellow"
                                                         : "red"
                                                     }`}

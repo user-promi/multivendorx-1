@@ -478,8 +478,8 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                             return <span className="admin-badge green">Completed</span>;
                         case 'Processed':
                             return <span className="admin-badge yellow">Processed</span>;
-                        case 'Pending':
-                            return <span className="admin-badge blue">Pending</span>;
+                        case 'Upcoming':
+                            return <span className="admin-badge blue">Upcoming</span>;
                         case 'Failed':
                             return <span className="admin-badge red">Failed</span>;
                         default:
@@ -670,7 +670,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                         className="basic-select"
                     >
                         <option value="">{__('Select Status', 'multivendorx')}</option>
-                        <option value="Pending">{__('Pending', 'multivendorx')}</option>
+                        <option value="Upcoming">{__('Upcoming', 'multivendorx')}</option>
                         <option value="Processed">{__('Processed', 'multivendorx')}</option>
                         <option value="Completed">{__('Completed', 'multivendorx')}</option>
                         <option value="Failed">{__('Failed', 'multivendorx')}</option>
@@ -728,7 +728,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             .catch(() => {
                 setOverview([
                     { id: 'total_balance', label: 'Total Balance', count: `0`, icon: 'adminlib-wallet' },
-                    { id: 'pending', label: 'Pending', count: `0`, icon: 'adminlib-clock' },
+                    { id: 'upcoming', label: 'Upcoming', count: `0`, icon: 'adminlib-clock' },
                     { id: 'locked', label: 'Locked', count: `0`, icon: 'adminlib-lock' },
                     { id: 'withdrawable', label: 'Withdrawable', count: `0`, icon: 'adminlib-cash' },
                     { id: 'commission', label: 'Commission', count: `0`, icon: 'adminlib-star' },

@@ -205,13 +205,13 @@ const Transactions: React.FC = () => {
                 let iconClass = '';
                 if (credit) {
                     switch (status) {
-                        case 'pending':
+                        case 'Upcoming':
                             iconClass = 'adminlib-clock';
                             break;
                         case 'Completed':
                             iconClass = 'adminlib-check';
                             break;
-                        case 'failed':
+                        case 'Failed':
                             iconClass = 'adminlib-cross';
                             break;
                     }
@@ -244,13 +244,13 @@ const Transactions: React.FC = () => {
                 let iconClass = '';
                 if (debit) {
                     switch (status) {
-                        case 'pending':
+                        case 'Upcoming':
                             iconClass = 'adminlib-clock';
                             break;
                         case 'Completed':
                             iconClass = 'adminlib-check';
                             break;
-                        case 'failed':
+                        case 'Failed':
                             iconClass = 'adminlib-cross';
                             break;
                     }
@@ -283,13 +283,13 @@ const Transactions: React.FC = () => {
                 let iconClass = '';
                 if (balance) {
                     switch (status) {
-                        case 'pending':
+                        case 'Upcoming':
                             iconClass = 'adminlib-clock';
                             break;
                         case 'Completed':
                             iconClass = 'adminlib-check';
                             break;
-                        case 'failed':
+                        case 'Failed':
                             iconClass = 'adminlib-cross';
                             break;
                     }
@@ -374,7 +374,7 @@ const Transactions: React.FC = () => {
                         className="basic-select"
                     >
                         <option value="">{__('Select Status', 'multivendorx')}</option>
-                        <option value="Pending">{__('Pending', 'multivendorx')}</option>
+                        <option value="Upcoming">{__('Upcoming', 'multivendorx')}</option>
                         <option value="Processed">{__('Processed', 'multivendorx')}</option>
                         <option value="Completed">{__('Completed', 'multivendorx')}</option>
                         <option value="Failed">{__('Failed', 'multivendorx')}</option>
