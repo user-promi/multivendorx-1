@@ -504,15 +504,13 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
             break;
         }
 
-        $status_settings = MultiVendorX()->setting->get_setting('store_status_management', []);
-
         switch ($store_status) {
             case 'pending':
-                $dashboard_array['error_msg'] = $status_settings['store_pending_status']['pending_msg'];
+                $dashboard_array['error_msg'] = MultiVendorX()->setting->get_setting('pending_msg');
                 break;
 
             case 'suspended':
-                $dashboard_array['error_msg'] = $status_settings['store_suspended_status']['suspended_msg'];
+                $dashboard_array['error_msg'] = MultiVendorX()->setting->get_setting('suspended_msg');
                 break;
 
             case 'rejected':
@@ -521,7 +519,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
                     esc_url( get_permalink( MultiVendorX()->setting->get_setting( 'store_registration_page' ) ) ),
                     esc_html__( 'Click here to reapply.', 'multivendorx' )
                 );
-                $dashboard_array['error_msg'] = $status_settings['store_rejected_status']['rejected_msg'] . ' ' . $reapply_link;
+                $dashboard_array['error_msg'] = MultiVendorX()->setting->get_setting('rejected_msg') . ' ' . $reapply_link;
                 break;
 
             default:

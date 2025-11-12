@@ -652,19 +652,30 @@ const EditStore = () => {
                                         }
                                         <li onClick={() => {
                                             navigate(`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`, {
-                                                state: { highlightTarget: "store-slug" },
+                                                state: { highlightTarget: "store-status" },
                                             });
 
                                             setTimeout(() => {
                                                 navigate(`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`, {
                                                     replace: true,
                                                 });
-                                            }, 500);
+                                            }, 5000);
                                         }}>
                                             <i className="adminlib-form-multi-select"></i> Manage status
                                         </li>
-                                        <li><i className="adminlib-single-product"></i> Products</li>
-                                        <li><i className="adminlib-order"></i> Orders</li>
+                                        <li>
+                                            <a
+                                                href={`${appLocalizer.admin_url}edit.php?post_type=product&multivendorx_store_id=${data.id}`}
+                                                className="product-link"
+                                            >
+                                                <i className="adminlib-single-product"></i> Products
+                                            </a>
+                                        </li>
+
+                                        <li onClick={() => {
+                                            navigate(`?page=multivendorx#&tab=reports`);
+                                        }}
+                                            ><i className="adminlib-order"></i> Orders</li>
                                         <li onClick={handleStoreDelete}><i className="adminlib-delete"></i> Delete store</li>
                                     </ul>
                                 )}

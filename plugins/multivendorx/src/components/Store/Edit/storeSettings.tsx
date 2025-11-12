@@ -959,7 +959,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                 </div>
 
                 <div className="card-wrapper w-35">
-                    <div className="card-content">
+                    <div id="store-status" className="card-content">
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">

@@ -115,7 +115,7 @@ export const TransactionHistory: React.FC = () => {
 
         // 🔹 Otherwise, show globally enabled methods
         const enabledMethods = Object.entries(appLocalizer.payout_payment_options)
-            .filter(([key, value]: [string, any]) => !value.enable)
+            .filter(([key, value]: [string, any]) => value.enable)
             .map(([key, value]) => ({
                 value: key,
                 label: key.charAt(0).toUpperCase() + key.slice(1),
