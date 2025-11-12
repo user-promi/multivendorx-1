@@ -247,8 +247,6 @@ const CustomForm: React.FC<CustomFormProps> = ({
         const newFormFieldList = formFieldList.filter((_, i) => i !== index);
         settingHasChanged.current = true;
         setFormFieldList(newFormFieldList);
-        console.log('opendInput id', opendInput?.id)
-        console.log('formFieldList id', formFieldList[index].id)
         if (opendInput?.id === formFieldList[index].id) {
             setOpendInput(null);
         }
@@ -687,7 +685,9 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                 //     }
                                 // }}
                                 onChange={(key, value) => {
-                                    if (key !== 'label' && key !== 'placeholder') return; // only allow label & placeholder
+                                    console.log('key',key);
+                                    console.log('')
+                                    if (key !== 'label' && key !== 'placeholder' && key !== 'disabled') return; // only allow label & placeholder
 
                                     if (opendInput?.parentId) {
                                         // Subfield case
