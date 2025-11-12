@@ -224,8 +224,8 @@ const StoreReviews: React.FC = () => {
             render: (updateFilter) => (
                 <div className="right">
                     <CalendarInput
-                        wrapperClass=""
-                        inputClass=""
+                        wrapperclassName=""
+                        inputclassName=""
                         onChange={(range: any) => updateFilter('date', { start_date: range.startDate, end_date: range.endDate })}
                     />
                 </div>
@@ -535,8 +535,8 @@ const StoreReviews: React.FC = () => {
                                 <i className="adminlib-store-review"></i>
                                 {__('Reply to Review', 'multivendorx')} - {selectedReview.customer_name}
                             </div>
-                            <p>Review customer inquiries and reply directly. You can choose to display answers publicly or keep them private.
-                            </p>
+                            {/* <p>Review customer inquiries and reply directly. You can choose to display answers publicly or keep them private.
+                            </p> */}
                             <i
                                 onClick={() => setSelectedReview(null)}
                                 className="icon adminlib-close"
@@ -563,8 +563,25 @@ const StoreReviews: React.FC = () => {
                 >
                     <div className="content">
                         <div className="form-group-wrapper">
+                            <div className="review-popup-wrapper">
+                                <div className="customer-wrapper">
+                                    <div className="avater">
+                                        <i className="item-icon adminlib-person"></i>
+                                    </div>
+                                    <div className="name-wrapper">
+                                        <div className="name">store1</div>
+                                        <div className="rating-wrapper"><i className="adminlib-star"></i><i className="adminlib-star"></i><i className="adminlib-star"></i><i className="adminlib-star"></i><i className="adminlib-star"></i> <div className="date">22 Dec 2022</div></div>
+                                    </div>
+
+                                </div>
+
+                                <div className="review">
+                                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Minus, aliquid repudiandae dolorem deserunt maxime nam necessitatibus et ullam nihil quasi.
+                                </div>
+                            </div>
+
                             <div className="form-group">
-                                <label htmlFor="reply">{__('Your Reply', 'multivendorx')}</label>
+                                <label htmlFor="reply">{__('Admin Reply', 'multivendorx')}</label>
                                 <textarea
                                     id="reply"
                                     value={replyText}
@@ -578,8 +595,8 @@ const StoreReviews: React.FC = () => {
                             <div className="form-group">
                                 <label htmlFor="status">{__('Review Status', 'multivendorx')}</label>
                                 <ToggleSetting
-                                    wrapperClass="setting-form-input"
-                                    descClass="settings-metabox-description"
+                                    wrapperclassName="setting-form-input"
+                                    descclassName="settings-metabox-description"
                                     description={__('Change review status', 'multivendorx')}
                                     options={[
                                         { key: 'pending', value: 'Pending', label: __('Pending', 'multivendorx') },
@@ -594,7 +611,6 @@ const StoreReviews: React.FC = () => {
                                     }}
                                 />
                             </div>
-                            <div className="space"></div>
                         </div>
                     </div>
                 </CommonPopup>

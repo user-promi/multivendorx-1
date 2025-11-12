@@ -1475,9 +1475,17 @@ input[type="checkbox"]:focus {
 .rating-wrapper {
   display: flex;
   gap: 0.313rem;
+  align-items: center;
 
   i {
     color: rgb(202, 172, 1);
+  }
+
+  .date {
+    font-size: 0.813rem;
+    padding-left: 0.313rem;
+    font-weight: 500;
+    color: #00000099;
   }
 }
 
