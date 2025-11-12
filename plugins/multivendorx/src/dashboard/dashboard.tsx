@@ -32,10 +32,10 @@ const salesIcon = new L.DivIcon({
   html: `<div style="background:#5007aa;color:#fff;border-radius:50%;padding:6px 0.625rem;font-size:0.75rem;">$</div>`,
 });
 const analyticsData = [
-  { icon: "adminlib-tools red", number: "230k", text: "Visitors" },
-  { icon: "adminlib-book green", number: "45k", text: "Add to Cart" },
-  { icon: "adminlib-global-community yellow", number: "1.2M", text: "Purchases" },
-  { icon: "adminlib-wholesale blue", number: "500k", text: "Conv. Rate" },
+  { icon: "adminlib-tools theme-color1", number: "230k", text: "Visitors" },
+  { icon: "adminlib-book theme-color2", number: "45k", text: "Add to Cart" },
+  { icon: "adminlib-global-community theme-color3", number: "1.2M", text: "Purchases" },
+  { icon: "adminlib-wholesale theme-color4", number: "500k", text: "Conv. Rate" },
 ];
 const revenueData = [
   { month: "Jan", orders: 4000, earnings: 2400, refunds: 200, conversion: 2.4 },
@@ -116,7 +116,7 @@ const Dashboard: React.FC = () => {
               </div>
               <div className="details">58% of sales target</div>
             </div>
-            <div className="admin-btn btn-white">
+            <div className="admin-btn btn-purple">
               View Details
             </div>
 
@@ -125,9 +125,9 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="column w-65">
+        <div className="column transparent">
           <div className="card">
-            <div className="card-header">
+            {/* <div className="card-header">
               <div className="left">
                 <div className="title">
                   Conversion Snapshot
@@ -136,11 +136,11 @@ const Dashboard: React.FC = () => {
               <div className="right">
                 <span>Updated 1 month ago</span>
               </div>
-            </div>
+            </div> */}
             <div className="card-body">
               <div className="analytics-container">
 
-                {/* {analyticsData.map((item, idx) => (
+                {analyticsData.map((item, idx) => (
                   <div key={idx} className="analytics-item">
                     <div className="analytics-icon">
                       <i className={item.icon}></i>
@@ -150,13 +150,69 @@ const Dashboard: React.FC = () => {
                       <div className="text">{item.text}</div>
                     </div>
                   </div>
-                ))} */}
+                ))}
 
               </div>
             </div>
           </div>
         </div>
       </div>
+
+
+
+      <div className="row">
+        <div className="column w-35">
+          <div className="card">
+            <div className="card-header">
+              <div className="left">
+                <div className="title">
+                  Best-Selling Products
+                </div>
+              </div>
+              {/* <div className="right">
+                <i className="adminlib-more-vertical"></i>
+              </div> */}
+            </div>
+            <div className="card-body">
+              <div className="top-products">
+                <table>
+                  <tr className="header">
+                    <td>#</td>
+                    <td>Name</td>
+                    <td>Popularity</td>
+                    <td>Sales</td>
+                  </tr>
+                  <tr>
+                    <td>01</td>
+                    <td>Wireless Headset</td>
+                    <td className="progress-bar"></td>
+                    <td><div className="admin-badge theme-color1">45%</div></td>
+                  </tr>
+                  <tr>
+                    <td>02</td>
+                    <td>Wireless Headset</td>
+                    <td className="progress-bar"></td>
+                    <td><div className="admin-badge theme-color2">45%</div></td>
+                  </tr>
+                  <tr>
+                    <td>03</td>
+                    <td>Wireless Headset</td>
+                    <td className="progress-bar"></td>
+                    <td><div className="admin-badge theme-color3">45%</div></td>
+                  </tr>
+                  <tr>
+                    <td>04</td>
+                    <td>Wireless Headset</td>
+                    <td className="progress-bar"></td>
+                    <td><div className="admin-badge theme-color4">19%</div></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
 
       <div className="row">
         <div className="column">

@@ -8,7 +8,7 @@ ul {
 }
 
 body:has(#store-dashboard) {
-    background: #f5f1ff;
+    background: #fafbfd;
     font-family: "Figtree", sans-serif;
     font-weight: 400;
     font-size: 0.95rem;
@@ -382,7 +382,13 @@ a {
         // box-shadow: 0 0.125rem 0.5rem 0 rgba(47, 43, 61, 0.12);
         background: #fff;
         width: 100%;
+        box-shadow: 0 0.5rem 1rem 0 rgb(213 209 223 / 12%);
 
+        &.transparent{
+            padding: 0;
+            background: transparent;
+            box-shadow: none;
+        }
         .action-btn-wrapper {
             display: flex;
             flex-wrap: wrap;
@@ -399,7 +405,7 @@ a {
         }
 
         &.theme-bg {
-            background: var(--themeColor);
+            background: $theme-color1;
 
             color: #fff;
 
@@ -564,13 +570,13 @@ a {
         .left {
             .title {
                 font-size: 1.25rem;
-                font-weight: 500;
+                font-weight: 600;
             }
 
             .des {
                 font-size: 0.95rem;
                 padding-top: 0.45rem;
-                color: #00000094;
+                color: #02092794;
             }
         }
 
@@ -640,29 +646,57 @@ a {
 .analytics-container {
     display: flex;
     justify-content: space-between;
-    padding-top: 2.5rem;
+    // padding-top: 2.5rem;
+    padding-top: 0.5rem;
+    gap: 1rem;
 
     .analytics-item {
         display: flex;
         gap: 1rem;
-        align-items: center;
+        flex-direction: column;
+        width: 100%;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 0.5rem 1rem 0 rgba(213, 209, 223, 0.12);
 
         .analytics-icon {
             i {
-                padding: 0.5rem;
+                padding: 0.313rem;
                 font-size: 1.625rem;
                 border-radius: 0.313rem;
+                color: #fff;
+                margin-top: 0.625rem;
             }
+
         }
 
         .details {
+            padding-top: 1rem;
+
             .number {
-                font-size: 1.25rem;
-                line-height: 1.5rem;
+                font-size: 1.45rem;
+                line-height: 1.813rem;
                 padding-bottom: 0.313rem;
                 font-weight: 500;
             }
         }
+
+        &:has(.theme-color1) {
+            background: color-mix(in srgb, $theme-color1 12%, transparent);
+        }
+
+        &:has(.theme-color2) {
+            background: color-mix(in srgb, $theme-color2 12%, transparent);
+        }
+
+        &:has(.theme-color3) {
+            background: color-mix(in srgb, $theme-color3 12%, transparent);
+        }
+
+        &:has(.theme-color4) {
+            background: color-mix(in srgb, $theme-color4 12%, transparent);
+        }
+
     }
 }
 
@@ -1009,15 +1043,16 @@ a {
     position: relative;
 
     .title {
-        font-size: 1.5rem;
+        font-size: 2rem;
         font-weight: 500;
-        line-height: 1.5rem;
+        line-height: 2rem;
     }
 
     .des {
-        font-size: 0.95rem;
+        font-size: 1rem;
         padding: 0.5rem 0;
         padding-bottom: 1.25rem;
+        line-height: 1.25rem;
     }
 
     .price-wrapper {
@@ -1099,3 +1134,45 @@ a {
         }
     }
 }
+
+
+
+// top product start
+.top-products {
+    table {
+        width: 100%;
+        border-collapse: collapse;
+
+        tr {
+            td:nth-child(1) {
+                width: 5%;
+            }
+
+            td:nth-child(2) {
+                width: 35%;
+            }
+
+            td:nth-child(3) {
+                width: 40%;
+            }
+
+            td:nth-child(4) {
+                width: 20%;
+            }
+
+            td {
+                padding: 0.625rem 0;
+                border-bottom: $border-light-small;
+            }
+
+            &.header {
+                td {
+                    // padding-bottom: 0.313rem;
+                    margin-bottom: 0.313rem;
+                }
+            }
+        }
+    }
+}
+
+// top product end

@@ -1,4 +1,4 @@
-$theme-color: #5007aa;
+$theme-color: #ff5982;
 $accent-color: #e35047;
 $light-accent-color: #e26f76;
 $color-white: #fff;
@@ -72,6 +72,18 @@ body{
     }
 }
 
+.theme-color1{
+    background: $theme-color1;
+}
+.theme-color2{
+    background: $theme-color2;
+}
+.theme-color3{
+    background: $theme-color3;
+}
+.theme-color4{
+    background: $theme-color4;
+}
 // no permission section end
 
 
