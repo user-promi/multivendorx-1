@@ -437,8 +437,8 @@ const RefundRequest: React.FC = () => {
         <>
             <div className="card-header">
                 <div className="left">
-                    <div className="title">Refund Requests</div>
-                    <div className="des">Shared by customers</div>
+                    <div className="title">Product questions in queue</div>
+                    <div className="des">Respond to assist buyers effectively.</div>
                 </div>
                 <div className="right">
                     <i className="adminlib-more-vertical"></i>

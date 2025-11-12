@@ -37,10 +37,9 @@ export default {
             selectDeselect: true,
         },
         {
-            key: 'pending_msg',
+            key: 'under_review_msg',
             label: 'Message shown to stores under review',
             type: 'text',
-            value: 'Your store is under review. Sales and payouts are temporarily paused.',
             des: 'What pending stores can do',
         },
     ],

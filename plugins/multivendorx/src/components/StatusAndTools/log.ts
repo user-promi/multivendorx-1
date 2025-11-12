@@ -5,7 +5,7 @@ export default {
     priority: 2,
     name: __( 'Log', 'multivendorx' ),
     desc: __(
-        'Controls how stores are onboarded and what access they get.',
+        'Site errors and events are logged for easy troubleshooting.',
         'multivendorx'
     ),
     icon: 'adminlib-general-tab',

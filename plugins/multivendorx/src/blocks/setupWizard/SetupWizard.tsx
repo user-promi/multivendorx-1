@@ -54,31 +54,6 @@ const SetupWizard: React.FC = () => {
     const isProSetting = (pro: boolean) => pro === true;
 
     const methods = [
-        // {
-        //     id: "welcome",
-        //     label: "Welcome to the MultivendorX family!",
-        //     icon: "adminlib-advertise-product",
-        //     desc: `Thank you for choosing MultiVendorX!`,
-        //     countBtn: true,
-        //     isWizardMode: true,
-        //     openForm: true,
-        //     formFields: [
-        //         {
-        //             key: 'description',
-        //             type: 'description',
-        //             des: '<div>Thank you for choosing MultiVendorX! This quick setup wizard will help you configure the basic settings and have your marketplace ready in no time. It’s completely optional and shouldn’t take longer than five minutes.</div>',
-        //         },
-        //         {
-        //             key: 'wizardButtons',
-        //             type: 'buttons',
-        //             options: [
-        //                 { label: "Not right now", action: "skip", btnClass: "admin-btn btn-outline" },
-        //                 { label: "Let's go!", action: "next", btnClass: "admin-btn btn-purple" }
-        //             ]
-        //         },
-        //     ],
-        // },
-
         {
             id: "store_setup",
             label: "Configure Your Store",
@@ -137,18 +112,115 @@ const SetupWizard: React.FC = () => {
                 },
                 {
                     key: 'commission_type',
-                    type: 'select',
-                    label: 'Commission Type',
+                    type: 'setting-toggle',
+                    label: __('Commission type', 'multivendorx'),
+                    settingDescription: __("Choose how commissions should be calculated for your marketplace.", 'multivendorx'),
+                    desc: __(
+                        '<ul><li>Store order based - Calculated on the full order amount of each store. Example: A customer buys from 3 stores → commission applies separately to each store’s order.</li><li>Per item based - Applied to each product in the order. Example: An order with 5 items → commission applies 5 times, once per item.</li></ul>',
+                        'multivendorx'
+                    ),
                     options: [
-                        { label: 'Percentage', value: 'percentage' },
-                        { label: 'Fixed', value: 'fixed' },
+                        {
+                            key: 'store_order',
+                            label: __('Store order based', 'multivendorx'),
+                            value: 'store_order',
+                        },
+                        {
+                            key: 'per_item',
+                            label: __('Per item based', 'multivendorx'),
+                            value: 'per_item',
+                        },
                     ],
                 },
                 {
-                    key: 'commission_percent',
-                    type: 'number',
-                    label: 'Commission Percentage',
-                    default: 80,
+                    key: 'facilitator_fees',
+                    type: 'nested',
+                    label: 'Facilitator fees',
+                    single: true,
+                    proSetting: true,
+                    settingDescription: __('Set the facilitator fees as a fixed amount, a percentage, or both, deducted from the store commission. Store-wise fees can also be configured from the store edit page.', 'multivendorx'),
+                    // desc: __(
+                    //     '<strong>Global facilitator:</strong> Assign a single facilitator for the entire marketplace from <a href="' +
+                    //     appLocalizer.site_url +
+                    //     '/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-capability">here</a>.<br>' +
+                    //     '<strong>Individual facilitators:</strong> Set facilitators for specific stores from the <em>Facilitator Settings</em> section or the <em>Store Edit</em> page.<br>' +
+                    //     '<strong>Example:</strong> If a store earns $1000 commission and the facilitator fees is $50 + 5%, then total facilitator fees = $50 + (5% of 1000) = $100 → the store receives $900 after facilitator deductions.',
+                    //     'multivendorx'
+                    // ),
+                    nestedFields: [
+                        {
+                            key: 'facilitator_fixed',
+                            type: 'number',
+                            preInsideText: __('$', 'multivendorx'),
+                            size: "8rem",
+                            preText: 'Fixed',
+                            postText: "+",
+                        },
+                        {
+                            key: 'facilitator_percentage',
+                            type: 'number',
+                            postInsideText: __('%', 'multivendorx'),
+                            size: "8rem",
+                        },
+                    ],
+                },
+                {
+                    key: 'wizardButtons',
+                    type: 'buttons',
+                    options: [
+                        { label: "Back", action: "back", btnClass: "admin-btn btn-red" },
+                        { label: "Next", action: "next", btnClass: "admin-btn btn-purple" }
+                    ]
+                },
+            ],
+        },
+        {
+            id: "store_permissions",
+            label: "Store Permissions",
+            icon: "adminlib-commission",
+            desc: 'Control which features and actions are available to each store role.',
+            countBtn: true,
+            isWizardMode: true,
+            formFields: [
+                {
+                    key: 'products_fields',
+                    type: 'multi-checkbox',
+                    label: __('Edit product page blocks', 'multivendorx'),
+                    settingDescription: __('Control which product data fields are available to stores when creating or editing products.', 'multivendorx'),
+                    class: 'mvx-toggle-checkbox',
+                    options: [
+                        {
+                            key: 'general',
+                            label: __('Manage Products', 'multivendorx'),
+                            value: 'general',
+                        },
+                        {
+                            key: 'view_products',
+                            label: __('View Products', 'multivendorx'),
+                            value: 'general',
+                        },
+                        {
+                            key: 'edit_products',
+                            label: __('Edit Products', 'multivendorx'),
+                            value: 'general',
+                        },
+                        {
+                            key: 'delete_products',
+                            label: __('Delete Products', 'multivendorx'),
+                            value: 'general',
+                        },
+                        {
+                            key: 'publish_products',
+                            label: __('Publish Products', 'multivendorx'),
+                            value: 'general',
+                        },
+                        {
+                            key: 'upload_files',
+                            label: __('Upload Files', 'multivendorx'),
+                            value: 'general',
+                        },
+                    ],
+                    selectDeselect: true,
                 },
                 {
                     key: 'wizardButtons',
@@ -168,23 +240,6 @@ const SetupWizard: React.FC = () => {
             countBtn: true,
             isWizardMode: true,
             formFields: [
-                {
-                    key: 'approve_store',
-                    type: 'setting-toggle',
-                    label: __('New store registration approval', 'multivendorx'),
-                    options: [
-                        {
-                            key: 'manually',
-                            label: __('Manual', 'multivendorx'),
-                            value: 'manually',
-                        },
-                        {
-                            key: 'automatically',
-                            label: __('Automatic', 'multivendorx'),
-                            value: 'automatically',
-                        },
-                    ],
-                },
                 {
                     key: 'commission_percent',
                     type: 'number',
@@ -305,10 +360,10 @@ const SetupWizard: React.FC = () => {
                     setWizardIndex={setCurrentStep}
                 />
 
-                <div className="welcome-wrapper">
+                {/* <div className="welcome-wrapper">
                     <div className="wizard-title">! Well Done</div>
                     <div className="des">Thank you for choosing MultiVendorX!</div>
-                </div>
+                </div> */}
             </div>
         </div>
     );

@@ -284,9 +284,9 @@ const Coupons: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
             <div className="card-header">
                 <div className="left">
                     <div className="title">
-                        Let’s validate!
+                        Coupons up for review
                     </div>
-                    <div className="des">These coupons need your approval.</div>
+                    <div className="des">Approve, decline, or tweak before they go live.</div>
                 </div>
                 <div className="right">
                     <i className="adminlib-more-vertical"></i>

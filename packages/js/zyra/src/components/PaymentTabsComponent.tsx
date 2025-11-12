@@ -3,6 +3,7 @@ import "../styles/web/PaymentTabsComponent.scss";
 import TextArea from "./TextArea";
 import ToggleSetting from "./ToggleSetting";
 import MultiCheckBox from "./MultiCheckbox";
+import NestedComponent from "./NestedComponent";
 
 interface PaymentFormField {
   key: string;
@@ -19,7 +20,8 @@ interface PaymentFormField {
   | "description"
   | "setup"
   | "setting-toggle"
-  | "buttons";
+  | "buttons"
+  | "nested";
 
   label: string;
   placeholder?: string;
@@ -60,6 +62,9 @@ interface PaymentMethod {
   toggleType?: "icon" | "checkbox";
   wrapperClass?: string;
   openForm?: boolean;
+  single?: boolean;
+  rowClass?: string;
+  nestedFields?: PaymentFormField[];
 }
 
 interface PaymentTabsComponentProps {
@@ -400,6 +405,33 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
           </>
         );
 
+      case "nested":
+        return (
+          <NestedComponent
+            key={field.key}
+            id={field.key}
+            label={field.label}
+            description={field.desc}
+            fields={field.nestedFields ?? []}
+            value={value}
+            wrapperClass={field.rowClass}
+            addButtonLabel={field.addButtonLabel}
+            deleteButtonLabel={field.deleteButtonLabel}
+            single={field.single}
+            // onChange={(val: any) => {
+            //   if (
+            //     hasAccess(
+            //       field.proSetting ?? false,
+            //       String(field.moduleEnabled ?? ""),
+            //       String(field.dependentSetting ?? ""),
+            //       String(field.dependentPlugin ?? "")
+            //     )
+            //   ) {
+            //     handleInputChange(methodId, field.key, val);
+            //   }
+            // }}
+          />
+        );
       default:
         return (
           <>
