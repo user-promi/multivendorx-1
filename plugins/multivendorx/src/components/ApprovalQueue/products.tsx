@@ -351,9 +351,9 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
             <div className="card-header">
                 <div className="left">
                     <div className="title">
-                        Let’s review!
+                        Products awaiting review
                     </div>
-                    <div className="des">These products are waiting on you.</div>
+                    <div className="des">Finalize approvals for new listings.</div>
                 </div>
                 <div className="right">
                     <i className="adminlib-more-vertical"></i>

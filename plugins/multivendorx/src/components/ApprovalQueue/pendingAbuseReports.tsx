@@ -337,9 +337,9 @@ const ReportAbuseTable: React.FC<Props> = ({ onUpdated }) => {
             <div className="card-header">
                 <div className="left">
                     <div className="title">
-                        Pending Abuse Reports
+                        Flagged products awaiting action
                     </div>
-                    <div className="des">Waiting for your response</div>
+                    <div className="des">Review reports and maintain quality.</div>
                 </div>
                 <div className="right">
                     <i className="adminlib-more-vertical"></i>
