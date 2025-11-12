@@ -21,16 +21,19 @@ $border-radius-medium: 0.438rem;
 $border-radius-large: 0.5rem;
 $border-radius-button: 8rem;
 
-$theme-color1: #ff5982;
-$theme-color2: #ff9f81;
-$theme-color3: #39db51;
-$theme-color4: #ba7ef8;
+$theme-color1: #568bf6;
+$theme-color2: #f1a60e;
+$theme-color3: #fa7a38;
+$theme-color4: #73d860;
 
+:root{
+    --themeColor: #568bf6;
+}
 
-
-body{
+body {
     margin: 0;
 }
+
 .basic-input,
 .basic-select,
 .rmdp-input,
@@ -42,10 +45,40 @@ body{
     background: var(--themeColor) !important;
     color: #fff;
 }
-.btn-white{
+
+.btn-white {
     background: #fff;
     color: var(--themeColor);
 }
+
+.admin-badge {
+    width: fit-content;
+
+    &.theme-color1 {
+        color: $theme-color1;
+        background: color-mix(in srgb, $theme-color1 15%, transparent);
+        border: 0.063rem solid $theme-color1;
+    }
+
+    &.theme-color2 {
+        color: $theme-color2;
+        background: color-mix(in srgb, $theme-color2 15%, transparent);
+        border: 0.063rem solid $theme-color2;
+    }
+
+    &.theme-color3 {
+        color: $theme-color3;
+        background: color-mix(in srgb, $theme-color3 15%, transparent);
+        border: 0.063rem solid $theme-color3;
+    }
+
+    &.theme-color4 {
+        color: $theme-color4;
+        background: color-mix(in srgb, $theme-color4 15%, transparent);
+        border: 0.063rem solid $theme-color4;
+    }
+}
+
 // no permission section start
 .permission-wrapper {
     height: 80vh;
@@ -72,18 +105,6 @@ body{
     }
 }
 
-.theme-color1{
-    background: $theme-color1;
-}
-.theme-color2{
-    background: $theme-color2;
-}
-.theme-color3{
-    background: $theme-color3;
-}
-.theme-color4{
-    background: $theme-color4;
-}
 // no permission section end
 
 

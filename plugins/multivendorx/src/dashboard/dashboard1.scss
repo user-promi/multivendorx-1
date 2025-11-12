@@ -8,7 +8,7 @@ ul {
 }
 
 body:has(#store-dashboard) {
-    background: #fafbfd;
+    background: #f3f5f7;
     font-family: "Figtree", sans-serif;
     font-weight: 400;
     font-size: 0.95rem;
@@ -372,8 +372,8 @@ a {
 
     .row {
         display: flex;
-        gap: 2rem;
-        padding-bottom: 2rem;
+        gap: 1.5rem;
+        padding-bottom: 1.5rem;
     }
 
     .column {
@@ -382,13 +382,14 @@ a {
         // box-shadow: 0 0.125rem 0.5rem 0 rgba(47, 43, 61, 0.12);
         background: #fff;
         width: 100%;
-        box-shadow: 0 0.5rem 1rem 0 rgb(213 209 223 / 12%);
+        box-shadow: 0 0.313rem 0.85rem 0 rgb(74 73 73 / 9%);
 
-        &.transparent{
+        &.transparent {
             padding: 0;
             background: transparent;
             box-shadow: none;
         }
+
         .action-btn-wrapper {
             display: flex;
             flex-wrap: wrap;
@@ -653,16 +654,17 @@ a {
     .analytics-item {
         display: flex;
         gap: 1rem;
-        flex-direction: column;
+        justify-content: space-between;
         width: 100%;
         padding: 1.5rem;
         border-radius: 0.5rem;
         box-shadow: 0 0.5rem 1rem 0 rgba(213, 209, 223, 0.12);
 
         .analytics-icon {
+            margin-top: 0.45rem;
             i {
-                padding: 0.313rem;
-                font-size: 1.625rem;
+                padding: 0.5rem;
+                font-size: 1.5rem;
                 border-radius: 0.313rem;
                 color: #fff;
                 margin-top: 0.625rem;
@@ -670,31 +672,73 @@ a {
 
         }
 
+        .theme-color1 {
+            background: $theme-color1;
+        }
+
+        .theme-color2 {
+            background: $theme-color2;
+        }
+
+        .theme-color3 {
+            background: $theme-color3;
+        }
+
+        .theme-color4 {
+            background: $theme-color4;
+        }
+
         .details {
-            padding-top: 1rem;
+
+            .text {
+                font-size: 1.063rem;
+                font-weight: 500;
+            }
 
             .number {
-                font-size: 1.45rem;
+                font-size: 1.813rem;
                 line-height: 1.813rem;
                 padding-bottom: 0.313rem;
+                font-weight: 600;
+                padding: 1.25rem 0;
+            }
+
+            .report {
                 font-weight: 500;
+                color: #00000061;
             }
         }
 
         &:has(.theme-color1) {
-            background: color-mix(in srgb, $theme-color1 12%, transparent);
+            background: color-mix(in srgb, $theme-color1 15%, transparent);
+
+            .report span {
+                color: $theme-color1;
+            }
         }
 
         &:has(.theme-color2) {
-            background: color-mix(in srgb, $theme-color2 12%, transparent);
+            background: color-mix(in srgb, $theme-color2 15%, transparent);
+
+            .report span {
+                color: $theme-color2;
+            }
         }
 
         &:has(.theme-color3) {
-            background: color-mix(in srgb, $theme-color3 12%, transparent);
+            background: color-mix(in srgb, $theme-color3 15%, transparent);
+
+            .report span {
+                color: $theme-color3;
+            }
         }
 
         &:has(.theme-color4) {
-            background: color-mix(in srgb, $theme-color4 12%, transparent);
+            background: color-mix(in srgb, $theme-color4 15%, transparent);
+
+            .report span {
+                color: $theme-color3;
+            }
         }
 
     }
@@ -1145,7 +1189,7 @@ a {
 
         tr {
             td:nth-child(1) {
-                width: 5%;
+                width: 10%;
             }
 
             td:nth-child(2) {
@@ -1157,7 +1201,7 @@ a {
             }
 
             td:nth-child(4) {
-                width: 20%;
+                width: 15%;
             }
 
             td {
@@ -1166,13 +1210,85 @@ a {
             }
 
             &.header {
-                td {
-                    // padding-bottom: 0.313rem;
-                    margin-bottom: 0.313rem;
-                }
+                color: #0000006b;
             }
         }
     }
 }
 
 // top product end
+
+// progress-bar
+.progress-bar {
+
+    div {
+        width: 80%;
+        height: 0.313rem;
+        position: absolute;
+        border-radius: 0.5rem;
+        position: relative;
+
+        &:after {
+            position: absolute;
+            content: "";
+            height: 0.313rem;
+            border-radius: 0.5rem;
+            // background: #000;
+            left: 0;
+            top: 0;
+            width: 56%;
+        }
+    }
+
+    &.theme-color1 {
+        div {
+            background: color-mix(in srgb, $theme-color1 15%, transparent);
+
+
+            &::after {
+                background: $theme-color1;
+
+            }
+        }
+    }
+
+    &.theme-color2 {
+        div {
+            background: color-mix(in srgb, $theme-color2 15%, transparent);
+
+
+            &::after {
+                background: $theme-color2;
+
+            }
+        }
+
+    }
+
+    &.theme-color3 {
+        div {
+            background: color-mix(in srgb, $theme-color3 15%, transparent);
+
+
+            &::after {
+                background: $theme-color3;
+
+            }
+        }
+    }
+
+    &.theme-color4 {
+        div {
+            background: color-mix(in srgb, $theme-color4 15%, transparent);
+
+
+            &::after {
+                background: $theme-color4;
+
+            }
+        }
+
+    }
+
+
+}
