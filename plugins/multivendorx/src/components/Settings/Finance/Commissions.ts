@@ -233,6 +233,7 @@ export default {
             desc: __(
                 'If enabled, store’s net earning will include both commission and shipping fees.', 'multivendorx'),
             type: 'checkbox',
+            moduleEnabled:'store-shipping',
             options: [
                 {
                     key: 'give_shipping',
@@ -253,6 +254,11 @@ export default {
                     value: 'taxable_shipping',
                 },
             ],
+            dependent: {
+                key: 'give_shipping',
+                set: true,
+                value: 'give_shipping',
+            },
             look: 'toggle',
         },
         {
