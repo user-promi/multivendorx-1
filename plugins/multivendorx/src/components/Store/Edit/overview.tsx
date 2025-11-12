@@ -48,6 +48,8 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                 page: 1,
                 row: 3,
                 store_id: id,
+                transaction_type: 'Withdrawal',
+                transaction_status: 'Completed',
                 filter_status: 'Dr',
                 orderBy: 'created_at',
                 order: 'DESC',
