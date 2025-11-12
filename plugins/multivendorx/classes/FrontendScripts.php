@@ -382,7 +382,11 @@ class FrontendScripts {
                 'tax-compliance',
                 'custom-css',
                 'single-product-multiple-store',
-                'store-status-control',
+                'pending-approval',
+                'rejected',
+                'permanently-rejected',
+                'under-review',
+                'suspended',
             )
 		);
 

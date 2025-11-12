@@ -508,35 +508,41 @@ By signing and submitting, the Seller accepts all terms above.
             // You can add other keys here if needed, e.g. 'required_store_uploads' => [...]
         ];
 
-        $store_status_settings = [
-            'store_status_management' => [
-                'store_pending_status'  => [
-                    'pending_msg'   => 'Your store is awaiting approval and will be activated soon.'
-                ],
-                'store_rejected_status'  => [
-                    'rejected_msg'   => 'Your store is rejected.'
-                ],
-                'store_under_review_status'  => [
-                    'review_msg'   => 'Your store is under review. Sales and payouts are temporarily paused.'
-                ],
-                'store_suspended_status'  => [
-                    'suspended_msg'   => 'Your store is suspended due to a policy issue. Contact support to resolve it.'
-                ],
-                'store_active_status'  => [
-                    'active_msg'   => 'Your store is live and ready for business.'
-                ],
-                'store_deactivated_status'  => [
-                    'deactivated_msg'   => 'Your store has been closed. Access and selling privileges are disabled.'
-                ],
-            ]
-        ];
+        $pending_store_status = array (
+            'pending_msg' => 'Your store is awaiting approval and will be activated soon.',
+        );
+
+        update_option('multivendorx_pending_approval_settings', $pending_store_status);        
+
+        $reject_store_status = array (
+            'rejected_msg' => 'Your application was not approved. Please review feedback and reapply.',
+        );
+
+        update_option('multivendorx_rejected_settings', $reject_store_status);        
+
+        $permanent_reject_store_status = array (
+            'permanent_rejected_msg' => 'Your application has been permanently rejected. Contact admin for clarification.',
+        );
+
+        update_option('multivendorx_permanently_rejected_settings', $permanent_reject_store_status);        
+
+        $under_review_store_status = array (
+            'under_review_msg' => 'Your store is under review. Sales and payouts are temporarily paused.',
+        );
+
+        update_option('multivendorx_under_review_settings', $under_review_store_status);        
+
+        $suspended_store_status = array (
+            'suspended_msg' => 'Your store is suspended due to a policy issue. Contact admin to resolve it.',
+        );
+
+        update_option('multivendorx_suspended_settings', $suspended_store_status);
 
         // 6. Save back to DB
         update_option('multivendorx_identity_verification_settings', $settings);
         update_option('multivendorx_order_actions_refunds_settings', $order_settings);
         update_option('multivendorx_legal_compliance_settings', $legal_settings);
         update_option('multivendorx_product_compliance_settings', $product_compliance_settings);        
-        update_option('multivendorx_store_status_control_settings', $store_status_settings);        
     }
     
 

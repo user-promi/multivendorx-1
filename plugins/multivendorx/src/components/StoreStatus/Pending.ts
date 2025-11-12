@@ -42,7 +42,6 @@ export default {
             key: 'pending_msg',
             label: 'Message shown to pending stores',
             type: 'textarea',
-            value: 'Your store is awaiting approval and will be activated soon.',
             des: 'What pending stores can do',
         },
     ],
