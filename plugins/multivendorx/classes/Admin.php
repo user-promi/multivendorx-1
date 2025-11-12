@@ -568,8 +568,10 @@ class Admin {
         
     }
 
-    public function render_multivendorx_cod_order_payment_box( $post ) {
-        $order = wc_get_order( $post->ID );
+    public function render_multivendorx_cod_order_payment_box( $order ) {
+        if ( ! $order ) {
+            return;
+        }
         $value = $order ? $order->get_meta( 'multivendorx_cod_order_payment', true ) : '';
         ?>
         <p>
