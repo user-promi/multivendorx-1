@@ -338,7 +338,7 @@ export const KnowledgeBase: React.FC = () => {
             ),
         },
         {
-            header: __('Write your explanation or tutorial.', 'multivendorx'),
+            header: __('Write your explanation or tutorial', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.content || ''}>
                     {truncateText(row.original.content || '', 50)} {/* truncate to 50 chars */}
