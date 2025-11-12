@@ -44,18 +44,6 @@ const AddressField: React.FC<AddressFieldProps> = ({ formField, onChange, opendI
         onChange('fields', updated);
     };
 
-    // Subfield value change
-    const handleSubFieldChange = (id: number, key: string, value: any) => {
-        const updated = subFields.map(f => f.id === id ? { ...f, [key]: value } : f);
-        setSubFields(updated);
-        // Update parent value object
-        const valueObj = formField.value || {};
-        const changedField = updated.find(f => f.id === id);
-        if (changedField) {
-            onChange('value', { ...valueObj, [changedField.key]: value });
-        }
-    };
-
     return (
         <div className="address-field-wrapper">
             <ReactSortable
@@ -82,7 +70,6 @@ const AddressField: React.FC<AddressFieldProps> = ({ formField, onChange, opendI
                         {f.type === 'text' && (
                             <SimpleInput
                                 formField={{ label: f.label, placeholder: f.placeholder }}
-                                onChange={(key, value) => handleSubFieldChange(f.id, key, value)}
                             />
                         )}
 
@@ -95,7 +82,6 @@ const AddressField: React.FC<AddressFieldProps> = ({ formField, onChange, opendI
                                 }}
                                 type="dropdown"
                                 selected={false}
-                                onChange={(key, value) => handleSubFieldChange(f.id, key, value)}
                             />
                         )}
                     </div>

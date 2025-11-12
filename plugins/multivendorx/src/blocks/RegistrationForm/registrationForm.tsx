@@ -137,6 +137,8 @@ const RegistrationForm = () => {
                     formFields={formData.settings}
                     response={inputs}
                     onSubmit={onSubmit}
+                    countryList={appLocalizer.country_list}
+                    stateList={appLocalizer.state_list}
                 />
                 <div>{registrationForm.content_after_form}</div>
                 {toast && (

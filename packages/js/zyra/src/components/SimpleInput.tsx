@@ -11,7 +11,7 @@ import HoverInputRender from './HoverInputRender';
 // Types
 interface SimpleInputProps {
     formField: { label: string; placeholder?: string };
-    onChange: ( field: string, value: string ) => void;
+    onChange?: ( field: string, value: string ) => void;
 }
 
 const SimpleInput: React.FC< SimpleInputProps > = ( {

@@ -297,6 +297,16 @@ export default {
             category: 'shipping_management'
         },
         {
+            id: 'store-shipping',
+            name: __('Store Shipping', 'multivendorx'),
+            desc: "Shipping charges calculated based on distance between store address and delivery location.",
+            icon: 'adminlib-distance-shipping',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/distance-shipping',
+            settings_link: '${appLocalizer.plugin_url}settings&subtab=shipping',
+            pro_module: false,
+            category: 'shipping_management'
+        },
+        {
             id: 'country-shipping',
             name: __('Country-Wise Shipping', 'multivendorx'),
             desc: "Stores decide which countries they ship products to.",
