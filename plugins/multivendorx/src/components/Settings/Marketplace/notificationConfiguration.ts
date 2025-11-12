@@ -5,7 +5,9 @@ export default {
     id: 'notification-configuration',
     priority: 5,
     name: __('Notification Configuration', 'multivendorx'),
-    desc: __('Define what each store role can access and manage within the marketplace.', 'multivendorx'),
+    desc: __('Define what each store role can access and manage within the marketplace. All notifications dispatched by the site can be <a href="' +
+        appLocalizer.site_url +
+        '/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=notifications" target="_blank">tracked and reviewed from this page', 'multivendorx'),
     icon: 'adminlib-user-network-icon',
     submitUrl: 'settings',
     modal: [
