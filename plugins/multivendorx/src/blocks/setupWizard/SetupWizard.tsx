@@ -132,7 +132,6 @@ const SetupWizard: React.FC = () => {
                         },
                     ],
                 },
-                nestedFields: [
                 {
                     key: 'paid_promotion_limit',
                     type: 'setup',
@@ -140,7 +139,6 @@ const SetupWizard: React.FC = () => {
                     desc: 'Set detailed commission rules by product, order, or store, including fees, taxes, and shipping.',
                     link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
                 },
-            ],
                 {
                     key: 'wizardButtons',
                     type: 'buttons',
@@ -199,7 +197,6 @@ const SetupWizard: React.FC = () => {
                     ],
                     selectDeselect: true,
                 },
-                nestedFields: [
                 {
                     key: 'paid_promotion_limit',
                     type: 'setup',
@@ -207,7 +204,6 @@ const SetupWizard: React.FC = () => {
                     desc: 'Quickly manage additional store permissions and advanced features, including orders, coupons, analytics, and more.',
                     link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-capability`,
                 },
-            ],
                 {
                     key: 'wizardButtons',
                     type: 'buttons',
@@ -303,8 +299,6 @@ const SetupWizard: React.FC = () => {
             ],
         },
     ];
-
-
 
     const proSettingChanged = (pro: boolean) => {
         console.log("Pro setting change triggered", pro);

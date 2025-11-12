@@ -93,6 +93,8 @@ class Module {
      */
     public function register_shipping_method( $methods ) {
         $methods['multivendorx_country_shipping'] = Country_Shipping::class;
+        $methods['multivendorx_distance_shipping'] = Distance_Shipping::class;
+
         return $methods;
     }
 }

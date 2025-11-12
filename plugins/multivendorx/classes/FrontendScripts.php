@@ -199,8 +199,8 @@ class FrontendScripts {
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
-                'multivendorx-distance-shipping-frontend-script' => array(
-					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/DistanceShipping/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
+                'multivendorx-store-shipping-frontend-script' => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/StoreShipping/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
@@ -620,7 +620,7 @@ class FrontendScripts {
                         'nonce'    => wp_create_nonce('follow_store_ajax_nonce'),
 					),
 				),
-                'multivendorx-distance-shipping-frontend-script' => array(
+                'multivendorx-store-shipping-frontend-script' => array(
 					'object_name' => 'distanceShippingFrontend',
                     'data'        => array(
                         'ajaxurl'           => admin_url('admin-ajax.php'),
