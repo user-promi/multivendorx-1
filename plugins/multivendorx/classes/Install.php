@@ -140,7 +140,7 @@ class Install {
             `currency` varchar(10) NOT NULL,
             `payment_method` varchar(50) DEFAULT NULL,
             `narration` text NOT NULL,
-            `status` enum('Pending','Processed','Completed', 'Failed') DEFAULT 'Pending',
+            `status` enum('Upcoming','Processed','Completed', 'Failed') DEFAULT 'Upcoming',
             `available_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
             `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (`id`),
@@ -334,7 +334,7 @@ class Install {
                 IF NEW.status = 'Completed' THEN
                     SET NEW.balance = last_balance + NEW.amount;
                     SET NEW.locking_balance = last_locking_balance;
-                ELSEIF NEW.status = 'Pending' THEN
+                ELSEIF NEW.status = 'Upcoming' THEN
                     SET NEW.balance = last_balance;
                     SET NEW.locking_balance = last_locking_balance + NEW.amount;
                 ELSE

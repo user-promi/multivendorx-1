@@ -42,7 +42,7 @@ class Disbursement {
         $table = $wpdb->prefix . Utill::TABLES['transaction'];
 
         $results = $wpdb->get_results("SELECT * FROM {$table}
-            WHERE status = 'Pending'
+            WHERE status = 'Upcoming'
             AND available_at IS NOT NULL
             AND available_at < NOW()"
         );
