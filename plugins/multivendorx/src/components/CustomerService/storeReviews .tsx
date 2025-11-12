@@ -22,7 +22,7 @@ type Review = {
     date_modified: string;
     review_images: string[];
     time_ago: string;
-    store_name?:string;
+    store_name?: string;
 };
 
 type Status = {
@@ -244,7 +244,7 @@ const StoreReviews: React.FC = () => {
                     status: selectedReview.status,
                 },
                 { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
-            ).then(()=>{
+            ).then(() => {
                 requestData(pagination.pageSize, pagination.pageIndex + 1);
             });
 
@@ -278,7 +278,7 @@ const StoreReviews: React.FC = () => {
             cell: ({ row }) => {
                 const { customer_id, customer_name } = row.original;
                 const editLink = `${window.location.origin}/wp-admin/user-edit.php?user_id=${customer_id}`;
-        
+
                 return (
                     <TableCell title={customer_name}>
                         {customer_id ? (
@@ -293,31 +293,6 @@ const StoreReviews: React.FC = () => {
                         ) : (
                             '-'
                         )}
-                    </TableCell>
-                );
-            },
-        },     
-        {
-            id: 'rating',
-            header: __('Rating', 'multivendorx'),
-            cell: ({ row }) => {
-                const rating = row.original.overall_rating ?? 0;
-                return (
-                    <TableCell title={rating.toString()}>
-                        <div className="rating-wrapper">
-                            {rating > 0 ? (
-                                <>
-                                    {[...Array(Math.round(rating))].map((_, i) => (
-                                        <i key={`filled-${i}`} className="adminlib-star"></i>
-                                    ))}
-                                    {[...Array(5 - Math.round(rating))].map((_, i) => (
-                                        <i key={`empty-${i}`} className="adminlib-star-o"></i>
-                                    ))}
-                                </>
-                            ) : (
-                                '-'
-                            )}
-                        </div>
                     </TableCell>
                 );
             },
@@ -338,7 +313,6 @@ const StoreReviews: React.FC = () => {
                                 href={storeLink}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-purple-600 hover:underline"
                             >
                                 {store_name || '-'}
                             </a>
@@ -348,30 +322,68 @@ const StoreReviews: React.FC = () => {
                     </TableCell>
                 );
             },
-        },   
-        {
-            id: 'title',
-            header: __('Title', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.review_title}>
-                    {row.original.review_title || '-'}
-                </TableCell>
-            ),
         },
         {
-            id: 'content',
-            header: __('Review', 'multivendorx'),
+            id: 'rating-details',
+            header: __('Details', 'multivendorx'),
             cell: ({ row }) => {
+                const rating = row.original.overall_rating ?? 0;
                 const content = row.original.review_content || '';
                 const shortText = content.length > 40 ? content.substring(0, 40) + '...' : content;
-
                 return (
-                    <TableCell title={content}>
-                        {shortText || '-'}
+                    <TableCell title={rating.toString()}>
+                        <div className="rating-details-wrapper">
+                            <div className="title-wrapper">
+                                <div className="rating-wrapper">
+                                    {rating > 0 ? (
+                                        <>
+                                            {[...Array(Math.round(rating))].map((_, i) => (
+                                                <i key={`filled-${i}`} className="adminlib-star"></i>
+                                            ))}
+                                            {[...Array(5 - Math.round(rating))].map((_, i) => (
+                                                <i key={`empty-${i}`} className="adminlib-star-o"></i>
+                                            ))}
+                                        </>
+                                    ) : (
+                                        '-'
+                                    )}
+                                </div>
+                                <div className="title">
+                                    {row.original.review_title || '-'}
+                                </div>
+                            </div>
+
+                            <div className="review">
+                                {shortText || '-'}
+                            </div>
+                        </div>
                     </TableCell>
                 );
             },
         },
+        // {
+        //     id: 'title',
+        //     header: __('Title', 'multivendorx'),
+        //     cell: ({ row }) => (
+        //         <TableCell title={row.original.review_title}>
+        //             {row.original.review_title || '-'}
+        //         </TableCell>
+        //     ),
+        // },
+        // {
+        //     id: 'content',
+        //     header: __('Review', 'multivendorx'),
+        //     cell: ({ row }) => {
+        //         const content = row.original.review_content || '';
+        //         const shortText = content.length > 40 ? content.substring(0, 40) + '...' : content;
+
+        //         return (
+        //             <TableCell title={content}>
+        //                 {shortText || '-'}
+        //             </TableCell>
+        //         );
+        //     },
+        // },
         {
             id: 'status',
             header: __('Status', 'multivendorx'),
@@ -503,7 +515,8 @@ const StoreReviews: React.FC = () => {
                                 <i className="adminlib-store-review"></i>
                                 {__('Reply to Review', 'multivendorx')} — {selectedReview.customer_name}
                             </div>
-                            <p>Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.</p>
+                            <p>Review customer inquiries and reply directly. You can choose to display answers publicly or keep them private.
+</p>
                             <i
                                 onClick={() => setSelectedReview(null)}
                                 className="icon adminlib-close"

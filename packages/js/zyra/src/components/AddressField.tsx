@@ -55,14 +55,14 @@ const AddressField: React.FC<AddressFieldProps> = ({ formField, onChange, opendI
                 {subFields.map(f => (
                     <div
                         key={f.id}
-                        className={`address-subfield ${opendInput?.id === f.id ? 'active' : ''}`}
+                        className={`form-field ${opendInput?.id === f.id ? 'active' : ''}`}
                         onClick={(e) => {
                             e.stopPropagation();
                             setOpendInput({ ...f, readonly:formField.readonly, parentId: formField.id } as unknown as FormField);
                         }}
                     >
-                        <div className="address-subfield-header">
-                            <span className="admin-badge gray drag-handle" style={{ cursor: 'grab' }}>
+                        <div className="meta-menu">
+                            <span className="admin-badge blue drag-handle">
                                 <i className="admin-font adminlib-drag"></i>
                             </span>
                         </div>
