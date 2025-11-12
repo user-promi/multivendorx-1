@@ -1,6 +1,6 @@
 <?php
 
-namespace MultiVendorX\CountryShipping;
+namespace MultiVendorX\StoreShipping;
 
 defined('ABSPATH') || exit;
 

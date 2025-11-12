@@ -32,7 +32,6 @@ class Frontend {
 
         // Get all shipping module settings
         $settings = MultiVendorX()->setting->get_setting('shipping_modules');
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: settings: " . var_export($settings, true) . "\n", FILE_APPEND);
 
         // Check if country-wise shipping is enabled
         $country_shipping_enabled = isset($settings['country-wise-shipping']['enable']) 
