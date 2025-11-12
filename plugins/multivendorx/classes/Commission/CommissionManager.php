@@ -475,7 +475,6 @@ class CommissionManager {
      */
     public function calculate_commission_refunds( $vendor_order, $refund_id ) {
         global $wpdb;
-        // $refund = new \WC_Order_Refund( $refund_id );
         $commission_id = $vendor_order->get_meta( 'multivendorx_commission_id', true );
         $store_id = $vendor_order->get_meta( 'multivendorx_store_id', true );
         $vendor = Store::get_store_by_id( $store_id );
@@ -484,21 +483,24 @@ class CommissionManager {
         if ($commission_id) {
 
             $refund_total = 0;
-            foreach ($vendor_order->get_refunds() as $_refund) {
+            // foreach ($vendor_order->get_refunds() as $_refund) {
+            $refunds = $vendor_order->get_refunds();
 
+            if ( ! empty( $refunds ) ) {
+                // Get the last refund (most recent one)
+                $_refund = end( $refunds );
                 $commission_type = MultiVendorX()->setting->get_setting( 'commission_type' );
-
                 $commission_amount = $shipping_amount = $tax_amount = $shipping_tax_amount = $gateway_fee = 0;
 
                 $commission_rates = [];
 
                 if ( $commission_type == 'per_item' ) {
-                    foreach ( $_refund->get_items() as $item_id => $item ) {
-                        $refund_amount = $item['line_total'];
-
+                    foreach ( $vendor_order->get_items() as $item_id => $item ) {
+                        $refund_amount = $this->get_item_refunded_total( $vendor_order, $item_id );
                         $product_id = $item['variation_id'] ? $item['variation_id'] : $item['product_id'];
 
                         $item_commission = $this->get_item_commission( $product_id, $item_id, $item, $vendor_order, $vendor, $refund_amount );
+                        
                         $commission_values = $this->get_commission_amount( $product_id, $item, $vendor );
                         $commission_rate = [
                             'mode' => 'store',
@@ -517,8 +519,8 @@ class CommissionManager {
                         if (array_key_exists('rule_type', $row)) {  
                             switch ($row['rule_type']) {
                                 case 'order_value':
-                                    $order_total = (float) $vendor_order->get_total();
-        
+                                    $order_total = (float) ($vendor_order->get_total() - $vendor_order->get_total_refunded());
+
                                     if (
                                         ($row['rule'] === 'less_than'  && $order_total <= (float) $row['order_value']) ||
                                         ($row['rule'] === 'more_than' && $order_total >  (float) $row['order_value'])
@@ -530,7 +532,8 @@ class CommissionManager {
         
                                 case 'price':
                                 case 'quantity':
-                                    foreach ($_refund->get_items() as $item_id => $item) {
+                                    foreach ( $vendor_order->get_items() as $item_id => $item ) {
+                                        $refund_amount = $this->get_item_refunded_total( $vendor_order, $item_id );
                                         // $line_total = $order->get_item_subtotal($item, false, false) * $item['qty'];
                                         $store_coupon = false;
                                         if ( $vendor_order->get_coupon_codes() ) {
@@ -545,9 +548,9 @@ class CommissionManager {
                                         }
 
                                         if ( MultiVendorX()->setting->get_setting( 'commission_include_coupon' ) == 'seperate' && empty( MultiVendorX()->setting->get_setting( 'admin_coupon_excluded' ) ) && !$store_coupon ) {
-                                            $line_total = ($vendor_order->get_item_total( $item, false, false ) - $item['line_total']) * $item['qty'];
+                                            $line_total = ($vendor_order->get_item_total( $item, false, false ) - $refund_amount) * $item['qty'];
                                         } else {
-                                            $line_total = ($vendor_order->get_item_subtotal( $item, false, false ) - $item['line_total']) * $item['qty'];
+                                            $line_total = ($vendor_order->get_item_subtotal( $item, false, false ) - $refund_amount) * $item['qty'];
                                         }
         
                                         $base_value = $row['rule_type'] === 'price'
@@ -576,7 +579,8 @@ class CommissionManager {
 
                     if ($commission_amount <= 0) {
                         $default_store_order_commission = reset($commission_per_store_order);                    
-                        $commission_amount = (float) ($vendor_order->get_total() - $_refund->get_amount()) * ((float) $default_store_order_commission['commission_percentage'] / 100) + (float) $default_store_order_commission['commission_fixed'];
+                        $commission_amount = (float) ($vendor_order->get_total() - $vendor_order->get_total_refunded()) * ((float) $default_store_order_commission['commission_percentage'] / 100) + (float) $default_store_order_commission['commission_fixed'];
+                        
                     }
 
                 }
@@ -606,13 +610,46 @@ class CommissionManager {
             }
 
             $commission = CommissionUtil::get_commission_db($commission_id);
-            $amount = $commission->commission_amount - $refund_total;
+            $amount = $commission->commission_amount - $commission_amount;
 
             if ( $amount == 0  ) {
                 $status = 'refunded'; 
             } else {
                 $status = 'partially_refunded';
             }
+
+            foreach ( $vendor_order->get_refunds() as $refund ) {
+
+                // Shipping refund total
+                if ( ! empty( MultiVendorX()->setting->get_setting('give_shipping') ) ) {
+                    foreach ( $refund->get_items( 'shipping' ) as $shipping_item ) {
+                        $shipping_amount += abs( (float) $shipping_item->get_total() );
+                    }
+                }
+
+                // Tax refund calculation
+                foreach ( $refund->get_items( 'tax' ) as $tax_item ) {
+
+                    if ( MultiVendorX()->setting->get_setting('give_tax') === 'full_tax' && MultiVendorX()->setting->get_setting('give_shipping') ) {
+                        $tax_amount         += abs( (float) $tax_item->get_tax_total() );
+                        $shipping_tax_amount += abs( (float) $tax_item->get_shipping_tax_total() );
+
+                    } elseif ( MultiVendorX()->setting->get_setting('give_tax') === 'full_tax' ) {
+                        $tax_amount         += abs( (float) $tax_item->get_tax_total() );
+                        $shipping_tax_amount += 0;
+
+                    } elseif ( MultiVendorX()->setting->get_setting('give_tax') === 'commision_based_tax' ) {
+                        $tax_rate_id = $tax_item->get_rate_id();
+                        $tax_percent = \WC_Tax::get_rate_percent( $tax_rate_id );
+                        $tax_rate    = str_replace( '%', '', $tax_percent );
+
+                        if ( $tax_rate ) {
+                            $tax_amount = ( $commission_amount * $tax_rate ) / 100;
+                        }
+                    }
+                }
+            }
+
             $commission_total = (float) $commission_amount + (float) $shipping_amount + (float) $tax_amount + (float) $shipping_tax_amount - (float) $gateway_fee;
 
             $data = [
@@ -622,16 +659,28 @@ class CommissionManager {
                 'total_order_amount'    => $vendor_order->get_total(),
                 'commission_amount'     => $commission_amount,
                 'gateway_fee'           => $gateway_fee,
-                // 'shipping_amount'       => $shipping_amount,
-                // 'tax_amount'            => $tax_amount,
-                // 'shipping_tax_amount'   => $shipping_tax_amount,
+                'shipping_amount'       => $shipping_amount,
+                'tax_amount'            => $tax_amount,
+                'shipping_tax_amount'   => $shipping_tax_amount,
                 'discount_amount'       => $vendor_order->get_discount_total(),
                 'commission_total'      => $commission_total,
-                'commission_refunded'   => $refund_total,
+                'commission_refunded'   => $commission->commission_refunded + ((float) $commission->commission_total - $commission_total),
                 'status'                => $status
             ];
 
             $format = [ "%d", "%d", "%d", "%f", "%f", "%f", "%f", "%f", "%f", "%s" ];
+
+            $filtered = apply_filters(
+                'multivendorx_before_commission_insert',
+                [
+                    'data'   => $data,
+                    'format' => $format,
+                ],
+                $vendor, $commission_amount
+            );
+            
+            $data   = $filtered['data'];
+            $format = $filtered['format'];
         
             $wpdb->update( $wpdb->prefix . Utill::TABLES['commission'], $data, ['ID' => $commission_id], $format );
 
@@ -644,7 +693,7 @@ class CommissionManager {
                 'commission_id'    => $commission_id ? (int) $commission_id : null,
                 'entry_type'       => 'Dr',
                 'transaction_type' => 'Refund',
-                'amount'           => abs($refund_total),
+                'amount'           => abs((float) $commission->commission_total - $commission_total),
                 'currency'         => get_woocommerce_currency(),
                 'payment_method'   => $store->get_meta('payment_method')??'',
                 'narration'        => "Withdrawal via refund",
@@ -703,4 +752,24 @@ class CommissionManager {
                  */
         }
     }
+
+
+    public function get_item_refunded_total( $order, $item_id ) {
+        $refunded_total = 0;
+
+        // Loop through all refunds of this order
+        foreach ( $order->get_refunds() as $refund ) {
+            // Each refund has refunded items
+            foreach ( $refund->get_items() as $refund_item ) {
+                // Check if this refund line refers to our original item
+                $refunded_item_id = $refund_item->get_meta( '_refunded_item_id', true );
+                if ( (int) $refunded_item_id === (int) $item_id ) {
+                    $refunded_total += abs( (float) $refund_item->get_total() );
+                }
+            }
+        }
+
+        return $refunded_total;
+    }
+
 }

@@ -1,0 +1,30 @@
+12/11/2025 08:52:53:orders: settings: array (
+  'country-wise-shipping' => 
+  array (
+    'enable' => true,
+  ),
+  'distance-based-shipping' => 
+  array (
+    'enable' => true,
+  ),
+)
+12/11/2025 08:52:53:orders: settings: array (
+  'country-wise-shipping' => 
+  array (
+    'enable' => true,
+  ),
+  'distance-based-shipping' => 
+  array (
+    'enable' => true,
+  ),
+)
+12/11/2025 08:53:48:orders: settings: array (
+  'country-wise-shipping' => 
+  array (
+    'enable' => true,
+  ),
+  'distance-based-shipping' => 
+  array (
+    'enable' => true,
+  ),
+)

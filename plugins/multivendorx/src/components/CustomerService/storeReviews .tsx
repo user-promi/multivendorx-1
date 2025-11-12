@@ -468,8 +468,8 @@ const StoreReviews: React.FC = () => {
         <>
             <div className="card-header">
                 <div className="left">
-                    <div className="title">Store Reviews</div>
-                    <div className="des">Shared by customers</div>
+                    <div className="title">Store reviews at a glance</div>
+                    <div className="des">Track and manage reviews for all stores.</div>
                 </div>
                 <div className="right">
                     <i className="adminlib-more-vertical"></i>
