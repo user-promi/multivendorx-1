@@ -5,7 +5,7 @@ import { __ } from "@wordpress/i18n";
 import { CalendarInput, Table, TableCell } from "zyra";
 import { ColumnDef, RowSelectionState, PaginationState } from "@tanstack/react-table";
 import OrderDetails from "./order-details";
-import {formatCurrency} from '../services/commonFunction';
+import { formatCurrency } from '../services/commonFunction';
 
 // Type declarations
 type OrderStatus = {
@@ -480,33 +480,29 @@ const Orders: React.FC = () => {
         <>
             {!isViewOrder && !selectedOrder && (
                 <>
-                    {/* <div className="page-title-wrapper">
+                    <div className="page-title-wrapper">
                         <div className="page-title">
                             <div className="title">Orders</div>
                             <div className="des">Manage your store information and preferences</div>
                         </div>
-                    </div> */}
-                    <div className="row">
-                        <div className="column">
-                            <Table
-                                data={data}
-                                columns={columns as ColumnDef<Record<string, any>, any>[]}
-                                rowSelection={rowSelection}
-                                onRowSelectionChange={setRowSelection}
-                                defaultRowsPerPage={10}
-                                pageCount={pageCount}
-                                pagination={pagination}
-                                onPaginationChange={setPagination}
-                                perPageOption={[10, 25, 50]}
-                                handlePagination={requestApiForData}
-                                totalCounts={totalRows}
-                                searchFilter={searchFilter}
-                                realtimeFilter={realtimeFilter}
-                                typeCounts={orderStatus}
-                                bulkActionComp={() => <BulkAction />}
-                            />
-                        </div>
                     </div>
+                    <Table
+                        data={data}
+                        columns={columns as ColumnDef<Record<string, any>, any>[]}
+                        rowSelection={rowSelection}
+                        onRowSelectionChange={setRowSelection}
+                        defaultRowsPerPage={10}
+                        pageCount={pageCount}
+                        pagination={pagination}
+                        onPaginationChange={setPagination}
+                        perPageOption={[10, 25, 50]}
+                        handlePagination={requestApiForData}
+                        totalCounts={totalRows}
+                        searchFilter={searchFilter}
+                        realtimeFilter={realtimeFilter}
+                        typeCounts={orderStatus}
+                        bulkActionComp={() => <BulkAction />}
+                    />
                 </>
             )}
 

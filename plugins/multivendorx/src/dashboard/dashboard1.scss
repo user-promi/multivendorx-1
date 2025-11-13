@@ -55,6 +55,12 @@ a {
         }
     }
 
+    .dashboard-tabs {
+        height: 87vh;
+        position: relative;
+
+    }
+
     ul {
         padding: 0;
         max-height: 80vh;
@@ -104,15 +110,42 @@ a {
             // a.tab:hover {
             //     background-color: #f3f2f3;
             // }
-            &.active,
-            &:hover {
-                border-right: 0.25rem solid var(--themeColor);
-                color: var(--themeColor);
 
-                a {
-                    // background-color: var(--themeColor);
+            &:not(.active) {
+                a:hover {
                     color: var(--themeColor);
+                    background: color-mix(in srgb, var(--themeColor) 10%, transparent);
                 }
+            }
+
+            &.active {
+                // border-right: 0.25rem solid var(--themeColor);
+                // color: #fff;
+
+                a,
+                a:hover {
+                    background-color: var(--themeColor);
+                    color: #fff;
+                }
+            }
+        }
+
+        li:has(.adminlib-setting) {
+            position: absolute;
+            width: 100%;
+            box-sizing: border-box;
+            bottom: 0;
+            color: var(--theme-color);
+
+            &.active {
+                a {
+                    color: var(--theme-color);
+                }
+            }
+
+            a,
+            a:hover {
+                color: var(--theme-color);
             }
         }
     }
@@ -406,7 +439,7 @@ a {
         }
 
         &.theme-bg {
-            background: $theme-color1;
+            background: var(--theme-color1);
 
             color: #fff;
 
@@ -509,7 +542,7 @@ a {
             display: flex;
             align-items: center;
             gap: 1rem;
-            padding: 0.5rem;
+            padding: 0.5rem 0;
             transition: all 0.5s ease;
 
             .product-name {
@@ -562,11 +595,60 @@ a {
         }
     }
 
+    .activity-log {
+        border-left: 0.063rem solid var(--themeColor);
+
+        .activity {
+            padding: 0 0 1.45rem 1.313rem;
+            position: relative;
+
+            .title {
+                font-size: 1.063rem;
+                font-weight: 500;
+                line-height: 1rem;
+            }
+
+            .des {
+                color: #0000006e;
+                padding-top: 0.5rem;
+            }
+
+            &::before {
+                position: absolute;
+                content: "";
+                width: 0.813rem;
+                height: 0.813rem;
+                border-radius: 50%;
+                background: var(--themeColor);
+                top: 0;
+                left: -0.4rem;
+                outline: 0.313rem solid #fff;
+            }
+
+            // &:after{
+            //     position: absolute;
+            //     content: "";
+            //     background: var(--themeColor);
+            //     width: 0.063rem;
+            //     height: 100%;
+            //     left: 0;
+            //     top: 0;
+            // }
+            span {
+                position: absolute;
+                right: 0;
+                top: 0;
+                color: #00000078;
+                font-weight: 500;
+            }
+        }
+    }
+
     // cart header start  (common card-header style)
     .card-header {
         display: flex;
         justify-content: space-between;
-        padding-bottom: 1rem;
+        padding-bottom: 1.5rem;
 
         .left {
             .title {
@@ -662,6 +744,7 @@ a {
 
         .analytics-icon {
             margin-top: 0.45rem;
+
             i {
                 padding: 0.5rem;
                 font-size: 1.5rem;
@@ -673,19 +756,19 @@ a {
         }
 
         .theme-color1 {
-            background: $theme-color1;
+            background: var(--theme-color1);
         }
 
         .theme-color2 {
-            background: $theme-color2;
+            background: var(--theme-color2);
         }
 
         .theme-color3 {
-            background: $theme-color3;
+            background: var(--theme-color3);
         }
 
         .theme-color4 {
-            background: $theme-color4;
+            background: var(--theme-color4);
         }
 
         .details {
@@ -710,34 +793,34 @@ a {
         }
 
         &:has(.theme-color1) {
-            background: color-mix(in srgb, $theme-color1 15%, transparent);
+            background: color-mix(in srgb, var(--theme-color1) 15%, transparent);
 
             .report span {
-                color: $theme-color1;
+                color: var(--theme-color1);
             }
         }
 
         &:has(.theme-color2) {
-            background: color-mix(in srgb, $theme-color2 15%, transparent);
+            background: color-mix(in srgb, var(--theme-color2) 15%, transparent);
 
             .report span {
-                color: $theme-color2;
+                color: var(--theme-color2);
             }
         }
 
         &:has(.theme-color3) {
-            background: color-mix(in srgb, $theme-color3 15%, transparent);
+            background: color-mix(in srgb, var(--theme-color3) 15%, transparent);
 
             .report span {
-                color: $theme-color3;
+                color: var(--theme-color3);
             }
         }
 
         &:has(.theme-color4) {
-            background: color-mix(in srgb, $theme-color4 15%, transparent);
+            background: color-mix(in srgb, var(--theme-color4) 15%, transparent);
 
             .report span {
-                color: $theme-color3;
+                color: var(--theme-color4);
             }
         }
 
@@ -1183,35 +1266,106 @@ a {
 
 // top product start
 .top-products {
+    tr {
+        td:nth-child(1) {
+            width: 10%;
+        }
+
+        td:nth-child(2) {
+            width: 35%;
+        }
+
+        td:nth-child(3) {
+            width: 40%;
+        }
+
+        td:nth-child(4) {
+            width: 15%;
+        }
+    }
+}
+
+// top customer
+.top-customer-wrapper {
+    .customer {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.625rem 0;
+
+        .left-section {
+            display: flex;
+            gap: 0.813rem;
+
+            .profile {
+                margin-top: 0.313rem;
+
+                i {
+                    padding: 0.5rem;
+                    background: var(--theme-color1);
+                    margin-top: 0.313rem;
+                    font-size: 1.25rem;
+                    color: #fff;
+                    border-radius: 50%;
+                }
+            }
+
+            .name {
+                font-size: 1.063rem;
+                font-weight: 500;
+                line-height: 1rem;
+            }
+
+            .order-number {
+                font-size: 0.95rem;
+                padding-top: 0.4rem;
+                color: #0000006b;
+            }
+        }
+
+        .price-section {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+    }
+}
+
+// review start
+.review-wrapper {
+    .review {
+        padding: 1rem;
+        border: $border-light-small;
+        border-radius: 0.13rem;
+
+        .details {
+            .title {
+                font-size: 1.125rem;
+                font-weight: 500;
+                line-height: 1rem;
+                margin-bottom: 0.625rem;
+            }
+
+            .des {
+                font-size: 0.95rem;
+                color: #0000008a;
+                padding-top: 0.5rem;
+                line-height: 1.063rem;
+            }
+        }
+    }
+}
+
+.table-wrapper {
     table {
         width: 100%;
         border-collapse: collapse;
 
-        tr {
-            td:nth-child(1) {
-                width: 10%;
-            }
+        td {
+            padding: 0.625rem 0;
+            border-bottom: $border-light-small;
+        }
 
-            td:nth-child(2) {
-                width: 35%;
-            }
-
-            td:nth-child(3) {
-                width: 40%;
-            }
-
-            td:nth-child(4) {
-                width: 15%;
-            }
-
-            td {
-                padding: 0.625rem 0;
-                border-bottom: $border-light-small;
-            }
-
-            &.header {
-                color: #0000006b;
-            }
+        &.header {
+            color: #0000006b;
         }
     }
 }
@@ -1242,11 +1396,11 @@ a {
 
     &.theme-color1 {
         div {
-            background: color-mix(in srgb, $theme-color1 15%, transparent);
+            background: color-mix(in srgb, var(--theme-color1) 15%, transparent);
 
 
             &::after {
-                background: $theme-color1;
+                background: var(--theme-color1);
 
             }
         }
@@ -1254,11 +1408,11 @@ a {
 
     &.theme-color2 {
         div {
-            background: color-mix(in srgb, $theme-color2 15%, transparent);
+            background: color-mix(in srgb, var(--theme-color2) 15%, transparent);
 
 
             &::after {
-                background: $theme-color2;
+                background: var(--theme-color2);
 
             }
         }
@@ -1267,11 +1421,11 @@ a {
 
     &.theme-color3 {
         div {
-            background: color-mix(in srgb, $theme-color3 15%, transparent);
+            background: color-mix(in srgb, var(--theme-color3) 15%, transparent);
 
 
             &::after {
-                background: $theme-color3;
+                background: var(--theme-color3);
 
             }
         }
@@ -1279,11 +1433,11 @@ a {
 
     &.theme-color4 {
         div {
-            background: color-mix(in srgb, $theme-color4 15%, transparent);
+            background: color-mix(in srgb, var(--theme-color4) 15%, transparent);
 
 
             &::after {
-                background: $theme-color4;
+                background: var(--theme-color4);
 
             }
         }
