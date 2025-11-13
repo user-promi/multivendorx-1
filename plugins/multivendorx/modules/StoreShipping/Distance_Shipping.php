@@ -123,59 +123,61 @@ class Distance_Shipping extends \WC_Shipping_Method {
      */
     public function calculate_shipping( $package = [] ) {
         if ( empty( $package['contents'] ) ) return;
-    
         $products = $package['contents'];
-        $store_id = $package['store_id'] ?? '';
-    
-        // Check if store ID exists and shipping is enabled
-        if ( empty( $store_id ) || ! self::is_shipping_enabled_for_seller( $store_id ) ) {
-            return;
-        }
-
         $mvx_user_location_lat = $package['mvx_user_location_lat'] ?? '';
         $mvx_user_location_lng = $package['mvx_user_location_lng'] ?? '';
 
         if ( ! $mvx_user_location_lat || ! $mvx_user_location_lng ) return;
 
-        $store = new \MultiVendorX\Store\Store( $store_id );
-        $meta  = $store->meta_data;
+        $seller_products = [];
 
-        $store_lat            = $meta['location_lat'] ?? 0;
-        $store_lng            = $meta['location_lng'] ?? 0;
-        $default_cost         = floatval( $meta['distance_default_cost'] ?? 0 );
-        $max_distance         = floatval( $meta['distance_max_km'] ?? 0 );
-        $local_pickup_cost    = floatval( $meta['distance_local_pickup_cost'] ?? 0 );
-        $free_shipping_amount = floatval( $meta['_free_shipping_amount'] ?? 0 );
-        $distance_rules       = isset( $meta['distance_rules'] ) ? json_decode( $meta['distance_rules'], true ) : [];
-    
-        if ( ! $store_lat || ! $store_lng ) return;
-    
-        $distance = self::mvx_get_latlng_distance( $mvx_user_location_lat, $mvx_user_location_lng, $store_lat, $store_lng, 'k' );
-        if ( ! $distance ) return;
-    
-        if ( $max_distance && $distance > $max_distance ) {
-            wc_add_notice( __( 'Some cart item(s) are not deliverable to your location.', 'multivendorx' ), 'error' );
-            return;
+        foreach ( $products as $product ) {
+            $store_id = get_post_meta( $product['product_id'], 'multivendorx_store_id', true );
+            if ( ! empty( $store_id ) && self::is_shipping_enabled_for_seller( $store_id ) ) {
+                $seller_products[ (int) $store_id ][] = $product;
+            }
         }
 
-        $store_amount = $this->calculate_per_seller( $products, $distance, $default_cost, $distance_rules, $free_shipping_amount, true );
-    
-        $tax_rate = ( $this->tax_status == 'none' ) ? false : '';
-        $tax_rate = apply_filters( 'multivendorx_is_apply_tax_on_shipping_rates', $tax_rate );
-    
-        $rate = [
-            'id'    => $this->id . ':' . $store_id,
-            'label' => $this->title,
-            'cost'  => $store_amount,
-            'taxes' => $tax_rate,
-        ];
-    
-        $this->add_rate( $rate );
+        if ( empty( $seller_products ) ) return;
 
-        // Add local pickup if set
-        $this->maybe_add_local_pickup_rate( $store_id, $local_pickup_cost, $tax_rate );
+        foreach ( $seller_products as $store_id => $products ) {
+            $store = new \MultiVendorX\Store\Store( $store_id );
+            $meta  = $store->meta_data;
+
+            $store_lat            = $meta['location_lat'] ?? 0;
+            $store_lng            = $meta['location_lng'] ?? 0;
+            $default_cost         = floatval( $meta['distance_default_cost'] ?? 0 );
+            $max_distance         = floatval( $meta['distance_max_km'] ?? 0 );
+            $local_pickup_cost    = floatval( $meta['distance_local_pickup_cost'] ?? 0 );
+            $free_shipping_amount = floatval( $meta['_free_shipping_amount'] ?? 0 );
+            $distance_rules       = isset($meta['distance_rules']) ? json_decode($meta['distance_rules'], true) : [];
+
+            if ( ! $store_lat || ! $store_lng ) continue;
+
+            $distance = self::mvx_get_latlng_distance( $mvx_user_location_lat, $mvx_user_location_lng, $store_lat, $store_lng, 'k' );
+            if ( ! $distance ) continue;
+
+            if ( $max_distance && $distance > $max_distance ) {
+                wc_add_notice( __( 'Some cart item(s) are not deliverable to your location.', 'multivendorx' ), 'error' );
+                continue;
+            }
+
+            $store_amount = $this->calculate_per_seller( $products, $distance, $default_cost, $distance_rules, $free_shipping_amount, true );
+
+            $tax_rate = ( $this->tax_status == 'none' ) ? false : '';
+            $tax_rate = apply_filters( 'multivendorx_is_apply_tax_on_shipping_rates', $tax_rate );
+
+            $rate = [
+                'id'    => $this->id . ':' . $store_id,
+                'label' => $this->title,
+                'cost'  => $store_amount,
+                'taxes' => $tax_rate,
+            ];
+            $this->add_rate( $rate );
+
+            $this->maybe_add_local_pickup_rate( $store_id, $local_pickup_cost, $tax_rate );
+        }
     }
-    
 
     /**
      * Add local pickup rate
