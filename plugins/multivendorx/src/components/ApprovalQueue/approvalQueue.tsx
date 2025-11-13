@@ -23,29 +23,88 @@ const ApprovalQueue = () => {
     const settings = appLocalizer.settings_databases_value || {};
 
     const refreshCounts = async () => {
-        try {
-            const [storeRes, productRes, couponRes, refundRes, abuseRes, withdrawRes, deactivateRes] = await Promise.all([
-                axios.get(getApiLink(appLocalizer, 'store'), { params: { count: true, status: 'pending' }, headers: { 'X-WP-Nonce': appLocalizer.nonce } }),
-                axios.get(`${appLocalizer.apiUrl}/wc/v3/products`, { params: { per_page: 1, meta_key: 'multivendorx_store_id', status: 'pending' }, headers: { 'X-WP-Nonce': appLocalizer.nonce } }),
-                axios.get(`${appLocalizer.apiUrl}/wc/v3/coupons`, { params: { per_page: 1, meta_key: 'multivendorx_store_id', status: 'pending' }, headers: { 'X-WP-Nonce': appLocalizer.nonce } }),
-                axios.get(`${appLocalizer.apiUrl}/wc/v3/orders`, { params: { meta_key: 'multivendorx_store_id', status: 'refund-requested' }, headers: { 'X-WP-Nonce': appLocalizer.nonce } }),
-                axios.get(getApiLink(appLocalizer, 'report-abuse'), { params: { count: true }, headers: { 'X-WP-Nonce': appLocalizer.nonce } }),
-                axios.get(getApiLink(appLocalizer, 'store'), { params: { count: true, pending_withdraw: true }, headers: { 'X-WP-Nonce': appLocalizer.nonce } }),
-                axios.get(getApiLink(appLocalizer, 'store'), { params: { count: true, deactivate: true }, headers: { 'X-WP-Nonce': appLocalizer.nonce } })
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'store'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { count: true, status: 'pending' },
+        })
+            .then((response) => {
+                setStoreCount(response.data || 0);
+            })
+            .catch(() => { });
 
-            ]);
-    
-            setStoreCount(storeRes.data || 0);
-            setProductCount(parseInt(productRes.headers['x-wp-total'], 10) || 0);
-            setCouponCount(parseInt(couponRes.headers['x-wp-total'], 10) || 0);
-            setRefundCount(parseInt(refundRes.headers['x-wp-total'], 10) || 0);
-            setReportAbuseCount(abuseRes.data || 0);
-            setWithdrawCount(withdrawRes.data || 0);
-            setDeactivateCount(deactivateRes.data || 0);
-    
-        } catch (err) {
-            console.error(err);
-        }
+        axios.get(`${appLocalizer.apiUrl}/wc/v3/products`, {
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: {
+                per_page: 1, meta_key: 'multivendorx_store_id', status: 'pending'
+            },
+        })
+            .then((response) => {
+                const totalCount = parseInt(response.headers['x-wp-total'], 10) || 0;
+                setProductCount(totalCount);
+            })
+            .catch(() => { });
+        axios
+            .get(`${appLocalizer.apiUrl}/wc/v3/coupons`, {
+                headers: { 'X-WP-Nonce': appLocalizer.nonce },
+                params: { per_page: 1, meta_key: 'multivendorx_store_id', status: 'pending' },
+            })
+            .then((response) => {
+                const totalCount = parseInt(response.headers['x-wp-total'], 10) || 0;
+                setCouponCount(totalCount);
+            })
+            .catch(() => { });
+
+        axios({
+            method: 'GET',
+            url: `${appLocalizer.apiUrl}/wc/v3/orders`,
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { meta_key: 'multivendorx_store_id', refund_status: 'refund_request', page: 1, per_page: 1 },
+        })
+            .then((response) => {
+                const total = Number(response.headers['x-wp-total']) || 0;
+                setRefundCount(total);
+            })
+            .catch(() => {
+            });
+
+        axios
+            .get(getApiLink(appLocalizer, 'report-abuse'), {
+                headers: { 'X-WP-Nonce': appLocalizer.nonce },
+                params: { count: true },
+            })
+            .then((res) => {
+                const total = res.data || 0;
+                setReportAbuseCount(total);
+            })
+            .catch(() => {
+
+            });
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'store'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { count: true, pending_withdraw: true },
+        })
+            .then((response) => {
+                setWithdrawCount(response.data || 0);
+            })
+            .catch(() => {
+
+            });
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'store'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { count: true, deactivate: true },
+        })
+            .then((response) => {
+                setDeactivateCount(response.data || 0);
+            })
+            .catch(() => {
+
+            });
     };
 
     const tabs = [

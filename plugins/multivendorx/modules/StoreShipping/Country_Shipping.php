@@ -128,6 +128,10 @@ class Country_Shipping extends \WC_Shipping_Method {
     }
 
     public function calculate_shipping( $package = array() ) {
+        // $store_id = $package['store_id'] ?? 'unknown';
+        // file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:country : " . var_export($store_id, true) . "\n", FILE_APPEND);
+        // file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:distance : " . var_export($package, true) . "\n", FILE_APPEND);
+
         $products = $package['contents'];
         $destination_country = $package['destination']['country'] ?? '';
         $destination_state   = $package['destination']['state'] ?? '';
