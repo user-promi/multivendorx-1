@@ -60,22 +60,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
                 'slug' => 'products',
                 'icon' => 'adminlib-single-product',
                 'submenu' => array(),
-                /*
-                'submenu' => array(
-                    array(
-                        'key'  => 'products',
-                        'name' => 'All Products',
-                        'slug' => 'products',
-                        'capability' => ['read_shop_orders', 'edit_shop_orders', 'delete_shop_orders']
-                    ), array(
-                        'key'  => 'edit',
-                        'name' => 'Edit Product',
-                        'slug' => 'edit',
-                        'capability' => ['read_shop_orders', 'edit_shop_orders', 'delete_shop_orders']
-                    ),
-                ),*/
                 'capability' => array('manage_products'),
-                'capability-edit' => array('manage_products'),
             ),
             'coupons' => array(
                 'name' => 'Coupons',
@@ -193,88 +178,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
                 'slug' => 'settings',
                 'icon' => 'adminlib-setting',
                 'capability' => array('read_products'),
-                // 'submenu' => array(
-                // array(
-                // 'key'  => 'general',
-                // 'name' => 'General',
-                // 'slug' => 'general',
-                // 'icon'    => 'adminlib-cart',
-                // 'capability' => ['read_products', 'edit_products', 'delete_products']
-                // ),
-                // array(
-                // 'key'  => 'appearance',
-                // 'name' => 'Appearance',
-                // 'slug' => 'appearance',
-                // 'icon'    => 'adminlib-cart',
-                // 'capability' => ['read_products', 'edit_products', 'delete_products']
-                // ),
-                // array(
-                // 'key'  => 'store-address-location',
-                // 'name' => 'Business Address & Location',
-                // 'slug' => 'store-address-location',
-                // 'icon'    => 'adminlib-cart',
-                // 'capability' => ['read_products', 'edit_products', 'upload_files']
-                // ),
-                // array(
-                // 'key'  => 'contact-information',
-                // 'name' => 'Contact Information',
-                // 'slug' => 'contact-information',
-                // 'icon'    => 'adminlib-cart',
-                // 'capability' => ['read_products', 'edit_products', 'upload_files']
-                // ),
-                // array(
-                // 'key'  => 'social-media',
-                // 'name' => 'Social Media',
-                // 'slug' => 'social-media',
-                // 'icon'    => 'adminlib-cart',
-                // 'capability' => ['read_products', 'edit_products', 'upload_files']
-                // ),
-                // array(
-                // 'key'  => 'payment-configuration',
-                // 'name' => 'Payment',
-                // 'slug' => 'payment-configuration',
-                // 'icon'    => 'adminlib-cart',
-                // 'capability' => ['read_products', 'edit_products', 'upload_files']
-                // ),
-                // array(
-                // 'key'  => 'shop-policies',
-                // 'name' => 'Policies',
-                // 'slug' => 'shop-policies',
-                // 'icon'    => 'adminlib-cart',
-                // 'capability' => ['read_products', 'edit_products', 'upload_files']
-                // ),
-                // array(
-                // 'key'  => 'privacy',
-                // 'name' => 'Privacy',
-                // 'slug' => 'privacy',
-                // 'icon'    => 'adminlib-cart',
-                // 'capability' => ['read_products', 'edit_products', 'upload_files']
-                // ),
-                // array(
-                // 'key'  => 'seo_visibility',
-                // 'name' => 'SEO & visibility',
-                // 'slug' => 'seo_visibility',
-                // 'icon'    => 'adminlib-cart',
-                // 'capability' => ['read_products', 'edit_products', 'upload_files']
-                // ),
-                // array(
-                // 'key'  => 'shipping',
-                // 'name' => 'Shipping',
-                // 'slug' => 'shipping',
-                // 'icon'    => 'adminlib-cart',
-                // 'capability' => ['read_products', 'edit_products', 'upload_files']
-                // ),
-                // ),
-                'capability' => array('manage_products'),
-            ),
-
-            'view-notifications' => array(
-                'name' => '',
-                'icon' => '',
-                'slug' => 'view-notifications',
-                'submenu' => array(),
-                'capability' => array('edit_products'),
-            ),
+            )
         );
 
         $saved_endpoints = MultiVendorX()->setting->get_setting('menu_manager');
@@ -451,6 +355,16 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
             'content' => '',
         ];
 
+        $other_endpoints = apply_filters('dashboard_other_endpoints', [
+            'view-notifications' => array(
+                'name'       => '',
+                'icon'       => '',
+                'slug'       => 'view-notifications',
+                'submenu'    => array(),
+                'capability' => array('edit_products'),
+            )
+        ]);
+
         $current_user = wp_get_current_user();
         $dashboard_array['store_ids'] = StoreUtil::get_stores_from_user_id($current_user->ID);
         $dashboard_array['active_store'] = get_user_meta($current_user->ID, 'multivendorx_active_store', true);
@@ -502,6 +416,11 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
             }
 
             break;
+        }
+
+        if (!empty($other_endpoints[$current_page])) {
+            $div_id = $current_page;
+            $allowed = current_user_can(implode(',', $other_endpoints[$current_page]['capability']));
         }
 
         switch ($store_status) {
