@@ -19,10 +19,7 @@ class OrderManager {
     private $container = array();
     public function __construct() {
         $this->init_classes();
-        // Filter the query of order table before it is fetch.
-        if (is_admin() || is_account_page()) {
-            add_filter('woocommerce_order_query_args', [$this, 'set_filter_order_query']);
-        }
+        add_action( 'init', [$this, 'filter_woocommerce_order_query']);
     }
 
     /**
@@ -36,6 +33,12 @@ class OrderManager {
         );
     }
 
+    public function filter_woocommerce_order_query() {
+        // Filter the query of order table before it is fetch.
+        if (is_admin() || is_account_page()) {
+            add_filter('woocommerce_order_query_args', [$this, 'set_filter_order_query']);
+        }
+    }
 
     /**
      * A special function that filter the query in time of getting all order.
