@@ -122,13 +122,6 @@ class Distance_Shipping extends \WC_Shipping_Method {
      * Calculate shipping for each store
      */
     public function calculate_shipping( $package = [] ) {
-        $this->add_rate([
-            'id' => $this->id . ':test1',
-            'label' => 'Test Shipping1',
-            'cost' => 100,
-            'taxes' => ''
-        ]);
-
         if ( empty( $package['contents'] ) ) return;
     
         $products = $package['contents'];
@@ -141,9 +134,6 @@ class Distance_Shipping extends \WC_Shipping_Method {
 
         $mvx_user_location_lat = $package['mvx_user_location_lat'] ?? '';
         $mvx_user_location_lng = $package['mvx_user_location_lng'] ?? '';
-
-        // file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:lat : " . var_export($mvx_user_location_lat, true) . "\n", FILE_APPEND);
-        // file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: :lang " . var_export($mvx_user_location_lng, true) . "\n", FILE_APPEND);
 
         if ( ! $mvx_user_location_lat || ! $mvx_user_location_lng ) return;
 
@@ -184,13 +174,6 @@ class Distance_Shipping extends \WC_Shipping_Method {
 
         // Add local pickup if set
         $this->maybe_add_local_pickup_rate( $store_id, $local_pickup_cost, $tax_rate );
-
-        $this->add_rate([
-            'id' => $this->id . ':test2',
-            'label' => 'Test Shipping2',
-            'cost' => 100,
-            'taxes' => ''
-        ]);
     }
     
 

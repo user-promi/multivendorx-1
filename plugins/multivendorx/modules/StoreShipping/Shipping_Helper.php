@@ -10,17 +10,22 @@ class Shipping_Helper {
      */
     public static function split_cart_by_store($packages) {
         $new_packages = [];
+
+        // Get user location from session
+        $user_lat = WC()->session->get('_mvx_user_location_lat') ?: '';
+        $user_lng = WC()->session->get('_mvx_user_location_lng') ?: '';
+
         foreach (WC()->cart->get_cart() as $item_key => $item) {
             $product_id = $item['product_id'];
             $store_id   = get_post_meta($product_id, 'multivendorx_store_id', true);
             if (!$store_id) continue;
-    
+
             if (!isset($new_packages[$store_id])) {
                 $new_packages[$store_id] = [
-                    'store_id'        => $store_id,
                     'contents'        => [],
                     'contents_cost'   => 0,
                     'applied_coupons' => WC()->cart->get_applied_coupons(),
+                    'store_id'        => $store_id, // store ID
                     'destination'     => [
                         'country'   => WC()->customer->get_shipping_country(),
                         'state'     => WC()->customer->get_shipping_state(),
@@ -29,14 +34,15 @@ class Shipping_Helper {
                         'address'   => WC()->customer->get_shipping_address(),
                         'address_2' => WC()->customer->get_shipping_address_2(),
                     ],
+                    'mvx_user_location_lat' => $user_lat,
+                    'mvx_user_location_lng' => $user_lng,
                 ];
             }
-    
+
             $new_packages[$store_id]['contents'][$item_key] = $item;
             $new_packages[$store_id]['contents_cost'] += $item['line_total'];
         }
-        // Return as array with store_id preserved in each package
+
         return array_values($new_packages);
     }
-    
 }
