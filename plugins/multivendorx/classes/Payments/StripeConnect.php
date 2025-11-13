@@ -58,8 +58,8 @@ class StripeConnect
     public function handle_oauth_callback() {
         $log_file = plugin_dir_path(__FILE__) . "/error.log";
         file_put_contents($log_file, date("d/m/Y H:i:s") . ": OAUTH_CALLBACK_STARTED\n", FILE_APPEND);
-        $code = filter_input(INPUT_GET, 'code', FILTER_SANITIZE_STRING);
-        $state = filter_input(INPUT_GET, 'state', FILTER_SANITIZE_STRING);
+        $code  = filter_input(INPUT_GET, 'code', FILTER_DEFAULT);
+        $state = filter_input(INPUT_GET, 'state', FILTER_DEFAULT);
         file_put_contents($log_file, date("d/m/Y H:i:s") . ": GET_PARAMS - Code: " . ($code ? 'PRESENT' : 'MISSING') . ", State: " . ($state ? 'PRESENT' : 'MISSING') . "\n", FILE_APPEND);
     
         if (!$code || !$state) {
@@ -159,7 +159,7 @@ class StripeConnect
     /**
      * Get proper redirect URL for dashboard
      */
-    private function get_redirect_url($type, $value) {
+    private function get_redirect_url() {
         // Dynamically build the correct dashboard settings payout URL.
         return StoreUtil::get_endpoint_url('settings') . '#subtab=payout';
     }    
