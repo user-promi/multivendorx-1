@@ -126,7 +126,11 @@ class Setting {
                 'multivendorx_tax_compliance_settings',
                 'multivendorx_custom_css_settings',
                 'multivendorx_single_product_multiple_store_settings',
-                'multivendorx_store_status_control_settings',
+                'multivendorx_pending_approval_settings',
+                'multivendorx_rejected_settings',
+                'multivendorx_permanently_rejected_settings',
+                'multivendorx_under_review_settings',
+                'multivendorx_suspended_settings',
 			)
         );
 
