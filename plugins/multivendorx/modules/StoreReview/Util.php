@@ -243,6 +243,18 @@ class Util {
         if ( !empty( $args['end_date'] ) ) {
             $where[] = "date_created <= '" . esc_sql( $args['end_date'] ) . "'";
         }
+        // 🔹 Filter by overall_rating ("X stars & up" style)
+        if ( isset( $args['overall_rating'] ) && $args['overall_rating'] !== '' ) {
+            $rating = floatval( $args['overall_rating'] );
+
+            // Handle invalid ratings gracefully
+            if ( $rating < 1 ) {
+                $rating = 1;
+            }
+
+            // Flipkart-style filter: show reviews with rating >= selected value
+            $where[] = "overall_rating >= {$rating}";
+        }
 
         // 🔹 Table name (update according to your DB structure)
         $table = $wpdb->prefix . Utill::TABLES['review'];

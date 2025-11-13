@@ -7,92 +7,117 @@
 
 namespace MultiVendorX\StoreShipping;
 
+defined('ABSPATH') || exit;
+
 /**
  * MultiVendorX Module class
  *
- * @class       Module class
- * @version     6.0.0
+ * @class       Module
+ * @version     6.0.1
  * @author      MultiVendorX
  */
 class Module {
     /**
-     * Container contain all helper class
+     * Container for helper classes.
      *
      * @var array
      */
     private $container = array();
 
     /**
-     * Contain reference of the class
+     * Singleton instance.
      *
      * @var Module|null
      */
     private static $instance = null;
 
     /**
-     * Simple class constructor function
+     * Constructor.
      */
     public function __construct() {
         // Init helper classes.
         $this->init_classes();
-         // Register WooCommerce shipping method
-         add_filter('woocommerce_shipping_methods', [ $this, 'register_shipping_method' ]);
+
+        // Ensure all shipping methods are loaded.
+        add_action('woocommerce_shipping_init', [$this, 'include_shipping_classes']);
+
+        // Register all detected shipping methods.
+        add_filter('woocommerce_shipping_methods', [$this, 'register_shipping_methods']);
     }
 
     /**
-     * Init helper classes
-     *
-     * @return void
+     * Init helper classes.
      */
     public function init_classes() {
         $this->container['frontend'] = new Frontend();
-        $this->container['admin'] = new Admin();
+        $this->container['admin']    = new Admin();
     }
 
     /**
-     * Magic getter function to get the reference of class.
-     * Accept class name, If valid return reference, else Wp_Error.
-     *
-     * @param   mixed $class Name of the class to retrieve from the container.
-     * @return  object | \WP_Error
+     * Load all shipping class files dynamically.
      */
-    public function __get( $class ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound
-        if ( array_key_exists( $class, $this->container ) ) {
-            return $this->container[ $class ];
+    public function include_shipping_classes() {
+        $shipping_dir = __DIR__;
+
+        // Load helper if exists.
+        $helper = $shipping_dir . '/Shipping_Helper.php';
+        if (file_exists($helper)) {
+            include_once $helper;
         }
-        return new \WP_Error( sprintf( 'Call to unknown class %s.', $class ) );
+
+        // Auto-load all files that end with _Shipping.php
+        foreach (glob($shipping_dir . '/*_Shipping.php') as $file) {
+            include_once $file;
+        }
     }
 
     /**
-     * Magic setter function to store a reference of a class.
-     * Accepts a class name as the key and stores the instance in the container.
-     *
-     * @param string $class The class name or key to store the instance.
-     * @param object $value The instance of the class to store.
+     * Register shipping methods automatically.
      */
-    public function __set( $class, $value ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound
-        $this->container[ $class ] = $value;
+    public function register_shipping_methods($methods) {
+        $namespace = __NAMESPACE__ . '\\';
+
+        foreach (glob(__DIR__ . '/*_Shipping.php') as $file) {
+            $class_name = basename($file, '.php');
+            $full_class = $namespace . $class_name;
+
+            if (class_exists($full_class)) {
+                // Instantiate temporarily to access $id.
+                $instance = new $full_class();
+
+                if (isset($instance->id)) {
+                    $methods[$instance->id] = $full_class;
+                }
+            }
+        }
+
+        return $methods;
     }
 
     /**
-     * Initializes Simple class.
-     * Checks for an existing instance
-     * And if it doesn't find one, create it.
-     *
-     * @return object | null
+     * Magic getter.
+     */
+    public function __get($class) {
+        if (array_key_exists($class, $this->container)) {
+            return $this->container[$class];
+        }
+        return new \WP_Error(sprintf('Call to unknown class %s.', $class));
+    }
+
+    /**
+     * Magic setter.
+     */
+    public function __set($class, $value) {
+        $this->container[$class] = $value;
+    }
+
+    /**
+     * Singleton initializer.
      */
     public static function init() {
-        if ( null === self::$instance ) {
+        if (null === self::$instance) {
             self::$instance = new self();
         }
-
         return self::$instance;
-    }
-    /**
-     * Register the shipping method for WooCommerce
-     */
-    public function register_shipping_method( $methods ) {
-        $methods['multivendorx_country_shipping'] = Country_Shipping::class;
-        return $methods;
     }
 }

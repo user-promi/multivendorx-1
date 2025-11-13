@@ -217,8 +217,6 @@ const FormViewer: React.FC<FormViewerProps> = ({
     useEffect(() => {
         setInputs(response);
     }, [response]);
-    console.log('country', countryList)
-    console.log('state', stateList)
     useEffect(() => {
         if (!siteKey) return;
 

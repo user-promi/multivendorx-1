@@ -319,8 +319,6 @@ const SetupWizard: React.FC = () => {
         },
     ];
 
-
-
     const proSettingChanged = (pro: boolean) => {
         console.log("Pro setting change triggered", pro);
     };

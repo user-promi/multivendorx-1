@@ -351,7 +351,7 @@ const EditStore = () => {
                 return <div></div>;
         }
     }, [editId, data, handleUpdateData]);
-
+    console.log('data',data);
     return (
         <>
             <div className="store-page">
@@ -563,12 +563,12 @@ const EditStore = () => {
                                                                     {[...Array(5)].map((_, i) => (
                                                                         <i
                                                                             key={i}
-                                                                            className={`review adminlib-star${i < Math.round(data.average_rating) ? ' filled' : ''
+                                                                            className={`review adminlib-star${i < Math.round(data.overall_reviews) ? ' filled' : ''
                                                                                 }`}
                                                                         ></i>
                                                                     ))}
                                                                     <span>
-                                                                        {data.average_rating} ({data.total_reviews}{' '}
+                                                                        {data.overall_reviews} ({data.total_reviews}{' '}
                                                                         {data.total_reviews === 1 ? 'Review' : 'Reviews'})
                                                                     </span>
                                                                 </>
