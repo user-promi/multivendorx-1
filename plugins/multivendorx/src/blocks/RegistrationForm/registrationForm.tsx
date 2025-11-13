@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import './storeRegistration.scss';
-import { FormViewer, getApiLink,ToggleSetting } from 'zyra';
+import { FormViewer, getApiLink, ToggleSetting } from 'zyra';
 import axios from 'axios';
 
 const RegistrationForm = () => {
@@ -13,37 +13,81 @@ const RegistrationForm = () => {
     const [inputs, setInputs] = useState<Record<string, any>>({});
     const formData = registrationForm;
 
-    useEffect(() => {
-    
-        axios({
-        	method: 'GET',
-        	url: getApiLink(appLocalizer, `store`),
-        	headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: {"store_registration": true },
+    // useEffect(() => {
 
+    //     axios({
+    //         method: 'GET',
+    //         url: getApiLink(appLocalizer, `store`),
+    //         headers: { 'X-WP-Nonce': appLocalizer.nonce },
+    //         params: { "store_registration": true },
+
+    //     }).then((res) => {
+    //         const data = res.data || {};
+    //         const storeList = data.all_stores || [];
+    //         const regData = data.response || [];
+    //         setStores(storeList);
+    //         setResponseData(regData);
+
+    //         if (storeList.length > 0 && regData.length > 0) {
+    //             // const firstStore = storeList[0];
+    //             // setSelectedStore(firstStore);
+    //             // const match = regData.find(
+    //             //     (item) => String(item.id) === String(firstStore.value)
+    //             //     );
+    //             // if (match) setInputs(match);
+
+    //             const match = storeList.find((store) =>
+    //                 regData.some((item) => String(item.id) === String(store.value))
+    //             );
+
+    //             if (match) {
+    //                 setSelectedStore(match);
+
+    //                 // Find the corresponding registration data
+    //                 const matchData = regData.find(
+    //                     (item) => String(item.id) === String(match.value)
+    //                 );
+
+    //                 if (matchData) setInputs(matchData);
+    //             }
+    //         }
+    //     });
+    // }, []);
+
+    useEffect(() => {
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, `store`),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { store_registration: true },
         }).then((res) => {
-        	const data = res.data || {};
+            const data = res.data || {};
             const storeList = data.all_stores || [];
             const regData = data.response || [];
-            setStores(storeList);
-            setResponseData(regData);
+
+            //Prevent unnecessary re-renders
+            setStores((prev) => {
+                if (JSON.stringify(prev) !== JSON.stringify(storeList)) {
+                    return storeList;
+                }
+                return prev;
+            });
+
+            setResponseData((prev) => {
+                if (JSON.stringify(prev) !== JSON.stringify(regData)) {
+                    return regData;
+                }
+                return prev;
+            });
 
             if (storeList.length > 0 && regData.length > 0) {
-                // const firstStore = storeList[0];
-                // setSelectedStore(firstStore);
-                // const match = regData.find(
-                //     (item) => String(item.id) === String(firstStore.value)
-                //     );
-                // if (match) setInputs(match);
-
-                const match = storeList.find((store) =>
-                    regData.some((item) => String(item.id) === String(store.value))
+                const match = storeList.find((store: any) =>
+                    regData.some((item: any) => String(item.id) === String(store.value))
                 );
 
                 if (match) {
                     setSelectedStore(match);
 
-                    // Find the corresponding registration data
                     const matchData = regData.find(
                         (item) => String(item.id) === String(match.value)
                     );
@@ -59,54 +103,89 @@ const RegistrationForm = () => {
         setSelectedStore(store);
 
         const match = responseData.find(
-        (item) => String(item.id) === String(val)
+            (item) => String(item.id) === String(val)
         );
         setInputs(match || {});
     };
 
-    const onSubmit = (submittedFormData: Record<string, any>) => {
+    // const onSubmit = (submittedFormData: Record<string, any>) => {
+    //     setLoading(true);
+
+    //     // Map form field keys to backend expected keys
+    //     const mappedData: Record<string, any> = {};
+
+    //     // Core fields
+    //     if (submittedFormData['name']) mappedData['name'] = submittedFormData['name'];
+    //     if (submittedFormData['description'] || submittedFormData['description'])
+    //         mappedData['description'] = submittedFormData['description'] || submittedFormData['description'];
+
+    //     // Optional: slug, who_created (if coming from form)
+    //     if (submittedFormData['slug']) mappedData['slug'] = submittedFormData['slug'];
+
+    //     // Other fields as meta
+    //     Object.keys(submittedFormData).forEach((key) => {
+    //         if (!['name', 'description', 'slug'].includes(key)) {
+    //             mappedData[key] = submittedFormData[key];
+    //         }
+    //     });
+
+    //     // Send to API
+    //     axios({
+    //         method: 'POST',
+    //         url: getApiLink(registrationForm, 'store'),
+    //         headers: { 'X-WP-Nonce': registrationForm.nonce, "registrations": 'registrations' },
+    //         data: {
+    //             formData: mappedData,
+    //         },
+    //     })
+    //         .then((response) => {
+    //             console.log('Store created:', response.data);
+    //             if (response.data.redirect !== '') {
+    //                 window.location.href = response.data.redirect;
+    //             }
+    //             setLoading(false);
+    //         })
+    //         .catch((error) => {
+    //             console.error('Error creating store:', error);
+    //             setLoading(false);
+    //         });
+    // };
+    const onSubmit = useCallback((submittedFormData: Record<string, any>) => {
         setLoading(true);
-    
-        // Map form field keys to backend expected keys
+
         const mappedData: Record<string, any> = {};
 
-        // Core fields
         if (submittedFormData['name']) mappedData['name'] = submittedFormData['name'];
-        if (submittedFormData['description'] || submittedFormData['description'])
-            mappedData['description'] = submittedFormData['description'] || submittedFormData['description'];
-    
-        // Optional: slug, who_created (if coming from form)
+        if (submittedFormData['description']) mappedData['description'] = submittedFormData['description'];
         if (submittedFormData['slug']) mappedData['slug'] = submittedFormData['slug'];
-    
-        // Other fields as meta
+
         Object.keys(submittedFormData).forEach((key) => {
             if (!['name', 'description', 'slug'].includes(key)) {
                 mappedData[key] = submittedFormData[key];
             }
         });
 
-        // Send to API
         axios({
             method: 'POST',
             url: getApiLink(registrationForm, 'store'),
-            headers: { 'X-WP-Nonce': registrationForm.nonce, "registrations": 'registrations'},
-            data: {
-                formData: mappedData,
-            },
+            headers: { 'X-WP-Nonce': registrationForm.nonce, "registrations": 'registrations' },
+            data: { formData: mappedData },
         })
-        .then((response) => {
-            console.log('Store created:', response.data);
-            if ( response.data.redirect !== '' ) {
-                window.location.href = response.data.redirect;
-            }
-            setLoading(false);
-        })
-        .catch((error) => {
-            console.error('Error creating store:', error);
-            setLoading(false);
-        });
-    };
-    
+            .then((response) => {
+                console.log('Store created:', response.data);
+                if (response.data.redirect !== '') {
+                    window.location.href = response.data.redirect;
+                }
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error('Error creating store:', error);
+                setLoading(false);
+            });
+    }, []); //empty dependencies = stable function
+
+    const memoizedCountryList = useMemo(() => appLocalizer.country_list, []);
+    const memoizedStateList = useMemo(() => appLocalizer.state_list, []);
 
     return (
         <div className="enquiry-form-modal">
@@ -121,12 +200,12 @@ const RegistrationForm = () => {
             )}
             {stores.length > 0 && (
                 <div className="store-selector">
-                <ToggleSetting
-                    wrapperClass="setting-form-input"
-                    options={stores}
-                    value={selectedStore?.value || ""}
-                    onChange={(val: any) => handleStoreChange(val)}
-                />
+                    <ToggleSetting
+                        wrapperClass="setting-form-input"
+                        options={stores}
+                        value={selectedStore?.value || ""}
+                        onChange={(val: any) => handleStoreChange(val)}
+                    />
                 </div>
             )}
 
@@ -137,8 +216,8 @@ const RegistrationForm = () => {
                     formFields={formData.settings}
                     response={inputs}
                     onSubmit={onSubmit}
-                    countryList={appLocalizer.country_list}
-                    stateList={appLocalizer.state_list}
+                    countryList={memoizedCountryList}
+                    stateList={memoizedStateList}
                 />
                 <div>{registrationForm.content_after_form}</div>
                 {toast && (
