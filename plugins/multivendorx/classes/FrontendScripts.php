@@ -199,8 +199,8 @@ class FrontendScripts {
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
-                'multivendorx-distance-shipping-frontend-script' => array(
-					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/DistanceShipping/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
+                'multivendorx-store-shipping-frontend-script' => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/StoreShipping/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
@@ -382,7 +382,11 @@ class FrontendScripts {
                 'tax-compliance',
                 'custom-css',
                 'single-product-multiple-store',
-                'store-status-control',
+                'pending-approval',
+                'rejected',
+                'permanently-rejected',
+                'under-review',
+                'suspended',
             )
 		);
 
@@ -499,6 +503,7 @@ class FrontendScripts {
                         'freeVersion'              => MultiVendorX()->version,
                         'marketplace_site'         => get_bloginfo(),
                         'site_url'                 => site_url(),
+                        'admin_url'                 => admin_url(),
                         'woocommerce_currency'     => get_woocommerce_currency(),
                         'user_id'                  => get_current_user_id(),
                         'currency'                 => get_woocommerce_currency(),       // e.g., USD
@@ -616,7 +621,7 @@ class FrontendScripts {
                         'nonce'    => wp_create_nonce('follow_store_ajax_nonce'),
 					),
 				),
-                'multivendorx-distance-shipping-frontend-script' => array(
+                'multivendorx-store-shipping-frontend-script' => array(
 					'object_name' => 'distanceShippingFrontend',
                     'data'        => array(
                         'ajaxurl'           => admin_url('admin-ajax.php'),

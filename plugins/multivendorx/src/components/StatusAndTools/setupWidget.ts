@@ -5,7 +5,7 @@ export default {
     priority: 5,
     name: __( 'Setup Widget', 'multivendorx' ),
     desc: __(
-        'Controls how stores are onboarded and what access they get.',
+        'Data from your previous marketplace can be seamlessly transferred using this migration tool.',
         'multivendorx'
     ),
     icon: 'adminlib-general-tab',

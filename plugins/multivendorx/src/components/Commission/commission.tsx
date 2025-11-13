@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { DateRangePicker, RangeKeyDict, Range } from 'react-date-range';
-import { Table, getApiLink, TableCell, AdminBreadcrumbs, CommonPopup, CalendarInput } from 'zyra';
+import { Table, getApiLink, TableCell, AdminBreadcrumbs, useModules, CalendarInput } from 'zyra';
 import {
     ColumnDef,
     RowSelectionState,
@@ -42,6 +42,7 @@ type CommissionRow = {
     // Add other fields that might be needed for CSV
     totalOrderAmount?: string;
     facilitatorFee?: string;
+    marketplaceFee?: string;
     gatewayFee?: string;
     shippingAmount?: string;
     taxAmount?: string;
@@ -181,9 +182,7 @@ const Commission: React.FC = () => {
     const [currentFilterData, setCurrentFilterData] = useState<FilterData>({});
     const [showMore, setShowMore] = useState(false);
     const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>({});
-
-
-
+    const { modules } = useModules();
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: 0,
         pageSize: 10,
@@ -427,7 +426,7 @@ const Commission: React.FC = () => {
             ),
         },
         {
-            id: 'ID',
+            id: 'id',
             accessorKey: 'ID',
             enableSorting: true,
             header: __('ID', 'multivendorx'),
@@ -493,14 +492,24 @@ const Commission: React.FC = () => {
                             </li>
 
                             <li>
-                                <div className="item">
-                                    <div className="des">Facilitator Fee</div>
-                                    <div className="title">- {formatCurrency(row.original.facilitatorFee)}</div>
-                                </div>
-                                <div className="item">
-                                    <div className="des">Marketplace Fee</div>
-                                    <div className="title">- {formatCurrency(row.original.facilitatorFee)} (d)</div>
-                                </div>
+                                {modules.includes('marketplace-gateway') && (
+                                    <div className="item">
+                                        <div className="des">Gateway Fee</div>
+                                        <div className="title">- {formatCurrency(row.original.gatewayFee)}</div>
+                                    </div>
+                                )}
+                                {modules.includes('facilitator') && (
+                                    <div className="item">
+                                        <div className="des">Facilitator Fee</div>
+                                        <div className="title">- {formatCurrency(row.original.facilitatorFee)}</div>
+                                    </div>
+                                )}
+                                {modules.includes('marketplace-fee') && (
+                                    <div className="item">
+                                        <div className="des">Marketplace Fee</div>
+                                        <div className="title">- {formatCurrency(row.original.marketplaceFee)}</div>
+                                    </div>
+                                )}
                             </li>
 
                             <span

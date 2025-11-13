@@ -48,6 +48,8 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                 page: 1,
                 row: 3,
                 store_id: id,
+                transaction_type: 'Withdrawal',
+                transaction_status: 'Completed',
                 filter_status: 'Dr',
                 orderBy: 'created_at',
                 order: 'DESC',
@@ -85,19 +87,14 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 
     const overviewData = [
         {
-            icon: "adminlib-tools green",
-            number: formatCurrency(storeData.commission?.commission_total ?? 0),
-            text: "Lifetime earnings",
-        },
-        {
             icon: "adminlib-book red",
             number: formatCurrency(storeData.transactions?.balance ?? 0),
-            text: "Available balance",
+            text: "Wallet balance",
         },
         {
             icon: "adminlib-global-community yellow",
             number: formatCurrency(storeData.transactions?.locking_balance ?? 0),
-            text: "Pending balance",
+            text: "Upcoming balance",
         },
         {
             icon: "adminlib-global-community blue",
@@ -139,40 +136,45 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                     ></i>
                                 </div>
                             </div>
-                            {recentDebits.map((txn) => (
-                                <div key={txn.id} className="store-owner-details">
-                                    <div className="profile">
-                                        <div className="avater">
-                                            <span className="adminlib-calendar"></span>
-                                        </div>
-                                        <div className="details">
-                                            <div className="name">
-                                                {formatCurrency(txn.balance)}
+                            {recentDebits && recentDebits.length > 0 ? (
+                                recentDebits.map((txn) => (
+                                    <div key={txn.id} className="store-owner-details">
+                                        <div className="profile">
+                                            <div className="avater">
+                                                <span className="adminlib-calendar"></span>
                                             </div>
-                                            <div className="des">
-                                                {new Date(txn.date).toLocaleDateString("en-US", {
-                                                    month: "short",
-                                                    day: "2-digit",
-                                                    year: "numeric",
-                                                })}
+                                            <div className="details">
+                                                <div className="name">
+                                                    {formatCurrency(txn.balance)}
+                                                </div>
+                                                <div className="des">
+                                                    {new Date(txn.date).toLocaleDateString("en-US", {
+                                                        month: "short",
+                                                        day: "2-digit",
+                                                        year: "numeric",
+                                                    })}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div className="right-details">
-                                        <div
-                                            className={`admin-badge ${txn.status?.toLowerCase() === "completed"
-                                                ? "green"
-                                                : txn.status?.toLowerCase() === "pending"
-                                                    ? "yellow"
-                                                    : "red"
-                                                }`}
-                                        >
-                                            {txn.status}
+                                        <div className="right-details">
+                                            <div
+                                                className={`admin-badge ${txn.status?.toLowerCase() === "completed"
+                                                    ? "green"
+                                                    : txn.status?.toLowerCase() === "upcoming"
+                                                        ? "yellow"
+                                                        : "red"
+                                                    }`}
+                                            >
+                                                {txn.status}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))
+                            ) : (
+                                <div className="no-products">No recent payout</div>
+                            )}
+
                         </div>
 
                         {/* <div className="column">
@@ -191,7 +193,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                             <div className="card-header">
                                 <div className="left">
                                     <div className="title">
-                                        Latest Products
+                                        Latest products
                                     </div>
                                 </div>
                                 <div className="right">
@@ -245,7 +247,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                                                 }
                                                             )
                                                             : "-"} */}
-                                                             sku: {product.sku}
+                                                        sku: {product.sku}
                                                     </div>
                                                 </div>
                                             </div>
@@ -374,21 +376,14 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                         </div>
 
                         <div className="overview-wrapper">
-                            <div className="items">
+                            {/* <div className="items">
                                 <div className="title">
                                     View application
                                 </div>
                                 <div className="details">
-                                    <div
-                                        className="sku"
-                                        onClick={() => {
-                                            navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=application-details`);
-                                        }}
-                                    >
-                                        <i className="adminlib-external"></i>
-                                    </div>
+
                                 </div>
-                            </div>
+                            </div> */}
 
                             <div className="items">
                                 <div className="title">
@@ -397,6 +392,24 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                 <div className="details">
                                     <div className="sku">
                                         {storeData.create_time}
+                                        <div
+                                            className="sku"
+                                            onClick={() => {
+                                                navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=application-details`);
+                                            }}
+                                        >
+                                            <i className="adminlib-external"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="items">
+                                <div className="title">
+                                    Lifetime earnings
+                                </div>
+                                <div className="details">
+                                    <div className="sku">
+                                        {formatCurrency(storeData.commission?.commission_total ?? 0)}
                                     </div>
                                 </div>
                             </div>
@@ -411,6 +424,19 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                 </div>
                             )}
                         </div>
+
+                        {/* <div className="analytics-container">
+                            <div className="analytics-item">
+                                <div className="analytics-icon">
+                                    <i className="adminlib-tools green"></i>
+                                </div>
+                                <div className="details">
+                                    <div className="number">{formatCurrency(storeData.commission?.commission_total ?? 0)}</div>
+                                    <div className="text">Lifetime earnings</div>
+                                </div>
+                            </div>
+                        </div> */}
+
                         {appLocalizer.khali_dabba && (
                             <div className="description-wrapper">
                                 <div className="title">

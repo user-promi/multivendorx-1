@@ -126,7 +126,6 @@ export const TransactionHistory: React.FC = () => {
     }, [storeData]);
 
 
-
     const handleAmountChange = (value: number) => {
         if (value > data.available_balance) {
             setError(`Amount cannot be greater than available balance (${data.available_balance})`);
@@ -191,6 +190,9 @@ export const TransactionHistory: React.FC = () => {
                 if (res.data.success) {
                     setRequestWithdrawal(false);
                     resetWithdrawalForm();
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 200);
                 } else if (res.data?.message) {
                     setError(`Server: ${res.data.message}`);
                 }
@@ -257,7 +259,7 @@ export const TransactionHistory: React.FC = () => {
 
             <div className="general-wrapper">
                 {/* Tab Titles */}
-                <div className="tab-titles">
+                <div className="tab-titles hover">
                     {tabs.map((tab) => (
                         <div
                             key={tab.id}
@@ -281,7 +283,7 @@ export const TransactionHistory: React.FC = () => {
                                     <div className="number">{formatCurrency(data.reserve_balance)} <i className="adminlib-bank"></i></div>
                                 </div> */}
                                 <div className="data-card">
-                                    <div className="title">Clearance balance</div>
+                                    <div className="title">Upcoming balance</div>
                                     <div className="number">{formatCurrency(data.locking_balance)} <i className="adminlib-cash "></i></div>
                                 </div>
                             </div>
@@ -316,10 +318,10 @@ export const TransactionHistory: React.FC = () => {
                                                     </div>
 
                                                     <div
-                                                        className={`number ${parseFloat(txn.balance) < 0 ? 'negative' : 'positive'
+                                                        className={`number ${parseFloat(txn.debit) < 0 ? 'negative' : 'positive'
                                                             }`}
                                                     >
-                                                        {formatCurrency(txn.balance)}{" "}
+                                                        {formatCurrency(txn.debit)}{" "}
                                                         {/* <span className="admin-badge green">({txn.status})</span> */}
                                                     </div>
 
@@ -388,8 +390,8 @@ export const TransactionHistory: React.FC = () => {
                 {requestWithdrawal && (
                     <CommonPopup
                         open={requestWithdrawal}
-                        width="400px"
-                        height="80%"
+                        width="500px"
+                        height="70%"
                         header={
                             <>
                                 <div className="title">
@@ -413,7 +415,6 @@ export const TransactionHistory: React.FC = () => {
                                     onClick={() => handleWithdrawal()}
                                 >
                                     Disburse
-                                    <i className="adminlib-check"></i>
                                 </div>
 
                             </>

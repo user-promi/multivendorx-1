@@ -53,7 +53,7 @@ class Shortcode {
 
     public static function dequeue_all_styles_on_page()
     {
-        if (has_shortcode(get_post()->post_content, 'multivendorx_store_dashboard') && is_user_logged_in() && in_array( 'store_owner', wp_get_current_user()->roles, true )) {
+        if (is_page() && has_shortcode(get_post()->post_content, 'multivendorx_store_dashboard') && is_user_logged_in() && in_array( 'store_owner', wp_get_current_user()->roles, true )) {
             global $wp_styles;
             $wp_styles->queue = array('multivendorx-dashboard-style', 'multivendorx-store-product-style');
             // print_r($wp_styles);
@@ -117,11 +117,10 @@ class Shortcode {
             </div>
             <?php
         } else {
-            ?>
-            <a href="<?php echo esc_url(wc_get_page_permalink('myaccount')); ?>">
-                Kindly login before registration
-            </a>
-            <?php
+            echo 'Kindly login before registration';
+            echo '<div class="mvx-dashboard woocommerce">';
+            wc_get_template('myaccount/form-login.php');
+            echo '</div>';            
         }
     
         // Return the output buffer content

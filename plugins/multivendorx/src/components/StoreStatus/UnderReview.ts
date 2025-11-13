@@ -9,15 +9,6 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
-            key: 'registration page',
-            type: 'blocktext',
-            label: __('no_label', 'multivendorx'),
-            blocktext: __(
-                'The store is under review due to compliance concerns. Selling is paused, payouts are held, and new product uploads are restricted until the review is complete.',
-                'multivendorx'
-            ),
-        },
-        {
             key: 'disbursement_order_status',
             type: 'checkbox',
             label: __('Store promotion limit', 'multivendorx'),
@@ -46,10 +37,9 @@ export default {
             selectDeselect: true,
         },
         {
-            key: 'pending_msg',
-            label: 'Message shown to pending stores',
+            key: 'under_review_msg',
+            label: 'Message shown to stores under review',
             type: 'text',
-            value: 'Your store is under review. Sales and payouts are temporarily paused.',
             des: 'What pending stores can do',
         },
     ],

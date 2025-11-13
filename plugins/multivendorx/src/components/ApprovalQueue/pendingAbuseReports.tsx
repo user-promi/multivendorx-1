@@ -4,7 +4,6 @@ import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { Table, getApiLink, TableCell, CalendarInput } from 'zyra';
 import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
-import DefaultStore from "../../../assets/images/default-store.jpg";
 
 export interface RealtimeFilter {
     name: string;
@@ -134,7 +133,7 @@ const ReportAbuseTable: React.FC<Props> = ({ onUpdated }) => {
             header: __('Product', 'multivendorx'),
             cell: ({ row }) => {
                 const product = row.original;
-                const image = product.product_image || DefaultStore; // fallback to default
+                const image = product.product_image ; // fallback to default
                 const productName = product.product_name || '-';
                 const productId = product.product_id; // use ID for admin edit link
                 const productLink = `${window.location.origin}/wp-admin/post.php?post=${productId}&action=edit`;
@@ -150,13 +149,20 @@ const ReportAbuseTable: React.FC<Props> = ({ onUpdated }) => {
                             rel="noreferrer"
                             className="product-wrapper"
                         >
-                            <img src={image} alt={productName} className="product-image" />
+                            {image ? (
+                                <img
+                                    src={image}
+                                    alt={productName}
+                                />
+                            ) : (
+                                <i className="item-icon adminlib-multi-product"></i>
+                            )}
                             <div className="details">
                                 <span className="title">{productName}</span>
                                 {sku && <span className="des">
-                                    SKU: {sku} 
+                                    SKU: {sku}
                                     {storeName !== '' && <>
-                                       | By:
+                                        | By:
                                         <a
                                             href={storeLink}
                                             target="_blank"
@@ -337,9 +343,9 @@ const ReportAbuseTable: React.FC<Props> = ({ onUpdated }) => {
             <div className="card-header">
                 <div className="left">
                     <div className="title">
-                        Pending Abuse Reports
+                        Flagged products awaiting action
                     </div>
-                    <div className="des">Waiting for your response</div>
+                    <div className="des">Review reports and maintain quality.</div>
                 </div>
                 <div className="right">
                     <i className="adminlib-more-vertical"></i>

@@ -12,7 +12,6 @@ export interface RealtimeFilter {
     name: string;
     render: (updateFilter: (key: string, value: any) => void, filterValue: any) => React.ReactNode;
 }
-import DefaultStore from "../../../assets/images/default-store.jpg";
 
 // QnA Row Type
 type QnaRow = {
@@ -197,7 +196,7 @@ const Qna: React.FC = () => {
             await axios.put(
                 getApiLink(appLocalizer, `qna/${selectedQna.id}`),
                 {
-                    question_text:qna,
+                    question_text: qna,
                     answer_text: answer,
                     question_visibility: selectedQna.question_visibility || 'public',
                 },
@@ -239,7 +238,13 @@ const Qna: React.FC = () => {
             header: __('Product', 'multivendorx'),
             cell: ({ row }) => {
                 const product = row.original;
-                const image = product.product_image || DefaultStore;
+                const image = product.product_image;
+
+                const { store_id, store_name } = row.original;
+                const baseUrl = `${window.location.origin}/wp-admin/admin.php?page=multivendorx#&tab=stores`;
+                const storeLink = store_id
+                    ? `${baseUrl}&edit/${store_id}/&subtab=store-overview`
+                    : '#';
                 return (
                     <TableCell title={product.product_name || ''}>
                         <a
@@ -248,11 +253,32 @@ const Qna: React.FC = () => {
                             rel="noreferrer"
                             className="product-wrapper"
                         >
-                            <img src={image} alt={product.product_name} />
+                            {image ? (
+                                <img
+                                    src={image}
+                                    alt={row.original.store_name}
+                                />
+                            ) : (
+                                <i className="item-icon adminlib-multi-product"></i>
+                            )}
                             <div className="details">
                                 <span className="title">{product.product_name || '-'}</span>
                                 {/* SKU not available in your current data, remove or leave placeholder */}
                                 {product.sku && <span><b>SKU:</b> {product.sku}</span>}
+
+                                {store_id ? (
+                                    <>
+                                        <span
+                                            // href={storeLink}
+                                            // target="_blank"
+                                            className="des"
+                                        >
+                                            By  {store_name || '-'}
+                                        </span>
+                                    </>
+                                ) : (
+                                    store_name || '-'
+                                )}
                             </div>
                         </a>
                     </TableCell>
@@ -262,20 +288,30 @@ const Qna: React.FC = () => {
 
         {
             header: __('Question', 'multivendorx'),
+            id: 'question',
             cell: ({ row }) => {
                 const text = row.original.question_text ?? '-';
                 const displayText = text.length > 50 ? text.slice(0, 50) + '…' : text;
-                return <TableCell title={text}>{displayText}</TableCell>;
+
+                const textAnswer = row.original.answer_text ?? '-';
+                const displayAnswer = textAnswer.length > 50 ? textAnswer.slice(0, 50) + '…' : textAnswer;
+                return <TableCell title={text}>
+                    <div className="question-wrapper">
+                        <div className="question">Q: {displayText}</div>
+                        <div className="answer">A: {displayAnswer}</div>
+                    </div>
+
+                </TableCell>;
             }
         },
-        {
-            header: __('Answer', 'multivendorx'),
-            cell: ({ row }) => {
-                const text = row.original.answer_text ?? '-';
-                const displayText = text.length > 50 ? text.slice(0, 50) + '…' : text;
-                return <TableCell title={text}>{displayText}</TableCell>;
-            }
-        },
+        // {
+        //     header: __('Answer', 'multivendorx'),
+        //     cell: ({ row }) => {
+        //         const text = row.original.answer_text ?? '-';
+        //         const displayText = text.length > 50 ? text.slice(0, 50) + '…' : text;
+        //         return <TableCell title={text}>{displayText}</TableCell>;
+        //     }
+        // },
         {
             header: __('Asked By', 'multivendorx'),
             cell: ({ row }) => <TableCell title={row.original.author_name || ''}>{row.original.author_name ?? '-'}</TableCell>
@@ -291,40 +327,64 @@ const Qna: React.FC = () => {
                 return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
             }
         },
-        {
-            header: __('Store', 'multivendorx'),
-            cell: ({ row }) => {
-                const { store_id, store_name } = row.original;
-                const baseUrl = `${window.location.origin}/wp-admin/admin.php?page=multivendorx#&tab=stores`;
-                const storeLink = store_id
-                    ? `${baseUrl}&edit/${store_id}/&subtab=store-overview`
-                    : '#';
+        // {
+        //     header: __('Store', 'multivendorx'),
+        //     cell: ({ row }) => {
+        //         const { store_id, store_name } = row.original;
+        //         const baseUrl = `${window.location.origin}/wp-admin/admin.php?page=multivendorx#&tab=stores`;
+        //         const storeLink = store_id
+        //             ? `${baseUrl}&edit/${store_id}/&subtab=store-overview`
+        //             : '#';
 
-                return (
-                    <TableCell title={store_name || ''}>
-                        {store_id ? (
-                            <a
-                                href={storeLink}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-purple-600 hover:underline"
-                            >
-                                {store_name || '-'}
-                            </a>
-                        ) : (
-                            store_name || '-'
-                        )}
-                    </TableCell>
-                );
-            },
-        },
+        //         return (
+        //             <TableCell title={store_name || ''}>
+        //                 {store_id ? (
+        //                     <a
+        //                         href={storeLink}
+        //                         target="_blank"
+        //                         rel="noopener noreferrer"
+        //                         className="text-purple-600 hover:underline"
+        //                     >
+        //                         {store_name || '-'}
+        //                     </a>
+        //                 ) : (
+        //                     store_name || '-'
+        //                 )}
+        //             </TableCell>
+        //         );
+        //     },
+        // },
         {
             header: __('Votes', 'multivendorx'),
             cell: ({ row }) => <TableCell title={String(row.original.total_votes) || ''}>{row.original.total_votes ?? 0}</TableCell>
         },
         {
             header: __('Visibility', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.question_visibility || ''}>{row.original.question_visibility ?? '-'}</TableCell>
+            enableSorting: true,
+            cell: ({ row }) => {
+                const visibility = row.original.question_visibility || '';
+                const formattedvisibility = visibility
+                    ?.replace(/[-_]/g, " ")
+                    .toLowerCase()
+                    .replace(/^\w/, c => c.toUpperCase());
+
+                const getStatusBadge = (status: string) => {
+                    switch (status) {
+                        case 'public':
+                            return <span className="admin-badge green">Public</span>;
+                        case 'private':
+                            return <span className="admin-badge yellow">Private</span>;
+                        default:
+                            return <span className="admin-badge gray">{formattedvisibility}</span>;
+                    }
+                };
+
+                return (
+                    <TableCell title={`${visibility}`}>
+                        {getStatusBadge(visibility)}
+                    </TableCell>
+                );
+            },
         },
         {
             header: __('Action', 'multivendorx'),
@@ -384,6 +444,28 @@ const Qna: React.FC = () => {
             ),
         },
         {
+            name: 'visibility',
+            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
+                <div className="group-field">
+                    <select
+                        name="store"
+                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
+                        value={filterValue || ''}
+                        className="basic-select"
+                    >
+                        <option value="">Public</option>
+                        <option value="">Private</option>
+                        {/* {store?.map((s: any) => (
+                            <option key={s.id} value={s.id}>
+                                {s.store_name.charAt(0).toUpperCase() + s.store_name.slice(1)}
+                            </option>
+                        ))} */}
+                    </select>
+
+                </div>
+            ),
+        },
+        {
             name: 'date',
             render: (updateFilter) => (
                 <div className="right">
@@ -421,7 +503,7 @@ const Qna: React.FC = () => {
         <>
             <div className="card-header">
                 <div className="left">
-                    <div className="title">Questions</div>
+                    <div className="title">Product questions in queue</div>
                     <div className="des">Waiting for your response</div>
                 </div>
                 <div className="right">
@@ -450,15 +532,20 @@ const Qna: React.FC = () => {
             {selectedQna && (
                 <CommonPopup
                     open={selectedQna}
-                    onClose={setSelectedQna}
-                    width="500px"
+                    onClose={() => setSelectedQna(null)}
+                    width="600px"
+                    height="70%"
                     header={
                         <>
                             <div className="title">
-                                <i className="adminlib-cart"></i>
+                                <i className="adminlib-question"></i>
                                 Answer Question
                             </div>
                             <p>Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.</p>
+                            <i
+                                onClick={() => setSelectedQna(null)}
+                                className="icon adminlib-close"
+                            ></i>
                         </>
                     }
                     footer={
@@ -485,7 +572,7 @@ const Qna: React.FC = () => {
                         </div>
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="ans">{__("Ans", "multivendorx")}</label>
+                                <label htmlFor="ans">{__("Answer", "multivendorx")}</label>
                                 <TextArea
                                     name="answer"
                                     inputClass="textarea-input"
@@ -497,11 +584,11 @@ const Qna: React.FC = () => {
 
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="visibility">{__("Visibility", "multivendorx")}</label>
+                                <label htmlFor="visibility">{__("Make this Q&A Public or Private - control who sees it.", "multivendorx")}</label>
                                 <ToggleSetting
                                     wrapperClass="setting-form-input"
                                     descClass="settings-metabox-description"
-                                    description="Select whether this question is visible to the public or private."
+                                    //description="Select whether this question is visible to the public or private."
                                     options={[
                                         { key: 'public', value: 'public', label: __('Public', 'multivendorx') },
                                         { key: 'private', value: 'private', label: __('Private', 'multivendorx') },

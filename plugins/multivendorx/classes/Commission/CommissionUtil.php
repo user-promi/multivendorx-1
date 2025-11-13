@@ -3,6 +3,7 @@
 namespace MultiVendorX\Commission;
 
 use MultiVendorX\Utill;
+use MultiVendorX\Store\Store;
 
 defined('ABSPATH') || exit;
 
@@ -175,12 +176,51 @@ class CommissionUtil {
     //         'commission_refunded'  => floatval($result->commission_refunded),
     //     ];
     // }
-    public static function get_commission_summary_for_store( $store_id = null ) {
+    public static function get_commission_summary_for_store( $store_id = null, $top_stores = false, $limit = 3 ) {
         global $wpdb;
     
         $table_name = $wpdb->prefix . Utill::TABLES['commission'];
     
-        // Base query
+        //If $top_stores = true, fetch top N stores by total order amount
+        if ( $top_stores ) {
+            $query = $wpdb->prepare("
+                SELECT 
+                    store_id,
+                    COALESCE(SUM(total_order_amount), 0) AS total_order_amount,
+                    COALESCE(SUM(facilitator_fee), 0) AS facilitator_fee,
+                    COALESCE(SUM(gateway_fee), 0) AS gateway_fee,
+                    COALESCE(SUM(shipping_amount), 0) AS shipping_amount,
+                    COALESCE(SUM(tax_amount), 0) AS tax_amount,
+                    COALESCE(SUM(shipping_tax_amount), 0) AS shipping_tax_amount,
+                    COALESCE(SUM(commission_total), 0) AS commission_total,
+                    COALESCE(SUM(commission_refunded), 0) AS commission_refunded
+                FROM {$table_name}
+                GROUP BY store_id
+                ORDER BY total_order_amount DESC
+                LIMIT %d
+            ", $limit );
+    
+            $results = $wpdb->get_results( $query );
+    
+            return array_map( function( $row ) {
+                $store      = new Store( $row->store_id );
+                $store_name = $store ? $store->get('name') : '';
+                return [
+                    'store_id'            => intval( $row->store_id ),
+                    'store_name'           => $store_name,
+                    'total_order_amount'  => floatval( $row->total_order_amount ),
+                    'facilitator_fee'     => floatval( $row->facilitator_fee ),
+                    'gateway_fee'         => floatval( $row->gateway_fee ),
+                    'shipping_amount'     => floatval( $row->shipping_amount ),
+                    'tax_amount'          => floatval( $row->tax_amount ),
+                    'shipping_tax_amount' => floatval( $row->shipping_tax_amount ),
+                    'commission_total'    => floatval( $row->commission_total ),
+                    'commission_refunded' => floatval( $row->commission_refunded ),
+                ];
+            }, $results );
+        }
+    
+        //Otherwise, return summary for a specific store (existing behavior)
         $query = "
             SELECT 
                 COALESCE(SUM(total_order_amount), 0) AS total_order_amount,
@@ -194,7 +234,6 @@ class CommissionUtil {
             FROM {$table_name}
         ";
     
-        // Add condition only if store_id is provided
         if ( ! empty( $store_id ) ) {
             $query .= $wpdb->prepare( " WHERE store_id = %d", $store_id );
         }
@@ -212,5 +251,6 @@ class CommissionUtil {
             'commission_refunded'  => floatval( $result->commission_refunded ),
         ];
     }
+    
     
 }

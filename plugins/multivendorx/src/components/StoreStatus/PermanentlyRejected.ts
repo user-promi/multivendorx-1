@@ -9,15 +9,6 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
-            key: 'registration page',
-            type: 'blocktext',
-            label: __('no_label', 'multivendorx'),
-            blocktext: __(
-                'The store application has been permanently rejected. Sellers can view their dashboard in read-only mode but cannot make changes or reapply without admin intervention.',
-                'multivendorx'
-            ),
-        },
-        {
             key: 'store_promotion_limit',
             label: __('Store promotion limit', 'multivendorx'),
             type: 'nested',
@@ -44,10 +35,9 @@ export default {
             ],
         },
         {
-            key: 'pending_msg',
-            label: 'Message shown to pending stores',
+            key: 'permanent_rejected_msg',
+            label: 'Message shown to permantly rejected stores',
             type: 'textarea',
-            value: 'Your application has been permanently rejected. Contact admin for clarification.',
             des: 'What pending stores can do',
         },
     ],

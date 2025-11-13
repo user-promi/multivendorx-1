@@ -9,15 +9,6 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
-            key: 'registration page',
-            type: 'blocktext',
-            label: __('no_label', 'multivendorx'),
-            blocktext: __(
-                'The store has been permanently deactivated. Stores have read-only access to historical data, but the storefront and its product is removed from public view and no changes can be made.',
-                'multivendorx'
-            ),
-        },
-        {
             key: 'store_promotion_limit',
             label: __('Store promotion limit', 'multivendorx'),
             type: 'nested',

@@ -136,14 +136,6 @@ const WithdrawalRequests: React.FC<Props> = ({ onUpdated }) => {
             ),
         },
         {
-            header: __('Slug', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.store_slug || ''}>
-                    {row.original.store_slug || '-'}
-                </TableCell>
-            ),
-        },
-        {
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.status || ''}>
@@ -183,9 +175,9 @@ const WithdrawalRequests: React.FC<Props> = ({ onUpdated }) => {
             <div className="card-header">
                 <div className="left">
                     <div className="title">
-                        withdrawal Requests
+                        Withdrawals awaiting approval
                     </div>
-                    <div className="des">Waiting for your response</div>
+                    <div className="des">Review and process store payouts.</div>
                 </div>
                 <div className="right">
                     <i className="adminlib-more-vertical"></i>

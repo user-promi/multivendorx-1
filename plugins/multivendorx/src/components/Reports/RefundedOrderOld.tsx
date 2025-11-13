@@ -201,13 +201,30 @@ const RefundedOrderOld: React.FC = () => {
     },
     {
       header: __('Status', 'multivendorx'),
-      cell: ({ row }: any) => (
-        <TableCell title={row.original.status || ''}>
-          {row.original.status
-            ? row.original.status.charAt(0).toUpperCase() + row.original.status.slice(1)
-            : '-'}
-        </TableCell>
-      ),
+      cell: ({ row }) => {
+        const status = row.original.status || '';
+        const formattedStatus = status
+          ?.replace(/[-_]/g, " ")
+          .toLowerCase()
+          .replace(/^\w/, c => c.toUpperCase());
+
+        const getStatusBadge = (status: string) => {
+          switch (status) {
+            case 'completed':
+              return <span className="admin-badge green">Completed</span>;
+            case 'private':
+              return <span className="admin-badge yellow">Private</span>;
+            default:
+              return <span className="admin-badge gray">{formattedStatus}</span>;
+          }
+        };
+
+        return (
+          <TableCell title={`${status}`}>
+            {getStatusBadge(status)}
+          </TableCell>
+        );
+      },
     },
     {
       id: 'date',
@@ -261,7 +278,7 @@ const RefundedOrderOld: React.FC = () => {
     // },
   ];
 
-  
+
   // const columns = [
   //   {
   //     id: 'select',
@@ -496,21 +513,33 @@ const RefundedOrderOld: React.FC = () => {
   ];
 
   return (
-    <Table
-      data={data}
-      columns={columns as any}
-      rowSelection={rowSelection}
-      onRowSelectionChange={setRowSelection}
-      defaultRowsPerPage={10}
-      pageCount={pageCount}
-      pagination={pagination}
-      searchFilter={searchFilter}
-      onPaginationChange={setPagination}
-      realtimeFilter={realtimeFilter}
-      handlePagination={requestApiForData}
-      perPageOption={[10, 25, 50]}
-      totalCounts={totalRows}
-    />
+    <>
+      <div className="card-header">
+        <div className="left">
+          <div className="title">
+            {__('Revenue Distribution', 'multivendorx')}
+          </div>
+          <div className="des">
+            {__('Total Orders:', 'multivendorx')} {totalRows}
+          </div>
+        </div>
+      </div>
+      <Table
+        data={data}
+        columns={columns as any}
+        rowSelection={rowSelection}
+        onRowSelectionChange={setRowSelection}
+        defaultRowsPerPage={10}
+        pageCount={pageCount}
+        pagination={pagination}
+        searchFilter={searchFilter}
+        onPaginationChange={setPagination}
+        realtimeFilter={realtimeFilter}
+        handlePagination={requestApiForData}
+        perPageOption={[10, 25, 50]}
+        totalCounts={totalRows}
+      />
+    </>
   );
 };
 

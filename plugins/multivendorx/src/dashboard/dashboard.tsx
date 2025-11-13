@@ -32,10 +32,10 @@ const salesIcon = new L.DivIcon({
   html: `<div style="background:#5007aa;color:#fff;border-radius:50%;padding:6px 0.625rem;font-size:0.75rem;">$</div>`,
 });
 const analyticsData = [
-  { icon: "adminlib-tools red", number: "230k", text: "Visitors" },
-  { icon: "adminlib-book green", number: "45k", text: "Add to Cart" },
-  { icon: "adminlib-global-community yellow", number: "1.2M", text: "Purchases" },
-  { icon: "adminlib-wholesale blue", number: "500k", text: "Conv. Rate" },
+  { icon: "adminlib-tools theme-color1", number: "230k", text: "Visitors" },
+  { icon: "adminlib-book theme-color2", number: "45k", text: "Add to Cart" },
+  { icon: "adminlib-global-community theme-color3", number: "1.2M", text: "Purchases" },
+  { icon: "adminlib-wholesale theme-color4", number: "500k", text: "Conv. Rate" },
 ];
 const revenueData = [
   { month: "Jan", orders: 4000, earnings: 2400, refunds: 200, conversion: 2.4 },
@@ -46,16 +46,16 @@ const revenueData = [
   { month: "Jun", orders: 4390, earnings: 3800, refunds: 210, conversion: 2.9 },
   { month: "Jul", orders: 6490, earnings: 5200, refunds: 600, conversion: 3.6 },
 ];
-const data = [
-  { month: "Jan", revenue: 4000, net_sale: 2400, admin_amount: 1200 },
-  { month: "Feb", revenue: 3000, net_sale: 2000, admin_amount: 1000 },
-  { month: "Mar", revenue: 4500, net_sale: 2800, admin_amount: 1300 },
-  { month: "Apr", revenue: 5000, net_sale: 3200, admin_amount: 1500 },
-  { month: "May", revenue: 4200, net_sale: 2500, admin_amount: 1400 },
-  { month: "Jun", revenue: 4800, net_sale: 3000, admin_amount: 1600 },
-  { month: "Jul", revenue: 5200, net_sale: 3400, admin_amount: 1700 },
-  { month: "Aug", revenue: 4700, net_sale: 2900, admin_amount: 1500 },
-];
+// const data = [
+//   { month: "Jan", revenue: 4000, net_sale: 2400, admin_amount: 1200 },
+//   { month: "Feb", revenue: 3000, net_sale: 2000, admin_amount: 1000 },
+//   { month: "Mar", revenue: 4500, net_sale: 2800, admin_amount: 1300 },
+//   { month: "Apr", revenue: 5000, net_sale: 3200, admin_amount: 1500 },
+//   { month: "May", revenue: 4200, net_sale: 2500, admin_amount: 1400 },
+//   { month: "Jun", revenue: 4800, net_sale: 3000, admin_amount: 1600 },
+//   { month: "Jul", revenue: 5200, net_sale: 3400, admin_amount: 1700 },
+//   { month: "Aug", revenue: 4700, net_sale: 2900, admin_amount: 1500 },
+// ];
 const ordersByCountry = [
   { country: "USA", orders: 4200, lat: 37.0902, lng: -95.7129 },
   { country: "UK", orders: 2800, lat: 55.3781, lng: -3.4360 },
@@ -86,22 +86,26 @@ const tabData = {
     { id: 4, name: "Glow & Co", orders: 4, amount: 420, color: "red" },
   ],
 };
-
+const data = [
+  { name: "Top Category", value: 400, color: "#f1a60e" },
+  { name: "Top Brand", value: 300, color: "#fa7a38" },
+  { name: "Top Store", value: 300, color: "#73d860" },
+];
 
 const Dashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState("transaction");
   const items = tabData[activeTab];
   return (
     <>
-      {/* <div className="page-title-wrapper">
+      <div className="page-title-wrapper">
         <div className="page-title">
-          <div className="title">Dashboard</div>
-          <div className="des">Manage your store information and preferences</div>
+          <div className="title">Good Morning, Anna!</div>
+          <div className="des">Here's what's happening with your store today <b>$84521 <i className="adminlib-arrow"></i></b></div>
         </div>
-      </div> */}
+      </div>
 
       <div className="row">
-        <div className="column w-35 theme-bg">
+        {/* <div className="column w-35">
           <div className="dashboard-view-section">
             <div className="title">
               Good Morning, Anna!
@@ -116,18 +120,18 @@ const Dashboard: React.FC = () => {
               </div>
               <div className="details">58% of sales target</div>
             </div>
-            <div className="admin-btn btn-white">
+            <div className="admin-btn btn-purple">
               View Details
             </div>
 
             <div className="image">
-              {/* <img src={Mascot} alt="" /> */}
+              <img src={Mascot} alt="" />
             </div>
           </div>
-        </div>
-        <div className="column w-65">
+        </div> */}
+        <div className="column transparent">
           <div className="card">
-            <div className="card-header">
+            {/* <div className="card-header">
               <div className="left">
                 <div className="title">
                   Conversion Snapshot
@@ -136,21 +140,22 @@ const Dashboard: React.FC = () => {
               <div className="right">
                 <span>Updated 1 month ago</span>
               </div>
-            </div>
+            </div> */}
             <div className="card-body">
               <div className="analytics-container">
 
-                {/* {analyticsData.map((item, idx) => (
+                {analyticsData.map((item, idx) => (
                   <div key={idx} className="analytics-item">
+                    <div className="details">
+                      <div className="text">{item.text}</div>
+                      <div className="number">{item.number}</div>
+                      <div className="report"><span>10%</span> | This month</div>
+                    </div>
                     <div className="analytics-icon">
                       <i className={item.icon}></i>
                     </div>
-                    <div className="details">
-                      <div className="number">{item.number}</div>
-                      <div className="text">{item.text}</div>
-                    </div>
                   </div>
-                ))} */}
+                ))}
 
               </div>
             </div>
@@ -158,13 +163,173 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
+
+
       <div className="row">
-        <div className="column">
+
+        <div className="column w-65">
           <div className="card">
             <div className="card-header">
               <div className="left">
                 <div className="title">
-                  Store Activity Log
+                  Sales Overview (7 Days)
+                </div>
+                {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
+              </div>
+              <div className="right">
+                <i className="adminlib-more-vertical"></i>
+              </div>
+            </div>
+            <div className="card-body">
+              <ResponsiveContainer width="100%" height={250}>
+                <BarChart
+                  data={revenueData}
+                  barSize={12}
+                  barCategoryGap="20%"
+                >
+                  <CartesianGrid stroke="#f0f0f0" vertical={false} />
+                  <XAxis dataKey="month" axisLine={false} tickLine={false} />
+                  <YAxis axisLine={false} tickLine={false} />
+                  <Tooltip
+                    contentStyle={{
+                      background: "#fff",
+                      border: "none",
+                      borderRadius: "3px",
+                      boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
+                    }}
+                  />
+                  <Legend />
+                  <Bar dataKey="orders" fill="#f1a60e" radius={[6, 6, 0, 0]} name="Sales" />
+                  <Bar dataKey="earnings" fill="#fa7a38" radius={[6, 6, 0, 0]} name="Earnings" />
+                  <Bar dataKey="refunds" fill="#73d860" radius={[6, 6, 0, 0]} name="Orders" />
+                  <Line
+                    type="monotone"
+                    dataKey="conversion"
+                    stroke="#ffa726"
+                    strokeWidth={2}
+                    dot={{ r: 3 }}
+                    name="Conversion %"
+                    yAxisId={1}
+                  />
+                  <YAxis
+                    yAxisId={1}
+                    orientation="right"
+                    axisLine={false}
+                    tickLine={false}
+                    tickFormatter={(v) => `${v}%`}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+        </div>
+        <div className="column w-35">
+          <div className="card">
+            <div className="card-header">
+              <div className="left">
+                <div className="title">
+                  Sales Overview (7 Days)
+                </div>
+                {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
+              </div>
+              <div className="right">
+                <i className="adminlib-more-vertical"></i>
+              </div>
+            </div>
+            <div className="card-body">
+              <ResponsiveContainer width="100%" height={250}>
+                <PieChart>
+                  <Pie
+                    data={data}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={90}
+                    paddingAngle={3}
+                    dataKey="value"
+                    nameKey="name"
+                    label
+                  >
+                    {data.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      <div className="row">
+        <div className="column w-35">
+          <div className="card">
+            <div className="card-header">
+              <div className="left">
+                <div className="title">
+                  Best-Selling Products
+                </div>
+              </div>
+              {/* <div className="right">
+                <i className="adminlib-more-vertical"></i>
+              </div> */}
+            </div>
+            <div className="card-body">
+              <div className="top-products">
+                <table>
+                  <tr className="header">
+                    <td>#</td>
+                    <td>Name</td>
+                    <td>Popularity</td>
+                    <td>Sales</td>
+                  </tr>
+                  <tr>
+                    <td>01</td>
+                    <td>Wireless Headset</td>
+                    <td className="progress-bar theme-color1"><div></div></td>
+                    <td><div className="admin-badge theme-color1">45%</div></td>
+                  </tr>
+                  <tr>
+                    <td>02</td>
+                    <td>Wireless Headset</td>
+                    <td className="progress-bar theme-color2"><div></div></td>
+                    <td><div className="admin-badge theme-color2">45%</div></td>
+                  </tr>
+                  <tr>
+                    <td>03</td>
+                    <td>Wireless Headset</td>
+                    <td className="progress-bar theme-color3"><div></div></td>
+                    <td><div className="admin-badge theme-color3">45%</div></td>
+                  </tr>
+                  <tr>
+                    <td>04</td>
+                    <td>Wireless Headset</td>
+                    <td className="progress-bar theme-color4"><div></div></td>
+                    <td><div className="admin-badge theme-color4">19%</div></td>
+                  </tr>
+                  <tr>
+                    <td>05</td>
+                    <td>Wireless Headset</td>
+                    <td className="progress-bar theme-color1"><div></div></td>
+                    <td><div className="admin-badge theme-color1">45%</div></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="column w-65">
+          <div className="card">
+            <div className="card-header">
+              <div className="left">
+                <div className="title">
+                  Admin Announcements
                 </div>
                 <div className="des">Lorem ipsum dolor sit amet.</div>
               </div>
@@ -173,54 +338,47 @@ const Dashboard: React.FC = () => {
               </div>
             </div>
             <div className="card-body">
-              <div className="top-items">
-                <div className="items">
-                  <div className="left-side">
-                    <div className="icon">
-                      <i className="admin-icon red">1</i>
+              <div className="notification-wrapper">
+                <ul>
+                  <li>
+                    <div className="icon-wrapper">
+                      <i className="adminlib-form-paypal-email blue"></i>
                     </div>
                     <div className="details">
-                      <div className="item-title">David Chen</div>
-                      <div className="sub-text">180 units sold</div>
+                      <div className="notification-title">Holiday campaign materials uploaded.</div>
+                      <div className="des">Holiday campaign materials uploaded.</div>
+                      <span>1d ago</span>
                     </div>
-                  </div>
-                  <div className="right-side">
-                    <div className="price">$9230</div>
-                  </div>
-                </div>
-                <div className="items">
-                  <div className="left-side">
-                    <div className="icon">
-                      <i className="admin-icon green">2</i>
+
+                  </li>
+                  <li>
+                    <div className="icon-wrapper">
+                      <i className="adminlib-mail orange"></i>
                     </div>
                     <div className="details">
-                      <div className="item-title">Emily White</div>
-                      <div className="sub-text">320 units sold</div>
+                      <div className="notification-title">System maintenance Nov 5 (2–4 AM PST).</div>
+                      <div className="des">Lorem ipsum dolor sit amet, consectetur adipisicing elit</div>
+                      <span>34min ago</span>
                     </div>
-                  </div>
-                  <div className="right-side">
-                    <div className="price">$380</div>
-                  </div>
-                </div>
-                <div className="items">
-                  <div className="left-side">
-                    <div className="icon">
-                      <i className="admin-icon blue">3</i>
+                  </li>
+                  <li>
+                    <div className="icon-wrapper">
+                      <i className="adminlib-form-paypal-email green"></i>
                     </div>
                     <div className="details">
-                      <div className="item-title">Mark Johnson</div>
-                      <div className="sub-text">3 orders</div>
+                      <div className="notification-title">New shipping carrier integration live.</div>
+                      <div className="des">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
+                      <span>34min ago</span>
                     </div>
-                  </div>
-                  <div className="right-side">
-                    <div className="price">$380</div>
-                  </div>
-                </div>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
-
         </div>
+      </div>
+
+      <div className="row">
         <div className="column">
           <div className="card">
             <div className="card-header">
@@ -249,98 +407,6 @@ const Dashboard: React.FC = () => {
                 ))}
               </div>
 
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-
-      <div className="row">
-        <div className="column">
-          <div className="card">
-            <div className="card-header">
-              <div className="left">
-                <div className="title">
-                  Sales Overview (7 Days)
-                </div>
-                <div className="des">Lorem ipsum dolor sit amet.</div>
-              </div>
-              <div className="right">
-                <i className="adminlib-more-vertical"></i>
-              </div>
-            </div>
-            <div className="card-body">
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={data}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line type="monotone" dataKey="revenue" stroke="#5007aa" strokeWidth={3} name="Top Category" />
-                  <Line type="monotone" dataKey="net_sale" stroke="#250250ff" strokeWidth={3} name="Top Brand" />
-                  <Line type="monotone" dataKey="admin_amount" stroke="#9b69d8ff" strokeWidth={3} name="Top Store" />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-
-        </div>
-        <div className="column">
-          <div className="card">
-            <div className="card-header">
-              <div className="left">
-                <div className="title">
-                  Monthly Performance
-                </div>
-                <div className="des">Lorem ipsum dolor sit amet.</div>
-              </div>
-              <div className="right">
-                <i className="adminlib-more-vertical"></i>
-              </div>
-            </div>
-            <div className="card-body">
-              <ResponsiveContainer width="100%" height={360}>
-                <BarChart
-                  data={revenueData}
-                  barSize={12}
-                  barCategoryGap="20%"
-                // margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
-                >
-                  <CartesianGrid stroke="#f0f0f0" vertical={false} />
-                  <XAxis dataKey="month" axisLine={false} tickLine={false} />
-                  <YAxis axisLine={false} tickLine={false} />
-                  <Tooltip
-                    contentStyle={{
-                      background: "#fff",
-                      border: "none",
-                      borderRadius: "3px",
-                      boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
-                    }}
-                  />
-                  <Legend />
-                  <Bar dataKey="orders" fill="#5007aa98" radius={[6, 6, 0, 0]} name="Sales" />
-                  <Bar dataKey="earnings" fill="#5007aa" radius={[6, 6, 0, 0]} name="Earnings" />
-                  <Bar dataKey="refunds" fill="#5007aaa1" radius={[6, 6, 0, 0]} name="Orders" />
-                  <Line
-                    type="monotone"
-                    dataKey="conversion"
-                    stroke="#ffa726"
-                    strokeWidth={2}
-                    dot={{ r: 3 }}
-                    name="Conversion %"
-                    yAxisId={1}
-                  />
-                  <YAxis
-                    yAxisId={1}
-                    orientation="right"
-                    axisLine={false}
-                    tickLine={false}
-                    tickFormatter={(v) => `${v}%`}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
             </div>
           </div>
 

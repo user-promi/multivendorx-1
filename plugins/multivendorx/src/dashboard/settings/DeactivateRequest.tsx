@@ -7,6 +7,22 @@ const DeactivateRequest = () => {
     const [formData, setFormData] = useState<{ [key: string]: any }>({});
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
+    useEffect(() => {
+        if (!appLocalizer.store_id) return;
+
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, `store/${appLocalizer.store_id}`),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        })
+            .then((res) => {
+                const data = res.data || {};
+                setFormData((prev) => ({ ...prev, ...data }));
+            });
+    }, [appLocalizer.store_id]);
+
+    console.log(formData)
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         const updated = { ...formData, [name]: value };

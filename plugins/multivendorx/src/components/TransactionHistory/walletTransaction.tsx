@@ -449,18 +449,40 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             // id: 'id',
             // accessorKey: 'id',
             // enableSorting: true,
-            header: __("ID", "multivendorx"),
+            header: __("id", "multivendorx"),
             cell: ({ row }) => <TableCell>#{row.original.id}</TableCell>,
         },
         {
+            id: 'status',
             header: __('Status', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.status || ''}>
-                    <span className={`status-badge status-${row.original.status?.toLowerCase()}`}>
-                        {row.original.status || '-'}
-                    </span>
-                </TableCell>
-            ),
+            cell: ({ row }) => {
+                const status = row.original.status || '';
+                const formattedStatus = status
+                    ?.replace(/[-_]/g, " ")
+                    .toLowerCase()
+                    .replace(/^\w/, c => c.toUpperCase());
+
+                const getStatusBadge = (status: string) => {
+                    switch (status) {
+                        case 'Completed':
+                            return <span className="admin-badge green">Completed</span>;
+                        case 'Processed':
+                            return <span className="admin-badge yellow">Processed</span>;
+                        case 'Upcoming':
+                            return <span className="admin-badge blue">Upcoming</span>;
+                        case 'Failed':
+                            return <span className="admin-badge red">Failed</span>;
+                        default:
+                            return <span className="admin-badge gray">{formattedStatus}</span>;
+                    }
+                };
+
+                return (
+                    <TableCell title={`${status}`}>
+                        {getStatusBadge(status)}
+                    </TableCell>
+                );
+            },
         },
         // {
         //     // id: 'order_id',
@@ -512,23 +534,22 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                 const type = row.original.transaction_type?.toLowerCase();
                 const commissionId = row.original.commission_id;
                 const paymentMethod = row.original.payment_method;
-        
+
                 const formatText = (text) =>
                     text
                         ?.replace(/-/g, ' ')
                         ?.replace(/\b\w/g, (c) => c.toUpperCase())
                     || '-';
-        
+
                 let displayValue = '-';
                 let content = displayValue;
-        
+
                 //Commission Transaction — clickable number
                 if (type === 'commission') {
                     displayValue = `Commission #${commissionId || '-'}`;
                     if (commissionId) {
                         content = (
-                            <span
-                                className="clickable-text"
+                            <span className="order-link"
                                 onClick={() => {
                                     setSelectedCommissionId(commissionId);
                                     setViewCommission(true);
@@ -549,10 +570,10 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                     displayValue = formatText(row.original.transaction_type);
                     content = displayValue;
                 }
-        
+
                 return <TableCell title={displayValue}>{content}</TableCell>;
             },
-        },        
+        },
         {
             // id: 'created_at',
             // accessorKey: 'created_at',
@@ -638,7 +659,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                         className="basic-select"
                     >
                         <option value="">{__('Select Status', 'multivendorx')}</option>
-                        <option value="Pending">{__('Pending', 'multivendorx')}</option>
+                        <option value="Upcoming">{__('Upcoming', 'multivendorx')}</option>
                         <option value="Processed">{__('Processed', 'multivendorx')}</option>
                         <option value="Completed">{__('Completed', 'multivendorx')}</option>
                         <option value="Failed">{__('Failed', 'multivendorx')}</option>
@@ -696,7 +717,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             .catch(() => {
                 setOverview([
                     { id: 'total_balance', label: 'Total Balance', count: `0`, icon: 'adminlib-wallet' },
-                    { id: 'pending', label: 'Pending', count: `0`, icon: 'adminlib-clock' },
+                    { id: 'upcoming', label: 'Upcoming', count: `0`, icon: 'adminlib-clock' },
                     { id: 'locked', label: 'Locked', count: `0`, icon: 'adminlib-lock' },
                     { id: 'withdrawable', label: 'Withdrawable', count: `0`, icon: 'adminlib-cash' },
                     { id: 'commission', label: 'Commission', count: `0`, icon: 'adminlib-star' },

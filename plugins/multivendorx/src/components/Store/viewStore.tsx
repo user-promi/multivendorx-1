@@ -214,38 +214,6 @@ const ViewStore = () => {
       ></i>
     ));
 
-  // 🔹 Cards
-  const cards = [
-    {
-      title: 'Lifetime Earnings',
-      value: `${appLocalizer.currency_symbol}${transaction?.total_order_amount ?? '0'}`,
-      link: '#',
-      trend: '+16.24%',
-      color: 'text-green',
-    },
-    {
-      title: 'Available Balance',
-      value: `${appLocalizer.currency_symbol}${transaction?.balance ?? '0'}`,
-      link: '?page=multivendorx#&tab=payouts',
-      trend: '+16.24%',
-      color: 'text-green',
-    },
-    {
-      title: 'Pending Balance',
-      value: `${appLocalizer.currency_symbol}${transaction?.locking_balance ?? '0'}`,
-      link: '?page=multivendorx#&tab=payouts',
-      trend: '-8.54%',
-      color: 'text-red',
-    },
-    {
-      title: 'Requested Payout',
-      value: `${appLocalizer.currency_symbol}${transaction?.withdraw_amount ?? '0'}`,
-      link: '?page=multivendorx#&tab=transactions-history',
-      trend: '+0.00%',
-      color: '',
-    },
-  ];
-
   const activities = [
     { icon: 'adminlib-cart', text: 'New product "Wireless Gaming Headset" added by TechWorld' },
     { icon: 'adminlib-star', text: '5-star review received for "Smartphone Case" by MobileGear' },
@@ -299,7 +267,7 @@ const ViewStore = () => {
                     <div className="store-details">
 
                       <div className="profile">
-                        <img src={data.image || ''} alt={data.name || 'Store'} className="multivendorx-profile-imgcls" />
+                        <img src={data.image || ''} alt={data.name || 'Store'} className="multivendorx-profile-img" />
                       </div>
                       <div className="details">
                         <div className="heading">store 1fgfgfghhghghh</div>
@@ -316,7 +284,7 @@ const ViewStore = () => {
                     <div className="store-details">
 
                       <div className="profile">
-                        <img src={data.image || ''} alt={data.name || 'Store'} className="multivendorx-profile-imgcls" />
+                        <img src={data.image || ''} alt={data.name || 'Store'} className="multivendorx-profile-img" />
                       </div>
                       <div className="details">
                         <div className="heading">store 1fgfgfghhghghh</div>

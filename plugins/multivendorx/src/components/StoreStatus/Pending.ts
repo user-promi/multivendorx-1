@@ -9,15 +9,6 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
-            key: 'registration page',
-            type: 'blocktext',
-            label: __('no_label', 'multivendorx'),
-            blocktext: __(
-                'The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
-                'multivendorx'
-            ),
-        },
-        {
             key: 'store_promotion_limit',
             label: __('Store promotion limit', 'multivendorx'),
             type: 'nested',
@@ -51,7 +42,6 @@ export default {
             key: 'pending_msg',
             label: 'Message shown to pending stores',
             type: 'textarea',
-            value: 'Your store is awaiting approval and will be activated soon.',
             des: 'What pending stores can do',
         },
     ],

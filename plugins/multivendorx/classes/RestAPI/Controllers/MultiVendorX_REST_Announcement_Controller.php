@@ -210,7 +210,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                 'message' => $post_id->get_error_message(),
             ]);
         }
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:stores : " . var_export($stores, true) . "\n", FILE_APPEND);
+        // file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:stores : " . var_export($stores, true) . "\n", FILE_APPEND);
         // Save stores if provided
         if ( ! empty($stores) ) {
             update_post_meta( $post_id, 'multivendorx_announcement_stores', $stores );

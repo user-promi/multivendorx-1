@@ -268,14 +268,25 @@ const StoreTable: React.FC = () => {
                     <TableCell title={primaryOwner?.data?.display_name || primaryOwner?.data?.user_email || ''}>
                         {primaryOwner ? (
                             <a
-                                href={`/wp-admin/user-edit.php?user_id=${primaryOwner.ID}`}
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    window.location.href = `/wp-admin/user-edit.php?user_id=${primaryOwner.ID}`;
-                                }}
+                                href={`${appLocalizer.admin_url}user-edit.php?user_id=${primaryOwner.ID}`}
+                                className="product-wrapper"
                             >
-                                {primaryOwner.data?.display_name || primaryOwner.data?.user_email}
+                                {row.original.primary_owner_image ? (
+                                    <span
+                                        dangerouslySetInnerHTML={{
+                                            __html: row.original.primary_owner_image,
+                                        }}
+                                    />
+                                ) : (
+                                    <i className="item-icon adminlib-person"></i>
+                                )}
+                                <div className="details">
+                                    <div className="title">
+                                        {primaryOwner.data?.display_name || primaryOwner.data?.user_email}
+                                    </div>
+                                </div>
                             </a>
+
                         ) : (
                             <span>-</span>
                         )}

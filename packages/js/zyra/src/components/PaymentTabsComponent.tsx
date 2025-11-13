@@ -3,6 +3,7 @@ import "../styles/web/PaymentTabsComponent.scss";
 import TextArea from "./TextArea";
 import ToggleSetting from "./ToggleSetting";
 import MultiCheckBox from "./MultiCheckbox";
+import NestedComponent from "./NestedComponent";
 
 interface PaymentFormField {
   key: string;
@@ -18,7 +19,9 @@ interface PaymentFormField {
   | "check-list"
   | "description"
   | "setup"
-  | "setting-toggle";
+  | "setting-toggle"
+  | "buttons"
+  | "nested";
 
   label: string;
   placeholder?: string;
@@ -44,6 +47,7 @@ interface PaymentFormField {
   link?: string;
   check?: boolean;
   hideCheckbox?: boolean;
+  btnClass?: string;
 }
 
 interface PaymentMethod {
@@ -58,6 +62,9 @@ interface PaymentMethod {
   toggleType?: "icon" | "checkbox";
   wrapperClass?: string;
   openForm?: boolean;
+  single?: boolean;
+  rowClass?: string;
+  nestedFields?: PaymentFormField[];
 }
 
 interface PaymentTabsComponentProps {
@@ -70,6 +77,8 @@ interface PaymentTabsComponentProps {
   value: Record<string, any>;
   onChange: (data: Record<string, any>) => void;
   buttonEnable?: boolean;
+  isWizardMode?: boolean;
+  setWizardIndex?: (index: number) => void;
 }
 
 const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
@@ -77,11 +86,14 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
   value,
   onChange,
   appLocalizer,
+  isWizardMode = false,
 }) => {
   const [activeTabs, setActiveTabs] = useState<string[]>([]);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const [modelOpen, setModelOpen] = useState(false);
+  const [wizardIndex, setWizardIndex] = useState(0);
+
 
   const handleInputChange = (
     methodKey: string,
@@ -99,7 +111,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
 
   const toggleEnable = (methodId: string, enable: boolean, icon?: string) => {
     handleInputChange(methodId, "enable", enable);
-    if (!enable) {
+    if (enable) {
       setActiveTabs((prev) => prev.filter((id) => id !== methodId));
     }
   };
@@ -128,7 +140,13 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
   const handlMultiSelectDeselectChange = (key: string, opts: any[]) => {
     console.log("Multi select/deselect triggered:", key, opts);
   };
+  const renderWizardButtons = () => {
+    const step = methods[wizardIndex];
+    const buttonField = step?.formFields?.find(f => f.type === "buttons");
+    if (!buttonField) return null;
 
+    return renderField(step.id, buttonField);
+  };
   const renderField = (methodId: string, field: PaymentFormField) => {
     const fieldValue = value[methodId]?.[field.key];
     console.log(fieldValue);
@@ -163,13 +181,16 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
 
       case "checkbox":
         return (
-          <input
-            type="checkbox"
-            checked={!!fieldValue}
-            onChange={(e) =>
-              handleInputChange(methodId, field.key, e.target.checked)
-            }
-          />
+          <>
+            <input
+              type="checkbox"
+              checked={!!fieldValue}
+              onChange={(e) =>
+                handleInputChange(methodId, field.key, e.target.checked)
+              }
+            />
+            <div className="settings-metabox-description">{field.desc}</div>
+          </>
         );
 
       case "textarea":
@@ -322,141 +343,247 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
             </ul>
           </>
         );
+
+      case "buttons":
+        return (
+          <>
+            {Array.isArray(field.options) &&
+              field.options.map((item, index) => {
+                const wizardSteps = methods.filter(m => m.isWizardMode === true);
+                const isLastStep = wizardIndex === wizardSteps.length - 1;
+
+                // Skip Button
+                if (item.action === "skip") {
+                  return (
+                    <button
+                      key={index}
+                      className={item.btnClass}
+                      onClick={() => {
+                        setWizardIndex(methods.length);
+                        window.location.href = `${appLocalizer.site_url}`;
+                      }}
+                    >
+                      {item.label}
+                    </button>
+                  );
+                }
+
+                // Next / Finish Button
+                if (item.action === "next") {
+                  return (
+                    <button
+                      key={index}
+                      className={item.btnClass}
+                      onClick={() => {
+                        if (!isLastStep) {
+                          const allWizardSteps = methods
+                            .map((m, i) => ({ ...m, index: i }))
+                            .filter(m => m.isWizardMode === true);
+
+                          const nextWizardStep = allWizardSteps[wizardIndex + 1];
+
+                          if (nextWizardStep) {
+                            setWizardIndex(nextWizardStep.index);
+                            setActiveTabs([nextWizardStep.id]);
+                          }
+                        } else {
+                          window.location.href = `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=modules`;
+                        }
+                      }}
+                    >
+                      {isLastStep ? "Finish" : item.label}
+                    </button>
+                  );
+                }
+
+                return (
+                  <div key={index} className={item.btnClass}>
+                    {item.label}
+                  </div>
+                );
+              })}
+          </>
+        );
+
+      case "nested":
+        return (
+          <NestedComponent
+            key={field.key}
+            id={field.key}
+            label={field.label}
+            description={field.desc}
+            fields={field.nestedFields ?? []}
+            value={value}
+            wrapperClass={field.rowClass}
+            addButtonLabel={field.addButtonLabel}
+            deleteButtonLabel={field.deleteButtonLabel}
+            single={field.single}
+            // onChange={(val: any) => {
+            //   if (
+            //     hasAccess(
+            //       field.proSetting ?? false,
+            //       String(field.moduleEnabled ?? ""),
+            //       String(field.dependentSetting ?? ""),
+            //       String(field.dependentPlugin ?? "")
+            //     )
+            //   ) {
+            //     handleInputChange(methodId, field.key, val);
+            //   }
+            // }}
+          />
+        );
       default:
         return (
-          <input
-            type={field.type}
-            placeholder={field.placeholder}
-            value={fieldValue || ""}
-            className="basic-input"
-            onChange={(e) =>
-              handleInputChange(methodId, field.key, e.target.value)
-            }
-          />
+          <>
+            <input
+              type={field.type}
+              placeholder={field.placeholder}
+              value={fieldValue || ""}
+              className="basic-input"
+              onChange={(e) =>
+                handleInputChange(methodId, field.key, e.target.value)
+              }
+            />
+            <div className="settings-metabox-description">{field.desc}</div>
+          </>
         );
     }
   };
 
   return (
-    <div className="payment-tabs-component">
-      {methods.map((method) => {
-        const isEnabled = value?.[method.id]?.enable ?? true;
-        const isActive = activeTabs.includes(method.id);
-        const isMenuOpen = openMenu === method.id;
+    <>
+      <div className="payment-tabs-component">
+        {methods.map((method, index) => {
+          const isEnabled = value?.[method.id]?.enable ?? false;
+          const isActive = activeTabs.includes(method.id);
 
-        return (
-          <div
-            key={method.id}
-            className={`payment-method-card ${method.disableBtn && !isEnabled ? "disable" : ""} ${method.openForm ? "open-form" : ""} `}
-          >
-            {/* Header */}
-            <div className="payment-method">
-
-              <div className="toggle-icon">
-                {method.formFields && method.formFields.length > 0 && !method.openForm && (
-                  <i
-                    className={`adminlib-${isEnabled && isActive ? "keyboard-arrow-down" : "pagination-right-arrow"
-                      }`}
-                    onClick={() => toggleActiveTab(method.id)}
-                  />
-                )}
-              </div>
+          if (isWizardMode && index > wizardIndex) return null;
 
 
-              <div
-                className="details"
-                onClick={() => toggleActiveTab(method.id)}
-              >
-                <div className="details-wrapper">
-                  <div className="payment-method-icon">
-                    <i className={method.icon}></i>
-                  </div>
-                  <div className="payment-method-info">
-                    <div className="title-wrapper">
-                      <span className="title">{method.label}</span>
+          return (
+            <div
+              key={method.id}
+              className={`payment-method-card ${method.disableBtn && !isEnabled ? "disable" : ""} ${method.openForm ? "open-form" : ""} `}
+            >
+              {/* Header */}
+              <div className="payment-method">
 
-                      {method.disableBtn ? (
-                        <>
-                          <div
-                            className={`admin-badge ${isEnabled ? "green" : "red"
-                              }`}
-                          >
-                            {isEnabled ? "Active" : "Inactive"}
-                          </div>
-                        </>
-                      ) : null}
-
-                      {method.countBtn && (
-                        <div className="admin-badge red">1/3</div>
-                      )}
-
-
-                    </div>
-                    <div className="method-desc">
-                      <p dangerouslySetInnerHTML={{ __html: method.desc }} />
-                    </div>
-                  </div>
+                <div className="toggle-icon">
+                  {method.formFields && method.formFields.length > 0 && !method.openForm && (
+                    <i
+                      className={`adminlib-${isEnabled && isActive ? "keyboard-arrow-down" : "pagination-right-arrow"
+                        }`}
+                      onClick={() => toggleActiveTab(method.id)}
+                    />
+                  )}
                 </div>
-              </div>
 
-              <div className="right-section" ref={menuRef}>
-                {method.disableBtn ? (
-                  <ul>
-                    {isEnabled ? (
-                      <>
-                        {method.formFields && method.formFields.length > 0 && (
-                          <li onClick={() => toggleActiveTab(method.id)}>
-                            <i className="settings-icon adminlib-setting"></i>
-                            <span>Settings</span>
-                          </li>
-                        )}
-                        <li
-                          onClick={() =>
-                            toggleEnable(method.id, false, method.icon)
-                          }
-                        >
-                          <i className="disable-icon adminlib-eye-blocked"></i>
-                          <span>Disable</span>
-                        </li>
-                      </>
-                    ) : (
-                      <li
-                        onClick={() =>
-                          toggleEnable(method.id, true, method.icon)
-                        }
-                      >
-                        <i className="eye-icon adminlib-eye"></i>
-                        <span>Enable</span>
-                      </li>
-                    )}
-                  </ul>
-                ) : method.countBtn ? (
-                  <div className="admin-badge red">1/3</div>
-                ) : null}
 
-              </div>
-            </div>
-
-            {
-              method.formFields && method.formFields.length > 0 && (
                 <div
-                  className={`${method.wrapperClass || ""} payment-method-form ${isEnabled && (isActive || method.openForm) ? "open" : ""}`}
+                  className="details"
+                  onClick={() => toggleActiveTab(method.id)}
                 >
-                  {method.formFields.map((field) => (
-                    <div key={field.key} className="form-group">
-                      {field.label && <label>{field.label}</label>}
-                      <div className="input-content">
-                        {renderField(method.id, field)}
+                  <div className="details-wrapper">
+                    <div className="payment-method-icon">
+                      <i className={method.icon}></i>
+                    </div>
+                    <div className="payment-method-info">
+                      <div className="title-wrapper">
+                        <span className="title">{method.label}</span>
+
+                        {method.disableBtn ? (
+                          <>
+                            <div
+                              className={`admin-badge ${isEnabled ? "green" : "red"
+                                }`}
+                            >
+                              {isEnabled ? "Active" : "Inactive"}
+                            </div>
+                          </>
+                        ) : null}
+
+                        {/* {method.countBtn && (
+                        <div className="admin-badge red">1/3</div>
+                      )} */}
+
+
+                      </div>
+                      <div className="method-desc">
+                        <p dangerouslySetInnerHTML={{ __html: method.desc }} />
                       </div>
                     </div>
-                  ))}
+                  </div>
                 </div>
-              )
-            }
-          </div>
-        );
-      })}
-    </div >
+
+                <div className="right-section" ref={menuRef}>
+                  {method.disableBtn ? (
+                    <ul>
+                      {isEnabled ? (
+                        <>
+                          {method.formFields && method.formFields.length > 0 && (
+                            <li onClick={() => toggleActiveTab(method.id)}>
+                              <i className="settings-icon adminlib-setting"></i>
+                              <span>Settings</span>
+                            </li>
+                          )}
+                          <li
+                            onClick={() =>
+                              toggleEnable(method.id, false, method.icon)
+                            }
+                          >
+                            <i className="disable-icon adminlib-eye-blocked"></i>
+                            <span>Disable</span>
+                          </li>
+                        </>
+                      ) : (
+                        <li
+                          onClick={() =>
+                            toggleEnable(method.id, true, method.icon)
+                          }
+                        >
+                          <i className="eye-icon adminlib-eye"></i>
+                          <span>Enable</span>
+                        </li>
+                      )}
+                    </ul>
+                  ) : method.countBtn ? (
+                    <div className="admin-badge red">1/3</div>
+                  ) : null}
+
+                </div>
+              </div>
+
+              {
+                method.formFields && method.formFields.length > 0 && (
+                  <div
+                    className={`${method.wrapperClass || ""} payment-method-form ${isEnabled && (isActive || method.openForm) ? "open" : ""}`}
+                  >
+                    {method.formFields.map((field) => {
+
+                      if (isWizardMode && field.type === "buttons") return null;
+
+                      return (
+                        <div key={field.key} className="form-group">
+                          {field.label && <label>{field.label}</label>}
+                          <div className="input-content">
+                            {renderField(method.id, field)}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )
+              }
+            </div>
+          );
+        })}
+      </div >
+      {isWizardMode && (
+        <div className="button-wrapper wizard-footer-buttons">
+          {renderWizardButtons()}
+        </div>
+      )}
+    </>
   );
 };
 

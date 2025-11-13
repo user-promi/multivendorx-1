@@ -32,8 +32,6 @@ const EditStore = () => {
     const [deleteModal, setDeleteModal] = useState(false);
     const [deleteOption, setDeleteOption] = useState('');
     const wrapperRef = useRef<HTMLDivElement>(null);
-    const [editInfo, setEditInfo] = useState(false);
-
     const [editName, setEditName] = useState(false);
     const [editDesc, setEditDesc] = useState(false);
     const [selectedOwner, setSelectedOwner] = useState(null);
@@ -67,8 +65,7 @@ const EditStore = () => {
 
         document.addEventListener("click", handleOutsideClick);
         return () => document.removeEventListener("click", handleOutsideClick);
-    }, [editName, editDesc, data]);
-
+    }, [data]);
 
     // Close dropdown on click outside
     useEffect(() => {
@@ -269,17 +266,45 @@ const EditStore = () => {
             : []),
     ], [modules]);
 
-    
+
     const handleUpdateData = useCallback((updatedFields: any) => {
         setData(prev => ({ ...prev, ...updatedFields }));
     }, []);
 
+    // const visibleTabs = useMemo(() => {
+    //     if (data?.status === 'pending' || data?.status === 'rejected' || data?.status === 'permanently_rejected') {
+    //         return tabData.filter(tab => tab.content.id === 'application-details');
+    //     }
+    //     return tabData;
+    // }, [tabData, data?.status]);
+
     const visibleTabs = useMemo(() => {
-        if (data?.status === 'pending' || data?.status === 'rejected' || data?.status === 'permanently_rejected') {
-            return tabData.filter(tab => tab.content.id === 'application-details');
+        const updatedTabs = tabData.map(tab =>
+            tab.content.id === 'application-details'
+                ? {
+                    ...tab,
+                    content: {
+                        ...tab.content,
+                        name:
+                            data?.status === 'active'
+                                ? 'Archive Data'
+                                : 'Application Details',
+                    },
+                }
+                : tab
+        );
+
+        if (
+            data?.status === 'pending' ||
+            data?.status === 'rejected' ||
+            data?.status === 'permanently_rejected'
+        ) {
+            return updatedTabs.filter(tab => tab.content.id === 'application-details');
         }
-        return tabData;
+
+        return updatedTabs;
     }, [tabData, data?.status]);
+
 
     // const getForm = (tabId: string) => {
     //     switch (tabId) {
@@ -326,7 +351,7 @@ const EditStore = () => {
                 return <div></div>;
         }
     }, [editId, data, handleUpdateData]);
-
+    console.log('data',data);
     return (
         <>
             <div className="store-page">
@@ -471,7 +496,7 @@ const EditStore = () => {
                                                         <span className="status admin-badge green">Active</span>
                                                     ) : data.status === 'pending' ? (
                                                         <span className="status  admin-badge yellow">Pending</span>
-                                                    ) : data.status === 'permanently_rejected' ? (
+                                                    ) : data.status === 'rejected' ? (
                                                         <span className="status  admin-badge red">Rejected</span>
                                                     ) : data.status === 'suspended' ? (
                                                         <span className="status  admin-badge blue">Suspended</span>
@@ -480,15 +505,18 @@ const EditStore = () => {
                                                     ) : data.status === 'under_review' ? (
                                                         <span className="status  admin-badge yellow">Under Review</span>
                                                     ) : data.status === 'deactivated' ? (
-                                                        <span className="status  admin-badge red">Deactivated</span>
+                                                        <span className="status  admin-badge red">Permanently Deactivated</span>
                                                     ) : (
                                                         <Skeleton variant="text" width={100} />
                                                     )}
 
-
-                                                    <div className="admin-badge green"><i className="adminlib-store-inventory"></i></div>
-                                                    <div className="admin-badge blue"><i className="adminlib-geo-my-wp"></i></div>
-                                                    <div className="admin-badge yellow"><i className="adminlib-staff-manager"></i></div>
+                                                    {modules.includes('marketplace-compliance') && (
+                                                        <>
+                                                            <div className="admin-badge green"><i className="adminlib-store-inventory"></i></div>
+                                                            <div className="admin-badge blue"><i className="adminlib-geo-my-wp"></i></div>
+                                                            <div className="admin-badge yellow"><i className="adminlib-staff-manager"></i></div>
+                                                        </>
+                                                    )}
                                                 </div>
 
                                                 <div className="des" onClick={() => setEditDesc(true)}>
@@ -498,7 +526,7 @@ const EditStore = () => {
                                                             onChange={(e) => setData({ ...data, description: e.target.value })}
                                                             onBlur={() => {
                                                                 if (!data?.description?.trim()) {
-                                                                setData({ ...data, description: prevDesc });
+                                                                    setData({ ...data, description: prevDesc });
                                                                 }
                                                                 setEditDesc(false);
                                                             }}
@@ -512,7 +540,7 @@ const EditStore = () => {
                                                     ) : (
                                                         <span>&nbsp;</span>
                                                     )}
-                                                    
+
 
                                                     <span
                                                         className={`edit-icon ${editDesc ? '' : 'admin-badge blue'}`}
@@ -535,12 +563,12 @@ const EditStore = () => {
                                                                     {[...Array(5)].map((_, i) => (
                                                                         <i
                                                                             key={i}
-                                                                            className={`review adminlib-star${i < Math.round(data.average_rating) ? ' filled' : ''
+                                                                            className={`review adminlib-star${i < Math.round(data.overall_reviews) ? ' filled' : ''
                                                                                 }`}
                                                                         ></i>
                                                                     ))}
                                                                     <span>
-                                                                        {data.average_rating} ({data.total_reviews}{' '}
+                                                                        {data.overall_reviews} ({data.total_reviews}{' '}
                                                                         {data.total_reviews === 1 ? 'Review' : 'Reviews'})
                                                                     </span>
                                                                 </>
@@ -553,12 +581,12 @@ const EditStore = () => {
 
 
                                                 <div className="des">
-                                                    <b>Store URL: </b>
+                                                    <b>Store base: </b>
                                                     {appLocalizer.store_page_url + '/'}
                                                     {data?.slug ? (
                                                         <>
                                                             {data.slug}{' '}
-                                                            
+
                                                             {(data?.status != 'pending' || data?.status != 'rejected' || data?.status != 'permanently_rejected') && (
 
                                                                 <span className="edit-icon admin-badge blue" onClick={() => {
@@ -601,7 +629,6 @@ const EditStore = () => {
                     hideTitle={true}
                     hideBreadcrumb={true}
                     action={
-
                         <>
                             <div className="edit-wrapper" ref={wrapperRef}>
                                 <span className="" onClick={(e) => {
@@ -619,11 +646,37 @@ const EditStore = () => {
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                 >
-                                                    <i className="adminlib-storefront"></i> Storefront
+                                                    <i className="adminlib-storefront"></i> View Storefront <i className="external adminlib-external"></i>
                                                 </a>
                                             </li>
                                         }
-                                        <li onClick={handleStoreDelete}><i className="adminlib-delete"></i> Store Delete</li>
+                                        <li onClick={() => {
+                                            navigate(`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`, {
+                                                state: { highlightTarget: "store-status" },
+                                            });
+
+                                            setTimeout(() => {
+                                                navigate(`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`, {
+                                                    replace: true,
+                                                });
+                                            }, 5000);
+                                        }}>
+                                            <i className="adminlib-form-multi-select"></i> Manage status
+                                        </li>
+                                        <li>
+                                            <a
+                                                href={`${appLocalizer.admin_url}edit.php?post_type=product&multivendorx_store_id=${data.id}`}
+                                                className="product-link"
+                                            >
+                                                <i className="adminlib-single-product"></i> Products
+                                            </a>
+                                        </li>
+
+                                        <li onClick={() => {
+                                            navigate(`?page=multivendorx#&tab=reports`);
+                                        }}
+                                            ><i className="adminlib-order"></i> Orders</li>
+                                        <li onClick={handleStoreDelete}><i className="adminlib-delete"></i> Delete store</li>
                                     </ul>
                                 )}
                             </div>

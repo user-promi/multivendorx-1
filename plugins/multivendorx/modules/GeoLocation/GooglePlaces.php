@@ -171,7 +171,7 @@ class GooglePlaces {
     }    
     
     private function log($message) {
-        $log_file = plugin_dir_path(__FILE__) . "/geolocation-debug.log";
+        // $log_file = plugin_dir_path(__FILE__) . "/geolocation-debug.log";
         $timestamp = date("d/m/Y H:i:s", time());
         file_put_contents($log_file, $timestamp . ": " . $message . "\n", FILE_APPEND);
     }

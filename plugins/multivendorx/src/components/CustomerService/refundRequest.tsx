@@ -244,13 +244,30 @@ const RefundRequest: React.FC = () => {
         },
         {
             header: __('Status', 'multivendorx'),
-            cell: ({ row }: any) => (
-                <TableCell title={row.original.status || ''}>
-                    {row.original.status
-                        ? row.original.status.charAt(0).toUpperCase() + row.original.status.slice(1)
-                        : '-'}
-                </TableCell>
-            ),
+            cell: ({ row }) => {
+                const status = row.original.status || '';
+                const formattedStatus = status
+                    ?.replace(/[-_]/g, " ")
+                    .toLowerCase()
+                    .replace(/^\w/, c => c.toUpperCase());
+
+                const getStatusBadge = (status: string) => {
+                    switch (status) {
+                        case 'completed':
+                            return <span className="admin-badge green">Completed</span>;
+                        case 'private':
+                            return <span className="admin-badge yellow">Private</span>;
+                        default:
+                            return <span className="admin-badge gray">{formattedStatus}</span>;
+                    }
+                };
+
+                return (
+                    <TableCell title={`${status}`}>
+                        {getStatusBadge(status)}
+                    </TableCell>
+                );
+            },
         },
         {
             id: 'date',
@@ -437,8 +454,8 @@ const RefundRequest: React.FC = () => {
         <>
             <div className="card-header">
                 <div className="left">
-                    <div className="title">Refund Requests</div>
-                    <div className="des">Shared by customers</div>
+                    <div className="title">Refund Tracker</div>
+                    <div className="des">Monitor refund trends and stay informed on store returns.</div>
                 </div>
                 <div className="right">
                     <i className="adminlib-more-vertical"></i>

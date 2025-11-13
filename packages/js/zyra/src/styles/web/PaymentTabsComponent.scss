@@ -197,12 +197,6 @@
                 padding: 1rem;
             }
 
-            .button-wrapper {
-                width: 100%;
-                display: flex;
-                justify-content: end;
-            }
-
             .form-group {
                 display: flex;
                 gap: 0.5rem;
@@ -216,14 +210,17 @@
                     font-size: 0.95rem;
                 }
 
-                .input-content {
+                .input-content:has(label) {
                     width: 75%;
+                }
+
+                .input-content {
+                    width: 100%;
                 }
 
                 textarea {
                     background: #fff;
                 }
-
 
                 .payment-tabs-component {
                     .payment-method-card {
@@ -394,11 +391,32 @@
 
 
 // setup wizard start (clean unuse css)
+.welcome-wrapper {
+    text-align: center;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+
+    img {
+        width: 11rem;
+    }
+
+    .des {
+        font-size: 0.95rem;
+        text-align: center;
+        padding: 0 3rem;
+    }
+}
+.finish-wrapper{
+    padding: 1rem;
+    .title{
+        font-size: 1.125rem;
+    }
+}
 .wizard-container {
     width: 100%;
     max-width: 50rem;
     margin: 2rem auto;
-    padding: 1rem;
+    padding: 1.5rem;
     background: #fff;
     border-radius: 0.313rem;
 
@@ -408,11 +426,19 @@
         border-radius: 0.313rem;
     }
 
-    h5 {
-        font-size: 1.313rem;
-        padding: 0.5rem;
-        margin: 0;
+    // .wizard-title {
+    //     font-size: 1.313rem;
+    //     padding-bottom: 1rem;
+    //     margin: 0;
+    // }
+
+    .button-wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: end;
+        gap: 0.5rem;
     }
+
 }
 
 .wizard-header {
@@ -427,8 +453,10 @@
     display: flex;
     align-items: center;
     font-weight: bold;
-    font-size: 1.063rem;
+    font-size: 1.45rem;
+    justify-content: center;
     gap: 0.5rem;
+    padding: 0.5rem;
 
     span {
         font-size: 1.4rem;
@@ -450,8 +478,6 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    // margin: 1.125rem 0;
-    // padding: 10px 0;
 }
 
 .wizard-step:first-child {

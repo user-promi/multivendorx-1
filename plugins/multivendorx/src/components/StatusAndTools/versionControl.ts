@@ -5,7 +5,7 @@ export default {
     priority: 3,
     name: __( 'Version Control', 'multivendorx' ),
     desc: __(
-        'Controls how stores are onboarded and what access they get.',
+        'Manage and switch plugin versions to restore or test previous releases when needed.',
         'multivendorx'
     ),
     icon: 'adminlib-general-tab',

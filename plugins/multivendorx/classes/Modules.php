@@ -156,6 +156,11 @@ class Modules {
                         'module_file'=> MultiVendorX()->plugin_path . 'modules/DistanceShipping/Module.php',
                         'module_class' => 'MultiVendorX\DistanceShipping\Module',
                     ),
+                    'store-shipping'=> array(
+                        'id'=> 'store-shipping',
+                        'module_file'=> MultiVendorX()->plugin_path . 'modules/StoreShipping/Module.php',
+                        'module_class' => 'MultiVendorX\StoreShipping\Module',
+                    ),
                     'announcement'=> array(
                         'id'=> 'announcement',
                         'module_file'=> MultiVendorX()->plugin_path . 'modules/Announcement/Module.php',
@@ -165,6 +170,16 @@ class Modules {
                         'id'=> 'knowladgebase',
                         'module_file'=> MultiVendorX()->plugin_path . 'modules/Knowledgebase/Module.php',
                         'module_class' => 'MultiVendorX\Knowledgebase\Module',
+                    ),
+                    'privacy'=> array(
+                        'id'=> 'privacy',
+                        'module_file'=> MultiVendorX()->plugin_path . 'modules/Privacy/Module.php',
+                        'module_class' => 'MultiVendorX\Privacy\Module',
+                    ),
+                    'marketplace-gateway'=> array(
+                        'id'=> 'marketplace-gateway',
+                        'module_file'=> MultiVendorX()->plugin_path . 'modules/GatewayFee/Module.php',
+                        'module_class' => 'MultiVendorX\GatewayFee\Module',
                     ),
 				)
             );

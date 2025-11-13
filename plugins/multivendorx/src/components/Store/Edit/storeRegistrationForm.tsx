@@ -2,11 +2,35 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { TextArea, getApiLink, SuccessNotice } from 'zyra';
 import { Skeleton } from '@mui/material';
+import { jsPDF } from "jspdf";
+
 
 const StoreRegistration = ({ id }: { id: string | null }) => {
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 	const [previousNotes, setPreviousNotes] = useState<{ note: string; date: string }[]>([]);
+
+
+	const handleDownloadPDF = () => {
+		const doc = new jsPDF();
+		doc.setFontSize(16);
+		doc.text("Registration Data", 10, 15);
+		doc.setFontSize(12);
+
+		const registrationData = formData.registration_data || {};
+
+		if (Object.keys(registrationData).length === 0) {
+			doc.text("No registration data found", 10, 30);
+		} else {
+			let y = 30;
+			Object.entries(registrationData).forEach(([label, value]) => {
+				doc.text(`${label}: ${value || "[Not Provided]"}`, 10, y);
+				y += 10;
+			});
+		}
+
+		doc.save("registration-data.pdf");
+	};
 
 	const fetchStoreData = () => {
 		axios({
@@ -124,6 +148,17 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 									<div className="value">{value || "[Not Provided]"}</div>
 								</div>
 							))} */}
+
+						{formData.registration_data && Object.keys(formData.registration_data).length > 0 && (
+							<button
+								onClick={() => {
+									handleDownloadPDF()
+								}}
+								className="download-btn"
+							>
+								Download
+							</button>
+						)}
 
 						{/* Registration Data */}
 						{formData.registration_data && Object.keys(formData.registration_data).length > 0 ? (

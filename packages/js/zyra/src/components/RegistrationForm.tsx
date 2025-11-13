@@ -65,7 +65,8 @@ export interface FormField {
     column?: number;
     filesize?: number;
     disabled?: boolean;
-
+    parentId?: any;
+    isStore?: boolean;
     // new for grouped/compound fields like address
     fields?: Array<{
         id: string | number;
@@ -102,7 +103,28 @@ const DEFAULT_OPTIONS: Option[] = [
 ];
 
 const DEFAULT_PLACEHOLDER = (type: string): string => `${type}`;
-const DEFAULT_LABEL_SIMPLE = (type: string): string => `Enter your ${type}`;
+// before: const DEFAULT_LABEL_SIMPLE = (type: string): string => `Enter your ${type}`;
+// const DEFAULT_LABEL_SIMPLE = (type: string, isStore: boolean = false): string => {
+//     const cleanType = String(type || '').trim();
+//     return isStore ? `Enter your store ${cleanType}` : `Enter your ${cleanType}`;
+// };
+const DEFAULT_LABEL_SIMPLE = (type: string, isStore: boolean = false,name:string=''): string => {
+    const cleanType = String(type || '').trim().toLowerCase();
+    if (isStore) {
+        const storeLabelMap: Record<string, string> = {
+            name: 'Enter your store name',
+            description: 'Enter your store description',
+            phone: 'Enter your store phone',
+            paypal_email: 'Enter your store PayPal email',
+            address: 'Enter your store address',
+        };
+        // return mapped label or fallback generic
+        return storeLabelMap[name] ;
+    }
+
+    return `Enter your ${cleanType}`;
+};
+
 const DEFAULT_LABEL_SELECT = 'Nature of Business';
 const DEFAULT_FORM_TITLE = 'Demo Form';
 
@@ -126,11 +148,11 @@ const selectOptions: SelectOption[] = [
 ];
 
 const selectOptionsStore: SelectOption[] = [
-    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Name', name: 'name' },
-    { icon: 'adminlib-text icon-form-textarea', value: 'textarea', label: 'Desc', name: 'description' },
-    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Phone', name: 'phone' },
-    { icon: 'adminlib-unread icon-form-email', value: 'email', label: 'Paypal Email', name: 'paypal_email' },
-    { icon: 'adminlib-divider icon-form-address', value: 'address', label: 'Address' },
+    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Store Name', name: 'name' },
+    { icon: 'adminlib-text icon-form-textarea', value: 'textarea', label: 'Store Desc', name: 'description' },
+    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Store Phone', name: 'phone' },
+    { icon: 'adminlib-unread icon-form-email', value: 'email', label: 'Store Paypal Email', name: 'paypal_email' },
+    { icon: 'adminlib-divider icon-form-address', value: 'address', label: 'Store Address',name: 'address' },
 ];
 
 // Component
@@ -180,11 +202,11 @@ const CustomForm: React.FC<CustomFormProps> = ({
             settingHasChanged.current = false;
             onChange({ formfieldlist: formFieldList, butttonsetting: buttonSetting });
         }
-    }, [buttonSetting, formFieldList, onChange]);
+    }, [buttonSetting, formFieldList]);
 
     const getUniqueName = () => Date.now().toString(36);
 
-    const getNewFormField = (type = 'text', fixedName?: string): FormField => {
+    const getNewFormField = (type = 'text', fixedName?: string, isStore: boolean = false): FormField => {
         const newFormField: FormField = {
             id: randMaxId ?? 0,
             type,
@@ -216,7 +238,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
             ];
             newFormField.value = {}; // optional, to hold user-entered values later
         } else {
-            newFormField.label = DEFAULT_LABEL_SIMPLE(type);
+            newFormField.label = DEFAULT_LABEL_SIMPLE(type, isStore, fixedName);
             newFormField.placeholder = DEFAULT_PLACEHOLDER(type);
         }
 
@@ -224,10 +246,9 @@ const CustomForm: React.FC<CustomFormProps> = ({
         return newFormField;
     };
 
-
-    const appendNewFormField = (index: number, type = 'text', fixedName?: string, readonly = false) => {
+    const appendNewFormField = (index: number, type = 'text', fixedName?: string, readonly = false, isStore = false) => {
         if (proSettingChange()) return;
-        const newField: FormField = getNewFormField(type, fixedName);
+        const newField: FormField = getNewFormField(type, fixedName, isStore);
         if (readonly) newField.readonly = true;
         // const newFormFieldList = [...formFieldList.slice(0, index + 1), newField, ...formFieldList.slice(index + 1)];
 
@@ -246,19 +267,67 @@ const CustomForm: React.FC<CustomFormProps> = ({
         const newFormFieldList = formFieldList.filter((_, i) => i !== index);
         settingHasChanged.current = true;
         setFormFieldList(newFormFieldList);
-        console.log('opendInput id', opendInput?.id)
-        console.log('formFieldList id', formFieldList[index].id)
         if (opendInput?.id === formFieldList[index].id) {
             setOpendInput(null);
         }
     };
 
-    const handleFormFieldChange = (index: number, key: string, value: any) => {
+    // const handleFormFieldChange = (index: number, key: string, value: any) => {
+    //     if (proSettingChange()) return;
+    //     const newFormFieldList = [...formFieldList];
+    //     newFormFieldList[index] = { ...newFormFieldList[index], [key]: value };
+    //     settingHasChanged.current = true;
+    //     setFormFieldList(newFormFieldList);
+
+    //     // Update opened input if it's the same field
+    //     if (opendInput?.id === newFormFieldList[index].id) {
+    //         setOpendInput(newFormFieldList[index]);
+    //     }
+    // };
+
+    const handleFormFieldChange = (
+        index: number,
+        key: string,
+        value: any,
+        parentId?: number
+    ) => {
         if (proSettingChange()) return;
+
         const newFormFieldList = [...formFieldList];
+
+        if (parentId !== undefined) {
+            // Handle subfield
+            const parentIndex = newFormFieldList.findIndex(f => f.id === parentId);
+            if (parentIndex >= 0) {
+                const parentField = { ...newFormFieldList[parentIndex] };
+                parentField.fields = parentField.fields?.map(f =>
+                    f.id === index ? { ...f, [key]: value } : f
+                );
+
+                // Update parent value object
+                parentField.value = parentField.value || {};
+                const changedSubField = parentField.fields?.find(f => f.id === index);
+                if (changedSubField?.key) {
+                    parentField.value[changedSubField.key] = value;
+                }
+
+                newFormFieldList[parentIndex] = parentField;
+                setFormFieldList(newFormFieldList);
+                settingHasChanged.current = true;
+
+                // Update opened input if it's the same subfield
+                if (opendInput?.id === index) {
+                    setOpendInput({ ...opendInput, [key]: value });
+                }
+
+                return;
+            }
+        }
+
+        // Top-level field
         newFormFieldList[index] = { ...newFormFieldList[index], [key]: value };
-        settingHasChanged.current = true;
         setFormFieldList(newFormFieldList);
+        settingHasChanged.current = true;
 
         // Update opened input if it's the same field
         if (opendInput?.id === newFormFieldList[index].id) {
@@ -392,7 +461,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
                         onClick={(type) => {
                             const option = selectOptionsStore.find(o => o.value === type);
                             const fixedName = option?.name;
-                            appendNewFormField(formFieldList.length - 1, type, fixedName, true);
+                            appendNewFormField(formFieldList.length - 1, type, fixedName, true, true);
                             setOpendInput(null);
                         }}
                     />
@@ -431,8 +500,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
             </div>
 
             <div className="registration-form-main-section">
-                {/* Form Title */}
-                <div className="form-heading">
+                {/* <div className="form-heading">
                     <input
                         type="text"
                         className="basic-input"
@@ -441,21 +509,33 @@ const CustomForm: React.FC<CustomFormProps> = ({
                         onChange={(e) => handleFormFieldChange(0, 'label', e.target.value)}
                     />
                     <i className="adminlib-eye"></i>
-                    {/* <DisplayButton
-                        wraperClass={'add-new-sections'}
-                        children={
-                            <div className="icon-wrapper">
-                                <span className="admin-font adminlib-move"></span>
-                            </div>
-                        }
-                        onClick={() => {
-                            const newInput = appendNewFormField(formFieldList.length - 1);
-                            if (newInput) {
-                                setOpendInput(newInput);
+                </div> */}
+                {/* Form Title */}
+                <div className={`form-heading ${formFieldList[0]?.disabled ? 'disable' : ''}`}>
+                    {/* Show only when not disabled */}
+                    {/* {!formFieldList[0]?.disabled && ( */}
+                    <input
+                        type="text"
+                        className="basic-input"
+                        placeholder={formTitlePlaceholder}
+                        value={formFieldList[0]?.label}
+                        onChange={(e) => {
+                            if (!formFieldList[0]?.disabled) {
+                                handleFormFieldChange(0, 'label', e.target.value);
                             }
                         }}
-                        btnType='button'
-                    /> */}
+                    />
+                    {/* )} */}
+
+                    {/* Eye / Eye-slash icon */}
+                    <i
+                        className={`adminlib-${formFieldList[0]?.disabled ? 'eye-blocked' : 'eye'}`}
+                        title={formFieldList[0]?.disabled ? 'Show Title' : 'Hide Title'}
+                        onClick={() => {
+                            const newDisabled = !formFieldList[0]?.disabled;
+                            handleFormFieldChange(0, 'disabled', newDisabled);
+                        }}
+                    ></i>
                 </div>
 
                 {/* Form Fields */}
@@ -617,47 +697,65 @@ const CustomForm: React.FC<CustomFormProps> = ({
             </div>
 
             {/* Meta Setting Modal outside registration-form-main-section */}
-            <div className="registration-edit-form">
+            <div className="registration-edit-form-wrapper">
                 {opendInput && (
                     <>
-                        {opendInput.readonly ? (
-                            // MultivendorX Free field: allow only label & placeholder
-                            <SettingMetaBox
-                                formField={opendInput}
-                                opened={{ click: true }}
-                                metaType="setting-meta"
-                                inputTypeList={[]} // hide type dropdown
-                                onChange={(key, value) => {
-                                    if (key !== 'label' && key !== 'placeholder') return; // only allow label & placeholder
-                                    const index = formFieldList.findIndex(f => f.id === opendInput.id);
-                                    if (index >= 0) {
-                                        handleFormFieldChange(index, key, value);
-                                        setOpendInput({ ...formFieldList[index], [key]: value });
-                                    }
-                                }}
-                            />
-                        ) : (
-                            // Normal fields: full edit box
-                            <SettingMetaBox
-                                formField={opendInput}
-                                opened={{ click: true }}
-                                onChange={(key, value) => {
-                                    const index = formFieldList.findIndex(f => f.id === opendInput.id);
-                                    if (index >= 0) {
-                                        handleFormFieldChange(index, key, value);
-                                        setOpendInput({ ...formFieldList[index], [key]: value });
-                                    }
-                                }}
-                                onTypeChange={(newType) => {
-                                    const index = formFieldList.findIndex(f => f.id === opendInput.id);
-                                    if (index >= 0) {
-                                        handleFormFieldTypeChange(index, newType);
-                                        setOpendInput({ ...formFieldList[index], type: newType });
-                                    }
-                                }}
-                                inputTypeList={selectOptions}
-                            />
-                        )}
+                        <div className="registration-edit-form">
+                            {opendInput.readonly ? (
+                                // MultivendorX Free field: allow only label & placeholder
+                                <SettingMetaBox
+                                    formField={opendInput}
+                                    opened={{ click: true }}
+                                    metaType="setting-meta"
+                                    inputTypeList={[]} // hide type dropdown
+                                    // onChange={(key, value) => {
+                                    //     if (key !== 'label' && key !== 'placeholder') return; // only allow label & placeholder
+                                    //     const index = formFieldList.findIndex(f => f.id === opendInput.id);
+                                    //     if (index >= 0) {
+                                    //         handleFormFieldChange(index, key, value);
+                                    //         setOpendInput({ ...formFieldList[index], [key]: value });
+                                    //     }
+                                    // }}
+                                    onChange={(key, value) => {
+                                        if (key !== 'label' && key !== 'placeholder' && key !== 'disabled') return; // only allow label & placeholder
+
+                                        if (opendInput?.parentId) {
+                                            // Subfield case
+                                            handleFormFieldChange(opendInput.id, key, value, opendInput.parentId);
+                                        } else {
+                                            // Top-level field case
+                                            const index = formFieldList.findIndex(f => f.id === opendInput.id);
+                                            if (index >= 0) {
+                                                handleFormFieldChange(index, key, value);
+                                                setOpendInput({ ...formFieldList[index], [key]: value });
+                                            }
+                                        }
+                                    }}
+
+                                />
+                            ) : (
+                                // Normal fields: full edit box
+                                <SettingMetaBox
+                                    formField={opendInput}
+                                    opened={{ click: true }}
+                                    onChange={(key, value) => {
+                                        const index = formFieldList.findIndex(f => f.id === opendInput.id);
+                                        if (index >= 0) {
+                                            handleFormFieldChange(index, key, value);
+                                            setOpendInput({ ...formFieldList[index], [key]: value });
+                                        }
+                                    }}
+                                    onTypeChange={(newType) => {
+                                        const index = formFieldList.findIndex(f => f.id === opendInput.id);
+                                        if (index >= 0) {
+                                            handleFormFieldTypeChange(index, newType);
+                                            setOpendInput({ ...formFieldList[index], type: newType });
+                                        }
+                                    }}
+                                    inputTypeList={selectOptions}
+                                />
+                            )}
+                        </div>
                     </>
                 )}
             </div>

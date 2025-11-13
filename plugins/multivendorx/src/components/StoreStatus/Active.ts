@@ -9,15 +9,6 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
-            key: 'registration page',
-            type: 'blocktext',
-            label: __('no_label', 'multivendorx'),
-            blocktext: __(
-                'The store is active and fully operational. Stores have complete access to manage products, process orders, receive payouts, and configure all store settings.',
-                'multivendorx'
-            ),
-        },
-        {
             key: 'store_promotion_limit',
             // label: __('Store promotion limit', 'multivendorx'),
             type: 'nested',

@@ -87,7 +87,7 @@ const ApprovalQueue = () => {
         },
         {
             id: "refund-requests",
-            label: "Refund Requests",
+            label: "Refunds",
             module: "marketplace-refund",
             icon: "adminlib-marketplace-refund blue",
             des: "Need your decision",
@@ -96,11 +96,11 @@ const ApprovalQueue = () => {
         },
         {
             id: "report-abuse",
-            label: "Abused Product",
+            label: "Flagged",
             module: "marketplace-compliance",
             icon: "adminlib-product blue",
             count: reportAbuseCount,
-            des: "Reported for assessment",
+            des: "Product reported for assessment",
             content: <ReportAbuseTable onUpdated={refreshCounts} />
         },
         {
@@ -114,9 +114,9 @@ const ApprovalQueue = () => {
         },
         {
             id: "deactivate-requests",
-            label: "Deactivate Requests",
+            label: "Deactivations",
             icon: "adminlib-bank blue",
-            des: "Queued for deactivated requests",
+            des: "Queued for requests",
             count: deactivateCount,
             content: <DeactivateRequests onUpdated={refreshCounts} />
         },
