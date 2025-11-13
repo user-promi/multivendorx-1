@@ -60,7 +60,7 @@ class PaypalPayout {
                 'label' => __('Paypal Payout', 'multivendorx'),
                 'fields' => [
                     [
-                        'name'        => 'paypal_email',
+                        'key'        => 'paypal_email',
                         'type'        => 'email',
                         'label'       => __('PayPal Email', 'multivendorx'),
                         'placeholder' => __('Enter your PayPal email address', 'multivendorx'),
