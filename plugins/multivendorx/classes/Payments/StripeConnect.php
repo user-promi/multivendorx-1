@@ -39,9 +39,9 @@ class StripeConnect
         // Use admin-post.php as redirect
         $redirect_uri = admin_url('admin-post.php?action=multivendorx_stripe_oauth_callback');
         $state = wp_generate_password(24, false, false);
-        
-        // Store vendor ID in transient for verification
-        set_transient('mvx_stripe_oauth_state_' . $state, $store_id, 5 * MINUTE_IN_SECONDS);
+
+        // Store store ID in option for verification
+        update_option('multivendorx_stripe_oauth_state_' . $state, ['store_id' => $store_id, 'time' => time()]);
         
         $onboarding_url = add_query_arg([
             'response_type' => 'code',
@@ -58,40 +58,33 @@ class StripeConnect
     }
 
     public function handle_oauth_callback() {
-        $log_file = plugin_dir_path(__FILE__) . "/error.log";
-        // Log initial callback
-        file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": OAUTH_CALLBACK_STARTED\n", FILE_APPEND);
-        // Use filter_input for GET parameters
-        $code  = filter_input(INPUT_GET, 'code', FILTER_DEFAULT);
+        $code = filter_input(INPUT_GET, 'code', FILTER_DEFAULT);
         $state = filter_input(INPUT_GET, 'state', FILTER_DEFAULT);
 
-        $code  = sanitize_text_field($code);
+        $code = sanitize_text_field($code);
         $state = sanitize_text_field($state);
 
-        file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": GET_PARAMS - Code: " . ($code ? 'PRESENT' : 'MISSING') . ", State: " . ($state ? 'PRESENT' : 'MISSING') . "\n", FILE_APPEND);
         if (!$code || !$state) {
-            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": ERROR: Missing code or state parameters\n", FILE_APPEND);
             wp_safe_redirect($this->get_redirect_url('error', 'stripe_oauth'));
             exit;
         }
-        $vendor_id = get_transient('mvx_stripe_oauth_state_' . $state);
-        file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": STATE: " . $state . "\n", FILE_APPEND);
-        file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": VENDOR_ID_FROM_TRANSIENT: " . var_export($vendor_id, true) . "\n", FILE_APPEND);
-        delete_transient('mvx_stripe_oauth_state_' . $state);
-        if (empty($vendor_id)) {
-            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": ERROR: Invalid or expired OAuth state\n", FILE_APPEND);
+
+        $state_data = get_option('multivendorx_stripe_oauth_state_' . $state);
+        if (!$state_data || (time() - $state_data['time']) > 600) {
+            delete_option('multivendorx_stripe_oauth_state_' . $state);
             wp_safe_redirect($this->get_redirect_url('error', 'invalid_state'));
             exit;
         }
+
+        $store_id = $state_data['store_id'];
+        delete_option('multivendorx_stripe_oauth_state_' . $state);
+
         $payment_admin_settings = MultiVendorX()->setting->get_setting('payment_methods', []);
         $stripe_settings = $payment_admin_settings['stripe-connect'] ?? [];
         $secret_key = $stripe_settings['secret_key'] ?? '';
-        $client_id  = $stripe_settings['client_id'] ?? '';
-        file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": STRIPE_SETTINGS: " . var_export($stripe_settings, true) . "\n", FILE_APPEND);
-        file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": SECRET_KEY_EXISTS: " . (!empty($secret_key) ? 'YES' : 'NO') . "\n", FILE_APPEND);
-        file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": CLIENT_ID_EXISTS: " . (!empty($client_id) ? 'YES' : 'NO') . "\n", FILE_APPEND);
+        $client_id = $stripe_settings['client_id'] ?? '';
+
         try {
-            // Replace SDK OAuth call with API call
             $response = $this->make_stripe_api_call(
                 'https://connect.stripe.com/oauth/token',
                 [
@@ -101,41 +94,31 @@ class StripeConnect
                     'code' => $code
                 ]
             );
-            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": STRIPE_OAUTH_RESPONSE: " . var_export($response, true) . "\n", FILE_APPEND);
+
             if (!empty($response['stripe_user_id'])) {
-                file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": STRIPE_USER_ID_RECEIVED: " . $response['stripe_user_id'] . "\n", FILE_APPEND);
-                $store = new Store($vendor_id);
-                file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": STORE_OBJECT_CREATED: " . var_export($store, true) . "\n", FILE_APPEND);
-                // Save each meta individually with logging
+                $store = new Store($store_id);
+
                 $meta_updates = [
                     "_stripe_connect_account_id" => $response['stripe_user_id'],
-                    "_vendor_payment_mode" => 'stripe-connect',
-                    "vendor_connected" => 1,
+                    "_store_payment_mode" => 'stripe-connect',
+                    "store_connected" => 1,
                     "admin_client_id" => $client_id,
                     "access_token" => $response['access_token'] ?? '',
                     "refresh_token" => $response['refresh_token'] ?? '',
                     "stripe_publishable_key" => $response['stripe_publishable_key'] ?? ''
                 ];
+
                 foreach ($meta_updates as $key => $value) {
-                    $result = $store->update_meta($key, sanitize_text_field($value));
-                    file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": META_UPDATE - " . $key . ": " . ($result ? 'SUCCESS' : 'FAILED') . "\n", FILE_APPEND);
-                    file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": META_VALUE - " . $key . ": " . sanitize_text_field($value) . "\n", FILE_APPEND);
+                    $store->update_meta($key, sanitize_text_field($value));
                 }
-                // Verify the data was saved
-                $saved_account_id = $store->get_meta("_stripe_connect_account_id");
-                $saved_payment_mode = $store->get_meta("_vendor_payment_mode");
-                file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": VERIFICATION - _stripe_connect_account_id: " . $saved_account_id . "\n", FILE_APPEND);
-                file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": VERIFICATION - _vendor_payment_mode: " . $saved_payment_mode . "\n", FILE_APPEND);
-                file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": OAUTH_SUCCESS - Redirecting to success\n", FILE_APPEND);
+
                 wp_safe_redirect($this->get_redirect_url('connected', 'stripe'));
                 exit;
             } else {
-                file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": ERROR: No stripe_user_id in response\n", FILE_APPEND);
                 wp_safe_redirect($this->get_redirect_url('error', 'stripe_connection_failed'));
                 exit;
             }
         } catch (Exception $e) {
-            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": GENERAL_ERROR: " . $e->getMessage() . "\n", FILE_APPEND);
             wp_safe_redirect($this->get_redirect_url('error', 'general_error'));
             exit;
         }
@@ -152,8 +135,8 @@ class StripeConnect
         // Delete all Stripe-related meta using the same Store object method
         $meta_keys = [
             "_stripe_connect_account_id",
-            "_vendor_payment_mode",
-            "vendor_connected",
+            "_store_payment_mode",
+            "store_connected",
             "admin_client_id",
             "access_token",
             "refresh_token",
@@ -286,43 +269,25 @@ class StripeConnect
 
     public function process_payment($store_id, $amount, $order_id = null, $transaction_id = null, $note = null)
     {
-        // $log_file = plugin_dir_path(__FILE__) . "/payment_processing.log";
-        
-        // Log payment process start
-        file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": PAYMENT_PROCESS_STARTED\n", FILE_APPEND);
-        file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": PARAMETERS - Store ID: {$store_id}, Amount: {$amount}, Order ID: {$order_id}, Transaction ID: {$transaction_id}, Note: {$note}\n", FILE_APPEND);
-        
         $store = new Store($store_id);
         $stripe_account_id = $store->get_meta('_stripe_connect_account_id');
-        
-        file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": STORE_META_RETRIEVED - Stripe Account ID: " . ($stripe_account_id ?: 'NOT_FOUND') . "\n", FILE_APPEND);
-        
+
         if (!$stripe_account_id) {
             $error_message = __('Vendor is not connected to Stripe.', 'multivendorx');
-            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": PAYMENT_FAILED - " . $error_message . "\n", FILE_APPEND);
             return [
                 'success' => false,
                 'message' => $error_message
             ];
         }
-        
-        // Log before creating transfer
-        file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": CREATING_TRANSFER - Amount: {$amount}, Destination: {$stripe_account_id}, Order ID: {$order_id}\n", FILE_APPEND);
-        
+
         $transfer = $this->create_transfer($amount, $stripe_account_id, $order_id);
-        
+
         if ($transfer) {
-            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": TRANSFER_SUCCESS - Transfer ID: " . $transfer['id'] . ", Status: " . $transfer['status'] . "\n", FILE_APPEND);
-            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": TRANSFER_DETAILS - Amount: " . ($transfer['amount'] / 100) . " " . $transfer['currency'] . ", Created: " . date("d/m/Y H:i:s", $transfer['created']) . "\n", FILE_APPEND);
-            
             // Trigger after payment complete action
             do_action('multivendorx_after_payment_complete', $store_id, 'Stripe Connect', 'success', $order_id, $transaction_id, $note, $amount);
-            
-            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": PAYMENT_COMPLETE_ACTION_TRIGGERED\n", FILE_APPEND);
-            
+
             $success_message = __('Payout successful', 'multivendorx');
-            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": PAYMENT_SUCCESS - " . $success_message . "\n", FILE_APPEND);
-            
+
             return [
                 'success'  => true,
                 'message'  => $success_message,
@@ -330,7 +295,6 @@ class StripeConnect
             ];
         } else {
             $error_message = __('Could not create transfer.', 'multivendorx');
-            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": PAYMENT_FAILED - " . $error_message . "\n", FILE_APPEND);
             return [
                 'success' => false,
                 'message' => $error_message
@@ -366,31 +330,22 @@ class StripeConnect
     }
 
     public function create_transfer($amount, $destination, $order_id) {
-        // $log_file = plugin_dir_path(__FILE__) . "/payment_processing.log";
-        
         try {
-            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": TRANSFER_CREATION_STARTED - Amount: {$amount}, Destination: {$destination}, Order ID: {$order_id}\n", FILE_APPEND);
-            
             $transfer_data = [
                 'amount' => $amount * 100,
                 'currency' => 'usd',
                 'destination' => $destination,
                 'transfer_group' => $order_id,
             ];
-            
-            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": TRANSFER_DATA - " . var_export($transfer_data, true) . "\n", FILE_APPEND);
-            
+
             $transfer = $this->make_stripe_api_call(
                 'https://api.stripe.com/v1/transfers',
                 $transfer_data,
                 'POST'
             );
-            
-            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": TRANSFER_CREATION_SUCCESS - Transfer ID: " . $transfer['id'] . "\n", FILE_APPEND);
-            
+
             return $transfer;
         } catch (Exception $e) {
-            file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": STRIPE_TRANSFER_ERROR - " . $e->getMessage() . "\n", FILE_APPEND);
             return null;
         }
     }
