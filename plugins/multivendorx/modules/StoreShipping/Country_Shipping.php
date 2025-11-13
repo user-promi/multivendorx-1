@@ -169,7 +169,7 @@ class Country_Shipping extends \WC_Shipping_Method {
                 'cost'  => $amount,
                 'taxes' => $tax_rate,
             );
-            file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:country : " . var_export($rate, true) . "\n", FILE_APPEND);
+            // file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:country : " . var_export($rate, true) . "\n", FILE_APPEND);
 
             $this->add_rate( $rate );
     

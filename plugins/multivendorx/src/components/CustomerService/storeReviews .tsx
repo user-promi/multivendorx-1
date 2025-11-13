@@ -35,6 +35,7 @@ type FilterData = {
     searchField: string;
     typeCount?: any;
     store?: string;
+    rating?: string;
     orderBy?: any;
     order?: any;
 };
@@ -103,6 +104,7 @@ const StoreReviews: React.FC = () => {
         currentPage = 1,
         typeCount = '',
         store = '',
+        rating = '',
         searchField = '',
         orderBy = '',
         order = '',
@@ -119,6 +121,7 @@ const StoreReviews: React.FC = () => {
                 row: rowsPerPage,
                 status: typeCount === 'all' ? '' : typeCount,
                 store_id: store,
+                overall_rating: rating,
                 searchField,
                 orderBy,
                 order,
@@ -169,6 +172,7 @@ const StoreReviews: React.FC = () => {
             currentPage,
             filterData?.typeCount,
             filterData?.store,
+            filterData?.rating,
             filterData?.searchField,
             filterData?.orderBy,
             filterData?.order,
@@ -200,20 +204,21 @@ const StoreReviews: React.FC = () => {
             ),
         },
         {
-            name: 'store',
+            name: 'rating',
             render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
                 <div className="   group-field">
                     <select
-                        name="store"
+                        name="rating"
                         onChange={(e) => updateFilter(e.target.name, e.target.value)}
                         value={filterValue || ''}
                         className="basic-select"
                     >
-                        <option value="">5 Star</option>
-                        <option value="">4 Star</option>
-                        <option value="">3 Star</option>
-                        <option value="">2 Star</option>
-                        <option value="">1 Star</option>
+                        <option value="">All ratings</option>
+                        <option value="5">5 Stars & Up</option>
+                        <option value="4">4 Stars & Up</option>
+                        <option value="3">3 Stars & Up</option>
+                        <option value="2">2 Stars & Up</option>
+                        <option value="1">1 Star & Up</option>
                     </select>
 
                 </div>
@@ -495,7 +500,6 @@ const StoreReviews: React.FC = () => {
             ),
         },
     ];
-    console.log('log', selectedReview)
     return (
         <>
             <div className="card-header">
