@@ -617,7 +617,7 @@ const StoreReviews: React.FC = () => {
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="reply">{__('Admin Reply', 'multivendorx')}</label>
+                                <label htmlFor="reply">{__('Respond to customer', 'multivendorx')}</label>
                                 <textarea
                                     id="reply"
                                     value={replyText}
@@ -629,11 +629,11 @@ const StoreReviews: React.FC = () => {
 
                             {/* Status Toggle */}
                             <div className="form-group">
-                                <label htmlFor="status">{__('Review Status', 'multivendorx')}</label>
+                                <label htmlFor="status">{__('Set review visibility status', 'multivendorx')}</label>
                                 <ToggleSetting
                                     wrapperclassName="setting-form-input"
                                     descclassName="settings-metabox-description"
-                                    description={__('Change review status', 'multivendorx')}
+                                    //description={__('Change review status', 'multivendorx')}
                                     options={[
                                         { key: 'pending', value: 'Pending', label: __('Pending', 'multivendorx') },
                                         { key: 'approved', value: 'Approved', label: __('Approved', 'multivendorx') },
