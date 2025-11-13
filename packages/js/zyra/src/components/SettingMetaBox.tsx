@@ -147,7 +147,7 @@ const SettingMetaBox: React.FC<SettingMetaBoxProps> = ({
                     onChange={(value) => onChange('placeholder', value)}
                 />
                 <InputField
-                    label="Character Limit"
+                    label="Character limit"
                     type="number"
                     value={formField?.charlimit?.toString() || ''}
                     onChange={(value) => onChange('charlimit', Number(value))}
@@ -186,7 +186,7 @@ const SettingMetaBox: React.FC<SettingMetaBoxProps> = ({
                 return (
                     <>
                         <InputField
-                            label="Site Key"
+                            label="Site key"
                             value={formField.sitekey || ''}
                             className={isSiteKeyEmpty ? 'highlight' : ''}
                             onChange={(value) => {
@@ -392,13 +392,13 @@ const SettingMetaBox: React.FC<SettingMetaBoxProps> = ({
                 <main className="meta-setting-modal-content">
                     <div className="settings-title">
                         {formField?.type
-                            ? `${formField.type.charAt(0).toUpperCase() + formField.type.slice(1)} Field Settings`
-                            : 'Input Field Settings'}
+                            ? `${formField.type.charAt(0).toUpperCase() + formField.type.slice(1)} field settings`
+                            : 'Input field settings'}
                     </div>
 
                     {/* Always show label */}
                     <InputField
-                        label="Field Label"
+                        label="Field label"
                         value={formField?.label || ''}
                         onChange={(value) => onChange('label', value)}
                     />

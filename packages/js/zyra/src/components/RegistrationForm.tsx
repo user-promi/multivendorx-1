@@ -104,9 +104,25 @@ const DEFAULT_OPTIONS: Option[] = [
 
 const DEFAULT_PLACEHOLDER = (type: string): string => `${type}`;
 // before: const DEFAULT_LABEL_SIMPLE = (type: string): string => `Enter your ${type}`;
-const DEFAULT_LABEL_SIMPLE = (type: string, isStore: boolean = false): string => {
-    const cleanType = String(type || '').trim();
-    return isStore ? `Enter your store ${cleanType}` : `Enter your ${cleanType}`;
+// const DEFAULT_LABEL_SIMPLE = (type: string, isStore: boolean = false): string => {
+//     const cleanType = String(type || '').trim();
+//     return isStore ? `Enter your store ${cleanType}` : `Enter your ${cleanType}`;
+// };
+const DEFAULT_LABEL_SIMPLE = (type: string, isStore: boolean = false,name:string=''): string => {
+    const cleanType = String(type || '').trim().toLowerCase();
+    if (isStore) {
+        const storeLabelMap: Record<string, string> = {
+            name: 'Enter your store name',
+            description: 'Enter your store description',
+            phone: 'Enter your store phone',
+            paypal_email: 'Enter your store PayPal email',
+            address: 'Enter your store address',
+        };
+        // return mapped label or fallback generic
+        return storeLabelMap[name] ;
+    }
+
+    return `Enter your ${cleanType}`;
 };
 
 const DEFAULT_LABEL_SELECT = 'Nature of Business';
@@ -132,11 +148,11 @@ const selectOptions: SelectOption[] = [
 ];
 
 const selectOptionsStore: SelectOption[] = [
-    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Name', name: 'name' },
-    { icon: 'adminlib-text icon-form-textarea', value: 'textarea', label: 'Desc', name: 'description' },
-    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Phone', name: 'phone' },
-    { icon: 'adminlib-unread icon-form-email', value: 'email', label: 'Paypal Email', name: 'paypal_email' },
-    { icon: 'adminlib-divider icon-form-address', value: 'address', label: 'Address' },
+    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Store Name', name: 'name' },
+    { icon: 'adminlib-text icon-form-textarea', value: 'textarea', label: 'Store Desc', name: 'description' },
+    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Store Phone', name: 'phone' },
+    { icon: 'adminlib-unread icon-form-email', value: 'email', label: 'Store Paypal Email', name: 'paypal_email' },
+    { icon: 'adminlib-divider icon-form-address', value: 'address', label: 'Store Address',name: 'address' },
 ];
 
 // Component
@@ -222,14 +238,13 @@ const CustomForm: React.FC<CustomFormProps> = ({
             ];
             newFormField.value = {}; // optional, to hold user-entered values later
         } else {
-            newFormField.label = DEFAULT_LABEL_SIMPLE(type, isStore);
+            newFormField.label = DEFAULT_LABEL_SIMPLE(type, isStore, fixedName);
             newFormField.placeholder = DEFAULT_PLACEHOLDER(type);
         }
 
         setRendMaxId(prev => (prev ?? 0) + 1);
         return newFormField;
     };
-
 
     const appendNewFormField = (index: number, type = 'text', fixedName?: string, readonly = false, isStore = false) => {
         if (proSettingChange()) return;
@@ -724,7 +739,6 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                     formField={opendInput}
                                     opened={{ click: true }}
                                     onChange={(key, value) => {
-                                        console.log()
                                         const index = formFieldList.findIndex(f => f.id === opendInput.id);
                                         if (index >= 0) {
                                             handleFormFieldChange(index, key, value);
