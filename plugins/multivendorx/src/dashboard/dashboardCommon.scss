@@ -696,56 +696,96 @@ a:focus {
     display: flex;
     gap: 2rem;
 
-    .horizontal-title-section {
-        width: 30%;
-        height: auto;
+    .horizontal-tabs {
+        display: flex;
+        width: 100%;
 
-        .tabs-wrapper {
-            background: transparent;
+        .horizontal-title-section {
+            width: 25%;
+            height: auto;
+            margin-top: 2.5rem;
 
-            .horizontal-tabs-item {
-                display: flex;
-                flex-direction: column;
-                gap: 0.25rem;
 
-                .menu-item {
-                    padding: 0.813rem;
-                    transition: all 0.3s ease;
-                    border-radius: 0.313rem;
-                    margin-bottom: 0.313rem;
-                    cursor: pointer;
-                    margin: 0;
+            .tabs-wrapper {
+                background: transparent;
 
-                    i {
-                        padding-right: 0.5rem;
-                    }
+                .horizontal-tabs-item {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.25rem;
+                    width: 100%;
 
-                    p {
+                    .menu-item {
+                        padding: 0.813rem;
+                        transition: all 0.3s ease;
+                        border-radius: 0.313rem;
+                        margin-bottom: 0.313rem;
+                        cursor: pointer;
                         margin: 0;
-                        font-weight: 500;
+
+                        i {
+                            padding-right: 0.5rem;
+                        }
+
+                        p {
+                            margin: 0;
+                            font-weight: 500;
+                            font-size: 1.125rem;
+                            line-height: 1rem;
+                        }
+
+                        &:hover {
+                            background: $theme-background-color;
+                            color: $theme-color;
+                        }
+
+                        &.active-current-tab,
+                        &.active-current-tab:hover {
+                            background: $theme-color;
+                            color: #fff;
+                        }
                     }
 
-                    &:hover {
-                        background: color-mix(in srgb, var(--themeColor) 15%, transparent);
-                        color: var(--themeColor);
-                    }
-
-                    &.active-current-tab,
-                    &.active-current-tab:hover {
-                        background: var(--themeColor);
-                        color: #fff;
+                    .tab-heading {
+                        font-size: 1.063rem;
+                        color: #0000008f;
+                        font-weight: 600;
+                        padding-bottom: 0.313rem;
+                        border-bottom: $border-light-small;
+                        margin: 0.5rem 0;
                     }
                 }
             }
         }
-    }
 
-    .general-wrapper {
-        width: 70%;
-        background: #fff;
+        .general-wrapper {
+            width: 75%;
+            background: #fff;
+            border: $border-light-small;
+            margin: 2.5rem 1rem 1rem;
+            border-radius: 0.313rem;
 
-        .card-content {
-            padding: 0;
+            .card-content {
+                padding: 0;
+            }
+
+            .middle-child-container {
+                border: none;
+            }
+
+            .tab-content {
+                padding: 1.5rem;
+                box-sizing: border-box;
+
+                .divider-wrapper:first-child {
+                    .divider-section {
+                        margin: 0;
+                        padding-top: 0;
+                        padding-bottom: .5rem;
+                        margin-bottom: 1rem;
+                    }
+                }
+            }
         }
     }
 }

@@ -16,11 +16,11 @@ a {
   text-decoration: none;
   color: $color-black;
 
-  &:hover,
-  &:focus {
-    color: $color-active;
-    outline: none
-  }
+  // &:hover,
+  // &:focus {
+  //   color: $color-active;
+  //   outline: none
+  // }
 }
 
 .form-select-field-wrapper input:focus {

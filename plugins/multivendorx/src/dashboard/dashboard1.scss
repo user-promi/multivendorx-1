@@ -107,10 +107,6 @@ a {
                 }
             }
 
-            // a.tab:hover {
-            //     background-color: #f3f2f3;
-            // }
-
             &:not(.active) {
                 a:hover {
                     color: var(--themeColor);
@@ -119,9 +115,6 @@ a {
             }
 
             &.active {
-                // border-right: 0.25rem solid var(--themeColor);
-                // color: #fff;
-
                 a,
                 a:hover {
                     background-color: var(--themeColor);
@@ -139,13 +132,15 @@ a {
 
             &.active {
                 a {
-                    color: var(--theme-color);
+                    color: var(--themeColor);
+
                 }
             }
 
             a,
             a:hover {
-                color: var(--theme-color);
+                color: var(--themeColor);
+                background: transparent;
             }
         }
     }
@@ -227,11 +222,11 @@ a {
                             }
                         }
 
-                        &:hover {
-                            .dropdown-menu {
-                                display: block;
-                            }
-                        }
+                        // &:hover {
+                        //     .dropdown-menu {
+                        //         display: block;
+                        //     }
+                        // }
                     }
 
                     .dropdown-menu {
@@ -247,6 +242,7 @@ a {
                         background: #fff;
                         border-radius: 0.313rem;
                         transition: all 0.3s ease;
+                        display: none;
 
                         .dropdown-header {
                             padding: 1.125rem 1.75rem;
@@ -1331,10 +1327,13 @@ a {
 
 // review start
 .review-wrapper {
+    display: flex;
+    gap: 1rem;
+
     .review {
         padding: 1rem;
         border: $border-light-small;
-        border-radius: 0.13rem;
+        border-radius: 0.313rem;
 
         .details {
             .title {
@@ -1348,7 +1347,20 @@ a {
                 font-size: 0.95rem;
                 color: #0000008a;
                 padding-top: 0.5rem;
-                line-height: 1.063rem;
+                line-height: 1.25rem;
+            }
+
+            .star-wrapper {
+                i {
+                    color: rgb(212, 156, 0);
+                }
+
+                span {
+                    color: #0000004a;
+                    font-size: 0.813rem;
+                    font-weight: 500;
+                    padding-left: 0.5rem;
+                }
             }
         }
     }

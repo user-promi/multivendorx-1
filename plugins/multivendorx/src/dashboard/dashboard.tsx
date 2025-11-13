@@ -81,6 +81,39 @@ const demoData = [
     theme: "theme-color3",
   },
 ];
+const reviews = [
+  {
+    id: 1,
+    product: "Product A",
+    rating: 5,
+    date: "22 Dec 2024",
+    description:
+      "Good product overall, but shipping took longer than expected."},
+  {
+    id: 2,
+    product: "Product B",
+    rating: 4,
+    date: "10 Jan 2025",
+    description:
+      "Amazing quality and packaging. Worth the price and fast delivery!",
+  },
+  {
+    id: 3,
+    product: "Product C",
+    rating: 3,
+    date: "5 Feb 2025",
+    description:
+      "Good product overall, but shipping took longer than expected.",
+  },
+  {
+    id: 4,
+    product: "Product D",
+    rating: 5,
+    date: "28 Mar 2025",
+    description:
+      "Exceeded expectations! The material feels premium and durable.",
+  },
+];
 const customers = [
   {
     id: 1,
@@ -574,7 +607,7 @@ const Dashboard: React.FC = () => {
 
 
       <div className="row">
-        <div className="column w-35">
+        <div className="column">
           <div className="card">
             <div className="card-header">
               <div className="left">
@@ -589,19 +622,24 @@ const Dashboard: React.FC = () => {
             </div>
             <div className="card-body">
               <div className="review-wrapper">
-                <div className="review">
-                  <div className="details">
-                    <div className="title">Product A</div>
-                    <div className="start">
-                      <i className="adminlib-star"></i>
-                      <i className="adminlib-star"></i>
-                      <i className="adminlib-star"></i>
-                      <i className="adminlib-star"></i>
-                      <i className="adminlib-star"></i>
+                {reviews.map((review) => (
+                  <div className="review" key={review.id}>
+                    <div className="details">
+                      <div className="title">{review.product}</div>
+                      <div className="star-wrapper">
+                        {[...Array(5)].map((_, index) => (
+                          <i
+                            key={index}
+                            className={`adminlib-star ${index < review.rating ? "active" : ""
+                              }`}
+                          ></i>
+                        ))}
+                        <span>{review.date}</span>
+                      </div>
+                      <div className="des">{review.description}</div>
                     </div>
-                    <div className="des">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus earum fugiat voluptatum nobis iure at esse perferendis nesciunt nisi officia!</div>
                   </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
