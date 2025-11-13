@@ -36,7 +36,7 @@ class Rewrites {
             return;
         }
 
-        $store_slug = get_query_var( 'store' );
+        $store_slug = get_query_var( $this->custom_store_url );
         if ( empty( $store_slug ) ) {
             return;
         }
