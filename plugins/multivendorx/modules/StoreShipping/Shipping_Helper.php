@@ -14,9 +14,10 @@ class Shipping_Helper {
             $product_id = $item['product_id'];
             $store_id   = get_post_meta($product_id, 'multivendorx_store_id', true);
             if (!$store_id) continue;
-
+    
             if (!isset($new_packages[$store_id])) {
                 $new_packages[$store_id] = [
+                    'store_id'        => $store_id,
                     'contents'        => [],
                     'contents_cost'   => 0,
                     'applied_coupons' => WC()->cart->get_applied_coupons(),
@@ -30,11 +31,12 @@ class Shipping_Helper {
                     ],
                 ];
             }
-
+    
             $new_packages[$store_id]['contents'][$item_key] = $item;
             $new_packages[$store_id]['contents_cost'] += $item['line_total'];
         }
-
+        // Return as array with store_id preserved in each package
         return array_values($new_packages);
     }
+    
 }
