@@ -133,7 +133,7 @@ class Product {
      */
     public function filter_products_by_store_query($query) {
         global $typenow, $pagenow;
-        $store_id  = filter_input(INPUT_GET, 'multivendorx_store_id', FILTER_SANITIZE_STRING);
+        $store_id  = filter_input(INPUT_GET, 'multivendorx_store_id', FILTER_SANITIZE_NUMBER_INT);
 
         if (
             $pagenow === 'edit.php' &&
