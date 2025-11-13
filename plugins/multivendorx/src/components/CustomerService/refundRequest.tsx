@@ -454,7 +454,7 @@ const RefundRequest: React.FC = () => {
         <>
             <div className="card-header">
                 <div className="left">
-                    <div className="title">Refund Tracker</div>
+                    <div className="title">Refund tracker</div>
                     <div className="des">Monitor refund trends and stay informed on store returns.</div>
                 </div>
                 <div className="right">

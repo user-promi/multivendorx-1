@@ -584,7 +584,7 @@ const Qna: React.FC = () => {
 
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="visibility">{__("Make this Q&A Public or Private - control who sees it.", "multivendorx")}</label>
+                                <label htmlFor="visibility">{__("Decide whether this Q&A is visible to everyone or only to the store team.", "multivendorx")}</label>
                                 <ToggleSetting
                                     wrapperClass="setting-form-input"
                                     descClass="settings-metabox-description"
