@@ -7,7 +7,7 @@ defined('ABSPATH') || exit;
 
 class StripeConnect
 {
-    private $api_version = '2025-08-27.basil';
+    private $api_version = '2025-10-29.clover';
     
     public function __construct()
     {
@@ -79,6 +79,12 @@ class StripeConnect
         $store_id = $state_data['store_id'];
         delete_option('multivendorx_stripe_oauth_state_' . $state);
 
+        $store = new Store($store_id);
+        if ($store->get_id() <= 0) {
+            wp_safe_redirect($this->get_redirect_url('error', 'invalid_store'));
+            exit;
+        }
+
         $payment_admin_settings = MultiVendorX()->setting->get_setting('payment_methods', []);
         $stripe_settings = $payment_admin_settings['stripe-connect'] ?? [];
         $secret_key = $stripe_settings['secret_key'] ?? '';
@@ -96,29 +102,35 @@ class StripeConnect
             );
 
             if (!empty($response['stripe_user_id'])) {
-                $store = new Store($store_id);
+                try {
+                    $meta_updates = [
+                        "_stripe_connect_account_id" => $response['stripe_user_id'],
+                        "_store_payment_mode" => 'stripe-connect',
+                        "store_connected" => 1,
+                        "admin_client_id" => $client_id,
+                        "access_token" => $response['access_token'] ?? '',
+                        "refresh_token" => $response['refresh_token'] ?? '',
+                        "stripe_publishable_key" => $response['stripe_publishable_key'] ?? ''
+                    ];
 
-                $meta_updates = [
-                    "_stripe_connect_account_id" => $response['stripe_user_id'],
-                    "_store_payment_mode" => 'stripe-connect',
-                    "store_connected" => 1,
-                    "admin_client_id" => $client_id,
-                    "access_token" => $response['access_token'] ?? '',
-                    "refresh_token" => $response['refresh_token'] ?? '',
-                    "stripe_publishable_key" => $response['stripe_publishable_key'] ?? ''
-                ];
+                    foreach ($meta_updates as $key => $value) {
+                        $store->update_meta($key, sanitize_text_field($value));
+                    }
 
-                foreach ($meta_updates as $key => $value) {
-                    $store->update_meta($key, sanitize_text_field($value));
+                    wp_safe_redirect($this->get_redirect_url('connected', 'stripe'));
+                    exit;
+                } catch (Exception $e) {
+                    file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":Stripe OAuth: Failed to update store meta for store ID " . $store_id . ": " . $e->getMessage() . "\n", FILE_APPEND);
+                    wp_safe_redirect($this->get_redirect_url('error', 'store_update_failed'));
+                    exit;
                 }
-
-                wp_safe_redirect($this->get_redirect_url('connected', 'stripe'));
-                exit;
             } else {
+                file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":Stripe OAuth: No stripe_user_id in response for store ID " . $store_id . "\n", FILE_APPEND);
                 wp_safe_redirect($this->get_redirect_url('error', 'stripe_connection_failed'));
                 exit;
             }
         } catch (Exception $e) {
+            file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":Stripe OAuth: API call failed for store ID " . $store_id . ": " . $e->getMessage() . "\n", FILE_APPEND);
             wp_safe_redirect($this->get_redirect_url('error', 'general_error'));
             exit;
         }
@@ -212,24 +224,37 @@ class StripeConnect
     public function get_store_payment_settings() {
         $payment_admin_settings = MultiVendorX()->setting->get_setting('payment_methods', []);
         $stripe_settings = $payment_admin_settings['stripe-connect'] ?? [];
-        
+
         if (!empty($stripe_settings) && $stripe_settings['enable']) {
-            $store_id = get_user_meta( get_current_user_id(), "multivendorx_active_store", true);
-            $store = new Store($store_id);
-            $stripe_account_id = $store->get_meta('_stripe_connect_account_id');
-            $onboarding_status = 'Not Connected';
-            $is_onboarded = false;
-            
-            if ($stripe_account_id) {
-                $account = $this->get_account($stripe_account_id);
-                if ($account) {
-                    if ($account['charges_enabled']) {
-                        $onboarding_status = 'Connected';
-                        $is_onboarded = true;
-                    } else {
-                        $onboarding_status = 'Connected – Verification Required';
+            try {
+                $store_id = get_user_meta( get_current_user_id(), "multivendorx_active_store", true);
+                if (!$store_id) {
+                    return null;
+                }
+
+                $store = new Store($store_id);
+                if ($store->get_id() <= 0) {
+                    return null;
+                }
+
+                $stripe_account_id = $store->get_meta('_stripe_connect_account_id');
+                $onboarding_status = 'Not Connected';
+                $is_onboarded = false;
+
+                if ($stripe_account_id) {
+                    $account = $this->get_account($stripe_account_id);
+                    if ($account) {
+                        if ($account['charges_enabled']) {
+                            $onboarding_status = 'Connected';
+                            $is_onboarded = true;
+                        } else {
+                            $onboarding_status = 'Connected – Verification Required';
+                        }
                     }
                 }
+            } catch (Exception $e) {
+                file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":Stripe get_store_payment_settings failed: " . $e->getMessage() . "\n", FILE_APPEND);
+                return null;
             }
             
             $fields = [
