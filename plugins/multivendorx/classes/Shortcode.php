@@ -27,6 +27,9 @@ class Shortcode {
     }
 
     public function frontend_scripts() {
+        if (is_page() && has_shortcode(get_post()->post_content, 'multivendorx_store_dashboard')) {
+            wp_deregister_style('wc-blocks-style');
+        }
         wp_enqueue_script( 'wp-element' );
         wp_enqueue_media();
         FrontendScripts::load_scripts();
