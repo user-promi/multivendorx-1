@@ -35,6 +35,7 @@ type FilterData = {
     searchField: string;
     typeCount?: any;
     store?: string;
+    rating?: string;
     orderBy?: any;
     order?: any;
 };
@@ -103,6 +104,7 @@ const StoreReviews: React.FC = () => {
         currentPage = 1,
         typeCount = '',
         store = '',
+        rating = '',
         searchField = '',
         orderBy = '',
         order = '',
@@ -119,6 +121,7 @@ const StoreReviews: React.FC = () => {
                 row: rowsPerPage,
                 status: typeCount === 'all' ? '' : typeCount,
                 store_id: store,
+                overall_rating: rating,
                 searchField,
                 orderBy,
                 order,
@@ -169,6 +172,7 @@ const StoreReviews: React.FC = () => {
             currentPage,
             filterData?.typeCount,
             filterData?.store,
+            filterData?.rating,
             filterData?.searchField,
             filterData?.orderBy,
             filterData?.order,
@@ -200,20 +204,21 @@ const StoreReviews: React.FC = () => {
             ),
         },
         {
-            name: 'store',
+            name: 'rating',
             render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
                 <div className="   group-field">
                     <select
-                        name="store"
+                        name="rating"
                         onChange={(e) => updateFilter(e.target.name, e.target.value)}
                         value={filterValue || ''}
                         className="basic-select"
                     >
-                        <option value="">5 Star</option>
-                        <option value="">4 Star</option>
-                        <option value="">3 Star</option>
-                        <option value="">2 Star</option>
-                        <option value="">1 Star</option>
+                        <option value="">All ratings</option>
+                        <option value="5">5 Stars & Up</option>
+                        <option value="4">4 Stars & Up</option>
+                        <option value="3">3 Stars & Up</option>
+                        <option value="2">2 Stars & Up</option>
+                        <option value="1">1 Star & Up</option>
                     </select>
 
                 </div>
@@ -495,7 +500,6 @@ const StoreReviews: React.FC = () => {
             ),
         },
     ];
-
     return (
         <>
             <div className="card-header">
@@ -533,7 +537,7 @@ const StoreReviews: React.FC = () => {
                         <>
                             <div className="title">
                                 <i className="adminlib-store-review"></i>
-                                {__('Reply to Review', 'multivendorx')} - {selectedReview.customer_name}
+                                {__('Reply to Review', 'multivendorx')} - {selectedReview.store_name}
                             </div>
                             {/* <p>Review customer inquiries and reply directly. You can choose to display answers publicly or keep them private.
                             </p> */}
@@ -568,15 +572,47 @@ const StoreReviews: React.FC = () => {
                                     <div className="avater">
                                         <i className="item-icon adminlib-person"></i>
                                     </div>
-                                    <div className="name-wrapper">
-                                        <div className="name">store1</div>
-                                        <div className="rating-wrapper"><i className="adminlib-star"></i><i className="adminlib-star"></i><i className="adminlib-star"></i><i className="adminlib-star"></i><i className="adminlib-star"></i> <div className="date">22 Dec 2022</div></div>
-                                    </div>
+                                    {/* <div className="name-wrapper">
+                                        <div className="name">{selectedReview.review_title}</div>
+                                        <div className="rating-wrapper">
+                                            <i className="adminlib-star"></i>
+                                            <i className="adminlib-star"></i>
+                                            <i className="adminlib-star"></i>
+                                            <i className="adminlib-star"></i>
+                                            <i className="adminlib-star">
+                                            </i>
+                                            <div className="date">22 Dec 2022</div></div>
+                                    </div> */}
+                                    {selectedReview && (
+                                        <div className="name-wrapper">
+                                            <div
+                                                className="name"
+                                                dangerouslySetInnerHTML={{ __html: selectedReview.review_title }}
+                                            ></div>
+
+                                            <div className="rating-wrapper">
+                                                {[...Array(5)].map((_, i) => (
+                                                    <i
+                                                        key={i}
+                                                        className={`adminlib-star ${i < Math.round(selectedReview.overall_rating) ? 'filled' : ''}`}
+                                                    ></i>
+                                                ))}
+
+                                                <div className="date">
+                                                    {new Date(selectedReview.date_created).toLocaleDateString('en-GB', {
+                                                        day: '2-digit',
+                                                        month: 'short',
+                                                        year: 'numeric',
+                                                    })}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
 
                                 </div>
 
                                 <div className="review">
-                                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Minus, aliquid repudiandae dolorem deserunt maxime nam necessitatibus et ullam nihil quasi.
+                                    {selectedReview.review_content}
                                 </div>
                             </div>
 

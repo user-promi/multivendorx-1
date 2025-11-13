@@ -39,7 +39,8 @@ class Country_Shipping extends \WC_Shipping_Method {
         $this->init_form_fields();
         $this->init_settings();
 
-        add_filter( 'woocommerce_cart_shipping_packages', array( $this, 'multivendorx_split_cart_by_store' ) );
+        // add_filter( 'woocommerce_cart_shipping_packages', array( $this, 'multivendorx_split_cart_by_store' ) );
+        add_filter( 'woocommerce_cart_shipping_packages', ['MultiVendorX\StoreShipping\Shipping_Helper', 'split_cart_by_store'] );
 
         add_action( 'woocommerce_cart_calculate_fees', array( $this, 'multivendorx_force_shipping_recalculation' ), 20, 1 );
         // Save settings in admin if you have any defined
@@ -168,7 +169,8 @@ class Country_Shipping extends \WC_Shipping_Method {
                 'cost'  => $amount,
                 'taxes' => $tax_rate,
             );
-    
+            // file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:country : " . var_export($rate, true) . "\n", FILE_APPEND);
+
             $this->add_rate( $rate );
     
             // Step 5: Maybe add local pickup rate if available

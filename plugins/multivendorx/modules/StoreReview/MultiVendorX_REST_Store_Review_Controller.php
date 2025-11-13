@@ -95,6 +95,7 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
         $status     = sanitize_text_field( $request->get_param( 'status' ) );
         $orderBy     = sanitize_text_field( $request->get_param( 'orderBy' ) );
         $order     = sanitize_text_field( $request->get_param( 'order' ) );
+        $overall_rating   = $request->get_param( 'overall_rating' );
         $args = [];
 
         // --- Step 3: Apply Store Filter ---
@@ -123,6 +124,19 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
 
         if ( $end_date ) {
             $args['end_date'] = $end_date;
+        }
+
+        // --- Step 5.2: Filter by Overall Rating (like "4 stars & up") ---
+        if ( $overall_rating !== null && $overall_rating !== '' ) {
+            $rating = floatval( $overall_rating );
+
+            // Prevent invalid or below 1 ratings
+            if ( $rating < 1 ) {
+                $rating = 1;
+            }
+
+            // Pass to query args
+            $args['overall_rating'] = $rating;
         }
 
         // --- Step 5.1: Add Sorting ---
