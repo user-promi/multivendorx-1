@@ -2,7 +2,6 @@
 namespace MultiVendorX\Payments;
 use Exception;
 use MultiVendorX\Store\Store;
-use MultiVendorX\Store\StoreUtil;
 defined('ABSPATH') || exit;
 
 class StripeConnect
@@ -117,7 +116,7 @@ class StripeConnect
                         $store->update_meta($key, sanitize_text_field($value));
                     }
 
-                    wp_safe_redirect($this->get_redirect_url('connected', 'stripe'));
+                    wp_safe_redirect($this->get_redirect_url('', ''));
                     exit;
                 } catch (Exception $e) {
                     file_put_contents(plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":Stripe OAuth: Failed to update store meta for store ID " . $store_id . ": " . $e->getMessage() . "\n", FILE_APPEND);
@@ -167,7 +166,7 @@ class StripeConnect
      */
     private function get_redirect_url($type, $value) {
         // Dynamically build the correct dashboard settings payout URL.
-        $base_url = StoreUtil::get_endpoint_url('settings') . '#subtab=payout';
+        $base_url = home_url('/?dashboard&tab=settings#subtab=payout');
         if ($type === 'connected') {
             return add_query_arg('connected', $value, $base_url);
         } elseif ($type === 'error') {
