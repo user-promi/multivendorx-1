@@ -66,7 +66,7 @@ export default {
             type: 'number',
             preText: __('Stores must accumulate at least', 'multivendorx'),
             preInsideText: __('$', 'multivendorx'),
-            postText: __(' in wallet receive a payout.', 'multivendorx'),
+            postText: __(' into wallet receive a payout.', 'multivendorx'),
             size: '8rem',
             options: [
                 {

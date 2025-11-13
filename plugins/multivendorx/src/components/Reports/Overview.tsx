@@ -174,7 +174,7 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
             ),
           },
         ];
-        
+
         const pieChartData = [
           { name: 'Admin Net Earning', value: adminEarning },
           { name: 'Store Net Earning', value: storeEarning },
@@ -261,8 +261,8 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
   return (
     <>
       <div className="row">
-        <div className="column w-65 transparent">
-          <div className="analytics-container report">
+        <div className="column transparent">
+          <div className="analytics-container report column-3">
             {commissionDetails.map((item, idx) => (
               <div key={idx} className="analytics-item">
                 <div className="analytics-icon">
@@ -277,7 +277,9 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
 
           </div>
         </div>
-        <div className="column w-35">
+      </div>
+      <div className="row">
+        <div className="column">
           <div className="card-header">
             <div className="left">
               <div className="title">
@@ -300,9 +302,7 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
             ))}
           </div>
         </div>
-      </div>
-      <div className="row">
-        <div className="column w-100">
+        <div className="column ">
           <div className="card-header">
             <div className="left">
               <div className="title">
@@ -547,7 +547,7 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
                       </a>
                     </div>
                     <div className="des">Orders: {customer.orders_count || 0}</div>
-                    <div className="small-text">{customer.email || 'No email'}</div>
+                    <div className="des">{customer.email || 'No email'}</div>
                   </div>
                 </div>
 
@@ -604,7 +604,7 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
                     <div className="des">
                       Commission: {formatCurrency(store.commission_total || 0)}
                     </div>
-                    <div className="small-text">
+                    <div className="des">
                       Refunded: {formatCurrency(store.commission_refunded || 0)}
                     </div>
                   </div>

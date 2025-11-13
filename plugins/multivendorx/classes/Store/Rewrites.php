@@ -21,7 +21,7 @@ class Rewrites {
      * Hook into the functions
      */
     public function __construct() {
-        $this->custom_store_url = 'store';
+        $this->custom_store_url = MultiVendorX()->setting->get_setting( 'store_url', 'store' );
 
         add_action( 'init', [ $this, 'register_rule' ] );
         add_filter( 'query_vars', [ $this, 'register_query_var' ] );

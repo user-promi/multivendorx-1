@@ -128,7 +128,7 @@ class StoreUtil {
 
         $store_data    = new Store( $store_id );
         $store_slug    = $store_data ? $store_data->get('slug') : '';
-        $custom_store_url = 'store';
+        $custom_store_url =  MultiVendorX()->setting->get_setting( 'store_url', 'store' );
 
         $path = '/' . $custom_store_url . '/' . $store_slug . '/';
         if ( $tab ) {
@@ -143,70 +143,70 @@ class StoreUtil {
     public static function get_store_capability() {
         $capabilities = [
             'products' => [
-                'label' => 'Manage Products',
+                'label' => 'Manage products',
                 'desc'  => 'Allow stores to create, edit, and control their product listings, including uploading media and publishing items for sale.',
                 'capability' =>
                 [
                     //'manage_users' => 'Manage Users',
-                    'manage_products' => 'Manage Products',
-                    'read_products' => 'View Products',
-                    'edit_products' => 'Edit Products',
-                    'delete_products' => 'Delete Products',
-                    'publish_products' => 'Publish Products',
-                    'upload_files' => 'Upload Files',
+                    'manage_products' => 'Manage products',
+                    'read_products' => 'View products',
+                    'edit_products' => 'Edit products',
+                    'delete_products' => 'Delete products',
+                    'publish_products' => 'Publish products',
+                    'upload_files' => 'Upload files',
                 ],
             ],
             'orders' => [
-                'label' => 'Manage Orders',
+                'label' => 'Manage orders',
                 'desc'  => 'Define how stores interact with customer orders, from viewing and updating details to adding order notes or processing cancellations.',
                 'capability' =>
                 [
-                    'read_shop_orders' => 'View Orders',
-                    'view_shop_orders' => 'Manage Orders',
-                    'edit_shop_orders' => 'Edit Orders',
-                    'delete_shop_orders' => 'Delete Orders',
-                    'add_shop_orders_note' => 'Add Order Notes',
+                    'read_shop_orders' => 'View orders',
+                    'view_shop_orders' => 'Manage orders',
+                    'edit_shop_orders' => 'Edit orders',
+                    'delete_shop_orders' => 'Delete orders',
+                    'add_shop_orders_note' => 'Add order notes',
                 ],
             ],
             'coupons' => [
-                'label' => 'Coupon Management',
+                'label' => 'Coupon management',
                 'desc'  => 'Enable stores to create and manage discount codes, adjust coupon settings, and track active promotions.',
                 'capability' =>
                 [
-                    'manage_shop_coupons' => 'Manage Coupons',
-                    'read_shop_coupons' => 'View Coupons',
-                    'edit_shop_coupons' => 'Edit Coupons',
-                    'delete_shop_coupons' => 'Delete Coupons',
-                    'publish_coupons' => 'Publish Coupons',
+                    'manage_shop_coupons' => 'Manage coupons',
+                    'read_shop_coupons' => 'View coupons',
+                    'edit_shop_coupons' => 'Edit coupons',
+                    'delete_shop_coupons' => 'Delete coupons',
+                    'publish_coupons' => 'Publish coupons',
                 ],
             ],
             'analytics' => [
-                'label' => 'Analytics & Report',
+                'label' => 'Analytics & report',
                 'desc'  => 'Give stores access to performance insights, sales data editing, and export options for business tracking and analysis.',
                 'capability' =>
                 [
-                    'read_shop_report' => 'View Reports',
-                    'export_shop_report' => 'Export Data',
+                    'read_shop_report' => 'View reports',
+                    'export_shop_report' => 'Export data',
                 ],
             ],
             'inventory' => [
-                'label' => 'Inventory Management',
+                'label' => 'Inventory management',
                 'desc'  => 'Let stores monitor stock levels, update quantities, and set alerts to prevent overselling or stockouts.',
                 'capability' =>
                 [
-                    'read_shop_report' => 'Manage Inventory',
-                    'edit_shop_report' => 'Track Stock',
-                    'edit_stock_alerts' => 'Set Stock Alerts',
+                    'read_shop_report' => 'Manage inventory',
+                    'edit_shop_report' => 'Track stock',
+                    'edit_stock_alerts' => 'Set stock alerts',
                 ],
             ],
             'commission' => [
-                'label' => 'Commission & Earning',
+                'label' => 'Commission & earning',
                 'desc'  => 'Provide stores with tools to review their earnings, track commission history, and request withdrawals when eligible.',
                 'capability' =>
                 [
-                    'read_shop_earning' => 'View Earning',
-                    'edit_withdrawl_request' => 'Request Withdrawl',
-                    'view_commission_history' => 'Commission History',
+                    'read_shop_earning' => 'View earning',
+                    'edit_withdrawl_request' => 'Request withdrawl',
+                    'view_commission_history' => 'Commission history',
                 ],
             ]
         ];

@@ -453,16 +453,6 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             cell: ({ row }) => <TableCell>#{row.original.id}</TableCell>,
         },
         {
-            header: __('Status', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.status || ''}>
-                    <span className={`status-badge status-${row.original.status?.toLowerCase()}`}>
-                        {row.original.status || '-'}
-                    </span>
-                </TableCell>
-            ),
-        },
-        {
             id: 'status',
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => {
@@ -559,8 +549,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                     displayValue = `Commission #${commissionId || '-'}`;
                     if (commissionId) {
                         content = (
-                            <span
-                                className="admin-btn btn-purple"
+                            <span className="order-link"
                                 onClick={() => {
                                     setSelectedCommissionId(commissionId);
                                     setViewCommission(true);

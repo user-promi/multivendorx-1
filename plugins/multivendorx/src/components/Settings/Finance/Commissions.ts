@@ -329,6 +329,7 @@ export default {
                 },
 
             ],
+            moduleEnabled: 'marketplace-fee',
         },
 
         {
@@ -362,13 +363,15 @@ export default {
                     size: "8rem",
                 },
             ],
+            moduleEnabled: 'facilitator',
         },
         {
             key: 'gateway_fees',
             type: 'nested',
             label: __('Gateway fees', 'multivendorx'),
             settingDescription: __('Set up gateway fees to recover the transaction costs charged by your payment provider. These fees are deducted from the store’s commission so your earnings remain unaffected.', 'multivendorx'),
-            rowClass: 'single-line', moduleEnabled: 'marketplace-gateway',
+            rowClass: 'single-line', 
+            moduleEnabled: 'marketplace-gateway',
             single: true,
             desc: __('<strong>Use this setting</strong> to manage transaction fees for different payment methods. You can set a default fee or define specific fees for each payment mode, such as bank transfer or cash on delivery.<br><br><strong>Example setup:</strong><br>Product price = $100<br>Store commission = 80%<br>Gateway fees = $10 + 5%<ul><li>Customer pays = $100</li><li>Store commission = 80% of $100 = $80</li><li>Gateway fees = $10 + 5% of $80 = $14</li><li>Final store earning = $80 - $14 = $66</li><li>Admin earning = ($100 - $80) + $14 = $34</li></ul>', 'multivendorx'),
             nestedFields

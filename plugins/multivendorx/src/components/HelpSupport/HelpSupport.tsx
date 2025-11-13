@@ -32,7 +32,7 @@ const HelpSupport: React.FC = () => {
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                    Community & Forums
+                                    Community & forums
                                 </div>
                             </div>
                         </div>
@@ -43,7 +43,7 @@ const HelpSupport: React.FC = () => {
                                         <i className="adminlib-cart"></i>
                                     </div>
                                     <div className="details">
-                                        <div className="name">Facebook Community</div>
+                                        <div className="name"><a href="https://www.facebook.com/groups/multivendorxcommunity" target="_blank" rel="noopener noreferrer">Facebook community</a></div>
                                         <div className="des">Connect with other store owners, share tips, and get quick solutions.</div>
                                     </div>
                                 </div>
@@ -53,7 +53,7 @@ const HelpSupport: React.FC = () => {
                                         <i className="adminlib-cart"></i>
                                     </div>
                                     <div className="details">
-                                        <div className="name">WordPress Support Forum</div>
+                                        <div className="name"><a href="https://wordpress.org/support/plugin/dc-woocommerce-multi-vendor/" target="_blank" rel="noopener noreferrer">WordPress support forum</a></div>
                                         <div className="des">Ask questions and get expert guidance from the WordPress community.</div>
                                     </div>
                                 </div>
@@ -62,7 +62,7 @@ const HelpSupport: React.FC = () => {
                                         <i className="adminlib-cart"></i>
                                     </div>
                                     <div className="details">
-                                        <div className="name">Our Forum</div>
+                                        <div className="name"><a href="https://multivendorx.com/support-forum/" target="_blank" rel="noopener noreferrer">Our forum</a></div>
                                         <div className="des">Discuss MultiVendorX features, report issues, and collaborate with other users.</div>
                                     </div>
                                 </div>
@@ -71,11 +71,11 @@ const HelpSupport: React.FC = () => {
                                         <i className="adminlib-cart"></i>
                                     </div>
                                     <div className="details">
-                                        <div className="name">Live Chat</div>
+                                        <div className="name"><a href="https://tawk.to/chat/5d2eebf19b94cd38bbe7c9ad/1fsg8cq8n" target="_blank" rel="noopener noreferrer">Live chat</a></div>
                                         <div className="des">Get real-time support from our team for setup, troubleshooting, and guidance.</div>
                                     </div>
                                     <div className="details">
-                                        <div className="name">Coding Support</div>
+                                        <div className="name"><a href="https://discord.com/channels/1376811097134469191/1376811102020829258" target="_blank" rel="noopener noreferrer">Coding support</a></div>
                                         <div className="des">Professional help for customizations, integrations, and technical issues.</div>
                                     </div>
                                 </div>
@@ -97,7 +97,7 @@ const HelpSupport: React.FC = () => {
                                         <i className="adminlib-cart"></i>
                                     </div>
                                     <div className="details">
-                                        <div className="name">Official Documentation</div>
+                                        <div className="name"><a href="https://multivendorx.com/docs/knowledgebase/" target="_blank" rel="noopener noreferrer">Official documentation</a></div>
                                         <div className="des">Step-by-step guides for every MultiVendorX feature.</div>
                                     </div>
                                 </div>
@@ -107,7 +107,7 @@ const HelpSupport: React.FC = () => {
                                         <i className="adminlib-cart"></i>
                                     </div>
                                     <div className="details">
-                                        <div className="name">YouTube Tutorials</div>
+                                        <div className="name"><a href="https://www.youtube.com/@MultiVendorX/videos" target="_blank" rel="noopener noreferrer">YouTube tutorials</a></div>
                                         <div className="des">Watch videos on marketplace setup, store management, payments, and more.</div>
                                     </div>
                                 </div>
@@ -117,7 +117,7 @@ const HelpSupport: React.FC = () => {
                                         <i className="adminlib-cart"></i>
                                     </div>
                                     <div className="details">
-                                        <div className="name">FAQs</div>
+                                        <div className="name"><a href="https://multivendorx.com/docs/faqs/" target="_blank" rel="noopener noreferrer">FAQs</a></div>
                                         <div className="des">Quick answers to the most common questions about features and troubleshooting.</div>
                                     </div>
                                 </div>
@@ -134,31 +134,27 @@ const HelpSupport: React.FC = () => {
                                     Master MultiVendorX in minutes!
                                 </div>
                                 <div className="des">Watch our top tutorial videos and learn how to set up your marketplace, manage vendors, and enable subscriptions - all in just a few easy steps.</div>
-                                <div className="admin-btn btn-purple">Watch All Tutorials</div>
+                                <div className="admin-btn btn-purple"><a href="https://www.youtube.com/@MultiVendorX/videos" target="_blank" rel="noopener noreferrer">Watch All Tutorials</a></div>
                             </div>
 
-                            <div className="row">
-                                <div className="column">
-                                    <div className="video-section">
-                                        {videos.map((video, index) => {
-                                            const videoId = new URL(video.link).searchParams.get("v");
-                                            return (
-                                                <div key={index} className="video-wrapper">
-                                                    <iframe
-                                                        src={`https://www.youtube.com/embed/${videoId}`}
-                                                        title={video.title}
-                                                        frameBorder="0"
-                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                        allowFullScreen
-                                                    ></iframe>
+                            <div className="video-section">
+                                {videos.map((video, index) => {
+                                    const videoId = new URL(video.link).searchParams.get("v");
+                                    return (
+                                        <div key={index} className="video-wrapper">
+                                            <iframe
+                                                src={`https://www.youtube.com/embed/${videoId}`}
+                                                title={video.title}
+                                                frameBorder="0"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                allowFullScreen
+                                            ></iframe>
 
-                                                    <div className="title">{video.title}</div>
-                                                    <div className="des">{video.des}</div>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
+                                            <div className="title">{video.title}</div>
+                                            <div className="des">{video.des}</div>
+                                        </div>
+                                    );
+                                })}
                             </div>
 
                         </div>

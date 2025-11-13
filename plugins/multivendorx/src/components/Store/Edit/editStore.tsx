@@ -271,12 +271,40 @@ const EditStore = () => {
         setData(prev => ({ ...prev, ...updatedFields }));
     }, []);
 
+    // const visibleTabs = useMemo(() => {
+    //     if (data?.status === 'pending' || data?.status === 'rejected' || data?.status === 'permanently_rejected') {
+    //         return tabData.filter(tab => tab.content.id === 'application-details');
+    //     }
+    //     return tabData;
+    // }, [tabData, data?.status]);
+
     const visibleTabs = useMemo(() => {
-        if (data?.status === 'pending' || data?.status === 'rejected' || data?.status === 'permanently_rejected') {
-            return tabData.filter(tab => tab.content.id === 'application-details');
+        const updatedTabs = tabData.map(tab =>
+            tab.content.id === 'application-details'
+                ? {
+                    ...tab,
+                    content: {
+                        ...tab.content,
+                        name:
+                            data?.status === 'active'
+                                ? 'Archive Data'
+                                : 'Application Details',
+                    },
+                }
+                : tab
+        );
+
+        if (
+            data?.status === 'pending' ||
+            data?.status === 'rejected' ||
+            data?.status === 'permanently_rejected'
+        ) {
+            return updatedTabs.filter(tab => tab.content.id === 'application-details');
         }
-        return tabData;
+
+        return updatedTabs;
     }, [tabData, data?.status]);
+
 
     // const getForm = (tabId: string) => {
     //     switch (tabId) {
@@ -468,7 +496,7 @@ const EditStore = () => {
                                                         <span className="status admin-badge green">Active</span>
                                                     ) : data.status === 'pending' ? (
                                                         <span className="status  admin-badge yellow">Pending</span>
-                                                    ) : data.status === 'permanently_rejected' ? (
+                                                    ) : data.status === 'rejected' ? (
                                                         <span className="status  admin-badge red">Rejected</span>
                                                     ) : data.status === 'suspended' ? (
                                                         <span className="status  admin-badge blue">Suspended</span>
@@ -477,12 +505,12 @@ const EditStore = () => {
                                                     ) : data.status === 'under_review' ? (
                                                         <span className="status  admin-badge yellow">Under Review</span>
                                                     ) : data.status === 'deactivated' ? (
-                                                        <span className="status  admin-badge red">Deactivated</span>
+                                                        <span className="status  admin-badge red">Permanently Deactivated</span>
                                                     ) : (
                                                         <Skeleton variant="text" width={100} />
                                                     )}
 
-                                                    {modules.includes('compliance') && (
+                                                    {modules.includes('marketplace-compliance') && (
                                                         <>
                                                             <div className="admin-badge green"><i className="adminlib-store-inventory"></i></div>
                                                             <div className="admin-badge blue"><i className="adminlib-geo-my-wp"></i></div>
@@ -624,19 +652,30 @@ const EditStore = () => {
                                         }
                                         <li onClick={() => {
                                             navigate(`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`, {
-                                                state: { highlightTarget: "store-slug" },
+                                                state: { highlightTarget: "store-status" },
                                             });
 
                                             setTimeout(() => {
                                                 navigate(`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`, {
                                                     replace: true,
                                                 });
-                                            }, 500);
+                                            }, 5000);
                                         }}>
                                             <i className="adminlib-form-multi-select"></i> Manage status
                                         </li>
-                                        <li><i className="adminlib-single-product"></i> Products</li>
-                                        <li><i className="adminlib-order"></i> Orders</li>
+                                        <li>
+                                            <a
+                                                href={`${appLocalizer.admin_url}edit.php?post_type=product&multivendorx_store_id=${data.id}`}
+                                                className="product-link"
+                                            >
+                                                <i className="adminlib-single-product"></i> Products
+                                            </a>
+                                        </li>
+
+                                        <li onClick={() => {
+                                            navigate(`?page=multivendorx#&tab=reports`);
+                                        }}
+                                            ><i className="adminlib-order"></i> Orders</li>
                                         <li onClick={handleStoreDelete}><i className="adminlib-delete"></i> Delete store</li>
                                     </ul>
                                 )}
