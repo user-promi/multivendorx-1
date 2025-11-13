@@ -629,7 +629,7 @@ const StoreReviews: React.FC = () => {
 
                             {/* Status Toggle */}
                             <div className="form-group">
-                                <label htmlFor="status">{__('Set review visibility status', 'multivendorx')}</label>
+                                <label htmlFor="status">{__('Control if this review appears publicly, stays under moderation, or is excluded from the store page.', 'multivendorx')}</label>
                                 <ToggleSetting
                                     wrapperclassName="setting-form-input"
                                     descclassName="settings-metabox-description"
