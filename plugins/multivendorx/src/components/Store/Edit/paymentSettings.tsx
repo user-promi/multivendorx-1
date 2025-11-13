@@ -264,7 +264,7 @@ const PaymentSettings = ({ id, data }: { id: string|null; data: any }) => {
 									/>
 									);
                             }
-							console.log(formData)
+
 							// Default input field rendering
 							return (
 								<div className="form-group-wrapper" key={field.key}>
