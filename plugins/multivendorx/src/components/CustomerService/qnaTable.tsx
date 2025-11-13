@@ -584,11 +584,11 @@ const Qna: React.FC = () => {
 
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="visibility">{__("Visibility", "multivendorx")}</label>
+                                <label htmlFor="visibility">{__("Make this Q&A Public or Private - control who sees it.", "multivendorx")}</label>
                                 <ToggleSetting
                                     wrapperClass="setting-form-input"
                                     descClass="settings-metabox-description"
-                                    description="Select whether this question is visible to the public or private."
+                                    //description="Select whether this question is visible to the public or private."
                                     options={[
                                         { key: 'public', value: 'public', label: __('Public', 'multivendorx') },
                                         { key: 'private', value: 'private', label: __('Private', 'multivendorx') },
