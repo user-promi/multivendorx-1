@@ -81,7 +81,6 @@ const GeneralSettings = () => {
                     <div className="form-group-wrapper">
                         <div className="form-group">
                             <label htmlFor="store-name">Name</label>
-                            {/* ✅ Fixed: Correct field name */}
                             <BasicInput
                                 name="name"
                                 wrapperClass="setting-form-input"

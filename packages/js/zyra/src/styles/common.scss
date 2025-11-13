@@ -16,11 +16,11 @@ a {
   text-decoration: none;
   color: $color-black;
 
-  &:hover,
-  &:focus {
-    color: $color-active;
-    outline: none
-  }
+  // &:hover,
+  // &:focus {
+  //   color: $color-active;
+  //   outline: none
+  // }
 }
 
 .form-select-field-wrapper input:focus {
@@ -38,9 +38,9 @@ body:has(.admin-main-wrapper) {
   margin-left: -1.25rem;
   font-family: Figtree, sans-serif;
 
-  a:focus {
-    box-shadow: none;
-  }
+  // a:focus {
+  //   box-shadow: none;
+  // }
 
   p,
   h1,

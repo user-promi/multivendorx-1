@@ -21,7 +21,7 @@ const settings = () => {
 
     useEffect(() => {
         if (!id) return;
- 
+
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, `store/${id}`),
@@ -233,25 +233,27 @@ const settings = () => {
             case 'verification':
                 return <Verification />;
             case 'livechat':
-                return <LiveChat/>;
+                return <LiveChat />;
             case 'deactivate':
-                return <DeactivateRequest/>;
+                return <DeactivateRequest />;
             default:
                 return <div></div>;
         }
     };
     return (
         <>
-            <Tabs
-                tabData={tabData}
-                currentTab={currentTab}
-                getForm={getForm}
-                prepareUrl={prepareUrl}
-                appLocalizer={appLocalizer}
-                settingName="Settings"
-                supprot={[]}
-                Link={SimpleLink}
-                submenuRender={true} />
+            <div className="horizontal-tabs">
+                <Tabs
+                    tabData={tabData}
+                    currentTab={currentTab}
+                    getForm={getForm}
+                    prepareUrl={prepareUrl}
+                    appLocalizer={appLocalizer}
+                    settingName="Settings"
+                    supprot={[]}
+                    Link={SimpleLink}
+                    submenuRender={true} />
+            </div >
         </>
     );
 };

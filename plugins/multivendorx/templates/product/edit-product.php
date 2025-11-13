@@ -22,7 +22,6 @@ $product_fileds = MultiVendorX()->setting->get_setting('products_fields', array(
 
 ?>
 
-<div class="content-wrapper">
     <form id="mvx-edit-product-form" class="woocommerce form-horizontal" method="post">
         <div class="page-title-wrapper">
             <div class="page-title">
@@ -387,5 +386,4 @@ $product_fileds = MultiVendorX()->setting->get_setting('products_fields', array(
             </div> <!-- right section end -->
         </div>
     </form>
-</div>
 </div>
