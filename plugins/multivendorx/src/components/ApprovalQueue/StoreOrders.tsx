@@ -379,9 +379,9 @@ const StoreOrders: React.FC<Props> = ({ onUpdated }) => {
       <div className="card-header">
         <div className="left">
           <div className="title">
-            Store Orders
+            Refund tracker
           </div>
-          <div className="des">Waiting for your response</div>
+          <div className="des">Monitor refund trends and stay informed on store returns.</div>
         </div>
         <div className="right">
           <i className="adminlib-more-vertical"></i>

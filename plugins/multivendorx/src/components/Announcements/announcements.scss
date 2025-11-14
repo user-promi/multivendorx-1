@@ -98,10 +98,11 @@
             }
             .available-balance{
                 font-size: 1.125rem;
-                padding: 0.625rem;
-                background: $theme-background-color;
+                padding: 0.625rem 0;
+                // background: $theme-background-color;
                 border-radius: 0.313rem;
                 color: #000000ad;
+                font-weight: 500;
 
                 span{
                     font-weight: 600;

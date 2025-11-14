@@ -22,6 +22,8 @@ const gatewayFields = gatewayList.flatMap(gateway => [
     }
 ]);
 
+const taxes_enabled = appLocalizer.taxes_enabled;
+
 const nestedFields = [
     {
         key: 'default_fixed',
@@ -233,7 +235,7 @@ export default {
             desc: __(
                 'If enabled, store’s net earning will include both commission and shipping fees.', 'multivendorx'),
             type: 'checkbox',
-            moduleEnabled:'store-shipping',
+            moduleEnabled: 'store-shipping',
             options: [
                 {
                     key: 'give_shipping',
@@ -261,30 +263,35 @@ export default {
             },
             look: 'toggle',
         },
-        {
-            key: 'give_tax',
-            type: 'setting-toggle',
-            label: __('Tax amount', 'multivendorx'),
-            settingDescription: __('Configure how taxes are treated in commission calculations.', 'multivendorx'),
-            desc: __('<li>No tax - Calculate commission on pre-tax amount only.<li>Full tax - Include 100% tax in commission base.<li>Commision based tax - Calculate commission on total order value including taxes, not just product price.', 'multivendorx'),
-            options: [
+        ...(taxes_enabled === 'yes'
+            ? [
                 {
-                    key: 'no_tax',
-                    label: __('No tax', 'multivendorx'),
-                    value: 'no_tax',
-                },
-                {
-                    key: 'full_tax',
-                    label: __('Full tax', 'multivendorx'),
-                    value: 'full_tax',
-                },
-                {
-                    key: 'commision_based_tax',
-                    label: __('Commision based tax', 'multivendorx'),
-                    value: 'commision_based_tax',
-                },
-            ],
-        },
+                    key: 'give_tax',
+                    type: 'setting-toggle',
+                    label: __('Tax amount', 'multivendorx'),
+                    settingDescription: __('Configure how taxes are treated in commission calculations.', 'multivendorx'),
+                    desc: __('<li>No tax - Calculate commission on pre-tax amount only.<li>Full tax - Include 100% tax in commission base.<li>Commission based tax - Calculate commission on total order value including taxes, not just product price.', 'multivendorx'),
+                    options: [
+                        {
+                            key: 'no_tax',
+                            label: __('No tax', 'multivendorx'),
+                            value: 'no_tax',
+                        },
+                        {
+                            key: 'full_tax',
+                            label: __('Full tax', 'multivendorx'),
+                            value: 'full_tax',
+                        },
+                        {
+                            key: 'commision_based_tax',
+                            label: __('Commission based tax', 'multivendorx'),
+                            value: 'commision_based_tax',
+                        },
+                    ],
+                }
+            ]
+            : []
+        ),
         {
             key: 'separator_content',
             type: 'section',
@@ -370,7 +377,7 @@ export default {
             type: 'nested',
             label: __('Gateway fees', 'multivendorx'),
             settingDescription: __('Set up gateway fees to recover the transaction costs charged by your payment provider. These fees are deducted from the store’s commission so your earnings remain unaffected.', 'multivendorx'),
-            rowClass: 'single-line', 
+            rowClass: 'single-line',
             moduleEnabled: 'marketplace-gateway',
             single: true,
             desc: __('<strong>Use this setting</strong> to manage transaction fees for different payment methods. You can set a default fee or define specific fees for each payment mode, such as bank transfer or cash on delivery.<br><br><strong>Example setup:</strong><br>Product price = $100<br>Store commission = 80%<br>Gateway fees = $10 + 5%<ul><li>Customer pays = $100</li><li>Store commission = 80% of $100 = $80</li><li>Gateway fees = $10 + 5% of $80 = $14</li><li>Final store earning = $80 - $14 = $66</li><li>Admin earning = ($100 - $80) + $14 = $34</li></ul>', 'multivendorx'),

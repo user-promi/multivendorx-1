@@ -392,6 +392,8 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
             'shipping'      => wc_format_decimal( $commission->shipping_amount, 2 ),
             'tax'           => wc_format_decimal( $commission->tax_amount, 2 ),
             'total'         => wc_format_decimal( $commission->commission_total, 2 ),
+            'commission_refunded' => !empty($commission->commission_refunded)? $commission->commission_refunded : 0,
+            'shipping_tax_amount'   => $commission->shipping_tax_amount,
             'note'          => $commission->commission_note,
             'created'       => $commission->created_at,
             'items'         => $items,

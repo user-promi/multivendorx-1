@@ -27,6 +27,8 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
   const [commissionData, setCommissionData] = useState<any>(null);
   const [storeData, setStoreData] = useState<any>(null);
   const [orderData, setOrderData] = useState<any>(null);
+  const [shippingItems, setShippingItems] = useState<any[]>([]);
+  const [refundMap, setRefundMap] = useState<Record<number, any>>({});
 
   // Add new state
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
@@ -64,18 +66,63 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
         if (commission.order_id) {
           axios({
             method: "GET",
+            url: `${appLocalizer.apiUrl}/wc/v3/orders/${commission.order_id}/refunds`,
+            headers: { "X-WP-Nonce": appLocalizer.nonce },
+          })
+            .then((refundRes) => {
+              const refunds = refundRes.data || [];
+
+              // map refunds by product_id
+              let refundMap: Record<number, any> = {};
+
+              refunds.forEach((refund: any) => {
+                refund.line_items.forEach((item: any) => {
+                  const productId = item.product_id;
+
+                  refundMap[productId] = {
+                    qty: item.quantity, // negative
+                    total: item.total,
+                    tax: item.total_tax
+                  };
+                });
+              });
+
+              // store refund map
+              setRefundMap(refundMap);
+            })
+            .catch(() => { });
+
+          axios({
+            method: "GET",
             url: `${appLocalizer.apiUrl}/wc/v3/orders/${commission.order_id}`,
             headers: { "X-WP-Nonce": appLocalizer.nonce },
           })
             .then((orderRes) => {
               const order = orderRes.data || {};
+
               setOrderData(order);
+              // Map Shipping Lines into Table Format
+              if (Array.isArray(order.shipping_lines)) {
+                const mappedShipping = order.shipping_lines.map((ship) => ({
+                  id: ship.id,
+                  method: ship.method_title || "-",
+                  methodId: ship.method_id || "-",
+                  total: formatCurrency(ship.total),
+                  tax: formatCurrency(ship.total_tax),
+                }));
+
+                setShippingItems(mappedShipping);
+              } else {
+                setShippingItems([]);
+              }
 
               //Convert WooCommerce line_items → OrderItem[]
               if (Array.isArray(order.line_items)) {
                 const fetchProductImages = order.line_items.map(async (item) => {
                   const subtotal = parseFloat(item.subtotal || "0");
                   const total = parseFloat(item.total || "0");
+                  const itemTax = item.total_tax ? parseFloat(item.total_tax) : 0;
+
                   const discount = subtotal > total
                     ? `-${formatCurrency(subtotal - total)}`
                     : undefined;
@@ -105,6 +152,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
                     discount,
                     qty: item.quantity,
                     total: formatCurrency(item.total),
+                    tax: formatCurrency(itemTax),
                     image: imageUrl, //add product image here
                   };
                 });
@@ -131,70 +179,78 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
         setOrderItems([]);
       });
   }, [commissionId]);
+console.log("remap",refundMap);
+  // const popupColumns: ColumnDef<OrderItem>[] = [
+  //   {
+  //     header: __("Product", "multivendorx"),
+  //     cell: ({ row }) => {
+  //       const productId = row.original.id; // WooCommerce product ID
+  //       const productName = row.original.name ?? "-";
+  //       const productImage = row.original.image; // ✅ image from your mapped data
 
+  //       return (
+  //         <TableCell title={productName}>
+  //           {productId ? (
+  //             <a
+  //               href={`${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${productId}&action=edit`}
+  //               target="_blank"
+  //               rel="noopener noreferrer"
+  //               className="product-wrapper"
+  //             >
+  //               {productImage ? (
+  //                 <img
+  //                   src={productImage}
+  //                   alt={productName}
+  //                   className="product-thumb"
+  //                 />
+  //               ) : (
+  //                 <i className="item-icon adminlib-multi-product"></i>
+  //               )}
+
+  //               <div className="details">
+  //                 {productName}
+  //                 <div className="sub-text">Sku: {row.original.sku ?? "-"}</div>
+  //               </div>
+  //             </a>
+  //           ) : (
+  //             productName
+  //           )}
+  //         </TableCell>
+  //       );
+  //     },
+  //   },
+  //   {
+  //     header: __("Cost", "multivendorx"),
+  //     cell: ({ row }) => (
+  //       <TableCell title={row.original.cost}>{row.original.cost ?? "-"}</TableCell>
+  //     ),
+  //   },
+  //   {
+  //     header: __("Qty", "multivendorx"),
+  //     cell: ({ row }) => (
+  //       <TableCell title={row.original.qty.toString()}>{row.original.qty ?? "-"}</TableCell>
+  //     ),
+  //   },
+  //   {
+  //     header: __("Total", "multivendorx"),
+  //     cell: ({ row }) => (
+  //       <TableCell title={row.original.total}>{row.original.total ?? "-"}</TableCell>
+  //     ),
+  //   },
+  //   {
+  //     header: __("Tax", "multivendorx"),
+  //     cell: ({ row }) => (
+  //       <TableCell title={row.original.cost}>{row.original.tax ?? "-"}</TableCell>
+  //     ),
+  //   },
+  // ];
   const popupColumns: ColumnDef<OrderItem>[] = [
-    // {
-    //   id: "select",
-    //   header: ({ table }) => (
-    //     <input
-    //       type="checkbox"
-    //       checked={table.getIsAllRowsSelected()}
-    //       onChange={table.getToggleAllRowsSelectedHandler()}
-    //     />
-    //   ),
-    //   cell: ({ row }) => (
-    //     <input
-    //       type="checkbox"
-    //       checked={row.getIsSelected()}
-    //       onChange={row.getToggleSelectedHandler()}
-    //     />
-    //   ),
-    // },
-    // {
-    //   header: __("Product", "multivendorx"),
-    //   cell: ({ row }) => {
-    //     const productId = row.original.id; // make sure this is the WooCommerce product ID
-    //     const productName = row.original.name ?? "-";
-
-    //     return (
-    //       <TableCell title={productName}>
-    //         {productId ? (
-    //           <a
-    //             href={`${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${productId}&action=edit`}
-    //             target="_blank"
-    //             rel="noopener noreferrer"
-    //             className="product-wrapper"
-    //           >
-    //             {/* {row.original.image ? (
-    //               <img
-    //                 src={row.original.image}
-    //                 alt={row.original.store_name}
-    //               />
-    //             ) : (
-    //               <i className="item-icon adminlib-store-inventory"></i>
-    //             )} */}
-
-    //             <i className="item-icon adminlib-multi-product"></i>
-
-    //             <div className="details">
-    //               {productName}
-    //               <div className="sub-text">Sku: {row.original.sku ?? "-"}</div>
-    //             </div>
-    //           </a>
-    //         ) : (
-    //           productName
-    //         )}
-
-    //       </TableCell>
-    //     );
-    //   },
-    // },
     {
       header: __("Product", "multivendorx"),
       cell: ({ row }) => {
-        const productId = row.original.id; // WooCommerce product ID
+        const productId = row.original.id;
         const productName = row.original.name ?? "-";
-        const productImage = row.original.image; // ✅ image from your mapped data
+        const productImage = row.original.image;
 
         return (
           <TableCell title={productName}>
@@ -206,11 +262,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
                 className="product-wrapper"
               >
                 {productImage ? (
-                  <img
-                    src={productImage}
-                    alt={productName}
-                    className="product-thumb"
-                  />
+                  <img src={productImage} alt={productName} className="product-thumb" />
                 ) : (
                   <i className="item-icon adminlib-multi-product"></i>
                 )}
@@ -227,31 +279,108 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
         );
       },
     },
+
+    // COST (unchanged)
     {
       header: __("Cost", "multivendorx"),
       cell: ({ row }) => (
         <TableCell title={row.original.cost}>{row.original.cost ?? "-"}</TableCell>
       ),
     },
+
+    // ✅ QTY WITH REFUND
     {
       header: __("Qty", "multivendorx"),
-      cell: ({ row }) => (
-        <TableCell title={row.original.qty.toString()}>{row.original.qty ?? "-"}</TableCell>
-      ),
+      cell: ({ row }) => {
+        const refunded = refundMap[row.original.id]?.qty || 0;
+        return (
+          <TableCell title={row.original.qty}>
+            <div className="cell-wrapper">
+              <span>{row.original.qty}</span>
+
+              {refunded < 0 && (
+                <span className="refunded">{refunded}</span>
+              )}
+            </div>
+          </TableCell>
+        );
+      },
     },
+
+    //TOTAL WITH REFUND
     {
       header: __("Total", "multivendorx"),
-      cell: ({ row }) => (
-        <TableCell title={row.original.total}>{row.original.total ?? "-"}</TableCell>
-      ),
+      cell: ({ row }) => {
+        const refunded = refundMap[row.original.id]?.total || 0;
+        return (
+          <TableCell title={row.original.total}>
+            <div className="cell-wrapper">
+              <span>{row.original.total}</span>
+
+              {refunded < 0 && (
+                <span className="refunded">
+                  {formatCurrency(refunded)}
+                </span>
+              )}
+            </div>
+          </TableCell>
+        );
+      },
+    },
+
+    //TAX WITH REFUND
+    {
+      header: __("Tax", "multivendorx"),
+      cell: ({ row }) => {
+        const refunded = refundMap[row.original.id]?.tax || 0;
+        return (
+          <TableCell title={row.original.tax}>
+            <div className="cell-wrapper">
+              <span>{row.original.tax}</span>
+
+              {refunded < 0 && (
+                <span className="refunded">
+                  {formatCurrency(refunded)}
+                </span>
+              )}
+            </div>
+          </TableCell>
+        );
+      },
     },
   ];
 
+  const shippingColumns: ColumnDef<any>[] = [
+    {
+      header: __("Method", "multivendorx"),
+      cell: ({ row }) => (
+        <TableCell title={row.original.method}>
+          {row.original.method}
+        </TableCell>
+      ),
+    },
+    {
+      header: __("Amount", "multivendorx"),
+      cell: ({ row }) => (
+        <TableCell title={row.original.total}>
+          {row.original.total}
+        </TableCell>
+      ),
+    },
+    {
+      header: __("Tax", "multivendorx"),
+      cell: ({ row }) => (
+        <TableCell title={row.original.tax}>
+          {row.original.tax}
+        </TableCell>
+      ),
+    },
+  ];
   return (
     <CommonPopup
       open={open}
       onClose={onClose}
-      width="1200px"
+      width="1000px"
       height="100%"
       header={
         <>
@@ -262,7 +391,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
           </div>
           <p>
             {__(
-              "Details of this commission including vendor, order breakdown, and notes.",
+              "Details of this commission including stores, order breakdown, and notes.",
               "multivendorx"
             )}
           </p>
@@ -323,15 +452,12 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
           />
 
           <div className="heading">{__("Shipping", "multivendorx")}</div>
-          {/* <Table
-            data={demoData}
-            columns={popupColumns as ColumnDef<Record<string, any>, any>[]}
-            rowSelection={{}}
-            onRowSelectionChange={() => {}}
-            defaultRowsPerPage={5}
-            pagination={pagination}
-            onPaginationChange={setPagination}
-          /> */}
+
+          <Table
+            data={shippingItems}
+            columns={shippingColumns as ColumnDef<Record<string, any>, any>[]}
+          />
+
         </div>
 
         <div className="section right">
@@ -389,7 +515,12 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
             </div>
             <div className="items">
               <div className="text">Commission Amount</div>
-              <div className="value">{formatCurrency(commissionData?.amount)}</div>
+              <div className="value">
+                {formatCurrency(
+                  parseFloat(commissionData?.amount ?? 0) +
+                  parseFloat(commissionData?.commission_refunded ?? 0)
+                )}
+              </div>
             </div>
             <div className="items">
               <div className="text">Shipping</div>
@@ -397,13 +528,25 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
             </div>
             <div className="items">
               <div className="text">Tax</div>
-              <div className="value">{formatCurrency(commissionData?.tax)}</div>
+              <div className="value">
+                {formatCurrency(
+                  (Number(commissionData?.tax || 0) +
+                    Number(commissionData?.shipping_tax_amount || 0))
+                )}
+              </div>
             </div>
+            {commissionData?.commission_refunded > 0 && (
+              <div className="items">
+                <div className="text">Commission refund</div>
+                <div className="value">
+                  {formatCurrency(commissionData.commission_refunded)}
+                </div>
+              </div>
+            )}
             <div className="items">
               <div className="text">Total</div>
               <div className="value">{formatCurrency(commissionData?.total)}</div>
             </div>
-
           </div>
 
           <div className="popup-divider"></div>

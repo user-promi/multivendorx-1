@@ -67,6 +67,7 @@ declare global {
         admin_url:any;
         setup_wizard_url:any;
         capability_pro:any;
+        taxes_enabled:any;
     }
     interface Color{
         color: any;
