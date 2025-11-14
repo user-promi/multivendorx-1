@@ -27,6 +27,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
   const [commissionData, setCommissionData] = useState<any>(null);
   const [storeData, setStoreData] = useState<any>(null);
   const [orderData, setOrderData] = useState<any>(null);
+  const [shippingItems, setShippingItems] = useState<any[]>([]);
 
   // Add new state
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
@@ -69,7 +70,22 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
           })
             .then((orderRes) => {
               const order = orderRes.data || {};
+
               setOrderData(order);
+              // Map Shipping Lines into Table Format
+              if (Array.isArray(order.shipping_lines)) {
+                const mappedShipping = order.shipping_lines.map((ship) => ({
+                  id: ship.id,
+                  method: ship.method_title || "-",
+                  methodId: ship.method_id || "-",
+                  total: formatCurrency(ship.total),
+                  tax: formatCurrency(ship.total_tax),
+                }));
+
+                setShippingItems(mappedShipping);
+              } else {
+                setShippingItems([]);
+              }
 
               //Convert WooCommerce line_items → OrderItem[]
               if (Array.isArray(order.line_items)) {
@@ -247,11 +263,38 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
     },
   ];
 
+  const shippingColumns: ColumnDef<any>[] = [
+    {
+      header: __("Method", "multivendorx"),
+      cell: ({ row }) => (
+        <TableCell title={row.original.method}>
+          {row.original.method}
+        </TableCell>
+      ),
+    },
+    {
+      header: __("Amount", "multivendorx"),
+      cell: ({ row }) => (
+        <TableCell title={row.original.total}>
+          {row.original.total}
+        </TableCell>
+      ),
+    },
+    {
+      header: __("Tax", "multivendorx"),
+      cell: ({ row }) => (
+        <TableCell title={row.original.tax}>
+          {row.original.tax}
+        </TableCell>
+      ),
+    },
+  ];
+  console.log(commissionData)
   return (
     <CommonPopup
       open={open}
       onClose={onClose}
-      width="1200px"
+      width="1000px"
       height="100%"
       header={
         <>
@@ -323,15 +366,12 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
           />
 
           <div className="heading">{__("Shipping", "multivendorx")}</div>
-          {/* <Table
-            data={demoData}
-            columns={popupColumns as ColumnDef<Record<string, any>, any>[]}
-            rowSelection={{}}
-            onRowSelectionChange={() => {}}
-            defaultRowsPerPage={5}
-            pagination={pagination}
-            onPaginationChange={setPagination}
-          /> */}
+
+          <Table
+            data={shippingItems}
+            columns={shippingColumns as ColumnDef<Record<string, any>, any>[]}
+          />
+
         </div>
 
         <div className="section right">
@@ -399,11 +439,18 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
               <div className="text">Tax</div>
               <div className="value">{formatCurrency(commissionData?.tax)}</div>
             </div>
+            {commissionData?.commission_refunded > 0 && (
+              <div className="items">
+                <div className="text">Commission refund</div>
+                <div className="value">
+                  {formatCurrency(commissionData.commission_refunded)}
+                </div>
+              </div>
+            )}
             <div className="items">
               <div className="text">Total</div>
               <div className="value">{formatCurrency(commissionData?.total)}</div>
             </div>
-
           </div>
 
           <div className="popup-divider"></div>
