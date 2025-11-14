@@ -263,7 +263,7 @@ class Distance_Shipping extends \WC_Shipping_Method {
                 $cost         = floatval( $rule['cost'] ?? 0 );
 
                 if ( $total_distance <= $max_distance ) {
-                    $amount = $cost;
+                    $amount += $cost;
                     break;
                 }
             }
