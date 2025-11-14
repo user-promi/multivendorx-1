@@ -11,6 +11,8 @@ const RegistrationForm = () => {
     const [stores, setStores] = useState<any[]>([]);
     const [selectedStore, setSelectedStore] = useState<any>(null);
     const [inputs, setInputs] = useState<Record<string, any>>({});
+    const [allStoreData, setAllStoreData] = useState<any[]>([]);
+    const [storeData, setStoreData] = useState<any>(null);
     const formData = registrationForm;
 
     // useEffect(() => {
@@ -64,7 +66,9 @@ const RegistrationForm = () => {
             const data = res.data || {};
             const storeList = data.all_stores || [];
             const regData = data.response || [];
+            const returnedStoreData = data.store_data || [];
 
+            setAllStoreData(returnedStoreData);
             //Prevent unnecessary re-renders
             setStores((prev) => {
                 if (JSON.stringify(prev) !== JSON.stringify(storeList)) {
@@ -93,6 +97,13 @@ const RegistrationForm = () => {
                     );
 
                     if (matchData) setInputs(matchData);
+
+
+                    const dataMatch = returnedStoreData.find(
+                        (item: any) => String(item.id) === String(match.value)
+                    );
+                    if (dataMatch) setStoreData(dataMatch);
+            
                 }
             }
         });
@@ -106,6 +117,11 @@ const RegistrationForm = () => {
             (item) => String(item.id) === String(val)
         );
         setInputs(match || {});
+
+        const dataMatch = allStoreData.find(
+            (item: any) => String(item.id) === String(val)
+          );
+        setStoreData(dataMatch || {});
     };
 
     // const onSubmit = (submittedFormData: Record<string, any>) => {
@@ -199,14 +215,26 @@ const RegistrationForm = () => {
                 </section>
             )}
             {stores.length > 0 && (
-                <div className="store-selector">
-                    <ToggleSetting
-                        wrapperClass="setting-form-input"
-                        options={stores}
-                        value={selectedStore?.value || ""}
-                        onChange={(val: any) => handleStoreChange(val)}
-                    />
-                </div>
+                <>
+                    <div className="store-selector">
+                        <ToggleSetting
+                            wrapperClass="setting-form-input"
+                            options={stores}
+                            value={selectedStore?.value || ""}
+                            onChange={(val: any) => handleStoreChange(val)}
+                        />
+                    </div>
+
+                    {storeData?.note?.[0]?.note && (
+                        <div>
+                            <h4>Store Note</h4>
+                            <div className="store-note">
+                                <strong>Note:</strong> {storeData.note[0].note}
+                            </div>
+                        </div>
+                    )}
+
+                </>
             )}
 
             <div className="modal-wrapper">
