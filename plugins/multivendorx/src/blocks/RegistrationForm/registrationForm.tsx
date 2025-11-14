@@ -188,7 +188,7 @@ const RegistrationForm = () => {
     const memoizedStateList = useMemo(() => appLocalizer.state_list, []);
 
     return (
-        <div className="enquiry-form-modal">
+        <>
             {loading && (
                 <section className="loader-wrapper">
                     <div className="loader-item">
@@ -209,25 +209,23 @@ const RegistrationForm = () => {
                 </div>
             )}
 
-            <div className="modal-wrapper">
-                <div>{registrationForm.content_before_form}</div>
+            <div>{registrationForm.content_before_form}</div>
 
-                <FormViewer
-                    formFields={formData.settings}
-                    response={inputs}
-                    onSubmit={onSubmit}
-                    countryList={memoizedCountryList}
-                    stateList={memoizedStateList}
-                />
-                <div>{registrationForm.content_after_form}</div>
-                {toast && (
-                    <div className="admin-notice-display-title">
-                        <i className="admin-font adminlib-icon-yes"></i>
-                        {responseMessage}
-                    </div>
-                )}
-            </div>
-        </div>
+            <FormViewer
+                formFields={formData.settings}
+                response={inputs}
+                onSubmit={onSubmit}
+                countryList={memoizedCountryList}
+                stateList={memoizedStateList}
+            />
+            <div>{registrationForm.content_after_form}</div>
+            {toast && (
+                <div className="admin-notice-display-title">
+                    <i className="admin-font adminlib-icon-yes"></i>
+                    {responseMessage}
+                </div>
+            )}
+        </>
     );
 };
 

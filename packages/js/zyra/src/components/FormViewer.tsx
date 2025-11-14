@@ -331,26 +331,27 @@ const FormViewer: React.FC<FormViewerProps> = ({
     const defaultDate: string = new Date().getFullYear() + '-01-01';
 
     return (
-        <main className="enquiry-pro-form">
+        <form className="woocommerce-form woocommerce-form-login login">
             {formList.map((field) => {
                 if (field.disabled) return null;
                 switch (field.type) {
                     case 'title':
                         return (
-                            <section className="form-title">
+                            <h2>
                                 {' '}
                                 {field.label}{' '}
-                            </section>
+                            </h2>
                         );
                     case 'text':
                         return (
-                            <section className="form-text form-pro-sections">
+                            <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                                 <label htmlFor={field.name}>
                                     {field.label}
                                 </label>
                                 <input
                                     type="text"
                                     name={field.name}
+                                    className='input-text'
                                     value={
                                         field.name === 'name'
                                             ? (typeof enquiryFormData !==
@@ -386,17 +387,18 @@ const FormViewer: React.FC<FormViewerProps> = ({
                                         {errors[field.name ?? '']}
                                     </span>
                                 )}
-                            </section>
+                            </p>
                         );
                     case 'email':
                         return (
-                            <section className="form-email form-pro-sections">
+                            <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                                 <label htmlFor={field.name}>
                                     {field.label}
                                 </label>
                                 <input
                                     type="email"
                                     name={field.name}
+                                    className='input-text'
                                     value={
                                         (typeof enquiryFormData !==
                                             'undefined' &&
@@ -424,11 +426,11 @@ const FormViewer: React.FC<FormViewerProps> = ({
                                     required={field.required}
                                     maxLength={field.charlimit}
                                 />
-                            </section>
+                            </p>
                         );
                     case 'textarea':
                         return (
-                            <section className=" form-pro-sections">
+                            <p className=" woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                                 <label htmlFor={field.name}>
                                     {field.label}
                                 </label>
@@ -446,18 +448,19 @@ const FormViewer: React.FC<FormViewerProps> = ({
                                     maxLength={field.charlimit}
                                     rows={field.row}
                                     cols={field.col}
+                                    className='input-text'
                                 />
                                 {errors[field.name ?? ''] && (
                                     <span className="error-text">
                                         {errors[field.name ?? '']}
                                     </span>
                                 )}
-                            </section>
+                            </p>
                         );
                     case 'checkboxes':
                         return (
-                            <section
-                                className="form-pro-sections"
+                            <p
+                                className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide"
                                 key={field.name}
                             >
                                 <label htmlFor={field.name}>
@@ -469,11 +472,11 @@ const FormViewer: React.FC<FormViewerProps> = ({
                                         handleChange(field.name!, data)
                                     }
                                 />
-                            </section>
+                            </p>
                         );
                     case 'multiselect':
                         return (
-                            <section className=" form-pro-sections">
+                            <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                                 <label htmlFor={field.name}>
                                     {field.label}
                                 </label>
@@ -494,11 +497,11 @@ const FormViewer: React.FC<FormViewerProps> = ({
                                         {errors[field.name ?? '']}
                                     </span>
                                 )}
-                            </section>
+                            </p>
                         );
                     case 'dropdown':
                         return (
-                            <section className=" form-pro-sections">
+                            <p className=" woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                                 <label htmlFor={field.name}>
                                     {field.label}
                                 </label>
@@ -518,11 +521,11 @@ const FormViewer: React.FC<FormViewerProps> = ({
                                         {errors[field.name ?? '']}
                                     </span>
                                 )}
-                            </section>
+                            </p>
                         );
                     case 'radio':
                         return (
-                            <section className=" form-pro-sections">
+                            <p className=" woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                                 <label htmlFor={field.name}>
                                     {field.label}
                                 </label>
@@ -537,23 +540,24 @@ const FormViewer: React.FC<FormViewerProps> = ({
                                         {errors[field.name ?? '']}
                                     </span>
                                 )}
-                            </section>
+                            </p>
                         );
                     case 'recaptcha':
                         return (
-                            <section className=" form-pro-sections">
+                            <p className=" woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                                 <div className="recaptcha-wrapper">
                                     <input
                                         type="hidden"
                                         name="g-recaptcha-response"
                                         value={captchaToken as string}
+                                        className='input-text'
                                     />
                                 </div>
-                            </section>
+                            </p>
                         );
                     case 'attachment':
                         return (
-                            <section className="form-pro-sections">
+                            <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                                 <label htmlFor={field.name}>
                                     {field.label}
                                 </label>
@@ -600,11 +604,11 @@ const FormViewer: React.FC<FormViewerProps> = ({
                                         {errors[field.name ?? '']}
                                     </span>
                                 )}
-                            </section>
+                            </p>
                         );
                     case 'datepicker':
                         return (
-                            <section className=" form-pro-sections">
+                            <p className=" woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                                 <label htmlFor={field.name}>
                                     {field.label}
                                 </label>
@@ -621,6 +625,7 @@ const FormViewer: React.FC<FormViewerProps> = ({
                                                 e.target.value
                                             );
                                         }}
+                                        className='input-text'
                                     />
                                 </div>
                                 {errors[field.name ?? ''] && (
@@ -628,17 +633,18 @@ const FormViewer: React.FC<FormViewerProps> = ({
                                         {errors[field.name ?? '']}
                                     </span>
                                 )}
-                            </section>
+                            </p>
                         );
                     case 'timepicker':
                         return (
-                            <section className=" form-pro-sections">
+                            <p className=" woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                                 <label htmlFor={field.name}>
                                     {field.label}
                                 </label>
                                 <input
                                     type="time"
                                     value={inputs[field.name ?? '']}
+                                    className='input-text'
                                     onChange={(e) => {
                                         handleChange(
                                             field.name ?? '',
@@ -651,21 +657,21 @@ const FormViewer: React.FC<FormViewerProps> = ({
                                         {errors[field.name ?? '']}
                                     </span>
                                 )}
-                            </section>
+                            </p>
                         );
                     case 'section':
                         return (
-                            <section className=" form-pro-sections">
+                            <p className=" woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                                 {field.label}
-                            </section>
+                            </p>
                         );
                     case 'divider':
                         return (
-                            <section className="section-divider-container"></section>
+                            <p className="section-divider-container"></p>
                         );
                     // case 'address':
                     //     return (
-                    //         <section className="form-pro-sections" key={field.id}>
+                    //         <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide" key={field.id}>
                     //             <label className="address-label">{field.label}</label>
                     //             <div className="address-field-group">
                     //                 {field.fields?.map((subField:any) => {
@@ -714,12 +720,12 @@ const FormViewer: React.FC<FormViewerProps> = ({
                     //                     }
                     //                 })}
                     //             </div>
-                    //         </section>
+                    //         </p>
                     //     );
                     // --- inside your FormViewer component, inside case 'address' ---
                     case 'address':
                         return (
-                            <section className="form-pro-sections" key={field.id}>
+                            <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide" key={field.id}>
                                 <label className="address-label">{field.label}</label>
                                 <div className="address-field-group">
                                     {field.fields?.map((subField: any) => {
@@ -812,14 +818,14 @@ const FormViewer: React.FC<FormViewerProps> = ({
                                         return null;
                                     })}
                                 </div>
-                            </section>
+                            </p>
                         );
 
                     default:
                         return null;
                 }
             })}
-            <section className="popup-footer-section">
+            <p className="woocommerce-form-row form-row">
                 <Button
                     customStyle={buttonSetting}
                     onClick={(e) => {
@@ -838,11 +844,11 @@ const FormViewer: React.FC<FormViewerProps> = ({
                     }}
                     children={'Submit'}
                 />
-                <button id="close-enquiry-popup" className="admin-btn btn-red">
+                <button id="close-enquiry-popup">
                     {'Close'}
                 </button>
-            </section>
-        </main>
+            </p>
+        </form>
     );
 };
 

@@ -593,6 +593,33 @@ const Commission: React.FC = () => {
             ),
         },
         {
+            header: __('Paid Status', 'multivendorx'),
+            cell: ({ row }) => {
+                const status = row.original.status || '';
+                const formattedStatus = status
+                    ?.replace(/[-_]/g, " ")
+                    .toLowerCase()
+                    .replace(/^\w/, c => c.toUpperCase());
+
+                const getStatusBadge = (status: string) => {
+                    switch (status) {
+                        case 'paid':
+                            return <span className="admin-badge green">Paid</span>;
+                        // case 'pending':
+                        //     return <span className="admin-badge yellow">Pending</span>;
+                        default:
+                            return <span className="admin-badge yellow">{formattedStatus}</span>;
+                    }
+                };
+
+                return (
+                    <TableCell title={`${status} - ${formattedDate}`}>
+                        {getStatusBadge(status)}
+                    </TableCell>
+                );
+            },
+        },
+        {
             id: 'created_at',
             accessorKey: 'created_at',
             enableSorting: true,
