@@ -175,7 +175,7 @@ const ApprovalQueue = () => {
             id: "deactivate-requests",
             label: "Deactivations",
             icon: "adminlib-bank blue",
-            des: "Queued for requests",
+            des: "Store-initiated permanent closure",
             count: deactivateCount,
             content: <DeactivateRequests onUpdated={refreshCounts} />
         },
