@@ -117,7 +117,11 @@ const Documentation: React.FC = () => {
 
                     <div className="documentation-wrapper">
                         {filteredDocuments.length === 0 && (
-                            <p className="no-results">No documents found.</p>
+                            <div className="permission-wrapper">
+                                <i className="adminlib-info red"></i>
+                                <div className="title">No documents found.</div>
+                                {/* <a href={appLocalizer.module_page_url} className="admin-btn btn-purple" >Enable Now</a> */}
+                            </div>
                         )}
 
                         {filteredDocuments.map((doc) => (
@@ -166,7 +170,7 @@ const Documentation: React.FC = () => {
                             <div className="footer-buttons">
                                 <div className="buttons-wrapper">
                                     <div className="admin-btn btn-red" onClick={() => setPopupOpen(false)}>
-                                         <i className="adminlib-close"></i>
+                                        <i className="adminlib-close"></i>
                                         Close
                                     </div>
                                     <div

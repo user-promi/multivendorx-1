@@ -210,12 +210,12 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                         {/* Sidebar */}
                         <div className="left-wrapper">
                             <div className="logo-wrapper">
-                                <img src="https://multivendorx.com/wp-content/uploads/2025/06/multivendorx-logo-180x40.png" alt="" />
+                                <img src="" alt="" />
                                 <i className="adminlib-menu"></i>
                             </div>
                             <ul className="dashboard-tabs">
                                 <li className="tab-name active">
-                                    <a className="tab" style={{ color: selectedColors.themeColor }}>
+                                    <a className="tab" style={{ color: selectedColors.colorPrimary, background: `color-mix(in srgb, ${selectedColors.colorPrimary} 20%, transparent)` }}>
                                         <i className="adminlib-cart"></i>
                                         Dashboard
                                     </a>
@@ -292,7 +292,7 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
 
                                         <li className="dropdown login-user">
                                             <a href="" className="dropdown-toggle">
-                                                <div className="avatar-wrapper" style={{ backgroundColor: selectedColors.themeColor }}>
+                                                <div className="avatar-wrapper" style={{ backgroundColor: selectedColors.colorPrimary }}>
                                                     <i className="adminlib-person"></i>
                                                 </div>
                                             </a>
@@ -302,14 +302,83 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                                 </div>
 
                             </div>
+                            <div className="tab-content-wrapper">
+                                <div className="title-wrapper">
+                                    <div className="left-section">
+                                        <div className="title">Good Morning, Anna!</div>
+                                        <div className="des"></div>
+                                    </div>
+                                    <div className="dashboard-btn" style={{ background: selectedColors.colorPrimary }}>Add new</div>
+                                </div>
 
+                                <div className="dashboard-card-wrapper">
+                                    <div className="item" style={{ background: `color-mix(in srgb, ${selectedColors.colorPrimary} 15%, transparent)` }}>
+                                        <div className="details">
+                                            <div className="price"></div>
+                                            <div className="des"></div>
+                                        </div>
+                                        <div className="icon-wrapper" style={{ background: selectedColors.colorPrimary }}>
+                                            <i className="adminlib-cart"></i>
+                                        </div>
+                                    </div>
+                                    <div className="item" style={{ background: `color-mix(in srgb, ${selectedColors.colorSecondary} 15%, transparent)` }}>
+                                        <div className="details">
+                                            <div className="price"></div>
+                                            <div className="des"></div>
+                                        </div>
+                                        <div className="icon-wrapper" style={{ background: selectedColors.colorSecondary }}>
+                                            <i className="adminlib-cart"></i>
+                                        </div>
+                                    </div>
+                                    <div className="item" style={{ background: `color-mix(in srgb, ${selectedColors.colorAccent} 15%, transparent)` }}>
+                                        <div className="details">
+                                            <div className="price"></div>
+                                            <div className="des"></div>
+                                        </div>
+                                        <div className="icon-wrapper" style={{ background: selectedColors.colorAccent }} >
+                                            <i className="adminlib-cart"></i>
+                                        </div>
+                                    </div>
+                                    <div className="item" style={{ background: `color-mix(in srgb, ${selectedColors.colorSupport} 15%, transparent)` }}>
+                                        <div className="details">
+                                            <div className="price"></div>
+                                            <div className="des"></div>
+                                        </div>
+                                        <div className="icon-wrapper" style={{ background: selectedColors.colorSupport }}>
+                                            <i className="adminlib-cart"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="dashboard-row">
+                                    <div className="section w-65">
+                                        <div className="section-header"><div className="title"></div></div>
+                                        <span></span><span></span><span></span><span></span><span></span><span></span>
+                                    </div>
+                                    <div className="section w-35">
+                                        <div className="section-header"><div className="title"></div></div>
+                                        <span></span><span></span><span></span><span></span><span></span><span></span>
+                                    </div>
+                                </div>
+
+                                <div className="dashboard-row">
+                                    <div className="section w-35">
+                                        <div className="section-header"><div className="title"></div></div>
+                                        <span></span><span></span><span></span><span></span><span></span><span></span>
+                                    </div>
+                                    <div className="section w-65">
+                                        <div className="section-header"><div className="title"></div></div>
+                                        <span></span><span></span><span></span><span></span><span></span><span></span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 )}
-            </div>
+            </div >
 
             {/* Image Palette List */}
-            <div className="color-setting two-column-layout">
+            < div className="color-setting two-column-layout" >
                 <div className="image-list">
                     {props.images && props.images.map((imgOption) => (
                         <div
@@ -341,11 +410,13 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                         <img src={selectedImage} alt="Selected Template" />
                     )}
                 </div>
-            </div>
+            </div >
 
-            {props.description && (
-                <p className={props.descClass} dangerouslySetInnerHTML={{ __html: props.description }}></p>
-            )}
+            {
+                props.description && (
+                    <p className={props.descClass} dangerouslySetInnerHTML={{ __html: props.description }}></p>
+                )
+            }
         </>
     );
 };

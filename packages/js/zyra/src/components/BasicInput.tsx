@@ -137,7 +137,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
         return (
             <>
                 <div
-                    className={`${wrapperClass || ''} ${(clickBtnName && generate) ? 'button' : ''} ${preInsideText || postInsideText ? 'inner-input' : ''}`}
+                    className={`${wrapperClass || ''} ${(clickBtnName || generate) ? 'input-button' : ''} ${preInsideText || postInsideText ? 'inner-input' : ''}`}
                 >
                     {inputLabel && (
                         <label htmlFor={id}>{inputLabel}</label>

@@ -32,10 +32,10 @@ const salesIcon = new L.DivIcon({
   html: `<div style="background:#5007aa;color:#fff;border-radius:50%;padding:6px 0.625rem;font-size:0.75rem;">$</div>`,
 });
 const analyticsData = [
-  { icon: "adminlib-tools theme-color1", number: "230k", text: "Visitors" },
-  { icon: "adminlib-book theme-color2", number: "45k", text: "Add to Cart" },
-  { icon: "adminlib-global-community theme-color3", number: "1.2M", text: "Purchases" },
-  { icon: "adminlib-wholesale theme-color4", number: "500k", text: "Conv. Rate" },
+  { icon: "adminlib-dollar theme-color1", number: "$45,230", text: "Total Revenue" },
+  { icon: "adminlib-order theme-color2", number: "325", text: "Total Orders" },
+  { icon: "adminlib-paid theme-color3", number: "$139.60", text: "Average Order Value" },
+  { icon: "adminlib-user-circle theme-color4", number: "1,248", text: "Active Customers" },
 ];
 const revenueData = [
   { month: "Jan", orders: 4000, earnings: 2400, refunds: 200, conversion: 2.4 },
@@ -145,6 +145,32 @@ const customers = [
     icon: "adminlib-person",
   },
 ];
+
+const requests = [
+  {
+    id: "REQ-001",
+    name: "Maria G.",
+    reason: "Damaged",
+    time: "Today",
+    amount: "$55.99"
+  },
+  {
+    id: "REQ-002",
+    name: "John D.",
+    reason: "Wrong size",
+    time: "Yesterday",
+    amount: "$29.50"
+  },
+  {
+    id: "REQ-003",
+    name: "Sarah L.",
+    reason: "Changed mind",
+    time: "2 days ago",
+    amount: "$12.00"
+  }
+];
+
+
 const ordersByCountry = [
   { country: "USA", orders: 4200, lat: 37.0902, lng: -95.7129 },
   { country: "UK", orders: 2800, lat: 55.3781, lng: -3.4360 },
@@ -274,7 +300,7 @@ const Dashboard: React.FC = () => {
             <div className="card-header">
               <div className="left">
                 <div className="title">
-                  Sales Overview (7 Days)
+                  Sales Overview (extra)
                 </div>
                 {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
               </div>
@@ -335,7 +361,7 @@ const Dashboard: React.FC = () => {
             <div className="card-header">
               <div className="left">
                 <div className="title">
-                  Sales Overview (7 Days)
+                  Sales Overview (extra)
                 </div>
                 {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
               </div>
@@ -431,7 +457,7 @@ const Dashboard: React.FC = () => {
             <div className="card-header">
               <div className="left">
                 <div className="title">
-                  Best-Selling Products
+                  Best-Selling Products (extra)
                 </div>
               </div>
               {/* <div className="right">
@@ -542,7 +568,7 @@ const Dashboard: React.FC = () => {
             <div className="card-header">
               <div className="left">
                 <div className="title">
-                  Store Activity Log
+                  Store Activity
                 </div>
                 {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
               </div>
@@ -596,6 +622,41 @@ const Dashboard: React.FC = () => {
                     </div>
 
                     <div className="price-section">{customer.total}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div className="column w-35">
+          <div className="card">
+            <div className="card-header">
+              <div className="left">
+                <div className="title">
+                  Pending Refunds
+                </div>
+                {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
+              </div>
+              {/* <div className="right">
+                <i className="adminlib-more-vertical"></i>
+              </div> */}
+            </div>
+            <div className="card-body">
+              <div className="top-customer-wrapper">
+                {requests.map((customer) => (
+                  <div key={customer.id} className="customer">
+                    <div className="left-section">
+                      {/* <div className="profile">
+                        <i className={customer.icon}></i>
+                      </div> */}
+                      <div className="details">
+                        <div className="name">{customer.name}</div>
+                        <div className="order-number">{customer.reason} | {customer.time}</div>
+                      </div>
+                    </div>
+
+                    <div className="price-section">{customer.amount}</div>
                   </div>
                 ))}
               </div>
