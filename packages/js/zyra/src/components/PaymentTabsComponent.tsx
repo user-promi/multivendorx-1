@@ -94,19 +94,29 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
   const [modelOpen, setModelOpen] = useState(false);
   const [wizardIndex, setWizardIndex] = useState(0);
 
-
   const handleInputChange = (
     methodKey: string,
     fieldKey: string,
     fieldValue: any
   ) => {
-    onChange({
+
+    const updated = {
       ...value,
       [methodKey]: {
         ...value[methodKey],
         [fieldKey]: fieldValue,
       },
-    });
+    };
+
+    onChange(updated);
+
+    // onChange({
+    //   ...value,
+    //   [methodKey]: {
+    //     ...value[methodKey],
+    //     [fieldKey]: fieldValue,
+    //   },
+    // });
   };
 
   const toggleEnable = (methodId: string, enable: boolean, icon?: string) => {
@@ -148,18 +158,22 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
     return renderField(step.id, buttonField);
   };
   const renderField = (methodId: string, field: PaymentFormField) => {
+
     const fieldValue = value[methodId]?.[field.key];
-    console.log(fieldValue);
+
     switch (field.type) {
-      case "payment-tabs":
-        return (
-          <PaymentTabsComponent
-            name={field.key}
-            methods={field.modal || []}
-            value={fieldValue || {}}
-            onChange={(val) => handleInputChange(methodId, field.key, val)}
-          />
-        );
+      // case "payment-tabs":
+      //   return (
+      //     <PaymentTabsComponent
+      //       name={field.key}
+      //       methods={field.modal || []}
+      //       value={fieldValue || {}}
+      //       onChange={(val) => {
+      //         handleInputChange(methodId, field.key, val)
+      //       }
+      //       }
+      //     />
+      //   );
 
       case "setting-toggle":
         return (
