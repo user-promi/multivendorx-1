@@ -14,9 +14,16 @@ class Distance_Shipping extends \WC_Shipping_Method {
         $this->method_title       = __( 'Multivendorx Shipping by Distance', 'multivendorx' );
         $this->method_description = __( 'Enable vendors to set marketplace shipping by distance range', 'multivendorx' );
 
-        $this->enabled    = $this->get_option( 'enabled' );
+        $shipping_modules = MultiVendorX()->setting->get_setting('shipping_modules', []);
+        $distance_based_shipping = $shipping_modules['distance-based-shipping'] ?? [];
+
+        $this->enabled = (!empty($distance_based_shipping['enable']) && $distance_based_shipping['enable']) ? 'yes' : 'no';
+
         $this->title      = $this->get_option( 'title' );
-        $this->tax_status = $this->get_option( 'tax_status' );
+        $taxable_shipping = MultiVendorX()->setting->get_setting('taxable', []);
+
+        $this->tax_status = (!empty($taxable_shipping) && in_array('taxable', $taxable_shipping))? 'taxable': 'none';
+        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:dis enable : " . var_export($this->enabled, true) . "\n", FILE_APPEND);
 
         if ( ! $this->title ) {
             $this->title = __( 'Shipping Cost', 'multivendorx' );
@@ -29,8 +36,8 @@ class Distance_Shipping extends \WC_Shipping_Method {
      * Initialize settings
      */
     public function init() {
-        $this->init_form_fields();
-        $this->init_settings();
+        // $this->init_form_fields();
+        // $this->init_settings();
 
         add_filter( 'woocommerce_cart_shipping_packages', ['MultiVendorX\StoreShipping\Shipping_Helper', 'split_cart_by_store'] );
 
@@ -97,7 +104,7 @@ class Distance_Shipping extends \WC_Shipping_Method {
                 'title'   => __( 'Enable/Disable', 'multivendorx' ),
                 'type'    => 'checkbox',
                 'label'   => __( 'Enable Shipping', 'multivendorx' ),
-                'default' => 'yes',
+                // 'default' => 'yes',
             ],
             'title' => [
                 'title'       => __( 'Method Title', 'multivendorx' ),

@@ -40,7 +40,6 @@ class Module {
 
         // Ensure all shipping methods are loaded.
         add_action('woocommerce_shipping_init', [$this, 'include_shipping_classes']);
-
         // Register all detected shipping methods.
         add_filter('woocommerce_shipping_methods', [$this, 'register_shipping_methods']);
     }

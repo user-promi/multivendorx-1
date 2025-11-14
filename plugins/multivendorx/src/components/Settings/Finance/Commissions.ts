@@ -243,15 +243,15 @@ export default {
             look: 'toggle',
         },
         {
-            key: 'taxable_shipping',
+            key: 'taxable',
             label: __('Tax on shipping', 'multivendorx'),
             settingDescription: __('Shipping charges will be treated as taxable items during checkout. Otherwise shipping costs will be tax-free.', 'multivendorx'),
             desc: __('', 'multivendorx'),
             type: 'checkbox',
             options: [
                 {
-                    key: 'taxable_shipping',
-                    value: 'taxable_shipping',
+                    key: 'taxable',
+                    value: 'taxable',
                 },
             ],
             dependent: {

@@ -14,16 +14,24 @@ class Country_Shipping extends \WC_Shipping_Method {
     * @return void
     */
     public function __construct() {
+        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:cenable : " . var_export('shipping', true) . "\n", FILE_APPEND);
+
         $this->id                 = 'multivendorx_product_shipping_by_country';
         $this->method_title       = __( 'Multivendorx Shipping by Country', 'multivendorx' );
         $this->method_description = __( 'Enable vendors to set marketplace shipping per country', 'multivendorx' );
 
-        $this->enabled      = $this->get_option( 'enabled' );
+        $shipping_modules = MultiVendorX()->setting->get_setting('shipping_modules', []);
+        $country_shipping_settings = $shipping_modules['country-wise-shipping'] ?? [];
+
+        $this->enabled = (!empty($country_shipping_settings['enable']) && $country_shipping_settings['enable']) ? 'yes' : 'no';
+
         $this->title        = $this->get_option( 'title' );
-        $this->tax_status   = $this->get_option( 'tax_status' );
+
+        $taxable_shipping = MultiVendorX()->setting->get_setting('taxable', []);
+
+        $this->tax_status = (!empty($taxable_shipping) && in_array('taxable', $taxable_shipping))? 'taxable': 'none';
         
         if( !$this->title ) $this->title = __( 'Shipping Cost', 'multivendorx' );
-
         $this->init();
     }
 
@@ -36,10 +44,9 @@ class Country_Shipping extends \WC_Shipping_Method {
     */
     function init() {
         // Load the settings API
-        $this->init_form_fields();
-        $this->init_settings();
+        // $this->init_form_fields();
+        // $this->init_settings();
 
-        // add_filter( 'woocommerce_cart_shipping_packages', array( $this, 'multivendorx_split_cart_by_store' ) );
         add_filter( 'woocommerce_cart_shipping_packages', ['MultiVendorX\StoreShipping\Shipping_Helper', 'split_cart_by_store'] );
 
         add_action( 'woocommerce_cart_calculate_fees', array( $this, 'multivendorx_force_shipping_recalculation' ), 20, 1 );
@@ -50,37 +57,6 @@ class Country_Shipping extends \WC_Shipping_Method {
 
     public function multivendorx_force_shipping_recalculation() {
         WC()->cart->calculate_shipping();
-    }
-
-    public function multivendorx_split_cart_by_store( $packages ) {
-        $new_packages = array();
-    
-        foreach ( WC()->cart->get_cart() as $item_key => $item ) {
-            $product_id = $item['product_id'];
-            $store_id   = get_post_meta( $product_id, 'multivendorx_store_id', true );
-
-            if ( ! $store_id ) continue;
-    
-            if ( ! isset( $new_packages[ $store_id ] ) ) {
-                $new_packages[ $store_id ] = array(
-                    'contents'    => array(),
-                    'contents_cost' => 0,
-                    'applied_coupons' => WC()->cart->get_applied_coupons(),
-                    'destination' => array(
-                        'country'   => WC()->customer->get_shipping_country(),
-                        'state'     => WC()->customer->get_shipping_state(),
-                        'postcode'  => WC()->customer->get_shipping_postcode(),
-                        'city'      => WC()->customer->get_shipping_city(),
-                        'address'   => WC()->customer->get_shipping_address(),
-                        'address_2' => WC()->customer->get_shipping_address_2(),
-                    ),
-                );
-            }
-    
-            $new_packages[ $store_id ]['contents'][ $item_key ] = $item;
-            $new_packages[ $store_id ]['contents_cost'] += $item['line_total'];
-        }
-        return array_values( $new_packages );
     }
 
     /**
@@ -99,13 +75,12 @@ class Country_Shipping extends \WC_Shipping_Method {
     * @return void
     */
     public function init_form_fields() {
-
         $this->form_fields = array(
             'enabled' => array(
                 'title'         => __( 'Enable/Disable', 'multivendorx' ),
                 'type'          => 'checkbox',
                 'label'         => __( 'Enable Shipping', 'multivendorx' ),
-                'default'       => 'yes'
+                // 'default'       => 'yes'
             ),
             'title' => array(
                 'title'         => __( 'Method Title', 'multivendorx' ),
@@ -176,7 +151,6 @@ class Country_Shipping extends \WC_Shipping_Method {
             $this->maybe_add_local_pickup_rate( $products, $tax_rate );
         }
     }
-    
 
     /**
     * Check if shipping for this product is enabled
