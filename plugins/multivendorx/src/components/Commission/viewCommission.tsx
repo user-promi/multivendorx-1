@@ -262,7 +262,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
           </div>
           <p>
             {__(
-              "Details of this commission including vendor, order breakdown, and notes.",
+              "Details of this commission including stores, order breakdown, and notes.",
               "multivendorx"
             )}
           </p>
