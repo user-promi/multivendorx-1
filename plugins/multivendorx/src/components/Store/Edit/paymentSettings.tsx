@@ -8,22 +8,22 @@ interface PaymentField {
 	name: string;
 	type?: string;
 	label: string;
-    placeholder?: string;
-    options?: Array<{ key: string; label: string; value: string; }>; // Added for clarity
+	placeholder?: string;
+	options?: Array<{ key: string; label: string; value: string; }>; // Added for clarity
 }
 
 interface PaymentProvider {
 	id: string;
 	label: string;
-    fields?: PaymentField[];
-    formFields?: PaymentField[]; // Accommodate the PHP structure
+	fields?: PaymentField[];
+	formFields?: PaymentField[]; // Accommodate the PHP structure
 }
 
 interface StorePaymentConfig {
 	[key: string]: PaymentProvider;
 }
 
-const PaymentSettings = ({ id, data }: { id: string|null; data: any }) => {
+const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 	const [formData, setFormData] = useState<{ [key: string]: any }>({}); // Use 'any' for simplicity here
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
@@ -39,10 +39,10 @@ const PaymentSettings = ({ id, data }: { id: string|null; data: any }) => {
 		value: p.id,
 		label: p.label,
 	}));
-    
-    // The selectedProvider needs to check both 'fields' and 'formFields'
+
+	// The selectedProvider needs to check both 'fields' and 'formFields'
 	const selectedProvider = storePayment[formData.payment_method];
-    const providerFields = selectedProvider?.fields || selectedProvider?.formFields || [];
+	const providerFields = selectedProvider?.fields || selectedProvider?.formFields || [];
 
 	useEffect(() => {
 		if (!id) return;
@@ -68,12 +68,12 @@ const PaymentSettings = ({ id, data }: { id: string|null; data: any }) => {
 		}
 	}, [successMsg]);
 
-    // ✨ --- NEW: Logic to handle Stripe dependencies --- ✨
+	// ✨ --- NEW: Logic to handle Stripe dependencies --- ✨
 	useEffect(() => {
-        // Ensure this logic only runs for the stripe marketplace provider
+		// Ensure this logic only runs for the stripe marketplace provider
 		if (formData.payment_method !== 'mvx_stripe_marketplace') {
-            return;
-        }
+			return;
+		}
 
 		const newFormData = { ...formData };
 		const dashboardAccess = formData.dashboard_access;
@@ -113,11 +113,11 @@ const PaymentSettings = ({ id, data }: { id: string|null; data: any }) => {
 			setFormData(newFormData);
 			autoSave(newFormData);
 		}
-    }, [formData.dashboard_access, formData.payment_method]);
-    
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        
+	}, [formData.dashboard_access, formData.payment_method]);
+
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+		const { name, value } = e.target;
+
 		setFormData((prev) => {
 			const updated = {
 				...(prev || {}),
@@ -137,9 +137,9 @@ const PaymentSettings = ({ id, data }: { id: string|null; data: any }) => {
 			autoSave(updated);
 			return updated;
 		});
-    };
+	};
 
-	
+
 
 	const autoSave = (updatedData: { [key: string]: string }) => {
 		axios({
@@ -152,7 +152,7 @@ const PaymentSettings = ({ id, data }: { id: string|null; data: any }) => {
 				setSuccessMsg('Store saved successfully!');
 			}
 		});
-    };
+	};
 
 	const handleAccChange = (value: string, name?: string) => {
 		setFormData((prev) => {
@@ -160,44 +160,44 @@ const PaymentSettings = ({ id, data }: { id: string|null; data: any }) => {
 				...(prev || {}),
 				[name || '']: value,
 			};
-			
+
 			autoSave(updated);
 			return updated;
 		});
 	};
-    
-    // ✨ --- NEW: Helper functions to get disabled options --- ✨
-    const getDynamicOptions = (fieldKey: string) => {
-        const field = providerFields.find((f) => f.key === fieldKey);
-        if (!field || !field.options || formData.payment_method !== 'mvx_stripe_marketplace') {
-            return field?.options || [];
-        }
 
-        const dashboardAccess = formData.dashboard_access;
+	// ✨ --- NEW: Helper functions to get disabled options --- ✨
+	const getDynamicOptions = (fieldKey: string) => {
+		const field = providerFields.find((f) => f.key === fieldKey);
+		if (!field || !field.options || formData.payment_method !== 'mvx_stripe_marketplace') {
+			return field?.options || [];
+		}
 
-        switch (fieldKey) {
-            case 'onboarding_flow':
-                if (dashboardAccess === 'full') {
-                    return field.options.map(opt => ({ ...opt, disabled: opt.value !== 'hosted' }));
-                }
-                if (dashboardAccess === 'none') {
-                    return field.options.map(opt => ({ ...opt, disabled: opt.value !== 'embedded' }));
-                }
-                return field.options.map(opt => ({...opt, disabled: false})); // Express supports both
+		const dashboardAccess = formData.dashboard_access;
 
-            case 'charge_type':
-                if (dashboardAccess === 'full') {
-                    return field.options.map(opt => ({ ...opt, disabled: opt.value !== 'direct' }));
-                }
-                if (dashboardAccess === 'express' || dashboardAccess === 'none') {
-                    return field.options.map(opt => ({ ...opt, disabled: opt.value === 'direct' }));
-                }
-                return field.options.map(opt => ({...opt, disabled: false}));
+		switch (fieldKey) {
+			case 'onboarding_flow':
+				if (dashboardAccess === 'full') {
+					return field.options.map(opt => ({ ...opt, disabled: opt.value !== 'hosted' }));
+				}
+				if (dashboardAccess === 'none') {
+					return field.options.map(opt => ({ ...opt, disabled: opt.value !== 'embedded' }));
+				}
+				return field.options.map(opt => ({ ...opt, disabled: false })); // Express supports both
 
-            default:
-                return field.options;
-        }
-    };
+			case 'charge_type':
+				if (dashboardAccess === 'full') {
+					return field.options.map(opt => ({ ...opt, disabled: opt.value !== 'direct' }));
+				}
+				if (dashboardAccess === 'express' || dashboardAccess === 'none') {
+					return field.options.map(opt => ({ ...opt, disabled: opt.value === 'direct' }));
+				}
+				return field.options.map(opt => ({ ...opt, disabled: false }));
+
+			default:
+				return field.options;
+		}
+	};
 
 	return (
 		<>
@@ -207,12 +207,12 @@ const PaymentSettings = ({ id, data }: { id: string|null; data: any }) => {
 				<div className="card-wrapper w-65">
 					<div className="card-content">
 						<div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    Withdrawal methods
-                                </div>
-                            </div>
-                        </div>
+							<div className="left">
+								<div className="title">
+									Withdrawal methods
+								</div>
+							</div>
+						</div>
 
 						<div className="form-group-wrapper">
 							<div className="form-group">
@@ -234,7 +234,7 @@ const PaymentSettings = ({ id, data }: { id: string|null; data: any }) => {
 						</div>
 
 						{providerFields.map((field, index) => {
-                            // Render HTML (e.g., connect button)
+							// Render HTML (e.g., connect button)
 							if (field.type === "html" && field.html) {
 								return (
 									<div
@@ -243,27 +243,31 @@ const PaymentSettings = ({ id, data }: { id: string|null; data: any }) => {
 										dangerouslySetInnerHTML={{ __html: field.html }}
 									/>
 								);
-                            }
-                            
-                            // Render Toggle Settings
-                            if (field.type === 'setting-toggle') {
-                                return (
-									<ToggleSetting
-										key={field.key}
-										description={field.desc}
-										options={
-										Array.isArray(field.options)
-											? field.options.map((opt) => ({
-											...opt,
-											value: String(opt.value),
-											}))
-											: []
-										}
-										value={formData[field.key || ""] || ""}
-										onChange={(value) => handleToggleChange(value, field.key)}
-									/>
-									);
-                            }
+							}
+
+							// Render Toggle Settings
+							if (field.type === 'setting-toggle') {
+								return (
+									<div className="form-group-wrapper" key={field.key}>
+										<div className="form-group">
+											<ToggleSetting
+												key={field.key}
+												description={field.desc}
+												options={
+													Array.isArray(field.options)
+														? field.options.map((opt) => ({
+															...opt,
+															value: String(opt.value),
+														}))
+														: []
+												}
+												value={formData[field.key || ""] || ""}
+												onChange={(value) => handleToggleChange(value, field.key)}
+											/>
+										</div>
+									</div>
+								);
+							}
 
 							// Default input field rendering
 							return (
@@ -289,16 +293,16 @@ const PaymentSettings = ({ id, data }: { id: string|null; data: any }) => {
 				<div className="card-wrapper w-35">
 					<div className="card-content">
 						<div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    Store-specific commission
-                                </div>
-                            </div>
-                        </div>
+							<div className="left">
+								<div className="title">
+									Store-specific commission
+								</div>
+							</div>
+						</div>
 						<BlockText
-                            blockTextClass="settings-metabox-note"
-                            value="If no store-specific commission is set, the global commission will automatically apply."// Text or HTML content to display inside the block (safe HTML injected).
-                        />
+							blockTextClass="settings-metabox-note"
+							value="If no store-specific commission is set, the global commission will automatically apply."// Text or HTML content to display inside the block (safe HTML injected).
+						/>
 						<div className="form-group-wrapper">
 							<div className="form-group">
 								<label htmlFor="product-name">Fixed</label>
@@ -312,7 +316,7 @@ const PaymentSettings = ({ id, data }: { id: string|null; data: any }) => {
 						</div>
 					</div>
 				</div>
-				
+
 			</div>
 		</>
 	);

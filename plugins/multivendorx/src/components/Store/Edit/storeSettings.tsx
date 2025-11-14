@@ -793,7 +793,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                             ref={emailInputRef}
                                             type="email"
                                             className="basic-input"
-                                            placeholder="Enter email and press Enter"
+                                            placeholder="Type the email ID and hit Enter to save it."
                                             value={newEmailValue}
                                             onChange={(e) => setNewEmailValue(e.target.value)}
                                             onKeyPress={handleEmailKeyPress}
@@ -1008,7 +1008,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                     value={formData.slug}
                                     onChange={handleChange}
                                 />
-                                <div className="settings-metabox-description">Store Url : {appLocalizer.store_page_url + '/' + formData.slug}</div>
+                                <div className="settings-metabox-description">Store Url : <a href={appLocalizer.store_page_url + '/' + formData.slug}> {appLocalizer.store_page_url + '/' + formData.slug}</a></div>
                             </div>
                             {errorMsg.slug && <p className="invalid-massage">{errorMsg.slug}</p>}
 

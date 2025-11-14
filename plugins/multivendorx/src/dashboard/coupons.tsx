@@ -859,13 +859,13 @@ const AllCoupon: React.FC = () => {
     return (
         <>
             <div className="page-title-wrapper">
-                {/* <div className="page-title">
+                <div className="page-title">
                     <div className="title">Coupons</div>
                     <div className="des">Manage your store information and preferences</div>
-                </div> */}
+                </div>
                 <div className="button-wrapper">
                     <div
-                        className="admin-btn btn-purple"
+                        className="admin-btn btn-purple-bg"
                         onClick={() => {
                             setFormData({ ...defaultFormData }); // <-- reset form
                             setActiveTab("general");             // start with General tab
@@ -881,7 +881,7 @@ const AllCoupon: React.FC = () => {
             {AddCoupon && (
                 <CommonPopup
                     open={AddCoupon}
-                    // onClose= setAddCoupon(true)
+                    onClick={() => setAddCoupon(false)}
                     width="500px"
                     height="100%"
                     header={

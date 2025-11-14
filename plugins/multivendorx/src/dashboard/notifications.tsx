@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CommonPopup, getApiLink } from 'zyra';
 import axios from 'axios';
+import { Skeleton } from '@mui/material';
 
 const Notifications = () => {
 
@@ -16,9 +17,9 @@ const Notifications = () => {
                 store_id: appLocalizer.store_id
             }
         })
-        .then((response) => {
-            setNotifications(response.data || []);
-        });
+            .then((response) => {
+                setNotifications(response.data || []);
+            });
     }, []);
 
     const dismissNotification = (id: number) => {
@@ -32,11 +33,11 @@ const Notifications = () => {
         });
     };
 
-    return(
+    return (
         <>
             <div className="dropdown-menu notification">
                 <div className="title">
-                    Notifications 
+                    Notifications
                     {notifications && notifications.length > 0 && (
                         <span className="admin-badge green">
                             {notifications.length} New
@@ -45,35 +46,49 @@ const Notifications = () => {
                 </div>
                 <div className="notification">
                     <ul>
-                         {notifications && notifications.length > 0 ? (
+                        {notifications && notifications.length > 0 ? (
                             notifications.map((item, idx) => (
                                 <li key={idx}>
                                     {/* <a href={item.link || "#"}> */}
-                                    <div 
-                                    className={`icon admin-badge green`}
-                                    >
-                                        <i className={item.icon || "adminlib-user-network-icon"}></i>
-                                    </div>
-                                    <div className="details">
-                                        <span className="heading">{item.title}</span>
-                                        <span className="message">{item.message}</span>
-                                        <span className="time">{item.time}</span>
-                                    </div>
+                                    <div className="item">
+                                        <div
+                                            className={`icon admin-badge green`}
+                                        >
+                                            <i className={item.icon || "adminlib-user-network-icon"}></i>
+                                        </div>
+                                        <div className="details">
+                                            <span className="heading">{item.title}</span>
+                                            <span className="message">{item.message}</span>
+                                            <span className="time">{item.time}</span>
+                                        </div>
 
-                                    <button
-                                        className="dismiss-btn"
-                                        onClick={() => dismissNotification(item.id)}
-                                        title="Dismiss"
-                                    >
-                                        <i className="adminlib-close"></i>
-                                    </button>
-                                    {/* </a> */}
+                                        <button
+                                            className="dismiss-btn"
+                                            onClick={() => dismissNotification(item.id)}
+                                            title="Dismiss"
+                                        >
+                                            <i className="adminlib-close"></i>
+                                        </button>
+                                        {/* </a> */}
+                                    </div>
                                 </li>
-                        ))) : (
-                            <li className="empty-state">
-                                <div className="no-notifications">
-                                    <i className="adminlib-info"></i>
-                                    <span>No notifications</span>
+                            ))) : (
+                            <li>
+                                <div className="item">
+                                    <Skeleton variant="text" width={400} height={70} />
+
+                                </div>
+                                <div className="item">
+                                    <Skeleton variant="text" width={400} height={70} />
+
+                                </div>
+                                <div className="item">
+                                    <Skeleton variant="text" width={400} height={70} />
+
+                                </div>
+                                <div className="item">
+                                    <Skeleton variant="text" width={400} height={70} />
+
                                 </div>
                             </li>
                         )}

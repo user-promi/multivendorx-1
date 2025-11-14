@@ -281,7 +281,7 @@ const StoreQna: React.FC = () => {
                         <i className="adminlib-cart"></i>
                         Answer Question
                     </div>
-                    <p>Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.</p>
+                    <p>Review customer inquiries and reply directly. You can choose to display answers publicly or keep them private.</p>
                 </>
             }
             footer={
