@@ -318,8 +318,6 @@
       line-height: 1.5rem;
     }
   }
-
-  .action-wrapper {}
 }
 
 .tab-title {
@@ -465,15 +463,8 @@
       }
     }
   }
-
-  // .container-wrapper {
-  //   padding: 0;
-  // }
 }
 
-.middle-child-container:has(.tabs-wrapper) {
-  // padding-top: 2rem;
-}
 
 .tabs-item {
   position: relative;
@@ -495,10 +486,6 @@
     font-weight: 500;
     cursor: pointer;
     transition: all 0.4s ease;
-
-    // &:hover{
-    //   background: #f3f3f3;
-    // }
 
     .menu-name {
       font-size: 0.938rem;
@@ -621,12 +608,10 @@
 }
 
 .divider-wrapper:first-child {
-  // padding: 1.5rem 0;
   margin: 0;
 }
 
 .divider-wrapper:not(:first-child) {
   width: 100%;
 }
-
 // section divider end

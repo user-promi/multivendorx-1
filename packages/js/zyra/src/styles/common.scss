@@ -16,11 +16,11 @@ a {
   text-decoration: none;
   color: $color-black;
 
-  &:hover,
-  &:focus {
-    color: $color-active;
-    outline: none
-  }
+  // &:hover,
+  // &:focus {
+  //   color: $color-active;
+  //   outline: none
+  // }
 }
 
 .form-select-field-wrapper input:focus {
@@ -38,9 +38,9 @@ body:has(.admin-main-wrapper) {
   margin-left: -1.25rem;
   font-family: Figtree, sans-serif;
 
-  a:focus {
-    box-shadow: none;
-  }
+  // a:focus {
+  //   box-shadow: none;
+  // }
 
   p,
   h1,
@@ -1373,11 +1373,12 @@ input[type="checkbox"]:focus {
     margin: 0;
     border: 0.125rem solid #ece2f9f1;
     min-width: 6rem;
-    border: none;
+    border: none !important;  /*store dashboard*/
     border-radius: 0.313rem;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     padding: 0 0.625rem;
+    height: 100%;
 
     option {
       background: #fff;
