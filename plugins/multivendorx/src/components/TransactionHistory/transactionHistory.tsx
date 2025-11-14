@@ -28,6 +28,26 @@ export const TransactionHistory: React.FC = () => {
     const [validationErrors, setValidationErrors] = useState<{ amount?: string; paymentMethod?: string }>({});
     const [recentDebits, setRecentDebits] = useState<any[]>([]);
 
+    const demoOptions = [
+        {
+            key: 'paypal',
+            label: 'PayPal',
+            value: 'paypal',
+            icon: 'adminlib-bank',
+        },
+        {
+            key: 'stripe',
+            label: 'Stripe',
+            value: 'stripe',
+            icon: 'adminlib-bank',
+        },
+        {
+            key: 'bank_transfer',
+            label: 'Bank Transfer',
+            value: 'bank_transfer',
+            icon: 'adminlib-bank',
+        },
+    ];
 
     // 🔹 Fetch stores on mount
     useEffect(() => {
@@ -99,26 +119,66 @@ export const TransactionHistory: React.FC = () => {
             });
     }, [selectedStore]);
 
+    // useEffect(() => {
+    //     if (!storeData) return;
+
+    //     if (storeData.payment_method) {
+    //         const defaultOption = {
+    //             value: storeData.payment_method,
+    //             label: `Store Default - ${storeData.payment_method}`,
+    //         };
+    //         setOptionList([defaultOption]);
+    //         setPaymentMethod(storeData.payment_method);
+    //         return;
+    //     }
+
+    //     const enabledMethods = Object.entries(appLocalizer.payout_payment_options)
+    //         .filter(([key, value]: [string, any]) => value.enable)
+    //         .map(([key, value]) => ({
+    //             value: key,
+    //             label: key.charAt(0).toUpperCase() + key.slice(1),
+    //         }));
+
+    //     setOptionList(enabledMethods);
+    //     setPaymentMethod(enabledMethods[0]?.value || "");
+    // }, [storeData]);
+
     useEffect(() => {
         if (!storeData) return;
 
-        // 🔹 If store has its own payment method, show only that
+        // 🔹 Define icon map for supported payment methods
+        const paymentIcons: Record<string, string> = {
+            paypal: 'adminlib-paypal',
+            stripe: 'adminlib-stripe',
+            razorpay: 'adminlib-razorpay',
+            bank_transfer: 'adminlib-bank',
+            wallet: 'adminlib-wallet',
+            cod: 'adminlib-cash',
+            direct: 'adminlib-direct-transaction',
+        };
+
+        // 🔹 Case 1: Store has a default method set
         if (storeData.payment_method) {
+            const defaultIcon = paymentIcons[storeData.payment_method] || 'adminlib-wallet';
             const defaultOption = {
+                key: storeData.payment_method,
                 value: storeData.payment_method,
                 label: `Store Default - ${storeData.payment_method}`,
+                icon: defaultIcon,
             };
             setOptionList([defaultOption]);
             setPaymentMethod(storeData.payment_method);
             return;
         }
 
-        // 🔹 Otherwise, show globally enabled methods
+        // 🔹 Case 2: Build enabled methods from global settings
         const enabledMethods = Object.entries(appLocalizer.payout_payment_options)
             .filter(([key, value]: [string, any]) => value.enable)
             .map(([key, value]) => ({
+                key,
                 value: key,
                 label: key.charAt(0).toUpperCase() + key.slice(1),
+                icon: paymentIcons[key] || 'adminlib-wallet', // fallback icon
             }));
 
         setOptionList(enabledMethods);
@@ -390,12 +450,12 @@ export const TransactionHistory: React.FC = () => {
                 {requestWithdrawal && (
                     <CommonPopup
                         open={requestWithdrawal}
-                        width="500px"
+                        width="800px"
                         height="70%"
                         header={
                             <>
                                 <div className="title">
-                                    <i className="adminlib-cart"></i>
+                                    <i className="adminlib-wallet"></i>
                                     Disburse payment
                                 </div>
                                 <i
@@ -405,7 +465,6 @@ export const TransactionHistory: React.FC = () => {
                                         resetWithdrawalForm(); //reset form on close
                                     }}
                                 ></i>
-
                             </>
                         }
                         footer={
@@ -424,6 +483,8 @@ export const TransactionHistory: React.FC = () => {
                         <div className="content">
                             {/* start left section */}
                             <div className="form-group-wrapper">
+                                <div className="available-balance">Available on transaction wallet balance is <span>$1253.25</span></div>
+
                                 <div className="form-group">
                                     <label htmlFor="amount">Amount</label>
                                     <BasicInput
@@ -432,6 +493,12 @@ export const TransactionHistory: React.FC = () => {
                                         value={amount}
                                         onChange={(e) => handleAmountChange(Number(e.target.value))}
                                     />
+
+                                    <div className="free-wrapper">
+                                        <span>$852.25 Total</span>
+                                        <span>$852.25 free</span>
+                                    </div>
+
                                     {validationErrors.amount && (
                                         <div className="invalid-massage">{validationErrors.amount}</div>
                                     )}
@@ -446,7 +513,7 @@ export const TransactionHistory: React.FC = () => {
                                                 ? "Choose your preferred payment processor."
                                                 : "No payment methods are available for this store."
                                         }
-                                        options={optionList}
+                                        options={demoOptions}
                                         value={paymentMethod || ""}
                                         onChange={(value) => setPaymentMethod(value)}
                                     />

@@ -96,6 +96,29 @@
             .space {
                 margin: 3.5rem;
             }
+            .available-balance{
+                font-size: 1.125rem;
+                padding: 0.625rem;
+                background: $theme-background-color;
+                border-radius: 0.313rem;
+                color: #000000ad;
+
+                span{
+                    font-weight: 600;
+                    color: $theme-color;
+                    font-size: 1.313rem;
+                    padding-left: 0.313rem;
+                }
+            }
+            .free-wrapper {
+                font-size: 0.95rem;
+                font-weight: 500;
+                padding-top: 0.5rem;
+
+                span{
+                    padding-right: 0.813rem;
+                }
+            }
         }
 
         .heading {
@@ -173,7 +196,8 @@
             height: 0.063rem;
             border-bottom: 0.063rem solid #e0e4e9;
         }
-        .settings-metabox-note{
+
+        .settings-metabox-note {
             width: 100%;
         }
     }

@@ -7,7 +7,7 @@ import {
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
-import {formatCurrency} from '../services/commonFunction';
+import { formatCurrency } from '../services/commonFunction';
 
 type RefundRow = {
     id: number;
@@ -46,7 +46,7 @@ const Refund: React.FC = () => {
             method: 'GET',
             url: getApiLink(appLocalizer, 'refund'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true,store_id:appLocalizer.store_id },
+            params: { count: true, store_id: appLocalizer.store_id },
         })
             .then((response) => {
                 const total = response.data || 0;
@@ -162,7 +162,7 @@ const Refund: React.FC = () => {
                 // const url = orderId
                 //     ? `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${orderId}&action=edit`
                 //     : '#';
-    
+
                 return (
                     <TableCell title={orderId ? `#${orderId}` : '-'}>
                         {orderId ? (
@@ -385,94 +385,90 @@ const Refund: React.FC = () => {
                     <div className="des">Manage and process refund requests from customers.</div>
                 </div>
                 <div className="buttons-wrapper">
-                    <div className="admin-btn btn-purple">
+                    <div className="admin-btn btn-purple-bg">
                         <i className="adminlib-export"></i>
                         Export
                     </div>
                 </div>
             </div>
 
-            <div className="row">
-                <div className="column">
-                    <Table
-                        data={data}
-                        columns={columns as any}
-                        rowSelection={rowSelection}
-                        onRowSelectionChange={setRowSelection}
-                        defaultRowsPerPage={10}
-                        pageCount={pageCount}
-                        pagination={pagination}
-                        searchFilter={searchFilter}
-                        onPaginationChange={setPagination}
-                        realtimeFilter={realtimeFilter}
-                        handlePagination={requestApiForData}
-                        perPageOption={[10, 25, 50]}
-                        totalCounts={totalRows}
-                    />
-                    {error && <div className="error-message">{error}</div>}
+            <Table
+                data={data}
+                columns={columns as any}
+                rowSelection={rowSelection}
+                onRowSelectionChange={setRowSelection}
+                defaultRowsPerPage={10}
+                pageCount={pageCount}
+                pagination={pagination}
+                searchFilter={searchFilter}
+                onPaginationChange={setPagination}
+                realtimeFilter={realtimeFilter}
+                handlePagination={requestApiForData}
+                perPageOption={[10, 25, 50]}
+                totalCounts={totalRows}
+            />
+            {error && <div className="error-message">{error}</div>}
 
-                    {/* Reject Refund Popup */}
-                    {selectedRefund && (
-                        <CommonPopup
-                            open={!!selectedRefund}
-                            onClose={() => setSelectedRefund(null)}
-                            width="500px"
-                            header={
-                                <>
-                                    <div className="title">
-                                        <i className="adminlib-close"></i>
-                                        Reject Refund Request
-                                    </div>
-                                    <p>Provide a reason for rejecting this refund request. The customer will be notified with this reason.</p>
-                                </>
-                            }
-                            footer={
-                                <>
-                                    <button
-                                        type="button"
-                                        onClick={() => setSelectedRefund(null)}
-                                        className="admin-btn btn-red"
-                                    >
-                                        Cancel
-                                    </button>
-                                    <button
-                                        onClick={handleRejectWithReason}
-                                        disabled={rejecting || !rejectReason.trim()}
-                                        className="admin-btn btn-purple"
-                                    >
-                                        {rejecting ? "Rejecting..." : "Reject Refund"}
-                                    </button>
-                                </>
-                            }
-                        >
-                            <div className="content">
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label htmlFor="rejectReason">
-                                            Rejection Reason
-                                        </label>
-                                        <TextArea
-                                            name="rejectReason"
-                                            inputClass="textarea-input"
-                                            value={rejectReason}
-                                            onChange={(e) => setRejectReason(e.target.value)}
-                                            placeholder="Enter reason for rejecting this refund request..."
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <div className="refund-details">
-                                            <strong>Order ID:</strong> {selectedRefund.orderNumber}<br />
-                                            <strong>Customer:</strong> {selectedRefund.customer}<br />
-                                            <strong>Amount:</strong> <span dangerouslySetInnerHTML={{ __html: selectedRefund.amount }} /><br />
-                                            <strong>Original Reason:</strong> {selectedRefund.reason}
-                                        </div>
-                                    </div>
+            {/* Reject Refund Popup */}
+            {selectedRefund && (
+                <CommonPopup
+                    open={!!selectedRefund}
+                    onClose={() => setSelectedRefund(null)}
+                    width="500px"
+                    header={
+                        <>
+                            <div className="title">
+                                <i className="adminlib-close"></i>
+                                Reject Refund Request
+                            </div>
+                            <p>Provide a reason for rejecting this refund request. The customer will be notified with this reason.</p>
+                        </>
+                    }
+                    footer={
+                        <>
+                            <button
+                                type="button"
+                                onClick={() => setSelectedRefund(null)}
+                                className="admin-btn btn-red"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleRejectWithReason}
+                                disabled={rejecting || !rejectReason.trim()}
+                                className="admin-btn btn-purple"
+                            >
+                                {rejecting ? "Rejecting..." : "Reject Refund"}
+                            </button>
+                        </>
+                    }
+                >
+                    <div className="content">
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="rejectReason">
+                                    Rejection Reason
+                                </label>
+                                <TextArea
+                                    name="rejectReason"
+                                    inputClass="textarea-input"
+                                    value={rejectReason}
+                                    onChange={(e) => setRejectReason(e.target.value)}
+                                    placeholder="Enter reason for rejecting this refund request..."
+                                />
+                            </div>
+                            <div className="form-group">
+                                <div className="refund-details">
+                                    <strong>Order ID:</strong> {selectedRefund.orderNumber}<br />
+                                    <strong>Customer:</strong> {selectedRefund.customer}<br />
+                                    <strong>Amount:</strong> <span dangerouslySetInnerHTML={{ __html: selectedRefund.amount }} /><br />
+                                    <strong>Original Reason:</strong> {selectedRefund.reason}
                                 </div>
                             </div>
-                        </CommonPopup>
-                    )}
-                </div>
-            </div>
+                        </div>
+                    </div>
+                </CommonPopup>
+            )}
         </>
     );
 };

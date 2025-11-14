@@ -328,6 +328,13 @@ const EditStore = () => {
     //             return <div></div>;
     //     }
     // };
+    const [expanded, setExpanded] = useState(false);
+
+    const words = data?.description?.split(" ") || [];
+    const shouldTruncate = words.length > 50;
+    const displayText = expanded
+        ? data?.description
+        : words.slice(0, 50).join(" ");
 
     const getForm = useCallback((tabId: string) => {
         switch (tabId) {
@@ -351,7 +358,6 @@ const EditStore = () => {
                 return <div></div>;
         }
     }, [editId, data, handleUpdateData]);
-    console.log('data',data);
     return (
         <>
             <div className="store-page">
@@ -520,10 +526,13 @@ const EditStore = () => {
                                                 </div>
 
                                                 <div className="des" onClick={() => setEditDesc(true)}>
+
                                                     {editDesc ? (
                                                         <textarea
                                                             value={data.description || ""}
-                                                            onChange={(e) => setData({ ...data, description: e.target.value })}
+                                                            onChange={(e) =>
+                                                                setData({ ...data, description: e.target.value })
+                                                            }
                                                             onBlur={() => {
                                                                 if (!data?.description?.trim()) {
                                                                     setData({ ...data, description: prevDesc });
@@ -531,15 +540,30 @@ const EditStore = () => {
                                                                 setEditDesc(false);
                                                             }}
                                                             className="textarea-input"
+                                                            style={{ width: "100%" }}
                                                             autoFocus
                                                         />
                                                     ) : Object.keys(data).length === 0 ? (
                                                         <Skeleton variant="text" width={150} />
                                                     ) : data?.description ? (
-                                                        data.description
+                                                        <div>
+                                                            <span>
+                                                                {displayText}
+                                                                {shouldTruncate && !expanded ? "..." : ""}
+                                                            </span>
+                                                            {shouldTruncate && (
+                                                                <button
+                                                                    onClick={() => setExpanded(!expanded)}
+                                                                    className="read-more-btn"
+                                                                >
+                                                                    {expanded ? "Read less" : "Read more"}
+                                                                </button>
+                                                            )}
+                                                        </div>
                                                     ) : (
                                                         <span>&nbsp;</span>
                                                     )}
+
 
 
                                                     <span
@@ -675,7 +699,7 @@ const EditStore = () => {
                                         <li onClick={() => {
                                             navigate(`?page=multivendorx#&tab=reports`);
                                         }}
-                                            ><i className="adminlib-order"></i> Orders</li>
+                                        ><i className="adminlib-order"></i> Orders</li>
                                         <li onClick={handleStoreDelete}><i className="adminlib-delete"></i> Delete store</li>
                                     </ul>
                                 )}

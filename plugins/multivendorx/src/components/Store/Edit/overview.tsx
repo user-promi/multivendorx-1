@@ -136,18 +136,19 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                     ></i>
                                 </div>
                             </div>
-                            {recentDebits && recentDebits.length > 0 ? (
-                                recentDebits.map((txn) => (
-                                    <div key={txn.id} className="store-owner-details">
-                                        <div className="profile">
-                                            <div className="avater">
+                            <div className="debit-list">
+                                {recentDebits && recentDebits.length > 0 ? (
+
+                                    recentDebits.map((txn) => (
+                                        <div key={txn.id} className="data-card">
+                                            <div className="title">
+                                                {/* <div className="avater">
                                                 <span className="adminlib-calendar"></span>
-                                            </div>
-                                            <div className="details">
+                                            </div> */}
                                                 <div className="name">
-                                                    {formatCurrency(txn.balance)}
+                                                    Bank Transfer
                                                 </div>
-                                                <div className="des">
+                                                <div className="date">
                                                     {new Date(txn.date).toLocaleDateString("en-US", {
                                                         month: "short",
                                                         day: "2-digit",
@@ -155,10 +156,9 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                                     })}
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div className="right-details">
-                                            <div
+                                            <div className="number">
+                                                {/* <div
                                                 className={`admin-badge ${txn.status?.toLowerCase() === "completed"
                                                     ? "green"
                                                     : txn.status?.toLowerCase() === "upcoming"
@@ -167,14 +167,15 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                                     }`}
                                             >
                                                 {txn.status}
+                                            </div> */}
+                                                {formatCurrency(txn.balance)}
                                             </div>
                                         </div>
-                                    </div>
-                                ))
-                            ) : (
-                                <div className="no-products">No recent payout</div>
-                            )}
-
+                                    ))
+                                ) : (
+                                    <div className="no-products">No recent payout</div>
+                                )}
+                            </div>
                         </div>
 
                         {/* <div className="column">
