@@ -118,7 +118,6 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
 
     return (
         <>
-
             <div className={props.wrapperClass}>
                 {/* Toggle Mode */}
                 {!selectedImage && (

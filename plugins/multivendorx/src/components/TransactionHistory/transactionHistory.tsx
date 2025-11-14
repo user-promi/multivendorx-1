@@ -465,6 +465,7 @@ export const TransactionHistory: React.FC = () => {
                                         resetWithdrawalForm(); //reset form on close
                                     }}
                                 ></i>
+                                <div className="des">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi quasi saepe temporibus aperiam voluptate quisquam.</div>
                             </>
                         }
                         footer={
@@ -483,7 +484,7 @@ export const TransactionHistory: React.FC = () => {
                         <div className="content">
                             {/* start left section */}
                             <div className="form-group-wrapper">
-                                <div className="available-balance">Available on transaction wallet balance is <span>$1253.25</span></div>
+                                <div className="available-balance">Available : <span>$1253.25</span></div>
 
                                 <div className="form-group">
                                     <label htmlFor="amount">Amount</label>

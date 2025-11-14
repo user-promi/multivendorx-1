@@ -46,11 +46,13 @@
                 padding: 0.313rem;
             }
         }
-        &.transparent{
+
+        &.transparent {
             background: transparent;
             box-shadow: none;
             padding: 0;
         }
+
         &.transaction {
             background: $theme-background-color;
         }
@@ -119,7 +121,8 @@
             }
         }
     }
-    &.p-top{
+
+    &.p-top {
         padding-top: 2rem;
         margin-bottom: 1.5rem;
     }
@@ -196,24 +199,24 @@
             width: 48%;
             box-sizing: border-box;
 
-            i{
+            i {
                 font-size: 2.5rem;
                 padding: 0.625rem;
                 line-height: 4rem;
             }
-            .details{
-                .number{
+
+            .details {
+                .number {
                     font-size: 2.063rem;
                 }
-                .text{
 
-                }
+                .text {}
             }
         }
     }
 
-    &.column-3{
-        .analytics-item{
+    &.column-3 {
+        .analytics-item {
             width: 24%;
         }
     }
@@ -278,6 +281,7 @@
     .form-details {
         display: flex;
         margin-bottom: 1rem;
+        align-items: center;
 
         label {
             font-size: 1rem;
@@ -286,6 +290,8 @@
 
         .value {
             width: 85%;
+            font-size: 1rem;
+            color: $sub-text-color;
         }
     }
 
