@@ -88,7 +88,8 @@ const reviews = [
     rating: 5,
     date: "22 Dec 2024",
     description:
-      "Good product overall, but shipping took longer than expected."},
+      "Good product overall, but shipping took longer than expected."
+  },
   {
     id: 2,
     product: "Product B",
@@ -178,10 +179,10 @@ const getCSSVar = (name) =>
   getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
 const themeColors = [
-  getCSSVar("--theme-color1"),
-  getCSSVar("--theme-color2"),
-  getCSSVar("--theme-color3"),
-  getCSSVar("--theme-color4"),
+  getCSSVar("--colorPrimary"),
+  getCSSVar("--colorSecondary"),
+  getCSSVar("--colorAccent"),
+  getCSSVar("--colorSupport"),
 ];
 const data = [
   { name: "Top Category", value: 400, color: themeColors[0] },

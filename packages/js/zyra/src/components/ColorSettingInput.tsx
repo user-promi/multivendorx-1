@@ -2,14 +2,18 @@ import React, { ChangeEvent, useState, useEffect } from 'react';
 import "../styles/web/ColorSettingInput.scss";
 
 interface CustomColors {
-    themeColor: string;
-    heading: string,
-    bodyText: string,
-    buttonText: string;
-    buttonBg: string;
-    buttonHoverText: string;
-    buttonHoverBg: string;
+    // themeColor: string;
+    // heading: string,
+    // bodyText: string,
+    // buttonText: string;
+    // buttonBg: string;
+    // buttonHoverText: string;
+    // buttonHoverBg: string;
     // buttonHoverBorder: string;
+    colorPrimary: string;
+    colorSecondary: string;
+    colorAccent: string;
+    colorSupport: string;
 }
 
 interface PaletteOption {
@@ -49,13 +53,10 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
     const [selectedPalette, setSelectedPalette] = useState(initialPalette);
     const [selectedColors, setSelectedColors] = useState<Partial<CustomColors>>(initialColors);
     const [customColors, setCustomColors] = useState<CustomColors>({
-        themeColor: '#5007aa',
-        heading: '#000',
-        bodyText: 'red',
-        buttonText: '#ffffff',
-        buttonBg: '#007cba',
-        buttonHoverText: '#ffffff',
-        buttonHoverBg: '#005f8d',
+        colorPrimary: '#FF5959',
+        colorSecondary: '#FADD3A',
+        colorAccent: '#49BEB6',
+        colorSupport: '#075F63',
         ...initialColors,
     });
 
