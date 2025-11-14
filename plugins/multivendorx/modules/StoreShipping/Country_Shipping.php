@@ -14,9 +14,7 @@ class Country_Shipping extends \WC_Shipping_Method {
     * @return void
     */
     public function __construct() {
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:cenable : " . var_export('shipping', true) . "\n", FILE_APPEND);
-
-        $this->id                 = 'multivendorx_product_shipping_by_country';
+        $this->id                 = 'multivendorx_country_shipping';
         $this->method_title       = __( 'Multivendorx Shipping by Country', 'multivendorx' );
         $this->method_description = __( 'Enable vendors to set marketplace shipping per country', 'multivendorx' );
 
@@ -24,13 +22,12 @@ class Country_Shipping extends \WC_Shipping_Method {
         $country_shipping_settings = $shipping_modules['country-wise-shipping'] ?? [];
 
         $this->enabled = (!empty($country_shipping_settings['enable']) && $country_shipping_settings['enable']) ? 'yes' : 'no';
-
         $this->title        = $this->get_option( 'title' );
 
         $taxable_shipping = MultiVendorX()->setting->get_setting('taxable', []);
 
         $this->tax_status = (!empty($taxable_shipping) && in_array('taxable', $taxable_shipping))? 'taxable': 'none';
-        
+
         if( !$this->title ) $this->title = __( 'Shipping Cost', 'multivendorx' );
         $this->init();
     }
@@ -75,31 +72,32 @@ class Country_Shipping extends \WC_Shipping_Method {
     * @return void
     */
     public function init_form_fields() {
-        $this->form_fields = array(
-            'enabled' => array(
-                'title'         => __( 'Enable/Disable', 'multivendorx' ),
-                'type'          => 'checkbox',
-                'label'         => __( 'Enable Shipping', 'multivendorx' ),
-                // 'default'       => 'yes'
-            ),
-            'title' => array(
-                'title'         => __( 'Method Title', 'multivendorx' ),
-                'type'          => 'text',
-                'description'   => __( 'This controls the title which the user sees during checkout.', 'multivendorx' ),
-                'default'       => __( 'Regular Shipping', 'multivendorx' ),
-                'desc_tip'      => true,
-            ),
-            'tax_status' => array(
-                'title'         => __( 'Tax Status', 'multivendorx' ),
-                'type'          => 'select',
-                'default'       => 'taxable',
-                'options'       => array(
-                    'taxable'   => __( 'Taxable', 'multivendorx' ),
-                    'none'      => _x( 'None', 'Tax status', 'multivendorx' )
-                ),
-            ),
 
-        );
+        // $this->form_fields = array(
+        //     'enabled' => array(
+        //         'title'         => __( 'Enable/Disable', 'multivendorx' ),
+        //         'type'          => 'checkbox',
+        //         'label'         => __( 'Enable Shipping', 'multivendorx' ),
+        //         // 'default'       => 'yes'
+        //     ),
+        //     'title' => array(
+        //         'title'         => __( 'Method Title', 'multivendorx' ),
+        //         'type'          => 'text',
+        //         'description'   => __( 'This controls the title which the user sees during checkout.', 'multivendorx' ),
+        //         'default'       => __( 'Regular Shipping', 'multivendorx' ),
+        //         'desc_tip'      => true,
+        //     ),
+        //     'tax_status' => array(
+        //         'title'         => __( 'Tax Status', 'multivendorx' ),
+        //         'type'          => 'select',
+        //         'default'       => 'taxable',
+        //         'options'       => array(
+        //             'taxable'   => __( 'Taxable', 'multivendorx' ),
+        //             'none'      => _x( 'None', 'Tax status', 'multivendorx' )
+        //         ),
+        //     ),
+        // );
+
     }
 
     public function calculate_shipping( $package = array() ) {
@@ -144,7 +142,6 @@ class Country_Shipping extends \WC_Shipping_Method {
                 'cost'  => $amount,
                 'taxes' => $tax_rate,
             );
-
             $this->add_rate( $rate );
     
             // Step 5: Maybe add local pickup rate if available

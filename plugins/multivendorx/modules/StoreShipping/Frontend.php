@@ -89,9 +89,14 @@ class Frontend {
     }
 
     public function mvx_checkout_user_location_fields($fields) {
-        if ((true === WC()->cart->needs_shipping()) && apply_filters('mvx_is_allow_checkout_user_location', true)) {
+
+        // show ONLY when distance-based shipping is used
+        if (
+            WC()->cart->needs_shipping() 
+            && apply_filters('mvx_is_allow_checkout_user_location', true)
+            && $this->cart_has_distance_shipping()
+        ) {
     
-            // Visible input for address
             $fields['billing']['mvx_user_location'] = [
                 'label'       => __('Delivery Location', 'multivendorx'),
                 'placeholder' => _x('Insert your address ..', 'placeholder', 'multivendorx'),
@@ -101,28 +106,29 @@ class Frontend {
                 'priority'    => 999,
                 'value'       => WC()->session->get('_mvx_user_location'),
                 'type'        => 'text',
-                'name'        => 'mvx_user_location', //must have
+                'name'        => 'mvx_user_location',
             ];
     
-            // Hidden fields for lat/lng
             $fields['billing']['mvx_user_location_lat'] = [
                 'required' => false,
                 'class'    => ['input-hidden'],
                 'value'    => WC()->session->get('_mvx_user_location_lat'),
                 'type'     => 'hidden',
-                'name'     => 'mvx_user_location_lat', //must have
+                'name'     => 'mvx_user_location_lat',
             ];
+    
             $fields['billing']['mvx_user_location_lng'] = [
                 'required' => false,
                 'class'    => ['input-hidden'],
                 'value'    => WC()->session->get('_mvx_user_location_lng'),
                 'type'     => 'hidden',
-                'name'     => 'mvx_user_location_lng', //must have
+                'name'     => 'mvx_user_location_lng',
             ];
         }
     
         return $fields;
     }
+    
     
 
     public function mvx_checkout_user_location_map($checkout) {
@@ -172,16 +178,31 @@ class Frontend {
     }
 
     public function load_scripts() {
-        $google_maps_api_key = MultiVendorX()->setting->get_setting('google_api_key', '');
-        if (!empty($google_maps_api_key)) {
-            wp_enqueue_script('google-maps', 'https://maps.googleapis.com/maps/api/js?key=' . $google_maps_api_key . '&libraries=places', ['jquery'], null, true);
+        // Check if distance-based shipping module is enabled
+        $settings = MultiVendorX()->setting->get_setting('shipping_modules', []);
+        $distance_enabled = $settings['distance-based-shipping']['enable'] ?? false;
+    
+        // Load map ONLY when distance module enabled AND cart contains distance shipping store
+        if ( $distance_enabled && $this->cart_has_distance_shipping() ) {
+    
+            $google_maps_api_key = MultiVendorX()->setting->get_setting('google_api_key', '');
+            if (!empty($google_maps_api_key)) {
+                wp_enqueue_script(
+                    'google-maps',
+                    'https://maps.googleapis.com/maps/api/js?key=' . $google_maps_api_key . '&libraries=places',
+                    array('jquery'),
+                    null,
+                    true
+                );
+            }
+    
+            // Load addon frontend scripts
+            FrontendScripts::load_scripts();
+            FrontendScripts::enqueue_script('multivendorx-store-shipping-frontend-script');
+            FrontendScripts::localize_scripts('multivendorx-store-shipping-frontend-script');
         }
-
-        FrontendScripts::load_scripts();
-        FrontendScripts::enqueue_script('multivendorx-store-shipping-frontend-script');
-        FrontendScripts::localize_scripts('multivendorx-store-shipping-frontend-script');
     }
-
+    
     /**
      * Inject user location into shipping packages
      */
@@ -193,4 +214,27 @@ class Frontend {
         }
         return $packages;
     }
+
+    /**
+     * Check if any product in cart belongs to a vendor using distance-based shipping.
+     */
+    public function cart_has_distance_shipping() {
+        if ( empty(WC()->cart) ) return false;
+
+        foreach ( WC()->cart->get_cart() as $cart_item ) {
+            $product_id = $cart_item['product_id'];
+            $store_id   = get_post_meta($product_id, 'multivendorx_store_id', true);
+
+            if ( $store_id ) {
+                $store = new \MultiVendorX\Store\Store($store_id);
+                $shipping_type = $store->meta_data['shipping_options'] ?? '';
+
+                if ( $shipping_type === 'shipping_by_distance' ) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }

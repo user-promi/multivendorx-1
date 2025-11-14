@@ -23,7 +23,6 @@ class Distance_Shipping extends \WC_Shipping_Method {
         $taxable_shipping = MultiVendorX()->setting->get_setting('taxable', []);
 
         $this->tax_status = (!empty($taxable_shipping) && in_array('taxable', $taxable_shipping))? 'taxable': 'none';
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:dis enable : " . var_export($this->enabled, true) . "\n", FILE_APPEND);
 
         if ( ! $this->title ) {
             $this->title = __( 'Shipping Cost', 'multivendorx' );
