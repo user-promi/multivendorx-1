@@ -605,7 +605,7 @@ const EditStore = () => {
 
 
                                                 <div className="des">
-                                                    <b>Store base: </b>
+                                                    <b>Storefront link: </b>
                                                     {appLocalizer.store_page_url + '/'}
                                                     {data?.slug ? (
                                                         <>

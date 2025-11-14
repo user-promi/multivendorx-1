@@ -27,41 +27,41 @@ $page_info = MultiVendorX()->rest->dashboard->get_current_page_and_submenu();
                 <?php endif; ?>
                 <i class='adminlib-menu'></i>
             </div>
+            <div class="dashboard-tabs">
+                <ul>
+                    <?php foreach ($page_info['all_endpoints'] as $section): ?>
+                        <?php
+                        $has_submenu = !empty($section['submenu']);
+                        $is_active = ($page_info['current_page'] === $section['slug'] && empty($page_info['current_sub']));
+                        ?>
+                        <li class="tab-name <?php echo $is_active ? 'active' : ''; ?>">
+                            <a class="tab" <?php echo $has_submenu ? 'href="#" onclick="return false;"' : 'href="' . esc_url(StoreUtil::get_endpoint_url($section['slug'])) . '"'; ?>>
+                                <i class="<?php echo esc_attr($section['icon']); ?>"></i>
+                                <?php echo esc_html($section['name']); ?>
+                                <?php if ($has_submenu): ?>
+                                    <i class="admin-arrow adminlib-pagination-right-arrow"></i>
+                                <?php endif; ?>
+                            </a>
 
-            <ul class="dashboard-tabs">
-                <?php foreach ($page_info['all_endpoints'] as $section): ?>
-                    <?php
-                    $has_submenu = !empty($section['submenu']);
-                    $is_active = ($page_info['current_page'] === $section['slug'] && empty($page_info['current_sub']));
-                    ?>
-                    <li class="tab-name <?php echo $is_active ? 'active' : ''; ?>">
-                        <a class="tab" <?php echo $has_submenu ? 'href="#" onclick="return false;"' : 'href="' . esc_url(StoreUtil::get_endpoint_url($section['slug'])) . '"'; ?>>
-                            <i class="<?php echo esc_attr($section['icon']); ?>"></i>
-                            <?php echo esc_html($section['name']); ?>
                             <?php if ($has_submenu): ?>
-                                <i class="admin-arrow adminlib-pagination-right-arrow"></i>
+                                <ul class="subtabs">
+                                    <?php foreach ($section['submenu'] as $submenu): ?>
+                                        <?php
+                                        $sub_active = ($page_info['current_page'] === $section['slug'] && $page_info['current_sub'] === $submenu['slug']);
+                                        ?>
+                                        <li class="<?php echo $sub_active ? 'active' : ''; ?>">
+                                            <a
+                                                href="<?php echo esc_url(StoreUtil::get_endpoint_url($section['slug'], $submenu['slug'])); ?>">
+                                                <?php echo esc_html($submenu['name']); ?>
+                                            </a>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
                             <?php endif; ?>
-                        </a>
-
-                        <?php if ($has_submenu): ?>
-                            <ul class="subtabs">
-                                <?php foreach ($section['submenu'] as $submenu): ?>
-                                    <?php
-                                    $sub_active = ($page_info['current_page'] === $section['slug'] && $page_info['current_sub'] === $submenu['slug']);
-                                    ?>
-                                    <li class="<?php echo $sub_active ? 'active' : ''; ?>">
-                                        <a
-                                            href="<?php echo esc_url(StoreUtil::get_endpoint_url($section['slug'], $submenu['slug'])); ?>">
-                                            <?php echo esc_html($submenu['name']); ?>
-                                        </a>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
-                        <?php endif; ?>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
         </div>
 
         <div class="dashboard-content tab-wrapper">

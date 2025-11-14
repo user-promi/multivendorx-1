@@ -793,7 +793,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                             ref={emailInputRef}
                                             type="email"
                                             className="basic-input"
-                                            placeholder="Enter email and press Enter"
+                                            placeholder="Type the email ID and hit Enter to save it."
                                             value={newEmailValue}
                                             onChange={(e) => setNewEmailValue(e.target.value)}
                                             onKeyPress={handleEmailKeyPress}
