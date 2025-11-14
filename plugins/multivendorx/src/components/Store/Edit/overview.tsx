@@ -168,7 +168,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                             >
                                                 {txn.status}
                                             </div> */}
-                                                {formatCurrency(txn.balance)}
+                                                {formatCurrency(txn.amount)}
                                             </div>
                                         </div>
                                     ))
@@ -198,12 +198,12 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                     </div>
                                 </div>
                                 <div className="right">
-                                    <i
-                                        className="adminlib-external"
-                                        onClick={() => {
-                                            window.location.href = `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/edit.php?post_type=product`;
-                                        }}
-                                    ></i>
+                                    <a
+                                        href={`${appLocalizer.admin_url}edit.php?post_type=product&multivendorx_store_id=${id}`}
+                                        className="product-link"
+                                    >
+                                        <i className="adminlib-external"></i>
+                                    </a>
                                 </div>
                             </div>
 
@@ -372,7 +372,9 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                 </div>
                             </div>
                             <div className="right">
-                                <i className="adminlib-external"></i>
+                                <i className="adminlib-external" 
+                                    onClick={() => { navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=store`) }}
+                                ></i>
                             </div>
                         </div>
 

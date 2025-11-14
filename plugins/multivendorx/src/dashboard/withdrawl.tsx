@@ -122,8 +122,6 @@ const Withdrawl: React.FC = () => {
         console.log('Store saved successfully!');
       }
     });
-  };
-
 
   return (
       <div className="card-wrapper">
@@ -254,11 +252,12 @@ const Withdrawl: React.FC = () => {
                     {field.label && <label htmlFor={field.key}>{field.label}</label>}
                     <BasicInput
                       key={field.key || ""}
+                      name={field.key}
                       type={field.type || "text"}
                       wrapperClass="setting-form-input"
                       descClass="settings-metabox-description"
                       placeholder={field.placeholder || ""}
-                      value={formData[field.key || ""] || ""}
+                      value={formData[field.key] || ""}
                       onChange={handleChange}
                     />
                   </div>
