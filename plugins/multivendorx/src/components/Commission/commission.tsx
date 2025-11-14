@@ -180,7 +180,6 @@ const Commission: React.FC = () => {
     const [viewCommission, setViewCommission] = useState(false);
     const [selectedCommissionId, setSelectedCommissionId] = useState<number | null>(null);
     const [currentFilterData, setCurrentFilterData] = useState<FilterData>({});
-    const [showMore, setShowMore] = useState(false);
     const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>({});
     const { modules } = useModules();
     const [pagination, setPagination] = useState<PaginationState>({
@@ -430,7 +429,20 @@ const Commission: React.FC = () => {
             accessorKey: 'ID',
             enableSorting: true,
             header: __('ID', 'multivendorx'),
-            cell: ({ row }) => <TableCell >#{row.original.id}</TableCell>,
+            cell: ({ row }) => (
+                <TableCell>
+                    <span
+                        className="admin-table-link"
+                        style={{ cursor: 'pointer', color: '#5b5ce2' }}
+                        onClick={() => {
+                            setSelectedCommissionId(row.original.id ?? null);
+                            setViewCommission(true);
+                        }}
+                    >
+                        #{row.original.id}
+                    </span>
+                </TableCell>
+            )
         },
         {
             id: 'order_id',

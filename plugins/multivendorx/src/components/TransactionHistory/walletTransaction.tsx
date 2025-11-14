@@ -528,12 +528,59 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
         //         return <TableCell title={displayValue}>{content}</TableCell>;
         //     },
         // },
+        // {
+        //     header: __('Transaction Type', 'multivendorx'),
+        //     cell: ({ row }) => {
+        //         const type = row.original.transaction_type?.toLowerCase();
+        //         const commissionId = row.original.commission_id;
+        //         const paymentMethod = row.original.payment_method;
+
+        //         const formatText = (text) =>
+        //             text
+        //                 ?.replace(/-/g, ' ')
+        //                 ?.replace(/\b\w/g, (c) => c.toUpperCase())
+        //             || '-';
+
+        //         let displayValue = '-';
+        //         let content = displayValue;
+
+        //         //Commission Transaction — clickable number
+        //         if (type === 'commission') {
+        //             displayValue = `Commission #${commissionId || '-'}`;
+        //             if (commissionId) {
+        //                 content = (
+        //                     <span className="order-link"
+        //                         onClick={() => {
+        //                             setSelectedCommissionId(commissionId);
+        //                             setViewCommission(true);
+        //                         }}
+        //                     >
+        //                         {displayValue}
+        //                     </span>
+        //                 );
+        //             } else {
+        //                 content = displayValue;
+        //             }
+        //         }
+        //         else if (type === 'withdrawal') {
+        //             displayValue = `Withdrawal - ${formatText(paymentMethod)}`;
+        //             content = displayValue;
+        //         }
+        //         else if (row.original.transaction_type) {
+        //             displayValue = formatText(row.original.transaction_type);
+        //             content = displayValue;
+        //         }
+
+        //         return <TableCell title={displayValue}>{content}</TableCell>;
+        //     },
+        // },
         {
             header: __('Transaction Type', 'multivendorx'),
             cell: ({ row }) => {
                 const type = row.original.transaction_type?.toLowerCase();
                 const commissionId = row.original.commission_id;
                 const paymentMethod = row.original.payment_method;
+                const orderId = row.original.order_details;
 
                 const formatText = (text) =>
                     text
@@ -544,28 +591,49 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                 let displayValue = '-';
                 let content = displayValue;
 
-                //Commission Transaction — clickable number
+                // Commission Transaction (clickable)
                 if (type === 'commission') {
                     displayValue = `Commission #${commissionId || '-'}`;
-                    if (commissionId) {
-                        content = (
-                            <span className="order-link"
-                                onClick={() => {
-                                    setSelectedCommissionId(commissionId);
-                                    setViewCommission(true);
-                                }}
-                            >
-                                {displayValue}
-                            </span>
-                        );
-                    } else {
-                        content = displayValue;
-                    }
+                    content = commissionId ? (
+                        <span
+                            className="order-link"
+                            onClick={() => {
+                                setSelectedCommissionId(commissionId);
+                                setViewCommission(true);
+                            }}
+                        >
+                            {displayValue}
+                        </span>
+                    ) : displayValue;
                 }
+
+                // Withdrawal
                 else if (type === 'withdrawal') {
                     displayValue = `Withdrawal - ${formatText(paymentMethod)}`;
                     content = displayValue;
                 }
+
+                else if (type === 'refund') {
+                    displayValue = `Refund - Order #${orderId || '-'}`;
+                
+                    const orderEditUrl = `${appLocalizer.site_url}/wp-admin/admin.php?page=wc-orders&action=edit&id=${orderId}`;
+                    content = orderId ? (
+                        <a
+                            href={orderEditUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="order-link"
+                        >
+                            {displayValue}
+                        </a>
+                    ) : (
+                        displayValue
+                    );
+                }
+                
+                
+
+                // Generic fallback
                 else if (row.original.transaction_type) {
                     displayValue = formatText(row.original.transaction_type);
                     content = displayValue;
