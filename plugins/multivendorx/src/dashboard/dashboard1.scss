@@ -47,7 +47,7 @@ a {
         .site-name {
             font-size: 1.5rem;
             font-weight: 600;
-            color: var(--themeColor);
+            color: var(--colorPrimary);
         }
 
         i {
@@ -109,15 +109,15 @@ a {
 
             &:not(.active) {
                 a:hover {
-                    color: var(--themeColor);
-                    background: color-mix(in srgb, var(--themeColor) 10%, transparent);
+                    color: var(--colorPrimary);
+                    background: color-mix(in srgb, var(--colorPrimary) 10%, transparent);
                 }
             }
 
             &.active {
                 a,
                 a:hover {
-                    background-color: var(--themeColor);
+                    background-color: var(--colorPrimary);
                     color: #fff;
                 }
             }
@@ -128,18 +128,18 @@ a {
             width: 100%;
             box-sizing: border-box;
             bottom: 0;
-            color: var(--theme-color);
+            color: var(--colorPrimary);
 
             &.active {
                 a {
-                    color: var(--themeColor);
+                    color: var(--colorPrimary);
 
                 }
             }
 
             a,
             a:hover {
-                color: var(--themeColor);
+                color: var(--colorPrimary);
                 background: transparent;
             }
         }
@@ -157,7 +157,7 @@ a {
         // backdrop-filter: saturate(200%) blur(6px);
         z-index: 999;
         width: 100%;
-        // background: color-mix(in srgb, var(--themeColor) 15%, transparent);
+        // background: color-mix(in srgb, var(--colorPrimary) 15%, transparent);
         background: #fff;
         border-bottom: $border-light-small;
         right: 0;
@@ -207,7 +207,7 @@ a {
                         // display: none;
 
                         .avatar-wrapper {
-                            background: var(--themeColor);
+                            background: var(--colorPrimary);
                             border-radius: 50%;
                             width: 2rem;
                             height: 2rem;
@@ -237,7 +237,7 @@ a {
                         box-shadow: 0 3px 12px 1px #3a227226;
                         max-width: 17.5rem;
                         min-width: 17.5rem;
-                        border-top: 3px solid var(--themeColor);
+                        border-top: 3px solid var(--colorPrimary);
                         right: 0;
                         background: #fff;
                         border-radius: 0.313rem;
@@ -262,7 +262,7 @@ a {
                                     justify-content: center;
                                     align-items: center;
                                     color: #fff;
-                                    background: var(--themeColor);
+                                    background: var(--colorPrimary);
                                     font-size: 0.875rem;
                                     font-weight: 700;
                                     letter-spacing: .06em;
@@ -345,7 +345,7 @@ a {
                                 }
 
                                 &:hover {
-                                    color: var(--themeColor);
+                                    color: var(--colorPrimary);
                                 }
                             }
                         }
@@ -435,7 +435,7 @@ a {
         }
 
         &.theme-bg {
-            background: var(--theme-color1);
+            background: var(--colorPrimary);
 
             color: #fff;
 
@@ -495,8 +495,8 @@ a {
             .icon {
                 padding: 0.625rem;
                 font-size: 1.8rem;
-                color: var(--themeColor);
-                background-color: color-mix(in srgb, var(--themeColor) 8%, transparent);
+                color: var(--colorPrimary);
+                background-color: color-mix(in srgb, var(--colorPrimary) 8%, transparent);
                 border-radius: 0.313rem;
             }
         }
@@ -519,12 +519,12 @@ a {
             a {
                 font-size: 0.9rem;
                 font-weight: 500;
-                color: var(--themeColor);
+                color: var(--colorPrimary);
             }
 
             i {
                 font-size: 2.2rem;
-                color: var(--themeColor);
+                color: var(--colorPrimary);
             }
 
             h3 {
@@ -548,7 +548,7 @@ a {
 
             .icon {
                 font-size: 1.125rem;
-                background: color-mix(in srgb, var(--themeColor) 15%, transparent);
+                background: color-mix(in srgb, var(--colorPrimary) 15%, transparent);
                 padding: 0.5rem;
                 border-radius: 50%;
                 display: flex;
@@ -558,7 +558,7 @@ a {
                 align-items: center;
 
                 i {
-                    color: var(--themeColor);
+                    color: var(--colorPrimary);
                 }
             }
 
@@ -582,7 +582,7 @@ a {
             }
 
             &:hover {
-                background: color-mix(in srgb, var(--themeColor) 3%, transparent);
+                background: color-mix(in srgb, var(--colorPrimary) 3%, transparent);
             }
 
             &.product {
@@ -592,7 +592,7 @@ a {
     }
 
     .activity-log {
-        border-left: 0.063rem solid var(--themeColor);
+        border-left: 0.063rem solid var(--colorPrimary);
 
         .activity {
             padding: 0 0 1.45rem 1.313rem;
@@ -615,7 +615,7 @@ a {
                 width: 0.813rem;
                 height: 0.813rem;
                 border-radius: 50%;
-                background: var(--themeColor);
+                background: var(--colorPrimary);
                 top: 0;
                 left: -0.4rem;
                 outline: 0.313rem solid #fff;
@@ -624,7 +624,7 @@ a {
             // &:after{
             //     position: absolute;
             //     content: "";
-            //     background: var(--themeColor);
+            //     background: var(--colorPrimary);
             //     width: 0.063rem;
             //     height: 100%;
             //     left: 0;
@@ -752,19 +752,19 @@ a {
         }
 
         .theme-color1 {
-            background: var(--theme-color1);
+            background: var(--colorPrimary);
         }
 
         .theme-color2 {
-            background: var(--theme-color2);
+            background: var(--colorSecondary);
         }
 
         .theme-color3 {
-            background: var(--theme-color3);
+            background: var(--colorAccent);
         }
 
         .theme-color4 {
-            background: var(--theme-color4);
+            background: var(--colorSupport);
         }
 
         .details {
@@ -789,34 +789,34 @@ a {
         }
 
         &:has(.theme-color1) {
-            background: color-mix(in srgb, var(--theme-color1) 15%, transparent);
+            background: color-mix(in srgb, var(--colorPrimary) 15%, transparent);
 
             .report span {
-                color: var(--theme-color1);
+                color: var(--colorPrimary);
             }
         }
 
         &:has(.theme-color2) {
-            background: color-mix(in srgb, var(--theme-color2) 15%, transparent);
+            background: color-mix(in srgb, var(--colorSecondary) 15%, transparent);
 
             .report span {
-                color: var(--theme-color2);
+                color: var(--colorSecondary);
             }
         }
 
         &:has(.theme-color3) {
-            background: color-mix(in srgb, var(--theme-color3) 15%, transparent);
+            background: color-mix(in srgb, var(--colorAccent) 15%, transparent);
 
             .report span {
-                color: var(--theme-color3);
+                color: var(--colorAccent);
             }
         }
 
         &:has(.theme-color4) {
-            background: color-mix(in srgb, var(--theme-color4) 15%, transparent);
+            background: color-mix(in srgb, var(--colorSupport) 15%, transparent);
 
             .report span {
-                color: var(--theme-color4);
+                color: var(--colorSupport);
             }
         }
 
@@ -1056,8 +1056,8 @@ a {
                     }
 
                     &:hover {
-                        color: #854fff;
-                        background: $theme-background-color;
+                        background: color-mix(in srgb, var(--themeColor) 15%, transparent);
+                        color: var(--themeColor);
                     }
                 }
             }
@@ -1283,7 +1283,7 @@ a {
 
                 i {
                     padding: 0.5rem;
-                    background: var(--theme-color1);
+                    background: var(--colorPrimary);
                     margin-top: 0.313rem;
                     font-size: 1.25rem;
                     color: #fff;
@@ -1394,11 +1394,11 @@ a {
 
     &.theme-color1 {
         div {
-            background: color-mix(in srgb, var(--theme-color1) 15%, transparent);
+            background: color-mix(in srgb, var(--colorPrimary) 15%, transparent);
 
 
             &::after {
-                background: var(--theme-color1);
+                background: var(--colorPrimary);
 
             }
         }
@@ -1406,11 +1406,11 @@ a {
 
     &.theme-color2 {
         div {
-            background: color-mix(in srgb, var(--theme-color2) 15%, transparent);
+            background: color-mix(in srgb, var(--colorSecondary) 15%, transparent);
 
 
             &::after {
-                background: var(--theme-color2);
+                background: var(--colorSecondary);
 
             }
         }
@@ -1419,11 +1419,11 @@ a {
 
     &.theme-color3 {
         div {
-            background: color-mix(in srgb, var(--theme-color3) 15%, transparent);
+            background: color-mix(in srgb, var(--colorAccent) 15%, transparent);
 
 
             &::after {
-                background: var(--theme-color3);
+                background: var(--colorAccent);
 
             }
         }
@@ -1431,11 +1431,11 @@ a {
 
     &.theme-color4 {
         div {
-            background: color-mix(in srgb, var(--theme-color4) 15%, transparent);
+            background: color-mix(in srgb, var(--colorSupport) 15%, transparent);
 
 
             &::after {
-                background: var(--theme-color4);
+                background: var(--colorSupport);
 
             }
         }

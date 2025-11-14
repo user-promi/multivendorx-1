@@ -21,53 +21,57 @@ $border-radius-medium: 0.438rem;
 $border-radius-large: 0.5rem;
 $border-radius-button: 8rem;
 
-// var(--theme-color1): #568bf6;
-// var(--theme-color2): #f1a60e;
-// var(--theme-color3): #fa7a38;
-// var(--theme-color4): #73d860;
+// var(--colorPrimary): #568bf6;
+// var(--colorSecondary): #f1a60e;
+// var(--colorAccent): #fa7a38;
+// var(--colorSupport): #73d860;
 
-// var(--theme-color1): #e6b924;
-// var(--theme-color2): #d888c1;
-// var(--theme-color3): #6b7923;
-// var(--theme-color4): #6e97d0;
+// var(--colorPrimary): #e6b924;
+// var(--colorSecondary): #d888c1;
+// var(--colorAccent): #6b7923;
+// var(--colorSupport): #6e97d0;
 
 :root {
-    // --themeColor: #d888c1;
-    // --theme-color1: #e6b924;
-    // --theme-color2: #d888c1;
-    // --theme-color3: #6b7923;
-    // --theme-color4: #6e97d0;
+    // --colorPrimary: #d888c1;
+    // --colorPrimary: #e6b924;
+    // --colorSecondary: #d888c1;
+    // --colorAccent: #6b7923;
+    // --colorSupport: #6e97d0;
 
-    // --themeColor: #f1a60e;
-    // --theme-color1: #568bf6;
-    // --theme-color2: #f1a60e;
-    // --theme-color3: #fa7a38;
-    // --theme-color4: #73d860;
+    // --colorPrimary: #f1a60e;
+    // --colorPrimary: #568bf6;
+    // --colorSecondary: #f1a60e;
+    // --colorAccent: #fa7a38;
+    // --colorSupport: #73d860;
 
-    // --themeColor: #6030db;
-    // --theme-color1: #fe900d;
-    // --theme-color2: #6030db;
-    // --theme-color3: #17cadb;
-    // --theme-color4: #a52fff;
+    // --colorPrimary: #6030db;
+    // --colorPrimary: #fe900d;
+    // --colorSecondary: #6030db;
+    // --colorAccent: #17cadb;
+    // --colorSupport: #a52fff;
 
 
-    // --themeColor: #04e762;
-    // --theme-color1: #04e762;
-    // --theme-color2: #f5b700;
-    // --theme-color3: #dc0073;
-    // --theme-color4: #008bf8;
+    // --colorPrimary: #04e762;
+    // --colorPrimary: #04e762;
+    // --colorSecondary: #f5b700;
+    // --colorAccent: #dc0073;
+    // --colorSupport: #008bf8;
 
-    --themeColor: #FF5959;
-    --theme-color1: #FF5959;
-    --theme-color2: #FADD3A;
-    --theme-color3: #49BEB6;
-    --theme-color4: #075F63;
+    // --colorPrimary: #FF5959;
+    // --colorSecondary: #FADD3A;
+    // --colorAccent: #49BEB6;
+    // --colorSupport: #075F63;
 
-    // --themeColor: #0E117A;
-    // --theme-color1: #0E117A;
-    // --theme-color2: #399169;
-    // --theme-color3: #12E2A4;
-    // --theme-color4: #DCF516;
+    // --colorPrimary: #0E117A;
+    // --colorPrimary: #00eed0;
+    // --colorSecondary: #0197af;
+    // --colorAccent: #4b227a;
+    // --colorSupport: #02153d;
+
+    --colorPrimary: #7ccc63;
+    --colorSecondary: #f39c12;
+    --colorAccent: #e74c3c;
+    --colorSupport: #2c3e50;
 }
 
 body {
@@ -86,40 +90,40 @@ a:focus {
 }
 
 .btn-purple-bg {
-    background: var(--themeColor) !important;
+    background: var(--colorPrimary) !important;
     color: #fff;
 }
 
 .btn-white {
     background: #fff;
-    color: var(--themeColor);
+    color: var(--colorPrimary);
 }
 
 .admin-badge {
     width: fit-content;
 
     &.theme-color1 {
-        color: var(--theme-color1);
-        background: color-mix(in srgb, var(--theme-color1) 15%, transparent);
-        border: 0.063rem solid var(--theme-color1);
+        color: var(--colorPrimary);
+        background: color-mix(in srgb, var(--colorPrimary) 15%, transparent);
+        border: 0.063rem solid var(--colorPrimary);
     }
 
     &.theme-color2 {
-        color: var(--theme-color2);
-        background: color-mix(in srgb, var(--theme-color2) 15%, transparent);
-        border: 0.063rem solid var(--theme-color2);
+        color: var(--colorSecondary);
+        background: color-mix(in srgb, var(--colorSecondary) 15%, transparent);
+        border: 0.063rem solid var(--colorSecondary);
     }
 
     &.theme-color3 {
-        color: var(--theme-color3);
-        background: color-mix(in srgb, var(--theme-color3) 15%, transparent);
-        border: 0.063rem solid var(--theme-color3);
+        color: var(--colorAccent);
+        background: color-mix(in srgb, var(--colorAccent) 15%, transparent);
+        border: 0.063rem solid var(--colorAccent);
     }
 
     &.theme-color4 {
-        color: var(--theme-color4);
-        background: color-mix(in srgb, var(--theme-color4) 15%, transparent);
-        border: 0.063rem solid var(--theme-color4);
+        color: var(--colorSupport);
+        background: color-mix(in srgb, var(--colorSupport) 15%, transparent);
+        border: 0.063rem solid var(--colorSupport);
     }
 }
 
