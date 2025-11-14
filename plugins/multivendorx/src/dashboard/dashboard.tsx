@@ -46,16 +46,104 @@ const revenueData = [
   { month: "Jun", orders: 4390, earnings: 3800, refunds: 210, conversion: 2.9 },
   { month: "Jul", orders: 6490, earnings: 5200, refunds: 600, conversion: 3.6 },
 ];
-// const data = [
-//   { month: "Jan", revenue: 4000, net_sale: 2400, admin_amount: 1200 },
-//   { month: "Feb", revenue: 3000, net_sale: 2000, admin_amount: 1000 },
-//   { month: "Mar", revenue: 4500, net_sale: 2800, admin_amount: 1300 },
-//   { month: "Apr", revenue: 5000, net_sale: 3200, admin_amount: 1500 },
-//   { month: "May", revenue: 4200, net_sale: 2500, admin_amount: 1400 },
-//   { month: "Jun", revenue: 4800, net_sale: 3000, admin_amount: 1600 },
-//   { month: "Jul", revenue: 5200, net_sale: 3400, admin_amount: 1700 },
-//   { month: "Aug", revenue: 4700, net_sale: 2900, admin_amount: 1500 },
-// ];
+const demoData = [
+  {
+    id: 1,
+    orderId: "#ORD-001",
+    date: "2025-11-01",
+    product: "Wireless Headset",
+    customer: "John Doe",
+    total: "$120.00",
+    status: "Processing",
+    progress: 45,
+    theme: "theme-color1",
+  },
+  {
+    id: 2,
+    orderId: "#ORD-002",
+    date: "2025-11-03",
+    product: "Bluetooth Speaker",
+    customer: "Jane Smith",
+    total: "$89.00",
+    status: "Shipped",
+    progress: 75,
+    theme: "theme-color2",
+  },
+  {
+    id: 3,
+    orderId: "#ORD-003",
+    date: "2025-11-04",
+    product: "Smartwatch",
+    customer: "Robert Wilson",
+    total: "$210.00",
+    status: "Delivered",
+    progress: 100,
+    theme: "theme-color3",
+  },
+];
+const reviews = [
+  {
+    id: 1,
+    product: "Product A",
+    rating: 5,
+    date: "22 Dec 2024",
+    description:
+      "Good product overall, but shipping took longer than expected."},
+  {
+    id: 2,
+    product: "Product B",
+    rating: 4,
+    date: "10 Jan 2025",
+    description:
+      "Amazing quality and packaging. Worth the price and fast delivery!",
+  },
+  {
+    id: 3,
+    product: "Product C",
+    rating: 3,
+    date: "5 Feb 2025",
+    description:
+      "Good product overall, but shipping took longer than expected.",
+  },
+  {
+    id: 4,
+    product: "Product D",
+    rating: 5,
+    date: "28 Mar 2025",
+    description:
+      "Exceeded expectations! The material feels premium and durable.",
+  },
+];
+const customers = [
+  {
+    id: 1,
+    name: "David Chen",
+    orders: 7,
+    total: "$1250",
+    icon: "adminlib-person",
+  },
+  {
+    id: 2,
+    name: "Sophia Martinez",
+    orders: 12,
+    total: "$2320",
+    icon: "adminlib-person",
+  },
+  {
+    id: 3,
+    name: "Ethan Johnson",
+    orders: 4,
+    total: "$890",
+    icon: "adminlib-person",
+  },
+  {
+    id: 4,
+    name: "Liam Patel",
+    orders: 9,
+    total: "$1560",
+    icon: "adminlib-person",
+  },
+];
 const ordersByCountry = [
   { country: "USA", orders: 4200, lat: 37.0902, lng: -95.7129 },
   { country: "UK", orders: 2800, lat: 55.3781, lng: -3.4360 },
@@ -86,10 +174,24 @@ const tabData = {
     { id: 4, name: "Glow & Co", orders: 4, amount: 420, color: "red" },
   ],
 };
+const getCSSVar = (name) =>
+  getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+const themeColors = [
+  getCSSVar("--theme-color1"),
+  getCSSVar("--theme-color2"),
+  getCSSVar("--theme-color3"),
+  getCSSVar("--theme-color4"),
+];
 const data = [
-  { name: "Top Category", value: 400, color: "#f1a60e" },
-  { name: "Top Brand", value: 300, color: "#fa7a38" },
-  { name: "Top Store", value: 300, color: "#73d860" },
+  { name: "Top Category", value: 400, color: themeColors[0] },
+  { name: "Top Brand", value: 300, color: themeColors[1] },
+  { name: "Top Store", value: 300, color: themeColors[2] },
+];
+const BarChartData = [
+  { name: "Sales", dataKey: "orders", color: themeColors[0] },
+  { name: "Earnings", dataKey: "earnings", color: themeColors[1] },
+  { name: "Orders", dataKey: "refunds", color: themeColors[2] },
 ];
 
 const Dashboard: React.FC = () => {
@@ -166,7 +268,6 @@ const Dashboard: React.FC = () => {
 
 
       <div className="row">
-
         <div className="column w-65">
           <div className="card">
             <div className="card-header">
@@ -199,9 +300,13 @@ const Dashboard: React.FC = () => {
                     }}
                   />
                   <Legend />
-                  <Bar dataKey="orders" fill="#f1a60e" radius={[6, 6, 0, 0]} name="Sales" />
+                  {/* <Bar dataKey="orders" fill="#f1a60e" radius={[6, 6, 0, 0]} name="Sales" />
                   <Bar dataKey="earnings" fill="#fa7a38" radius={[6, 6, 0, 0]} name="Earnings" />
-                  <Bar dataKey="refunds" fill="#73d860" radius={[6, 6, 0, 0]} name="Orders" />
+                  <Bar dataKey="refunds" fill="#73d860" radius={[6, 6, 0, 0]} name="Orders" /> */}
+                  {BarChartData.map((entry, index) => (
+                    // <Cell key={`cell-${index}`} fill={entry.color} />
+                    <Bar dataKey={entry.dataKey} fill={entry.color} radius={[6, 6, 0, 0]} name={entry.name} />
+                  ))}
                   <Line
                     type="monotone"
                     dataKey="conversion"
@@ -265,10 +370,62 @@ const Dashboard: React.FC = () => {
 
         </div>
       </div>
-
+      <div className="row">
+        <div className="column">
+          <div className="card">
+            <div className="card-header">
+              <div className="left">
+                <div className="title">
+                  Recent Orders
+                </div>
+              </div>
+              {/* <div className="right">
+                <i className="adminlib-more-vertical"></i>
+              </div> */}
+            </div>
+            <div className="card-body">
+              <div className="table-wrapper">
+                <table className="order-table">
+                  <thead>
+                    <tr className="header">
+                      <td>#</td>
+                      <td>Order Id</td>
+                      <td>Order Date</td>
+                      <td>Product Name</td>
+                      <td>Customer</td>
+                      <td>Total Amount</td>
+                      <td>Status</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {demoData.map((item, index) => (
+                      <tr key={item.id}>
+                        <td>{index + 1}</td>
+                        <td>{item.orderId}</td>
+                        <td>{item.date}</td>
+                        <td>{item.product}</td>
+                        <td>{item.customer}</td>
+                        <td>{item.total}</td>
+                        <td>
+                          <div className={`admin-badge ${item.theme}`}>
+                            {item.status}
+                          </div>
+                          {/* <div className={`progress-bar ${item.theme}`}>
+                            <div style={{ width: `${item.progress}%` }}></div>
+                          </div> */}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div className="row">
-        <div className="column w-35">
+        <div className="column">
           <div className="card">
             <div className="card-header">
               <div className="left">
@@ -281,7 +438,7 @@ const Dashboard: React.FC = () => {
               </div> */}
             </div>
             <div className="card-body">
-              <div className="top-products">
+              <div className="table-wrapper top-products">
                 <table>
                   <tr className="header">
                     <td>#</td>
@@ -324,25 +481,25 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="column w-65">
+        <div className="column">
           <div className="card">
             <div className="card-header">
               <div className="left">
                 <div className="title">
                   Admin Announcements
                 </div>
-                <div className="des">Lorem ipsum dolor sit amet.</div>
+                {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
               </div>
-              <div className="right">
+              {/* <div className="right">
                 <i className="adminlib-more-vertical"></i>
-              </div>
+              </div> */}
             </div>
             <div className="card-body">
               <div className="notification-wrapper">
                 <ul>
                   <li>
                     <div className="icon-wrapper">
-                      <i className="adminlib-form-paypal-email blue"></i>
+                      <i className="adminlib-form-paypal-email admin-badge theme-color1"></i>
                     </div>
                     <div className="details">
                       <div className="notification-title">Holiday campaign materials uploaded.</div>
@@ -353,7 +510,7 @@ const Dashboard: React.FC = () => {
                   </li>
                   <li>
                     <div className="icon-wrapper">
-                      <i className="adminlib-mail orange"></i>
+                      <i className="adminlib-mail admin-badge theme-color2"></i>
                     </div>
                     <div className="details">
                       <div className="notification-title">System maintenance Nov 5 (2–4 AM PST).</div>
@@ -363,7 +520,7 @@ const Dashboard: React.FC = () => {
                   </li>
                   <li>
                     <div className="icon-wrapper">
-                      <i className="adminlib-form-paypal-email green"></i>
+                      <i className="adminlib-form-paypal-email admin-badge theme-color3"></i>
                     </div>
                     <div className="details">
                       <div className="notification-title">New shipping carrier integration live.</div>
@@ -377,6 +534,76 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <div className="row">
+        <div className="column w-65">
+          <div className="card">
+            <div className="card-header">
+              <div className="left">
+                <div className="title">
+                  Store Activity Log
+                </div>
+                {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
+              </div>
+              {/* <div className="right">
+                <i className="adminlib-more-vertical"></i>
+              </div> */}
+            </div>
+            <div className="card-body">
+              <div className="activity-log">
+                {activities.map((a, i) => (
+                  <div key={i} className="activity">
+                    <div className="title">
+                      {a.text}
+                    </div>
+                    <div className="des">Your order has been placed successfully</div>
+                    <span>2 minutes ago</span>
+
+                  </div>
+                ))}
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+        <div className="column w-35">
+          <div className="card">
+            <div className="card-header">
+              <div className="left">
+                <div className="title">
+                  Top customer
+                </div>
+                {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
+              </div>
+              {/* <div className="right">
+                <i className="adminlib-more-vertical"></i>
+              </div> */}
+            </div>
+            <div className="card-body">
+              <div className="top-customer-wrapper">
+                {customers.map((customer) => (
+                  <div key={customer.id} className="customer">
+                    <div className="left-section">
+                      <div className="profile">
+                        <i className={customer.icon}></i>
+                      </div>
+                      <div className="details">
+                        <div className="name">{customer.name}</div>
+                        <div className="order-number">{customer.orders} orders</div>
+                      </div>
+                    </div>
+
+                    <div className="price-section">{customer.total}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
 
       <div className="row">
         <div className="column">
@@ -384,200 +611,39 @@ const Dashboard: React.FC = () => {
             <div className="card-header">
               <div className="left">
                 <div className="title">
-                  Store Activity Log
+                  Latest Reviews
                 </div>
-                <div className="des">Lorem ipsum dolor sit amet.</div>
+                {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
               </div>
-              <div className="right">
+              {/* <div className="right">
                 <i className="adminlib-more-vertical"></i>
-              </div>
+              </div> */}
             </div>
             <div className="card-body">
-              <div className="activity-wrapper">
-                {activities.map((a, i) => (
-                  <div key={i} className="activity">
-                    <span className="icon">
-                      <i className={a.icon}></i>
-                    </span>
+              <div className="review-wrapper">
+                {reviews.map((review) => (
+                  <div className="review" key={review.id}>
                     <div className="details">
-                      {a.text}
-                      <span>2 minutes ago</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <div className="row">
-        <div className="column w-65">
-          <div className="card">
-            <div className="card-header">
-              <div className="left">
-                <div className="title">
-                  Admin Announcements
-                </div>
-                <div className="des">Lorem ipsum dolor sit amet.</div>
-              </div>
-              <div className="right">
-                <i className="adminlib-more-vertical"></i>
-              </div>
-            </div>
-            <div className="card-body">
-              <div className="notification-wrapper">
-                <ul>
-                  <li>
-                    <div className="icon-wrapper">
-                      <i className="adminlib-form-paypal-email blue"></i>
-                    </div>
-                    <div className="details">
-                      <div className="notification-title">Holiday campaign materials uploaded.</div>
-                      <div className="des">Holiday campaign materials uploaded.</div>
-                      <span>1d ago</span>
-                    </div>
-
-                  </li>
-                  <li>
-                    <div className="icon-wrapper">
-                      <i className="adminlib-mail orange"></i>
-                    </div>
-                    <div className="details">
-                      <div className="notification-title">System maintenance Nov 5 (2–4 AM PST).</div>
-                      <div className="des">Lorem ipsum dolor sit amet, consectetur adipisicing elit</div>
-                      <span>34min ago</span>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="icon-wrapper">
-                      <i className="adminlib-form-paypal-email green"></i>
-                    </div>
-                    <div className="details">
-                      <div className="notification-title">New shipping carrier integration live.</div>
-                      <div className="des">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
-                      <span>34min ago</span>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="column w-35">
-          <div className="card">
-            <div className="card-header">
-              <div className="left">
-                <div className="title">
-                  Best-Selling Products
-                </div>
-                <div className="des">Lorem ipsum dolor sit amet.</div>
-              </div>
-              <div className="right">
-                <i className="adminlib-more-vertical"></i>
-              </div>
-            </div>
-            <div className="card-body">
-              <div className="top-items">
-                <div className="items">
-                  <div className="left-side">
-                    <div className="icon">
-                      <i className="adminlib-pro-tag admin-icon red"></i>
-                    </div>
-                    <div className="details">
-                      <div className="item-title">Wireless Headset</div>
-                      <div className="sub-text">180 units sold</div>
-                    </div>
-                  </div>
-                  <div className="right-side">
-                    <div className="price">$9230</div>
-                  </div>
-                </div>
-                <div className="items">
-                  <div className="left-side">
-                    <div className="icon">
-                      <i className="adminlib-pro-tag admin-icon green"></i>
-                    </div>
-                    <div className="details">
-                      <div className="item-title">Coffee Beans</div>
-                      <div className="sub-text">320 units sold</div>
-                    </div>
-                  </div>
-                  <div className="right-side">
-                    <div className="price">$380</div>
-                  </div>
-                </div>
-                <div className="items">
-                  <div className="left-side">
-                    <div className="icon">
-                      <i className="adminlib-pro-tag admin-icon green"></i>
-                    </div>
-                    <div className="details">
-                      <div className="item-title">Yoga Mat</div>
-                      <div className="sub-text">3 orders</div>
-                    </div>
-                  </div>
-                  <div className="right-side">
-                    <div className="price">$380</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* <div className="column w-35">
-          <div className="card">
-            <div className="card-header">
-              <div className="left">
-                <div className="title">
-                  Trans
-                </div>
-                <div className="des">Lorem ipsum dolor sit amet.</div>
-              </div>
-              <div className="right">
-                <i className="adminlib-more-vertical"></i>
-              </div>
-            </div>
-            <div className="cart-body">
-              <div className="tab-titles">
-                {tabs.map((tab) => (
-                  <div
-                    key={tab.id}
-                    className={`title ${activeTab === tab.id ? "active" : ""}`}
-                    onClick={() => setActiveTab(tab.id)}
-                  >
-                    <p>{tab.label}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="top-items">
-                {items.map((item) => (
-                  <div className="items" key={item.id}>
-                    <div className="left-side">
-                      <div className="icon">
-                        <i
-                          className={`adminlib-pro-tag admin-icon ${item.color}`}
-                          aria-hidden="true"
-                        />
+                      <div className="title">{review.product}</div>
+                      <div className="star-wrapper">
+                        {[...Array(5)].map((_, index) => (
+                          <i
+                            key={index}
+                            className={`adminlib-star ${index < review.rating ? "active" : ""
+                              }`}
+                          ></i>
+                        ))}
+                        <span>{review.date}</span>
                       </div>
-                      <div className="details">
-                        <div className="item-title">{item.name}</div>
-                        <div className="sub-text">{item.orders} orders</div>
-                      </div>
-                    </div>
-                    <div className="right-side">
-                      <div className="price">${item.amount}</div>
+                      <div className="des">{review.description}</div>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
           </div>
-        </div> */}
+
+        </div>
       </div>
 
     </>

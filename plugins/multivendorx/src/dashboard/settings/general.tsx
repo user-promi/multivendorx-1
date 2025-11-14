@@ -74,14 +74,10 @@ const GeneralSettings = () => {
                         <i className="adminlib-info"></i>
                         <p>Confirm that you have access to johndoe@gmail.com in sender email settings.</p>
                     </div>
-                    <div className="card-title">
-                        Basic information
-                    </div>
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
                             <label htmlFor="store-name">Name</label>
-                            {/* ✅ Fixed: Correct field name */}
                             <BasicInput
                                 name="name"
                                 wrapperClass="setting-form-input"

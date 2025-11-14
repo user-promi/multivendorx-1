@@ -21,7 +21,7 @@ const settings = () => {
 
     useEffect(() => {
         if (!id) return;
- 
+
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, `store/${id}`),
@@ -106,7 +106,7 @@ const settings = () => {
                 id: 'general',
                 name: 'General',
                 desc: 'general',
-                hideTabHeader: true,
+                // hideTabHeader: true,
                 icon: 'tools',
             },
         },
@@ -116,7 +116,7 @@ const settings = () => {
                 id: 'appearance',
                 name: 'Appearance',
                 desc: 'appearance',
-                hideTabHeader: true,
+                // hideTabHeader: true,
                 icon: 'tools',
             },
         },
@@ -126,7 +126,7 @@ const settings = () => {
                 id: 'business-address',
                 name: 'Business Address',
                 desc: 'business-address',
-                hideTabHeader: true,
+                // hideTabHeader: true,
                 icon: 'form-address',
             },
         },
@@ -136,7 +136,7 @@ const settings = () => {
                 id: 'contact-information',
                 name: 'Contact Information',
                 desc: 'contact-information',
-                hideTabHeader: true,
+                // hideTabHeader: true,
                 icon: 'form-phone',
             },
         },
@@ -146,7 +146,7 @@ const settings = () => {
                 id: 'social-media',
                 name: 'Social Media',
                 desc: 'social-media',
-                hideTabHeader: true,
+                // hideTabHeader: true,
                 icon: 'cohort',
             },
         },
@@ -156,7 +156,7 @@ const settings = () => {
                 id: 'payout',
                 name: 'Payout',
                 desc: 'payout',
-                hideTabHeader: true,
+                // hideTabHeader: true,
                 icon: 'tools',
             },
         },
@@ -166,7 +166,7 @@ const settings = () => {
                 id: 'privacy',
                 name: 'Privacy',
                 desc: 'privacy',
-                hideTabHeader: true,
+                // hideTabHeader: true,
                 icon: 'tools',
             },
         },
@@ -176,7 +176,7 @@ const settings = () => {
                 id: 'shipping',
                 name: 'Shipping',
                 desc: 'shipping',
-                hideTabHeader: true,
+                // hideTabHeader: true,
                 icon: 'tools',
             },
         },
@@ -186,7 +186,7 @@ const settings = () => {
                 id: 'verification',
                 name: 'Verification',
                 desc: 'verification',
-                hideTabHeader: true,
+                // hideTabHeader: true,
                 icon: 'tools',
             },
         },
@@ -196,7 +196,7 @@ const settings = () => {
                 id: 'livechat',
                 name: 'Livechat',
                 desc: 'livechat',
-                hideTabHeader: true,
+                // hideTabHeader: true,
                 icon: 'tools',
             },
         },
@@ -206,7 +206,7 @@ const settings = () => {
                 id: 'deactivate',
                 name: 'Deactivated Request',
                 desc: 'Deactivated Request',
-                hideTabHeader: true,
+                // hideTabHeader: true,
                 icon: 'tools',
             },
         },
@@ -233,25 +233,27 @@ const settings = () => {
             case 'verification':
                 return <Verification />;
             case 'livechat':
-                return <LiveChat/>;
+                return <LiveChat />;
             case 'deactivate':
-                return <DeactivateRequest/>;
+                return <DeactivateRequest />;
             default:
                 return <div></div>;
         }
     };
     return (
         <>
-            <Tabs
-                tabData={tabData}
-                currentTab={currentTab}
-                getForm={getForm}
-                prepareUrl={prepareUrl}
-                appLocalizer={appLocalizer}
-                settingName="Settings"
-                supprot={[]}
-                Link={SimpleLink}
-                submenuRender={true} />
+            <div className="horizontal-tabs">
+                <Tabs
+                    tabData={tabData}
+                    currentTab={currentTab}
+                    getForm={getForm}
+                    prepareUrl={prepareUrl}
+                    appLocalizer={appLocalizer}
+                    settingName="Settings"
+                    supprot={[]}
+                    Link={SimpleLink}
+                    submenuRender={true} />
+            </div >
         </>
     );
 };
