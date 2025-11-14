@@ -5,7 +5,7 @@ import { __ } from "@wordpress/i18n";
 import { CalendarInput, getApiLink, Table, TableCell } from "zyra";
 import { ColumnDef, PaginationState } from "@tanstack/react-table";
 import ViewCommission from "./viewCommission";
-import {formatCurrency} from '../services/commonFunction';
+import { formatCurrency } from '../services/commonFunction';
 
 export interface RealtimeFilter {
     name: string;
@@ -110,7 +110,7 @@ const StoreCommission: React.FC = () => {
                         count: response.data.cancelled || 0,
                     },
                 ]);
-                
+
             })
             .catch(() => {
                 setData([]);
@@ -172,7 +172,7 @@ const StoreCommission: React.FC = () => {
             accessorFn: row => parseFloat(row.totalOrderAmount || '0'),
             enableSorting: true,
             header: __('Order Amount', 'multivendorx'),
-            cell: ({ row }) => 
+            cell: ({ row }) =>
                 <TableCell title={row.original.totalOrderAmount ? `${appLocalizer.currency_symbol}${row.original.totalOrderAmount}` : '-'}>
                     {row.original.totalOrderAmount
                         ? formatCurrency(row.original.totalOrderAmount)
@@ -185,7 +185,7 @@ const StoreCommission: React.FC = () => {
             accessorFn: row => parseFloat(row.commissionAmount || '0'),
             enableSorting: true,
             header: __('Commission Earned', 'multivendorx'),
-            cell: ({ row }) => 
+            cell: ({ row }) =>
                 <TableCell title={row.original.commissionAmount ? `${appLocalizer.currency_symbol}${row.original.commissionAmount}` : '-'}>
                     {row.original.commissionAmount
                         ? formatCurrency(row.original.commissionAmount)
@@ -198,7 +198,7 @@ const StoreCommission: React.FC = () => {
             accessorFn: row => parseFloat(row.shippingAmount || '0'),
             enableSorting: true,
             header: __('Shipping Amount', 'multivendorx'),
-            cell: ({ row }) => 
+            cell: ({ row }) =>
                 <TableCell title={row.original.shippingAmount ? `${appLocalizer.currency_symbol}${row.original.shippingAmount}` : '-'}>
                     {row.original.shippingAmount
                         ? formatCurrency(row.original.shippingAmount)
@@ -211,7 +211,7 @@ const StoreCommission: React.FC = () => {
             accessorFn: row => parseFloat(row.taxAmount || '0'),
             enableSorting: true,
             header: __('Tax Amount', 'multivendorx'),
-            cell: ({ row }) => 
+            cell: ({ row }) =>
                 <TableCell title={row.original.taxAmount ? `${appLocalizer.currency_symbol}${row.original.taxAmount}` : '-'}>
                     {row.original.taxAmount
                         ? formatCurrency(row.original.taxAmount)
@@ -272,7 +272,19 @@ const StoreCommission: React.FC = () => {
         },
     ];
     return (
-        <div className="admin-table-wrapper">
+        <>
+            <div className="page-title-wrapper">
+                <div className="page-title">
+                    <div className="title">Commission</div>
+                    <div className="des">Manage and process refund requests from customers.</div>
+                </div>
+                {/* <div className="buttons-wrapper">
+                    <div className="admin-btn btn-purple-bg">
+                        <i className="adminlib-export"></i>
+                        Export
+                    </div>
+                </div> */}
+            </div>
             <Table
                 data={data}
                 columns={columns as ColumnDef<Record<string, any>, any>[]}
@@ -294,7 +306,7 @@ const StoreCommission: React.FC = () => {
                     commissionId={modalCommission.id}
                 />
             )}
-        </div>
+        </>
     );
 };
 

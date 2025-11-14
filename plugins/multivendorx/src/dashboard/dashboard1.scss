@@ -837,26 +837,8 @@ a {
     }
 
     .content {
-        padding: 1rem 3rem 2rem 2rem;
+        // padding: 1rem 3rem 2rem 2rem;
         // max-height: 70vh;
-
-        .form-group-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-
-
-            .form-group {
-                display: flex;
-                flex-direction: column;
-                gap: 0.313rem;
-                padding: 0.5rem 0;
-
-                label {
-                    font-size: 0.9rem;
-                }
-            }
-        }
 
         .heading {
             font-size: 1.125rem;
@@ -1038,7 +1020,7 @@ a {
     position: absolute;
     top: 2rem;
     overflow: hidden;
-    border: $border-light-small;
+    border: 1px solid #e5e9f2;
     max-width: 14rem;
     min-width: 14rem;
     right: 0;
@@ -1074,8 +1056,8 @@ a {
                     }
 
                     &:hover {
-                        background: color-mix(in srgb, var(--themeColor) 15%, transparent);
-                        color: var(--themeColor);
+                        color: #854fff;
+                        background: $theme-background-color;
                     }
                 }
             }
@@ -1084,12 +1066,11 @@ a {
 
     .footer {
         padding: 0.75rem;
-        // border: $border-light-small;
+        border: $border-light-small;
     }
 
     &.notification {
-        min-width: 25rem !important;
-        display: none;
+        min-width: 25rem;
 
         .title {
             padding: 0.75rem;
@@ -1109,12 +1090,13 @@ a {
                 margin: 0;
             }
 
+            .item,
             a {
                 display: flex;
                 gap: 0.813rem;
+                padding: 0.75rem;
                 align-items: start;
                 border-bottom: $border-light-small;
-                padding: 0.5rem !important;
 
                 &:hover {
                     background: #f3f3f3;
@@ -1130,6 +1112,10 @@ a {
                     i {
                         font-size: 1.5rem;
                     }
+                }
+
+                .check-icon {
+                    font-size: 1.125rem;
                 }
 
                 .details {
@@ -1457,4 +1443,24 @@ a {
     }
 
 
+}
+
+
+// form style start
+.form-group-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.313rem;
+        padding: 0.5rem 0;
+
+        label {
+            font-size: 0.9rem;
+        }
+    }
 }

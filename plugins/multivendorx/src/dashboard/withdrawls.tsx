@@ -95,7 +95,7 @@ const History: React.FC = () => {
             </div>
 
             <div className="row">
-                <div className="column theme-bg w-65">
+                <div className="column w-65">
                     <div className="card">
                         <div className="card-header">
                             <div className="left">

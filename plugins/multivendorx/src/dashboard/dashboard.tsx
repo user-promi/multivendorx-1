@@ -268,7 +268,6 @@ const Dashboard: React.FC = () => {
 
 
       <div className="row">
-
         <div className="column w-65">
           <div className="card">
             <div className="card-header">
