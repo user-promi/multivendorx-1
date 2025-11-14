@@ -68,9 +68,14 @@ $border-radius-button: 8rem;
     // --colorAccent: #4b227a;
     // --colorSupport: #02153d;
 
-    --colorPrimary: #7ccc63;
-    --colorSecondary: #f39c12;
-    --colorAccent: #e74c3c;
+    // --colorPrimary: #7ccc63;
+    // --colorSecondary: #f39c12;
+    // --colorAccent: #e74c3c;
+    // --colorSupport: #2c3e50;
+
+     --colorPrimary: #2c3e50;
+    --colorSecondary: #2c3e50;
+    --colorAccent: #2c3e50;
     --colorSupport: #2c3e50;
 }
 
@@ -89,9 +94,15 @@ a:focus {
     color: #181819;
 }
 
+// zyra color overwrite start
 .btn-purple-bg {
     background: var(--colorPrimary) !important;
     color: #fff;
+}
+
+.btn-purple {
+    background: color-mix(in srgb, var(--colorPrimary) 20%, transparent) !important;
+    color: var(--colorPrimary) !important;
 }
 
 .btn-white {
@@ -127,9 +138,32 @@ a:focus {
     }
 }
 
+// table color overwrite
+.filter-item.active,
+.search-field select {
+    background: color-mix(in srgb, var(--colorPrimary) 20%, transparent) !important;
+}
+
+.table-action-wrapper {
+    .search-field {
+        border-color: var(--colorPrimary);
+    }
+}
+
+.search-section i,
+.filter-item.active,
+.search-field select {
+    color: var(--colorPrimary) !important;
+}
+
+// zyra color overwrite end
+
+
+
 // no permission section start
 .permission-wrapper {
-    height: 80vh;
+    height: 40vh;
+    width: 100%;
     background: #fff;
     display: flex;
     align-items: center;
@@ -152,19 +186,8 @@ a:focus {
         margin-bottom: 1rem;
     }
 }
-
 // no permission section end
 
-
-// .btn-purple{
-//     color: var(--buttonText) !important;
-//     background: var(--buttonBg) !important;
-
-//     &:hover{
-//         color: var(--buttonHoverText) !important;
-//         background: var(--buttonHoverBg) !important;
-//     }
-// }
 
 .red {
     background: #fde8e4;

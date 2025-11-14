@@ -28,7 +28,7 @@ export default {
                 'Store customizer',
                 'multivendorx'
             ),
-            desc: __("Control how your store looks and feels. Set the banner style, logo placement, and customize the dashboard color scheme to match your brand identity.",'multivendorx'),
+            desc: __("Control how your store looks and feels. Set the banner style, logo placement, and customize the dashboard color scheme to match your brand identity.", 'multivendorx'),
         },
         {
             key: 'store_banner_template',
@@ -49,10 +49,10 @@ export default {
                     value: 'template2',
                 },
                 {
-                key: 'template3',
-                label: 'Classic Vibe',
-                img: template3,
-                value: 'template3',
+                    key: 'template3',
+                    label: 'Classic Vibe',
+                    img: template3,
+                    value: 'template3',
                 }
             ],
         },
@@ -137,6 +137,17 @@ export default {
                         colorPrimary: '#7ccc63',
                         colorSecondary: '#f39c12',
                         colorAccent: '#e74c3c',
+                        colorSupport: '#2c3e50',
+                    },
+                },
+                {
+                    key: 'dark',
+                    label: 'Dark',
+                    value: 'dark',
+                    colors: {
+                        colorPrimary: '#2c3e50',
+                        colorSecondary: '#2c3e50',
+                        colorAccent: '#2c3e50',
                         colorSupport: '#2c3e50',
                     },
                 },
