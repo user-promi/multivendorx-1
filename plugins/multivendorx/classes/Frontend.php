@@ -191,7 +191,7 @@ class Frontend {
     public function message_multiple_vendors_cart() {
         $stores_in_cart = $this->get_stores_in_cart();
         if ( count($stores_in_cart) > 1 ) {
-            wc_print_notice(esc_html__('The products in your cart are sold by multiple different vendor partners. The order will be placed simultaneously with all vendors and you will receive a package from each of them.', 'multivendorx'), 'notice' );
+            wc_print_notice(esc_html__('Your cart has products from various stores. They’ll be processed and shipped individually, so expect more than one delivery.', 'multivendorx'), 'notice' );
         }
     }
 
@@ -199,7 +199,7 @@ class Frontend {
         $message = '';
         $stores_in_cart = $this->get_stores_in_cart();
         if ( count($stores_in_cart) > 1 ) {
-            $message = __('The products in your cart are sold by multiple different vendor partners. The order will be placed simultaneously with all vendors and you will receive a package from each of them.', 'multivendorx');
+            $message = __('Your cart has products from various stores. They’ll be processed and shipped individually, so expect more than one delivery.', 'multivendorx');
         }
         return $message.$block_content;
     }
