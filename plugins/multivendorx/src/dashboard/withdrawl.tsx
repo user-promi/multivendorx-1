@@ -122,6 +122,7 @@ const Withdrawl: React.FC = () => {
         console.log('Store saved successfully!');
       }
     });
+  };
 
   return (
       <div className="card-wrapper">

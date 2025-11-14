@@ -247,8 +247,10 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
                 $all_stores = [];
                 $response = [];
+                $store_data = [];
 
                 foreach($rejected_stores as $store) {
+                    $store_object = new \MultiVendorX\Store\Store( $store['ID'] );
                     $all_stores[] = [
                         'key'   => $store['ID'],
                         'value'   => $store['ID'],
@@ -257,13 +259,18 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
                     $from_data = StoreUtil::get_store_registration_form(  $store['ID'] );
                     $response[] = $from_data['all_registration_data'];
+                    $store_data [] = [
+                        'id' => $store['ID'],
+                        'note' => unserialize($store_object->get_meta('store_reject_note'))
+                    ];
 
                 }
                 
                 // $response = StoreUtil::get_store_registration_form( reset($rejected_stores)['ID'] );
                 return rest_ensure_response([
                     'all_stores' => $all_stores,
-                    'response'  => $response
+                    'response'  => $response,
+                    'store_data' => $store_data
                 ]);
             }
 
