@@ -15,8 +15,8 @@ class Country_Shipping extends \WC_Shipping_Method {
     */
     public function __construct() {
         $this->id                 = 'multivendorx_country_shipping';
-        $this->method_title       = __( 'Multivendorx Shipping by Country', 'multivendorx' );
-        $this->method_description = __( 'Enable vendors to set marketplace shipping per country', 'multivendorx' );
+        // $this->method_title       = __( 'Multivendorx Shipping by Country', 'multivendorx' );
+        // $this->method_description = __( 'Enable vendors to set marketplace shipping per country', 'multivendorx' );
 
         $shipping_modules = MultiVendorX()->setting->get_setting('shipping_modules', []);
         $country_shipping_settings = $shipping_modules['country-wise-shipping'] ?? [];
@@ -135,13 +135,15 @@ class Country_Shipping extends \WC_Shipping_Method {
             $tax_rate = ( $this->tax_status == 'none' ) ? false : '';
             $tax_rate = apply_filters( 'multivendorx_is_apply_tax_on_shipping_rates', $tax_rate );
     
-            // Step 4: Add shipping rate
+            $label = ($amount > 0) ? $this->title : __('Free Shipping', 'multivendorx');
+
             $rate = array(
                 'id'    => $this->id . ':' . $store_id,
-                'label' => $this->title,
+                'label' => $label,
                 'cost'  => $amount,
                 'taxes' => $tax_rate,
             );
+            
             $this->add_rate( $rate );
     
             // Step 5: Maybe add local pickup rate if available

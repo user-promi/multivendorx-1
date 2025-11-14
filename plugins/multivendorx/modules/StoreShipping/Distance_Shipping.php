@@ -11,8 +11,8 @@ class Distance_Shipping extends \WC_Shipping_Method {
      */
     public function __construct() {
         $this->id                 = 'multivendorx_distance_shipping';
-        $this->method_title       = __( 'Multivendorx Shipping by Distance', 'multivendorx' );
-        $this->method_description = __( 'Enable vendors to set marketplace shipping by distance range', 'multivendorx' );
+        // $this->method_title       = __( 'Multivendorx Shipping by Distance', 'multivendorx' );
+        // $this->method_description = __( 'Enable vendors to set marketplace shipping by distance range', 'multivendorx' );
 
         $shipping_modules = MultiVendorX()->setting->get_setting('shipping_modules', []);
         $distance_based_shipping = $shipping_modules['distance-based-shipping'] ?? [];
@@ -173,12 +173,16 @@ class Distance_Shipping extends \WC_Shipping_Method {
             $tax_rate = ( $this->tax_status == 'none' ) ? false : '';
             $tax_rate = apply_filters( 'multivendorx_is_apply_tax_on_shipping_rates', $tax_rate );
 
+            // Set label to Free Shipping if shipping amount is zero
+            $label = ($store_amount > 0) ? $this->title : __('Free Shipping', 'multivendorx');
+
             $rate = [
                 'id'    => $this->id . ':' . $store_id,
-                'label' => $this->title,
+                'label' => $label,
                 'cost'  => $store_amount,
                 'taxes' => $tax_rate,
             ];
+
             $this->add_rate( $rate );
 
             $this->maybe_add_local_pickup_rate( $store_id, $local_pickup_cost, $tax_rate );
