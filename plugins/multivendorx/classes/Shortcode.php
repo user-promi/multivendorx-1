@@ -94,7 +94,7 @@ class Shortcode {
                     '<a href="' . esc_url( $reapply_url ) . '">' . esc_html__( 'Click here to reapply.', 'multivendorx' ) . '</a>'
                 );
             } elseif (!empty($pending_stores)) {
-                echo esc_html__('Your application is pending.', 'multivendorx');
+                echo MultiVendorX()->setting->get_setting('pending_msg');
             } else {
                 echo esc_html__('Signup has been disabled.', 'multivendorx');
             }
