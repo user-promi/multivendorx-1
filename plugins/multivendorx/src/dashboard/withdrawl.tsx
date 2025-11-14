@@ -124,6 +124,24 @@ const Withdrawl: React.FC = () => {
     });
   };
 
+  const handleButtonClick = (field, formData) => {
+    console.log('button click')
+    axios
+      .post(
+        appLocalizer.ajaxurl,
+        new URLSearchParams({
+          action: field.action || "create_stripe_account",
+          _ajax_nonce: appLocalizer.nonce,
+          ...formData,
+        }),
+      )
+      .then((res) => {
+        if (res.data.success && res.data.data.onboarding_url) {
+          window.location.replace(res.data.data.onboarding_url);
+        }
+      });
+  };
+
   return (
       <div className="card-wrapper">
         <div className="card-content">
@@ -200,27 +218,7 @@ const Withdrawl: React.FC = () => {
                     <button
                       type="button"
                       className="btn btn-primary"
-                      onClick={() => {
-                        axios
-                          .post(
-                            appLocalizer.ajaxurl,
-                            new URLSearchParams({
-                              action: field.action || "create_stripe_account",
-                              _ajax_nonce: appLocalizer.nonce,
-                              ...formData,
-                            }),
-                            {
-                              headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                            }
-                          )
-                          .then((res) => {
-                            if (res.data.success && res.data.data.onboarding_url) {
-                              window.location.href = res.data.data.onboarding_url;
-                            } else {
-                              alert(res.data.data.message || "Something went wrong.");
-                            }
-                          });
-                      }}
+                      onClick={() => handleButtonClick(field, formData)}
                     >
                       {field.label}
                     </button>
