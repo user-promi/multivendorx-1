@@ -468,10 +468,8 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         if( $withdraw ){
             if ( $action === 'approve' && $threshold_amount < $amount) {
                 MultiVendorX()->payments->processor->process_payment( $store_id, $amount);
-                $store->delete_meta('request_withdrawal_amount');
-            }elseif($action === 'reject'){
-                $store->delete_meta('request_withdrawal_amount');
 
+            }else{
                 $parameters = [
                     'store_email'   => 'test@gmail.com',
                     'store_id'      => $store_id,
@@ -479,8 +477,9 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
                 ];
                 
                 do_action('multivendorx_notify_payout_rejected', 'new_store_approval', $parameters);
-
             }
+            
+            $store->delete_meta('request_withdrawal_amount');
 
             return rest_ensure_response([
                 'success' => true,

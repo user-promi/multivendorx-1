@@ -27,7 +27,7 @@ class PaymentProcessor {
             $withdrawals_fees = MultiVendorX()->setting->get_setting( 'withdrawals_fees', [] );
             $withdrawals_count = (int)$store->get_meta('withdrawals_count');
 
-            if ($withdrawals_fees['free_withdrawals'] < $withdrawals_count) {
+            if (!empty($withdrawals_fees['free_withdrawals']) && ((int) $withdrawals_fees['free_withdrawals'] < $withdrawals_count)) {
 
                 $deduct_amount = (float) $amount * ((float) $withdrawals_fees['withdrawal_percentage'] / 100) + (float) $withdrawals_fees['withdrawal_fixed'];
                 $amount = $amount - $deduct_amount;
@@ -51,7 +51,6 @@ class PaymentProcessor {
                 );
 
                 $transaction_id = $wpdb->insert_id;
-                $store->update_meta('withdrawals_count', $withdrawals_count+1);
             }
         }
 
@@ -116,11 +115,17 @@ class PaymentProcessor {
 
         $format = ["%d", "%d", "%d", "%s", "%s", "%f", "%s", "%s", "%s", "%s"];
 
-        $wpdb->insert(
+        $result = $wpdb->insert(
             $wpdb->prefix . Utill::TABLES['transaction'],
             $data,
             $format
         );
+
+        if ($result && $status == 'success') {
+            $withdrawals_count = (int)$store->get_meta('withdrawals_count');
+            $store->update_meta('withdrawals_count', $withdrawals_count+1);
+        }
+
         if ($status != 'success') {
             $row = $wpdb->get_row(
                         $wpdb->prepare(

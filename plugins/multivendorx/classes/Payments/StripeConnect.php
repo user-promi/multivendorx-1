@@ -206,7 +206,7 @@ class StripeConnect
                 ],
                 [
                     'key'         => 'secret_key',
-                    'type'        => 'password',
+                    'type'        => 'text',
                     'label'       => __('Secret key', 'multivendorx'),
                     'placeholder' => __('Enter secret key', 'multivendorx'),
                 ],
