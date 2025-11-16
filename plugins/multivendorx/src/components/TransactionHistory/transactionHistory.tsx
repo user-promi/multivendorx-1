@@ -1,5 +1,6 @@
 /* global appLocalizer */
 import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { __ } from '@wordpress/i18n';
 import "../Announcements/announcements.scss";
 import TransactionHistoryTable from './walletTransaction';
@@ -49,7 +50,31 @@ export const TransactionHistory: React.FC = () => {
         },
     ];
 
-    // 🔹 Fetch stores on mount
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    function getStoreIdFromURL() {
+        const hashString = location.hash.replace("#", "");
+
+        const params = new URLSearchParams(hashString);
+        return params.get("store_id");
+    }
+
+    const removeStoreIdFromURL = () => {
+        const hash = location.hash.replace("#", ""); 
+        const params = new URLSearchParams(hash);
+
+         if (params.has("store_id")) {
+            params.delete("store_id");
+        }
+
+        // rebuild URL
+        const newHash = params.toString();
+        navigate(`?page=multivendorx#&${newHash}`);
+    };
+
+
+    // Fetch stores on mount
     useEffect(() => {
         axios({
             method: 'GET',
@@ -65,6 +90,18 @@ export const TransactionHistory: React.FC = () => {
                     }));
                     setAllStores(mappedStores);
                     setFilteredStores(mappedStores.slice(0, 5));
+
+                    const urlStoreId = getStoreIdFromURL();
+                    if (urlStoreId) {
+                        const match = mappedStores.find(
+                            (store) => store.value == urlStoreId
+                        );
+                        if (match) {
+                            setSelectedStore(match);
+                            return;
+                        }
+                    }
+
                     setSelectedStore(mappedStores[0]);
                 }
             })
@@ -309,7 +346,10 @@ export const TransactionHistory: React.FC = () => {
                             value={selectedStore?.value || ""}
                             options={filteredStores}
                             type="select"
-                            onChange={(newValue: any) => setSelectedStore(newValue)}
+                            onChange={(newValue: any) => {
+                                setSelectedStore(newValue)
+                                removeStoreIdFromURL()
+                            }}
                             onInputChange={(inputValue: string) => handleSearch(inputValue)}
                             size="12rem"
                         />
