@@ -7,7 +7,8 @@ const GeneralSettings = () => {
     const [formData, setFormData] = useState<{ [key: string]: any }>({});
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
     const [stateOptions, setStateOptions] = useState<{ label: string; value: string }[]>([]);
-
+    const settings = appLocalizer.settings_databases_value['store-capability']?.edit_store_info_activation || [];
+console.log('settings', settings)
     useEffect(() => {
         if (!id) return;
 
@@ -84,6 +85,7 @@ const GeneralSettings = () => {
                                 descClass="settings-metabox-description"
                                 value={formData.name || ''}
                                 onChange={handleChange}
+                                readOnly={settings.includes('store_name') ? true : false}
                             />
                         </div>
                     </div>
@@ -110,6 +112,7 @@ const GeneralSettings = () => {
                                 inputClass="textarea-input"
                                 value={formData.description || ''}
                                 onChange={handleChange}
+                                readOnly={settings.includes('store_description') ? true : false}
                             />
                         </div>
                     </div>
