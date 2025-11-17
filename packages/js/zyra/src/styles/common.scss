@@ -33,10 +33,13 @@ body:has(.admin-main-wrapper) {
   background: #f2f5fd8f;
 }
 
+#admin-main-wrapper {
+  margin-left: -1.25rem;
+}
+
 #admin-main-wrapper,
 #multivendorx-setup-wizard,
 .dashboard-content {
-  margin-left: -1.25rem;
   font-family: Figtree, sans-serif;
 
   // a:focus {
