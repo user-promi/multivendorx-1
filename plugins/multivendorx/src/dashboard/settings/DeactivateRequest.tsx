@@ -38,13 +38,15 @@ const DeactivateRequest = () => {
             data: updatedData,
         }).then((res) => {
             if (res.data?.success) {
-                setSuccessMsg('Store saved successfully!');
+                setSuccessMsg('Request Submit successfully!');
             }
         });
     };
 
     return(
         <>
+            <SuccessNotice message={successMsg} />
+
              <div className="card-wrapper">
                 <div className="card-content">
                     <div className="form-group-wrapper">
