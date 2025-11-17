@@ -52,47 +52,89 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 
   return (
     <CommonPopup
-      title={__("Commission Details", "multivendorx")}
       open={open}
       onClose={onClose}
+      width="500px"
+      height="100%"
+      header={
+        <>
+          <div className="title">
+            <i className="adminlib-cart"></i>
+            Commission Details
+          </div>
+          <p>Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.</p>
+          <i
+            className="icon adminlib-close"
+            onClick={() => onClose}
+          ></i>
+        </>}
     >
       {loading && <p>{__("Loading...", "multivendorx")}</p>}
       {!loading && details && (
-        <div className="commission-details">
-          <p>
-            <strong>{__("Store:", "multivendorx")}</strong> {details.storeName}
-          </p>
-          <p>
-            <strong>{__("Order ID:", "multivendorx")}</strong> #{details.orderId}
-          </p>
-          <p>
-            <strong>{__("Commission Earned:", "multivendorx")}</strong>{" "}
-            {details.commissionAmount}
-          </p>
-          <p>
-            <strong>{__("Commission Total:", "multivendorx")}</strong>{" "}
-            {details.commissionTotal}
-          </p>
-          <p>
-            <strong>{__("Shipping:", "multivendorx")}</strong>{" "}
-            {details.shippingAmount || "-"}
-          </p>
-          <p>
-            <strong>{__("Tax:", "multivendorx")}</strong>{" "}
-            {details.taxAmount || "-"}
-          </p>
-          <p>
-            <strong>{__("Discount:", "multivendorx")}</strong>{" "}
-            {details.discountAmount || "-"}
-          </p>
-          <p>
-            <strong>{__("Status:", "multivendorx")}</strong> {details.status}
-          </p>
-          <p>
-            <strong>{__("Created:", "multivendorx")}</strong>{" "}
-            {new Date(details.createTime).toLocaleString()}
-          </p>
-        </div>
+        <>
+          <div className="content">
+            <div className="form-group-wrapper">
+              <div className="form-group">
+                <label htmlFor="title">{__("Store:", "multivendorx")}</label>
+                #{details.orderId}
+              </div>
+            </div>
+            <div className="form-group-wrapper">
+              <div className="form-group">
+                <label htmlFor="title">{__("Store Name:", "multivendorx")}</label>
+                {details.storeName}
+              </div>
+            </div>
+            <div className="form-group-wrapper">
+              <div className="form-group">
+                <label htmlFor="title">{__("Order ID:", "multivendorx")}</label>
+                {/* {details.storeName} */}
+              </div>
+            </div>
+            <div className="form-group-wrapper">
+              <div className="form-group">
+                <label htmlFor="title">{__("Commission Earned:", "multivendorx")}</label>
+                {details.commissionAmount}
+              </div>
+            </div>
+            <div className="form-group-wrapper">
+              <div className="form-group">
+                <label htmlFor="title">{__("Commission Total:", "multivendorx")}</label>
+                {details.commissionTotal}
+              </div>
+            </div>
+            <div className="form-group-wrapper">
+              <div className="form-group">
+                <label htmlFor="title">{__("Shipping:", "multivendorx")}</label>
+                {details.shippingAmount || "-"}
+              </div>
+            </div>
+            <div className="form-group-wrapper">
+              <div className="form-group">
+                <label htmlFor="title">{__("Tax:", "multivendorx")}</label>
+                {details.taxAmount || "-"}
+              </div>
+            </div>
+            <div className="form-group-wrapper">
+              <div className="form-group">
+                <label htmlFor="title">{__("Discount:", "multivendorx")}</label>
+                {details.discountAmount || "-"}
+              </div>
+            </div>
+            <div className="form-group-wrapper">
+              <div className="form-group">
+                <label htmlFor="title">{__("Status:", "multivendorx")}</label>
+                {details.status}
+              </div>
+            </div>
+            <div className="form-group-wrapper">
+              <div className="form-group">
+                <label htmlFor="title">{__("Created:", "multivendorx")}</label>
+                {new Date(details.createTime).toLocaleString()}
+              </div>
+            </div>
+          </div>
+        </>
       )}
     </CommonPopup>
   );

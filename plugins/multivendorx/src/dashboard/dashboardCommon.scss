@@ -859,3 +859,23 @@ a:focus {
 }
 
 // horizental menu end -- move to component
+
+
+
+// add orderpage 
+
+.total-summary{
+    .row{
+        justify-content: end;
+    }
+}
+.select-product-wrapper{
+    display: flex;
+    align-items: start;
+    margin-top: 1rem;
+
+    label{
+        width: 25%;
+        font-size: 1rem;
+    }
+}

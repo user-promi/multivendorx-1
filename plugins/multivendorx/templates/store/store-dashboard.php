@@ -75,6 +75,9 @@ $page_info = MultiVendorX()->rest->dashboard->get_current_page_and_submenu();
                                 <div class="adminlib-icon adminlib-vendor-form-add"></div>
                             </li>
                             <li>
+                                <div class="adminlib-icon adminlib-storefront"></div>
+                            </li>
+                            <li>
                                 <div class="adminlib-icon notification adminlib-notification"></div>
 
                                 <div id="notifications"></div>
