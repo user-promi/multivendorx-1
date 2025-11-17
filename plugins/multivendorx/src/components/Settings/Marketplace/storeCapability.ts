@@ -2,31 +2,31 @@ import { __ } from '@wordpress/i18n';
 
 const capabilityOptions = appLocalizer?.capabilities
     ? Object.entries(appLocalizer.capabilities).map(([key, group]) => {
-          return {
-              key,
-              type: 'checkbox',
-              label: group.label,
-              desc: group.desc,
-              options: Object.entries(group.capability || {}).map(([capKey, capLabel]) => {
-                  const proData = appLocalizer.capability_pro?.[capKey] || {};
-                  return {
-                      key: capKey,
-                      label: capLabel,
-                      value: capKey,
-                      proSetting: proData.prosetting === true,
-                      moduleEnabled: proData.module || null,
-                  };
-              }),
-              selectDeselect: true,
-          };
-      })
+        return {
+            key,
+            type: 'checkbox',
+            label: group.label,
+            desc: group.desc,
+            options: Object.entries(group.capability || {}).map(([capKey, capLabel]) => {
+                const proData = appLocalizer.capability_pro?.[capKey] || {};
+                return {
+                    key: capKey,
+                    label: capLabel,
+                    value: capKey,
+                    proSetting: proData.prosetting === true,
+                    moduleEnabled: proData.module || null,
+                };
+            }),
+            selectDeselect: true,
+        };
+    })
     : [];
 
 const staticOptions = [
     {
         key: 'section',
         type: 'section',
-        hint: __('Store profile editing permissions', 'multivendorx'),
+        hint: __('What stores can change after approval', 'multivendorx'),
     },
     {
         key: 'edit_store_info_activation',
@@ -35,20 +35,31 @@ const staticOptions = [
         desc: __('Control which store information fields can be modified after a store has been activated.', 'multivendorx'),
         options: [
             {
-                key: 'edit_business_details',
-                label: __('Edit business details', 'multivendorx'),
-                value: 'edit_business_details',
+                key: 'store_description',
+                label: __('Store description', 'multivendorx'),
+                value: 'store_description',
             },
             {
-                key: 'upload_store_branding',
-                label: __('Update store branding', 'multivendorx'),
-                value: 'upload_store_branding',
+                key: 'store_images',
+                label: __('Logo and banner', 'multivendorx'),
+                value: 'store_images',
             },
             {
-                key: 'modify_store_address',
-                label: __('Modify store address', 'multivendorx'),
-                value: 'modify_store_address',
+                key: 'store_address',
+                label: __('Store address', 'multivendorx'),
+                value: 'store_address',
             },
+            {
+                key: 'store_contact',
+                label: __('Phone and email', 'multivendorx'),
+                value: 'store_contact',
+            },
+            {
+                key: 'store_name',
+                label: __('Store name', 'multivendorx'),
+                value: 'store_name',
+            },
+
         ],
         selectDeselect: true,
     },
