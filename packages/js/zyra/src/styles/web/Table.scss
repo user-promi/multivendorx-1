@@ -226,6 +226,7 @@
         border: none;
         border-collapse: collapse;
         border: $border-light-small;
+        margin: 0;
         // border-bottom: 0;
         // border-top-left-radius: 0.625rem;
         // border-top-right-radius: 0.625rem;
@@ -696,6 +697,8 @@
 
         .showing-number {
             padding-top: 0.125rem;
+            display: flex;
+            align-items: center;
 
             select {
                 margin: 0 0.5rem;

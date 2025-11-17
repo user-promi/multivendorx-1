@@ -528,7 +528,6 @@ const BusinessAddress = () => {
     return (
         <div className="card-wrapper">
             <div className="card-content">
-                <div className="card-title">Business Address & Location</div>
 
                 {successMsg && (
                     <div className="success-message">
@@ -550,7 +549,7 @@ const BusinessAddress = () => {
                                 ref={autocompleteInputRef}
                                 id="location-autocomplete"
                                 type="text"
-                                className="setting-form-input"
+                                className="basic-input"
                                 placeholder="Search your business address..."
                                 defaultValue={addressData.location_address}
                             />
