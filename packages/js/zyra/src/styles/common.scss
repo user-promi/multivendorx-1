@@ -34,7 +34,8 @@ body:has(.admin-main-wrapper) {
 }
 
 #admin-main-wrapper,
-#multivendorx-setup-wizard {
+#multivendorx-setup-wizard,
+.dashboard-content {
   margin-left: -1.25rem;
   font-family: Figtree, sans-serif;
 
@@ -59,7 +60,65 @@ body:has(.admin-main-wrapper) {
     min-height: 2.213rem !important; // for overwrite wordpress style
   }
 
-}  
+
+  input[type="color"] {
+    cursor: pointer;
+  }
+
+  input[type="radio"] {
+    border: 0.125rem solid #e0e4e9;
+    line-height: 1.5;
+    cursor: pointer;
+    height: 1rem;
+    margin: -.25rem .25rem 0 0;
+    padding: 0;
+    vertical-align: middle;
+    min-width: 1rem;
+    appearance: none;
+    border-radius: 50%;
+  }
+
+  input[type="checkbox"] {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  input[type="checkbox"]:checked {
+    border: none;
+  }
+
+  input[type="checkbox"]:checked::before,
+  input.minus-icon::before {
+    background-color: $theme-color;
+    color: #fff;
+    width: 1rem !important;
+    height: 1rem !important;
+    margin: -0.063rem .3rem 0 0 !important;
+    line-height: 1rem;
+    border-radius: 0.25rem;
+    font-size: 0.95rem;
+  }
+
+  input[type="checkbox"]:checked::before {
+    content: "\e809";
+    padding: 0.063rem;
+  }
+
+  input.minus-icon::before {
+    content: "\ef9e";
+    padding: 0.063rem;
+    font-size: 1rem;
+  }
+
+  input.minus-icon {
+    border: none;
+  }
+
+  input[type="checkbox"]:focus {
+    box-shadow: none;
+  }
+
+}
 
 // button style start
 .admin-btn {
@@ -407,63 +466,6 @@ body:has(.admin-main-wrapper) {
   }
 }
 
-
-input[type="color"] {
-  cursor: pointer;
-}
-
-input[type="radio"] {
-  border: 0.125rem solid #e0e4e9;
-  line-height: 1.5;
-  cursor: pointer;
-  height: 1rem;
-  margin: -.25rem .25rem 0 0;
-  padding: 0;
-  vertical-align: middle;
-  min-width: 1rem;
-  appearance: none;
-  border-radius: 50%;
-}
-
-input[type="checkbox"] {
-  width: 1.125rem;
-  height: 1.125rem;
-}
-
-input[type="checkbox"]:checked {
-  border: none;
-}
-
-input[type="checkbox"]:checked::before,
-input.minus-icon::before {
-  background-color: $theme-color;
-  color: #fff;
-  width: 1rem !important;
-  height: 1rem !important;
-  margin: -0.063rem .3rem 0 0 !important;
-  line-height: 1rem;
-  border-radius: 0.25rem;
-  font-size: 0.95rem;
-}
-
-input[type="checkbox"]:checked::before {
-  content: "\e809";
-  padding: 0.063rem;
-}
-
-input.minus-icon::before {
-  content: "\ef9e";
-  padding: 0.063rem;
-  font-size: 1rem;
-}
-
-input.minus-icon {
-  border: none;
-}
-
-input[type="checkbox"]:focus {
-  box-shadow: none;
-}
 
 .checkbox-list-side-by-side {
   display: flex;

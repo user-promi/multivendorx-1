@@ -63,15 +63,15 @@ $border-radius-button: 8rem;
     // --colorSupport: #075F63;
 
     // --colorPrimary: #0E117A;
-    // --colorPrimary: #00eed0;
-    // --colorSecondary: #0197af;
-    // --colorAccent: #4b227a;
-    // --colorSupport: #02153d;
+    --colorPrimary: #00eed0;
+    --colorSecondary: #0197af;
+    --colorAccent: #4b227a;
+    --colorSupport: #02153d;
 
-    --colorPrimary: #7ccc63;
-    --colorSecondary: #f39c12;
-    --colorAccent: #e74c3c;
-    --colorSupport: #2c3e50;
+    // --colorPrimary: #7ccc63;
+    // --colorSecondary: #f39c12;
+    // --colorAccent: #e74c3c;
+    // --colorSupport: #2c3e50;
 
     //  --colorPrimary: #2c3e50;
     // --colorSecondary: #2c3e50;
@@ -95,12 +95,14 @@ a:focus {
 }
 
 // zyra color overwrite start
-.btn-purple-bg {
+.btn-purple-bg,
+.horizontal-tabs-item .menu-item.active-current-tab {
     background: var(--colorPrimary) !important;
     color: #fff;
 }
 
-.btn-purple {
+.btn-purple,
+.horizontal-tabs-item .menu-item:hover {
     background: color-mix(in srgb, var(--colorPrimary) 20%, transparent) !important;
     color: var(--colorPrimary) !important;
 }
@@ -110,7 +112,8 @@ a:focus {
     color: var(--colorPrimary);
 }
 
-.admin-badge {
+.admin-badge,
+.admin-status {
     width: fit-content;
 
     &.theme-color1 {
@@ -138,6 +141,35 @@ a:focus {
     }
 }
 
+.admin-status{
+    font-weight: 500;
+    position: relative;
+    padding-left: 0.95rem;
+    background: transparent !important;
+    border: none !important;
+
+    &::before{
+        position: absolute;
+        content: "";
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        left: 0;
+        top: 0.125rem;
+    }
+    &.theme-color1::before {
+        background: var(--colorPrimary);
+    }
+    &.theme-color2::before {
+        background: var(--colorSecondary);
+    }
+    &.theme-color3::before {
+        background: var(--colorAccent);
+    }
+    &.theme-color4::before {
+        background: var(--colorSupport);
+    }
+}
 // table color overwrite
 .filter-item.active,
 .search-field select {
@@ -157,8 +189,6 @@ a:focus {
 }
 
 // zyra color overwrite end
-
-
 
 // no permission section start
 .permission-wrapper {
@@ -728,10 +758,9 @@ a:focus {
         width: 100%;
 
         .horizontal-title-section {
-            width: 25%;
+            width: 19%;
             height: auto;
-            margin-top: 2.5rem;
-
+            // margin-top: 2.5rem;
 
             .tabs-wrapper {
                 background: transparent;
@@ -786,10 +815,10 @@ a:focus {
         }
 
         .general-wrapper {
-            width: 75%;
+            width: 81%;
             background: #fff;
             border: $border-light-small;
-            margin: 2.5rem 1rem 1rem;
+            margin: 0 1rem 1rem;
             border-radius: 0.313rem;
 
             .card-content {

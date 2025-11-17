@@ -384,7 +384,6 @@ const RefundRequest: React.FC = () => {
             render: (updateFilter, filterValue) => (
                 <div className="search-action">
                     <select
-                        className="basic-select"
                         value={filterValue || ''}
                         onChange={(e) => updateFilter('searchAction', e.target.value || '')}
                     >

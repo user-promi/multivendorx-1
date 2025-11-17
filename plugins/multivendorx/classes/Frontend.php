@@ -71,7 +71,7 @@ class Frontend {
     public function restrict_products_from_cart($passed, $product_id) {
 
         if ( StoreUtil::get_excluded_products($product_id) ) {
-            wc_add_notice(__('This product cannot be purchased at the moment.'), 'error');
+            wc_add_notice(__('This product cannot be purchased at the moment.','multivendorx' ), 'error');
             return false;
         }
 
@@ -94,7 +94,7 @@ class Frontend {
             $product_id = $item['product_id'];
 
             if ( get_excluded_products($product_id) ) {
-                wc_add_notice(__('Checkout blocked: your cart contains products from a restricted store.'), 'error');
+                wc_add_notice(__('Checkout blocked: your cart contains products from a restricted store.','multivendorx' ), 'error');
                 break;
             }
         }

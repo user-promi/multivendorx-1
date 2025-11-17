@@ -58,7 +58,6 @@ a {
     .dashboard-tabs {
         height: 87vh;
         position: relative;
-
     }
 
     ul {
@@ -66,7 +65,6 @@ a {
         max-height: 80vh;
         overflow: auto;
         margin: 0;
-
 
         li {
             padding: 0 0.75rem;
@@ -115,6 +113,7 @@ a {
             }
 
             &.active {
+
                 a,
                 a:hover {
                     background-color: var(--colorPrimary);
@@ -820,6 +819,28 @@ a {
             }
         }
 
+
+    }
+
+    &.small-card {
+        flex-wrap: wrap;
+        // gap: 0;
+
+        .analytics-item {
+            padding: 0.625rem;
+            border-radius: 0.313rem;
+            justify-content: start;
+            align-items: center;
+
+            .number {
+                margin-bottom: 0.33rem;
+                padding: 0;
+            }
+
+            .text {
+                font-size: 0.95rem;
+            }
+        }
     }
 }
 
