@@ -110,7 +110,7 @@ class Product {
         }
 
         // Build dropdown
-        $selected_store = filter_input(INPUT_GET, 'multivendorx_store_id', FILTER_SANITIZE_STRING) ?: '';
+        $selected_store = sanitize_text_field(filter_input(INPUT_GET, 'multivendorx_store_id', FILTER_DEFAULT)) ?: '';
 
         echo '<select name="multivendorx_store_id">';
         echo '<option value="">Filter by Store</option>';

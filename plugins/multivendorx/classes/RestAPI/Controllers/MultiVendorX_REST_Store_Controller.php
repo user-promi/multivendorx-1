@@ -816,6 +816,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 // Save _reject_note if provided
                 if (!empty($data['store_permanent_reject'])) {
                     $store->set('status', 'permanently_rejected');
+                    delete_metadata( 'user', 0, 'multivendorx_active_store', '', true );
                 }
 
                 if (!empty($data['store_application_note'])) {
@@ -859,6 +860,9 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         unset($data['overall_reviews']);
         unset($data['total_reviews']);
         
+        if ($data['status'] == 'deactivated' ) {
+            delete_metadata( 'user', 0, 'multivendorx_active_store', '', true );
+        }
         // Update basic store info
         $store->set('name',        $data['name'] ?? $store->get('name'));
         $store->set('slug',        $data['slug'] ?? $store->get('slug'));

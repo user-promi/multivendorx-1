@@ -77,15 +77,19 @@ class StoreUtil {
         $store_users = "{$wpdb->prefix}" . Utill::TABLES['store_users'];
         $stores      = "{$wpdb->prefix}" . Utill::TABLES['store'];
 
-        return $wpdb->get_col( $wpdb->prepare(
-            "SELECT su.store_id
+        $excluded_statuses = ['permanently_rejected', 'deactivated'];
+        $placeholders = implode(', ', array_fill(0, count($excluded_statuses), '%s'));
+        $params = array_merge([$user_id], $excluded_statuses);
+
+        $sql = "
+            SELECT su.store_id
             FROM {$store_users} su
-            JOIN {$stores} s ON s.ID = su.store_id
+            INNER JOIN {$stores} s ON s.ID = su.store_id
             WHERE su.user_id = %d
-            AND s.status <> %s",
-            $user_id,
-            'permanently_rejected'
-        ) );
+            AND s.status NOT IN ($placeholders)
+        ";
+
+        return $wpdb->get_col($wpdb->prepare($sql, $params));
     }
 
 
@@ -597,5 +601,45 @@ class StoreUtil {
         }
     }
     
+    /**
+     * Get all product IDs that should be excluded based on conditions.
+     *
+     * @param array $args  Optional: custom conditions.
+     * @return boolean
+     */
+    public static function get_excluded_products( $product_id = '', $store_id = '', $check_payouts = false ) {
+
+        $store_id = !empty($store_id) ? $store_id : get_post_meta($product_id, 'multivendorx_store_id', true);
+
+        if ( ! $store_id ) {
+            return false;
+        }
+        $store = Store::get_store_by_id( $store_id );
+
+        $status = $store->get('status');
+        $review_settings = MultiVendorX()->setting->get_setting('restriction_for_under_review', []);
+        $suspend_settings = MultiVendorX()->setting->get_setting('restriction_for_sunspended', []);
+
+        if ($check_payouts) {
+            if ($status == 'under_review' && in_array('hold_payments_release', $review_settings)) {
+                return true;
+            }
+
+            if ($status == 'suspended' && in_array('freeze_all_payments', $suspend_settings)) {
+                return true;
+            }
+        } else {
+            if ($status == 'under_review' && in_array('pause_selling_products', $review_settings)) {
+                return true;
+            }
+    
+            if ($status == 'suspended' && in_array('store_visible_in_checkout', $suspend_settings)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
 }

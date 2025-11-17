@@ -10,6 +10,7 @@ const Appearance = () => {
     const [formData, setFormData] = useState<FormData>({});
     const [imagePreviews, setImagePreviews] = useState<{ [key: string]: string }>({});
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
+    const settings = appLocalizer.settings_databases_value['store-capability']?.edit_store_info_activation || [];
 
     const storeOptions = [
         { value: 'static_image', label: 'Static Image' },
@@ -45,6 +46,7 @@ const Appearance = () => {
     }, [appLocalizer.store_id]);
 
     const runUploader = (key: string) => {
+        if (settings.includes('store_images')) return;
         const frame = (window as any).wp.media({
             title: 'Select or Upload Image',
             button: { text: 'Use this image' },
@@ -110,6 +112,7 @@ const Appearance = () => {
                                 buttonClass="admin-btn btn-purple"
                                 descClass="settings-metabox-description"
                                 onRemove={() => {
+                                    if (settings.includes('store_images')) return;
                                     const updated = { ...formData, image: '' };
                                     setFormData(updated);
                                     setImagePreviews((prev) => ({ ...prev, image: '' }));
@@ -131,6 +134,7 @@ const Appearance = () => {
                                 options={storeOptions}
                                 value={formData.banner_type || ''}
                                 onChange={(newValue: any) => {
+                                    if (settings.includes('store_images')) return;
                                     const selectedValue = newValue?.value || '';
                                     const updated = { ...formData, banner_type: selectedValue };
                                     setFormData(updated);
@@ -157,6 +161,7 @@ const Appearance = () => {
                                     buttonClass="admin-btn btn-purple"
                                     descClass="settings-metabox-description"
                                     onRemove={() => {
+                                        if (settings.includes('store_images')) return;
                                         const updated = { ...formData, banner: '' };
                                         setFormData(updated);
                                         setImagePreviews((prev) => ({ ...prev, banner: '' }));
@@ -187,6 +192,7 @@ const Appearance = () => {
                                         setFormData(updated);
                                         autoSave(updated);
                                     }}
+                                    readOnly={settings.includes('store_images') ? true : false}
                                 />
                             </div>
                         </div>

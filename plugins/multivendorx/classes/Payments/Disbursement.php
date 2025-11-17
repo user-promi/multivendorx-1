@@ -2,6 +2,7 @@
 
 namespace MultiVendorX\Payments;
 use MultiVendorX\Commission\CommissionUtil;
+use MultiVendorX\Store\StoreUtil;
 use MultiVendorX\Utill;
 
 defined('ABSPATH') || exit;
@@ -79,8 +80,8 @@ class Disbursement {
 
     public function multivendorx_payout_cron() {
        
-        $threshold_amount = MultiVendorX()->setting->get_setting( 'payout_threshold_amount' );
-        $minimum_wallet_amount = MultiVendorX()->setting->get_setting( 'wallet_threshold_amount', 0 );
+        $threshold_amount = (int) MultiVendorX()->setting->get_setting( 'payout_threshold_amount', 0 );
+        $minimum_wallet_amount = (int) MultiVendorX()->setting->get_setting( 'wallet_threshold_amount', 0 );
         
         global $wpdb;
         $table = $wpdb->prefix . Utill::TABLES['transaction'];
@@ -90,6 +91,9 @@ class Disbursement {
         ");
 
         foreach ($results as $row) {
+            if (StoreUtil::get_excluded_products('', $row->store_id, true)) {
+                return;
+            }
             if (($threshold_amount + $minimum_wallet_amount) < $row->balance) {
                 MultiVendorX()->payments->processor->process_payment( $row->store_id, $row->balance);
             }

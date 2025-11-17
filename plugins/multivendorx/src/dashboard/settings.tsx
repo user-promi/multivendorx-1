@@ -105,7 +105,7 @@ const settings = () => {
             content: {
                 id: 'general',
                 name: 'General',
-                desc: 'general',
+                desc: 'Update your store’s core information - name, slug, description, and buyer message',
                 // hideTabHeader: true,
                 icon: 'tools',
             },
@@ -115,9 +115,9 @@ const settings = () => {
             content: {
                 id: 'appearance',
                 name: 'Appearance',
-                desc: 'appearance',
+                desc: 'Manage your store’s profile image, banner, and video.',
                 // hideTabHeader: true,
-                icon: 'tools',
+                icon: 'appearance',
             },
         },
         {
@@ -125,7 +125,7 @@ const settings = () => {
             content: {
                 id: 'business-address',
                 name: 'Business Address',
-                desc: 'business-address',
+                desc: 'Provide your business address, city, zip code, country, state, and timezone to ensure accurate order and location settings.',
                 // hideTabHeader: true,
                 icon: 'form-address',
             },
@@ -135,7 +135,7 @@ const settings = () => {
             content: {
                 id: 'contact-information',
                 name: 'Contact Information',
-                desc: 'contact-information',
+                desc: 'Add your store’s contact details so customers can reach you easily through phone, email.',
                 // hideTabHeader: true,
                 icon: 'form-phone',
             },
@@ -145,7 +145,7 @@ const settings = () => {
             content: {
                 id: 'social-media',
                 name: 'Social Media',
-                desc: 'social-media',
+                desc: 'Add your store’s social media links to help buyers connect with you across platforms.',
                 // hideTabHeader: true,
                 icon: 'cohort',
             },
@@ -155,9 +155,9 @@ const settings = () => {
             content: {
                 id: 'payout',
                 name: 'Payout',
-                desc: 'payout',
+                desc: 'Enter your payment information and select the method you’d like to use for receiving store payouts.',
                 // hideTabHeader: true,
-                icon: 'tools',
+                icon: 'wallet',
             },
         },
         {
@@ -165,9 +165,9 @@ const settings = () => {
             content: {
                 id: 'privacy',
                 name: 'Privacy',
-                desc: 'privacy',
+                desc: 'Define your store’s policies so customers clearly understand your shipping, refund, and return terms.',
                 // hideTabHeader: true,
-                icon: 'tools',
+                icon: 'privacy',
             },
         },
         {
@@ -175,9 +175,9 @@ const settings = () => {
             content: {
                 id: 'shipping',
                 name: 'Shipping',
-                desc: 'shipping',
+                desc: 'Manage your store’s shipping method, pricing rules, and location-based rates.',
                 // hideTabHeader: true,
-                icon: 'tools',
+                icon: 'shipping',
             },
         },
         {
@@ -187,7 +187,7 @@ const settings = () => {
                 name: 'Verification',
                 desc: 'verification',
                 // hideTabHeader: true,
-                icon: 'tools',
+                icon: 'verification5',
             },
         },
         {
@@ -195,9 +195,9 @@ const settings = () => {
             content: {
                 id: 'livechat',
                 name: 'Livechat',
-                desc: 'livechat',
+                desc: 'Connect your store with live chat platforms so customers can reach you instantly for support or inquiries.',
                 // hideTabHeader: true,
-                icon: 'tools',
+                icon: 'live-chat',
             },
         },
         {
@@ -207,7 +207,7 @@ const settings = () => {
                 name: 'Deactivated Request',
                 desc: 'Deactivated Request',
                 // hideTabHeader: true,
-                icon: 'tools',
+                icon: 'close-delete',
             },
         },
     ];

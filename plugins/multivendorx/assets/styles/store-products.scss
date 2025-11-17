@@ -644,10 +644,15 @@
  .order-refund-product-list {
      display: flex;
      gap: 0.125rem;
-     padding-top: 0.313rem;
+     padding: 0.625rem 0;
+
+     label{
+        display: flex;
+        gap: 0.625rem;
+     }
 
      img {
-         width: 5rem;
+         width: 3rem;
      }
  }
 

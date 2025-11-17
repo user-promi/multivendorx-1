@@ -52,7 +52,7 @@ const SocialMedia = () => {
         <>
             <div className="card-wrapper">
                 <div className="card-content">
-                    <div className="card-title">Social information</div>
+                    
                     {/* Facebook */}
                     <div className="form-group-wrapper">
                         <div className="form-group">

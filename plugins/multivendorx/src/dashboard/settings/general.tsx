@@ -7,7 +7,8 @@ const GeneralSettings = () => {
     const [formData, setFormData] = useState<{ [key: string]: any }>({});
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
     const [stateOptions, setStateOptions] = useState<{ label: string; value: string }[]>([]);
-
+    const settings = appLocalizer.settings_databases_value['store-capability']?.edit_store_info_activation || [];
+console.log('settings', settings)
     useEffect(() => {
         if (!id) return;
 
@@ -71,8 +72,10 @@ const GeneralSettings = () => {
             <div className="card-wrapper">
                 <div className="card-content">
                     <div className="settings-metabox-note">
-                        <i className="adminlib-info"></i>
-                        <p>Confirm that you have access to johndoe@gmail.com in sender email settings.</p>
+                        {/* <div className="metabox-note-wrapper">
+                            <i className="adminlib-info"></i>
+                            <p>Confirm that you have access to johndoe@gmail.com in sender email settings.</p>
+                        </div> */}
                     </div>
 
                     <div className="form-group-wrapper">
@@ -84,13 +87,14 @@ const GeneralSettings = () => {
                                 descClass="settings-metabox-description"
                                 value={formData.name || ''}
                                 onChange={handleChange}
+                                readOnly={settings.includes('store_name') ? true : false}
                             />
                         </div>
                     </div>
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label htmlFor="store-slug">Slug</label>
+                            <label htmlFor="store-slug">Storefront link</label>
                             {/* ✅ Fixed: Correct field name */}
                             <BasicInput
                                 name="slug"
@@ -110,13 +114,14 @@ const GeneralSettings = () => {
                                 inputClass="textarea-input"
                                 value={formData.description || ''}
                                 onChange={handleChange}
+                                readOnly={settings.includes('store_description') ? true : false}
                             />
                         </div>
                     </div>
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label htmlFor="message-to-buyer">Message to Buyers</label>
+                            <label htmlFor="message-to-buyer">Buyer welcome message after purchase</label>
                             {/* ✅ Fixed: Correct field name */}
                             <BasicInput
                                 name="messageToBuyer"

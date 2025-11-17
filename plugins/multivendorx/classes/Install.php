@@ -520,11 +520,11 @@ By signing and submitting, the Seller accepts all terms above.
 
         update_option('multivendorx_rejected_settings', $reject_store_status);        
 
-        $permanent_reject_store_status = array (
-            'permanent_rejected_msg' => 'Your application has been permanently rejected. Contact admin for clarification.',
-        );
+        // $permanent_reject_store_status = array (
+        //     'permanent_rejected_msg' => 'Your application has been permanently rejected. Contact admin for clarification.',
+        // );
 
-        update_option('multivendorx_permanently_rejected_settings', $permanent_reject_store_status);        
+        // update_option('multivendorx_permanently_rejected_settings', $permanent_reject_store_status);        
 
         $under_review_store_status = array (
             'under_review_msg' => 'Your store is under review. Sales and payouts are temporarily paused.',

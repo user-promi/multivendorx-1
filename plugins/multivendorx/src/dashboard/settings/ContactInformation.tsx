@@ -7,6 +7,7 @@ const ContactInformation = () => {
     const [formData, setFormData] = useState<{ [key: string]: string }>({});
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
     const [stateOptions, setStateOptions] = useState<{ label: string; value: string }[]>([]);
+    const settings = appLocalizer.settings_databases_value['store-capability']?.edit_store_info_activation || [];
 
     useEffect(() => {
         if (!id) return;
@@ -69,17 +70,17 @@ const ContactInformation = () => {
             <SuccessNotice message={successMsg} />
             <div className="card-wrapper">
                 <div className="card-content">
-                    <div className="card-title">Contact & Communication </div>
+                    {/* <div className="card-title">Contact & Communication </div> */}
                     <div className="form-group-wrapper">
                         <div className="form-group">
                             <label htmlFor="product-name">Phone</label>
-                            <BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
+                            <BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} readOnly={settings.includes('store_contact') ? true : false} />
                         </div>
                     </div>
                     <div className="form-group-wrapper">
                         <div className="form-group">
                             <label htmlFor="product-name">Email / Additional Email</label>
-                            <BasicInput type="email" name="email" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.email} onChange={handleChange} />
+                            <BasicInput type="email" name="email" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.email} onChange={handleChange} readOnly={settings.includes('store_contact') ? true : false} />
                         </div>
                     </div>
                     <div className="form-group-wrapper">

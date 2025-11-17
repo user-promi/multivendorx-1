@@ -432,6 +432,10 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
                 $dashboard_array['error_msg'] = MultiVendorX()->setting->get_setting('suspended_msg');
                 break;
 
+            case 'under_review':
+                $dashboard_array['error_msg'] = MultiVendorX()->setting->get_setting('under_review_msg');
+                break;
+
             case 'rejected':
                 $reapply_link = sprintf(
                     '<a href="%s">%s</a>',

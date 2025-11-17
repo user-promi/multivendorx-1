@@ -185,7 +185,7 @@ class Store {
         $table = "{$wpdb->prefix}" . Utill::TABLES['store'];
 
         $id = $wpdb->get_var( $wpdb->prepare(
-            "SELECT ID FROM $table WHERE slug = %s AND status = %s LIMIT 1", $slug, 'active'
+            "SELECT ID FROM $table WHERE slug = %s LIMIT 1", $slug
         ) );
 
         return $id ? new self( $id ) : null;

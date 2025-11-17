@@ -12,6 +12,7 @@ interface TextAreaProps {
     rowNumber?: number;
     colNumber?: number;
     proSetting?: boolean;
+    readOnly?: boolean;
     description?: string;
     descClass?: string;
     tinymceApiKey?: string;
@@ -32,6 +33,7 @@ const TextArea: React.FC<TextAreaProps> = ({
     rowNumber = 4,
     colNumber = 50,
     proSetting,
+    readOnly,
     description,
     descClass,
     tinymceApiKey,
@@ -86,6 +88,7 @@ const TextArea: React.FC<TextAreaProps> = ({
                     onMouseOut={onMouseOut}
                     onFocus={onFocus}
                     onBlur={onBlur}
+                    readOnly={readOnly}
                 />
             )}
 

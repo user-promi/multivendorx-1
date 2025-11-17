@@ -55,8 +55,13 @@ $product_fileds = MultiVendorX()->setting->get_setting('products_fields', array(
         <div class="container-wrapper">
             <div class="card-wrapper w-65">
                 <div class="card-content">
-                    <div class="card-title">Product Title</div>
-
+                    <div class="card-header">
+                        <div class="left">
+                            <div class="title">
+                                Product Title
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group-wrapper">
                         <!-- <strong
                                 class="editable-content"><?php echo isset($_POST['post_title']) ? wc_clean($_POST['post_title']) : htmlspecialchars($product_object->get_title('edit')); ?></strong> -->
@@ -73,7 +78,13 @@ $product_fileds = MultiVendorX()->setting->get_setting('products_fields', array(
 
                 </div>
                 <div class="card-content">
-                    <div class="card-title">Product short description</div>
+                    <div class="card-header">
+                        <div class="left">
+                            <div class="title">
+                                Product short description
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group-wrapper">
                         <div class="form-group">
                             <?php
@@ -96,7 +107,13 @@ $product_fileds = MultiVendorX()->setting->get_setting('products_fields', array(
                     </div>
                 </div>
                 <div class="card-content">
-                    <div class="card-title">Product description</div>
+                    <div class="card-header">
+                        <div class="left">
+                            <div class="title">
+                                Product description
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group-wrapper">
                         <div class="form-group">
                             <?php
@@ -210,53 +227,13 @@ $product_fileds = MultiVendorX()->setting->get_setting('products_fields', array(
             <!-- right section start -->
             <div class="card-wrapper w-35">
                 <div class="card-content">
-                    <div class="pull-right full-1080">
-                        <?php
-                        $current_visibility = $product_object->get_catalog_visibility();
-                        $current_featured = wc_bool_to_string($product_object->get_featured());
-                        $visibility_options = wc_get_product_visibility_options();
-                        ?>
-                        <p class="cat-visiblity"><?php esc_html_e('Catalog visibility:', 'multivendorx'); ?>
-                            <strong id="catalog-visibility-display">
-                                <?php
-
-                                echo isset($visibility_options[$current_visibility]) ? esc_html($visibility_options[$current_visibility]) : esc_html($current_visibility);
-
-                                if ('yes' === $current_featured) {
-                                    echo ', ' . esc_html__('Featured', 'multivendorx');
-                                }
-                                ?>
-                            </strong>
-                            <button type="button" class="editabble-button" data-toggle="collapse"
-                                data-target="#product_visiblity"><i class="mvx-font ico-downarrow-2-icon"
-                                    title="<?php _e('Edit', 'multivendorx'); ?>"></i> <!--span>edit</span--></button>
-                        </p>
-                        <div id="product_visiblity" class="mvx-clps collapse dropdown-panel">
-                            <input type="hidden" name="current_visibility" id="current_visibility"
-                                value="<?php echo esc_attr($current_visibility); ?>" />
-                            <input type="hidden" name="current_featured" id="current_featured"
-                                value="<?php echo esc_attr($current_featured); ?>" />
-                            <div class="product-visibility-toggle-inner">
-                                <?php
-                                foreach ($visibility_options as $name => $label) {
-                                    echo '<div class="form-group"><label><input type="radio" name="_visibility" id="_visibility_' . esc_attr($name) . '" value="' . esc_attr($name) . '" ' . checked($current_visibility, $name, false) . ' data-label="' . esc_attr($label) . '" /> <span for="_visibility_' . esc_attr($name) . '" class="selectit">' . esc_html($label) . '</span></label></div>';
-                                }
-                                if (apply_filters('mvx_feature_product_is_enable', true)) {
-                                    echo '<hr><div class="form-group"><label><input type="checkbox" name="_featured" class="mt-0" id="_featured" ' . checked($current_featured, 'yes', false) . ' data-label="' . __('Featured', 'multivendorx') . '" /> <span for="_featured">' . esc_html__('This is a featured product', 'multivendorx') . '</label></label></div>';
-                                }
-                                ?>
-                                <div class="buttons-wrapper">
-                                    <button type="button"
-                                        class="admin-btn btn-green"><?php esc_html_e('Ok', 'multivendorx'); ?></button>
-                                    <a href="javascript:void(0)" class="admin-btn btn-red" data-toggle="collapse"
-                                        data-target="#product_visiblity"><?php esc_html_e('Cancel', 'multivendorx'); ?></a>
-                                </div>
+                    <div class="card-header">
+                        <div class="left">
+                            <div class="title">
+                                Upload Image
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="card-content">
-                    <div class="card-title">Upload Image</div>
                     <div class="product-gallery-wrapper">
                         <div class="featured-img upload_image">
                             <?php $featured_img = isset($_POST['featured_img']) ? wc_clean($_POST['featured_img']) : ($product_object->get_image_id('edit') ? $product_object->get_image_id('edit') : ''); ?>
@@ -274,7 +251,7 @@ $product_fileds = MultiVendorX()->setting->get_setting('products_fields', array(
                                     value="<?php echo esc_attr($featured_img); ?>" />
                             </a>
                         </div>
-                        <div id="product_images_container" class="custom-panel">
+                        <!-- <div id="product_images_container" class="custom-panel">
                             <h3><?php _e('Product gallery', 'multivendorx'); ?></h3>
                             <ul class="product_images">
                                 <?php
@@ -327,12 +304,18 @@ $product_fileds = MultiVendorX()->setting->get_setting('products_fields', array(
                                     data-delete="<?php esc_attr_e('Delete image', 'multivendorx'); ?>"
                                     data-text="<?php esc_attr_e('Delete', 'multivendorx'); ?>"><?php _e('Add product gallery images', 'multivendorx'); ?></a>
                             </p>
-                        </div>
+                        </div> -->
                         <?php do_action('mvx_product_manager_right_panel_after', $post->ID); ?>
                     </div>
                 </div>
                 <div class="card-content">
-                    <div class="card-title">Product categories</div>
+                    <div class="card-header">
+                        <div class="left">
+                            <div class="title">
+                                Product categories
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group-wrapper">
                         <?php
                         $product_categories = $self->mvx_get_product_terms_HTML('product_cat', $post->ID, apply_filters('mvx_vendor_can_add_product_category', false, get_current_user_id())); ?>
@@ -348,7 +331,13 @@ $product_fileds = MultiVendorX()->setting->get_setting('products_fields', array(
                     </div>
                 </div>
                 <div class="card-content">
-                    <div class="card-title">Product tags</div>
+                    <div class="card-header">
+                        <div class="left">
+                            <div class="title">
+                                Product tags
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group-wrapper">
                         <?php
                         $product_tags = $self->mvx_get_product_terms_HTML('product_tag', $post->ID, apply_filters('mvx_vendor_can_add_product_tag', true, get_current_user_id()), false); ?>
@@ -368,7 +357,13 @@ $product_fileds = MultiVendorX()->setting->get_setting('products_fields', array(
                     </div>
                 </div>
                 <div class="card-content">
-                    <div class="card-title">Brands</div>
+                    <div class="card-header">
+                        <div class="left">
+                            <div class="title">
+                                Brands
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group-wrapper">
                         <?php
                         $product_brands = $self->mvx_get_product_terms_HTML('product_brand', $post->ID, apply_filters('mvx_vendor_can_add_product_category', false, get_current_user_id())); ?>
@@ -381,6 +376,57 @@ $product_fileds = MultiVendorX()->setting->get_setting('products_fields', array(
                                 </div>
                             </div>
                         <?php endif; ?>
+                    </div>
+                </div>
+
+                <div class="">
+                    <div class="pull-right full-1080">
+                        <?php
+                        $current_visibility = $product_object->get_catalog_visibility();
+                        $current_featured = wc_bool_to_string($product_object->get_featured());
+                        $visibility_options = wc_get_product_visibility_options();
+                        ?>
+
+                        <!-- <p class="cat-visiblity"><?php esc_html_e('Catalog visibility:', 'multivendorx'); ?>
+                            <strong id="catalog-visibility-display">
+                                <?php
+
+                                echo isset($visibility_options[$current_visibility]) ? esc_html($visibility_options[$current_visibility]) : esc_html($current_visibility);
+
+                                if ('yes' === $current_featured) {
+                                    echo ', ' . esc_html__('Featured', 'multivendorx');
+                                }
+                                ?>
+                            </strong>
+                            <button type="button" class="editabble-button" data-toggle="collapse"
+                                data-target="#product_visiblity"><i class="mvx-font ico-downarrow-2-icon"
+                                    title="<?php _e('Edit', 'multivendorx'); ?>"></i> <span>edit</span></button>
+                        </p> -->
+
+                        <!--
+                        <div id="product_visiblity" class="mvx-clps collapse dropdown-panel">
+                            <input type="hidden" name="current_visibility" id="current_visibility"
+                                value="<?php echo esc_attr($current_visibility); ?>" />
+                            <input type="hidden" name="current_featured" id="current_featured"
+                                value="<?php echo esc_attr($current_featured); ?>" />
+                            <div class="product-visibility-toggle-inner">
+                                <?php
+                                foreach ($visibility_options as $name => $label) {
+                                    echo '<div class="form-group"><label><input type="radio" name="_visibility" id="_visibility_' . esc_attr($name) . '" value="' . esc_attr($name) . '" ' . checked($current_visibility, $name, false) . ' data-label="' . esc_attr($label) . '" /> <span for="_visibility_' . esc_attr($name) . '" class="selectit">' . esc_html($label) . '</span></label></div>';
+                                }
+                                if (apply_filters('mvx_feature_product_is_enable', true)) {
+                                    echo '<hr><div class="form-group"><label><input type="checkbox" name="_featured" class="mt-0" id="_featured" ' . checked($current_featured, 'yes', false) . ' data-label="' . __('Featured', 'multivendorx') . '" /> <span for="_featured">' . esc_html__('This is a featured product', 'multivendorx') . '</label></label></div>';
+                                }
+                                ?>
+                                <div class="buttons-wrapper">
+                                    <button type="button"
+                                        class="admin-btn btn-green"><?php esc_html_e('Ok', 'multivendorx'); ?></button>
+                                    <a href="javascript:void(0)" class="admin-btn btn-red" data-toggle="collapse"
+                                        data-target="#product_visiblity"><?php esc_html_e('Cancel', 'multivendorx'); ?></a>
+                                </div>
+                            </div>
+                        </div>
+                        -->
                     </div>
                 </div>
             </div> <!-- right section end -->
