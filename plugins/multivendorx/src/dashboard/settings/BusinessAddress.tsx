@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import { BasicInput, getApiLink, SelectInput } from 'zyra';
+import { BasicInput, getApiLink, SelectInput, SuccessNotice } from 'zyra';
 
 declare global {
     interface Window {
@@ -524,140 +524,138 @@ const BusinessAddress = () => {
         });
     };
 
-    console.log('addressData', addressData)
     return (
-        <div className="card-wrapper">
-            <div className="card-content">
+        <>
+            <SuccessNotice message={successMsg} />
 
-                {successMsg && (
-                    <div className="success-message">
-                        {successMsg}
+            <div className="card-wrapper">
+                <div className="card-content">
+                    <div className="card-title">Business Address & Location</div>
+
+                    {errorMsg && (
+                        <div className="error-message">
+                            {errorMsg}
+                        </div>
+                    )}
+
+                    {/* <div className="form-group-wrapper">
+                        <div className="form-group">
+                            <label htmlFor="location-autocomplete">Search Location *</label>
+                            <div id="location-autocomplete-container">
+                                <input
+                                    ref={autocompleteInputRef}
+                                    id="location-autocomplete"
+                                    type="text"
+                                    className="setting-form-input"
+                                    placeholder="Search your business address..."
+                                    defaultValue={addressData.location_address}
+                                />
+                            </div>
+                            <div className="settings-metabox-description" >
+                                Type your business name or address and select from suggestions
+                            </div>
+                        </div>
+                    </div> */}
+
+                    {/* Map Display */}
+                    {/* <div className="form-group-wrapper">
+                        <div className="form-group">
+                            <label>Location Map *</label>
+                            <div
+                                id="location-map"
+                            ></div>
+                            <div className="settings-metabox-description" >
+                                Click on the map or drag the marker to set your exact location
+                            </div>
+                        </div>
+                    </div> */}
+
+                    {/* Address Field */}
+                    <div className="form-group-wrapper">
+                        <div className="form-group">
+                            <label htmlFor="location_address">Address *</label>
+                            <BasicInput 
+                                name="location_address"
+                                value={addressData.location_address} 
+                                wrapperClass="setting-form-input" 
+                                descClass="settings-metabox-description" 
+                                onChange={(e) => handleChange('location_address', e.target.value)} 
+                            />
+                            {!addressData.location_address && (
+                                <div class="settings-metabox-description" >
+                                    Address is required. Please select a location from the map or search.
+                                </div>
+                            )}
+                        </div>
                     </div>
-                )}
 
-                {errorMsg && (
-                    <div className="error-message">
-                        {errorMsg}
-                    </div>
-                )}
-
-                {/* <div className="form-group-wrapper">
-                    <div className="form-group">
-                        <label htmlFor="location-autocomplete">Search Location *</label>
-                        <div id="location-autocomplete-container">
-                            <input
-                                ref={autocompleteInputRef}
-                                id="location-autocomplete"
-                                type="text"
-                                className="basic-input"
-                                placeholder="Search your business address..."
-                                defaultValue={addressData.location_address}
+                    {/* Address Components */}
+                    <div className="form-group-wrapper">
+                        <div className="form-group">
+                            <label htmlFor="city">City</label>
+                            <BasicInput 
+                                name="city"
+                                value={addressData.city} 
+                                wrapperClass="setting-form-input" 
+                                descClass="settings-metabox-description" 
+                                onChange={(e) => handleChange('city', e.target.value)} 
                             />
                         </div>
-                         <div className="settings-metabox-description" >
-                            Type your business name or address and select from suggestions
+                        <div className="form-group">
+                            <label htmlFor="zip">Zip Code</label>
+                            <BasicInput 
+                                name="zip"
+                                value={addressData.zip} 
+                                wrapperClass="setting-form-input" 
+                                descClass="settings-metabox-description" 
+                                onChange={(e) => handleChange('zip', e.target.value)} 
+                            />
                         </div>
                     </div>
-                </div> */}
 
-                {/* Map Display */}
-                {/* <div className="form-group-wrapper">
-                    <div className="form-group">
-                        <label>Location Map *</label>
-                        <div
-                            id="location-map"
-                        ></div>
-                         <div className="settings-metabox-description" >
-                            Click on the map or drag the marker to set your exact location
+                    {/* Country and State Select Inputs (from old code) */}
+                    <div className="form-group-wrapper">
+                        <div className="form-group">
+                            <label htmlFor="country">Country</label>
+                            <SelectInput
+                                name="country"
+                                value={addressData.country}
+                                options={appLocalizer.country_list || []}
+                                type="single-select"
+                                onChange={handleCountryChange}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="state">State</label>
+                            <SelectInput
+                                name="state"
+                                value={addressData.state}
+                                options={stateOptions}
+                                type="single-select"
+                                onChange={handleStateChange}
+                            />
                         </div>
                     </div>
-                </div> */}
 
-                {/* Address Field */}
-                <div className="form-group-wrapper">
-                    <div className="form-group">
-                        <label htmlFor="location_address">Address *</label>
-                        <BasicInput 
-                            name="location_address"
-                            value={addressData.location_address} 
-                            wrapperClass="setting-form-input" 
-                            descClass="settings-metabox-description" 
-                            onChange={(e) => handleChange('location_address', e.target.value)} 
-                        />
-                        {!addressData.location_address && (
-                             <div class="settings-metabox-description" >
-                                Address is required. Please select a location from the map or search.
-                            </div>
-                        )}
+                    <div className="form-group-wrapper">
+                        <div className="form-group">
+                            <label htmlFor="timezone">Timezone</label>
+                            <BasicInput 
+                                name="timezone"
+                                value={addressData.timezone} 
+                                wrapperClass="setting-form-input" 
+                                descClass="settings-metabox-description" 
+                                onChange={(e) => handleChange('timezone', e.target.value)} 
+                            />
+                        </div>
                     </div>
+
+                    {/* Hidden coordinates */}
+                    <input type="hidden" name="location_lat" value={addressData.location_lat} />
+                    <input type="hidden" name="location_lng" value={addressData.location_lng} />
                 </div>
-
-                {/* Address Components */}
-                <div className="form-group-wrapper">
-                    <div className="form-group">
-                        <label htmlFor="city">City</label>
-                        <BasicInput 
-                            name="city"
-                            value={addressData.city} 
-                            wrapperClass="setting-form-input" 
-                            descClass="settings-metabox-description" 
-                            onChange={(e) => handleChange('city', e.target.value)} 
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="zip">Zip Code</label>
-                        <BasicInput 
-                            name="zip"
-                            value={addressData.zip} 
-                            wrapperClass="setting-form-input" 
-                            descClass="settings-metabox-description" 
-                            onChange={(e) => handleChange('zip', e.target.value)} 
-                        />
-                    </div>
-                </div>
-
-                {/* Country and State Select Inputs (from old code) */}
-                <div className="form-group-wrapper">
-                    <div className="form-group">
-                        <label htmlFor="country">Country</label>
-                        <SelectInput
-                            name="country"
-                            value={addressData.country}
-                            options={appLocalizer.country_list || []}
-                            type="single-select"
-                            onChange={handleCountryChange}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="state">State</label>
-                        <SelectInput
-                            name="state"
-                            value={addressData.state}
-                            options={stateOptions}
-                            type="single-select"
-                            onChange={handleStateChange}
-                        />
-                    </div>
-                </div>
-
-                <div className="form-group-wrapper">
-                    <div className="form-group">
-                        <label htmlFor="timezone">Timezone</label>
-                        <BasicInput 
-                            name="timezone"
-                            value={addressData.timezone} 
-                            wrapperClass="setting-form-input" 
-                            descClass="settings-metabox-description" 
-                            onChange={(e) => handleChange('timezone', e.target.value)} 
-                        />
-                    </div>
-                </div>
-
-                {/* Hidden coordinates */}
-                <input type="hidden" name="location_lat" value={addressData.location_lat} />
-                <input type="hidden" name="location_lng" value={addressData.location_lng} />
             </div>
-        </div>
+        </>
     );
 };
 
