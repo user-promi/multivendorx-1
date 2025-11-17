@@ -9,7 +9,7 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
-            key: 'disbursement_order_status',
+            key: 'restriction_for_under_review',
             type: 'checkbox',
             label: __('Store promotion limit', 'multivendorx'),
             class: 'mvx-toggle-checkbox',

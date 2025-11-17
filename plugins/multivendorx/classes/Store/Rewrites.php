@@ -51,6 +51,10 @@ class Rewrites {
             return;
         }
 
+        if (StoreUtil::get_excluded_products('', $store_id)) {
+            return;
+        }
+
         // Force query to load products
         $query->set( 'post_type', 'product' );
 

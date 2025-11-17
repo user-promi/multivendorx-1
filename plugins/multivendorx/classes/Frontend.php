@@ -41,7 +41,65 @@ class Frontend {
         }
         // add_filter('woocommerce_login_redirect', array($this, 'multivendorx_store_login'), 10, 2);
     
+        add_action('woocommerce_product_query', [ $this, 'restrict_store_products_from_shop']);
+        add_action('woocommerce_cart_loaded_from_session', [ $this, 'restrict_products_already_in_cart']);
+        add_filter('woocommerce_add_to_cart_validation', [ $this, 'restrict_products_from_cart'], 10, 2);
+        add_action('woocommerce_checkout_process', [ $this, 'restrict_products_from_checkout'] );
+
     }
+
+    public function restrict_store_products_from_shop($q) {
+
+         $products = wc_get_products([
+            'limit'  => -1,
+            'return' => 'ids',
+        ]);
+
+        $exclude = [];
+
+        foreach ($products as $product_id) {
+            if (StoreUtil::get_excluded_products($product_id)) {
+                $exclude[] = $product_id;
+            }
+        }
+
+        if (!empty($exclude)) {
+            $q->set('post__not_in', $exclude);
+        }
+    }
+
+    public function restrict_products_from_cart($passed, $product_id) {
+
+        if ( StoreUtil::get_excluded_products($product_id) ) {
+            wc_add_notice(__('This product cannot be purchased at the moment.'), 'error');
+            return false;
+        }
+
+        return $passed;
+    }
+
+    public function restrict_products_already_in_cart($cart) {
+        foreach ($cart->get_cart() as $cart_key => $item) {
+            $product_id = $item['product_id'];
+
+            if ( StoreUtil::get_excluded_products($product_id) ) {
+                $cart->remove_cart_item($cart_key);
+            }
+        }
+    }
+
+    public function restrict_products_from_checkout() {
+
+        foreach (WC()->cart->get_cart() as $item) {
+            $product_id = $item['product_id'];
+
+            if ( get_excluded_products($product_id) ) {
+                wc_add_notice(__('Checkout blocked: your cart contains products from a restricted store.'), 'error');
+                break;
+            }
+        }
+    }
+
     public function show_store_info($product_id) {
         $store_details = MultiVendorX()->setting->get_setting('store_branding_details', []);
     
@@ -110,7 +168,6 @@ class Frontend {
             }
         }
     }
-
     public function add_sold_by_text_cart( $array, $cart_item ) {
         if ( apply_filters( 'mvx_sold_by_text_in_cart_checkout', true, $cart_item['product_id'] ) ) {
 

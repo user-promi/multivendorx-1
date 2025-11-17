@@ -9,21 +9,21 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
-            key: 'disbursement_order_status',
+            key: 'restriction_for_sunspended',
             type: 'checkbox',
             label: __('Store promotion limit', 'multivendorx'),
             class: 'mvx-toggle-checkbox',
             options: [
                 {
-                    key: 'completed',
+                    key: 'store_visible_in_checkout',
                     label: __('Keep store visible but disable checkout', 'multivendorx'),
-                    value: 'completed',
+                    value: 'store_visible_in_checkout',
                     desc: __('Displays the store and its products but prevents customers from placing new orders.Freeze all pending payments', 'multivendorx'),
                 },
                 {
-                    key: 'processing',
+                    key: 'freeze_all_payments',
                     label: __('Freeze all pending payments', 'multivendorx'),
-                    value: 'processing',
+                    value: 'freeze_all_payments',
                     desc: __('Holds all earnings during suspension. Funds are released only after reinstatement or successful appeal.', 'multivendorx'),
                 },
             ],

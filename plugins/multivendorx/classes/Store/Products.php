@@ -93,6 +93,11 @@ class Products {
 
     public function create_product_draft( $post_type ) {
         $current_user_store_id = get_user_meta(get_current_user_id(), 'multivendorx_active_store', true);
+        $store = Store::get_store_by_id( $current_user_store_id );
+        
+        if ($store->get('status') == 'under_review' && in_array('restrict_new_product_uploads', MultiVendorX()->setting->get_setting('restriction_for_under_review', []))) {
+            return false;
+        }
         if ( $current_user_store_id ) {
             $post_id = wp_insert_post( array( 'post_title' => __( 'Auto Draft', 'multivendorx' ), 'post_type' => $post_type, 'post_status' => 'auto-draft' ) );
             return $post_id;
@@ -110,8 +115,11 @@ class Products {
             MultiVendorX()->setting->get_setting('category_pyramid_guide') === 'no') && 
             MultiVendorX()->modules->is_active('spmv') == false ) {
                 $product_id =$this->create_product_draft('product');
-                
-                wp_safe_redirect( StoreUtil::get_endpoint_url('products', 'edit', $product_id) );
+                if ($product_id) {
+                    wp_safe_redirect( StoreUtil::get_endpoint_url('products', 'edit', $product_id) );
+                } else {
+                    wp_safe_redirect( StoreUtil::get_endpoint_url('products') );
+                }
                 exit;
         }
     }
