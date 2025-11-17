@@ -341,30 +341,30 @@ const AllProduct: React.FC = () => {
                             {
                                 label: __('View', 'multivendorx'),
                                 icon: 'adminlib-preview',
-                                onClick: (rowData) => {
+                                onClick: () => {
                                     window.location.href = `${row.original.permalink}`;
                                 },
                             },
                             {
                                 label: __('Copy URL', 'multivendorx'),
                                 icon: 'adminlib-vendor-form-copy',
-                                onClick: (rowData) => {
-                                    const url = rowData.original.permalink;
+                                onClick: () => {
+                                    const url = row.original.permalink;
                                     navigator.clipboard.writeText(url).catch(() => {});
                                 },
                             },
-                            {
-                                label: __('Clone', 'multivendorx'),
-                                icon: 'adminlib-vendor-form-copy',
-                                onClick: (rowData) => {
-                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
-                                },
-                            },
+                            // {
+                            //     label: __('Clone', 'multivendorx'),
+                            //     icon: 'adminlib-vendor-form-copy',
+                            //     // onClick: (rowData) => {
+                            //     //     window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                            //     // },
+                            // },
                             {
                                 label: __('Delete', 'multivendorx'),
                                 icon: 'adminlib-vendor-form-delete',
                                 onClick: (rowData) => {
-                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
+                                    handleDelete(rowData.id)
                                 },
                                 hover: true
                             },
@@ -592,6 +592,17 @@ const AllProduct: React.FC = () => {
             filterData?.date?.end_date,             // 8: endDate
         );
     };
+
+    const handleDelete = async (productId) => {
+        const res = await axios.delete(
+            `${appLocalizer.apiUrl}/wc/v3/products/${productId}`, {
+                headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            }
+            );
+
+            console.log("Product deleted:", res);
+            requestData();
+    }
 
     return (
         <>

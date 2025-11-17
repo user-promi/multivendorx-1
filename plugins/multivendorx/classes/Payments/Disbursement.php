@@ -80,8 +80,8 @@ class Disbursement {
 
     public function multivendorx_payout_cron() {
        
-        $threshold_amount = MultiVendorX()->setting->get_setting( 'payout_threshold_amount' );
-        $minimum_wallet_amount = MultiVendorX()->setting->get_setting( 'wallet_threshold_amount', 0 );
+        $threshold_amount = (int) MultiVendorX()->setting->get_setting( 'payout_threshold_amount', 0 );
+        $minimum_wallet_amount = (int) MultiVendorX()->setting->get_setting( 'wallet_threshold_amount', 0 );
         
         global $wpdb;
         $table = $wpdb->prefix . Utill::TABLES['transaction'];

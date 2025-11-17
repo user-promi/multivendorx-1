@@ -5,6 +5,7 @@ import { __ } from "@wordpress/i18n";
 import { CalendarInput, Table, TableCell } from "zyra";
 import { ColumnDef, RowSelectionState, PaginationState } from "@tanstack/react-table";
 import OrderDetails from "./order-details";
+import AddOrder from "./addOrder";
 import { formatCurrency } from '../services/commonFunction';
 
 // Type declarations
@@ -43,6 +44,7 @@ const Orders: React.FC = () => {
 
     const hash = location.hash.replace(/^#/, '') || '';
     const isViewOrder = hash.includes('view');
+    const isAddOrder = hash.includes('add');
 
     useEffect(() => {
         if (isViewOrder) {
@@ -478,20 +480,18 @@ const Orders: React.FC = () => {
 
     return (
         <>
-            {!isViewOrder && !selectedOrder && (
+            {!isViewOrder && !isAddOrder && !selectedOrder && (
                 <>
                     <div className="page-title-wrapper">
                         <div className="page-title">
                             <div className="title">Orders</div>
                             <div className="des">Manage your store information and preferences</div>
                         </div>
-                        <div className="buttons-wrapper">
-                            <div
-                                className="admin-btn btn-purple-bg"
-                            >
-                                <i className="adminlib-plus-circle-o"></i>
-                                Add order
-                            </div>
+                        <div
+                            className="admin-btn btn-purple-bg"
+                            onClick={() => { window.location.hash = `add`; }} >                      
+                            <i className="adminlib-plus-circle-o"></i>
+                            Add New
                         </div>
                     </div>
                     <Table
@@ -514,6 +514,7 @@ const Orders: React.FC = () => {
                 </>
             )}
 
+            {isAddOrder && <AddOrder/>}
             {isViewOrder && <OrderDetails
                 order={selectedOrder}
                 onBack={() => {
