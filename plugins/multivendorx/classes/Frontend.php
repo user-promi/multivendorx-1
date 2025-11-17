@@ -93,7 +93,7 @@ class Frontend {
         foreach (WC()->cart->get_cart() as $item) {
             $product_id = $item['product_id'];
 
-            if ( get_excluded_products($product_id) ) {
+            if ( StoreUtil::get_excluded_products($product_id) ) {
                 wc_add_notice(__('Checkout blocked: your cart contains products from a restricted store.','multivendorx' ), 'error');
                 break;
             }
