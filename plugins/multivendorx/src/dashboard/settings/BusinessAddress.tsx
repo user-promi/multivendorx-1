@@ -29,6 +29,7 @@ const BusinessAddress = () => {
     const [apiKey, setApiKey] = useState('');
     const [stateOptions, setStateOptions] = useState<{ label: string; value: string }[]>([]);
     const appLocalizer = (window as any).appLocalizer;
+    const settings = appLocalizer.settings_databases_value['store-capability']?.edit_store_info_activation || [];
 
     const [addressData, setAddressData] = useState({
         location_address: '',
@@ -501,6 +502,7 @@ const BusinessAddress = () => {
 
     // Update your autoSave function:
     const autoSave = (updatedData: any) => {
+        if (settings.includes('store_address')) return;
         const saveData = {
             ...updatedData,
             location_address: updatedData.location_address || updatedData.address || '',
@@ -522,6 +524,7 @@ const BusinessAddress = () => {
         });
     };
 
+    console.log('addressData', addressData)
     return (
         <div className="card-wrapper">
             <div className="card-content">
@@ -539,7 +542,7 @@ const BusinessAddress = () => {
                     </div>
                 )}
 
-                <div className="form-group-wrapper">
+                {/* <div className="form-group-wrapper">
                     <div className="form-group">
                         <label htmlFor="location-autocomplete">Search Location *</label>
                         <div id="location-autocomplete-container">
@@ -556,10 +559,10 @@ const BusinessAddress = () => {
                             Type your business name or address and select from suggestions
                         </div>
                     </div>
-                </div>
+                </div> */}
 
                 {/* Map Display */}
-                <div className="form-group-wrapper">
+                {/* <div className="form-group-wrapper">
                     <div className="form-group">
                         <label>Location Map *</label>
                         <div
@@ -569,7 +572,7 @@ const BusinessAddress = () => {
                             Click on the map or drag the marker to set your exact location
                         </div>
                     </div>
-                </div>
+                </div> */}
 
                 {/* Address Field */}
                 <div className="form-group-wrapper">
