@@ -10,9 +10,10 @@ interface OrderDetailsProps {
 
 const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
     const [orderData, setOrderData] = useState<any>(order || null);
+    const [customerData, setCustomerData] = useState<any>();
     const orderId = order?.id;
 
-
+    const [statusSelect, setStatusSelect] = useState(false);
     const [isRefund, setIsRefund] = useState(false);
     const [refundItems, setRefundItems] = useState({});
     const [refundDetails, setRefundDetails] = useState({
@@ -20,6 +21,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
         restock: true,
         reason: "",
     });
+
 
     // When any item total changes, recalculate refundAmount
     const handleItemChange = (id, field, value) => {
@@ -55,7 +57,6 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
             restock: refundDetails.restock,
             reason: refundDetails.reason,
         };
-        console.log("Refund Data Sent:", payload);
         axios({
             method: 'POST',
             url: getApiLink(appLocalizer, 'refund'),
@@ -78,24 +79,30 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
         earned: 50,
     });
 
+    const fetchOrder = async () => {
+        try {
+            const res = await axios.get(`${appLocalizer.apiUrl}/wc/v3/orders/${orderId}`, {
+                headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            });
+            setOrderData(res.data);
+
+            const customerId = res.data.customer_id;
+
+            const customer = await axios.get(`${appLocalizer.apiUrl}/wc/v3/customers/${customerId}`, {
+                headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            });
+            setCustomerData(customer.data);
+            
+        } catch (error) {
+            console.error("Error fetching order:", error);
+        }
+    };
+
     useEffect(() => {
         if (!orderId) return;
-
-        const fetchOrder = async () => {
-            try {
-                const res = await axios.get(`${appLocalizer.apiUrl}/wc/v3/orders/${orderId}`, {
-                    headers: { 'X-WP-Nonce': appLocalizer.nonce },
-                });
-                setOrderData(res.data);
-                console.log(res.data)
-            } catch (error) {
-                console.error("Error fetching order:", error);
-            }
-        };
-
         fetchOrder();
     }, [orderId]);
-    console.log("od",orderData)
+
     const handleChange = (field: keyof typeof values, val: number) => {
         const newVals = { ...values, [field]: val };
         const baseTotal = 100; // example base price
@@ -103,6 +110,21 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
         newVals.earned = newVals.commission;
         setValues(newVals);
     };
+
+    const handleStatusChange = async (newStatus) => {
+            const response = await axios.put(
+                `${appLocalizer.apiUrl}/wc/v3/orders/${orderId}`,
+                { status: newStatus },
+                { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
+            );
+
+            if (response) {
+                setStatusSelect(false)
+                fetchOrder()
+            }
+    };
+
+    console.log("Order updated:", orderData);
     const formatDateTime = (iso?: string | null) => {
         if (!iso) return '-';
         try {
@@ -133,10 +155,42 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                         <div className="page-title">
                             <div className="title">
                                 Order #{orderData?.number ?? orderId ?? "—"}
-                                <div className={statusBadgeClass(orderData?.status)}>
+                                <div className={statusBadgeClass(orderData?.status)}
+                                onClick={() => setStatusSelect(true)}
+                                >
                                     {/* choose icon and label dynamically */}
                                     {orderData?.status === 'completed' ? <i className="adminlib-check"></i> : <i className="adminlib-info"></i>}
                                     {` ${(orderData?.status || 'Unknown').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}`}
+                                
+                                {statusSelect && 
+                                    // <select
+                                    //     value={orderData?.status}
+                                    //     onClick={(e) => e.stopPropagation()} 
+                                    //     onChange={(e) => handleStatusChange(e.target.value)}
+                                    //     className="order-status-dropdown"
+                                    // >
+                                    //     <option value="processing">Processing</option>
+                                    //     <option value="on-hold">On Hold</option>
+                                    //     <option value="completed">Completed</option>
+                                    //     <option value="cancelled">Cancelled</option>
+                                    //     <option value="refunded">Refunded</option>
+                                    // </select>
+
+                                    <SelectInput
+                                            name="status"
+                                            options={[
+                                                { label: 'Processing', value: 'processing' },
+                                                { label: 'On Hold', value: 'on-hold' },
+                                                { label: 'Completed', value: 'completed' },
+                                                { label: 'Cancelled', value: 'cancelled' },
+                                            ]}
+                                            value={orderData?.status}
+                                            type="single-select"
+                                            onChange={(newValue: any) => {
+                                                handleStatusChange(newValue.value)
+                                            }}
+                                        />
+                                }
                                 </div>
                             </div>
 
@@ -545,10 +599,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                 <div className="details">
                                     <div className="icon">
                                         <img
-                                            src={
-                                                orderData?.customer_avatar ||
-                                                "https://demos.pixinvent.com/vuexy-html-admin-template/assets/img/avatars/1.png"
-                                            }
+                                            src={customerData?.avatar_url}
                                             alt={`${orderData?.billing?.first_name || "Customer"} avatar`}
                                         />
                                     </div>
