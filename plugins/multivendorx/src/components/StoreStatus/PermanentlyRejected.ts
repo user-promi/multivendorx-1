@@ -20,7 +20,7 @@ export default {
                     options: [
                         {
                             label: __('Can log in to dashboard', 'multivendorx'),
-                            check: true,
+                            check: false,
                         },
                         {
                             label: __('Cannot modify store settings', 'multivendorx'),
@@ -34,11 +34,11 @@ export default {
                 },
             ],
         },
-        {
-            key: 'permanent_rejected_msg',
-            label: 'Message shown to permantly rejected stores',
-            type: 'textarea',
-            des: 'What pending stores can do',
-        },
+        // {
+        //     key: 'permanent_rejected_msg',
+        //     label: 'Message shown to permantly rejected stores',
+        //     type: 'textarea',
+        //     des: 'What pending stores can do',
+        // },
     ],
 };

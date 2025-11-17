@@ -564,8 +564,6 @@ const EditStore = () => {
                                                         <span>&nbsp;</span>
                                                     )}
 
-
-
                                                     <span
                                                         className={`edit-icon ${editDesc ? '' : 'admin-badge blue'}`}
                                                         onClick={(e) => {
@@ -611,7 +609,7 @@ const EditStore = () => {
                                                         <>
                                                             {data.slug}{' '}
 
-                                                            {(data?.status != 'pending' || data?.status != 'rejected' || data?.status != 'permanently_rejected') && (
+                                                            {(data?.status != 'pending' && data?.status != 'rejected' && data?.status != 'permanently_rejected') && (
 
                                                                 <span className="edit-icon admin-badge blue" onClick={() => {
                                                                     navigate(`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`, {

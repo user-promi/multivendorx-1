@@ -2,6 +2,7 @@
 
 namespace MultiVendorX\Payments;
 use MultiVendorX\Commission\CommissionUtil;
+use MultiVendorX\Store\StoreUtil;
 use MultiVendorX\Utill;
 
 defined('ABSPATH') || exit;
@@ -90,6 +91,9 @@ class Disbursement {
         ");
 
         foreach ($results as $row) {
+            if (StoreUtil::get_excluded_products('', $row->store_id, true)) {
+                return;
+            }
             if (($threshold_amount + $minimum_wallet_amount) < $row->balance) {
                 MultiVendorX()->payments->processor->process_payment( $row->store_id, $row->balance);
             }
