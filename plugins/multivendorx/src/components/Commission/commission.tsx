@@ -591,19 +591,19 @@ const Commission: React.FC = () => {
         //     header: __('Commi.. Total', 'multivendorx'),
         //     cell: ({ row }) => <TableCell title={row.original.commissionTotal ? `${appLocalizer.currency_symbol}${row.original.commissionTotal}` : '-'}>{formatCurrency(row.original.commissionTotal)}</TableCell>,
         // },
-        {
-            header: __('Paid Status', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.status || '-'}>
-                    <span className={`admin-badge ${row.original.status === 'paid' ? 'green' : 'red'}`}>
-                        {row.original.status
-                            ? row.original.status.charAt(0).toLocaleUpperCase() + row.original.status.slice(1)
-                            : ''}
+        // {
+        //     header: __('Paid Status', 'multivendorx'),
+        //     cell: ({ row }) => (
+        //         <TableCell title={row.original.status || '-'}>
+        //             <span className={`admin-badge ${row.original.status === 'paid' ? 'green' : 'red'}`}>
+        //                 {row.original.status
+        //                     ? row.original.status.charAt(0).toLocaleUpperCase() + row.original.status.slice(1)
+        //                     : ''}
 
-                    </span>
-                </TableCell>
-            ),
-        },
+        //             </span>
+        //         </TableCell>
+        //     ),
+        // },
         {
             header: __('Paid Status', 'multivendorx'),
             cell: ({ row }) => {
@@ -617,15 +617,15 @@ const Commission: React.FC = () => {
                     switch (status) {
                         case 'paid':
                             return <span className="admin-badge green">Paid</span>;
-                        // case 'pending':
-                        //     return <span className="admin-badge yellow">Pending</span>;
+                        case 'unpaid':
+                            return <span className="admin-badge red">Unpaid</span>;
                         default:
                             return <span className="admin-badge yellow">{formattedStatus}</span>;
                     }
                 };
 
                 return (
-                    <TableCell title={`${status} - ${formattedDate}`}>
+                    <TableCell title={`${status}`}>
                         {getStatusBadge(status)}
                     </TableCell>
                 );

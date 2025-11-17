@@ -27,12 +27,12 @@ const History: React.FC = () => {
 
     const analyticsData = [
         data.wallet_balance != null && {
-            icon: "adminlib-tools red",
+            icon: "adminlib-tools theme-color1",
             number: formatCurrency(data.wallet_balance),
             text: "Wallet Balance",
         },
         data.reserve_balance != null && {
-            icon: "adminlib-book green",
+            icon: "adminlib-book theme-color2",
             number: formatCurrency(data.reserve_balance),
             text: "Reserve Balance",
         },
@@ -40,12 +40,12 @@ const History: React.FC = () => {
 
     const analyticsData2 = [
         data.locking_balance != null && {
-            icon: "adminlib-global-community yellow",
+            icon: "adminlib-global-community theme-color3",
             number: formatCurrency(data.locking_balance),
             text: "Locked",
         },
         data.locking_day != null && {
-            icon: "adminlib-global-community yellow",
+            icon: "adminlib-global-community theme-color4",
             number: `${data.locking_day} Days`,
             text: "Locking Period",
         },
@@ -126,8 +126,7 @@ const History: React.FC = () => {
                         </div>
                     </div>
                     <div className="card-body">
-                        <div className="analytics-container">
-
+                        <div className="analytics-container small-card">
                             {analyticsData.map((item, idx) => (
                                 <div key={idx} className="analytics-item">
                                     <div className="analytics-icon">
@@ -139,8 +138,6 @@ const History: React.FC = () => {
                                     </div>
                                 </div>
                             ))}
-                        </div>
-                        <div className="analytics-container">
                             {analyticsData2.map((item, idx) => (
                                 <div key={idx} className="analytics-item">
                                     <div className="analytics-icon">
@@ -165,7 +162,6 @@ const History: React.FC = () => {
                                 <div className="title">
                                     Withdrawal Schedule
                                 </div>
-
                             </div>
                         </div>
                         <div className="withdrawal-wrapper">

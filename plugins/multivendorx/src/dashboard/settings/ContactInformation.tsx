@@ -70,7 +70,7 @@ const ContactInformation = () => {
             <SuccessNotice message={successMsg} />
             <div className="card-wrapper">
                 <div className="card-content">
-                    <div className="card-title">Contact & Communication </div>
+                    {/* <div className="card-title">Contact & Communication </div> */}
                     <div className="form-group-wrapper">
                         <div className="form-group">
                             <label htmlFor="product-name">Phone</label>

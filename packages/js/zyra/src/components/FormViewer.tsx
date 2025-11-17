@@ -81,7 +81,8 @@ const Checkboxes: React.FC<{
     return (
         <div className="multiselect-container items-wrapper">
             {options.map((option) => (
-                <div key={option.value} className="select-items">
+                // <div key={option.value} className="select-items">
+                    <label htmlFor={option.value}>
                     <input
                         type="checkbox"
                         id={option.value}
@@ -94,8 +95,8 @@ const Checkboxes: React.FC<{
                             handleChange(option, e.target.checked)
                         }
                     />
-                    <label htmlFor={option.value}>{option.label}</label>
-                </div>
+                    {option.label}</label>
+                // </div>
             ))}
         </div>
     );
@@ -164,7 +165,8 @@ const Radio: React.FC<RadioProps> = ({ options, onChange }) => {
         <div className="multiselect-container items-wrapper">
             {options.map((option, index) => {
                 return (
-                    <div key={index} className="select-items">
+                    // <div key={index} className="select-items">
+                    <label htmlFor={option.value}>
                         <input
                             type="radio"
                             id={option.value}
@@ -172,8 +174,8 @@ const Radio: React.FC<RadioProps> = ({ options, onChange }) => {
                             checked={selectdedItem === option.value}
                             onChange={handleChange}
                         />
-                        <label htmlFor={option.value}>{option.label}</label>
-                    </div>
+                        {option.label}</label>
+                    // </div>
                 );
             })}
         </div>
@@ -480,7 +482,7 @@ const FormViewer: React.FC<FormViewerProps> = ({
                                 <label htmlFor={field.name}>
                                     {field.label}
                                 </label>
-                                <div className="multiselect-container">
+                                <div className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                                     <Multiselect
                                         options={field.options ?? []}
                                         onChange={(data) =>
@@ -505,7 +507,7 @@ const FormViewer: React.FC<FormViewerProps> = ({
                                 <label htmlFor={field.name}>
                                     {field.label}
                                 </label>
-                                <div className="multiselect-container">
+                                <div className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                                     <Multiselect
                                         options={field.options ?? []}
                                         onChange={(data) =>
@@ -725,100 +727,98 @@ const FormViewer: React.FC<FormViewerProps> = ({
                     // --- inside your FormViewer component, inside case 'address' ---
                     case 'address':
                         return (
-                            <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide" key={field.id}>
-                                <label className="address-label">{field.label}</label>
-                                <div className="address-field-group">
-                                    {field.fields?.map((subField: any) => {
-                                        if (subField.disabled) return null;
-                                        const inputName = `${subField.key}`;
-                                        const value = inputs[inputName] ?? '';
+                            <fieldset key={field.id}>
+                                <legend>{field.label}</legend>
+                                {field.fields?.map((subField: any) => {
+                                    if (subField.disabled) return null;
+                                    const inputName = `${subField.key}`;
+                                    const value = inputs[inputName] ?? '';
 
-                                        // Helper: build state options for a country code
-                                        const buildStateOptions = (countryCode: string | undefined) => {
-                                            if (!countryCode || !stateList) return [];
+                                    // Helper: build state options for a country code
+                                    const buildStateOptions = (countryCode: string | undefined) => {
+                                        if (!countryCode || !stateList) return [];
 
-                                            const raw = stateList[countryCode];
+                                        const raw = stateList[countryCode];
 
-                                            // Case A: already an array of { label, value }
-                                            if (Array.isArray(raw)) {
-                                                return raw;
-                                            }
-
-                                            // Case B: object like { WB: 'West Bengal', MH: 'Maharashtra' }
-                                            if (raw && typeof raw === 'object') {
-                                                return Object.entries(raw).map(([code, name]) => ({
-                                                    label: String(name),
-                                                    value: String(code),
-                                                }));
-                                            }
-
-                                            // Fallback: empty
-                                            return [];
-                                        };
-
-                                        // 🔹 Handle country dropdown
-                                        if (subField.key === 'country') {
-                                            return (
-                                                <div className="multiselect-container" key={subField.id}>
-                                                    <label htmlFor={inputName}>{subField.label}</label>
-                                                    <Multiselect
-                                                        options={countryList || []}
-                                                        // Multiselect returns a string (value) for single-select in your implementation
-                                                        onChange={(selectedCountryValue) => {
-                                                            // selectedCountryValue should be a string (or null)
-                                                            const countryVal = selectedCountryValue || null;
-                                                            handleChange(inputName, countryVal);
-
-                                                            // Clear / reset state when country changes
-                                                            handleChange('state', null);
-                                                        }}
-                                                    />
-                                                </div>
-                                            );
+                                        // Case A: already an array of { label, value }
+                                        if (Array.isArray(raw)) {
+                                            return raw;
                                         }
 
-                                        // 🔹 Handle state dropdown (depends on selected country)
-                                        if (subField.key === 'state') {
-                                            const selectedCountryValue = inputs['country'];
-                                            const availableStates = buildStateOptions(selectedCountryValue);
-
-                                            return (
-                                                <div className="multiselect-container" key={subField.id}>
-                                                    <label htmlFor={inputName}>{subField.label}</label>
-                                                    <Multiselect
-                                                        options={availableStates}
-                                                        onChange={(selectedStateValue) =>
-                                                            handleChange(inputName, selectedStateValue)
-                                                        }
-                                                    />
-                                                </div>
-                                            );
+                                        // Case B: object like { WB: 'West Bengal', MH: 'Maharashtra' }
+                                        if (raw && typeof raw === 'object') {
+                                            return Object.entries(raw).map(([code, name]) => ({
+                                                label: String(name),
+                                                value: String(code),
+                                            }));
                                         }
 
-                                        // 🔹 Normal text fields
-                                        if (subField.type === 'text') {
-                                            return (
-                                                <div className="address-input-wrapper" key={subField.id}>
-                                                    <label htmlFor={inputName}>{subField.label}</label>
-                                                    <input
-                                                        type="text"
-                                                        id={inputName}
-                                                        name={inputName}
-                                                        placeholder={subField.placeholder}
-                                                        value={value}
-                                                        required={field.required || subField.required}
-                                                        onChange={(e) =>
-                                                            handleChange(inputName, e.target.value)
-                                                        }
-                                                    />
-                                                </div>
-                                            );
-                                        }
+                                        // Fallback: empty
+                                        return [];
+                                    };
 
-                                        return null;
-                                    })}
-                                </div>
-                            </p>
+                                    // 🔹 Handle country dropdown
+                                    if (subField.key === 'country') {
+                                        return (
+                                            <p className="woocommerce-form-row woocommerce-form-row--first form-row form-row-first" key={subField.id}>
+                                                <label htmlFor={inputName}>{subField.label}</label>
+                                                <Multiselect
+                                                    options={countryList || []}
+                                                    // Multiselect returns a string (value) for single-select in your implementation
+                                                    onChange={(selectedCountryValue) => {
+                                                        // selectedCountryValue should be a string (or null)
+                                                        const countryVal = selectedCountryValue || null;
+                                                        handleChange(inputName, countryVal);
+
+                                                        // Clear / reset state when country changes
+                                                        handleChange('state', null);
+                                                    }}
+                                                />
+                                            </p>
+                                        );
+                                    }
+
+                                    // 🔹 Handle state dropdown (depends on selected country)
+                                    if (subField.key === 'state') {
+                                        const selectedCountryValue = inputs['country'];
+                                        const availableStates = buildStateOptions(selectedCountryValue);
+
+                                        return (
+                                            <p className="woocommerce-form-row woocommerce-form-row--last form-row form-row-last" key={subField.id}>
+                                                <label htmlFor={inputName}>{subField.label}</label>
+                                                <Multiselect
+                                                    options={availableStates}
+                                                    onChange={(selectedStateValue) =>
+                                                        handleChange(inputName, selectedStateValue)
+                                                    }
+                                                />
+                                            </p>
+                                        );
+                                    }
+
+                                    // 🔹 Normal text fields
+                                    if (subField.type === 'text') {
+                                        return (
+                                            <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide" key={subField.id}>
+                                                <label htmlFor={inputName}>{subField.label}</label>
+                                                <input
+                                                    type="text"
+                                                    id={inputName}
+                                                    name={inputName}
+                                                    placeholder={subField.placeholder}
+                                                    value={value}
+                                                    required={field.required || subField.required}
+                                                    onChange={(e) =>
+                                                        handleChange(inputName, e.target.value)
+                                                    }
+                                                />
+                                            </p>
+                                        );
+                                    }
+
+                                    return null;
+                                })}
+                            </fieldset>
                         );
 
                     default:

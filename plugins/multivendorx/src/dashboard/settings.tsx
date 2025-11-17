@@ -117,7 +117,7 @@ const settings = () => {
                 name: 'Appearance',
                 desc: 'appearance',
                 // hideTabHeader: true,
-                icon: 'tools',
+                icon: 'appearance',
             },
         },
         {
@@ -157,7 +157,7 @@ const settings = () => {
                 name: 'Payout',
                 desc: 'payout',
                 // hideTabHeader: true,
-                icon: 'tools',
+                icon: 'wallet',
             },
         },
         {
@@ -167,7 +167,7 @@ const settings = () => {
                 name: 'Privacy',
                 desc: 'privacy',
                 // hideTabHeader: true,
-                icon: 'tools',
+                icon: 'privacy',
             },
         },
         {
@@ -177,7 +177,7 @@ const settings = () => {
                 name: 'Shipping',
                 desc: 'shipping',
                 // hideTabHeader: true,
-                icon: 'tools',
+                icon: 'shipping',
             },
         },
         {
@@ -187,7 +187,7 @@ const settings = () => {
                 name: 'Verification',
                 desc: 'verification',
                 // hideTabHeader: true,
-                icon: 'tools',
+                icon: 'verification5',
             },
         },
         {
@@ -197,7 +197,7 @@ const settings = () => {
                 name: 'Livechat',
                 desc: 'livechat',
                 // hideTabHeader: true,
-                icon: 'tools',
+                icon: 'live-chat',
             },
         },
         {
@@ -207,7 +207,7 @@ const settings = () => {
                 name: 'Deactivated Request',
                 desc: 'Deactivated Request',
                 // hideTabHeader: true,
-                icon: 'tools',
+                icon: 'close-delete',
             },
         },
     ];

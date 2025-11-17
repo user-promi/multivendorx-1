@@ -61,8 +61,10 @@ const Privacy = () => {
             <div className="card-wrapper">
                 <div className="card-content">
                     <div className="settings-metabox-note">
-                        <i className="adminlib-info"></i>
-                        <p>Confirm that you have access to johndoe@gmail.com in sender email settings.</p>
+                        <div className='metabox-note-wrapper'>
+                            <i className="adminlib-info"></i>
+                            <p>Confirm that you have access to johndoe@gmail.com in sender email settings.</p>
+                        </div>
                     </div>
 
                     <div className="form-group-wrapper">
