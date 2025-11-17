@@ -132,7 +132,12 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                 </div>
                                 <div className="right">
                                     <i className="adminlib-external"
-                                        onClick={() => { navigate(`?page=multivendorx#&tab=transaction-history`) }}
+                                    onClick={() => {
+    navigate(`?page=multivendorx#&tab=transaction-history&store_id=${id}`);
+}}
+
+
+                                        // onClick={() => { navigate(`?page=multivendorx#&tab=transaction-history&store_id=${id}`); }}
                                     ></i>
                                 </div>
                             </div>

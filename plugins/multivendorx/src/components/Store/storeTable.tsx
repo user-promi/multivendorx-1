@@ -8,6 +8,7 @@ import {
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
+import { useNavigate } from 'react-router-dom';
 import { formatCurrency } from '../../services/commonFunction';
 
 type StoreRow = {
@@ -52,6 +53,7 @@ const StoreTable: React.FC = () => {
     });
     const [pageCount, setPageCount] = useState(0);
     const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     // Fetch total rows on mount
     useEffect(() => {
@@ -200,7 +202,7 @@ const StoreTable: React.FC = () => {
                     <TableCell title={row.original.store_name || ''}>
                         <a
                             onClick={() => {
-                                window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`;
+                                navigate(`?page=multivendorx#&tab=stores&edit/${row.original.id}`);
                             }}
                             className="product-wrapper"
                         >
@@ -355,8 +357,11 @@ const StoreTable: React.FC = () => {
                                 label: __('Settings', 'multivendorx'),
                                 icon: 'adminlib-setting',
                                 onClick: () => {
-                                    window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`;
+                                    navigate(`?page=multivendorx#&tab=stores&edit/${row.original.id}`);
                                 },
+                                // onClick: () => {
+                                //     window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`;
+                                // },
                                 hover: true
                             },
                             ...(row.original.status === 'active'
