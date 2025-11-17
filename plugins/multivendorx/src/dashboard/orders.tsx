@@ -485,6 +485,14 @@ const Orders: React.FC = () => {
                             <div className="title">Orders</div>
                             <div className="des">Manage your store information and preferences</div>
                         </div>
+                        <div className="buttons-wrapper">
+                            <div
+                                className="admin-btn btn-purple-bg"
+                            >
+                                <i className="adminlib-plus-circle-o"></i>
+                                Add order
+                            </div>
+                        </div>
                     </div>
                     <Table
                         data={data}

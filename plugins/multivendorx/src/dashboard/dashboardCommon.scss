@@ -141,14 +141,14 @@ a:focus {
     }
 }
 
-.admin-status{
+.admin-status {
     font-weight: 500;
     position: relative;
     padding-left: 0.95rem;
     background: transparent !important;
     border: none !important;
 
-    &::before{
+    &::before {
         position: absolute;
         content: "";
         width: 0.5rem;
@@ -157,19 +157,24 @@ a:focus {
         left: 0;
         top: 0.125rem;
     }
+
     &.theme-color1::before {
         background: var(--colorPrimary);
     }
+
     &.theme-color2::before {
         background: var(--colorSecondary);
     }
+
     &.theme-color3::before {
         background: var(--colorAccent);
     }
+
     &.theme-color4::before {
         background: var(--colorSupport);
     }
 }
+
 // table color overwrite
 .filter-item.active,
 .search-field select {
@@ -216,6 +221,7 @@ a:focus {
         margin-bottom: 1rem;
     }
 }
+
 // no permission section end
 
 
@@ -402,6 +408,12 @@ a:focus {
     display: flex;
     justify-content: space-between;
     padding-top: 2rem;
+
+    .left {
+        display: flex;
+        align-items: start;
+        gap: 0.5rem;
+    }
 
     .coupon {
         display: flex;

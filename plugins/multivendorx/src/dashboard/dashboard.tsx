@@ -231,7 +231,8 @@ const Dashboard: React.FC = () => {
       <div className="page-title-wrapper">
         <div className="page-title">
           <div className="title">Good Morning, Anna!</div>
-          <div className="des">Here's what's happening with your store today <b>$84521 <i className="adminlib-arrow"></i></b></div>
+          <div className="view-des">You’re viewing: <b>Anna’s Home Crafts</b></div>
+          <div className="des up">Here's what's happening with your store today <b>$84521 <i className="adminlib-arrow-up"></i></b></div>
         </div>
       </div>
 
@@ -307,7 +308,7 @@ const Dashboard: React.FC = () => {
                 {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
               </div>
               <div className="right">
-                <i className="adminlib-more-vertical"></i>
+                <i className="adminlib-external"></i>
               </div>
             </div>
             <div className="card-body">
@@ -410,9 +411,9 @@ const Dashboard: React.FC = () => {
                 </div>
                 {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
               </div>
-              {/* <div className="right">
-                <i className="adminlib-more-vertical"></i>
-              </div> */}
+              <div className="right">
+                <i className="adminlib-external"></i>
+              </div>
             </div>
             <div className="card-body">
               <div className="top-customer-wrapper">
@@ -448,9 +449,9 @@ const Dashboard: React.FC = () => {
                   Recent Orders
                 </div>
               </div>
-              {/* <div className="right">
-                <i className="adminlib-more-vertical"></i>
-              </div> */}
+              <div className="right">
+                <i className="adminlib-external"></i>
+              </div>
             </div>
             <div className="card-body">
               <div className="table-wrapper">
@@ -508,9 +509,9 @@ const Dashboard: React.FC = () => {
                   Best-Selling Products (extra)
                 </div>
               </div>
-              {/* <div className="right">
-                <i className="adminlib-more-vertical"></i>
-              </div> */}
+              <div className="right">
+                <i className="adminlib-external"></i>
+              </div>
             </div>
             <div className="card-body">
               <div className="table-wrapper top-products">
@@ -565,9 +566,9 @@ const Dashboard: React.FC = () => {
                 </div>
                 {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
               </div>
-              {/* <div className="right">
-                <i className="adminlib-more-vertical"></i>
-              </div> */}
+              <div className="right">
+                <i className="adminlib-external"></i>
+              </div>
             </div>
             <div className="card-body">
               <div className="notification-wrapper">
@@ -686,9 +687,9 @@ const Dashboard: React.FC = () => {
                 </div>
                 {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
               </div>
-              {/* <div className="right">
-                <i className="adminlib-more-vertical"></i>
-              </div> */}
+              <div className="right">
+                <i className="adminlib-external"></i>
+              </div>
             </div>
             <div className="card-body">
               <div className="top-customer-wrapper">
@@ -725,9 +726,9 @@ const Dashboard: React.FC = () => {
                 </div>
                 {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
               </div>
-              {/* <div className="right">
+              <div className="right">
                 <i className="adminlib-more-vertical"></i>
-              </div> */}
+              </div>
             </div>
             <div className="card-body">
               <div className="review-wrapper">
