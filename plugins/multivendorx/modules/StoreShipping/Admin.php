@@ -11,8 +11,7 @@ namespace MultiVendorX\StoreShipping;
  * MultiVendorX StoreShipping Admin class
  *
  * @class       Admin class
- * @version     6.0.0
- * @author      MultiVendorX
+ * @version     6.0.3
  */
 class Admin {
 
@@ -28,46 +27,73 @@ class Admin {
      */
     public function get_all_shipping_methods() {
         
+        // Return shipping method structure
         return [
             [
                 'id' => 'zone-wise-shipping',
                 'icon' => 'adminlib-zone-wise-shipping',
                 'label' => 'Zone based shipping',
-                'openForm' => true,
-                'desc' => 'Stores set different rates for different regions (like "East Coast" or "California").',
+                'disableBtn'=> true,
+                'enableOption' => true,
+                'desc' => 'Stores can configure multiple shipping zones.',
                 'formFields' => [
                     [
-                        'key' => 'client_id',
-                        'type' => 'description',
-                        'label' => 'Currently enabled zones',
-                        'des' => '<span class="admin-badge yellow">North America</span>  <span class="admin-badge blue">North America</span>  <span class="admin-badge yellow">North America</span>  <span class="admin-badge red">North America</span>'
-                    ],
-                    [
-                        'key' => 'client_id',
-                        'type' => 'description',
-                        'label' => ' ',
-                        'des' => '<span class="admin-btn btn-purple"><i class="adminlib-plus-circle-o"></i>Add new Zone</span>'
-                    ],
-                ],
+                        'key' => 'zones',
+                        'type' => 'nested',
+                        'label' => 'Add Shipping Zones',
+                        'addButtonLabel' => 'Add Zone',
+                        'deleteButtonLabel' => 'Delete Zone',
+                        'single' => false,
+                        'nestedFields' => [
+                            [
+                                'key' => 'zone_name',
+                                'type' => 'text',
+                                'label' => 'Zone Name',
+                                'placeholder' => 'e.g. North America'
+                            ],
+                            [
+                                'key' => 'zone_countries',
+                                'type' => 'dropdown',
+                                'label' => 'Countries / Regions',
+                                'treeSelect' => true,
+                                // 'options' => $country_tree,
+                            ],
+                        ]
+                    ]
+                ]
             ],
             [
-                'id' => 'country-wise-shipping',
                 'icon' => 'adminlib-country-shipping',
+                'id' => 'country-wise-shipping',
                 'label' => 'Country-wise shipping',
-                'openForm' => true,
-                'desc' => 'Let store set specific shipping rates based on destination countries.',
+                'disableBtn'=> true,
                 'enableOption' => true,
-                'disableBtn' => true,
+                'desc'      => 'Let store set specific shipping rates based on destination countries.',
+                'formFields' => [
+                    [
+                        'key'         => 'country_shipping_method_name',
+                        'type'        => 'text',
+                        'label'       => 'Method name',
+                        'placeholder' => 'Enter Name',
+                    ],
+                ]
             ],
             [
-                'id' => 'distance-based-shipping',
                 'icon' => 'adminlib-distance-shipping',
+                'id' => 'distance-based-shipping',
                 'label' => 'Distance-based shipping',
-                'openForm' => true,
-                'desc' => 'Calculate shipping costs based on actual distance between locations.',
+                'disableBtn'=> true,
                 'enableOption' => true,
-                'disableBtn' => true,
-            ],
+                'desc'      => 'Calculate shipping costs based on actual distance between locations.',
+                'formFields' => [
+                    [
+                        'key'         => 'distance_shipping_method_name',
+                        'type'        => 'text',
+                        'label'       => 'Method name',
+                        'placeholder' => 'Enter Name',
+                    ],
+                ]
+            ]
         ];
     }
 }

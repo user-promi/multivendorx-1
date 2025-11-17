@@ -2,6 +2,7 @@ import { __ } from '@wordpress/i18n';
 const shippingMethods = appLocalizer?.all_shippings
     ? Object.values(appLocalizer.all_shippings)
     : [];
+console.log(shippingMethods)
 export default {
     id: 'shipping',
     priority: 6,

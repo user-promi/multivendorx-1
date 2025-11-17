@@ -14,23 +14,33 @@ class Country_Shipping extends \WC_Shipping_Method {
     * @return void
     */
     public function __construct() {
-        $this->id                 = 'multivendorx_country_shipping';
-        // $this->method_title       = __( 'Multivendorx Shipping by Country', 'multivendorx' );
-        // $this->method_description = __( 'Enable vendors to set marketplace shipping per country', 'multivendorx' );
-
+        $this->id = 'multivendorx_country_shipping';
+    
         $shipping_modules = MultiVendorX()->setting->get_setting('shipping_modules', []);
         $country_shipping_settings = $shipping_modules['country-wise-shipping'] ?? [];
-
-        $this->enabled = (!empty($country_shipping_settings['enable']) && $country_shipping_settings['enable']) ? 'yes' : 'no';
-        $this->title        = $this->get_option( 'title' );
-
+    
+        // Enable/Disable
+        $this->enabled = (!empty($country_shipping_settings['enable']) && $country_shipping_settings['enable'])
+            ? 'yes'
+            : 'no';
+    
+        //Set title from module settings
+        $this->title = $country_shipping_settings['country_shipping_method_name']
+            ?? $this->get_option('title');
+    
+        if (empty($this->title)) {
+            $this->title = __('Shipping Cost', 'multivendorx');
+        }
+    
+        // Tax setting
         $taxable_shipping = MultiVendorX()->setting->get_setting('taxable', []);
-
-        $this->tax_status = (!empty($taxable_shipping) && in_array('taxable', $taxable_shipping))? 'taxable': 'none';
-
-        if( !$this->title ) $this->title = __( 'Shipping Cost', 'multivendorx' );
+        $this->tax_status = (!empty($taxable_shipping) && in_array('taxable', $taxable_shipping))
+            ? 'taxable'
+            : 'none';
+    
         $this->init();
     }
+    
 
 
     /**

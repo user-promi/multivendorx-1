@@ -10,26 +10,33 @@ class Distance_Shipping extends \WC_Shipping_Method {
      * Constructor for the shipping class
      */
     public function __construct() {
-        $this->id                 = 'multivendorx_distance_shipping';
-        // $this->method_title       = __( 'Multivendorx Shipping by Distance', 'multivendorx' );
-        // $this->method_description = __( 'Enable vendors to set marketplace shipping by distance range', 'multivendorx' );
-
+        $this->id = 'multivendorx_distance_shipping';
+    
         $shipping_modules = MultiVendorX()->setting->get_setting('shipping_modules', []);
         $distance_based_shipping = $shipping_modules['distance-based-shipping'] ?? [];
-
-        $this->enabled = (!empty($distance_based_shipping['enable']) && $distance_based_shipping['enable']) ? 'yes' : 'no';
-
-        $this->title      = $this->get_option( 'title' );
-        $taxable_shipping = MultiVendorX()->setting->get_setting('taxable', []);
-
-        $this->tax_status = (!empty($taxable_shipping) && in_array('taxable', $taxable_shipping))? 'taxable': 'none';
-
-        if ( ! $this->title ) {
-            $this->title = __( 'Shipping Cost', 'multivendorx' );
+    
+        // Enable / disable module
+        $this->enabled = (!empty($distance_based_shipping['enable']) && $distance_based_shipping['enable'])
+            ? 'yes'
+            : 'no';
+    
+        //Set title from module setting OR WooCommerce saved option
+        $this->title = $distance_based_shipping['distance_shipping_method_name']
+            ?? $this->get_option('title');
+    
+        if (empty($this->title)) {
+            $this->title = __('Shipping Cost', 'multivendorx');
         }
-
+    
+        // Taxable setting
+        $taxable_shipping = MultiVendorX()->setting->get_setting('taxable', []);
+        $this->tax_status = (!empty($taxable_shipping) && in_array('taxable', $taxable_shipping))
+            ? 'taxable'
+            : 'none';
+    
         $this->init();
     }
+    
 
     /**
      * Initialize settings
