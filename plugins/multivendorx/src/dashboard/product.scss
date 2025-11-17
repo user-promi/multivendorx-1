@@ -7,8 +7,18 @@ $border-light-small: 0.063rem solid #e0e4e9;
 
 #mvx-edit-product-form {
     .featured-img {
+        position: relative;
+
+        p {
+            position: absolute;
+            top: 50%;
+            left: 12%;
+            font-size: 1.313rem;
+        }
+
         img {
-            width: 100%;
+            width: auto;
+            height: 20rem;
         }
     }
 }
@@ -113,6 +123,7 @@ $border-light-small: 0.063rem solid #e0e4e9;
 }
 
 .product_attributes {
+
     .mvx-metabox-title,
     .wc-metabox-content {
         display: flex;
@@ -124,12 +135,13 @@ $border-light-small: 0.063rem solid #e0e4e9;
             color: rgba(187, 14, 14, 0.767);
         }
 
-        tr{
-            .attribute_name{
+        tr {
+            .attribute_name {
                 padding-right: 1rem;
             }
         }
-        .adminlib-drag{
+
+        .adminlib-drag {
             cursor: move;
         }
     }
@@ -224,27 +236,27 @@ $border-light-small: 0.063rem solid #e0e4e9;
 // Category Styles
 
 .category {
-        margin: 0;
-        list-style: none;
+    margin: 0;
+    list-style: none;
 
-        li {
-            margin-bottom: 1rem;
+    li {
+        margin-bottom: 1rem;
 
-            label {
-                font-size: 1rem;
-            }
+        label {
+            font-size: 1rem;
+        }
 
-            ul {
-                margin-left: 1rem;
-                margin-top: 1rem;
-                list-style-type: none;
+        ul {
+            margin-left: 1rem;
+            margin-top: 1rem;
+            list-style-type: none;
 
-                li {
-                    margin-bottom: 1rem;
-                }
+            li {
+                margin-bottom: 1rem;
             }
         }
-    
+    }
+
 }
 
 
@@ -389,5 +401,26 @@ $border-light-small: 0.063rem solid #e0e4e9;
         .form-group {
             margin: 0;
         }
+    }
+}
+
+
+
+// select input style
+.form-group{
+    .select2-container{
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+}
+.linked-products{
+    .form-group{
+        margin-bottom: 1rem !important;
+    }
+}
+.select2-selection__rendered{
+    .select2-selection__choice,
+    .select2-selection__choice__remove{
+        color: #000 !important;
     }
 }

@@ -489,7 +489,6 @@ const Orders: React.FC = () => {
                         </div>
                         <div
                             className="admin-btn btn-purple-bg"
-                            // onClick={() => window.location.href = appLocalizer.add_product_link}
                             onClick={() => { window.location.hash = `add`; }} >                      
                             <i className="adminlib-plus-circle-o"></i>
                             Add New

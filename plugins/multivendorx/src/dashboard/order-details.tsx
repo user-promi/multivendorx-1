@@ -9,6 +9,10 @@ interface OrderDetailsProps {
 }
 
 const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
+    const [showAddProduct, setShowAddProduct] = useState(false);
+    const [allProducts, setAllProducts] = useState([]);
+    const [addedProducts, setAddedProducts] = useState([]);
+
     const [orderData, setOrderData] = useState<any>(order || null);
     const [customerData, setCustomerData] = useState<any>();
     const orderId = order?.id;
@@ -292,6 +296,48 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                                     </td>
                                                 </tr>
                                             )}
+                                            {addedProducts.length > 0 &&
+                                                addedProducts.map((item) => (
+                                                    <tr key={`added-${item.id}`} className="admin-row simple">
+                                                        <td className="admin-column">
+                                                            <div className="item-details">
+                                                                <div className="image">
+                                                                    <img
+                                                                        src={item?.images?.[0]?.src}
+                                                                        width={40}
+                                                                        alt={item.name}
+                                                                    />
+                                                                </div>
+                                                                <div className="detail">
+                                                                    <div className="name">{item.name}</div>
+                                                                    {item?.sku && <div className="sku">SKU: {item.sku}</div>}
+                                                                </div>
+                                                            </div>
+                                                        </td>
+
+                                                        <td className="admin-column">${item.price}</td>
+
+                                                        <td className="admin-column">
+                                                            <input
+                                                                type="number"
+                                                                min="1"
+                                                                className="basic-input"
+                                                                value={item.qty || 1}
+                                                                onChange={(e) => {
+                                                                    const qty = +e.target.value;
+                                                                    setAddedProducts(prev => prev.map(p => p.id === item.id ? { ...p, qty } : p));
+                                                                }}
+                                                            />
+                                                        </td>
+
+                                                        <td className="admin-column">
+                                                            ${(item.price * (item.qty || 1)).toFixed(2)}
+                                                        </td>
+
+                                                        <td className="admin-column">${item.price}</td>
+                                                    </tr>
+                                                ))
+                                            }
                                             <tr className="admin-row simple">
                                                 <td className="admin-column">
                                                     <div className="item-details">
@@ -428,12 +474,17 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                 <div className="coupons-calculation-wrapper">
                                     <div className="left">
                                         {!isRefund ? (
-                                            <button
-                                                className="admin-btn btn-purple"
-                                                onClick={() => setIsRefund(true)}
-                                            >
-                                                Refund
-                                            </button>
+                                            <>
+                                                <button
+                                                    className="admin-btn btn-purple"
+                                                    onClick={() => setIsRefund(true)}
+                                                >
+                                                    Refund
+                                                </button>
+                                                <button className="admin-btn btn-green" onClick={() => setShowAddProduct(true)}>
+                                                    + Add Product
+                                                </button>
+                                            </>
                                         ) : (
                                             <div className="buttons-wrapper">
                                                 <button
@@ -513,6 +564,37 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                             </table>
                                         </div>
                                     )}
+
+                                    {showAddProduct && (
+                                        <div className="modal-backdrop">
+                                            <div className="modal-box">
+                                                <h3>Select Product</h3>
+
+                                                <select
+                                                    className="basic-input"
+                                                    onChange={(e) => {
+                                                        const prod = allProducts.find(p => p.id == e.target.value);
+                                                        if (prod) {
+                                                            setAddedProducts(prev => [...prev, { ...prod, qty: 1 }]);
+                                                        }
+                                                        setShowAddProduct(false);
+                                                    }}
+                                                >
+                                                    <option value="">Select a product</option>
+                                                    {allProducts.map((p) => (
+                                                        <option key={p.id} value={p.id}>
+                                                            {p.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+
+                                                <button className="admin-btn btn-red mt-2" onClick={() => setShowAddProduct(false)}>
+                                                    Close
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
+
                                     <div className="right">
                                         {!isRefund ? (
                                             <table>
