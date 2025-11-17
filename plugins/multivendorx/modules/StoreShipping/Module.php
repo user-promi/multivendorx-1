@@ -47,6 +47,8 @@ class Module {
     public function init_classes() {
         $this->container['frontend'] = new Frontend();
         $this->container['admin'] = new Admin();
+        $this->container['util'] = new Util();
+        $this->container['rest'] = new MultiVendorX_REST_Zone_Shipping_Controller();
     }
 
     /**
@@ -94,6 +96,7 @@ class Module {
     public function register_shipping_method( $methods ) {
         $methods['multivendorx_distance_shipping'] = Distance_Shipping::class;
         $methods['multivendorx_country_shipping'] = Country_Shipping::class;
+        $methods['multivendorx_store_shipping'] = Zone_Shipping::class;
         return $methods;
     }
 }

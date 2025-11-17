@@ -36,31 +36,31 @@ class Admin {
                 'disableBtn'=> true,
                 'enableOption' => true,
                 'desc' => 'Stores can configure multiple shipping zones.',
-                'formFields' => [
-                    [
-                        'key' => 'zones',
-                        'type' => 'nested',
-                        'label' => 'Add Shipping Zones',
-                        'addButtonLabel' => 'Add Zone',
-                        'deleteButtonLabel' => 'Delete Zone',
-                        'single' => false,
-                        'nestedFields' => [
-                            [
-                                'key' => 'zone_name',
-                                'type' => 'text',
-                                'label' => 'Zone Name',
-                                'placeholder' => 'e.g. North America'
-                            ],
-                            [
-                                'key' => 'zone_countries',
-                                'type' => 'dropdown',
-                                'label' => 'Countries / Regions',
-                                'treeSelect' => true,
-                                // 'options' => $country_tree,
-                            ],
-                        ]
-                    ]
-                ]
+                // 'formFields' => [
+                //     [
+                //         'key' => 'zones',
+                //         'type' => 'nested',
+                //         'label' => 'Add Shipping Zones',
+                //         'addButtonLabel' => 'Add Zone',
+                //         'deleteButtonLabel' => 'Delete Zone',
+                //         'single' => false,
+                //         'nestedFields' => [
+                //             [
+                //                 'key' => 'zone_name',
+                //                 'type' => 'text',
+                //                 'label' => 'Zone Name',
+                //                 'placeholder' => 'e.g. North America'
+                //             ],
+                //             [
+                //                 'key' => 'zone_countries',
+                //                 'type' => 'dropdown',
+                //                 'label' => 'Countries / Regions',
+                //                 'treeSelect' => true,
+                //                 // 'options' => $country_tree,
+                //             ],
+                //         ]
+                //     ]
+                // ]
             ],
             [
                 'icon' => 'adminlib-country-shipping',

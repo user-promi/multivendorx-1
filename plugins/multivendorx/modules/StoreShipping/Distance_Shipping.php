@@ -47,7 +47,6 @@ class Distance_Shipping extends \WC_Shipping_Method {
 
         add_filter( 'woocommerce_cart_shipping_packages', ['MultiVendorX\StoreShipping\Shipping_Helper', 'split_cart_by_store'] );
 
-        // add_filter( 'woocommerce_cart_shipping_packages', [ $this, 'multivendorx_split_cart_by_store' ] );
         add_action( 'woocommerce_cart_calculate_fees', [ $this, 'multivendorx_force_shipping_recalculation' ], 20, 1 );
         add_action( 'woocommerce_update_options_shipping_' . $this->id, [ $this, 'process_admin_options' ] );
     }
@@ -57,41 +56,6 @@ class Distance_Shipping extends \WC_Shipping_Method {
      */
     public function multivendorx_force_shipping_recalculation() {
         WC()->cart->calculate_shipping();
-    }
-
-    /**
-     * Split cart items by store
-     */
-    public function multivendorx_split_cart_by_store( $packages ) {
-        $new_packages = [];
-
-        foreach ( WC()->cart->get_cart() as $item_key => $item ) {
-            $product_id = $item['product_id'];
-            $store_id   = get_post_meta( $product_id, 'multivendorx_store_id', true );
-
-            if ( ! $store_id ) continue;
-
-            if ( ! isset( $new_packages[ $store_id ] ) ) {
-                $new_packages[ $store_id ] = [
-                    'contents'        => [],
-                    'contents_cost'   => 0,
-                    'applied_coupons' => WC()->cart->get_applied_coupons(),
-                    'destination'     => [
-                        'country'   => WC()->customer->get_shipping_country(),
-                        'state'     => WC()->customer->get_shipping_state(),
-                        'postcode'  => WC()->customer->get_shipping_postcode(),
-                        'city'      => WC()->customer->get_shipping_city(),
-                        'address'   => WC()->customer->get_shipping_address(),
-                        'address_2' => WC()->customer->get_shipping_address_2(),
-                    ],
-                ];
-            }
-
-            $new_packages[ $store_id ]['contents'][ $item_key ] = $item;
-            $new_packages[ $store_id ]['contents_cost'] += $item['line_total'];
-        }
-
-        return array_values( $new_packages );
     }
 
     /**

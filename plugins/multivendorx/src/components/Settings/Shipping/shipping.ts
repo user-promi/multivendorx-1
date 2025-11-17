@@ -5,7 +5,7 @@ const shippingMethods = appLocalizer?.all_shippings
 console.log(shippingMethods)
 export default {
     id: 'shipping',
-    priority: 6,
+    priority: 1,
     name: __('Shipping', 'multivendorx'),
     desc: __(
         'Choose whether stores follow a step-by-step guided process through the category hierarchy or freely select multiple categories & subcategories without restrictions.', 'multivendorx'
