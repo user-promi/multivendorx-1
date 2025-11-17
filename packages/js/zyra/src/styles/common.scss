@@ -34,7 +34,8 @@ body:has(.admin-main-wrapper) {
 }
 
 #admin-main-wrapper,
-#multivendorx-setup-wizard {
+#multivendorx-setup-wizard,
+.dashboard-content {
   margin-left: -1.25rem;
   font-family: Figtree, sans-serif;
 
