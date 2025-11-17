@@ -72,10 +72,10 @@ console.log('settings', settings)
             <div className="card-wrapper">
                 <div className="card-content">
                     <div className="settings-metabox-note">
-                        <div className="metabox-note-wrapper">
+                        {/* <div className="metabox-note-wrapper">
                             <i className="adminlib-info"></i>
                             <p>Confirm that you have access to johndoe@gmail.com in sender email settings.</p>
-                        </div>
+                        </div> */}
                     </div>
 
                     <div className="form-group-wrapper">
@@ -94,7 +94,7 @@ console.log('settings', settings)
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label htmlFor="store-slug">Slug</label>
+                            <label htmlFor="store-slug">Storefront link</label>
                             {/* ✅ Fixed: Correct field name */}
                             <BasicInput
                                 name="slug"
@@ -121,7 +121,7 @@ console.log('settings', settings)
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label htmlFor="message-to-buyer">Message to Buyers</label>
+                            <label htmlFor="message-to-buyer">Buyer welcome message after purchase</label>
                             {/* ✅ Fixed: Correct field name */}
                             <BasicInput
                                 name="messageToBuyer"
