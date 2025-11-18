@@ -238,37 +238,67 @@ class Zone_Shipping extends \WC_Shipping_Method {
 
                     if ( ! empty( $shipping_classes ) ) {
                         $found_shipping_classes = $this->find_shipping_classes( $package );
-                        $highest_class_cost = 0;
-                        $calculation_type = ! empty( $method['settings']['calculation_type'] ) ? $method['settings']['calculation_type'] : 'class';
-
+                        $highest_class_cost     = 0;
+                        $calculation_type       = ! empty( $method['settings']['calculation_type'] ) ? $method['settings']['calculation_type'] : 'class';
+                    
                         foreach ( $found_shipping_classes as $shipping_class => $products_in_class ) {
+
                             $shipping_class_term = get_term_by( 'slug', $shipping_class, 'product_shipping_class' );
-                            $class_cost_string = $shipping_class_term && $shipping_class_term->term_id
-                                ? ( ! empty( $method['settings']['class_cost_' . $shipping_class_term->term_id] ) ? stripslashes_deep( $method['settings']['class_cost_' . $shipping_class_term->term_id] ) : '' )
-                                : ( ! empty( $method['settings']['no_class_cost'] ) ? $method['settings']['no_class_cost'] : '' );
-    
-                            if ( '' === $class_cost_string ) {
+
+                            if ( $shipping_class_term && $shipping_class_term->term_id ) {
+                    
+                                $term_id = $shipping_class_term->term_id;
+                                $key     = 'class_cost_' . $term_id;
+                    
+                                // 1. Class specific cost: class_cost_12
+                                if ( ! empty( $method['settings'][ $key ] ) ) {
+                                    $class_cost_string = stripslashes_deep( $method['settings'][ $key ] );
+                                }
+                                // 2. Fallback to generic class_cost
+                                elseif ( ! empty( $method['settings']['class_cost'] ) ) {
+                                    $class_cost_string = stripslashes_deep( $method['settings']['class_cost'] );
+                                }
+                                // 3. Nothing found
+                                else {
+                                    $class_cost_string = '';
+                                }
+                    
+                            } else {
+                                // No class → use no_class_cost
+                                $class_cost_string = ! empty( $method['settings']['no_class_cost'] )
+                                    ? $method['settings']['no_class_cost']
+                                    : '';
+                            }
+                            // Skip if empty
+                            if ( $class_cost_string === '' ) {
                                 continue;
                             }
-    
+                    
                             $has_costs = true;
-    
+                    
+                            /**
+                             * Evaluate shipping class expression
+                             * Example: 10 * [qty]
+                             */
                             $class_cost = $this->evaluate_cost( $class_cost_string, array(
                                 'qty'  => array_sum( wp_list_pluck( $products_in_class, 'quantity' ) ),
                                 'cost' => array_sum( wp_list_pluck( $products_in_class, 'line_total' ) ),
                             ) );
-    
-                            if ( 'class' === $calculation_type ) {
+                    
+                            // Add or compare
+                            if ( $calculation_type === 'class' ) {
                                 $cost += $class_cost;
                             } else {
                                 $highest_class_cost = max( $highest_class_cost, $class_cost );
                             }
                         }
-    
-                        if ( 'order' === $calculation_type && $highest_class_cost ) {
+                    
+                        // For calculation_type = order
+                        if ( $calculation_type === 'order' && $highest_class_cost ) {
                             $cost += $highest_class_cost;
                         }
                     }
+                    
     
                 } elseif ( 'free_shipping' == $method['id'] ) {
                     $is_available = self::free_shipping_is_available( $package, $method );

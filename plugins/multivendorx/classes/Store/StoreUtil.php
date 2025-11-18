@@ -15,6 +15,57 @@ defined('ABSPATH') || exit;
 
 class StoreUtil {
 
+    public function __construct() {
+
+        add_action('multivendorx_after_store_active', [ $this, 'create_store_shipping_class']);
+    }
+     /**
+     * Create a WooCommerce shipping class when store becomes active.
+     */
+    public function create_store_shipping_class( $store_id ) {
+        // Load store object
+        $store = new \MultiVendorX\Store\Store( $store_id );
+
+        // Check if class already exists for this store
+        $existing_class_id = $store->get_meta( 'shipping_class_id' );
+        if ( $existing_class_id ) {
+            return; // Skip creation
+        }
+
+        // Prepare unique shipping class slug
+        $store_name = sanitize_title( $store->get( 'name' ) );
+        $slug       = $store_name . '-' . $store_id;
+
+        // Check if the shipping class already exists
+        $shipping_term = get_term_by( 'slug', $slug, 'product_shipping_class', ARRAY_A );
+
+        // Create a new shipping class if missing
+        if ( ! $shipping_term ) {
+            $shipping_term = wp_insert_term(
+                $store->get( 'name' ) . ' Shipping', // Shipping class name
+                'product_shipping_class',
+                [
+                    'slug' => $slug,
+                ]
+            );
+        }
+
+        // Validate creation
+        if ( ! is_wp_error( $shipping_term ) ) {
+
+            $class_id = $shipping_term['term_id'];
+
+            // Save class ID in store meta
+            $store->update_meta( 'shipping_class_id', $class_id );
+
+            // Save MultiVendorX store reference in term meta
+            update_term_meta( $class_id, 'multivendorx_store_id', $store_id );
+
+            // Optional: add origin help
+            update_term_meta( $class_id, 'shipping_origin_country', get_option( 'woocommerce_default_country' ) );
+        }
+    }
+
     public static function add_store_users($args) {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['store_users'];

@@ -465,8 +465,8 @@ const DistanceByZoneShipping: React.FC = () => {
                                         value={formData.flatRateCalculationType}
                                         onChange={(val: string) => handleChange("flatRateCalculationType", val)}
                                         options={[
-                                            { key: "per_class", value: "per_class", label: "Per Class" },
-                                            { key: "per_order", value: "per_order", label: "Per Order" },
+                                            { key: "class", value: "class", label: "Per Class" },
+                                            { key: "order", value: "order", label: "Per Order" },
                                         ]}
                                     />
                                 </div>

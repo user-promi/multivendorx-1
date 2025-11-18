@@ -876,7 +876,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         $store->set('who_created', 'admin');
         $store->set('status',      $data['status'] ?? $store->get('status'));
         $store->set('create_time', $data['create_time'] ?? $store->get('create_time'));
-    
+
         // Save all other meta dynamically
         if (is_array($data)) {
             foreach ($data as $key => $value) {
@@ -890,7 +890,11 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         }
     
         $store->save();
-    
+
+        if ( $store->get('status') == 'active') {
+            do_action('multivendorx_after_store_active', $id);
+        }
+
         return rest_ensure_response([
             'success' => true,
             'id'      => $store->get_id(),
