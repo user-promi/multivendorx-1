@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { BasicInput, TextArea, FileInput, SelectInput, SuccessNotice, getApiLink, Tabs } from 'zyra';
+import { BasicInput, TextArea, FileInput, SelectInput, useModules, getApiLink, Tabs } from 'zyra';
 import GeneralSettings from './settings/general';
 import Appearance from './settings/Appearance';
 import SocialMedia from './settings/SocialMedia';
@@ -17,6 +17,7 @@ const settings = () => {
     const [formData, setFormData] = useState<{ [key: string]: string }>({});
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
     const [stateOptions, setStateOptions] = useState<{ label: string; value: string }[]>([]);
+    const { modules } = useModules();
 
     useEffect(() => {
         if (!id) return;
@@ -159,46 +160,62 @@ const settings = () => {
                 icon: 'wallet',
             },
         },
-        {
-            type: 'file',
-            content: {
-                id: 'privacy',
-                name: 'Privacy',
-                desc: 'Define your store’s policies so customers clearly understand your shipping, refund, and return terms.',
-                // hideTabHeader: true,
-                icon: 'privacy',
-            },
-        },
-        {
-            type: 'file',
-            content: {
-                id: 'shipping',
-                name: 'Shipping',
-                desc: 'Manage your store’s shipping method, pricing rules, and location-based rates.',
-                // hideTabHeader: true,
-                icon: 'shipping',
-            },
-        },
-        {
-            type: 'file',
-            content: {
-                id: 'verification',
-                name: 'Verification',
-                desc: 'verification',
-                // hideTabHeader: true,
-                icon: 'verification5',
-            },
-        },
-        {
-            type: 'file',
-            content: {
-                id: 'livechat',
-                name: 'Livechat',
-                desc: 'Connect your store with live chat platforms so customers can reach you instantly for support or inquiries.',
-                // hideTabHeader: true,
-                icon: 'live-chat',
-            },
-        },
+        ...(modules.includes('store-policy')
+            ? [
+                {
+                    type: 'file',
+                    content: {
+                        id: 'privacy',
+                        name: 'Privacy',
+                        desc: 'Define your store’s policies so customers clearly understand your shipping, refund, and return terms.',
+                        // hideTabHeader: true,
+                        icon: 'privacy',
+                    },
+                },
+            ]
+        : []),
+        ...(modules.includes('store-shipping')
+            ? [
+                {
+                    type: 'file',
+                    content: {
+                        id: 'shipping',
+                        name: 'Shipping',
+                        desc: 'Manage your store’s shipping method, pricing rules, and location-based rates.',
+                        // hideTabHeader: true,
+                        icon: 'shipping',
+                    },
+                },
+            ]
+        : []),
+        ...(modules.includes('marketplace-compliance')
+            ? [
+                {
+                    type: 'file',
+                    content: {
+                        id: 'verification',
+                        name: 'Verification',
+                        desc: 'verification',
+                        // hideTabHeader: true,
+                        icon: 'verification5',
+                    },
+                },
+            ]
+        : []),
+        ...(modules.includes('live-chat')
+            ? [
+                {
+                    type: 'file',
+                    content: {
+                        id: 'livechat',
+                        name: 'Livechat',
+                        desc: 'Connect your store with live chat platforms so customers can reach you instantly for support or inquiries.',
+                        // hideTabHeader: true,
+                        icon: 'live-chat',
+                    },
+                },
+            ]
+        : []),
     ];
 
     const getForm = (tabId: string) => {
