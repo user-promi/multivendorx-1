@@ -237,7 +237,7 @@ const ShippingRatesByCountry: React.FC = () => {
 
                             {countryItem.country &&
                                 Object.keys(countryStates).length > 0 && (
-                                    <div className="State-wrapper">
+                                    <div className="state-wrapper">
 
                                         <div className="header">
                                             <div className="left">
