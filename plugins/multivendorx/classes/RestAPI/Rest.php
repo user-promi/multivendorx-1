@@ -42,6 +42,7 @@ class Rest {
         add_filter('woocommerce_analytics_products_query_args', array($this, 'filter_low_stock_by_meta_exists'), 10, 1);
         add_filter('woocommerce_rest_prepare_shop_order_object', array($this, 'filter_orders_by_meta_exists'), 10, 3);
         add_filter('woocommerce_rest_prepare_shop_coupon_object', array($this, 'filter_coupons_by_meta_exists_response'), 10, 3);
+        add_filter('woocommerce_rest_pre_insert_shop_coupon_object', array($this, 'fix_rest_coupon_status'), 10, 3);
     }
 
     /**
@@ -301,6 +302,29 @@ class Rest {
         return $response;
     }
 
+    public function fix_rest_coupon_status( $coupon, $request, $creating ) {
+
+        if ( isset( $request['status'] ) ) {
+    
+            $status = sanitize_text_field( $request['status'] );
+    
+            $allowed = array( 'publish', 'draft', 'pending', 'private' );
+    
+            if ( in_array( $status, $allowed, true ) ) {
+    
+                // Save to the post directly (WORKS 100%)
+                wp_update_post(array(
+                    'ID'          => $coupon->get_id(),
+                    'post_status' => $status,
+                ));
+            }
+        }
+    
+        return $coupon;
+    }
+    
+    
+    
     /**
      * Initialize all REST API controller classes.
      */

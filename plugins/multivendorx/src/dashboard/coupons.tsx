@@ -330,7 +330,7 @@ const AllCoupon: React.FC = () => {
                 excluded_product_categories: formData.exclude_product_categories || [],
                 status: status,
                 meta_data: [
-                    { key: "multivendorx_store_id", value: id }
+                    { key: "multivendorx_store_id", value: appLocalizer.store_id }
                 ]
             };
 
@@ -568,7 +568,7 @@ const AllCoupon: React.FC = () => {
                     </div>
 
 
-                    <div className="form-group-wrapper">
+                    {/* <div className="form-group-wrapper">
                         <div className="form-group">
                             <label>Products</label>
                             <SelectInput
@@ -640,7 +640,7 @@ const AllCoupon: React.FC = () => {
                                 }
                             />
                         </div>
-                    </div>
+                    </div> */}
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
@@ -927,6 +927,7 @@ const AllCoupon: React.FC = () => {
                                     type="text"
                                     name="title"
                                     value={formData.title}
+                                    generate={true}
                                     onChange={(e: any) =>
                                         setFormData({ ...formData, title: e.target.value })
                                     }
