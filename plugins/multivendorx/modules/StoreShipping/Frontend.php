@@ -84,6 +84,24 @@ class Frontend {
             $existing_options = array_merge($existing_options, $new_options);
         }
 
+        $zone_wise_shipping = isset($settings['zone-wise-shipping']['enable']) 
+        ? $settings['zone-wise-shipping']['enable'] 
+        : false;
+
+        // Only add if country-wise shipping is enabled
+        if ($zone_wise_shipping) {
+            $new_options = array(
+                (object) array(
+                    'key' => 'shipping_by_zone',
+                    'label' => __('Shipping by Zone', 'multivendorx'),
+                    'value' => 'shipping_by_zone'
+                )
+            );
+    
+            // Merge with existing options without overwriting
+            $existing_options = array_merge($existing_options, $new_options);
+        }
+
         // Return existing options if module not enabled
         return $existing_options;
     }

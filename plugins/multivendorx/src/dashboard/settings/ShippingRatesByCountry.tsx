@@ -82,13 +82,14 @@ const ShippingRatesByCountry: React.FC = () => {
                 multivendorx_shipping_rates: JSON.stringify(
                     updatedRates.map((rate) => ({
                         country: rate.country || "",
-                        cost: rate.cost || "0.00",
+                        cost: rate.cost === "" ? "" : rate.cost,
                         states: (rate.states || []).map((state) => ({
                             state: state.state || "",
-                            cost: state.cost || "0.00",
+                            cost: state.cost === "" ? "" : state.cost,
                         })),
                     }))
                 ),
+                
             };
 
             const response = await axios.put(
@@ -115,7 +116,7 @@ const ShippingRatesByCountry: React.FC = () => {
 
     // Country handlers
     const handleAddCountry = () => {
-        const newRates = [...rates, { country: "", cost: "0.00", states: [] }];
+        const newRates = [...rates, { country: "", cost: "", states: [] }];
         autoSave(newRates);
     };
 
@@ -140,7 +141,7 @@ const ShippingRatesByCountry: React.FC = () => {
         const updated = [...rates];
         updated[countryIndex].states = [
             ...updated[countryIndex].states,
-            { state: "", cost: "0.00" },
+            { state: "", cost: "" },
         ];
         autoSave(updated);
     };

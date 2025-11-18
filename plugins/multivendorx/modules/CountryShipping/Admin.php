@@ -18,7 +18,7 @@ class Admin {
 
     public function __construct() {
         // Add filter to return all shipping methods for admin
-        add_filter( 'multivendorx_get_all_shipping_methods', [ $this, 'get_all_shipping_methods' ] );
+        // add_filter( 'multivendorx_get_all_shipping_methods', [ $this, 'get_all_shipping_methods' ] );
     }
 
     /**

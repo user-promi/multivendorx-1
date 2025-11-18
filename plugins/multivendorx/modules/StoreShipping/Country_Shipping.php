@@ -14,23 +14,33 @@ class Country_Shipping extends \WC_Shipping_Method {
     * @return void
     */
     public function __construct() {
-        $this->id                 = 'multivendorx_country_shipping';
-        $this->method_title       = __( 'Multivendorx Shipping by Country', 'multivendorx' );
-        $this->method_description = __( 'Enable vendors to set marketplace shipping per country', 'multivendorx' );
-
+        $this->id = 'multivendorx_country_shipping';
+    
         $shipping_modules = MultiVendorX()->setting->get_setting('shipping_modules', []);
         $country_shipping_settings = $shipping_modules['country-wise-shipping'] ?? [];
-
-        $this->enabled = (!empty($country_shipping_settings['enable']) && $country_shipping_settings['enable']) ? 'yes' : 'no';
-        $this->title        = $this->get_option( 'title' );
-
+    
+        // Enable/Disable
+        $this->enabled = (!empty($country_shipping_settings['enable']) && $country_shipping_settings['enable'])
+            ? 'yes'
+            : 'no';
+    
+        //Set title from module settings
+        $this->title = $country_shipping_settings['country_shipping_method_name']
+            ?? $this->get_option('title');
+    
+        if (empty($this->title)) {
+            $this->title = __('Shipping Cost', 'multivendorx');
+        }
+    
+        // Tax setting
         $taxable_shipping = MultiVendorX()->setting->get_setting('taxable', []);
-
-        $this->tax_status = (!empty($taxable_shipping) && in_array('taxable', $taxable_shipping))? 'taxable': 'none';
-
-        if( !$this->title ) $this->title = __( 'Shipping Cost', 'multivendorx' );
+        $this->tax_status = (!empty($taxable_shipping) && in_array('taxable', $taxable_shipping))
+            ? 'taxable'
+            : 'none';
+    
         $this->init();
     }
+    
 
 
     /**
@@ -44,9 +54,7 @@ class Country_Shipping extends \WC_Shipping_Method {
         // $this->init_form_fields();
         // $this->init_settings();
 
-        add_filter( 'woocommerce_cart_shipping_packages', ['MultiVendorX\StoreShipping\Shipping_Helper', 'split_cart_by_store'] );
-
-        add_action( 'woocommerce_cart_calculate_fees', array( $this, 'multivendorx_force_shipping_recalculation' ), 20, 1 );
+        // add_action( 'woocommerce_cart_calculate_fees', array( $this, 'multivendorx_force_shipping_recalculation' ), 20, 1 );
         // Save settings in admin if you have any defined
         add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
 
@@ -135,13 +143,15 @@ class Country_Shipping extends \WC_Shipping_Method {
             $tax_rate = ( $this->tax_status == 'none' ) ? false : '';
             $tax_rate = apply_filters( 'multivendorx_is_apply_tax_on_shipping_rates', $tax_rate );
     
-            // Step 4: Add shipping rate
+            $label = ($amount > 0) ? $this->title : __('Free Shipping', 'multivendorx');
+
             $rate = array(
                 'id'    => $this->id . ':' . $store_id,
-                'label' => $this->title,
+                'label' => $label,
                 'cost'  => $amount,
                 'taxes' => $tax_rate,
             );
+            
             $this->add_rate( $rate );
     
             // Step 5: Maybe add local pickup rate if available

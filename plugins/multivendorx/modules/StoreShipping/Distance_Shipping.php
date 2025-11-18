@@ -10,26 +10,33 @@ class Distance_Shipping extends \WC_Shipping_Method {
      * Constructor for the shipping class
      */
     public function __construct() {
-        $this->id                 = 'multivendorx_distance_shipping';
-        $this->method_title       = __( 'Multivendorx Shipping by Distance', 'multivendorx' );
-        $this->method_description = __( 'Enable vendors to set marketplace shipping by distance range', 'multivendorx' );
-
+        $this->id = 'multivendorx_distance_shipping';
+    
         $shipping_modules = MultiVendorX()->setting->get_setting('shipping_modules', []);
         $distance_based_shipping = $shipping_modules['distance-based-shipping'] ?? [];
-
-        $this->enabled = (!empty($distance_based_shipping['enable']) && $distance_based_shipping['enable']) ? 'yes' : 'no';
-
-        $this->title      = $this->get_option( 'title' );
-        $taxable_shipping = MultiVendorX()->setting->get_setting('taxable', []);
-
-        $this->tax_status = (!empty($taxable_shipping) && in_array('taxable', $taxable_shipping))? 'taxable': 'none';
-
-        if ( ! $this->title ) {
-            $this->title = __( 'Shipping Cost', 'multivendorx' );
+    
+        // Enable / disable module
+        $this->enabled = (!empty($distance_based_shipping['enable']) && $distance_based_shipping['enable'])
+            ? 'yes'
+            : 'no';
+    
+        //Set title from module setting OR WooCommerce saved option
+        $this->title = $distance_based_shipping['distance_shipping_method_name']
+            ?? $this->get_option('title');
+    
+        if (empty($this->title)) {
+            $this->title = __('Shipping Cost', 'multivendorx');
         }
-
+    
+        // Taxable setting
+        $taxable_shipping = MultiVendorX()->setting->get_setting('taxable', []);
+        $this->tax_status = (!empty($taxable_shipping) && in_array('taxable', $taxable_shipping))
+            ? 'taxable'
+            : 'none';
+    
         $this->init();
     }
+    
 
     /**
      * Initialize settings
@@ -38,10 +45,7 @@ class Distance_Shipping extends \WC_Shipping_Method {
         // $this->init_form_fields();
         // $this->init_settings();
 
-        add_filter( 'woocommerce_cart_shipping_packages', ['MultiVendorX\StoreShipping\Shipping_Helper', 'split_cart_by_store'] );
-
-        // add_filter( 'woocommerce_cart_shipping_packages', [ $this, 'multivendorx_split_cart_by_store' ] );
-        add_action( 'woocommerce_cart_calculate_fees', [ $this, 'multivendorx_force_shipping_recalculation' ], 20, 1 );
+        // add_action( 'woocommerce_cart_calculate_fees', [ $this, 'multivendorx_force_shipping_recalculation' ], 20, 1 );
         add_action( 'woocommerce_update_options_shipping_' . $this->id, [ $this, 'process_admin_options' ] );
     }
 
@@ -50,41 +54,6 @@ class Distance_Shipping extends \WC_Shipping_Method {
      */
     public function multivendorx_force_shipping_recalculation() {
         WC()->cart->calculate_shipping();
-    }
-
-    /**
-     * Split cart items by store
-     */
-    public function multivendorx_split_cart_by_store( $packages ) {
-        $new_packages = [];
-
-        foreach ( WC()->cart->get_cart() as $item_key => $item ) {
-            $product_id = $item['product_id'];
-            $store_id   = get_post_meta( $product_id, 'multivendorx_store_id', true );
-
-            if ( ! $store_id ) continue;
-
-            if ( ! isset( $new_packages[ $store_id ] ) ) {
-                $new_packages[ $store_id ] = [
-                    'contents'        => [],
-                    'contents_cost'   => 0,
-                    'applied_coupons' => WC()->cart->get_applied_coupons(),
-                    'destination'     => [
-                        'country'   => WC()->customer->get_shipping_country(),
-                        'state'     => WC()->customer->get_shipping_state(),
-                        'postcode'  => WC()->customer->get_shipping_postcode(),
-                        'city'      => WC()->customer->get_shipping_city(),
-                        'address'   => WC()->customer->get_shipping_address(),
-                        'address_2' => WC()->customer->get_shipping_address_2(),
-                    ],
-                ];
-            }
-
-            $new_packages[ $store_id ]['contents'][ $item_key ] = $item;
-            $new_packages[ $store_id ]['contents_cost'] += $item['line_total'];
-        }
-
-        return array_values( $new_packages );
     }
 
     /**
@@ -173,12 +142,16 @@ class Distance_Shipping extends \WC_Shipping_Method {
             $tax_rate = ( $this->tax_status == 'none' ) ? false : '';
             $tax_rate = apply_filters( 'multivendorx_is_apply_tax_on_shipping_rates', $tax_rate );
 
+            // Set label to Free Shipping if shipping amount is zero
+            $label = ($store_amount > 0) ? $this->title : __('Free Shipping', 'multivendorx');
+
             $rate = [
                 'id'    => $this->id . ':' . $store_id,
-                'label' => $this->title,
+                'label' => $label,
                 'cost'  => $store_amount,
                 'taxes' => $tax_rate,
             ];
+
             $this->add_rate( $rate );
 
             $this->maybe_add_local_pickup_rate( $store_id, $local_pickup_cost, $tax_rate );
@@ -263,7 +236,7 @@ class Distance_Shipping extends \WC_Shipping_Method {
                 $cost         = floatval( $rule['cost'] ?? 0 );
 
                 if ( $total_distance <= $max_distance ) {
-                    $amount = $cost;
+                    $amount += $cost;
                     break;
                 }
             }

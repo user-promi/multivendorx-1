@@ -33,11 +33,13 @@ class Module {
      * Simple class constructor function
      */
     public function __construct() {
-        // Init helper classes.
         $this->init_classes();
-        // Register WooCommerce shipping method
-         add_filter('woocommerce_shipping_methods', [ $this, 'register_shipping_method' ]);
+
+        add_filter( 'woocommerce_cart_shipping_packages', ['MultiVendorX\StoreShipping\Shipping_Helper', 'split_cart_by_store'] );
+
+        add_filter('woocommerce_shipping_methods', [ $this, 'register_shipping_method' ]);
     }
+    
 
     /**
      * Init helper classes
@@ -47,6 +49,8 @@ class Module {
     public function init_classes() {
         $this->container['frontend'] = new Frontend();
         $this->container['admin'] = new Admin();
+        $this->container['util'] = new Util();
+        $this->container['rest'] = new MultiVendorX_REST_Zone_Shipping_Controller();
     }
 
     /**
@@ -94,6 +98,7 @@ class Module {
     public function register_shipping_method( $methods ) {
         $methods['multivendorx_distance_shipping'] = Distance_Shipping::class;
         $methods['multivendorx_country_shipping'] = Country_Shipping::class;
+        $methods['multivendorx_store_shipping'] = Zone_Shipping::class;
         return $methods;
     }
 }
