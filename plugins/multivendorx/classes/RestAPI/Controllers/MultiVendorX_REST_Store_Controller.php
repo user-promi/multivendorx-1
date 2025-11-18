@@ -627,6 +627,10 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             ]);
         }
         
+        if ($store_data['status'] == 'active') {
+            do_action('multivendorx_after_store_active', $insert_id);
+        }
+
         $admin_email = get_option('admin_email');
         $store_email = 'test@gmail.com';
         $parameters = [
@@ -808,6 +812,8 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                     StoreUtil::set_primary_owner($user->ID, $id);
                     $store->set('status', 'active');
                     $store->save();
+                    do_action('multivendorx_after_store_active', $id);
+                    
                     return rest_ensure_response([ 'success' => true ]);
                 }
             } elseif (isset($data['status']) && $data['status'] === 'rejected') {
