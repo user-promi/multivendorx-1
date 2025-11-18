@@ -154,7 +154,9 @@ const Withdrawl: React.FC = () => {
               <ToggleSetting
                 wrapperClass="setting-form-input"
                 descClass="settings-metabox-description"
-                description="Choose your preferred payment method."
+                description={(paymentOptions && paymentOptions.length === 0)
+										? `You haven’t enabled any payment methods yet.`
+										: ""}
                 options={paymentOptions}
                 value={formData.payment_method || ""}
                 onChange={(value) => handleToggleChange(value)}

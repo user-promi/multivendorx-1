@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { BasicInput, TextArea, FileInput, SelectInput, getApiLink, SuccessNotice } from 'zyra';
+import { BasicInput, TextArea, FileInput, useModules, getApiLink, SuccessNotice } from 'zyra';
 
 const ContactInformation = () => {
     const id = appLocalizer.store_id;
@@ -8,6 +8,7 @@ const ContactInformation = () => {
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
     const [stateOptions, setStateOptions] = useState<{ label: string; value: string }[]>([]);
     const settings = appLocalizer.settings_databases_value['store-capability']?.edit_store_info_activation || [];
+    const { modules } = useModules();
 
     useEffect(() => {
         if (!id) return;
@@ -83,12 +84,14 @@ const ContactInformation = () => {
                             <BasicInput type="email" name="email" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.email} onChange={handleChange} readOnly={settings.includes('store_contact') ? true : false} />
                         </div>
                     </div>
-                    <div className="form-group-wrapper">
-                        <div className="form-group">
-                            <label htmlFor="product-name">Live Chat (Enable, WhatsApp, etc.)</label>
-                            <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                    {modules.includes('live-chat') &&
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="product-name">Live Chat (Enable, WhatsApp, etc.)</label>
+                                <BasicInput name="phone" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                            </div>
                         </div>
-                    </div>
+                    }
                 </div>
             </div>
         </>

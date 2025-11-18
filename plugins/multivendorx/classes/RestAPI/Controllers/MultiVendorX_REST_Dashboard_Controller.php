@@ -84,6 +84,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
                         'name' => 'Refund',
                         'slug' => 'refund',
                         'capability' => array('read_shop_coupons', 'edit_shop_coupons'),
+                        'module'    => 'marketplace-refund'
                     ),
                     array(
                         'key' => 'commissions',
@@ -123,18 +124,21 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
                         'name' => 'Support Tickets',
                         'slug' => 'support-tickets',
                         'capability' => array('read_shop_coupons', 'edit_shop_coupons', 'delete_shop_coupons'),
+                        'module'    => 'customer-support'
                     ),
                     array(
                         'key' => 'customer-questions',
                         'name' => 'Customer Questions',
                         'slug' => 'customer-questions',
                         'capability' => array('read_shop_coupons', 'edit_shop_coupons'),
+                        'module'    => 'question-answer'
                     ),
                     array(
                         'key' => 'store-followers',
                         'name' => 'Store Followers',
                         'slug' => 'store-followers',
                         'capability' => array('read_products', 'edit_products', 'delete_products'),
+                        'module'    => 'follow-store'
                     ),
                     array(
                         'key' => 'store-review',
@@ -377,6 +381,30 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
         $store = new Store($dashboard_array['active_store']);
         $store_status = $store->get('status');
         $capability_settings = MultiVendorX()->setting->get_setting(reset($current_user->roles), []);
+
+        foreach ($dashboard_array['all_endpoints'] as $key => $endpoint) {
+
+            if (!empty($endpoint['submenu'])) {
+                $filtered_submenu = array();
+
+                foreach ($endpoint['submenu'] as $submenu_item) {
+
+                    // if module exists and is disabled → skip entry
+                    if (!empty($submenu_item['module']) && !in_array($submenu_item['module'], MultiVendorX()->modules->get_active_modules())) {
+                        continue;
+                    }
+
+                    $filtered_submenu[] = $submenu_item;
+                }
+
+                $dashboard_array['all_endpoints'][$key]['submenu'] = $filtered_submenu;
+
+                // if every submenu was removed → remove the whole endpoint
+                if (empty($filtered_submenu) && !empty($endpoint['submenu'])) {
+                    unset($dashboard_array['all_endpoints'][$key]);
+                }
+            }
+        }
 
         // Early exit if no store found.
         if (empty($dashboard_array['store_ids'])) {
