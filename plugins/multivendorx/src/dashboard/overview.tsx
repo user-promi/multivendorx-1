@@ -260,6 +260,13 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
   console.log('site_url', appLocalizer.site_url)
   return (
     <>
+      <div className="page-title-wrapper">
+        <div className="page-title">
+          <div className="title">Overview</div>
+          <div className="des">Manage your store information and preferences</div>
+        </div>
+      </div>
+
       <div className="row">
         <div className="column transparent">
           <div className="analytics-container small-card report">
@@ -586,7 +593,7 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
                         src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
                           store.store_name || 'Store'
                         )}&background=0073aa&color=fff`}
-                        alt={store.store_name}
+                        // alt={store.store_name}
                       />
                     </a>
                   </div>
@@ -598,7 +605,7 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        {store.store_name}
+                        {/* {store.store_name} */}
                       </a>
                     </div>
                     <div className="des">
@@ -624,9 +631,6 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
         </div>
 
       </div>
-
-
-
 
     </>
   );

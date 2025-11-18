@@ -1701,4 +1701,47 @@ a {
         flex-direction: column;
     }
 }
+
+.profile {
+    display: flex;
+    gap: 0.75rem;
+    padding-bottom: 1rem;
+
+    .details {
+        .name {
+            font-size: 1.063rem;
+            color: #000000ed;
+            font-weight: 500;
+            // padding-bottom: 0.313rem;
+            position: relative;
+            padding-right: 0.625rem;
+        }
+
+        .des {
+            color: #0000007c;
+        }
+    }
+}
+
+.avater {
+    padding: 0.5rem;
+    border-radius: 50%;
+    background: var(--colorPrimary);
+    width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    span {
+        color: #fff;
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    img {
+        width: 3rem;
+    }
+}
+
 // store profile end

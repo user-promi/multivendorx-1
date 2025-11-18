@@ -92,7 +92,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                 headers: { 'X-WP-Nonce': appLocalizer.nonce },
             });
             setCustomerData(customer.data);
-            
+
         } catch (error) {
             console.error("Error fetching order:", error);
         }
@@ -154,30 +154,33 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                         <div className="page-title">
                             <div className="title">
                                 Order #{orderData?.number ?? orderId ?? "—"}
-                                <div className={statusBadgeClass(orderData?.status)}
-                                onClick={() => setStatusSelect(true)}
-                                >
-                                    {/* choose icon and label dynamically */}
-                                    {orderData?.status === 'completed' ? <i className="adminlib-check"></i> : <i className="adminlib-info"></i>}
-                                    {` ${(orderData?.status || 'Unknown').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}`}
-                                
-                                    {statusSelect && 
+                                {!statusSelect &&
+                                    <div className={statusBadgeClass(orderData?.status)}
+                                        onClick={() => setStatusSelect(true)}
+                                    >
+                                        {/* choose icon and label dynamically */}
+                                        {orderData?.status === 'completed' ? <i className="adminlib-check"></i> : <i className="adminlib-info"></i>}
+                                        {` ${(orderData?.status || 'Unknown').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}`}
+                                    </div>
+                                }
+                                {statusSelect &&
+                                    <div className="status-edit">
                                         <SelectInput
-                                                name="status"
-                                                options={[
-                                                    { label: 'Processing', value: 'processing' },
-                                                    { label: 'On Hold', value: 'on-hold' },
-                                                    { label: 'Completed', value: 'completed' },
-                                                    { label: 'Cancelled', value: 'cancelled' },
-                                                ]}
-                                                value={orderData?.status}
-                                                type="single-select"
-                                                onChange={(newValue: any) => {
-                                                    handleStatusChange(newValue.value)
-                                                }}
-                                            />
-                                    }
-                                </div>
+                                            name="status"
+                                            options={[
+                                                { label: 'Processing', value: 'processing' },
+                                                { label: 'On Hold', value: 'on-hold' },
+                                                { label: 'Completed', value: 'completed' },
+                                                { label: 'Cancelled', value: 'cancelled' },
+                                            ]}
+                                            value={orderData?.status}
+                                            type="single-select"
+                                            onChange={(newValue: any) => {
+                                                handleStatusChange(newValue.value)
+                                            }}
+                                        />
+                                    </div>
+                                }
                             </div>
 
                             <div className="des">
