@@ -204,7 +204,7 @@ const History: React.FC = () => {
                                     <div className="details">
                                         <div className="notification-title">PayPal</div>
                                         <div className="des">Withdrawal request pending</div>
-                                        <span><a href="">Change</a></span>
+                                        <span><a href={`${appLocalizer.site_url}dashboard/settings/#subtab=payout`}>Change</a></span>
                                     </div>
                                 </li>
                             </ul>
@@ -247,7 +247,7 @@ const History: React.FC = () => {
                     </div>
 
                     <div className="buttons-wrapper">
-                        <div className="admin-btn btn-purple">
+                        <div className="admin-btn btn-purple" onClick={`${appLocalizer.site_url}dashboard/settings/#subtab=payout`}>
                             <i className="adminlib-preview"></i>
                             View transaction history
                         </div>

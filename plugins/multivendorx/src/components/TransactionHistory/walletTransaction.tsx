@@ -549,7 +549,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
         //             displayValue = `Commission #${commissionId || '-'}`;
         //             if (commissionId) {
         //                 content = (
-        //                     <span className="order-link"
+        //                     <span className="link-item"
         //                         onClick={() => {
         //                             setSelectedCommissionId(commissionId);
         //                             setViewCommission(true);
@@ -596,7 +596,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                     displayValue = `Commission #${commissionId || '-'}`;
                     content = commissionId ? (
                         <span
-                            className="order-link"
+                            className="link-item"
                             onClick={() => {
                                 setSelectedCommissionId(commissionId);
                                 setViewCommission(true);
@@ -622,7 +622,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                             href={orderEditUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="order-link"
+                            className="link-item"
                         >
                             {displayValue}
                         </a>

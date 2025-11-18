@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { __ } from "@wordpress/i18n";
-import { CalendarInput, CommonPopup, getApiLink, Table, TableCell } from "zyra";
+import { CalendarInput, CommonPopup, getApiLink, Table, TableCell, useModules } from "zyra";
 import { ColumnDef, PaginationState } from "@tanstack/react-table";
 import ViewCommission from "./viewCommission";
 import { formatCurrency } from '../services/commonFunction';
@@ -32,7 +32,9 @@ const StoreCommission: React.FC = () => {
     const [modalCommission, setModalCommission] = useState<CommissionRow | null>(null);
     const [totalRows, setTotalRows] = useState<number>(0);
     const [pageCount, setPageCount] = useState(0);
+    const { modules } = useModules();
     const [commissionStatus, setCommissionStatus] = useState<CommissionStatus[] | null>(null);
+    const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>({});
 
     // Fetch total rows on mount
     useEffect(() => {
@@ -156,7 +158,7 @@ const StoreCommission: React.FC = () => {
                 return (
                     <TableCell title={orderId ? `#${orderId}` : '-'}>
                         {orderId ? (
-                            <a href={'#'} target="_blank" rel="noopener noreferrer" className="order-link">
+                            <a href={'#'} target="_blank" rel="noopener noreferrer" className="link-item">
                                 #{orderId}
                             </a>
                         ) : (
@@ -180,43 +182,149 @@ const StoreCommission: React.FC = () => {
                 </TableCell>,
         },
         {
-            id: 'commissionAmount',
-            accessorKey: 'commissionAmount',
-            accessorFn: row => parseFloat(row.commissionAmount || '0'),
+            id: 'commission-summary',
             enableSorting: true,
-            header: __('Commission Earned', 'multivendorx'),
-            cell: ({ row }) =>
-                <TableCell title={row.original.commissionAmount ? `${appLocalizer.currency_symbol}${row.original.commissionAmount}` : '-'}>
-                    {row.original.commissionAmount
-                        ? formatCurrency(row.original.commissionAmount)
-                        : '-'}
-                </TableCell>,
+            header: __('Commission Summary', 'multivendorx'),
+            cell: ({ row }) => {
+                const isExpanded = expandedRows[row.original.id!];
+
+                return (
+                    <TableCell>
+                        <ul className={`details ${isExpanded ? '' : 'overflow'}`}>
+                            <li>
+                                <div className="item">
+                                    <div className="des">Commission Earned</div>
+                                    <div className="title">{formatCurrency(row.original.commissionAmount)}</div>
+                                </div>
+                            </li>
+
+                            <li>
+                                <div className="item">
+                                    <div className="des">Shipping</div>
+                                    <div className="title">+ {formatCurrency(row.original.shippingAmount)}</div>
+                                </div>
+                                <div className="item">
+                                    <div className="des">Tax</div>
+                                    <div className="title">+ {formatCurrency(row.original.taxAmount)}</div>
+                                </div>
+                            </li>
+
+                            <li>
+                                {modules.includes('marketplace-gateway') && (
+                                    <div className="item">
+                                        <div className="des">Gateway Fee</div>
+                                        <div className="title">- {formatCurrency(row.original.gatewayFee)}</div>
+                                    </div>
+                                )}
+                                {modules.includes('facilitator') && (
+                                    <div className="item">
+                                        <div className="des">Facilitator Fee</div>
+                                        <div className="title">- {formatCurrency(row.original.facilitatorFee)}</div>
+                                    </div>
+                                )}
+                                {modules.includes('marketplace-fee') && (
+                                    <div className="item">
+                                        <div className="des">Marketplace Fee</div>
+                                        <div className="title">- {formatCurrency(row.original.marketplaceFee)}</div>
+                                    </div>
+                                )}
+                            </li>
+
+                            <span
+                                className="more-btn"
+                                onClick={() =>
+                                    setExpandedRows(prev => ({
+                                        ...prev,
+                                        [row.original.id!]: !prev[row.original.id!]
+                                    }))
+                                }
+                            >
+                                {isExpanded ? (
+                                    <>Less <i className="adminlib-arrow-up"></i></>
+                                ) : (
+                                    <>More <i className="adminlib-arrow-down"></i></>
+                                )}
+                            </span>
+                        </ul>
+                    </TableCell>
+                );
+            },
         },
+        // {
+        //     id: 'commissionAmount',
+        //     accessorKey: 'commissionAmount',
+        //     accessorFn: row => parseFloat(row.commissionAmount || '0'),
+        //     enableSorting: true,
+        //     header: __('Commission Earned', 'multivendorx'),
+        //     cell: ({ row }) =>
+        //         <TableCell title={row.original.commissionAmount ? `${appLocalizer.currency_symbol}${row.original.commissionAmount}` : '-'}>
+        //             {row.original.commissionAmount
+        //                 ? formatCurrency(row.original.commissionAmount)
+        //                 : '-'}
+        //         </TableCell>,
+        // },
+        // {
+        //     id: 'shippingAmount',
+        //     accessorKey: 'shippingAmount',
+        //     accessorFn: row => parseFloat(row.shippingAmount || '0'),
+        //     enableSorting: true,
+        //     header: __('Shipping Amount', 'multivendorx'),
+        //     cell: ({ row }) =>
+        //         <TableCell title={row.original.shippingAmount ? `${appLocalizer.currency_symbol}${row.original.shippingAmount}` : '-'}>
+        //             {row.original.shippingAmount
+        //                 ? formatCurrency(row.original.shippingAmount)
+        //                 : '-'}
+        //         </TableCell>,
+        // },
+        // {
+        //     id: 'taxAmount',
+        //     accessorKey: 'taxAmount',
+        //     accessorFn: row => parseFloat(row.taxAmount || '0'),
+        //     enableSorting: true,
+        //     header: __('Tax Amount', 'multivendorx'),
+        //     cell: ({ row }) =>
+        //         <TableCell title={row.original.taxAmount ? `${appLocalizer.currency_symbol}${row.original.taxAmount}` : '-'}>
+        //             {row.original.taxAmount
+        //                 ? formatCurrency(row.original.taxAmount)
+        //                 : '-'}
+        //         </TableCell>,
+        // },
         {
-            id: 'shippingAmount',
-            accessorKey: 'shippingAmount',
-            accessorFn: row => parseFloat(row.shippingAmount || '0'),
-            enableSorting: true,
-            header: __('Shipping Amount', 'multivendorx'),
-            cell: ({ row }) =>
-                <TableCell title={row.original.shippingAmount ? `${appLocalizer.currency_symbol}${row.original.shippingAmount}` : '-'}>
-                    {row.original.shippingAmount
-                        ? formatCurrency(row.original.shippingAmount)
-                        : '-'}
-                </TableCell>,
-        },
-        {
-            id: 'taxAmount',
-            accessorKey: 'taxAmount',
+            id: 'totalEarned',
+            accessorKey: 'totalEarned',
             accessorFn: row => parseFloat(row.taxAmount || '0'),
             enableSorting: true,
-            header: __('Tax Amount', 'multivendorx'),
+            header: __('Total Earned ', 'multivendorx'),
             cell: ({ row }) =>
                 <TableCell title={row.original.taxAmount ? `${appLocalizer.currency_symbol}${row.original.taxAmount}` : '-'}>
                     {row.original.taxAmount
                         ? formatCurrency(row.original.taxAmount)
                         : '-'}
                 </TableCell>,
+        },
+        {
+            id: 'created_at',
+            accessorKey: 'created_at',
+            enableSorting: true,
+            header: __('Date', 'multivendorx'),
+            cell: ({ row }) => {
+                const date = row.original.createdAt;
+                if (!date) return <TableCell>-</TableCell>;
+
+                // Format the date for display
+                const formattedDate = new Date(date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+
+                return (
+                    <TableCell title={`${formattedDate}`}>
+                        {formattedDate}
+
+                    </TableCell>
+                );
+            },
         },
         {
             header: __("Status", "multivendorx"),

@@ -173,15 +173,16 @@ const ShippingRatesByCountry: React.FC = () => {
     return (
         <div className="shipping-country-wrapper">
             {error && (
-                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                <div className="">
                     {error}
                 </div>
             )}
 
             {rates.length === 0 && !loading ? (
-                <div className="text-center p-4 text-gray-500">
+                <div className="no-shipping-data">
                     No shipping rates configured. Add your first country to get started.
                 </div>
+
             ) : (
                 rates.map((countryItem, index) => {
                     const countryCode = countryItem.country?.trim()?.toUpperCase() || "";
@@ -194,128 +195,118 @@ const ShippingRatesByCountry: React.FC = () => {
                     return (
                         <div
                             key={index}
-                            className="country-block border p-3 mb-3 rounded-lg bg-white shadow-sm"
+                            className="shipping-country"
                         >
-                            <div className="flex gap-3 items-center mb-2">
-                                <div className="flex-1">
-                                    <SelectInput
-                                        label="Country"
-                                        name={`country-${index}`}
-                                        value={countryItem.country}
-                                        options={[
-                                            { value: "", label: "Select Country" },
-                                            { value: "everywhere", label: "Everywhere Else" },
-                                            ...(Array.isArray(countries)
-                                                ? countries
-                                                : Object.entries(countries).map(([value, label]) => ({
-                                                    value,
-                                                    label,
-                                                }))),
-                                        ]}
-                                        onChange={(opt: any) =>
-                                            opt?.value &&
-                                            handleCountryChange(index, "country", opt.value)
-                                        }
-                                    />
-                                </div>
+                            <div className="country item">
+                                <div className="location-icon adminlib-geo-location"></div>
+                                <SelectInput
+                                    label="Country"
+                                    name={`country-${index}`}
+                                    value={countryItem.country}
+                                    options={[
+                                        { value: "", label: "Select Country" },
+                                        { value: "everywhere", label: "Everywhere Else" },
+                                        ...(Array.isArray(countries)
+                                            ? countries
+                                            : Object.entries(countries).map(([value, label]) => ({
+                                                value,
+                                                label,
+                                            }))),
+                                    ]}
+                                    onChange={(opt: any) =>
+                                        opt?.value &&
+                                        handleCountryChange(index, "country", opt.value)
+                                    }
+                                />
 
-                                <div className="w-32">
-                                    <BasicInput
-                                        label="Cost"
-                                        type="number"
-                                        name={`cost-${index}`}
-                                        value={countryItem.cost}
-                                        onChange={(e) =>
-                                            handleCountryChange(index, "cost", e.target.value)
-                                        }
-                                        placeholder="0.00"
-                                        min="0"
-                                        step="0.01"
-                                    />
-                                </div>
+                                <BasicInput
+                                    label="Cost"
+                                    type="number"
+                                    name={`cost-${index}`}
+                                    value={countryItem.cost}
+                                    onChange={(e) =>
+                                        handleCountryChange(index, "cost", e.target.value)
+                                    }
+                                    placeholder="0.00"
+                                    min="0"
+                                    step="0.01"
+                                />
 
-                                <button
-                                    type="button"
-                                    className="admin-btn btn-red self-end"
-                                    onClick={() => handleRemoveCountry(index)}
-                                >
-                                    Remove
-                                </button>
+                                <span onClick={() => handleRemoveCountry(index)} className="delete-icon adminlib-delete"></span>
                             </div>
 
                             {countryItem.country &&
                                 Object.keys(countryStates).length > 0 && (
-                                    <div className="ml-6 mt-4 p-3 border rounded bg-gray-50">
-                                        <div className="text-sm font-medium mb-2">
-                                            State Shipping Rates
+                                    <div className="State-wrapper">
+
+                                        <div className="header">
+                                            <div className="left">
+                                                <div className="title">
+                                                    State/Region Rates
+                                                </div>
+                                                <div className="des">
+                                                    State/region rates are added to the Default Shipping Price. Example: If Default Shipping is $5 and State Rate is $3, the total shipping will be $8.
+                                                </div>
+                                            </div>
+                                            <div className="right">
+                                                <button
+                                                    type="button"
+                                                    className="admin-btn btn-purple-bg"
+                                                    onClick={() => handleAddState(index)}
+                                                >
+                                                    <i className="adminlib-plus-circle-o"></i> Add State/Region
+                                                </button>
+                                            </div>
                                         </div>
+
                                         {countryItem.states.map((stateItem, sIndex) => (
                                             <div
                                                 key={sIndex}
-                                                className="flex gap-3 items-center mb-2"
+                                                className="state item"
                                             >
-                                                <div className="flex-1">
-                                                    <SelectInput
-                                                        label="State"
-                                                        name={`state-${index}-${sIndex}`}
-                                                        value={stateItem.state}
-                                                        options={[
-                                                            { value: "", label: "Select State" },
-                                                            ...Object.entries(
-                                                                countryStates
-                                                            ).map(([value, label]) => ({
-                                                                label,
-                                                                value,
-                                                            })),
-                                                        ]}
-                                                        onChange={(opt: any) =>
-                                                            opt?.value &&
-                                                            handleStateChange(
-                                                                index,
-                                                                sIndex,
-                                                                "state",
-                                                                opt.value
-                                                            )
-                                                        }
-                                                    />
-                                                </div>
-                                                <div className="w-32">
-                                                    <BasicInput
-                                                        label="Cost"
-                                                        type="number"
-                                                        name={`state-cost-${index}-${sIndex}`}
-                                                        value={stateItem.cost}
-                                                        onChange={(e) =>
-                                                            handleStateChange(
-                                                                index,
-                                                                sIndex,
-                                                                "cost",
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                        placeholder="0.00"
-                                                        min="0"
-                                                        step="0.01"
-                                                    />
-                                                </div>
-                                                <button
-                                                    type="button"
-                                                    className="admin-btn btn-red self-end"
-                                                    onClick={() =>
-                                                        handleRemoveState(index, sIndex)
+                                                <SelectInput
+                                                    label="State"
+                                                    name={`state-${index}-${sIndex}`}
+                                                    value={stateItem.state}
+                                                    options={[
+                                                        { value: "", label: "Select State" },
+                                                        ...Object.entries(
+                                                            countryStates
+                                                        ).map(([value, label]) => ({
+                                                            label,
+                                                            value,
+                                                        })),
+                                                    ]}
+                                                    onChange={(opt: any) =>
+                                                        opt?.value &&
+                                                        handleStateChange(
+                                                            index,
+                                                            sIndex,
+                                                            "state",
+                                                            opt.value
+                                                        )
                                                     }
-                                                >
-                                                    Remove
-                                                </button>
+                                                />
+                                                <BasicInput
+                                                    label="Cost"
+                                                    type="number"
+                                                    name={`state-cost-${index}-${sIndex}`}
+                                                    value={stateItem.cost}
+                                                    onChange={(e) =>
+                                                        handleStateChange(
+                                                            index,
+                                                            sIndex,
+                                                            "cost",
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    placeholder="0.00"
+                                                    min="0"
+                                                    step="0.01"
+                                                />
+                                                <span onClick={() => handleRemoveState(index, sIndex)} className="delete-icon adminlib-delete"></span>
                                             </div>
                                         ))}
-                                        <button
-                                            type="button"
-                                            className="admin-btn btn-purple mt-2"
-                                            onClick={() => handleAddState(index)}
-                                        >
-                                            + Add State
-                                        </button>
                                     </div>
                                 )}
                         </div>
@@ -325,10 +316,10 @@ const ShippingRatesByCountry: React.FC = () => {
 
             <button
                 type="button"
-                className="admin-btn btn-purple mt-4"
+                className="admin-btn btn-purple-bg"
                 onClick={handleAddCountry}
             >
-                + Add Country
+                <i className="adminlib-plus-circle-o"></i> Add Country
             </button>
         </div>
     );

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { __ } from '@wordpress/i18n';
-import { BasicInput, CalendarInput, CommonPopup, getApiLink, MultiCheckBox, Table, TableCell, TextArea } from 'zyra';
+import { BasicInput, CalendarInput, CommonPopup, getApiLink, useModules, Table, TableCell, TextArea } from 'zyra';
 import {
     ColumnDef,
     RowSelectionState,
@@ -68,6 +68,7 @@ const AllProduct: React.FC = () => {
     const [categoriesList, setCategoriesList] = useState<{ id: number; name: string }[]>([]);
     const [pageCount, setPageCount] = useState(0);
     const [activeTab, setActiveTab] = useState("general");
+    const { modules } = useModules();
 
     const tabs = [
         {
@@ -702,20 +703,24 @@ const AllProduct: React.FC = () => {
                     <div className="des">Manage your store information and preferences</div>
                 </div>
                 <div className="buttons-wrapper">
-                    <div
-                        className="admin-btn btn-purple-bg"
-                        onClick={() => setAddProduct(true)}
-                    >
-                        <i className="adminlib-import"></i>
-                        import
-                    </div>
-                    <div
-                        className="admin-btn btn-purple-bg"
-                        onClick={() => setAddProduct(true)}
-                    >
-                        <i className="adminlib-export"></i>
-                        Export
-                    </div>
+                    {modules.includes('import-export') && (
+                        <>
+                            <div
+                                className="admin-btn btn-purple-bg"
+                                onClick={() => setAddProduct(true)}
+                            >
+                                <i className="adminlib-import"></i>
+                                import
+                            </div>
+                            <div
+                                className="admin-btn btn-purple-bg"
+                                onClick={() => setAddProduct(true)}
+                            >
+                                <i className="adminlib-export"></i>
+                                Export
+                            </div>
+                        </>
+                    )}
                     <div
                         className="admin-btn btn-purple-bg"
                         onClick={() => window.location.href = appLocalizer.add_product_link}

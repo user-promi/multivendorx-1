@@ -43,7 +43,7 @@ const LatestRefundRequest: React.FC<LatestRefundRequestProps> = ({ store_id }) =
                 return (
                     <TableCell title={orderId ? `#${orderId}` : '-'}>
                         {orderId ? (
-                            <a href={url} target="_blank" rel="noopener noreferrer" className="order-link">
+                            <a href={url} target="_blank" rel="noopener noreferrer" className="link-item">
                                 #{orderId}
                             </a>
                         ) : (

@@ -62,13 +62,13 @@ const Notifications = () => {
                                             <span className="time">{item.time}</span>
                                         </div>
 
-                                        <button
-                                            className="dismiss-btn"
-                                            onClick={() => dismissNotification(item.id)}
-                                            title="Dismiss"
+                                        <span
+                                            className="check-icon"
+                                            // onClick={() => dismissNotification(item.id)}
+                                            // title="Dismiss"
                                         >
-                                            <i className="adminlib-close"></i>
-                                        </button>
+                                            <i className="adminlib-check"></i>
+                                        </span>
                                         {/* </a> */}
                                     </div>
                                 </li>
