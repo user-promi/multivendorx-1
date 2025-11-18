@@ -53,7 +53,7 @@ const StoreFollower: React.FC = () => {
     useEffect(() => {
         requestFollowers(pagination.pageSize, pagination.pageIndex + 1);
     }, [pagination]);
-    
+
     const columns: ColumnDef<FollowerRow>[] = [
         {
             id: 'select',
@@ -87,19 +87,19 @@ const StoreFollower: React.FC = () => {
             header: __("Followed On", "multivendorx"),
             cell: ({ row }) => {
                 if (!row.original.date) return <TableCell>—</TableCell>;
-        
+
                 const followed = new Date(row.original.date);
-        
+
                 // Check if the date is valid
                 if (isNaN(followed.getTime())) {
                     return <TableCell>—</TableCell>;
                 }
-        
+
                 const now = new Date();
                 const diff = Math.floor((now.getTime() - followed.getTime()) / 1000);
-        
+
                 let display = '';
-        
+
                 if (diff < 60) {
                     display = `${diff} sec ago`;
                 } else if (diff < 3600) {
@@ -116,28 +116,36 @@ const StoreFollower: React.FC = () => {
                     const years = Math.floor(diff / 31536000);
                     display = `${years} year${years > 1 ? 's' : ''} ago`;
                 }
-        
+
                 return <TableCell title={followed.toString()}>{display}</TableCell>;
             },
         },
     ];
 
     return (
-        <div className="admin-table-wrapper">
-            <Table
-                data={data}
-                columns={columns as ColumnDef<Record<string, any>, any>[]}
-                rowSelection={{}}
-                onRowSelectionChange={() => { }}
-                defaultRowsPerPage={10}
-                pageCount={Math.ceil(data.length / pagination.pageSize)}
-                pagination={pagination}
-                onPaginationChange={setPagination}
-                handlePagination={requestFollowers}
-                perPageOption={[10, 25, 50]}
-                totalCounts={totalRows}
-            />
-        </div>
+        <>
+            <div className="page-title-wrapper">
+                <div className="page-title">
+                    <div className="title">Store Followers</div>
+                    <div className="des">Manage your store information and preferences</div>
+                </div>
+            </div>
+            <div className="admin-table-wrapper">
+                <Table
+                    data={data}
+                    columns={columns as ColumnDef<Record<string, any>, any>[]}
+                    rowSelection={{}}
+                    onRowSelectionChange={() => { }}
+                    defaultRowsPerPage={10}
+                    pageCount={Math.ceil(data.length / pagination.pageSize)}
+                    pagination={pagination}
+                    onPaginationChange={setPagination}
+                    handlePagination={requestFollowers}
+                    perPageOption={[10, 25, 50]}
+                    totalCounts={totalRows}
+                />
+            </div>
+        </>
     );
 };
 

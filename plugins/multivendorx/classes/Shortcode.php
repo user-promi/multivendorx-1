@@ -22,7 +22,7 @@ class Shortcode
         add_shortcode('multivendorx_store_registration', [$this, 'display_store_registration']);
         add_action('wp_enqueue_scripts', array($this, 'frontend_scripts'));
 
-        // add_action('wp_print_styles', array($this, 'dequeue_all_styles_on_page'), 99);
+        add_action('wp_print_styles', array($this, 'dequeue_all_styles_on_page'), 99);
 
         add_shortcode('multivendorx_stores_list', array($this, 'display_stores_list'));
 

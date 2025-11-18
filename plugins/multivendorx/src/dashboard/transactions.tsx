@@ -4,7 +4,7 @@ import { __ } from "@wordpress/i18n";
 import { CalendarInput, getApiLink, Table, TableCell } from "zyra";
 import { ColumnDef, PaginationState } from "@tanstack/react-table";
 import TransactionDetailsModal from "./TransactionDetailsModal";
-import {formatCurrency} from '../services/commonFunction';
+import { formatCurrency } from '../services/commonFunction';
 
 type TransactionRow = {
     id: number;
@@ -65,8 +65,8 @@ const Transactions: React.FC = () => {
         rowsPerPage = 10,
         currentPage = 1,
         typeCount = '',
-        transactionType='',
-        transactionStatus='',
+        transactionType = '',
+        transactionStatus = '',
         startDate = new Date(0),
         endDate = new Date(),
     ) {
@@ -83,8 +83,8 @@ const Transactions: React.FC = () => {
                 start_date: startDate,
                 end_date: endDate,
                 filter_status: typeCount == 'all' ? '' : typeCount,
-                transaction_status:transactionStatus,
-                transaction_type:transactionType
+                transaction_status: transactionStatus,
+                transaction_type: transactionType
             },
         }).then((response) => {
             setData(response.data.transaction || []);
@@ -401,30 +401,38 @@ const Transactions: React.FC = () => {
         },
     ];
     return (
-        <div className="admin-table-wrapper">
-            <Table
-                data={data}
-                columns={columns as ColumnDef<Record<string, any>, any>[]}
-                rowSelection={{}}
-                onRowSelectionChange={() => { }}
-                defaultRowsPerPage={10}
-                pageCount={pageCount}
-                pagination={pagination}
-                realtimeFilter={realtimeFilter}
-                onPaginationChange={setPagination}
-                handlePagination={requestApiForData}
-                perPageOption={[10, 25, 50]}
-                totalCounts={totalRows}
-                typeCounts={transactionStatus as TransactionStatus[]}
-            />
-
-            {modalTransaction && (
-                <TransactionDetailsModal
-                    transaction={modalTransaction}
-                    onClose={() => setModalTransaction(null)}
+        <>
+            <div className="page-title-wrapper">
+                <div className="page-title">
+                    <div className="title">Transactions</div>
+                    <div className="des">Manage your store information and preferences</div>
+                </div>
+            </div>
+            <div className="admin-table-wrapper">
+                <Table
+                    data={data}
+                    columns={columns as ColumnDef<Record<string, any>, any>[]}
+                    rowSelection={{}}
+                    onRowSelectionChange={() => { }}
+                    defaultRowsPerPage={10}
+                    pageCount={pageCount}
+                    pagination={pagination}
+                    realtimeFilter={realtimeFilter}
+                    onPaginationChange={setPagination}
+                    handlePagination={requestApiForData}
+                    perPageOption={[10, 25, 50]}
+                    totalCounts={totalRows}
+                    typeCounts={transactionStatus as TransactionStatus[]}
                 />
-            )}
-        </div>
+
+                {modalTransaction && (
+                    <TransactionDetailsModal
+                        transaction={modalTransaction}
+                        onClose={() => setModalTransaction(null)}
+                    />
+                )}
+            </div>
+        </>
     );
 };
 

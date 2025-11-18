@@ -458,7 +458,8 @@
                         }
                     }
 
-                    &.commission-summary {
+                    &.commission-summary
+                    &.product-wrapper {
                         flex-grow: 0;
                         min-width: 18rem;
                     }
@@ -541,6 +542,7 @@
             gap: 0.625rem;
             cursor: pointer;
 
+
             a {
                 color: #00000062;
             }
@@ -557,15 +559,7 @@
                     gap: 0.5rem;
                 }
 
-                .des {
-                    color: #00000073;
-                    font-size: 0.813rem;
 
-                    i {
-                        padding-right: 0.313rem;
-                        color: $theme-color;
-                    }
-                }
             }
 
             img {
@@ -586,6 +580,16 @@
             }
         }
 
+        .des {
+            color: #00000073;
+            font-size: 0.813rem;
+
+            i {
+                padding-right: 0.313rem;
+                color: $theme-color;
+            }
+        }
+
         .question {
             flex-grow: 0;
             min-width: 18rem;
@@ -598,7 +602,7 @@
 
                 .answer {
                     line-height: 1.125rem;
-                    padding-top: 0.45rem;
+                    padding: 0.45rem 0;
                     color: #0000008a;
                 }
             }
