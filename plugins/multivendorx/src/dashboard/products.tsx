@@ -283,6 +283,9 @@ const AllProduct: React.FC = () => {
                     {row.original.stock_status === 'outofstock' && (
                         <span className="admin-badge out-of-stock">Out of Stock</span>
                     )}
+                    {row.original.stock_status === 'onbackorder' && (
+                        <span className="admin-badge onbackorder">On Backorder</span>
+                    )}
                     {!row.original.stock_status && '-'}
                 </TableCell>
             ),
@@ -422,7 +425,7 @@ const AllProduct: React.FC = () => {
         {
             name: 'stock_status',
             render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
-                <div className="   group-field">
+                <div className="group-field">
                     <select
                         name="stock_status"
                         onChange={(e) => updateFilter(e.target.name, e.target.value)}
@@ -438,27 +441,27 @@ const AllProduct: React.FC = () => {
                 </div>
             ),
         },
-        {
-            name: 'brand',
-            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
-                <div className="   group-field">
-                    <select
-                        name="product-type"
-                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
-                        value={filterValue || ''}
-                        className="basic-select"
-                    >
-                        <option value="">Brand</option>
-                        {/* { Object.entries( groups ).map( ( [ groupId, groupName ] ) => (
-                                <option key={ groupId } value={ groupId }>
-                                    { ' ' }
-                                    { groupName }{ ' ' }
-                                </option>
-                            ) ) } */}
-                    </select>
-                </div>
-            ),
-        },
+        // {
+        //     name: 'brand',
+        //     render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
+        //         <div className="   group-field">
+        //             <select
+        //                 name="product-type"
+        //                 onChange={(e) => updateFilter(e.target.name, e.target.value)}
+        //                 value={filterValue || ''}
+        //                 className="basic-select"
+        //             >
+        //                 <option value="">Brand</option>
+        //                 {/* { Object.entries( groups ).map( ( [ groupId, groupName ] ) => (
+        //                         <option key={ groupId } value={ groupId }>
+        //                             { ' ' }
+        //                             { groupName }{ ' ' }
+        //                         </option>
+        //                     ) ) } */}
+        //             </select>
+        //         </div>
+        //     ),
+        // },
         {
             name: 'date',
             render: (updateFilter) => (
@@ -601,7 +604,6 @@ const AllProduct: React.FC = () => {
             }
             );
 
-            console.log("Product deleted:", res);
             requestData();
     }
 
