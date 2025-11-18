@@ -94,7 +94,10 @@ const ShippingDelivery = () => {
                             {/* country wise shipping */}
                             {formData.shipping_options === 'shipping_by_country' && (
                                 <>
-                                    <div className="card-title">Country-wise Shipping Configuration</div>
+                                    <div className="form-group-title-wrapper">
+                                        <div className="title">Default Shipping Rules</div>
+                                        <div className="des">Set base rates that apply to all orders</div>
+                                    </div>
 
                                     {/* Default Shipping Price */}
                                     <div className="form-group-wrapper">
@@ -110,7 +113,7 @@ const ShippingDelivery = () => {
                                                 onChange={handleChange}
                                             />
                                             <div className="settings-metabox-description">
-                                                This is the base price and will be the starting shipping price for each product
+                                                This is the shipping cost applied to every order.
                                             </div>
                                         </div>
                                     </div>
@@ -129,7 +132,7 @@ const ShippingDelivery = () => {
                                                 onChange={handleChange}
                                             />
                                             <div className="settings-metabox-description">
-                                                If a customer buys more than one type product from your store, first product of the every second type will be charged with this price
+                                                This amount will be <b>added to the Default Shipping Price </b>for each additional product type in the cart. Example: If Default Shipping is $5 and this is set to $2, a customer buying Product A and Product B will pay $5 (for Product A) + $2 (for Product B) = $7 total shipping.
                                             </div>
                                         </div>
                                     </div>
@@ -148,7 +151,7 @@ const ShippingDelivery = () => {
                                                 onChange={handleChange}
                                             />
                                             <div className="settings-metabox-description">
-                                                Every second product of same type will be charged with this price
+                                                This amount will be <b>added to the Default Shipping Price </b>for each additional quantity of the same product. Example: If Default Shipping is $5 and this is set to $1, a customer buying 3 units of Product A will pay $5 (first unit) + $1 (second unit) + $1 (third unit) = $7 total shipping.
                                             </div>
                                         </div>
                                     </div>
@@ -167,7 +170,7 @@ const ShippingDelivery = () => {
                                                 onChange={handleChange}
                                             />
                                             <div className="settings-metabox-description">
-                                                Free shipping will be available if order amount more than this. Leave empty to disable Free Shipping.
+                                                If the customer's order total exceeds this amount, shipping becomes free. Leave this field empty if you do not want to offer free shipping.
                                             </div>
                                         </div>
                                     </div>
@@ -185,10 +188,16 @@ const ShippingDelivery = () => {
                                                 value={formData._local_pickup_cost || ''}
                                                 onChange={handleChange}
                                             />
+                                            <div className="settings-metabox-description">
+                                                This is the fee customers need to pay if they choose Local Pickup as the delivery option.
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div className="card-title">Country-wise Shipping Configuration</div>
+                                    <div className="form-group-title-wrapper">
+                                        <div className="title">Country-Specific Rates</div>
+                                        <div className="des">Country-specific rates will be <b>added to the Default Shipping Price.</b> If state/region rates are defined, the final shipping cost will be State Rate + Default Shipping Price.</div>
+                                    </div>
                                     <ShippingRatesByCountry />
                                 </>
                             )}

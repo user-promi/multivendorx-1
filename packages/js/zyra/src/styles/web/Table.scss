@@ -340,10 +340,10 @@
                     // box-sizing: border-box;
                     overflow: hidden;
 
-                    .admin-badge {
-                        padding: 0.45rem;
-                        font-size: 0.9rem;
-                    }
+                    // .admin-badge {
+                    //     padding: 0.45rem;
+                    //     font-size: 0.9rem;
+                    // }
 
                     .table-row-custom {
                         display: flex;
@@ -402,7 +402,7 @@
                         }
                     }
 
-                    .order-link {
+                    .link-item {
                         color: $theme-color;
                         cursor: pointer;
                     }
@@ -410,6 +410,7 @@
                     .details {
                         margin: 0;
                         position: relative;
+                        list-style-type: none;
 
                         .more-btn {
                             position: absolute;

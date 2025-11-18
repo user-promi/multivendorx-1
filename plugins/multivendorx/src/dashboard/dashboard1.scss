@@ -708,13 +708,15 @@ a {
             font-size: 1.125rem;
             line-height: 1.5rem;
         }
-        .des{
+
+        .des {
             color: #00000094;
 
-            b{
+            b {
                 color: #000;
             }
-            &.up b{
+
+            &.up b {
                 color: #06be9f;
             }
         }
@@ -929,6 +931,41 @@ a {
         gap: 0.5rem;
         border-top: $border-light-small;
     }
+
+    .popup-divider {
+        margin: 1.5rem 0;
+        height: 0.063rem;
+        border-bottom: 0.063rem solid #e0e4e9;
+    }
+
+    .heading {
+        font-size: 1.125rem;
+        font-weight: 500;
+        margin-bottom: 1.125rem;
+    }
+
+    .commission-details {
+        .items {
+            display: flex;
+            align-items: start;
+            margin-bottom: 1rem;
+
+            .text {
+                font-size: 0.9rem;
+                font-weight: 500;
+                color: #585858;
+                width: 50%;
+            }
+
+            .value {
+                font-size: 1rem;
+                color: #000;
+                font-weight: 500;
+                width: 50%;
+                display: flex;
+            }
+        }
+    }
 }
 
 // table style
@@ -1108,7 +1145,7 @@ a {
     }
 
     &.notification {
-        min-width: 25rem;
+        min-width: 25rem !important;
 
         .title {
             padding: 0.75rem;
@@ -1485,11 +1522,30 @@ a {
 
 
 // form style start
+.form-group-title-wrapper {
+    padding: 1rem 0 0.5rem;
+    border-bottom: $border-light-small;
+    margin-bottom: 0.5rem;
+
+    .title {
+        font-size: 1.125rem;
+        font-weight: 500;
+    }
+
+    .des {
+        font-size: 0.95rem;
+        color: $sub-text-color;
+    }
+}
+
 .form-group-wrapper {
     display: flex;
     flex-direction: column;
     gap: 1rem;
 
+    .settings-metabox-description {
+        padding: 0;
+    }
 
     .form-group {
         display: flex;
@@ -1502,3 +1558,83 @@ a {
         }
     }
 }
+
+// settings shipping add country start
+.shipping-country-wrapper {
+    margin-top: 1rem;
+
+    .shipping-country {
+        padding: 1rem;
+        background: #f7f6f69c;
+        border-radius: 0.313rem;
+        margin-bottom: 1rem;
+        border: $border-light-small;
+    }
+
+    .item {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+
+        .location-icon {
+            background: #d9f5f0;
+            color: #06be9f;
+            padding: 0.45rem;
+            font-size: 1.313rem;
+            border-radius: 0.313rem;
+        }
+
+        .delete-icon {
+            font-size: 1.125rem;
+            color: #f06b4f;
+            cursor: pointer;
+        }
+
+        .basic-input {
+            background: #fff !important;
+            /*overwrite common style*/
+        }
+
+        &.state {
+            margin-bottom: 0.625rem;
+        }
+    }
+
+    .State-wrapper {
+        padding: 0.813rem;
+        background: #fff;
+        margin-top: 0.813rem;
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.813rem;
+
+            .left {
+                width: 75%;
+            }
+
+            .title {
+                font-size: 1.125em;
+                font-weight: 500;
+            }
+
+            .des {
+                font-size: 0.813rem;
+                color: $sub-text-color;
+            }
+        }
+
+    }
+
+    .no-shipping-data {
+        padding: 1rem;
+        border-radius: 0.313rem;
+        font-size: 1rem;
+        background: #c9c9c954;
+        margin: 1rem 0;
+    }
+}
+
+// settings shipping add country end

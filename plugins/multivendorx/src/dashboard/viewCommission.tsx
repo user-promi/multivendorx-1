@@ -65,14 +65,87 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
           <p>Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.</p>
           <i
             className="icon adminlib-close"
-            onClick={() => onClose}
+            onClick={onClose}
           ></i>
         </>}
     >
       {loading && <p>{__("Loading...", "multivendorx")}</p>}
       {!loading && details && (
         <>
-          <div className="content">
+
+          <div className="heading">{__("Order Overview", "multivendorx")}</div>
+
+          <div className="commission-details">
+            <div className="items">
+              <div className="text">Store</div>
+              <div className="value">
+                #{details.orderId}
+              </div>
+            </div>
+            <div className="items">
+              <div className="text">Order ID</div>
+              <div className="value">
+                #52
+              </div>
+            </div>
+            <div className="items">
+              <div className="text">Status</div>
+              <div className="value">
+                 <span className={`admin-badge ${details.status === 'paid' ? 'green' : 'red'}`}>
+                  {details.status
+                    ? details.status
+                      .replace(/^wc-/, '') // remove any prefix like 'wc-'
+                      .replace(/_/g, ' ')  // replace underscores with spaces
+                      .replace(/\b\w/g, (c) => c.toUpperCase()) // capitalize each word
+                    : ''}
+                </span>
+              </div>
+            </div>
+            <div className="items">
+              <div className="text">Created</div>
+              <div className="value">
+                {new Date(details.createTime).toLocaleString()}
+              </div>
+            </div>
+          </div>
+
+          <div className="popup-divider"></div>
+          <div className="heading">{__("Commission Overview", "multivendorx")}</div>
+
+          <div className="commission-details">
+            <div className="items">
+              <div className="text">Commission Earned</div>
+              <div className="value">
+                {details.commissionAmount}
+              </div>
+            </div>
+            <div className="items">
+              <div className="text">Commission Total</div>
+              <div className="value">
+                {details.commissionTotal}
+              </div>
+            </div>
+            <div className="items">
+              <div className="text">Shipping</div>
+              <div className="value">
+                {details.shippingAmount || "-"}
+              </div>
+            </div>
+            <div className="items">
+              <div className="text">Tax</div>
+              <div className="value">
+                {details.taxAmount || "-"}
+              </div>
+            </div>
+            <div className="items">
+              <div className="text">Discount</div>
+              <div className="value">
+                {details.discountAmount || "-"}
+              </div>
+            </div>
+          </div>
+
+          {/* <div className="content">
             <div className="form-group-wrapper">
               <div className="form-group">
                 <label htmlFor="title">{__("Store:", "multivendorx")}</label>
@@ -88,7 +161,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
             <div className="form-group-wrapper">
               <div className="form-group">
                 <label htmlFor="title">{__("Order ID:", "multivendorx")}</label>
-                {/* {details.storeName} */}
+                {details.storeName}
               </div>
             </div>
             <div className="form-group-wrapper">
@@ -133,7 +206,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
                 {new Date(details.createTime).toLocaleString()}
               </div>
             </div>
-          </div>
+          </div> */}
         </>
       )}
     </CommonPopup>
