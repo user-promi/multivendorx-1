@@ -162,7 +162,7 @@ $post = $args['post'];
                 <div class="form-group">
                     <label class="control-label col-sm-3 col-md-3" for="_tax_status"><?php _e( 'Tax status', 'multivendorx' ); ?></label>
                     <div class="col-md-6 col-sm-9">
-                        <select class="form-control" id="_tax_status" name="_tax_status">
+                        <select class="basic-select" id="_tax_status" name="_tax_status">
                             <option value="taxable" <?php selected( isset($_POST['_tax_status']) ? wc_clean($_POST['_tax_status']) : ($product_object->get_tax_status( 'edit' ) ?  $product_object->get_tax_status( 'edit' ) : ''), 'taxable' ); ?>><?php esc_html_e( 'Taxable', 'multivendorx' ); ?></option>
                             <option value="shipping" <?php selected( isset($_POST['_tax_status']) ? wc_clean($_POST['_tax_status']) : ($product_object->get_tax_status( 'edit' ) ?  $product_object->get_tax_status( 'edit' ) : ''), 'shipping' ); ?>><?php esc_html_e( 'Shipping only', 'multivendorx' ); ?></option>
                             <option value="none" <?php selected( isset($_POST['_tax_status']) ? wc_clean($_POST['_tax_status']) : ($product_object->get_tax_status( 'edit' ) ?  $product_object->get_tax_status( 'edit' ) : ''), 'none' ); ?>><?php esc_html_e( 'None', 'multivendorx' ); ?></option>
@@ -172,7 +172,7 @@ $post = $args['post'];
                 <div class="form-group">
                     <label class="control-label col-sm-3 col-md-3" for="_tax_class"><?php esc_html_e( 'Tax class', 'multivendorx' ); ?></label>
                     <div class="col-md-6 col-sm-9">
-                        <select class="form-control" id="_tax_class" name="_tax_class">
+                        <select class="basic-select" id="_tax_class" name="_tax_class">
                             <?php foreach ( wc_get_product_tax_class_options() as $class => $class_label ) : ?>
                                 <option value="<?php echo $class; ?>" <?php selected( isset($_POST['_tax_class']) ? wc_clean($_POST['_tax_class']) : ($product_object->get_tax_class( 'edit' ) ? $product_object->get_tax_class( 'edit' ) : ''), $class ); ?>><?php echo esc_html($class_label); ?></option>
                             <?php endforeach; ?>
