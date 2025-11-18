@@ -1,5 +1,23 @@
 /* global dashboard */
 jQuery(document).ready(function ($) {
+    $('.adminlib-menu').on('click', function () {
+        $('#store-dashboard').toggleClass('menu-opened');
+    });
+
+    // HOVER → only when menu-opened exists
+    $('.dashboard-tabs-wrapper').hover(
+        function () {  // mouse enter
+            if ($('#store-dashboard').hasClass('menu-opened')) {
+                $('#store-dashboard').addClass('menu-hovered');
+            }
+        },
+        function () {  // mouse leave
+            if ($('#store-dashboard').hasClass('menu-opened')) {
+                $('#store-dashboard').removeClass('menu-hovered');
+            }
+        }
+    );
+
     $(document).on('click', '.switch-store', function (e) {
         e.preventDefault();
 

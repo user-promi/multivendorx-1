@@ -725,7 +725,7 @@ a {
     .breadcrumbs {
         span {
             a {
-                color: $theme-color;
+                color: var(--colorPrimary);
             }
 
             &:last-child {
@@ -864,24 +864,13 @@ a {
 
     &.report {
         flex-wrap: wrap;
+        padding: 0;
 
         .analytics-item {
-            width: 48%;
+            width: 24%;
             box-sizing: border-box;
-
-            i {
-                font-size: 2.5rem;
-                padding: 0.625rem;
-                line-height: 4rem;
-            }
-
-            .details {
-                .number {
-                    font-size: 2.063rem;
-                }
-
-                .text {}
-            }
+            background: #fff;
+            padding: 1rem;
         }
     }
 
@@ -927,7 +916,7 @@ a {
             color: #000;
 
             i {
-                color: $theme-color;
+                color: var(--colorPrimary);
                 font-size: 1.625rem;
                 margin-right: 0.5rem;
             }
@@ -1013,6 +1002,22 @@ a {
         padding-bottom: 0;
         gap: 1rem;
     }
+
+    &.menu-opened {
+        .tab-wrapper {
+            margin-left: 3rem;
+        }
+
+        .dashboard-tabs-wrapper {
+            width: 4rem;
+
+            .tab-name span,
+            .admin-arrow,
+            .site-name {
+                display: none;
+            }
+        }
+    }
 }
 
 // top items start
@@ -1087,11 +1092,11 @@ a {
         }
 
         &.active {
-            color: $theme-color;
-            border-bottom: 0.126rem solid $theme-color;
+            color: var(--colorPrimary);
+            border-bottom: 0.126rem solid var(--colorPrimary);
 
             p {
-                color: $theme-color;
+                color: var(--colorPrimary);
             }
         }
     }
@@ -1320,7 +1325,7 @@ a {
         line-height: 1.313rem;
 
         i {
-            color: $theme-color;
+            color: var(--colorPrimary);
         }
     }
 }
@@ -1669,3 +1674,31 @@ a {
 }
 
 // settings shipping add country end
+
+// store profile start
+.store-owner-details {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.313rem;
+
+    .contact-details {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .right-details {
+        text-align: right;
+
+        .price {
+            font-size: 1.063rem;
+            font-weight: 600;
+            line-height: 1.5rem;
+            padding-bottom: 0.125rem;
+        }
+    }
+
+    &.owner {
+        flex-direction: column;
+    }
+}
+// store profile end

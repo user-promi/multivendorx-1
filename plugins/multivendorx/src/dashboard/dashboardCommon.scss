@@ -332,7 +332,7 @@ a:focus {
 //                 padding: 0.5rem 1rem;
 //                 border: 0.063rem solid #e0e4e9;
 //                 border-radius: 0.313rem;
-//                 color: $theme-color;
+//                 color: var(--colorPrimary);
 //                 background: $theme-background-color;
 
 //                 i {
@@ -698,7 +698,7 @@ a:focus {
             width: 2.5rem;
 
             i {
-                color: $theme-color;
+                color: var(--colorPrimary);
                 font-size: 1.313rem;
             }
         }
@@ -717,7 +717,7 @@ a:focus {
 
             .read-more {
                 font-weight: 500;
-                color: $theme-color;
+                color: var(--colorPrimary);
                 cursor: pointer;
             }
         }
@@ -805,12 +805,12 @@ a:focus {
 
                         &:hover {
                             background: $theme-background-color;
-                            color: $theme-color;
+                            color: var(--colorPrimary);
                         }
 
                         &.active-current-tab,
                         &.active-current-tab:hover {
-                            background: $theme-color;
+                            background: var(--colorPrimary);
                             color: #fff;
                         }
                     }

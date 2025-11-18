@@ -144,6 +144,43 @@ const Transactions: React.FC = () => {
             ),
         },
         {
+            id: "id",
+            header: __("ID", "multivendorx"),
+            cell: ({ row }) => <TableCell>#{row.original.id}</TableCell>,
+        },
+        {
+            id: 'status',
+            header: __('Status', 'multivendorx'),
+            cell: ({ row }) => {
+                const status = row.original.status || '';
+                const formattedStatus = status
+                    ?.replace(/[-_]/g, " ")
+                    .toLowerCase()
+                    .replace(/^\w/, c => c.toUpperCase());
+
+                const getStatusBadge = (status: string) => {
+                    switch (status) {
+                        case 'Completed':
+                            return <span className="admin-badge green">Completed</span>;
+                        case 'Processed':
+                            return <span className="admin-badge yellow">Processed</span>;
+                        case 'Upcoming':
+                            return <span className="admin-badge blue">Upcoming</span>;
+                        case 'Failed':
+                            return <span className="admin-badge red">Failed</span>;
+                        default:
+                            return <span className="admin-badge gray">{formattedStatus}</span>;
+                    }
+                };
+
+                return (
+                    <TableCell title={`${status}`}>
+                        {getStatusBadge(status)}
+                    </TableCell>
+                );
+            },
+        },
+        {
             id: 'date',
             accessorKey: 'date',
             enableSorting: true,
@@ -162,35 +199,31 @@ const Transactions: React.FC = () => {
                 return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
             },
         },
-        {
-            header: __("Transaction ID", "multivendorx"),
-            cell: ({ row }) => <TableCell>#{row.original.id}</TableCell>,
-        },
-        {
-            id: 'order_details',
-            accessorKey: 'order_details',
-            enableSorting: true,
-            accessorFn: row => parseInt(row.order_details || '0'),
-            header: __('Order ID', 'multivendorx'),
-            cell: ({ row }) => {
-                const orderId = row.original.order_details;
-                const editLink = orderId
-                    ? `${window.location.origin}/wp-admin/post.php?post=${orderId}&action=edit`
-                    : '#';
-                return (
-                    <TableCell title={orderId || ''}>
-                        {orderId ? (
-                            <a href={'#'} target="_blank" rel="noopener noreferrer">
-                                #{orderId}
-                            </a>
-                        ) : '-'}
-                    </TableCell>
-                );
-            },
-        },
+        // {
+        //     id: 'order_details',
+        //     accessorKey: 'order_details',
+        //     enableSorting: true,
+        //     accessorFn: row => parseInt(row.order_details || '0'),
+        //     header: __('Order ID', 'multivendorx'),
+        //     cell: ({ row }) => {
+        //         const orderId = row.original.order_details;
+        //         const editLink = orderId
+        //             ? `${window.location.origin}/wp-admin/post.php?post=${orderId}&action=edit`
+        //             : '#';
+        //         return (
+        //             <TableCell title={orderId || ''}>
+        //                 {orderId ? (
+        //                     <a href={'#'} target="_blank" rel="noopener noreferrer">
+        //                         #{orderId}
+        //                     </a>
+        //                 ) : '-'}
+        //             </TableCell>
+        //         );
+        //     },
+        // },
         {
             header: __("Transaction Type", "multivendorx"),
-            cell: ({ row }) => <TableCell>{row.original.transaction_type}</TableCell>,
+            cell: ({ row }) => <TableCell><div className="link-item"> {row.original.transaction_type}</div></TableCell>,
         },
         {
             id: 'credit',
@@ -202,26 +235,10 @@ const Transactions: React.FC = () => {
                 const credit = row.original.credit;
                 const status = row.original.status || '';
 
-                let iconClass = '';
-                if (credit) {
-                    switch (status) {
-                        case 'Upcoming':
-                            iconClass = 'adminlib-clock';
-                            break;
-                        case 'Completed':
-                            iconClass = 'adminlib-check';
-                            break;
-                        case 'Failed':
-                            iconClass = 'adminlib-cross';
-                            break;
-                    }
-                }
-
                 return (
                     <TableCell>
                         {credit ? (
                             <>
-                                {iconClass && <i className={iconClass}></i>}
                                 {formatCurrency(credit)}
                             </>
                         ) : (
@@ -280,26 +297,10 @@ const Transactions: React.FC = () => {
                 const balance = row.original.balance;
                 const status = row.original.status || '';
 
-                let iconClass = '';
-                if (balance) {
-                    switch (status) {
-                        case 'Upcoming':
-                            iconClass = 'adminlib-clock';
-                            break;
-                        case 'Completed':
-                            iconClass = 'adminlib-check';
-                            break;
-                        case 'Failed':
-                            iconClass = 'adminlib-cross';
-                            break;
-                    }
-                }
-
                 return (
                     <TableCell>
                         {balance ? (
                             <>
-                                {iconClass && <i className={iconClass}></i>}
                                 {formatCurrency(balance)}
                             </>
                         ) : (
@@ -309,15 +310,10 @@ const Transactions: React.FC = () => {
                 );
             },
         },
-
-        {
-            header: __("Status", "multivendorx"),
-            cell: ({ row }) => <TableCell>{row.original.status}</TableCell>,
-        },
-        {
-            header: __("Payment Mode", "multivendorx"),
-            cell: ({ row }) => <TableCell>{row.original.payment_mode}</TableCell>,
-        },
+        // {
+        //     header: __("Payment Mode", "multivendorx"),
+        //     cell: ({ row }) => <TableCell>{row.original.payment_mode}</TableCell>,
+        // },
         {
             header: __("Action", "multivendorx"),
             cell: ({ row }) => (
@@ -430,6 +426,8 @@ const Transactions: React.FC = () => {
                         transaction={modalTransaction}
                         onClose={() => setModalTransaction(null)}
                     />
+
+                    
                 )}
             </div>
         </>
