@@ -42,7 +42,7 @@ class Shipping_Helper {
             $new_packages[$store_id]['contents'][$item_key] = $item;
             $new_packages[$store_id]['contents_cost'] += $item['line_total'];
         }
-
+        // file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: pack: " . var_export($new_packages, true) . "\n", FILE_APPEND);
         return array_values($new_packages);
     }
 }

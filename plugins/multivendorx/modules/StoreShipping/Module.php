@@ -34,7 +34,9 @@ class Module {
      */
     public function __construct() {
         $this->init_classes();
-    
+
+        add_filter( 'woocommerce_cart_shipping_packages', ['MultiVendorX\StoreShipping\Shipping_Helper', 'split_cart_by_store'] );
+
         add_filter('woocommerce_shipping_methods', [ $this, 'register_shipping_method' ]);
     }
     

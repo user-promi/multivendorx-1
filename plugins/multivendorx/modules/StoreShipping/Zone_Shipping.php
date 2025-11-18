@@ -21,17 +21,12 @@ class Zone_Shipping extends \WC_Shipping_Method {
         // Initialize settings
         $this->init();
         
-        // add_filter( 'woocommerce_cart_shipping_packages', ['MultiVendorX\StoreShipping\Shipping_Helper', 'split_cart_by_store'] );
 
-        // //additional hooks for post-calculations settings
-        // // add_filter( 'woocommerce_shipping_chosen_method', array( $this, 'select_default_rate' ), 10, 2 );
-        // add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
-        // // add_filter( 'woocommerce_package_rates', array( $this, 'woocommerce_package_rates' ), 99, 2);
+        //additional hooks for post-calculations settings
+        add_filter( 'woocommerce_shipping_chosen_method', array( $this, 'select_default_rate' ), 10, 2 );
+        add_filter( 'woocommerce_package_rates', array( $this, 'woocommerce_package_rates' ), 99, 2);
+
         // add_action( 'woocommerce_cart_calculate_fees', [ $this, 'multivendorx_force_shipping_recalculation' ], 20, 1 );
-
-        add_filter( 'woocommerce_cart_shipping_packages', ['MultiVendorX\StoreShipping\Shipping_Helper', 'split_cart_by_store'] );
-
-        add_action( 'woocommerce_cart_calculate_fees', [ $this, 'multivendorx_force_shipping_recalculation' ], 20, 1 );
         add_action( 'woocommerce_update_options_shipping_' . $this->id, [ $this, 'process_admin_options' ] );
     }
 
@@ -209,7 +204,6 @@ class Zone_Shipping extends \WC_Shipping_Method {
 
         // Loop through each store
         foreach ( $seller_products as $store_id => $products ) {
-
             $zone = WC_Shipping_Zones::get_zone_matching_package( $package );
             $shipping_methods = Util::get_shipping_methods( $zone->get_id(), $store_id );
 
@@ -307,7 +301,9 @@ class Zone_Shipping extends \WC_Shipping_Method {
     
         // Apply filters
         $rates = apply_filters('mvx_get_rates_for_custom_shipping', $rates, $package);
-    
+
+
+
         // Send rates to WooCommerce
         if ( is_array( $rates ) && count( $rates ) > 0 ) {
             foreach ( $rates as $rate ) {

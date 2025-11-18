@@ -54,9 +54,7 @@ class Country_Shipping extends \WC_Shipping_Method {
         // $this->init_form_fields();
         // $this->init_settings();
 
-        add_filter( 'woocommerce_cart_shipping_packages', ['MultiVendorX\StoreShipping\Shipping_Helper', 'split_cart_by_store'] );
-
-        add_action( 'woocommerce_cart_calculate_fees', array( $this, 'multivendorx_force_shipping_recalculation' ), 20, 1 );
+        // add_action( 'woocommerce_cart_calculate_fees', array( $this, 'multivendorx_force_shipping_recalculation' ), 20, 1 );
         // Save settings in admin if you have any defined
         add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
 
