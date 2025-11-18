@@ -92,7 +92,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                 headers: { 'X-WP-Nonce': appLocalizer.nonce },
             });
             setCustomerData(customer.data);
-            
+
         } catch (error) {
             console.error("Error fetching order:", error);
         }
@@ -154,30 +154,33 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                         <div className="page-title">
                             <div className="title">
                                 Order #{orderData?.number ?? orderId ?? "—"}
-                                <div className={statusBadgeClass(orderData?.status)}
-                                onClick={() => setStatusSelect(true)}
-                                >
-                                    {/* choose icon and label dynamically */}
-                                    {orderData?.status === 'completed' ? <i className="adminlib-check"></i> : <i className="adminlib-info"></i>}
-                                    {` ${(orderData?.status || 'Unknown').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}`}
-                                
-                                    {statusSelect && 
+                                {!statusSelect &&
+                                    <div className={statusBadgeClass(orderData?.status)}
+                                        onClick={() => setStatusSelect(true)}
+                                    >
+                                        {/* choose icon and label dynamically */}
+                                        {orderData?.status === 'completed' ? <i className="adminlib-check"></i> : <i className="adminlib-info"></i>}
+                                        {` ${(orderData?.status || 'Unknown').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}`}
+                                    </div>
+                                }
+                                {statusSelect &&
+                                    <div className="status-edit">
                                         <SelectInput
-                                                name="status"
-                                                options={[
-                                                    { label: 'Processing', value: 'processing' },
-                                                    { label: 'On Hold', value: 'on-hold' },
-                                                    { label: 'Completed', value: 'completed' },
-                                                    { label: 'Cancelled', value: 'cancelled' },
-                                                ]}
-                                                value={orderData?.status}
-                                                type="single-select"
-                                                onChange={(newValue: any) => {
-                                                    handleStatusChange(newValue.value)
-                                                }}
-                                            />
-                                    }
-                                </div>
+                                            name="status"
+                                            options={[
+                                                { label: 'Processing', value: 'processing' },
+                                                { label: 'On Hold', value: 'on-hold' },
+                                                { label: 'Completed', value: 'completed' },
+                                                { label: 'Cancelled', value: 'cancelled' },
+                                            ]}
+                                            value={orderData?.status}
+                                            type="single-select"
+                                            onChange={(newValue: any) => {
+                                                handleStatusChange(newValue.value)
+                                            }}
+                                        />
+                                    </div>
+                                }
                             </div>
 
                             <div className="des">
@@ -298,115 +301,6 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                                 <td className="admin-column">$95</td>
                                             </tr>
                                         </tbody>
-
-                                        {/* <tbody className="admin-table-body">
-                                        {orderData?.line_items?.length > 0 ? (
-                                            orderData.line_items.map((item: any) => (
-                                                <tr key={item.id} className="admin-row simple">
-                                                    <td className="admin-column">
-                                                        <div className="item-details">
-                                                            <div className="image">
-                                                                <img
-                                                                    src={item?.image?.src || productImage}
-                                                                    alt={item?.name || "product"}
-                                                                />
-                                                            </div>
-                                                            <div className="detail">
-                                                                <div className="name">{item?.name}</div>
-                                                                {item?.sku && <div className="sku">SKU: {item.sku}</div>}
-                                                            </div>
-                                                        </div>
-                                                    </td>
-
-                                                    <td className="admin-column">
-                                                        {appLocalizer.currency_symbol}{parseFloat(item?.price || 0).toFixed(2)}
-                                                    </td>
-
-                                                    <td className="admin-column">x {item?.quantity}</td>
-
-                                                    <td className="admin-column">
-                                                        ${parseFloat(item?.total || 0).toFixed(2)}
-                                                    </td>
-                                                </tr>
-                                            ))
-                                        ) : (
-                                            <tr>
-                                                <td colSpan={4} className="text-center">
-                                                    No items found.
-                                                </td>
-                                            </tr>
-                                        )}
-                                    </tbody> */}
-
-                                        {/* <tbody className="admin-table-body">
-                                        <tr className="admin-row simple">
-                                            <td className="admin-column">
-                                                <div className="item-details">
-                                                    <div className="image">
-                                                        <img src={productImage} alt="product" />
-                                                    </div>
-                                                    <div className="detail">
-                                                        <div className="name">Charcoal Detox</div>
-                                                        <div className="sku">SKU: 8676</div>
-                                                    </div>
-                                                </div>
-                                            </td>
-
-                                            <td className="admin-column">
-                                                {!isRefund ? `$${row.cost}` : (
-                                                    <input
-                                                        type="number"
-                                                        value={row.cost}
-                                                        onChange={(e) => setRow({ ...row, cost: +e.target.value })}
-                                                        className="basic-input"
-                                                    />
-                                                )}
-                                            </td>
-
-                                            <td className="admin-column">
-                                                {!isRefund ? `x ${row.qty}` : (
-                                                    <input
-                                                        type="number"
-                                                        value={row.qty}
-                                                        onChange={(e) => setRow({ ...row, qty: +e.target.value })}
-                                                        className="basic-input"
-                                                    />
-                                                )}
-                                            </td>
-
-                                            <td className="admin-column">
-                                                {!isRefund ? `$${row.total}` : (
-                                                    <input
-                                                        type="number"
-                                                        value={row.total}
-                                                        onChange={(e) => setRow({ ...row, total: +e.target.value })}
-                                                        className="basic-input"
-                                                    />
-                                                )}
-                                            </td>
-
-                                        </tr>
-
-                                        <tr className="admin-row simple">
-                                            <td className="admin-column">
-                                                <div className="item-details">
-                                                    <div className="icon">
-                                                        <i className="adminlib-cart green"></i>
-                                                    </div>
-                                                    <div className="detail">
-                                                        <div className="name">Free shipping</div>
-                                                        <div className="sub-text"><span>Items:</span> Charcoal Detox × 1</div>
-                                                        <div className="sub-text"><span>package_qty:</span></div>
-                                                        <div className="sub-text"><span>_vendor_order_shipping_item_id:</span> 337</div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td className="admin-column"></td>
-                                            <td className="admin-column"></td>
-                                            <td className="admin-column"></td>
-                                            <td className="admin-column">$95</td>
-                                        </tr>
-                                    </tbody> */}
                                     </table>
                                 </div>
 
@@ -580,8 +474,13 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 
                         <div className="card-wrapper w-35">
                             <div className="card-content">
-                                <div className="card-title">Customer details</div>
-
+                                <div className="card-header">
+                                    <div className="left">
+                                        <div className="title">
+                                            Customer details
+                                        </div>
+                                    </div>
+                                </div>
                                 <div className="details">
                                     <div className="icon">
                                         <img
@@ -622,7 +521,16 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                             </div>
 
                             <div className="card-content">
-                                <div className="card-title">Billing address</div>
+                                <div className="card-header">
+                                    <div className="left">
+                                        <div className="title">
+                                            Billing address
+                                        </div>
+                                    </div>
+                                    {/* <div className="right">
+                                        <i className="adminlib-external"></i>
+                                    </div> */}
+                                </div>
 
                                 {orderData?.billing?.address_1 ||
                                     orderData?.billing?.city ||
@@ -658,7 +566,13 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 
 
                             <div className="card-content">
-                                <div className="card-title">Shipping address</div>
+                                <div className="card-header">
+                                    <div className="left">
+                                        <div className="title">
+                                            Shipping address
+                                        </div>
+                                    </div>
+                                </div>
                                 <div>45 Roker Terrace</div>
                                 <div>Latheronwheel</div>
                                 <div>KW5 8NW, London</div>
@@ -666,7 +580,16 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                             </div>
 
                             <div className="card-content">
-                                <div className="card-title">Shipping Tracking</div>
+                                <div className="card-header">
+                                    <div className="left">
+                                        <div className="title">
+                                            Shipping Tracking
+                                        </div>
+                                    </div>
+                                    {/* <div className="right">
+                                        <i className="adminlib-external"></i>
+                                    </div> */}
+                                </div>
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
                                         <label htmlFor="product-name">Create Shipping</label>
@@ -685,7 +608,16 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                             </div>
 
                             <div className="card-content">
-                                <div className="card-title">Order notes</div>
+                                <div className="card-header">
+                                    <div className="left">
+                                        <div className="title">
+                                            Order notes
+                                        </div>
+                                    </div>
+                                    {/* <div className="right">
+                                        <i className="adminlib-external"></i>
+                                    </div> */}
+                                </div>
 
                                 {orderData?.order_notes && orderData.order_notes.length > 0 ? (
                                     <div className="notification-wrapper">

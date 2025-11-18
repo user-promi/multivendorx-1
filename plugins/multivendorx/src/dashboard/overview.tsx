@@ -67,49 +67,49 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
             id: 'total_order_amount',
             label: 'Total Order Amount',
             count: formatCurrency(data.total_order_amount),
-            icon: 'adminlib-order green',
+            icon: 'adminlib-order theme-color1',
           },
           {
             id: 'facilitator_fee',
             label: 'Facilitator Fee',
             count: formatCurrency(data.facilitator_fee),
-            icon: 'adminlib-facilitator blue',
+            icon: 'adminlib-facilitator theme-color2',
           },
           {
             id: 'gateway_fee',
             label: 'Gateway Fee',
             count: formatCurrency(data.gateway_fee),
-            icon: 'adminlib-credit-card red',
+            icon: 'adminlib-credit-card theme-color3',
           },
           {
             id: 'shipping_amount',
             label: 'Shipping Amount',
             count: formatCurrency(data.shipping_amount),
-            icon: 'adminlib-shipping green',
+            icon: 'adminlib-shipping theme-color4',
           },
           {
             id: 'tax_amount',
             label: 'Tax Amount',
             count: formatCurrency(data.tax_amount),
-            icon: 'adminlib-tax-compliance blue',
+            icon: 'adminlib-tax-compliance theme-color4',
           },
           {
             id: 'shipping_tax_amount',
             label: 'Shipping Tax Amount',
             count: formatCurrency(data.shipping_tax_amount),
-            icon: 'adminlib-per-product-shipping purple',
+            icon: 'adminlib-per-product-shipping theme-color3',
           },
           {
             id: 'commission_total',
             label: 'Commission Total',
             count: formatCurrency(data.commission_total),
-            icon: 'adminlib-commission yellow',
+            icon: 'adminlib-commission theme-color2',
           },
           {
             id: 'commission_refunded',
             label: 'Commission Refunded',
             count: formatCurrency(data.commission_refunded),
-            icon: 'adminlib-marketplace-refund red',
+            icon: 'adminlib-marketplace-refund theme-color1',
           },
         ];
 
@@ -260,9 +260,16 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
   console.log('site_url', appLocalizer.site_url)
   return (
     <>
+      <div className="page-title-wrapper">
+        <div className="page-title">
+          <div className="title">Overview</div>
+          <div className="des">Manage your store information and preferences</div>
+        </div>
+      </div>
+
       <div className="row">
         <div className="column transparent">
-          <div className="analytics-container report column-3">
+          <div className="analytics-container small-card report">
             {commissionDetails.map((item, idx) => (
               <div key={idx} className="analytics-item">
                 <div className="analytics-icon">
@@ -586,7 +593,7 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
                         src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
                           store.store_name || 'Store'
                         )}&background=0073aa&color=fff`}
-                        alt={store.store_name}
+                        // alt={store.store_name}
                       />
                     </a>
                   </div>
@@ -598,7 +605,7 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        {store.store_name}
+                        {/* {store.store_name} */}
                       </a>
                     </div>
                     <div className="des">
@@ -624,9 +631,6 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
         </div>
 
       </div>
-
-
-
 
     </>
   );

@@ -25,7 +25,7 @@ $page_info = MultiVendorX()->rest->dashboard->get_current_page_and_submenu();
                 <?php else: ?>
                     <span class="site-name"><?php echo esc_html(get_bloginfo('name')); ?></span>
                 <?php endif; ?>
-                <i class='adminlib-menu'></i>
+                <i class='adminlib-menu toggle-menu-icon'></i>
             </div>
             <div class="dashboard-tabs">
                 <ul>
@@ -37,7 +37,7 @@ $page_info = MultiVendorX()->rest->dashboard->get_current_page_and_submenu();
                         <li class="tab-name <?php echo $is_active ? 'active' : ''; ?>">
                             <a class="tab" <?php echo $has_submenu ? 'href="#" onclick="return false;"' : 'href="' . esc_url(StoreUtil::get_endpoint_url($section['slug'])) . '"'; ?>>
                                 <i class="<?php echo esc_attr($section['icon']); ?>"></i>
-                                <?php echo esc_html($section['name']); ?>
+                                <span><?php echo esc_html($section['name']); ?></span>
                                 <?php if ($has_submenu): ?>
                                     <i class="admin-arrow adminlib-pagination-right-arrow"></i>
                                 <?php endif; ?>
