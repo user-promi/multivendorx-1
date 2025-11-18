@@ -8,6 +8,7 @@ import {
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
+import { formatCurrency } from '@/services/commonFunction';
 // import { formatCurrency } from '../../services/commonFunction';
 
 type RefundRow = {
@@ -158,14 +159,14 @@ const Refund: React.FC = () => {
             header: __('Order', 'multivendorx'),
             cell: ({ row }: any) => {
                 const orderId = row.original.order_id;
-                const url = orderId
-                    ? `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${orderId}&action=edit`
-                    : '#';
-
+                const orderLink = `/dashboard/sales/orders/#view/${orderId}`;
+        
                 return (
                     <TableCell title={orderId ? `#${orderId}` : '-'}>
                         {orderId ? (
-                            <a href={url} target="_blank" rel="noopener noreferrer" className="link-item">
+                            <a
+                                href={orderLink}
+                            >
                                 #{orderId}
                             </a>
                         ) : (
@@ -174,58 +175,18 @@ const Refund: React.FC = () => {
                     </TableCell>
                 );
             },
-        },
+        },        
         {
             header: __('Customer', 'multivendorx'),
             cell: ({ row }: any) => {
                 const name = row.original.customer_name?.trim();
-                const link = row.original.customer_edit_link;
-
                 return (
                     <TableCell title={name || '-'}>
-                        {name
-                            ? link
-                                ? <a
-                                    href={link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-blue-600 hover:underline"
-                                >
-                                    {name}
-                                </a>
-                                : name
-                            : '-'}
+                        {name || '-'}
                     </TableCell>
                 );
             },
-        },
-        {
-            header: __('Store', 'multivendorx'),
-            cell: ({ row }) => {
-                const { store_id, store_name } = row.original;
-                const baseUrl = `${window.location.origin}/wp-admin/admin.php?page=multivendorx#&tab=stores`;
-                const storeLink = store_id
-                    ? `${baseUrl}&edit/${store_id}/&subtab=store-overview`
-                    : '#';
-
-                return (
-                    <TableCell title={store_name || ''}>
-                        {store_id ? (
-                            <a
-                                href={storeLink}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-purple-600 hover:underline"
-                            >
-                                {store_name || '-'}
-                            </a>
-                        ) : (
-                            store_name || '-'
-                        )}
-                    </TableCell>
-                );
-            },
-        },
+        },        
         {
             header: __('Refund Amount', 'multivendorx'),
             cell: ({ row }: any) => (
@@ -412,26 +373,6 @@ const Refund: React.FC = () => {
     ];
 
     const realtimeFilter: RealtimeFilter[] = [
-        {
-            name: 'store_id',
-            render: (updateFilter, filterValue) => (
-                <div className="group-field">
-                    <select
-                        name="store_id"
-                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
-                        value={filterValue || ''}
-                        className="basic-select"
-                    >
-                        <option value="">{__('All Store', 'multivendorx')}</option>
-                        {store?.map((s: any) => (
-                            <option key={s.id} value={s.id}>
-                                {s.store_name.charAt(0).toUpperCase() + s.store_name.slice(1)}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-            ),
-        },
         {
             name: 'date',
             render: (updateFilter) => (

@@ -219,25 +219,94 @@ const Orders: React.FC = () => {
         }
     };
 
-    const BulkAction: React.FC = () => (
-        <div className="bulk-action">
-            <select
-                name="action"
-                className="basic-select"
-                ref={bulkSelectRef}
-                onChange={handleBulkAction}
-            >
-                <option value="">{__('Change order status')}</option>
-                <option value="completed">{__('Completed', 'multivendorx')}</option>
-                <option value="processing">{__('Processing', 'multivendorx')}</option>
-                <option value="pending">{__('Pending', 'multivendorx')}</option>
-                <option value="on-hold">{__('On Hold', 'multivendorx')}</option>
-                <option value="cancelled">{__('Cancelled', 'multivendorx')}</option>
-                <option value="refunded">{__('Refunded', 'multivendorx')}</option>
-                <option value="failed">{__('Failed', 'multivendorx')}</option>
-            </select>
-        </div>
-    );
+    const BulkAction: React.FC = () => {
+        const handleBulkActionChange = async (action: string) => {
+            if (!action || selectedOrderIds.length === 0) return;
+    
+            // Change order status
+            try {
+                await Promise.all(
+                    selectedOrderIds.map((orderId) =>
+                        axios.put(
+                            `${appLocalizer.apiUrl}/wc/v3/orders/${orderId}`,
+                            { status: action },
+                            { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
+                        )
+                    )
+                );
+    
+                setRowSelection({});
+                fetchOrderStatusCounts();
+                requestData(pagination.pageSize, pagination.pageIndex + 1);
+            } catch (err) {
+                console.error(err);
+            } finally {
+                if (bulkSelectRef.current) bulkSelectRef.current.value = "";
+            }
+        };
+    
+        const downloadSelectedCSV = () => {
+            if (selectedOrderIds.length === 0) {
+                alert('No orders selected for export');
+                return;
+            }
+    
+            const selectedOrders = data.filter(order => selectedOrderIds.includes(order.id));
+    
+            const csvRows: string[] = [];
+            csvRows.push('Order ID,Customer,Email,Total,Status,Date');
+    
+            selectedOrders.forEach(order => {
+                const customer = order.billing?.first_name
+                    ? `${order.billing.first_name} ${order.billing.last_name || ''}`
+                    : 'Guest';
+                const email = order.billing?.email || '';
+                const total = order.total || '';
+                const status = order.status || '';
+                const date = order.date_created || '';
+    
+                csvRows.push(`"${order.id}","${customer}","${email}","${total}","${status}","${date}"`);
+            });
+    
+            const csvString = csvRows.join('\n');
+            const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `selected_orders_${appLocalizer.store_id}_${new Date().toISOString()}.csv`;
+            link.click();
+            URL.revokeObjectURL(link.href);
+        };
+    
+        return (
+            <div className="bulk-action" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <select
+                    name="action"
+                    className="basic-select"
+                    ref={bulkSelectRef}
+                    onChange={(e) => handleBulkActionChange(e.target.value)}
+                >
+                    <option value="">{__('Bulk Actions', 'multivendorx')}</option>
+                    <option value="completed">{__('Completed', 'multivendorx')}</option>
+                    <option value="processing">{__('Processing', 'multivendorx')}</option>
+                    <option value="pending">{__('Pending', 'multivendorx')}</option>
+                    <option value="on-hold">{__('On Hold', 'multivendorx')}</option>
+                    <option value="cancelled">{__('Cancelled', 'multivendorx')}</option>
+                    <option value="refunded">{__('Refunded', 'multivendorx')}</option>
+                    <option value="failed">{__('Failed', 'multivendorx')}</option>
+                </select>
+    
+                <button
+                    type="button"
+                    className="admin-btn btn-purple-bg"
+                    onClick={downloadSelectedCSV}
+                >
+                    <i className="adminlib-export"></i> {__('Download CSV', 'multivendorx')}
+                </button>
+            </div>
+        );
+    };
+    
+    
 
 
     const columns: ColumnDef<any>[] = [
@@ -266,12 +335,19 @@ const Orders: React.FC = () => {
             header: __("Order ID", "multivendorx"),
             cell: ({ row }) => (
                 <TableCell>
-                    <span className="link" onClick={() => setSelectedOrder(row.original)}>
+                    <span
+                        className="link"
+                        onClick={() => {
+                            // Open order in view mode (same as View action)
+                            setSelectedOrder(row.original);
+                            window.location.hash = `view/${row.original.id}`;
+                        }}
+                    >
                         #{row.original.number}
                     </span>
                 </TableCell>
             ),
-        },
+        },        
         {
             header: __("Customer", "multivendorx"),
             cell: ({ row }) => {
@@ -478,6 +554,77 @@ const Orders: React.FC = () => {
         },
     ];
 
+    const exportAllOrders = async () => {
+        try {
+            let allOrders: any[] = [];
+            let page = 1;
+            const perPage = 100; // WooCommerce API max per page
+    
+            // Fetch all pages
+            while (true) {
+                const res = await axios.get(`${appLocalizer.apiUrl}/wc/v3/orders`, {
+                    headers: { 'X-WP-Nonce': appLocalizer.nonce },
+                    params: {
+                        per_page: perPage,
+                        page,
+                        meta_key: 'multivendorx_store_id',
+                        value: appLocalizer.store_id,
+                    },
+                });
+    
+                allOrders = allOrders.concat(res.data);
+    
+                const totalPages = parseInt(res.headers['x-wp-totalpages'] || '1');
+                if (page >= totalPages) break;
+                page++;
+            }
+    
+            if (allOrders.length === 0) {
+                alert('No orders found to export');
+                return;
+            }
+    
+            // Convert orders to CSV
+            const csvRows: string[] = [];
+            csvRows.push('Order ID,Customer,Email,Total,Status,Date'); // Header
+    
+            allOrders.forEach(order => {
+                const customer = order.billing?.first_name
+                    ? `${order.billing.first_name} ${order.billing.last_name || ''}`
+                    : 'Guest';
+                const email = order.billing?.email || '';
+                const total = order.total || '';
+                const status = order.status || '';
+                const date = order.date_created || '';
+    
+                csvRows.push([
+                    order.id,
+                    customer,
+                    email,
+                    total,
+                    status,
+                    date
+                ].map(field => `"${field}"`).join(','));
+            });
+    
+            const csvString = csvRows.join('\n');
+    
+            // Trigger download
+            const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `orders_${appLocalizer.store_id}_${new Date().toISOString()}.csv`;
+            link.click();
+            URL.revokeObjectURL(link.href);
+    
+        } catch (err) {
+            console.error('Failed to export all orders:', err);
+            alert('Failed to export orders, check console for details');
+        }
+    };
+    
+    
+
     return (
         <>
             {!isViewOrder && !isAddOrder && !selectedOrder && (
@@ -489,11 +636,20 @@ const Orders: React.FC = () => {
                         </div>
                         <div
                             className="admin-btn btn-purple-bg"
-                            onClick={() => { window.location.hash = `add`; }} >                      
+                            onClick={exportAllOrders}  // <-- fixed here
+                        >
+                            <i className="adminlib-export"></i>
+                            Export
+                        </div>
+                        <div
+                            className="admin-btn btn-purple-bg"
+                            onClick={() => { window.location.hash = `add`; }}
+                        >
                             <i className="adminlib-plus-circle-o"></i>
                             Add New
                         </div>
                     </div>
+
                     <Table
                         data={data}
                         columns={columns as ColumnDef<Record<string, any>, any>[]}
@@ -514,7 +670,7 @@ const Orders: React.FC = () => {
                 </>
             )}
 
-            {isAddOrder && <AddOrder/>}
+            {isAddOrder && <AddOrder />}
             {isViewOrder && <OrderDetails
                 order={selectedOrder}
                 onBack={() => {

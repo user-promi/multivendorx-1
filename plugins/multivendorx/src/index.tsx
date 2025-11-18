@@ -4,6 +4,7 @@ import App from './app';
 import replaceDashboardDivs from './storeDashboard';
 import 'zyra/build/index.css';
 import "leaflet/dist/leaflet.css";
+import { initializeModules } from 'zyra';
 
 // Render the App component into the DOM
 // render(
@@ -12,6 +13,8 @@ import "leaflet/dist/leaflet.css";
 //     </BrowserRouter>,
 //     document.getElementById( 'admin-main-wrapper' )
 // );
+
+initializeModules(appLocalizer, 'multivendorx', 'free', 'modules');
 
 // 1. Try to mount admin panel if element is found
 const adminWrapper = document.getElementById('admin-main-wrapper');

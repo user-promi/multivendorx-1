@@ -150,9 +150,7 @@ const App = () => {
     });
   }, [currentTabParams]);
 
-  useEffect(() => {
-    initializeModules(appLocalizer, 'multivendorx', 'free', 'modules');
-  }, []);
+
 
   // 🔹 Search handlers
   const handleSearchChange = (value: string) => {

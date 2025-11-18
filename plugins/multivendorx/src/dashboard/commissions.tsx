@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { __ } from "@wordpress/i18n";
 import { CalendarInput, CommonPopup, getApiLink, Table, TableCell, useModules } from "zyra";
-import { ColumnDef, PaginationState } from "@tanstack/react-table";
+import { ColumnDef, PaginationState, RowSelectionState } from "@tanstack/react-table";
 import ViewCommission from "./viewCommission";
 import { formatCurrency } from '../services/commonFunction';
 
@@ -26,6 +26,18 @@ type CommissionStatus = {
     name: string;
     count: number;
 };
+type FilterData = {
+    searchAction?: string;
+    searchField?: string;
+    typeCount?: any;
+    store?: string;
+    order?: any;
+    orderBy?: any;
+    date?: {
+        start_date: Date;
+        end_date: Date;
+    };
+};
 const StoreCommission: React.FC = () => {
     const [data, setData] = useState<CommissionRow[]>([]);
     const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
@@ -35,6 +47,8 @@ const StoreCommission: React.FC = () => {
     const { modules } = useModules();
     const [commissionStatus, setCommissionStatus] = useState<CommissionStatus[] | null>(null);
     const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>({});
+    const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+    const [currentFilterData, setCurrentFilterData] = useState<FilterData>({});
 
     // Fetch total rows on mount
     useEffect(() => {
@@ -66,6 +80,8 @@ const StoreCommission: React.FC = () => {
         currentPage = 1,
         typeCount = '',
         store = '',
+        orderBy = '',
+        order = '',
         startDate = new Date(0),
         endDate = new Date(),
     ) {
@@ -79,6 +95,8 @@ const StoreCommission: React.FC = () => {
                 page: currentPage,
                 row: rowsPerPage,
                 status: typeCount === 'all' ? '' : typeCount,
+                orderBy,
+                order,
                 startDate,
                 endDate
             },
@@ -125,17 +143,37 @@ const StoreCommission: React.FC = () => {
         currentPage: number,
         filterData: FilterData
     ) => {
+        setCurrentFilterData(filterData);
         setData([]);
         requestData(
             rowsPerPage,
             currentPage,
             filterData?.typeCount,
             filterData?.store,
+            filterData?.orderBy,
+            filterData?.order,
             filterData?.date?.start_date,
             filterData?.date?.end_date
         );
     };
     const columns: ColumnDef<CommissionRow>[] = [
+        {
+            id: 'select',
+            header: ({ table }) => (
+                <input
+                    type="checkbox"
+                    checked={table.getIsAllRowsSelected()}
+                    onChange={table.getToggleAllRowsSelectedHandler()}
+                />
+            ),
+            cell: ({ row }) => (
+                <input
+                    type="checkbox"
+                    checked={row.getIsSelected()}
+                    onChange={row.getToggleSelectedHandler()}
+                />
+            ),
+        },
         {
             id: 'id',
             accessorKey: 'id',
@@ -149,16 +187,16 @@ const StoreCommission: React.FC = () => {
             accessorKey: 'orderId',
             enableSorting: true,
             header: __('Order ID', 'multivendorx'),
-            cell: ({ row }) => {
+            cell: ({ row }: any) => {
                 const orderId = row.original.orderId;
-                // const url = orderId
-                //     ? `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${orderId}&action=edit`
-                //     : '#';
-
+                const orderLink = `/dashboard/sales/orders/#view/${orderId}`;
+        
                 return (
                     <TableCell title={orderId ? `#${orderId}` : '-'}>
                         {orderId ? (
-                            <a href={'#'} target="_blank" rel="noopener noreferrer" className="link-item">
+                            <a
+                                href={orderLink}
+                            >
                                 #{orderId}
                             </a>
                         ) : (
@@ -379,6 +417,160 @@ const StoreCommission: React.FC = () => {
             ),
         },
     ];
+
+    // CSV Download Button Component
+    const DownloadCSVButton: React.FC<{
+        selectedRows: RowSelectionState;
+        data: CommissionRow[] | null;
+        filterData: FilterData;
+        isLoading?: boolean;
+    }> = ({ selectedRows, data, filterData, isLoading = false }) => {
+        const [isDownloading, setIsDownloading] = useState(false);
+
+
+        const handleDownload = async () => {
+            setIsDownloading(true);
+            try {
+                // Get selected row IDs
+                const selectedIds = Object.keys(selectedRows)
+                    .filter(key => selectedRows[key])
+                    .map(key => {
+                        const rowIndex = parseInt(key);
+                        return data?.[rowIndex]?.id;
+                    })
+                    .filter(id => id !== undefined);
+
+                // Prepare parameters for CSV download
+                const params: any = {
+                    format: 'csv',
+                    startDate: filterData?.date?.start_date ? filterData.date.start_date.toISOString().split('T')[0] : '',
+                    endDate: filterData?.date?.end_date ? filterData.date.end_date.toISOString().split('T')[0] : '',
+                };
+
+                // Add filters if present
+                if (filterData?.store) {
+                    params.store_id = filterData.store;
+                }
+                if (filterData?.typeCount && filterData.typeCount !== 'all') {
+                    params.status = filterData.typeCount;
+                }
+
+                // If specific rows are selected, send their IDs
+                if (selectedIds.length > 0) {
+                    params.ids = selectedIds.join(',');
+                }
+
+                // Make API request for CSV
+                const response = await axios({
+                    method: 'GET',
+                    url: getApiLink(appLocalizer, 'commission'),
+                    headers: {
+                        'X-WP-Nonce': appLocalizer.nonce,
+                        'Accept': 'text/csv'
+                    },
+                    params: params,
+                    responseType: 'blob'
+                });
+
+                // Create download link
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+
+                // Generate filename with timestamp
+                const timestamp = new Date().toISOString().split('T')[0];
+                const filename = `commissions_${timestamp}.csv`;
+                link.setAttribute('download', filename);
+
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                window.URL.revokeObjectURL(url);
+
+            } catch (error) {
+                console.error('Error downloading CSV:', error);
+                alert(__('Failed to download CSV. Please try again.', 'multivendorx'));
+            } finally {
+                setIsDownloading(false);
+            }
+        };
+
+        const hasSelectedRows = Object.keys(selectedRows).some(key => selectedRows[key]);
+
+        return (
+            <button
+                onClick={handleDownload}
+                disabled={isDownloading || isLoading || (!hasSelectedRows && !data)}
+                className="button"
+            >
+                Download CSV
+            </button>
+        );
+    };
+
+    // Bulk Actions Component
+    const BulkActions: React.FC<{
+        selectedRows: RowSelectionState;
+        data: CommissionRow[] | null;
+        filterData: FilterData;
+        onActionComplete?: () => void;
+    }> = ({ selectedRows, data, filterData, onActionComplete }) => {
+        return (
+            <div>
+                <DownloadCSVButton
+                    selectedRows={selectedRows}
+                    data={data}
+                    filterData={filterData}
+                />
+                {/* Add other bulk actions here if needed */}
+            </div>
+        );
+    };
+    const handleExportAll = async () => {
+        try {
+            const params: any = {
+                format: 'csv',
+                startDate: currentFilterData?.date?.start_date
+                    ? currentFilterData.date.start_date.toISOString().split('T')[0]
+                    : '',
+                endDate: currentFilterData?.date?.end_date
+                    ? currentFilterData.date.end_date.toISOString().split('T')[0]
+                    : '',
+            };
+
+            if (currentFilterData?.store) {
+                params.store_id = currentFilterData.store;
+            }
+
+            if (currentFilterData?.typeCount && currentFilterData.typeCount !== 'all') {
+                params.status = currentFilterData.typeCount;
+            }
+
+            const response = await axios({
+                method: 'GET',
+                url: getApiLink(appLocalizer, 'commission'),
+                headers: { 'X-WP-Nonce': appLocalizer.nonce, Accept: 'text/csv' },
+                params,
+                responseType: 'blob',
+            });
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+
+            const timestamp = new Date().toISOString().split('T')[0];
+            link.setAttribute('download', `commissions_${timestamp}.csv`);
+
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error('Error exporting CSV:', error);
+            alert(__('Failed to export CSV. Please try again.', 'multivendorx'));
+        }
+    };
+
     return (
         <>
             <div className="page-title-wrapper">
@@ -386,16 +578,19 @@ const StoreCommission: React.FC = () => {
                     <div className="title">Commission</div>
                     <div className="des">Manage and process refund requests from customers.</div>
                 </div>
-                {/* <div className="buttons-wrapper">
-                    <div className="admin-btn btn-purple-bg">
+                <div className="buttons-wrapper">
+                    <button className="admin-btn btn-purple-bg" onClick={handleExportAll}>
                         <i className="adminlib-export"></i>
                         Export
-                    </div>
-                </div> */}
+                    </button>
+                </div>
+
             </div>
             <Table
                 data={data}
                 columns={columns as ColumnDef<Record<string, any>, any>[]}
+                rowSelection={rowSelection}
+                onRowSelectionChange={setRowSelection}
                 pagination={pagination}
                 onPaginationChange={setPagination}
                 handlePagination={requestApiForData}
@@ -405,6 +600,13 @@ const StoreCommission: React.FC = () => {
                 totalCounts={totalRows}
                 pageCount={pageCount}
                 realtimeFilter={realtimeFilter}
+                bulkActionComp={() => (
+                    <BulkActions
+                        selectedRows={rowSelection}
+                        data={data}
+                        filterData={currentFilterData}
+                    />
+                )}
             />
 
             {modalCommission && (
