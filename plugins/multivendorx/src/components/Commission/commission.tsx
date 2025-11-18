@@ -432,8 +432,7 @@ const Commission: React.FC = () => {
             cell: ({ row }) => (
                 <TableCell>
                     <span
-                        className="admin-table-link"
-                        style={{ cursor: 'pointer', color: '#5b5ce2' }}
+                        className="link-item"
                         onClick={() => {
                             setSelectedCommissionId(row.original.id ?? null);
                             setViewCommission(true);
@@ -458,7 +457,7 @@ const Commission: React.FC = () => {
                 return (
                     <TableCell title={orderId ? `#${orderId}` : '-'}>
                         {orderId ? (
-                            <a href={url} target="_blank" rel="noopener noreferrer" className="order-link">
+                            <a href={url} target="_blank" rel="noopener noreferrer" className="link-item">
                                 #{orderId} - {row.original.storeName || '-'}
                             </a>
                         ) : (

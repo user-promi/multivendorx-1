@@ -166,7 +166,7 @@ const Refund: React.FC = () => {
                 return (
                     <TableCell title={orderId ? `#${orderId}` : '-'}>
                         {orderId ? (
-                            <a href={'#'} target="_blank" rel="noopener noreferrer" className="order-link">
+                            <a href={'#'} target="_blank" rel="noopener noreferrer" className="link-item">
                                 #{orderId}
                             </a>
                         ) : (

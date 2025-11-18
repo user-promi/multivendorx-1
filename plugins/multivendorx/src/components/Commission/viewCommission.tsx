@@ -471,7 +471,7 @@ console.log("remap",refundMap);
                     href={`${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${commissionData.order_id}&action=edit`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="order-link"
+                    className="link-item"
                   >
                     #{commissionData.order_id}
                   </a>

@@ -136,6 +136,12 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
                         'slug' => 'store-followers',
                         'capability' => array('read_products', 'edit_products', 'delete_products'),
                     ),
+                    array(
+                        'key' => 'store-review',
+                        'name' => 'Store Review',
+                        'slug' => 'store-review',
+                        'capability' => array('read_products', 'edit_products', 'delete_products'),
+                    ),
                 ),
                 'capability' => array('manage_users'),
             ),
