@@ -65,7 +65,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
           <p>Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.</p>
           <i
             className="icon adminlib-close"
-            onClick={() => onClose}
+            onClick = {onClose}
           ></i>
         </>}
     >
