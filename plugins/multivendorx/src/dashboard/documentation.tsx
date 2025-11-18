@@ -91,12 +91,12 @@ const Documentation: React.FC = () => {
 
     return (
         <>
-            {/* <div className="page-title-wrapper">
+            <div className="page-title-wrapper">
                 <div className="page-title">
                     <div className="title">Documentation</div>
                     <div className="des">Everything you need to know about store operations</div>
                 </div>
-            </div> */}
+            </div>
 
             <div className="row">
                 <div className="column">

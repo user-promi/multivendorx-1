@@ -222,7 +222,7 @@ const Orders: React.FC = () => {
     const BulkAction: React.FC = () => {
         const handleBulkActionChange = async (action: string) => {
             if (!action || selectedOrderIds.length === 0) return;
-    
+
             // Change order status
             try {
                 await Promise.all(
@@ -234,7 +234,7 @@ const Orders: React.FC = () => {
                         )
                     )
                 );
-    
+
                 setRowSelection({});
                 fetchOrderStatusCounts();
                 requestData(pagination.pageSize, pagination.pageIndex + 1);
@@ -244,18 +244,18 @@ const Orders: React.FC = () => {
                 if (bulkSelectRef.current) bulkSelectRef.current.value = "";
             }
         };
-    
+
         const downloadSelectedCSV = () => {
             if (selectedOrderIds.length === 0) {
                 alert('No orders selected for export');
                 return;
             }
-    
+
             const selectedOrders = data.filter(order => selectedOrderIds.includes(order.id));
-    
+
             const csvRows: string[] = [];
             csvRows.push('Order ID,Customer,Email,Total,Status,Date');
-    
+
             selectedOrders.forEach(order => {
                 const customer = order.billing?.first_name
                     ? `${order.billing.first_name} ${order.billing.last_name || ''}`
@@ -264,10 +264,10 @@ const Orders: React.FC = () => {
                 const total = order.total || '';
                 const status = order.status || '';
                 const date = order.date_created || '';
-    
+
                 csvRows.push(`"${order.id}","${customer}","${email}","${total}","${status}","${date}"`);
             });
-    
+
             const csvString = csvRows.join('\n');
             const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
@@ -276,7 +276,7 @@ const Orders: React.FC = () => {
             link.click();
             URL.revokeObjectURL(link.href);
         };
-    
+
         return (
             <div className="bulk-action" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                 <select
@@ -294,7 +294,7 @@ const Orders: React.FC = () => {
                     <option value="refunded">{__('Refunded', 'multivendorx')}</option>
                     <option value="failed">{__('Failed', 'multivendorx')}</option>
                 </select>
-    
+
                 <button
                     type="button"
                     className="admin-btn btn-purple-bg"
@@ -305,8 +305,8 @@ const Orders: React.FC = () => {
             </div>
         );
     };
-    
-    
+
+
 
 
     const columns: ColumnDef<any>[] = [
@@ -347,7 +347,7 @@ const Orders: React.FC = () => {
                     </span>
                 </TableCell>
             ),
-        },        
+        },
         {
             header: __("Customer", "multivendorx"),
             cell: ({ row }) => {
@@ -559,7 +559,7 @@ const Orders: React.FC = () => {
             let allOrders: any[] = [];
             let page = 1;
             const perPage = 100; // WooCommerce API max per page
-    
+
             // Fetch all pages
             while (true) {
                 const res = await axios.get(`${appLocalizer.apiUrl}/wc/v3/orders`, {
@@ -571,23 +571,23 @@ const Orders: React.FC = () => {
                         value: appLocalizer.store_id,
                     },
                 });
-    
+
                 allOrders = allOrders.concat(res.data);
-    
+
                 const totalPages = parseInt(res.headers['x-wp-totalpages'] || '1');
                 if (page >= totalPages) break;
                 page++;
             }
-    
+
             if (allOrders.length === 0) {
                 alert('No orders found to export');
                 return;
             }
-    
+
             // Convert orders to CSV
             const csvRows: string[] = [];
             csvRows.push('Order ID,Customer,Email,Total,Status,Date'); // Header
-    
+
             allOrders.forEach(order => {
                 const customer = order.billing?.first_name
                     ? `${order.billing.first_name} ${order.billing.last_name || ''}`
@@ -596,7 +596,7 @@ const Orders: React.FC = () => {
                 const total = order.total || '';
                 const status = order.status || '';
                 const date = order.date_created || '';
-    
+
                 csvRows.push([
                     order.id,
                     customer,
@@ -606,9 +606,9 @@ const Orders: React.FC = () => {
                     date
                 ].map(field => `"${field}"`).join(','));
             });
-    
+
             const csvString = csvRows.join('\n');
-    
+
             // Trigger download
             const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
@@ -616,14 +616,14 @@ const Orders: React.FC = () => {
             link.download = `orders_${appLocalizer.store_id}_${new Date().toISOString()}.csv`;
             link.click();
             URL.revokeObjectURL(link.href);
-    
+
         } catch (err) {
             console.error('Failed to export all orders:', err);
             alert('Failed to export orders, check console for details');
         }
     };
-    
-    
+
+
 
     return (
         <>
@@ -634,19 +634,21 @@ const Orders: React.FC = () => {
                             <div className="title">Orders</div>
                             <div className="des">Manage your store information and preferences</div>
                         </div>
-                        <div
-                            className="admin-btn btn-purple-bg"
-                            onClick={exportAllOrders}  // <-- fixed here
-                        >
-                            <i className="adminlib-export"></i>
-                            Export
-                        </div>
-                        <div
-                            className="admin-btn btn-purple-bg"
-                            onClick={() => { window.location.hash = `add`; }}
-                        >
-                            <i className="adminlib-plus-circle-o"></i>
-                            Add New
+                        <div className="buttons-wrapper">
+                            <div
+                                className="admin-btn btn-purple-bg"
+                                onClick={exportAllOrders}  // <-- fixed here
+                            >
+                                <i className="adminlib-export"></i>
+                                Export
+                            </div>
+                            <div
+                                className="admin-btn btn-purple-bg"
+                                onClick={() => { window.location.hash = `add`; }}
+                            >
+                                <i className="adminlib-plus-circle-o"></i>
+                                Add New
+                            </div>
                         </div>
                     </div>
 

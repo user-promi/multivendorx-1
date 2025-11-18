@@ -451,10 +451,12 @@ a:focus {
         }
     }
 }
-.status-edit{
+
+.status-edit {
     font-size: 0.813rem;
     line-height: 0.813rem;
 }
+
 .item-details-table {
     table {
         tbody {
@@ -868,18 +870,52 @@ a:focus {
 
 // add orderpage 
 
-.total-summary{
-    .row{
+.total-summary {
+    .row {
         justify-content: end;
     }
 }
-.select-product-wrapper{
+
+.select-product-wrapper {
     display: flex;
     align-items: start;
     margin-top: 1rem;
 
-    label{
+    label {
         width: 25%;
         font-size: 1rem;
     }
 }
+
+
+
+// review-popup-wrapper
+.review-popup-wrapper {
+    .customer-wrapper {
+        display: flex;
+        gap: 0.5rem;
+
+        .avater {
+            i {
+                color: #fff;
+                font-size: 1.5rem;
+            }
+        }
+
+        .name {
+            font-size: 1.125rem;
+            font-weight: 500;
+            padding-bottom: 0.45rem;
+        }
+
+    }
+
+    .review {
+        padding-top: 0.95rem;
+        font-size: 0.95rem;
+        line-height: 1.45rem;
+        color: #000000c7;
+    }
+}
+
+// review-popup-wrapper end
