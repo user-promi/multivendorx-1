@@ -11,7 +11,6 @@ import Privacy from './settings/Privacy';
 import Verification from './settings/Verification';
 import ShippingDelivery from './settings/ShippingDelivery';
 import LiveChat from './settings/LiveChat';
-import DeactivateRequest from './settings/DeactivateRequest';
 
 const settings = () => {
     const id = appLocalizer.store_id;
@@ -200,16 +199,6 @@ const settings = () => {
                 icon: 'live-chat',
             },
         },
-        {
-            type: 'file',
-            content: {
-                id: 'deactivate',
-                name: 'Deactivated Request',
-                desc: 'Deactivated Request',
-                // hideTabHeader: true,
-                icon: 'close-delete',
-            },
-        },
     ];
 
     const getForm = (tabId: string) => {
@@ -234,8 +223,6 @@ const settings = () => {
                 return <Verification />;
             case 'livechat':
                 return <LiveChat />;
-            case 'deactivate':
-                return <DeactivateRequest />;
             default:
                 return <div></div>;
         }
