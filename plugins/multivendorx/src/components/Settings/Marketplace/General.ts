@@ -52,7 +52,7 @@ export default {
         {
             key: 'store_url',
             type: 'text',
-            label: __( 'Storefront link ', 'multivendorx' ),
+            label: __( 'Storefront base ', 'multivendorx' ),
             desc: __(
                 'Set a custom slug for your store URL. For example, in the URL: https://yourdomain.com/store/sample-store/, the default word [store] can be replaced with any slug you define here.',
                 'multivendorx'
