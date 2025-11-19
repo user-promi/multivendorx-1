@@ -132,12 +132,12 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                 </div>
                                 <div className="right">
                                     <i className="adminlib-external"
-                                    onClick={() => {
-    navigate(`?page=multivendorx#&tab=transaction-history&store_id=${id}`);
-}}
+                                        onClick={() => {
+                                            navigate(`?page=multivendorx#&tab=transaction-history&store_id=${id}`);
+                                        }}
 
 
-                                        // onClick={() => { navigate(`?page=multivendorx#&tab=transaction-history&store_id=${id}`); }}
+                                    // onClick={() => { navigate(`?page=multivendorx#&tab=transaction-history&store_id=${id}`); }}
                                     ></i>
                                 </div>
                             </div>
@@ -377,7 +377,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                 </div>
                             </div>
                             <div className="right">
-                                <i className="adminlib-external" 
+                                <i className="adminlib-external"
                                     onClick={() => { navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=store`) }}
                                 ></i>
                             </div>
