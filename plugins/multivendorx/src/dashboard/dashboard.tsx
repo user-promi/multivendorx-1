@@ -1,4 +1,3 @@
-import { Link, useLocation } from 'react-router-dom';
 import {
   BarChart,
   Bar,
@@ -11,32 +10,15 @@ import {
   ResponsiveContainer,
   PieChart, Pie, Cell, Legend
 } from 'recharts';
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import L from "leaflet";
-import { Table, TableCell } from 'zyra';
-import { ColumnDef } from '@tanstack/react-table';
 import React, { useState, useEffect } from "react";
 import "../components/dashboard.scss";
 import '../dashboard/dashboard1.scss';
-import Mascot from "../assets/images/multivendorx-mascot-scale.png";
+import { getApiLink, Table, TableCell } from 'zyra';
+import axios from 'axios';
+import { __ } from '@wordpress/i18n';
+import { formatCurrency } from '@/services/commonFunction';
 
-type StoreRow = {
-  id?: number;
-  store_name?: string;
-  store_slug?: string;
-  status?: 'publish' | 'pending' | string;
-};
 
-const salesIcon = new L.DivIcon({
-  className: "custom-marker",
-  html: `<div style="background:#5007aa;color:#fff;border-radius:50%;padding:6px 0.625rem;font-size:0.75rem;">$</div>`,
-});
-const analyticsData = [
-  { icon: "adminlib-dollar theme-color1", number: "$45,230", text: "Total Revenue" },
-  { icon: "adminlib-order theme-color2", number: "325", text: "Total Orders" },
-  { icon: "adminlib-paid theme-color3", number: "$139.60", text: "Average Order Value" },
-  { icon: "adminlib-user-circle theme-color4", number: "1,248", text: "Active Customers" },
-];
 const revenueData = [
   { month: "Jan", orders: 4000, earnings: 2400, refunds: 200, conversion: 2.4 },
   { month: "Feb", orders: 3000, earnings: 1398, refunds: 40, conversion: 2.1 },
@@ -46,163 +28,14 @@ const revenueData = [
   { month: "Jun", orders: 4390, earnings: 3800, refunds: 210, conversion: 2.9 },
   { month: "Jul", orders: 6490, earnings: 5200, refunds: 600, conversion: 3.6 },
 ];
-const demoData = [
-  {
-    id: 1,
-    orderId: "#ORD-001",
-    date: "2025-11-01",
-    product: "Wireless Headset",
-    customer: "John Doe",
-    total: "$120.00",
-    status: "Processing",
-    order: "Processing",
-    progress: 45,
-    theme: "theme-color1",
-  },
-  {
-    id: 2,
-    orderId: "#ORD-002",
-    date: "2025-11-03",
-    product: "Bluetooth Speaker",
-    customer: "Jane Smith",
-    total: "$89.00",
-    status: "Shipped",
-    order: "Shipped",
-    progress: 75,
-    theme: "theme-color2",
-  },
-  {
-    id: 3,
-    orderId: "#ORD-003",
-    date: "2025-11-04",
-    product: "Smartwatch",
-    customer: "Robert Wilson",
-    total: "$210.00",
-    status: "Delivered",
-    progress: 100,
-    theme: "theme-color3",
-  },
-];
-const reviews = [
-  {
-    id: 1,
-    product: "Product A",
-    rating: 5,
-    date: "22 Dec 2024",
-    description:
-      "Good product overall, but shipping took longer than expected."
-  },
-  {
-    id: 2,
-    product: "Product B",
-    rating: 4,
-    date: "10 Jan 2025",
-    description:
-      "Amazing quality and packaging. Worth the price and fast delivery!",
-  },
-  {
-    id: 3,
-    product: "Product C",
-    rating: 3,
-    date: "5 Feb 2025",
-    description:
-      "Good product overall, but shipping took longer than expected.",
-  },
-  {
-    id: 4,
-    product: "Product D",
-    rating: 5,
-    date: "28 Mar 2025",
-    description:
-      "Exceeded expectations! The material feels premium and durable.",
-  },
-];
-const customers = [
-  {
-    id: 1,
-    name: "David Chen",
-    orders: 7,
-    total: "$1250",
-    icon: "adminlib-person",
-  },
-  {
-    id: 2,
-    name: "Sophia Martinez",
-    orders: 12,
-    total: "$2320",
-    icon: "adminlib-person",
-  },
-  {
-    id: 3,
-    name: "Ethan Johnson",
-    orders: 4,
-    total: "$890",
-    icon: "adminlib-person",
-  },
-  {
-    id: 4,
-    name: "Liam Patel",
-    orders: 9,
-    total: "$1560",
-    icon: "adminlib-person",
-  },
-];
 
-const requests = [
-  {
-    id: "REQ-001",
-    name: "Maria G.",
-    reason: "Damaged",
-    time: "Today",
-    amount: "$55.99"
-  },
-  {
-    id: "REQ-002",
-    name: "John D.",
-    reason: "Wrong size",
-    time: "Yesterday",
-    amount: "$29.50"
-  },
-  {
-    id: "REQ-003",
-    name: "Sarah L.",
-    reason: "Changed mind",
-    time: "2 days ago",
-    amount: "$12.00"
-  }
-];
-
-
-const ordersByCountry = [
-  { country: "USA", orders: 4200, lat: 37.0902, lng: -95.7129 },
-  { country: "UK", orders: 2800, lat: 55.3781, lng: -3.4360 },
-  { country: "India", orders: 5200, lat: 20.5937, lng: 78.9629 },
-  { country: "Germany", orders: 3100, lat: 51.1657, lng: 10.4515 },
-  { country: "Australia", orders: 1900, lat: -25.2744, lng: 133.7751 },
-];
 const activities = [
   { icon: 'adminlib-cart', text: 'New order #10023 by Alex Doe.' },
   { icon: 'adminlib-star', text: 'Inventory updated: "Coffee Beans"' },
   { icon: 'adminlib-global-community', text: 'Customer "davidchen" updated account.' },
   { icon: 'adminlib-cart', text: 'New product "Wireless Headset"' },
 ];
-const tabs = [
-  { id: "transaction", label: "All transaction", content: "ffff" },
-  { id: "success", label: "Success", content: "ff " },
-  { id: "pending", label: "Pending", content: "" },
-];
-const tabData = {
-  transaction: [
-    { id: 1, name: "Lather & Loom", orders: 3, amount: 380, color: "red" },
-    { id: 2, name: "Urban Threads", orders: 5, amount: 560, color: "green" },
-  ],
-  success: [
-    { id: 3, name: "Crafty Corner", orders: 2, amount: 210, color: "blue" },
-  ],
-  pending: [
-    { id: 4, name: "Glow & Co", orders: 4, amount: 420, color: "red" },
-  ],
-};
+
 const getCSSVar = (name) =>
   getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
@@ -212,11 +45,7 @@ const themeColors = [
   getCSSVar("--colorAccent"),
   getCSSVar("--colorSupport"),
 ];
-const data = [
-  { name: "Top Category", value: 400, color: themeColors[0] },
-  { name: "Top Brand", value: 300, color: themeColors[1] },
-  { name: "Top Store", value: 300, color: themeColors[2] },
-];
+
 const BarChartData = [
   { name: "Sales", dataKey: "orders", color: themeColors[0] },
   { name: "Earnings", dataKey: "earnings", color: themeColors[1] },
@@ -224,55 +53,325 @@ const BarChartData = [
 ];
 
 const Dashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState("transaction");
-  const items = tabData[activeTab];
+  const [review, setReview] = useState<any[]>([]);
+  const [pendingRefund, setPendingRefund] = useState<any[]>([]);
+  const [announcement, setAnnouncement] = useState<any[]>([]);
+  const [topProducts, setTopProducts] = useState([]);
+  const [recentOrder, setRecentOrders] = useState<any[]>([]);
+  const [transaction, setTransaction] = useState<any[]>([]);
+  const [store, setStore] = useState<any[]>([]);
+  const [totalOrder, setTotalOrder] = useState<any>([]);
+
+  useEffect(() => {
+    axios({
+      method: 'GET',
+      url: getApiLink(appLocalizer, 'review'),
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      params: {
+        page: 1,
+        row: 4,
+        store_id: appLocalizer.store_id,
+        orderBy: 'date_created',
+        order: 'desc',
+      },
+    })
+      .then((response) => {
+        const items = response.data.items || [];
+        setReview(items);
+      })
+      .catch(() => {
+        setReview([]);
+      });
+
+    axios({
+      method: "GET",
+      url: `${appLocalizer.apiUrl}/wc/v3/orders`,
+      headers: { "X-WP-Nonce": appLocalizer.nonce },
+      params: {
+        meta_key: "multivendorx_store_id",
+        value: appLocalizer.store_id,
+        // refund_status: "refund_request",
+        status:'refund-requested',
+        page: 1,
+        per_page: 4,
+        orderby: "date",
+        order: "desc",
+      },
+    })
+      .then((response) => {
+        const items = response.data || [];
+
+        const formatData = items.map((order) => {
+          // extract refund reason
+          const reasonMeta = order.meta_data.find(
+            (m) => m.key === "_customer_refund_reason"
+          );
+          const refundReason = reasonMeta ? reasonMeta.value : "No reason";
+
+          return {
+            id: order.id,
+            name: `${order.billing.first_name} ${order.billing.last_name}`,
+            reason: refundReason,
+            time: order.date_created, // or format with moment()
+            amount: order.total,
+          };
+        });
+
+        setPendingRefund(formatData);
+      })
+      .catch(() => {
+        setPendingRefund([]);
+      });
+
+    axios({
+      method: "GET",
+      url: getApiLink(appLocalizer, "announcement"),
+      headers: { "X-WP-Nonce": appLocalizer.nonce },
+      params: {
+        page: 1,
+        row: 4,
+        store_id: appLocalizer.store_id,
+      },
+    })
+      .then((response) => {
+        setAnnouncement(response.data.items || []);
+      })
+      .catch(() => { });
+
+    axios({
+      method: 'GET',
+      url: `${appLocalizer.apiUrl}/wc/v3/products`,
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      params: {
+        per_page: 5,
+        meta_key: 'multivendorx_store_id',
+        orderby: 'popularity',
+        order: 'desc',
+        value: appLocalizer.store_id
+      },
+    })
+      .then(response => {
+        const products = response.data;
+
+        // Find max sales to calculate popularity %
+        const maxSales = Math.max(...products.map(p => parseInt(p.total_sales) || 0));
+
+        const processed = products.map(p => {
+          const sales = parseInt(p.total_sales) || 0;
+          const popularity = maxSales > 0 ? Math.round((sales / maxSales) * 100) : 0;
+          return {
+            id: p.id,
+            name: p.name,
+            sales,
+            popularity,
+          };
+        });
+        console.log("pro", processed);
+        setTopProducts(processed);
+      })
+      .catch(error => {
+        console.error("Error fetching top selling products:", error);
+      });
+
+    axios({
+      method: 'GET',
+      url: `${appLocalizer.apiUrl}/wc/v3/orders`,
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      params: {
+        per_page: 5,
+        order: 'desc',
+        orderby: 'date',
+        meta_key: 'multivendorx_store_id',
+        value: appLocalizer.store_id,   // THIS FIXES YOUR ISSUE
+      },
+    })
+      .then(response => {
+        const orders = response.data.map(order => {
+          return {
+            id: order.id,
+            store_name: order.store_name || '-',
+            amount: formatCurrency(order.total),
+            commission_amount: order.commission_amount
+              ? formatCurrency(order.commission_amount)
+              : '-',
+            date: formatWcShortDate(order.date_created),
+            status: order.status,
+            currency_symbol: order.currency_symbol,
+          };
+        });
+
+        setRecentOrders(orders);
+      })
+      .catch(() => { });
+
+    axios({
+      method: 'GET',
+      url: getApiLink(appLocalizer, 'transaction'),
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      params: {
+        page: 1,
+        row: 4,
+        store_id: appLocalizer.store_id,
+        orderBy: 'created_at',
+        order: 'DESC',
+      },
+    })
+      .then((response) => {
+        setTransaction(response.data.transaction || []);
+      })
+      .catch((error) => {
+        setTransaction([]);
+      });
+
+    axios({
+      method: 'GET',
+      url: getApiLink(appLocalizer, `store/${appLocalizer.store_id}`),
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+    })
+      .then((res: any) => {
+        const data = res.data || {};
+        setStore(data);
+      })
+    axios({
+      method: 'GET',
+      url: `${appLocalizer.apiUrl}/wc/v3/orders`,
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      params: {
+        per_page: 1,
+        meta_key: 'multivendorx_store_id',
+        value: appLocalizer.store_id,
+      },
+    })
+      .then(response => {
+        // WooCommerce returns total order count in headers
+        const totalOrders = parseInt(response.headers['x-wp-total']) || 0;
+        setTotalOrder(totalOrders)
+
+      })
+      .catch(() => { });
+
+  }, []);
+
+  const analyticsData = [
+    { icon: "adminlib-dollar theme-color1", number: formatCurrency(store?.commission?.total_order_amount || 0), text: "Total Revenue" },
+    { icon: "adminlib-order theme-color2", number: totalOrder, text: "Total Orders" },
+    { icon: "adminlib-paid theme-color3", number: formatCurrency(store?.commission?.commission_total || 0), text: "Total Commission" },
+    { icon: "adminlib-user-circle theme-color4", number: formatCurrency(store?.commission?.commission_refunded || 0), text: "Total Commission Refund" },
+  ];
+
+  const columns: ColumnDef<StoreRow>[] = [
+    {
+      id: 'order_id',
+      header: __('Order', 'multivendorx'),
+      cell: ({ row }) => {
+        const id = row.original.id;
+
+        const orderUrl = `/dashboard/sales/orders/#view/${id}`;
+
+        return (
+          <TableCell>
+            <a href={orderUrl} target="_blank" rel="noopener noreferrer">
+              #{id}
+            </a>
+          </TableCell>
+        );
+      },
+    },
+    {
+      header: __('Amount', 'multivendorx'),
+      cell: ({ row }) => <TableCell>{row.original.amount}</TableCell>,
+    },
+    {
+      header: __('Commission', 'multivendorx'),
+      cell: ({ row }) => <TableCell>{row.original.commission_amount}</TableCell>,
+    },
+    {
+      header: __('Date', 'multivendorx'),
+      cell: ({ row }) => <TableCell>{row.original.date}</TableCell>,
+    },
+    {
+      header: __('Status', 'multivendorx'),
+      cell: ({ row }) => {
+        const rawStatus = row.original.status || '';
+        const status = rawStatus.toLowerCase();
+
+        // Define color mapping for known statuses
+        const statusColorMap: Record<string, string> = {
+          completed: 'green',
+          processing: 'blue',
+          refunded: 'red',
+          'on-hold': 'yellow',
+          cancelled: 'gray',
+          pending: 'orange',
+          failed: 'dark-red',
+          'refund-requested': 'purple',
+        };
+
+        const badgeClass = statusColorMap[status] || 'gray';
+
+        // Format status for display (refund-requested → Refund Requested)
+        const displayStatus =
+          status
+            ?.replace(/-/g, ' ')
+            ?.replace(/\b\w/g, (c) => c.toUpperCase()) || '-';
+
+        return (
+          <TableCell title={displayStatus}>
+            <span className={`admin-badge ${badgeClass}`}>
+              {displayStatus}
+            </span>
+          </TableCell>
+        );
+      },
+    }
+
+  ];
+
+  const formatWcShortDate = (dateString: any) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
+  function formatTimeAgo(dateString: any) {
+    const date = new Date(dateString.replace(" ", "T"));
+    const diff = (Date.now() - date.getTime()) / 1000;
+
+    if (diff < 60) return "just now";
+    if (diff < 3600) return Math.floor(diff / 60) + "m ago";
+    if (diff < 86400) return Math.floor(diff / 3600) + "h ago";
+    return Math.floor(diff / 86400) + "d ago";
+  }
+  // Helper function to get dynamic greeting
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+
+    if (hour >= 5 && hour < 12) {
+      return "Good Morning";
+    } else if (hour >= 12 && hour < 17) {
+      return "Good Afternoon";
+    } else if (hour >= 17 && hour < 21) {
+      return "Good Evening";
+    } else {
+      return "Good Night";
+    }
+  };
+
   return (
     <>
       <div className="page-title-wrapper">
         <div className="page-title">
-          <div className="title">Good Morning, Anna!</div>
-          <div className="view-des">You’re viewing: <b>Anna’s Home Crafts</b></div>
-          <div className="des up">Here's what's happening with your store today <b>$84521 <i className="adminlib-arrow-up"></i></b></div>
+          <div className="title">{getGreeting()}, {store?.primary_owner_info?.data?.display_name}!</div>
+          <div className="view-des">You’re viewing: <b>{store?.primary_owner_info?.data?.display_name}’s {store?.name || '-'}</b></div>
         </div>
       </div>
 
       <div className="row">
-        {/* <div className="column w-35">
-          <div className="dashboard-view-section">
-            <div className="title">
-              Good Morning, Anna!
-            </div>
-            <div className="des">
-              Here's what's happening with your store today <b>$84521 <i className="adminlib-arrow"></i></b>
-            </div>
-
-            <div className="price-wrapper">
-              <div className="price">
-                $165K
-              </div>
-              <div className="details">58% of sales target</div>
-            </div>
-            <div className="admin-btn btn-purple">
-              View Details
-            </div>
-
-            <div className="image">
-              <img src={Mascot} alt="" />
-            </div>
-          </div>
-        </div> */}
         <div className="column transparent">
           <div className="card">
-            {/* <div className="card-header">
-              <div className="left">
-                <div className="title">
-                  Conversion Snapshot
-                </div>
-              </div>
-              <div className="right">
-                <span>Updated 1 month ago</span>
-              </div>
-            </div> */}
             <div className="card-body">
               <div className="analytics-container">
 
@@ -281,7 +380,7 @@ const Dashboard: React.FC = () => {
                     <div className="details">
                       <div className="text">{item.text}</div>
                       <div className="number">{item.number}</div>
-                      <div className="report"><span>10%</span> | This month</div>
+                      {/* <div className="report"><span>10%</span> | This month</div> */}
                     </div>
                     <div className="analytics-icon">
                       <i className={item.icon}></i>
@@ -298,14 +397,13 @@ const Dashboard: React.FC = () => {
 
 
       <div className="row">
-        <div className="column w-65">
+        {/* <div className="column w-65">
           <div className="card">
             <div className="card-header">
               <div className="left">
                 <div className="title">
                   Sales Overview (extra)
                 </div>
-                {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
               </div>
               <div className="right">
                 <i className="adminlib-external"></i>
@@ -330,11 +428,7 @@ const Dashboard: React.FC = () => {
                     }}
                   />
                   <Legend />
-                  {/* <Bar dataKey="orders" fill="#f1a60e" radius={[6, 6, 0, 0]} name="Sales" />
-                  <Bar dataKey="earnings" fill="#fa7a38" radius={[6, 6, 0, 0]} name="Earnings" />
-                  <Bar dataKey="refunds" fill="#73d860" radius={[6, 6, 0, 0]} name="Orders" /> */}
                   {BarChartData.map((entry, index) => (
-                    // <Cell key={`cell-${index}`} fill={entry.color} />
                     <Bar dataKey={entry.dataKey} fill={entry.color} radius={[6, 6, 0, 0]} name={entry.name} />
                   ))}
                   <Line
@@ -358,48 +452,49 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
 
-        </div>
+        </div> */}
 
-        {/* <div className="column w-35">
+        <div className="column w-65">
           <div className="card">
             <div className="card-header">
               <div className="left">
-                <div className="title">
-                  Sales Overview (extra)
-                </div>
+                <div className="title">Commission Overview</div>
               </div>
-              <div className="right">
-                <i className="adminlib-more-vertical"></i>
+              <div className="right"
+                onClick={() => {
+                  window.location.href = "/dashboard/reports/overview/";
+                }}
+              >
+                <i className="adminlib-external"></i>
               </div>
             </div>
             <div className="card-body">
               <ResponsiveContainer width="100%" height={250}>
                 <PieChart>
                   <Pie
-                    data={data}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={90}
-                    paddingAngle={3}
+                    data={[
+                      { name: "Commission Earned", value: (store?.commission?.commission_total || 0) },
+                      { name: "Commission Refunded", value: (store?.commission?.commission_refunded || 0) },
+                      { name: "Total Revenue", value: (store?.commission?.total_order_amount || 0) }
+                    ]}
                     dataKey="value"
                     nameKey="name"
-                    label
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={80}
+                    label={(entry) => `${entry.name}: ${entry.value}`}
                   >
-                    {data.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
+                    <Cell fill="#4caf50" />
+                    <Cell fill="#f44336" />
+                    <Cell fill="#2196f3" />
                   </Pie>
-                  <Tooltip />
+                  <Tooltip formatter={(value: number) => formatCurrency(value)} />
                   <Legend />
                 </PieChart>
               </ResponsiveContainer>
-
             </div>
           </div>
-
         </div>
-         */}
 
 
         <div className="column w-35">
@@ -409,30 +504,43 @@ const Dashboard: React.FC = () => {
                 <div className="title">
                   Transaction Details
                 </div>
-                {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
               </div>
-              <div className="right">
+              <div className="right"
+                onClick={() => {
+                  window.location.href = "/dashboard/wallet/transactions/";
+                }}
+              >
                 <i className="adminlib-external"></i>
               </div>
             </div>
             <div className="card-body">
               <div className="top-customer-wrapper">
-                {requests.map((customer) => (
-                  <div key={customer.id} className="customer">
+                {transaction.map((item) => (
+                  <div key={item.id} className="customer">
+
                     <div className="left-section">
-                      {/* <div className="profile">
-                        <i className={customer.icon}></i>
-                      </div> */}
                       <div className="details">
-                        <div className="name">#53643246</div>
-                        <div className="order-number"> {customer.time}</div>
+
+                        {/* Order Number */}
+                        <div className="name">
+                          #{item.order_details}
+                        </div>
+
+                        {/* Date */}
+                        <div className="order-number">
+                          {formatWcShortDate(item.date)}
+                        </div>
                       </div>
                     </div>
 
-                    <div className="price-section">{customer.amount}</div>
+                    {/* Amount → use credit or debit */}
+                    <div className="price-section">
+                      {item.credit > 0 ? `${formatCurrency(item.credit)}` : `-${formatCurrency(item.debit)}`}
+                    </div>
                   </div>
                 ))}
               </div>
+
             </div>
           </div>
 
@@ -440,6 +548,7 @@ const Dashboard: React.FC = () => {
 
 
       </div>
+
       <div className="row">
         <div className="column">
           <div className="card">
@@ -449,51 +558,20 @@ const Dashboard: React.FC = () => {
                   Recent Orders
                 </div>
               </div>
-              <div className="right">
+              <div className="right"
+                onClick={() => {
+                  window.location.href = "/dashboard/sales/orders/";
+                }}
+              >
                 <i className="adminlib-external"></i>
               </div>
             </div>
             <div className="card-body">
               <div className="table-wrapper">
-                <table className="order-table">
-                  <thead>
-                    <tr className="header">
-                      <td>#</td>
-                      <td>Order Id</td>
-                      <td>Order Date</td>
-                      <td>Product Name</td>
-                      <td>Customer</td>
-                      <td>Total Amount</td>
-                      <td>Order Status</td>
-                      <td>Status</td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {demoData.map((item, index) => (
-                      <tr key={item.id}>
-                        <td>{index + 1}</td>
-                        <td>{item.orderId}</td>
-                        <td>{item.date}</td>
-                        <td>{item.product}</td>
-                        <td>{item.customer}</td>
-                        <td>{item.total}</td>
-                        <td>
-                          <div className={`admin-status ${item.theme}`}>
-                            {item.status}
-                          </div>
-                        </td>
-                        <td>
-                          <div className={`admin-badge ${item.theme}`}>
-                            {item.status}
-                          </div>
-                          {/* <div className={`progress-bar ${item.theme}`}>
-                            <div style={{ width: `${item.progress}%` }}></div>
-                          </div> */}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <Table
+                  data={recentOrder}
+                  columns={columns as ColumnDef<Record<string, any>, any>[]}
+                />
               </div>
             </div>
           </div>
@@ -506,13 +584,15 @@ const Dashboard: React.FC = () => {
             <div className="card-header">
               <div className="left">
                 <div className="title">
-                  Best-Selling Products (extra)
+                  Best-Selling Products
                 </div>
               </div>
               <div className="right">
                 <i className="adminlib-external"></i>
               </div>
             </div>
+
+
             <div className="card-body">
               <div className="table-wrapper top-products">
                 <table>
@@ -522,39 +602,32 @@ const Dashboard: React.FC = () => {
                     <td>Popularity</td>
                     <td>Sales</td>
                   </tr>
-                  <tr>
-                    <td>01</td>
-                    <td>Wireless Headset</td>
-                    <td className="progress-bar theme-color1"><div></div></td>
-                    <td><div className="admin-badge theme-color1">45%</div></td>
-                  </tr>
-                  <tr>
-                    <td>02</td>
-                    <td>Wireless Headset</td>
-                    <td className="progress-bar theme-color2"><div></div></td>
-                    <td><div className="admin-badge theme-color2">45%</div></td>
-                  </tr>
-                  <tr>
-                    <td>03</td>
-                    <td>Wireless Headset</td>
-                    <td className="progress-bar theme-color3"><div></div></td>
-                    <td><div className="admin-badge theme-color3">45%</div></td>
-                  </tr>
-                  <tr>
-                    <td>04</td>
-                    <td>Wireless Headset</td>
-                    <td className="progress-bar theme-color4"><div></div></td>
-                    <td><div className="admin-badge theme-color4">19%</div></td>
-                  </tr>
-                  <tr>
-                    <td>05</td>
-                    <td>Wireless Headset</td>
-                    <td className="progress-bar theme-color1"><div></div></td>
-                    <td><div className="admin-badge theme-color1">45%</div></td>
-                  </tr>
+
+                  {topProducts.map((item: any, index) => {
+                    const color = `theme-color${(index % 4) + 1}`;
+
+                    return (
+                      <tr key={item.id}>
+                        <td>{String(index + 1).padStart(2, '0')}</td>
+
+                        <td>{item.name}</td>
+
+                        <td className={`progress-bar ${color}`}>
+                          <div style={{ width: `${item.popularity}%` }}></div>
+                        </td>
+
+                        <td>
+                          <div className={`admin-badge ${color}`}>
+                            {item.popularity}%
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </table>
               </div>
             </div>
+
           </div>
         </div>
         <div className="column">
@@ -570,49 +643,45 @@ const Dashboard: React.FC = () => {
                 <i className="adminlib-external"></i>
               </div>
             </div>
+
             <div className="card-body">
               <div className="notification-wrapper">
                 <ul>
-                  <li>
-                    <div className="icon-wrapper">
-                      <i className="adminlib-form-paypal-email admin-badge theme-color1"></i>
-                    </div>
-                    <div className="details">
-                      <div className="notification-title">Holiday campaign materials uploaded.</div>
-                      <div className="des">Holiday campaign materials uploaded.</div>
-                      <span>1d ago</span>
-                    </div>
+                  {announcement.map((item) => (
+                    <li key={item.id}>
+                      <div className="icon-wrapper">
+                        {/* One common icon */}
+                        <i className="adminlib-form-paypal-email admin-badge theme-color1"></i>
+                      </div>
 
-                  </li>
-                  <li>
-                    <div className="icon-wrapper">
-                      <i className="adminlib-mail admin-badge theme-color2"></i>
-                    </div>
-                    <div className="details">
-                      <div className="notification-title">System maintenance Nov 5 (2–4 AM PST).</div>
-                      <div className="des">Lorem ipsum dolor sit amet, consectetur adipisicing elit</div>
-                      <span>34min ago</span>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="icon-wrapper">
-                      <i className="adminlib-form-paypal-email admin-badge theme-color3"></i>
-                    </div>
-                    <div className="details">
-                      <div className="notification-title">New shipping carrier integration live.</div>
-                      <div className="des">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
-                      <span>34min ago</span>
-                    </div>
-                  </li>
+                      <div className="details">
+                        <div className="notification-title">{item.title}</div>
+
+                        <div className="des">{item.content}</div>
+
+                        <span>{formatTimeAgo(item.date)}</span>
+                      </div>
+                    </li>
+                  ))}
+
+                  {/* If no announcements */}
+                  {announcement.length === 0 && (
+                    <li>
+                      <div className="details">
+                        <div className="notification-title">No announcements found</div>
+                      </div>
+                    </li>
+                  )}
                 </ul>
               </div>
             </div>
+
           </div>
         </div>
       </div>
 
       <div className="row">
-        <div className="column w-65">
+        <div className="column w-60">
           <div className="card">
             <div className="card-header">
               <div className="left">
@@ -643,18 +712,15 @@ const Dashboard: React.FC = () => {
           </div>
 
         </div>
-        <div className="column w-35">
+
+        {/* <div className="column w-35">
           <div className="card">
             <div className="card-header">
               <div className="left">
                 <div className="title">
                   Top customer
                 </div>
-                {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
               </div>
-              {/* <div className="right">
-                <i className="adminlib-more-vertical"></i>
-              </div> */}
             </div>
             <div className="card-body">
               <div className="top-customer-wrapper">
@@ -677,35 +743,36 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
 
-        </div>
-        <div className="column w-35">
+        </div> */}
+
+        <div className="column w-40">
           <div className="card">
             <div className="card-header">
               <div className="left">
                 <div className="title">
                   Pending Refunds
                 </div>
-                {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
               </div>
-              <div className="right">
+              <div
+                className="right"
+                onClick={() => window.location.href = "/dashboard/sales/orders/"}
+                style={{ cursor: "pointer" }}
+              >
                 <i className="adminlib-external"></i>
               </div>
             </div>
             <div className="card-body">
               <div className="top-customer-wrapper">
-                {requests.map((customer) => (
+                {pendingRefund.map((customer) => (
                   <div key={customer.id} className="customer">
                     <div className="left-section">
-                      {/* <div className="profile">
-                        <i className={customer.icon}></i>
-                      </div> */}
                       <div className="details">
                         <div className="name">{customer.name}</div>
-                        <div className="order-number">{customer.reason} | {customer.time}</div>
+                        <div className="order-number">
+                          {customer.reason} | {formatWcShortDate(customer.time)}
+                        </div>
                       </div>
                     </div>
-
-                    <div className="price-section">{customer.amount}</div>
                   </div>
                 ))}
               </div>
@@ -726,30 +793,40 @@ const Dashboard: React.FC = () => {
                 </div>
                 {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
               </div>
-              <div className="right">
-                <i className="adminlib-more-vertical"></i>
+              <div className="right" onClick={() => {
+                window.location.href = "/dashboard/store-support/store-review/";
+              }}>
+                <i className="adminlib-external"></i>
               </div>
+
             </div>
             <div className="card-body">
               <div className="review-wrapper">
-                {reviews.map((review) => (
-                  <div className="review" key={review.id}>
+                {review.map((review) => (
+                  <div className="review" key={review.review_id}>
                     <div className="details">
-                      <div className="title">{review.product}</div>
+
+                      {/* Review Title */}
+                      <div className="title">{review.review_title}</div>
+
+                      {/* Star Rating */}
                       <div className="star-wrapper">
                         {[...Array(5)].map((_, index) => (
                           <i
                             key={index}
-                            className={`adminlib-star ${index < review.rating ? "active" : ""
+                            className={`adminlib-star ${index < Math.round(review.overall_rating) ? "active" : ""
                               }`}
                           ></i>
                         ))}
-                        <span>{review.date}</span>
+                        <span>{formatWcShortDate(review.date_created)}</span>
                       </div>
-                      <div className="des">{review.description}</div>
+
+                      {/* Review Content */}
+                      <div className="des">{review.review_content}</div>
                     </div>
                   </div>
                 ))}
+
               </div>
             </div>
           </div>

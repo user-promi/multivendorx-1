@@ -130,8 +130,8 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             return $this->download_transaction_csv( $request );
         }
     
-        $limit    = max( intval( $request->get_param( 'row' ) ), 10 );
-        $page     = max( intval( $request->get_param( 'page' ) ), 1 );
+        $limit = intval( $request->get_param( 'row' ) ) ?: 10;
+        $page  = intval( $request->get_param( 'page' ) ) ?: 1;        
         $offset   = ( $page - 1 ) * $limit;
         $count    = $request->get_param( 'count' );
         $store_id = intval( $request->get_param( 'store_id' ) );
