@@ -887,7 +887,7 @@ const AllCoupon: React.FC = () => {
                     header={
                         <>
                             <div className="title">
-                                <i className="adminlib-cart"></i>
+                                <i className="adminlib-coupon"></i>
                                 Add Coupon
                             </div>
                             <p>Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.</p>
@@ -904,14 +904,14 @@ const AllCoupon: React.FC = () => {
                                 onClick={() => handleSave("draft")}
                             >
                                 Draft
-                                <i className="adminlib-contact-form"></i>
+                                {/* <i className="adminlib-contact-form"></i> */}
                             </div>
                             <div
-                                className="admin-btn btn-purple"
+                                className="admin-btn btn-purple-bg"
                                 onClick={() => handleSave("publish")}
                             >
                                 Publish
-                                <i className="adminlib-check"></i>
+                                {/* <i className="adminlib-check"></i> */}
                             </div>
 
                         </>
@@ -926,6 +926,7 @@ const AllCoupon: React.FC = () => {
                                 <BasicInput
                                     type="text"
                                     name="title"
+                                    wrapperClass="setting-form-input"
                                     value={formData.title}
                                     generate={true}
                                     onChange={(e: any) =>

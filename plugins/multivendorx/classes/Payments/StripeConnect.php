@@ -57,9 +57,10 @@ class StripeConnect
                 ],
                 [
                     'key'         => 'redirect_url',
-                    'type'        => 'description',
+                    'type'        => 'copy-text',
                     'label'       => __('Redirect url', 'multivendorx'),
-                    'des'         => $redirect_url . '<br><br>' . __('Copy this URL and add it to your Stripe dashboard as a redirect URL.', 'multivendorx'),
+                    'title' => $redirect_url,
+                    'desc'         =>  __('Copy this URL and add it to your Stripe dashboard as a redirect URL.', 'multivendorx'),
                 ]
             ]
         ];
@@ -81,11 +82,11 @@ class StripeConnect
                 $onboarding_status = 'Connected';
                 $is_onboarded = true;
             }
-            
+            $badge_class = ($onboarding_status === 'Connected') ? 'green' : 'red';
             $fields = [
                 [
                     'type' => 'html',
-                    'html' => '<p><strong>' . __('Stripe Status:', 'multivendorx') . '</strong> ' . $onboarding_status . '</p>',
+                    'html' => '<div class="form-group"><label>' . __('Stripe Status:', 'multivendorx') . ' <span class="admin-badge ' . $badge_class . '">' . $onboarding_status . '</span></label></div>',
                 ],
             ];
             
