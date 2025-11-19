@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { getApiLink, CommonPopup, BasicInput, SuccessNotice } from 'zyra';
-import {formatCurrency} from '../services/commonFunction';
+import { formatCurrency, formatWcShortDate } from '../services/commonFunction';
 
 const History: React.FC = () => {
     const [data, setData] = useState<any>([]);
     const [amount, setAmount] = useState<number>(0);
     const [error, setError] = useState<string>("");
     const [message, setMessage] = useState<string>("");
+    const [store, setStore] = useState<any>([]);
+    const [lastWithdraws, setLastWithdraws] = useState<any>([]);
 
     const [requestWithdrawal, setRequestWithdrawal] = useState(false);
 
@@ -21,8 +23,36 @@ const History: React.FC = () => {
         })
             .then((response) => {
                 setData(response.data || []);
-                console.log(response.data)
             })
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, `store/${appLocalizer.store_id}`),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { id: appLocalizer.store_id }
+        })
+            .then((response) => {
+                setStore(response.data);
+            })
+
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'transaction'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: {
+                page: 1,
+                row: 5,
+                store_id: appLocalizer.store_id,
+                transaction_type: 'Withdrawal',
+                transaction_status: 'Completed',
+                orderBy: 'created_at',
+                order: 'DESC',
+            },
+        }).then((response) => {
+            setLastWithdraws(response.data.transaction || []);
+        })
+            .catch(() => setData([]));
+
+
     }, []);
 
     const analyticsData = [
@@ -83,7 +113,6 @@ const History: React.FC = () => {
             setMessage(res.data.message);
         });
     };
-
     return (
         <>
             <SuccessNotice message={message} />
@@ -197,21 +226,63 @@ const History: React.FC = () => {
 
                         <div className="notification-wrapper">
                             <ul>
-                                <li>
-                                    <div className="icon-wrapper">
-                                        <i className="adminlib-form-paypal-email blue"></i>
-                                    </div>
-                                    <div className="details">
-                                        <div className="notification-title">PayPal</div>
-                                        <div className="des">Withdrawal request pending</div>
-                                        <span><a href={`${appLocalizer.site_url}dashboard/settings/#subtab=payout`}>Change</a></span>
-                                    </div>
-                                </li>
+                                {store.payment_method === "stripe-connect" && (
+                                    <li>
+                                        <div className="icon-wrapper">
+                                            <i className="adminlib-form-stripe orange"></i>
+                                        </div>
+                                        <div className="details">
+                                            <div className="notification-title">Stripe</div>
+                                            <div className="des">Withdrawal request pending</div>
+                                            <span>
+                                                <a href={`${appLocalizer.site_url}/dashboard/settings/#subtab=payout`}>
+                                                    Change
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </li>
+                                )}
+
+                                {store.payment_method === "bank-transfer" && (
+                                    <li>
+                                        <div className="icon-wrapper">
+                                            <i className="adminlib-form-bank blue"></i>
+                                        </div>
+                                        <div className="details">
+                                            <div className="notification-title">Bank Transfer</div>
+                                            <div className="des">Bank transfer setup pending</div>
+                                            <span>
+                                                <a href={`${appLocalizer.site_url}/dashboard/settings/#subtab=payout`}>
+                                                    Change
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </li>
+                                )}
+
+                                {store.payment_method === "paypal-payout" && (
+                                    <li>
+                                        <div className="icon-wrapper">
+                                            <i className="adminlib-form-paypal yellow"></i>
+                                        </div>
+                                        <div className="details">
+                                            <div className="notification-title">PayPal</div>
+                                            <div className="des">PayPal setup pending</div>
+                                            <span>
+                                                <a href={`${appLocalizer.site_url}/dashboard/settings/#subtab=payout`}>
+                                                    Change
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </li>
+                                )}
                             </ul>
                         </div>
+
                     </div>
                 </div>
-                <div className="column">
+
+                {/* <div className="column">
                     <div className="card-header">
                         <div className="left">
                             <div className="title">
@@ -247,12 +318,53 @@ const History: React.FC = () => {
                     </div>
 
                     <div className="buttons-wrapper">
-                        <div className="admin-btn btn-purple" onClick={`${appLocalizer.site_url}dashboard/settings/#subtab=payout`}>
+                        <div className="admin-btn btn-purple" onClick={`${appLocalizer.site_url}/dashboard/wallet/transactions/`}>
+                            <i className="adminlib-preview"></i>
+                            View transaction history
+                        </div>
+                    </div>
+                </div> */}
+
+                <div className="column">
+                    <div className="card-header">
+                        <div className="left">
+                            <div className="title">Last Withdrawal</div>
+                        </div>
+                    </div>
+
+                    {lastWithdraws && lastWithdraws.length > 0 ? (
+                        lastWithdraws.map((item: any) => (
+                            <div className="last-withdradal-wrapper" key={item.id}>
+                                <div className="left">
+                                    <div className="price">{formatCurrency(item.amount)}</div>
+                                    <div className="des">
+                                        {item.payment_method === "stripe-connect" && "Stripe"}
+                                        {item.payment_method === "bank-transfer" && "Direct to Local Bank (INR)"}
+                                        {item.payment_method === "paypal-payout" && "PayPal"}
+                                        {item.payment_method === "bank-transfer" ? `Bank Transfer` : ""}
+                                    </div>
+                                </div>
+                                <div className="right">
+                                    <div className="date">{formatWcShortDate(item.date)}</div>
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <div className="no-data">No withdrawals found.</div>
+                    )}
+
+                    <div className="buttons-wrapper">
+                        <div
+                            className="admin-btn btn-purple"
+                            onClick={() => (window.location.href = `${appLocalizer.site_url}/dashboard/wallet/transactions/`)}
+                        >
                             <i className="adminlib-preview"></i>
                             View transaction history
                         </div>
                     </div>
                 </div>
+
+
             </div>
 
             {requestWithdrawal && (

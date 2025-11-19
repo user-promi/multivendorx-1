@@ -13,21 +13,10 @@ import {
 import React, { useState, useEffect } from "react";
 import "../components/dashboard.scss";
 import '../dashboard/dashboard1.scss';
-import { getApiLink, Table, TableCell } from 'zyra';
+import { getApiLink, Table, TableCell, useModules } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { formatCurrency } from '@/services/commonFunction';
-
-
-const revenueData = [
-  { month: "Jan", orders: 4000, earnings: 2400, refunds: 200, conversion: 2.4 },
-  { month: "Feb", orders: 3000, earnings: 1398, refunds: 40, conversion: 2.1 },
-  { month: "Mar", orders: 5000, earnings: 2800, refunds: 280, conversion: 3.2 },
-  { month: "Apr", orders: 4780, earnings: 3908, refunds: 1000, conversion: 2.6 },
-  { month: "May", orders: 5890, earnings: 4800, refunds: 300, conversion: 3.4 },
-  { month: "Jun", orders: 4390, earnings: 3800, refunds: 210, conversion: 2.9 },
-  { month: "Jul", orders: 6490, earnings: 5200, refunds: 600, conversion: 3.6 },
-];
 
 const activities = [
   { icon: 'adminlib-cart', text: 'New order #10023 by Alex Doe.' },
@@ -61,6 +50,9 @@ const Dashboard: React.FC = () => {
   const [transaction, setTransaction] = useState<any[]>([]);
   const [store, setStore] = useState<any[]>([]);
   const [totalOrder, setTotalOrder] = useState<any>([]);
+  const [lastWithdraws, setLastWithdraws] = useState<any>([]);
+  const { modules } = useModules();
+
 
   useEffect(() => {
     axios({
@@ -91,7 +83,7 @@ const Dashboard: React.FC = () => {
         meta_key: "multivendorx_store_id",
         value: appLocalizer.store_id,
         // refund_status: "refund_request",
-        status:'refund-requested',
+        status: 'refund-requested',
         page: 1,
         per_page: 4,
         orderby: "date",
@@ -250,6 +242,24 @@ const Dashboard: React.FC = () => {
       })
       .catch(() => { });
 
+    axios({
+      method: 'GET',
+      url: getApiLink(appLocalizer, 'transaction'),
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+      params: {
+        page: 1,
+        row: 5,
+        store_id: appLocalizer.store_id,
+        transaction_type: 'Withdrawal',
+        transaction_status: 'Completed',
+        orderBy: 'created_at',
+        order: 'DESC',
+      },
+    }).then((response) => {
+      setLastWithdraws(response.data.transaction || []);
+    })
+      .catch(() => setLastWithdraws([]));
+
   }, []);
 
   const analyticsData = [
@@ -359,7 +369,7 @@ const Dashboard: React.FC = () => {
       return "Good Night";
     }
   };
-
+  console.log('mod', modules);
   return (
     <>
       <div className="page-title-wrapper">
@@ -497,7 +507,7 @@ const Dashboard: React.FC = () => {
         </div>
 
 
-        <div className="column w-35">
+        {/* <div className="column w-35">
           <div className="card">
             <div className="card-header">
               <div className="left">
@@ -521,19 +531,16 @@ const Dashboard: React.FC = () => {
                     <div className="left-section">
                       <div className="details">
 
-                        {/* Order Number */}
                         <div className="name">
                           #{item.order_details}
                         </div>
 
-                        {/* Date */}
                         <div className="order-number">
                           {formatWcShortDate(item.date)}
                         </div>
                       </div>
                     </div>
 
-                    {/* Amount → use credit or debit */}
                     <div className="price-section">
                       {item.credit > 0 ? `${formatCurrency(item.credit)}` : `-${formatCurrency(item.debit)}`}
                     </div>
@@ -544,8 +551,46 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
 
-        </div>
+        </div> */}
 
+        <div className="column">
+          <div className="card-header">
+            <div className="left">
+              <div className="title">Last Withdrawal</div>
+            </div>
+          </div>
+
+          {lastWithdraws && lastWithdraws.length > 0 ? (
+            lastWithdraws.map((item: any) => (
+              <div className="last-withdradal-wrapper" key={item.id}>
+                <div className="left">
+                  <div className="price">{formatCurrency(item.amount)}</div>
+                  <div className="des">
+                    {item.payment_method === "stripe-connect" && "Stripe"}
+                    {item.payment_method === "bank-transfer" && "Direct to Local Bank (INR)"}
+                    {item.payment_method === "paypal-payout" && "PayPal"}
+                    {item.payment_method === "bank-transfer" ? `Bank Transfer` : ""}
+                  </div>
+                </div>
+                <div className="right">
+                  <div className="date">{formatWcShortDate(item.date)}</div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="no-data">No withdrawals found.</div>
+          )}
+
+          <div className="buttons-wrapper">
+            <div
+              className="admin-btn btn-purple"
+              onClick={() => (window.location.href = `${appLocalizer.site_url}/dashboard/wallet/transactions/`)}
+            >
+              <i className="adminlib-preview"></i>
+              View transaction history
+            </div>
+          </div>
+        </div>
 
       </div>
 
@@ -579,105 +624,95 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="row">
+        {/* Best-Selling Products */}
         <div className="column">
           <div className="card">
             <div className="card-header">
               <div className="left">
-                <div className="title">
-                  Best-Selling Products
-                </div>
+                <div className="title">Best-Selling Products</div>
               </div>
               <div className="right">
                 <i className="adminlib-external"></i>
               </div>
             </div>
-
 
             <div className="card-body">
               <div className="table-wrapper top-products">
-                <table>
-                  <tr className="header">
-                    <td>#</td>
-                    <td>Name</td>
-                    <td>Popularity</td>
-                    <td>Sales</td>
-                  </tr>
+                {topProducts && topProducts.length > 0 ? (
+                  <table>
+                    <tr className="header">
+                      <td>#</td>
+                      <td>Name</td>
+                      <td>Popularity</td>
+                      <td>Sales</td>
+                    </tr>
 
-                  {topProducts.map((item: any, index) => {
-                    const color = `theme-color${(index % 4) + 1}`;
-
-                    return (
-                      <tr key={item.id}>
-                        <td>{String(index + 1).padStart(2, '0')}</td>
-
-                        <td>{item.name}</td>
-
-                        <td className={`progress-bar ${color}`}>
-                          <div style={{ width: `${item.popularity}%` }}></div>
-                        </td>
-
-                        <td>
-                          <div className={`admin-badge ${color}`}>
-                            {item.popularity}%
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </table>
+                    {topProducts.map((item: any, index) => {
+                      const color = `theme-color${(index % 4) + 1}`;
+                      return (
+                        <tr key={item.id}>
+                          <td>{String(index + 1).padStart(2, '0')}</td>
+                          <td>{item.name}</td>
+                          <td className={`progress-bar ${color}`}>
+                            <div style={{ width: `${item.popularity}%` }}></div>
+                          </td>
+                          <td>
+                            <div className={`admin-badge ${color}`}>
+                              {item.popularity}%
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </table>
+                ) : (
+                  <div className="no-data">No products found.</div>
+                )}
               </div>
             </div>
-
           </div>
         </div>
-        <div className="column">
-          <div className="card">
-            <div className="card-header">
-              <div className="left">
-                <div className="title">
-                  Admin Announcements
+
+        {/* Admin Announcements */}
+        {modules.includes("announcement") && (
+          <div className="column">
+            <div className="card">
+              <div className="card-header">
+                <div className="left">
+                  <div className="title">Admin Announcements</div>
                 </div>
-                {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
+                <div className="right">
+                  <i className="adminlib-external"></i>
+                </div>
               </div>
-              <div className="right">
-                <i className="adminlib-external"></i>
-              </div>
-            </div>
 
-            <div className="card-body">
-              <div className="notification-wrapper">
-                <ul>
-                  {announcement.map((item) => (
-                    <li key={item.id}>
-                      <div className="icon-wrapper">
-                        {/* One common icon */}
-                        <i className="adminlib-form-paypal-email admin-badge theme-color1"></i>
-                      </div>
-
-                      <div className="details">
-                        <div className="notification-title">{item.title}</div>
-
-                        <div className="des">{item.content}</div>
-
-                        <span>{formatTimeAgo(item.date)}</span>
-                      </div>
-                    </li>
-                  ))}
-
-                  {/* If no announcements */}
-                  {announcement.length === 0 && (
-                    <li>
-                      <div className="details">
-                        <div className="notification-title">No announcements found</div>
-                      </div>
-                    </li>
+              <div className="card-body">
+                <div className="notification-wrapper">
+                  {announcement && announcement.length > 0 ? (
+                    <ul>
+                      {announcement.map((item) => (
+                        <li key={item.id}>
+                          <div className="icon-wrapper">
+                            <i className="adminlib-form-paypal-email admin-badge theme-color1"></i>
+                          </div>
+                          <div className="details">
+                            <div className="notification-title">{item.title}</div>
+                            <div className="des">{item.content}</div>
+                            <span>{formatTimeAgo(item.date)}</span>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <div className="no-data">No announcements found.</div>
                   )}
-                </ul>
+                </div>
               </div>
             </div>
-
           </div>
-        </div>
+        )}
+
+
       </div>
 
       <div className="row">
@@ -744,95 +779,102 @@ const Dashboard: React.FC = () => {
           </div>
 
         </div> */}
-
-        <div className="column w-40">
-          <div className="card">
-            <div className="card-header">
-              <div className="left">
-                <div className="title">
-                  Pending Refunds
+        {modules.includes("marketplace-refund") && (
+          <div className="column w-40">
+            <div className="card">
+              <div className="card-header">
+                <div className="left">
+                  <div className="title">Pending Refunds</div>
+                </div>
+                <div
+                  className="right"
+                  onClick={() => window.location.href = "/dashboard/sales/orders/"}
+                  style={{ cursor: "pointer" }}
+                >
+                  <i className="adminlib-external"></i>
                 </div>
               </div>
-              <div
-                className="right"
-                onClick={() => window.location.href = "/dashboard/sales/orders/"}
-                style={{ cursor: "pointer" }}
-              >
-                <i className="adminlib-external"></i>
-              </div>
-            </div>
-            <div className="card-body">
-              <div className="top-customer-wrapper">
-                {pendingRefund.map((customer) => (
-                  <div key={customer.id} className="customer">
-                    <div className="left-section">
-                      <div className="details">
-                        <div className="name">{customer.name}</div>
-                        <div className="order-number">
-                          {customer.reason} | {formatWcShortDate(customer.time)}
+
+              <div className="card-body">
+                <div className="top-customer-wrapper">
+                  {pendingRefund && pendingRefund.length > 0 ? (
+                    pendingRefund.map((customer) => (
+                      <div key={customer.id} className="customer">
+                        <div className="left-section">
+                          <div className="details">
+                            <div className="name">{customer.name}</div>
+                            <div className="order-number">
+                              {customer.reason} | {formatWcShortDate(customer.time)}
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-
-      <div className="row">
-        <div className="column">
-          <div className="card">
-            <div className="card-header">
-              <div className="left">
-                <div className="title">
-                  Latest Reviews
+                    ))
+                  ) : (
+                    <div className="no-data">No pending refunds found.</div>
+                  )}
                 </div>
-                {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
-              </div>
-              <div className="right" onClick={() => {
-                window.location.href = "/dashboard/store-support/store-review/";
-              }}>
-                <i className="adminlib-external"></i>
-              </div>
-
-            </div>
-            <div className="card-body">
-              <div className="review-wrapper">
-                {review.map((review) => (
-                  <div className="review" key={review.review_id}>
-                    <div className="details">
-
-                      {/* Review Title */}
-                      <div className="title">{review.review_title}</div>
-
-                      {/* Star Rating */}
-                      <div className="star-wrapper">
-                        {[...Array(5)].map((_, index) => (
-                          <i
-                            key={index}
-                            className={`adminlib-star ${index < Math.round(review.overall_rating) ? "active" : ""
-                              }`}
-                          ></i>
-                        ))}
-                        <span>{formatWcShortDate(review.date_created)}</span>
-                      </div>
-
-                      {/* Review Content */}
-                      <div className="des">{review.review_content}</div>
-                    </div>
-                  </div>
-                ))}
-
               </div>
             </div>
           </div>
+        )}
 
-        </div>
+
+
       </div>
+
+      {modules.includes("store-review") && (
+        <div className="row">
+          <div className="column">
+            <div className="card">
+              <div className="card-header">
+                <div className="left">
+                  <div className="title">Latest Reviews</div>
+                </div>
+                <div
+                  className="right"
+                  onClick={() => {
+                    window.location.href = "/dashboard/store-support/store-review/";
+                  }}
+                >
+                  <i className="adminlib-external"></i>
+                </div>
+              </div>
+
+              <div className="card-body">
+                <div className="review-wrapper">
+                  {review && review.length > 0 ? (
+                    review.map((reviewItem) => (
+                      <div className="review" key={reviewItem.review_id}>
+                        <div className="details">
+                          <div className="title">{reviewItem.review_title}</div>
+
+                          <div className="star-wrapper">
+                            {[...Array(5)].map((_, index) => (
+                              <i
+                                key={index}
+                                className={`adminlib-star ${index < Math.round(reviewItem.overall_rating) ? "active" : ""
+                                  }`}
+                              ></i>
+                            ))}
+                            <span>{formatWcShortDate(reviewItem.date_created)}</span>
+                          </div>
+
+                          <div className="des">{reviewItem.review_content}</div>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="no-data">No reviews found.</div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+
 
     </>
   );
