@@ -156,6 +156,7 @@ const StoreCommission: React.FC = () => {
             filterData?.date?.end_date
         );
     };
+
     const columns: ColumnDef<CommissionRow>[] = [
         {
             id: 'select',
@@ -288,45 +289,6 @@ const StoreCommission: React.FC = () => {
                 );
             },
         },
-        // {
-        //     id: 'commissionAmount',
-        //     accessorKey: 'commissionAmount',
-        //     accessorFn: row => parseFloat(row.commissionAmount || '0'),
-        //     enableSorting: true,
-        //     header: __('Commission Earned', 'multivendorx'),
-        //     cell: ({ row }) =>
-        //         <TableCell title={row.original.commissionAmount ? `${appLocalizer.currency_symbol}${row.original.commissionAmount}` : '-'}>
-        //             {row.original.commissionAmount
-        //                 ? formatCurrency(row.original.commissionAmount)
-        //                 : '-'}
-        //         </TableCell>,
-        // },
-        // {
-        //     id: 'shippingAmount',
-        //     accessorKey: 'shippingAmount',
-        //     accessorFn: row => parseFloat(row.shippingAmount || '0'),
-        //     enableSorting: true,
-        //     header: __('Shipping Amount', 'multivendorx'),
-        //     cell: ({ row }) =>
-        //         <TableCell title={row.original.shippingAmount ? `${appLocalizer.currency_symbol}${row.original.shippingAmount}` : '-'}>
-        //             {row.original.shippingAmount
-        //                 ? formatCurrency(row.original.shippingAmount)
-        //                 : '-'}
-        //         </TableCell>,
-        // },
-        // {
-        //     id: 'taxAmount',
-        //     accessorKey: 'taxAmount',
-        //     accessorFn: row => parseFloat(row.taxAmount || '0'),
-        //     enableSorting: true,
-        //     header: __('Tax Amount', 'multivendorx'),
-        //     cell: ({ row }) =>
-        //         <TableCell title={row.original.taxAmount ? `${appLocalizer.currency_symbol}${row.original.taxAmount}` : '-'}>
-        //             {row.original.taxAmount
-        //                 ? formatCurrency(row.original.taxAmount)
-        //                 : '-'}
-        //         </TableCell>,
-        // },
         {
             id: 'totalEarned',
             accessorKey: 'totalEarned',
@@ -377,27 +339,35 @@ const StoreCommission: React.FC = () => {
         {
             id: 'action',
             header: __("Action", "multivendorx"),
-            cell: ({ row }) => (
-                <TableCell
-                    type="action-dropdown"
-                    rowData={row.original}
-                    header={{
-                        actions: [
-                            {
-                                label: __("View Commission", "multivendorx"),
-                                icon: "adminlib-preview",
-                                onClick: (rowData) => {
-                                    setModalCommission(rowData);
-                                },
-                                hover: true,
-                            },
-                        ],
-                    }}
-                />
-            ),
-        },
+            cell: ({ row }) => {
+                const isPaid = row.original.status === "paid";
+        
+                return (
+                    <TableCell
+                        type="action-dropdown"
+                        rowData={row.original}
+                        header={{
+                            actions: isPaid
+                                ? [
+                                    {
+                                        label: __("View Commission", "multivendorx"),
+                                        icon: "adminlib-preview",
+                                        onClick: (rowData) => {
+                                            setModalCommission(rowData);
+                                        },
+                                        hover: true,
+                                    },
+                                ]
+                                : []
+                        }}
+                    />
+                );
+            },
+        }
+        
 
     ];
+
     const realtimeFilter: RealtimeFilter[] = [
         {
             name: 'date',

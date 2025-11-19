@@ -257,19 +257,7 @@ const Transactions: React.FC = () => {
             cell: ({ row }) => {
                 const debit = row.original.debit;
                 const status = row.original.status || '';
-                if (debit) {
-                    switch (status) {
-                        case 'Upcoming':
-                            iconClass = 'adminlib-clock';
-                            break;
-                        case 'Completed':
-                            iconClass = 'adminlib-check';
-                            break;
-                        case 'Failed':
-                            iconClass = 'adminlib-cross';
-                            break;
-                    }
-                }
+              
 
                 return (
                     <TableCell>

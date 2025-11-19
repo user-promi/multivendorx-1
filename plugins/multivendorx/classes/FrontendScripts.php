@@ -673,6 +673,7 @@ class FrontendScripts {
                         'restUrl'                  => MultiVendorX()->rest_namespace,
                         'nonce'                    => wp_create_nonce( 'wp_rest' ),
                         'woo_nonce'                => wp_create_nonce( 'wc_store_api' ),
+                        'site_url'                 => site_url(),
                         // 'country_list'             => WC()->countries->get_shipping_countries(),
                         'state_list'               => WC()->countries->get_states(),
                         'country_list'             => $country_list,
