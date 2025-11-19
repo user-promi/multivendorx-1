@@ -83,21 +83,24 @@
             background: #000;
             color: #fff;
             font-size: 1rem;
-            padding: 0.313rem;
+            padding: 0.5rem;
 
             .count {
                 color: #fff;
-                padding: 0 0.813rem;
+                padding: 0.125rem 0.813rem;
                 border-right: 0.063rem solid #fff;
-                height: 95%;
+                // height: 95%;
                 display: flex;
                 align-items: center;
 
-                // &.select{
-                //   border: none;
-                // }
+                &.row{
+                    border: 0.063rem solid #727272;
+                    border-radius: 0.313rem;
+                }
             }
+            button{
 
+            }
             .select {
                 cursor: pointer;
                 border-radius: 0;

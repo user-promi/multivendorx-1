@@ -877,19 +877,12 @@ const Table: React.FC<TableProps> = ({
                                 {Object.keys(rowSelection || {}).length >= 2 ? (
 
                                     <div className="wrap-bulk-all-date bulk">
-                                        <span className="count">{Object.keys(rowSelection).length} rows selected</span>
+                                        <span className="count row">{Object.keys(rowSelection).length} rows selected <i onClick={() => onRowSelectionChange?.({})} className="adminlib-close"></i></span>
                                         <span className="select count"
                                             onClick={() => table.toggleAllRowsSelected(true)}>
                                             Select all
                                         </span>
                                         {bulkActionComp && bulkActionComp()}
-                                        <div
-                                            className="close-btn"
-                                            onClick={() => onRowSelectionChange?.({})}
-                                        >
-                                            <i className="adminlib-vendor-form-delete"></i>
-                                            Delete
-                                        </div>
                                     </div>
                                 ) : (
                                     <>

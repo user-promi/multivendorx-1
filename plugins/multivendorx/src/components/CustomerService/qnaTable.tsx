@@ -299,6 +299,7 @@ const Qna: React.FC = () => {
                     <div className="question-wrapper">
                         <div className="question">Q: {displayText}</div>
                         <div className="answer">A: {displayAnswer}</div>
+                        <div className="des">By: {row.original.author_name ?? '-'}</div>
                     </div>
 
                 </TableCell>;
@@ -312,10 +313,6 @@ const Qna: React.FC = () => {
         //         return <TableCell title={text}>{displayText}</TableCell>;
         //     }
         // },
-        {
-            header: __('Asked By', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original.author_name || ''}>{row.original.author_name ?? '-'}</TableCell>
-        },
         {
             id: 'question_date',
             header: __('Date', 'multivendorx'),
