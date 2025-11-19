@@ -481,43 +481,36 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="details">
-                                    <div className="icon">
-                                        <img
-                                            src={customerData?.avatar_url}
-                                            alt={`${orderData?.billing?.first_name || "Customer"} avatar`}
-                                        />
-                                    </div>
-
-                                    <div className="content">
-                                        <div className="title">
-                                            {orderData?.billing?.first_name || orderData?.billing?.last_name
-                                                ? `${orderData?.billing?.first_name ?? ""} ${orderData?.billing?.last_name ?? ""}`
-                                                : "Guest Customer"}
+                                <div className="store-owner-details">
+                                    <div className="profile">
+                                        <div className="avater">
+                                            <img
+                                                src={customerData?.avatar_url}
+                                                alt={`${orderData?.billing?.first_name || "Customer"} avatar`}
+                                            />
                                         </div>
 
-                                        <div className="des">
-                                            Customer ID: #{orderData?.customer_id && orderData.customer_id !== 0 ? orderData.customer_id : "—"}
+                                        <div className="details">
+                                            <div className="name">
+                                                {orderData?.billing?.first_name || orderData?.billing?.last_name
+                                                    ? `${orderData?.billing?.first_name ?? ""} ${orderData?.billing?.last_name ?? ""}`
+                                                    : "Guest Customer"}
+                                            </div>
+                                            <div className="des"> Customer ID: #{orderData?.customer_id && orderData.customer_id !== 0 ? orderData.customer_id : "—"}</div>
+                                            {orderData?.billing?.email && (
+                                                <div className="des">
+                                                    <i className="adminlib-mail" /> {orderData.billing.email}
+                                                </div>
+                                            )}
+
+                                            {orderData?.billing?.phone && (
+                                                <div className="des">
+                                                    <i className="adminlib-phone" /> {orderData.billing.phone}
+                                                </div>
+                                            )}
                                         </div>
-
-                                        {orderData?.billing?.email && (
-                                            <div className="des">
-                                                <i className="adminlib-mail" /> {orderData.billing.email}
-                                            </div>
-                                        )}
-
-                                        {orderData?.billing?.phone && (
-                                            <div className="des">
-                                                <i className="adminlib-phone" /> {orderData.billing.phone}
-                                            </div>
-                                        )}
                                     </div>
                                 </div>
-
-                                {/* <div className="details">
-                                <div className="icon "><i className="adminlib-cart green"></i></div>
-                                <div className="content"><div className="title">4 Orders</div></div>
-                            </div> */}
                             </div>
 
                             <div className="card-content">

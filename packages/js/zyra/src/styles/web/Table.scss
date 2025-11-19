@@ -614,6 +614,8 @@
 
             .rating-details-wrapper {
                 .title-wrapper {
+                    flex-direction: column;
+                    padding: 0;
 
                     // display: flex;
                     .rating-wrapper {

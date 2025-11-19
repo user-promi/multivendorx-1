@@ -120,7 +120,7 @@ const ActivitiesTable = React.FC = () => {
                 </TableCell>
             ),
         },
-        
+
         {
             header: __('Type', 'multivendorx'),
             cell: ({ row }) => (
@@ -141,32 +141,30 @@ const ActivitiesTable = React.FC = () => {
 
 
     return (
-            <div className="general-wrapper">
-                <div className="admin-table-wrapper">
-                    {error && (
-                        <div className="error-notice">
-                            {error}
-                        </div>
-                    )}
-                    <Table
-                        data={data}
-                        columns={columns as ColumnDef<Record<string, any>, any>[]}
-                        rowSelection={rowSelection}
-                        onRowSelectionChange={setRowSelection}
-                        defaultRowsPerPage={10}
-                        pageCount={pageCount}
-                        pagination={pagination}
-                        onPaginationChange={setPagination}
-                        handlePagination={requestApiForData}
-                        perPageOption={[10, 25, 50]}
-                        typeCounts={[]}
-                        totalCounts={totalRows}
-                        // searchFilter={searchFilter}
-                        // realtimeFilter={realtimeFilter}
-                    />
+        <>
+            {error && (
+                <div className="error-notice">
+                    {error}
                 </div>
-            </div>
-        );
+            )}
+            <Table
+                data={data}
+                columns={columns as ColumnDef<Record<string, any>, any>[]}
+                rowSelection={rowSelection}
+                onRowSelectionChange={setRowSelection}
+                defaultRowsPerPage={10}
+                pageCount={pageCount}
+                pagination={pagination}
+                onPaginationChange={setPagination}
+                handlePagination={requestApiForData}
+                perPageOption={[10, 25, 50]}
+                typeCounts={[]}
+                totalCounts={totalRows}
+            // searchFilter={searchFilter}
+            // realtimeFilter={realtimeFilter}
+            />
+        </>
+    );
 }
 
 export default ActivitiesTable;
