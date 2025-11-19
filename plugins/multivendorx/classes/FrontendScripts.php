@@ -693,6 +693,7 @@ class FrontendScripts {
                         'decimals'                 => wc_get_price_decimals(),
                         'edit_order_capability'    => current_user_can( 'edit_shop_orders' ),
                         'add_product_link'         => StoreUtil::get_endpoint_url( 'products', 'edit' ),
+                        'permalink_structure'      => get_option('permalink_structure') ? true : false,
                         'view_notifications_link'  => StoreUtil::get_endpoint_url( 'view-notifications'),
                         'all_verification_methods' => MultiVendorX()->setting->get_setting( 'all_verification_methods' ),
                         'shipping_methods'         => apply_filters( 'multivendorx_store_shipping_options', array() ),

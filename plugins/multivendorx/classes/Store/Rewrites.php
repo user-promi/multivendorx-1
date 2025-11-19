@@ -14,7 +14,6 @@ defined('ABSPATH') || exit;
 
 class Rewrites {
 
-    public $query_vars = [];
     public $custom_store_url = '';
 
     /**
@@ -26,7 +25,7 @@ class Rewrites {
         add_action( 'init', [ $this, 'register_rule' ] );
         add_filter( 'query_vars', [ $this, 'register_query_var' ] );
         add_filter( 'template_include', [ $this, 'store_template' ], 10 );
-        add_action( 'wp', [ $this, 'flash_rewrite_rules' ], 10 );
+        add_action( 'wp', [ $this, 'flash_rewrite_rules' ], 99 );
         add_action( 'pre_get_posts', [ $this, 'store_query_filter' ] );
 
     }
@@ -76,7 +75,8 @@ class Rewrites {
     }
 
     public function register_rule() {
-
+        $page_id = MultiVendorX()->setting->get_setting( 'store_dashboard_page' );
+        
         $rules = [
             [
                 '^' . $this->custom_store_url . '/([^/]+)/?$',
@@ -87,20 +87,33 @@ class Rewrites {
                 '^' . $this->custom_store_url . '/([^/]+)/page/([0-9]{1,})/?$',
                 'index.php?' . $this->custom_store_url . '=$matches[1]&paged=$matches[2]',
                 'top',
-            ],
-            [
-                '^dashboard/?$',
-                'index.php?pagename=dashboard',
-                'top',
-            ],
+            ],            
             [
                 '^dashboard/([^/]+)/?([^/]*)/?([0-9]*)/?$',
-                'index.php?pagename=dashboard&tab=$matches[1]&subtab=$matches[2]&value=$matches[3]',
-                'top',
-            ],
+                'index.php?page_id=' . $page_id . '&segment=$matches[1]&element=$matches[2]&context_id=$matches[3]',
+                'top'
+            ]
+    
+            // oldddd
+            // [
+            //     '^dashboard/?$',
+            //     'index.php?pagename=dashboard',
+            //     'top',
+            // ],
+
+            // [
+            //     '^dashboard/([^/]+)/?([^/]*)/?([0-9]*)/?$',
+            //     'index.php?pagename=dashboard&tab=$matches[1]&subtab=$matches[2]&value=$matches[3]',
+            //     'top',
+            // ],
+
         ];
 
         $rules = apply_filters( 'multivendorx_rewrite_rules', $rules, $this );
+
+        add_rewrite_tag( '%segment%', '([^/]+)' );
+        add_rewrite_tag( '%element%', '([^/]*)' );
+        add_rewrite_tag( '%context_id%', '([0-9]*)' );
 
         foreach ( $rules as $rule ) {
             add_rewrite_rule( $rule[0], $rule[1], $rule[2] );
@@ -109,13 +122,9 @@ class Rewrites {
 
     public function register_query_var( $vars ) {
         $vars[] = $this->custom_store_url;
-        $vars[] = 'tab';
-        $vars[] = 'subtab';
-        $vars[] = 'value';
-
-        foreach ( $this->query_vars as $var ) {
-            $vars[] = $var;
-        }
+        $vars[] = 'segment';
+        $vars[] = 'element';
+        $vars[] = 'context_id';
 
         return apply_filters( 'multivendorx_query_vars', $vars, $this );
     }

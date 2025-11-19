@@ -106,11 +106,11 @@ class Products {
     }
 
     public function redirect_edit_product_page() {
-        $subtab = get_query_var('subtab');
-        $value  = get_query_var('value');
+        $subtab = get_query_var('element');
+        $context_id  = get_query_var('context_id');
 
         if ($subtab === 'edit' && 
-            empty($value) && (
+            empty($context_id) && (
             !MultiVendorX()->setting->get_setting('category_pyramid_guide') ||
             MultiVendorX()->setting->get_setting('category_pyramid_guide') === 'no') && 
             MultiVendorX()->modules->is_active('spmv') == false ) {
@@ -136,7 +136,7 @@ class Products {
         
         global $wp;
         
-        $this->product_id = $wp->query_vars['value'];
+        $this->product_id = $wp->query_vars['context_id'];
 
         if ( $this->product_id ) {
             $this->product_object = wc_get_product( $this->product_id );
