@@ -265,58 +265,59 @@ const ShippingDelivery = () => {
                                     <div className="form-group-wrapper">
                                         <div className="form-group">
                                             <label>Distance-Cost Rules</label>
-                                            {(formData.distance_rules || []).map((rule: any, index: number) => (
-                                                <div key={index} className="flex gap-2 items-center mb-2">
-                                                    <BasicInput
-                                                        type="number"
-                                                        placeholder="Up to km"
-                                                        value={rule.max_distance || ''}
-                                                        onChange={(e) => {
-                                                            const updatedRules = [...(formData.distance_rules || [])];
-                                                            updatedRules[index] = { ...updatedRules[index], max_distance: e.target.value };
-                                                            setFormData({ ...formData, distance_rules: updatedRules });
-                                                            autoSave({ ...formData, distance_rules: updatedRules });
-                                                        }}
-                                                        min="0"
-                                                        step="0.1"
-                                                    />
-                                                    <BasicInput
-                                                        type="number"
-                                                        placeholder="Cost $"
-                                                        value={rule.cost || ''}
-                                                        onChange={(e) => {
-                                                            const updatedRules = [...(formData.distance_rules || [])];
-                                                            updatedRules[index] = { ...updatedRules[index], cost: e.target.value };
-                                                            setFormData({ ...formData, distance_rules: updatedRules });
-                                                            autoSave({ ...formData, distance_rules: updatedRules });
-                                                        }}
-                                                        min="0"
-                                                        step="0.01"
-                                                    />
-                                                    <button
-                                                        type="button"
-                                                        className="admin-btn btn-red"
-                                                        onClick={() => {
-                                                            const updatedRules = (formData.distance_rules || []).filter((_, i) => i !== index);
-                                                            setFormData({ ...formData, distance_rules: updatedRules });
-                                                            autoSave({ ...formData, distance_rules: updatedRules });
-                                                        }}
-                                                    >
-                                                        Remove
-                                                    </button>
-                                                </div>
-                                            ))}
-
+                                            <div className="shipping-country-wrapper">
+                                                {(formData.distance_rules || []).map((rule: any, index: number) => (
+                                                    <div key={index} className="shipping-country rule">
+                                                        <div className="item">
+                                                            <BasicInput
+                                                                type="number"
+                                                                placeholder="Up to km"
+                                                                value={rule.max_distance || ''}
+                                                                onChange={(e) => {
+                                                                    const updatedRules = [...(formData.distance_rules || [])];
+                                                                    updatedRules[index] = { ...updatedRules[index], max_distance: e.target.value };
+                                                                    setFormData({ ...formData, distance_rules: updatedRules });
+                                                                    autoSave({ ...formData, distance_rules: updatedRules });
+                                                                }}
+                                                                min="0"
+                                                                step="0.1"
+                                                            />
+                                                            <BasicInput
+                                                                type="number"
+                                                                placeholder="Cost $"
+                                                                value={rule.cost || ''}
+                                                                onChange={(e) => {
+                                                                    const updatedRules = [...(formData.distance_rules || [])];
+                                                                    updatedRules[index] = { ...updatedRules[index], cost: e.target.value };
+                                                                    setFormData({ ...formData, distance_rules: updatedRules });
+                                                                    autoSave({ ...formData, distance_rules: updatedRules });
+                                                                }}
+                                                                min="0"
+                                                                step="0.01"
+                                                            />
+                                                            <span
+                                                                className="delete-icon adminlib-delete"
+                                                                onClick={() => {
+                                                                    const updatedRules = (formData.distance_rules || []).filter((_, i) => i !== index);
+                                                                    setFormData({ ...formData, distance_rules: updatedRules });
+                                                                    autoSave({ ...formData, distance_rules: updatedRules });
+                                                                }}
+                                                            >
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
                                             <button
                                                 type="button"
-                                                className="admin-btn btn-purple mt-2"
+                                                className="admin-btn btn-purple-bg"
                                                 onClick={() => {
                                                     const updatedRules = [...(formData.distance_rules || []), { max_distance: '', cost: '' }];
                                                     setFormData({ ...formData, distance_rules: updatedRules });
                                                     autoSave({ ...formData, distance_rules: updatedRules });
                                                 }}
                                             >
-                                                + Add Rule
+                                                <i className="adminlib-plus-circle-o"></i> Add Rule
                                             </button>
                                         </div>
                                     </div>

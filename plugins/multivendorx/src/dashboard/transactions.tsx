@@ -257,8 +257,6 @@ const Transactions: React.FC = () => {
             cell: ({ row }) => {
                 const debit = row.original.debit;
                 const status = row.original.status || '';
-
-                let iconClass = '';
                 if (debit) {
                     switch (status) {
                         case 'Upcoming':
@@ -277,7 +275,6 @@ const Transactions: React.FC = () => {
                     <TableCell>
                         {debit ? (
                             <>
-                                {iconClass && <i className={iconClass}></i>}
                                 {formatCurrency(debit)}
                             </>
                         ) : (

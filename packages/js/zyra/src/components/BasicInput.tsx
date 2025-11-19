@@ -197,7 +197,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                                 )}
                                 {clickBtnName && (
                                     <DisplayButton
-                                        wraperClass="admin-btn btn-purple"
+                                        wraperClass="admin-btn btn-purple input-btn"
                                         onClick={onclickCallback}
                                     >
                                         <>
@@ -208,7 +208,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                                 {generate &&
                                     ((!value || value === '') ? (
                                         <DisplayButton
-                                            wraperClass="admin-btn btn-purple"
+                                            wraperClass="admin-btn btn-purple input-btn"
                                             onClick={generateSSOKey}
                                         >
                                             <>

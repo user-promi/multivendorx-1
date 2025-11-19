@@ -23,6 +23,7 @@ class Roles {
     public function __construct() {
         add_action( 'init', [ $this, 'multivendorx_add_custom_role' ] );
         add_filter( 'user_has_cap', array($this, 'assign_cap_authenticate_user') );
+        add_filter( 'show_admin_bar', [ $this, 'hide_admin_bar' ] );
     }
 
     public function multivendorx_add_custom_role() {
@@ -60,6 +61,7 @@ class Roles {
     public function assign_cap_authenticate_user( $allcaps ) {
         if ( is_user_logged_in() ) {
             $allcaps['create_stores'] = true;
+            $allcaps['edit_posts'] = true;
         }
 
         return $allcaps;
@@ -73,5 +75,13 @@ class Roles {
         ];
 
         return $capabilities;
+    }
+
+    public function hide_admin_bar($show) {
+        $user = wp_get_current_user();
+        if (in_array('store_owner', $user->roles)) {
+            return false;
+        }
+        return $show;
     }
 }
