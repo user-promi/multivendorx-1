@@ -21,7 +21,8 @@ interface PaymentFormField {
   | "setup"
   | "setting-toggle"
   | "buttons"
-  | "nested";
+  | "nested"
+  | "copy-text";
 
   label: string;
   placeholder?: string;
@@ -93,6 +94,14 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
   const menuRef = useRef<HTMLDivElement>(null);
   const [modelOpen, setModelOpen] = useState(false);
   const [wizardIndex, setWizardIndex] = useState(0);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    });
+  };
 
   const handleInputChange = (
     methodKey: string,
@@ -358,6 +367,23 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
           </>
         );
 
+
+      case "copy-text":
+        return (
+          <>
+            <div className="copy-text-wrapper">
+              <code>{field.title}</code>
+              <i
+                className="adminlib-vendor-form-copy"
+                onClick={() => handleCopy(field.title)}
+              ></i>
+
+              {/* {copied && <span className="copied-msg">Copied!</span>} */}
+            </div>
+            <div className="settings-metabox-description">{field.desc}</div>
+          </>
+        );
+
       case "buttons":
         return (
           <>
@@ -432,18 +458,18 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
             addButtonLabel={field.addButtonLabel}
             deleteButtonLabel={field.deleteButtonLabel}
             single={field.single}
-            // onChange={(val: any) => {
-            //   if (
-            //     hasAccess(
-            //       field.proSetting ?? false,
-            //       String(field.moduleEnabled ?? ""),
-            //       String(field.dependentSetting ?? ""),
-            //       String(field.dependentPlugin ?? "")
-            //     )
-            //   ) {
-            //     handleInputChange(methodId, field.key, val);
-            //   }
-            // }}
+          // onChange={(val: any) => {
+          //   if (
+          //     hasAccess(
+          //       field.proSetting ?? false,
+          //       String(field.moduleEnabled ?? ""),
+          //       String(field.dependentSetting ?? ""),
+          //       String(field.dependentPlugin ?? "")
+          //     )
+          //   ) {
+          //     handleInputChange(methodId, field.key, val);
+          //   }
+          // }}
           />
         );
       default:

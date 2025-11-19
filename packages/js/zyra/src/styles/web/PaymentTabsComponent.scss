@@ -264,6 +264,34 @@
                 margin: 0;
                 font-size: 0.95rem;
             }
+
+            .payments-tab-notice {
+                padding: 0.625rem;
+                background: #ece2f8a6;
+                color: #000000cf;
+                border-radius: 0.313rem;
+            }
+
+            .copy-text-wrapper {
+                display: flex;
+                align-items: center;
+
+                code {
+                    background: $theme-background-color;
+                    color: $theme-color;
+                    margin-right: 0.313rem;
+                }
+
+                i {
+                    font-size: 1rem;
+                }
+
+                .copied-msg {
+                    margin-left: 8px;
+                    color: green;
+                    font-size: 12px;
+                }
+            }
         }
 
         &.add-method {
@@ -406,12 +434,15 @@
         padding: 0 3rem;
     }
 }
-.finish-wrapper{
+
+.finish-wrapper {
     padding: 1rem;
-    .title{
+
+    .title {
         font-size: 1.125rem;
     }
 }
+
 .wizard-container {
     width: 100%;
     max-width: 50rem;
