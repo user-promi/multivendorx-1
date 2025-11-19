@@ -224,7 +224,7 @@ export default {
 
         },
         { type: 'separator', id: 'payment_management', label: 'Payment Management' },
-        
+
         {
             id: 'paypal-marketplace',
             name: __('PayPal Marketplace', 'multivendorx'),
@@ -277,41 +277,11 @@ export default {
         },
         { type: 'separator', id: 'shipping_management', label: 'Shipping Management' },
         {
-            id: 'zone-shipping',
-            name: __('Zone-Wise Shipping', 'multivendorx'),
-            desc: "Stores define shipping availability restricted to specific geographic zones.",
-            icon: 'adminlib-zone-shipping',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/shipping-by-zone/',
-            settings_link: '${appLocalizer.plugin_url}settings&subtab=shipping',
-            pro_module: false,
-            category: 'shipping_management'
-        },
-        {
-            id: 'distance-shipping',
-            name: __('Distance Shipping', 'multivendorx'),
-            desc: "Shipping charges calculated based on distance between store address and delivery location.",
-            icon: 'adminlib-distance-shipping',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/distance-shipping',
-            settings_link: '${appLocalizer.plugin_url}settings&subtab=shipping',
-            pro_module: false,
-            category: 'shipping_management'
-        },
-        {
             id: 'store-shipping',
             name: __('Store Shipping', 'multivendorx'),
             desc: "Shipping charges calculated based on distance between store address and delivery location.",
             icon: 'adminlib-distance-shipping',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/distance-shipping',
-            settings_link: '${appLocalizer.plugin_url}settings&subtab=shipping',
-            pro_module: false,
-            category: 'shipping_management'
-        },
-        {
-            id: 'country-shipping',
-            name: __('Country-Wise Shipping', 'multivendorx'),
-            desc: "Stores decide which countries they ship products to.",
-            icon: 'adminlib-country-shipping',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/country-shipping',
             settings_link: '${appLocalizer.plugin_url}settings&subtab=shipping',
             pro_module: false,
             category: 'shipping_management'
@@ -425,7 +395,7 @@ export default {
             icon: 'adminlib-compliance',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/marketplace-memberhsip',
             settings_link: '${appLocalizer.plugin_url}settings&subtab=non-compliance',
-             // pro_module: true,
+            // pro_module: true,
             category: 'marketplace_boosters'
         }, {
             id: 'marketplace-membership',
@@ -456,6 +426,17 @@ export default {
             pro_module: true,
             category: 'marketplace_boosters'
         },
+        {
+            id: 'franchises-module',
+            name: __('Franchises', 'multivendorx'),
+            desc: 'Enables franchise-style ordering with store-created orders, admin-product ordering, and automatic store assignment based on customer location.',
+            icon: 'adminlib-franchises-module',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/',
+            settings_link: '${appLocalizer.plugin_url}settings&subtab=franchises',
+            pro_module: false,
+            category: ['store_management', 'marketplace_boosters'],
+        },
+
         {
             id: 'marketplace-gateway',
             name: __('Payment Gateway Charge', 'multivendorx'),
