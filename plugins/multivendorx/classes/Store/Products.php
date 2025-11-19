@@ -136,7 +136,7 @@ class Products {
         
         global $wp;
         
-        $this->product_id = $wp->query_vars['value'];
+        $this->product_id = $wp->query_vars['context_id'];
 
         if ( $this->product_id ) {
             $this->product_object = wc_get_product( $this->product_id );

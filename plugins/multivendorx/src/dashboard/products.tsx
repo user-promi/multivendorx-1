@@ -340,7 +340,7 @@ const AllProduct: React.FC = () => {
                                 onClick: (rowData) => {
                                      let url = appLocalizer.permalink_structure
                                         ? `${appLocalizer.add_product_link}/${rowData.id}` 
-                                        : `${appLocalizer.add_product_link}&value=${rowData.id}`;
+                                        : `${appLocalizer.add_product_link}&context_id=${rowData.id}`;
                                     window.location.assign(url);
                                 },
                                 hover: true
