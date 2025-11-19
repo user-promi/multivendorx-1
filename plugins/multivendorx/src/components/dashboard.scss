@@ -19,7 +19,9 @@
         gap: 1rem;
         padding-bottom: 1rem;
     }
-
+    .row:has(.transaction){
+        margin-bottom: 1rem;
+    }
     .column {
         padding: 1.5rem;
         border-radius: 0.313rem;

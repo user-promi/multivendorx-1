@@ -366,7 +366,7 @@ const Modules: React.FC<ModuleProps> = ({
                                             <div className="requires-title">Requires:</div>
                                             {requiredPlugins.map((plugin: { name: string; link: string }, idx: number) => (
                                                 <span key={idx}>
-                                                    <a href={plugin.link} target="_blank" rel="noopener noreferrer">
+                                                    <a href={plugin.link} className="link-item" target="_blank" rel="noopener noreferrer">
                                                         {plugin.name}
                                                     </a>
                                                     {idx < requiredPlugins.length - 1 ? ', ' : ''}

@@ -196,7 +196,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                             </div>
                         </div> */}
                         <div className="column">
-                            <div className="card-header">
+                            {/* <div className="card-header">
                                 <div className="left">
                                     <div className="title">
                                         Latest products
@@ -210,8 +210,24 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                         <i className="adminlib-external"></i>
                                     </a>
                                 </div>
-                            </div>
+                            </div> */}
+                            <div className="card-header">
+                                <div className="left">
+                                    <div className="title">
+                                        Latest products
+                                    </div>
+                                </div>
+                                <div className="right">
+                                    <i className="adminlib-external"
+                                        onClick={() => {
+                                            navigate(`?page=multivendorx#&tab=transaction-history&store_id=${id}`);
+                                        }}
 
+
+                                    // onClick={() => { navigate(`?page=multivendorx#&tab=transaction-history&store_id=${id}`); }}
+                                    ></i>
+                                </div>
+                            </div>
                             {recentProducts.length > 0 ? (
                                 recentProducts.map((product) => {
                                     const productImage =
@@ -400,14 +416,14 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                 <div className="details">
                                     <div className="sku">
                                         {storeData.create_time}
-                                        <div
+                                        <a
                                             className="sku"
                                             onClick={() => {
                                                 navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=application-details`);
                                             }}
                                         >
-                                            <i className="adminlib-external"></i>
-                                        </div>
+                                            Application Data
+                                        </a>
                                     </div>
                                 </div>
                             </div>

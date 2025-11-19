@@ -174,7 +174,12 @@ a {
             margin-left: 16rem;
             // border-bottom: 1px solid #e5e9f2;
             // box-shadow: 0 0.125rem 0.5rem 0 rgba(47, 43, 61, 0.12);
-
+            .navbar-leftside{
+                .toggle-menu-icon{
+                    font-size: 1.625rem;
+                    cursor: pointer;
+                }
+            }
             .navbar-rightside {
                 .navbar-right {
                     display: flex;
@@ -954,7 +959,7 @@ a {
             }
         }
         .top-navbar{
-            margin: 0;
+            margin-left: 4rem;
         }
     }
 }

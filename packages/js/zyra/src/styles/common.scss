@@ -55,7 +55,7 @@ body:has(.admin-main-wrapper) {
   h6 {
     margin: 0;
   }
-  
+
   .basic-input,
   .basic-select,
   .textarea-input,
@@ -63,7 +63,9 @@ body:has(.admin-main-wrapper) {
     min-height: 2.213rem !important; // for overwrite wordpress style
   }
 
-
+  a:hover{
+    color: $theme-color;
+  }
   input[type="color"] {
     cursor: pointer;
   }
@@ -451,6 +453,10 @@ body:has(.admin-main-wrapper) {
 .link-item {
   color: $theme-color;
   cursor: pointer;
+
+  &:hover {
+    color: $theme-color;
+  }
 }
 
 // color input style

@@ -28,6 +28,17 @@ export const TransactionHistory: React.FC = () => {
     const [paymentMethod, setPaymentMethod] = useState<any | "">("");
     const [validationErrors, setValidationErrors] = useState<{ amount?: string; paymentMethod?: string }>({});
     const [recentDebits, setRecentDebits] = useState<any[]>([]);
+    const freeAmount = amount ? amount * 0.05 : 0;
+    const totalAmount = amount ? amount + freeAmount : 0;
+
+    const AmountChange = (value: number) => {
+        setAmount(value);
+    };
+    useEffect(() => {
+        if (data.wallet_balance && amount === 0) {
+            setAmount(data.wallet_balance);
+        }
+    }, [data.wallet_balance]);
 
     const demoOptions = [
         {
@@ -61,10 +72,10 @@ export const TransactionHistory: React.FC = () => {
     }
 
     const removeStoreIdFromURL = () => {
-        const hash = location.hash.replace("#", ""); 
+        const hash = location.hash.replace("#", "");
         const params = new URLSearchParams(hash);
 
-         if (params.has("store_id")) {
+        if (params.has("store_id")) {
             params.delete("store_id");
         }
 
@@ -490,8 +501,8 @@ export const TransactionHistory: React.FC = () => {
                 {requestWithdrawal && (
                     <CommonPopup
                         open={requestWithdrawal}
-                        width="800px"
-                        height="70%"
+                        width="450px"
+                        height="75%"
                         header={
                             <>
                                 <div className="title">
@@ -524,26 +535,28 @@ export const TransactionHistory: React.FC = () => {
                         <div className="content">
                             {/* start left section */}
                             <div className="form-group-wrapper">
-                                <div className="available-balance">Available : <span>$1253.25</span></div>
+                                <div className="available-balance">Available balance <div>{formatCurrency(data.wallet_balance)}</div></div>
 
                                 <div className="form-group">
                                     <label htmlFor="amount">Amount</label>
+
                                     <BasicInput
                                         type="number"
                                         name="amount"
                                         value={amount}
-                                        onChange={(e) => handleAmountChange(Number(e.target.value))}
+                                        onChange={(e) => AmountChange(Number(e.target.value))}
                                     />
 
                                     <div className="free-wrapper">
-                                        <span>$852.25 Total</span>
-                                        <span>$852.25 free</span>
+                                        <span><b>₹{totalAmount} </b>Total</span>
+                                        <span><b>₹{freeAmount} Free </b>(5%)</span>
                                     </div>
 
                                     {validationErrors.amount && (
                                         <div className="invalid-massage">{validationErrors.amount}</div>
                                     )}
                                 </div>
+
                                 <div className="form-group">
                                     <label htmlFor="payment_method">Payment Processor</label>
                                     <ToggleSetting
