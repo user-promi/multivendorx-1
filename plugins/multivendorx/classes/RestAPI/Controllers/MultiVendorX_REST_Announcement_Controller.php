@@ -54,7 +54,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
     }    
 
     public function get_items_permissions_check($request) {
-        return current_user_can( 'read' );
+        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
     }
 
      // POST permission
@@ -115,6 +115,29 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             'no_found_rows'    => false,           // enables pagination count
         ];
 
+        $store_id_raw = $request->get_param( 'store_id' );
+        $store_id     = intval( $store_id_raw );
+        
+        if ( $store_id >= 0 ) {
+            $query_args['meta_query'] = [
+                'relation' => 'OR',
+        
+                // Match specific store ID
+                [
+                    'key'     => 'multivendorx_announcement_stores',
+                    'value'   => ';i:' . $store_id . ';',
+                    'compare' => 'LIKE',
+                ],
+        
+                // Match announcements intended for ALL stores (value = 0)
+                [
+                    'key'     => 'multivendorx_announcement_stores',
+                    'value'   => ';i:0;',
+                    'compare' => 'LIKE',
+                ],
+            ];
+        }
+        
         // Add date filter if provided
         if ( $start_date && $end_date ) {
             $query_args['date_query'] = [
@@ -210,7 +233,6 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                 'message' => $post_id->get_error_message(),
             ]);
         }
-        // file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:stores : " . var_export($stores, true) . "\n", FILE_APPEND);
         // Save stores if provided
         if ( ! empty($stores) ) {
             update_post_meta( $post_id, 'multivendorx_announcement_stores', $stores );

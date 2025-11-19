@@ -52,7 +52,7 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
       method: 'GET',
       url: getApiLink(appLocalizer, 'commission'),
       headers: { 'X-WP-Nonce': appLocalizer.nonce },
-      params: { format: 'reports' },
+      params: { format: 'reports',store_id:appLocalizer.store_id },
     })
       .then((response) => {
         const data = response.data;
@@ -355,106 +355,8 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
         </div>
       </div>
 
-
-      {/* <div className="row">
-        {leaderboard.map((section: any, sectionIndex: number) => (
-          <div className="column" key={sectionIndex}>
-            <div className="card-header">
-              <div className="left">
-                <div className="title">{section.label}</div>
-              </div>
-            </div>
-
-            <div className="top-items">
-              {section.rows?.length ? (
-                section.rows.map((row: any, rowIndex: number) => (
-                  <div className="items" key={rowIndex}>
-                    <div className="left-side">
-                      <div className="icon">
-                        <i
-                          className={`adminlib-pro-tag admin-icon ${rowIndex % 2 === 0 ? "red" : "green"
-                            }`}
-                        ></i>
-                      </div>
-                      <div className="details">
-                        <div
-                          className="item-title"
-                          dangerouslySetInnerHTML={{
-                            __html: row[0].display.trim()
-                              ? row[0].display
-                              : `<a href="#">Customer</a>`, // fallback text
-                          }}
-                        />
-                        <div className="sub-text">
-                          {row[1].value} {row[1].label || "orders"}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="right-side">
-                      <div
-                        className="price"
-                        dangerouslySetInnerHTML={{ __html: row[2].display }}
-                      />
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className="items">
-                  <div className="left-side">
-                    <div className="details">
-                      <div className="item-title">No data</div>
-                      <div className="sub-text">0 orders</div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-            </div>
-          </div>
-        ))}
-        <div className="column">
-          <div className="card-header">
-            <div className="left">
-              <div className="title">
-                Top Store
-              </div>
-            </div>
-          </div>
-          <div className="top-items">
-            <div className="items">
-              <div className="left-side">
-                <div className="icon">
-                  <i className="adminlib-pro-tag admin-icon red"></i>
-                </div>
-                <div className="details">
-                  <div className="item-title">Lather & Loom</div>
-                  <div className="sub-text">3 orders</div>
-                </div>
-              </div>
-              <div className="right-side">
-                <div className="price">$380</div>
-              </div>
-            </div>
-            <div className="items">
-              <div className="left-side">
-                <div className="icon">
-                  <i className="adminlib-pro-tag admin-icon green"></i>
-                </div>
-                <div className="details">
-                  <div className="item-title">Lather & Loom</div>
-                  <div className="sub-text">3 orders</div>
-                </div>
-              </div>
-              <div className="right-side">
-                <div className="price">$380</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
-
       {/* Keep categories and brands */}
-      <div className="row">
+      {/* <div className="row">
 
         <div className="column">
           <div className="card-header">
@@ -593,7 +495,6 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
                         src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
                           store.store_name || 'Store'
                         )}&background=0073aa&color=fff`}
-                        // alt={store.store_name}
                       />
                     </a>
                   </div>
@@ -605,7 +506,6 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        {/* {store.store_name} */}
                       </a>
                     </div>
                     <div className="des">
@@ -630,7 +530,7 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
 
         </div>
 
-      </div>
+      </div> */}
 
     </>
   );
