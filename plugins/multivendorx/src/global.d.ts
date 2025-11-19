@@ -68,6 +68,7 @@ declare global {
         setup_wizard_url:any;
         capability_pro:any;
         taxes_enabled:any;
+        permalink_structure:any;
     }
     interface Color{
         color: any;

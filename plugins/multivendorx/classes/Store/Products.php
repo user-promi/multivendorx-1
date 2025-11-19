@@ -106,7 +106,7 @@ class Products {
     }
 
     public function redirect_edit_product_page() {
-        $subtab = get_query_var('subtab');
+        $subtab = get_query_var('element');
         $value  = get_query_var('value');
 
         if ($subtab === 'edit' && 
