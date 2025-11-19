@@ -90,7 +90,7 @@ class Rewrites {
             ],            
             [
                 '^dashboard/([^/]+)/?([^/]*)/?([0-9]*)/?$',
-                'index.php?page_id=' . $page_id . '&segment=$matches[1]&element=$matches[2]&value=$matches[3]',
+                'index.php?page_id=' . $page_id . '&segment=$matches[1]&element=$matches[2]&context_id=$matches[3]',
                 'top'
             ]
     
@@ -113,8 +113,8 @@ class Rewrites {
 
         add_rewrite_tag( '%segment%', '([^/]+)' );
         add_rewrite_tag( '%element%', '([^/]*)' );
-        add_rewrite_tag( '%value%', '([0-9]*)' );
-        
+        add_rewrite_tag( '%context_id%', '([0-9]*)' );
+
         foreach ( $rules as $rule ) {
             add_rewrite_rule( $rule[0], $rule[1], $rule[2] );
         }
@@ -124,7 +124,7 @@ class Rewrites {
         $vars[] = $this->custom_store_url;
         $vars[] = 'segment';
         $vars[] = 'element';
-        $vars[] = 'value';
+        $vars[] = 'context_id';
 
         return apply_filters( 'multivendorx_query_vars', $vars, $this );
     }

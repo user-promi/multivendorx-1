@@ -107,10 +107,10 @@ class Products {
 
     public function redirect_edit_product_page() {
         $subtab = get_query_var('element');
-        $value  = get_query_var('value');
+        $context_id  = get_query_var('context_id');
 
         if ($subtab === 'edit' && 
-            empty($value) && (
+            empty($context_id) && (
             !MultiVendorX()->setting->get_setting('category_pyramid_guide') ||
             MultiVendorX()->setting->get_setting('category_pyramid_guide') === 'no') && 
             MultiVendorX()->modules->is_active('spmv') == false ) {
