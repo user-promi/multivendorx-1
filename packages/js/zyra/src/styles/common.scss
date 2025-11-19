@@ -55,7 +55,7 @@ body:has(.admin-main-wrapper) {
   h6 {
     margin: 0;
   }
-  
+
   .basic-input,
   .basic-select,
   .textarea-input,
@@ -451,6 +451,10 @@ body:has(.admin-main-wrapper) {
 .link-item {
   color: $theme-color;
   cursor: pointer;
+
+  &:hover {
+    color: $theme-color;
+  }
 }
 
 // color input style
