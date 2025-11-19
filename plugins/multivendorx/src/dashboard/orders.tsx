@@ -77,7 +77,7 @@ const Orders: React.FC = () => {
 
     const fetchOrderStatusCounts = async () => {
         try {
-            const statuses = ["all", "pending", "processing", "on-hold", "completed", "cancelled", "refunded", "failed", "trash"];
+            const statuses = ["all", "pending", "processing", "on-hold", "completed", "cancelled","refund-requested", "refunded", "failed", "trash"];
 
             const counts: OrderStatus[] = await Promise.all(
                 statuses.map(async (status) => {
@@ -112,6 +112,7 @@ const Orders: React.FC = () => {
             console.error("Failed to fetch order status counts:", error);
         }
     };
+
 
     // Fetch dynamic order status counts for typeCounts filter
     useEffect(() => {
@@ -187,6 +188,14 @@ const Orders: React.FC = () => {
         if (filterData.typeCount && filterData.typeCount !== 'all') {
             params.status = filterData.typeCount;
         }
+        // Add typeCount filter
+        // if (filterData.typeCount && filterData.typeCount !== 'all') {
+        //     if (filterData.typeCount === "refund-request") {
+        //         params.refund_status = "refund_request";
+        //     } else {
+        //         params.status = filterData.typeCount;
+        //     }
+        // }
 
         requestData(rowsPerPage, currentPage, startDate, endDate, params);
     };
@@ -305,9 +314,6 @@ const Orders: React.FC = () => {
             </div>
         );
     };
-
-
-
 
     const columns: ColumnDef<any>[] = [
         {

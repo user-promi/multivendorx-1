@@ -179,7 +179,7 @@ class Frontend {
                 $array[] = array(
                     'name'  => esc_html( $sold_by_text ),
                     'value' => esc_html( $details['name'] ),
-                    'display' => $details['logo_html'] . esc_html( $details['name'] ),
+                    // 'display' => $details['logo_html'] . esc_html( $details['name'] ),
                 );
 
             }

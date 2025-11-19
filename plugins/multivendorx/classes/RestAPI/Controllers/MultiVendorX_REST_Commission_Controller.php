@@ -78,19 +78,30 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
             return $this->download_csv( $request );
         }
 
-        if ( $format === 'reports' ) {
-            $top_stores = $request->get_param( 'top_stores' );
-            
-            if( $top_stores ) return CommissionUtil::get_commission_summary_for_store( null, $top_stores, $top_stores);
+        $storeId = $request->get_param('store_id');
 
+        if ($format === 'reports') {
+            $top_stores = $request->get_param('top_stores');
+
+            if ($storeId) {
+                // If a specific store ID is provided, return commission summary for that store
+                return CommissionUtil::get_commission_summary_for_store($storeId);
+            }
+
+            if ($top_stores) {
+                // If top_stores is provided, return commission summary for top stores
+                return CommissionUtil::get_commission_summary_for_store(null, $top_stores, $top_stores);
+            }
+
+            // Default: return summary for all stores
             return CommissionUtil::get_commission_summary_for_store();
         }
+
 
         $limit   = max( intval( $request->get_param( 'row' ) ), 10 );
         $page    = max( intval( $request->get_param( 'page' ) ), 1 );
         $offset  = ( $page - 1 ) * $limit;
         $count   = $request->get_param( 'count' );
-        $storeId = $request->get_param( 'store_id' );
         $status = $request->get_param( 'status' );
         $start_date = date('Y-m-d 00:00:00', strtotime(sanitize_text_field($request->get_param('startDate'))));
         $end_date   = date('Y-m-d 23:59:59', strtotime(sanitize_text_field($request->get_param('endDate'))));

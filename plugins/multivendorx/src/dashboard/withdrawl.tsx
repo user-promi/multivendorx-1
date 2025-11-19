@@ -145,7 +145,11 @@ const Withdrawl: React.FC = () => {
   return (
       <div className="card-wrapper">
         <div className="card-content">
-          <div className="card-title">Payment information</div>
+          <div className="form-group-title-wrapper">
+            <div className="title">
+              Payment information
+            </div>
+          </div>
 
           {/* Payment Method Toggle */}
           <div className="form-group-wrapper">
@@ -219,7 +223,7 @@ const Withdrawl: React.FC = () => {
                   <div className="form-group-wrapper" key={field.key || index}>
                     <button
                       type="button"
-                      className="btn btn-primary"
+                      className="admin-btn btn-purple-bg"
                       onClick={() => handleButtonClick(field, formData)}
                     >
                       {field.label}

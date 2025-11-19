@@ -25,7 +25,6 @@ $page_info = MultiVendorX()->rest->dashboard->get_current_page_and_submenu();
                 <?php else: ?>
                     <span class="site-name"><?php echo esc_html(get_bloginfo('name')); ?></span>
                 <?php endif; ?>
-                <i class='adminlib-menu toggle-menu-icon'></i>
             </div>
             <div class="dashboard-tabs">
                 <ul>
@@ -68,6 +67,7 @@ $page_info = MultiVendorX()->rest->dashboard->get_current_page_and_submenu();
             <div class="top-navbar-wrapper">
                 <div class="top-navbar">
                     <div class="navbar-leftside">
+                        <i class='adminlib-menu toggle-menu-icon'></i>
                     </div>
                     <div class="navbar-rightside">
                         <ul class="navbar-right">
@@ -124,23 +124,23 @@ $page_info = MultiVendorX()->rest->dashboard->get_current_page_and_submenu();
                                             </li>
                                         </ul>
                                     </div>
+                                    <?php if (!empty($available_stores)): ?>
+                                        <div class="store-wrapper">
+                                            <h3>Switch stores</h3>
+                                            <?php
+                                            // Count stores excluding the active one.
+                                            $active_store = $page_info['active_store'] ?? null;
+                                            $store_ids = $page_info['store_ids'] ?? [];
 
-                                    <div class="store-wrapper">
-                                        <h3>Switch stores</h3>
-                                        <?php
-                                        // Count stores excluding the active one.
-                                        $active_store = $page_info['active_store'] ?? null;
-                                        $store_ids = $page_info['store_ids'] ?? [];
+                                            $available_stores = array_filter(
+                                                $store_ids,
+                                                function ($id) use ($active_store) {
+                                                    // Skip the active store if it exists in the list
+                                                    return $active_store ? ($id !== $active_store) : true;
+                                                }
+                                            );
 
-                                        $available_stores = array_filter(
-                                            $store_ids,
-                                            function ($id) use ($active_store) {
-                                                // Skip the active store if it exists in the list
-                                                return $active_store ? ($id !== $active_store) : true;
-                                            }
-                                        );
 
-                                        if (!empty($available_stores)):
                                             ?>
                                             <ul>
                                                 <?php
@@ -156,21 +156,15 @@ $page_info = MultiVendorX()->rest->dashboard->get_current_page_and_submenu();
                                                     </li>
                                                 <?php endforeach; ?>
                                             </ul>
-                                        <?php else: ?>
-                                            <p><?php echo esc_html__('No store found', 'multivendorx'); ?></p>
-                                        <?php endif; ?>
-                                    </div>
+                                        </div>
+                                    <?php endif; ?>
 
-                                    <div class="dropdown-footer">
-                                        <ul>
-                                            <li>
-                                                <a
-                                                    href="<?php echo esc_url(wp_logout_url(get_permalink((int) MultiVendorX()->setting->get_setting('store_dashboard_page')))); ?>">
-                                                    <i class="adminlib-import"></i>
-                                                    <?php echo esc_html__('Sign Out', 'multivendorx'); ?>
-                                                </a>
-                                            </li>
-                                        </ul>
+                                    <div class="footer">
+                                        <a class="admin-btn btn-red"
+                                            href="<?php echo esc_url(wp_logout_url(get_permalink((int) MultiVendorX()->setting->get_setting('store_dashboard_page')))); ?>">
+                                            <i class="adminlib-import"></i>
+                                            <?php echo esc_html__('Sign Out', 'multivendorx'); ?>
+                                        </a>
                                     </div>
                                 </div>
                             </li>
