@@ -120,7 +120,7 @@ const StoreReview: React.FC = () => {
                 page: currentPage,
                 row: rowsPerPage,
                 status: typeCount === 'all' ? '' : typeCount,
-                store_id: store,
+                store_id: appLocalizer.store_id,
                 overall_rating: rating,
                 searchField,
                 orderBy,
@@ -182,27 +182,6 @@ const StoreReview: React.FC = () => {
     };
 
     const realtimeFilter: RealtimeFilter[] = [
-        {
-            name: 'store',
-            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
-                <div className="   group-field">
-                    <select
-                        name="store"
-                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
-                        value={filterValue || ''}
-                        className="basic-select"
-                    >
-                        <option value="">All Store</option>
-                        {store?.map((s: any) => (
-                            <option key={s.id} value={s.id}>
-                                {s.store_name.charAt(0).toUpperCase() + s.store_name.slice(1)}
-                            </option>
-                        ))}
-                    </select>
-
-                </div>
-            ),
-        },
         {
             name: 'rating',
             render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
@@ -301,49 +280,11 @@ const StoreReview: React.FC = () => {
             id: 'customer',
             header: __('Customer', 'multivendorx'),
             cell: ({ row }) => {
-                const { customer_id, customer_name } = row.original;
-                const editLink = `${window.location.origin}/wp-admin/user-edit.php?user_id=${customer_id}`;
-
+                const { customer_name } = row.original;
+        
                 return (
-                    <TableCell title={customer_name}>
-                        {customer_id ? (
-                            <a
-                                href={editLink}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="customer-link"
-                            >
-                                {customer_name}
-                            </a>
-                        ) : (
-                            '-'
-                        )}
-                    </TableCell>
-                );
-            },
-        },
-        {
-            header: __('Store', 'multivendorx'),
-            cell: ({ row }) => {
-                const { store_id, store_name } = row.original;
-                const baseUrl = `${window.location.origin}/wp-admin/admin.php?page=multivendorx#&tab=stores`;
-                const storeLink = store_id
-                    ? `${baseUrl}&edit/${store_id}/&subtab=application-details`
-                    : '#';
-
-                return (
-                    <TableCell title={store_name || ''}>
-                        {store_id ? (
-                            <a
-                                href={storeLink}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {store_name || '-'}
-                            </a>
-                        ) : (
-                            store_name || '-'
-                        )}
+                    <TableCell title={customer_name || '-'}>
+                        {customer_name || '-'}
                     </TableCell>
                 );
             },
@@ -455,45 +396,6 @@ const StoreReview: React.FC = () => {
                                 },
                                 hover: true,
                             },
-                            {
-                                label: __('Delete', 'multivendorx'),
-                                icon: 'adminlib-delete',
-                                onClick: async () => {
-                                    if (
-                                        confirm(
-                                            __(
-                                                'Are you sure you want to delete this review?',
-                                                'multivendorx'
-                                            )
-                                        )
-                                    ) {
-                                        try {
-                                            await axios.delete(
-                                                getApiLink(
-                                                    appLocalizer,
-                                                    `review/${row.original.review_id}`
-                                                ),
-                                                {
-                                                    headers: {
-                                                        'X-WP-Nonce': appLocalizer.nonce,
-                                                    },
-                                                }
-                                            );
-
-                                            // ✅ Refresh the table after delete
-                                            requestData(
-                                                pagination.pageSize,
-                                                pagination.pageIndex + 1
-                                            );
-                                        } catch (error) {
-                                            console.error(error);
-                                            alert(__('Failed to delete review', 'multivendorx'));
-                                        }
-                                    }
-                                },
-                                hover: true,
-                            }
-
                         ],
                     }}
                 />

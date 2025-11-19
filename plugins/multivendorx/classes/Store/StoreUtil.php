@@ -540,41 +540,83 @@ class StoreUtil {
         return $policies;
     }
 
-    public static function get_endpoint_url($page = '', $sub = '', $value = '') {
+    // public static function get_endpoint_url($page = '', $sub = '', $value = '') {
+    //     if (get_option('permalink_structure')) {
+    //         $url = home_url('/dashboard');
+    //         if ($page && $page !== 'dashboard') {
+    //             $url .= '/' . $page;
+    //         }
+    //         if ($sub) {
+    //             $url .= '/' . $sub;
+    //         }
+    //         if ($value) {
+    //             $url .= '/' . $value;
+    //         }
+    //     } else {
+    //         $page_id = isset($_GET['page_id']) ? (int) $_GET['page_id'] : 0;
+
+    //         if ($page_id) {
+    //             $base_url = add_query_arg(['page_id' => $page_id], home_url('/'));
+    //         } else {
+    //             $base_url = home_url('/');
+    //         }
+
+    //         $url = add_query_arg(['dashboard' => '1'], $base_url);
+    //         if ($page) {
+    //             $url = add_query_arg('tab', $page, $url);
+    //         }
+    //         if ($sub) {
+    //             $url = add_query_arg('subtab', $sub, $url);
+    //         }
+    //         if ($value) {
+    //             $url = add_query_arg('value', $value, $url);
+    //         }
+    //     }
+
+    //     return esc_url($url);
+    // }
+
+    public static function get_endpoint_url($tab = '', $sub = '', $value = '') {
+
+        // Set your Dashboard Page ID
+        $page_id = MultiVendorX()->setting->get_setting( 'store_dashboard_page' );
+
+        // Pretty permalinks
         if (get_option('permalink_structure')) {
+
             $url = home_url('/dashboard');
-            if ($page && $page !== 'dashboard') {
-                $url .= '/' . $page;
+
+            if ($tab) {
+                $url .= '/' . sanitize_title($tab);
             }
             if ($sub) {
-                $url .= '/' . $sub;
+                $url .= '/' . sanitize_title($sub);
             }
             if ($value) {
-                $url .= '/' . $value;
-            }
-        } else {
-            $page_id = isset($_GET['page_id']) ? (int) $_GET['page_id'] : 0;
-
-            if ($page_id) {
-                $base_url = add_query_arg(['page_id' => $page_id], home_url('/'));
-            } else {
-                $base_url = home_url('/');
+                $url .= '/' . sanitize_title($value);
             }
 
-            $url = add_query_arg(['dashboard' => '1'], $base_url);
-            if ($page) {
-                $url = add_query_arg('tab', $page, $url);
-            }
-            if ($sub) {
-                $url = add_query_arg('subtab', $sub, $url);
-            }
-            if ($value) {
-                $url = add_query_arg('value', $value, $url);
-            }
+            return esc_url( trailingslashit($url) );
+        }
+
+        
+
+        $url = add_query_arg(['page_id' => $page_id], home_url('/'));
+
+        if ($tab) {
+            $url = add_query_arg('segment', sanitize_text_field($tab), $url);
+        }
+        if ($sub) {
+            $url = add_query_arg('element', sanitize_text_field($sub), $url);
+        }
+        if ($value) {
+            $url = add_query_arg('value', sanitize_text_field($value), $url);
         }
 
         return esc_url($url);
     }
+
+
 
     /**
      * Get store records from the database based on given filters.

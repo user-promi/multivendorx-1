@@ -43,7 +43,7 @@ const HelpSupport: React.FC = () => {
                                         <i className="adminlib-cart"></i>
                                     </div>
                                     <div className="details">
-                                        <div className="name"><a href="https://www.facebook.com/groups/multivendorxcommunity" target="_blank" rel="noopener noreferrer">Facebook community</a></div>
+                                        <div className="name"><a href="https://www.facebook.com/groups/226246620006065/" target="_blank" rel="noopener noreferrer">Facebook community</a></div>
                                         <div className="des">Connect with other store owners, share tips, and get quick solutions.</div>
                                     </div>
                                 </div>

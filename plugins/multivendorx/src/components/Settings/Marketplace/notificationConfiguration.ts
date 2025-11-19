@@ -5,7 +5,7 @@ export default {
     id: 'notification-configuration',
     priority: 5,
     name: __('Notification Configuration', 'multivendorx'),
-    desc: __('Define what each store role can access and manage within the marketplace. All notifications dispatched by the site can be tracked and reviewed from this page', 'multivendorx'),
+    desc: __('Define what each store role can access and manage within the marketplace. All notifications dispatched by the site can be tracked and reviewed from <b><a href="#&tab=settings&subtab=notifications">Notification Settings</a>', 'multivendorx'),
     icon: 'adminlib-user-network-icon',
     submitUrl: 'settings',
     modal: [
@@ -14,7 +14,7 @@ export default {
             type: 'blocktext',
             label: __('no_label', 'multivendorx'),
             blocktext: __(
-                'Only store owners can apply for store registration. Applicants must log in or create an account before proceeding. So, Make sure WooCommerce’s Account & Privacy settings are configured to allow user registration.',
+                'Only store owners can apply for store registration. Applicants must log in or create an account before proceeding. So, Make sure <a href="/wp-admin/admin.php?page=wc-settings&tab=account" target="_blank">WooCommerce’s Account & Privacy settings are configured to allow user registration.',
                 'multivendorx'
             ),
             // blockTextClass: "nor"

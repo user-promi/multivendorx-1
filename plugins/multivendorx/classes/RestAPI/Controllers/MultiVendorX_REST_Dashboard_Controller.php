@@ -51,7 +51,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
             'dashboard' => array(
                 'name' => 'Dashboard',
                 'icon' => 'adminlib-module',
-                'slug' => 'dashboard',
+                'slug' => '',
                 'submenu' => array(),
                 'capability' => array('edit_products'),
             ),
@@ -341,11 +341,11 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
 
     public function call_edit_product_template(): void
     {
-        $subtab = get_query_var('subtab');
-        $value = get_query_var('value');
+        $element = get_query_var('element');
+        $context_id = get_query_var('context_id');
 
-        if ($subtab === 'edit') {
-            if (!empty($value)) {
+        if ($element === 'edit') {
+            if (!empty($context_id)) {
                 MultiVendorX()->store->products->call_edit_product();
             } elseif (MultiVendorX()->setting->get_setting('category_pyramid_guide') == 'yes' || MultiVendorX()->modules->is_active('spmv')) {
                 MultiVendorX()->store->products->call_add_product();
@@ -506,13 +506,13 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
     private function get_tab_and_subtab(): array
     {
         if (get_option('permalink_structure')) {
-            $tab = sanitize_key(get_query_var('tab') ?: 'dashboard');
-            $sub = sanitize_key(get_query_var('subtab'));
+            $segment = sanitize_key(get_query_var('segment') ?: 'dashboard');
+            $element = sanitize_key(get_query_var('element'));
         } else {
-            $tab = filter_input(INPUT_GET, 'tab', FILTER_DEFAULT) ?? 'dashboard';
-            $sub = filter_input(INPUT_GET, 'subtab', FILTER_DEFAULT);
+            $segment = filter_input(INPUT_GET, 'segment', FILTER_DEFAULT) ?? 'dashboard';
+            $element = filter_input(INPUT_GET, 'element', FILTER_DEFAULT);
         }
-        return [$tab, $sub];
+        return [$segment, $element];
     }
 
     /**

@@ -256,7 +256,7 @@ const Transactions: React.FC = () => {
             header: __('Debit', 'multivendorx'),
             cell: ({ row }) => {
                 const debit = row.original.debit;
-                const status = row.original.status || '';
+                const status = row.original.status || '';             
 
                 return (
                     <TableCell>

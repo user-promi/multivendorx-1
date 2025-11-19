@@ -60,3 +60,22 @@ export function formatCurrency(amount: number | string): string {
 
   return formatted;
 }
+
+export const formatWcShortDate = (dateString: any) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
+
+export function formatTimeAgo(dateString: any) {
+  const date = new Date(dateString.replace(" ", "T"));
+  const diff = (Date.now() - date.getTime()) / 1000;
+
+  if (diff < 60) return "just now";
+  if (diff < 3600) return Math.floor(diff / 60) + "m ago";
+  if (diff < 86400) return Math.floor(diff / 3600) + "h ago";
+  return Math.floor(diff / 86400) + "d ago";
+}
