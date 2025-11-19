@@ -62,7 +62,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
             <i className="adminlib-cart"></i>
             Commission Details
           </div>
-          <p>Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.</p>
+          <p>Details of this commission, including the order breakdown and notes.</p>
           <i
             className="icon adminlib-close"
             onClick={onClose}

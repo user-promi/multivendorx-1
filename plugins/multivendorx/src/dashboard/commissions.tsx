@@ -576,7 +576,7 @@ const StoreCommission: React.FC = () => {
             <div className="page-title-wrapper">
                 <div className="page-title">
                     <div className="title">Commission</div>
-                    <div className="des">Manage and process refund requests from customers.</div>
+                    <div className="des">Details of commissions earned by your store for every order, including order amount, commission rate and payout status.</div>
                 </div>
                 <div className="buttons-wrapper">
                     <button className="admin-btn btn-purple-bg" onClick={handleExportAll}>

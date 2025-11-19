@@ -544,10 +544,10 @@ const Notification: React.FC = () => {
                                                     r.label === 'Customer' ? 'adminlib-user-circle' : 'adminlib-mail'
                                         }></i>
                                     </span>
-                                    <div className="details">
+                                    {/* <div className="details">
                                         <span>{r.label}</span>
                                         <div className="description">Lorem, ipsum.</div>
-                                    </div>
+                                    </div> */}
                                     {r.canDelete && (
                                         <i className="delete-btn adminlib-delete" onClick={() => deleteRecipient(editingNotification, r.id)}></i>
                                     )}
@@ -562,7 +562,7 @@ const Notification: React.FC = () => {
                             <input
                                 type="text"
                                 className="basic-input"
-                                placeholder="email@domain.com or +1234567890"
+                                placeholder="Type the email address of the additional recipient you want to notify, then click ‘Add’. "
                                 value={newRecipientValue}
                                 onChange={(e) => setNewRecipientValue(e.target.value)}
                                 onKeyPress={(e) => e.key === 'Enter' && addRecipient(editingNotification)}
