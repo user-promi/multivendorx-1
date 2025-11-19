@@ -97,7 +97,7 @@ const settings = () => {
     }, []);
 
     // Build hash URL for a given tab
-    const prepareUrl = (tabId: string) => `#subtab=${tabId}`;
+    const prepareUrl = (tabId: string) => `&subtab=${tabId}`;
 
     const tabData = [
         {

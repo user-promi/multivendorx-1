@@ -1,4 +1,4 @@
-import { AdminBreadcrumbs, getApiLink, useModules } from 'zyra';
+import { AdminBreadcrumbs, getApiLink, useModules, Tabs } from 'zyra';
 import RefundRequest from './refundRequest';
 import './customerServices.scss';
 import '../AdminDashboard/adminDashboard.scss';
@@ -6,6 +6,7 @@ import Qna from './qnaTable';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import StoreReviews from './storeReviews ';
+import { useLocation, Link } from 'react-router-dom';
 
 const CustomerServices = () => {
     const [abuseCount, setAbuseCount] = useState(0);
@@ -20,11 +21,11 @@ const CustomerServices = () => {
     /**
      * Fetch counts on mount
      */
-    useEffect(() => {
-        if (tabs.length > 0) {
-            setActiveTab(tabs[0].id);
-        }
-    }, [modules]);
+    // useEffect(() => {
+    //     if (tabs.length > 0) {
+    //         setActiveTab(tabs[0].id);
+    //     }
+    // }, [modules]);
 
     useEffect(() => {
         axios
@@ -71,55 +72,92 @@ const CustomerServices = () => {
             .catch(() => setStoreReviewCount(0));
     }, []);
 
+    const location = new URLSearchParams( useLocation().hash.substring( 1 ) );
+
+    const tabData = [
+        {
+            type: 'file',
+            content: {
+                id: 'refund-requests',
+                name: 'Refund Requests',
+                desc: 'Need your decision',
+                hideTabHeader: true,
+                icon: 'adminlib-marketplace-refund',
+            },
+        },
+        {
+            type: 'file',
+            content: {
+                id: 'questions',
+                name: 'Questions',
+                desc: 'Waiting for your response',
+                hideTabHeader: true,
+                icon: 'adminlib-question',
+            },
+        },
+    ]
+
+    const getForm = (tabId: string) => {
+        switch (tabId) {
+            case 'refund-requests':
+                return <RefundRequest />;
+            case 'questions':
+                return <Qna />;
+            default:
+                return <div></div>;
+        }
+    };
+
+
     /**
      * Tabs — only visible if related module is active
      */
-    const tabs = [
-        {
-            id: "questions",
-            label: "Questions",
-            module: "question-answer",
-            icon: "adminlib-question",
-            des: "Waiting for your response",
-            count: qnaCount,
-            content: <Qna />
-        },
-        {
-            id: "review",
-            label: "Store Reviews",
-            module: "store-review",
-            icon: "adminlib-store-review",
-            count: storeReviewCount,
-            des: "Shared by customers",
-            content: <StoreReviews />
-        },
-        {
-            id: "refund-requests",
-            label: "Refund Requests",
-            module: "marketplace-refund",
-            icon: "adminlib-marketplace-refund",
-            des: "Need your decision",
-            count: refundCount,
-            content: <RefundRequest />
-        },
-        {
-            id: "support-ticket",
-            label: "Support Ticket",
-            icon: "adminlib-vacation",
-            module: 'customer-support',
-            des: "Flagged for abuse review",
-            count: abuseCount,
-            content: <div className="row"><div className="column"><h1>Upcoming Feature</h1></div></div>,
-        },
-    ].filter(tab => !tab.module || modules.includes(tab.module));
-    const [activeTab, setActiveTab] = useState(() => tabs?.[0]?.id ?? "");
-    // Update URL hash when activeTab changes
-    useEffect(() => {
-        if (activeTab) {
-            const baseHash = '#&tab=customer-support';
-            window.location.hash = `${baseHash}&subtab=${activeTab}`;
-        }
-    }, [activeTab]);
+    // const tabs = [
+    //     {
+    //         id: "questions",
+    //         label: "Questions",
+    //         module: "question-answer",
+    //         icon: "adminlib-question",
+    //         des: "Waiting for your response",
+    //         count: qnaCount,
+    //         content: <Qna />
+    //     },
+    //     {
+    //         id: "review",
+    //         label: "Store Reviews",
+    //         module: "store-review",
+    //         icon: "adminlib-store-review",
+    //         count: storeReviewCount,
+    //         des: "Shared by customers",
+    //         content: <StoreReviews />
+    //     },
+    //     {
+    //         id: "refund-requests",
+    //         label: "Refund Requests",
+    //         module: "marketplace-refund",
+    //         icon: "adminlib-marketplace-refund",
+    //         des: "Need your decision",
+    //         count: refundCount,
+    //         content: <RefundRequest />
+    //     },
+    //     {
+    //         id: "support-ticket",
+    //         label: "Support Ticket",
+    //         icon: "adminlib-vacation",
+    //         module: 'customer-support',
+    //         des: "Flagged for abuse review",
+    //         count: abuseCount,
+    //         content: <div className="row"><div className="column"><h1>Upcoming Feature</h1></div></div>,
+    //     },
+    // ].filter(tab => !tab.module || modules.includes(tab.module));
+    // const [activeTab, setActiveTab] = useState(() => tabs?.[0]?.id ?? "");
+    // // Update URL hash when activeTab changes
+    // useEffect(() => {
+    //     if (activeTab) {
+    //         const baseHash = '#&tab=customer-support';
+    //         window.location.hash = `${baseHash}&subtab=${activeTab}`;
+    //     }
+    // }, [activeTab]);
 
 
     return (
@@ -129,7 +167,31 @@ const CustomerServices = () => {
                 tabTitle="Customer Service"
                 description={'Manage store reviews, support requests, financial transactions, and reported issues.'}
             />
+
             <div className="general-wrapper">
+                {tabData.length > 0 ? (
+                    <Tabs
+                        tabData={tabData}
+                        currentTab={ location.get( 'subtab' ) as string }
+                        getForm={getForm}
+                        prepareUrl={ ( subTab: string ) =>
+                        `?page=multivendorx#&tab=customer-support&subtab=${ subTab }`
+                    }
+                        appLocalizer={appLocalizer}
+                        supprot={[]}
+                        Link={Link}
+                        hideTitle={true}
+                        hideBreadcrumb={true}
+                    />
+                ) : (
+                    <div className="permission-wrapper">
+                        <i className="adminlib-info red"></i>
+                        <div className="title">Looks like customer support isn’t set up yet! Turn on a support module to start assisting your customers.</div>
+                        <a href={appLocalizer.module_page_url} className="admin-btn btn-purple" >Enable Now</a>
+                    </div>
+                )}
+            </div>
+            {/* <div className="general-wrapper">
                 {tabs.length > 0 ? (
                     <>
                         <div className="tab-titles hover">
@@ -163,7 +225,7 @@ const CustomerServices = () => {
                         <a href={appLocalizer.module_page_url} className="admin-btn btn-purple" >Enable Now</a>
                     </div>
                 )}
-            </div>
+            </div> */}
         </>
     );
 };
