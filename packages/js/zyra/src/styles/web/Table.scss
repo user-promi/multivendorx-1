@@ -228,11 +228,12 @@
         position: relative;
         border: none;
         border-collapse: collapse;
-        border: $border-light-small;
+        // border: $border-light-small;
         margin: 0;
+        background: #e7e7e7;
         // border-bottom: 0;
-        // border-top-left-radius: 0.625rem;
-        // border-top-right-radius: 0.625rem;
+        border-top-left-radius: 0.313rem;
+        border-top-right-radius: 0.313rem;
 
         input[type="checkbox"] {
             min-height: 0.8rem;
@@ -328,7 +329,7 @@
                 width: 100%;
                 box-sizing: border-box;
                 // border-bottom: $border-light-small;
-                border-radius: 0.313rem;
+                // border-radius: 0.313rem;
                 background: #fff;
                 margin: 0.725rem 0;
                 border: 0.063rem solid transparent;
@@ -641,11 +642,11 @@
     align-items: center;
     padding: 0 1rem;
     height: 3rem;
-    // background: #fff;
+    background: #e7e7e7;
     min-height: 3.125rem;
-    // border-bottom-left-radius: 0.625rem;
-    // border-bottom-right-radius: 0.625rem;
-    border: $border-light-small;
+    border-bottom-left-radius: 0.313rem;
+    border-bottom-right-radius: 0.313rem;
+    // border: $border-light-small;
     border-top: 0;
 
     .pagination-arrow {

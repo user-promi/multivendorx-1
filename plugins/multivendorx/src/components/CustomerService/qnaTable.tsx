@@ -263,7 +263,6 @@ const Qna: React.FC = () => {
                             )}
                             <div className="details">
                                 <span className="title">{product.product_name || '-'}</span>
-                                {/* SKU not available in your current data, remove or leave placeholder */}
                                 {product.sku && <span><b>SKU:</b> {product.sku}</span>}
 
                                 {store_id ? (
@@ -298,7 +297,9 @@ const Qna: React.FC = () => {
                 return <TableCell title={text}>
                     <div className="question-wrapper">
                         <div className="question">Q: {displayText}</div>
-                        <div className="answer">A: {displayAnswer}</div>
+                        {displayAnswer && (
+                            <div className="answer">A: {displayAnswer}</div>
+                        )}
                         <div className="des">By: {row.original.author_name ?? '-'}</div>
                     </div>
 

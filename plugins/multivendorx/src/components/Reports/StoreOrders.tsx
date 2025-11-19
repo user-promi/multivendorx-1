@@ -275,7 +275,6 @@ const StoreOrders: React.FC = () => {
                 href={storeLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-purple-600 hover:underline"
               >
                 {store_name || '-'}
               </a>
@@ -337,9 +336,9 @@ const StoreOrders: React.FC = () => {
           cancelled: 'gray',
           pending: 'orange',
           failed: 'dark-red',
-          'refund-requested': 'purple', // 👈 Added for Refund Requested
+          'refund-requested': 'purple', 
         };
-
+        
         const badgeClass = statusColorMap[status] || 'gray';
 
         // Format status for display (refund-requested → Refund Requested)
@@ -361,8 +360,6 @@ const StoreOrders: React.FC = () => {
   ];
 
   return (
-    // <div className="row">
-    //   <div className="column">
     <>
       <div className="card-header">
         <div className="left">
@@ -391,8 +388,6 @@ const StoreOrders: React.FC = () => {
         totalCounts={totalRows}
       />
     </>
-    //   </div>
-    // </div>
   );
 };
 
