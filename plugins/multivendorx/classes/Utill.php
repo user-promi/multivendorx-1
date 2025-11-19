@@ -104,4 +104,22 @@ class Utill {
         }
         return $string;
     }
+
+    public static function is_store_dashboard() {
+        $dashboard_page = (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' );
+        // if (is_page($dashboard_page)) {
+        //     $has_shortcode = has_shortcode(get_post($dashboard_page)->post_content, 'multivendorx_store_dashboard');
+        //     return $has_shortcode;
+        // }
+        return is_page( $dashboard_page);
+    }
+
+    public static function is_store_registration_page() {
+        $registration_page = (int) MultiVendorX()->setting->get_setting( 'store_registration_page' );
+        // if (is_page($registration_page)) {
+        //     $has_shortcode = has_shortcode(get_post($registration_page)->post_content, 'multivendorx_store_registration');
+        //     return $has_shortcode;
+        // }
+        return is_page($registration_page);
+    }
 }

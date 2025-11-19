@@ -23,7 +23,7 @@ class Roles {
     public function __construct() {
         add_action( 'init', [ $this, 'multivendorx_add_custom_role' ] );
         add_filter( 'user_has_cap', array($this, 'assign_cap_authenticate_user') );
-        add_filter( 'show_admin_bar', [ $this, 'hide_admin_bar' ] );
+        add_filter( 'map_meta_cap', [ $this, 'specific_capability' ], 10, 4 );
     }
 
     public function multivendorx_add_custom_role() {
@@ -77,11 +77,26 @@ class Roles {
         return $capabilities;
     }
 
-    public function hide_admin_bar($show) {
-        $user = wp_get_current_user();
-        if (in_array('store_owner', $user->roles)) {
-            return false;
+    public function specific_capability($caps, $cap, $user_id, $args) {
+        $user = get_userdata($user_id);
+
+        if (in_array('store_owner', (array) $user->roles)) {
+
+            if ($cap === 'edit_posts') {
+                $segment = get_query_var('segment');
+                $endpoints = MultiVendorX()->setting->get_setting('menu_manager');
+
+                // do not remove this code
+                // checking add later for edit product page
+                // && ($segment == $endpoints['products']['slug'] || $segment == $endpoints['settings']['slug'])
+                if (defined('DOING_AJAX') && DOING_AJAX ) {
+                    $caps = array('edit_posts');
+                } else {
+                    $caps = array('do_not_allow');
+                }
+            }
         }
-        return $show;
+
+        return $caps;
     }
 }
