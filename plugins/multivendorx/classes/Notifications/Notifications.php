@@ -490,20 +490,6 @@ class Notifications
                 'category'       => 'activity',
             ],
 
-            'key'                       => [
-                'name'             => 'Readable Title',
-                'desc'             => 'A short explanation of the notification purpose is provided.',
-                'admin_enabled'    => true,
-                'store_enabled'    => true,
-                'customer_enabled' => true,
-                'email_subject'    => 'Email subject',
-                'email_body'       => 'Email message body',
-                'sms_content'      => 'SMS text',
-                'system_message'   => 'System notification message',
-                'tag'              => 'Category',
-                'category'         => 'activity',
-            ],
-
             // (remaining duplicates/legacy keys retained from original list)
             'product_review_received'   => [
                 'name'           => 'New Review Received',
@@ -764,6 +750,7 @@ class Notifications
             'order_processing'          => [
                 'name'             => 'Order processing',
                 'desc'             => 'Notify customer when order status changes to processing.',
+                'admin_enabled'    => true,
                 'store_enabled'    => true,
                 'customer_enabled' => true,
                 'email_subject'    => 'Order processing started',
@@ -777,6 +764,7 @@ class Notifications
             'order_shipped'             => [
                 'name'             => 'Order shipped',
                 'desc'             => 'Notify customer when an order is shipped.',
+                'admin_enabled'    => true,
                 'store_enabled'    => true,
                 'customer_enabled' => true,
                 'email_subject'    => 'Order shipped',
@@ -790,6 +778,7 @@ class Notifications
             'order_completed'           => [
                 'name'             => 'Order completed',
                 'desc'             => 'Notify store and customer when an order is completed.',
+                'admin_enabled'    => true,
                 'store_enabled'    => true,
                 'customer_enabled' => true,
                 'email_subject'    => 'Order completed',
@@ -817,6 +806,7 @@ class Notifications
             'order_refunded'            => [
                 'name'             => 'Order refunded',
                 'desc'             => 'Notify customer and store when an order is refunded.',
+                'admin_enabled'    => true,
                 'store_enabled'    => true,
                 'customer_enabled' => true,
                 'email_subject'    => 'Order refunded',
@@ -828,22 +818,9 @@ class Notifications
             ],
 
             // ========== PAYMENT ==========
-            'payment_received'          => [
-                'name'           => 'Payment received',
-                'desc'           => 'Notify store and admin when payment for an order is received.',
-                'store_enabled'  => true,
-                'admin_enabled'  => true,
-                'email_subject'  => 'Payment received',
-                'email_body'     => 'Payment for order [order_id] has been received successfully.',
-                'sms_content'    => 'Payment received for [order_id].',
-                'system_message' => 'Payment for [order_id] received.',
-                'tag'            => 'Payment',
-                'category'       => 'activity',
-            ],
-
             'payout_released'           => [
-                'name'           => 'Payout released',
-                'desc'           => 'Notify stores when their payout is released.',
+                'name'           => 'Store payout released',
+                'desc'           => 'Notify stores that their payout is released.',
                 'store_enabled'  => true,
                 'email_subject'  => 'Payout released',
                 'email_body'     => 'A payout of [amount] has been released to your account.',
@@ -853,34 +830,9 @@ class Notifications
                 'category'       => 'activity',
             ],
 
-            'payout_rejected'           => [
-                'name'           => 'Payout rejected',
-                'desc'           => 'Notify stores when their payout is rejected.',
-                'store_enabled'  => true,
-                'email_subject'  => 'Payout rejected',
-                'email_body'     => 'A payout of [amount] has been rejected by your administrator.',
-                'sms_content'    => 'Payout of [amount] rejected.',
-                'system_message' => 'Payout rejected: [amount].',
-                'tag'            => 'Payment',
-                'category'       => 'activity',
-            ],
-
-            'payout_failed'             => [
-                'name'           => 'Payout failed',
-                'desc'           => 'Notify admin and store when payout processing fails.',
-                'admin_enabled'  => true,
-                'store_enabled'  => true,
-                'email_subject'  => 'Payout failed',
-                'email_body'     => 'Payout of [amount] for store [store_name] failed.',
-                'sms_content'    => 'Payout failed for [store_name].',
-                'system_message' => 'Payout error for [store_name].',
-                'tag'            => 'Payment',
-                'category'       => 'activity',
-            ],
-
             // ========== REFUND ==========
             'refund_requested'          => [
-                'name'             => 'Refund requested',
+                'name'             => 'Customer refund request submitted',
                 'desc'             => 'Notify admin, store, and customer when a refund is requested.',
                 'admin_enabled'    => true,
                 'store_enabled'    => true,
@@ -894,7 +846,7 @@ class Notifications
             ],
 
             'refund_approved'           => [
-                'name'             => 'Refund approved',
+                'name'             => 'Refund request is approved',
                 'desc'             => 'Notify customer and store when a refund is approved by admin.',
                 'store_enabled'    => true,
                 'customer_enabled' => true,
@@ -907,7 +859,7 @@ class Notifications
             ],
 
             'refund_rejected'           => [
-                'name'             => 'Refund rejected',
+                'name'             => 'Refund request is rejected',
                 'desc'             => 'Notify customer when their refund request is rejected.',
                 'customer_enabled' => true,
                 'email_subject'    => 'Refund rejected',
@@ -917,25 +869,11 @@ class Notifications
                 'tag'              => 'Refund',
                 'category'         => 'activity',
             ],
-
-            'refund_processed'          => [
-                'name'             => 'Refund processed',
-                'desc'             => 'Notify customer and admin when a refund is processed successfully.',
-                'admin_enabled'    => true,
-                'customer_enabled' => true,
-                'email_subject'    => 'Refund processed',
-                'email_body'       => 'Refund for order [order_id] has been processed successfully.',
-                'sms_content'      => 'Refund processed for [order_id].',
-                'system_message'   => 'Refund processed successfully.',
-                'tag'              => 'Refund',
-                'category'         => 'activity',
-            ],
             // ========== PRODUCT ==========
             'product_added'             => [
-                'name'           => 'New product added',
+                'name'           => 'New product added by store',
                 'desc'           => 'Notify admin when a new product is added by a store.',
                 'admin_enabled'  => true,
-                'store_enabled'  => true,
                 'email_subject'  => 'New product added',
                 'email_body'     => 'New product “[product_name]” added by [store_name].',
                 'sms_content'    => 'New product “[product_name]” added by [store_name].',
@@ -945,7 +883,7 @@ class Notifications
             ],
 
             'product_approved'          => [
-                'name'           => 'Product approved',
+                'name'           => 'Admin reviews and approves a product',
                 'desc'           => 'Notify store when a product is approved.',
                 'store_enabled'  => true,
                 'email_subject'  => 'Product approved',
@@ -957,7 +895,7 @@ class Notifications
             ],
 
             'product_rejected'          => [
-                'name'           => 'Product rejected',
+                'name'           => 'Admin reviews and rejects a product',
                 'desc'           => 'Notify store when a product is rejected.',
                 'store_enabled'  => true,
                 'email_subject'  => 'Product rejected',
@@ -969,7 +907,7 @@ class Notifications
             ],
 
             'product_low_stock'         => [
-                'name'           => 'Low stock alert',
+                'name'           => 'Product stock level drops below the minimum threshold',
                 'desc'           => 'Notify store when a product stock falls below threshold.',
                 'store_enabled'  => true,
                 'email_subject'  => 'Low stock alert',
@@ -981,7 +919,7 @@ class Notifications
             ],
 
             'product_out_of_stock'      => [
-                'name'           => 'Out of stock alert',
+                'name'           => 'Product out of stock alert',
                 'desc'           => 'Notify store when a product goes out of stock.',
                 'store_enabled'  => true,
                 'email_subject'  => 'Out of stock',
@@ -994,29 +932,30 @@ class Notifications
 
             // ========== REVIEWS ==========
             'product_review_received'   => [
-                'name'             => 'New product review',
+                'name'             => 'New product review submitted',
                 'desc'             => 'Notify store when a new product review is submitted by a customer.',
                 'store_enabled'    => true,
                 'customer_enabled' => true,
+                'admin_enabled'  => true,
                 'email_subject'    => 'New product review received',
                 'email_body'       => '[rating]-star review received for “[product_name]” by [customer_name].',
                 'sms_content'      => 'New review received for “[product_name]”.',
                 'system_message'   => 'New review received for “[product_name]”.',
-                'tag'              => 'Review',
-                'category'         => 'activity',
-            ],
-
-            'review_flagged'            => [
-                'name'           => 'Review flagged',
-                'desc'           => 'Notify admin when a customer flags a review.',
-                'admin_enabled'  => true,
-                'email_subject'  => 'Review flagged',
-                'email_body'     => 'A review for “[product_name]” has been flagged for moderation.',
-                'sms_content'    => 'Review flagged for “[product_name]”.',
-                'system_message' => 'Review flagged for “[product_name]”.',
                 'tag'            => 'Review',
                 'category'       => 'notification',
             ],
+
+            // 'review_flagged'            => [
+            //     'name'           => 'Abuse report submitted for product',
+            //     'desc'           => 'Notify admin when a customer flags a review.',
+            //     'admin_enabled'  => true,
+            //     'email_subject'  => 'Review flagged',
+            //     'email_body'     => 'A review for “[product_name]” has been flagged for moderation.',
+            //     'sms_content'    => 'Review flagged for “[product_name]”.',
+            //     'system_message' => 'Review flagged for “[product_name]”.',
+            //     'tag'            => 'Review',
+            //     'category'       => 'notification',
+            // ],
 
             // ========== WITHDRAWALS ==========
             'withdrawal_requested'      => [
@@ -1046,7 +985,7 @@ class Notifications
 
             // ========== REPORT ABUSE ==========
             'report_abuse_submitted'    => [
-                'name'             => 'Report abuse submitted',
+                'name'             => 'Abuse report submitted for product',
                 'desc'             => 'Notify admin and store when a customer reports a product.',
                 'admin_enabled'    => true,
                 'store_enabled'    => true,
@@ -1060,7 +999,7 @@ class Notifications
             ],
 
             'report_abuse_action_taken' => [
-                'name'             => 'Report abuse resolved',
+                'name'             => 'Product review moderated by admin',
                 'desc'             => 'Notify store and customer when admin takes action on a report.',
                 'store_enabled'    => true,
                 'customer_enabled' => true,
@@ -1074,7 +1013,7 @@ class Notifications
 
             // ========== ANNOUNCEMENTS ==========
             'system_announcement'       => [
-                'name'             => 'System announcement',
+                'name'             => 'Announcement published',
                 'desc'             => 'Notify stores and customers of a new admin announcement.',
                 'store_enabled'    => true,
                 'customer_enabled' => true,
@@ -1085,23 +1024,8 @@ class Notifications
                 'tag'              => 'System',
                 'category'         => 'notification',
             ],
-
-            'system_maintenance'        => [
-                'name'             => 'System maintenance',
-                'desc'             => 'Notify all users of scheduled system maintenance.',
-                'store_enabled'    => true,
-                'customer_enabled' => true,
-                'admin_enabled'    => true,
-                'email_subject'    => 'System maintenance scheduled',
-                'email_body'       => 'System maintenance is scheduled on [date_time].',
-                'sms_content'      => 'Maintenance scheduled on [date_time].',
-                'system_message'   => 'Scheduled maintenance on [date_time].',
-                'tag'              => 'System',
-                'category'         => 'notification',
-            ],
-
             'policy_update'             => [
-                'name'             => 'Policy update',
+                'name'             => 'Store policy update',
                 'desc'             => 'Notify users when marketplace policy changes.',
                 'store_enabled'    => true,
                 'customer_enabled' => true,
@@ -1112,43 +1036,6 @@ class Notifications
                 'tag'              => 'System',
                 'category'         => 'notification',
             ],
-
-            'commission_processed'      => [
-                'name'           => 'Commission processed',
-                'desc'           => 'Notify store when commission payment is processed.',
-                'store_enabled'  => true,
-                'admin_enabled'  => true,
-                'email_subject'  => 'Commission processed',
-                'email_body'     => 'Commission payment of [amount] processed for [store_name].',
-                'sms_content'    => 'Commission processed for [store_name].',
-                'system_message' => 'Commission payment processed for [store_name].',
-                'tag'            => 'Commission',
-                'category'       => 'activity',
-            ],
-            'product_review_received'   => [
-                'name'           => 'New Review Received',
-                'desc'           => 'Notify stores when a new review is received for one of their products.',
-                'store_enabled'  => true,
-                'email_subject'  => 'New Review Received',
-                'email_body'     => '{rating}-star review received for "{product_name}" by {customer_name}.',
-                'sms_content'    => 'You received a {rating}-star review for {product_name}.',
-                'system_message' => 'New review for {product_name} from {customer_name}.',
-                'tag'            => 'Product',
-                'category'       => 'activity',
-            ],
-
-            'commission_processed'      => [
-                'name'           => 'Commission Processed',
-                'desc'           => 'Notify stores when their commission payment is processed.',
-                'store_enabled'  => true,
-                'email_subject'  => 'Commission Processed',
-                'email_body'     => 'Commission payment of {amount} processed for your store.',
-                'sms_content'    => 'Commission of {amount} processed.',
-                'system_message' => 'Commission payment processed for {store_name}.',
-                'tag'            => 'Commission',
-                'category'       => 'activity',
-            ],
-
             'order_completed'           => [
                 'name'             => 'Order Completed',
                 'desc'             => 'Notify stores and customers when an order is completed.',
