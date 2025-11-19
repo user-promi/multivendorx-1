@@ -25,7 +25,6 @@ $page_info = MultiVendorX()->rest->dashboard->get_current_page_and_submenu();
                 <?php else: ?>
                     <span class="site-name"><?php echo esc_html(get_bloginfo('name')); ?></span>
                 <?php endif; ?>
-                <i class='adminlib-menu toggle-menu-icon'></i>
             </div>
             <div class="dashboard-tabs">
                 <ul>
@@ -68,6 +67,7 @@ $page_info = MultiVendorX()->rest->dashboard->get_current_page_and_submenu();
             <div class="top-navbar-wrapper">
                 <div class="top-navbar">
                     <div class="navbar-leftside">
+                        <i class='adminlib-menu toggle-menu-icon'></i>
                     </div>
                     <div class="navbar-rightside">
                         <ul class="navbar-right">
