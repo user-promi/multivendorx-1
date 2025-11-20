@@ -134,7 +134,7 @@ const CustomerQuestions: React.FC = () => {
                 page: currentPage,
                 row: rowsPerPage,
                 status: typeCount === 'all' ? '' : typeCount,
-                store_id: store,
+                store_id: appLocalizer.store_id,
                 searchField,
                 orderBy,
                 order,
@@ -304,18 +304,6 @@ const CustomerQuestions: React.FC = () => {
                 </TableCell>
             }
         },
-        // {
-        //     header: __('Answer', 'multivendorx'),
-        //     cell: ({ row }) => {
-        //         const text = row.original.answer_text ?? '-';
-        //         const displayText = text.length > 50 ? text.slice(0, 50) + '…' : text;
-        //         return <TableCell title={text}>{displayText}</TableCell>;
-        //     }
-        // },
-        // {
-        //     header: __('Asked By', 'multivendorx'),
-        //     cell: ({ row }) => <TableCell title={row.original.author_name || ''}></TableCell>
-        // },
         {
             id: 'question_date',
             header: __('Date', 'multivendorx'),
@@ -327,33 +315,6 @@ const CustomerQuestions: React.FC = () => {
                 return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
             }
         },
-        // {
-        //     header: __('Store', 'multivendorx'),
-        //     cell: ({ row }) => {
-        //         const { store_id, store_name } = row.original;
-        //         const baseUrl = `${window.location.origin}/wp-admin/admin.php?page=multivendorx#&tab=stores`;
-        //         const storeLink = store_id
-        //             ? `${baseUrl}&edit/${store_id}/&subtab=store-overview`
-        //             : '#';
-
-        //         return (
-        //             <TableCell title={store_name || ''}>
-        //                 {store_id ? (
-        //                     <a
-        //                         href={storeLink}
-        //                         target="_blank"
-        //                         rel="noopener noreferrer"
-        //                         className="text-purple-600 hover:underline"
-        //                     >
-        //                         {store_name || '-'}
-        //                     </a>
-        //                 ) : (
-        //                     store_name || '-'
-        //                 )}
-        //             </TableCell>
-        //         );
-        //     },
-        // },
         {
             header: __('Votes', 'multivendorx'),
             cell: ({ row }) => <TableCell title={String(row.original.total_votes) || ''}>{row.original.total_votes ?? 0}</TableCell>
@@ -422,27 +383,6 @@ const CustomerQuestions: React.FC = () => {
     ];
 
     const realtimeFilter: RealtimeFilter[] = [
-        {
-            name: 'store',
-            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
-                <div className="   group-field">
-                    <select
-                        name="store"
-                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
-                        value={filterValue || ''}
-                        className="basic-select"
-                    >
-                        <option value="">All Store</option>
-                        {store?.map((s: any) => (
-                            <option key={s.id} value={s.id}>
-                                {s.store_name.charAt(0).toUpperCase() + s.store_name.slice(1)}
-                            </option>
-                        ))}
-                    </select>
-
-                </div>
-            ),
-        },
         {
             name: 'visibility',
             render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (

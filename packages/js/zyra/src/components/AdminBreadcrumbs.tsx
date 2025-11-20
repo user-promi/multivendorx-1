@@ -12,6 +12,7 @@ interface AdminBreadcrumbsProps {
   activeTabIcon?: string;
   tabTitle?: string;
   submenuRender?: boolean;
+  template?: string;
   hideTitle?: boolean;
   hideBreadcrumb?: boolean;
   renderBreadcrumb?: () => React.ReactNode;
@@ -30,6 +31,7 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
   activeTabIcon = '',
   tabTitle = '',
   submenuRender = false,
+  template = '',
   renderBreadcrumb,
   renderMenuItems,
   tabData = [],
@@ -38,7 +40,7 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
   goPremium = false,
   goPremiumLink,
   description,
-  customContent ,
+  customContent,
   hideBreadcrumb = false,
   hideTitle = false,
   action
@@ -66,7 +68,9 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
 
   return (
     <>
-      <div className={submenuRender ? "horizontal-title-section" : "title-section"}>
+      <div
+        className={`${submenuRender ? "horizontal-title-section" : "title-section"} ${template || "template-1"}`}
+      >
         {!submenuRender && (
           <>
             <div className={submenuRender ? "horizontal-title-wrapper" : "title-wrapper"}>
@@ -115,7 +119,7 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
               </>
             )}
             <div className={submenuRender ? "horizontal-tabs-item" : "tabs-item"}>{renderMenuItems(tabData)}</div>
-            {!submenuRender && goPremium && premium &&(
+            {!submenuRender && goPremium && premium && (
               <a href={goPremiumLink} className="menu-item pro-btn">
                 <i className="adminlib-pro-tag"></i> Upgrade<i className="adminlib-arrow-right"></i>
               </a>
@@ -127,18 +131,18 @@ const AdminBreadcrumbs: React.FC<AdminBreadcrumbsProps> = ({
 
 
       {/* render multiple notices */}
-      {!submenuRender && 
-        notices.length > 0 && 
-          notices.map((html, i) => (
-            <div
-              key={i}
-              className="wp-admin-notice"
-              dangerouslySetInnerHTML={{ __html: html }}
-            />
-          ))
+      {!submenuRender &&
+        notices.length > 0 &&
+        notices.map((html, i) => (
+          <div
+            key={i}
+            className="wp-admin-notice"
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
+        ))
       }
 
-      
+
     </>
   );
 };

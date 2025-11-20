@@ -1,4 +1,4 @@
-import { AdminBreadcrumbs, getApiLink, SelectInput } from 'zyra';
+import { AdminBreadcrumbs, getApiLink, SelectInput, Tabs } from 'zyra';
 import { useEffect, useRef, useState } from 'react';
 
 import "../../dashboard/dashboardCommon.scss";
@@ -8,6 +8,7 @@ import Revenue from './Revenue';
 import StoreOrders from './StoreOrders';
 import RefundedOrderOld from './RefundedOrderOld';
 import axios from 'axios';
+import { useLocation, Link } from 'react-router-dom';
 
 const Reports = () => {
   // Dummy chart data
@@ -75,7 +76,7 @@ const Reports = () => {
   ];
 
   const [activeTab, setActiveTab] = useState("overview");
-  
+
   const tabs = [
     { id: "overview", label: "Marketplace", icon: "adminlib-marketplace-membership", content: <Overview overview={overview} data={data} overviewData={overviewData} pieData={pieData} /> },
     { id: "revenue", label: "Products", icon: "adminlib-multi-product", content: <Revenue /> },
@@ -83,39 +84,96 @@ const Reports = () => {
     { id: "StoreOrders", icon: "adminlib-order", label: "Store Orders", content: <StoreOrders /> },
     { id: "RefundedOrderOld", icon: "adminlib-marketplace-refund", label: "Refunded Orders", content: <RefundedOrderOld /> },
   ];
+  const location = new URLSearchParams(useLocation().hash.substring(1));
 
+  const tabData = [
+    {
+      type: 'file',
+      content: {
+        id: 'marketplace',
+        name: 'Marketplace',
+        icon: 'marketplace-membership',
+        hideTabHeader: true,
+      },
+    },
+    {
+      type: 'file',
+      content: {
+        id: 'products',
+        name: 'Products',
+        icon: 'multi-product',
+        hideTabHeader: true,
+      },
+    },
+    {
+      type: 'file',
+      content: {
+        id: 'stores',
+        name: 'Stores',
+        icon: 'store-inventory',
+        hideTabHeader: true,
+      },
+    },
+    {
+      type: 'file',
+      content: {
+        id: 'store-orders',
+        name: 'Store Orders',
+        icon: 'order',
+        hideTabHeader: true,
+      },
+    },
+    {
+      type: 'file',
+      content: {
+        id: 'refunded-orders',
+        name: 'Refunded Orders',
+        icon: 'marketplace-refund',
+        hideTabHeader: true,
+      },
+    },
+  ]
+
+  const getForm = (tabId: string) => {
+    switch (tabId) {
+      case 'marketplace':
+        return <Overview overview={overview} data={data} overviewData={overviewData} pieData={pieData} />;
+      case 'products':
+        return <Revenue />;
+      case 'stores':
+        return <Transactions />;
+      case 'store-orders':
+        return <StoreOrders />;
+      case 'refunded-orders':
+        return <RefundedOrderOld />;
+      default:
+        return <div></div>;
+    }
+  };
   return (
-
     <>
       <AdminBreadcrumbs
         activeTabIcon="adminlib-report"
         tabTitle="Reports"
         description={'Track sales, earnings, and store performance with real-time marketplace insights.'}
-
       />
-      <div className="general-wrapper tab">
 
-        <div className="tab-titles">
-          {tabs.map((tab) => (
-            <div
-              key={tab.id}
-              className={`title ${activeTab === tab.id ? "active" : ""}`}
-              onClick={() => setActiveTab(tab.id)}
-            >
-              <i className={`icon ${tab.icon}`}></i><p>{tab.label}</p>
-            </div>
-          ))}
-        </div>
-
-        {tabs.map(
-          (tab) =>
-            activeTab === tab.id && (
-              <div key={tab.id} className="tab-panel">
-                {tab.content}
-              </div>
-            )
-        )}
-      </div>
+      <Tabs
+        tabData={tabData}
+        currentTab={location.get('subtab') as string}
+        getForm={getForm}
+        prepareUrl={(subTab: string) =>
+          `?page=multivendorx#&tab=reports&subtab=${subTab}`
+        }
+        appLocalizer={appLocalizer}
+        supprot={[]}
+        Link={Link}
+        hideTitle={true}
+        hideBreadcrumb={true}
+        template={'template-2'}
+        premium={false}
+        menuIcon={true}
+      />
     </>
   );
 };

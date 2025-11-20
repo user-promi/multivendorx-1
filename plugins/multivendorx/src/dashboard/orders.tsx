@@ -28,6 +28,7 @@ export interface RealtimeFilter {
 }
 
 const Orders: React.FC = () => {
+    const location = useLocation();
     const [data, setData] = useState<any[]>([]);
     const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
     const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
@@ -36,13 +37,12 @@ const Orders: React.FC = () => {
     const [orderStatus, setOrderStatus] = useState<OrderStatus[]>([]);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const bulkSelectRef = React.useRef<HTMLSelectElement>(null);
+    const hash = location.hash.replace(/^#/, '') || '';
 
     // const hash = window.location.hash || '';
     // const isViewOrder = hash.includes('view');
 
-    const location = useLocation();
 
-    const hash = location.hash.replace(/^#/, '') || '';
     const isViewOrder = hash.includes('view');
     const isAddOrder = hash.includes('add');
 
@@ -72,8 +72,18 @@ const Orders: React.FC = () => {
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
         const rowsPerPage = pagination.pageSize;
-        requestData(rowsPerPage, currentPage);
+    
+        if (hash === 'refund-requested') {
+            // call API with refund-requested filter
+            requestApiForData(rowsPerPage, currentPage, {
+                typeCount: 'refund-requested'
+            });
+        } else {
+            // normal API call
+            requestData(rowsPerPage, currentPage);
+        }
     }, [pagination]);
+    
 
     const fetchOrderStatusCounts = async () => {
         try {
@@ -188,15 +198,7 @@ const Orders: React.FC = () => {
         if (filterData.typeCount && filterData.typeCount !== 'all') {
             params.status = filterData.typeCount;
         }
-        // Add typeCount filter
-        // if (filterData.typeCount && filterData.typeCount !== 'all') {
-        //     if (filterData.typeCount === "refund-request") {
-        //         params.refund_status = "refund_request";
-        //     } else {
-        //         params.status = filterData.typeCount;
-        //     }
-        // }
-
+        console.log('params',params)
         requestData(rowsPerPage, currentPage, startDate, endDate, params);
     };
 
@@ -674,6 +676,7 @@ const Orders: React.FC = () => {
                         realtimeFilter={realtimeFilter}
                         typeCounts={orderStatus}
                         bulkActionComp={() => <BulkAction />}
+                        defaultCounts={hash? 'refund-requested':'all'}
                     />
                 </>
             )}

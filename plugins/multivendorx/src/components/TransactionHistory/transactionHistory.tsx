@@ -1,11 +1,11 @@
 /* global appLocalizer */
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { __ } from '@wordpress/i18n';
 import "../Announcements/announcements.scss";
 import TransactionHistoryTable from './walletTransaction';
 import TransactionDataTable from './transactionDataTable';
-import { AdminBreadcrumbs, CalendarInput, getApiLink, SelectInput, CommonPopup, BasicInput, TextArea, ToggleSetting } from 'zyra';
+import { AdminBreadcrumbs, CalendarInput, getApiLink, SelectInput, CommonPopup, BasicInput, TextArea, ToggleSetting, Tabs } from 'zyra';
 import axios from 'axios';
 import { formatCurrency } from '../../services/commonFunction';
 
@@ -334,7 +334,39 @@ export const TransactionHistory: React.FC = () => {
         setError("");
         setValidationErrors({});
     };
+    const locationUrl = new URLSearchParams(useLocation().hash.substring(1));
 
+    const tabData = [
+        {
+            type: 'file',
+            content: {
+                id: 'wallet-transaction',
+                name: 'Marketplace',
+                icon: 'marketplace-membership',
+                hideTabHeader: true,
+            },
+        },
+        {
+            type: 'file',
+            content: {
+                id: 'direct-transaction',
+                name: 'Direct transaction',
+                icon: 'multi-product',
+                hideTabHeader: true,
+            },
+        },
+    ]
+
+    const getForm = (tabId: string) => {
+        switch (tabId) {
+            case 'wallet-transaction':
+                return <TransactionHistoryTable storeId={selectedStore?.value} dateRange={dateRange} />;
+            case 'direct-transaction':
+                return <TransactionDataTable storeId={selectedStore?.value} dateRange={dateRange} />;
+            default:
+                return <div></div>;
+        }
+    };
     return (
         <>
             <AdminBreadcrumbs
@@ -368,9 +400,25 @@ export const TransactionHistory: React.FC = () => {
                 }
             />
 
+            <Tabs
+                tabData={tabData}
+                currentTab={locationUrl.get('subtab') as string}
+                getForm={getForm}
+                prepareUrl={(subTab: string) =>
+                    `?page=multivendorx#&tab=transaction-history&subtab=${subTab}`
+                }
+                appLocalizer={appLocalizer}
+                supprot={[]}
+                Link={Link}
+                hideTitle={true}
+                hideBreadcrumb={true}
+                template={'template-2'}
+                premium={false}
+                menuIcon={true}
+            />
             <div className="general-wrapper">
                 {/* Tab Titles */}
-                <div className="tab-titles hover">
+                {/* <div className="tab-titles hover">
                     {tabs.map((tab) => (
                         <div
                             key={tab.id}
@@ -380,7 +428,7 @@ export const TransactionHistory: React.FC = () => {
                             <i className={`icon ${tab.icon}`}></i><p>{tab.label}</p>
                         </div>
                     ))}
-                </div>
+                </div> */}
                 {activeTab === "wallet-transaction" && (
                     <div className="row">
                         <div className="col">
@@ -590,8 +638,8 @@ export const TransactionHistory: React.FC = () => {
                         </div>
                     </CommonPopup>
                 )}
-
-                <div className="tab-content">
+            </div>
+            {/* <div className="tab-content">
                     {tabs.map(
                         (tab) =>
                             activeTab === tab.id && (
@@ -600,12 +648,12 @@ export const TransactionHistory: React.FC = () => {
                                 </div>
                             )
                     )}
-                </div>
-                {/* <div className="row">
+                </div> */}
+            {/* <div className="row">
                     <div className="column">
                         <div className="card-header">
                             <div className="left"> */}
-                {/* <div className="tab-titles">
+            {/* <div className="tab-titles">
                                     {tabs.map((tab) => (
                                         <div
                                             key={tab.id}
@@ -616,9 +664,9 @@ export const TransactionHistory: React.FC = () => {
                                         </div>
                                     ))}
                                 </div> */}
-                {/* </div>
+            {/* </div>
                             <div className="right"> */}
-                {/* <CalendarInput
+            {/* <CalendarInput
                                     wrapperClass=""
                                     inputClass=""
                                     showLabel={true}
@@ -626,11 +674,11 @@ export const TransactionHistory: React.FC = () => {
                                         setDateRange({ startDate: range.startDate, endDate: range.endDate });
                                     }}
                                 /> */}
-                {/* </div>
+            {/* </div>
                         </div>
                     </div>
                 </div> */}
-            </div>
+            {/* </div> */}
         </>
     );
 };
