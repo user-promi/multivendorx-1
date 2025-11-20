@@ -420,6 +420,8 @@
             font-weight: 500;
             color: #344357;
             margin-bottom: .5rem;
+            display: flex;
+            gap: 0.625rem;
         }
 
         i {
@@ -761,35 +763,35 @@
 }
 
 // transaction debit list
-.debit-list {
-    height: 9rem;
-    overflow: auto;
+// .debit-list {
+//     height: 9rem;
+//     overflow: auto;
 
-    .data-card {
-        margin-bottom: 0.75rem;
-        display: flex;
-        justify-content: space-between;
+//     .data-card {
+//         margin-bottom: 0.75rem;
+//         display: flex;
+//         justify-content: space-between;
 
-        .title {
-            .name {
-                font-size: 1.063rem;
-                margin-bottom: 0.125rem;
-            }
+//         .title {
+//             .name {
+//                 font-size: 1.063rem;
+//                 margin-bottom: 0.125rem;
+//             }
 
-            .date {
-                color: #0000007d;
-            }
-        }
-    }
+//             .date {
+//                 color: #0000007d;
+//             }
+//         }
+//     }
 
-    .number {
-        display: flex;
-        align-items: center;
-        gap: 0.313rem;
-        font-size: 1.063rem;
-        color: rgba(0, 128, 0, 0.842);
-    }
-}
+//     .number {
+//         display: flex;
+//         align-items: center;
+//         gap: 0.313rem;
+//         font-size: 1.063rem;
+//         color: rgba(0, 128, 0, 0.842);
+//     }
+// }
 
 .payout-notice {
     background: #ffff;

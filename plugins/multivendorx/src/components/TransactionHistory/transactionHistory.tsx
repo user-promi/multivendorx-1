@@ -454,20 +454,20 @@ export const TransactionHistory: React.FC = () => {
                                             <div className="title">Recent Debit Transactions</div>
                                         </div>
                                     </div>
-                                    <div className="debit-list">
-                                        {recentDebits.map((txn) => {
-                                            // Format payment method nicely (e.g., "stripe-connect" -> "Stripe Connect")
-                                            const formattedPaymentMethod = txn.payment_method
-                                                ? txn.payment_method
-                                                    .replace(/[-_]/g, ' ')                // replace - and _ with spaces
-                                                    .replace(/\b\w/g, char => char.toUpperCase()) // capitalize each word
-                                                : 'N/A';
+                                    {recentDebits.map((txn) => {
+                                        // Format payment method nicely (e.g., "stripe-connect" -> "Stripe Connect")
+                                        const formattedPaymentMethod = txn.payment_method
+                                            ? txn.payment_method
+                                                .replace(/[-_]/g, ' ')                // replace - and _ with spaces
+                                                .replace(/\b\w/g, char => char.toUpperCase()) // capitalize each word
+                                            : 'N/A';
 
-                                            return (
-                                                <div key={txn.id} className="data-card">
-                                                    <div className="title">
+                                        return (
+                                            <div key={txn.id} className="info-item">
+                                                <div className="details-wrapper">
+                                                    <div className="details">
                                                         <div className="name">{formattedPaymentMethod}</div>
-                                                        <div className="date">
+                                                        <div className="des">
                                                             {new Date(txn.date).toLocaleDateString("en-US", {
                                                                 month: "short",
                                                                 day: "2-digit",
@@ -475,19 +475,19 @@ export const TransactionHistory: React.FC = () => {
                                                             })}
                                                         </div>
                                                     </div>
-
-                                                    <div
-                                                        className={`number ${parseFloat(txn.debit) < 0 ? 'negative' : 'positive'
-                                                            }`}
-                                                    >
-                                                        {formatCurrency(txn.debit)}{" "}
-                                                        {/* <span className="admin-badge green">({txn.status})</span> */}
-                                                    </div>
-
                                                 </div>
-                                            );
-                                        })}
-                                    </div>
+
+                                                <div
+                                                    className={`right-details ${parseFloat(txn.debit) < 0 ? 'negative' : 'positive'
+                                                        }`}
+                                                >
+                                                    <div className={`price ${parseFloat(txn.debit) < 0 ? 'negative' : 'positive'
+                                                        }`}>   {formatCurrency(txn.debit)}</div>
+                                                </div>
+
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             ) : (
                                 <div className="column">

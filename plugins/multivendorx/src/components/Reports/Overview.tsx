@@ -458,15 +458,15 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
 
           {topCoupons.length > 0 ? (
             topCoupons.map((coupon: any) => (
-              <div className="store-owner-details" key={`coupon-${coupon.id}`}>
-                <div className="profile">
-                  <div className="avater">
+              <div className="info-item" key={`coupon-${coupon.id}`}>
+                <div className="details-wrapper">
+                  <div className="avatar">
                     <a
                       href={`${appLocalizer.site_url}/wp-admin/post.php?post=${coupon.id}&action=edit`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <span className="adminlib-coupon"></span>
+                      <i className="adminlib-coupon"></i>
                     </a>
                   </div>
 
@@ -482,11 +482,11 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
                     </div>
                     <div className="des">Used {coupon.usage_count || 0} times</div>
                     {coupon.description && (
-                      <div className="small-text">{coupon.description}</div>
+                      <div className="des">{coupon.description}</div>
                     )}
                     {coupon.store_name && (
-                      <div className="small-text">
-                        Store: {coupon.store_name}
+                      <div className="des">
+                       <b> Store: </b>{coupon.store_name}
                       </div>
                     )}
                   </div>
@@ -519,8 +519,8 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
 
           {topCustomers.length > 0 ? (
             topCustomers.map((customer: any) => (
-              <div className="store-owner-details" key={`customer-${customer.user_id}`}>
-                <div className="profile">
+              <div className="info-item" key={`customer-${customer.user_id}`}>
+                <div className="details-wrapper">
                   <div className="avater">
                     <a
                       href={`${appLocalizer.site_url}/wp-admin/user-edit.php?user_id=${customer.user_id}&wp_http_referer=%2Fwp-admin%2Fusers.php`}
@@ -563,8 +563,6 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
           )}
         </div>
 
-
-
         <div className="column">
           <div className="card-header">
             <div className="left">
@@ -574,8 +572,8 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
 
           {topStores.length > 0 ? (
             topStores.map((store: any) => (
-              <div className="store-owner-details" key={`store-${store.store_id}`}>
-                <div className="profile">
+              <div className="info-item" key={`store-${store.store_id}`}>
+                <div className="details-wrapper">
                   <div className="avater">
                     <a
                       href={`${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${store.store_id}/&subtab=store-overview`}
@@ -622,12 +620,7 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
           )}
 
         </div>
-
       </div>
-
-
-
-
     </>
   );
 };
