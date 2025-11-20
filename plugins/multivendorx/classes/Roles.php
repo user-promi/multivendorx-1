@@ -78,25 +78,26 @@ class Roles {
     }
 
     public function specific_capability($caps, $cap, $user_id, $args) {
-        $user = get_userdata($user_id);
+        if ( is_user_logged_in() ) {
+            $user = get_userdata($user_id);
 
-        if (in_array('store_owner', (array) $user->roles)) {
+            if (in_array('store_owner', (array) $user->roles)) {
 
-            if ($cap === 'edit_posts') {
-                $segment = get_query_var('segment');
-                $endpoints = MultiVendorX()->setting->get_setting('menu_manager');
+                if ($cap === 'edit_posts') {
+                    $segment = get_query_var('segment');
+                    $endpoints = MultiVendorX()->setting->get_setting('menu_manager');
 
-                // do not remove this code
-                // checking add later for edit product page
-                // && ($segment == $endpoints['products']['slug'] || $segment == $endpoints['settings']['slug'])
-                if (defined('DOING_AJAX') && DOING_AJAX ) {
-                    $caps = array('edit_posts');
-                } else {
-                    $caps = array('do_not_allow');
+                    // do not remove this code
+                    // checking add later for edit product page
+                    // && ($segment == $endpoints['products']['slug'] || $segment == $endpoints['settings']['slug'])
+                    if (defined('DOING_AJAX') && DOING_AJAX ) {
+                        $caps = array('edit_posts');
+                    } else {
+                        $caps = array('do_not_allow');
+                    }
                 }
             }
         }
-
         return $caps;
     }
 }
