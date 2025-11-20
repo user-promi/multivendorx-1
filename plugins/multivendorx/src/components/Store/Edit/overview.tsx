@@ -118,16 +118,16 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                     ></i>
                                 </div>
                             </div>
-                            <div className="debit-list">
-                                {recentDebits && recentDebits.length > 0 ? (
+                            {recentDebits && recentDebits.length > 0 ? (
 
-                                    recentDebits.map((txn) => (
-                                        <div key={txn.id} className="data-card">
-                                            <div className="title">
+                                recentDebits.map((txn) => (
+                                    <div key={txn.id} className="info-item">
+                                        <div className="details-wrapper">
+                                            <div className="details">
                                                 <div className="name">
                                                     Bank Transfer
                                                 </div>
-                                                <div className="date">
+                                                <div className="des">
                                                     {new Date(txn.date).toLocaleDateString("en-US", {
                                                         month: "short",
                                                         day: "2-digit",
@@ -135,16 +135,16 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                                     })}
                                                 </div>
                                             </div>
-
-                                            <div className="number">
-                                                {formatCurrency(txn.amount)}
-                                            </div>
                                         </div>
-                                    ))
-                                ) : (
-                                    <div className="no-products">No recent payout</div>
-                                )}
-                            </div>
+
+                                        <div className="right-details">
+                                            <div className="price"> {formatCurrency(txn.amount)}</div>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="no-products">No recent payout</div>
+                            )}
                         </div>
                         <div className="column">
                             <div className="card-header">
@@ -167,13 +167,12 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                         product.images && product.images.length > 0
                                             ? product.images[0].src
                                             : null;
-
+                                    console.log(product);
                                     const editUrl = `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${product.id}&action=edit`;
 
                                     return (
                                         <div key={product.id} className="info-item">
-                                            {/* Left side */}
-                                            <div className="profile">
+                                            <div className="details-wrapper">
                                                 <div className="avatar">
                                                     {productImage ? (
                                                         <img src={productImage} alt={product.name} />
@@ -202,15 +201,10 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                                 </div>
                                             </div>
 
-                                            {/* Right side */}
                                             <div className="right-details">
-                                                <div
-                                                    className="price"
-                                                    dangerouslySetInnerHTML={{ __html: product.price_html }}
-                                                />
+                                                <div className="price">{formatCurrency(product.price ?? 0)}</div>
                                             </div>
                                         </div>
-
                                     );
                                 })
                             ) : (
@@ -415,28 +409,19 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                             </div>
                         </div>
 
-                        <div className="store-owner-details owner">
-                            <div className="profile">
-                                <div className="avater">
-                                    <span>JD</span>
+                        <div className="info-item">
+                            <div className="details-wrapper">
+                                <div className="avatar">
+                                    <i className="item-icon adminlib-person"></i>
                                 </div>
                                 <div className="details">
                                     <div className="name">{storeData.primary_owner_info?.data?.display_name ?? <Skeleton variant="text" width={150} />
-                                    }</div>
-                                    <div className="des">Owner</div>
+                                    } <div className="admin-badge blue">Owner</div></div>
+                                    <div className="des">Email: {storeData.primary_owner_info?.data?.user_email ?? <Skeleton variant="text" width={150} />}</div>
                                 </div>
                             </div>
-                            <ul className="contact-details">
-                                <li>
-                                    <i className="adminlib-mail"></i>{storeData.primary_owner_info?.data?.user_email ?? <Skeleton variant="text" width={150} />}
-                                </li>
-                                {/* <li>
-                                    <i className="adminlib-form-phone"></i> +1 (555) 987-6543
-                                </li> */}
-                            </ul>
                         </div>
                     </div>
-
                 </div>
             </div>
         </>

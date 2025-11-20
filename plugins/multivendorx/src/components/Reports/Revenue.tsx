@@ -866,9 +866,9 @@ const Revenue: React.FC = () => {
 
           {toSellingProduct.length > 0 ? (
             toSellingProduct.map((product: any) => (
-              <div className="store-owner-details" key={`selling-${product.id}`}>
-                <div className="profile">
-                  <div className="avater">
+              <div className="info-item" key={`selling-${product.id}`}>
+                <div className="details-wrapper">
+                  <div className="avatar">
                     <img
                       src={
                         product.images?.length
@@ -885,11 +885,7 @@ const Revenue: React.FC = () => {
                 </div>
                 <div className="right-details">
                   <div className="price">
-                    <span
-                      dangerouslySetInnerHTML={{
-                        __html: product.price_html || product.price || "—",
-                      }}
-                    />
+                   
                   </div>
                 </div>
               </div>
