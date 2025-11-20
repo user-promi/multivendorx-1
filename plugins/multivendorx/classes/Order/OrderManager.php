@@ -379,14 +379,17 @@ class OrderManager {
             $coupon_products = $coupon->get_product_ids();
 
             $match_coupon_product = array_intersect($product_ids, $coupon_products);
-
+            
             if( $match_coupon_product ) {
                 $item = new \WC_Order_Item_Coupon();
                 $item->set_props(
                     array(
-                        'code'         => $coupon->get_code(),
-                        'discount'     => $coupon->get_discount_amount(),
-                        'discount_tax' => $coupon->get_discount_tax(),
+                        // 'code'         => $coupon->get_code(),
+                        // 'discount'     => $coupon->get_discount_amount(),
+                        // 'discount_tax' => $coupon->get_discount_tax(),
+                        'code'         => $coupon_item->get_code(),
+                        'discount'     => $coupon_item->get_discount(),
+                        'discount_tax' => $coupon_item->get_discount_tax(),
                     )
                 );
 

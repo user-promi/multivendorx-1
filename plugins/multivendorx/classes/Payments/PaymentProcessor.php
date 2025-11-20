@@ -96,7 +96,7 @@ class PaymentProcessor {
         $commission_id = $order ? $order->get_meta('multivendorx_commission_id', true) : null;
         $commission    = $commission_id ? CommissionUtil::get_commission_db($commission_id) : null;
 
-        $amount = $amount ? $amount : ($commission ? (float) $commission->commission_total : 0.00);
+        $amount = $amount ? $amount : ($commission ? (float) $commission->store_payable : 0.00);
 
         $data = [
             'store_id'         => (int) $store_id,
@@ -195,7 +195,7 @@ class PaymentProcessor {
             $commission_id = $order ? $order->get_meta('multivendorx_commission_id', true) : null;
             $commission    = $commission_id ? CommissionUtil::get_commission_db($commission_id) : null;
 
-            $amount = $commission ? (float) $commission->commission_total : 0.00;
+            $amount = $commission ? (float) $commission->store_payable : 0.00;
             $store = new Store((int) $commission->store_id);
 
                 $data = [
