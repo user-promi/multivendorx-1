@@ -72,7 +72,7 @@ const CustomerServices = () => {
             .catch(() => setStoreReviewCount(0));
     }, []);
 
-    const location = new URLSearchParams( useLocation().hash.substring( 1 ) );
+    const location = new URLSearchParams(useLocation().hash.substring(1));
 
     const tabData = [
         {
@@ -81,8 +81,7 @@ const CustomerServices = () => {
                 id: 'refund-requests',
                 name: 'Refund Requests',
                 desc: 'Need your decision',
-                hideTabHeader: true,
-                icon: 'adminlib-marketplace-refund',
+                icon: 'marketplace-refund',
             },
         },
         {
@@ -91,8 +90,7 @@ const CustomerServices = () => {
                 id: 'questions',
                 name: 'Questions',
                 desc: 'Waiting for your response',
-                hideTabHeader: true,
-                icon: 'adminlib-question',
+                icon: 'question',
             },
         },
     ]
@@ -168,29 +166,30 @@ const CustomerServices = () => {
                 description={'Manage store reviews, support requests, financial transactions, and reported issues.'}
             />
 
-            <div className="general-wrapper">
-                {tabData.length > 0 ? (
-                    <Tabs
-                        tabData={tabData}
-                        currentTab={ location.get( 'subtab' ) as string }
-                        getForm={getForm}
-                        prepareUrl={ ( subTab: string ) =>
-                        `?page=multivendorx#&tab=customer-support&subtab=${ subTab }`
+            {tabData.length > 0 ? (
+                <Tabs
+                    tabData={tabData}
+                    currentTab={location.get('subtab') as string}
+                    getForm={getForm}
+                    prepareUrl={(subTab: string) =>
+                        `?page=multivendorx#&tab=customer-support&subtab=${subTab}`
                     }
-                        appLocalizer={appLocalizer}
-                        supprot={[]}
-                        Link={Link}
-                        hideTitle={true}
-                        hideBreadcrumb={true}
-                    />
-                ) : (
-                    <div className="permission-wrapper">
-                        <i className="adminlib-info red"></i>
-                        <div className="title">Looks like customer support isn’t set up yet! Turn on a support module to start assisting your customers.</div>
-                        <a href={appLocalizer.module_page_url} className="admin-btn btn-purple" >Enable Now</a>
-                    </div>
-                )}
-            </div>
+                    appLocalizer={appLocalizer}
+                    supprot={[]}
+                    Link={Link}
+                    hideTitle={true}
+                    hideBreadcrumb={true}
+                    template={'template-2'}
+                    premium={false}
+                    menuIcon={true}
+                />
+            ) : (
+                <div className="permission-wrapper">
+                    <i className="adminlib-info red"></i>
+                    <div className="title">Looks like customer support isn’t set up yet! Turn on a support module to start assisting your customers.</div>
+                    <a href={appLocalizer.module_page_url} className="admin-btn btn-purple" >Enable Now</a>
+                </div>
+            )}
             {/* <div className="general-wrapper">
                 {tabs.length > 0 ? (
                     <>

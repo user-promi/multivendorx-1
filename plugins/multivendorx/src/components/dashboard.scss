@@ -4,9 +4,75 @@
     border-radius: 0.313rem;
     margin: 2.5rem 1rem 1rem;
 
+
+
+    .middle-child-container {
+        position: relative;
+        color: #121116;
+        line-height: 1.5;
+
+        .tabs-wrapper {
+            // margin: 0 2rem;
+            padding: 0 1rem 1rem;
+        }
+
+        &.show-menu {
+            .tabs-wrapper {
+                max-width: 4.125rem;
+
+                .brand {
+                    margin: 0 auto;
+
+                    img {
+                        width: 3.15rem;
+                    }
+
+                    .logo {
+                        display: none;
+                    }
+
+                    .logo-small {
+                        display: block;
+                    }
+                }
+
+                .menu-coll-btn {
+                    span {
+                        transform: rotate(180deg);
+                    }
+                }
+            }
+        }
+    }
+
     &.bg-wrapper {
         padding: 1.5rem;
         background: #fff;
+    }
+
+    &.template-1 {
+        .middle-child-container {
+            border: $border-light-small;
+        }
+
+        .divider-wrapper {
+            background: #fff;
+
+            .divider-section {
+                margin: 0 1rem;
+                border-bottom: $border-light-small;
+            }
+        }
+
+        .active-current-tab {
+            color: $color-active;
+            border-bottom: 0.126rem solid $color-active;
+
+            .menu-name,
+            i {
+                color: $color-active;
+            }
+        }
     }
 
     &:has(.container-wrapper) {
@@ -19,9 +85,11 @@
         gap: 1rem;
         padding-bottom: 1rem;
     }
-    .row:has(.transaction){
+
+    .row:has(.transaction) {
         margin-bottom: 1rem;
     }
+
     .column {
         padding: 1.5rem;
         border-radius: 0.313rem;
@@ -68,6 +136,9 @@
         width: 100%;
     }
 }
+
+
+
 
 .card-header {
     display: flex;
@@ -431,9 +502,6 @@
             width: 24%;
             box-sizing: border-box;
 
-            // &.active{
-            //     border: 0.063rem solid;
-            // }
             &:hover {
                 background: $theme-color;
                 color: #fff;
