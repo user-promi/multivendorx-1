@@ -544,10 +544,10 @@ const Notification: React.FC = () => {
                                                     r.label === 'Customer' ? 'adminlib-user-circle' : 'adminlib-mail'
                                         }></i>
                                     </span>
-                                    {/* <div className="details">
+                                    <div className="details">
                                         <span>{r.label}</span>
-                                        <div className="description">Lorem, ipsum.</div>
-                                    </div> */}
+                                        {/* <div className="description">Lorem, ipsum.</div> */}
+                                    </div>
                                     {r.canDelete && (
                                         <i className="delete-btn adminlib-delete" onClick={() => deleteRecipient(editingNotification, r.id)}></i>
                                     )}

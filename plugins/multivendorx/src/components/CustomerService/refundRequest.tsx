@@ -451,15 +451,6 @@ const RefundRequest: React.FC = () => {
 
     return (
         <>
-            <div className="card-header">
-                <div className="left">
-                    <div className="title">Refund tracker</div>
-                    <div className="des">Monitor refund trends and stay informed on store returns.</div>
-                </div>
-                <div className="right">
-                    <i className="adminlib-more-vertical"></i>
-                </div>
-            </div>
             <Table
                 data={data}
                 columns={columns as any}

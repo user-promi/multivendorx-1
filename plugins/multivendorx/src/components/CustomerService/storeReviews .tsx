@@ -502,16 +502,6 @@ const StoreReviews: React.FC = () => {
     ];
     return (
         <>
-            <div className="card-header">
-                <div className="left">
-                    <div className="title">Store reviews at a glance</div>
-                    <div className="des">Track and manage reviews for all stores.</div>
-                </div>
-                <div className="right">
-                    <i className="adminlib-more-vertical"></i>
-                </div>
-            </div>
-            {/* {error && <div className="error">{error}</div>} */}
             <Table
                 data={data || []}
                 columns={columns as ColumnDef<Record<string, any>, any>[]}

@@ -8,8 +8,8 @@
 
     .middle-child-container {
         position: relative;
-        color: #121116;
-        line-height: 1.5;
+        // color: #121116;
+        // line-height: 1.5;
 
         .tabs-wrapper {
             // margin: 0 2rem;
@@ -60,7 +60,6 @@
 
             .divider-section {
                 margin: 0 1rem;
-                border-bottom: $border-light-small;
             }
         }
 
@@ -71,6 +70,17 @@
             .menu-name,
             i {
                 color: $color-active;
+            }
+        }
+    }
+
+    &.template-2,
+    &.template-3 {
+        .divider-wrapper {
+            margin-bottom: 1.5rem;
+
+            .divider-section {
+                padding-top: 0;
             }
         }
     }

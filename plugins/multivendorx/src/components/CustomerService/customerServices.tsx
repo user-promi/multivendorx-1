@@ -83,6 +83,8 @@ const CustomerServices = () => {
                 name: 'Refund Requests',
                 desc: 'Need your decision',
                 icon: 'marketplace-refund',
+                tabTitle: 'Refund tracker',
+                tabDes: 'Monitor refund trends and stay informed on store returns.',
             },
         },
         {
@@ -93,6 +95,8 @@ const CustomerServices = () => {
                 name: 'Questions',
                 desc: 'Waiting for your response',
                 icon: 'question',
+                tabTitle: 'Product questions in queue',
+                tabDes: 'Waiting for your response',
             },
         },
         {
@@ -101,8 +105,9 @@ const CustomerServices = () => {
             content: {
                 id: 'review',
                 name: 'Store Reviews',
-                des: "Shared by customers",
                 icon: "store-review",
+                tabTitle: 'Store reviews at a glance',
+                tabDes: 'Track and manage reviews for all stores.',
             },
         },
         {

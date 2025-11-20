@@ -582,6 +582,13 @@ const AdminDashboard = () => {
 
             <div className="row">
               <div className="column">
+                <div className="card-header">
+                  <div className="left">
+                    <div className="title">
+                      Need Help Getting Started?
+                    </div>
+                  </div>
+                </div>
                 <div className="cards-wrapper quick-link">
                   {resources.map((res, index) => (
                     <div className="cards" key={index}>
