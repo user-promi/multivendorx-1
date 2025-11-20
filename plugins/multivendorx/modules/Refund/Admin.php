@@ -20,7 +20,7 @@ class Admin {
         add_action( 'init', [$this, 'register_status_for_refund']);
         add_filter( 'wc_order_statuses', array( $this, 'add_refund_requested_to_order_statuses') );
 
-        add_action( 'add_meta_boxes', array( $this, 'mvx_refund_order_status_customer_meta' ), 10, 2 );
+        // add_action( 'add_meta_boxes', array( $this, 'mvx_refund_order_status_customer_meta' ), 10, 2 );
         add_action( 'woocommerce_process_shop_order_meta', array( $this, 'mvx_refund_order_status_save' ) );
     }
 
