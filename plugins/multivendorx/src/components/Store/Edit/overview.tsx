@@ -22,24 +22,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
     useEffect(() => {
         if (!id) return;
 
-        // axios({
-        //     method: 'GET',
-        //     url: getApiLink(appLocalizer, `transaction/${id}`),
-        //     headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        // })
-        //     .then((response) => {
-        //         setData(response?.data || {});
-        //     })
-
-        // axios({
-        //     method: "GET",
-        //     url: getApiLink(appLocalizer, `store/${id}`),
-        //     headers: { "X-WP-Nonce": appLocalizer.nonce },
-        // })
-        //     .then((response) => {
-        //         setStoreData(response.data || {});
-        //     })
-
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, 'transaction'),
@@ -105,7 +87,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 
     return (
         <>
-
             <div className="container-wrapper ">
                 <div className="card-wrapper w-65">
                     <div className="analytics-container">
@@ -120,7 +101,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                 </div>
                             </div>
                         ))}
-
                     </div>
                     <div className="row">
                         <div className="column">
@@ -135,9 +115,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                         onClick={() => {
                                             navigate(`?page=multivendorx#&tab=transaction-history&store_id=${id}`);
                                         }}
-
-
-                                    // onClick={() => { navigate(`?page=multivendorx#&tab=transaction-history&store_id=${id}`); }}
                                     ></i>
                                 </div>
                             </div>
@@ -147,9 +124,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                     recentDebits.map((txn) => (
                                         <div key={txn.id} className="data-card">
                                             <div className="title">
-                                                {/* <div className="avater">
-                                                <span className="adminlib-calendar"></span>
-                                            </div> */}
                                                 <div className="name">
                                                     Bank Transfer
                                                 </div>
@@ -163,16 +137,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                             </div>
 
                                             <div className="number">
-                                                {/* <div
-                                                className={`admin-badge ${txn.status?.toLowerCase() === "completed"
-                                                    ? "green"
-                                                    : txn.status?.toLowerCase() === "upcoming"
-                                                        ? "yellow"
-                                                        : "red"
-                                                    }`}
-                                            >
-                                                {txn.status}
-                                            </div> */}
                                                 {formatCurrency(txn.amount)}
                                             </div>
                                         </div>
@@ -182,35 +146,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                 )}
                             </div>
                         </div>
-
-                        {/* <div className="column">
-                            <div className="card-header">
-                                <div className="left">
-                                    <div className="title">
-                                        Latest products
-                                    </div>
-                                </div>
-                                <div className="right">
-                                    <i className="adminlib-external"></i>
-                                </div>
-                            </div>
-                        </div> */}
                         <div className="column">
-                            {/* <div className="card-header">
-                                <div className="left">
-                                    <div className="title">
-                                        Latest products
-                                    </div>
-                                </div>
-                                <div className="right">
-                                    <a
-                                        href={`${appLocalizer.admin_url}edit.php?post_type=product&multivendorx_store_id=${id}`}
-                                        className="product-link"
-                                    >
-                                        <i className="adminlib-external"></i>
-                                    </a>
-                                </div>
-                            </div> */}
                             <div className="card-header">
                                 <div className="left">
                                     <div className="title">
@@ -222,9 +158,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                         onClick={() => {
                                             navigate(`?page=multivendorx#&tab=transaction-history&store_id=${id}`);
                                         }}
-
-
-                                    // onClick={() => { navigate(`?page=multivendorx#&tab=transaction-history&store_id=${id}`); }}
                                     ></i>
                                 </div>
                             </div>
@@ -238,16 +171,17 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                     const editUrl = `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${product.id}&action=edit`;
 
                                     return (
-                                        <div key={product.id} className="store-owner-details">
+                                        <div key={product.id} className="info-item">
                                             {/* Left side */}
                                             <div className="profile">
-                                                <div className="avater">
+                                                <div className="avatar">
                                                     {productImage ? (
                                                         <img src={productImage} alt={product.name} />
                                                     ) : (
                                                         <i className="item-icon adminlib-single-product"></i>
                                                     )}
                                                 </div>
+
                                                 <div className="details">
                                                     <div className="name">
                                                         <a
@@ -258,19 +192,13 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                                             {product.name}
                                                         </a>
                                                     </div>
+
                                                     <div className="des">
-                                                        {/* {product.date_created
-                                                            ? new Date(product.date_created).toLocaleDateString(
-                                                                "en-US",
-                                                                {
-                                                                    month: "short",
-                                                                    day: "2-digit",
-                                                                    year: "numeric",
-                                                                }
-                                                            )
-                                                            : "-"} */}
                                                         sku: {product.sku}
                                                     </div>
+
+                                                    {/* Optional extra text */}
+                                                    {/* <div className="small-text">Additional info</div> */}
                                                 </div>
                                             </div>
 
@@ -282,6 +210,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                                 />
                                             </div>
                                         </div>
+
                                     );
                                 })
                             ) : (
@@ -508,31 +437,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                         </div>
                     </div>
 
-
-                    {/* <div className="card-content">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    Repeating
-                                </div>
-                            </div>
-                            <div className="right">
-                                <i className="adminlib-external"></i>
-                            </div>
-                        </div>
-
-                        <div className="store-owner-details">
-                            <div className="profile">
-                                <div className="avater">
-                                    <span className="adminlib-form-recaptcha"></span>
-                                </div>
-                                <div className="details">
-                                    <div className="name">Repeats every two weeks</div>
-                                    <div className="des">Monday @ 9.00 - 11.00 Am</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> */}
                 </div>
             </div>
         </>
