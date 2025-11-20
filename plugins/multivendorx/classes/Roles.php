@@ -61,7 +61,12 @@ class Roles {
     public function assign_cap_authenticate_user( $allcaps ) {
         if ( is_user_logged_in() ) {
             $allcaps['create_stores'] = true;
-            $allcaps['edit_posts'] = true;
+
+            $user = wp_get_current_user();
+
+            if ( in_array( 'store_owner', (array) $user->roles, true ) ) {
+                $allcaps['edit_posts'] = true;
+            }
         }
 
         return $allcaps;
