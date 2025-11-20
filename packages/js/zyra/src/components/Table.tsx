@@ -335,6 +335,7 @@ interface TableProps {
     pagination: PaginationState;
     onPaginationChange: OnChangeFn<PaginationState>;
     typeCounts: Status[];
+    defaultCounts?:string;
     autoLoading?: boolean;
     handlePagination?: (
         rowsPerPage: number,
@@ -370,7 +371,8 @@ const Table: React.FC<TableProps> = ({
     expandElement,
     expandedRows,
     onRowClick,
-    totalCounts = 0
+    totalCounts = 0,
+    defaultCounts ='all'
 }) => {
     const [sorting, setSorting] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
@@ -503,7 +505,7 @@ const Table: React.FC<TableProps> = ({
         getFilteredRowModel: getFilteredRowModel(),
     });
 
-    const typeCountActive = filterData.typeCount || 'all';
+    const typeCountActive = filterData.typeCount || defaultCounts;
     const { pageIndex, pageSize } = table.getState().pagination;
     const totalRows = flattenedData.length;
     const start = totalRows === 0 ? 0 : pageIndex * pageSize + 1;
