@@ -22,7 +22,7 @@ interface EmailBadge {
     isValid: boolean;
 }
 
-const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; onUpdate:any }) => {
+const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; onUpdate: any }) => {
     const [formData, setFormData] = useState<FormData>({});
     const [emailBadges, setEmailBadges] = useState<EmailBadge[]>([]);
     const [newEmailValue, setNewEmailValue] = useState('');
@@ -149,9 +149,9 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
         if (!isValidEmail) {
             setErrorMsg(prev => ({
                 ...prev,
-                email : __('Invalid email format', 'multivendorx'),
+                email: __('Invalid email format', 'multivendorx'),
             }));
-            
+
             return;
         }
 
@@ -171,10 +171,10 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
 
         setNewEmailValue('');
         setErrorMsg(prev => ({
-                ...prev,
-                email : "",
-            }));
-            
+            ...prev,
+            email: "",
+        }));
+
         autoSave(updatedFormData);
     };
 
@@ -200,9 +200,12 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
     };
 
     // Email Badge Component
-    const EmailBadge: React.FC<{ badge: EmailBadge; onRemove: (id: number) => void }> = ({ badge, onRemove }) => {
+    const EmailBadge: React.FC<{ badge: EmailBadge; onRemove: (id: number) => void, isFirst: boolean; }> = ({ badge, onRemove, isFirst }) => {
         return (
             <div className={`admin-badge ${badge.isValid ? 'yellow' : 'red'}`}>
+                {isFirst && (
+                    <i className="adminlib-star primary-icon"></i>
+                )}
                 <i className="adminlib-mail"></i>
                 <span>{badge.email}</span>
                 <i
@@ -499,7 +502,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
         const foundCountry = (appLocalizer.country_list || []).find(
             (item) => item.label === newAddressData.country || item.value === newAddressData.country
         );
-        
+
         const foundState = stateOptions.find(
             (item) => item.label === newAddressData.state || item.value === newAddressData.state
         );
@@ -641,15 +644,15 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
     // Handle state select change (from old code)
     const handleStateChange = (newValue) => {
         if (!newValue || Array.isArray(newValue)) return;
-    
+
         const updated = {
             ...formData,
             state: newValue.value
         };
-    
+
         setFormData(updated);
         setAddressData(prev => ({ ...prev, state: newValue.label }));
-    
+
         autoSave(updated);
     };
 
@@ -668,9 +671,10 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
             const response = await axios.get(
                 getApiLink(appLocalizer, 'store'),
                 {
-                    params: { slug,
+                    params: {
+                        slug,
                         id: id
-                     },
+                    },
                     headers: { 'X-WP-Nonce': appLocalizer.nonce },
                 }
             );
@@ -710,7 +714,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
             })();
 
             return;
-        }else if (name === "phone") {
+        } else if (name === "phone") {
             const isValidPhone = /^\+?[0-9\s\-]{7,15}$/.test(value);
             if (isValidPhone || value == '') {
                 autoSave(updated);
@@ -733,7 +737,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
         if (!id) return;
         // Format email data for backend
         const formattedData = { ...updatedData };
-        
+
         // if (formattedData.email && typeof formattedData.email === 'string') {
         //     // Convert newline-separated emails to array for backend
         //     formattedData.emails = formattedData.email
@@ -777,10 +781,11 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                 <label htmlFor="store-email">Store email(s)</label>
                                 <div className="email-input-container">
                                     <div className="email-badges-container" >
-                                        {emailBadges.map(badge => (
+                                        {emailBadges.map((badge, index) => (
                                             <EmailBadge
                                                 key={badge.id}
                                                 badge={badge}
+                                                isFirst={index === 0}
                                                 onRemove={removeEmail}
                                             />
                                         ))}
@@ -895,7 +900,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                             </div>
                         </div>
 
-                        {modules.includes('geo-location') && 
+                        {modules.includes('geo-location') &&
                             !!(appLocalizer?.settings_databases_value?.geolocation?.google_api_key?.trim() ||
                                 appLocalizer?.settings_databases_value?.geolocation?.mapbox_api_key?.trim()) &&
                             <div>

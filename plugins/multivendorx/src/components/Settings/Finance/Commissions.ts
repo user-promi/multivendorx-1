@@ -61,7 +61,7 @@ export default {
             key: 'commission_type',
             type: 'setting-toggle',
             label: __('Marketplace commission', 'multivendorx'),
-            settingDescription: __("Decide how the system should calculate the marketplace commission." 'multivendorx'),
+            settingDescription: __("Decide how the system should calculate the marketplace commission." ,'multivendorx'),
             desc: __(
                 '<ul><li>Store order based - Calculated on the full order amount of each store. Example: A customer buys from 3 stores → commission applies separately to each store’s order.</li><li>Per item based - Applied to each product in the order. Example: An order with 5 items → commission applies 5 times, once per item.</li></ul>',
                 'multivendorx'
