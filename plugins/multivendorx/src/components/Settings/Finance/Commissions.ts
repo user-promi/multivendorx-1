@@ -308,7 +308,8 @@ export default {
                 'Define a fee to cover platform costs. Apply a fixed, percentage, or combined rate. Choose whether it’s paid by the customer at checkout or deducted from the store’s commission.',
                 'multivendorx'
             ),
-            desc: __('<strong>Example setup:</strong><br>Order total = $100<br>Store earning = 80%<ul><li><strong>Case 1 – Fee added to the customer’s order total:</strong><br>Marketplace fees = $2 + 10% of 100 = $12<br>Customer pays = $100 + $12 = $112<br>The $12 will be displayed at checkout as <em>Marketplace fees</em>.</li><li><strong>Case 2 – Fee deducted from the store’s commission:</strong><br>Customer pays = $100<br>Store earning = 80% of $100 = $80<br>Marketplace fees = $2 + 10% of $80 = $10<br>Final store payout = $80 - $10 = $70</li></ul>', 'multivendorx'),
+            desc: __(
+                '<strong>Example setup:</strong><br>Total product price of the order = $100<br>Admin fee = 80%<br>Marketplace fee = $2 + 10%<br> Payable marketplace fee = $12(i.e. $2 + 10% of 100)<br><em>(Fee is calculated on the total product price)</em><ul><li><strong>Case 1 – Fee paid by the customer:</strong><br>Customer pays = $100 + $12 = $112<br>Store receives = $80</li><li><strong>Case 2 – Fee deducted from the store:</strong><br>Customer pays = $100<br>Store earning = 80% of $100 = $80<br>Marketplace fee = $2 + 10% of 100 = $12<br>Final store payout = $80 - $12 = $68</li></ul>', 'multivendorx'),
             nestedFields: [
                 {
                     key: 'commission_fixed',
@@ -351,8 +352,7 @@ export default {
                 appLocalizer.site_url +
                 '/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=facilitator">here</a>.<br>' +
                 '<strong>Individual facilitators:</strong> Set facilitators for specific stores from the <em>Facilitator Settings</em> section or the <em>Store Edit</em> page.<br>' +
-                '<strong>Example:</strong> If a store earns $1000 commission and the facilitator fees is $50 + 5%, then total facilitator fees = $50 + (5% of 1000) = $100 → the store receives $900 after facilitator deductions.',
-                'multivendorx'
+                '<strong>Example:</strong> If the total product price of the order is $1000 and the admin fee is 20% while the facilitator fee is $50 + 5%, then the admin fee = 20% of 1000 = $200 and the facilitator fee = $50 + (5% of 1000) = $100 → the store receives $700 after all deductions.','multivendorx'
             ),
             nestedFields: [
                 {
