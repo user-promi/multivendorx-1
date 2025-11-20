@@ -172,17 +172,6 @@ const WithdrawalRequests: React.FC<Props> = ({ onUpdated }) => {
 
     return (
         <>
-            <div className="card-header">
-                <div className="left">
-                    <div className="title">
-                        Withdrawals awaiting approval
-                    </div>
-                    <div className="des">Review and process store payouts.</div>
-                </div>
-                <div className="right">
-                    <i className="adminlib-more-vertical"></i>
-                </div>
-            </div>
             <div className="admin-table-wrapper">
                 <Table
                     data={data}

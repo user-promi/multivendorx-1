@@ -182,17 +182,6 @@ const DeactivateRequests: React.FC<Props> = ({ onUpdated }) => {
 
     return (
         <>
-            <div className="card-header">
-                <div className="left">
-                    <div className="title">
-                        Stores requesting deactivation
-                    </div>
-                    <div className="des">Approve or reject marketplace joiners.</div>
-                </div>
-                <div className="right">
-                    <i className="adminlib-more-vertical"></i>
-                </div>
-            </div>
             <div className="admin-table-wrapper">
                 <Table
                     data={data}

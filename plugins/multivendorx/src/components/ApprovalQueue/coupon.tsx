@@ -281,17 +281,6 @@ const Coupons: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 
     return (
         <>
-            <div className="card-header">
-                <div className="left">
-                    <div className="title">
-                        Coupons up for review
-                    </div>
-                    <div className="des">Approve, decline, or tweak before they go live.</div>
-                </div>
-                <div className="right">
-                    <i className="adminlib-more-vertical"></i>
-                </div>
-            </div>
             <div className="admin-table-wrapper">
                 <Table
                     data={data}

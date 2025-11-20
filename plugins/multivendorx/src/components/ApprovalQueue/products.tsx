@@ -358,17 +358,6 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 
     return (
         <>
-            <div className="card-header">
-                <div className="left">
-                    <div className="title">
-                        Products awaiting review
-                    </div>
-                    <div className="des">Approve these listings to start generating sales in your marketplace.</div>
-                </div>
-                <div className="right">
-                    <i className="adminlib-more-vertical"></i>
-                </div>
-            </div>
             <Table
                 data={data}
                 columns={columns as ColumnDef<Record<string, any>, any>[]}
