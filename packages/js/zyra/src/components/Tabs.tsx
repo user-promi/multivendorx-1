@@ -7,6 +7,7 @@ type TabContent = {
   id: string;
   name: string;
   desc?: string;
+  count?: string;
   icon?: string;
   link?: string;
   hideTabHeader?: boolean,
@@ -35,6 +36,9 @@ type TabsProps = {
   tabTitleSection?: React.ReactNode;
   appLocalizer?: any;
   submenuRender?: boolean;
+  menuIcon?: boolean;
+  desc?: boolean;
+  template?: string;
   hideBreadcrumb?: boolean;
   action?: React.ReactNode;
   hideTitle?: boolean;
@@ -174,6 +178,9 @@ const Tabs: React.FC<TabsProps> = ({
   tabTitleSection,
   appLocalizer,
   submenuRender,
+  template,
+  menuIcon,
+  desc,
   hideBreadcrumb,
   action,
   hideTitle,
@@ -357,10 +364,11 @@ const Tabs: React.FC<TabsProps> = ({
         >
           {/* <p className="menu-name">{tab.name}</p> */}
           <p className="menu-name">
-            {submenuRender && tab.icon && <i className={`adminlib-${tab.icon}`}></i>}
+            {menuIcon && tab.icon && <i className={`adminlib-${tab.icon}`}></i>}
+            <span>{tab.count}</span>
             {tab.name}
           </p>
-
+        {desc &&  <div className="des">{tab.desc}</div> }
         </Link>
       );
     }
@@ -440,6 +448,7 @@ const Tabs: React.FC<TabsProps> = ({
         activeTabIcon={tabIcon}
         tabTitle={parentTab}
         submenuRender={submenuRender}
+        template={template}
         renderBreadcrumb={renderBreadcrumbLinks}
         renderMenuItems={renderAllMenuItems}
         tabData={tabData}
@@ -451,7 +460,9 @@ const Tabs: React.FC<TabsProps> = ({
         action={action}
       />
 
-      <div className="general-wrapper">
+      <div
+        className={`general-wrapper ${template || "template-1"}`}
+      >
         {HeaderSection && <HeaderSection />}
         <div className="middle-child-container">
           {menuStack.length > 1 && (

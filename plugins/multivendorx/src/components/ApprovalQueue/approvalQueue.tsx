@@ -1,4 +1,4 @@
-import { AdminBreadcrumbs, getApiLink, useModules } from 'zyra';
+import { AdminBreadcrumbs, getApiLink, Tabs, useModules } from 'zyra';
 import Products from './products';
 import Coupons from './coupon';
 import { useEffect, useState } from 'react';
@@ -8,6 +8,7 @@ import ReportAbuseTable from './pendingAbuseReports';
 import WithdrawalRequests from './withdrawalRequests';
 import StoreOrders from './StoreOrders';
 import DeactivateRequests from './deactivateRequests';
+import { useLocation, Link } from 'react-router-dom';
 
 const ApprovalQueue = () => {
     const [storeCount, setStoreCount] = useState<number>(0);
@@ -106,7 +107,121 @@ const ApprovalQueue = () => {
 
             });
     };
+    const location = new URLSearchParams(useLocation().hash.substring(1));
 
+    const tabData = [
+        {
+            type: 'file',
+            content: {
+                id: 'stores',
+                name: 'Stores',
+                desc: 'Eager to join the marketplace',
+                icon: 'storefront yellow',
+                count: storeCount,
+            },
+        },
+        {
+            type: 'file',
+            content: {
+                id: 'products',
+                name: 'Products',
+                desc: 'Pending your approval',
+                icon: 'multi-product red',
+                count: productCount,
+            },
+        },
+        {
+            type: 'file',
+            content: {
+                id: 'coupons',
+                name: 'Coupons',
+                desc: 'Need a quick review',
+                icon: 'coupon green',
+                count: couponCount,
+            },
+        },
+        {
+            type: 'file',
+            content: {
+                id: 'wholesale-customer',
+                name: 'Customers',
+                desc: 'Ready for your approval',
+                icon: 'user-circle yellow',
+                count: 9,
+            },
+        },
+        {
+            type: 'file',
+            content: {
+                id: 'refund-requests',
+                name: 'Refunds',
+                desc: 'Need your decision',
+                icon: 'marketplace-refund blue',
+                count: refundCount,
+            },
+        },
+        {
+            type: 'file',
+            content: {
+                id: 'report-abuse',
+                name: 'Flagged',
+                desc: 'Product reported for assessment',
+                icon: 'product blue',
+                count: reportAbuseCount,
+            },
+        },
+        {
+            type: 'file',
+            content: {
+                id: 'withdrawal',
+                name: 'Withdrawals',
+                desc: 'Queued for disbursement',
+                icon: 'bank blue',
+                count: withdrawCount,
+            },
+        },
+        {
+            type: 'file',
+            content: {
+                id: 'deactivate-requests',
+                name: 'Deactivations',
+                desc: 'Store-initiated permanent closure',
+                icon: 'bank blue',
+                count: deactivateCount,
+            },
+        },
+    ]
+
+    const getForm = (tabId: string) => {
+        switch (tabId) {
+            case 'stores':
+                return <Stores onUpdated={refreshCounts} />;
+
+            case 'products':
+                return <Products onUpdated={refreshCounts} />;
+
+            case 'coupons':
+                return <Coupons onUpdated={refreshCounts} />;
+
+            case 'wholesale-customer':
+                return <h1>Upcoming Feature</h1>;
+
+            case 'refund-requests':
+                return <StoreOrders onUpdated={refreshCounts} />;
+
+            case 'report-abuse':
+                return <ReportAbuseTable onUpdated={refreshCounts} />;
+
+            case 'withdrawal':
+                return <WithdrawalRequests onUpdated={refreshCounts} />;
+
+            case 'deactivate-requests':
+                return <DeactivateRequests onUpdated={refreshCounts} />;
+
+            default:
+                return <div></div>;
+        }
+    };
     const tabs = [
         {
             id: "stores",
@@ -186,16 +301,16 @@ const ApprovalQueue = () => {
             (tab.condition === undefined || tab.condition)   // condition true or not set
     );
 
-    useEffect(() => {
-        if (!tabs.find(tab => tab.id === activeTab)) {
-            setActiveTab(tabs[0]?.id || "");
-        }
-    }, [tabs, activeTab]);
+    // useEffect(() => {
+    //     if (!tabs.find(tab => tab.id === activeTab)) {
+    //         setActiveTab(tabs[0]?.id || "");
+    //     }
+    // }, [tabs, activeTab]);
 
-    // run once on mount
-    useEffect(() => {
-        refreshCounts();
-    }, []);
+    // // run once on mount
+    // useEffect(() => {
+    //     refreshCounts();
+    // }, []);
 
     return (
         <>
@@ -204,11 +319,26 @@ const ApprovalQueue = () => {
                 tabTitle="Approval Queue"
                 description={'Manage all pending administrative actions including approvals, payouts, and notifications.'}
             />
-
+            <Tabs
+                tabData={tabData}
+                currentTab={location.get('subtab') as string}
+                getForm={getForm}
+                prepareUrl={(subTab: string) =>
+                    `?page=multivendorx#&tab=approval-queue&subtab=${subTab}`
+                }
+                appLocalizer={appLocalizer}
+                supprot={[]}
+                Link={Link}
+                hideTitle={true}
+                hideBreadcrumb={true}
+                template={'template-3'}
+                premium={false}
+                menuIcon={true}
+                desc={true}
+            />
             {/* Workboard Stats */}
-            <div className="general-wrapper">
+            {/* <div className="general-wrapper">
                 <div className="row ">
-                    {/* Tab Titles */}
                     <div className="overview-card-wrapper tab">
                         {tabs.map((tab) => (
                             <div className={`tab-action ${activeTab === tab.id ? "active" : ""}`} key={tab.id} onClick={() => setActiveTab(tab.id)}>
@@ -223,7 +353,6 @@ const ApprovalQueue = () => {
                         ))}
                     </div>
                 </div>
-                {/* Tab Content */}
                 <div className="tab-content">
                     {tabs.map(
                         (tab) =>
@@ -235,7 +364,7 @@ const ApprovalQueue = () => {
                     )}
                 </div>
 
-            </div>
+            </div> */}
         </>
     );
 };
