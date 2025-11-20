@@ -117,6 +117,8 @@ const ApprovalQueue = () => {
                 name: 'Stores',
                 desc: 'Eager to join the marketplace',
                 icon: 'storefront yellow',
+                tabTitle: 'Store in review queue',
+                tabDes: 'Next in line! Approve or reject new store join requests.',
                 count: storeCount,
             },
         },

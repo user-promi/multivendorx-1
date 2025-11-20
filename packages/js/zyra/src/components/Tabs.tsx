@@ -8,6 +8,8 @@ type TabContent = {
   name: string;
   desc?: string;
   count?: string;
+  tabTitle?: string;
+  tabDes?: string;
   icon?: string;
   link?: string;
   hideTabHeader?: boolean,
@@ -115,8 +117,8 @@ const findTabDescription = (items: TabData[], activeTabId: string): ReactNode =>
         !tab.hideTabHeader && (
           <div className="divider-wrapper" key={tab.id}>
             <div className="divider-section">
-              {tab.name && <div className="title">{tab.name}</div>}
-              {tab.desc && <div className="desc">{tab.desc}</div>}
+              {tab.name && <div className="title">{tab.tabTitle?.trim() || tab.name}</div>}
+              {tab.desc && <div className="desc">{tab.tabDes?.trim() || tab.desc}</div>}
             </div>
           </div>
         )
