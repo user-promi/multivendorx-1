@@ -748,37 +748,6 @@ const Dashboard: React.FC = () => {
 
         </div>
 
-        {/* <div className="column w-35">
-          <div className="card">
-            <div className="card-header">
-              <div className="left">
-                <div className="title">
-                  Top customer
-                </div>
-              </div>
-            </div>
-            <div className="card-body">
-              <div className="top-customer-wrapper">
-                {customers.map((customer) => (
-                  <div key={customer.id} className="customer">
-                    <div className="left-section">
-                      <div className="profile">
-                        <i className={customer.icon}></i>
-                      </div>
-                      <div className="details">
-                        <div className="name">{customer.name}</div>
-                        <div className="order-number">{customer.orders} orders</div>
-                      </div>
-                    </div>
-
-                    <div className="price-section">{customer.total}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-        </div> */}
         {modules.includes("marketplace-refund") && (
           <div className="column w-40">
             <div className="card">
@@ -788,7 +757,7 @@ const Dashboard: React.FC = () => {
                 </div>
                 <div
                   className="right"
-                  onClick={() => window.location.href = "/dashboard/sales/orders/"}
+                  onClick={() => window.location.href = "/dashboard/sales/orders/#refund-requested"}
                   style={{ cursor: "pointer" }}
                 >
                   <i className="adminlib-external"></i>
