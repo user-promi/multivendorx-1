@@ -339,7 +339,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
     //     );
     // }
 
-    public function call_edit_product_template(): void
+    public function call_edit_product_template()
     {
         $element = get_query_var('element');
         $context_id = get_query_var('context_id');

@@ -60,7 +60,7 @@ const ApprovalQueue = () => {
             method: 'GET',
             url: `${appLocalizer.apiUrl}/wc/v3/orders`,
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { meta_key: 'multivendorx_store_id', refund_status: 'refund_request', page: 1, per_page: 1 },
+            params: { meta_key: 'multivendorx_store_id', status: 'refund-requested', page: 1, per_page: 1 },
         })
             .then((response) => {
                 const total = Number(response.headers['x-wp-total']) || 0;

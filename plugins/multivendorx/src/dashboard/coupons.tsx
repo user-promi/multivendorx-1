@@ -7,7 +7,7 @@ import {
     PaginationState,
 } from '@tanstack/react-table';
 import axios from 'axios';
-import {formatCurrency} from '../services/commonFunction';
+import { formatCurrency } from '../services/commonFunction';
 
 type CouponRow = {
     id: number;
@@ -59,6 +59,24 @@ const formatDateForInput = (dateString?: string | null) => {
 
 const AllCoupon: React.FC = () => {
     const [id, setId] = useState<string | null>(null);
+    const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
+
+    const validateForm = () => {
+        const errors: { [key: string]: string } = {};
+
+        if (!formData.title.trim()) {
+            errors.title = __('Coupon code is required', 'multivendorx');
+        }
+
+        if (!formData.discount_type.trim()) {
+            errors.discount_type = __('Discount type is required', 'multivendorx');
+        }
+
+        setValidationErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
+
     const defaultFormData = {
         title: "",
         content: "",
@@ -153,7 +171,7 @@ const AllCoupon: React.FC = () => {
                 customer_email: (coupon.email_restrictions || []).join(','),
                 id: coupon.id
             });
-            
+
 
             setAddCoupon(true);       // open popup
             setActiveTab("general");  // optional: start with general tab
@@ -165,7 +183,7 @@ const AllCoupon: React.FC = () => {
 
 
     const fetchCouponStatusCounts = async () => {
-        const statuses = ['all', 'publish', 'draft', 'pending', 'trash'];
+        const statuses = ['all', 'publish', 'draft', 'pending'];
         const counts = await Promise.all(
             statuses.map(async (status) => {
                 const params: any = {
@@ -176,7 +194,7 @@ const AllCoupon: React.FC = () => {
                 if (status !== 'all') {
                     params.status = status;
                 } else {
-                    params.status = 'any'; // WooCommerce: all statuses
+                    params.status = 'any';
                 }
 
                 const res = await axios.get(`${appLocalizer.apiUrl}/wc/v3/coupons`, {
@@ -205,8 +223,8 @@ const AllCoupon: React.FC = () => {
         searchField = '',
         couponType = '',
         typeCount = 'any',
-        startDate = new Date(0),
-        endDate = new Date(),
+        startDate = '',
+        endDate = '',
     ) {
         setData([]);
 
@@ -215,11 +233,14 @@ const AllCoupon: React.FC = () => {
             status: typeCount,
             page: currentPage,
             row: rowsPerPage,
-            after: startDate,
-            before: endDate,
             meta_key: 'multivendorx_store_id',
             value: appLocalizer.store_id,
         };
+
+        if (startDate && endDate) {
+            params.after = startDate;
+            params.before = endDate;
+        }
 
         if (stockStatus) {
             params.stock_status = stockStatus;
@@ -255,6 +276,8 @@ const AllCoupon: React.FC = () => {
                     status: coupon.status, // usually 'publish', 'draft', or 'trash'
                 }));
                 setData(formatted);
+                fetchCouponStatusCounts();
+
             })
 
             .catch(() => {
@@ -308,6 +331,9 @@ const AllCoupon: React.FC = () => {
 
 
     const handleSave = async (status: "draft" | "publish") => {
+        if (!validateForm()) {
+            return; // Stop submission if errors exist
+        }
         try {
             const payload: any = {
                 code: formData.title,
@@ -379,11 +405,10 @@ const AllCoupon: React.FC = () => {
             requestData(pagination.pageSize, pagination.pageIndex + 1);
         } catch (err) {
             console.error("Error saving coupon:", err);
-            alert("Failed to save coupon");
         }
     };
 
-
+    console.log(validationErrors)
     const tabs = [
         {
             id: "general",
@@ -402,6 +427,7 @@ const AllCoupon: React.FC = () => {
                                     setFormData({ ...formData, discount_type: val?.value || "" })
                                 }
                             />
+                            {validationErrors.discount_type && <div className="invalid-massage">{validationErrors.discount_type}</div>}
                         </div>
                     </div>
 
@@ -690,10 +716,16 @@ const AllCoupon: React.FC = () => {
             header: __('Coupon Type', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.discount_type}>
-                    {row.original.discount_type.replace('_', ' ')}
+                    {row.original.discount_type === 'percent'
+                        ? 'Percentage discount'
+                        : row.original.discount_type === 'fixed_cart'
+                        ? 'Fixed cart discount'
+                        : row.original.discount_type === 'fixed_product'
+                        ? 'Fixed product discount'
+                        : '-'}
                 </TableCell>
             ),
-        },
+        },  
         {
             id: 'amount',
             accessorKey: 'amount',
@@ -703,6 +735,14 @@ const AllCoupon: React.FC = () => {
             cell: ({ row }) => (
                 <TableCell title={row.original.amount}>
                     {formatCurrency(row.original.amount)}
+                </TableCell>
+            ),
+        },
+        {
+            header: __('Description', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.description || '-'}>
+                    {row.original.description || '-'}
                 </TableCell>
             ),
         },
@@ -726,14 +766,6 @@ const AllCoupon: React.FC = () => {
             header: __('Expiry Date', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell>{formatWooDate(row.original.date_expires)}</TableCell>
-            ),
-        },
-        {
-            header: __('Description', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.description || '-'}>
-                    {row.original.description || '-'}
-                </TableCell>
             ),
         },
         {
@@ -933,6 +965,7 @@ const AllCoupon: React.FC = () => {
                                         setFormData({ ...formData, title: e.target.value })
                                     }
                                 />
+                                {validationErrors.title && <div className="invalid-massage">{validationErrors.title}</div>}
                             </div>
                         </div>
                         <div className="form-group-wrapper">
