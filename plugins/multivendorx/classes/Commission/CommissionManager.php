@@ -45,7 +45,7 @@ class CommissionManager {
 
             $commission_type = MultiVendorX()->setting->get_setting( 'commission_type' );
 
-            $commission_amount = $shipping_amount = $tax_amount = $shipping_tax_amount = 0;
+            $commission_amount = $shipping_amount = $tax_amount = $shipping_tax_amount = $marketplace_payable = $store_payable = $coupon_amount = 0;
             $commission_rates = $rules_array = [];
 
             if ( $commission_type == 'per_item' ) {
@@ -91,7 +91,7 @@ class CommissionManager {
                     if (array_key_exists('rule_type', $row)) {  
                         switch ($row['rule_type']) {
                             case 'order_value':
-                                $order_total = (float) $order->get_subtotal();
+                                $order_total = (float) $order->get_subtotal() - (float) $order->get_discount_total();
     
                                 if (
                                     ($row['rule'] === 'less_than'  && $order_total <= (float) $row['order_value']) ||
@@ -112,24 +112,7 @@ class CommissionManager {
                             case 'price':
                             case 'quantity':
                                 foreach ($order->get_items() as $item_id => $item) {
-                                    // $line_total = $order->get_item_subtotal($item, false, false) * $item['qty'];
-                                    $store_coupon = false;
-                                    if ( $order->get_coupon_codes() ) {
-                                        foreach ( $order->get_coupon_codes() as $coupon_code ) {
-                                            $coupon   = new \WC_Coupon( $coupon_code );
-                                            $store_id = (int) get_post_meta( $coupon->get_id(), 'multivendorx_store_id', true );
-
-                                            if ( $store_id && Store::get_store_by_id( $store_id ) ) {
-                                                $store_coupon = true;
-                                            }
-                                        }
-                                    }
-
-                                    if ( MultiVendorX()->setting->get_setting( 'commission_include_coupon' ) == 'seperate' && empty( MultiVendorX()->setting->get_setting( 'admin_coupon_excluded' ) ) && !$store_coupon ) {
-                                        $line_total = $order->get_item_total( $item, false, false ) * $item['qty'];
-                                    } else {
-                                        $line_total = $order->get_item_subtotal( $item, false, false ) * $item['qty'];
-                                    }
+                                    $line_total = $order->get_item_total( $item, false, false ) * $item['qty'];
     
                                     $base_value = $row['rule_type'] === 'price'
                                         ? (float) $row['product_price']
@@ -165,8 +148,9 @@ class CommissionManager {
                 }
                 
                 if ($commission_amount <= 0) {
-                    $default_store_order_commission = reset($commission_per_store_order);                    
-                    $commission_amount = (float) $order->get_subtotal() * ((float) $default_store_order_commission['commission_percentage'] / 100) + (float) $default_store_order_commission['commission_fixed'];
+                    $default_store_order_commission = reset($commission_per_store_order);      
+                    $order_total = (float) $order->get_subtotal() - (float) $order->get_discount_total();              
+                    $commission_amount = $order_total * ((float) $default_store_order_commission['commission_percentage'] / 100) + (float) $default_store_order_commission['commission_fixed'];
                     $rules_array['commission_amount']['rules'][] = [
                         'rule_type'  => 'global',
                         'fixed' => $default_store_order_commission['commission_fixed'],
@@ -179,15 +163,34 @@ class CommissionManager {
             // Action hook to adjust items commission rates before save.
             $order->update_meta_data('multivendorx_order_items_commission_rates', apply_filters('mvx_vendor_order_items_commission_rates', $commission_rates, $order));
             
-            if ( MultiVendorX()->setting->get_setting( 'commission_include_coupon' ) == 'store' && empty( MultiVendorX()->setting->get_setting( 'admin_coupon_excluded' )) ) {
-                $total_discount = $order->get_discount_total();
-                $commission_amount = (float) $commission_amount - (float) $total_discount;
+            $marketplace_commission = $commission_amount;
+            $store_earning = (float) $order->get_total() - (float) $commission_amount;
+
+            //For migrate users
+            if ($vendor->get_meta('revenue_mode_store')) {
+                $marketplace_commission = (float) $order->get_total() - (float) $commission_amount;
+                $store_earning = $commission_amount;
             }
 
-            if ($commission_amount > $order->get_total()) {
-                $commission_amount = $order->get_total();
+            $store_coupon = false;
+            if ( $order->get_coupon_codes() ) {
+                foreach ( $order->get_coupon_codes() as $coupon_code ) {
+                    $coupon   = new \WC_Coupon( $coupon_code );
+                    $store_id = (int) get_post_meta( $coupon->get_id(), 'multivendorx_store_id', true );
+
+                    if ( $store_id && Store::get_store_by_id( $store_id ) ) {
+                        $store_coupon = true;
+                    }
+                }
             }
-            // $order->save(); // Avoid using save() if it will save letter in same flow.
+
+            // 1st check exclude admin coupon setting on and the coupon is not store coupon OR
+            // 2nd check the commission_include_coupon set to admin 
+            if ( (!empty( MultiVendorX()->setting->get_setting( 'admin_coupon_excluded' )) && !$store_coupon) || MultiVendorX()->setting->get_setting( 'commission_include_coupon' ) == 'admin' ) {
+                $coupon_amount = sprintf("%+0.2f", ($order->get_discount_total() * ($store_earning / $order->get_total())));
+            } elseif ( MultiVendorX()->setting->get_setting( 'commission_include_coupon' ) == 'store') {
+                $coupon_amount = sprintf("%+0.2f", - ($order->get_discount_total() * ($marketplace_commission / $order->get_total())));
+            }
 
             // && !get_user_meta($vendor_id, '_vendor_give_shipping', true)
             // && !get_user_meta($vendor_id, '_vendor_give_tax', true)
@@ -210,32 +213,37 @@ class CommissionManager {
                     $tax_percent    = \WC_Tax::get_rate_percent( $tax_rate_id );
                     $tax_rate       = str_replace( '%', '', $tax_percent );
                     if ( $tax_rate ) {
-                        $tax_amount = ( $commission_amount * $tax_rate ) / 100;
+                        $tax_amount = ( $store_earning * $tax_rate ) / 100;
                     }
                 }
             }
 
             // in commission total add facilitator_fee and gateway fee.
-            $commission_total = (float) $commission_amount + (float) $shipping_amount + (float) $tax_amount + (float) $shipping_tax_amount;
-            $commission_total = apply_filters( 'mvx_commission_total_amount', $commission_total, $commission_id );
+            $store_payable = (float) $store_earning + (float) $shipping_amount + (float) $tax_amount + (float) $shipping_tax_amount + $coupon_amount;
+            $marketplace_payable = (float) $order->get_total() - (float) $store_payable;
+            
+            // $commission_total = apply_filters( 'mvx_commission_total_amount', $commission_total, $commission_id );
 
             // insert | update commission into commission table.
             $data = [
-                'order_id'              => $order->get_id(),
-                'store_id'              => $store_id,
-                'customer_id'           => $order->get_customer_id(),
-                'total_order_amount'    => $order->get_total(),
-                'commission_amount'     => $commission_amount,
-                'shipping_amount'       => $shipping_amount,
-                'tax_amount'            => $tax_amount,
-                'shipping_tax_amount'   => $shipping_tax_amount,
-                'discount_amount'       => $order->get_discount_total(),
-                'commission_total'      => $commission_total,
-                'currency'              => get_woocommerce_currency(),
-                'status'                => $order->get_status() == 'cancelled' ? 'cancelled' : 'unpaid',
-                'rules_applied'         => serialize( $rules_array )
+                'order_id'                  => $order->get_id(),
+                'store_id'                  => $store_id,
+                'customer_id'               => $order->get_customer_id(),
+                'total_order_value'         => $order->get_total(),
+                'net_items_cost'            => (float) $order->get_subtotal() - (float) $order->get_discount_total(),
+                'marketplace_commission'    => $marketplace_commission,
+                'store_earning'             => $store_earning,
+                'store_shipping'            => $shipping_amount,
+                'store_tax'                 => $tax_amount,
+                'store_shipping_tax'        => $shipping_tax_amount,
+                'discount_applied'          => $coupon_amount,
+                'store_payable'             => $store_payable,
+                'marketplace_payable'       => $marketplace_payable,
+                'currency'                  => get_woocommerce_currency(),
+                'status'                    => $order->get_status() == 'cancelled' ? 'cancelled' : 'unpaid',
+                'rules_applied'             => serialize( $rules_array )
             ];
-            $format = [ "%d", "%d", "%d", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%s", "%s", "%s" ];
+            $format = [ "%d", "%d", "%d", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%s", "%s", "%s" ];
             
             $filtered = apply_filters(
                 'multivendorx_before_commission_insert',
@@ -243,7 +251,7 @@ class CommissionManager {
                     'data'   => $data,
                     'format' => $format,
                 ],
-                $vendor, $commission_amount, $order
+                $vendor, $order
             );
             
             $data   = $filtered['data'];
@@ -275,29 +283,9 @@ class CommissionManager {
         $commission = [];
         $product_value_total = 0;
 
-        // Check order coupon created by vendor or not
-        $store_coupon = false;
-        if ( $order->get_coupon_codes() ) {
-            foreach ( $order->get_coupon_codes() as $coupon_code ) {
-                $coupon   = new \WC_Coupon( $coupon_code );
-                $store_id = (int) get_post_meta( $coupon->get_id(), 'multivendorx_store_id', true );
-
-                if ( $store_id && Store::get_store_by_id( $store_id ) ) {
-                    $store_coupon = true;
-                }
-            }
-        }
-
-
-        // Calculate item total based on condition
-        if ( MultiVendorX()->setting->get_setting( 'commission_include_coupon' ) == 'seperate' && empty( MultiVendorX()->setting->get_setting( 'admin_coupon_excluded' ) ) && !$store_coupon ) {
-            $line_total = $after_refund_amount ? (($order->get_item_total( $item, false, false ) - $after_refund_amount) * $item['qty']) : $order->get_item_total( $item, false, false ) * $item['qty'];
-        } else {
-            $line_total = $after_refund_amount ? (($order->get_item_subtotal( $item, false, false ) - $after_refund_amount) * $item['qty']) : $order->get_item_subtotal( $item, false, false ) * $item['qty'];
-        }
+        $line_total = $after_refund_amount ? (($order->get_item_total( $item, false, false ) - $after_refund_amount) * $item['qty']) : $order->get_item_total( $item, false, false ) * $item['qty'];
         // Filter the item total before calculating item commission.
         $line_total = apply_filters( 'mvx_get_commission_line_total', $line_total, $item, $order );
-
 
         if ( $product_id && $vendor ) {
             
@@ -312,16 +300,6 @@ class CommissionManager {
             if ( !empty($commission) && $commission_type == 'per_item' ) {
                 $amount = (float) $line_total * ( (float) $commission['commission_val'] / 100 ) + ((float) $commission['commission_fixed'] * $item['qty']);
             }
-
-
-            // if ( MultiVendorX()->setting->get_setting( 'revenue_sharing_mode' ) ) {
-            //     if ( MultiVendorX()->setting->get_setting( 'revenue_sharing_mode' ) == 'revenue_sharing_mode_admin' ) {
-            //         $amount = (float) $line_total - (float) $amount;
-            //         if ( $amount < 0 ) {
-            //             $amount = 0;
-            //         }
-            //     }
-            // }
 
             $product_value_total += $item->get_total();
 
@@ -701,8 +679,6 @@ class CommissionManager {
                  */
         }
     }
-
-
     public function get_item_refunded_total( $order, $item_id ) {
         $refunded_total = 0;
 

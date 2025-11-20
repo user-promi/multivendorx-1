@@ -81,7 +81,7 @@ class Transaction {
             'commission_id'    => (int) $commission_id,
             'entry_type'       => 'Cr',
             'transaction_type' => 'Commission',
-            'amount'           => (float) $commission->commission_total,
+            'amount'           => (float) $commission->store_payable,
             'currency'         => get_woocommerce_currency(),
             'narration'        => "Commission received for order " . $order->get_id(),
             'status'           => $status,

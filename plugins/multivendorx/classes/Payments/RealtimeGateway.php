@@ -26,8 +26,8 @@ class RealtimeGateway extends \WC_Payment_Gateway {
 
             $commission = CommissionUtil::get_commission_by_store_and_order_id($store_id, $suborder_id);
 
-            $store_amount = $commission->commission_total;
-            $admin_amount = (float)$commission->total_order_amount - (float)$commission->commission_total;
+            $store_amount = $commission->store_payable;
+            $admin_amount = $commission->marketplace_payable;
 
             $all_info[] = [
                 'store_id'  => $store_id,
