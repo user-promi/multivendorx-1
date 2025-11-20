@@ -51,7 +51,7 @@ export default {
     priority: 1,
     name: __('Commissions', 'multivendorx'),
     desc: __(
-        "Tailor your marketplace commission plan to decide how much revenue stores earn from each sale.",
+        "Tailor your marketplace commission plan to decide how much revenue admin earn from each sale.",
         'multivendorx'
     ),
     icon: 'adminlib-commission',
@@ -60,8 +60,8 @@ export default {
         {
             key: 'commission_type',
             type: 'setting-toggle',
-            label: __('Commission type', 'multivendorx'),
-            settingDescription: __("Choose how commissions should be calculated for your marketplace.", 'multivendorx'),
+            label: __('Admin fee', 'multivendorx'),
+            settingDescription: __("Decide how the system should calculate the admin’s fee." 'multivendorx'),
             desc: __(
                 '<ul><li>Store order based - Calculated on the full order amount of each store. Example: A customer buys from 3 stores → commission applies separately to each store’s order.</li><li>Per item based - Applied to each product in the order. Example: An order with 5 items → commission applies 5 times, once per item.</li></ul>',
                 'multivendorx'
@@ -225,13 +225,13 @@ export default {
         {
             key: 'separator_content',
             type: 'section',
-            hint: __("What's included along with store commission", 'multivendorx'),
+            hint: __("What's included along with store earning", 'multivendorx'),
             desc: __('Choose which order components are factored into commission calculations.', 'multivendorx')
         },
         {
             key: 'give_shipping',
             label: __('Shipping amount', 'multivendorx'),
-            settingDescription: __('This option determines whether shipping charges are included when calculating commission.', 'multivendorx'),
+            settingDescription: __('This option determines whether shipping charges are included when calculating store earning.', 'multivendorx'),
             desc: __(
                 'If enabled, store’s net earning will include both commission and shipping fees.', 'multivendorx'),
             type: 'checkbox',
@@ -295,7 +295,7 @@ export default {
         {
             key: 'separator_content',
             type: 'section',
-            hint: __("What gets deducted from store commission", 'multivendorx'),
+            hint: __("What gets deducted from store earning", 'multivendorx'),
             desc: __('Determine which fees to deduct from the commission amount.', 'multivendorx')
         },
         {
@@ -308,7 +308,7 @@ export default {
                 'Define a fee to cover platform costs. Apply a fixed, percentage, or combined rate. Choose whether it’s paid by the customer at checkout or deducted from the store’s commission.',
                 'multivendorx'
             ),
-            desc: __('<strong>Example setup:</strong><br>Order total = $100<br>Store commission = 80%<ul><li><strong>Case 1 – Fee added to the customer’s order total:</strong><br>Marketplace fees = $2 + 10% of 100 = $12<br>Customer pays = $100 + $12 = $112<br>The $12 will be displayed at checkout as <em>Marketplace fees</em>.</li><li><strong>Case 2 – Fee deducted from the store’s commission:</strong><br>Customer pays = $100<br>Store commission = 80% of $100 = $80<br>Marketplace fees = $2 + 10% of $80 = $10<br>Final store payout = $80 - $10 = $70</li></ul>', 'multivendorx'),
+            desc: __('<strong>Example setup:</strong><br>Order total = $100<br>Store earning = 80%<ul><li><strong>Case 1 – Fee added to the customer’s order total:</strong><br>Marketplace fees = $2 + 10% of 100 = $12<br>Customer pays = $100 + $12 = $112<br>The $12 will be displayed at checkout as <em>Marketplace fees</em>.</li><li><strong>Case 2 – Fee deducted from the store’s commission:</strong><br>Customer pays = $100<br>Store earning = 80% of $100 = $80<br>Marketplace fees = $2 + 10% of $80 = $10<br>Final store payout = $80 - $10 = $70</li></ul>', 'multivendorx'),
             nestedFields: [
                 {
                     key: 'commission_fixed',
@@ -345,7 +345,7 @@ export default {
             label: 'Facilitator fees',
             single: true,
             proSetting: true,
-            settingDescription: __('Set the facilitator fees as a fixed amount, a percentage, or both, deducted from the store commission. Store-wise fees can also be configured from the store edit page.', 'multivendorx'),
+            settingDescription: __('Set the facilitator fees as a fixed amount, a percentage, or both, deducted from the store earning. Store-wise fees can also be configured from the store edit page.', 'multivendorx'),
             desc: __(
                 '<strong>Global facilitator:</strong> Assign a single facilitator for the entire marketplace from <a href="' +
                 appLocalizer.site_url +
@@ -380,7 +380,7 @@ export default {
             rowClass: 'single-line',
             moduleEnabled: 'marketplace-gateway',
             single: true,
-            desc: __('<strong>Use this setting</strong> to manage transaction fees for different payment methods. You can set a default fee or define specific fees for each payment mode, such as bank transfer or cash on delivery.<br><br><strong>Example setup:</strong><br>Product price = $100<br>Store commission = 80%<br>Gateway fees = $10 + 5%<ul><li>Customer pays = $100</li><li>Store commission = 80% of $100 = $80</li><li>Gateway fees = $10 + 5% of $80 = $14</li><li>Final store earning = $80 - $14 = $66</li><li>Admin earning = ($100 - $80) + $14 = $34</li></ul>', 'multivendorx'),
+            desc: __('<strong>Use this setting</strong> to manage transaction fees for different payment methods. You can set a default fee or define specific fees for each payment mode, such as bank transfer or cash on delivery.<br><br><strong>Example setup:</strong><br>Product price = $100<br>Store earning = 80%<br>Gateway fees = $10 + 5%<ul><li>Customer pays = $100</li><li>Store earning = 80% of $100 = $80</li><li>Gateway fees = $10 + 5% of $80 = $14</li><li>Final store earning = $80 - $14 = $66</li><li>Admin earning = ($100 - $80) + $14 = $34</li></ul>', 'multivendorx'),
             nestedFields
         },
     ],
