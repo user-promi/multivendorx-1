@@ -311,7 +311,7 @@ class Frontend {
         $user = wp_get_current_user();
 
         //checking change later when all function ready
-        if ( is_page() && is_user_logged_in() && has_shortcode(get_post()->post_content, 'multivendorx_store_dashboard') && in_array( 'store_owner', $user->roles, true ) ) {
+        if ( is_user_logged_in() && Utill::is_store_dashboard() && in_array( 'store_owner', $user->roles, true ) ) {
             return MultiVendorX()->plugin_path . 'templates/store/store-dashboard.php';
         }
         return $template;
