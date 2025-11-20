@@ -257,7 +257,7 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
 
     fetchCommissionDetails();
   }, []);
-  console.log('site_url', appLocalizer.site_url)
+  console.log('site_urlcus', topCustomers)
   return (
     <>
       <div className="row">
@@ -486,7 +486,7 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
                     )}
                     {coupon.store_name && (
                       <div className="des">
-                       <b> Store: </b>{coupon.store_name}
+                        <b> Store: </b>{coupon.store_name}
                       </div>
                     )}
                   </div>
@@ -527,13 +527,11 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <img
-                        src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-                          customer.name?.trim() || customer.username
-                        )}&background=5007aa&color=fff`}
-                        alt={customer.name || customer.username}
-                      />
+                      <div >
+                        {(customer.name?.trim() || customer.username)?.charAt(0)}
+                      </div>
                     </a>
+
                   </div>
 
                   <div className="details">
@@ -580,12 +578,9 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <img
-                        src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-                          store.store_name || 'Store'
-                        )}&background=0073aa&color=fff`}
-                        alt={store.store_name}
-                      />
+                      <div >
+                        {(store.store_name?.trim())?.charAt(0)}
+                      </div>
                     </a>
                   </div>
 
