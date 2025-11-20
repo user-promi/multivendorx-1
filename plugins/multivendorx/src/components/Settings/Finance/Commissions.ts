@@ -58,6 +58,15 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
+            key: 'store_rating_page',
+            type: 'blocktext',
+            label: __('no_label', 'multivendorx'),
+            blocktext: __(
+                'From MultiVendorX 5.0.0, vendor-specific commission has been shifted to legacy mode.<b>If you were using vendor-level commissions in earlier versions, your existing settings will continue to work. However, any new commission changes made here will now follow the Marketplace Fee model as defined in the settings below.</b>',
+                'multivendorx'
+            ),
+        },
+        {
             key: 'commission_type',
             type: 'setting-toggle',
             label: __('Marketplace commission', 'multivendorx'),
