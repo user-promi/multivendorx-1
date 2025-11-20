@@ -19,8 +19,8 @@ export default {
         {
             key: 'disbursement_order_status',
             type: 'checkbox',
-            label: __('Eligible order statuses for commission payout', 'multivendorx'),
-            settingDescription: __("Select the order statuses after which commissions will be added to the store wallet.", 'multivendorx'),
+            label: __('Eligible order statuses for store earning payout', 'multivendorx'),
+            settingDescription: __("Select the order statuses after which earning will be added to the store wallet.", 'multivendorx'),
             class: 'mvx-toggle-checkbox',
             options: [
                 {
