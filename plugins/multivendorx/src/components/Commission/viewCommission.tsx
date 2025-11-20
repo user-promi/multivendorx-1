@@ -179,71 +179,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
         setOrderItems([]);
       });
   }, [commissionId]);
-console.log("remap",refundMap);
-  // const popupColumns: ColumnDef<OrderItem>[] = [
-  //   {
-  //     header: __("Product", "multivendorx"),
-  //     cell: ({ row }) => {
-  //       const productId = row.original.id; // WooCommerce product ID
-  //       const productName = row.original.name ?? "-";
-  //       const productImage = row.original.image; // ✅ image from your mapped data
 
-  //       return (
-  //         <TableCell title={productName}>
-  //           {productId ? (
-  //             <a
-  //               href={`${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${productId}&action=edit`}
-  //               target="_blank"
-  //               rel="noopener noreferrer"
-  //               className="product-wrapper"
-  //             >
-  //               {productImage ? (
-  //                 <img
-  //                   src={productImage}
-  //                   alt={productName}
-  //                   className="product-thumb"
-  //                 />
-  //               ) : (
-  //                 <i className="item-icon adminlib-multi-product"></i>
-  //               )}
-
-  //               <div className="details">
-  //                 {productName}
-  //                 <div className="sub-text">Sku: {row.original.sku ?? "-"}</div>
-  //               </div>
-  //             </a>
-  //           ) : (
-  //             productName
-  //           )}
-  //         </TableCell>
-  //       );
-  //     },
-  //   },
-  //   {
-  //     header: __("Cost", "multivendorx"),
-  //     cell: ({ row }) => (
-  //       <TableCell title={row.original.cost}>{row.original.cost ?? "-"}</TableCell>
-  //     ),
-  //   },
-  //   {
-  //     header: __("Qty", "multivendorx"),
-  //     cell: ({ row }) => (
-  //       <TableCell title={row.original.qty.toString()}>{row.original.qty ?? "-"}</TableCell>
-  //     ),
-  //   },
-  //   {
-  //     header: __("Total", "multivendorx"),
-  //     cell: ({ row }) => (
-  //       <TableCell title={row.original.total}>{row.original.total ?? "-"}</TableCell>
-  //     ),
-  //   },
-  //   {
-  //     header: __("Tax", "multivendorx"),
-  //     cell: ({ row }) => (
-  //       <TableCell title={row.original.cost}>{row.original.tax ?? "-"}</TableCell>
-  //     ),
-  //   },
-  // ];
   const popupColumns: ColumnDef<OrderItem>[] = [
     {
       header: __("Product", "multivendorx"),
@@ -288,7 +224,7 @@ console.log("remap",refundMap);
       ),
     },
 
-    // ✅ QTY WITH REFUND
+    //QTY WITH REFUND
     {
       header: __("Qty", "multivendorx"),
       cell: ({ row }) => {
@@ -428,7 +364,7 @@ console.log("remap",refundMap);
               {storeData?.email && (
                 <div className="email">
                   <i className="adminlib-mail"></i>
-                  <b>Email:</b> {storeData.email}
+                  <b>Email:</b> {storeData.email.split(/\s*[\n,]\s*/)[0]}
                 </div>
               )}
 

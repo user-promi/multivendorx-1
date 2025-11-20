@@ -53,7 +53,6 @@ const Dashboard: React.FC = () => {
   const [lastWithdraws, setLastWithdraws] = useState<any>([]);
   const { modules } = useModules();
 
-
   useEffect(() => {
     axios({
       method: 'GET',

@@ -489,6 +489,7 @@ class FrontendScripts {
 						'vendor_dashboard_pages'   => $vendor_dashboard_pages,
 						'pro_url'                  => esc_url( MULTIVENDORX_PRO_SHOP_URL ),
                         'open_uploader'            => 'Upload Image',
+                        'color'                    => MultiVendorX()->setting->get_setting( 'store_color_settings' ),
                         'taxes_enabled'            => get_option( 'woocommerce_calc_taxes' ),
                         'country_list'             => $country_list,
                         'store_owners'             => $owners_list,
