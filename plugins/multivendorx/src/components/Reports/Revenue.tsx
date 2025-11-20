@@ -813,20 +813,18 @@ const Revenue: React.FC = () => {
                   <div className="top-items">
                     <div className="items">
                       <div className="left-side flex items-center gap-3 p-2">
-                        {product.images?.[0]?.src ? (
-                          <img
-                            src={product.images[0].src}
-                            alt={product.name}
-                            style={{
-                              width: 50,
-                              height: 50,
-                              borderRadius: 6,
-                              objectFit: "cover",
-                            }}
-                          />
-                        ) : (
-                          <i className="adminlib-store-inventory text-xl"></i>
-                        )}
+                        <div className="avatar">
+                          {product.images?.length ? (
+                            <img
+                              src={product.images[0].src}
+                              alt={product.name}
+                            />
+                          ) : (
+                            <div>
+                              {product.name?.charAt(0) || '?'}
+                            </div>
+                          )}
+                        </div>
 
                         <div className="details text-sm leading-6">
                           <div>
@@ -869,14 +867,18 @@ const Revenue: React.FC = () => {
               <div className="info-item" key={`selling-${product.id}`}>
                 <div className="details-wrapper">
                   <div className="avatar">
-                    <img
-                      src={
-                        product.images?.length
-                          ? product.images[0].src
-                          : "https://via.placeholder.com/100?text=No+Image"
-                      }
-                      alt={product.name}
-                    />
+                    {product.images?.length ? (
+                      <img
+                        src={product.images[0].src}
+                        alt={product.name}
+                      />
+                    ) : (
+                      <div
+
+                      >
+                        {product.name?.charAt(0) || '?'}
+                      </div>
+                    )}
                   </div>
                   <div className="details">
                     <div className="name">{product.name}</div>
@@ -885,7 +887,7 @@ const Revenue: React.FC = () => {
                 </div>
                 <div className="right-details">
                   <div className="price">
-                   
+
                   </div>
                 </div>
               </div>
