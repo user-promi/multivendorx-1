@@ -77,6 +77,7 @@ const CustomerServices = () => {
     const tabData = [
         {
             type: 'file',
+            module: "marketplace-refund",
             content: {
                 id: 'refund-requests',
                 name: 'Refund Requests',
@@ -86,6 +87,7 @@ const CustomerServices = () => {
         },
         {
             type: 'file',
+            module: "question-answer",
             content: {
                 id: 'questions',
                 name: 'Questions',
@@ -93,7 +95,27 @@ const CustomerServices = () => {
                 icon: 'question',
             },
         },
-    ]
+        {
+            type: 'file',
+            module: "store-review",
+            content: {
+                id: 'review',
+                name: 'Store Reviews',
+                des: "Shared by customers",
+                icon: "store-review",
+            },
+        },
+        {
+            type: 'file',
+            module: 'customer-support',
+            content: {
+                id: 'support-ticket',
+                name: 'Support Ticket',
+                des: "Flagged for abuse review",
+                icon: "vacation",
+            },
+        },
+    ].filter(tab => !tab.module || modules.includes(tab.module));
 
     const getForm = (tabId: string) => {
         switch (tabId) {
@@ -101,6 +123,10 @@ const CustomerServices = () => {
                 return <RefundRequest />;
             case 'questions':
                 return <Qna />;
+            case 'review':
+                return <StoreReviews />;
+            case 'support-ticket':
+                return  <div className="row"><div className="column"><h1>Upcoming Feature</h1></div></div>;
             default:
                 return <div></div>;
         }

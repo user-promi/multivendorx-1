@@ -20,7 +20,6 @@ const ApprovalQueue = () => {
     const [deactivateCount, setDeactivateCount] = useState<number>(0);
 
     const { modules } = useModules();
-    const [activeTab, setActiveTab] = useState("");
     const settings = appLocalizer.settings_databases_value || {};
 
     const refreshCounts = async () => {
@@ -112,6 +111,7 @@ const ApprovalQueue = () => {
     const tabData = [
         {
             type: 'file',
+            condition: settings?.general?.approve_store === "manually",
             content: {
                 id: 'stores',
                 name: 'Stores',
@@ -122,6 +122,7 @@ const ApprovalQueue = () => {
         },
         {
             type: 'file',
+            condition: settings?.["store-capability"]?.products?.includes("publish_products"),
             content: {
                 id: 'products',
                 name: 'Products',
@@ -132,6 +133,7 @@ const ApprovalQueue = () => {
         },
         {
             type: 'file',
+            condition: settings?.["store-capability"]?.coupons?.includes("publish_coupons"),
             content: {
                 id: 'coupons',
                 name: 'Coupons',
@@ -142,6 +144,7 @@ const ApprovalQueue = () => {
         },
         {
             type: 'file',
+            module: "wholesale",
             content: {
                 id: 'wholesale-customer',
                 name: 'Customers',
@@ -152,6 +155,7 @@ const ApprovalQueue = () => {
         },
         {
             type: 'file',
+            module: "marketplace-refund",
             content: {
                 id: 'refund-requests',
                 name: 'Refunds',
@@ -162,6 +166,7 @@ const ApprovalQueue = () => {
         },
         {
             type: 'file',
+            module: "marketplace-compliance",
             content: {
                 id: 'report-abuse',
                 name: 'Flagged',
@@ -172,6 +177,7 @@ const ApprovalQueue = () => {
         },
         {
             type: 'file',
+            condition: settings?.disbursement?.withdraw_type === "manual",
             content: {
                 id: 'withdrawal',
                 name: 'Withdrawals',
@@ -190,7 +196,12 @@ const ApprovalQueue = () => {
                 count: deactivateCount,
             },
         },
-    ]
+    ].filter(
+        (tab) =>
+            //Show if:
+            (!tab.module || modules.includes(tab.module)) && // module active or not required
+            (tab.condition === undefined || tab.condition)   // condition true or not set
+    );
 
     const getForm = (tabId: string) => {
         switch (tabId) {
@@ -222,6 +233,7 @@ const ApprovalQueue = () => {
                 return <div></div>;
         }
     };
+
     const tabs = [
         {
             id: "stores",
@@ -238,7 +250,7 @@ const ApprovalQueue = () => {
             icon: "adminlib-multi-product red",
             count: productCount,
             des: "Pending your approval",
-            condition: settings?.["store-capability"]?.products?.includes("publish_products"), count: productCount,
+            condition: settings?.["store-capability"]?.products?.includes("publish_products"),
             content: <Products onUpdated={refreshCounts} />
         },
         {
