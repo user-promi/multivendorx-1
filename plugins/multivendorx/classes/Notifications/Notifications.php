@@ -204,30 +204,6 @@ class Notifications
                 'category'       => 'activity',
             ],
 
-            'payout_released'           => [
-                'name'           => 'Payout released',
-                'desc'           => 'A payout is released to the store.',
-                'store_enabled'  => true,
-                'email_subject'  => 'Payout released',
-                'email_body'     => 'A payout of [amount] has been released to your account.',
-                'sms_content'    => 'Payout of [amount] released.',
-                'system_message' => 'Payout released: [amount].',
-                'tag'            => 'Payment',
-                'category'       => 'activity',
-            ],
-
-            'payout_rejected'           => [
-                'name'           => 'Payout rejected',
-                'desc'           => 'A payout request is rejected by the admin.',
-                'store_enabled'  => true,
-                'email_subject'  => 'Payout rejected',
-                'email_body'     => 'A payout of [amount] has been rejected by your administrator.',
-                'sms_content'    => 'Payout of [amount] rejected.',
-                'system_message' => 'Payout rejected: [amount].',
-                'tag'            => 'Payment',
-                'category'       => 'activity',
-            ],
-
             'payout_failed'             => [
                 'name'           => 'Payout failed',
                 'desc'           => 'A payout processing attempt has failed.',
@@ -406,6 +382,18 @@ class Notifications
                 'system_message' => 'Withdrawal released successfully.',
                 'tag'            => 'Payment',
                 'category'       => 'notification',
+            ],
+            
+            'withdrawl_rejected'           => [
+                'name'           => 'Withdrawl rejected',
+                'desc'           => 'A withdrawl request is rejected by the admin.',
+                'store_enabled'  => true,
+                'email_subject'  => 'Withdrawl rejected',
+                'email_body'     => 'A Withdrawl of [amount] has been rejected by your administrator.',
+                'sms_content'    => 'Withdrawl of [amount] rejected.',
+                'system_message' => 'Withdrawl Payout rejected: [amount].',
+                'tag'            => 'Payment',
+                'category'       => 'activity',
             ],
 
             // ========== REPORT ABUSE ==========
