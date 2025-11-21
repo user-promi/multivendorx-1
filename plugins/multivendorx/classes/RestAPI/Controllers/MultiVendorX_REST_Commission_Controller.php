@@ -157,8 +157,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
             $filter,
             false
         );
-    
-    
+            
         $formatted_commissions = array();
     
         foreach ( $commissions as $commission ) {
@@ -168,28 +167,34 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
             $formatted_commissions[] = apply_filters(
                 'multivendorx_commission',
                 array(
-                    'id'                  => (int) $commission->ID,
-                    'orderId'             => (int) $commission->order_id,
-                    'storeId'             => (int) $commission->store_id,
-                    'storeName'           => $store_name,
-                    'totalOrderAmount'    => $commission->total_order_amount,
-                    'commissionAmount'    => $commission->commission_amount,
-                    'facilitatorFee'      => $commission->facilitator_fee,
-                    'marketplaceFee'      => $commission->marketplace_fee,
-                    'gatewayFee'          => $commission->gateway_fee,
-                    'shippingAmount'      => $commission->shipping_amount,
-                    'taxAmount'           => $commission->tax_amount,
-                    'shippingTaxAmount'   => $commission->shipping_tax_amount,
-                    'discountAmount'      => $commission->discount_amount,
-                    'commissionTotal'     => $commission->commission_total,
-                    'commissionRefunded'  => $commission->commission_refunded,
-                    'currency'            => $commission->currency,
-                    'status'              => $commission->status,
-                    'commissionNote'      => $commission->commission_note,
-                    'createdAt'           => $commission->created_at,
-                    'updatedAt'           => $commission->updated_at,
+                    'id'                 => (int) $commission->ID,
+                    'orderId'            => (int) $commission->order_id,
+                    'storeId'            => (int) $commission->store_id,
+                    'storeName'          => $store_name,
+            
+                    'totalOrderAmount'   => $commission->total_order_value,
+                    'netItemsCost'       => $commission->net_items_cost,
+                    'marketplaceFee'     => $commission->marketplace_commission,
+                    'storeEarning'       => $commission->store_earning,
+                    'facilitatorFee'     => $commission->facilitator_fee,
+                    'gatewayFee'         => $commission->gateway_fee,
+                    'platformFee'        => $commission->platform_fee,
+                    'shippingAmount'     => $commission->store_shipping,
+                    'taxAmount'          => $commission->store_tax,
+                    'shippingTaxAmount'  => $commission->store_shipping_tax,
+                    'discountAmount'     => $commission->discount_applied,
+                    'storePayable'       => $commission->store_payable,
+                    'marketplacePayable' => $commission->marketplace_payable,
+                    'commissionRefunded' => $commission->store_refunded,
+            
+                    'currency'           => $commission->currency,
+                    'status'             => $commission->status,
+                    'commissionNote'     => $commission->commission_note,
+                    'createdAt'          => $commission->created_at,
+                    'updatedAt'          => $commission->updated_at,
                 )
             );
+            
         }
 
         // Prepare base filter (for store-specific counts)
@@ -201,6 +206,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         // Status-wise counts with store/date filters applied
         $all                 = CommissionUtil::get_commissions( $base_filter, true, true );
         $paid                = CommissionUtil::get_commissions( array_merge( $base_filter, ['status' => 'paid'] ), true, true );
+        $unpaid              = CommissionUtil::get_commissions( array_merge( $base_filter, ['status' => 'unpaid'] ), true, true );
         $refunded            = CommissionUtil::get_commissions( array_merge( $base_filter, ['status' => 'refunded'] ), true, true );
         $partially_refunded  = CommissionUtil::get_commissions( array_merge( $base_filter, ['status' => 'partially_refunded'] ), true, true );
         $cancelled           = CommissionUtil::get_commissions( array_merge( $base_filter, ['status' => 'cancelled'] ), true, true );
@@ -209,6 +215,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
             'commissions'        => $formatted_commissions,
             'all'                => $all,
             'paid'               => $paid,
+            'unpaid'             => $unpaid,
             'refunded'           => $refunded,
             'partially_refunded' => $partially_refunded,
             'cancelled'          => $cancelled,
@@ -399,16 +406,30 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
             'order_id'      => $order_id,
             'store_id'      => absint( $commission->store_id ),
             'status'        => $commission->status,
-            'amount'        => wc_format_decimal( $commission->commission_amount, 2 ),
-            'shipping'      => wc_format_decimal( $commission->shipping_amount, 2 ),
-            'tax'           => wc_format_decimal( $commission->tax_amount, 2 ),
-            'total'         => wc_format_decimal( $commission->commission_total, 2 ),
-            'commission_refunded' => !empty($commission->commission_refunded)? $commission->commission_refunded : 0,
-            'shipping_tax_amount'   => $commission->shipping_tax_amount,
+        
+            // Corrected variable mappings
+            'amount'        => wc_format_decimal( $commission->store_earning, 2 ),          
+            'shipping'      => wc_format_decimal( $commission->store_shipping, 2 ),         
+            'tax'           => wc_format_decimal( $commission->store_tax, 2 ),              
+            'shipping_tax_amount' => wc_format_decimal( $commission->store_shipping_tax, 2 ),
+        
+            // Total payable to vendor (your earlier 'commission_total' does not exist)
+            'total'         => wc_format_decimal( $commission->store_payable, 2 ),
+        
+            // Refund stored as store_refunded
+            'commission_refunded' => wc_format_decimal( $commission->store_refunded ?? 0, 2 ),
+        
+            'marketplace_commission' => wc_format_decimal( $commission->marketplace_commission, 2 ),
+            'facilitator_fee'        => wc_format_decimal( $commission->facilitator_fee, 2 ),
+            'gateway_fee'            => wc_format_decimal( $commission->gateway_fee, 2 ),
+            'platform_fee'           => wc_format_decimal( $commission->platform_fee, 2 ),
+            'discount_applied'       => wc_format_decimal( $commission->discount_applied, 2 ),
+        
             'note'          => $commission->commission_note,
             'created'       => $commission->created_at,
             'items'         => $items,
         ];
+        
         
     
         return rest_ensure_response( $response );
