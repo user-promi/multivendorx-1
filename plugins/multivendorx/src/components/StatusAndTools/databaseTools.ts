@@ -8,7 +8,7 @@ export default {
         'Site errors and events are logged for easy troubleshooting.',
         'multivendorx'
     ),
-    icon: 'adminlib-general-tab',
+    icon: 'adminlib-database',
     submitUrl: 'settings',
     modal: [     
         {

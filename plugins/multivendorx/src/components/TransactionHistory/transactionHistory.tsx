@@ -58,7 +58,7 @@ export const TransactionHistory: React.FC = () => {
             content: {
                 id: 'direct-transaction',
                 name: 'Direct transaction',
-                icon: 'multi-product',
+                icon: 'direct-transaction',
                 hideTabHeader: true,
             },
         },
@@ -78,7 +78,7 @@ export const TransactionHistory: React.FC = () => {
     return (
         <>
             <AdminBreadcrumbs
-                activeTabIcon="adminlib-book"
+                activeTabIcon="adminlib-store-reactivated"
                 tabTitle={
                     selectedStore
                         ? `Storewise Transaction History - ${selectedStore.label}`

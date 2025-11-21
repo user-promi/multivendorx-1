@@ -230,10 +230,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                         ></i>
                                     </div>
                                 </div>
-
-                                <div className="store-owner-details owner">
-                                    <LatestReview store_id={id} />
-                                </div>
+                                <LatestReview store_id={id} />
                             </div>
                         )}
                     </div>

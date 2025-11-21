@@ -8,7 +8,7 @@ export default {
         'Follow the step-by-step wizard to import products, vendors, and settings effortlessly from other multivendor solutions.',
         'multivendorx'
     ),
-    icon: 'adminlib-general-tab',
+    icon: 'adminlib-migration',
     submitUrl: 'settings',
     modal: [         
         {

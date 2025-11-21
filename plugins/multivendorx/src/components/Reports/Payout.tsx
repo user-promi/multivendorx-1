@@ -128,25 +128,25 @@ const Transactions: React.FC = () => {
             id: 'all',
             label: 'All Stores',
             count: response.data.all || 0,
-            icon: 'adminlib-global-community blue',
+            icon: 'adminlib-storefront blue',
           },
           {
             id: 'active',
             label: 'Active Stores',
             count: response.data.active || 0,
-            icon: 'adminlib-star green',
+            icon: 'adminlib-store-policy green',
           },
           {
             id: 'pending',
             label: 'Pending Stores',
             count: response.data.pending || 0,
-            icon: 'adminlib-support yellow',
+            icon: 'adminlib-pending',
           },
           {
             id: 'deactivated',
             label: 'Deactivated Stores',
             count: response.data.deactivated || 0,
-            icon: 'adminlib-store-inventory red',
+            icon: 'adminlib-close-delete red',
           },
         ]);
 

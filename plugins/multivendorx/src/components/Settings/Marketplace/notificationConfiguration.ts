@@ -6,7 +6,7 @@ export default {
     priority: 5,
     name: __('Notification Configuration', 'multivendorx'),
     desc: __('Define what each store role can access and manage within the marketplace. All notifications dispatched by the site can be tracked and reviewed from <b><a href="#&tab=settings&subtab=notifications">Notification Settings</a>', 'multivendorx'),
-    icon: 'adminlib-user-network-icon',
+    icon: 'adminlib-notification',
     submitUrl: 'settings',
     modal: [
         {

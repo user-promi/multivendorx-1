@@ -8,7 +8,7 @@ export default {
         'Manage and switch plugin versions to restore or test previous releases when needed.',
         'multivendorx'
     ),
-    icon: 'adminlib-general-tab',
+    icon: 'adminlib-version-control',
     submitUrl: 'settings',
     modal: [     
     ],

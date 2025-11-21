@@ -21,7 +21,7 @@ const HelpSupport: React.FC = () => {
     return (
         <>
             <AdminBreadcrumbs
-                activeTabIcon="adminlib-cart"
+                activeTabIcon="adminlib-customer-support"
                 tabTitle="Help & Support"
                 description={'Get fast help, expert guidance, and easy-to-follow resources - all in one place.'}
             />
@@ -40,7 +40,7 @@ const HelpSupport: React.FC = () => {
                             <div className="support-wrapper">
                                 <div className="support">
                                     <div className="image">
-                                        <i className="adminlib-cart"></i>
+                                        <i className="adminlib-facebook-fill"></i>
                                     </div>
                                     <div className="details">
                                         <div className="name"><a href="https://www.facebook.com/groups/226246620006065/" target="_blank" rel="noopener noreferrer">Facebook community</a></div>
@@ -73,6 +73,11 @@ const HelpSupport: React.FC = () => {
                                     <div className="details">
                                         <div className="name"><a href="https://tawk.to/chat/5d2eebf19b94cd38bbe7c9ad/1fsg8cq8n" target="_blank" rel="noopener noreferrer">Live chat</a></div>
                                         <div className="des">Get real-time support from our team for setup, troubleshooting, and guidance.</div>
+                                    </div>
+                                </div>
+                                <div className="support">
+                                    <div className="image">
+                                        <i className="adminlib-cart"></i>
                                     </div>
                                     <div className="details">
                                         <div className="name"><a href="https://discord.com/channels/1376811097134469191/1376811102020829258" target="_blank" rel="noopener noreferrer">Coding support</a></div>

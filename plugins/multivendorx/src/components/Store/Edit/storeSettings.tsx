@@ -204,12 +204,12 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
         return (
             <div className={`admin-badge ${badge.isValid ? 'yellow' : 'red'}`}>
                 {isFirst && (
-                    <i className="adminlib-star primary-icon"></i>
+                    <i className="adminlib-star primary-email"></i>
                 )}
                 <i className="adminlib-mail"></i>
                 <span>{badge.email}</span>
                 <i
-                    className="adminlib-delete remove-btn"
+                    className="adminlib-delete delete-btn"
                     onClick={() => onRemove(badge.id)}
                 ></i>
             </div>

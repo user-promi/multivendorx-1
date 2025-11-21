@@ -8,7 +8,7 @@ export default {
         'Manage inventory alerts and stock monitoring settings for stores in your marketplace.',
         'multivendorx'
     ),
-    icon: 'adminlib-general-tab',
+    icon: 'adminlib-store-inventory',
     submitUrl: 'settings',
     modal: [
         {
