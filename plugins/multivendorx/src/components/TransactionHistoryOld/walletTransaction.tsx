@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { Table, getApiLink, TableCell, CalendarInput, CommonPopup, BasicInput, ToggleSetting, TextArea } from 'zyra';
+import { Table, getApiLink, TableCell, CalendarInput } from 'zyra';
 import {
     ColumnDef,
     RowSelectionState,
@@ -287,17 +287,6 @@ const TransactionBulkActions: React.FC<{
 
 const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ storeId, dateRange }) => {
     const [data, setData] = useState<StoreRow[] | null>(null);
-    const [wallet, setWallet] = useState<any[]>([]);
-    const [recentDebits, setRecentDebits] = useState<any[]>([]);
-    const [storeData, setStoreData] = useState<any>(null);
-    const [requestWithdrawal, setRequestWithdrawal] = useState(false);
-    const [validationErrors, setValidationErrors] = useState<{ amount?: string; paymentMethod?: string }>({});
-    const [amount, setAmount] = useState<number>(0);
-    const [error, setError] = useState<string>("");
-    const [note, setNote] = useState<any | "">("");
-    const freeAmount = amount ? amount * 0.05 : 0;
-    const totalAmount = amount ? amount + freeAmount : 0;
-
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
     const [pagination, setPagination] = useState<PaginationState>({
@@ -305,6 +294,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
         pageSize: 10,
     });
     const [pageCount, setPageCount] = useState(0);
+    const [activeTab, setActiveTab] = useState("products");
     const [allStores, setAllStores] = useState<any[]>([]);
     const [filteredStores, setFilteredStores] = useState<any[]>([]);
     const [selectedStore, setSelectedStore] = useState<any>(null);
@@ -456,6 +446,9 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             ),
         },
         {
+            // id: 'id',
+            // accessorKey: 'id',
+            // enableSorting: true,
             header: __("id", "multivendorx"),
             cell: ({ row }) => <TableCell>#{row.original.id}</TableCell>,
         },
@@ -491,6 +484,96 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                 );
             },
         },
+        // {
+        //     // id: 'order_id',
+        //     // accessorKey: 'order_id',
+        //     // enableSorting: true,
+        //     header: __('Transaction Type', 'multivendorx'),
+        //     cell: ({ row }) => {
+        //         const type = row.original.transaction_type?.toLowerCase();
+        //         const orderId = row.original.order_details;
+        //         const paymentMethod = row.original.payment_method;
+
+        //         // Format helper → makes text human-readable
+        //         const formatText = (text) =>
+        //             text
+        //                 ?.replace(/-/g, ' ')                // replace hyphens with spaces
+        //                 ?.replace(/\b\w/g, (c) => c.toUpperCase()) // capitalize each word
+        //             || '-';
+
+        //         let displayValue = '-';
+        //         let content = displayValue;
+
+        //         // Dynamic output
+        //         if (type === 'commission') {
+        //             displayValue = `Commission #${orderId || '-'}`;
+        //             if (orderId) {
+        //                 const editLink = `${appLocalizer.site_url}/wp-admin/post.php?post=${orderId}&action=edit`;
+        //                 content = (
+        //                     <a href={editLink} target="_blank" rel="noopener noreferrer">
+        //                         {displayValue}
+        //                     </a>
+        //                 );
+        //             } else {
+        //                 content = displayValue;
+        //             }
+        //         } else if (type === 'withdrawal') {
+        //             displayValue = `Withdrawal - ${formatText(paymentMethod)}`;
+        //             content = displayValue;
+        //         } else if (row.original.transaction_type) {
+        //             displayValue = formatText(row.original.transaction_type);
+        //             content = displayValue;
+        //         }
+
+        //         return <TableCell title={displayValue}>{content}</TableCell>;
+        //     },
+        // },
+        // {
+        //     header: __('Transaction Type', 'multivendorx'),
+        //     cell: ({ row }) => {
+        //         const type = row.original.transaction_type?.toLowerCase();
+        //         const commissionId = row.original.commission_id;
+        //         const paymentMethod = row.original.payment_method;
+
+        //         const formatText = (text) =>
+        //             text
+        //                 ?.replace(/-/g, ' ')
+        //                 ?.replace(/\b\w/g, (c) => c.toUpperCase())
+        //             || '-';
+
+        //         let displayValue = '-';
+        //         let content = displayValue;
+
+        //         //Commission Transaction — clickable number
+        //         if (type === 'commission') {
+        //             displayValue = `Commission #${commissionId || '-'}`;
+        //             if (commissionId) {
+        //                 content = (
+        //                     <span className="link-item"
+        //                         onClick={() => {
+        //                             setSelectedCommissionId(commissionId);
+        //                             setViewCommission(true);
+        //                         }}
+        //                     >
+        //                         {displayValue}
+        //                     </span>
+        //                 );
+        //             } else {
+        //                 content = displayValue;
+        //             }
+        //         }
+        //         else if (type === 'withdrawal') {
+        //             displayValue = `Withdrawal - ${formatText(paymentMethod)}`;
+        //             content = displayValue;
+        //         }
+        //         else if (row.original.transaction_type) {
+        //             displayValue = formatText(row.original.transaction_type);
+        //             content = displayValue;
+        //         }
+
+        //         return <TableCell title={displayValue}>{content}</TableCell>;
+        //     },
+        // },
         {
             header: __('Transaction Type', 'multivendorx'),
             cell: ({ row }) => {
@@ -532,7 +615,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
 
                 else if (type === 'refund') {
                     displayValue = `Refund - Order #${orderId || '-'}`;
-
+                
                     const orderEditUrl = `${appLocalizer.site_url}/wp-admin/admin.php?page=wc-orders&action=edit&id=${orderId}`;
                     content = orderId ? (
                         <a
@@ -547,7 +630,10 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                         displayValue
                     );
                 }
+                
+                
 
+                // Generic fallback
                 else if (row.original.transaction_type) {
                     displayValue = formatText(row.original.transaction_type);
                     content = displayValue;
@@ -557,6 +643,9 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             },
         },
         {
+            // id: 'created_at',
+            // accessorKey: 'created_at',
+            // enableSorting: true,
             header: __('Date', 'multivendorx'),
             cell: ({ row }) => {
                 const rawDate = row.original.date;
@@ -573,6 +662,10 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             },
         },
         {
+            // id: 'credit',
+            // accessorKey: 'credit',
+            // enableSorting: true,
+            // accessorFn: row => parseFloat(row.credit || '0'),
             header: __('Credit', 'multivendorx'),
             cell: ({ row }) => {
                 const credit = row.original.credit;
@@ -580,6 +673,10 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             },
         },
         {
+            // id: 'debit',
+            // accessorKey: 'debit',
+            // enableSorting: true,
+            // accessorFn: row => parseFloat(row.debit || '0'),
             header: __('Debit', 'multivendorx'),
             cell: ({ row }) => {
                 const debit = row.original.debit;
@@ -587,6 +684,9 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             },
         },
         {
+            // id: 'balance',
+            // accessorKey: 'balance',
+            // enableSorting: true,
             header: __('Balance', 'multivendorx'),
             cell: ({ row }) => {
                 const balance = row.original.balance;
@@ -658,317 +758,57 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             })
             .catch((error) => console.error("Error fetching stores:", error));
     }, []);
+
     // 🔹 Fetch wallet/transaction overview whenever store changes
     useEffect(() => {
         if (!storeId) return;
 
         axios({
             method: 'GET',
-            url: getApiLink(appLocalizer, `transaction/${storeId}`),
+            url: getApiLink(appLocalizer, `reports/${storeId}`),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
         })
             .then((response) => {
-                setWallet(response?.data || {});
-            })
+                const data = response?.data || {};
 
-        axios({
-            method: "GET",
-            url: getApiLink(appLocalizer, `store/${storeId}`),
-            headers: { "X-WP-Nonce": appLocalizer.nonce },
-        })
-            .then((response) => {
-                setStoreData(response.data || {});
-            })
+                const dynamicOverview = [
+                    { id: 'commission', label: 'Commission', count: formatCurrency(data.commission_total), icon: 'adminlib-star green' },
+                    { id: 'shipping', label: 'Shipping Tax', count: formatCurrency(data.shipping_amount), icon: 'adminlib-clock blue' },
+                    { id: 'facilitator', label: 'Facilitator Fee', count: formatCurrency(data.facilitator_fee), icon: 'adminlib-star yellow' },
+                    { id: 'gateway_fees', label: 'Gateway Fees', count: formatCurrency(data.gateway_fee), icon: 'adminlib-credit-card red' },
+                    { id: 'total_balance', label: 'Total Balance', count: formatCurrency(data.balance), icon: 'adminlib-star green' },
+                ];
 
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'transaction'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: {
-                page: 1,
-                row: 3,
-                store_id: storeId,
-                filter_status: 'Dr',
-                transaction_type: 'Withdrawal',
-                orderBy: 'created_at',
-                order: 'DESC',
-            },
-        })
-            .then((response) => {
-                setRecentDebits(response.data.transaction || []);
-                console.log("last 3", response.data.transaction)
+
+                setOverview(dynamicOverview);
             })
-            .catch((error) => {
-                console.error('Error fetching recent debit transactions:', error);
-                setRecentDebits([]);
+            .catch(() => {
+                setOverview([
+                    { id: 'total_balance', label: 'Total Balance', count: `0`, icon: 'adminlib-wallet' },
+                    { id: 'upcoming', label: 'Upcoming', count: `0`, icon: 'adminlib-clock' },
+                    { id: 'locked', label: 'Locked', count: `0`, icon: 'adminlib-lock' },
+                    { id: 'withdrawable', label: 'Withdrawable', count: `0`, icon: 'adminlib-cash' },
+                    { id: 'commission', label: 'Commission', count: `0`, icon: 'adminlib-star' },
+                    { id: 'gateway_fees', label: 'Gateway Fees', count: `0`, icon: 'adminlib-credit-card' },
+                ]);
             });
     }, [storeId]);
-    const handleWithdrawal = () => {
-        // Clear all old errors first
-        setValidationErrors({});
-
-        const newErrors: { amount?: string; paymentMethod?: string } = {};
-
-        // Amount validations
-        if (!amount || amount <= 0) {
-            newErrors.amount = "Please enter a valid amount.";
-        } else if (amount > (wallet.available_balance ?? 0)) {
-            newErrors.amount = `Amount cannot be greater than available balance (${formatCurrency(wallet.available_balance)})`;
-        }
-
-        // Payment method validation
-        if (!paymentMethod) {
-            newErrors.paymentMethod = "Please select a payment processor.";
-        }
-
-        // If any validation errors exist, show them and stop
-        if (Object.keys(newErrors).length > 0) {
-            setValidationErrors(newErrors);
-            return;
-        }
-
-        // Clear old generic error
-        setError("");
-
-        // ✅ Submit request
-        axios({
-            method: 'PUT',
-            url: getApiLink(appLocalizer, `transaction/${selectedStore?.value}`),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            data: {
-                disbursement: true,
-                amount,
-                store_id: selectedStore?.value,
-                method: paymentMethod,
-                note,
-            },
-        })
-            .then((res) => {
-                if (res.data.success) {
-                    setRequestWithdrawal(false);
-                    resetWithdrawalForm();
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 200);
-                } else if (res.data?.message) {
-                    setError(`Server: ${res.data.message}`);
-                }
-            })
-            .catch((err) => {
-                setError("Server: Failed to submit withdrawal. Please try again.");
-                console.error(err);
-            });
-    };
-
-    const AmountChange = (value: number) => {
-        setAmount(value);
-    };
 
     return (
         <>
-            <div className="general-wrapper">
-                <div className="row">
-                    <div className="col">
-                        <div className="data-card-wrapper">
-                            <div className="data-card">
-                                <div className="title">Wallet balance</div>
-                                <div className="number">{formatCurrency(wallet.wallet_balance)} <i className="adminlib-wallet"></i></div>
-                            </div>
-                            <div className="data-card">
-                                <div className="title">Upcoming balance</div>
-                                <div className="number">{formatCurrency(wallet.locking_balance)} <i className="adminlib-cash "></i></div>
-                            </div>
+            {/* <div className="analytics-container wallet">
+                {overview.map((item, idx) => (
+                    <div key={idx} className="analytics-item">
+                        <div className="analytics-icon">
+                            <i className={item.icon}></i>
                         </div>
-
-                        {recentDebits.length > 0 ? (
-                            <div className="column debit-transactions">
-                                <div className="card-header">
-                                    <div className="left">
-                                        <div className="title">Recent Debit Transactions</div>
-                                    </div>
-                                </div>
-                                {recentDebits.map((txn) => {
-                                    // Format payment method nicely (e.g., "stripe-connect" -> "Stripe Connect")
-                                    const formattedPaymentMethod = txn.payment_method
-                                        ? txn.payment_method
-                                            .replace(/[-_]/g, ' ')                // replace - and _ with spaces
-                                            .replace(/\b\w/g, char => char.toUpperCase()) // capitalize each word
-                                        : 'N/A';
-
-                                    return (
-                                        <div key={txn.id} className="info-item">
-                                            <div className="details-wrapper">
-                                                <div className="details">
-                                                    <div className="name">{formattedPaymentMethod}</div>
-                                                    <div className="des">
-                                                        {new Date(txn.date).toLocaleDateString("en-US", {
-                                                            month: "short",
-                                                            day: "2-digit",
-                                                            year: "numeric",
-                                                        })}
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div
-                                                className={`right-details ${parseFloat(txn.debit) < 0 ? 'negative' : 'positive'
-                                                    }`}
-                                            >
-                                                <div className={`price ${parseFloat(txn.debit) < 0 ? 'negative' : 'positive'
-                                                    }`}>   {formatCurrency(txn.debit)}</div>
-                                            </div>
-
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        ) : (
-                            <div className="column">
-                                <div className="card-header">
-                                    <div className="left">
-                                        <div className="title">Recent payouts</div>
-                                    </div>
-                                </div>
-                                <div className="des">
-                                    No recent payouts transactions found.
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                    <div className="column transaction">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    Withdrawable balance
-                                </div>
-                            </div>
-                        </div>
-                        <div className="payout-wrapper">
-                            <div className="price">
-                                {formatCurrency(wallet.available_balance)}
-                            </div>
-
-                            {storeData?.request_withdrawal_amount ? (
-                                <>
-                                    <div className="des">
-                                        Last withdrawal request:
-                                        {formatCurrency(storeData.request_withdrawal_amount)}, is <strong>Pending</strong>.
-                                    </div>
-                                    <div className="payout-notice">
-                                        <i className="adminlib-error"></i>
-                                        Please clear the pending request before disbursing new payments.
-                                    </div>
-                                    <div className="admin-btn btn-purple-bg disabled" style={{ opacity: 0.5, pointerEvents: 'none' }}>
-                                        Disburse payment
-                                    </div>
-                                </>
-                            ) : (
-                                <>
-                                    <div className="des">
-                                        Current available balance ready to transfer
-                                        {wallet?.reserve_balance ? (
-                                            <>,&nbsp;'Excluding Reserve Balance' {formatCurrency(wallet.reserve_balance)}</>
-                                        ) : null}
-                                    </div>
-                                    <div className="admin-btn btn-purple-bg" onClick={() => setRequestWithdrawal(true)}>
-                                        Disburse payment
-                                    </div>
-                                </>
-                            )}
+                        <div className="details">
+                            <div className="number">{item.count}</div>
+                            <div className="text">{item.label}</div>
                         </div>
                     </div>
-                </div>
-
-                <CommonPopup
-                    open={requestWithdrawal}
-                    width="450px"
-                    height="75%"
-                    header={
-                        <>
-                            <div className="title">
-                                <i className="adminlib-wallet"></i>
-                                Disburse payment
-                            </div>
-                            <i
-                                className="icon adminlib-close"
-                                onClick={() => {
-                                    setRequestWithdrawal(false);
-                                    resetWithdrawalForm(); //reset form on close
-                                }}
-                            ></i>
-                            <div className="des">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi quasi saepe temporibus aperiam voluptate quisquam.</div>
-                        </>
-                    }
-                    footer={
-                        <>
-                            <div
-                                className="admin-btn btn-purple"
-                                onClick={() => handleWithdrawal()}
-                            >
-                                Disburse
-                            </div>
-
-                        </>
-                    }
-                >
-                    <div className="content">
-                        {/* start left section */}
-                        <div className="form-group-wrapper">
-                            <div className="available-balance">Available balance <div>{formatCurrency(wallet.wallet_balance)}</div></div>
-
-                            <div className="form-group">
-                                <label htmlFor="amount">Amount</label>
-
-                                <BasicInput
-                                    type="number"
-                                    name="amount"
-                                    value={amount}
-                                    onChange={(e) => AmountChange(Number(e.target.value))}
-                                />
-
-                                <div className="free-wrapper">
-                                    <span><b>₹{totalAmount} </b>Total</span>
-                                    <span><b>₹{freeAmount} Free </b>(5%)</span>
-                                </div>
-
-                                {validationErrors.amount && (
-                                    <div className="invalid-massage">{validationErrors.amount}</div>
-                                )}
-                            </div>
-
-                            <div className="form-group">
-                                <label htmlFor="payment_method">Payment Processor</label>
-                                {/* <ToggleSetting
-                                    wrapperClass="setting-form-input"
-                                    descClass="settings-metabox-description"
-                                    description={
-                                        optionList.length > 0
-                                            ? "Choose your preferred payment processor."
-                                            : "No payment methods are available for this store."
-                                    }
-                                    options={demoOptions}
-                                    value={paymentMethod || ""}
-                                    onChange={(value) => setPaymentMethod(value)}
-                                /> */}
-                                {validationErrors.paymentMethod && (
-                                    <div className="invalid-massage">{validationErrors.paymentMethod}</div>
-                                )}
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="note">Note</label>
-                                <TextArea
-                                    name="note"
-                                    wrapperClass="setting-from-textarea"
-                                    inputClass="textarea-input"
-                                    descClass="settings-metabox-description"
-                                    value={note}
-                                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNote(e.target.value)}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </CommonPopup>
-            </div>
+                ))}
+            </div> */}
             <div className="admin-table-wrapper">
                 <Table
                     data={data}

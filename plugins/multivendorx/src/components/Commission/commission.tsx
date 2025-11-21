@@ -268,6 +268,11 @@ const Commission: React.FC = () => {
                         count: response.data.paid || 0,
                     },
                     {
+                        key: 'unpaid',
+                        name: 'Unpaid',
+                        count: response.data.unpaid || 0,
+                    },
+                    {
                         key: 'refunded',
                         name: 'Refunded',
                         count: response.data.refunded || 0,
@@ -334,9 +339,6 @@ const Commission: React.FC = () => {
                 if (filterData?.typeCount && filterData.typeCount !== 'all') {
                     params.status = filterData.typeCount;
                 }
-
-                // Note: We don't send page/row params to get ALL data
-                // Note: We don't send IDs since this is for all filtered data
 
                 // Make API request for CSV
                 const response = await axios({
@@ -474,6 +476,82 @@ const Commission: React.FC = () => {
             header: __('Order Amount', 'multivendorx'),
             cell: ({ row }) => <TableCell title={row.original.totalOrderAmount ? `${row.original.totalOrderAmount}` : '-'}>{formatCurrency(row.original.totalOrderAmount)}</TableCell>,
         },
+        // {
+        //     id: 'commission-summary',
+        //     enableSorting: true,
+        //     header: __('Commission Summary', 'multivendorx'),
+        //     cell: ({ row }) => {
+        //         const isExpanded = expandedRows[row.original.id!];
+
+        //         return (
+        //             <TableCell>
+        //                 <ul className={`details ${isExpanded ? '' : 'overflow'}`}>
+        //                     <li>
+        //                         <div className="item">
+        //                             <div className="des">Commission Earned</div>
+        //                             <div className="title">{formatCurrency(row.original.commissionAmount)}</div>
+        //                         </div>
+        //                     </li>
+
+        //                     <li>
+        //                         <div className="item">
+        //                             <div className="des">Shipping</div>
+        //                             <div className="title">+ {formatCurrency(row.original.shippingAmount)}</div>
+        //                         </div>
+        //                         <div className="item">
+        //                             <div className="des">Tax</div>
+        //                             <div className="title">+ {formatCurrency(row.original.taxAmount)}</div>
+        //                         </div>
+        //                     </li>
+
+        //                     <li>
+        //                         {modules.includes('marketplace-gateway') && (
+        //                             <div className="item">
+        //                                 <div className="des">Gateway Fee</div>
+        //                                 <div className="title">- {formatCurrency(row.original.gatewayFee)}</div>
+        //                             </div>
+        //                         )}
+        //                         {modules.includes('facilitator') && (
+        //                             <div className="item">
+        //                                 <div className="des">Facilitator Fee</div>
+        //                                 <div className="title">- {formatCurrency(row.original.facilitatorFee)}</div>
+        //                             </div>
+        //                         )}
+        //                         {modules.includes('marketplace-fee') && (
+        //                             <div className="item">
+        //                                 <div className="des">Marketplace Fee</div>
+        //                                 <div className="title">- {formatCurrency(row.original.marketplaceFee)}</div>
+        //                             </div>
+        //                         )}
+        //                     </li>
+
+        //                     <span
+        //                         className="more-btn"
+        //                         onClick={() =>
+        //                             setExpandedRows(prev => ({
+        //                                 ...prev,
+        //                                 [row.original.id!]: !prev[row.original.id!]
+        //                             }))
+        //                         }
+        //                     >
+        //                         {isExpanded ? (
+        //                             <>Less <i className="adminlib-arrow-up"></i></>
+        //                         ) : (
+        //                             <>More <i className="adminlib-arrow-down"></i></>
+        //                         )}
+        //                     </span>
+        //                 </ul>
+        //             </TableCell>
+        //         );
+        //     },
+        // },
+        // {
+        //     id: 'commission_total',
+        //     accessorKey: 'commission_total',
+        //     enableSorting: true,
+        //     header: __('Total Earned', 'multivendorx'),
+        //     cell: ({ row }) => <TableCell title={''}>{formatCurrency(row.original.commissionTotal)}</TableCell>,
+        // },
         {
             id: 'commission-summary',
             enableSorting: true,
@@ -484,21 +562,29 @@ const Commission: React.FC = () => {
                 return (
                     <TableCell>
                         <ul className={`details ${isExpanded ? '' : 'overflow'}`}>
+
                             <li>
                                 <div className="item">
                                     <div className="des">Commission Earned</div>
-                                    <div className="title">{formatCurrency(row.original.commissionAmount)}</div>
+                                    <div className="title">
+                                        {formatCurrency(row.original.storeEarning)}
+                                    </div>
                                 </div>
                             </li>
 
                             <li>
                                 <div className="item">
                                     <div className="des">Shipping</div>
-                                    <div className="title">+ {formatCurrency(row.original.shippingAmount)}</div>
+                                    <div className="title">
+                                        + {formatCurrency(row.original.shippingAmount)}
+                                    </div>
                                 </div>
+
                                 <div className="item">
                                     <div className="des">Tax</div>
-                                    <div className="title">+ {formatCurrency(row.original.taxAmount)}</div>
+                                    <div className="title">
+                                        + {formatCurrency(row.original.taxAmount)}
+                                    </div>
                                 </div>
                             </li>
 
@@ -506,19 +592,27 @@ const Commission: React.FC = () => {
                                 {modules.includes('marketplace-gateway') && (
                                     <div className="item">
                                         <div className="des">Gateway Fee</div>
-                                        <div className="title">- {formatCurrency(row.original.gatewayFee)}</div>
+                                        <div className="title">
+                                            - {formatCurrency(row.original.gatewayFee)}
+                                        </div>
                                     </div>
                                 )}
+
                                 {modules.includes('facilitator') && (
                                     <div className="item">
                                         <div className="des">Facilitator Fee</div>
-                                        <div className="title">- {formatCurrency(row.original.facilitatorFee)}</div>
+                                        <div className="title">
+                                            - {formatCurrency(row.original.facilitatorFee)}
+                                        </div>
                                     </div>
                                 )}
+
                                 {modules.includes('marketplace-fee') && (
                                     <div className="item">
                                         <div className="des">Marketplace Fee</div>
-                                        <div className="title">- {formatCurrency(row.original.marketplaceFee)}</div>
+                                        <div className="title">
+                                            - {formatCurrency(row.original.marketplaceFee)}
+                                        </div>
                                     </div>
                                 )}
                             </li>
@@ -544,65 +638,16 @@ const Commission: React.FC = () => {
             },
         },
         {
-            id: 'commission_total',
-            accessorKey: 'commission_total',
+            id: 'store_payable',
+            accessorKey: 'store_payable',
             enableSorting: true,
             header: __('Total Earned', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={''}>{formatCurrency(row.original.commissionTotal)}</TableCell>,
+            cell: ({ row }) => (
+                <TableCell title={''}>
+                    {formatCurrency(row.original.storePayable)}
+                </TableCell>
+            ),
         },
-        // {
-        //     id: 'facilitatorFee',
-        //     accessorKey: 'facilitatorFee',
-        //     accessorFn: row => parseFloat(row.facilitatorFee || '0'),
-        //     enableSorting: true,
-        //     header: __('Facilitator Fee', 'multivendorx'),
-        //     cell: ({ row }) => <TableCell title={row.original.facilitatorFee ? `${appLocalizer.currency_symbol}${row.original.facilitatorFee}` : '-'}>{formatCurrency(row.original.facilitatorFee)}</TableCell>,
-        // },
-        // {
-        //     id: 'gatewayFee',
-        //     accessorKey: 'gatewayFee',
-        //     accessorFn: row => parseFloat(row.gatewayFee || '0'),
-        //     enableSorting: true,
-        //     header: __('Gateway Fee', 'multivendorx'),
-        //     cell: ({ row }) => <TableCell title={row.original.gatewayFee ? `${appLocalizer.currency_symbol}${row.original.gatewayFee}` : '-'}>{formatCurrency(row.original.gatewayFee)}</TableCell>,
-        // },
-        // {
-        //     id: 'shippingAmount',
-        //     accessorKey: 'shippingAmount',
-        //     accessorFn: row => parseFloat(row.shippingAmount || '0'),
-        //     enableSorting: true,
-        //     header: __('Shipping Amount', 'multivendorx'),
-        //     cell: ({ row }) => <TableCell title={row.original.shippingAmount ? `${appLocalizer.currency_symbol}${row.original.shippingAmount}` : '-'}>{formatCurrency(row.original.shippingAmount)}</TableCell>,
-        // },
-        // {
-        //     id: 'taxAmount',
-        //     accessorKey: 'taxAmount',
-        //     accessorFn: row => parseFloat(row.taxAmount || '0'),
-        //     enableSorting: true,
-        //     header: __('Tax Amount', 'multivendorx'),
-        //     cell: ({ row }) => <TableCell title={row.original.taxAmount ? `${appLocalizer.currency_symbol}${row.original.taxAmount}` : '-'}>{formatCurrency(row.original.taxAmount)}</TableCell>,
-        // },
-        // {
-        //     id: 'commissionTotal',
-        //     accessorKey: 'commissionTotal',
-        //     accessorFn: row => parseFloat(row.commissionTotal || '0'),
-        //     enableSorting: true,
-        //     header: __('Commi.. Total', 'multivendorx'),
-        //     cell: ({ row }) => <TableCell title={row.original.commissionTotal ? `${appLocalizer.currency_symbol}${row.original.commissionTotal}` : '-'}>{formatCurrency(row.original.commissionTotal)}</TableCell>,
-        // },
-        // {
-        //     header: __('Paid Status', 'multivendorx'),
-        //     cell: ({ row }) => (
-        //         <TableCell title={row.original.status || '-'}>
-        //             <span className={`admin-badge ${row.original.status === 'paid' ? 'green' : 'red'}`}>
-        //                 {row.original.status
-        //                     ? row.original.status.charAt(0).toLocaleUpperCase() + row.original.status.slice(1)
-        //                     : ''}
-
-        //             </span>
-        //         </TableCell>
-        //     ),
-        // },
         {
             header: __('Paid Status', 'multivendorx'),
             cell: ({ row }) => {
@@ -618,7 +663,7 @@ const Commission: React.FC = () => {
                             return <span className="admin-badge green">Paid</span>;
                         case 'unpaid':
                             return <span className="admin-badge red">Unpaid</span>;
-                            case 'Refunded':
+                        case 'Refunded':
                             return <span className="admin-badge red">Unpaid</span>;
                         // default:
                         //     return <span className="admin-badge yellow">{formattedStatus}</span>;

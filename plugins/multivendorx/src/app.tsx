@@ -18,13 +18,13 @@ import Announcements from './components/Announcements/announcements';
 import Knowledgebase from './components/Knowledgebase/knowledgebase';
 import Blogs from './components/Blogs/blogs';
 import Commission from './components/Commission/commission';
-import TransactionHistory from './components/TransactionHistory/transactionHistory';
 import Analytics from './components/Reports/Reports';
 import Advertisement from './components/Advertisement/Advertisement';
 import HelpSupport from './components/HelpSupport/HelpSupport';
 import ApprovalQueue from './components/ApprovalQueue/approvalQueue';
 import HeaderNotification from './components/Notifications/HeaderNotifications';
 import Notifications from './components/Notifications/Notifications';
+import TransactionHistory from './components/TransactionHistory/transactionHistory';
 
 localStorage.setItem('force_multivendorx_context_reload', 'true');
 

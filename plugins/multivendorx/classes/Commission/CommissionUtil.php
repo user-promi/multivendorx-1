@@ -181,19 +181,19 @@ class CommissionUtil {
     
         $table_name = $wpdb->prefix . Utill::TABLES['commission'];
     
-        //If $top_stores = true, fetch top N stores by total order amount
+        // If $top_stores = true, fetch top N stores by total order value
         if ( $top_stores ) {
             $query = $wpdb->prepare("
                 SELECT 
                     store_id,
-                    COALESCE(SUM(total_order_amount), 0) AS total_order_amount,
+                    COALESCE(SUM(total_order_value), 0) AS total_order_amount,
                     COALESCE(SUM(facilitator_fee), 0) AS facilitator_fee,
                     COALESCE(SUM(gateway_fee), 0) AS gateway_fee,
-                    COALESCE(SUM(shipping_amount), 0) AS shipping_amount,
-                    COALESCE(SUM(tax_amount), 0) AS tax_amount,
-                    COALESCE(SUM(shipping_tax_amount), 0) AS shipping_tax_amount,
-                    COALESCE(SUM(commission_total), 0) AS commission_total,
-                    COALESCE(SUM(commission_refunded), 0) AS commission_refunded
+                    COALESCE(SUM(store_shipping), 0) AS shipping_amount,
+                    COALESCE(SUM(store_tax), 0) AS tax_amount,
+                    COALESCE(SUM(store_shipping_tax), 0) AS shipping_tax_amount,
+                    COALESCE(SUM(store_payable), 0) AS commission_total,
+                    COALESCE(SUM(store_refunded), 0) AS commission_refunded
                 FROM {$table_name}
                 GROUP BY store_id
                 ORDER BY total_order_amount DESC
@@ -205,9 +205,10 @@ class CommissionUtil {
             return array_map( function( $row ) {
                 $store      = new Store( $row->store_id );
                 $store_name = $store ? $store->get('name') : '';
+    
                 return [
                     'store_id'            => intval( $row->store_id ),
-                    'store_name'           => $store_name,
+                    'store_name'          => $store_name,
                     'total_order_amount'  => floatval( $row->total_order_amount ),
                     'facilitator_fee'     => floatval( $row->facilitator_fee ),
                     'gateway_fee'         => floatval( $row->gateway_fee ),
@@ -220,17 +221,17 @@ class CommissionUtil {
             }, $results );
         }
     
-        //Otherwise, return summary for a specific store (existing behavior)
+        // Summary for a specific store
         $query = "
             SELECT 
-                COALESCE(SUM(total_order_amount), 0) AS total_order_amount,
+                COALESCE(SUM(total_order_value), 0) AS total_order_amount,
                 COALESCE(SUM(facilitator_fee), 0) AS facilitator_fee,
                 COALESCE(SUM(gateway_fee), 0) AS gateway_fee,
-                COALESCE(SUM(shipping_amount), 0) AS shipping_amount,
-                COALESCE(SUM(tax_amount), 0) AS tax_amount,
-                COALESCE(SUM(shipping_tax_amount), 0) AS shipping_tax_amount,
-                COALESCE(SUM(commission_total), 0) AS commission_total,
-                COALESCE(SUM(commission_refunded), 0) AS commission_refunded
+                COALESCE(SUM(store_shipping), 0) AS shipping_amount,
+                COALESCE(SUM(store_tax), 0) AS tax_amount,
+                COALESCE(SUM(store_shipping_tax), 0) AS shipping_tax_amount,
+                COALESCE(SUM(store_payable), 0) AS commission_total,
+                COALESCE(SUM(store_refunded), 0) AS commission_refunded
             FROM {$table_name}
         ";
     
@@ -251,6 +252,7 @@ class CommissionUtil {
             'commission_refunded'  => floatval( $result->commission_refunded ),
         ];
     }
+    
     
     
 }
