@@ -973,7 +973,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                         {/* Updated Email Section */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="store-email">Status</label>
+                                <label htmlFor="store-email">Current status</label>
                                 <SelectInput
                                     name="status"
                                     value={formData.status}
@@ -995,14 +995,14 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                    Manage store Slug
+                                    Manage storefront link
                                 </div>
                             </div>
                         </div>
 
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="store-email">Slug</label>
+                                <label htmlFor="store-email">Current storefront link</label>
                                 <BasicInput
                                     name="slug"
                                     wrapperClass="setting-form-input"
