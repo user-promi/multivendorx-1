@@ -5,7 +5,7 @@ export default {
     priority: 6,
     name: __( 'Migration', 'multivendorx' ),
     desc: __(
-        'Controls how stores are onboarded and what access they get.',
+        'Follow the step-by-step wizard to import products, vendors, and settings effortlessly from other multivendor solutions.',
         'multivendorx'
     ),
     icon: 'adminlib-general-tab',
@@ -14,10 +14,10 @@ export default {
         {
             key: 'migrate',
             type: 'button',
-            name: __( 'Multivendor Migrate', 'multivendorx' ),
-            label: __( 'Multivendor Migration', 'multivendorx' ),
+            name: __( 'Run migration wizard', 'multivendorx' ),
+            label: __( 'Multivendor migration', 'multivendorx' ),
             desc: __(
-                'With this tool, you can transfer valuable data from your previous marketplace',
+                'Seamlessly transfer your store data from your previous multivendor plugin (i.e. Dokan, WCFM and WC Vendor) using this migration tool.',
                 'multivendorx'
             ),
         },

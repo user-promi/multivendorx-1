@@ -16,7 +16,7 @@ export default {
             key: 'custom_css_product_page',
             type: 'textarea',
             desc: __(
-                'Put your custom css here, to customize the store dashbaord.',
+                'Add your own CSS here to modify and style the dashboard to match your preferences.',
                 'multivendorx'
             ),
             label: __( 'Addional CSS', 'multivendorx' ),
