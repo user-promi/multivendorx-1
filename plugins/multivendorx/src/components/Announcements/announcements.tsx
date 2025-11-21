@@ -75,6 +75,7 @@ export const Announcements: React.FC = () => {
         try {
             const response = await axios.get(getApiLink(appLocalizer, 'store'), {
                 headers: { 'X-WP-Nonce': appLocalizer.nonce },
+                params:{filter_status:'active'}
             });
             const stores = response.data?.stores || [];
             const options = [
@@ -168,12 +169,12 @@ export const Announcements: React.FC = () => {
         try {
             await axios({
                 method: 'PUT',
-                url: getApiLink(appLocalizer, 'knowledge'),
+                url: getApiLink(appLocalizer, 'announcement'),
                 headers: { 'X-WP-Nonce': appLocalizer.nonce },
                 data: { bulk: true, action, ids: selectedIds },
             });
             await fetchTotalRows();
-            requestData(pagination.pageSize, pagination.pageIndex + 1, page);
+            requestData(pagination.pageSize, pagination.pageIndex + 1);
             setRowSelection({});
         } catch (err) {
             setError(__('Failed to perform bulk action', 'multivendorx'));
@@ -311,7 +312,7 @@ export const Announcements: React.FC = () => {
                     },
                     {
                         key: 'publish',
-                        name: 'Publish',
+                        name: 'Published',
                         count: response.data.publish || 0,
                     },
                     {
@@ -419,7 +420,7 @@ export const Announcements: React.FC = () => {
                 const getStatusBadge = (status: string) => {
                     switch (status) {
                         case 'publish':
-                            return <span className="admin-badge green">Publish</span>;
+                            return <span className="admin-badge green">Published</span>;
                         case 'pending':
                             return <span className="admin-badge yellow">Pending</span>;
                         case 'draft':
@@ -661,6 +662,15 @@ export const Announcements: React.FC = () => {
                                             ...prev,
                                             stores: selectedValues,
                                         }));
+
+                                        if (selectedValues.length > 0 && validationErrors.stores) {
+                                            setValidationErrors((prev) => {
+                                                const updated = { ...prev };
+                                                delete updated.stores;
+                                                return updated;
+                                            });
+                                        }
+                                        
                                     }}
                                 />
                                 {validationErrors.stores && <div className="invalid-massage">{validationErrors.stores}</div>}

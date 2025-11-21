@@ -261,11 +261,18 @@ const Dashboard: React.FC = () => {
 
   }, []);
 
+  // const analyticsData = [
+  //   { icon: "adminlib-dollar theme-color1", number: formatCurrency(store?.commission?.total_order_amount || 0), text: "Total Revenue" },
+  //   { icon: "adminlib-order theme-color2", number: totalOrder, text: "Total Orders" },
+  //   { icon: "adminlib-paid theme-color3", number: formatCurrency(store?.commission?.commission_total || 0), text: "Total Commission" },
+  //   { icon: "adminlib-user-circle theme-color4", number: formatCurrency(store?.commission?.commission_refunded || 0), text: "Total Commission Refund" },
+  // ];
+
   const analyticsData = [
-    { icon: "adminlib-dollar theme-color1", number: formatCurrency(store?.commission?.total_order_amount || 0), text: "Total Revenue" },
+    { icon: "adminlib-dollar theme-color1", number: formatCurrency(store?.commission?.total_order_amount || 0), text: "Store Views" },
     { icon: "adminlib-order theme-color2", number: totalOrder, text: "Total Orders" },
-    { icon: "adminlib-paid theme-color3", number: formatCurrency(store?.commission?.commission_total || 0), text: "Total Commission" },
-    { icon: "adminlib-user-circle theme-color4", number: formatCurrency(store?.commission?.commission_refunded || 0), text: "Total Commission Refund" },
+    { icon: "adminlib-paid theme-color3", number: formatCurrency(store?.commission?.commission_total || 0), text: "Total Revenue" },
+    { icon: "adminlib-user-circle theme-color4", number: formatCurrency(store?.commission?.commission_total || 0), text: "Commission Earned" },
   ];
 
   const columns: ColumnDef<StoreRow>[] = [

@@ -32,6 +32,8 @@ export default {
                 {
                     key: 'low_stock_alert',
                     type: 'checkbox',
+                    proSetting: true,
+                    moduleEnabled: 'store-inventory',
                     options: [
                         {
                             key: 'low_stock_alert',
@@ -65,6 +67,8 @@ export default {
                 {
                     key: 'out_of_stock_alert',
                     type: 'checkbox',
+                    proSetting: true,
+                    moduleEnabled: 'store-inventory',
                     options: [
                         {
                             key: 'out_of_stock_alert',

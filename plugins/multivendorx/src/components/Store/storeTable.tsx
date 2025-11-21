@@ -108,35 +108,18 @@ const StoreTable: React.FC = () => {
         })
             .then((response) => {
                 setData(response.data.stores || []);
-                setStoreStatus([
-                    {
-                        key: 'all',
-                        name: 'All',
-                        count: response.data.all || 0,
-                    },
-                    {
-                        key: 'active',
-                        name: 'Active',
-                        count: response.data.active || 0,
-                    },
-                    {
-                        key: 'under_review',
-                        name: 'Under Review',
-                        count: response.data.under_review || 0,
-                    },
-                    {
-                        key: 'suspended',
-                        name: 'Suspended',
-                        count: response.data.suspended || 0,
-                    },
-                    {
-                        key: 'deactivated',
-                        name: 'Deactivated',
-                        count: response.data.deactivated || 0,
-                    },
-                ]);
-            })
-            .catch(() => {
+
+                const statuses = [
+                    { key: 'all', name: 'All', count: response.data.all || 0 },
+                    { key: 'active', name: 'Active', count: response.data.active || 0 },
+                    { key: 'under_review', name: 'Under Review', count: response.data.under_review || 0 },
+                    { key: 'suspended', name: 'Suspended', count: response.data.suspended || 0 },
+                    { key: 'deactivated', name: 'Deactivated', count: response.data.deactivated || 0 },
+                ];
+
+                // Only keep items where count > 0
+                setStoreStatus(statuses.filter(status => status.count > 0));
+            }).catch(() => {
                 setError(__('Failed to load stores', 'multivendorx'));
                 setData([]);
             });
@@ -333,7 +316,7 @@ const StoreTable: React.FC = () => {
                         case 'deactivated':
                             return <span className="admin-badge red">Deactivated</span>;
                         default:
-                            return <span className="admin-badge gray">{formattedStatus}</span>;
+                            return <span className="admin-badge gray">-</span>;
                     }
                 };
 

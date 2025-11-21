@@ -395,23 +395,14 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             },
         }).then((response) => {
             setData(response.data.transaction || []);
-            setTransactionStatus([
-                {
-                    key: 'all',
-                    name: 'All',
-                    count: response.data.all || 0,
-                },
-                {
-                    key: 'Cr',
-                    name: 'Credit',
-                    count: response.data.credit || 0,
-                },
-                {
-                    key: 'Dr',
-                    name: 'Debit',
-                    count: response.data.debit || 0,
-                },
-            ]);
+            const statuses = [
+                { key: 'all', name: 'All', count: response.data.all || 0 },
+                { key: 'Cr', name: 'Credit', count: response.data.credit || 0 },
+                { key: 'Dr', name: 'Debit', count: response.data.debit || 0 },
+            ];
+            
+            setTransactionStatus(statuses.filter(status => status.count > 0));
+            
         })
             .catch(() => setData([]));
     }

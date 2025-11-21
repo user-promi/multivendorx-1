@@ -131,28 +131,15 @@ const StoreReviews: React.FC = () => {
         })
             .then((response) => {
                 setData(response.data.items || []);
-                setStatus([
-                    {
-                        key: 'all',
-                        name: 'All',
-                        count: response.data.all || 0,
-                    },
-                    {
-                        key: 'approved',
-                        name: 'Approved',
-                        count: response.data.approved || 0,
-                    },
-                    {
-                        key: 'pending',
-                        name: 'Pending',
-                        count: response.data.pending || 0,
-                    },
-                    {
-                        key: 'rejected',
-                        name: 'Rejected',
-                        count: response.data.rejected || 0,
-                    },
-                ]);
+                const statuses = [
+                    { key: 'all', name: 'All', count: response.data.all || 0 },
+                    { key: 'approved', name: 'Approved', count: response.data.approved || 0 },
+                    { key: 'pending', name: 'Pending', count: response.data.pending || 0 },
+                    { key: 'rejected', name: 'Rejected', count: response.data.rejected || 0 },
+                ];
+                
+                setStatus(statuses.filter(status => status.count > 0));
+                
             })
             .catch(() => {
                 setError(__('Failed to load Q&A', 'multivendorx'));

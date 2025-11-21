@@ -69,6 +69,7 @@ declare global {
         capability_pro:any;
         taxes_enabled:any;
         permalink_structure:any;
+        tax:any;
     }
     interface Color{
         color: any;

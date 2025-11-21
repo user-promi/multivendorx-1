@@ -256,40 +256,19 @@ const Commission: React.FC = () => {
         })
             .then((response) => {
                 setData(response.data.commissions || []);
-                setCommissionStatus([
-                    {
-                        key: 'all',
-                        name: 'All',
-                        count: response.data.all || 0,
-                    },
-                    {
-                        key: 'paid',
-                        name: 'Paid',
-                        count: response.data.paid || 0,
-                    },
-                    {
-                        key: 'unpaid',
-                        name: 'Unpaid',
-                        count: response.data.unpaid || 0,
-                    },
-                    {
-                        key: 'refunded',
-                        name: 'Refunded',
-                        count: response.data.refunded || 0,
-                    },
-                    {
-                        key: 'partially_refunded',
-                        name: 'Partially Refunded',
-                        count: response.data.partially_refunded || 0,
-                    },
-                    {
-                        key: 'cancelled',
-                        name: 'Cancelled',
-                        count: response.data.cancelled || 0,
-                    },
-                ]);
-            })
-            .catch(() => {
+
+                const statuses = [
+                    { key: 'all', name: 'All', count: response.data.all || 0 },
+                    { key: 'paid', name: 'Paid', count: response.data.paid || 0 },
+                    { key: 'unpaid', name: 'Unpaid', count: response.data.unpaid || 0 },
+                    { key: 'refunded', name: 'Refunded', count: response.data.refunded || 0 },
+                    { key: 'partially_refunded', name: 'Partially Refunded', count: response.data.partially_refunded || 0 },
+                    { key: 'cancelled', name: 'Cancelled', count: response.data.cancelled || 0 },
+                ];
+
+                // Remove items where count === 0
+                setCommissionStatus(statuses.filter(status => status.count > 0));
+            }).catch(() => {
                 setError(__('Failed to load stores', 'multivendorx'));
                 setData([]);
             });
@@ -406,7 +385,6 @@ const Commission: React.FC = () => {
             filterData?.date?.end_date
         );
     };
-
     // Column definitions (your existing columns remain the same)
     const columns: ColumnDef<CommissionRow>[] = [
         {
@@ -573,19 +551,23 @@ const Commission: React.FC = () => {
                             </li>
 
                             <li>
-                                <div className="item">
-                                    <div className="des">Shipping</div>
-                                    <div className="title">
-                                        + {formatCurrency(row.original.shippingAmount)}
+                                {modules.includes('store-shipping') && (
+                                    <div className="item">
+                                        <div className="des">Shipping</div>
+                                        <div className="title">
+                                            + {formatCurrency(row.original.shippingAmount)}
+                                        </div>
                                     </div>
-                                </div>
+                                )}
+                                {appLocalizer.tax && (
+                                    <div className="item">
+                                        <div className="des">Tax</div>
+                                        <div className="title">
+                                            + {formatCurrency(row.original.taxAmount)}
+                                        </div>
+                                    </div>
+                                )}
 
-                                <div className="item">
-                                    <div className="des">Tax</div>
-                                    <div className="title">
-                                        + {formatCurrency(row.original.taxAmount)}
-                                    </div>
-                                </div>
                             </li>
 
                             <li>
@@ -663,10 +645,14 @@ const Commission: React.FC = () => {
                             return <span className="admin-badge green">Paid</span>;
                         case 'unpaid':
                             return <span className="admin-badge red">Unpaid</span>;
-                        case 'Refunded':
-                            return <span className="admin-badge red">Unpaid</span>;
-                        // default:
-                        //     return <span className="admin-badge yellow">{formattedStatus}</span>;
+                        case 'refunded':
+                            return <span className="admin-badge red">Refunded</span>;
+                        case 'partially_refunded':
+                            return <span className="admin-badge red">Partially Refunded</span>;
+                        case 'cancelled':
+                            return <span className="admin-badge red">Cancelled</span>;
+                        default:
+                            return <span className="admin-badge yellow">-</span>;
                     }
                 };
 

@@ -89,7 +89,6 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
         
         $start_date = $start_timestamp ? date( 'Y-m-d 00:00:00', $start_timestamp ) : '';
         $end_date   = $end_timestamp   ? date( 'Y-m-d 23:59:59', $end_timestamp )   : '';
-    
         // Existing count logic
         if ( $count_param ) {
             $posts = get_posts([
