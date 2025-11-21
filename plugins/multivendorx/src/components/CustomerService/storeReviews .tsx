@@ -4,6 +4,7 @@ import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { Table, TableCell, CommonPopup, getApiLink, ToggleSetting, CalendarInput } from 'zyra';
 import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
+import ReviewsRatings from '../Settings/Marketplace/ReviewsRatings';
 
 type Review = {
     review_id: number;
@@ -137,9 +138,9 @@ const StoreReviews: React.FC = () => {
                     { key: 'pending', name: 'Pending', count: response.data.pending || 0 },
                     { key: 'rejected', name: 'Rejected', count: response.data.rejected || 0 },
                 ];
-                
+
                 setStatus(statuses.filter(status => status.count > 0));
-                
+
             })
             .catch(() => {
                 setError(__('Failed to load Q&A', 'multivendorx'));
@@ -516,8 +517,6 @@ const StoreReviews: React.FC = () => {
                                 <i className="adminlib-store-review"></i>
                                 {__('Reply to Review', 'multivendorx')} - {selectedReview.store_name}
                             </div>
-                            {/* <p>Review customer inquiries and reply directly. You can choose to display answers publicly or keep them private.
-                            </p> */}
                             <i
                                 onClick={() => setSelectedReview(null)}
                                 className="icon adminlib-close"
@@ -549,19 +548,12 @@ const StoreReviews: React.FC = () => {
                                     <div className="avater">
                                         <i className="item-icon adminlib-person"></i>
                                     </div>
-                                    {/* <div className="name-wrapper">
-                                        <div className="name">{selectedReview.review_title}</div>
-                                        <div className="rating-wrapper">
-                                            <i className="adminlib-star"></i>
-                                            <i className="adminlib-star"></i>
-                                            <i className="adminlib-star"></i>
-                                            <i className="adminlib-star"></i>
-                                            <i className="adminlib-star">
-                                            </i>
-                                            <div className="date">22 Dec 2022</div></div>
-                                    </div> */}
                                     {selectedReview && (
                                         <div className="name-wrapper">
+                                            <span className="customer-name">
+                                                {selectedReview.customer_name.charAt(0).toUpperCase()}
+                                            </span>
+
                                             <div
                                                 className="name"
                                                 dangerouslySetInnerHTML={{ __html: selectedReview.review_title }}

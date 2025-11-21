@@ -285,6 +285,8 @@ const TransactionBulkActions: React.FC<{
     );
 };
 
+
+
 const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ storeId, dateRange }) => {
     const [data, setData] = useState<StoreRow[] | null>(null);
     const [wallet, setWallet] = useState<any[]>([]);
@@ -297,6 +299,8 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
     const [note, setNote] = useState<any | "">("");
     const freeAmount = amount ? amount * 0.05 : 0;
     const totalAmount = amount ? amount + freeAmount : 0;
+    const [paymentMethod, setPaymentMethod] = useState<any | "">("");
+    const [optionList, setOptionList] = React.useState([]);
 
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
@@ -313,6 +317,27 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
     const [currentFilterData, setCurrentFilterData] = useState<FilterData>({});
     const [viewCommission, setViewCommission] = useState(false);
     const [selectedCommissionId, setSelectedCommissionId] = useState<number | null>(null);
+
+    const demoOptions = [
+        {
+            key: 'paypal-payout',
+            label: 'PayPal',
+            value: 'paypal-payout',
+            icon: 'adminlib-bank',
+        },
+        {
+            key: 'stripe-connect',
+            label: 'Stripe',
+            value: 'stripe-connect',
+            icon: 'adminlib-bank',
+        },
+        {
+            key: 'bank-transfer',
+            label: 'Bank Transfer',
+            value: 'bank-transfer',
+            icon: 'adminlib-bank',
+        },
+    ];
 
     // Add search filter with export button
     const actionButton: RealtimeFilter[] = [
@@ -400,9 +425,9 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                 { key: 'Cr', name: 'Credit', count: response.data.credit || 0 },
                 { key: 'Dr', name: 'Debit', count: response.data.debit || 0 },
             ];
-            
+
             setTransactionStatus(statuses.filter(status => status.count > 0));
-            
+
         })
             .catch(() => setData([]));
     }
@@ -721,7 +746,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
         // Clear old generic error
         setError("");
 
-        // ✅ Submit request
+        // Submit request
         axios({
             method: 'PUT',
             url: getApiLink(appLocalizer, `transaction/${selectedStore?.value}`),
@@ -754,7 +779,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
     const AmountChange = (value: number) => {
         setAmount(value);
     };
-
+    console.log("stordata",storeData)
     return (
         <>
             <div className="general-wrapper">
@@ -905,8 +930,21 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                     <div className="content">
                         {/* start left section */}
                         <div className="form-group-wrapper">
-                            <div className="available-balance">Available balance <div>{formatCurrency(wallet.wallet_balance)}</div></div>
+                            <div className="available-balance">Withdrawable balance <div>{formatCurrency(wallet.available_balance)}</div></div>
 
+                            <div className="form-group">
+                                <label htmlFor="payment_method">Payment Processor</label>
+                                <ToggleSetting
+                                    wrapperClass="setting-form-input"
+                                    descClass="settings-metabox-description"
+                                    options={demoOptions}
+                                    value={paymentMethod || ""}
+                                    onChange={(value) => setPaymentMethod(value)}
+                                />
+                                {validationErrors.paymentMethod && (
+                                    <div className="invalid-massage">{validationErrors.paymentMethod}</div>
+                                )}
+                            </div>
                             <div className="form-group">
                                 <label htmlFor="amount">Amount</label>
 
@@ -917,34 +955,12 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                                     onChange={(e) => AmountChange(Number(e.target.value))}
                                 />
 
-                                <div className="free-wrapper">
-                                    <span><b>₹{totalAmount} </b>Total</span>
-                                    <span><b>₹{freeAmount} Free </b>(5%)</span>
-                                </div>
-
                                 {validationErrors.amount && (
                                     <div className="invalid-massage">{validationErrors.amount}</div>
                                 )}
                             </div>
 
-                            <div className="form-group">
-                                <label htmlFor="payment_method">Payment Processor</label>
-                                {/* <ToggleSetting
-                                    wrapperClass="setting-form-input"
-                                    descClass="settings-metabox-description"
-                                    description={
-                                        optionList.length > 0
-                                            ? "Choose your preferred payment processor."
-                                            : "No payment methods are available for this store."
-                                    }
-                                    options={demoOptions}
-                                    value={paymentMethod || ""}
-                                    onChange={(value) => setPaymentMethod(value)}
-                                /> */}
-                                {validationErrors.paymentMethod && (
-                                    <div className="invalid-massage">{validationErrors.paymentMethod}</div>
-                                )}
-                            </div>
+
                             <div className="form-group">
                                 <label htmlFor="note">Note</label>
                                 <TextArea
