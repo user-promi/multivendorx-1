@@ -7,7 +7,6 @@ import Dialog from '@mui/material/Dialog';
 /**
  * Internal dependencies
  */
-import Popoup from './Popup';
 import { getApiLink, sendApiResponse } from '../utils/apiService';
 import '../styles/web/Modules.scss';
 import { useModules } from '../contexts/ModuleContext';
@@ -36,20 +35,11 @@ interface Separator {
 
 type ModuleItem = Module | Separator;
 
-interface ProPopupContent {
-    proUrl: string;
-    title: string;
-    messages: {
-        icon: string;
-        text: string;
-    }[];
-}
-
 interface ModuleProps {
     modulesArray?: { category: boolean; modules: ModuleItem[] };
     appLocalizer: Record<string, any>;
     apiLink: string;
-    proPopupContent: ProPopupContent;
+    proPopupContent?: React.FC<any>;
     pluginName: string;
     brandImg: string;
 }
@@ -58,7 +48,7 @@ const Modules: React.FC<ModuleProps> = ({
     modulesArray = { category: false, modules: [] },
     appLocalizer,
     apiLink,
-    proPopupContent,
+    proPopupContent: ProPopupComponent,
     brandImg,
     pluginName,
 }) => {
@@ -228,11 +218,7 @@ const Modules: React.FC<ModuleProps> = ({
                         onClick={() => setModelOpen(false)}
                         aria-label="Close dialog"
                     ></button>
-                    <Popoup
-                        proUrl={proPopupContent.proUrl}
-                        title={proPopupContent.title}
-                        messages={proPopupContent.messages}
-                    />
+                    {ProPopupComponent && <ProPopupComponent />}
                 </Dialog>
 
                 {successMsg && (
