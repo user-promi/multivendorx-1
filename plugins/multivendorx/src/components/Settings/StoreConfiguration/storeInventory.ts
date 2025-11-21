@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'store-inventory',
     priority: 6,
-    name: __('Inventory', 'multivendorx'),
+    name: __('Store inventory notifications', 'multivendorx'),
     desc: __(
         'Manage inventory alerts and stock monitoring settings for stores in your marketplace.',
         'multivendorx'

@@ -3,9 +3,9 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'general',
     priority: 1,
-    name: __( 'Onboarding', 'multivendorx' ),
+    name: __( 'Approval process for new stores', 'multivendorx' ),
     desc: __(
-        'Decide what stores see first after signing up and guide them through the key steps to get their store ready for sales.',
+        'Choose how new stores enter your marketplace—review them manually or allow instant access.',
         'multivendorx'
     ),
     icon: 'adminlib-onboarding',
