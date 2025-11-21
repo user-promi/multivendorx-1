@@ -144,23 +144,14 @@ const Qna: React.FC = () => {
         })
             .then((response) => {
                 setData(response.data.items || []);
-                setStatus([
-                    {
-                        key: 'all',
-                        name: 'All',
-                        count: response.data.all || 0,
-                    },
-                    {
-                        key: 'has_answer',
-                        name: 'Answered',
-                        count: response.data.answered || 0,
-                    },
-                    {
-                        key: 'no_answer',
-                        name: 'Unanswered',
-                        count: response.data.unanswered || 0,
-                    },
-                ]);
+                const statuses = [
+                    { key: 'all', name: 'All', count: response.data.all || 0 },
+                    { key: 'has_answer', name: 'Answered', count: response.data.answered || 0 },
+                    { key: 'no_answer', name: 'Unanswered', count: response.data.unanswered || 0 },
+                ];
+                
+                setStatus(statuses.filter(status => status.count > 0));
+                
             })
             .catch(() => {
                 setError(__('Failed to load Q&A', 'multivendorx'));
