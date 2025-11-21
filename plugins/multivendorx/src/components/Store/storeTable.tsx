@@ -316,7 +316,7 @@ const StoreTable: React.FC = () => {
                         case 'deactivated':
                             return <span className="admin-badge red">Deactivated</span>;
                         default:
-                            return <span className="admin-badge gray">{formattedStatus}</span>;
+                            return <span className="admin-badge gray">-</span>;
                     }
                 };
 

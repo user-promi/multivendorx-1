@@ -645,10 +645,14 @@ const Commission: React.FC = () => {
                             return <span className="admin-badge green">Paid</span>;
                         case 'unpaid':
                             return <span className="admin-badge red">Unpaid</span>;
-                        case 'Refunded':
-                            return <span className="admin-badge red">Unpaid</span>;
-                        // default:
-                        //     return <span className="admin-badge yellow">{formattedStatus}</span>;
+                        case 'refunded':
+                            return <span className="admin-badge red">Refunded</span>;
+                        case 'partially_refunded':
+                            return <span className="admin-badge red">Partially Refunded</span>;
+                        case 'cancelled':
+                            return <span className="admin-badge red">Cancelled</span>;
+                        default:
+                            return <span className="admin-badge yellow">-</span>;
                     }
                 };
 
