@@ -3,9 +3,10 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'general',
     priority: 1,
-    name: __( 'Approval process for new stores', 'multivendorx' ),
+    name: __( 'Onboarding', 'multivendorx' ),
+    tabTitle: 'Approval process for new stores',
     desc: __(
-        'Choose how new stores enter your marketplace—review them manually or allow instant access.',
+        'Choose how new stores enter your marketplace, review them manually or allow instant access.',
         'multivendorx'
     ),
     icon: 'adminlib-onboarding',
