@@ -490,19 +490,6 @@ class Notifications
                 'tag'            => 'Product',
                 'category'       => 'activity',
             ],
-
-            'commission_processed_alt'  => [
-                'name'           => 'Commission Processed',
-                'desc'           => 'A commission payment is processed for a store.',
-                'store_enabled'  => true,
-                'email_subject'  => 'Commission Processed',
-                'email_body'     => 'Commission payment of {amount} processed for your store.',
-                'sms_content'    => 'Commission of {amount} processed.',
-                'system_message' => 'Commission payment processed for {store_name}.',
-                'tag'            => 'Commission',
-                'category'       => 'activity',
-            ],
-
             'order_completed_alt'       => [
                 'name'             => 'Order Completed',
                 'desc'             => 'An order is completed successfully.',
@@ -527,33 +514,7 @@ class Notifications
                 'tag'            => 'Commission',
                 'category'       => 'notification',
             ],
-
-            'withdrawal_debit'          => [
-                'name'           => 'Withdrawal Released',
-                'desc'           => 'A withdrawal is released and funds are transferred.',
-                'store_enabled'  => true,
-                'email_subject'  => 'Withdrawal Released',
-                'email_body'     => 'Withdrawal released via {payment_processor} with Transaction ID #{txn_id}.',
-                'sms_content'    => 'Withdrawal released successfully.',
-                'system_message' => 'Withdrawal released for {store_name}.',
-                'tag'            => 'Finance',
-                'category'       => 'notification',
-            ],
-
-            'refund_debit'              => [
-                'name'             => 'Refund Processed',
-                'desc'             => 'A refund adjustment is applied for an order.',
-                'admin_enabled'    => true,
-                'store_enabled'    => true,
-                'customer_enabled' => true,
-                'email_subject'    => 'Refund Processed',
-                'email_body'       => 'Refund adjustment for order #{order_id}.',
-                'sms_content'      => 'Refund processed for order #{order_id}.',
-                'system_message'   => 'Refund processed for order #{order_id}.',
-                'tag'              => 'Refund',
-                'category'         => 'notification',
-            ],
-
+            
             'adjustment_credit'         => [
                 'name'           => 'Adjustment Credit',
                 'desc'           => 'An adjustment credit is issued by the admin.',
@@ -590,19 +551,6 @@ class Notifications
                 'category'       => 'notification',
             ],
 
-            'order_cancelled_alt'       => [
-                'name'             => 'Order Cancelled',
-                'desc'             => 'An order is cancelled by the customer or admin.',
-                'store_enabled'    => true,
-                'customer_enabled' => true,
-                'email_subject'    => 'Order Cancelled',
-                'email_body'       => 'Order #{order_id} has been cancelled.',
-                'sms_content'      => 'Order #{order_id} cancelled.',
-                'system_message'   => 'Order #{order_id} cancelled.',
-                'tag'              => 'Order',
-                'category'         => 'notification',
-            ],
-
             'order_ready_to_ship'       => [
                 'name'           => 'Order Ready to Ship',
                 'desc'           => 'An order is marked as ready to ship.',
@@ -613,18 +561,6 @@ class Notifications
                 'system_message' => 'Order #{order_id} ready to ship.',
                 'tag'            => 'Order',
                 'category'       => 'notification',
-            ],
-
-            'order_shipped_alt'         => [
-                'name'             => 'Order Shipped',
-                'desc'             => 'An order is marked as shipped.',
-                'customer_enabled' => true,
-                'email_subject'    => 'Order Shipped',
-                'email_body'       => 'Order #{order_id} has been shipped.',
-                'sms_content'      => 'Order #{order_id} shipped.',
-                'system_message'   => 'Order #{order_id} shipped.',
-                'tag'              => 'Order',
-                'category'         => 'notification',
             ],
 
             'order_delivered_alt'       => [
@@ -745,48 +681,6 @@ class Notifications
                 'email_body'       => 'Your order [order_id] is now being processed.',
                 'sms_content'      => 'Order [order_id] is now processing.',
                 'system_message'   => 'Order [order_id] status: Processing.',
-                'tag'              => 'Order',
-                'category'         => 'activity',
-            ],
-
-            'order_shipped'             => [
-                'name'             => 'Order shipped',
-                'desc'             => 'Notify customer when an order is shipped.',
-                'admin_enabled'    => true,
-                'store_enabled'    => true,
-                'customer_enabled' => true,
-                'email_subject'    => 'Order shipped',
-                'email_body'       => 'Your order [order_id] has been shipped.',
-                'sms_content'      => 'Order [order_id] shipped successfully.',
-                'system_message'   => 'Order [order_id] is on its way.',
-                'tag'              => 'Order',
-                'category'         => 'activity',
-            ],
-
-            'order_completed'           => [
-                'name'             => 'Order completed',
-                'desc'             => 'Notify store and customer when an order is completed.',
-                'admin_enabled'    => true,
-                'store_enabled'    => true,
-                'customer_enabled' => true,
-                'email_subject'    => 'Order completed',
-                'email_body'       => 'Order [order_id] has been successfully completed.',
-                'sms_content'      => 'Order [order_id] completed successfully.',
-                'system_message'   => 'Order [order_id] marked as completed.',
-                'tag'              => 'Order',
-                'category'         => 'activity',
-            ],
-
-            'order_cancelled'           => [
-                'name'             => 'Order cancelled',
-                'desc'             => 'Notify stores and customers when an order is cancelled.',
-                'store_enabled'    => true,
-                'customer_enabled' => true,
-                'admin_enabled'    => true,
-                'email_subject'    => 'Order cancelled',
-                'email_body'       => 'Order [order_id] has been cancelled.',
-                'sms_content'      => 'Order [order_id] cancelled successfully.',
-                'system_message'   => 'Order [order_id] cancelled.',
                 'tag'              => 'Order',
                 'category'         => 'activity',
             ],
@@ -958,19 +852,6 @@ class Notifications
                 'tag'            => 'Payment',
                 'category'       => 'notification',
             ],
-
-            'withdrawal_released'       => [
-                'name'           => 'Withdrawal released',
-                'desc'           => 'Notify store when withdrawal is released.',
-                'store_enabled'  => true,
-                'email_subject'  => 'Withdrawal released',
-                'email_body'     => 'Your withdrawal has been released via [payment_processor].',
-                'sms_content'    => 'Withdrawal released successfully.',
-                'system_message' => 'Withdrawal released successfully.',
-                'tag'            => 'Payment',
-                'category'       => 'notification',
-            ],
-
             // ========== REPORT ABUSE ==========
             'report_abuse_submitted'    => [
                 'name'             => 'Abuse report submitted for product',
@@ -1024,19 +905,6 @@ class Notifications
                 'tag'              => 'System',
                 'category'         => 'notification',
             ],
-            'order_completed'           => [
-                'name'             => 'Order Completed',
-                'desc'             => 'Notify stores and customers when an order is completed.',
-                'store_enabled'    => true,
-                'customer_enabled' => true,
-                'email_subject'    => 'Order Completed',
-                'email_body'       => 'Order #{order_id} successfully completed.',
-                'sms_content'      => 'Order #{order_id} is now completed.',
-                'system_message'   => 'Order #{order_id} completed successfully.',
-                'tag'              => 'Order',
-                'category'         => 'notification',
-            ],
-
             'commission_credit'         => [
                 'name'           => 'Commission Credited',
                 'desc'           => 'Notify stores when commission is credited for an order.',
@@ -1047,32 +915,6 @@ class Notifications
                 'system_message' => 'Commission received for order #{order_id}.',
                 'tag'            => 'Commission',
                 'category'       => 'notification',
-            ],
-
-            'withdrawal_debit'          => [
-                'name'           => 'Withdrawal Released',
-                'desc'           => 'Notify stores when withdrawal is released.',
-                'store_enabled'  => true,
-                'email_subject'  => 'Withdrawal Released',
-                'email_body'     => 'Withdrawal released via {payment_processor} with Transaction ID #{txn_id}.',
-                'sms_content'    => 'Withdrawal released successfully.',
-                'system_message' => 'Withdrawal released for {store_name}.',
-                'tag'            => 'Finance',
-                'category'       => 'notification',
-            ],
-
-            'refund_debit'              => [
-                'name'             => 'Refund Processed',
-                'desc'             => 'Notify stores, admins, and customers when a refund is processed.',
-                'admin_enabled'    => true,
-                'store_enabled'    => true,
-                'customer_enabled' => true,
-                'email_subject'    => 'Refund Processed',
-                'email_body'       => 'Refund adjustment for order #{order_id}.',
-                'sms_content'      => 'Refund processed for order #{order_id}.',
-                'system_message'   => 'Refund processed for order #{order_id}.',
-                'tag'              => 'Refund',
-                'category'         => 'notification',
             ],
 
             'adjustment_credit'         => [
@@ -1111,19 +953,6 @@ class Notifications
                 'category'       => 'notification',
             ],
 
-            'order_cancelled'           => [
-                'name'             => 'Order Cancelled',
-                'desc'             => 'Notify stores and customers when an order is cancelled.',
-                'store_enabled'    => true,
-                'customer_enabled' => true,
-                'email_subject'    => 'Order Cancelled',
-                'email_body'       => 'Order #{order_id} has been cancelled.',
-                'sms_content'      => 'Order #{order_id} cancelled.',
-                'system_message'   => 'Order #{order_id} cancelled.',
-                'tag'              => 'Order',
-                'category'         => 'notification',
-            ],
-
             'order_ready_to_ship'       => [
                 'name'           => 'Order Ready to Ship',
                 'desc'           => 'Notify stores when an order is ready to ship.',
@@ -1134,18 +963,6 @@ class Notifications
                 'system_message' => 'Order #{order_id} ready to ship.',
                 'tag'            => 'Order',
                 'category'       => 'notification',
-            ],
-
-            'order_shipped'             => [
-                'name'             => 'Order Shipped',
-                'desc'             => 'Notify customers when an order is shipped.',
-                'customer_enabled' => true,
-                'email_subject'    => 'Order Shipped',
-                'email_body'       => 'Order #{order_id} has been shipped.',
-                'sms_content'      => 'Order #{order_id} shipped.',
-                'system_message'   => 'Order #{order_id} shipped.',
-                'tag'              => 'Order',
-                'category'         => 'notification',
             ],
 
             'order_delivered'           => [

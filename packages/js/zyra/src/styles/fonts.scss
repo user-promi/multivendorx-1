@@ -24,29 +24,89 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-.adminlib-mapbox:before {
-  content: "\e900";
-}
-.adminlib-google:before {
-  content: "\e901";
-}
-.adminlib-close-delete:before {
-  content: "\e902";
-}
-.adminlib-under-review:before {
-  content: "\e903";
-}
-.adminlib-rejected:before {
-  content: "\e904";
-}
-.adminlib-rejecte:before {
-  content: "\e905";
+.adminlib-franchises-module:before {
+  content: "\e92e";
 }
 .adminlib-pending:before {
-  content: "\e906";
+  content: "\e92f";
 }
-.adminlib-active:before {
-  content: "\e907";
+.adminlib-version-control:before {
+  content: "\e930";
+}
+.adminlib-setup:before {
+  content: "\e931";
+}
+.adminlib-out-of-stock:before {
+  content: "\e932";
+}
+.adminlib-migration:before {
+  content: "\e933";
+}
+.adminlib-document:before {
+  content: "\e934";
+}
+.adminlib-database:before {
+  content: "\e935";
+}
+.adminlib-store-reject:before {
+  content: "\e936";
+}
+.adminlib-store-reactivated:before {
+  content: "\e937";
+}
+.adminlib-refund:before {
+  content: "\e938";
+}
+.adminlib-order-shipped:before {
+  content: "\e939";
+}
+.adminlib-order-completed:before {
+  content: "\e93a";
+}
+.adminlib-wordpress:before {
+  content: "\e93b";
+}
+.adminlib-profile:before {
+  content: "\e93c";
+}
+.adminlib-forum:before {
+  content: "\e93d";
+}
+.adminlib-faq:before {
+  content: "\e93e";
+}
+.adminlib-coding .path1:before {
+  content: "\e93f";
+  color: rgb(0, 0, 0);
+}
+.adminlib-coding .path2:before {
+  content: "\e940";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.adminlib-coding .path3:before {
+  content: "\e941";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.adminlib-coding .path4:before {
+  content: "\e942";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.adminlib-coding .path5:before {
+  content: "\e943";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.adminlib-wallet-open:before {
+  content: "\e900";
+}
+.adminlib-wallet-in:before {
+  content: "\e901";
+}
+.adminlib-wallet:before {
+  content: "\e902";
 }
 .adminlib-cart:before {
   content: "\8907";
@@ -120,110 +180,131 @@
 .adminlib-plus-circle-o:before {
   content: "\e8f7";
 }
-.adminlib-recycle:before {
+.adminlib-mapbox:before {
+  content: "\e903";
+}
+.adminlib-google:before {
+  content: "\e904";
+}
+.adminlib-close-delete:before {
+  content: "\e905";
+}
+.adminlib-under-review:before {
+  content: "\e906";
+}
+.adminlib-rejected:before {
+  content: "\e907";
+}
+.adminlib-rejecte:before {
   content: "\e908";
 }
-.adminlib-resources:before {
-  content: "\e909";
-}
-.adminlib-coupon:before {
+.adminlib-active:before {
   content: "\e90a";
 }
-.adminlib-wallet:before {
+.adminlib-recycle:before {
   content: "\e90b";
 }
-.adminlib-sales:before {
+.adminlib-resources:before {
   content: "\e90c";
 }
-.adminlib-question:before {
+.adminlib-coupon:before {
   content: "\e90d";
 }
-.adminlib-facilitator:before {
+.adminlib-wallet1:before {
   content: "\e90e";
 }
-.adminlib-edit:before {
+.adminlib-sales:before {
   content: "\e90f";
 }
-.adminlib-direct-transaction:before {
+.adminlib-question:before {
   content: "\e910";
 }
-.adminlib-geo-location:before {
+.adminlib-facilitator:before {
   content: "\e911";
 }
-.adminlib-product-addon1:before {
+.adminlib-edit:before {
   content: "\e912";
 }
-.adminlib-advertise-product:before {
+.adminlib-direct-transaction:before {
   content: "\e913";
 }
-.adminlib-marketplace-gateway:before {
+.adminlib-geo-location:before {
   content: "\e914";
 }
-.adminlib-marketplace-fee:before {
+.adminlib-product-addon:before {
   content: "\e915";
 }
-.adminlib-compliance:before {
+.adminlib-advertise-product:before {
   content: "\e916";
 }
-.adminlib-lock:before {
+.adminlib-marketplace-gateway:before {
   content: "\e917";
 }
-.adminlib-pros-and-cons:before {
+.adminlib-marketplace-fee:before {
   content: "\e918";
 }
-.adminlib-like:before {
+.adminlib-compliance:before {
   content: "\e919";
 }
-.adminlib-home:before {
+.adminlib-lock:before {
   content: "\e91a";
 }
-.adminlib-dollar:before {
+.adminlib-pros-and-cons:before {
   content: "\e91b";
 }
-.adminlib-bank:before {
+.adminlib-like:before {
   content: "\e91c";
 }
-.adminlib-question-answer:before {
+.adminlib-home:before {
   content: "\e91d";
 }
-.adminlib-zone-wise-shipping:before {
+.adminlib-dollar:before {
   content: "\e91e";
 }
-.adminlib-approval:before {
+.adminlib-bank:before {
   content: "\e91f";
 }
-.adminlib-cash:before {
+.adminlib-question-answer:before {
   content: "\e920";
 }
-.adminlib-view-files:before {
+.adminlib-zone-wise-shipping:before {
   content: "\e921";
 }
-.adminlib-automation:before {
+.adminlib-approval:before {
   content: "\e922";
 }
-.adminlib-shipping:before {
+.adminlib-cash:before {
   content: "\e923";
 }
-.adminlib-delivery-person:before {
+.adminlib-view-files:before {
   content: "\e924";
 }
-.adminlib-delivery:before {
+.adminlib-automation:before {
   content: "\e925";
 }
-.adminlib-tax-compliance:before {
+.adminlib-shipping:before {
   content: "\e926";
 }
-.adminlib-legal-compliance:before {
+.adminlib-delivery-person:before {
   content: "\e927";
 }
-.adminlib-seller-verification:before {
+.adminlib-delivery:before {
   content: "\e928";
 }
-.adminlib-new:before {
+.adminlib-tax-compliance:before {
   content: "\e929";
 }
-.adminlib-feature:before {
+.adminlib-legal-compliance:before {
   content: "\e92a";
+}
+.adminlib-seller-verification:before {
+  content: "\e92b";
+}
+.adminlib-new:before {
+  content: "\e92c";
+}
+.adminlib-feature:before {
+  content: "\e92d";
 }
 .adminlib-accommodation:before {
   content: "\ef35";
@@ -626,9 +707,6 @@
 }
 .adminlib-subscription-courses:before {
   content: "\efba";
-}
-.adminlib-wholesal:before {
-  content: "\efbb";
 }
 .adminlib-mailchimp:before {
   content: "\efbc";
