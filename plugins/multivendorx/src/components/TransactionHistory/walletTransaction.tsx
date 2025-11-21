@@ -887,7 +887,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                                     resetWithdrawalForm(); //reset form on close
                                 }}
                             ></i>
-                            <div className="des">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi quasi saepe temporibus aperiam voluptate quisquam.</div>
+                            <div className="des">Release earnings to your stores in a few simple steps - amount, payment processor, and an optional note.</div>
                         </>
                     }
                     footer={
