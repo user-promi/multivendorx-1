@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'setup-widget',
     priority: 5,
-    name: __( 'Setup Widget', 'multivendorx' ),
+    name: __( 'Setup widget', 'multivendorx' ),
     desc: __(
         'Data from your previous marketplace can be seamlessly transferred using this migration tool.',
         'multivendorx'
@@ -15,10 +15,10 @@ export default {
         {
             key: 'setup_wizard',
             type: 'button',
-            name: __( 'Setup Wizard', 'multivendorx' ),
-            label: __( 'Run Setup Wizard', 'multivendorx' ),
+            name: __( 'Setup wizard', 'multivendorx' ),
+            label: __( 'Run setup wizard', 'multivendorx' ),
             desc: __(
-                'Follow this wizard to configure your marketplace step by step',
+                'Launch the step-by-step wizard to configure your marketplace quickly and effortlessly.',
                 'multivendorx'
             ),
             link: appLocalizer.setup_wizard_url
