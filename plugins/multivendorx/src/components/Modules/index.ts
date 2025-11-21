@@ -142,7 +142,7 @@ export default {
             desc: "Allows more than one store to sell the same product with their own price and stock.",
             icon: 'adminlib-spmv',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/single-product-multiple-vendors-spmv',
-            settings_link: '${appLocalizer.plugin_url}settings&subtab=single-product-multiple-store',
+            settings_link: `${appLocalizer.plugin_url}settings&subtab=single-product-multiple-store`,
             pro_module: false,
             category: 'store_management'
         },
@@ -161,7 +161,7 @@ export default {
             desc: "Each store publishes its own return, refund, and shipping policies.",
             icon: 'adminlib-store-policy',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/store-policy',
-            settings_link: '${appLocalizer.plugin_url}settings&subtab=policy',
+            settings_link: `${appLocalizer.plugin_url}settings&subtab=policy`,
             pro_module: false,
             category: 'store_management'
         },
@@ -180,7 +180,7 @@ export default {
             desc: "Customers leave ratings and written reviews on store pages.",
             icon: 'adminlib-store-review',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/store-review',
-            settings_link: '${appLocalizer.plugin_url}settings&subtab=review-management',
+            settings_link: `${appLocalizer.plugin_url}settings&subtab=review-management`,
             pro_module: false,
             category: ['store_management', 'customer_experience'],
         },
@@ -208,7 +208,7 @@ export default {
             desc: "Store owners add staff accounts with role-based access to manage orders, products, or support.",
             icon: 'adminlib-staff-manager',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/staff-manager',
-            settings_link: '${appLocalizer.plugin_url}settings&subtab=user-capability',
+            settings_link: `${appLocalizer.plugin_url}settings&subtab=user-capability`,
             pro_module: true,
             category: 'store_management'
         },
@@ -218,7 +218,7 @@ export default {
             desc: "Hide sensitive store information from customers, including contact details, location, or other specified data.",
             icon: 'adminlib-privacy',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/privacy',
-            settings_link: '${appLocalizer.plugin_url}settings&subtab=privacy-settings',
+            settings_link: `${appLocalizer.plugin_url}settings&subtab=privacy-settings`,
             pro_module: false,
             category: 'store_management'
 
@@ -282,7 +282,7 @@ export default {
             desc: "Shipping charges calculated based on distance between store address and delivery location.",
             icon: 'adminlib-distance-shipping',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/distance-shipping',
-            settings_link: '${appLocalizer.plugin_url}settings&subtab=shipping',
+            settings_link: `${appLocalizer.plugin_url}settings&subtab=shipping`,
             pro_module: false,
             category: 'shipping_management'
         },
@@ -292,7 +292,7 @@ export default {
             desc: "Shipping cost determined by weight, order value, or product quantity.",
             icon: 'adminlib-weight-shipping',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/weight-shipping',
-            settings_link: '${appLocalizer.plugin_url}settings&subtab=shipping',
+            settings_link: `${appLocalizer.plugin_url}settings&subtab=shipping`,
             pro_module: false,
             req_pluging: [{ name: 'Table Rate Shipping', link: 'https://woocommerce.com/products/table-rate-shipping/' }],
             category: 'shipping_management'
@@ -315,7 +315,7 @@ export default {
             desc: "Generates invoices and packing slips that can be printed or emailed to customers.",
             icon: 'adminlib-invoice',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/invoice-packing-slip',
-            settings_link: '${appLocalizer.plugin_url}settings&subtab=store-invoice',
+            settings_link: `${appLocalizer.plugin_url}settings&subtab=store-invoice`,
             pro_module: true,
             category: 'customer_experience'
         },
@@ -325,7 +325,7 @@ export default {
             desc: "Customers send real-time messages to stores about products or orders.",
             icon: 'adminlib-live-chat',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/live-chat',
-            settings_link: '${appLocalizer.plugin_url}settings&subtab=live-chat',
+            settings_link: `${appLocalizer.plugin_url}settings&subtab=live-chat`,
             pro_module: true,
             category: 'customer_experience'
         },
@@ -363,7 +363,7 @@ export default {
             desc: "Customers submit refund requests, and stores review and process them directly.",
             icon: 'adminlib-marketplace-refund',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/marketplace-refund',
-            settings_link: '${appLocalizer.plugin_url}settings&subtab=order-actions-refunds',
+            settings_link: `${appLocalizer.plugin_url}settings&subtab=order-actions-refunds`,
             pro_module: false,
             category: ['store_management', 'customer_experience'],
         },
@@ -383,7 +383,7 @@ export default {
             desc: "SEO settings for store pages and products using Rank Math or Yoast SEO.",
             icon: 'adminlib-store-seo',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/store-seo',
-            settings_link: '${appLocalizer.plugin_url}settings&subtab=seo',
+            settings_link: `${appLocalizer.plugin_url}settings&subtab=seo`,
             pro_module: true,
             category: ['analytics_tools', 'store_management'],
         },
@@ -394,7 +394,7 @@ export default {
             desc: "Ensure stores meet marketplace requirements with automated policy checks.",
             icon: 'adminlib-compliance',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/marketplace-memberhsip',
-            settings_link: '${appLocalizer.plugin_url}settings&subtab=non-compliance',
+            settings_link: `${appLocalizer.plugin_url}settings&subtab=non-compliance`,
             // pro_module: true,
             category: 'marketplace_boosters'
         }, {
@@ -412,7 +412,7 @@ export default {
             desc: "Share commission on a sale between the store and another designated user. Each participant receives their assigned portion automatically.",
             icon: 'adminlib-facilitator',
             doc_link: "/admin.php?page=multivendorx#&tab=settings&subtab=store-commissions",
-            settings_link: '${appLocalizer.plugin_url}settings&subtab=facilitator',
+            settings_link: `${appLocalizer.plugin_url}settings&subtab=facilitator`,
             pro_module: true,
             category: 'marketplace_boosters'
         },
@@ -422,7 +422,7 @@ export default {
             desc: "Set and manage platform fees for each order or store to cover operational costs",
             icon: 'adminlib-marketplace-fee',
             doc_link: "/admin.php?page=multivendorx#&tab=settings&subtab=store-commissions",
-            settings_link: '${appLocalizer.plugin_url}settings&subtab=store-commissions',
+            settings_link: `${appLocalizer.plugin_url}settings&subtab=store-commissions`,
             pro_module: true,
             category: 'marketplace_boosters'
         },
@@ -432,7 +432,7 @@ export default {
             desc: 'Enables franchise-style ordering with store-created orders, admin-product ordering, and automatic store assignment based on customer location.',
             icon: 'adminlib-franchises-module',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/',
-            settings_link: '${appLocalizer.plugin_url}settings&subtab=franchises',
+            settings_link: `${appLocalizer.plugin_url}settings&subtab=franchises`,
             pro_module: false,
             category: ['store_management', 'marketplace_boosters'],
         },
@@ -443,7 +443,7 @@ export default {
             desc: "Payment gateway fees are deducted from vendor commissions by the admin, ensuring platform costs are covered automatically.",
             icon: 'adminlib-marketplace-gateway',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/',
-            settings_link: '${appLocalizer.plugin_url}settings&subtab=store-commissions',
+            settings_link: `${appLocalizer.plugin_url}settings&subtab=store-commissions`,
             pro_module: false,
             category: ['store_management', 'payment_management'],
         },
@@ -453,7 +453,7 @@ export default {
             desc: "Paid promotion for products within the marketplace, boosting visibility.",
             icon: 'adminlib-advertisement',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/advertise-product/',
-            settings_link: '${appLocalizer.plugin_url}settings&subtab=advertising',
+            settings_link: `${appLocalizer.plugin_url}settings&subtab=advertising`,
             pro_module: true,
             category: 'marketplace_boosters'
         },
@@ -463,7 +463,7 @@ export default {
             desc: "Stores set wholesale prices and bulk purchase rules for selected customer groups.",
             icon: 'adminlib-wholesale',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/wholesale',
-            settings_link: '${appLocalizer.plugin_url}settings&subtab=wholesale',
+            settings_link: `${appLocalizer.plugin_url}settings&subtab=wholesale`,
             pro_module: true,
             category: ['analytics_tools', 'store_management'],
         },
@@ -473,7 +473,7 @@ export default {
             desc: "Manages stock levels, sends low-stock alerts, and maintains a waitlist for out-of-stock products.",
             icon: 'adminlib-store-inventory',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/store-inventory',
-            settings_link: '${appLocalizer.plugin_url}settings&subtab=store-inventory',
+            settings_link: `${appLocalizer.plugin_url}settings&subtab=store-inventory`,
             pro_module: true,
             category: 'marketplace_boosters'
         },
@@ -483,7 +483,7 @@ export default {
             desc: "Defines the minimum or maximum number of items a customer can purchase in a single order.",
             icon: 'adminlib-min-max',
             doc_link: 'https://multivendorx.com/docs/non-knowledgebase/min-max-quantities/',
-            settings_link: '${appLocalizer.plugin_url}settings&subtab=min-max',
+            settings_link: `${appLocalizer.plugin_url}settings&subtab=min-max`,
             pro_module: false,
             category: 'marketplace_boosters'
         },
@@ -566,7 +566,7 @@ export default {
             desc: "Affiliate program that tracks referrals and commissions for marketplace products.",
             icon: 'adminlib-wp-affiliate',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/affiliate-product/',
-            settings_link: '${appLocalizer.settings_page_url}affiliate',
+            settings_link: `${appLocalizer.settings_page_url}affiliate`,
             pro_module: true,
             req_pluging: [{ name: 'Affiliate WP', link: 'https://affiliatewp.com/' }],
             category: 'integration'
@@ -596,7 +596,7 @@ export default {
             desc: "Lets stores pinpoint their location on an interactive map, making it easy for customers to discover nearby stores and shop locally.",
             icon: 'adminlib-geo-location',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/shipstation/',
-            settings_link: '${appLocalizer.settings_page_url}geolocation',
+            settings_link: `${appLocalizer.settings_page_url}geolocation`,
             pro_module: false,
             category: 'store_management'
         },
