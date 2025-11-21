@@ -16,11 +16,11 @@ namespace MultiVendorX\GatewayFee;
  */
 class Admin {
     public function __construct(){
-        add_filter( 'multivendorx_before_commission_insert', [ $this, 'gateway_fee_calculation' ], 10, 3 );
+        add_filter( 'multivendorx_before_commission_insert', [ $this, 'gateway_fee_calculation' ], 10, 4 );
     }
 
 
-    public function gateway_fee_calculation( $filtered, $store, $order ) {
+    public function gateway_fee_calculation( $filtered, $store, $total, $order ) {
 
         if (!empty( MultiVendorX()->setting->get_setting('gateway_fees') )) {
             $fixed_fee      = 0;
@@ -41,7 +41,7 @@ class Admin {
                 ?? 0
             );
 
-            $gateway_fee = (float) $order->get_total() * ((float) $percentage_fee / 100) + (float) $fixed_fee;
+            $gateway_fee = $total > 0 ? ((float) $total * ((float) $percentage_fee / 100) + (float) $fixed_fee) : 0;
 
             $rules = unserialize($filtered['data']['rules_applied']);
             $rules['gateway_fee'] = [

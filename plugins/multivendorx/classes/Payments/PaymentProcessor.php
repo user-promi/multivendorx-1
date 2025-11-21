@@ -138,7 +138,7 @@ class PaymentProcessor {
                 $wpdb->prefix . Utill::TABLES['transaction'],
                 [
                     'store_id'        => $row->store_id,
-                    'entry_type'      => 'Cr',
+                    'entry_type'      => 'Dr',
                     'transaction_type'=> 'Reversed',
                     'amount'          => $row->amount,
                     'currency'        => $row->currency,
