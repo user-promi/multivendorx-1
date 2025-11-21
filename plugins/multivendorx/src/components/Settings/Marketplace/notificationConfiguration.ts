@@ -74,12 +74,12 @@ export default {
         {
             key: 'sms_section',
             type: 'section',
-            hint: __('SMS Configuration', 'multivendorx'),
+            hint: __('SMS configuration', 'multivendorx'),
         },
         {
             key: 'sms_gateway_selector',
             type: 'setting-toggle',
-            label: __('Select SMS Gateway', 'multivendorx'),
+            label: __('Select SMS gateway', 'multivendorx'),
             settingDescription: __('Pick the SMS service your marketplace will use to send text alerts.', 'multivendorx'),
             options: [
                 {
