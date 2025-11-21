@@ -118,7 +118,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
         $store_id_raw = $request->get_param( 'store_id' );
         $store_id     = intval( $store_id_raw );
         
-        if ( $store_id >= 0 ) {
+        if ( $store_id > 0 ) {
             $query_args['meta_query'] = [
                 'relation' => 'OR',
         
@@ -148,7 +148,6 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                 ],
             ];
         }
-    
         // Add title search only if searchField has value
         if ( ! empty( $searchField ) ) {
             $query_args['s'] = $searchField; // WP_Query searches post_title + content
@@ -321,8 +320,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             'stores'  => $stores,
         ]);
     }
-    
-        
+      
     public function get_item( $request ) {
 
         $nonce = $request->get_header( 'X-WP-Nonce' );

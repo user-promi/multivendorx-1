@@ -168,12 +168,12 @@ export const Announcements: React.FC = () => {
         try {
             await axios({
                 method: 'PUT',
-                url: getApiLink(appLocalizer, 'knowledge'),
+                url: getApiLink(appLocalizer, 'announcement'),
                 headers: { 'X-WP-Nonce': appLocalizer.nonce },
                 data: { bulk: true, action, ids: selectedIds },
             });
             await fetchTotalRows();
-            requestData(pagination.pageSize, pagination.pageIndex + 1, page);
+            requestData(pagination.pageSize, pagination.pageIndex + 1);
             setRowSelection({});
         } catch (err) {
             setError(__('Failed to perform bulk action', 'multivendorx'));
