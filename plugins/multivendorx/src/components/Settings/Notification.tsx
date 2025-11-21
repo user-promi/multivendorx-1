@@ -265,16 +265,16 @@ const Notification: React.FC = () => {
                         </thead>
                         <tbody className='admin-table-body'>
                             {filteredNotifications.map((notif: any) => (
-                                <tr className="admin-row" key={notif.id} onClick={() => { setEditingNotification(notif.id); setNotificationId(notif.id); } }>
+                                <tr className="admin-row" key={notif.id} onClick={() => { setEditingNotification(notif.id); setNotificationId(notif.id); }}>
                                     <td className="admin-column notificaton">
                                         <div className="table-row-custom">
                                             <div className="product-wrapper notification">
-                                                <i className={`item-icon notification-icon ${notif.icon}`}></i>
+                                                <span className={`item-icon notification-icon icon-${notif.id}`}></span>
                                                 <div className="details">
                                                     <div className="title">
                                                         {notif.event}
-                                                        <span className="admin-badge yellow"><i className="adminlib-follow-store"></i> {notif.tag} </span>
-                                                        <span className="admin-badge blue"> {notif.category} </span>
+                                                        <span className={`admin-badge yellow ${notif.tag}`}>{notif.tag} </span>
+                                                        <span className={`admin-badge blue ${notif.category}`}> {notif.category} </span>
                                                     </div>
                                                     <div className="des">{notif.description}</div>
                                                 </div>
@@ -335,8 +335,15 @@ const Notification: React.FC = () => {
                                         </div>
                                     </td>
                                     <td className="admin-column action">
-                                        <div className="table-row-custom">
-                                            <i className="adminlib-edit"></i>
+                                        <div className="action-section">
+                                            <div className="action-icons">
+                                                <div className="inline-actions">
+                                                    <div className="inline-action-btn">
+                                                        <i className="adminlib-edit"></i>
+                                                        <span>Edit</span>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
@@ -378,9 +385,9 @@ const Notification: React.FC = () => {
                     <div className="content">
 
                         <div className="form-group-wrapper">
+                            {openChannel === "system" && (
+                                <div className="form-group">
 
-                            <div className="form-group">
-                                {openChannel === "system" && (
                                     <>
                                         <label>System Message</label>
                                         <TextArea
@@ -396,11 +403,13 @@ const Notification: React.FC = () => {
                                             onBlur={() => { handleAutoSave(formData.id); }}
                                         />
                                     </>
-                                )}
-                            </div>
 
-                            <div className="form-group">
-                                {openChannel === "sms" && (
+                                </div>
+                            )}
+                        </div>
+                        <div className="form-group-wrapper">
+                            {openChannel === "sms" && (
+                                <div className="form-group">
                                     <>
                                         <label>SMS Content</label>
                                         <TextArea
@@ -417,11 +426,12 @@ const Notification: React.FC = () => {
                                             onBlur={() => { handleAutoSave(formData.id); }}
                                         />
                                     </>
-                                )}
-                            </div>
-
-                            <div className="form-group">
-                                {openChannel === "mail" && (
+                                </div>
+                            )}
+                        </div>
+                        <div className="form-group-wrapper">
+                            {openChannel === "mail" && (
+                                <div className="form-group">
                                     <>
                                         <label>Email Subject</label>
                                         <BasicInput
@@ -437,24 +447,29 @@ const Notification: React.FC = () => {
                                             }}
                                             onBlur={() => { handleAutoSave(formData.id); }}
                                         />
-
-                                        <label>Email Body</label>
-                                        <TextArea
-                                            name="sms_content"
-                                            inputClass="textarea-input"
-                                            value={formData.email_body || ""}
-                                            onChange={(e) => {
-                                                setFormData({
-                                                    ...formData,
-                                                    email_body: e.target.value,
-                                                });
-                                                handleAutoSave(formData.id);
-                                            }}
-                                            onBlur={() => { handleAutoSave(formData.id); }}
-                                        />
                                     </>
-                                )}
+                                </div>
+                            )}
+                        </div>
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label>Email Body</label>
+                                <TextArea
+                                    name="sms_content"
+                                    inputClass="textarea-input"
+                                    value={formData.email_body || ""}
+                                    onChange={(e) => {
+                                        setFormData({
+                                            ...formData,
+                                            email_body: e.target.value,
+                                        });
+                                        handleAutoSave(formData.id);
+                                    }}
+                                    onBlur={() => { handleAutoSave(formData.id); }}
+                                />
                             </div>
+                        </div>
+                        <div className="form-group-wrapper">
                             {systemTags?.length > 0 && (
                                 <div className="tag-list">
                                     <p>You can use these tags:</p>
@@ -484,7 +499,7 @@ const Notification: React.FC = () => {
                     header={
                         <>
                             <div className="title">
-                                <i className="adminlib-cart"></i>
+                                <i className="adminlib-notification"></i>
                                 Notification preferences
                             </div>
                             <p>Edit and control notification method and recipients for this event.</p>
@@ -520,7 +535,7 @@ const Notification: React.FC = () => {
                                                 </span>
                                                 <div className="details">
                                                     <span>{label}</span>
-                                                    
+
                                                 </div>
                                                 <i onClick={() => toggleChannel(editingNotification, channel)} className={enabled ? 'adminlib-eye' : 'adminlib-eye-blocked'}></i>
                                             </div>

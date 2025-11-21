@@ -204,12 +204,12 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
         return (
             <div className={`admin-badge ${badge.isValid ? 'yellow' : 'red'}`}>
                 {isFirst && (
-                    <i className="adminlib-star primary-icon"></i>
+                    <i className="adminlib-star primary-email"></i>
                 )}
                 <i className="adminlib-mail"></i>
                 <span>{badge.email}</span>
                 <i
-                    className="adminlib-delete remove-btn"
+                    className="adminlib-delete delete-btn"
                     onClick={() => onRemove(badge.id)}
                 ></i>
             </div>
@@ -795,7 +795,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                             ref={emailInputRef}
                                             type="email"
                                             className="basic-input"
-                                            placeholder="Type the email ID and hit Enter to save it."
+                                            placeholder="Type the email ID and hit 'Enter' or 'Add' to save it."
                                             value={newEmailValue}
                                             onChange={(e) => setNewEmailValue(e.target.value)}
                                             onKeyPress={handleEmailKeyPress}
@@ -811,7 +811,11 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                     </div>
                                 </div>
                                 <div className="settings-metabox-description">
-                                    Add multiple email addresses. Press "Enter" or click "Add" after each email.
+                                    Manage your store email preferences: 
+                                    <ul>
+                                       <li> <strong>Primary email</strong> – The first email you enter becomes the store’s primary contact address and is displayed on the storefront.</li>
+                                       <li><strong>Additional email</strong> – Add extra email addresses to receive store notifications. These emails are used internally for alerts only and will not appear publicly.</li> 
+                                    </ul>
                                 </div>
                                 {errorMsg.email && <p className="invalid-massage">{errorMsg.email}</p>}
                             </div>
@@ -973,7 +977,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                         {/* Updated Email Section */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="store-email">Status</label>
+                                <label htmlFor="store-email">Current status</label>
                                 <SelectInput
                                     name="status"
                                     value={formData.status}
@@ -995,14 +999,14 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                    Manage store Slug
+                                    Manage storefront link
                                 </div>
                             </div>
                         </div>
 
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="store-email">Slug</label>
+                                <label htmlFor="store-email">Current storefront link</label>
                                 <BasicInput
                                     name="slug"
                                     wrapperClass="setting-form-input"

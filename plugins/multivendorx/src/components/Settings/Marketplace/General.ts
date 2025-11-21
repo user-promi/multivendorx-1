@@ -4,8 +4,12 @@ export default {
     id: 'marketplace-settings',
     priority: 1,
     name: __( 'Overview', 'multivendorx' ),
+<<<<<<< HEAD
+    tabTitle: 'Marketplace page configuration',
+=======
+>>>>>>> 7d3f31db (css)
     desc: __(
-        'Controls how stores are onboarded and what access they get.',
+        'Configure the essential system pages required for your marketplace - including store registration, store dashboard.',
         'multivendorx'
     ),
     video: {
@@ -16,7 +20,7 @@ export default {
         icon: 'adminlib-general-tab', // optional icon class
         link: 'https://example.com/docs/general-settings',
     },
-    icon: 'adminlib-general-tab',
+    icon: 'adminlib-view-files',
     submitUrl: 'settings',
     modal: [          
         {

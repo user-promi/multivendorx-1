@@ -6,7 +6,7 @@ export default {
     priority: 5,
     name: __('Notification Configuration', 'multivendorx'),
     desc: __('Define what each store role can access and manage within the marketplace. All notifications dispatched by the site can be tracked and reviewed from <b><a href="#&tab=settings&subtab=notifications">Notification Settings</a>', 'multivendorx'),
-    icon: 'adminlib-user-network-icon',
+    icon: 'adminlib-notification',
     submitUrl: 'settings',
     modal: [
         {
@@ -74,12 +74,12 @@ export default {
         {
             key: 'sms_section',
             type: 'section',
-            hint: __('SMS Configuration', 'multivendorx'),
+            hint: __('SMS configuration', 'multivendorx'),
         },
         {
             key: 'sms_gateway_selector',
             type: 'setting-toggle',
-            label: __('Select SMS Gateway', 'multivendorx'),
+            label: __('Select SMS gateway', 'multivendorx'),
             settingDescription: __('Pick the SMS service your marketplace will use to send text alerts.', 'multivendorx'),
             options: [
                 {

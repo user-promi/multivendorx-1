@@ -10,46 +10,109 @@
         opacity: 0.8;
     }
 
-    .notification-table {
-        width: 100%;
-        border-collapse: collapse;
+    .product-wrapper.notification {
+        .notification-icon {
+            position: relative;
+            font-family: adminlibrary !important;
 
-
-        thead {
-            background: $theme-background-color;
-            color: $theme-color;
-
-            th {
-                font-size: 1rem;
-                font-weight: 600;
+            &::before {
+                position: absolute;
             }
-        }
 
-        th,
-        td {
-            padding: 0.75rem;
-            text-align: left;
-            font-size: 0.875rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        tbody {
-            tr {
-                cursor: pointer;
-                transition: all 0.4s ease;
-
-                &:nth-child(odd) {
-                    // background: $background-color;
-                }
-
-                &:hover {
-                    // background: #ece2f98f;
-                }
-
-                td {
-                    border-bottom: $border-light-small;
-                }
+            &.icon-1::before {
+                content: "\ef5f";
             }
+            &.icon-2::before {
+                content: "\e936";
+            }
+            &.icon-3::before {
+                content: "\ef45";
+            }
+            &.icon-4::before {
+                content: "\e937";
+            }
+            &.icon-5::before {
+                content: "\e93c";
+            }
+            &.icon-6::before {
+                content: "\efff";
+            }
+            &.icon-7::before {
+                content: "\e92f";
+            }
+            &.icon-8::before {
+                content: "\e939";
+            }
+            &.icon-9::before {
+                content: "\e93a";
+            }
+            &.icon-10::before {
+                content: "\e905";
+            }
+            &.icon-11::before {
+                content: "\e938";
+            }
+            &.icon-12::before {
+                content: "\ef39";
+            }
+            &.icon-13::before {
+                content: "\ef80";
+            }
+            &.icon-14::before {
+                content: "\e908";
+            }
+            &.icon-15::before {
+                content: "\e932";
+            }
+            &.icon-16::before {
+                content: "\ef4f";
+            }
+            &.icon-17::before {
+                content: "\e932";
+            }
+            &.icon-18::before {
+                content: "\e908";
+            }
+            &.icon-19::before {
+                content: "\ef54";
+            }
+            &.icon-20::before {
+                content: "\e932";
+            }
+            &.icon-21::before {
+                content: "\ef8a";
+            }
+            &.icon-22::before {
+                content: "\e908";
+            }
+            &.icon-23::before {
+                content: "\ef8e";
+            }
+            &.icon-24::before {
+                content: "\e932";
+            }
+            &.icon-25::before {
+                content: "\f009";
+            }
+            &.icon-26::before {
+                content: "\e906";
+            }
+            &.icon-27::before {
+                content: "\e91f";
+            }
+            &.icon-28::before {
+                content: "\ef81";
+            }
+            &.icon-29::before {
+                content: "\ef58";
+            }
+            &.icon-26::before {
+                content: "\e906";
+            }
+            &.icon-26::before {
+                content: "\e906";
+            }
+
         }
     }
 
@@ -64,6 +127,13 @@
             color: $theme-color;
             border-radius: 0.313rem;
             font-size: 1.25rem;
+            font-family: adminlibrary !important;
+            position: relative;
+
+            &::before {
+                position: absolute;
+                content: "\e930";
+            }
         }
 
         .details {
@@ -189,7 +259,8 @@
         //     background: $theme-background-color;
         // }
     }
-    .tabs-wrapper{
+
+    .tabs-wrapper {
         margin: 0 !important;
     }
 }
@@ -239,15 +310,27 @@
     display: flex;
     gap: 0.5rem;
 }
-.email-badges-container{
+
+.email-badges-container {
     display: flex;
     gap: 0.625rem;
     margin-bottom: 0.625rem;
 
-    .admin-badge{
+    .admin-badge {
         align-items: center;
     }
 }
+
+.delete-btn {
+    font-size: 1.063rem;
+    color: #f06b4f;
+    cursor: pointer;
+}
+
+.primary-email {
+    color: #0000ffb5;
+}
+
 .drawer-recipients {
     display: flex;
     gap: 0.5rem;
@@ -274,18 +357,10 @@
             color: #5a5858;
         }
 
-        .delete-btn {
-            font-size: 1.063rem;
-            color: #f06b4f;
-            cursor: pointer;
-        }
-
         i {
             color: $theme-color;
             font-size: 1.125rem;
         }
-
-        .details {}
     }
 
     .admin-badge {

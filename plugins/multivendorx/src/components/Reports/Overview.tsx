@@ -527,8 +527,8 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <div >
-                        {(customer.name?.trim() || customer.username)?.charAt(0)}
+                      <div className="avatar">
+                        <span>{((customer.name?.trim() || customer.username)?.charAt(0) || "").toUpperCase()}</span>
                       </div>
                     </a>
 
@@ -579,7 +579,10 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
                       rel="noopener noreferrer"
                     >
                       <div >
-                        {(store.store_name?.trim())?.charAt(0)}
+                        {}
+                      </div>
+                      <div className="avatar">
+                        <span>{((store.store_name?.trim())?.charAt(0) || "").toUpperCase()}</span>
                       </div>
                     </a>
                   </div>

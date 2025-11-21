@@ -313,7 +313,7 @@ const AdminDashboard = () => {
     { id: 'paypal-marketplace', name: 'PayPal marketplace', iconClass: 'adminlib-paypal-marketplace', pro: true },
     { id: 'stripe-marketplace', name: 'Stripe marketplace', iconClass: 'adminlib-stripe-marketplace', pro: true },
     { id: 'facilitator', name: 'Facilitator', iconClass: 'adminlib-facilitator', pro: true },
-    { id: 'notifications', name: 'Notifications', iconClass: 'adminlib-notification', pro: true },
+    { id: 'franchises-module', name: 'Franchises', iconClass: 'adminlib-franchises-module', pro: true },
     { id: 'invoice', name: 'Invoice & packing slip', iconClass: 'adminlib-invoice', pro: true },
   ];
 
@@ -495,7 +495,7 @@ const AdminDashboard = () => {
                         <img src={catalogx} alt="" />
                         <div className="tag">
                           <span className="admin-badge red"><i className="adminlib-pro-tag"></i> Pro</span>
-                          <a href="https://multivendorx.com/pricing/" target="_blank">
+                          <a href="https://catalogx.com/pricing/" target="_blank">
                             Get Pro
                           </a>
                         </div>
@@ -539,7 +539,7 @@ const AdminDashboard = () => {
                         <img src={notifima} alt="" />
                         <div className="tag">
                           <span className="admin-badge red"><i className="adminlib-pro-tag"></i> Pro</span>
-                          <a href="https://multivendorx.com/pricing/" target="_blank">
+                          <a href="https://notifima.com/pricing/" target="_blank">
                             Get Pro
                           </a>
                         </div>
@@ -585,7 +585,7 @@ const AdminDashboard = () => {
                 <div className="card-header">
                   <div className="left">
                     <div className="title">
-                      Need Help Getting Started?
+                      Need help getting started?
                     </div>
                   </div>
                 </div>

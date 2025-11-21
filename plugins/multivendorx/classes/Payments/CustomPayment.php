@@ -16,7 +16,7 @@ class CustomPayment {
 
     public function get_settings() {
         return [
-            'icon'      => 'adminlib-cart',
+            'icon'      => 'adminlib-cogs-on-wheels',
             'id'        => $this->get_id(),
             'label'     => 'Custom Gateway',
             'disableBtn'=> true,

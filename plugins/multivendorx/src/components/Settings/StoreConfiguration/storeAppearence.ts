@@ -7,8 +7,9 @@ export default {
     id: 'store-appearance',
     priority: 5,
     name: __('Appearance', 'multivendorx'),
+    tabTitle: 'Marketplace branding',
     desc: __(
-        "Control how stores look and feel on your marketplace.",
+        "Set a marketplace logo to strengthen brand identity across all connected stores.",
         'multivendorx'
     ),
     icon: 'adminlib-appearance',
@@ -19,7 +20,7 @@ export default {
             type: 'file',
             label: __('Branding logo', 'multivendorx'),
             size: 'small',
-            settingDescription: __('Upload your brand logo for the Store Dashboard. If not added, the site name will be shown.', 'multivendorx'),
+            settingDescription: __('Upload the logo that will be displayed in all store dashboards to highlight your marketplace’s branding. If not provided, the site name will be used.', 'multivendorx'),
         },
         {
             key: 'section',

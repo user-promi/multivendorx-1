@@ -21,10 +21,10 @@ import { PaginationState, RowSelectionState, ColumnDef } from "@tanstack/react-t
 import { formatCurrency } from '../../services/commonFunction';
 
 const overview = [
-  { id: "sales", label: "Total Products", count: 15, icon: "adminlib-star red" },
-  { id: "earnings", label: "New Products", count: 625, icon: "adminlib-support green" },
-  { id: "Vendors", label: "Low Stock", count: 8, icon: "adminlib-global-community yellow" },
-  { id: "free", label: "Out of Stock", count: 8, icon: "adminlib-global-community blue" },
+  { id: "sales", label: "Total Products", count: 15, icon: "adminlib-single-product red" },
+  { id: "earnings", label: "New Products", count: 625, icon: "adminlib-per-product-shipping green" },
+  { id: "Vendors", label: "Low Stock", count: 8, icon: "adminlib-multi-product yellow" },
+  { id: "free", label: "Out of Stock", count: 8, icon: "adminlib-out-of-stock blue" },
 ];
 
 type ProductRow = {
@@ -463,10 +463,10 @@ const Revenue: React.FC = () => {
   }, []);
 
   const overview = [
-    { id: "sales", label: "Total Products", count: totalRows, icon: "adminlib-star red" },
-    { id: "earnings", label: "In Stock", count: inStockCount, icon: "adminlib-support green" },
-    { id: "Vendors", label: "On backorder", count: onBackorderCount, icon: "adminlib-global-community yellow" },
-    { id: "free", label: "Out of Stock", count: outOfStockCount, icon: "adminlib-global-community blue" },
+    { id: "sales", label: "Total Products", count: totalRows, icon: "adminlib-single-product red" },
+    { id: "earnings", label: "In Stock", count: inStockCount, icon: "adminlib-per-product-shipping green" },
+    { id: "Vendors", label: "On backorder", count: onBackorderCount, icon: "adminlib-multi-product yellow" },
+    { id: "free", label: "Out of Stock", count: outOfStockCount, icon: "adminlib-out-of-stock blue" },
   ];
 
   //Fixed table columns for WooCommerce products

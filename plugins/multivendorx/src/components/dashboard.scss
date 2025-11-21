@@ -113,6 +113,10 @@
             margin: 0;
         }
 
+        .table-wrapper {
+            border: 0.063rem solid whitesmoke;
+        }
+
         .column {
             width: 94%;
             padding: 1rem;
@@ -863,7 +867,10 @@
                     &.active-current-tab,
                     &.active-current-tab:hover {
                         background: $theme-color;
-                        color: #fff;
+
+                        p,i {
+                            color: #fff;
+                        }
                     }
                 }
 

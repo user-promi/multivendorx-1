@@ -681,7 +681,7 @@
       }
     }
   }
-}
+} 
 
 // section divider start
 .divider-wrapper {
@@ -694,8 +694,8 @@
 
 
     .title {
-      font-size: 1.813rem;
-
+      font-size: 1.15rem;
+      line-height: 1.813rem;
       width: auto;
     }
 
@@ -719,5 +719,4 @@
 .divider-wrapper:not(:first-child) {
   width: 100%;
 }
-
 // section divider end

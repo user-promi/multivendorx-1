@@ -112,13 +112,17 @@ const findTabDescription = (items: TabData[], activeTabId: string): ReactNode =>
     if (isFile(item) && item.content.id === activeTabId) {
       const tab = item.content;
       if (tab.id === "support") return null;
-
+      const desc = tab.tabDes?.trim() ? tab.tabDes : tab.desc;
       return (
         !tab.hideTabHeader && (
           <div className="divider-wrapper" key={tab.id}>
             <div className="divider-section">
               {tab.name && <div className="title">{tab.tabTitle ?? tab.name}</div>}
-              {tab.desc && <div className="desc">{tab.tabDes ?? tab.desc}</div>}
+              {tab.desc &&
+                <div className="desc"
+                  dangerouslySetInnerHTML={{ __html: desc }}
+                ></div>
+              }
             </div>
           </div>
         )
@@ -370,7 +374,7 @@ const Tabs: React.FC<TabsProps> = ({
             <span>{tab.count}</span>
             {tab.name}
           </p>
-        {desc &&  <div className="des">{tab.desc}</div> }
+          {desc && <div className="des">{tab.desc}</div>}
         </Link>
       );
     }

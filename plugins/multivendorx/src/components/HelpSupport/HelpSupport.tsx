@@ -21,7 +21,7 @@ const HelpSupport: React.FC = () => {
     return (
         <>
             <AdminBreadcrumbs
-                activeTabIcon="adminlib-cart"
+                activeTabIcon="adminlib-customer-support"
                 tabTitle="Help & Support"
                 description={'Get fast help, expert guidance, and easy-to-follow resources - all in one place.'}
             />
@@ -40,7 +40,7 @@ const HelpSupport: React.FC = () => {
                             <div className="support-wrapper">
                                 <div className="support">
                                     <div className="image">
-                                        <i className="adminlib-cart"></i>
+                                        <i className="adminlib-facebook-fill"></i>
                                     </div>
                                     <div className="details">
                                         <div className="name"><a href="https://www.facebook.com/groups/226246620006065/" target="_blank" rel="noopener noreferrer">Facebook community</a></div>
@@ -50,7 +50,7 @@ const HelpSupport: React.FC = () => {
 
                                 <div className="support">
                                     <div className="image">
-                                        <i className="adminlib-cart"></i>
+                                        <i className="adminlib-wordpress"></i>
                                     </div>
                                     <div className="details">
                                         <div className="name"><a href="https://wordpress.org/support/plugin/dc-woocommerce-multi-vendor/" target="_blank" rel="noopener noreferrer">WordPress support forum</a></div>
@@ -59,7 +59,7 @@ const HelpSupport: React.FC = () => {
                                 </div>
                                 <div className="support">
                                     <div className="image">
-                                        <i className="adminlib-cart"></i>
+                                        <i className="adminlib-forum"></i>
                                     </div>
                                     <div className="details">
                                         <div className="name"><a href="https://multivendorx.com/support-forum/" target="_blank" rel="noopener noreferrer">Our forum</a></div>
@@ -68,15 +68,11 @@ const HelpSupport: React.FC = () => {
                                 </div>
                                 <div className="support">
                                     <div className="image">
-                                        <i className="adminlib-cart"></i>
+                                        <i className="adminlib-live-chat"></i>
                                     </div>
                                     <div className="details">
                                         <div className="name"><a href="https://tawk.to/chat/5d2eebf19b94cd38bbe7c9ad/1fsg8cq8n" target="_blank" rel="noopener noreferrer">Live chat</a></div>
                                         <div className="des">Get real-time support from our team for setup, troubleshooting, and guidance.</div>
-                                    </div>
-                                    <div className="details">
-                                        <div className="name"><a href="https://discord.com/channels/1376811097134469191/1376811102020829258" target="_blank" rel="noopener noreferrer">Coding support</a></div>
-                                        <div className="des">Professional help for customizations, integrations, and technical issues.</div>
                                     </div>
                                 </div>
                             </div>
@@ -94,7 +90,7 @@ const HelpSupport: React.FC = () => {
                             <div className="support-wrapper">
                                 <div className="support">
                                     <div className="image">
-                                        <i className="adminlib-cart"></i>
+                                        <i className="adminlib-document"></i>
                                     </div>
                                     <div className="details">
                                         <div className="name"><a href="https://multivendorx.com/docs/knowledgebase/" target="_blank" rel="noopener noreferrer">Official documentation</a></div>
@@ -104,7 +100,7 @@ const HelpSupport: React.FC = () => {
 
                                 <div className="support">
                                     <div className="image">
-                                        <i className="adminlib-cart"></i>
+                                        <i className="adminlib-youtube"></i>
                                     </div>
                                     <div className="details">
                                         <div className="name"><a href="https://www.youtube.com/@MultiVendorX/videos" target="_blank" rel="noopener noreferrer">YouTube tutorials</a></div>
@@ -114,11 +110,20 @@ const HelpSupport: React.FC = () => {
 
                                 <div className="support">
                                     <div className="image">
-                                        <i className="adminlib-cart"></i>
+                                        <i className="adminlib-faq"></i>
                                     </div>
                                     <div className="details">
                                         <div className="name"><a href="https://multivendorx.com/docs/faqs/" target="_blank" rel="noopener noreferrer">FAQs</a></div>
                                         <div className="des">Quick answers to the most common questions about features and troubleshooting.</div>
+                                    </div>
+                                </div>
+                                <div className="support">
+                                    <div className="image">
+                                        <i className="adminlib-coding"></i>
+                                    </div>
+                                    <div className="details">
+                                        <div className="name"><a href="https://discord.com/channels/1376811097134469191/1376811102020829258" target="_blank" rel="noopener noreferrer">Coding support</a></div>
+                                        <div className="des">Professional help for customizations, integrations, and technical issues.</div>
                                     </div>
                                 </div>
                             </div>

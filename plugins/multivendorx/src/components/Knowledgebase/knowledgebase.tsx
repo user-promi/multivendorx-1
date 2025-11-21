@@ -477,7 +477,7 @@ export const KnowledgeBase: React.FC = () => {
                 <CommonPopup
                     open={addEntry}
                     onClose={handleCloseForm}
-                    width="700px"
+                    width="500px"
                     height='80%'
                     header={
                         <>

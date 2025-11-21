@@ -3,18 +3,18 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'database-tools',
     priority: 4,
-    name: __( 'Database Tools', 'multivendorx' ),
+    name: __( 'Database tools', 'multivendorx' ),
     desc: __(
         'Site errors and events are logged for easy troubleshooting.',
         'multivendorx'
     ),
-    icon: 'adminlib-general-tab',
+    icon: 'adminlib-database',
     submitUrl: 'settings',
     modal: [     
         {
             key: 'transients',
             type: 'button',
-            name:__('Clear Transients', 'multivendorx'),
+            name:__('Clear transients', 'multivendorx'),
             label: __( 'MultivendorX Vendors Transients', 'multivendorx' ),
             desc: __(
                 'This button clears all vendor dashboards transient cache',
@@ -24,8 +24,8 @@ export default {
         {
             key: 'visitor',
             type: 'button',
-            name: __( 'Reset Database', 'multivendorx' ),
-            label: __( 'Reset Visitors Stats Table', 'multivendorx' ),
+            name: __( 'Reset database', 'multivendorx' ),
+            label: __( 'Reset visitors Stats Table', 'multivendorx' ),
             desc: __(
                 'Use this tool to clear all the table data of MultivendorX visitors stats',
                 'multivendorx'
@@ -34,8 +34,8 @@ export default {
         {
             key: 'migrate_order',
             type: 'button',
-            name: __( 'Order Migrate', 'multivendorx' ),
-            label: __( 'Regenerate Suborders', 'multivendorx' ),
+            name: __( 'Order migrate', 'multivendorx' ),
+            label: __( 'Regenerate suborders', 'multivendorx' ),
             desc: __(
                 'With this tool, you can create missing sub orders',
                 'multivendorx'
@@ -46,7 +46,7 @@ export default {
             key: 'default_pages',
             type: 'button',
             name: __( 'Create default MultiVendorX Page', 'multivendorx' ),
-            label: __( 'MultiVendorX Page', 'multivendorx' ),
+            label: __( 'MultiVendorX page', 'multivendorx' ),
             desc: __(
                 'This tool will install all the missing MultiVendorX pages. Pages already defined and set up will not be replaced',
                 'multivendorx'
@@ -57,7 +57,7 @@ export default {
             key: 'separator_content',
             type: 'section',
             wrapperClass: 'divider-wrapper color-red',
-            hint: __("Danger Zone", 'multivendorx'),
+            hint: __("Danger zone", 'multivendorx'),
             desc: __('', 'multivendorx')
         },
 
@@ -65,7 +65,7 @@ export default {
             key: 'clear_notifications',
             type: 'number',
             wrapperClass: 'red-text',
-            label: __( 'Clear Notifications', 'multivendorx' ),
+            label: __( 'Clear notifications', 'multivendorx' ),
         },
         
     ],
