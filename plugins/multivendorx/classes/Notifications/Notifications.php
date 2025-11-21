@@ -1027,7 +1027,7 @@ class Notifications
                 'tag'              => 'System',
                 'category'         => 'notification',
             ],
-        ]
+        ];
 
         $count = $wpdb->get_var(
             "SELECT COUNT(*) FROM {$wpdb->prefix}" . Utill::TABLES['system_events']
