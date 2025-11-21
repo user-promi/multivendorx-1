@@ -795,7 +795,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                             ref={emailInputRef}
                                             type="email"
                                             className="basic-input"
-                                            placeholder="Type the email ID and hit Enter to save it."
+                                            placeholder="Type the email ID and hit 'Enter' or 'Add' to save it."
                                             value={newEmailValue}
                                             onChange={(e) => setNewEmailValue(e.target.value)}
                                             onKeyPress={handleEmailKeyPress}
@@ -811,7 +811,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                     </div>
                                 </div>
                                 <div className="settings-metabox-description">
-                                    Add multiple email addresses. Press "Enter" or click "Add" after each email.
+                                    Manage your store email preferences:<br>Primary email - You can set any email as the primary one by marking it with the star icon. This email address is displayed on the storefront.<br>Additional email - Add extra email addresses to receive store notifications. These emails are used internally for alerts only and will not appear publicly.
                                 </div>
                                 {errorMsg.email && <p className="invalid-massage">{errorMsg.email}</p>}
                             </div>
@@ -973,7 +973,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                         {/* Updated Email Section */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="store-email">Status</label>
+                                <label htmlFor="store-email">Current status</label>
                                 <SelectInput
                                     name="status"
                                     value={formData.status}
@@ -995,14 +995,14 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                    Manage store Slug
+                                    Manage storefront link
                                 </div>
                             </div>
                         </div>
 
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="store-email">Slug</label>
+                                <label htmlFor="store-email">Current storefront link</label>
                                 <BasicInput
                                     name="slug"
                                     wrapperClass="setting-form-input"

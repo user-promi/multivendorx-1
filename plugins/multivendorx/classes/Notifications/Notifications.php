@@ -477,6 +477,63 @@ class Notifications
                 'tag'            => 'Commission',
                 'category'       => 'activity',
             ],
+            //Store addional status//
+            'store_pending_approval' =>
+    [
+        'name'           => 'Store pending approval',
+        'desc'           => 'The store is pending approval by the admin.',
+        'admin_enabled'  => true,
+        'store_enabled'  => true,
+        'email_subject'  => 'Store pending approval',
+        'email_body'     => 'Your store is pending approval by the admin.',
+        'sms_content'    => 'Your store is pending approval by the admin.',
+        'system_message' => 'Store pending approval [store_name]',
+        'tag'            => 'Store',
+        'category'       => 'activity',
+    ],
+
+'store_permanently_rejected' =>
+    [
+        'name'           => 'Store permanently rejected',
+        'desc'           => 'The store is permanently rejected. The store owner will have read-only access to historical data.',
+        'admin_enabled'  => true,
+        'store_enabled'  => true,
+        'email_subject'  => 'Store permanently rejected',
+        'email_body'     => 'Your store has been permanently rejected. Read-only access to historical data is available.',
+        'sms_content'    => 'Your store has been permanently rejected.',
+        'system_message' => 'Store permanently rejected [store_name]',
+        'tag'            => 'Store',
+        'category'       => 'activity',
+    ],
+
+'store_under_review' =>
+    [
+        'name'           => 'Store under review',
+        'desc'           => 'The store is under review after activation or post-update.',
+        'admin_enabled'  => true,
+        'store_enabled'  => true,
+        'email_subject'  => 'Store under review',
+        'email_body'     => 'Your store is under review by the admin.',
+        'sms_content'    => 'Your store is under review by the admin.',
+        'system_message' => 'Store under review [store_name]',
+        'tag'            => 'Store',
+        'category'       => 'activity',
+    ],
+
+'store_permanently_deactivated' =>
+    [
+        'name'           => 'Store permanently deactivated',
+        'desc'           => 'The store has been permanently deactivated. Read-only access to historical data is available, storefront and products are removed from public view.',
+        'admin_enabled'  => true,
+        'store_enabled'  => true,
+        'email_subject'  => 'Store permanently deactivated',
+        'email_body'     => 'Your store has been permanently deactivated. Read-only access to historical data is available.',
+        'sms_content'    => 'Your store has been permanently deactivated.',
+        'system_message' => 'Store permanently deactivated [store_name]',
+        'tag'            => 'Store',
+        'category'       => 'activity',
+    ],
+
 
             // (remaining duplicates/legacy keys retained from original list)
             'product_review_received'   => [

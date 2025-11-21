@@ -6,7 +6,8 @@ import template3 from '../../../assets/images/template/store/template3.jpg';
 export default {
     id: 'store-appearance',
     priority: 5,
-    name: __('Marketplace branding', 'multivendorx'),
+    name: __('Appearance', 'multivendorx'),
+    tabTitle: 'Marketplace branding',
     desc: __(
         "Set a marketplace logo to strengthen brand identity across all connected stores.",
         'multivendorx'
