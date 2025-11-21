@@ -396,7 +396,7 @@ const Dashboard: React.FC = () => {
                     <div className="details">
                       <div className="text">{item.text}</div>
                       <div className="number">{item.number}</div>
-                      {/* <div className="report"><span>10%</span> | This month</div> */}
+                      <div className="report"><span>10%</span> | This month  <span>10%</span> | This month</div>
                     </div>
                     <div className="analytics-icon">
                       <i className={item.icon}></i>
@@ -413,7 +413,7 @@ const Dashboard: React.FC = () => {
 
 
       <div className="row">
-        {/* <div className="column w-65">
+        <div className="column w-65">
           <div className="card">
             <div className="card-header">
               <div className="left">
@@ -468,7 +468,7 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
 
-        </div> */}
+        </div>
 
         <div className="column w-65">
           <div className="card">

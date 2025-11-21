@@ -227,7 +227,7 @@ const App = () => {
           { value: 'modules', label: 'Modules' },
           { value: 'settings', label: 'Settings' },
         ]}
-        showMessages={true}
+        // showMessages={true}
         notifications={<HeaderNotification />}
         showNotifications={true}
         messages={[
