@@ -579,7 +579,10 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
                       rel="noopener noreferrer"
                     >
                       <div >
-                        {(store.store_name?.trim())?.charAt(0)}
+                        {}
+                      </div>
+                      <div className="avatar">
+                        <span>{((store.store_name?.trim())?.charAt(0) || "").toUpperCase()}</span>
                       </div>
                     </a>
                   </div>

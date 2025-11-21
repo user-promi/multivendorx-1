@@ -4,7 +4,10 @@ export default {
     id: 'marketplace-settings',
     priority: 1,
     name: __( 'Overview', 'multivendorx' ),
+<<<<<<< HEAD
     tabTitle: 'Marketplace page configuration',
+=======
+>>>>>>> 7d3f31db (css)
     desc: __(
         'Controls how stores are onboarded and what access they get.',
         'multivendorx'

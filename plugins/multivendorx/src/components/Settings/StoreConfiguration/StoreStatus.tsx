@@ -157,6 +157,7 @@ const StoreStatus: React.FC = () => {
                     supprot={[]}
                     Link={Link}
                     submenuRender={true}
+                    menuIcon={true}
                 />
             </div>
         </SettingProvider>
