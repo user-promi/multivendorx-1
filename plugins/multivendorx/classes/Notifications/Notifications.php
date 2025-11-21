@@ -475,8 +475,7 @@ class Notifications
                 'system_message' => 'New review for {product_name} from {customer_name}.',
                 'tag'            => 'Product',
                 'category'       => 'activity',
-            ]
-
+            ],
             'commission_credit'         => [
                 'name'           => 'Commission Credited',
                 'desc'           => 'A commission is credited for an order.',
@@ -548,7 +547,7 @@ class Notifications
                 'tag'            => 'Order',
                 'category'       => 'notification',
             ],
-        ];
+        ],
 
         [
 
@@ -962,7 +961,7 @@ class Notifications
                 'tag'              => 'System',
                 'category'         => 'notification',
             ],
-        ];
+        ]
 
         $count = $wpdb->get_var(
             "SELECT COUNT(*) FROM {$wpdb->prefix}" . Utill::TABLES['system_events']
