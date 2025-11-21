@@ -566,7 +566,7 @@ export default {
             desc: "Affiliate program that tracks referrals and commissions for marketplace products.",
             icon: 'adminlib-wp-affiliate',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/affiliate-product/',
-            settings_link: `${appLocalizer.settings_page_url}affiliate`,
+            settings_link: `${appLocalizer.plugin_url}settings&subtab=affiliate`,
             pro_module: true,
             req_pluging: [{ name: 'Affiliate WP', link: 'https://affiliatewp.com/' }],
             category: 'integration'
@@ -596,7 +596,7 @@ export default {
             desc: "Lets stores pinpoint their location on an interactive map, making it easy for customers to discover nearby stores and shop locally.",
             icon: 'adminlib-geo-location',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/shipstation/',
-            settings_link: `${appLocalizer.settings_page_url}geolocation`,
+            settings_link: `${appLocalizer.plugin_url}settings&subtab=geolocation`,
             pro_module: false,
             category: 'store_management'
         },
