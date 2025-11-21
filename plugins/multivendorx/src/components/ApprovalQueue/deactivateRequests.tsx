@@ -156,22 +156,23 @@ const DeactivateRequests: React.FC<Props> = ({ onUpdated }) => {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) =>
                 <TableCell title={row.original.status || ''}>
-                    <span className="admin-btn btn-purple" onClick={() => { handleSingleAction('approve', row.original.id!) }}><i className="adminlib-check"></i> Approve</span>
+                    <span className="admin-btn btn-purple" onClick={() => { handleSingleAction('approve', row) }}><i className="adminlib-check"></i> Approve</span>
 
-                    <span className="admin-btn btn-red" onClick={() => handleSingleAction('reject', row.original.id!)}><i className="adminlib-close"></i> Reject</span>
+                    <span className="admin-btn btn-red" onClick={() => handleSingleAction('reject', row)}><i className="adminlib-close"></i> Reject</span>
                 </TableCell>,
         },
     ];
 
     const handleSingleAction = (action: string, row: any) => {
-        let storeId = row.id;
+        let storeId = row.original.id;
+
         if (!storeId) return;
 
         axios({
             method: 'PUT',
             url: getApiLink(appLocalizer, `store/${storeId}`),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            data: { deactivate: true, action, id: row.id },
+            data: { deactivate: true, action, id: storeId },
         })
             .then(() => {
                 requestData(pagination.pageSize, pagination.pageIndex + 1);

@@ -247,7 +247,7 @@ export const KnowledgeBase: React.FC = () => {
                     },
                     {
                         key: 'publish',
-                        name: 'Publish',
+                        name: 'Published',
                         count: response.data.publish || 0,
                     },
                     {
@@ -370,7 +370,7 @@ export const KnowledgeBase: React.FC = () => {
                 <TableCell title={row.original.status || ''}>
                     {row.original.status ? (
                         <>
-                            {row.original.status === 'publish' && <span className="admin-badge green">Publish</span>}
+                            {row.original.status === 'publish' && <span className="admin-badge green">Published</span>}
                             {row.original.status === 'pending' && <span className="admin-badge yellow">Pending</span>}
                             {row.original.status === 'draft' && <span className="admin-badge blue">Draft</span>}
                         </>
