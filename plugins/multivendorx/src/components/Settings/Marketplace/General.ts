@@ -9,7 +9,7 @@ export default {
 =======
 >>>>>>> 7d3f31db (css)
     desc: __(
-        'Controls how stores are onboarded and what access they get.',
+        'Configure the essential system pages required for your marketplace - including store registration, store dashboard.',
         'multivendorx'
     ),
     video: {
