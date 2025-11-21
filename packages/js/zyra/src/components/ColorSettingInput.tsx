@@ -209,20 +209,20 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                         {/* Sidebar */}
                         <div className="left-wrapper">
                             <div className="logo-wrapper">
-                                <img src="" alt="" />
+                                <div className="logo">MultivendorX</div>
                                 <i className="adminlib-menu"></i>
                             </div>
                             <ul className="dashboard-tabs">
                                 <li className="tab-name active">
                                     <a className="tab" style={{ color: selectedColors.colorPrimary, background: `color-mix(in srgb, ${selectedColors.colorPrimary} 20%, transparent)` }}>
-                                        <i className="adminlib-cart"></i>
+                                        <i className="adminlib-module"></i>
                                         Dashboard
                                     </a>
                                 </li>
 
                                 <li className="tab-name ">
                                     <a className="tab" >
-                                        <i className="adminlib-cart"></i>
+                                        <i className="adminlib-single-product"></i>
                                         Products
                                     </a>
                                     <i className="admin-arrow adminlib-pagination-right-arrow"></i>
@@ -238,7 +238,7 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                                 </ul>
                                 <li className="tab-name ">
                                     <a href="#" className="tab" >
-                                        <i className="adminlib-cart"></i>
+                                        <i className="adminlib-order"></i>
                                         Orders                            </a>
                                     <i className="admin-arrow adminlib-pagination-right-arrow"></i>
                                 </li>
@@ -251,7 +251,7 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                                 </ul>
                                 <li className="tab-name ">
                                     <a className="tab" >
-                                        <i className=""></i>
+                                        <i className="adminlib-coupon"></i>
                                         Coupons
                                     </a>
                                     <i className="admin-arrow adminlib-pagination-right-arrow"></i>
@@ -304,7 +304,7 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                             <div className="tab-content-wrapper">
                                 <div className="title-wrapper">
                                     <div className="left-section">
-                                        <div className="title">Good Morning, Anna!</div>
+                                        <div className="title">Good Morning, Store owner!</div>
                                         <div className="des"></div>
                                     </div>
                                     <div className="dashboard-btn" style={{ background: selectedColors.colorPrimary }}>Add new</div>
@@ -317,7 +317,7 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                                             <div className="des"></div>
                                         </div>
                                         <div className="icon-wrapper" style={{ background: selectedColors.colorPrimary }}>
-                                            <i className="adminlib-cart"></i>
+                                            <i className="adminlib-order"></i>
                                         </div>
                                     </div>
                                     <div className="item" style={{ background: `color-mix(in srgb, ${selectedColors.colorSecondary} 15%, transparent)` }}>
@@ -326,7 +326,7 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                                             <div className="des"></div>
                                         </div>
                                         <div className="icon-wrapper" style={{ background: selectedColors.colorSecondary }}>
-                                            <i className="adminlib-cart"></i>
+                                            <i className="adminlib-global-community"></i>
                                         </div>
                                     </div>
                                     <div className="item" style={{ background: `color-mix(in srgb, ${selectedColors.colorAccent} 15%, transparent)` }}>
@@ -335,7 +335,7 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                                             <div className="des"></div>
                                         </div>
                                         <div className="icon-wrapper" style={{ background: selectedColors.colorAccent }} >
-                                            <i className="adminlib-cart"></i>
+                                            <i className="adminlib-wallet"></i>
                                         </div>
                                     </div>
                                     <div className="item" style={{ background: `color-mix(in srgb, ${selectedColors.colorSupport} 15%, transparent)` }}>
@@ -344,7 +344,7 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                                             <div className="des"></div>
                                         </div>
                                         <div className="icon-wrapper" style={{ background: selectedColors.colorSupport }}>
-                                            <i className="adminlib-cart"></i>
+                                            <i className="adminlib-dollar"></i>
                                         </div>
                                     </div>
                                 </div>
