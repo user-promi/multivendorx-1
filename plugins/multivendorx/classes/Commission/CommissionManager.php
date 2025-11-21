@@ -212,7 +212,7 @@ class CommissionManager {
 
         $order_total = (float) $order->get_subtotal() - (float) $order->get_discount_total();
         if ( $is_refund ) {
-            $order_total -= (float) $order->get_total_refunded();
+            $order_total -= (float) $this->get_item_refunded_total($order);
         }
 
         foreach ( $commission_per_store_order as $row ) {
@@ -497,7 +497,7 @@ class CommissionManager {
             }
 
             $marketplace_commission = $commission_amount;
-            $store_earning = (float) ($vendor_order->get_subtotal() - $vendor_order->get_discount_total() - $vendor_order->get_total_refunded() - $commission_amount);
+            $store_earning = (float) ($vendor_order->get_subtotal() - $vendor_order->get_discount_total() - $this->get_item_refunded_total($vendor_order) - $commission_amount);
 
             $commission = CommissionUtil::get_commission_db($commission_id);
         
@@ -557,7 +557,6 @@ class CommissionManager {
                 'discount_applied'          => $coupon_amount,
                 'store_payable'             => $store_payable,
                 'marketplace_payable'       => $marketplace_payable,
-                // 'store_refunded'            => $commission->store_refunded + (float) ($commission->store_payable - $store_payable),
                 'currency'                  => get_woocommerce_currency(),
                 'status'                    => $status,
                 'rules_applied'             => $commission->rules_applied
@@ -612,16 +611,45 @@ class CommissionManager {
             return $commission_id;
         }
     }
-    public function get_item_refunded_total( $order, $item_id ) {
+    // public function get_item_refunded_total( $order, $item_id ) {
+    //     $refunded_total = 0;
+
+    //     // Loop through all refunds of this order
+    //     foreach ( $order->get_refunds() as $refund ) {
+    //         // Each refund has refunded items
+    //         foreach ( $refund->get_items() as $refund_item ) {
+    //             // Check if this refund line refers to our original item
+    //             $refunded_item_id = $refund_item->get_meta( '_refunded_item_id', true );
+    //             if ( (int) $refunded_item_id === (int) $item_id ) {
+    //                 $refunded_total += abs( (float) $refund_item->get_total() );
+    //             }
+    //         }
+    //     }
+
+    //     return $refunded_total;
+    // }
+
+    /**
+     * Get refunded total for specific item OR all items (excluding shipping, taxes, etc.)
+     *
+     * @param WC_Order $order
+     * @param int|null $item_id  If null, returns total refund for all items.
+     * @return float
+     */
+    public function get_item_refunded_total( $order, $item_id = null ) {
+
         $refunded_total = 0;
 
-        // Loop through all refunds of this order
+        // Loop through all refunds in this order
         foreach ( $order->get_refunds() as $refund ) {
-            // Each refund has refunded items
             foreach ( $refund->get_items() as $refund_item ) {
-                // Check if this refund line refers to our original item
                 $refunded_item_id = $refund_item->get_meta( '_refunded_item_id', true );
-                if ( (int) $refunded_item_id === (int) $item_id ) {
+
+                if ( $item_id !== null ) {
+                    if ( (int) $refunded_item_id === (int) $item_id ) {
+                        $refunded_total += abs( (float) $refund_item->get_total() );
+                    }
+                } else {
                     $refunded_total += abs( (float) $refund_item->get_total() );
                 }
             }
@@ -629,5 +657,6 @@ class CommissionManager {
 
         return $refunded_total;
     }
+
 
 }
