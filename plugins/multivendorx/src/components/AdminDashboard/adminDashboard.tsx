@@ -495,7 +495,7 @@ const AdminDashboard = () => {
                         <img src={catalogx} alt="" />
                         <div className="tag">
                           <span className="admin-badge red"><i className="adminlib-pro-tag"></i> Pro</span>
-                          <a href="https://multivendorx.com/pricing/" target="_blank">
+                          <a href="https://catalogx.com/pricing/" target="_blank">
                             Get Pro
                           </a>
                         </div>
@@ -539,7 +539,7 @@ const AdminDashboard = () => {
                         <img src={notifima} alt="" />
                         <div className="tag">
                           <span className="admin-badge red"><i className="adminlib-pro-tag"></i> Pro</span>
-                          <a href="https://multivendorx.com/pricing/" target="_blank">
+                          <a href="https://notifima.com/pricing/" target="_blank">
                             Get Pro
                           </a>
                         </div>

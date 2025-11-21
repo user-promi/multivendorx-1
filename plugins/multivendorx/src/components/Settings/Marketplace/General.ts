@@ -16,7 +16,7 @@ export default {
         icon: 'adminlib-general-tab', // optional icon class
         link: 'https://example.com/docs/general-settings',
     },
-    icon: 'adminlib-general-tab',
+    icon: 'adminlib-view-files',
     submitUrl: 'settings',
     modal: [          
         {

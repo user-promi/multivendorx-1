@@ -8,7 +8,7 @@ export default {
         'Controls how stores are onboarded and what access they get.',
         'multivendorx'
     ),
-    icon: 'adminlib-general-tab',
+    icon: 'adminlib-migration',
     submitUrl: 'settings',
     modal: [         
         {

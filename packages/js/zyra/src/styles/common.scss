@@ -63,9 +63,6 @@ body:has(.admin-main-wrapper) {
     min-height: 2.213rem !important; // for overwrite wordpress style
   }
 
-  a:hover{
-    color: $theme-color;
-  }
   input[type="color"] {
     cursor: pointer;
   }

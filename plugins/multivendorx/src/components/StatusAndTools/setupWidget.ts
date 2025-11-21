@@ -8,7 +8,7 @@ export default {
         'Data from your previous marketplace can be seamlessly transferred using this migration tool.',
         'multivendorx'
     ),
-    icon: 'adminlib-general-tab',
+    icon: 'adminlib-setup',
     submitUrl: 'settings',
     modal: [   
 

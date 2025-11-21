@@ -8,7 +8,7 @@ export default {
         'Custom CSS can be added here to modify and style the dashboard.',
         'multivendorx'
     ),
-    icon: 'adminlib-general-tab',
+    icon: 'adminlib-coding',
     submitUrl: 'settings',
     modal: [     
 
