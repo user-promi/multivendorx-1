@@ -22,7 +22,11 @@ const Section: React.FC<SectionProps> = ({ wrapperClass, hint, value, descriptio
                             dangerouslySetInnerHTML={{ __html: hint }}
                         ></p>
                     )}
-                    <div className="desc">{description}</div>
+                    {description && (
+                        <div className="desc"
+                            dangerouslySetInnerHTML={{ __html: description }}
+                        ></div>
+                    )}
                     {value && <span>{value}</span>}
                 </div>
             </div>

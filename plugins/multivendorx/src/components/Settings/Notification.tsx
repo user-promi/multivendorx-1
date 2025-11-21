@@ -385,9 +385,9 @@ const Notification: React.FC = () => {
                     <div className="content">
 
                         <div className="form-group-wrapper">
+                            {openChannel === "system" && (
+                                <div className="form-group">
 
-                            <div className="form-group">
-                                {openChannel === "system" && (
                                     <>
                                         <label>System Message</label>
                                         <TextArea
@@ -403,11 +403,13 @@ const Notification: React.FC = () => {
                                             onBlur={() => { handleAutoSave(formData.id); }}
                                         />
                                     </>
-                                )}
-                            </div>
 
-                            <div className="form-group">
-                                {openChannel === "sms" && (
+                                </div>
+                            )}
+                        </div>
+                        <div className="form-group-wrapper">
+                            {openChannel === "sms" && (
+                                <div className="form-group">
                                     <>
                                         <label>SMS Content</label>
                                         <TextArea
@@ -424,11 +426,12 @@ const Notification: React.FC = () => {
                                             onBlur={() => { handleAutoSave(formData.id); }}
                                         />
                                     </>
-                                )}
-                            </div>
-
-                            <div className="form-group">
-                                {openChannel === "mail" && (
+                                </div>
+                            )}
+                        </div>
+                        <div className="form-group-wrapper">
+                            {openChannel === "mail" && (
+                                <div className="form-group">
                                     <>
                                         <label>Email Subject</label>
                                         <BasicInput
@@ -444,24 +447,29 @@ const Notification: React.FC = () => {
                                             }}
                                             onBlur={() => { handleAutoSave(formData.id); }}
                                         />
-
-                                        <label>Email Body</label>
-                                        <TextArea
-                                            name="sms_content"
-                                            inputClass="textarea-input"
-                                            value={formData.email_body || ""}
-                                            onChange={(e) => {
-                                                setFormData({
-                                                    ...formData,
-                                                    email_body: e.target.value,
-                                                });
-                                                handleAutoSave(formData.id);
-                                            }}
-                                            onBlur={() => { handleAutoSave(formData.id); }}
-                                        />
                                     </>
-                                )}
+                                </div>
+                            )}
+                        </div>
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label>Email Body</label>
+                                <TextArea
+                                    name="sms_content"
+                                    inputClass="textarea-input"
+                                    value={formData.email_body || ""}
+                                    onChange={(e) => {
+                                        setFormData({
+                                            ...formData,
+                                            email_body: e.target.value,
+                                        });
+                                        handleAutoSave(formData.id);
+                                    }}
+                                    onBlur={() => { handleAutoSave(formData.id); }}
+                                />
                             </div>
+                        </div>
+                        <div className="form-group-wrapper">
                             {systemTags?.length > 0 && (
                                 <div className="tag-list">
                                     <p>You can use these tags:</p>
@@ -491,7 +499,7 @@ const Notification: React.FC = () => {
                     header={
                         <>
                             <div className="title">
-                                <i className="adminlib-cart"></i>
+                                <i className="adminlib-notification"></i>
                                 Notification preferences
                             </div>
                             <p>Edit and control notification method and recipients for this event.</p>

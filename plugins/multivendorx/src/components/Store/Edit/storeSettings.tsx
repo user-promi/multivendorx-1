@@ -811,7 +811,15 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                     </div>
                                 </div>
                                 <div className="settings-metabox-description">
+<<<<<<< HEAD
                                     Manage your store email preferences:<br>Primary email - You can set any email as the primary one by marking it with the star icon. This email address is displayed on the storefront.<br>Additional email - Add extra email addresses to receive store notifications. These emails are used internally for alerts only and will not appear publicly.
+=======
+                                    Manage your store email preferences: 
+                                    <ul>
+                                       <li> <strong>Primary email</strong> – The first email you enter becomes the store’s primary contact address and is displayed on the storefront.</li>
+                                       <li><strong>Additional email</strong> – Add extra email addresses to receive store notifications. These emails are used internally for alerts only and will not appear publicly.</li> 
+                                    </ul>
+>>>>>>> 7d3f31db (css)
                                 </div>
                                 {errorMsg.email && <p className="invalid-massage">{errorMsg.email}</p>}
                             </div>
