@@ -45,7 +45,7 @@ class Hooks {
             $vendor = StoreUtil::get_products_vendor($item['product_id']);
             if ($vendor) {
                 $item->add_meta_data('multivendorx_sold_by', $vendor->get('name'));
-                $item->add_meta_data('multivendorx_store_id', $vendor->get_id());
+                // $item->add_meta_data('multivendorx_store_id', $vendor->get_id());
             }
         }
     }

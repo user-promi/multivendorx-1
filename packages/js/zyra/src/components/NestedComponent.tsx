@@ -65,6 +65,8 @@ interface NestedComponentProps {
   single?: boolean;
   description?: string;
   wrapperClass?: string;
+  khali_dabba?: boolean;
+  modules?: any;
 }
 
 const NestedComponent: React.FC<NestedComponentProps> = ({
@@ -77,9 +79,30 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
   single = false,
   description,
   wrapperClass,
+  khali_dabba,
+  modules,
 }) => {
+  function hasFieldAccess(field: NestedField) {
+    // PRO CHECK
+    if (field.proSetting) {
+      if (!khali_dabba) {
+        return false;
+      }
+    }
+
+    // MODULE CHECK
+    if (field.moduleEnabled) {
+      // modules is an array of enabled module names
+      if (!Array.isArray(modules) || !modules.includes(field.moduleEnabled)) {
+        return false; // module not active
+      }
+    }
+
+    return true; // access allowed
+  }
+
   const [rows, setRows] = useState<Record<string, any>[]>([]);
-  
+
   // sync value → state
   useEffect(() => {
     setRows(single ? (value.length ? [value[0]] : [{}]) : value.length ? value : [{}]);
@@ -160,7 +183,12 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
               key={field.key}
               options={field.options || []}
               value={val}
-              onChange={(newVal) => handleChange(rowIndex, field.key, newVal)}
+              onChange={(newVal) => {
+                if (!hasFieldAccess(field)) {
+                  return;
+                }
+                handleChange(rowIndex, field.key, newVal)
+              }}
               preText={field.preText}
               postText={field.postText}
             />
@@ -188,7 +216,13 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
               description={field.desc}
               size={field.size}
               placeholder={field.placeholder}
-              onChange={(e) => handleChange(rowIndex, field.key, e.target.value)}
+              onChange={(e) => {
+                if (!hasFieldAccess(field)) {
+                  return;
+                }
+                handleChange(rowIndex, field.key, e.target.value)
+
+              }}
               wrapperClass="setting-form-input"
             />
           </div>
@@ -207,7 +241,13 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
               colNumber={50}
               description={field.desc}
               descClass="settings-metabox-description"
-              onChange={(e) => handleChange(rowIndex, field.key, e.target.value)}
+              onChange={(e) => {
+                if (!hasFieldAccess(field)) {
+                  return;
+                }
+                handleChange(rowIndex, field.key, e.target.value)
+
+              }}
             />
           </div>
         );
@@ -234,6 +274,9 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
               }
               value={typeof val === "object" ? val.value : val}
               onChange={(newVal: any) => {
+                if (!hasFieldAccess(field)) {
+                  return;
+                }
                 if (!newVal) {
                   handleChange(rowIndex, field.key, "");
                 } else if (Array.isArray(newVal)) {
@@ -292,6 +335,9 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
               }
               value={normalizedValue}
               onChange={(e) => {
+                if (!hasFieldAccess(field)) {
+                  return;
+                }
                 if (Array.isArray(e)) {
                   handleChange(rowIndex, field.key, e.length > 0 ? e : []);
                 } else if ("target" in e) {

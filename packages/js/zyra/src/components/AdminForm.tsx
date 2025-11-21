@@ -1489,7 +1489,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                     input = (
                         <BlockText
                             key={inputField.blocktext}
-                            blockTextClass= {inputField.blockTextClass || 'settings-metabox-note'}
+                            blockTextClass={inputField.blockTextClass || 'settings-metabox-note'}
                             title={inputField.title}
                             value={String(inputField.blocktext)}// Text or HTML content to display inside the block (safe HTML injected).
                         />
@@ -1846,6 +1846,8 @@ const AdminForm: React.FC<AdminFormProps> = ({
                 case 'nested':
                     input = (
                         <NestedComponent
+                            khali_dabba={appLocalizer?.khali_dabba === "1"}
+                            modules={modules}
                             key={inputField.key}
                             id={inputField.key}
                             label={inputField.label}
