@@ -119,49 +119,39 @@ const LatestReview: React.FC<LatestReviewProps> = ({ store_id }) => {
             },
         },
         {
-            id: 'rating',
-            header: __('Rating', 'multivendorx'),
+            id: 'rating-details',
+            header: __('Details', 'multivendorx'),
             cell: ({ row }) => {
                 const rating = row.original.overall_rating ?? 0;
-                return (
-                    <TableCell title={rating.toString()}>
-                        <div className="rating-wrapper">
-                            {rating > 0 ? (
-                                <>
-                                    {[...Array(Math.round(rating))].map((_, i) => (
-                                        <i key={`filled-${i}`} className="adminlib-star"></i>
-                                    ))}
-                                    {[...Array(5 - Math.round(rating))].map((_, i) => (
-                                        <i key={`empty-${i}`} className="adminlib-star-o"></i>
-                                    ))}
-                                </>
-                            ) : (
-                                '-'
-                            )}
-                        </div>
-                    </TableCell>
-                );
-            },
-        },
-        {
-            id: 'title',
-            header: __('Title', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.review_title}>
-                    {row.original.review_title || '-'}
-                </TableCell>
-            ),
-        },
-        {
-            id: 'content',
-            header: __('Review', 'multivendorx'),
-            cell: ({ row }) => {
                 const content = row.original.review_content || '';
                 const shortText = content.length > 40 ? content.substring(0, 40) + '...' : content;
-
                 return (
-                    <TableCell title={content}>
-                        {shortText || '-'}
+                    <TableCell title={rating.toString()}>
+                        <div className="rating-details-wrapper">
+                            <div className="title-wrapper">
+                                <div className="rating-wrapper">
+                                    {rating > 0 ? (
+                                        <>
+                                            {[...Array(Math.round(rating))].map((_, i) => (
+                                                <i key={`filled-${i}`} className="adminlib-star"></i>
+                                            ))}
+                                            {[...Array(5 - Math.round(rating))].map((_, i) => (
+                                                <i key={`empty-${i}`} className="adminlib-star-o"></i>
+                                            ))}
+                                        </>
+                                    ) : (
+                                        '-'
+                                    )}
+                                </div>
+                                <div className="title">
+                                    {row.original.review_title || '-'}
+                                </div>
+                            </div>
+
+                            <div className="review">
+                                {shortText || '-'}
+                            </div>
+                        </div>
                     </TableCell>
                 );
             },
@@ -184,14 +174,13 @@ const LatestReview: React.FC<LatestReviewProps> = ({ store_id }) => {
             ),
         },
         {
-            id: 'date_created',
             header: __('Date', 'multivendorx'),
             cell: ({ row }) => {
                 const rawDate = row.original.date_created;
                 const formattedDate = rawDate ? new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(rawDate)) : '-';
                 return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
             }
-        },
+        }
     ];
 
     return (

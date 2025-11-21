@@ -33,6 +33,9 @@ const LatestRefundRequest: React.FC<LatestRefundRequestProps> = ({ store_id }) =
     // Column definitions
     const columns: ColumnDef<RefundRow>[] = [
         {
+            id: 'order_id',
+            accessorKey: 'order_id',
+            enableSorting: true,
             header: __('Order', 'multivendorx'),
             cell: ({ row }: any) => {
                 const orderId = row.original.order_id;
@@ -58,25 +61,25 @@ const LatestRefundRequest: React.FC<LatestRefundRequestProps> = ({ store_id }) =
             cell: ({ row }: any) => {
                 const name = row.original.customer_name?.trim();
                 const link = row.original.customer_edit_link;
-        
+
                 return (
                     <TableCell title={name || '-'}>
                         {name
                             ? link
                                 ? <a
-                                      href={link}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="text-blue-600 hover:underline"
-                                  >
-                                      {name}
-                                  </a>
+                                    href={link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-blue-600 hover:underline"
+                                >
+                                    {name}
+                                </a>
                                 : name
                             : '-'}
                     </TableCell>
                 );
             },
-        },        
+        },
         {
             header: __('Refund Amount', 'multivendorx'),
             cell: ({ row }: any) => (
@@ -85,23 +88,40 @@ const LatestRefundRequest: React.FC<LatestRefundRequestProps> = ({ store_id }) =
                 </TableCell>
             ),
         },
-        // {
-        //     header: __('Refund Reason', 'multivendorx'),
-        //     cell: ({ row }: any) => (
-        //         <TableCell title={row.original.reason || ''}>
-        //             {row.original.reason || '-'}
-        //         </TableCell>
-        //     ),
-        // },
         {
-            header: __('Status', 'multivendorx'),
+            header: __('Refund Reason', 'multivendorx'),
             cell: ({ row }: any) => (
-                <TableCell title={row.original.status || ''}>
-                    {row.original.status
-                        ? row.original.status.charAt(0).toUpperCase() + row.original.status.slice(1)
-                        : '-'}
+                <TableCell title={row.original.customer_reason || ''}>
+                    {row.original.customer_reason || '-'}
                 </TableCell>
             ),
+        },
+        {
+            header: __('Status', 'multivendorx'),
+            cell: ({ row }) => {
+                const status = row.original.status || '';
+                const formattedStatus = status
+                    ?.replace(/[-_]/g, " ")
+                    .toLowerCase()
+                    .replace(/^\w/, c => c.toUpperCase());
+
+                const getStatusBadge = (status: string) => {
+                    switch (status) {
+                        case 'completed':
+                            return <span className="admin-badge green">Completed</span>;
+                        case 'private':
+                            return <span className="admin-badge yellow">Private</span>;
+                        default:
+                            return <span className="admin-badge gray">{formattedStatus}</span>;
+                    }
+                };
+
+                return (
+                    <TableCell title={`${status}`}>
+                        {getStatusBadge(status)}
+                    </TableCell>
+                );
+            },
         },
         {
             header: __('Date', 'multivendorx'),
