@@ -50,7 +50,7 @@ export default {
     id: 'store-commissions',
     priority: 1,
     name: __('Commissions', 'multivendorx'),
-    tabTitle: 'Marketplace revenue share',
+    tabTitle: 'Commission share from the seller’s product/service:',
     desc: __(
         "Decide how your marketplace takes commission from sales.",
         'multivendorx'
@@ -235,24 +235,19 @@ export default {
         {
             key: 'separator_content',
             type: 'section',
-            hint: __("What's included along with store earning", 'multivendorx'),
+            hint: __("How shipping and tax be calculated with store earnings", 'multivendorx'),
             desc: __('Choose which order components are factored into commission calculations.', 'multivendorx')
         },
         {
-            key: 'give_shipping',
-            label: __('Shipping amount', 'multivendorx'),
-            settingDescription: __('This option determines whether shipping charges are included when calculating store earning.', 'multivendorx'),
-            desc: __(
-                'If enabled, store’s net earning will include both commission and shipping fees.', 'multivendorx'),
-            type: 'checkbox',
-            moduleEnabled: 'store-shipping',
-            options: [
-                {
-                    key: 'give_shipping',
-                    value: 'give_shipping',
-                },
-            ],
-            look: 'toggle',
+            key: 'store_rating_page',
+            type: 'blocktext',
+            label: __('no_label', 'multivendorx'),
+            blocktext: __(
+                'To allow each store to set up and manage its own shipping methods, zones, and rates, please enable the <a href="' +
+                appLocalizer.site_url +
+                '/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=facilitator"> Shipping” module.</a></b>',
+                'multivendorx'
+            ),
         },
         {
             key: 'taxable',
@@ -260,17 +255,13 @@ export default {
             settingDescription: __('Shipping charges will be treated as taxable items during checkout. Otherwise shipping costs will be tax-free.', 'multivendorx'),
             desc: __('', 'multivendorx'),
             type: 'checkbox',
+            moduleEnabled: 'store-shipping',
             options: [
                 {
                     key: 'taxable',
                     value: 'taxable',
                 },
             ],
-            dependent: {
-                key: 'give_shipping',
-                set: true,
-                value: 'give_shipping',
-            },
             look: 'toggle',
         },
         ...(taxes_enabled === 'yes'
@@ -305,7 +296,7 @@ export default {
         {
             key: 'separator_content',
             type: 'section',
-            hint: __("What gets deducted from store earning", 'multivendorx'),
+            hint: __("Fees deducted from store earnings", 'multivendorx'),
             desc: __('Determine which fees to deduct from the store earning.', 'multivendorx')
         },
         {
