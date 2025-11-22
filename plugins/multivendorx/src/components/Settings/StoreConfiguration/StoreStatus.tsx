@@ -26,7 +26,7 @@ const StoreStatus: React.FC = () => {
     const tabData = [
         {
             type: 'heading',
-            name: 'Activation Flow',
+            name: 'Activation flow',
         },
         {
             type: 'file',
@@ -60,7 +60,7 @@ const StoreStatus: React.FC = () => {
         },
         {
             type: 'heading',
-            name: 'Post-Activation Flow',
+            name: 'Post-activation flow',
         },
         {
             type: 'file',

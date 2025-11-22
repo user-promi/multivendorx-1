@@ -287,7 +287,7 @@ const EditStore = () => {
                         ...tab.content,
                         name:
                             data?.status === 'active'
-                                ? 'Archive Data'
+                                ? 'Archive data'
                                 : 'Application Details',
                     },
                 }
