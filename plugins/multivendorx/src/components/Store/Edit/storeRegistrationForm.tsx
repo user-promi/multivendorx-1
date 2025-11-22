@@ -116,7 +116,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 								<div className="card-header">
 									<div className="left">
 										<div className="title">
-											Store Details
+											Store details
 										</div>
 									</div>
 								</div>
@@ -144,7 +144,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{formData.core_data?.status === 'pending' || formData.core_data?.status === 'rejected' ? 'Registration Form Details' : 'Archive Data'}
+									{formData.core_data?.status === 'pending' || formData.core_data?.status === 'rejected' ? 'Registration form details' : 'Archive Data'}
 
 								</div>
 							</div>
@@ -277,7 +277,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 														checked={formData.store_permanent_reject}
 														onChange={handleChange}
 													/>
-													Store Permanently Reject
+													Reject store permanently
 												</label>
 											</div>
 										</div>

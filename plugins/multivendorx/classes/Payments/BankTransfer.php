@@ -38,25 +38,25 @@ class BankTransfer
                     'options' => [
                         [
                             'key' => 'bank_name',
-                            'label' => __('Bank Name', 'multivendorx'),
+                            'label' => __('Bank name', 'multivendorx'),
                             'value' => 'bank_account_details',
                             'edit' => true,
                         ],
                         [
                             'key' => 'routing_number',
-                            'label' => __('ABA Routing Number)', 'multivendorx'),
+                            'label' => __('ABA routing number)', 'multivendorx'),
                             'value' => 'routing_number',
                             'edit' => true,
                         ],
                         [
                             'key' => 'destination_currency',
-                            'label' => __('Destination Currency', 'multivendorx'),
+                            'label' => __('Destination currency', 'multivendorx'),
                             'value' => 'destination_currency',
                             'edit' => true,
                         ],
                         [
                             'key' => 'bank_address',
-                            'label' => __('Bank Address', 'multivendorx'),
+                            'label' => __('Bank address', 'multivendorx'),
                             'value' => 'bank_address',
                             'edit' => true,
                         ],
@@ -68,13 +68,13 @@ class BankTransfer
                         ],
                         [
                             'key' => 'account_holder_name',
-                            'label' => __('Account Holder Name', 'multivendorx'),
+                            'label' => __('Account holder Name', 'multivendorx'),
                             'value' => 'account_holder_name',
                             'edit' => true,
                         ],
                         [
                             'key' => 'account_number',
-                            'label' => __('Account Number', 'multivendorx'),
+                            'label' => __('Account number', 'multivendorx'),
                             'value' => 'account_number',
                             'edit' => true,
                         ],
@@ -144,26 +144,26 @@ class BankTransfer
                     [
                         'key' => 'bank_name',
                         'type' => 'text',
-                        'label' => 'Bank Name',
-                        'placeholder' => 'Enter Bank Name',
+                        'label' => 'Bank name',
+                        'placeholder' => 'Enter bank name',
                     ],
                     [
                         'key' => 'abr_routing_number',
                         'type' => 'text',
-                        'label' => 'ABA Routing Number',
-                        'placeholder' => 'Enter ABA Routing Number',
+                        'label' => 'ABA routing number',
+                        'placeholder' => 'Enter ABA routing number',
                     ],
                     [
                         'key' => 'destination currency',
                         'type' => 'text',
-                        'label' => 'Destination Currency',
-                        'placeholder' => 'Enter Destination Currency',
+                        'label' => 'Destination currency',
+                        'placeholder' => 'Enter destination currency',
                     ],
                     [
                         'key' => 'bank_address',
                         'type' => 'text-area',
-                        'label' => 'Bank Address',
-                        'placeholder' => 'Enter Bank Address',
+                        'label' => 'Bank address',
+                        'placeholder' => 'Enter bank address',
                     ],
                     [
                         'key' => 'iban',
@@ -174,14 +174,14 @@ class BankTransfer
                     [
                         'key' => 'account_holder_name',
                         'type' => 'text',
-                        'label' => 'Account Holder Name',
-                        'placeholder' => 'Enter Account Holder Name',
+                        'label' => 'Account holder name',
+                        'placeholder' => 'Enter account holder name',
                     ],
                     [
                         'key' => 'account_number',
                         'type' => 'text',
-                        'label' => 'Account Number',
-                        'placeholder' => 'Enter Account Number',
+                        'label' => 'Account number',
+                        'placeholder' => 'Enter account number',
                     ]
                 ]
             ];
