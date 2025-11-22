@@ -86,7 +86,7 @@ class Payment {
                         'type'  => 'setting-toggle',
                         'label' => __('Account type', 'multivendorx'),
                         'options' => [
-                            ['key' => 'current', 'label' => __('current', 'multivendorx'), 'value' => 'current'],
+                            ['key' => 'current', 'label' => __('Current', 'multivendorx'), 'value' => 'current'],
                             ['key' => 'savings', 'label' => __('Savings', 'multivendorx'), 'value' => 'savings'],
                         ]
                     ],

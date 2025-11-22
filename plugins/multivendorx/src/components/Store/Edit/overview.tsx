@@ -396,7 +396,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                    Primary owner
+                                    Store staffs
                                 </div>
                             </div>
                             <div className="right">
@@ -413,7 +413,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                 </div>
                                 <div className="details">
                                     <div className="name">{storeData.primary_owner_info?.data?.display_name ?? <Skeleton variant="text" width={150} />
-                                    } <div className="admin-badge blue">Owner</div></div>
+                                    } <div className="admin-badge blue">Primary Owner</div></div>
                                     <div className="des">Email: {storeData.primary_owner_info?.data?.user_email ?? <Skeleton variant="text" width={150} />}</div>
                                 </div>
                             </div>
