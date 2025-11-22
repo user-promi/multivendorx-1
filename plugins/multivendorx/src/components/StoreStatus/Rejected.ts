@@ -10,7 +10,7 @@ export default {
     modal: [
         {
             key: 'store_promotion_limit',
-            label: __('What sellers can do', 'multivendorx'),
+            label: __('Account capabilities', 'multivendorx'),
             type: 'nested',
             single: true,
             nestedFields: [
@@ -44,7 +44,7 @@ export default {
         },
         {
             key: 'rejected_msg',
-            label: 'Message shown rejected stores',
+            label: 'Message shown to rejected stores',
             type: 'textarea',
             des: 'What pending stores can do',
         },
