@@ -22,6 +22,7 @@ interface PaymentFormField {
   | "setting-toggle"
   | "buttons"
   | "nested"
+  | "clickable-list"
   | "copy-text";
 
   label: string;
@@ -49,6 +50,8 @@ interface PaymentFormField {
   check?: boolean;
   hideCheckbox?: boolean;
   btnClass?: string;
+  items?: any;
+  button?: any;
 }
 
 interface PaymentMethod {
@@ -80,6 +83,7 @@ interface PaymentTabsComponentProps {
   buttonEnable?: boolean;
   isWizardMode?: boolean;
   setWizardIndex?: (index: number) => void;
+  moduleEnabled?: boolean;
 }
 
 const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
@@ -88,6 +92,8 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
   onChange,
   appLocalizer,
   isWizardMode = false,
+  proSetting,
+  moduleEnabled,
 }) => {
   const [activeTabs, setActiveTabs] = useState<string[]>([]);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
@@ -95,6 +101,11 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
   const [modelOpen, setModelOpen] = useState(false);
   const [wizardIndex, setWizardIndex] = useState(0);
   const [copied, setCopied] = useState(false);
+
+  const canEdit = () => {
+    // You cannot edit if Pro is enabled (locked) OR if module is disabled
+    return !proSetting && moduleEnabled;
+  };
 
   const handleCopy = (text) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -108,7 +119,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
     fieldKey: string,
     fieldValue: any
   ) => {
-
+    if (!canEdit()) return;
     const updated = {
       ...value,
       [methodKey]: {
@@ -129,6 +140,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
   };
 
   const toggleEnable = (methodId: string, enable: boolean, icon?: string) => {
+    if (!canEdit()) return;
     handleInputChange(methodId, "enable", enable);
     if (enable) {
       setActiveTabs((prev) => prev.filter((id) => id !== methodId));
@@ -136,6 +148,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
   };
 
   const toggleActiveTab = (methodId: string) => {
+    if (!canEdit()) return;
     setActiveTabs((prev) =>
       prev.includes(methodId)
         ? prev.filter((id) => id !== methodId) // close
@@ -215,6 +228,50 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
             <div className="settings-metabox-description">{field.desc}</div>
           </>
         );
+      case "clickable-list":
+        return (
+          <div className="clickable-list-wrapper">
+
+            {/* Render items */}
+            <ul className="clickable-items">
+              {Array.isArray(field.items) &&
+                field.items.map((item, idx) => (
+                  <li
+                    key={idx}
+                    className={`clickable-item ${item.url ? "has-link" : ""}`}
+                    onClick={() => {
+                      if (item.url) {
+                        window.location.href = item.url;
+                      }
+                    }}
+                  >
+                    {item.name}
+                  </li>
+                ))
+              }
+            </ul>
+
+            {/* Render bottom button */}
+            {field.button?.label && (
+              <button
+                className="admin-btn btn-purple"
+                onClick={() => {
+                  console.log(field.button.url)
+                  if (field.button.url) {
+                    window.location.href = field.button.url;
+                  }
+                }}
+              >
+                {field.button.label}
+              </button>
+            )}
+
+            {field.desc && (
+              <div className="settings-metabox-description">{field.desc}</div>
+            )}
+          </div>
+        );
+
 
       case "textarea":
         return (
@@ -453,23 +510,14 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
             label={field.label}
             description={field.desc}
             fields={field.nestedFields ?? []}
-            value={value}
+            value={fieldValue}
             wrapperClass={field.rowClass}
             addButtonLabel={field.addButtonLabel}
             deleteButtonLabel={field.deleteButtonLabel}
             single={field.single}
-          // onChange={(val: any) => {
-          //   if (
-          //     hasAccess(
-          //       field.proSetting ?? false,
-          //       String(field.moduleEnabled ?? ""),
-          //       String(field.dependentSetting ?? ""),
-          //       String(field.dependentPlugin ?? "")
-          //     )
-          //   ) {
-          //     handleInputChange(methodId, field.key, val);
-          //   }
-          // }}
+            onChange={(val: any) => {
+              handleInputChange(methodId, field.key, val);
+            }}
           />
         );
       default:

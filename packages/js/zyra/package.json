@@ -53,6 +53,7 @@
     "dependencies": {
         "@rollup/plugin-replace": "^6.0.2",
         "@tanstack/react-table": "^8.21.3",
+        "antd": "^6.0.0",
         "axios": "^1.8.4",
         "js-yaml": "^4.1.0",
         "react-csv": "^2.2.2",

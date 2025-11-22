@@ -45,6 +45,7 @@ import PaymentTabsComponent from './PaymentTabsComponent';
 import SystemInfo from './SystemInfo';
 import MultiInput from './MultiInput';
 import { useModules } from '../contexts/ModuleContext';
+import TreeSelectInput from './TreeSelectInput';
 
 // Types
 declare const wp: any;
@@ -84,6 +85,7 @@ interface InputField {
     id?: string;
     class?: string;
     name?: string;
+    treeData?: any;
     type?:
     | 'text'
     | 'select'
@@ -130,6 +132,7 @@ interface InputField {
     | 'multi-string'
     | 'verification-methods'
     | 'description'
+    | 'treeselect'
     | 'form-builder'
     | 'setting-time'
     | 'endpoint-editor';
@@ -1195,6 +1198,42 @@ const AdminForm: React.FC<AdminFormProps> = ({
                         />
                     );
                     break;
+                // CASE: treeselect
+                case 'treeselect':
+                    input = (
+                        <TreeSelectInput
+                            wrapperClass="form-tree-select-wrapper"
+                            descClass="settings-metabox-description"
+                            name={inputField.key}
+                            description={inputField.desc}
+                            inputClass={inputField.className}
+                            size={inputField.size}
+                            treeData={inputField.treeData || []}
+                            multiple={inputField.multiple ?? false}
+                            value={value}
+                            proSetting={isProSetting(inputField.proSetting ?? false)}
+                            onChange={(data) => {
+                                if (
+                                    hasAccess(
+                                        inputField.proSetting ?? false,
+                                        String(
+                                            inputField.moduleEnabled ?? ''
+                                        ),
+                                        String(
+                                            inputField.dependentSetting ?? ''
+                                        ),
+                                        String(
+                                            inputField.dependentPlugin ?? ''
+                                        )
+                                    )
+                                ) {
+                                    settingChanged.current = true;
+                                    updateSetting(inputField.key, data);
+                                }
+                            }}
+                        />
+                    );
+                    break;
 
                 // for multiple select box with select/deselect button
                 case 'multi-select':
@@ -1911,6 +1950,8 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             proSettingChanged={() =>
                                 proSettingChanged(inputField.proSetting ?? false)
                             }
+                            proSetting={isProSetting(inputField.proSetting ?? false)}
+                            moduleEnabled={inputField.moduleEnabled ? modules.includes(inputField.moduleEnabled) : true}
                             apilink={String(inputField.apiLink)}//API endpoint used for communication with backend.
                             appLocalizer={appLocalizer}
                             methods={inputField.modal ?? []}//Array of available payment methods/options.
@@ -1933,8 +1974,6 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                 ) {
                                     settingChanged.current = true;
                                     updateSetting(inputField.key, data);
-                                } else {
-                                    console.warn("Blocked by hasAccess — no update triggered");
                                 }
                             }}
                         />
