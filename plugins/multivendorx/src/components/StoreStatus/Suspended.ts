@@ -11,7 +11,7 @@ export default {
         {
             key: 'restriction_for_sunspended',
             type: 'checkbox',
-            label: __('Store promotion limit', 'multivendorx'),
+            label: __('What sellers can do', 'multivendorx'),
             class: 'mvx-toggle-checkbox',
             options: [
                 {

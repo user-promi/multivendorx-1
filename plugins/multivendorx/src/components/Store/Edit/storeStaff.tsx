@@ -235,7 +235,7 @@ const StoreSquad = ({ id }: { id: string | null }) => {
                         {/* FIXED: Corrected label typo and fixed primary_owner handling */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label>Primary owners</label>
+                                <label>Primary owner</label>
                                 <SelectInput
                                     name="primary_owner"
                                     options={appLocalizer?.store_owners || []}

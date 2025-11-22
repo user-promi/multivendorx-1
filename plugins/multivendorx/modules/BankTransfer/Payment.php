@@ -28,26 +28,26 @@ class Payment {
                 [
                     'key'         => 'bank_name',
                     'type'        => 'text',
-                    'label'       => 'Bank Name',
-                    'placeholder' => 'Enter Bank Name',
+                    'label'       => 'Bank name',
+                    'placeholder' => 'Enter bank name',
                 ],
                 [
                     'key'         => 'abr_routing_number',
                     'type'        => 'text',
-                    'label'       => 'ABA Routing Number',
-                    'placeholder' => 'Enter ABA Routing Number',
+                    'label'       => 'ABA routing number',
+                    'placeholder' => 'Enter ABA routing number',
                 ],
                 [
                     'key'         => 'destination_currency',
                     'type'        => 'text',
-                    'label'       => 'Destination Currency',
-                    'placeholder' => 'Enter Destination Currency',
+                    'label'       => 'Destination currency',
+                    'placeholder' => 'Enter destination currency',
                 ],
                 [
                     'key'         => 'bank_address',
                     'type'        => 'text-area',
-                    'label'       => 'Bank Address',
-                    'placeholder' => 'Enter Bank Address',
+                    'label'       => 'Bank address',
+                    'placeholder' => 'Enter bank address',
                 ],
                 [
                     'key'         => 'iban',
@@ -58,14 +58,14 @@ class Payment {
                 [
                     'key'         => 'account_holder_name',
                     'type'        => 'text',
-                    'label'       => 'Account Holder Name',
-                    'placeholder' => 'Enter Account Holder Name',
+                    'label'       => 'Account holder name',
+                    'placeholder' => 'Enter account holder name',
                 ],
                 [
                     'key'         => 'account_number',
                     'type'        => 'text',
-                    'label'       => 'Account Number',
-                    'placeholder' => 'Enter Account Number',
+                    'label'       => 'Account number',
+                    'placeholder' => 'Enter account number',
                 ]
             ]
         ];
