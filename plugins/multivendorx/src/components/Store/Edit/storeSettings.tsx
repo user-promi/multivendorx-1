@@ -50,7 +50,80 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
     const [apiKey, setApiKey] = useState('');
     const appLocalizer = (window as any).appLocalizer;
     const { modules } = useModules();
+    // === ADD THESE STATES (replace old ones) ===
+    const [emails, setEmails] = useState<string[]>([]);           // All emails
+    const [primaryEmail, setPrimaryEmail] = useState<string>('');  // Which one is starred
+    const [inputValue, setInputValue] = useState('');
+    const inputRef = useRef<HTMLDivElement>(null);
 
+    // === LOAD EMAILS FROM BACKEND ===
+    useEffect(() => {
+
+        let parsedEmails = [];
+    
+        try {
+            parsedEmails = data.emails ? JSON.parse(data.emails) : [];
+        } catch (e) {
+            console.error("Invalid email JSON", e);
+            parsedEmails = [];
+        }
+    
+        if (Array.isArray(parsedEmails)) {
+            setEmails(parsedEmails);
+            setPrimaryEmail(data.primary_email || parsedEmails[0] || '');
+        }
+
+    }, [data]);
+    
+
+    // === HANDLE INPUT & AUTO-CONVERT TO CHIP ===
+    const handleInputKeyDown = (e: React.KeyboardEvent) => {
+        if (['Enter', ' ', ','].includes(e.key)) {
+            e.preventDefault();
+            const email = inputValue.trim();
+            if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && !emails.includes(email)) {
+                const newEmails = [...emails, email];
+                setEmails(newEmails);
+                setInputValue('');
+                saveEmails(newEmails, primaryEmail || email);
+            }
+        } else if (e.key === 'Backspace' && !inputValue && emails.length > 0) {
+            // Remove last email on backspace
+            const newEmails = emails.slice(0, -1);
+            setEmails(newEmails);
+            const newPrimary = primaryEmail === emails[emails.length - 1] ? (newEmails[0] || '') : primaryEmail;
+            setPrimaryEmail(newPrimary);
+            saveEmails(newEmails, newPrimary);
+        }
+    };
+
+    // === TOGGLE PRIMARY EMAIL ===
+    const togglePrimary = (email: string) => {
+        if (email === primaryEmail) return;
+        setPrimaryEmail(email);
+        saveEmails(emails, email);
+    };
+
+    // === REMOVE EMAIL ===
+    const removeEmail = (emailToRemove: string) => {
+        const newEmails = emails.filter(e => e !== emailToRemove);
+        setEmails(newEmails);
+        if (primaryEmail === emailToRemove) {
+            setPrimaryEmail(newEmails[0] || '');
+        }
+        saveEmails(newEmails, newEmails[0] || '');
+    };
+
+    // === SAVE FUNCTION ===
+    const saveEmails = (emailList: string[], primary: string) => {
+        const updated = {
+            ...formData,
+            primary_email: primary,
+            emails: emailList,
+        };
+        setFormData(updated);
+        autoSave(updated);
+    };
 
     const [addressData, setAddressData] = useState({
         location_address: '',
@@ -104,14 +177,6 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
             return;
         }
 
-        // axios({
-        //     method: 'GET',
-        //     url: getApiLink(appLocalizer, `store/${id}`),
-        //     headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        // })
-        //     .then((res) => {
-        //         const data = res.data || {};
-
         // Set all form data
         setFormData((prev) => ({ ...prev, ...data }));
 
@@ -133,11 +198,6 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
             banner: data.banner || '',
         });
         setLoading(false);
-        // })
-        // .catch((error) => {
-        //     console.error('Error loading store data:', error);
-        //     setLoading(false);
-        // });
     }, [data]);
 
     // Add email function
@@ -178,18 +238,6 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
         autoSave(updatedFormData);
     };
 
-    // Remove email function
-    const removeEmail = (id: number) => {
-        const updatedBadges = emailBadges.filter(badge => badge.id !== id);
-        setEmailBadges(updatedBadges);
-
-        // Update form data
-        const emailString = updatedBadges.map(badge => badge.email).join('\n');
-        const updatedFormData = { ...formData, email: emailString };
-        setFormData(updatedFormData);
-
-        autoSave(updatedFormData);
-    };
 
     // Handle Enter key in email input
     const handleEmailKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -738,14 +786,6 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
         // Format email data for backend
         const formattedData = { ...updatedData };
 
-        // if (formattedData.email && typeof formattedData.email === 'string') {
-        //     // Convert newline-separated emails to array for backend
-        //     formattedData.emails = formattedData.email
-        //         .split('\n')
-        //         .map((email: string) => email.trim())
-        //         .filter((email: string) => email !== '');
-        // }
-
         axios({
             method: 'PUT',
             url: getApiLink(appLocalizer, `store/${id}`),
@@ -759,7 +799,9 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
             console.error('Save error:', error);
         });
     };
-
+    const isValidEmail = (email: string): boolean => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+    };
     return (
         <>
             <SuccessNotice message={successMsg} />
@@ -774,53 +816,116 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                             </div>
                         </div>
 
-
-                        {/* Updated Email Section */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="store-email">Store email(s)</label>
-                                <div className="email-input-container">
-                                    <div className="email-badges-container" >
-                                        {emailBadges.map((badge, index) => (
-                                            <EmailBadge
-                                                key={badge.id}
-                                                badge={badge}
-                                                isFirst={index === 0}
-                                                onRemove={removeEmail}
-                                            />
-                                        ))}
-                                    </div>
-                                    <div className="drawer-add-recipient" >
-                                        <input
-                                            ref={emailInputRef}
-                                            type="email"
-                                            className="basic-input"
-                                            placeholder="noreply@test.com"
-                                            value={newEmailValue}
-                                            onChange={(e) => setNewEmailValue(e.target.value)}
-                                            onKeyPress={handleEmailKeyPress}
-                                        />
-                                        <button
-                                            className="admin-btn btn-purple"
-                                            onClick={addEmail}
-                                            type="button"
+                                <label>Store email(s)</label>
+
+                                <div
+                                    ref={inputRef}
+                                    className="email-chips-input"
+                                    style={{
+                                        border: '1px solid #ddd',
+                                        borderRadius: '8px',
+                                        padding: '8px 12px',
+                                        minHeight: '44px',
+                                        display: 'flex',
+                                        flexWrap: 'wrap',
+                                        gap: '8px',
+                                        alignItems: 'center',
+                                        background: 'white',
+                                        cursor: 'text'
+                                    }}
+                                    onClick={() => inputRef.current?.querySelector('input')?.focus()}
+                                >
+                                    {emails.map((email) => (
+                                        <div
+                                            key={email}
+                                            style={{
+                                                background: primaryEmail === email ? '#e3f2fd' : '#f5f5f5',
+                                                color: primaryEmail === email ? '#1976d2' : '#333',
+                                                border: primaryEmail === email ? '1px solid #1976d2' : '1px solid #ddd',
+                                                borderRadius: '16px',
+                                                padding: '4px 8px 4px 12px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '6px',
+                                                fontSize: '14px'
+                                            }}
                                         >
-                                            <i className="adminlib-plus-circle-o"></i>
-                                            Add
-                                        </button>
+                                            {primaryEmail === email && <i className="adminlib-star" style={{ color: '#ffa000', fontSize: '16px' }}></i>}
+                                            <span>{email}</span>
+                                            <button
+                                                type="button"
+                                                onClick={(e) => { e.stopPropagation(); togglePrimary(email); }}
+                                                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '2px', marginLeft: '4px' }}
+                                                title="Set as primary"
+                                            >
+                                                {primaryEmail === email ? '★' : '☆'}
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={(e) => { e.stopPropagation(); removeEmail(email); }}
+                                                style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px', color: '#999' }}
+                                            >
+                                                ×
+                                            </button>
+                                        </div>
+                                    ))}
+
+                                    <div style={{ position: 'relative', flex: 1, minWidth: '200px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        <input
+                                            type="text"
+                                            value={inputValue}
+                                            onChange={(e) => setInputValue(e.target.value)}
+                                            onKeyDown={handleInputKeyDown}
+                                            placeholder={emails.length === 0 ? "Enter email addresses..." : ""}
+                                            style={{
+                                                border: 'none',
+                                                outline: 'none',
+                                                width: '100%',
+                                                padding: '4px 0',
+                                                fontSize: '14px',
+                                                background: 'transparent'
+                                            }}
+                                            autoFocus={emails.length === 0}
+                                        />
+
+                                        {/* MAGIC INLINE SUGGESTION */}
+                                        {inputValue && !inputValue.endsWith(' ') && !inputValue.endsWith(',') && isValidEmail(inputValue) && !emails.includes(inputValue.trim()) && (
+                                            <div
+                                                onClick={() => {
+                                                    const email = inputValue.trim();
+                                                    const newEmails = [...emails, email];
+                                                    setEmails(newEmails);
+                                                    setInputValue('');
+                                                    saveEmails(newEmails, primaryEmail || email);
+                                                }}
+                                                style={{
+                                                    background: '#e3f6ff',
+                                                    color: '#1976d2',
+                                                    padding: '4px 10px',
+                                                    borderRadius: '12px',
+                                                    fontSize: '13px',
+                                                    cursor: 'pointer',
+                                                    whiteSpace: 'nowrap',
+                                                    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                                                    transition: 'all 0.2s'
+                                                }}
+                                                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#dbeafe'}
+                                                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#e3f6ff'}
+                                            >
+                                                → {inputValue.trim()}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
-                                <div className="settings-metabox-description">
-                                    Manage your store email preferences:
-                                    <ul>
-                                        <li> <strong>Primary email</strong> – The first email you enter becomes the store’s primary contact address and is displayed on the storefront.</li>
-                                        <li><strong>Additional email</strong> – Add extra email addresses to receive store notifications. These emails are used internally for alerts only and will not appear publicly.</li>
-                                    </ul>
+
+                                <div className="settings-metabox-description" style={{ marginTop: '8px' }}>
+                                    <strong>Primary email</strong>: Click the star on any email to make it primary (shown on storefront).<br />
+                                    Additional emails receive notifications only.
                                 </div>
-                                {errorMsg.email && <p className="invalid-massage">{errorMsg.email}</p>}
                             </div>
                         </div>
-
                         <div className="form-group-wrapper">
                             <div className="form-group">
                                 <label htmlFor="product-name">Phone</label>
@@ -1080,7 +1185,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                     wrapperClass="setting-form-input"
                                     descClass="settings-metabox-description"
                                     value={formData.youtube?.trim() || "https://youtube.com/"}
-                                    onChange={handleChange} 
+                                    onChange={handleChange}
                                 />
                             </div>
                         </div>
