@@ -138,7 +138,7 @@ export default {
                             key: 'suspended_show_products',
                             type: 'setup',
                             title: 'Keep store visible but disable checkout',
-                            des: 'Displays the store and its products but prevents customers from placing new orders.Freeze all pending payments',
+                            des: 'Displays the store and its products but prevents customers from placing new orders.Freeze all pending payments.',
                         },
                         {
                             key: 'suspended_hold_payments',

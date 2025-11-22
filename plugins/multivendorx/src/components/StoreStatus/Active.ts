@@ -10,7 +10,7 @@ export default {
     modal: [
         {
             key: 'store_promotion_limit',
-            // label: __('Store promotion limit', 'multivendorx'),
+            // label: __('What sellers can do', 'multivendorx'),
             type: 'nested',
             single: true,
             nestedFields: [
