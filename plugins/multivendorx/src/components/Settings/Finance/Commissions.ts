@@ -71,7 +71,7 @@ export default {
             key: 'commission_type',
             type: 'setting-toggle',
             label: __('Marketplace commission', 'multivendorx'),
-            settingDescription: __("Decide how the system should calculate the marketplace commission." ,'multivendorx'),
+            settingDescription: __("Decide how the system should calculate the marketplace commission.", 'multivendorx'),
             desc: __(
                 '<ul><li>Store order based - Calculated on the full order amount of each store. Example: A customer buys from 3 stores → commission applies separately to each store’s order.</li><li>Per item based - Applied to each product in the order. Example: An order with 5 items → commission applies 5 times, once per item.</li></ul>',
                 'multivendorx'
@@ -306,11 +306,11 @@ export default {
             single: true,
             proSetting: true,
             settingDescription: __(
-                'Define a fee to cover platform costs. Apply a fixed, percentage, or combined rate. Choose whether it’s paid by the customer at checkout or deducted from the store’s commission.',
+                'Set a platform fee as a fixed, percentage, or combined rate calculated on the product price. Choose whether the fee is paid by the customer at checkout or deducted from the store’s commission.',
                 'multivendorx'
             ),
-           desc: __( '<strong>Example setup:</strong><br> Total product price of the order = $100<br> Platform fee = 80%<br> Marketplace commission = $2 + 10%<br> Payable marketplace fee = $12 (i.e. $2 + 10% of 100)<br> <em>(Fee is calculated on the total product price)</em> <ul> <li><strong>Case 1 – Fee paid by the customer:</strong><br> Customer pays = $100 + $12 = $112<br> Store receives = $80 </li> <li><strong>Case 2 – Fee deducted from the store:</strong><br> Customer pays = $100<br> Store earning = 80% of $100 = $80<br> Marketplace fee = $2 + 10% of 100 = $12<br> Final store payout = $80 - $12 = $68 </li> </ul>', 'multivendorx' ),
-           nestedFields: [
+            desc: __('<strong>Example setup:</strong><br> Total product price of the order = $100<br> Platform fee = 80%<br> Marketplace commission = $2 + 10%<br> Payable marketplace fee = $12 (i.e. $2 + 10% of 100)<br> <em>(Fee is calculated on the total product price)</em> <ul> <li><strong>Case 1 – Fee paid by the customer:</strong><br> Customer pays = $100 + $12 = $112<br> Store receives = $80 </li> <li><strong>Case 2 – Fee deducted from the store:</strong><br> Customer pays = $100<br> Store earning = 80% of $100 = $80<br> Marketplace fee = $2 + 10% of 100 = $12<br> Final store payout = $80 - $12 = $68 </li> </ul>', 'multivendorx'),
+            nestedFields: [
                 {
                     key: 'commission_fixed',
                     type: 'text',
@@ -346,13 +346,13 @@ export default {
             label: 'Facilitator fees',
             single: true,
             proSetting: true,
-            settingDescription: __('Set the facilitator fees as a fixed amount, a percentage, or both, deducted from the store earning. Store-wise fees can also be configured from the store edit page.', 'multivendorx'),
+            settingDescription: __('Set facilitator fees as a fixed amount, a percentage, or both. These fees are calculated only on the product price and then deducted from the store’s earnings.', 'multivendorx'),
             desc: __(
                 '<strong>Global facilitator:</strong> Assign a single facilitator for the entire marketplace from <a href="' +
                 appLocalizer.site_url +
                 '/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=facilitator">here</a>.<br>' +
                 '<strong>Individual facilitators:</strong> Set facilitators for specific stores from the <em>Facilitator Settings</em> section or the <em>Store Edit</em> page.<br>' +
-                '<strong>Example:</strong> If the total product price of the order is $1000 and the Marketplace commission is 20% while the facilitator fee is $50 + 5%, then the admin fee = 20% of 1000 = $200 and the facilitator fee = $50 + (5% of 1000) = $100 → the store receives $700 after all deductions.','multivendorx'
+                '<strong>Example:</strong><strong>Example setup:</strong><br> Total product price of the order = $1000<br> Marketplace commission = 20%<br> Facilitator fee = $50 + 5%<br> Payable marketplace commission = $200 (i.e. 20% of 1000)<br> Payable facilitator fee = $100 (i.e. $50 + 5% of 1000)<br> Store receives = $1000 − ($200 + $100) = $700', 'multivendorx'
             ),
             nestedFields: [
                 {
@@ -380,8 +380,7 @@ export default {
             rowClass: 'single-line',
             moduleEnabled: 'marketplace-gateway',
             single: true,
-            desc: __('<strong>Use this setting</strong> to manage transaction fees for different payment methods. You can set a default fee or define specific fees for each payment mode, such as bank transfer or cash on delivery.<br><br><strong>Example setup:</strong><br>Product price = $100<br>Store earning = 80%<br>Gateway fees = $10 + 5%<ul><li>Customer pays = $100</li><li>Store earning = 80% of $100 = $80</li><li>Gateway fees = $10 + 5% of $80 = $14</li><li>Final store earning = $80 - $14 = $66</li><li>Marketplace commission = ($100 - $80) + $14 = $34</li></ul>', 'multivendorx'),
-            nestedFields
+            desc: __('<strong>Use this setting</strong> to manage transaction fees for different payment methods. You can set a default fee or define specific fees for each payment mode, such as bank transfer or cash on delivery.<br><br><strong>Example setup:</strong><br> Total order price = $100<br> Store earning = 80%<br> Gateway fees = $10 + 5% <ul> <li>Customer pays = $100</li> <li>Store earning = 80% of $100 = $80</li> <li>Gateway fees = $10 + 5% of $100 = $15</li> <li>Final store earning = $80 - $15 = $65</li> <li>Marketplace fee = ($100 - $80) + $15 = $35</li> </ul>', 'multivendorx'), nestedFields
         },
     ],
 };
