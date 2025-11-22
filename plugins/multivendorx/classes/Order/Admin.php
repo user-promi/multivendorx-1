@@ -4,6 +4,7 @@ namespace MultiVendorX\Order;
 
 use MultiVendorX\Commission\CommissionUtil;
 use MultiVendorX\Store\Store;
+use MultiVendorX\Utill;
 
 defined('ABSPATH') || exit;
 
@@ -76,17 +77,13 @@ class Admin {
     }
 
     public function regenerate_order_commissions($order) {
+        global $wpdb;
         if ( ! $order->get_parent_id() ) {
             return;
         }
 
         $commission_id = $order->get_meta( 'multivendorx_commission_id', true) ?? '';
 
-        $commission = CommissionUtil::get_commission_db($commission_id);
-
-        if( $commission->paid_status == 'paid' ) {
-            return;
-        }
         if (!in_array($order->get_status(), apply_filters( 'mvx_regenerate_order_commissions_statuses', array( 'on-hold', 'pending', 'processing', 'completed' ), $order ))) {
             return;
         }
@@ -98,6 +95,47 @@ class Admin {
         $order->update_meta_data( 'multivendorx_commission_id', $regenerate_commission_id );
         $order->update_meta_data( 'multivendorx_commissions_processed', 'yes' );
         $order->save();
+
+        $commission = CommissionUtil::get_commission_db($regenerate_commission_id);
+
+        if( $commission->status != 'unpaid' ) {
+
+            $row = $wpdb->get_row(
+                        $wpdb->prepare(
+                            "SELECT *
+                            FROM $wpdb->prefix . Utill::TABLES['transaction']
+                            WHERE commission_id = %d",
+                            $regenerate_commission_id ));
+
+            $wpdb->insert(
+                $wpdb->prefix . Utill::TABLES['transaction'],
+                [
+                    'store_id'        => $row->store_id,
+                    'entry_type'      => 'Dr',
+                    'transaction_type'=> 'Reversed',
+                    'amount'          => $row->amount,
+                    'currency'        => $row->currency,
+                    'narration'       => 'Transaction Reversed',
+                    'status'          => 'Completed',
+                ],
+                ['%d','%s','%s', '%f','%s','%s', '%s']
+            );
+
+            $wpdb->insert(
+                $wpdb->prefix . Utill::TABLES['transaction'],
+                [
+                    'store_id'        => $row->store_id,
+                    'entry_type'      => 'Cr',
+                    'transaction_type'=> 'Commission',
+                    'amount'          => $commission->store_payable,
+                    'currency'        => $row->currency,
+                    'narration'       => "Regeneate Commission received for order " . $order->get_id(),
+                    'status'          => 'Completed',
+                ],
+                ['%d','%s','%s', '%f','%s','%s', '%s']
+            );
+        }
+
     }
 
     public function regenerate_suborders($order) {
