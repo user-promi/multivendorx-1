@@ -18,6 +18,13 @@ class Zone_Shipping extends \WC_Shipping_Method {
         $this->supports             = array( 'shipping-zones', 'instance-settings', 'instance-settings-modal' );
         $this->default              = "";
 
+        $zone_wise_shipping = $shipping_modules['zone-wise-shipping'] ?? [];
+    
+        // Enable / disable module
+        $this->enabled = (!empty($zone_wise_shipping['enable']) && $zone_wise_shipping['enable'])
+            ? 'yes'
+            : 'no';
+            
         // Initialize settings
         $this->init();
         

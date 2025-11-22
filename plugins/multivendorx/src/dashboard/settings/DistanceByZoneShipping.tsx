@@ -20,7 +20,14 @@ type Zone = {
     zone_id: number;
 };
 
-const DistanceByZoneShipping: React.FC = () => {
+interface DistanceByZoneShippingProps {
+    id: string | number;  // or whatever type you expect
+}
+
+const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({ id }) => {
+
+    let store_id = appLocalizer.store_id ? appLocalizer.store_id : id;
+
     const [data, setData] = useState<Zone[]>([]);
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: 0,
@@ -54,7 +61,7 @@ const DistanceByZoneShipping: React.FC = () => {
                 method: "GET",
                 url: getApiLink(appLocalizer, "zone-shipping"),
                 headers: { "X-WP-Nonce": appLocalizer.nonce },
-                params: { store_id: appLocalizer.store_id },
+                params: { store_id: store_id },
             });
 
             const zonesObject: Record<string, Zone> = res?.data || {};
@@ -105,7 +112,7 @@ const DistanceByZoneShipping: React.FC = () => {
                 url: getApiLink(appLocalizer, `zone-shipping/${zoneWithMethod.zone_id}`),
                 headers: { "X-WP-Nonce": appLocalizer.nonce },
                 params: {
-                    store_id: appLocalizer.store_id,
+                    store_id: store_id,
                     method_id: method.id,
                     zone_id: zoneWithMethod.zone_id,
                 },
@@ -153,7 +160,7 @@ const DistanceByZoneShipping: React.FC = () => {
                 url: getApiLink(appLocalizer, `zone-shipping/${zone.zone_id}`),
                 headers: { "X-WP-Nonce": appLocalizer.nonce },
                 data: {
-                    store_id: appLocalizer.store_id,
+                    store_id: store_id,
                     zone_id: zone.zone_id,
                     method_id: method.id,
                 },
@@ -210,7 +217,7 @@ const DistanceByZoneShipping: React.FC = () => {
                 : getApiLink(appLocalizer, "zone-shipping");
 
             const requestData: any = {
-                store_id: appLocalizer.store_id,
+                store_id: store_id,
                 zone_id: selectedZone.zone_id,
                 method_id: isUpdate ? editingMethod.id : formData.shippingMethod,
                 settings: shippingData.settings

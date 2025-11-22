@@ -70,6 +70,8 @@ declare global {
         taxes_enabled:any;
         permalink_structure:any;
         tax:any;
+        all_zones:any;
+        adminUrl:any;
     }
     interface Color{
         color: any;

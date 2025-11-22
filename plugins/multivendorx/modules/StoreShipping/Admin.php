@@ -1,99 +1,49 @@
 <?php
-/**
- * MultiVendorX Admin class file
- *
- * @package MultiVendorX
- */
-
 namespace MultiVendorX\StoreShipping;
 
-/**
- * MultiVendorX StoreShipping Admin class
- *
- * @class       Admin class
- * @version     6.0.3
- */
 class Admin {
 
     public function __construct() {
-        // Add filter to return all shipping methods for admin
-        add_filter( 'multivendorx_get_all_shipping_methods', [ $this, 'get_all_shipping_methods' ] );
+        add_filter( 'multivendorx_get_all_store_zones', [ $this, 'get_all_store_shipping_zones' ] );
     }
 
     /**
-     * Return all MultiVendorX shipping methods for admin panel
-     *
-     * @return array
+     * Returns all WooCommerce shipping zones in your required format.
      */
-    public function get_all_shipping_methods() {
-        
-        // Return shipping method structure
-        return [
-            [
-                'id' => 'zone-wise-shipping',
-                'icon' => 'adminlib-zone-wise-shipping',
-                'label' => 'Zone based shipping',
-                'disableBtn'=> true,
-                'enableOption' => true,
-                'desc' => 'Stores can configure multiple shipping zones.',
-                // 'formFields' => [
-                //     [
-                //         'key' => 'zones',
-                //         'type' => 'nested',
-                //         'label' => 'Add Shipping Zones',
-                //         'addButtonLabel' => 'Add Zone',
-                //         'deleteButtonLabel' => 'Delete Zone',
-                //         'single' => false,
-                //         'nestedFields' => [
-                //             [
-                //                 'key' => 'zone_name',
-                //                 'type' => 'text',
-                //                 'label' => 'Zone Name',
-                //                 'placeholder' => 'e.g. North America'
-                //             ],
-                //             [
-                //                 'key' => 'zone_countries',
-                //                 'type' => 'dropdown',
-                //                 'label' => 'Countries / Regions',
-                //                 'treeSelect' => true,
-                //                 // 'options' => $country_tree,
-                //             ],
-                //         ]
-                //     ]
-                // ]
-            ],
-            [
-                'icon' => 'adminlib-country-shipping',
-                'id' => 'country-wise-shipping',
-                'label' => 'Country-wise shipping',
-                'disableBtn'=> true,
-                'enableOption' => true,
-                'desc'      => 'Let store set specific shipping rates based on destination countries.',
-                'formFields' => [
-                    [
-                        'key'         => 'country_shipping_method_name',
-                        'type'        => 'text',
-                        'label'       => 'Method name',
-                        'placeholder' => 'Enter Name',
-                    ],
-                ]
-            ],
-            [
-                'icon' => 'adminlib-distance-shipping',
-                'id' => 'distance-based-shipping',
-                'label' => 'Distance-based shipping',
-                'disableBtn'=> true,
-                'enableOption' => true,
-                'desc'      => 'Calculate shipping costs based on actual distance between locations.',
-                'formFields' => [
-                    [
-                        'key'         => 'distance_shipping_method_name',
-                        'type'        => 'text',
-                        'label'       => 'Method name',
-                        'placeholder' => 'Enter Name',
-                    ],
-                ]
-            ]
-        ];
-    }
+    public function get_all_store_shipping_zones( $zones = [] ) {
+
+        $shipping_zones = \WC_Shipping_Zones::get_zones();
+        $formatted = [];
+    
+        foreach ( $shipping_zones as $zone ) {
+    
+            $zone_id   = $zone['id'] ?? 0;
+            $zone_name = $zone['zone_name'] ?? '';
+    
+            // Get shipping methods for this zone
+            $wc_zone = new \WC_Shipping_Zone( $zone_id );
+            $methods = $wc_zone->get_shipping_methods();
+            $has_mvx_store_shipping = false;
+    
+            foreach ( $methods as $method ) {
+                if ( $method->id === 'multivendorx_store_shipping' ) {
+                    $has_mvx_store_shipping = true;
+                    break;
+                }
+            }
+    
+            // Skip zones that do NOT have this method
+            if ( ! $has_mvx_store_shipping ) {
+                continue;
+            }
+    
+            // Include only allowed zones
+            $formatted[] = [
+                'name' => $zone_name,
+                'url'  => admin_url( 'admin.php?page=wc-settings&tab=shipping&zone_id=' . $zone_id ),
+            ];
+        }
+    
+        return $formatted;
+    }    
 }
