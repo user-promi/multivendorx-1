@@ -6,6 +6,7 @@
  */
 
 namespace MultiVendorX\GatewayFee;
+use MultiVendorX\Commission\CommissionUtil;
 
 /**
  * MultiVendorX Gateway Fee Admin class
@@ -16,18 +17,18 @@ namespace MultiVendorX\GatewayFee;
  */
 class Admin {
     public function __construct(){
-        add_filter( 'multivendorx_before_commission_insert', [ $this, 'gateway_fee_calculation' ], 10, 4 );
+        add_filter( 'multivendorx_before_commission_insert', [ $this, 'gateway_fee_calculation' ], 10, 5 );
     }
 
 
-    public function gateway_fee_calculation( $filtered, $store, $total, $order ) {
+    public function gateway_fee_calculation( $filtered, $store, $total, $order, $refund ) {
 
         if (!empty( MultiVendorX()->setting->get_setting('gateway_fees') )) {
             $fixed_fee      = 0;
             $percentage_fee = 0;
             $gateway_settings = reset(MultiVendorX()->setting->get_setting('gateway_fees', []));
             $parent_order = wc_get_order($order->get_parent_id());
-
+            
             $payment_method = $parent_order->get_payment_method();
             $fixed_fee = (float) (
                 $gateway_settings[ $payment_method . '_fixed' ]
@@ -41,7 +42,14 @@ class Admin {
                 ?? 0
             );
 
-            $gateway_fee = $total > 0 ? ((float) $total * ((float) $percentage_fee / 100) + (float) $fixed_fee) : 0;
+            $gateway_fee = $order->get_total() > 0 ? ((float) $order->get_total() * ((float) $percentage_fee / 100) + (float) $fixed_fee) : 0;
+
+            if ($refund) {
+                $commission_id = $order->get_meta( 'multivendorx_commission_id', true );
+                $commission = CommissionUtil::get_commission_db($commission_id);
+                $remaining_payable = (float) ($order->get_total() - $order->get_total_refunded());
+                $gateway_fee = $remaining_payable > 0 ? (( $remaining_payable * ( (float) $percentage_fee / 100 ) ) + (float) $fixed_fee) : 0;
+            }
 
             $rules = unserialize($filtered['data']['rules_applied']);
             $rules['gateway_fee'] = [
@@ -52,7 +60,13 @@ class Admin {
             $filtered['data']['gateway_fee'] = (float) $gateway_fee;
             $filtered['data']['store_payable'] = (float) $filtered['data']['store_payable'] - (float) $gateway_fee;
             $filtered['data']['marketplace_payable'] = (float) $filtered['data']['marketplace_payable'] + (float) $gateway_fee;
+            
+            if ($refund) {
+                $filtered['data']['store_refunded'] = (float) $filtered['data']['store_refunded'] - (float) ($commission->gateway_fee - $gateway_fee);
+                $filtered['data']['marketplace_refunded'] = (float) $filtered['data']['marketplace_refunded'] + (float) ($commission->gateway_fee - $gateway_fee);
+            }
             $filtered['data']['rules_applied']= serialize($rules);
+
             $filtered['format'][] = '%f';
         }
 

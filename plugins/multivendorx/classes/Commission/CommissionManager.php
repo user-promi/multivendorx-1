@@ -73,37 +73,23 @@ class CommissionManager {
             }
 
             // Coupons
-            $coupon_amount = $this->calc_coupon_split( $order, $store_earning, $marketplace_commission );
+            $coupon = $this->calc_coupon_split( $order, $store_earning, $marketplace_commission );
+            $store_coupon_amount = $coupon['store_coupon_amount'];
+            $admin_coupon_amount = $coupon['admin_coupon_amount'];
 
-            // && !get_user_meta($vendor_id, '_vendor_give_shipping', true)
-            // && !get_user_meta($vendor_id, '_vendor_give_tax', true)
             // transfer shipping charges
-            if ( !empty(MultiVendorX()->setting->get_setting('give_shipping')) ) {
+            if ( MultiVendorX()->modules->is_active('store-shipping') ) {
                 $shipping_amount = $order->get_shipping_total();
             }
-            // transfer tax charges
-            foreach ( $order->get_items( 'tax' ) as $key => $tax ) { 
-                if ( MultiVendorX()->setting->get_setting('give_tax') == 'full_tax' && MultiVendorX()->setting->get_setting('give_shipping') ) {
-                    $tax_amount += $tax->get_tax_total();
-                    $shipping_tax_amount = $tax->get_shipping_tax_total();
-                } else if ( MultiVendorX()->setting->get_setting('give_tax') == 'full_tax' ) {
-                    $tax_amount += $tax->get_tax_total();
-                    $shipping_tax_amount = 0;
-                }
 
-                if (MultiVendorX()->setting->get_setting('give_tax') == 'commision_based_tax' ) {
-                    $tax_rate_id    = $tax->get_rate_id();
-                    $tax_percent    = \WC_Tax::get_rate_percent( $tax_rate_id );
-                    $tax_rate       = str_replace( '%', '', $tax_percent );
-                    if ( $tax_rate ) {
-                        $tax_amount = ( $store_earning * $tax_rate ) / 100;
-                    }
-                }
-            }
+            $tax_calculation = $this->calc_tax_split($order, $store_earning, $marketplace_commission);
+            $admin_tax = $tax_calculation['admin_tax'];
+            $store_tax = $tax_calculation['store_tax'];
+            $admin_shipping_tax = $tax_calculation['admin_shipping_tax'];
+            $store_shipping_tax = $tax_calculation['store_shipping_tax'];
 
-            // in commission total add facilitator_fee and gateway fee.
-            $store_payable = (float) $store_earning + (float) $shipping_amount + (float) $tax_amount + (float) $shipping_tax_amount + $coupon_amount;
-            $marketplace_payable = (float) $order->get_total() - (float) $store_payable;
+            $store_payable = (float) $store_earning + (float) $shipping_amount + (float) $store_tax + (float) $store_shipping_tax + $store_coupon_amount;
+            $marketplace_payable = (float) $marketplace_commission + (float) $admin_tax + (float) $admin_shipping_tax + $admin_coupon_amount;
 
             $status = $order->get_status() == 'cancelled' ? 'cancelled' : 'unpaid';
             if ($commission_id) {
@@ -121,16 +107,19 @@ class CommissionManager {
                 'marketplace_commission'    => $marketplace_commission,
                 'store_earning'             => $store_earning,
                 'store_shipping'            => $shipping_amount,
-                'store_tax'                 => $tax_amount,
-                'store_shipping_tax'        => $shipping_tax_amount,
-                'discount_applied'          => $coupon_amount,
+                'store_tax'                 => $store_tax,
+                'store_shipping_tax'        => $store_shipping_tax,
+                'marketplace_tax'           => $admin_tax,
+                'marketplace_shipping_tax'  => $admin_shipping_tax,
+                'store_discount'            => $store_coupon_amount,
+                'admin_discount'            => $admin_coupon_amount,
                 'store_payable'             => $store_payable,
                 'marketplace_payable'       => $marketplace_payable,
                 'currency'                  => get_woocommerce_currency(),
                 'status'                    => $status,
                 'rules_applied'             => serialize( $rules_array )
             ];
-            $format = [ "%d", "%d", "%d", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%s", "%s", "%s" ];
+            $format = [ "%d", "%d", "%d", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%s", "%s", "%s" ];
             
             $filtered = apply_filters(
                 'multivendorx_before_commission_insert',
@@ -138,7 +127,7 @@ class CommissionManager {
                     'data'   => $data,
                     'format' => $format,
                 ],
-                $vendor, ($order->get_subtotal() - $order->get_discount_total()), $order
+                $vendor, ($order->get_subtotal() - $order->get_discount_total()), $order, false
             );
             
             $data   = $filtered['data'];
@@ -154,6 +143,51 @@ class CommissionManager {
             return $commission_id;
         }
         return false;
+    }
+
+    public function calc_tax_split($order, $store_earning, $marketplace_commission, $refund = false) {
+        $item_tax_total = (float) $order->get_cart_tax();
+        $shipping_tax_total = (float) $order->get_shipping_tax();
+
+        if ($refund) {
+            foreach ( $order->get_refunds() as $refund ) {
+                $refunded_item_tax += abs( (float) $refund->get_cart_tax() );
+                $refunded_shipping_tax += abs( (float) $refund->get_shipping_tax() );
+            }
+
+            $item_tax_total = (float) ($order->get_cart_tax() - $refunded_item_tax);
+            $shipping_tax_total = (float) ($order->get_shipping_tax() - $refunded_shipping_tax);
+        }
+
+        $tax_on_shipping = MultiVendorX()->setting->get_setting('taxable');
+        if (MultiVendorX()->setting->get_setting('give_tax') == 'no_tax' || empty($tax_on_shipping)) {
+            $admin_tax = $item_tax_total;
+            $store_tax = 0;
+            $admin_shipping_tax = $shipping_tax_total;
+            $store_shipping_tax = 0;
+        } elseif (MultiVendorX()->setting->get_setting('give_tax') == 'full_tax') {
+            $admin_tax = 0;
+            $store_tax = $item_tax_total;
+            if (!empty($tax_on_shipping)) {
+                $store_shipping_tax = $shipping_tax_total;
+                $admin_shipping_tax = 0;
+            }
+        } elseif (MultiVendorX()->setting->get_setting('give_tax') == 'commision_based_tax') {
+            $order_total = ($order->get_subtotal() - $order->get_discount_total());
+            $admin_tax = $item_tax_total * ($marketplace_commission / $order_total);
+            $store_tax = $item_tax_total * ($store_earning / $order_total);
+            if (!empty($tax_on_shipping)) {
+                $admin_shipping_tax = $shipping_tax_total * ($marketplace_commission / $order_total);
+                $store_shipping_tax = $shipping_tax_total * ($store_earning / $order_total);
+            }
+        }
+
+        return [
+            'admin_tax' => $admin_tax ?? 0,
+            'store_tax' => $store_tax ?? 0,
+            'admin_shipping_tax' => $admin_shipping_tax ?? 0,
+            'store_shipping_tax' => $store_shipping_tax ?? 0
+        ];
     }
 
     public function calc_item_commissions( $items, $order, $vendor, $commission_rates = [], $is_refund = false ) {
@@ -291,7 +325,7 @@ class CommissionManager {
     }
 
     public function calc_coupon_split( $order, $store_earning, $marketplace_commission ) {
-        $coupon_amount = 0;
+        $store_coupon_amount = $admin_coupon_amount = 0;
         $store_coupon = false;
         $base_total = $order->get_subtotal() - $order->get_discount_total();
 
@@ -309,12 +343,13 @@ class CommissionManager {
         // 1st check exclude admin coupon setting on and the coupon is not store coupon OR
         // 2nd check the commission_include_coupon set to admin 
         if ( (!empty( MultiVendorX()->setting->get_setting( 'admin_coupon_excluded' )) && !$store_coupon) || MultiVendorX()->setting->get_setting( 'commission_include_coupon' ) == 'admin' ) {
-            $coupon_amount = sprintf("%+0.2f", ($order->get_discount_total() * ($store_earning / $base_total)));
+            $store_coupon_amount = sprintf("%+0.2f", ($order->get_discount_total() * ($store_earning / $base_total)));
         } elseif ( MultiVendorX()->setting->get_setting( 'commission_include_coupon' ) == 'store') {
-            $coupon_amount = sprintf("%+0.2f", - ($order->get_discount_total() * ($marketplace_commission / $base_total)));
+            $store_coupon_amount = sprintf("%+0.2f", - ($order->get_discount_total() * ($marketplace_commission / $base_total)));
         }
 
-        return (float) $coupon_amount;
+        $admin_coupon_amount = (float) ($order->get_discount_total() - $store_coupon_amount);
+        return [ 'store_coupon_amount' => (float) $store_coupon_amount, 'admin_coupon_amount' => $admin_coupon_amount ];
     }
 
     /**
@@ -478,10 +513,9 @@ class CommissionManager {
         $vendor = Store::get_store_by_id( $store_id );
 
         if ($commission_id) {
-            $refunds = $vendor_order->get_refunds();
-            $commission_amount = $shipping_amount = $tax_amount = $shipping_tax_amount = $marketplace_payable = $store_payable = $coupon_amount = 0;
+            $commission_amount = $marketplace_payable = $store_payable = 0;
 
-            if ( ! empty( $refunds ) ) {
+            if ( ! empty( $vendor_order->get_refunds() ) ) {
                 $commission_type = MultiVendorX()->setting->get_setting( 'commission_type' );
 
                 $commission_rates = [];
@@ -490,7 +524,6 @@ class CommissionManager {
                     $per_item = $this->calc_item_commissions( $vendor_order->get_items(), $vendor_order, $vendor, $commission_rates, true );
                     $commission_amount = $per_item['commission_amount'];
                 } elseif ( $commission_type == 'store_order' ) {
-
                     $store_order_commision = $this->calc_store_order_commission( $vendor_order, $vendor_order->get_items(), true );
                     $commission_amount = $store_order_commision['commission_amount'];
                 }
@@ -508,61 +541,64 @@ class CommissionManager {
             }
 
             // Coupons
-            $coupon_amount = $this->calc_coupon_split( $vendor_order, $store_earning, $marketplace_commission );
+            $coupon = $this->calc_coupon_split( $vendor_order, $store_earning, $marketplace_commission );
+            $store_coupon_amount = $coupon['store_coupon_amount'];
+            $admin_coupon_amount = $coupon['admin_coupon_amount'];
 
             foreach ( $vendor_order->get_refunds() as $refund ) {
-
-                // Shipping refund total
-                if ( ! empty( MultiVendorX()->setting->get_setting('give_shipping') ) ) {
-                    foreach ( $refund->get_items( 'shipping' ) as $shipping_item ) {
-                        $shipping_amount += abs( (float) $shipping_item->get_total() );
-                    }
-                }
-
-                // Tax refund calculation
-                foreach ( $refund->get_items( 'tax' ) as $tax_item ) {
-
-                    if ( MultiVendorX()->setting->get_setting('give_tax') === 'full_tax' && MultiVendorX()->setting->get_setting('give_shipping') ) {
-                        $tax_amount         += abs( (float) $tax_item->get_tax_total() );
-                        $shipping_tax_amount += abs( (float) $tax_item->get_shipping_tax_total() );
-
-                    } elseif ( MultiVendorX()->setting->get_setting('give_tax') === 'full_tax' ) {
-                        $tax_amount         += abs( (float) $tax_item->get_tax_total() );
-                        $shipping_tax_amount += 0;
-
-                    } elseif ( MultiVendorX()->setting->get_setting('give_tax') === 'commision_based_tax' ) {
-                        $tax_rate_id = $tax_item->get_rate_id();
-                        $tax_percent = \WC_Tax::get_rate_percent( $tax_rate_id );
-                        $tax_rate    = str_replace( '%', '', $tax_percent );
-
-                        if ( $tax_rate ) {
-                            $tax_amount = ( $store_earning * $tax_rate ) / 100;
-                        }
-                    }
+                if ( MultiVendorX()->modules->is_active('store-shipping') ) {
+                    $refunded_shipping += abs( (float) $refund->get_shipping_total() );
                 }
             }
-            
-            $store_payable = (float) $store_earning + (float) $shipping_amount + (float) $tax_amount + (float) $shipping_tax_amount + $coupon_amount;
-            $marketplace_payable = (float) ($vendor_order->get_total() - $vendor_order->get_total_refunded() - $store_payable);
 
+            $tax_calculation = $this->calc_tax_split($vendor_order, $store_earning, $marketplace_commission, true);
+            $admin_tax = $tax_calculation['admin_tax'];
+            $store_tax = $tax_calculation['store_tax'];
+            $admin_shipping_tax = $tax_calculation['admin_shipping_tax'];
+            $store_shipping_tax = $tax_calculation['store_shipping_tax'];
+
+            $store_shipping = $vendor_order->get_shipping_total() - $refunded_shipping;            
+            $store_payable = (float) $store_earning + (float) $store_shipping + (float) $store_tax + (float) $store_shipping_tax + $store_coupon_amount;
+            $marketplace_payable = (float) $marketplace_commission + (float) $admin_tax + (float) $admin_shipping_tax + $admin_coupon_amount;
+
+            $store_refunded = $commission->store_refunded + (
+                                ($commission->store_earning - $store_earning) + 
+                                ($commission->store_shipping - $store_shipping) + 
+                                ($commission->store_tax - $store_tax) + 
+                                ($commission->store_shipping_tax - $store_shipping_tax) + 
+                                ($commission->store_discount - $store_coupon_amount)
+                            );
+
+            $marketplace_refunded = $commission->marketplace_refunded + (
+                                ($commission->marketplace_commission - $marketplace_commission) + 
+                                ($commission->marketplace_tax - $admin_tax) + 
+                                ($commission->marketplace_shipping_tax - $admin_shipping_tax) + 
+                                ($commission->admin_discount - $admin_coupon_amount)
+                            );
+            
             $data = [
                 'order_id'                  => $vendor_order->get_id(),
                 'store_id'                  => $store_id,
                 'total_order_value'         => $vendor_order->get_total(),
                 'marketplace_commission'    => $marketplace_commission,
                 'store_earning'             => $store_earning,
-                'store_shipping'            => $shipping_amount,
-                'store_tax'                 => $tax_amount,
-                'store_shipping_tax'        => $shipping_tax_amount,
-                'discount_applied'          => $coupon_amount,
+                'store_shipping'            => $store_shipping,
+                'store_tax'                 => $store_tax,
+                'store_shipping_tax'        => $store_shipping_tax,
+                'marketplace_tax'           => $admin_tax,
+                'marketplace_shipping_tax'  => $admin_shipping_tax,
+                'store_discount'            => $store_coupon_amount,
+                'admin_discount'            => $admin_coupon_amount,
                 'store_payable'             => $store_payable,
                 'marketplace_payable'       => $marketplace_payable,
+                'store_refunded'            => $store_refunded,
+                'marketplace_refunded'      => $marketplace_refunded,
                 'currency'                  => get_woocommerce_currency(),
                 'status'                    => $status,
                 'rules_applied'             => $commission->rules_applied
             ];
 
-            $format = [ "%d", "%d", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%s", "%s", "%s" ];
+            $format = [ "%d", "%d", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%f", "%s", "%s", "%s" ];
 
             $filtered = apply_filters(
                 'multivendorx_before_commission_insert',
@@ -570,14 +606,11 @@ class CommissionManager {
                     'data'   => $data,
                     'format' => $format,
                 ],
-                $vendor, ($vendor_order->get_subtotal() - $vendor_order->get_discount_total() - $vendor_order->get_total_refunded()), $vendor_order
+                $vendor, ($vendor_order->get_subtotal() - $vendor_order->get_discount_total() - $this->get_item_refunded_total($vendor_order)), $vendor_order, true
             );
             
             $data   = $filtered['data'];
             $format = $filtered['format'];
-
-            $data['store_refunded'] = $commission->store_refunded + (float) ($commission->store_payable - $data['store_payable']);
-            $format[] = '%f';
 
             $wpdb->update( $wpdb->prefix . Utill::TABLES['commission'], $data, ['ID' => $commission_id], $format );
 
@@ -611,23 +644,6 @@ class CommissionManager {
             return $commission_id;
         }
     }
-    // public function get_item_refunded_total( $order, $item_id ) {
-    //     $refunded_total = 0;
-
-    //     // Loop through all refunds of this order
-    //     foreach ( $order->get_refunds() as $refund ) {
-    //         // Each refund has refunded items
-    //         foreach ( $refund->get_items() as $refund_item ) {
-    //             // Check if this refund line refers to our original item
-    //             $refunded_item_id = $refund_item->get_meta( '_refunded_item_id', true );
-    //             if ( (int) $refunded_item_id === (int) $item_id ) {
-    //                 $refunded_total += abs( (float) $refund_item->get_total() );
-    //             }
-    //         }
-    //     }
-
-    //     return $refunded_total;
-    // }
 
     /**
      * Get refunded total for specific item OR all items (excluding shipping, taxes, etc.)
