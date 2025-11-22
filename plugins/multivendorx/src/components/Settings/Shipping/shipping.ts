@@ -1,8 +1,5 @@
 import { __ } from '@wordpress/i18n';
-const shippingMethods = appLocalizer?.all_shippings
-    ? Object.values(appLocalizer.all_shippings)
-    : [];
-console.log(shippingMethods)
+
 export default {
     id: 'shipping',
     priority: 1,
@@ -20,7 +17,67 @@ export default {
             desc: __('See which shipping options your stores can offer to customers. Each method determines how shipping costs are calculated.', 'multivendorx'),
             buttonEnable: true,
             toggleType: 'icon',
-            modal: shippingMethods
+            modal: [
+                {
+                    id: "zone-wise-shipping",
+                    icon: "adminlib-zone-wise-shipping",
+                    label: "Zone based shipping",
+                    disableBtn: true,
+                    moduleEnabled: 'store-shipping',
+                    proSetting:true,
+                    enableOption: true,
+                    desc: "Stores can configure multiple shipping zones.",
+                    formFields: [
+                        {
+                            key: "zones",
+                            type: "clickable-list",
+                            label: "Shipping Zones",
+                            desc: "test code",
+                            items: appLocalizer.all_zones,
+                            button: {
+                              label: "Add New Zone",
+                              url: `${appLocalizer.adminUrl}/admin.php?page=wc-settings&tab=shipping`
+                            }
+                          }
+                    ]
+                },
+                {
+                    id: "country-wise-shipping",
+                    icon: "adminlib-country-shipping",
+                    label: "Country-wise shipping",
+                    moduleEnabled: 'store-shipping',
+                    disableBtn: true,
+                    proSetting:true,
+                    enableOption: true,
+                    desc: "Let store set specific shipping rates based on destination countries.",
+                    formFields: [
+                        {
+                            key: "country_shipping_method_name",
+                            type: "text",
+                            label: "Method name",
+                            placeholder: "Enter Name"
+                        }
+                    ]
+                },
+                {
+                    id: "distance-based-shipping",
+                    icon: "adminlib-distance-shipping",
+                    label: "Distance-based shipping",
+                    disableBtn: true,
+                    enableOption: true,
+                    proSetting:true,
+                    moduleEnabled: 'store-shipping',
+                    desc: "Calculate shipping costs based on actual distance between locations.",
+                    formFields: [
+                        {
+                            key: "distance_shipping_method_name",
+                            type: "text",
+                            label: "Method name",
+                            placeholder: "Enter Name"
+                        }
+                    ]
+                }
+            ]
         },
         {
             key: 'disbursement_order_status',

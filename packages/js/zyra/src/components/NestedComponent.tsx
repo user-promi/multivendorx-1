@@ -5,6 +5,7 @@ import BasicInput from "./BasicInput";
 import SelectInput from "./SelectInput";
 import MultiCheckBox from "./MultiCheckbox";
 import TextArea from "./TextArea";
+import TreeSelectInput from "./TreeSelectInput";
 
 interface NestedFieldOption {
   key?: string;
@@ -15,9 +16,11 @@ interface NestedFieldOption {
 }
 
 interface NestedField {
+  treeData: never[];
+  multiple: boolean;
   look?: string;
   key: string;
-  type: "number" | "select" | "text" | "url" | "dropdown" | "time" | "checkbox" | "textarea" | "checklist" | "setup" | "devider";
+  type: "number" | "select" | "text" | "url" | "treeselect" | "dropdown" | "time" | "checkbox" | "textarea" | "checklist" | "setup" | "devider";
   label?: string;
   placeholder?: string;
   options?: NestedFieldOption[];
@@ -192,6 +195,39 @@ const NestedComponent: React.FC<NestedComponentProps> = ({
               preText={field.preText}
               postText={field.postText}
             />
+          </div>
+        );
+      case "treeselect":
+        return (
+          <div className="settings-input-content" key={field.key}>
+            {!(rowIndex === 0 && field.skipLabel) && field.label && <label>{field.label}</label>}
+
+            <TreeSelectInput
+              wrapperClass="form-tree-select-wrapper"
+              descClass="settings-metabox-description"
+              name={field.key}
+              description={field.desc}
+              inputClass={field.className}
+              size={field.size}
+              preText={rowIndex === 0 ? field.preTextFirstRow ?? field.preText : field.preText}
+              postText={rowIndex === 0 ? field.postTextFirstRow ?? field.postText : field.postText}
+              treeData={field.treeData || []}
+              multiple={field.multiple ?? false}
+              value={val}
+              onChange={(newValue) => {
+                if (!hasFieldAccess(field)) {
+                  return;
+                }
+                handleChange(rowIndex, field.key, newValue);
+              }}
+            />
+
+            {field.desc && (
+              <p
+                className="settings-metabox-description"
+                dangerouslySetInnerHTML={{ __html: field.desc }}
+              />
+            )}
           </div>
         );
 

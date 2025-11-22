@@ -375,7 +375,21 @@ const Dashboard: React.FC = () => {
       return "Good Night";
     }
   };
-  console.log('mod', modules);
+  const revenueData = [
+    { month: "Jan", sales: 1200, refund: 200, conversion: 2.4 },
+    { month: "Feb", sales: 1500, refund: 180, conversion: 2.9 },
+    { month: "Mar", sales: 1700, refund: 220, conversion: 3.2 },
+    { month: "Apr", sales: 1400, refund: 160, conversion: 2.7 },
+    { month: "May", sales: 1900, refund: 250, conversion: 3.8 },
+    { month: "Jun", sales: 2100, refund: 240, conversion: 4.1 },
+    { month: "Jul", sales: 2300, refund: 260, conversion: 4.4 },
+    { month: "Aug", sales: 2000, refund: 210, conversion: 3.6 },
+    { month: "Sep", sales: 1800, refund: 190, conversion: 3.1 },
+    { month: "Oct", sales: 2200, refund: 270, conversion: 4.0 },
+    { month: "Nov", sales: 2500, refund: 300, conversion: 4.7 },
+    { month: "Dec", sales: 2800, refund: 320, conversion: 5.2 },
+  ];
+  
   return (
     <>
       <div className="page-title-wrapper">
