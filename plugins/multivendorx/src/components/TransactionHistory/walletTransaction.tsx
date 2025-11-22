@@ -318,27 +318,6 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
     const [viewCommission, setViewCommission] = useState(false);
     const [selectedCommissionId, setSelectedCommissionId] = useState<number | null>(null);
 
-    const demoOptions = [
-        {
-            key: 'paypal-payout',
-            label: 'PayPal',
-            value: 'paypal-payout',
-            icon: 'adminlib-bank',
-        },
-        {
-            key: 'stripe-connect',
-            label: 'Stripe',
-            value: 'stripe-connect',
-            icon: 'adminlib-bank',
-        },
-        {
-            key: 'bank-transfer',
-            label: 'Bank Transfer',
-            value: 'bank-transfer',
-            icon: 'adminlib-bank',
-        },
-    ];
-
     // Add search filter with export button
     const actionButton: RealtimeFilter[] = [
         {
@@ -514,13 +493,12 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                 const commissionId = row.original.commission_id;
                 const paymentMethod = row.original.payment_method;
                 const orderId = row.original.order_details;
-
                 const formatText = (text) =>
                     text
                         ?.replace(/-/g, ' ')
                         ?.replace(/\b\w/g, (c) => c.toUpperCase())
                     || '-';
-
+                
                 let displayValue = '-';
                 let content = displayValue;
 
@@ -542,12 +520,20 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
 
                 // Withdrawal
                 else if (type === 'withdrawal') {
-                    displayValue = `Withdrawal - ${formatText(paymentMethod)}`;
+                    const formattedMethod = formatText(paymentMethod);
+                    const accNo = row.original.account_number;
+                
+                    let maskedAccount = "";
+                    if (paymentMethod === "bank-transfer" && accNo) {
+                        const last2 = accNo.slice(-2);
+                        maskedAccount = ` (A/C...${last2})`;
+                    }
+                
+                    displayValue = `Withdrawal via ${formattedMethod}${maskedAccount}`;
                     content = displayValue;
                 }
-
                 else if (type === 'refund') {
-                    displayValue = `Refund - Order #${orderId || '-'}`;
+                    displayValue = `Refund for Order #${orderId || '-'}`;
 
                     const orderEditUrl = `${appLocalizer.site_url}/wp-admin/admin.php?page=wc-orders&action=edit&id=${orderId}`;
                     content = orderId ? (
@@ -685,6 +671,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
         })
             .then((response) => {
                 setWallet(response?.data || {});
+                setAmount(response?.data.available_balance);
             })
 
         axios({
@@ -724,7 +711,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
         setValidationErrors({});
 
         const newErrors: { amount?: string; paymentMethod?: string } = {};
-
+        console.log('is')
         // Amount validations
         if (!amount || amount <= 0) {
             newErrors.amount = "Please enter a valid amount.";
@@ -733,10 +720,10 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
         }
 
         // Payment method validation
-        if (!paymentMethod) {
+        if (!storeData.payment_method) {
             newErrors.paymentMethod = "Please select a payment processor.";
         }
-
+        
         // If any validation errors exist, show them and stop
         if (Object.keys(newErrors).length > 0) {
             setValidationErrors(newErrors);
@@ -762,7 +749,6 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             .then((res) => {
                 if (res.data.success) {
                     setRequestWithdrawal(false);
-                    resetWithdrawalForm();
                     setTimeout(() => {
                         window.location.reload();
                     }, 200);
@@ -779,7 +765,14 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
     const AmountChange = (value: number) => {
         setAmount(value);
     };
-    console.log("stordata", storeData)
+
+    const formatMethod = (method) => {
+        if (!method) return "";
+        return method
+            .replace(/-/g, " ")       // stripe-connect → stripe connect
+            .replace(/\b\w/g, c => c.toUpperCase());  // Stripe connect → Stripe Connect
+    };
+
     return (
         <>
             <div className="general-wrapper">
@@ -977,17 +970,20 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
 
                             <div className="form-group">
                                 <label htmlFor="payment_method">Payment Processor</label>
-                                <ToggleSetting
-                                    wrapperClass="setting-form-input"
-                                    descClass="settings-metabox-description"
-                                    options={demoOptions}
-                                    value={paymentMethod || ""}
-                                    onChange={(value) => setPaymentMethod(value)}
-                                />
-                                {validationErrors.paymentMethod && (
-                                    <div className="invalid-massage">{validationErrors.paymentMethod}</div>
-                                )}
+
+                                <div className="saved-value-box">
+                                    {storeData?.payment_method ? (
+                                        <strong >
+                                            {formatMethod(storeData.payment_method)}
+                                        </strong>
+                                    ) : (
+                                        <span style={{ color: "#999" }}>
+                                            No payment method saved
+                                        </span>
+                                    )}
+                                </div>
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="amount">Amount</label>
 
