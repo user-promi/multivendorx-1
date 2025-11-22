@@ -196,6 +196,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
                 target="_blank"
                 rel="noopener noreferrer"
                 className="product-wrapper"
+
               >
                 {productImage ? (
                   <img src={productImage} alt={productName} className="product-thumb" />
@@ -366,7 +367,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
                 href={`${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/admin.php?page=multivendorx#&tab=stores&view&id=${storeData.id}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="store-link"
+                className="link-item"
               >
                 {storeData.name}
               </a>
