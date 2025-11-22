@@ -217,7 +217,7 @@ export default {
             name: __('Privacy', 'multivendorx'),
             desc: "Hide sensitive store information from customers, including contact details, location, or other specified data.",
             icon: 'adminlib-privacy',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/privacy',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/NA',
             settings_link: `${appLocalizer.plugin_url}settings&subtab=privacy-settings`,
             pro_module: false,
             category: 'store_management'
@@ -343,7 +343,7 @@ export default {
             name: __('Question & Answer', 'multivendorx'),
             desc: "Customers can publicly ask product questions.",
             icon: 'adminlib-question-answer',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/shipstation/',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/NA',
             pro_module: false,
             category: 'customer_experience'
         },
@@ -352,7 +352,7 @@ export default {
             name: __('Enquiry', 'multivendorx'),
             desc: "Customers can send private product inquiries.",
             icon: 'adminlib-enquiry',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/shipstation/',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/NA',
             req_pluging: [{ name: 'CatalogX', link: 'https://catalogx.com/?utm_source=multivendorx&utm_medium=pluginsettings&utm_campaign=multivendorx' }],
             pro_module: true,
             category: 'customer_experience'
@@ -393,7 +393,7 @@ export default {
             name: __('Compliance', 'multivendorx'),
             desc: "Ensure stores meet marketplace requirements with automated policy checks.",
             icon: 'adminlib-compliance',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/marketplace-memberhsip',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/NA',
             settings_link: `${appLocalizer.plugin_url}settings&subtab=non-compliance`,
             // pro_module: true,
             category: 'marketplace_boosters'
@@ -411,7 +411,7 @@ export default {
             name: __('Facilitator', 'multivendorx'),
             desc: "Share commission on a sale between the store and another designated user. Each participant receives their assigned portion automatically.",
             icon: 'adminlib-facilitator',
-            doc_link: "/admin.php?page=multivendorx#&tab=settings&subtab=store-commissions",
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/NA',
             settings_link: `${appLocalizer.plugin_url}settings&subtab=facilitator`,
             pro_module: true,
             category: 'marketplace_boosters'
@@ -421,7 +421,7 @@ export default {
             name: __('Marketplace Fee', 'multivendorx'),
             desc: "Set and manage platform fees for each order or store to cover operational costs",
             icon: 'adminlib-marketplace-fee',
-            doc_link: "/admin.php?page=multivendorx#&tab=settings&subtab=store-commissions",
+            doc_link: "https://multivendorx.com/docs/knowledgebase/NA",
             settings_link: `${appLocalizer.plugin_url}settings&subtab=store-commissions`,
             pro_module: true,
             category: 'marketplace_boosters'
@@ -431,7 +431,7 @@ export default {
             name: __('Franchises', 'multivendorx'),
             desc: 'Enables franchise-style ordering with store-created orders, admin-product ordering, and automatic store assignment based on customer location.',
             icon: 'adminlib-franchises-module',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/NA',
             settings_link: `${appLocalizer.plugin_url}settings&subtab=franchises`,
             pro_module: false,
             category: ['store_management', 'marketplace_boosters'],
@@ -442,7 +442,7 @@ export default {
             name: __('Payment Gateway Charge', 'multivendorx'),
             desc: "Payment gateway fees are deducted from vendor commissions by the admin, ensuring platform costs are covered automatically.",
             icon: 'adminlib-marketplace-gateway',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/payment-gateway-charge/',
             settings_link: `${appLocalizer.plugin_url}settings&subtab=store-commissions`,
             pro_module: false,
             category: ['store_management', 'payment_management'],
@@ -595,7 +595,7 @@ export default {
             name: __('Geo Location', 'multivendorx'),
             desc: "Lets stores pinpoint their location on an interactive map, making it easy for customers to discover nearby stores and shop locally.",
             icon: 'adminlib-geo-location',
-            doc_link: 'https://multivendorx.com/docs/knowledgebase/shipstation/',
+            doc_link: 'https://multivendorx.com/docs/knowledgebase/store-location/',
             settings_link: `${appLocalizer.plugin_url}settings&subtab=geolocation`,
             pro_module: false,
             category: 'store_management'
