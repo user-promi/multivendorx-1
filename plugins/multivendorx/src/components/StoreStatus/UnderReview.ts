@@ -11,7 +11,7 @@ export default {
         {
             key: 'restriction_for_under_review',
             type: 'checkbox',
-            label: __('What sellers can do', 'multivendorx'),
+            label: __('Account capabilities', 'multivendorx'),
             class: 'mvx-toggle-checkbox',
             options: [
                 {

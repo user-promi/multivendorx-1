@@ -15,7 +15,7 @@ export default {
             key: 'separator_content',
             type: 'section',
             label: __("Recommended Status Flow:Pending Approval → Under Review → Active → (Suspended / Rejected / Deactivated)", 'multivendorx'),
-            desc: __('Control how stores behave at different stages of their lifecycle. These settings determine what sellers can do and what customers see based on each stores approval status.', 'multivendorx')
+            desc: __('Control how stores behave at different stages of their lifecycle. These settings determine Account capabilities and what customers see based on each stores approval status.', 'multivendorx')
         },
         {
             key: 'store_status_management',

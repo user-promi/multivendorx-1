@@ -308,8 +308,7 @@ export default {
             settingDescription: __(
                 'Set a platform fee as a fixed, percentage, or combined rate calculated on the product price. Choose whether the fee is paid by the customer at checkout or deducted from the store’s commission.',
                 'multivendorx'
-            ),
-            desc: __('<strong>Example setup:</strong><br> Total product price of the order = $100<br> Platform fee = 80%<br> Marketplace commission = $2 + 10%<br> Payable marketplace fee = $12 (i.e. $2 + 10% of 100)<br> <em>(Fee is calculated on the total product price)</em> <ul> <li><strong>Case 1 – Fee paid by the customer:</strong><br> Customer pays = $100 + $12 = $112<br> Store receives = $80 </li> <li><strong>Case 2 – Fee deducted from the store:</strong><br> Customer pays = $100<br> Store earning = 80% of $100 = $80<br> Marketplace fee = $2 + 10% of 100 = $12<br> Final store payout = $80 - $12 = $68 </li> </ul>', 'multivendorx'),
+            ), desc: __('<strong>Example setup:</strong><br> Total product price of the order = $100<br> Platform fee = 5%<br> Marketplace commission = $2 + 10%<br> <em>(Fee is calculated on the total product price)</em> <ul> <li><strong>Case 1 – Fee paid by the customer:</strong><br> Customer pays = $100 + $5 = $105<br> Store receives = $88</li> <li><strong>Case 2 – Fee deducted from the store:</strong><br> Customer pays = $100<br> Marketplace fee = $2 + 10% of 100 = $12<br> Platform fee = 5% of $100 = $5<br> Final store payout = $100 - (12 + 5) = $83</li> </ul>', 'multivendorx'),
             nestedFields: [
                 {
                     key: 'commission_fixed',
@@ -352,7 +351,7 @@ export default {
                 appLocalizer.site_url +
                 '/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=facilitator">here</a>.<br>' +
                 '<strong>Individual facilitators:</strong> Set facilitators for specific stores from the <em>Facilitator Settings</em> section or the <em>Store Edit</em> page.<br>' +
-                '<strong>Example:</strong><strong>Example setup:</strong><br> Total product price of the order = $1000<br> Marketplace commission = 20%<br> Facilitator fee = $50 + 5%<br> Payable marketplace commission = $200 (i.e. 20% of 1000)<br> Payable facilitator fee = $100 (i.e. $50 + 5% of 1000)<br> Store receives = $1000 − ($200 + $100) = $700', 'multivendorx'
+                '<strong>Example setup:</strong><br> Total product price of the order = $1000<br> Marketplace commission = 20%<br> Facilitator fee = $50 + 5%<br> Payable marketplace commission = $200 (i.e. 20% of 1000)<br> Payable facilitator fee = $100 (i.e. $50 + 5% of 1000)<br> Store receives = $1000 − ($200 + $100) = $700', 'multivendorx'
             ),
             nestedFields: [
                 {
