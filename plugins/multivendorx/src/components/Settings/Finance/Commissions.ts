@@ -63,7 +63,7 @@ export default {
             type: 'blocktext',
             label: __('no_label', 'multivendorx'),
             blocktext: __(
-                'From MultiVendorX 5.0.0, vendor-specific commission has been shifted to legacy mode.<b>If you were using vendor-level commissions in earlier versions, your existing settings will continue to work. However, any new commission changes made here will now follow the Marketplace Fee model as defined in the settings below.</b>',
+                'You are currently using the older vendor-specific commission system from previous versions of MultiVendorX. Because of that, the <b>Marketplace commission</b> and <b>Commission value</b> fields shown below will continue to work as vendor-specific until you update or modify this settings page.<br><br>Once you make any change, your marketplace will automatically switch to the new <b>Marketplace commission</b> model. From that point onward, all commissions will be calculated using the updated system, and this notice will no longer appear.',
                 'multivendorx'
             ),
         },
