@@ -108,7 +108,7 @@ class Install {
             `status` enum('unpaid', 'paid','refunded','partially_refunded','cancelled') DEFAULT 'unpaid',
             `commission_note`  longtext NULL,
             `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             `rules_applied` LONGTEXT,
             PRIMARY KEY (`ID`)
         ) $collate;";
@@ -368,6 +368,14 @@ class Install {
                     SET NEW.balance = last_balance - NEW.amount;
                     SET NEW.locking_balance = last_locking_balance;
                 ELSEIF NEW.status = 'Failed' THEN
+                    SET NEW.balance = last_balance;
+                    SET NEW.locking_balance = last_locking_balance;
+                END IF;
+            ELSEIF NEW.transaction_type = 'Reversed' AND NEW.entry_type = 'Dr' THEN
+                IF NEW.status = 'Completed' THEN
+                    SET NEW.balance = last_balance - NEW.amount;
+                    SET NEW.locking_balance = last_locking_balance;
+                ELSE
                     SET NEW.balance = last_balance;
                     SET NEW.locking_balance = last_locking_balance;
                 END IF;
