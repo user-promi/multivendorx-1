@@ -236,7 +236,7 @@ const Modules: React.FC<ModuleProps> = ({
                     <div className="admin-notice-wrapper">
                         <i className="admin-font adminlib-icon-yes"></i>
                         <div className="notice-details">
-                            <div className="title">Great!</div>
+                            <div className="title">Success!</div>
                             <div className="desc">{successMsg}</div>
                         </div>
                     </div>

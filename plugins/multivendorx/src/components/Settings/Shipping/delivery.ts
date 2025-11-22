@@ -53,10 +53,10 @@ export default {
             ),
             name: 'abuse_report_reasons',
             defaultValues: [
-                { value: "Delivered", locked: true, iconClass: "adminlib-check", description: "Order is received by store", required: true },
-                { value: "Cancelled", locked: true, iconClass: "adminlib-clock", description: "Order is cancelled", required: true },
+                { value: "Delivered", locked: true, iconClass: "adminlib-delivery", description: "Order is received by store", required: true },
+                { value: "Cancelled", locked: true, iconClass: "adminlib-rejecte", description: "Order is cancelled", required: true },
             ],
-            iconOptions: ["adminlib-check", "adminlib-clock", "adminlib-cart", "adminlib-store"], // dropdown options
+            iconOptions: ["adminlib-delivery", "adminlib-rejecte", "adminlib-delivery-person", "adminlib-pending", "adminlib-order-completed", "adminlib-refund","adminlib-cart","adminlib-active", "adminlib-distance-shipping","adminlib-geo-my-wp", "adminlib-per-product-shipping","adminlib-verification7", "adminlib-verification9", "adminlib-verification3", "adminlib-multi-product",  "adminlib-marketplace", "adminlib-location", "adminlib-wholesale1",] , // dropdown options
             proSetting: false,
             maxItems: 10,
             allowDuplicates: false

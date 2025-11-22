@@ -23,8 +23,8 @@ type FilterData = {
     typeCount?: any;
     store?: string;
     date?: { start_date?: Date; end_date?: Date };
-    orderBy?:string;
-    order?:string;
+    orderBy?: string;
+    order?: string;
 };
 export interface RealtimeFilter {
     name: string;
@@ -111,8 +111,8 @@ const Coupons: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
         rowsPerPage = 10,
         currentPage = 1,
         store = '',
-        orderBy='',
-        order='',
+        orderBy = '',
+        order = '',
         startDate?: Date,
         endDate?: Date
     ) => {
@@ -157,7 +157,7 @@ const Coupons: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 
     const requestApiForData = (rowsPerPage: number, currentPage: number, filterData: FilterData) => {
         setData(null);
-        requestData(rowsPerPage, currentPage, filterData?.store,filterData?.orderBy,filterData?.order, filterData?.date?.start_date, filterData?.date?.end_date);
+        requestData(rowsPerPage, currentPage, filterData?.store, filterData?.orderBy, filterData?.order, filterData?.date?.start_date, filterData?.date?.end_date);
     };
 
     const realtimeFilter: RealtimeFilter[] = [
@@ -205,13 +205,17 @@ const Coupons: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
         },
         {
             header: __('Code', 'multivendorx'),
-            cell: ({ row }) => <TableCell title={row.original?.code ?? '-'}>{row.original?.id ? <a href={`${appLocalizer.site_url}/wp-admin/post.php?post=${row.original.id}&action=edit`} target="_blank" rel="noreferrer">{row.original.code}</a> : row.original?.code ?? '-'}</TableCell>
-        },
-        {
-            header: __('Store', 'multivendorx'),
-            cell: ({ row }) => {
-                return <TableCell title={row.original.store_name ?? '-'}>{row.original.store_name ?? '-'}</TableCell>;
-            }
+            cell: ({ row }) =>
+                <TableCell title={row.original?.code ?? '-'}>
+                    <div
+                        className="product-wrapper"
+                    >
+                        <div className="details">
+                            <span className="title">{row.original?.id ? <a href={`${appLocalizer.site_url}/wp-admin/post.php?post=${row.original.id}&action=edit`} target="_blank" rel="noreferrer">{row.original.code}</a> : row.original?.code ?? '-'}</span>
+                            <div className="des">By {row.original.store_name ?? '-'}</div>
+                        </div>
+                    </div>
+                </TableCell>
         },
         {
             header: __('Discount Type', 'multivendorx'),
@@ -221,19 +225,19 @@ const Coupons: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                     type === 'percent'
                         ? __('Percentage discount', 'multivendorx')
                         : type === 'fixed_cart'
-                        ? __('Fixed cart discount', 'multivendorx')
-                        : type === 'fixed_product'
-                        ? __('Fixed product discount', 'multivendorx')
-                        : '-';
-        
-                return <TableCell title={formattedType}>{formattedType}</TableCell>;
+                            ? __('Fixed cart discount', 'multivendorx')
+                            : type === 'fixed_product'
+                                ? __('Fixed product discount', 'multivendorx')
+                                : '-';
+
+                return <TableCell title={formattedType}>{row.original?.amount ?? '-'} {formattedType}</TableCell>;
             },
-        },        
-        {
-            header: __('Amount', 'multivendorx'),
-            accessorFn: (row) => parseFloat(row.amount || '0'), // sorting numeric
-            cell: ({ row }) => <TableCell title={row.original?.amount ?? '-'}>{formatCurrency(row.original?.amount)}</TableCell>
         },
+        // {
+        //     header: __('Amount', 'multivendorx'),
+        //     accessorFn: (row) => parseFloat(row.amount || '0'), // sorting numeric
+        //     cell: ({ row }) => <TableCell title={row.original?.amount ?? '-'}>{formatCurrency(row.original?.amount)}</TableCell>
+        // },
         {
             id: 'date',
             accessorKey: 'date',
@@ -245,17 +249,6 @@ const Coupons: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                 return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
             }
         },
-        // {
-        //     header: __('Status', 'multivendorx'),
-        //     cell: ({ row }) => <TableCell title={row.original?.status ?? '-'}>
-        //         {row.original.status === "active" && (
-        //             <span className="admin-badge green">Active</span>
-        //         )}
-        //         {row.original.status === "pending" && (
-        //             <span className="admin-badge yellow">Pending</span>
-        //         )}
-        //     </TableCell>
-        // },
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) =>

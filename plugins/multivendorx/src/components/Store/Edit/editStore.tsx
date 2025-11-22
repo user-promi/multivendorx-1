@@ -540,7 +540,6 @@ const EditStore = () => {
                                                                 setEditDesc(false);
                                                             }}
                                                             className="textarea-input"
-                                                            style={{ width: "100%" }}
                                                             autoFocus
                                                         />
                                                     ) : Object.keys(data).length === 0 ? (

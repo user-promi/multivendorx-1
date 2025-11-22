@@ -559,7 +559,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                 key={formField.id}
                                 className={`form-field 
                                                 ${opendInput?.id === formField.id
-                                        ? 'active'
+                                        ? 'active drag-handle'
                                         : ''
                                     }`}
                                 onClick={(e) => {
@@ -569,11 +569,6 @@ const CustomForm: React.FC<CustomFormProps> = ({
                             >
                                 {opendInput?.id === formField.id && (
                                     <section className="meta-menu">
-                                        {opendInput?.id === formField.id && (
-                                            <div className="admin-badge blue drag-handle">
-                                                <i className="admin-font adminlib-drag"></i>
-                                            </div>
-                                        )}
                                         <span
                                             onClick={() => {
                                                 const index = formFieldList.findIndex(f => f.id === opendInput.id);

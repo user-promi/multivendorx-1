@@ -82,15 +82,6 @@ class Payment {
                 'label' => __('Bank Transfer', 'multivendorx'),
                 'fields' => [
                     [
-                        'key'   => 'account_type',
-                        'type'  => 'setting-toggle',
-                        'label' => __('Account type', 'multivendorx'),
-                        'options' => [
-                            ['key' => 'current', 'label' => __('current', 'multivendorx'), 'value' => 'current'],
-                            ['key' => 'savings', 'label' => __('Savings', 'multivendorx'), 'value' => 'savings'],
-                        ]
-                    ],
-                    [
                         'key'         => 'bank_name',
                         'type'        => 'text',
                         'label'       => 'Bank Name',
@@ -131,7 +122,16 @@ class Payment {
                         'type'        => 'text',
                         'label'       => 'Account Number',
                         'placeholder' => 'Enter Account Number',
-                    ]
+                    ],
+                    [
+                        'key'   => 'account_type',
+                        'type'  => 'setting-toggle',
+                        'label' => __('Account type', 'multivendorx'),
+                        'options' => [
+                            ['key' => 'current', 'label' => __('Current', 'multivendorx'), 'value' => 'current'],
+                            ['key' => 'savings', 'label' => __('Savings', 'multivendorx'), 'value' => 'savings'],
+                        ]
+                    ],
                 ]
             ];
         }

@@ -147,7 +147,7 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
   const handleAddNew = () => {
     const updatedValues = [...values];
     const demoItem: MultiStringItem = {
-      value: "New Item",
+      value: "New item",
       description: "",
       iconClass: iconOptions.length > 0 ? iconOptions[0] : "",
       required: false,
@@ -314,7 +314,7 @@ const MultiInput: React.FC<MultiInputProps> = (props) => {
                   </div>
                 )}
 
-                {requiredEnable && (
+                {requiredEnable && !item.deleteDisabled &&(
                   <div className="form-group">
                     <label>Required</label>
                     <div className="input-content">

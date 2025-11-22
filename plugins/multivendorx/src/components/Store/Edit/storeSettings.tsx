@@ -811,10 +811,10 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                     </div>
                                 </div>
                                 <div className="settings-metabox-description">
-                                    Manage your store email preferences: 
+                                    Manage your store email preferences:
                                     <ul>
-                                       <li> <strong>Primary email</strong> – The first email you enter becomes the store’s primary contact address and is displayed on the storefront.</li>
-                                       <li><strong>Additional email</strong> – Add extra email addresses to receive store notifications. These emails are used internally for alerts only and will not appear publicly.</li> 
+                                        <li> <strong>Primary email</strong> – The first email you enter becomes the store’s primary contact address and is displayed on the storefront.</li>
+                                        <li><strong>Additional email</strong> – Add extra email addresses to receive store notifications. These emails are used internally for alerts only and will not appear publicly.</li>
                                     </ul>
                                 </div>
                                 {errorMsg.email && <p className="invalid-massage">{errorMsg.email}</p>}
@@ -1014,13 +1014,12 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                     value={formData.slug}
                                     onChange={handleChange}
                                 />
-                                <div className="settings-metabox-description slug">Store Url : <a className="link-item" href={appLocalizer.store_page_url + '/' + formData.slug}> {appLocalizer.store_page_url + '/' + formData.slug} <i className="adminlib-external"></i></a></div>
+                                <div className="settings-metabox-description slug">Store Url : <a className="link-item" target="blank" href={appLocalizer.store_page_url + '/' + formData.slug}> {appLocalizer.store_page_url + '/' + formData.slug} <i className="adminlib-external"></i></a></div>
                             </div>
                             {errorMsg.slug && <p className="invalid-massage">{errorMsg.slug}</p>}
 
                         </div>
                     </div>
-
 
                     <div className="card-content">
                         <div className="card-header">
@@ -1038,7 +1037,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                     name="facebook"
                                     wrapperClass="setting-form-input"
                                     descClass="settings-metabox-description"
-                                    value={formData.facebook}
+                                    value={formData.facebook?.trim() || "https://facebook.com/"}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -1052,7 +1051,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                     name="twitter"
                                     wrapperClass="setting-form-input"
                                     descClass="settings-metabox-description"
-                                    value={formData.twitter}
+                                    value={formData.twitter?.trim() || "https://twitter.com/"}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -1066,7 +1065,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                     name="linkedin"
                                     wrapperClass="setting-form-input"
                                     descClass="settings-metabox-description"
-                                    value={formData.linkedin}
+                                    value={formData.linkedin?.trim() || "https://linkedin.com/"}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -1080,8 +1079,8 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                     name="youtube"
                                     wrapperClass="setting-form-input"
                                     descClass="settings-metabox-description"
-                                    value={formData.youtube}
-                                    onChange={handleChange}
+                                    value={formData.youtube?.trim() || "https://youtube.com/"}
+                                    onChange={handleChange} 
                                 />
                             </div>
                         </div>
@@ -1094,7 +1093,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                     name="instagram"
                                     wrapperClass="setting-form-input"
                                     descClass="settings-metabox-description"
-                                    value={formData.instagram}
+                                    value={formData.instagram?.trim() || "https://instagram.com/"}
                                     onChange={handleChange}
                                 />
                             </div>

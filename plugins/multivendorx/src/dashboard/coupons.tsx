@@ -408,7 +408,6 @@ const AllCoupon: React.FC = () => {
         }
     };
 
-    console.log(validationErrors)
     const tabs = [
         {
             id: "general",

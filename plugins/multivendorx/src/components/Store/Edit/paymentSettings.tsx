@@ -250,6 +250,7 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 								return (
 									<div className="form-group-wrapper" key={field.key}>
 										<div className="form-group">
+											<label htmlFor={field.key}>{field.label}</label>
 											<ToggleSetting
 												key={field.key}
 												description={field.desc}
@@ -301,7 +302,13 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 						</div>
 						<BlockText
 							blockTextClass="settings-metabox-note"
-							value="If no store-specific commission is set, the global commission will automatically apply."// Text or HTML content to display inside the block (safe HTML injected).
+							value={`
+									If no store-specific commission is set, the 
+									<a href="${appLocalizer.plugin_url}settings&subtab=store-commissions">
+									global commission
+									</a> 
+									will automatically apply.
+								`}
 						/>
 						<div className="form-group-wrapper">
 							<div className="form-group">

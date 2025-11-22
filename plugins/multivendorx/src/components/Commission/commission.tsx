@@ -541,63 +541,63 @@ const Commission: React.FC = () => {
                     <TableCell>
                         <ul className={`details ${isExpanded ? '' : 'overflow'}`}>
 
-                            <li>
-                                <div className="item">
-                                    <div className="des">Commission Earned</div>
-                                    <div className="title">
-                                        {formatCurrency(row.original.storeEarning)}
-                                    </div>
-                                </div>
-                            </li>
-
-                            <li>
-                                {modules.includes('store-shipping') && (
+                            {row.original?.commissionAmount ? (
+                                <li>
                                     <div className="item">
-                                        <div className="des">Shipping</div>
-                                        <div className="title">
-                                            + {formatCurrency(row.original.shippingAmount)}
-                                        </div>
+                                        <div className="des">Commission Earned</div>
+                                        <div className="title">{formatCurrency(row.original.commissionAmount)}</div>
                                     </div>
-                                )}
-                                {appLocalizer.tax && (
-                                    <div className="item">
-                                        <div className="des">Tax</div>
-                                        <div className="title">
-                                            + {formatCurrency(row.original.taxAmount)}
+                                </li>
+                            ) : null}
+                            {(row.original?.shippingAmount ) && (
+                                <li>
+                                    {row.original?.shippingAmount && (
+                                        <div className="item">
+                                            <div className="des">Shipping</div>
+                                            <div className="title">+ {formatCurrency(row.original.shippingAmount)}</div>
                                         </div>
-                                    </div>
-                                )}
+                                    )}
+                                </li>
+                            )}
+                            {(row.original?.taxAmount) && (
+                                <li>
 
-                            </li>
-
-                            <li>
-                                {modules.includes('marketplace-gateway') && (
-                                    <div className="item">
-                                        <div className="des">Gateway Fee</div>
-                                        <div className="title">
-                                            - {formatCurrency(row.original.gatewayFee)}
+                                    {row.original?.taxAmount && (
+                                        <div className="item">
+                                            <div className="des">Tax</div>
+                                            <div className="title">+ {formatCurrency(row.original.taxAmount)}</div>
                                         </div>
-                                    </div>
-                                )}
+                                    )}
+                                </li>
+                            )}
+                            {(
+                                (modules.includes('marketplace-gateway') && row.original?.gatewayFee) ||
+                                (modules.includes('facilitator') && row.original?.facilitatorFee) ||
+                                (modules.includes('marketplace-fee') && row.original?.marketplaceFee)
+                            ) && (
+                                    <li>
+                                        {modules.includes('marketplace-gateway') && row.original?.gatewayFee && (
+                                            <div className="item">
+                                                <div className="des">Gateway Fee</div>
+                                                <div className="title">- {formatCurrency(row.original.gatewayFee)}</div>
+                                            </div>
+                                        )}
 
-                                {modules.includes('facilitator') && (
-                                    <div className="item">
-                                        <div className="des">Facilitator Fee</div>
-                                        <div className="title">
-                                            - {formatCurrency(row.original.facilitatorFee)}
-                                        </div>
-                                    </div>
-                                )}
+                                        {modules.includes('facilitator') && row.original?.facilitatorFee && (
+                                            <div className="item">
+                                                <div className="des">Facilitator Fee</div>
+                                                <div className="title">- {formatCurrency(row.original.facilitatorFee)}</div>
+                                            </div>
+                                        )}
 
-                                {modules.includes('marketplace-fee') && (
-                                    <div className="item">
-                                        <div className="des">Marketplace Fee</div>
-                                        <div className="title">
-                                            - {formatCurrency(row.original.marketplaceFee)}
-                                        </div>
-                                    </div>
+                                        {modules.includes('marketplace-fee') && row.original?.marketplaceFee && (
+                                            <div className="item">
+                                                <div className="des">Marketplace Fee</div>
+                                                <div className="title">- {formatCurrency(row.original.marketplaceFee)}</div>
+                                            </div>
+                                        )}
+                                    </li>
                                 )}
-                            </li>
 
                             <span
                                 className="more-btn"
