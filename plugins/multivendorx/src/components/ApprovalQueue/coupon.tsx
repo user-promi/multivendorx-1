@@ -230,7 +230,7 @@ const Coupons: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                                 ? __('Fixed product discount', 'multivendorx')
                                 : '-';
 
-                return <TableCell title={formattedType}>{formattedType}</TableCell>;
+                return <TableCell title={formattedType}>{row.original?.amount ?? '-'} {formattedType}</TableCell>;
             },
         },
         // {

@@ -1212,30 +1212,30 @@
     }
 }
 
-.form-field-container-wrapper {
-    .address-field-wrapper {
-        padding: 1rem;
+// .form-field-container-wrapper {
+//     .address-field-wrapper {
+//         padding: 1rem;
 
-        .meta-menu {
-            opacity: 0;
-        }
+//         .meta-menu {
+//             opacity: 0;
+//         }
 
-        .form-field {
-            border: .063rem dashed transparent;
-            cursor: pointer;
-            padding: .313rem;
+//         .form-field {
+//             border: .063rem dashed transparent;
+//             cursor: pointer;
+//             padding: .313rem;
 
-            &.active {
-                border-color: $theme-color;
-                background: #5c0ebb09;
+//             &.active {
+//                 border-color: $theme-color;
+//                 background: #5c0ebb09;
 
-                .meta-menu {
-                    opacity: 1;
-                }
-            }
-        }
-    }
-}
+//                 .meta-menu {
+//                     opacity: 1;
+//                 }
+//             }
+//         }
+//     }
+// }
 
 // no permission section start
 .permission-wrapper {

@@ -779,7 +779,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
     const AmountChange = (value: number) => {
         setAmount(value);
     };
-    console.log("stordata",storeData)
+    console.log("stordata", storeData)
     return (
         <>
             <div className="general-wrapper">
@@ -851,46 +851,89 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                             </div>
                         )}
                     </div>
-                    <div className="column transaction">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    Withdrawable balance
+                    <div className="col">
+                        <div className="column transaction">
+                            <div className="card-header">
+                                <div className="left">
+                                    <div className="title">
+                                        Withdrawable balance
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="payout-wrapper">
-                            <div className="price">
-                                {formatCurrency(wallet.available_balance)}
-                            </div>
-
-                            {storeData?.request_withdrawal_amount ? (
-                                <>
-                                    <div className="des">
-                                        Last withdrawal request:
-                                        {formatCurrency(storeData.request_withdrawal_amount)}, is <strong>Pending</strong>.
-                                    </div>
-                                    <div className="payout-notice">
-                                        <i className="adminlib-error"></i>
-                                        Please clear the pending request before disbursing new payments.
-                                    </div>
-                                    <div className="admin-btn btn-purple-bg disabled" style={{ opacity: 0.5, pointerEvents: 'none' }}>
-                                        Disburse payment
-                                    </div>
-                                </>
-                            ) : (
-                                <>
-                                    <div className="des">
-                                        Current available balance ready to transfer
-                                        {wallet?.reserve_balance ? (
-                                            <>,&nbsp;'Excluding Reserve Balance' {formatCurrency(wallet.reserve_balance)}</>
-                                        ) : null}
+                            <div className="payout-wrapper">
+                                <div className="payout-header">
+                                    <div className="price-wrapper">
+                                        <div className="price">{formatCurrency(wallet.available_balance)}</div>
+                                        <div className="small-text"><b>Reserve wallet:</b> $52668</div>
+                                        <div className="small-text"><b>Withdrawal fees:</b> $546325</div>
                                     </div>
                                     <div className="admin-btn btn-purple-bg" onClick={() => setRequestWithdrawal(true)}>
                                         Disburse payment
                                     </div>
-                                </>
-                            )}
+                                </div>
+
+
+                                {storeData?.request_withdrawal_amount ? (
+                                    <>
+                                        <div className="des">
+                                            Last withdrawal request:
+                                            {formatCurrency(storeData.request_withdrawal_amount)}, is <strong>Pending</strong>.
+                                        </div>
+                                        <div className="payout-notice">
+                                            <i className="adminlib-error"></i>
+                                            Please clear the pending request before disbursing new payments.
+                                        </div>
+                                        <div className="admin-btn btn-purple-bg disabled" style={{ opacity: 0.5, pointerEvents: 'none' }}>
+                                            Disburse payment
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        {/* <div className="des">
+                                        Current available balance ready to transfer
+                                        {wallet?.reserve_balance ? (
+                                            <>,&nbsp;'Excluding Reserve Balance' {formatCurrency(wallet.reserve_balance)}</>
+                                        ) : null}
+                                    </div> */}
+
+
+                                        {/* <div className="des">
+                                        +$0.00 pending 
+                                    </div> */}
+
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                        <div className="column">
+                            <div className="card-header">
+                                <div className="left">
+                                    <div className="title">Frequency</div>
+                                </div>
+                            </div>
+                            <div className="withdrawal-wrapper">
+                                {/* Show Frequency + Title only if NOT manual */}
+                                {data?.payment_schedules !== "mannual" && (
+                                    <>
+                                        {/* <div className="des">
+                                            Frequency
+                                        </div> */}
+                                        <div className="title">
+                                            {data?.payment_schedules
+                                                ? data.payment_schedules.charAt(0).toUpperCase() + data.payment_schedules.slice(1)
+                                                : "N/A"}
+                                        </div>
+                                    </>
+                                )}
+
+                                {/* Show threshold line only if > 0 */}
+                                {Number(data?.thresold ?? 0) > 0 && (
+                                    <div className="withdrawl-notice">
+                                        <i className="adminlib-info"></i>{" "}
+                                        Withdrawal occurs only when your balance reaches {formatCurrency(data.thresold)} or more. View payment calendar
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>

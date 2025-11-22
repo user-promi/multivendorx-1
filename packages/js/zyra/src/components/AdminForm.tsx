@@ -2053,7 +2053,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                         <div className="admin-notice-wrapper">
                             <i className="admin-font adminlib-icon-yes"></i>
                             <div className="notice-details">
-                                <div className="title">Settings Saved!</div>
+                                <div className="title">Success</div>
                                 <div className="desc">{successMsg}</div>
                             </div>
                         </div>

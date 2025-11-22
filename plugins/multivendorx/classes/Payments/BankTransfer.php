@@ -133,15 +133,6 @@ class BankTransfer
                 'label' => __('Bank Transfer', 'multivendorx'),
                 'fields' => [
                     [
-                        'key' => 'account_type',
-                        'type' => 'setting-toggle',
-                        'label' => __('Account type', 'multivendorx'),
-                        'options' => [
-                            ['key' => 'current', 'label' => __('Current', 'multivendorx'), 'value' => 'current'],
-                            ['key' => 'savings', 'label' => __('Savings', 'multivendorx'), 'value' => 'savings'],
-                        ]
-                    ],
-                    [
                         'key' => 'bank_name',
                         'type' => 'text',
                         'label' => 'Bank name',
@@ -182,7 +173,16 @@ class BankTransfer
                         'type' => 'text',
                         'label' => 'Account number',
                         'placeholder' => 'Enter account number',
-                    ]
+                    ],
+                    [
+                        'key' => 'account_type',
+                        'type' => 'setting-toggle',
+                        'label' => __('Account type', 'multivendorx'),
+                        'options' => [
+                            ['key' => 'current', 'label' => __('Current', 'multivendorx'), 'value' => 'current'],
+                            ['key' => 'savings', 'label' => __('Savings', 'multivendorx'), 'value' => 'savings'],
+                        ]
+                    ],
                 ]
             ];
         }
