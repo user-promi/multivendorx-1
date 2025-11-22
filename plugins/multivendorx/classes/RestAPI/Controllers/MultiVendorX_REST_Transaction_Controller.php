@@ -179,7 +179,6 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
     
         $formatted = array_map(function($row) {
             $store = new \MultiVendorX\Store\Store($row['store_id']);
-    
             return [
                 'id'             => $row['id'],
                 'commission_id'  => $row['commission_id'],
@@ -188,6 +187,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
                 'balance'        => $row['balance'],
                 'status'         => $row['status'],
                 'payment_method' => $row['payment_method'] ?? '',
+                'account_number' => $store ? $store->get_meta('account_number') : '',
                 'credit'         => $row['entry_type'] === 'Cr' ? $row['amount'] : 0,
                 'debit'          => $row['entry_type'] === 'Dr' ? $row['amount'] : 0,
                 'date'           => $row['created_at'],

@@ -410,7 +410,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                         'store_name' => $store['name'],
                         'store_slug' => $store['slug'],
                         'status'     => $store['status'],
-                        'email'      => $store_meta->meta_data['email'] ?? '',
+                        'email'      => $store_meta->meta_data['primary_email'] ?? '',
                         'phone'      => $store_meta->meta_data['phone'] ?? $store_meta->meta_data['_phone'] ?? $store_meta->meta_data['contact_number'] ?? '',
                         'primary_owner' => $primary_owner,
                         'primary_owner_image' =>get_avatar($primary_owner->ID, 48),
