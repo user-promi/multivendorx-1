@@ -20,7 +20,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 		const registrationData = formData.registration_data || {};
 
 		if (Object.keys(registrationData).length === 0) {
-			doc.text("No registration data found", 10, 30);
+			doc.text("Store submitted application without filling out registration form.", 10, 30);
 		} else {
 			let y = 30;
 			Object.entries(registrationData).forEach(([label, value]) => {
@@ -144,7 +144,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{formData.core_data?.status === 'pending' || formData.core_data?.status === 'rejected' ? 'Registration form details' : 'Archive Data'}
+									{formData.core_data?.status === 'pending' || formData.core_data?.status === 'rejected' ? 'Registration form details' : 'Archive data'}
 
 								</div>
 							</div>
@@ -181,7 +181,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 								</div>
 							))
 						) : (
-							<div className="no-data">No registration data found</div>
+							<div className="no-data">Store submitted application without filling out registration form.</div>
 						)}
 					</div>
 				</div>

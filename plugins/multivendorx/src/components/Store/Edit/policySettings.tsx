@@ -112,7 +112,7 @@ const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
 						<div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                    Cancellation/Return/Exchange policy
+                                    Cancellation / Return / Exchange policy
                                 </div>
                             </div>
                         </div>

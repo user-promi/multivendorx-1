@@ -111,7 +111,7 @@ const Policy = () => {
                     </div>
                     <div className="card-content">
                         <div className="card-title">
-                            Cancellation/Return/Exchange Policy
+                            Cancellation / Return / Exchange policy
                         </div>
 
                         <div className="form-group-wrapper">
