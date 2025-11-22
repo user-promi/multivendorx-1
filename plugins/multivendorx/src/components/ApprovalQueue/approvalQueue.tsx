@@ -206,7 +206,7 @@ const ApprovalQueue = () => {
             content: {
                 id: 'deactivate-requests',
                 name: 'Deactivations',
-                desc: 'Store-initiated permanent closure',
+                desc: 'Permanent store closure request',
                 icon: 'bank blue',
                 tabTitle: 'Stores requesting deactivation',
                 tabDes: 'Approve or reject marketplace joiners.',
