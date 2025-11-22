@@ -94,7 +94,7 @@ export default {
                 },
                 {
                     key: 'vonage',
-                    label: __('Vonage (Nexmo)', 'multivendorx'),
+                    label: __('Vonage', 'multivendorx'),
                     value: 'vonage',
                 },
                 {
@@ -106,12 +106,7 @@ export default {
                     key: 'plivo',
                     label: __('Plivo', 'multivendorx'),
                     value: 'plivo',
-                },
-                {
-                    key: 'fake_gateway',
-                    label: __('Fake Gateway (Testing)', 'multivendorx'),
-                    value: 'fake',
-                },
+                }
             ],
         },
 
