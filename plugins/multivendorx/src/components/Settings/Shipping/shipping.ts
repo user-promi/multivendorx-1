@@ -13,6 +13,7 @@ export default {
         {
             key: 'shipping_modules',
             type: 'payment-tabs',
+			moduleEnabled: 'store-shipping',
             label: __('Shipping methods available to stores ', 'multivendorx'),
             desc: __('See which shipping options your stores can offer to customers. Each method determines how shipping costs are calculated.', 'multivendorx'),
             buttonEnable: true,
@@ -83,6 +84,7 @@ export default {
             key: 'disbursement_order_status',
             type: 'checkbox',
             label: __(' Shipping carriers', 'multivendorx'),
+			moduleEnabled: 'store-shipping',
             settingDescription: __(" Choose which shipping providers stores can use. Only the carriers you enable will be available for sellers to ship their products and add tracking details. This helps keep all shipments through trusted, approved providers.", 'multivendorx'),
             class: 'mvx-toggle-checkbox',
             addNewBtn: 'Add Custom Provider',
