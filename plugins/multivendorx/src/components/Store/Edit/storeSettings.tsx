@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import { BasicInput, TextArea, FileInput, getApiLink, SuccessNotice, SelectInput, useModules } from 'zyra';
+import { BasicInput, TextArea, FileInput, getApiLink, SuccessNotice, SelectInput, useModules, EmailsInput } from 'zyra';
 import { useLocation } from "react-router-dom";
 import { __ } from '@wordpress/i18n';
 
@@ -819,7 +819,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                         <div className="form-group-wrapper">
                             <div className="form-group">
                                 <label>Store email(s)</label>
-                                <div
+                                {/* <div
                                     ref={inputRef}
                                     className="emails-section"
                                     onClick={() => inputRef.current?.querySelector('input')?.focus()}
@@ -852,7 +852,6 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                             autoFocus={emails.length === 0}
                                         />
 
-                                        {/* MAGIC INLINE SUGGESTION */}
                                         {inputValue && !inputValue.endsWith(' ') && !inputValue.endsWith(',') && isValidEmail(inputValue) && !emails.includes(inputValue.trim()) && (
                                             <div
                                                 onClick={() => {
@@ -867,7 +866,15 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                             </div>
                                         )}
                                     </div>
-                                </div>
+                                </div> */}
+                                <EmailsInput
+                                    value={emails}
+                                    primary={primaryEmail}
+                                    enablePrimary={true}
+                                    onChange={(list, primary) => {
+                                        saveEmails(list, primary);
+                                    }}
+                                />
 
                                 <div className="settings-metabox-description">
                                     <strong>Primary email</strong>: Click the star on any email to make it primary (shown on storefront).<br />
