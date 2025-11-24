@@ -20,6 +20,7 @@ $login_url = add_query_arg('redirect_to', $current_url, $myaccount_url);
         <h3>Questions about this product</h3>
         <div class="qna-search">
             <input type="text" id="qna-search" placeholder="Search questions...">
+            <button id="qna-direct-submit" style="display:none;">Ask this question</button>
         </div>
     </div>
 
@@ -55,7 +56,7 @@ $login_url = add_query_arg('redirect_to', $current_url, $myaccount_url);
             <textarea id="qna-question" placeholder="Type your question..."></textarea><br>
             <button type="submit" id="qna-submit">Submit</button>
         </div>
-        <div class="qna-cta">
+        <div class="qna-cta" style="display:none;">
             <button type="button" id="qna-show-form">Post your Question</button>
         </div>
     <?php else: ?>
