@@ -37,6 +37,9 @@ export interface PopupProps {
     modulePageUrl?: string;
     btnLink?: BtnLink[];
     upgradeBtnText?: string;
+    wooSetting?: string;
+    wooLink?: string;
+    wooPageUrl?:string;
 }
 
 const ProPopup: React.FC<PopupProps> = (props) => {
@@ -166,6 +169,33 @@ const ProPopup: React.FC<PopupProps> = (props) => {
                         <>
                             <h2>{props.message}</h2>
                             <p>{props.SettingDescription}</p>
+                        </>
+                    )}
+                    {props.wooSetting && (
+                        <>
+                            <div className="popup-header">
+                                <i className="adminlib-settings"></i>
+                            </div>
+
+                            <div className="popup-body">
+                                <h2>Update WooCommerce Settings</h2>
+
+                                <p>
+                                    {props.message ??
+                                        `To enable this feature, please update your WooCommerce settings.`}
+                                </p>
+
+                                <div className="buttons-wrapper center">
+                                    <a
+                                        className="admin-btn btn-purple"
+                                        href={props.wooPageUrl}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
+                                        <i className="adminlib-preview"></i> Update Settings
+                                    </a>
+                                </div>
+                            </div>
                         </>
                     )}
                 </div>

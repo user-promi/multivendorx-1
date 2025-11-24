@@ -86,6 +86,8 @@ interface InputField {
     class?: string;
     name?: string;
     treeData?: any;
+    wooCheck?:any;
+    wooLink?:any;
     type?:
     | 'text'
     | 'select'
@@ -422,23 +424,30 @@ const AdminForm: React.FC<AdminFormProps> = ({
         proFeaturesEnabled: boolean,
         hasDependentModule?: string,
         hasDependentSetting?: string,
-        hasDependentPlugin?: string
+        hasDependentPlugin?: string,
+        hasWooCommerceSetting?: string,
+        wooLink?: string
     ) => {
         const popupData: PopupProps = {
             moduleName: '',
             settings: '',
             plugin: '',
+            wooSetting: '',
+            wooLink:'',
         };
+
         if (proFeaturesEnabled && !appLocalizer?.khali_dabba) {
             setModelOpen(true);
             return false;
         }
+
         if (hasDependentModule && !modules.includes(hasDependentModule)) {
             popupData.moduleName = hasDependentModule;
             setModulePopupData(popupData);
             setModelOpen(true);
             return false;
         }
+
         if (
             hasDependentSetting &&
             Array.isArray(setting[hasDependentSetting]) &&
@@ -449,6 +458,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
             setModelOpen(true);
             return false;
         }
+
         if (
             hasDependentPlugin &&
             !appLocalizer[`${hasDependentPlugin}_active`]
@@ -458,8 +468,26 @@ const AdminForm: React.FC<AdminFormProps> = ({
             setModelOpen(true);
             return false;
         }
+        if (
+            hasWooCommerceSetting &&
+            (
+                appLocalizer[hasWooCommerceSetting] === undefined ||
+                appLocalizer[hasWooCommerceSetting] === null ||
+                appLocalizer[hasWooCommerceSetting] === '' ||
+                appLocalizer[hasWooCommerceSetting] === false ||
+                appLocalizer[hasWooCommerceSetting] === 'no'
+            )
+        ) {
+            popupData.wooSetting = hasWooCommerceSetting;
+            popupData.wooLink = wooLink;
+            setModulePopupData(popupData);
+            setModelOpen(true);
+            return false;
+        }
+
         return true;
     };
+
 
     const handleChange = (
         event: any,
@@ -1449,12 +1477,16 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             }
                             proSetting={isProSetting(inputField.proSetting ?? false)}
                             onChange={(data) => {
+                                console.log('inputset',inputField)
+
                                 if (
                                     hasAccess(
                                         inputField.proSetting ?? false,
                                         String(inputField.moduleEnabled ?? ''),
                                         String(inputField.dependentSetting ?? ''),
-                                        String(inputField.dependentPlugin ?? '')
+                                        String(inputField.dependentPlugin ?? ''),
+                                        String(inputField.wooCheck ?? ''),
+                                        String(inputField.wooLink ?? ''),
                                     )
                                 ) {
                                     settingChanged.current = true;
@@ -1950,7 +1982,6 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             proSettingChanged={() =>
                                 proSettingChanged(inputField.proSetting ?? false)
                             }
-                            proSetting={isProSetting(inputField.proSetting ?? false)}
                             moduleEnabled={inputField.moduleEnabled ? modules.includes(inputField.moduleEnabled) : true}
                             apilink={String(inputField.apiLink)}//API endpoint used for communication with backend.
                             appLocalizer={appLocalizer}
@@ -1958,6 +1989,10 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             buttonEnable={inputField.buttonEnable}//Flag to enable/disable action buttons in the UI.
                             value={value || {}}
                             onChange={(data) => {
+                                console.log('payment tab1',data);
+                                console.log('payment tab2pro',inputField.proSetting );
+                                console.log('payment tab3mod',inputField.moduleEnabled);
+                                console.log('input',inputField)
                                 if (
                                     hasAccess(
                                         inputField.proSetting ?? false,
@@ -2064,6 +2099,8 @@ const AdminForm: React.FC<AdminFormProps> = ({
                     {
                         <Popup
                             moduleName={String(modulePopupData.moduleName)}
+                            wooSetting={String(modulePopupData.wooSetting)}
+                            wooLink={String(modulePopupData.wooLink)}
                             settings={modulePopupData.settings}
                             plugin={modulePopupData.plugin}
                             message={modulePopupFields?.message}
