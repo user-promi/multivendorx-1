@@ -1,5 +1,5 @@
 // /* global appLocalizer */
-import Brand from '../../assets/images/mvx-brand-logo.png';
+import Brand from '../../assets/images/multivendorx-logo.png';
 import React, { useEffect, JSX } from 'react';
 import { __ } from '@wordpress/i18n';
 // Context

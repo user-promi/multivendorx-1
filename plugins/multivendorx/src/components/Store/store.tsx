@@ -6,6 +6,7 @@ import {
     AdminBreadcrumbs,
     BasicInput,
     CommonPopup,
+    EmailsInput,
     FileInput,
     getApiLink,
     SelectInput,
@@ -19,8 +20,9 @@ const Store = () => {
     const [addStore, setaddStore] = useState(false);
     const [formData, setFormData] = useState<Record<string, string>>({});
     const [imagePreview, setImagePreview] = useState<string>('');
+    const [emails, setEmails] = useState<string[]>([]); 
     // const [error, setError] = useState<{ type: string; message: string } | null>(null);
-    const [error, setError] = useState<{[key: string]: { type: string; message: string };}>({});
+    const [error, setError] = useState<{ [key: string]: { type: string; message: string }; }>({});
 
 
     const hash = location.hash;
@@ -66,15 +68,15 @@ const Store = () => {
         //     const newSlug = generateSlug(value);
         //     updated.slug = newSlug;
         // }
-        
-         if (name === "slug") {
+
+        if (name === "slug") {
             const clean = value.replace(/[^a-zA-Z0-9-]/g, "");
             updated.slug = clean.toLowerCase();
         } else if (name === "name") {
             updated.name = value;
             updated.slug = generateSlug(value);
-        } 
-        
+        }
+
         setFormData(updated);
     };
 
@@ -82,40 +84,52 @@ const Store = () => {
     const handleNameBlur = async () => {
         if (!formData.slug) return;
         const exists = await checkSlugExists(formData.slug);
-        if (exists) 
+        if (exists)
             // setError(`Slug "${formData.slug}" already exists.`);
             setError((prev) => ({
-                    ...prev,
-                    slug: {
-                        type: 'invalid-message',
-                        message: `Slug "${formData.slug}" already exists.`,
-                    },
-                }));
-        else 
+                ...prev,
+                slug: {
+                    type: 'invalid-massage',
+                    message: `Slug "${formData.slug}" already exists.`,
+                },
+            }));
+        else
             setError((prev) => ({
-                    ...prev,
-                    slug: {
-                        type: 'invalid-message',
-                        message: 'Available',
-                    },
-                }));
+                ...prev,
+                slug: {
+                    type: 'success-massage',
+                    message: 'Available',
+                },
+            }));
     };
 
     const handleSubmit = async () => {
         if (!formData || Object.keys(formData).length === 0) return;
 
-        const { name, slug, email } = formData;
+        const { name, slug, email, store_owners } = formData;
 
-        if ( !email?.trim()) {
+        if (!email?.trim()) {
             setError((prev) => ({
                 ...prev,
                 email: {
-                    type: 'invalid-message',
+                    type: 'invalid-massage',
                     message: 'Store email is required.',
                 },
             }));
             return;
         }
+
+        if (!store_owners?.trim()) {
+            setError((prev) => ({
+                ...prev,
+                primary: {
+                    type: 'invalid-massage',
+                    message: 'Primary owners is required.',
+                },
+            }));
+            return;
+        }
+
 
         // Check again before submit (in case slug manually changed)
         const exists = await checkSlugExists(slug);
@@ -123,7 +137,7 @@ const Store = () => {
             setError((prev) => ({
                 ...prev,
                 slug: {
-                    type: 'invalid-message',
+                    type: 'invalid-massage',
                     message: `Slug "${formData.slug}" already exists.`,
                 },
             }));
@@ -152,7 +166,7 @@ const Store = () => {
             setError((prev) => ({
                 ...prev,
                 name: {
-                    type: 'invalid-message',
+                    type: 'invalid-massage',
                     message: 'Something went wrong while saving the store.',
                 },
             }));
@@ -303,13 +317,18 @@ const Store = () => {
                                         <label htmlFor="store-name">
                                             Store Email
                                         </label>
-                                        <BasicInput
+                                        {/* <BasicInput
                                             type="text"
                                             name="email"
                                             value={formData.email || ''}
                                             onChange={handleChange}
                                             required={true}
                                             msg={error.email}
+                                        /> */}
+                                        <EmailsInput
+                                            value={emails}
+                                            enablePrimary={true}
+                                            onChange={handleChange}
                                         />
                                     </div>
 
@@ -353,6 +372,7 @@ const Store = () => {
                                                 setFormData(updated);
                                             }}
                                         />
+                                        {error?.primary?.message && <div className="invalid-massage">{error?.primary?.message}</div>}
                                     </div>
 
                                     <div className="form-group">

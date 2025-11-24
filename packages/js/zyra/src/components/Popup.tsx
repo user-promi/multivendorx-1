@@ -37,9 +37,9 @@ export interface PopupProps {
     modulePageUrl?: string;
     btnLink?: BtnLink[];
     upgradeBtnText?: string;
-    wooSetting?: string;
-    wooLink?: string;
-    wooPageUrl?:string;
+    // wooSetting?: string;
+    // wooLink?: string;
+    // wooPageUrl?:string;
 }
 
 const ProPopup: React.FC<PopupProps> = (props) => {
@@ -171,7 +171,7 @@ const ProPopup: React.FC<PopupProps> = (props) => {
                             <p>{props.SettingDescription}</p>
                         </>
                     )}
-                    {props.wooSetting && (
+                    {/* {props.wooSetting && (
                         <>
                             <div className="popup-header">
                                 <i className="adminlib-settings"></i>
@@ -197,7 +197,7 @@ const ProPopup: React.FC<PopupProps> = (props) => {
                                 </div>
                             </div>
                         </>
-                    )}
+                    )} */}
                 </div>
             </DialogContentText>
         </DialogContent >

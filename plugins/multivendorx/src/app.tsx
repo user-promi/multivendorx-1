@@ -11,7 +11,7 @@ import SetupWizard from './blocks/setupWizard/SetupWizard';
 import CustomerServices from './components/CustomerService/customerServices';
 import Memberships from './components/Membership/membership';
 
-import Brand from './assets/images/mvx-brand-logo.png';
+import Brand from './assets/images/multivendorx-logo.png';
 import { searchIndex, SearchItem } from './searchIndex';
 import { __ } from '@wordpress/i18n';
 import Announcements from './components/Announcements/announcements';

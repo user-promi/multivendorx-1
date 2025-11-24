@@ -412,6 +412,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                 { key: 'all', name: 'All', count: response.data.all || 0 },
                 { key: 'Cr', name: 'Credit', count: response.data.credit || 0 },
                 { key: 'Dr', name: 'Debit', count: response.data.debit || 0 },
+                { key: 'TransactionType', name: 'Transaction Type', count: response.data.debit || 0 },
             ];
 
             setTransactionStatus(statuses.filter(status => status.count > 0));
@@ -854,86 +855,160 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                         )}
                     </div>
                     <div className="column">
-                        {/* <div className="column transaction"> */}
-                            <div className="card-header">
-                                <div className="left">
-                                    <div className="title">
-                                        Withdrawable balance
-                                    </div>
+                        {/* <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Withdrawable balance
                                 </div>
                             </div>
-                            {storeData?.request_withdrawal_amount ? (
-                                <>
-                                    <div className="payout-notice">
-                                        <i className="adminlib-error"></i>
-                                        Please clear the pending request before disbursing new payments.
-                                    </div>
-                                </>
-                            ) : (
-                                <>
-                                </>
-                            )}
-                            <div className="payout-wrapper">
-                                <div className="payout-header">
-                                    <div className="price-wrapper">
-                                        <div className="price">{formatCurrency(wallet.available_balance)}</div>
-                                        <div className="small-text"><b>Reserve wallet:</b> $52668</div>
-                                        <div className="small-text"><b>Withdrawal fees:</b> $546325</div>
-                                        {storeData?.request_withdrawal_amount ? (
+                        </div> */}
+                        <div className="payout-wrapper">
+                            <div className="payout-header">
+                                <div className="price-wrapper">
+                                    <div className="price-title">Available balance</div>
+                                    <div className="price">{formatCurrency(wallet.available_balance)} <div className="admin-badge green">Ready to withdraw</div></div>
+                                </div>
+                                {/* <div className="right-section">
+                                    <div className="withdrawal-wrapper">
+                                        {storeTransaction?.payment_schedules !== "mannual" && (
                                             <>
-                                                <div className="des">
-                                                    <b> Last withdrawal request:</b> {formatCurrency(storeData.request_withdrawal_amount)} <span className="admin-badge yellow">Pending</span>
+                                                <div className="title">
+                                                    {storeTransaction?.payment_schedules
+                                                        ? storeTransaction.payment_schedules.charAt(0).toUpperCase() + storeTransaction.payment_schedules.slice(1)
+                                                        : "N/A"}
                                                 </div>
-                                            </>
-                                        ) : (
-                                            <>
-                                                {/* <div className="des">
-                                        Current available balance ready to transfer
-                                        {wallet?.reserve_balance ? (
-                                            <>,&nbsp;'Excluding Reserve Balance' {formatCurrency(wallet.reserve_balance)}</>
-                                        ) : null}
-                                    </div> */}
-
-
-                                                {/* <div className="des">
-                                        +$0.00 pending 
-                                    </div> */}
-
                                             </>
                                         )}
-                                    </div>
-                                    <div className="right-section">
-                                        <div className="withdrawal-wrapper">
-                                            {/* Show Frequency + Title only if NOT manual */}
-                                            {storeTransaction?.payment_schedules !== "mannual" && (
-                                                <>
-                                                    <div className="title">
-                                                        {storeTransaction?.payment_schedules
-                                                            ? storeTransaction.payment_schedules.charAt(0).toUpperCase() + storeTransaction.payment_schedules.slice(1)
-                                                            : "N/A"}
-                                                    </div>
-                                                </>
-                                            )}
 
-                                            {/* Show threshold line only if > 0 */}
-                                            {Number(storeTransaction?.thresold ?? 0) > 0 && (
-                                                <div className="withdrawl-notice">
-                                                    <i className="adminlib-info"></i>{" "}
-                                                    Withdrawal occurs only when your balance reaches {formatCurrency(storeTransaction.thresold)} or more. View payment calendar
-                                                </div>
-                                            )}
-                                        </div>
-                                        <div className="buttons-wrapper">
-                                            <div className="admin-btn btn-purple-bg" onClick={() => setRequestWithdrawal(true)}>
-                                                Disburse Payment
+                                        {Number(storeTransaction?.thresold ?? 0) > 0 && (
+                                            <div className="withdrawl-notice">
+                                                <i className="adminlib-info"></i>{" "}
+                                                Withdrawal occurs only when your balance reaches {formatCurrency(storeTransaction.thresold)} or more. View payment calendar
                                             </div>
+                                        )}
+                                    </div>
+                                    <div className="buttons-wrapper">
+                                        <div className="admin-btn btn-purple-bg" onClick={() => setRequestWithdrawal(true)}>
+                                            Disburse Payment
+                                        </div>
+                                    </div>
+                                </div> */}
+                            </div>
+
+                            <div className="small-text"><b>$5.00 </b> minimum rwquired to withdraw</div>
+
+
+                            <div className="payout-card-wrapper">
+                                <div className="payout-card">
+                                    <div className="card-title">Locked Balance</div>
+                                    <div className="card-price">$52</div>
+                                    <div className="card-des">Pending settinglement. Released soon</div>
+                                </div>
+                                <div className="payout-card">
+                                    <div className="card-title">Free Withdrawals</div>
+                                    <div className="card-price">5 Left</div>
+                                    <div className="card-des">Then 5% + $3.00 fee</div>
+                                </div>
+                            </div>
+                            <div className="small-text">some funds locked during settlement</div>
+                            <div className="small-text">Auto payouts run hourly</div>
+
+                            {/* <div className="withdrawal-wrapper">
+                                <div className="payout-notice">
+                                    <i className="adminlib-error"></i>
+                                    $5.00 minimum rwquired to withdraw
+                                </div>
+                                <div className="payout-notice">
+                                    <i className="adminlib-error"></i>
+                                    some funds locked during settlement
+                                </div>
+
+                            </div> */}
+
+                            {/* <div className="payout-notice error-notice">
+                                <i className="adminlib-error"></i>
+                                Auto payouts run hourly
+                            </div> */}
+
+                            <div className="buttons-wrapper">
+                                <div className="admin-btn btn-purple-bg" onClick={() => setRequestWithdrawal(true)}>
+                                    Disburse Payment
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    {/* <div className="column">
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Withdrawable balance
+                                </div>
+                            </div>
+                        </div>
+                        {storeData?.request_withdrawal_amount ? (
+                            <>
+                                <div className="payout-notice">
+                                    <i className="adminlib-error"></i>
+                                    Please clear the pending request before disbursing new payments.
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                            </>
+                        )}
+                        <div className="payout-wrapper">
+                            <div className="payout-header">
+                                <div className="price-wrapper">
+                                    <div className="price">{formatCurrency(wallet.available_balance)}</div>
+                                    <div className="small-text"><b>Reserve wallet:</b> $52668</div>
+                                    <div className="small-text"><b>Withdrawal fees:</b> $546325</div>
+                                    {storeData?.request_withdrawal_amount ? (
+                                        <>
+                                            <div className="des">
+                                                <b> Last withdrawal request:</b> {formatCurrency(storeData.request_withdrawal_amount)} <span className="admin-badge yellow">Pending</span>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <div className="des">
+                                                Current available balance ready to transfer
+                                                {wallet?.reserve_balance ? (
+                                                    <>,&nbsp;'Excluding Reserve Balance' {formatCurrency(wallet.reserve_balance)}</>
+                                                ) : null}
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                                <div className="right-section">
+                                    <div className="withdrawal-wrapper">
+                                        {storeTransaction?.payment_schedules !== "mannual" && (
+                                            <>
+                                                <div className="title">
+                                                    {storeTransaction?.payment_schedules
+                                                        ? storeTransaction.payment_schedules.charAt(0).toUpperCase() + storeTransaction.payment_schedules.slice(1)
+                                                        : "N/A"}
+                                                </div>
+                                            </>
+                                        )}
+
+                                        {Number(storeTransaction?.thresold ?? 0) > 0 && (
+                                            <div className="withdrawl-notice">
+                                                <i className="adminlib-info"></i>{" "}
+                                                Withdrawal occurs only when your balance reaches {formatCurrency(storeTransaction.thresold)} or more. View payment calendar
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="buttons-wrapper">
+                                        <div className="admin-btn btn-purple-bg" onClick={() => setRequestWithdrawal(true)}>
+                                            Disburse Payment
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
-                        
-                    </div>
+
+                        </div>
+                    </div> */}
                 </div>
 
                 <CommonPopup

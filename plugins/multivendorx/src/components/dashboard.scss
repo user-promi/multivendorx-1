@@ -351,7 +351,10 @@
     display: flex;
     // gap: 1rem;
     flex-direction: column;
-    // width: 100%;
+
+    .table-wrapper {
+        border: 0.063rem solid whitesmoke;
+    }
 }
 
 .card-content {
@@ -414,14 +417,31 @@
 
 }
 
+.form-group-title-wrapper {
+    padding: 1rem 0 0.5rem;
+    border-bottom: $border-light-small;
+    margin-bottom: 1rem;
+
+    .title {
+        font-size: 1.125rem;
+        font-weight: 500;
+    }
+
+    .des {
+        font-size: 0.95rem;
+        color: $sub-text-color;
+    }
+}
+
 .form-group-wrapper {
     display: flex;
-    gap: 1rem;
+    // gap: 1rem;
 
     .form-group {
         display: flex;
         flex-direction: column;
         width: 100%;
+        margin-bottom: 1rem;
 
         .button-wrapper {
             display: flex;
@@ -435,6 +455,10 @@
             margin-bottom: .5rem;
             display: flex;
             gap: 0.625rem;
+        }
+
+        .toggle-setting-container label {
+            margin: 0;
         }
 
         i {
@@ -638,25 +662,29 @@
 
 // payout page price section start --common
 .payout-wrapper {
-    padding-top: 1rem;
 
     .payout-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: start;
-        gap: 0.5rem;
-
         .admin-btn {
             font-size: 1.313rem;
             padding: .813rem 1.813rem;
         }
     }
 
+    .price-title {
+        font-size: 0.95rem;
+        line-height: 1rem;
+        padding-bottom: 0.625rem;
+        color: #00000071;
+    }
+
     .price {
-        font-size: 2.45rem;
+        font-size: 3rem;
         font-weight: 600;
-        line-height: 2rem;
+        line-height: 2.4rem;
         margin-bottom: 0.813rem;
+        display: flex;
+        align-items: start;
+        gap: 0.5rem;
     }
 
     .des {
@@ -679,12 +707,47 @@
     .admin-badge {
         display: inline-block;
     }
+
+    .payout-card-wrapper {
+        display: flex;
+        gap: 1rem;
+        margin: 0.813rem 0;
+
+        .payout-card {
+            padding: 1rem;
+            border-radius: 0.313rem;
+            background: #e6e2e275;
+            width: 50%;
+
+            .card-title {
+                font-size: 1.125rem;
+            }
+
+            .card-price {
+                font-size: 1.813rem;
+                font-weight: 600;
+                line-height: 2rem;
+                margin: 0.5rem 0;
+            }
+
+            .card-des {
+                color: #0000009e;
+                font-size: 0.813rem;
+            }
+        }
+    }
 }
 
 .withdrawal-wrapper {
     background: $theme-background-color;
-    padding: 1rem;
+    padding: 0.313rem;
     border-radius: 0.313rem;
+    margin: 1rem 0;
+    color: $theme-color;
+
+    i {
+        color: $theme-color;
+    }
 
     .title {
         font-size: 1.45rem;
@@ -838,16 +901,24 @@
 // }
 
 .payout-notice {
-    background: #ff00001c;
-    padding: 0.5rem;
+    padding: 0.625rem;
     border-radius: 0.313rem;
-    font-size: 1rem;
-    width: fit-content;
-    color: #ff0000eb;
+    font-size: 1.063rem;
+
 
     i {
         padding-right: 0.313rem;
+    }
+
+    &.error-notice {
         color: #ff0000eb;
+        background: #ff00001c;
+
+        i {
+            color: #ff0000eb;
+
+        }
+
     }
 }
 
@@ -1459,8 +1530,25 @@
     align-items: center;
     gap: 0.5rem;
 
-    .admin-badge {
+    .email {
+        font-size: 0.813rem;
+        font-weight: 600;
+        line-height: 0.7rem;
+        padding: 0.313rem 0.5rem;
+        border-radius: 15rem;
+        display: flex;
+        align-items: end;
+        gap: 0.25rem;
+        border: $border-light-small;
         align-items: center;
+        background: #c1a1e91c;
+        transition: all 0.4s ease;
+
+        &.primary {
+            background: $theme-background-color;
+            color: $theme-color;
+            border-color: $theme-color;
+        }
     }
 
     div {
@@ -1473,6 +1561,9 @@
 
     .close-icon {
         color: $accent-color;
+        // font-size: 1rem;
+        // background: #fff;
+        // border-radius: 50%;
     }
 
     input,
@@ -1585,3 +1676,24 @@
 }
 
 // settings shipping add country end
+
+
+
+// shipping-method-wrapper start  store shipping tab start (move table css)
+.shipping-method-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .shipping-method {
+        display: flex;
+        gap: 0.313rem;
+        align-items: center;
+
+        .icon-wrapper {
+            i {
+                cursor: pointer;
+            }
+        }
+    }
+}

@@ -280,7 +280,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({ id }) =
                         <TableCell>
                             <div>No shipping methods</div>
                             <button
-                                className="btn btn-default btn-sm mt-2"
+                                className="admin-btn btn-purple"
                                 onClick={() => handleAdd(row.original)}
                             >
                                 <i className="adminlib-plus"></i> {__("Add Shipping Method", "multivendorx")}
@@ -291,29 +291,19 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({ id }) =
 
                 return (
                     <TableCell>
-                        <div className="space-y-2">
+                        <div className="shipping-method-wrapper">
                             {methodsArray.map((method: any) => (
-                                <div key={method.instance_id} className="flex items-center justify-between border-b pb-2">
-                                    <div className="font-medium">{method.title}</div>
-                                    <div className="flex gap-2">
-                                        <button
-                                            className="btn btn-default btn-sm"
-                                            onClick={() => handleEdit(method)}
-                                        >
-                                            <i className="adminlib-edit"></i> {__("Edit", "multivendorx")}
-                                        </button>
-                                        <button
-                                            className="btn btn-danger btn-sm"
-                                            onClick={() => handleDelete(method, row.original)}
-                                        >
-                                            <i className="adminlib-trash"></i> {__("Delete", "multivendorx")}
-                                        </button>
+                                <div key={method.instance_id} className="shipping-method">
+                                    <div className="admin-badge yellow">{method.title}</div>
+                                    <div className="icon-wrapper">
+                                        <i onClick={() => handleEdit(method)} className="adminlib-edit"></i>
+                                        <i onClick={() => handleDelete(method, row.original)} className="adminlib-delete"></i>
                                     </div>
                                 </div>
                             ))}
 
                             <button
-                                className="btn btn-default btn-sm mt-2"
+                                className="admin-btn btn-purple"
                                 onClick={() => handleAdd(row.original)}
                             >
                                 <i className="adminlib-plus"></i> {__("Add New Method", "multivendorx")}
@@ -327,9 +317,9 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({ id }) =
 
     return (
         <>
-            <div className="card-title">
-                {__("Zone-wise Shipping Configuration", "multivendorx")}
-            </div>
+                <div className="form-group-title-wrapper">
+                    <label htmlFor="">{__("Zone-wise Shipping Configuration", "multivendorx")}</label>
+                </div>
 
             <div className="admin-table-wrapper">
                 <Table
@@ -337,148 +327,154 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({ id }) =
                     columns={columns as ColumnDef<Record<string, any>, any>[]}
                     rowSelection={{}}
                     onRowSelectionChange={() => { }}
-                    defaultRowsPerPage={10}
-                    pageCount={pageCount}
-                    pagination={pagination}
-                    onPaginationChange={setPagination}
-                    perPageOption={[10, 25, 50]}
-                    totalCounts={totalRows}
+                    // defaultRowsPerPage={10}
+                    // pageCount={pageCount}
+                    // pagination={pagination}
+                    // onPaginationChange={setPagination}
+                    // perPageOption={[10, 25, 50]}
+                    // totalCounts={totalRows}
                 />
             </div>
 
             {addShipping && selectedZone && (
                 <CommonPopup
                     open={addShipping}
-                    width="800px"
-                    height="50%"
+                    width="500px"
+                    height="60%"
                     header={
                         <>
-                            <div className="title flex items-center gap-2">
-                                <i className="adminlib-cart"></i>
+                            <div className="title">
+                                <i className="adminlib-shipping"></i>
                                 {isEditing ? __("Edit Shipping — ", "multivendorx") : __("Add Shipping — ", "multivendorx")}
                                 {selectedZone.zone_name}
                             </div>
                             <i
-                                className="icon adminlib-close cursor-pointer"
+                                className="icon adminlib-close "
                                 onClick={() => setAddShipping(false)}
                             ></i>
                         </>
                     }
                     footer={
-                        <div className="flex justify-end gap-2 p-3">
+                        <>
                             <button
-                                className="btn btn-default"
+                                className="admin-btn btn-red"
                                 onClick={() => setAddShipping(false)}
                             >
                                 {__("Cancel", "multivendorx")}
                             </button>
-                            <button className="btn btn-primary" onClick={handleSave}>
+                            <button className="admin-btn btn-purple" onClick={handleSave}>
                                 {isEditing ? __("Update", "multivendorx") : __("Save", "multivendorx")}
                             </button>
-                        </div>
+                        </>
                     }
                 >
-                    <div className="content p-3 space-y-4">
-                        {/* Select Shipping Method */}
-                        <label className="font-medium">{__("Shipping Method", "multivendorx")}</label>
-                        <ToggleSetting
-                            wrapperClass="setting-form-input"
-                            value={formData.shippingMethod}
-                            onChange={(val: string) => {
-                                if (!isEditing) handleChange("shippingMethod", val);
-                            }}
-                            options={
-                                isEditing
-                                    ? [{ key: formData.shippingMethod, value: formData.shippingMethod, label: formData.shippingMethod.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase()) }]
-                                    : [
-                                        { key: "local_pickup", value: "local_pickup", label: "Local pickup" },
-                                        { key: "free_shipping", value: "free_shipping", label: "Free shipping" },
-                                        { key: "flat_rate", value: "flat_rate", label: "Flat Rate" },
-                                    ]
-                            }
-                            disabled={isEditing}
-                        />
+                    <div className="content">
+                        <div className="form-group-wrapper">
 
-                        {/* Local Pickup */}
-                        {formData.shippingMethod === "local_pickup" && (
                             <div className="form-group">
-                                <label className="font-medium">{__("Cost", "multivendorx")}</label>
-                                <BasicInput
-                                    type="number"
-                                    name="localPickupCost"
-                                    placeholder="Enter cost"
-                                    value={formData.localPickupCost}
-                                    onChange={(e: any) => handleChange("localPickupCost", e.target.value)}
-                                />
-                            </div>
-                        )}
-
-                        {/* Free Shipping */}
-                        {formData.shippingMethod === "free_shipping" && (
-                            <>
+                                <label >{__("Shipping Method", "multivendorx")}</label>
                                 <ToggleSetting
                                     wrapperClass="setting-form-input"
-                                    value={formData.freeShippingType}
-                                    onChange={(val: string) => handleChange("freeShippingType", val)}
-                                    options={[
-                                        { key: "min_order", value: "min_order", label: "Min Order" },
-                                        { key: "coupon", value: "coupon", label: "Coupon" },
-                                    ]}
+                                    value={formData.shippingMethod}
+                                    onChange={(val: string) => {
+                                        if (!isEditing) handleChange("shippingMethod", val);
+                                    }}
+                                    options={
+                                        isEditing
+                                            ? [{ key: formData.shippingMethod, value: formData.shippingMethod, label: formData.shippingMethod.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase()) }]
+                                            : [
+                                                { key: "local_pickup", value: "local_pickup", label: "Local pickup" },
+                                                { key: "free_shipping", value: "free_shipping", label: "Free shipping" },
+                                                { key: "flat_rate", value: "flat_rate", label: "Flat Rate" },
+                                            ]
+                                    }
+                                    disabled={isEditing}
                                 />
-                                {formData.freeShippingType === "min_order" && (
-                                    <div className="form-group mt-2">
-                                        <label className="font-medium">{__("Minimum Order Cost", "multivendorx")}</label>
-                                        <BasicInput
-                                            type="number"
-                                            name="minOrderCost"
-                                            placeholder="Enter minimum order cost"
-                                            value={formData.minOrderCost}
-                                            onChange={(e: any) => handleChange("minOrderCost", e.target.value)}
-                                        />
-                                    </div>
-                                )}
-                            </>
-                        )}
+                            </div>
 
-                        {/* Flat Rate */}
-                        {formData.shippingMethod === "flat_rate" && (
-                            <>
+                            {/* Local Pickup */}
+                            {formData.shippingMethod === "local_pickup" && (
                                 <div className="form-group">
-                                    <label className="font-medium">{__("Cost", "multivendorx")}</label>
+                                    <label>{__("Cost", "multivendorx")}</label>
                                     <BasicInput
                                         type="number"
-                                        name="flatRateCost"
+                                        name="localPickupCost"
                                         placeholder="Enter cost"
-                                        value={formData.flatRateCost}
-                                        onChange={(e: any) => handleChange("flatRateCost", e.target.value)}
+                                        value={formData.localPickupCost}
+                                        onChange={(e: any) => handleChange("localPickupCost", e.target.value)}
                                     />
                                 </div>
+                            )}
 
-                                <div className="form-group">
-                                    <label className="font-medium">{__("Cost of Shipping Class", "multivendorx")}</label>
-                                    <BasicInput
-                                        type="text"
-                                        name="flatRateClassCost"
-                                        placeholder="Enter class cost"
-                                        value={formData.flatRateClassCost}
-                                        onChange={(e: any) => handleChange("flatRateClassCost", e.target.value)}
-                                    />
-                                </div>
+                            {/* Free Shipping */}
+                            {formData.shippingMethod === "free_shipping" && (
+                                <>
+                                    <div className="form-group">
+                                        <ToggleSetting
+                                            wrapperClass="setting-form-input"
+                                            value={formData.freeShippingType}
+                                            onChange={(val: string) => handleChange("freeShippingType", val)}
+                                            options={[
+                                                { key: "min_order", value: "min_order", label: "Min Order" },
+                                                { key: "coupon", value: "coupon", label: "Coupon" },
+                                            ]}
+                                        />
+                                    </div>
+                                    {formData.freeShippingType === "min_order" && (
+                                        <div className="form-group">
+                                            <label className="font-medium">{__("Minimum Order Cost", "multivendorx")}</label>
+                                            <BasicInput
+                                                type="number"
+                                                name="minOrderCost"
+                                                placeholder="Enter minimum order cost"
+                                                value={formData.minOrderCost}
+                                                onChange={(e: any) => handleChange("minOrderCost", e.target.value)}
+                                            />
+                                        </div>
+                                    )}
+                                </>
+                            )}
 
-                                <div className="form-group">
-                                    <label className="font-medium">{__("Calculation Type", "multivendorx")}</label>
-                                    <ToggleSetting
-                                        wrapperClass="setting-form-input"
-                                        value={formData.flatRateCalculationType}
-                                        onChange={(val: string) => handleChange("flatRateCalculationType", val)}
-                                        options={[
-                                            { key: "class", value: "class", label: "Per Class" },
-                                            { key: "order", value: "order", label: "Per Order" },
-                                        ]}
-                                    />
-                                </div>
-                            </>
-                        )}
+                            {/* Flat Rate */}
+                            {formData.shippingMethod === "flat_rate" && (
+                                <>
+                                    <div className="form-group">
+                                        <label className="font-medium">{__("Cost", "multivendorx")}</label>
+                                        <BasicInput
+                                            type="number"
+                                            name="flatRateCost"
+                                            placeholder="Enter cost"
+                                            value={formData.flatRateCost}
+                                            onChange={(e: any) => handleChange("flatRateCost", e.target.value)}
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label className="font-medium">{__("Cost of Shipping Class", "multivendorx")}</label>
+                                        <BasicInput
+                                            type="text"
+                                            name="flatRateClassCost"
+                                            placeholder="Enter class cost"
+                                            value={formData.flatRateClassCost}
+                                            onChange={(e: any) => handleChange("flatRateClassCost", e.target.value)}
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label className="font-medium">{__("Calculation Type", "multivendorx")}</label>
+                                        <ToggleSetting
+                                            wrapperClass="setting-form-input"
+                                            value={formData.flatRateCalculationType}
+                                            onChange={(val: string) => handleChange("flatRateCalculationType", val)}
+                                            options={[
+                                                { key: "class", value: "class", label: "Per Class" },
+                                                { key: "order", value: "order", label: "Per Order" },
+                                            ]}
+                                        />
+                                    </div>
+                                </>
+                            )}
+                        </div>
                     </div>
                 </CommonPopup>
             )}
