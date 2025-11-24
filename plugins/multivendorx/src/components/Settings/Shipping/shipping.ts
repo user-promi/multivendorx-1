@@ -36,7 +36,7 @@ export default {
                             items: appLocalizer.all_zones,
                             button: {
                               label: "Add New Zone",
-                              url: `${appLocalizer.adminUrl}/admin.php?page=wc-settings&tab=shipping`
+                              url: `${appLocalizer.admin_url}admin.php?page=wc-settings&tab=shipping`
                             }
                           }
                     ]
