@@ -738,8 +738,23 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
         setFormData(updated);
 
         if (name === "slug") {
+            const cleanValue = value
+                .toLowerCase()
+                .replace(/[^a-z0-9-]/g, "");
+
+            const updated = { ...formData, slug: cleanValue };
+            setFormData(updated);
+
+            if (cleanValue !== value.toLowerCase()) {
+                setErrorMsg(prev => ({
+                    ...prev,
+                    slug: __("Special characters are not allowed.", "multivendorx"),
+                }));
+                return;
+            }
+            
             (async () => {
-                const trimmedValue = value.trim();
+                const trimmedValue = cleanValue.trim();
                 if (!trimmedValue) {
                     setErrorMsg(prev => ({
                         ...prev,

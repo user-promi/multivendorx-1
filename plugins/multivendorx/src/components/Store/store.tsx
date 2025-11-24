@@ -62,11 +62,19 @@ const Store = () => {
         const { name, value } = e.target;
         const updated = { ...formData, [name]: value };
 
-        if (name === 'name') {
-            const newSlug = generateSlug(value);
-            updated.slug = newSlug;
-        }
-
+        // if (name === 'name') {
+        //     const newSlug = generateSlug(value);
+        //     updated.slug = newSlug;
+        // }
+        
+         if (name === "slug") {
+            const clean = value.replace(/[^a-zA-Z0-9-]/g, "");
+            updated.slug = clean.toLowerCase();
+        } else if (name === "name") {
+            updated.name = value;
+            updated.slug = generateSlug(value);
+        } 
+        
         setFormData(updated);
     };
 
