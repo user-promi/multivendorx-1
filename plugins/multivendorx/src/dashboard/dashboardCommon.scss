@@ -433,25 +433,23 @@ a:focus {
         width: 100%;
     }
 
-    table {
-        width: 30rem;
+    .right {
+        width: 50%;
+        table {
+            width: 100%;
 
-        tr {
-            padding: 0.313rem;
-            height: 2rem;
+            tr {
+                padding: 0.313rem;
+                height: 2.313rem;
 
-            td {
-                font-size: 1.125rem;
-                font-weight: 500;
+                td {
+                    font-size: 1rem;
+                }
             }
 
-            input {
-                // width: 3rem;
+            tr:last-child {
+                border-top: $border-light-small ;
             }
-        }
-
-        tr:last-child {
-            border-top: $border-light-small ;
         }
     }
 }
@@ -477,7 +475,7 @@ a:focus {
 .view-order-table {
     tr {
         td:first-child {
-            min-width: 50%;
+            min-width: 40%;
         }
     }
 
