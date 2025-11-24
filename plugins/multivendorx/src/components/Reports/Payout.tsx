@@ -319,8 +319,19 @@ const Transactions: React.FC = () => {
                   e.preventDefault();
                   window.location.href = `/wp-admin/user-edit.php?user_id=${primaryOwner.ID}`;
                 }}
+                className="product-wrapper"
               >
-                {primaryOwner.data?.display_name || primaryOwner.data?.user_email}
+                {row.original.image ? (
+                  <img
+                    src={row.original.image}
+                    alt={row.original.store_name}
+                  />
+                ) : (
+                  <i className="item-icon adminlib-person"></i>
+                )}
+                <div className="details">
+                  <span className="title">{primaryOwner.data?.display_name || primaryOwner.data?.user_email}</span>
+                </div>
               </a>
             ) : (
               <span>-</span>

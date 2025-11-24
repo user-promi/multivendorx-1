@@ -317,8 +317,8 @@ export const TransactionHistory: React.FC = () => {
             type: 'file',
             content: {
                 id: 'wallet-transaction',
-                name: 'Marketplace',
-                icon: 'marketplace-membership',
+                name: 'Wallet Transaction',
+                icon: 'marketplace-wallet',
                 hideTabHeader: true,
             },
         },

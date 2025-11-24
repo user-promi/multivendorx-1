@@ -62,6 +62,13 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
                 'submenu' => array(),
                 'capability' => array('manage_products'),
             ),
+            'dashboard1' => array(
+                'name' => 'Dashboard1',
+                'slug' => 'dashboard1',
+                'icon' => 'adminlib-single-product',
+                'submenu' => array(),
+                'capability' => array('manage_products'),
+            ),
             'coupons' => array(
                 'name' => 'Coupons',
                 'slug' => 'coupons',
@@ -144,12 +151,6 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
                         'key' => 'store-review',
                         'name' => 'Store Review',
                         'slug' => 'store-review',
-                        'capability' => array('read_products', 'edit_products', 'delete_products'),
-                    ),
-                    array(
-                        'key' => 'dashboard-1',
-                        'name' => 'Dashboard 1',
-                        'slug' => 'dashboard-1',
                         'capability' => array('read_products', 'edit_products', 'delete_products'),
                     ),
                 ),
