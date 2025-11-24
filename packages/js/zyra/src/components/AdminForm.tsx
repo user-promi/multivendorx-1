@@ -46,6 +46,7 @@ import SystemInfo from './SystemInfo';
 import MultiInput from './MultiInput';
 import { useModules } from '../contexts/ModuleContext';
 import TreeSelectInput from './TreeSelectInput';
+import EmailsInput from './EmailsInput';
 
 // Types
 declare const wp: any;
@@ -86,8 +87,8 @@ interface InputField {
     class?: string;
     name?: string;
     treeData?: any;
-    wooCheck?:any;
-    wooLink?:any;
+    wooCheck?: any;
+    wooLink?: any;
     type?:
     | 'text'
     | 'select'
@@ -114,6 +115,7 @@ interface InputField {
     | 'setting-toggle'
     | 'wpeditor'
     | 'label'
+    | 'emails'
     | 'section'
     | 'blocktext'
     | 'button-customizer'
@@ -155,6 +157,8 @@ interface InputField {
     postInsideText?: string;
     parameter?: string;
     generate?: string;
+    enablePrimary?:any;
+    mode?:any;
     dependent?: DependentCondition | DependentCondition[];
     rowNumber?: number;
     colNumber?: number;
@@ -433,7 +437,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
             settings: '',
             plugin: '',
             wooSetting: '',
-            wooLink:'',
+            wooLink: '',
         };
 
         if (proFeaturesEnabled && !appLocalizer?.khali_dabba) {
@@ -773,6 +777,33 @@ const AdminForm: React.FC<AdminFormProps> = ({
                         />
                     );
                     break;
+                case 'emails':
+                    input = (
+                        <EmailsInput
+                            mode={inputField.mode || "multiple"}        // "single" | "multiple"
+                            enablePrimary={inputField.enablePrimary ?? true}
+                            max={inputField.max}                        // optional limit
+                            value={value?.emails || value || []}        // support both structures
+                            primary={value?.primary || null}
+                            placeholder={inputField.placeholder}
+                            onChange={(emails, primary) => {
+
+                                // The settings system should always store a single object:
+                                // { emails: [...], primary: "..." }
+                                const formattedValue =
+                                    inputField.mode === "single"
+                                        ? emails[0] || ""                 // For single email mode
+                                        : { emails, primary };            // For multiple mode
+
+                                handleChange(
+                                    { target: { value: formattedValue } },
+                                    inputField.key
+                                );
+                            }}
+                        />
+                    );
+                    break;
+
                 case 'textarea':
                     input = (
                         <TextArea
@@ -1477,8 +1508,6 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             }
                             proSetting={isProSetting(inputField.proSetting ?? false)}
                             onChange={(data) => {
-                                console.log('inputset',inputField)
-
                                 if (
                                     hasAccess(
                                         inputField.proSetting ?? false,
@@ -1989,10 +2018,6 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             buttonEnable={inputField.buttonEnable}//Flag to enable/disable action buttons in the UI.
                             value={value || {}}
                             onChange={(data) => {
-                                console.log('payment tab1',data);
-                                console.log('payment tab2pro',inputField.proSetting );
-                                console.log('payment tab3mod',inputField.moduleEnabled);
-                                console.log('input',inputField)
                                 if (
                                     hasAccess(
                                         inputField.proSetting ?? false,

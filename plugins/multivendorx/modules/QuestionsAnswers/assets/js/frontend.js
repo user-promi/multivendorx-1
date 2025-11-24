@@ -1,5 +1,16 @@
 /* global qnaFrontend */
 jQuery(document).ready(function($) {
+    const $cta  = $('.qna-cta');     // wrapper of "Post your Question"
+    const $list = $('#qna-list');    // the list of questions
+
+    function updatePostButton() {
+        const count = $list.find('.qna-item').length;
+        if (count === 0) {
+            $cta.show();  // no results → show button
+        } else {
+            $cta.hide();  // has results → hide button
+        }
+    }
     // Show hidden form when clicking "Post your Question"
     $(document).on('click', '#qna-show-form', function() {
         $('#qna-form').slideDown();
@@ -30,9 +41,13 @@ jQuery(document).ready(function($) {
     });
 
     $(document).on('keyup', '#qna-search', function() {
-        let keyword = $(this).val();
+        let keyword = $(this).val().trim();
         let productId = $('#product-qna').data('product');
-
+    
+        if (!keyword) {
+            $('#qna-direct-submit').hide();
+        }
+    
         $.post(qnaFrontend.ajaxurl, {
             action: 'qna_search',
             product_id: productId,
@@ -41,36 +56,38 @@ jQuery(document).ready(function($) {
         }, function(res) {
             if (res.success) {
                 $('#qna-list').html(res.data.html);
-                // $('#qna-form').slideUp();
-                $('#qna-show-form').show();
-            }
-        });
-    });
-
-    // Voting
-    $('#qna-list').on('click', '.qna-vote', function(){
-        var btn = $(this);
-        var li = btn.closest('.qna-item');
-        var qna_id = li.data('qna');
-        var type = btn.data('type');
-
-        $.ajax({
-            url: qnaFrontend.ajaxurl,
-            type: 'POST',
-            data: {
-                action: 'qna_vote',
-                qna_id: qna_id,
-                type: type,
-                nonce: qnaFrontend.nonce
-            },
-            success: function(response){
-                if(response.success){
-                    li.find('.qna-votes p').text(response.data.total_votes);
+    
+                const count = $('#qna-list .qna-item').length;
+    
+                if (count === 0 && keyword !== "") {
+                    $('#qna-direct-submit').show();   // show submit button
+                    $('#qna-direct-submit').data('question', keyword);
                 } else {
-                    alert(response.data.message);
+                    $('#qna-direct-submit').hide();   // hide button if results exist
                 }
             }
         });
     });
+    
+
+    // Voting
+    $(document).on('click', '#qna-direct-submit', function() {
+        let question = $(this).data('question');
+        let productId = $('#product-qna').data('product');
+    
+        $.post(qnaFrontend.ajaxurl, {
+            action: 'qna_submit',
+            product_id: productId,
+            question: question,
+            nonce: qnaFrontend.nonce
+        }, function(res) {
+            if (res.success) {
+                location.reload();
+            } else {
+                alert(res.data.message);
+            }
+        });
+    });
+    
 
 });
