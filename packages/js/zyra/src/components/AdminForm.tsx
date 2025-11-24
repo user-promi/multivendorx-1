@@ -1950,7 +1950,6 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             proSettingChanged={() =>
                                 proSettingChanged(inputField.proSetting ?? false)
                             }
-                            proSetting={isProSetting(inputField.proSetting ?? false)}
                             moduleEnabled={inputField.moduleEnabled ? modules.includes(inputField.moduleEnabled) : true}
                             apilink={String(inputField.apiLink)}//API endpoint used for communication with backend.
                             appLocalizer={appLocalizer}
@@ -1976,6 +1975,14 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                     updateSetting(inputField.key, data);
                                 }
                             }}
+                            modules={modules}
+                            moduleChange={(moduleEnabled) => {
+                                moduleEnabledChanged(
+                                    String(moduleEnabled ?? '')
+                                )
+                                // setModelOpen(true);
+                            }}
+                            proChanged={() => setModelOpen(true)}
                         />
                     );
                     break;
