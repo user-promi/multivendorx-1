@@ -460,7 +460,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             ),
         },
         {
-            header: __("id", "multivendorx"),
+            header: __("ID", "multivendorx"),
             cell: ({ row }) => <TableCell>#{row.original.id}</TableCell>,
         },
         {
@@ -870,7 +870,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                                         <div className="small-text"><b>Withdrawal fees:</b> $546325</div>
                                     </div>
                                     <div className="admin-btn btn-purple-bg" onClick={() => setRequestWithdrawal(true)}>
-                                        Disburse payment
+                                        Disburse Payment
                                     </div>
                                 </div>
 
@@ -878,15 +878,11 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                                 {storeData?.request_withdrawal_amount ? (
                                     <>
                                         <div className="des">
-                                            Last withdrawal request:
-                                            {formatCurrency(storeData.request_withdrawal_amount)}, is <strong>Pending</strong>.
+                                           <b> Last withdrawal request:</b> {formatCurrency(storeData.request_withdrawal_amount)} <span className="admin-badge yellow">Pending</span>
                                         </div>
                                         <div className="payout-notice">
                                             <i className="adminlib-error"></i>
                                             Please clear the pending request before disbursing new payments.
-                                        </div>
-                                        <div className="admin-btn btn-purple-bg disabled" style={{ opacity: 0.5, pointerEvents: 'none' }}>
-                                            Disburse payment
                                         </div>
                                     </>
                                 ) : (
@@ -917,9 +913,6 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                                 {/* Show Frequency + Title only if NOT manual */}
                                 {storeTransaction?.payment_schedules !== "mannual" && (
                                     <>
-                                        {/* <div className="des">
-                                            Frequency
-                                        </div> */}
                                         <div className="title">
                                             {storeTransaction?.payment_schedules
                                                 ? storeTransaction.payment_schedules.charAt(0).toUpperCase() + storeTransaction.payment_schedules.slice(1)
@@ -968,7 +961,6 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                             >
                                 Disburse
                             </div>
-
                         </>
                     }
                 >
@@ -980,13 +972,14 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                             <div className="form-group">
                                 <label htmlFor="payment_method">Payment Processor</label>
 
-                                <div className="saved-value-box">
+                                <div className="payment-method">
                                     {storeData?.payment_method ? (
-                                        <strong >
+                                        <div className="method">
+                                            <i className="adminlib-bank"></i>
                                             {formatMethod(storeData.payment_method)}
-                                        </strong>
+                                        </div>
                                     ) : (
-                                        <span style={{ color: "#999" }}>
+                                        <span>
                                             No payment method saved
                                         </span>
                                     )}
@@ -1002,12 +995,14 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                                     value={amount}
                                     onChange={(e) => AmountChange(Number(e.target.value))}
                                 />
-
+                                <div className="free-wrapper">
+                                    <span>Total: $152</span>
+                                    <span>| Free: $10</span>
+                                </div>
                                 {validationErrors.amount && (
                                     <div className="invalid-massage">{validationErrors.amount}</div>
                                 )}
                             </div>
-
 
                             <div className="form-group">
                                 <label htmlFor="note">Note</label>
