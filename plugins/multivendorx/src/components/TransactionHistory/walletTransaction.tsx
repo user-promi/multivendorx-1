@@ -289,6 +289,7 @@ const TransactionBulkActions: React.FC<{
 
 const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ storeId, dateRange }) => {
     const [data, setData] = useState<StoreRow[] | null>(null);
+    const [storeTransaction, setTtoreTransaction] = useState<any>(null);
     const [wallet, setWallet] = useState<any[]>([]);
     const [recentDebits, setRecentDebits] = useState<any[]>([]);
     const [storeData, setStoreData] = useState<any>(null);
@@ -312,7 +313,6 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
     const [allStores, setAllStores] = useState<any[]>([]);
     const [filteredStores, setFilteredStores] = useState<any[]>([]);
     const [selectedStore, setSelectedStore] = useState<any>(null);
-    const [overview, setOverview] = useState<any[]>([]);
     const [transactionStatus, setTransactionStatus] = useState<TransactionStatus[] | null>(null);
     const [currentFilterData, setCurrentFilterData] = useState<FilterData>({});
     const [viewCommission, setViewCommission] = useState(false);
@@ -346,6 +346,15 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
         if (!storeId) return;
 
         const { startDate, endDate } = getEffectiveDateRange();
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, `transaction/${storeId}`),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { id: appLocalizer.store_id }
+        })
+            .then((response) => {
+                setTtoreTransaction(response.data || []);
+            })
 
         axios({
             method: 'GET',
@@ -498,7 +507,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                         ?.replace(/-/g, ' ')
                         ?.replace(/\b\w/g, (c) => c.toUpperCase())
                     || '-';
-                
+
                 let displayValue = '-';
                 let content = displayValue;
 
@@ -522,13 +531,13 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                 else if (type === 'withdrawal') {
                     const formattedMethod = formatText(paymentMethod);
                     const accNo = row.original.account_number;
-                
+
                     let maskedAccount = "";
                     if (paymentMethod === "bank-transfer" && accNo) {
                         const last2 = accNo.slice(-2);
                         maskedAccount = ` (A/C...${last2})`;
                     }
-                
+
                     displayValue = `Withdrawal via ${formattedMethod}${maskedAccount}`;
                     content = displayValue;
                 }
@@ -723,7 +732,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
         if (!storeData.payment_method) {
             newErrors.paymentMethod = "Please select a payment processor.";
         }
-        
+
         // If any validation errors exist, show them and stop
         if (Object.keys(newErrors).length > 0) {
             setValidationErrors(newErrors);
@@ -906,24 +915,24 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                             </div>
                             <div className="withdrawal-wrapper">
                                 {/* Show Frequency + Title only if NOT manual */}
-                                {data?.payment_schedules !== "mannual" && (
+                                {storeTransaction?.payment_schedules !== "mannual" && (
                                     <>
                                         {/* <div className="des">
                                             Frequency
                                         </div> */}
                                         <div className="title">
-                                            {data?.payment_schedules
-                                                ? data.payment_schedules.charAt(0).toUpperCase() + data.payment_schedules.slice(1)
+                                            {storeTransaction?.payment_schedules
+                                                ? storeTransaction.payment_schedules.charAt(0).toUpperCase() + storeTransaction.payment_schedules.slice(1)
                                                 : "N/A"}
                                         </div>
                                     </>
                                 )}
 
                                 {/* Show threshold line only if > 0 */}
-                                {Number(data?.thresold ?? 0) > 0 && (
+                                {Number(storeTransaction?.thresold ?? 0) > 0 && (
                                     <div className="withdrawl-notice">
                                         <i className="adminlib-info"></i>{" "}
-                                        Withdrawal occurs only when your balance reaches {formatCurrency(data.thresold)} or more. View payment calendar
+                                        Withdrawal occurs only when your balance reaches {formatCurrency(storeTransaction.thresold)} or more. View payment calendar
                                     </div>
                                 )}
                             </div>

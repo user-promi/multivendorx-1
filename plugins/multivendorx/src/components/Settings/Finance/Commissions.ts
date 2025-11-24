@@ -264,35 +264,32 @@ export default {
             ],
             look: 'toggle',
         },
-        ...(taxes_enabled === 'yes'
-            ? [
+        {
+            key: 'give_tax',
+            type: 'setting-toggle',
+            label: __('Tax amount', 'multivendorx'),
+            wooCheck: 'taxes_enabled',
+            wooLink:'page=wc-settings&tab=general#taxes_and_coupons_options-description',
+            settingDescription: __('Configure how taxes are treated in commission calculations.', 'multivendorx'),
+            desc: __('<li>No tax - Calculate commission on pre-tax amount only.<li>Full tax - Include 100% tax in commission base.<li>Commission based tax - Calculate commission on total order value including taxes, not just product price.', 'multivendorx'),
+            options: [
                 {
-                    key: 'give_tax',
-                    type: 'setting-toggle',
-                    label: __('Tax amount', 'multivendorx'),
-                    settingDescription: __('Configure how taxes are treated in commission calculations.', 'multivendorx'),
-                    desc: __('<li>No tax - Calculate commission on pre-tax amount only.<li>Full tax - Include 100% tax in commission base.<li>Commission based tax - Calculate commission on total order value including taxes, not just product price.', 'multivendorx'),
-                    options: [
-                        {
-                            key: 'no_tax',
-                            label: __('No tax', 'multivendorx'),
-                            value: 'no_tax',
-                        },
-                        {
-                            key: 'full_tax',
-                            label: __('Full tax', 'multivendorx'),
-                            value: 'full_tax',
-                        },
-                        {
-                            key: 'commision_based_tax',
-                            label: __('Commission based tax', 'multivendorx'),
-                            value: 'commision_based_tax',
-                        },
-                    ],
-                }
-            ]
-            : []
-        ),
+                    key: 'no_tax',
+                    label: __('No tax', 'multivendorx'),
+                    value: 'no_tax',
+                },
+                {
+                    key: 'full_tax',
+                    label: __('Full tax', 'multivendorx'),
+                    value: 'full_tax',
+                },
+                {
+                    key: 'commision_based_tax',
+                    label: __('Commission based tax', 'multivendorx'),
+                    value: 'commision_based_tax',
+                },
+            ],
+        },
         {
             key: 'separator_content',
             type: 'section',
