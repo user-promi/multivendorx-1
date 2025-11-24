@@ -258,7 +258,7 @@ const StoreCommission: React.FC = () => {
                             {(
                                 (modules.includes('marketplace-gateway') && row.original?.gatewayFee) ||
                                 (modules.includes('facilitator') && row.original?.facilitatorFee) ||
-                                (modules.includes('marketplace-fee') && row.original?.marketplaceFee)
+                                (modules.includes('marketplace-fee') && row.original?.platformFee)
                             ) && (
                                     <li>
                                         {modules.includes('marketplace-gateway') && row.original?.gatewayFee && (
@@ -275,10 +275,10 @@ const StoreCommission: React.FC = () => {
                                             </div>
                                         )}
 
-                                        {modules.includes('marketplace-fee') && row.original?.marketplaceFee && (
+                                        {modules.includes('marketplace-fee') && row.original?.platformFee && (
                                             <div className="item">
                                                 <div className="des">Marketplace Fee</div>
-                                                <div className="title">- {formatCurrency(row.original.marketplaceFee)}</div>
+                                                <div className="title">- {formatCurrency(row.original.platformFee)}</div>
                                             </div>
                                         )}
                                     </li>

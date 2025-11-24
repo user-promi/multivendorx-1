@@ -541,15 +541,15 @@ const Commission: React.FC = () => {
                     <TableCell>
                         <ul className={`details ${isExpanded ? '' : 'overflow'}`}>
 
-                            {row.original?.commissionAmount ? (
+                            {row.original?.storeEarning ? (
                                 <li>
                                     <div className="item">
-                                        <div className="des">Commission Earned</div>
-                                        <div className="title">{formatCurrency(row.original.commissionAmount)}</div>
+                                        <div className="des">Store Earning</div>
+                                        <div className="title">{formatCurrency(row.original.storeEarning)}</div>
                                     </div>
                                 </li>
                             ) : null}
-                            {(row.original?.shippingAmount ) && (
+                            {(modules.includes('store-shipping') && row.original?.shippingAmount ) && (
                                 <li>
                                     {row.original?.shippingAmount && (
                                         <div className="item">
@@ -566,6 +566,17 @@ const Commission: React.FC = () => {
                                         <div className="item">
                                             <div className="des">Tax</div>
                                             <div className="title">+ {formatCurrency(row.original.taxAmount)}</div>
+                                        </div>
+                                    )}
+                                </li>
+                            )}
+                            {(row.original?.shippingTaxAmount) && (
+                                <li>
+
+                                    {row.original?.shippingTaxAmount && (
+                                        <div className="item">
+                                            <div className="des">Shipping Tax</div>
+                                            <div className="title">+ {formatCurrency(row.original.shippingTaxAmount)}</div>
                                         </div>
                                     )}
                                 </li>
@@ -590,10 +601,10 @@ const Commission: React.FC = () => {
                                             </div>
                                         )}
 
-                                        {modules.includes('marketplace-fee') && row.original?.marketplaceFee && (
+                                        {modules.includes('marketplace-fee') && row.original?.platformFee && (
                                             <div className="item">
-                                                <div className="des">Marketplace Fee</div>
-                                                <div className="title">- {formatCurrency(row.original.marketplaceFee)}</div>
+                                                <div className="des">Platform Fee</div>
+                                                <div className="title">- {formatCurrency(row.original.platformFee)}</div>
                                             </div>
                                         )}
                                     </li>
