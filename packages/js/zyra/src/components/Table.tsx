@@ -335,7 +335,7 @@ interface TableProps {
     pagination: PaginationState;
     onPaginationChange: OnChangeFn<PaginationState>;
     typeCounts: Status[];
-    defaultCounts?:string;
+    defaultCounts?: string;
     autoLoading?: boolean;
     handlePagination?: (
         rowsPerPage: number,
@@ -372,7 +372,7 @@ const Table: React.FC<TableProps> = ({
     expandedRows,
     onRowClick,
     totalCounts = 0,
-    defaultCounts ='all'
+    defaultCounts = 'all'
 }) => {
     const [sorting, setSorting] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
@@ -875,9 +875,9 @@ const Table: React.FC<TableProps> = ({
                                 </>
                             )}
 
-                            <div className="admin-filter-wrapper ">
-                                {Object.keys(rowSelection || {}).length >= 2 ? (
 
+                            {Object.keys(rowSelection || {}).length >= 2 ? (
+                                <div className="admin-filter-wrapper ">
                                     <div className="wrap-bulk-all-date bulk">
                                         <span className="count row">{Object.keys(rowSelection).length} rows selected <i onClick={() => onRowSelectionChange?.({})} className="adminlib-close"></i></span>
                                         <span className="select count"
@@ -886,39 +886,40 @@ const Table: React.FC<TableProps> = ({
                                         </span>
                                         {bulkActionComp && bulkActionComp()}
                                     </div>
-                                ) : (
-                                    <>
-                                        {data?.length !== 0 && realtimeFilter && realtimeFilter.length > 0 && (
-                                            <div className="wrap-bulk-all-date filter">
-                                                <span className="title">
-                                                    <i className="adminlib-filter"></i> Filter
-                                                </span>
-                                                {realtimeFilter?.map((filter) => (
-                                                    <React.Fragment key={filter.name}>
-                                                        {filter.render(handleFilterChange, filterData[filter.name])}
-                                                    </React.Fragment>
-                                                ))}
-                                            </div>
-                                        )}
+                                </div>
+                            ) : (
+                                <div className="admin-filter-wrapper ">
+                                    {data?.length !== 0 && realtimeFilter && realtimeFilter.length > 0 && (
+                                        <div className="wrap-bulk-all-date filter">
+                                            <span className="title">
+                                                <i className="adminlib-filter"></i> Filter
+                                            </span>
+                                            {realtimeFilter?.map((filter) => (
+                                                <React.Fragment key={filter.name}>
+                                                    {filter.render(handleFilterChange, filterData[filter.name])}
+                                                </React.Fragment>
+                                            ))}
+                                        </div>
+                                    )}
 
-                                        {/* Show Reset button only if filters are applied */}
-                                        {Object.keys(filterData).length > 0 && (
-                                            <div className="reset-btn">
-                                                <span
-                                                    onClick={() => {
-                                                        setFilterData({});            // clear all filters
-                                                        onRowSelectionChange?.({});   // clear row selection if any
-                                                        handlePagination?.(defaultRowsPerPage, 1, {}); // reload data
-                                                    }}
-                                                    className="admin-badge red"
-                                                >
-                                                    <i className="adminlib-refresh"></i> Reset
-                                                </span>
-                                            </div>
-                                        )}
-                                    </>
-                                )}
-                            </div>
+                                    {/* Show Reset button only if filters are applied */}
+                                    {Object.keys(filterData).length > 0 && (
+                                        <div className="reset-btn">
+                                            <span
+                                                onClick={() => {
+                                                    setFilterData({});            // clear all filters
+                                                    onRowSelectionChange?.({});   // clear row selection if any
+                                                    handlePagination?.(defaultRowsPerPage, 1, {}); // reload data
+                                                }}
+                                                className="admin-badge red"
+                                            >
+                                                <i className="adminlib-refresh"></i> Reset
+                                            </span>
+                                        </div>
+                                    )} 
+                                </div>
+                            )}
+
                         </div>
                     )}
                     {successMsg && (

@@ -223,7 +223,7 @@ const BarChartData = [
   { name: "Orders", dataKey: "refunds", color: themeColors[2] },
 ];
 
-const Dashboard: React.FC = () => {
+const dashboard1: React.FC = () => {
   const [activeTab, setActiveTab] = useState("transaction");
   const items = tabData[activeTab];
   return (
@@ -761,4 +761,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;
+export default dashboard1;

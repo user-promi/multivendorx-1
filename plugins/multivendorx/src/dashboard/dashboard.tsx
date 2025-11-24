@@ -389,7 +389,7 @@ const Dashboard: React.FC = () => {
     { month: "Nov", sales: 2500, refund: 300, conversion: 4.7 },
     { month: "Dec", sales: 2800, refund: 320, conversion: 5.2 },
   ];
-  
+
   return (
     <>
       <div className="page-title-wrapper">

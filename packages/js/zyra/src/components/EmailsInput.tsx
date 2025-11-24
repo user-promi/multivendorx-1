@@ -109,7 +109,7 @@ const EmailsInput = forwardRef<HTMLInputElement, EmailsInputProps>(({
         >
             {emails.map((email) => (
                 <div
-                    className={`admin-badge ${enablePrimary && primaryEmail === email ? "yellow" : ""}`}
+                    className={`email ${enablePrimary && primaryEmail === email ? "primary" : ""}`}
                     key={email}
                 >
                     {enablePrimary && (
@@ -120,7 +120,7 @@ const EmailsInput = forwardRef<HTMLInputElement, EmailsInputProps>(({
                     )}
                     <span>{email}</span>
                     <i
-                        className="adminlib-delete close-icon"
+                        className="adminlib-close close-icon"
                         onClick={(e) => { e.stopPropagation(); removeEmail(email); }}
                     ></i>
                 </div>

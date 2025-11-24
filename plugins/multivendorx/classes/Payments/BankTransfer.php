@@ -132,12 +132,7 @@ class BankTransfer
                 'id' => $this->get_id(),
                 'label' => __('Bank Transfer', 'multivendorx'),
                 'fields' => [
-                    [
-                        'key' => 'account_number',
-                        'type' => 'text',
-                        'label' => 'Account number',
-                        'placeholder' => 'Enter account number',
-                    ],
+                    
                     [
                         'key' => 'account_holder_name',
                         'type' => 'text',

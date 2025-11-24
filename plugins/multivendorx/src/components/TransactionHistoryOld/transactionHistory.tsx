@@ -317,8 +317,8 @@ export const TransactionHistory: React.FC = () => {
             type: 'file',
             content: {
                 id: 'wallet-transaction',
-                name: 'Marketplace',
-                icon: 'marketplace-membership',
+                name: 'Wallet Transaction',
+                icon: 'marketplace-wallet',
                 hideTabHeader: true,
             },
         },
@@ -485,8 +485,10 @@ export const TransactionHistory: React.FC = () => {
                                             <i className="adminlib-error"></i>
                                             Please clear the pending request before disbursing new payments.
                                         </div>
-                                        <div className="admin-btn btn-purple-bg disabled" style={{ opacity: 0.5, pointerEvents: 'none' }}>
-                                            Disburse payment
+                                        <div className="buttons-wrapper">
+                                            <div className="admin-btn btn-purple-bg disabled" style={{ opacity: 0.5, pointerEvents: 'none' }}>
+                                                Disburse payment
+                                            </div>
                                         </div>
                                     </>
                                 ) : (
@@ -521,7 +523,7 @@ export const TransactionHistory: React.FC = () => {
                                     className="icon adminlib-close"
                                     onClick={() => {
                                         setRequestWithdrawal(false);
-                                        resetWithdrawalForm(); //reset form on close
+                                        resetWithdrawalForm();
                                     }}
                                 ></i>
                                 <div className="des">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi quasi saepe temporibus aperiam voluptate quisquam.</div>

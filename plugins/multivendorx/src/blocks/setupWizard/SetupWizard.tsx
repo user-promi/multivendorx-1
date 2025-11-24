@@ -3,7 +3,7 @@ import './SetupWizard.scss';
 import 'zyra/build/index.css';
 import { PaymentTabsComponent } from 'zyra';
 import { __ } from '@wordpress/i18n';
-import img from '../../assets/images/mvx-brand-logo.png';
+import img from '../../assets/images/multivendorx-logo.png';
 
 interface Step {
     title: string;
