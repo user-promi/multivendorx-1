@@ -15,15 +15,15 @@ export default {
             class: 'mvx-toggle-checkbox',
             options: [
                 {
-                    key: 'pause_selling_products',
-                    label: __('Pause selling products', 'multivendorx'),
-                    value: 'pause_selling_products',
+                    key: 'disable_product',
+                    label: __('Disable product upload', 'multivendorx'),
+                    value: 'disable_product',
                     desc: __('Temporarily disables product sales and order fulfillment while the review is in progress.', 'multivendorx'),
                 },
                 {
-                    key: 'hold_payments_release',
-                    label: __('Hold payments release', 'multivendorx'),
-                    value: 'hold_payments_release',
+                    key: 'disable_payouts',
+                    label: __('Disable payouts', 'multivendorx'),
+                    value: 'DisablePayouts',
                     desc: __('Suspends payout processing. Earnings will be released once the store successfully clears the review.', 'multivendorx'),
                 },
                 {
