@@ -729,12 +729,13 @@ const Commission: React.FC = () => {
                                 label: __('Regenerate Commission', 'multivendorx'),
                                 icon: 'adminlib-refresh',
                                 onClick: (rowData: any) => {
-                                    if (rowData?.orderId) {
-                                        const url = `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/admin.php?page=wc-orders&action=edit&id=${rowData.orderId}`;
-                                        window.open(url, '_blank');
-                                    } else {
-                                        alert(__('Order ID missing for this commission.', 'multivendorx'));
-                                    }
+                                    handleSingleAction('regenerate', rowData)
+                                    // if (rowData?.orderId) {
+                                    //     const url = `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/admin.php?page=wc-orders&action=edit&id=${rowData.orderId}`;
+                                    //     window.open(url, '_blank');
+                                    // } else {
+                                    //     alert(__('Order ID missing for this commission.', 'multivendorx'));
+                                    // }
                                 },
 
                                 hover: true,
@@ -745,6 +746,23 @@ const Commission: React.FC = () => {
             ),
         }
     ];
+
+    const handleSingleAction = (action: string, row: any) => {
+        let commissionId = row.id;
+
+        if (!commissionId) return;
+
+        axios({
+            method: 'PUT',
+            url: getApiLink(appLocalizer, `commission/${commissionId}`),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            data: { action, orderId: row?.orderId },
+        })
+            .then(() => {
+                requestData(pagination.pageSize, pagination.pageIndex + 1);
+            })
+            .catch(console.error);
+    };
 
     const realtimeFilter: RealtimeFilter[] = [
         {

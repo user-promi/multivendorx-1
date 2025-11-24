@@ -406,4 +406,19 @@ class OrderManager {
             }
         }
     }
+
+    /**
+     * Magic getter function to get the reference of class.
+     * Accept class name, If valid return reference, else Wp_Error.
+     *
+     * @param   mixed $class Name of the class to retrieve from the container.
+     * @return  object | \WP_Error
+     */
+    public function __get( $class ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound
+        if ( array_key_exists( $class, $this->container ) ) {
+            return $this->container[ $class ];
+        }
+        return new \WP_Error( sprintf( 'Call to unknown class %s.', $class ) );
+    }
+
 }
