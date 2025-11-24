@@ -58,6 +58,7 @@ export { default as NestedComponent } from './components/NestedComponent';
 export { default as PaymentTabsComponent } from './components/PaymentTabsComponent';
 export { default as CommonPopup } from './components/CommonPopup';
 export { default as SuccessNotice } from './components/SuccessNotice';
+export { default as EmailsInput } from './components/EmailsInput';
 
 export {
     useModules,
