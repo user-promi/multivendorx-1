@@ -1477,8 +1477,6 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             }
                             proSetting={isProSetting(inputField.proSetting ?? false)}
                             onChange={(data) => {
-                                console.log('inputset',inputField)
-
                                 if (
                                     hasAccess(
                                         inputField.proSetting ?? false,
@@ -1989,10 +1987,6 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             buttonEnable={inputField.buttonEnable}//Flag to enable/disable action buttons in the UI.
                             value={value || {}}
                             onChange={(data) => {
-                                console.log('payment tab1',data);
-                                console.log('payment tab2pro',inputField.proSetting );
-                                console.log('payment tab3mod',inputField.moduleEnabled);
-                                console.log('input',inputField)
                                 if (
                                     hasAccess(
                                         inputField.proSetting ?? false,
