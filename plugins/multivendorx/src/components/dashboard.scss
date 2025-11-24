@@ -638,10 +638,13 @@
 
 // payout page price section start --common
 .payout-wrapper {
+    padding-top: 1rem;
+
     .payout-header {
         display: flex;
         justify-content: space-between;
         align-items: start;
+        gap: 0.5rem;
 
         .admin-btn {
             font-size: 1.313rem;
@@ -659,9 +662,6 @@
     .des {
         font-size: 0.9rem;
         margin-bottom: 1rem;
-        display: flex;
-        align-items: center;
-        gap: 0.313rem;
     }
 
     .small-text {
@@ -670,6 +670,14 @@
 
     .admin-btn {
         margin-top: 1rem;
+    }
+
+    .right-section {
+        width: 50%;
+    }
+
+    .admin-badge {
+        display: inline-block;
     }
 }
 
@@ -1490,3 +1498,90 @@
 }
 
 // email component end
+
+
+// settings shipping add country start
+.shipping-country-wrapper {
+    margin-top: 1rem;
+
+    .shipping-country {
+        padding: 1rem;
+        background: #f7f6f69c;
+        border-radius: 0.313rem;
+        margin-bottom: 1rem;
+        border: $border-light-small;
+
+        &.rule {
+            width: fit-content;
+        }
+    }
+
+    .item {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+
+        .location-icon {
+            background: #d9f5f0;
+            color: #06be9f;
+            padding: 0.45rem;
+            font-size: 1.313rem;
+            border-radius: 0.313rem;
+        }
+
+        .delete-icon {
+            font-size: 1.125rem;
+            color: #f06b4f;
+            cursor: pointer;
+        }
+
+        .basic-input {
+            background: #fff !important;
+            /*overwrite common style*/
+        }
+
+        &.state {
+            margin-bottom: 0.625rem;
+        }
+    }
+
+    .state-wrapper {
+        padding: 0.813rem;
+        background: #fff;
+        margin-top: 0.813rem;
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.813rem;
+            padding-bottom: 0.5rem;
+            border-bottom: $border-light-small;
+
+            .left {
+                width: 75%;
+            }
+
+            .title {
+                font-size: 1.125em;
+                font-weight: 500;
+            }
+
+            .des {
+                font-size: 0.813rem;
+                color: $sub-text-color;
+            }
+        }
+
+    }
+
+    .no-shipping-data {
+        padding: 1rem;
+        border-radius: 0.313rem;
+        font-size: 1rem;
+        background: #c9c9c954;
+        margin: 1rem 0;
+    }
+}
+
+// settings shipping add country end

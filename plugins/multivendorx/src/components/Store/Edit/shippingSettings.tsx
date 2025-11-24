@@ -4,8 +4,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { BasicInput, getApiLink, SuccessNotice, ToggleSetting } from "zyra";
 
-const ShippingSettings = ({ id, data }: { id: string |null; data: any }) => {
-	const [formData, setFormData] = useState<{ [key: string]: any }>({}); // Use 'any' for simplicity here
+const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
+    const [formData, setFormData] = useState<{ [key: string]: any }>({}); // Use 'any' for simplicity here
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
     useEffect(() => {
@@ -75,8 +75,13 @@ const ShippingSettings = ({ id, data }: { id: string |null; data: any }) => {
             <SuccessNotice message={successMsg} />
             <div className="card-wrapper">
                 <div className="card-content">
-                    <div className="card-title">Method Type</div>
-
+                    <div className="card-header">
+                        <div className="left">
+                            <div className="title">
+                                Method Type
+                            </div>
+                        </div>
+                    </div>
                     {/* Only show ToggleSetting if shipping_methods has options */}
                     {appLocalizer.shipping_methods && appLocalizer.shipping_methods.length > 0 && (
                         <>
@@ -89,14 +94,16 @@ const ShippingSettings = ({ id, data }: { id: string |null; data: any }) => {
                                 onChange={(value: any) => handleToggleChange(value, 'shipping_options')}
                             />
                             {/* //zone by shipping */}
-                            {formData.shipping_options === 'shipping_by_zone' && <DistanceByZoneShipping id={id}/>}
+                            {formData.shipping_options === 'shipping_by_zone' && <DistanceByZoneShipping id={id} />}
 
                             {/* country wise shipping */}
                             {formData.shipping_options === 'shipping_by_country' && (
                                 <>
-                                    <div className="form-group-title-wrapper">
-                                        <div className="title">Default Shipping Rules</div>
-                                        <div className="des">Set base rates that apply to all orders</div>
+                                    <div className="divider-wrapper">
+                                        <div className="divider-section">
+                                            <div className="title">Default Shipping Rules</div>
+                                            <div className="des">Set base rates that apply to all orders</div>
+                                        </div>
                                     </div>
 
                                     {/* Default Shipping Price */}

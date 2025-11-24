@@ -488,7 +488,6 @@ const AdminForm: React.FC<AdminFormProps> = ({
             setModelOpen(true);
             return false;
         }
-
         return true;
     };
 

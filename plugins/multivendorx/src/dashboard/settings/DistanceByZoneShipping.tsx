@@ -327,7 +327,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({ id }) =
 
     return (
         <>
-            <div className="card-title text-lg font-semibold mb-3">
+            <div className="card-title">
                 {__("Zone-wise Shipping Configuration", "multivendorx")}
             </div>
 
