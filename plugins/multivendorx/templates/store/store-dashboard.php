@@ -6,6 +6,17 @@ use MultiVendorX\Store\Store;
 $user = wp_get_current_user();
 $store_dashboard_logo = MultiVendorX()->setting->get_setting('store_dashboard_site_logo', array());
 $page_info = MultiVendorX()->rest->dashboard->get_current_page_and_submenu();
+// Count stores excluding the active one.
+$active_store = $page_info['active_store'] ?? null;
+$store_ids = $page_info['store_ids'] ?? [];
+
+$available_stores = array_filter(
+    $store_ids,
+    function ($id) use ($active_store) {
+        // Skip the active store if it exists in the list
+        return $active_store ? ($id !== $active_store) : true;
+    }
+);
 
 ?>
 <!DOCTYPE html>
@@ -127,21 +138,7 @@ $page_info = MultiVendorX()->rest->dashboard->get_current_page_and_submenu();
                                     <?php if (!empty($available_stores)): ?>
                                         <div class="store-wrapper">
                                             <h3>Switch stores</h3>
-                                            <?php
-                                            // Count stores excluding the active one.
-                                            $active_store = $page_info['active_store'] ?? null;
-                                            $store_ids = $page_info['store_ids'] ?? [];
-
-                                            $available_stores = array_filter(
-                                                $store_ids,
-                                                function ($id) use ($active_store) {
-                                                    // Skip the active store if it exists in the list
-                                                    return $active_store ? ($id !== $active_store) : true;
-                                                }
-                                            );
-
-
-                                            ?>
+                                            
                                             <ul>
                                                 <?php
                                                 foreach ($available_stores as $store_id):

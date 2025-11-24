@@ -165,34 +165,31 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
             $store_name = $store ? $store->get('name') : '';
     
             $formatted_commissions[] = apply_filters(
-                'multivendorx_commission',
+                'multivendorx_commission_table',
                 array(
                     'id'                 => (int) $commission->ID,
                     'orderId'            => (int) $commission->order_id,
                     'storeId'            => (int) $commission->store_id,
                     'storeName'          => $store_name,
-            
                     'totalOrderAmount'   => $commission->total_order_value,
                     'netItemsCost'       => $commission->net_items_cost,
-                    'marketplaceFee'     => $commission->marketplace_commission,
+                    'marketplaceCommission'  => $commission->marketplace_commission,
                     'storeEarning'       => $commission->store_earning,
-                    'facilitatorFee'     => $commission->facilitator_fee,
                     'gatewayFee'         => $commission->gateway_fee,
-                    'platformFee'        => $commission->platform_fee,
                     'shippingAmount'     => $commission->store_shipping,
                     'taxAmount'          => $commission->store_tax,
                     'shippingTaxAmount'  => $commission->store_shipping_tax,
-                    'discountAmount'     => $commission->discount_applied,
+                    'storeDiscount'     => $commission->store_discount,
+                    'adminDiscount'     => $commission->admin_discount,
                     'storePayable'       => $commission->store_payable,
                     'marketplacePayable' => $commission->marketplace_payable,
-                    'commissionRefunded' => $commission->store_refunded,
-            
+                    'storeRefunded' => $commission->store_refunded,
                     'currency'           => $commission->currency,
                     'status'             => $commission->status,
                     'commissionNote'     => $commission->commission_note,
                     'createdAt'          => $commission->created_at,
                     'updatedAt'          => $commission->updated_at,
-                )
+                ), $commission
             );
             
         }
@@ -433,5 +430,27 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         
     
         return rest_ensure_response( $response );
+    }
+
+    public function update_item($request) {
+        $nonce = $request->get_header( 'X-WP-Nonce' );
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            return new \WP_Error(
+                'invalid_nonce',
+                __( 'Invalid nonce', 'multivendorx' ),
+                [ 'status' => 403 ]
+            );
+        }
+    
+        $order_id = absint( $request->get_param( 'orderId' ) );
+        $action =  $request->get_param( 'action' );
+
+        if ($action == 'regenerate') {
+            $order = wc_get_order($order_id);
+            if ($order) {
+                MultiVendorX()->order->admin->regenerate_order_commissions($order);
+                return rest_ensure_response( [ 'success' => true ] );
+            }
+        }
     }
 }

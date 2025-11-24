@@ -133,6 +133,27 @@ class BankTransfer
                 'label' => __('Bank Transfer', 'multivendorx'),
                 'fields' => [
                     [
+                        'key' => 'account_number',
+                        'type' => 'text',
+                        'label' => 'Account number',
+                        'placeholder' => 'Enter account number',
+                    ],
+                    [
+                        'key' => 'account_holder_name',
+                        'type' => 'text',
+                        'label' => 'Account holder name',
+                        'placeholder' => 'Enter account holder name',
+                    ],
+                    [
+                        'key' => 'account_type',
+                        'type' => 'setting-toggle',
+                        'label' => __('Account type', 'multivendorx'),
+                        'options' => [
+                            ['key' => 'current', 'label' => __('Current', 'multivendorx'), 'value' => 'current'],
+                            ['key' => 'savings', 'label' => __('Savings', 'multivendorx'), 'value' => 'savings'],
+                        ]
+                    ],
+                    [
                         'key' => 'bank_name',
                         'type' => 'text',
                         'label' => 'Bank name',
@@ -161,27 +182,6 @@ class BankTransfer
                         'type' => 'text',
                         'label' => 'IBAN',
                         'placeholder' => 'Enter IBAN',
-                    ],
-                    [
-                        'key' => 'account_holder_name',
-                        'type' => 'text',
-                        'label' => 'Account holder name',
-                        'placeholder' => 'Enter account holder name',
-                    ],
-                    [
-                        'key' => 'account_number',
-                        'type' => 'text',
-                        'label' => 'Account number',
-                        'placeholder' => 'Enter account number',
-                    ],
-                    [
-                        'key' => 'account_type',
-                        'type' => 'setting-toggle',
-                        'label' => __('Account type', 'multivendorx'),
-                        'options' => [
-                            ['key' => 'current', 'label' => __('Current', 'multivendorx'), 'value' => 'current'],
-                            ['key' => 'savings', 'label' => __('Savings', 'multivendorx'), 'value' => 'savings'],
-                        ]
                     ],
                 ]
             ];

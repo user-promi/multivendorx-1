@@ -286,9 +286,10 @@ const EditStore = () => {
                     content: {
                         ...tab.content,
                         name:
-                            data?.status === 'active'
-                                ? 'Archive data'
-                                : 'Application Details',
+                            (data?.status === 'pending' || data?.status === 'rejected' || data?.status === 'permanently_rejected')
+                            // data?.status === 'active'
+                                ? 'Application Details'
+                                : 'Archive data',
                     },
                 }
                 : tab

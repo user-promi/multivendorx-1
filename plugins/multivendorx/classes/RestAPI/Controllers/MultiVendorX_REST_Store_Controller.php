@@ -561,8 +561,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         } else {
             // Create store object
             $store = new \MultiVendorX\Store\Store();
-
-            if ( MultiVendorX()->setting->get_setting( 'approve_store' ) == 'manually' ) {
+            if ( !current_user_can( 'manage_options' ) && MultiVendorX()->setting->get_setting( 'approve_store' ) == 'manually' ) {
                 $store_data['status'] = 'pending';
             }
         }
