@@ -2035,6 +2035,14 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                     updateSetting(inputField.key, data);
                                 }
                             }}
+                            modules={modules}
+                            moduleChange={(moduleEnabled) => {
+                                moduleEnabledChanged(
+                                    String(moduleEnabled ?? '')
+                                )
+                                // setModelOpen(true);
+                            }}
+                            proChanged={() => setModelOpen(true)}
                         />
                     );
                     break;

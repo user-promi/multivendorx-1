@@ -752,7 +752,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                 }));
                 return;
             }
-            
+
             (async () => {
                 const trimmedValue = cleanValue.trim();
                 if (!trimmedValue) {
@@ -891,10 +891,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                     }}
                                 />
 
-                                <div className="settings-metabox-description">
-                                    <strong>Primary email</strong>: Click the star on any email to make it primary (shown on storefront).<br />
-                                    Additional emails receive notifications only.
-                                </div>
+                                <div className="settings-metabox-description"> <strong>Tip:</strong> You can add multiple email addresses. Type an email and press Enter.<br/> <strong>Primary email</strong>: Click the star icon to designate it as primary. This email will be shown on your storefront and receive all notifications.<br /> <strong>Additional emails</strong>: These emails remain private and will receive notifications only. </div>
                             </div>
                         </div>
                         <div className="form-group-wrapper">

@@ -69,6 +69,8 @@ interface PaymentMethod {
   single?: boolean;
   rowClass?: string;
   nestedFields?: PaymentFormField[];
+  proSetting?: boolean;
+  moduleEnabled?: string;
 }
 
 interface PaymentTabsComponentProps {
@@ -84,6 +86,9 @@ interface PaymentTabsComponentProps {
   isWizardMode?: boolean;
   setWizardIndex?: (index: number) => void;
   moduleEnabled?: boolean;
+  proChanged?: () => void;
+  moduleChange: (module: string) => void;
+  modules: string[];
 }
 
 const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
@@ -94,6 +99,9 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
   isWizardMode = false,
   proSetting,
   moduleEnabled,
+  proChanged,
+  moduleChange,
+  modules
 }) => {
   const [activeTabs, setActiveTabs] = useState<string[]>([]);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
@@ -255,10 +263,10 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
             {field.button?.label && (
               <button
                 className="admin-btn btn-purple"
-                onClick={() => {
-                  console.log(field.button.url)
+                onClick={(e) => {
                   if (field.button.url) {
-                    window.location.href = field.button.url;
+                     e.preventDefault();
+                    window.open(field.button.url, '_blank');
                   }
                 }}
               >
@@ -561,7 +569,22 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                     <i
                       className={`adminlib-${isEnabled && isActive ? "keyboard-arrow-down" : "pagination-right-arrow"
                         }`}
-                      onClick={() => toggleActiveTab(method.id)}
+                      onClick={() => {
+                          if (method.proSetting && !appLocalizer?.khali_dabba) {
+                            proChanged?.();
+                            return;
+                          } else if (
+                              method.moduleEnabled &&
+                              !modules.includes(
+                                  method.moduleEnabled
+                              )
+                          ) {
+                              moduleChange?.(method.moduleEnabled);
+                              return;
+                          } else {  
+                            toggleActiveTab(method.id)
+                          }}
+                        }
                     />
                   )}
                 </div>
@@ -569,7 +592,22 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
 
                 <div
                   className="details"
-                  onClick={() => toggleActiveTab(method.id)}
+                  onClick={() => {
+                    if (method.proSetting && !appLocalizer?.khali_dabba) {
+                      proChanged?.();
+                      return;
+                    } else if (
+                        method.moduleEnabled &&
+                        !modules.includes(
+                            method.moduleEnabled
+                        )
+                    ) {
+                        moduleChange?.(method.moduleEnabled);
+                        return;
+                    } else {  
+                      toggleActiveTab(method.id)
+                    }}
+                  }
                 >
                   <div className="details-wrapper">
                     <div className="payment-method-icon">
@@ -609,15 +647,44 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                       {isEnabled ? (
                         <>
                           {method.formFields && method.formFields.length > 0 && (
-                            <li onClick={() => toggleActiveTab(method.id)}>
+                            <li 
+                              onClick={() => {
+                                if (method.proSetting && !appLocalizer?.khali_dabba) {
+                                  proChanged?.();
+                                  return;
+                                } else if (
+                                    method.moduleEnabled &&
+                                    !modules.includes(
+                                        method.moduleEnabled
+                                    )
+                                ) {
+                                    moduleChange?.(method.moduleEnabled);
+                                    return;
+                                } else {  
+                                  toggleActiveTab(method.id)
+                                }}
+                              }>
                               <i className="settings-icon adminlib-setting"></i>
                               <span>Settings</span>
                             </li>
                           )}
                           <li
-                            onClick={() =>
-                              toggleEnable(method.id, false, method.icon)
-                            }
+                            onClick={() => {
+                              if (method.proSetting && !appLocalizer?.khali_dabba) {
+                                  proChanged?.();
+                                  return;
+                              } else if (
+                                  method.moduleEnabled &&
+                                  !modules.includes(
+                                      method.moduleEnabled
+                                  )
+                              ) {
+                                  moduleChange?.(method.moduleEnabled);
+                                  return;
+                              } else {                              
+                                toggleEnable(method.id, false, method.icon);
+                              }
+                            }}
                           >
                             <i className="disable-icon adminlib-eye-blocked"></i>
                             <span>Disable</span>
@@ -625,9 +692,22 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                         </>
                       ) : (
                         <li
-                          onClick={() =>
-                            toggleEnable(method.id, true, method.icon)
-                          }
+                          onClick={() => {
+                              if (method.proSetting && !appLocalizer?.khali_dabba) {
+                                  proChanged?.();
+                                  return;
+                              } else if (
+                                  method.moduleEnabled &&
+                                  !modules.includes(
+                                      method.moduleEnabled
+                                  )
+                              ) {
+                                  moduleChange?.(method.moduleEnabled);
+                                  return;
+                              } else {                              
+                                toggleEnable(method.id, true, method.icon);
+                              }
+                            }}
                         >
                           <i className="eye-icon adminlib-eye"></i>
                           <span>Enable</span>

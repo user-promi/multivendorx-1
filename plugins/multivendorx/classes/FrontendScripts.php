@@ -690,7 +690,7 @@ class FrontendScripts {
                         'store_payment_settings'   => MultiVendorX()->payments->get_all_store_payment_settings(),
                         'store_id'                 => get_user_meta( wp_get_current_user()->ID, 'multivendorx_active_store', true ),
                         'ajaxurl'                  => admin_url( 'admin-ajax.php' ),
-                        'adminUrl'                 => admin_url(),
+                        'admin_url'                 => admin_url(),
                         'currency'                 => get_woocommerce_currency(),
                         'taxes_enabled'            => get_option( 'woocommerce_calc_taxes' ),
                         'currency_symbol'          => get_woocommerce_currency_symbol(),
