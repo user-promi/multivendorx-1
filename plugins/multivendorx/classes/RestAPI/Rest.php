@@ -276,8 +276,8 @@ class Rest {
         
             if ( $commission && ! empty( $commission->ID ) ) {
                 // Add only commission amounts to API response
-                $response->data['commission_amount'] = (float) $commission->commission_amount;
-                $response->data['commission_total']  = (float) $commission->commission_total;
+                $response->data['commission_amount'] = (float) $commission->store_earning;
+                $response->data['commission_total']  = (float) $commission->store_payable;
             }
         }
         

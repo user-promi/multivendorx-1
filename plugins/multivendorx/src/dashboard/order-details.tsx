@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { __ } from '@wordpress/i18n';
 import { BasicInput, SelectInput, getApiLink } from "zyra";
 import axios from "axios";
+import { formatCurrency } from '../services/commonFunction';
 
 interface OrderDetailsProps {
     order?: any; // optionally pass order data
@@ -65,7 +66,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
         })
             .then((response) => {
                 if (response.data.success) {
-
+                    window.location.reload();
                 }
             })
         // onRefund(payload); // send to your API here
@@ -97,7 +98,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
             console.error("Error fetching order:", error);
         }
     };
-
+console.log('orderData', orderData)
     useEffect(() => {
         if (!orderId) return;
 
@@ -238,16 +239,16 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 
                                                         {/* Qty (editable only in refund mode) */}
                                                         <td className="admin-column">
-                                                          <div className="price">  ${parseFloat(item.total).toFixed(2)} </div>
+                                                          <div className="price"> x {item.quantity} </div>
 
                                                             {isRefund && (
                                                                 <input
                                                                     type="number"
                                                                     min="0"
                                                                     className="basic-input"
-                                                                    value={refundItems[item.id]?.total ?? 0}
+                                                                    value={refundItems[item.id]?.quantity ?? 0}
                                                                     onChange={(e) =>
-                                                                        handleItemChange(item.id, "total", +e.target.value)
+                                                                        handleItemChange(item.id, "quantity", +e.target.value)
                                                                     }
                                                                 />
                                                             )}
@@ -255,7 +256,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 
                                                         {/* Total (editable only in refund mode) */}
                                                         <td className="admin-column">
-                                                          <div className="price">   ${parseFloat(item.total).toFixed(2)} </div>
+                                                          <div className="price">   ${parseFloat(item.subtotal).toFixed(2)} </div>
 
                                                             {isRefund && (
                                                                 <input
@@ -270,16 +271,16 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                                             )}
                                                         </td>
                                                         <td className="admin-column">
-                                                         <div className="price"> ${parseFloat(item.total).toFixed(2)} </div>
+                                                         <div className="price"> ${parseFloat(item.subtotal_tax).toFixed(2)} </div>
 
                                                             {isRefund && (
                                                                 <input
                                                                     type="number"
                                                                     min="0"
                                                                     className="basic-input"
-                                                                    value={refundItems[item.id]?.total ?? 0}
+                                                                    value={refundItems[item.id]?.tax ?? 0}
                                                                     onChange={(e) =>
-                                                                        handleItemChange(item.id, "total", +e.target.value)
+                                                                        handleItemChange(item.id, "tax", +e.target.value)
                                                                     }
                                                                 />
                                                             )}
@@ -294,47 +295,60 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                                     </td>
                                                 </tr>
                                             )}
-                                            <tr className="admin-row simple">
-                                                <td className="admin-column" colSpan={3}>
-                                                    <div className="item-details">
-                                                        <div className="icon">
-                                                            <i className="adminlib-cart green"></i>
-                                                        </div>
-                                                        <div className="detail">
-                                                            <div className="name">Free shipping</div>
-                                                            <div className="sub-text"><span>Items:</span> Charcoal Detox × 1</div>
-                                                            <div className="sub-text"><span>package_qty:</span></div>
-                                                            <div className="sub-text"><span>_vendor_order_shipping_item_id:</span> 337</div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td className="admin-column"></td>
-                                                <td className="admin-column"></td>
-                                                <td className="admin-column">
-                                                    {isRefund ? (
-                                                        <input
-                                                            type="number"
-                                                            min="0"
-                                                            className="basic-input"
-                                                            value="$95"
-                                                        />
-                                                    ) : (
-                                                        '$95'
-                                                    )}
-                                                </td>
-                                                <td className="admin-column">
-                                                    {isRefund ? (
-                                                        <input
-                                                            type="number"
-                                                            min="0"
-                                                            className="basic-input"
-                                                            value="$195"
-                                                        />
-                                                    ) : (
-                                                        '$195'
-                                                    )}
-                                                </td>
-                                            </tr>
+                                            {orderData?.shipping_lines?.length > 0 && (
+                                                orderData.shipping_lines.map((item) => (
+                                                    <tr className="admin-row simple">
+                                                        <td className="admin-column" colSpan={3}>
+                                                            <div className="item-details">
+                                                                <div className="icon">
+                                                                    <i className="adminlib-cart green"></i>
+                                                                </div>
+                                                                <div className="detail">
+                                                                    <div className="name">{item.method_title}</div>
+                                                                    {/* {item?.meta_data?.map((data) => (
+                                                                        <div className="sub-text" key={data.id}>
+                                                                            <span>{data.display_key || data.key}:</span> {data.display_value || data.value}
+                                                                        </div>
+                                                                    ))} */}
+                                                                        {/* <div className="sub-text"><span>_vendor_order_shipping_item_id:</span> 337</div> */}
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td className="admin-column"></td>
+                                                        <td className="admin-column"></td>
+                                                        <td className="admin-column">
+                                                            {isRefund ? (
+                                                                <input
+                                                                    type="number"
+                                                                    min="0"
+                                                                    className="basic-input"
+                                                                    // value="$95"
+                                                                    value={refundItems[item.id]?.shipping_total ?? 0}
+                                                                    onChange={(e) =>
+                                                                        handleItemChange(item.id, "shipping_total", +e.target.value)
+                                                                    }
+                                                                />
+                                                            ) : (
+                                                                item.total
+                                                            )}
+                                                        </td>
+                                                        <td className="admin-column">
+                                                            {isRefund ? (
+                                                                <input
+                                                                    type="number"
+                                                                    min="0"
+                                                                    className="basic-input"
+                                                                    value={refundItems[item.id]?.total_tax ?? 0}
+                                                                    onChange={(e) =>
+                                                                        handleItemChange(item.id, "total_tax", +e.target.value)
+                                                                    }
+                                                                />
+                                                            ) : (
+                                                                item.total_tax
+                                                            )}
+                                                        </td>
+                                                    </tr>
+                                                )))}
                                         </tbody>
                                     </table>
                                 </div>
@@ -433,10 +447,10 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                         <div className="right">
                                             <table>
                                                 <tbody>
-                                                    <tr><td>Commission:</td><td>$29</td></tr>
-                                                    <tr><td>Shipping:</td><td>$29</td></tr>
-                                                    <tr><td>Total:</td><td>$29</td></tr>
-                                                    <tr><td>Total Earned:</td><td>$529</td></tr>
+                                                    <tr><td>Commission:</td><td>{formatCurrency(orderData?.commission_amount)}</td></tr>
+                                                    <tr><td>Shipping:</td><td>{formatCurrency(orderData?.shipping_total)}</td></tr>
+                                                    <tr><td>Total:</td><td>{formatCurrency(orderData?.total)}</td></tr>
+                                                    <tr><td>Total Earned:</td><td>{formatCurrency(orderData?.commission_total)}</td></tr>
                                                 </tbody>
                                             </table>
                                         </div>
