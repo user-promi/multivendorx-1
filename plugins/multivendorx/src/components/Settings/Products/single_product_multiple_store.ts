@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 
 export default {
     id: 'single-product-multiple-store',
-    priority: 2,
+    priority: 3,
     name: __( 'Single Product Multiple Vendors (SPMV)', 'multivendorx' ),
     desc: __(
         'Manage how multiple vendors (stores) can list and sell the same product in your marketplace.',

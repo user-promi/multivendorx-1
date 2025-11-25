@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 
 export default {
     id: 'product-preferencess',
-    priority: 1,
+    priority: 2,
     name: __( 'Product Preferences', 'multivendorx' ),
     desc: __(
         'Decide which product types, fields, and features stores can access when creating or managing products in their store.',
