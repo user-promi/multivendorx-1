@@ -107,6 +107,7 @@
         "@wordpress/react-i18n": "wp-6.6",
         "@wordpress/scripts": "^30.23.0",
         "d3-geo": "^3.1.1",
+        "d3-scale": "^4.0.2",
         "d3-zoom": "^3.0.0",
         "jspdf": "^3.0.3",
         "leaflet": "^1.9.4",

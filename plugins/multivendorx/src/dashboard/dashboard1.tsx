@@ -724,7 +724,6 @@ const dashboard1: React.FC = () => {
                 <div className="title">
                   Latest Reviews
                 </div>
-                {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
               </div>
               <div className="right">
                 <i className="adminlib-more-vertical"></i>

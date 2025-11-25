@@ -1463,6 +1463,7 @@ a {
 .review-wrapper {
     display: flex;
     gap: 1rem;
+    flex-direction: column;
 
     .review {
         padding: 1rem;
@@ -1471,10 +1472,24 @@ a {
 
         .details {
             .title {
-                font-size: 1.125rem;
+                font-size: 1.25rem;
                 font-weight: 500;
                 line-height: 1rem;
                 margin-bottom: 0.625rem;
+                display: flex;
+                gap: 0.5rem;
+                align-items: center;
+            }
+
+            .avatar {
+                padding: 0.313rem;
+                background: var(--colorPrimary);
+                border-radius: 50%;
+
+                i {
+                    font-size: 1.125rem;
+                    color: #fff;
+                }
             }
 
             .des {
@@ -1530,7 +1545,7 @@ a {
         border-radius: 0.5rem;
         position: relative;
 
-        &:after {
+        span {
             position: absolute;
             content: "";
             height: 0.313rem;
@@ -1547,7 +1562,7 @@ a {
             background: color-mix(in srgb, var(--colorPrimary) 15%, transparent);
 
 
-            &::after {
+            span {
                 background: var(--colorPrimary);
 
             }
@@ -1559,7 +1574,7 @@ a {
             background: color-mix(in srgb, var(--colorSecondary) 15%, transparent);
 
 
-            &::after {
+            span {
                 background: var(--colorSecondary);
 
             }
@@ -1572,7 +1587,7 @@ a {
             background: color-mix(in srgb, var(--colorAccent) 15%, transparent);
 
 
-            &::after {
+            span {
                 background: var(--colorAccent);
 
             }
@@ -1584,7 +1599,7 @@ a {
             background: color-mix(in srgb, var(--colorSupport) 15%, transparent);
 
 
-            &::after {
+            span {
                 background: var(--colorSupport);
 
             }
