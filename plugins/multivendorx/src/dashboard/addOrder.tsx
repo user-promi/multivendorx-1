@@ -185,20 +185,33 @@ const AddOrder = () => {
                                 </div>
                                 {/* <div className="des">Approve, decline, or tweak before they go live.</div> */}
                             </div>
-                            {/* <div className="right">
-                                <i className="adminlib-more-vertical"></i>
-                            </div> */}
                         </div>
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                {/* <label htmlFor="country">Country</label> */}
-
                                 <SelectInput
                                     name="new_owner"
                                     // value={selectedOwner?.value}
                                     options={ownerOptions}
                                     type="single-select"
                                 // onChange={(val) => val && setSelectedOwner(val)}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="card-content">
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Customer details
+                                </div>
+                            </div>
+                        </div>
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <SelectInput
+                                    name="new_owner"
+                                    options={ownerOptions}
+                                    type="single-select"
                                 />
                             </div>
                         </div>
@@ -227,9 +240,6 @@ const AddOrder = () => {
                                     Billing address
                                 </div>
                             </div>
-                            {/* <div className="right">
-                                        <i className="adminlib-external"></i>
-                                    </div> */}
                         </div>
                         <div className="form-group-wrapper">
                             <div className="form-group">
