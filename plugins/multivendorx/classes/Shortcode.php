@@ -33,6 +33,7 @@ class Shortcode
         FrontendScripts::enqueue_script('multivendorx-dashboard-script');
         FrontendScripts::localize_scripts('multivendorx-dashboard-script');
         FrontendScripts::enqueue_style('multivendorx-dashboard-style');
+        FrontendScripts::enqueue_style('multivendorx-store-product-style');
 
         if (Utill::is_store_dashboard()) {
             wp_deregister_style('wc-blocks-style');
@@ -42,7 +43,6 @@ class Shortcode
 
             FrontendScripts::enqueue_script('multivendorx-store-dashboard-script');
             FrontendScripts::localize_scripts('multivendorx-store-dashboard-script');
-            FrontendScripts::enqueue_style('multivendorx-store-product-style');
 
             ?>
             <style>
@@ -51,7 +51,7 @@ class Shortcode
             </style>
             <?php
         }
-        
+
         if (Utill::is_store_registration_page()) {
             FrontendScripts::enqueue_script('multivendorx-registration-form-script');
             FrontendScripts::localize_scripts('multivendorx-registration-form-script');
@@ -62,7 +62,7 @@ class Shortcode
     {
         if (Utill::is_store_dashboard() && is_user_logged_in() && in_array('store_owner', wp_get_current_user()->roles, true)) {
             global $wp_styles;
-            $wp_styles->queue = array('multivendorx-dashboard-style', 'multivendorx-store-product-style', 'media-views', 'imgareaselect',);
+            $wp_styles->queue = array('multivendorx-dashboard-style', 'multivendorx-store-product-style', 'media-views', 'imgareaselect', );
         }
     }
 

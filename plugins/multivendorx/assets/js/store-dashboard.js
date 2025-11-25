@@ -1,10 +1,10 @@
 /* global dashboard */
 jQuery(document).ready(function ($) {
     $('.dashboard-tabs').css('opacity', '1');
+
     $('.adminlib-menu').on('click', function () {
         $('#store-dashboard').toggleClass('menu-opened');
     });
-
     // HOVER → only when menu-opened exists
     $('.dashboard-tabs-wrapper').hover(
         function () {  // mouse enter

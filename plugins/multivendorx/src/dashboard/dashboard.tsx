@@ -17,7 +17,7 @@ import world from "react-simple-maps/world-110m.json";
 import React, { useState, useEffect } from "react";
 import "../components/dashboard.scss";
 import '../dashboard/dashboard1.scss';
-import { getApiLink, Table, TableCell, useModules } from 'zyra';
+import { CalendarInput, getApiLink, Table, TableCell, useModules } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { formatCurrency } from '@/services/commonFunction';
@@ -45,7 +45,36 @@ const BarChartData = [
   { name: "Orders", dataKey: "refunds", color: themeColors[2] },
 ];
 
-
+const customers = [
+  {
+    id: 1,
+    name: "David Chen",
+    orders: 7,
+    total: "$1250",
+    icon: "adminlib-person",
+  },
+  {
+    id: 2,
+    name: "Sophia Martinez",
+    orders: 12,
+    total: "$2320",
+    icon: "adminlib-person",
+  },
+  {
+    id: 3,
+    name: "Ethan Johnson",
+    orders: 4,
+    total: "$890",
+    icon: "adminlib-person",
+  },
+  {
+    id: 4,
+    name: "Liam Patel",
+    orders: 9,
+    total: "$1560",
+    icon: "adminlib-person",
+  },
+];
 
 const RADIAN = Math.PI / 180;
 const COLORS = [themeColors[0], themeColors[1], themeColors[2], themeColors[3]];
@@ -446,14 +475,17 @@ const Dashboard: React.FC = () => {
     {
       name: "Commission Earned",
       value: Number(store?.commission?.commission_total || 0),
+      color: themeColors[0]
     },
     {
       name: "Commission Refunded",
       value: Number(store?.commission?.commission_refunded || 0),
+      color: themeColors[1]
     },
     {
       name: "Total Revenue",
       value: Number(store?.commission?.total_order_amount || 0),
+      color: themeColors[2]
     },
   ];
 
@@ -465,6 +497,18 @@ const Dashboard: React.FC = () => {
         <div className="page-title">
           <div className="title">{getGreeting()}, {store?.primary_owner_info?.data?.display_name}!</div>
           <div className="view-des">You’re viewing: <b>{store?.primary_owner_info?.data?.display_name}’s {store?.name || '-'}</b></div>
+        </div>
+        <div className="buttons-wrapper">
+          <CalendarInput
+            wrapperClass=""
+            inputClass=""
+          // onChange={(range: any) => {
+          //   updateFilter('date', {
+          //     start_date: range.startDate,
+          //     end_date: range.endDate,
+          //   });
+          // }}
+          />
         </div>
       </div>
 
@@ -479,7 +523,7 @@ const Dashboard: React.FC = () => {
                     <div className="details">
                       <div className="text">{item.text}</div>
                       <div className="number">{item.number}</div>
-                      <div className="report"><span>10%</span> | This month  <span>10%</span> | This month</div>
+                      <div className="report"><div>Last 30 days : <span>$189</span>  </div> <div> Previous 30 days: <span>$690</span></div></div>
                     </div>
                     <div className="analytics-icon">
                       <i className={item.icon}></i>
@@ -499,7 +543,7 @@ const Dashboard: React.FC = () => {
             <div className="card-header">
               <div className="left">
                 <div className="title">
-                  Sales Overview
+                  Sales Overview (P)
                 </div>
                 {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
               </div>
@@ -556,55 +600,59 @@ const Dashboard: React.FC = () => {
 
         </div>
 
-        <div className="column w-35">
-          <div className="card">
-            <div className="card-header">
-              <div className="left">
-                <div className="title">Commission Overview</div>
-              </div>
-              <div className="right"
-                onClick={() => {
-                  window.location.href = "/dashboard/reports/overview/";
-                }}
-              >
-                <i className="adminlib-external"></i>
-              </div>
+        <div className="column w-35" >
+          <div className="card-header">
+            <div className="left">
+              <div className="title">Last Withdrawal</div>
             </div>
-            <div className="card-body">
-              <div style={{ width: '100%', height: 400 }}>
-                <ResponsiveContainer>
-                  <PieChart>
-                    <Pie
-                      data={chartData}
-                      dataKey="value"
-                      nameKey="name"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={140}
-                      innerRadius={80}
-                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(1)}%`}
-                      labelLine={false}
-                      isAnimationActive={true}
-                    >
-                      {chartData.map((_, index) => (
-                        <Cell
-                          key={`cell-${index}`}
-                          fill={['#0088FE', '#00C49F', '#FF8042'][index % 3]}
-                        />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      formatter={(value) => formatCurrency(value)}
-                      contentStyle={{
-                        backgroundColor: '#fff',
-                        borderRadius: '8px',
-                        border: '1px solid #ddd',
-                      }}
-                    />
-                    <Legend verticalAlign="bottom" height={36} />
-                  </PieChart>
-                </ResponsiveContainer>
+          </div>
+          <div className="top-customer-wrapper">
+            {lastWithdraws.map((item: any) => (
+              <div key={item.id} className="customer">
+                <div className="left-section">
+                  <div className="details">
+                    <div className="name">
+                      {item.payment_method === "stripe-connect" && "Stripe"}
+                      {item.payment_method === "bank-transfer" && "Direct to Local Bank (INR)"}
+                      {item.payment_method === "paypal-payout" && "PayPal"}
+                      {item.payment_method === "bank-transfer" ? `Bank Transfer` : ""}
+                    </div>
+                    <div className="order-number"> {formatWcShortDate(item.date)}</div>
+                  </div>
+                </div>
+
+                <div className="price-section">{formatCurrency(item.amount)}</div>
               </div>
+            ))}
+          </div>
+          {/* {lastWithdraws && lastWithdraws.length > 0 ? (
+            lastWithdraws.map((item: any) => (
+              <div className="last-withdradal-wrapper" key={item.id}>
+                <div className="left">
+                  <div className="price">{formatCurrency(item.amount)}</div>
+                  <div className="des">
+                    {item.payment_method === "stripe-connect" && "Stripe"}
+                    {item.payment_method === "bank-transfer" && "Direct to Local Bank (INR)"}
+                    {item.payment_method === "paypal-payout" && "PayPal"}
+                    {item.payment_method === "bank-transfer" ? `Bank Transfer` : ""}
+                  </div>
+                </div>
+                <div className="right">
+                  <div className="date">{formatWcShortDate(item.date)}</div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="no-data">No withdrawals found.</div>
+          )} */}
+
+          <div className="buttons-wrapper">
+            <div
+              className="admin-btn btn-purple"
+              onClick={() => (window.location.href = `${appLocalizer.site_url}/dashboard/wallet/transactions/`)}
+            >
+              <i className="adminlib-preview"></i>
+              View transaction history
             </div>
           </div>
         </div>
@@ -665,7 +713,6 @@ const Dashboard: React.FC = () => {
         </div>
       </div> */}
 
-
       <div className="row">
         <div className="column">
           <div className="card">
@@ -684,11 +731,9 @@ const Dashboard: React.FC = () => {
                 {recentOrder && recentOrder.length > 0 ? (
                   <table className="order-table">
                     <tr className="header">
-                      <td>#</td>
                       <td>Order Id</td>
                       <td>Order Date</td>
                       <td>Product Name</td>
-                      <td>Customer</td>
                       <td>Total Amount</td>
                       <td>Order Status</td>
                       <td>Status</td>
@@ -700,15 +745,13 @@ const Dashboard: React.FC = () => {
                       const orderUrl = `/dashboard/sales/orders/#view/${id}`;
                       return (
                         <tr key={item.id}>
-                          <td>{index + 1}</td>
                           <td>
                             <a href={orderUrl} target="_blank" rel="noopener noreferrer">
-                              #{id}
+                              #{id} Customer
                             </a>
                           </td>
                           <td>{item.date}</td>
                           <td>{item.name}</td>
-                          <td>{item.commission_amount}</td>
                           <td>{item.amount}</td>
                           <td>
                             <div className={`admin-status ${color}`}>
@@ -734,66 +777,6 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="row">
-        <div className="column" >
-          <div className="card-header">
-            <div className="left">
-              <div className="title">Last Withdrawal</div>
-            </div>
-          </div>
-          <div className="top-customer-wrapper">
-            {lastWithdraws.map((item: any) => (
-              <div key={item.id} className="customer">
-                <div className="left-section">
-                  {/* <div className="profile">
-                        <i className={customer.icon}></i>
-                      </div> */}
-                  <div className="details">
-                    <div className="name">
-                      {item.payment_method === "stripe-connect" && "Stripe"}
-                      {item.payment_method === "bank-transfer" && "Direct to Local Bank (INR)"}
-                      {item.payment_method === "paypal-payout" && "PayPal"}
-                      {item.payment_method === "bank-transfer" ? `Bank Transfer` : ""}
-                    </div>
-                    <div className="order-number"> {formatWcShortDate(item.date)}</div>
-                  </div>
-                </div>
-
-                <div className="price-section">{formatCurrency(item.amount)}</div>
-              </div>
-            ))}
-          </div>
-          {/* {lastWithdraws && lastWithdraws.length > 0 ? (
-            lastWithdraws.map((item: any) => (
-              <div className="last-withdradal-wrapper" key={item.id}>
-                <div className="left">
-                  <div className="price">{formatCurrency(item.amount)}</div>
-                  <div className="des">
-                    {item.payment_method === "stripe-connect" && "Stripe"}
-                    {item.payment_method === "bank-transfer" && "Direct to Local Bank (INR)"}
-                    {item.payment_method === "paypal-payout" && "PayPal"}
-                    {item.payment_method === "bank-transfer" ? `Bank Transfer` : ""}
-                  </div>
-                </div>
-                <div className="right">
-                  <div className="date">{formatWcShortDate(item.date)}</div>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="no-data">No withdrawals found.</div>
-          )} */}
-
-          <div className="buttons-wrapper">
-            <div
-              className="admin-btn btn-purple"
-              onClick={() => (window.location.href = `${appLocalizer.site_url}/dashboard/wallet/transactions/`)}
-            >
-              <i className="adminlib-preview"></i>
-              View transaction history
-            </div>
-          </div>
-        </div>
-
         {/* Best-Selling Products */}
         <div className="column">
           <div className="card">
@@ -838,6 +821,59 @@ const Dashboard: React.FC = () => {
                 ) : (
                   <div className="no-data">No products found.</div>
                 )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="column">
+          <div className="card">
+            <div className="card-header">
+              <div className="left">
+                <div className="title">Commission Overview</div>
+              </div>
+              <div className="right"
+                onClick={() => {
+                  window.location.href = "/dashboard/reports/overview/";
+                }}
+              >
+                <i className="adminlib-external"></i>
+              </div>
+            </div>
+            <div className="card-body">
+              <div style={{ width: '100%', height: 400 }}>
+                <ResponsiveContainer>
+                  <PieChart>
+                    <Pie
+                      data={chartData}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={140}
+                      innerRadius={80}
+                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(1)}%`}
+                      labelLine={false}
+                      isAnimationActive={true}
+                    >
+                      {chartData.map((item, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={item.color}
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      formatter={(value) => formatCurrency(value)}
+                      contentStyle={{
+                        backgroundColor: '#fff',
+                        borderRadius: '8px',
+                        border: '1px solid #ddd',
+                      }}
+                    />
+                    <Legend verticalAlign="bottom" height={36} />
+                  </PieChart>
+                </ResponsiveContainer>
               </div>
             </div>
           </div>
@@ -922,6 +958,41 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
         )}
+        <div className="column">
+          <div className="card">
+            <div className="card-header">
+              <div className="left">
+                <div className="title">
+                  Top customer (P)
+                </div>
+                {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
+              </div>
+              {/* <div className="right">
+                <i className="adminlib-more-vertical"></i>
+              </div> */}
+            </div>
+            <div className="card-body">
+              <div className="top-customer-wrapper">
+                {customers.map((customer) => (
+                  <div key={customer.id} className="customer">
+                    <div className="left-section">
+                      <div className="profile">
+                        <i className={customer.icon}></i>
+                      </div>
+                      <div className="details">
+                        <div className="name">{customer.name}</div>
+                        <div className="order-number">{customer.orders} orders</div>
+                      </div>
+                    </div>
+
+                    <div className="price-section">{customer.total}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
 
       <div className="row">
@@ -930,7 +1001,7 @@ const Dashboard: React.FC = () => {
             <div className="card-header">
               <div className="left">
                 <div className="title">
-                  Store Activity
+                  Store Activity (P)
                 </div>
                 {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
               </div>
