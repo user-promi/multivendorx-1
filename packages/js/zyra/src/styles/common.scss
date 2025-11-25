@@ -193,9 +193,9 @@ body:has(.admin-main-wrapper) {
   gap: 0.25rem;
   border: 0.063rem solid;
 
-  @each $name, $style in $button-color-palette {
+  @each $name, $style in $color-palette {
     &.#{$name} {
-      background: map-get($style, background);
+      background: map-get($style, lightColor);
       color: map-get($style, color);
     }
   }
@@ -210,9 +210,9 @@ body:has(.admin-main-wrapper) {
   border-radius: 0.313rem;
   font-size: 1.313rem;
 
-  @each $name, $style in $icon-color-palette {
+  @each $name, $style in $color-palette {
     &.#{$name} {
-      background: map-get($style, background);
+      background: map-get($style, lightColor);
       color: map-get($style, color);
     }
   }
@@ -220,38 +220,12 @@ body:has(.admin-main-wrapper) {
 
 .in-stock {
   position: relative;
-  // padding-left: 0.625rem;
   color: #06be9f;
-
-  // &:before {
-  //   position: absolute;
-  //   content: "";
-  //   width: 0.5rem;
-  //   height: 0.5rem;
-  //   border-radius: 50%;
-  //   background: #06be9f;
-  //   top: 50%;
-  //   left: 0;
-  //   transform: translate(-50%, -50%);
-  // }
 }
 
 .out-of-stock {
   position: relative;
   color: #f06b4f;
-  // padding-left: 0.625rem;
-
-  // &:before {
-  //   position: absolute;
-  //   content: "";
-  //   width: 0.5rem;
-  //   height: 0.5rem;
-  //   border-radius: 50%;
-  //   background: #f06b4f;
-  //   top: 50%;
-  //   left: 0;
-  //   transform: translate(-50%, -50%);
-  // }
 }
 
 .text-green {
@@ -336,11 +310,6 @@ body:has(.admin-main-wrapper) {
     width: 25%;
   }
 }
-
-// .error-input:has(.basic-input) .basic-input {
-//   border-color: red !important;
-//   box-shadow: 0 0 0 3px #ff00001f !important;
-// }
 
 .react-select input:focus {
   box-shadow: none;
@@ -1405,7 +1374,6 @@ body:has(.admin-main-wrapper) {
   }
 }
 
-
 .search-section {
   display: flex;
   align-items: center;
@@ -1542,23 +1510,6 @@ body:has(.admin-main-wrapper) {
   }
 }
 
-// placeholder image start
-// .placeholder-400x400 {
-//   content: "400 x 400";
-//   left: 0;
-//   position: absolute;
-//   top: 0;
-//   width: 100%;
-//   height: 100%;
-//   background: #dfdcdc;
-//   color: red;
-//   font-size: 1.5rem;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-// }
-
-
 // filter tabs (module , notification)
 .category-filter {
   display: flex;
@@ -1621,11 +1572,8 @@ body:has(.admin-main-wrapper) {
     transform: scale(1);
   }
 }
-
 .highlight {
   animation: animate 2.5s ease-in-out infinite;
-  border: $border-theme-small;
+  border: $border-theme-small !important;
 }
-
-
 // highlight section end

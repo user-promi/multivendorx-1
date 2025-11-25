@@ -157,7 +157,7 @@ const settings = () => {
                 name: 'Payout',
                 desc: 'Enter your payment information and select the method you’d like to use for receiving store payouts.',
                 // hideTabHeader: true,
-                icon: 'wallet',
+                icon: 'wallet-open',
             },
         },
         ...(modules.includes('store-policy')
@@ -256,7 +256,8 @@ const settings = () => {
                     settingName="Settings"
                     supprot={[]}
                     Link={SimpleLink}
-                    submenuRender={true} />
+                    submenuRender={true}
+                    menuIcon={true} />
             </div >
         </>
     );

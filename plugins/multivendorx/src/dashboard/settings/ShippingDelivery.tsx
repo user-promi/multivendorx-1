@@ -75,19 +75,23 @@ const ShippingDelivery = () => {
             <SuccessNotice message={successMsg} />
             <div className="card-wrapper">
                 <div className="card-content">
-                    <div className="card-title">Method Type</div>
 
                     {/* Only show ToggleSetting if shipping_methods has options */}
                     {appLocalizer.shipping_methods && appLocalizer.shipping_methods.length > 0 && (
                         <>
-                            <ToggleSetting
-                                wrapperClass="setting-form-input"
-                                descClass="settings-metabox-description"
-                                description="Choose your preferred payment method."
-                                options={appLocalizer.shipping_methods}
-                                value={formData.shipping_options || ""}
-                                onChange={(value: any) => handleToggleChange(value, 'shipping_options')}
-                            />
+                            <div className="form-group-wrapper">
+                                <div className="form-group">
+                                    <label htmlFor="">Method Type</label>
+                                    <ToggleSetting
+                                        wrapperClass="setting-form-input"
+                                        descClass="settings-metabox-description"
+                                        description="Choose your preferred payment method."
+                                        options={appLocalizer.shipping_methods}
+                                        value={formData.shipping_options || ""}
+                                        onChange={(value: any) => handleToggleChange(value, 'shipping_options')}
+                                    />
+                                </div>
+                            </div>
                             {/* //zone by shipping */}
                             {formData.shipping_options === 'shipping_by_zone' && <DistanceByZoneShipping />}
 
@@ -205,8 +209,11 @@ const ShippingDelivery = () => {
 
                             {formData.shipping_options === 'shipping_by_distance' && (
                                 <>
-                                    <div className="card-title">Distance-wise Shipping Configuration</div>
-
+                                    <div className="form-group-title-wrapper">
+                                        <div className="title">
+                                            Distance-wise Shipping Configuration
+                                        </div>
+                                    </div>
                                     {/* Default Cost */}
                                     <div className="form-group-wrapper">
                                         <div className="form-group">

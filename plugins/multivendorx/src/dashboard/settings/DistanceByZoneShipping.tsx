@@ -283,7 +283,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({ id }) =
                                 className="admin-btn btn-purple"
                                 onClick={() => handleAdd(row.original)}
                             >
-                                <i className="adminlib-plus"></i> {__("Add Shipping Method", "multivendorx")}
+                                <i className="adminlib-plus-circle-o"></i> {__("Add Shipping Method", "multivendorx")}
                             </button>
                         </TableCell>
                     );
@@ -306,7 +306,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({ id }) =
                                 className="admin-btn btn-purple"
                                 onClick={() => handleAdd(row.original)}
                             >
-                                <i className="adminlib-plus"></i> {__("Add New Method", "multivendorx")}
+                                <i className="adminlib-plus-circle-o"></i> {__("Add New Method", "multivendorx")}
                             </button>
                         </div>
                     </TableCell>
@@ -318,7 +318,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({ id }) =
     return (
         <>
                 <div className="form-group-title-wrapper">
-                    <label htmlFor="">{__("Zone-wise Shipping Configuration", "multivendorx")}</label>
+                    <div className="title">{__("Zone-wise Shipping Configuration", "multivendorx")}</div>
                 </div>
 
             <div className="admin-table-wrapper">
@@ -327,12 +327,6 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({ id }) =
                     columns={columns as ColumnDef<Record<string, any>, any>[]}
                     rowSelection={{}}
                     onRowSelectionChange={() => { }}
-                    // defaultRowsPerPage={10}
-                    // pageCount={pageCount}
-                    // pagination={pagination}
-                    // onPaginationChange={setPagination}
-                    // perPageOption={[10, 25, 50]}
-                    // totalCounts={totalRows}
                 />
             </div>
 
@@ -362,7 +356,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({ id }) =
                             >
                                 {__("Cancel", "multivendorx")}
                             </button>
-                            <button className="admin-btn btn-purple" onClick={handleSave}>
+                            <button className="admin-btn btn-purple-bg" onClick={handleSave}>
                                 {isEditing ? __("Update", "multivendorx") : __("Save", "multivendorx")}
                             </button>
                         </>

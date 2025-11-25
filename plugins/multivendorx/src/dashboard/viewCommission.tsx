@@ -59,7 +59,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
       header={
         <>
           <div className="title">
-            <i className="adminlib-cart"></i>
+            <i className="adminlib-commission"></i>
             Commission Details
           </div>
           <p>Details of this commission, including the order breakdown and notes.</p>

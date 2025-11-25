@@ -143,134 +143,139 @@ const Withdrawl: React.FC = () => {
   };
 
   return (
-      <div className="card-wrapper">
-        <div className="card-content">
-          <div className="form-group-title-wrapper">
-            <div className="title">
-              Payment information
-            </div>
+    <div className="card-wrapper">
+      <div className="card-content">
+        <div className="form-group-title-wrapper">
+          <div className="title">
+            Payment information
           </div>
+        </div>
 
-          {/* Payment Method Toggle */}
-          <div className="form-group-wrapper">
-            <div className="form-group">
-              <label>Payment Method</label>
-              <ToggleSetting
-                wrapperClass="setting-form-input"
-                descClass="settings-metabox-description"
-                description={(paymentOptions && paymentOptions.length === 0)
-										? `You haven’t enabled any payment methods yet.`
-										: ""}
-                options={paymentOptions}
-                value={formData.payment_method || ""}
-                onChange={(value) => handleToggleChange(value)}
-              />
-            </div>
+        {/* Payment Method Toggle */}
+        <div className="form-group-wrapper">
+          <div className="form-group">
+            <label>Payment Method</label>
+            <ToggleSetting
+              wrapperClass="setting-form-input"
+              descClass="settings-metabox-description"
+              description={(paymentOptions && paymentOptions.length === 0)
+                ? `You haven’t enabled any payment methods yet.`
+                : ""}
+              options={paymentOptions}
+              value={formData.payment_method || ""}
+              onChange={(value) => handleToggleChange(value)}
+            />
           </div>
+        </div>
 
-          {/* Dynamic Fields */}
-          {Array.isArray(selectedProvider?.fields) &&
-            selectedProvider.fields.map((field, index) => {
-              if (field.type === "html" && field.html) {
-                return (
-                  <div
-                    key={`html-${index}`}
-                    className="form-group-wrapper"
-                    dangerouslySetInnerHTML={{ __html: field.html }}
-                  />
-                );
-              }
+        {/* Dynamic Fields */}
+        {Array.isArray(selectedProvider?.fields) &&
+          selectedProvider.fields.map((field, index) => {
+            if (field.type === "html" && field.html) {
+              return (
+                <div
+                  key={`html-${index}`}
+                  className="form-group-wrapper"
+                  dangerouslySetInnerHTML={{ __html: field.html }}
+                />
+              );
+            }
 
-              if (field.type === "embedded") {
-                return (
-                  <div ref={containerRef} key={`embedded-${index}`}>
-                    {stripeConnectInstance && (
-                      <ConnectComponentsProvider connectInstance={stripeConnectInstance}>
-                        <ConnectAccountOnboarding
-                          onExit={() => console.log("Onboarding exited")}
-                          onStepChange={({ step }) => {
-                            console.log("Current step:", step);
-                            if (step === "complete") {
-                              // Call WP backend to save status
-                              axios.post(appLocalizer.ajaxurl, new URLSearchParams({
-                                action: 'mark_stripe_onboarding_complete',
-                                _ajax_nonce: appLocalizer.nonce,
-                                vendor_id: appLocalizer.store_id,
-                              }))
-                                .then((res) => {
-                                  if (res.data.success) {
-                                    console.log('Stripe onboarding marked complete!');
-                                    window.location.reload();
-                                  } else {
-                                    console.error('Failed to update onboarding status', res.data);
-                                  }
-                                });
-                            }
-                          }}
-                          collectionOptions={{
-                            fields: "eventually_due",
-                            futureRequirements: "include",
-                          }}
-                        />
-                      </ConnectComponentsProvider>
-                    )}
-                  </div>
-                );
-              }
+            if (field.type === "embedded") {
+              return (
+                <div ref={containerRef} key={`embedded-${index}`}>
+                  {stripeConnectInstance && (
+                    <ConnectComponentsProvider connectInstance={stripeConnectInstance}>
+                      <ConnectAccountOnboarding
+                        onExit={() => console.log("Onboarding exited")}
+                        onStepChange={({ step }) => {
+                          console.log("Current step:", step);
+                          if (step === "complete") {
+                            // Call WP backend to save status
+                            axios.post(appLocalizer.ajaxurl, new URLSearchParams({
+                              action: 'mark_stripe_onboarding_complete',
+                              _ajax_nonce: appLocalizer.nonce,
+                              vendor_id: appLocalizer.store_id,
+                            }))
+                              .then((res) => {
+                                if (res.data.success) {
+                                  console.log('Stripe onboarding marked complete!');
+                                  window.location.reload();
+                                } else {
+                                  console.error('Failed to update onboarding status', res.data);
+                                }
+                              });
+                          }
+                        }}
+                        collectionOptions={{
+                          fields: "eventually_due",
+                          futureRequirements: "include",
+                        }}
+                      />
+                    </ConnectComponentsProvider>
+                  )}
+                </div>
+              );
+            }
 
-              if (field.type === "button") {
-                return (
-                  <div className="form-group-wrapper" key={field.key || index}>
-                    <button
-                      type="button"
-                      className="admin-btn btn-purple-bg"
-                      onClick={() => handleButtonClick(field, formData)}
-                    >
-                      {field.label}
-                    </button>
-                  </div>
-                );
-              }
-
-              if (field.type === 'setting-toggle') {
-                return (
-                  <ToggleSetting
-                    key={field.key}
-                    description={field.desc}
-                    options={
-                      Array.isArray(field.options)
-                        ? field.options.map((opt) => ({
-                          ...opt,
-                          value: String(opt.value),
-                        }))
-                        : []
-                    }
-                    value={formData[field.key || ""] || ""}
-                    onChange={(value) => handleToggleChange(value, field.key)}
-                  />
-                );
-              }
-
+            if (field.type === "button") {
               return (
                 <div className="form-group-wrapper" key={field.key || index}>
+                  <button
+                    type="button"
+                    className="admin-btn btn-purple-bg"
+                    onClick={() => handleButtonClick(field, formData)}
+                  >
+                    {field.label}
+                  </button>
+                </div>
+              );
+            }
+
+            if (field.type === 'setting-toggle') {
+              return (
+                <div className="form-group-wrapper" >
                   <div className="form-group">
                     {field.label && <label htmlFor={field.key}>{field.label}</label>}
-                    <BasicInput
-                      key={field.key || ""}
-                      name={field.key}
-                      type={field.type || "text"}
-                      wrapperClass="setting-form-input"
-                      descClass="settings-metabox-description"
-                      placeholder={field.placeholder || ""}
-                      value={formData[field.key] || ""}
-                      onChange={handleChange}
+                    <ToggleSetting
+                      key={field.key}
+                      description={field.desc}
+                      options={
+                        Array.isArray(field.options)
+                          ? field.options.map((opt) => ({
+                            ...opt,
+                            value: String(opt.value),
+                          }))
+                          : []
+                      }
+                      value={formData[field.key || ""] || ""}
+                      onChange={(value) => handleToggleChange(value, field.key)}
                     />
                   </div>
                 </div>
               );
-            })}
-        </div>
+            }
+
+            return (
+              <div className="form-group-wrapper" key={field.key || index}>
+                <div className="form-group">
+                  {field.label && <label htmlFor={field.key}>{field.label}</label>}
+                  <BasicInput
+                    key={field.key || ""}
+                    name={field.key}
+                    type={field.type || "text"}
+                    wrapperClass="setting-form-input"
+                    descClass="settings-metabox-description"
+                    placeholder={field.placeholder || ""}
+                    value={formData[field.key] || ""}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+            );
+          })}
       </div>
+    </div>
   );
 };
 
