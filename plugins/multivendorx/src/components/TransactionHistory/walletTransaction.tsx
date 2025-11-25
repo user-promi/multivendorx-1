@@ -410,16 +410,18 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             setData(response.data.transaction || []);
             const statuses = [
                 { key: 'all', name: 'All', count: response.data.all || 0 },
-                { key: 'Cr', name: 'Credit', count: response.data.credit || 0 },
-                { key: 'Dr', name: 'Debit', count: response.data.debit || 0 },
-                { key: 'TransactionType', name: 'Transaction Type', count: response.data.debit || 0 },
+                { key: 'completed', name: 'Completed', count: response.data.completed || 0 },
+                { key: 'processed', name: 'Processed', count: response.data.processed || 0 },
+                { key: 'upcoming', name: 'Upcoming', count: response.data.upcoming || 0 },
+                { key: 'failed', name: 'Failed', count: response.data.failed || 0 },
             ];
 
-            setTransactionStatus(statuses.filter(status => status.count > 0));
+            setTransactionStatus(statuses);
 
         })
             .catch(() => setData([]));
     }
+
 
     // 🔹 Handle pagination & date changes
     useEffect(() => {
@@ -638,11 +640,9 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                         value={filterValue || ''}
                         className="basic-select"
                     >
-                        <option value="">{__('Select Status', 'multivendorx')}</option>
-                        <option value="Upcoming">{__('Upcoming', 'multivendorx')}</option>
-                        <option value="Processed">{__('Processed', 'multivendorx')}</option>
-                        <option value="Completed">{__('Completed', 'multivendorx')}</option>
-                        <option value="Failed">{__('Failed', 'multivendorx')}</option>
+                        <option value="">{__('Financial Transactions', 'multivendorx')}</option>
+                        <option value="Cr">{__('Credit', 'multivendorx')}</option>
+                        <option value="Dr">{__('Debit', 'multivendorx')}</option>
                     </select>
                 </div>
             ),
@@ -783,6 +783,13 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             .replace(/\b\w/g, c => c.toUpperCase());  // Stripe connect → Stripe Connect
     };
 
+    const freeLeft = wallet?.withdrawal_setting?.[0]?.free_withdrawals - wallet?.free_withdrawal;
+    const percentage = Number(wallet?.withdrawal_setting?.[0]?.withdrawal_percentage || 0);
+    const fixed = Number(wallet?.withdrawal_setting?.[0]?.withdrawal_fixed || 0);
+
+    // fee calculation
+    const fee = (amount * (percentage / 100)) + fixed;
+console.log(wallet?.withdrawal_setting)
     return (
         <>
             <div className="general-wrapper">
@@ -912,10 +919,11 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                                         {wallet?.withdrawal_setting?.[0]?.free_withdrawals - wallet?.free_withdrawal} Left
                                         </div>
 
-                                        <div className="card-des">
-                                        Then {wallet?.withdrawal_setting?.[0]?.withdrawal_percentage}% + 
-                                        {formatCurrency(wallet?.withdrawal_setting?.[0]?.withdrawal_fixed)} fee
+                                       <div className="card-des">
+                                            Then {(Number(wallet?.withdrawal_setting?.[0]?.withdrawal_percentage) || 0)}% + 
+                                            {formatCurrency(Number(wallet?.withdrawal_setting?.[0]?.withdrawal_fixed) || 0)} fee
                                         </div>
+
 
                                     </div>
                                 )}
@@ -1081,17 +1089,31 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
 
                             <div className="form-group">
                                 <label htmlFor="amount">Amount</label>
-
+                                    
                                 <BasicInput
                                     type="number"
                                     name="amount"
                                     value={amount}
                                     onChange={(e) => AmountChange(Number(e.target.value))}
                                 />
+
                                 <div className="free-wrapper">
-                                    <span>Total: $152</span>
-                                    <span>| Fee: $10</span>
-                                </div>
+                                    {wallet?.withdrawal_setting?.length > 0 && wallet?.withdrawal_setting?.[0]?.free_withdrawals ? (
+                                        <>
+                                        {freeLeft > 0 ? (
+                                            <span>Burning 1 out of {freeLeft} free withdrawals</span>
+                                        ) : (
+                                            <span> Free withdrawal limit reached</span>
+                                        )}
+                                            <span>Total: {formatCurrency(amount || 0)}</span>
+                                            <span>| Fee: {formatCurrency(fee)}</span>
+                                        </>
+                                    ) : (
+                                        <span>Actual withdrawal: {formatCurrency(amount || 0)}</span>
+                                    )}
+                                    </div>
+
+                                
                                 {validationErrors.amount && (
                                     <div className="invalid-massage">{validationErrors.amount}</div>
                                 )}

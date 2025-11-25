@@ -169,7 +169,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             $transactions = Transaction::get_transaction_information( $args );
             return rest_ensure_response( (int) $transactions );
         }
-        if ( $transaction_status )   $args['status']   = $transaction_status;
+        if ( $transaction_status )   $args['entry_type']   = $transaction_status;
         if ( $transaction_type )   $args['transaction_type']   = $transaction_type;
         $args['limit']  = $limit;
         $args['offset'] = $offset;
@@ -207,14 +207,18 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         }
         
         $all    = Transaction::get_transaction_information( $countArgs );
-        $credit = Transaction::get_transaction_information( array_merge( $countArgs, ['entry_type' => 'Cr'] ) );
-        $debit  = Transaction::get_transaction_information( array_merge( $countArgs, ['entry_type' => 'Dr'] ) );
+        $completed = Transaction::get_transaction_information( array_merge( $countArgs, ['status' => 'Completed'] ) );
+        $processed  = Transaction::get_transaction_information( array_merge( $countArgs, ['status' => 'Processed'] ) );
+        $upcoming = Transaction::get_transaction_information( array_merge( $countArgs, ['status' => 'Upcoming'] ) );
+        $failed  = Transaction::get_transaction_information( array_merge( $countArgs, ['status' => 'Failed'] ) );
         
         $response = [
             'transaction' => $formatted,
             'all'         => $all,
-            'credit'      => $credit,
-            'debit'      =>  $debit,
+            'completed'      => $completed,
+            'processed'      =>  $processed,
+            'upcoming'      =>  $upcoming,
+            'failed'      =>  $failed,
         ];
         return rest_ensure_response( $response );
     }
@@ -245,7 +249,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             $args['transaction_type'] = $transaction_type;
         }
         if ( ! empty( $transaction_status ) ) {
-            $args['status'] = $transaction_status;
+            $args['entry_type'] = $transaction_status;
         }
         if ( ! empty( $start_date ) && ! empty( $end_date ) ) {
             $args['start_date'] = date('Y-m-d 00:00:00', strtotime($start_date));
