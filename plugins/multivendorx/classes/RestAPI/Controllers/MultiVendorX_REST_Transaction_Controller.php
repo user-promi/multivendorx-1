@@ -1,6 +1,8 @@
 <?php
 
 namespace MultiVendorX\RestAPI\Controllers;
+
+use MultiVendorX\Store\Store;
 use MultiVendorX\Transaction\Transaction; 
 use MultiVendorX\Utill;
 
@@ -417,6 +419,8 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         $minimum_wallet_amount = MultiVendorX()->setting->get_setting( 'wallet_threshold_amount', 0 );
         $locking_day = MultiVendorX()->setting->get_setting( 'commission_lock_period', 0 );
         $payment_schedules = MultiVendorX()->setting->get_setting( 'payment_schedules', '' );
+        $withdrawals_fees = MultiVendorX()->setting->get_setting( 'withdrawals_fees', [] );
+        $store = Store::get_store_by_id($store_id);
 
         return rest_ensure_response([
             'wallet_balance'   => $balance,
@@ -428,6 +432,8 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             'locking_balance'  => $locking_balance,
             'lifetime_earning' => $lifetime_earning,
             'payment_schedules'=> $payment_schedules,
+            'free_withdrawal' => (int)$store->get_meta('withdrawals_count'),
+            'withdrawal_setting' => $withdrawals_fees,
         ]);
                 
     }

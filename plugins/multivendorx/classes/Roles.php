@@ -89,8 +89,8 @@ class Roles {
             if (in_array('store_owner', (array) $user->roles)) {
 
                 if ($cap === 'edit_posts') {
-                    $segment = get_query_var('segment');
-                    $endpoints = MultiVendorX()->setting->get_setting('menu_manager');
+                    // $segment = get_query_var('segment');
+                    // $endpoints = MultiVendorX()->setting->get_setting('menu_manager');
 
                     // do not remove this code
                     // checking add later for edit product page

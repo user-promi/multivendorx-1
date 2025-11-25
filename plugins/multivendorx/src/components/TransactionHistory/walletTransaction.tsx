@@ -895,23 +895,38 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                                 </div> */}
                             </div>
 
-                            <div className="small-text"><b>$5.00 </b> minimum rwquired to withdraw</div>
-
+                            <div className="small-text"><b>{formatCurrency(storeTransaction?.thresold)} </b> minimum required to withdraw</div>
 
                             <div className="payout-card-wrapper">
                                 <div className="payout-card">
-                                    <div className="card-title">Locked Balance</div>
-                                    <div className="card-price">$52</div>
+                                    <div className="card-title">Upcoming Balance</div>
+                                    <div className="card-price">{formatCurrency(wallet.locking_balance)}</div>
                                     <div className="card-des">Pending settinglement. Released soon</div>
                                 </div>
-                                <div className="payout-card">
-                                    <div className="card-title">Free Withdrawals</div>
-                                    <div className="card-price">5 Left</div>
-                                    <div className="card-des">Then 5% + $3.00 fee</div>
-                                </div>
+                                {wallet?.withdrawal_setting?.length > 0 && (
+
+                                    <div className="payout-card">
+                                        <div className="card-title">Free Withdrawals</div>
+
+                                        <div className="card-price">
+                                        {wallet?.withdrawal_setting?.[0]?.free_withdrawals - wallet?.free_withdrawal} Left
+                                        </div>
+
+                                        <div className="card-des">
+                                        Then {wallet?.withdrawal_setting?.[0]?.withdrawal_percentage}% + 
+                                        {formatCurrency(wallet?.withdrawal_setting?.[0]?.withdrawal_fixed)} fee
+                                        </div>
+
+                                    </div>
+                                )}
                             </div>
                             <div className="small-text">some funds locked during settlement</div>
-                            <div className="small-text">Auto payouts run hourly</div>
+                            {wallet?.payment_schedules ? (
+                                <div className="small-text">Auto payouts run {wallet.payment_schedules}</div>
+                            ) : (
+                                <div className="small-text">Auto payouts not set</div>
+                            )}
+
 
                             {/* <div className="withdrawal-wrapper">
                                 <div className="payout-notice">
@@ -1075,7 +1090,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                                 />
                                 <div className="free-wrapper">
                                     <span>Total: $152</span>
-                                    <span>| Free: $10</span>
+                                    <span>| Fee: $10</span>
                                 </div>
                                 {validationErrors.amount && (
                                     <div className="invalid-massage">{validationErrors.amount}</div>
