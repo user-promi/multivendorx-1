@@ -571,30 +571,37 @@ const Dashboard: React.FC = () => {
               </div>
             </div>
             <div className="card-body">
-              <div
-                style={{
-                  width: "100%",
-                  maxWidth: "300px",
-                  height: "100%",
-                  maxHeight: "80vh",
-                  aspectRatio: "1",
-                }}
-              >
-                <ResponsiveContainer width="100%" height="100%">
+              <div style={{ width: '100%', height: 400 }}>
+                <ResponsiveContainer>
                   <PieChart>
                     <Pie
                       data={chartData}
                       dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={140}
+                      innerRadius={80}
+                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(1)}%`}
                       labelLine={false}
-                      label={renderCustomizedLabel}
                       isAnimationActive={true}
-                      animationDuration={800}
-                      animationEasing="ease-out"
                     >
-                      {chartData.map((entry, index) => (
-                        <Cell key={entry.name} fill={COLORS[index]} />
+                      {chartData.map((_, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={['#0088FE', '#00C49F', '#FF8042'][index % 3]}
+                        />
                       ))}
                     </Pie>
+                    <Tooltip
+                      formatter={(value) => formatCurrency(value)}
+                      contentStyle={{
+                        backgroundColor: '#fff',
+                        borderRadius: '8px',
+                        border: '1px solid #ddd',
+                      }}
+                    />
+                    <Legend verticalAlign="bottom" height={36} />
                   </PieChart>
                 </ResponsiveContainer>
               </div>

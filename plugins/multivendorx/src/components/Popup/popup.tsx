@@ -13,7 +13,7 @@ interface PopupProps {
 export const proPopupContent = {
     proUrl: typeof appLocalizer !== 'undefined' ? appLocalizer.pro_url : '#',
     title: __(
-        'The upgrade every marketplace owner needs!',
+        'Upgrade every marketplace needs!',
         'multivendorx'
     ),
     moreText: __('Recurring revenue for you, empowered stores, automated operations', 'multivendorx'),
