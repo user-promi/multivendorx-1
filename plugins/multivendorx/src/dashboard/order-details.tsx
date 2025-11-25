@@ -323,9 +323,9 @@ console.log('orderData', orderData)
                                                                     min="0"
                                                                     className="basic-input"
                                                                     // value="$95"
-                                                                    value={refundItems[item.id]?.shipping_total ?? 0}
+                                                                    value={refundItems[item.id]?.total ?? 0}
                                                                     onChange={(e) =>
-                                                                        handleItemChange(item.id, "shipping_total", +e.target.value)
+                                                                        handleItemChange(item.id, "total", +e.target.value)
                                                                     }
                                                                 />
                                                             ) : (
@@ -338,15 +338,36 @@ console.log('orderData', orderData)
                                                                     type="number"
                                                                     min="0"
                                                                     className="basic-input"
-                                                                    value={refundItems[item.id]?.total_tax ?? 0}
+                                                                    value={refundItems[item.id]?.tax ?? 0}
                                                                     onChange={(e) =>
-                                                                        handleItemChange(item.id, "total_tax", +e.target.value)
+                                                                        handleItemChange(item.id, "tax", +e.target.value)
                                                                     }
                                                                 />
                                                             ) : (
                                                                 item.total_tax
                                                             )}
                                                         </td>
+                                                    </tr>
+                                                )))}
+                                            {orderData?.refunds?.length > 0 && (
+                                                orderData.refunds.map((item) => (
+                                                    <tr className="admin-row simple">
+                                                        <td className="admin-column" colSpan={3}>
+                                                            <div className="item-details">
+                                                                <div className="icon">
+                                                                    <i className="adminlib-cart green"></i>
+                                                                </div>
+                                                                <div className="detail">
+                                                                    <div className="name">Refunds #{item.id}</div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td className="admin-column"></td>
+                                                        <td className="admin-column"></td>
+                                                        <td className="admin-column">
+                                                            {item.total}
+                                                        </td>
+                                                        <td className="admin-column"></td>
                                                     </tr>
                                                 )))}
                                         </tbody>
