@@ -415,7 +415,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
                         setShowImageGallery(true);
                     }}
                 >
-                    <i className="admin-font adminlib-plus"></i>
+                    <i className="admin-font adminlib-plus-circle-o"></i>
                     Select Images
                 </button>
             </div>

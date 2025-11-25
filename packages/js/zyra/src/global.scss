@@ -21,98 +21,61 @@ $border-radius-small: 0.25rem;
 $border-radius-medium: 0.438rem;
 $border-radius-large: 0.5rem;
 $border-radius-button: 8rem;
-$button-color-palette: (
-  red: (
-    background: #fde8e4,
-    color: #f06b4f
-  ),
-  green: (
-    background: #c6f6d5,
-    color: #276749
-  ),
-  teal: (
-    background: #b2f5ea,
-    color: #285e61
-  ),
-  orange:(
-  background: #fff0e1,
-    color: #9c4221
-  ),
-  yellow: (
-    background: #fefcbf,
-    color: #975a16
-  ),
-  blue: (
-    background: #bee3f8,
-    color: #2c5282
-  ),
-  purple: (
-    background: #e9d8fd,
-    color: #553c9a
-  ),
-  indigo: (
-    background: #c3dafe,
-    color: #434190
-  ),
-  pink: (
-    background: #fed7e2,
-    color: #97266d
-  ),
-);
-$icon-color-palette: (
-  red: (
-    background: #fde8e4,
-    color: #f06b4f
-  ),
-  green: (
-    background: #c6f6d5,
-    color: #276749
-  ),
-  teal: (
-    background: #b2f5ea,
-    color: #285e61
-  ),
-  orange:(
-  background: #fff0e1,
-    color: #9c4221
-  ),
-  yellow: (
-    background: #fefcbf,
-    color: #975a16
-  ),
-  blue: (
-    background: #bee3f8,
-    color: #2c5282
-  ),
-  purple: (
-    background: #e9d8fd,
-    color: #553c9a
-  ),
-  indigo: (
-    background: #c3dafe,
-    color: #434190
-  ),
-  pink: (
-    background: #fed7e2,
-    color: #97266d
-  ),
 
+
+$color-palette: (
+  red: (
+    lightColor: #fde8e4,
+    color: #f06b4f
+  ),
+  green: (
+    lightColor: #c6f6d5,
+    color: #276749
+  ),
+  teal: (
+    lightColor: #b2f5ea,
+    color: #285e61
+  ),
+  orange:(
+  lightColor: #fff0e1,
+    color: #9c4221
+  ),
+  yellow: (
+    lightColor: #fefcbf,
+    color: #975a16
+  ),
+  blue: (
+    lightColor: #bee3f8,
+    color: #2c5282
+  ),
+  purple: (
+    lightColor: #e9d8fd,
+    color: #553c9a
+  ),
+  indigo: (
+    lightColor: #c3dafe,
+    color: #434190
+  ),
+  pink: (
+    lightColor: #fed7e2,
+    color: #97266d
+  ),
 );
 // $icon-color-palette: (
 //   red: (
-//     background: #fde8e4,
+//     lightColor: #fde8e4,
 //     color: #f06b4f
 //   ),
 //   green: (
-//     background: #d9f5f0,
+//     lightColor: #d9f5f0,
 //     color: #06be9f
 //   ),
 //   yellow: (
-//     background: #fff0e1,
+//     lightColor: #fff0e1,
 //     color: #ff9f43
 //   ),
 //   blue: (
-//     background: #bfdeed6e,
+//     lightColor: #bfdeed6e,
 //     color: #003d66de
 //   ),
   

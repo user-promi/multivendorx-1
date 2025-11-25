@@ -349,7 +349,9 @@ a {
         background: #fff;
         padding: 1.5rem;
 
-
+        .admin-table-wrapper{
+            border: 0.063rem solid whitesmoke;
+        }
     }
 
     .row {
@@ -1630,6 +1632,7 @@ a {
     .title {
         font-size: 1.125rem;
         font-weight: 500;
+        padding-bottom: 0.45rem;
     }
 
     .des {
@@ -1663,8 +1666,6 @@ a {
 
 // settings shipping add country start
 .shipping-country-wrapper {
-    margin-top: 1rem;
-
     .shipping-country {
         padding: 1rem;
         background: #f7f6f69c;
@@ -1854,3 +1855,23 @@ a {
 }
 
 // column details start
+
+
+// common 
+.shipping-method-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .shipping-method {
+        display: flex;
+        gap: 0.313rem;
+        align-items: center;
+
+        .icon-wrapper {
+            i {
+                cursor: pointer;
+            }
+        }
+    }
+}
