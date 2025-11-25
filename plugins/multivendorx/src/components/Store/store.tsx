@@ -80,6 +80,15 @@ const Store = () => {
         setFormData(updated);
     };
 
+    const saveEmails = (emailList: string[], primary: string) => {
+        const updated = {
+            ...formData,
+            primary_email: primary,
+            emails: emailList,
+        };
+        setFormData(updated);
+    };
+
     // run slug check only after user finishes typing (onBlur)
     const handleNameBlur = async () => {
         if (!formData.slug) return;
@@ -108,7 +117,7 @@ const Store = () => {
 
         const { name, slug, email, store_owners } = formData;
 
-        if (!email?.trim()) {
+        if (!formData.primary_email?.trim()) {
             setError((prev) => ({
                 ...prev,
                 email: {
@@ -119,7 +128,7 @@ const Store = () => {
             return;
         }
 
-        if (!store_owners?.trim()) {
+        if (!store_owners) {
             setError((prev) => ({
                 ...prev,
                 primary: {
@@ -328,8 +337,12 @@ const Store = () => {
                                         <EmailsInput
                                             value={emails}
                                             enablePrimary={true}
-                                            onChange={handleChange}
+                                            onChange={(list, primary) => {
+                                                saveEmails(list, primary);
+                                            }}
                                         />
+                                        {error?.email?.message && <div className="invalid-massage">{error?.email?.message}</div>}
+
                                     </div>
 
                                     <div className="form-group">
