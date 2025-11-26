@@ -72,6 +72,7 @@ declare global {
         tax:any;
         all_zones:any;
         adminUrl:any;
+        module_page_url:any;
     }
     interface Color{
         color: any;
