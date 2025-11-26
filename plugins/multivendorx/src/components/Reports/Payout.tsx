@@ -140,7 +140,7 @@ const Transactions: React.FC = () => {
             id: 'pending',
             label: 'Pending Stores',
             count: response.data.pending || 0,
-            icon: 'adminlib-pending',
+            icon: 'adminlib-pending yellow',
           },
           {
             id: 'deactivated',

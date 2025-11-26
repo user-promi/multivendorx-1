@@ -245,7 +245,7 @@ const ApprovalQueue = () => {
 
             case 'deactivate-requests':
                 return <DeactivateRequests onUpdated={refreshCounts} />;
-
+                
             default:
                 return <div></div>;
         }

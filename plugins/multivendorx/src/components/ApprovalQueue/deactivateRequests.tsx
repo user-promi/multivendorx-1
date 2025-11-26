@@ -136,22 +136,6 @@ const DeactivateRequests: React.FC<Props> = ({ onUpdated }) => {
                 </TableCell>
             ),
         },
-        // {
-        //     id: 'action',
-        //     header: __('Action', 'multivendorx'),
-        //     cell: ({ row }) => (
-        //         <TableCell
-        //             type="action-dropdown"
-        //             rowData={row.original}
-        //             header={{
-        //                 actions: [
-        //                     { label: __('Approve', 'multivendorx'), icon: 'adminlib-check', onClick: (row: any) => handleSingleAction('approve', row), hover: true },
-        //                     { label: __('Reject', 'multivendorx'), icon: 'adminlib-close', onClick: (row: any) => handleSingleAction('reject', row), hover: true },
-        //                 ],
-        //             }}
-        //         />
-        //     ),
-        // },
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) =>

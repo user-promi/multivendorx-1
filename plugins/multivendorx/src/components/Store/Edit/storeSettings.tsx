@@ -1164,7 +1164,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                         {/* Instagram */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="instagram"><i className="adminlib-supervised-user-circle instagram"></i> Instagram</label>
+                                <label htmlFor="instagram"><i className="adminlib-instagram instagram"></i> Instagram</label>
                                 <BasicInput
                                     name="instagram"
                                     wrapperClass="setting-form-input"

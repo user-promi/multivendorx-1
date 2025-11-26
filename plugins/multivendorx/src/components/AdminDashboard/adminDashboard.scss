@@ -1026,7 +1026,7 @@
     height: 100%;
     width: 100%;
 
-    &:after {
+    &::after {
         content: "80 x 80";
         left: 0;
         // position: absolute;
