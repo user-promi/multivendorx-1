@@ -1,9 +1,6 @@
 <?php
 namespace MultiVendorX\GeoLocation;
 
-use MultiVendorX\Geolocation\GooglePlaces;
-use MultiVendorX\Geolocation\StoreGeolocation;
-
 class Module {
     private $container = array();
     private static $instance = null;
@@ -19,11 +16,11 @@ class Module {
             require_once plugin_dir_path(__FILE__) . 'StoreGeolocation.php';
         }
         
-        if (!class_exists('MultiVendorX\\Geolocation\\GooglePlaces')) {
-            require_once plugin_dir_path(__FILE__) . 'GooglePlaces.php';
+        if (!class_exists('MultiVendorX\\Geolocation\\GeoLocation')) {
+            require_once plugin_dir_path(__FILE__) . 'GeoLocation.php';
         }
         
-        $this->container['geo_location'] = new GooglePlaces();
+        $this->container['geo_location'] = new GeoLocation();
     }
 
     public function init_hooks() {
@@ -34,7 +31,7 @@ class Module {
         // Manual class loading as fallback
         $class_files = [
             'StoreGeolocation' => 'StoreGeolocation.php',
-            'GooglePlaces' => 'GooglePlaces.php'
+            'GeoLocation' => 'GeoLocation.php'
         ];
 
         foreach ($class_files as $class_name => $file) {
