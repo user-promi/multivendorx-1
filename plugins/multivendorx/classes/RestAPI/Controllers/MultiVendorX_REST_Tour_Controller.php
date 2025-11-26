@@ -79,8 +79,8 @@ class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
      * @return \WP_Error|\WP_REST_Response
      */
     public function get_items( $request ) {
-        $status = MultivendorX()->setting->get_option( 'multivendorx_tour_active', false );
-        return array( 'active' => $status );
+        // $status = MultivendorX()->setting->get_option( 'multivendorx_tour_active', false );
+        return array( 'active' => true );
     }
 
     /**
@@ -90,7 +90,6 @@ class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
      * @return \WP_Error|\WP_REST_Response
      */
     // active boolean required
-    // catalogx tour active or not
     public function create_item( $request ) {
         update_option( 'multivendorx_tour_active', $request->get_param( 'active' ) );
         return array( 'success' => true );

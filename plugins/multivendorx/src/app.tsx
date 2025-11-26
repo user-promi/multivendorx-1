@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { AdminHeader, Banner, initializeModules, Tour } from 'zyra';
+import { AdminHeader, Banner, initializeModules } from 'zyra';
 
 import Settings from './components/Settings/Settings';
 import Modules from './components/Modules/modules';
@@ -27,6 +27,7 @@ import Notifications from './components/Notifications/Notifications';
 import TransactionHistory from './components/TransactionHistory/transactionHistory';
 import { TourProvider } from '@reactour/tour';
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
+import Tour from './components/Tour/Tour';
 
 const disableBody = (target: any) => disableBodyScroll(target);
 const enableBody = (target: any) => enableBodyScroll(target);
