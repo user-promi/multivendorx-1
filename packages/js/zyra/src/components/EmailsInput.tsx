@@ -1,4 +1,5 @@
 import React, { useState, useRef, forwardRef, useImperativeHandle } from "react";
+import "EmailsInput.scss";
 
 export interface EmailsInputProps {
     mode?: "single" | "multiple";

@@ -213,9 +213,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                                     <div className="des">
                                                         sku: {product.sku}
                                                     </div>
-
-                                                    {/* Optional extra text */}
-                                                    {/* <div className="small-text">Additional info</div> */}
                                                 </div>
                                             </div>
 
@@ -386,18 +383,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                 </div>
                             )}
                         </div>
-
-                        {/* <div className="analytics-container">
-                            <div className="analytics-item">
-                                <div className="analytics-icon">
-                                    <i className="adminlib-tools green"></i>
-                                </div>
-                                <div className="details">
-                                    <div className="number">{formatCurrency(storeData.commission?.commission_total ?? 0)}</div>
-                                    <div className="text">Lifetime earnings</div>
-                                </div>
-                            </div>
-                        </div> */}
 
                         {appLocalizer.khali_dabba && (
                             <div className="description-wrapper">

@@ -1,5 +1,155 @@
 @use '../../global.scss' as *;
 
+.general-wrapper {
+  border-radius: 0.313rem;
+  margin: 2.5rem 1rem 1rem;
+
+  .middle-child-container {
+    position: relative;
+    // color: #121116;
+    // line-height: 1.5;
+
+    .tabs-wrapper {
+      // margin: 0 2rem;
+      padding: 0 1rem 1rem;
+    }
+
+    &.show-menu {
+      .tabs-wrapper {
+        max-width: 4.125rem;
+
+        .brand {
+          margin: 0 auto;
+
+          img {
+            width: 3.15rem;
+          }
+
+          .logo {
+            display: none;
+          }
+
+          .logo-small {
+            display: block;
+          }
+        }
+
+        .menu-coll-btn {
+          span {
+            transform: rotate(180deg);
+          }
+        }
+      }
+    }
+  }
+
+  &.bg-wrapper {
+    padding: 1.5rem;
+    background: #fff;
+  }
+
+  &.template-1 {
+    .middle-child-container {
+      border: $border-light-small;
+    }
+
+    .divider-wrapper {
+      background: #fff;
+
+      .divider-section {
+        margin: 0 1rem;
+      }
+    }
+
+    .active-current-tab {
+      color: $color-active;
+      border-bottom: 0.126rem solid $color-active;
+
+      .menu-name,
+      i {
+        color: $color-active;
+      }
+    }
+  }
+
+  &.template-2,
+  &.template-3 {
+    .divider-wrapper {
+      margin-bottom: 1.5rem;
+
+      .divider-section {
+        padding-top: 0;
+      }
+    }
+  }
+
+  &:has(.container-wrapper) {
+    background: transparent;
+    padding: 0;
+  }
+
+  .row {
+    display: flex;
+    gap: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .row:has(.transaction) {
+    margin-bottom: 1rem;
+  }
+
+  .column {
+    padding: 1.5rem;
+    border-radius: 0.313rem;
+    box-shadow: 0 0.125rem 0.5rem 0 rgb(223 222 225 / 43%);
+    background: #fff;
+    width: 100%;
+    box-sizing: border-box;
+
+    h3 {
+      padding-bottom: 0.85rem;
+      margin: 0;
+    }
+
+    .table-wrapper {
+      border: 0.063rem solid whitesmoke;
+    }
+
+    .column {
+      width: 94%;
+      padding: 1rem;
+      margin-bottom: 0.813rem;
+
+      .product-name {
+        font-size: 1.063rem;
+      }
+
+      .items {
+        padding: 0.313rem;
+      }
+    }
+
+    &.transparent {
+      background: transparent;
+      box-shadow: none;
+      padding: 0;
+    }
+
+    &.transaction {
+      // background: ;
+      margin-bottom: 1rem;
+    }
+
+    // &.debit-transactions {
+    //     background: #00800052;
+    // }
+  }
+
+  .col {
+    width: 100%;
+  }
+}
+
 .top-header {
   padding: 0.5rem;
   text-align: center;
@@ -65,7 +215,7 @@
       font-size: 1.313rem;
       padding: 0.313rem;
     }
-    
+
   }
 }
 
@@ -73,8 +223,6 @@
   // padding-top: 0.5rem;
   display: flex;
   justify-content: space-between;
-
-  // border-bottom: 0.063rem solid #e0e4e9;
 
   .pro-btn {
     color: #e35047;
@@ -147,11 +295,6 @@
     border-radius: 50%;
   }
 }
-
-// .general-wrapper {
-//   padding: 1rem;
-//   border-radius: 0.313rem;
-// }
 
 .tab-content {
   position: relative;
@@ -535,7 +678,7 @@
       }
     }
   }
-} 
+}
 
 // section divider start
 .divider-wrapper {
@@ -575,3 +718,100 @@
 }
 
 // section divider end
+
+
+// horizontal-tabs start
+.horizontal-tabs {
+  display: flex;
+
+  .horizontal-title-section {
+    width: 25%;
+    height: auto;
+    margin-top: 2.5rem;
+
+
+    .tabs-wrapper {
+      background: transparent;
+
+      .horizontal-tabs-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        width: 100%;
+
+        .menu-item {
+          padding: 0.813rem;
+          transition: all 0.3s ease;
+          border-radius: 0.313rem;
+          margin-bottom: 0.313rem;
+          cursor: pointer;
+          margin: 0;
+
+          i {
+            padding-right: 0.5rem;
+          }
+
+          p {
+            margin: 0;
+            font-weight: 500;
+            font-size: 1.125rem;
+            line-height: 1rem;
+          }
+
+          &:hover {
+            background: $theme-background-color;
+            color: $theme-color;
+          }
+
+          &.active-current-tab,
+          &.active-current-tab:hover {
+            background: $theme-color;
+
+            p,
+            i {
+              color: #fff;
+            }
+          }
+        }
+
+        .tab-heading {
+          font-size: 1.063rem;
+          color: #0000008f;
+          font-weight: 600;
+          padding-bottom: 0.313rem;
+          border-bottom: $border-light-small;
+          margin: 0.5rem 0;
+        }
+      }
+    }
+  }
+
+  .general-wrapper {
+    width: 75%;
+    background: #fff;
+    border: $border-light-small;
+
+    .card-content {
+      padding: 0;
+    }
+
+    .middle-child-container {
+      border: none;
+    }
+
+    .tab-content {
+      padding: 1.5rem;
+      box-sizing: border-box;
+
+      .divider-wrapper:first-child {
+        .divider-section {
+          margin: 0;
+          padding-top: 0;
+          padding-bottom: .5rem;
+          margin-bottom: 1rem;
+        }
+      }
+    }
+  }
+}
+// horizontal-tabs end
