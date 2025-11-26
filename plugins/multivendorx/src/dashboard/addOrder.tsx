@@ -6,25 +6,17 @@ import axios from "axios";
 const AddOrder = () => {
     const [showAddProduct, setShowAddProduct] = useState(false);
     const [allProducts, setAllProducts] = useState([]);
+    const [customers, setCustomers] = useState([]);
+    const [selectedCustomer, setSelectedCustomer] = useState(null);
+
+    const [shippingAddress, setShippingAddress] = useState({});
+    const [billingAddress, setBillingAddress] = useState({});
+    const [paymentMethods, setPaymentMethods] = useState([]);
+    const [selectedPayment, setSelectedPayment] = useState(null);
+
     const [addedProducts, setAddedProducts] = useState([]);
     const [showAddressEdit, setShowAddressEdit] = useState(false);
 
-
-    const ownerOptions = [
-        { label: "Choose an action...", value: "" },
-        { label: "Send order details to customer", value: "send_order_details" },
-        { label: "Resend new order notification", value: "send_order_details_admin" },
-        { label: "Regenerate download permissions", value: "regenerate_download_permissions" },
-        { label: "Regenerate suborders", value: "regenerate_suborders" },
-    ];
-    const customerOptions = [
-        { label: "Choose customer...", value: "" },
-        { label: "customer 1", value: "customer" },
-        { label: "customer 2", value: "customer" },
-        { label: "customer 3", value: "customer" },
-        { label: "customer 4", value: "customer" },
-
-    ];
     const addressEditRef = useRef(null);
 
     useEffect(() => {
@@ -43,29 +35,65 @@ const AddOrder = () => {
         };
     }, [showAddressEdit]);
 
+    // useEffect(() => {
+    //     axios.get(`${appLocalizer.apiUrl}/wp/v2/users?roles=customer&per_page=100`, {
+    //         headers: { "X-WP-Nonce": appLocalizer.nonce },
+    //     })
+    //         .then((res) => {
+    //             const mapped = res.data.map(c => ({
+    //                 label: c.name || c.username,
+    //                 value: c.id,
+    //                 raw: c,
+    //             }));
+    //             setCustomers(mapped);
+    //         })
+    //         .catch(err => console.log("Error loading customers", err));
+    // }, []);
+
     useEffect(() => {
-        axios.get(`${appLocalizer.apiUrl}/wp/v2/users?roles=customer&per_page=100`, {
-            headers: { "X-WP-Nonce": appLocalizer.nonce },
+        axios.get(`${appLocalizer.apiUrl}/wc/v3/customers`, {
+            headers: { 
+                'X-WP-Nonce': appLocalizer.nonce
+            },
+            params: {
+                per_page: 100,
+            }
         })
-            .then((res) => {
-                const mapped = res.data.map(c => ({
-                    label: c.name || c.username,
-                    value: c.id,
-                    raw: c,
-                }));
-                setCustomers(mapped);
-            })
-            .catch(err => console.log("Error loading customers", err));
+        .then((response) => {
+            setCustomers(response.data); 
+        });
     }, []);
+
+    const customerOptions = [
+        { label: "Choose customer...", value: "" },
+        ...customers?.map((c) => ({
+            label: `${c.first_name} ${c.last_name}`.trim() || c.email,
+            value: c.id
+        }))
+    ];
+
     useEffect(() => {
         if (!showAddProduct) return;
 
-        axios.get(`${appLocalizer.apiUrl}/wc/v3/products?per_page=100`, {
-            headers: { "X-WP-Nonce": appLocalizer.nonce },
+        axios.get(`${appLocalizer.apiUrl}/wc/v3/products`, {
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: {
+                per_page: 100
+            }
         })
-            .then((res) => setAllProducts(res.data))
-            .catch((e) => console.log("Error loading products", e));
+        .then((res) => {
+            const products = res.data;
+
+            const filtered = products.filter(p => {
+                const storeId = p.meta_data?.find(m => m.key === "multivendorx_store_id")?.value;
+                return storeId === appLocalizer.store_id || !storeId;
+            });
+
+            setAllProducts(filtered);
+        })
     }, [showAddProduct]);
+
+
     const subtotal = addedProducts.reduce((sum, item) => {
         return sum + item.price * (item.qty || 1);
     }, 0);
@@ -78,6 +106,63 @@ const AddOrder = () => {
     const discount = 0; // If you add discount input later
 
     const grandTotal = subtotal + tax + shipping - discount;
+    const hasCustomer = !!selectedCustomer;
+
+    useEffect(() => {
+        axios.get(`${appLocalizer.apiUrl}/wc/v3/payment_gateways`, {
+            headers: { "X-WP-Nonce": appLocalizer.nonce }
+        })
+        .then(res => {
+            const enabled = res.data.filter(m => m.enabled === true);
+
+            const formatted = enabled.map(m => ({
+                label: m.title,
+                value: m.id,
+                method_title: m.title
+            }));
+
+            setPaymentMethods(formatted);
+        })
+    }, []);
+
+    const paymentOptions = [
+        { label: "Select Payment Method", value: "" },
+        ...paymentMethods
+    ];
+
+    const createOrder = async () => {
+        const orderData = {
+            customer_id: selectedCustomer.id,
+
+            billing: billingAddress,
+            shipping: shippingAddress,
+
+            line_items: addedProducts.map(item => ({
+                product_id: item.id,
+                quantity: item.qty || 1,
+            })),
+
+            // shipping_lines: [
+            //     {
+            //         method_id: "flat_rate",
+            //         method_title: "Flat Rate",
+            //         total: "50"
+            //     }
+            // ],
+
+            payment_method: selectedPayment?.value,
+            payment_method_title: selectedPayment?.method_title,
+            set_paid: false
+        };
+
+        axios.post(`${appLocalizer.apiUrl}/wc/v3/orders`, orderData, {
+            headers: { "X-WP-Nonce": appLocalizer.nonce },
+        })
+        .then(res => {
+            console.log("Order created:", res.data);
+            window.location.assign(window.location.pathname);
+        })
+    };    
 
     return (
         <>
@@ -211,7 +296,7 @@ const AddOrder = () => {
                     </div>
                 </div>
                 <div className="card-wrapper w-35">
-                    <div className="card-content">
+                    {/* <div className="card-content">
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
@@ -230,7 +315,41 @@ const AddOrder = () => {
                                 />
                             </div>
                         </div>
+                    </div> */}
+                    <div className="buttons">
+                        <button
+                            className="admin-btn btn-purple-bg"
+                            onClick={createOrder}
+                        >
+                            Create Order
+                        </button>
                     </div>
+
+
+                    <div className="card-content">
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">Payment Method</div>
+                            </div>
+                        </div>
+
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="payment-method">Select Payment Method</label>
+                                <SelectInput
+                                    name="payment_method"
+                                    options={paymentOptions}
+                                    type="single-select"
+                                    value={selectedPayment?.value}
+                                    onChange={(value) => {
+                                        const method = paymentMethods.find(m => m.value === value.value);
+                                        setSelectedPayment(method || null);
+                                    }}
+                                />
+                            </div>
+                        </div>
+                    </div>
+
 
                     <div className="card-content">
                         <div className="card-header">
@@ -247,31 +366,55 @@ const AddOrder = () => {
                                     name="new_owner"
                                     options={customerOptions}
                                     type="single-select"
+                                    onChange={(value) => {
+                                        const customer = customers.find(c => c.id == value.value);
+                                        setSelectedCustomer(customer);
+                                        if (customer) {
+                                            setShippingAddress(customer.shipping);
+                                            setBillingAddress(customer.billing);
+                                        } else {
+                                            setShippingAddress({});
+                                            setBillingAddress({});
+                                        }
+                                    }}
                                 />
                             </div>
                         </div>
 
+                        {selectedCustomer && (
+                            <div className="store-owner-details">
+                                <div className="profile">
+                                    <div className="avater">
+                                        <span>{selectedCustomer ? selectedCustomer.first_name[0] : "C"}</span>
+                                    </div>
 
-                        <div className="store-owner-details">
-                            <div className="profile">
-                                <div className="avater">
-                                    <span>C</span>
+                                    <div className="details">
+                                        <div className="name">
+                                            {selectedCustomer 
+                                                ? `${selectedCustomer.first_name} ${selectedCustomer.last_name}` 
+                                                : "Guest Customer"}
+                                        </div>
+
+                                        {selectedCustomer && (
+                                            <>
+                                                <div className="des">Customer ID: #{selectedCustomer.id}</div>
+                                                <div className="des">
+                                                    <i className="adminlib-mail" /> {selectedCustomer.email}
+                                                </div>
+                                                <div className="des">
+                                                    <i className="adminlib-phone" /> {selectedCustomer.billing.phone}
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
                                 </div>
 
-                                <div className="details">
-                                    <div className="name">Guest Customer</div>
-                                    <div className="des">Customer ID: #854</div>
-                                    <div className="des"><i className="adminlib-mail" /> test@gmail.com</div>
-                                    <div className="des"><i className="adminlib-phone" /> 9875413369</div>
+                                <div className="admin-badge blue">
+                                    <i className="adminlib-edit"></i>
                                 </div>
                             </div>
-
-                            <div className="admin-badge blue">
-                                <i className="adminlib-edit"></i>
-                            </div>
-                        </div>
-
-
+                        )}
+                        
 
                     </div>
 
@@ -283,14 +426,23 @@ const AddOrder = () => {
                                 </div>
                             </div>
                         </div>
-                        {!showAddressEdit && (
+                        {!hasCustomer && (
                             <div className="address-wrapper">
                                 <div className="address">
-                                    <span>45 Roker Terrace</span>
-                                    <span>Latheronwheel</span>
-                                    <span>KW5 8NW, London</span>
-                                    <span>UK</span>
+                                    <span>No shipping address found</span>
                                 </div>
+                            </div>
+                        )}
+
+                        {hasCustomer && !showAddressEdit && (
+                            <div className="address-wrapper">
+                                <div className="address">
+                                    <span>{shippingAddress.address_1}</span>
+                                    <span>{shippingAddress.city}</span>
+                                    <span>{shippingAddress.postcode}, {shippingAddress.state}</span>
+                                    <span>{shippingAddress.country}</span>
+                                </div>
+
                                 <div className="admin-badge blue" onClick={() => setShowAddressEdit(true)}>
                                     <i className="adminlib-edit"></i>
                                 </div>
@@ -339,14 +491,23 @@ const AddOrder = () => {
                                 </div>
                             </div>
                         </div>
-                        {!showAddressEdit && (
+                        {!hasCustomer && (
                             <div className="address-wrapper">
                                 <div className="address">
-                                    <span>45 Roker Terrace</span>
-                                    <span>Latheronwheel</span>
-                                    <span>KW5 8NW, London</span>
-                                    <span>UK</span>
+                                    <span>No billing address found</span>
                                 </div>
+                            </div>
+                        )}
+
+                        {hasCustomer && !showAddressEdit && (
+                            <div className="address-wrapper">
+                                <div className="address">
+                                    <span>{billingAddress.address_1}</span>
+                                    <span>{billingAddress.city}</span>
+                                    <span>{billingAddress.postcode}, {billingAddress.state}</span>
+                                    <span>{billingAddress.country}</span>
+                                </div>
+
                                 <div className="admin-badge blue" onClick={() => setShowAddressEdit(true)}>
                                     <i className="adminlib-edit"></i>
                                 </div>
