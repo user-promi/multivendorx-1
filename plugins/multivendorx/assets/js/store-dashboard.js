@@ -76,9 +76,9 @@ jQuery(document).ready(function ($) {
     });// dashboard sub menu show hide end
 
     // my acoount start
-    const $dropdown = $(".login-user .dropdown-menu");
+    const $dropdown = $(".login-user .dropdown");
     const $avatar = $(".login-user .avatar-wrapper");
-    const $notificationList = $(".dropdown-menu.notification");
+    const $notificationList = $(".dropdown.notification");
     const $notificationIcon = $(".adminlib-icon.notification");
 
 

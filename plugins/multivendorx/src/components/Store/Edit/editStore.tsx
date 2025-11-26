@@ -287,9 +287,9 @@ const EditStore = () => {
                         ...tab.content,
                         name:
                             (data?.status === 'pending' || data?.status === 'rejected' || data?.status === 'permanently_rejected')
-                            // data?.status === 'active'
+                                // data?.status === 'active'
                                 ? 'Application Details'
-                                : 'Archive data',
+                                : 'Archive Data',
                     },
                 }
                 : tab
@@ -387,34 +387,38 @@ const EditStore = () => {
                                         ) : null}
 
                                         <div className="edit-section">
-                                            <div className="edit-wrapper">
+                                            <div className="icon-wrapper edit-wrapper">
                                                 <span className="admin-btn btn-purple" onClick={(e) => {
                                                     e.stopPropagation();
                                                     setBannerMenu(true);
                                                     setLogoMenu(false);
                                                 }}><i className="adminlib-edit"></i>Edit banner image</span>
                                                 {bannerMenu && (
-                                                    <ul>
-                                                        {/* <li><i className="adminlib-cloud-upload"></i> Upload</li> */}
-                                                        <li
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                runUploader('banner');
-                                                                setBannerMenu(false);
-                                                            }}>
-                                                            <i className="adminlib-cloud-upload"
-                                                            ></i> Upload
-                                                        </li>
-                                                        <li className="delete"
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                const updated = { ...data, banner: "" };
-                                                                setData(updated);
-                                                                autoSave(updated);
-                                                                setBannerMenu(false);
-                                                            }}>
-                                                            <i className="adminlib-delete"></i> Delete</li>
-                                                    </ul>
+                                                    <div className="dropdown">
+                                                        <div className="dropdown-body">
+                                                            <ul>
+                                                                <li
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        runUploader('banner');
+                                                                        setBannerMenu(false);
+                                                                    }}>
+                                                                    <div className="item">
+                                                                        <i className="adminlib-cloud-upload"
+                                                                        ></i> Upload </div>
+                                                                </li>
+                                                                <li className="delete"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        const updated = { ...data, banner: "" };
+                                                                        setData(updated);
+                                                                        autoSave(updated);
+                                                                        setBannerMenu(false);
+                                                                    }}>
+                                                                    <div className="item"><i className="adminlib-delete"></i> Delete </div> </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
                                                 )}
                                             </div>
                                         </div>
@@ -429,33 +433,40 @@ const EditStore = () => {
                                                 )}
 
                                                 <div className="edit-section">
-                                                    <div className="edit-wrapper">
+                                                    <div className="icon-wrapper edit-wrapper">
                                                         <span className="admin-btn btn-purple" onClick={(e) => {
                                                             e.stopPropagation();
                                                             setLogoMenu((prev) => !prev);
                                                             setBannerMenu(false);
                                                         }}><i className="adminlib-edit"></i></span>
                                                         {logoMenu && (
-                                                            <ul>
-                                                                <li
-                                                                    onClick={(e) => {
-                                                                        e.stopPropagation();
-                                                                        runUploader('image');
-                                                                        setLogoMenu(false);
-                                                                    }}>
-                                                                    <i className="adminlib-cloud-upload"
-                                                                    ></i> Upload
-                                                                </li>
-                                                                <li className="delete"
-                                                                    onClick={(e) => {
-                                                                        e.stopPropagation();
-                                                                        const updated = { ...data, image: "" };
-                                                                        setData(updated);
-                                                                        autoSave(updated);
-                                                                        setLogoMenu(false);
-                                                                    }}>
-                                                                    <i className="adminlib-delete"></i> Delete</li>
-                                                            </ul>
+                                                            <div className="dropdown">
+                                                                <div className="dropdown-body">
+                                                                    <ul>
+                                                                        <li
+                                                                            onClick={(e) => {
+                                                                                e.stopPropagation();
+                                                                                runUploader('image');
+                                                                                setLogoMenu(false);
+                                                                            }}>
+                                                                            <div className="item">
+                                                                                <i className="adminlib-cloud-upload"
+                                                                                ></i> Upload
+                                                                            </div>
+                                                                        </li>
+                                                                        <li className="delete"
+                                                                            onClick={(e) => {
+                                                                                e.stopPropagation();
+                                                                                const updated = { ...data, image: "" };
+                                                                                setData(updated);
+                                                                                autoSave(updated);
+                                                                                setLogoMenu(false);
+                                                                            }}>
+                                                                            <div className="item"><i className="adminlib-delete"></i> Delete</div>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
                                                         )}
                                                     </div>
                                                 </div>
@@ -577,30 +588,24 @@ const EditStore = () => {
                                                         <i className={editDesc ? "" : "adminlib-edit"}></i>
                                                     </span>
                                                 </div>
-                                                <ul className="contact-details">
-                                                    <li>
-                                                        <div className="reviews-wrapper">
-                                                            {data.total_reviews > 0 ? (
-                                                                <>
-                                                                    {[...Array(5)].map((_, i) => (
-                                                                        <i
-                                                                            key={i}
-                                                                            className={`review adminlib-star${i < Math.round(data.overall_reviews) ? ' filled' : ''
-                                                                                }`}
-                                                                        ></i>
-                                                                    ))}
-                                                                    <span>
-                                                                        {data.overall_reviews} ({data.total_reviews}{' '}
-                                                                        {data.total_reviews === 1 ? 'Review' : 'Reviews'})
-                                                                    </span>
-                                                                </>
-                                                            ) : (
-                                                                <span><i className="adminlib-star-o"></i> <i className="adminlib-star-o"></i> <i className="adminlib-star-o"></i> <i className="adminlib-star-o"></i> <i className="adminlib-star-o"></i> (0) Review</span>
-                                                            )}
-                                                        </div>
-                                                    </li>
-                                                </ul>
+                                                <div className="reviews-wrapper">
+                                                    {[...Array(5)].map((_, i) => (
+                                                        <i
+                                                            key={i}
+                                                            className={`review adminlib-star${data.total_reviews > 0 && i < Math.round(data.overall_reviews)
+                                                                ? ''
+                                                                : '-o'
+                                                                }`}
+                                                        ></i>
+                                                    ))}
 
+                                                    <span>
+                                                        {data.total_reviews > 0
+                                                            ? `${data.overall_reviews} (${data.total_reviews} ${data.total_reviews === 1 ? 'Review' : 'Reviews'
+                                                            })`
+                                                            : `(0 Review)`}
+                                                    </span>
+                                                </div>
 
                                                 <div className="des">
                                                     <b>Storefront link: </b>
@@ -652,61 +657,66 @@ const EditStore = () => {
                     hideBreadcrumb={true}
                     action={
                         <>
-                            <div className="edit-wrapper" ref={wrapperRef}>
-                                <span className="" onClick={(e) => {
+                            <div className="icon-wrapper edit-wrapper" ref={wrapperRef}>
+                                <i onClick={(e) => {
                                     e.stopPropagation();
                                     setActionMenu((prev) => !prev);
                                     setLogoMenu(false);
                                     setBannerMenu(false);
-                                }}><i className="action-icon adminlib-more-vertical"></i></span>
+                                }} className="admin-icon adminlib-more-vertical"></i>
                                 {actionMenu && (
-                                    <ul>
-                                        {data.status == 'active' &&
-                                            <li>
-                                                <a
-                                                    href={`${appLocalizer.store_page_url}/${data.slug}`}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    <i className="adminlib-storefront"></i> View Storefront <i className="external adminlib-external"></i>
-                                                </a>
-                                            </li>
-                                        }
-                                        <li onClick={() => {
-                                            navigate(`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`, {
-                                                state: { highlightTarget: "store-status" },
-                                            });
+                                    <div className="dropdown">
+                                        <div className='dropdown-body'>
+                                            <ul>
+                                                {data.status == 'active' &&
+                                                    <li>
+                                                        <a
+                                                            href={`${appLocalizer.store_page_url}/${data.slug}`}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="item"
+                                                        >
+                                                            <i className="adminlib-storefront"></i> View Storefront <i className="external adminlib-external"></i>
+                                                        </a>
+                                                    </li>
+                                                }
+                                                <li onClick={() => {
+                                                    navigate(`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`, {
+                                                        state: { highlightTarget: "store-status" },
+                                                    });
 
-                                            setTimeout(() => {
-                                                navigate(`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`, {
-                                                    replace: true,
-                                                });
-                                            }, 5000);
-                                        }}>
-                                            <i className="adminlib-form-multi-select"></i> Manage status
-                                        </li>
-                                        <li>
-                                            <a
-                                                href={`${appLocalizer.admin_url}edit.php?post_type=product&multivendorx_store_id=${data.id}`}
-                                                className="product-link"
-                                            >
-                                                <i className="adminlib-single-product"></i> Products
-                                            </a>
-                                        </li>
+                                                    setTimeout(() => {
+                                                        navigate(`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`, {
+                                                            replace: true,
+                                                        });
+                                                    }, 5000);
+                                                }}>
+                                                    <span className="item"> <i className="adminlib-form-multi-select"></i> Manage status </span>
+                                                </li>
+                                                <li>
+                                                    <a
+                                                        href={`${appLocalizer.admin_url}edit.php?post_type=product&multivendorx_store_id=${data.id}`}
+                                                        className="item"
+                                                    >
+                                                        <i className="adminlib-single-product"></i> Products
+                                                    </a>
+                                                </li>
 
-                                        <li onClick={() => {
-                                            navigate(`?page=multivendorx#&tab=reports`);
-                                        }}
-                                        ><i className="adminlib-order"></i> Orders</li>
-                                        <li onClick={handleStoreDelete}><i className="adminlib-delete"></i> Delete store</li>
-                                    </ul>
+                                                <li onClick={() => {
+                                                    navigate(`?page=multivendorx#&tab=reports`);
+                                                }}
+                                                ><span className="item"><i className="adminlib-order"></i> Orders </span></li>
+                                                <li onClick={handleStoreDelete}><span className="item"> <i className="adminlib-delete"></i> Delete store </span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 )}
                             </div>
                         </>
                     }
                 />
 
-                <CommonPopup
+                < CommonPopup
                     open={deleteModal}
                     onClose={() => setDeleteModal(false)}
                     width="600px"
@@ -829,8 +839,8 @@ const EditStore = () => {
                             </div>
                         </div>
                     </div>
-                </CommonPopup>
-            </div>
+                </CommonPopup >
+            </div >
         </>
     );
 };

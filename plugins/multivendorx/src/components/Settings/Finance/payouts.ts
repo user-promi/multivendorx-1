@@ -265,7 +265,7 @@ export default {
                 set: true,
                 value: 'daily',
             },
-            size: '6rem',
+            size: '7rem',
             proSetting: false, // set true if this is a Pro feature
         },
         {

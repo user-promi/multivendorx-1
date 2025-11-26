@@ -146,7 +146,7 @@ const EmailsInput = forwardRef<HTMLInputElement, EmailsInputProps>(({
                             className="inline-suggestion"
                             onClick={() => addEmail(inputValue.trim())}
                         >
-                            {inputValue.trim()}
+                           <i className="adminlib-mail orange"></i> {inputValue.trim()}
                         </div>
                     )}
             </div>

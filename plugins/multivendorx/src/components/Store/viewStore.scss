@@ -15,7 +15,7 @@
 
 // add main css(delete) end
 .banner:has(.default-img-1500x900) {
-    &:after {
+    &::after {
         position: absolute;
         content: "1500 x 900";
         top: 0;
@@ -45,7 +45,7 @@
         background-position: center !important;
 
 
-        &:before {
+        &::before {
             position: absolute;
             content: "";
             background: #3838381c;
@@ -88,16 +88,14 @@
                 z-index: 1;
                 position: relative;
 
+                // edit logo section
                 .edit-section {
                     right: -0.5rem;
                     bottom: 0;
 
-                    .edit-wrapper {
-                        ul {
-                            left: 0;
-                        }
+                    .dropdown{
+                        left: 0;
                     }
-
                     .admin-btn {
                         padding: 0.5rem;
                     }
@@ -119,6 +117,7 @@
 
             .details {
                 width: 100%;
+
                 .name {
                     display: flex;
                     gap: 0.5rem;
@@ -274,20 +273,6 @@
 //     }
 // }
 
-.reviews-wrapper {
-    display: flex;
-    gap: 0.313rem;
-
-    .review {
-        color: rgb(231, 178, 5) !important; // common color and delete
-    }
-
-    span {
-        padding-left: 0.313rem;
-        display: flex;
-    }
-}
-
 .contact-details {
     display: flex;
     margin: 0;
@@ -309,57 +294,57 @@
     }
 }
 
-.edit-wrapper {
-    position: relative;
+// .edit-wrapper {
+//     position: relative;
 
-    .action-icon {
-        font-size: 1.25rem;
-        cursor: pointer;
-    }
+//     .action-icon {
+//         font-size: 1.25rem;
+//         cursor: pointer;
+//     }
 
-    ul {
-        position: absolute;
-        top: 100%;
-        background: #fff;
-        box-shadow: 0 0.125rem 0.5rem 0 rgb(66 62 78 / 12%);
-        width: 14rem;
-        right: 0;
-        margin-top: 0.313rem;
-        padding: 0.5rem 0;
-        z-index: 1;
+//     ul {
+//         position: absolute;
+//         top: 100%;
+//         background: #fff;
+//         box-shadow: 0 0.125rem 0.5rem 0 rgb(66 62 78 / 12%);
+//         width: 14rem;
+//         right: 0;
+//         margin-top: 0.313rem;
+//         padding: 0.5rem 0;
+//         z-index: 1;
 
-        li {
-            padding: 0.5rem 1rem;
-            font-size: 1rem;
-            margin: 0;
-            cursor: pointer;
-            transition: all 0.4s ease;
+//         li {
+//             padding: 0.5rem 1rem;
+//             font-size: 1rem;
+//             margin: 0;
+//             cursor: pointer;
+//             transition: all 0.4s ease;
 
-            i {
-                font-size: 1.25rem;
-                margin-right: 0.313rem;
-            }
+//             i {
+//                 font-size: 1.25rem;
+//                 margin-right: 0.313rem;
+//             }
 
-            a {
-                display: flex;
-                align-items: end;
+//             a {
+//                 display: flex;
+//                 align-items: end;
 
-                .external {
-                    padding-left: 0.313rem;
-                    font-size: 1rem;
-                }
-            }
+//                 .external {
+//                     padding-left: 0.313rem;
+//                     font-size: 1rem;
+//                 }
+//             }
 
-            &:hover {
-                background: #ece2f9c7;
-            }
+//             &:hover {
+//                 background: #ece2f9c7;
+//             }
 
-            &.delete {
-                color: rgb(199, 7, 7);
-            }
-        }
-    }
-}
+//             &.delete {
+//                 color: rgb(199, 7, 7);
+//             }
+//         }
+//     }
+// }
 
 .overview-wrapper {
     .items {

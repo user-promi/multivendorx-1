@@ -5,7 +5,7 @@ body:has(.admin-main-wrapper) {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  background: rgba(246, 248, 260, 0.5) !important;
+  background: rgb(246 248 260 / 50%) !important;
 }
 
 .sb-show-main {
@@ -192,13 +192,6 @@ body:has(.admin-main-wrapper) {
   align-items: end;
   gap: 0.25rem;
   border: 0.063rem solid;
-
-  @each $name, $style in $color-palette {
-    &.#{$name} {
-      background: map-get($style, lightColor);
-      color: map-get($style, color);
-    }
-  }
 }
 
 .icon-pro-btn {
@@ -209,12 +202,12 @@ body:has(.admin-main-wrapper) {
   padding: 0.313rem 1rem;
   border-radius: 0.313rem;
   font-size: 1.313rem;
+}
 
-  @each $name, $style in $color-palette {
-    &.#{$name} {
-      background: map-get($style, lightColor);
-      color: map-get($style, color);
-    }
+@each $name, $style in $color-palette {
+  .#{$name} {
+    background: map-get($style, light-color);
+    color: map-get($style, color);
   }
 }
 
@@ -333,7 +326,6 @@ body:has(.admin-main-wrapper) {
   &.inner-input {
     .input-wrapper {
       display: flex;
-      align-items: center;
       border: $border-light-small;
       border-radius: 0.313rem;
       align-items: center;
@@ -367,7 +359,6 @@ body:has(.admin-main-wrapper) {
   }
 
   &.input-button {
-
     .input-wrapper {
       display: flex;
 
@@ -971,7 +962,8 @@ body:has(.admin-main-wrapper) {
   &.center {
     justify-content: center;
   }
-  &.left{
+
+  &.left {
     justify-content: start;
   }
 }
@@ -1056,7 +1048,7 @@ body:has(.admin-main-wrapper) {
   right: 1rem;
   bottom: 1rem;
   border-radius: 0.313rem;
-  box-shadow: 0 0.125rem 0.5rem 0 rgba(47, 43, 61, 0.12);
+  box-shadow: 0 0.125rem 0.5rem 0 rgb(47 43 61 / 12%);
   transform: translateX(110%);
   transition: all 0.4s ease;
   background: #fff;
@@ -1190,7 +1182,7 @@ body:has(.admin-main-wrapper) {
           &:hover {
             span {
               display: block;
-              background-color: rgb(46, 46, 46);
+              background-color: rgb(46 46 46);
               color: #fff;
               text-align: center;
               padding: 0.313rem;
@@ -1199,7 +1191,7 @@ body:has(.admin-main-wrapper) {
               top: -2rem;
               z-index: 1;
               font-size: 0.8rem;
-              inset: auto auto 0px 0px;
+              inset: auto auto 0 0;
               transform: translate(-2rem, -2.313rem);
             }
           }
@@ -1250,7 +1242,6 @@ body:has(.admin-main-wrapper) {
           font-size: 0.813rem;
           font-weight: 500;
           cursor: pointer;
-          transition: all 0.3s linear;
           margin: 0;
           border-radius: 0.313rem;
           transition: all 0.4s ease;
@@ -1301,7 +1292,7 @@ body:has(.admin-main-wrapper) {
       &:hover {
         span {
           display: block;
-          background-color: rgb(46, 46, 46);
+          background-color: rgb(46 46 46);
           color: #fff;
           text-align: center;
           padding: 0.313rem;
@@ -1310,7 +1301,7 @@ body:has(.admin-main-wrapper) {
           top: -2rem;
           z-index: 1;
           font-size: 0.8rem;
-          inset: auto auto 0px 0px;
+          inset: auto auto 0 0;
           transform: translate(-2rem, -2.313rem);
         }
       }
@@ -1353,10 +1344,10 @@ body:has(.admin-main-wrapper) {
     background: #ece2f9f1;
     color: #5007aa;
     margin: 0;
-    border: 0.125rem solid #ece2f9f1;
     min-width: 6rem;
     border: none !important;
-    /*store dashboard*/
+
+    /* store dashboard */
     border-radius: 0.313rem;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
@@ -1437,7 +1428,7 @@ body:has(.admin-main-wrapper) {
   &:hover {
     .tooltip {
       display: block;
-      background-color: rgb(46, 46, 46);
+      background-color: rgb(46 46 46);
       color: #fff;
       text-align: center;
       padding: 0.313rem;
@@ -1446,7 +1437,7 @@ body:has(.admin-main-wrapper) {
       top: -2rem;
       z-index: 1;
       font-size: 0.8rem;
-      inset: auto auto 0px 0px;
+      inset: auto auto 0 0;
       transform: translate(-2rem, -2.313rem);
     }
   }
@@ -1461,14 +1452,14 @@ body:has(.admin-main-wrapper) {
   align-items: center;
 
   i {
-    color: rgb(202, 172, 1);
+    color: rgb(202 172 1);
   }
 
   .date {
     font-size: 0.813rem;
     padding-left: 0.313rem;
     font-weight: 500;
-    color: #00000099;
+    color: #0009;
   }
 }
 
@@ -1481,7 +1472,7 @@ body:has(.admin-main-wrapper) {
   padding-top: 0.125rem;
   margin: 0;
 
-  &:before {
+  &::before {
     position: absolute;
     font-family: adminlibrary;
     content: "\e807";
@@ -1500,7 +1491,7 @@ body:has(.admin-main-wrapper) {
   padding-top: 0.125rem;
   margin: 0;
 
-  &:before {
+  &::before {
     font-family: adminlibrary;
     position: absolute;
     content: "\e809";
@@ -1572,8 +1563,162 @@ body:has(.admin-main-wrapper) {
     transform: scale(1);
   }
 }
+
 .highlight {
   animation: animate 2.5s ease-in-out infinite;
   border: $border-theme-small !important;
 }
+
 // highlight section end
+
+// dropdown menu style (table action, icon action)
+.icon-wrapper {
+  position: relative;
+
+  .count {
+    position: absolute;
+    font-size: 0.75rem;
+    right: -0.25rem;
+    top: -0.45rem;
+    padding: 0.125rem;
+    background: red;
+    border-radius: 50%;
+    width: 0.75rem;
+    height: 0.75rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .dropdown {
+    position: absolute;
+    top: 2rem;
+    overflow: hidden;
+    border: 1px solid #e5e9f2;
+    max-width: 14rem;
+    min-width: 14rem;
+    right: 0;
+    background: #fff;
+    border-radius: 0.313rem;
+    transition: all 0.3s ease;
+    z-index: 9999;
+
+    .dropdown-body {
+      margin: 0;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+
+      li {
+        margin: 0;
+
+        .item {
+          display: flex;
+          align-items: center;
+          color: #526484;
+          font-size: 0.813rem;
+          line-height: 1.4rem;
+          font-weight: 500;
+          padding: .5rem 1.313rem;
+          position: relative;
+          gap: 0.5rem;
+          cursor: pointer;
+
+
+          i {
+            font-size: 1.063rem;
+          }
+
+          &:hover {
+            color: #854fff;
+            background: $theme-background-color;
+          }
+        }
+      }
+    }
+
+    .footer {
+      padding: 0.75rem;
+      border: $border-light-small;
+    }
+
+    &.notification {
+      min-width: 25rem;
+
+      .title {
+        padding: 0.75rem;
+        border-bottom: $border-light-small;
+        display: flex;
+        justify-content: space-between;
+        font-size: 1.25rem;
+        align-items: center;
+      }
+
+      ul {
+        margin: 0;
+        max-height: 20rem;
+        overflow: auto;
+
+        li {
+          margin: 0;
+        }
+
+        .item,
+        a {
+          display: flex;
+          gap: 0.813rem;
+          padding: 0.75rem;
+          align-items: start;
+          border-bottom: $border-light-small;
+
+          &:hover {
+            background: #f3f3f3;
+          }
+
+          .icon {
+            padding: 0.313rem;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            i {
+              font-size: 1.5rem;
+            }
+          }
+
+          .check-icon {
+            font-size: 1.125rem;
+            position: absolute;
+            right: 1rem;
+          }
+
+          .details {
+            span {
+              display: block;
+            }
+
+            .heading {
+              font-size: 0.95rem;
+              color: #000;
+            }
+
+            .message {
+              color: #00000082;
+              padding: 0.313rem 0;
+            }
+
+            .time {
+              font-size: 0.813rem;
+              color: #0000004a;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// dropdown menu end

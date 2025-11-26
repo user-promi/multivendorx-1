@@ -230,7 +230,7 @@ const StoreSquad = ({ id }: { id: string | null }) => {
 
                 </div>
                 <div className="card-wrapper w-35">
-                    <div className="card-content">
+                    <div id="primary-owner" className="card-content">
 
                         {/* FIXED: Corrected label typo and fixed primary_owner handling */}
                         <div className="form-group-wrapper">

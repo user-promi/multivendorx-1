@@ -137,7 +137,6 @@ class BankTransfer
                         'key' => 'account_holder_name',
                         'type' => 'text',
                         'label' => 'Account holder name',
-                        'placeholder' => 'Enter account holder name',
                     ],
                     [
                         'key' => 'account_type',
@@ -152,31 +151,26 @@ class BankTransfer
                         'key' => 'bank_name',
                         'type' => 'text',
                         'label' => 'Bank name',
-                        'placeholder' => 'Enter bank name',
                     ],
                     [
                         'key' => 'abr_routing_number',
                         'type' => 'text',
                         'label' => 'ABA routing number',
-                        'placeholder' => 'Enter ABA routing number',
                     ],
                     [
                         'key' => 'destination currency',
                         'type' => 'text',
                         'label' => 'Destination currency',
-                        'placeholder' => 'Enter destination currency',
                     ],
                     [
                         'key' => 'bank_address',
                         'type' => 'text-area',
                         'label' => 'Bank address',
-                        'placeholder' => 'Enter bank address',
                     ],
                     [
                         'key' => 'iban',
                         'type' => 'text',
                         'label' => 'IBAN',
-                        'placeholder' => 'Enter IBAN',
                     ],
                 ]
             ];
