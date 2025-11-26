@@ -1053,6 +1053,10 @@
             line-height: 1.125rem;
             border-radius: 0.313rem;
             min-width: 18rem;
+            z-index: 9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
 
 
             i {

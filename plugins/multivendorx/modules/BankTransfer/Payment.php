@@ -104,25 +104,25 @@ class Payment
                         'label' => 'Bank Name',
                     ],
                     [
+                        'key' => 'bank_address',
+                        'type' => 'text-area',
+                        'label' => 'Bank Address',
+                    ],
+                    [
                         'key' => 'abr_routing_number',
                         'type' => 'text',
                         'label' => 'ABA Routing Number',
+                    ],
+                    [
+                        'key' => 'iban',
+                        'type' => 'text',
+                        'label' => 'IBAN',
                     ],
                     [
                         'key' => 'destination currency',
                         'type' => 'text',
                         'label' => 'Destination Currency',
                         'placeholder' => 'Enter Destination Currency',
-                    ],
-                    [
-                        'key' => 'bank_address',
-                        'type' => 'text-area',
-                        'label' => 'Bank Address',
-                    ],
-                    [
-                        'key' => 'iban',
-                        'type' => 'text',
-                        'label' => 'IBAN',
                     ],
                 ]
             ];

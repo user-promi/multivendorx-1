@@ -68,7 +68,7 @@ const StoreTable: React.FC = () => {
                 setPageCount(Math.ceil(response.data / pagination.pageSize));
             })
             .catch(() => {
-                setError(__('Failed to load total rows', 'multivendorx'));
+                // setError(__('Failed to load total rows', 'multivendorx'));
             });
     }, []);
 

@@ -132,7 +132,7 @@ class BankTransfer
                 'id' => $this->get_id(),
                 'label' => __('Bank Transfer', 'multivendorx'),
                 'fields' => [
-                    
+
                     [
                         'key' => 'account_holder_name',
                         'type' => 'text',
@@ -153,24 +153,24 @@ class BankTransfer
                         'label' => 'Bank name',
                     ],
                     [
-                        'key' => 'abr_routing_number',
-                        'type' => 'text',
-                        'label' => 'ABA routing number',
-                    ],
-                    [
-                        'key' => 'destination currency',
-                        'type' => 'text',
-                        'label' => 'Destination currency',
-                    ],
-                    [
                         'key' => 'bank_address',
                         'type' => 'text-area',
                         'label' => 'Bank address',
                     ],
                     [
+                        'key' => 'abr_routing_number',
+                        'type' => 'text',
+                        'label' => 'ABA routing number',
+                    ],
+                    [
                         'key' => 'iban',
                         'type' => 'text',
                         'label' => 'IBAN',
+                    ],
+                    [
+                        'key' => 'destination currency',
+                        'type' => 'text',
+                        'label' => 'Destination currency',
                     ],
                 ]
             ];

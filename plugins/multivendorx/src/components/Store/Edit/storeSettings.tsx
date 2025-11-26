@@ -891,7 +891,10 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                     }}
                                 />
 
-                                <div className="settings-metabox-description"> <strong>Tip:</strong> You can add multiple email addresses. Type an email and press Enter.<br/> <strong>Primary email</strong>: Click the star icon to designate it as primary. This email will be shown on your storefront and receive all notifications.<br /> <strong>Additional emails</strong>: These emails remain private and will receive notifications only. </div>
+                                <div className="settings-metabox-description">
+                                    <b> Tip: </b> You can add multiple email addresses. All added emails will receive notifications. <br />
+                                    <b> Primary email: </b> Click the star icon to set an email as primary. This email will appear on your storefront, and all other email IDs will be hidden from display.
+                                </div>
                             </div>
                         </div>
                         <div className="form-group-wrapper">

@@ -125,7 +125,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                             <div className="card-header">
                                 <div className="left">
                                     <div className="title">
-                                        Recent payout
+                                        Recent payouts
                                     </div>
                                 </div>
                                 <div className="right">
@@ -168,7 +168,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                             <div className="card-header">
                                 <div className="left">
                                     <div className="title">
-                                        Latest product
+                                        Latest products
                                     </div>
                                 </div>
                                 <div className="right">
@@ -239,7 +239,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                 <div className="card-header">
                                     <div className="left">
                                         <div className="title">
-                                            Latest review
+                                            Latest reviews
                                         </div>
                                     </div>
                                     <div className="right">
@@ -258,7 +258,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                 <div className="card-header">
                                     <div className="left">
                                         <div className="title">
-                                            Latest refund
+                                            Latest refunds
                                         </div>
                                     </div>
                                     <div className="right">

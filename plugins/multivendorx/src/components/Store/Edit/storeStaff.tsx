@@ -45,10 +45,16 @@ const StoreSquad = ({ id }: { id: string | null }) => {
             <div className="container-wrapper">
                 <div className="card-wrapper w-65">
                     <div className="card-content">
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Store owners
+                                </div>
+                            </div>
+                        </div>
                         {/* Other form groups remain the same */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label>Store owners</label>
                                 <SelectInput
                                     name="store_owners"
                                     options={appLocalizer.store_owners || []}
@@ -231,11 +237,17 @@ const StoreSquad = ({ id }: { id: string | null }) => {
                 </div>
                 <div className="card-wrapper w-35">
                     <div id="primary-owner" className="card-content">
-
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Primary owner
+                                </div>
+                            </div>
+                        </div>
                         {/* FIXED: Corrected label typo and fixed primary_owner handling */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label>Primary owner</label>
+                                <label></label>
                                 <SelectInput
                                     name="primary_owner"
                                     options={appLocalizer?.store_owners || []}

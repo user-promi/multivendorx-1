@@ -311,7 +311,7 @@ body:has(.admin-main-wrapper) {
 .setting-form-input {
   position: relative;
   display: flex;
-  gap: 0.5rem;
+  gap: 0.625rem;
   align-items: center;
   color: $text-color;
 
@@ -1610,18 +1610,19 @@ body:has(.admin-main-wrapper) {
     ul {
       list-style: none;
       margin: 0;
+      padding: 0.5rem 0;
 
       li {
         margin: 0;
 
         .item {
           display: flex;
-          align-items: center;
+          align-items: end;
           color: #526484;
-          font-size: 0.813rem;
-          line-height: 1.4rem;
+          font-size: 0.95rem;
+          line-height: 0.8rem;
           font-weight: 500;
-          padding: .5rem 1.313rem;
+          padding: .813rem 1.313rem;
           position: relative;
           gap: 0.5rem;
           cursor: pointer;
