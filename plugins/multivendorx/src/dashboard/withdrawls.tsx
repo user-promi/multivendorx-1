@@ -140,7 +140,7 @@ const History: React.FC = () => {
                             <div className="des">Current available balance ready for withdrawal</div>
 
                             <div className="notice"></div>
-                            <div className="admin-btn btn-purple" onClick={() => setRequestWithdrawal(true)}>
+                            <div className="admin-btn btn-purple-bg" onClick={() => setRequestWithdrawal(true)}>
                                 Request Withdrawal
                             </div>
                         </div>
@@ -355,7 +355,7 @@ const History: React.FC = () => {
 
                     <div className="buttons-wrapper">
                         <div
-                            className="admin-btn btn-purple"
+                            className="admin-btn btn-purple-bg"
                             onClick={() => (window.location.href = `${appLocalizer.site_url}/dashboard/wallet/transactions/`)}
                         >
                             <i className="adminlib-preview"></i>
@@ -370,12 +370,12 @@ const History: React.FC = () => {
             {requestWithdrawal && (
                 <CommonPopup
                     open={requestWithdrawal}
-                    width="300px"
-                    height="50%"
+                    width="500px"
+                    height="60%"
                     header={
                         <>
                             <div className="title">
-                                <i className="adminlib-cart"></i>
+                                <i className="adminlib-wallet"></i>
                                 Request Withdrawal
                             </div>
                             <i
@@ -387,11 +387,10 @@ const History: React.FC = () => {
                     footer={
                         <>
                             <div
-                                className="admin-btn btn-purple"
+                                className="admin-btn btn-purple-bg"
                                 onClick={() => handleWithdrawal()}
                             >
                                 Publish
-                                <i className="adminlib-check"></i>
                             </div>
 
                         </>

@@ -152,9 +152,6 @@
     }
 }
 
-
-
-
 .card-header {
     display: flex;
     justify-content: space-between;
@@ -329,16 +326,6 @@
     background: #bfdeed6e;
     color: #003d66de;
 }
-
-// card styles start
-
-// .container-wrapper:has(.column) {
-//     padding: 0;
-
-//     .row {
-//         padding: 0;
-//     }
-// }
 
 .container-wrapper {
     display: flex;
@@ -1593,7 +1580,6 @@
 
 // settings shipping add country start
 .shipping-country-wrapper {
-    margin-top: 1rem;
 
     .shipping-country {
         padding: 1rem;

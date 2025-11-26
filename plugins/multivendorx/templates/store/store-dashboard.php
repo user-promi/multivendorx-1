@@ -135,10 +135,13 @@ $available_stores = array_filter(
                                             </li>
                                         </ul>
                                     </div>
+
                                     <?php if (!empty($available_stores)): ?>
+                                        <div class="dropdown-header">
+                                            <h3><i class="adminlib-switch-store"></i>Switch stores</h3>
+                                        </div>
+
                                         <div class="store-wrapper">
-                                            <h3>Switch stores</h3>
-                                            
                                             <ul>
                                                 <?php
                                                 foreach ($available_stores as $store_id):
@@ -147,7 +150,7 @@ $available_stores = array_filter(
                                                     <li>
                                                         <a href="javascript:void(0);" class="switch-store"
                                                             data-store-id="<?php echo esc_attr($store_id); ?>">
-                                                            <i class="adminlib-user-network-icon"></i>
+                                                            <i class="adminlib-storefront"></i>
                                                             <?php echo esc_html($store->get('name')); ?>
                                                         </a>
                                                     </li>

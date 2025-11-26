@@ -6,80 +6,105 @@ import './popup.scss';
 
 interface PopupProps {
     moduleName?: string;
-    wooSetting?:string;
+    wooSetting?: string;
     wooLink?: string,
 }
 
 export const proPopupContent = {
     proUrl: typeof appLocalizer !== 'undefined' ? appLocalizer.pro_url : '#',
     title: __(
-        'Your students will love this!',
+        'Upgrade every marketplace needs!',
         'multivendorx'
     ),
-    moreText: __('Better courses, bigger profits', 'multivendorx'),
+    moreText: __('Recurring revenue for you, empowered stores, automated operations', 'multivendorx'),
     upgradeBtnText: __('Yes, Upgrade Me!', 'multivendorx'),
     messages: [
         {
-            icon: 'adminlib-Bulk-Course-Sync',
-            text: __('Bulk Course Sync', 'multivendorx'),
-            des: __('Sync multiple Moodle™ courses to WordPress with one click.', 'multivendorx'),
+            icon: 'adminlib-commission',
+            text: __('Membership Rewards & Commission', 'multivendorx'),
+            des: __('Charge your sellers a monthly or yearly membership fee to sell on your marketplace - predictable revenue every month.', 'multivendorx'),
         },
         {
-            icon: 'adminlib-classroom-enrollment',
-            text: __('Cohort Enrollment', 'multivendorx'),
-            des: __('Sell and enroll entire Moodle™ cohorts via WooCommerce.', 'multivendorx'),
+            icon: 'adminlib-store-policy',
+            text: __('Verified Stores Only', 'multivendorx'),
+            des: __('Screen stores with document verification and approval - build a trusted marketplace from day one.', 'multivendorx'),
         },
         {
-            icon: 'adminlib-cohort',
-            text: __('Group Enrollment', 'multivendorx'),
-            des: __('Map course variations to Moodle™ groups for targeted enrollment.', 'multivendorx'),
+            icon: 'adminlib-marketplace',
+            text: __('Diversified Marketplace', 'multivendorx'),
+            des: __(' Enable bookings, subscriptions, and auctions to boost sales and engagement.', 'multivendorx'),
         },
         {
-            icon: 'adminlib-global-community',
-            text: __('Classroom Enrollment', 'multivendorx'),
-            des: __('Buy multiple seats and assign them to students or teams.', 'multivendorx'),
+            icon: 'adminlib-store-inventory',
+            text: __('Vacation Mode for Stores', 'multivendorx'),
+            des: __('Stores can pause their stores temporarily with automatic buyer notifications - no missed messages.', 'multivendorx'),
         },
         {
-            icon: 'adminlib-Gift-a-Course',
-            text: __('Gift a Course', 'multivendorx'),
-            des: __('Let customers purchase and gift courses to others.', 'multivendorx'),
+            icon: 'adminlib-out-of-stock',
+            text: __('Never Run Out of Stock', 'multivendorx'),
+            des: __(' Real-time inventory tracking with automatic low-stock alerts keeps sellers prepared and buyers happy.', 'multivendorx'),
         },
         {
-            icon: 'adminlib-Single-Sign-On',
-            text: __('Single Sign-On (SSO)', 'multivendorx'),
-            des: __('Access Moodle™ and WordPress with one login.', 'multivendorx'),
+            icon: 'adminlib-notification',
+            text: __('Autopilot Notifications', 'multivendorx'),
+            des: __('Automatic emails and alerts for every order, refund, and payout - everyone stays in the loop.', 'multivendorx'),
         },
         {
-            icon: 'adminlib-Single-Sign-On',
-            text: __('Smart Course Sync', 'multivendorx'),
-            des: __('Keep course details updated between Moodle™ and WordPress.', 'multivendorx'),
+            icon: 'adminlib-staff-manager',
+            text: __('Staff Manager', 'multivendorx'),
+            des: __('Empower vendors to manage their team with role-based access and permissions.', 'multivendorx'),
         },
         {
-            icon: 'adminlib-subscription-courses',
-            text: __('Subscription Courses', 'multivendorx'),
-            des: __('Offer courses with recurring subscription plans.', 'multivendorx'),
+            icon: 'adminlib-business-hours',
+            text: __('Business Hours', 'multivendorx'),
+            des: __('Let stores set their operating hours for better customer expectations.', 'multivendorx'),
+        },
+        {
+            icon: 'adminlib-wholesale',
+            text: __('Wholesale', 'multivendorx'),
+            des: __('Enable bulk pricing and wholesale options to attract B2B buyers.', 'multivendorx'),
+        },
+        {
+            icon: 'adminlib-paypal-marketplace',
+            text: __('PayPal Marketplace', 'multivendorx'),
+            des: __('Split payments automatically to vendors via PayPal - seamless payouts.', 'multivendorx'),
+        },
+        {
+            icon: 'adminlib-stripe-marketplace',
+            text: __('Stripe Marketplace', 'multivendorx'),
+            des: __('Instant vendor payouts with Stripe Connect - fast and secure.', 'multivendorx'),
+        },
+        {
+            icon: 'adminlib-facilitator',
+            text: __('Facilitator', 'multivendorx'),
+            des: __('Manage complex commission structures with advanced calculation rules.', 'multivendorx'),
         },
         {
             icon: 'adminlib-user-network-icon',
-            text: __('Unified Access', 'multivendorx'),
-            des: __('Give learners one dashboard for all their courses.', 'multivendorx'),
+            text: __('Franchises', 'multivendorx'),
+            des: __('Create multi-location marketplace networks with centralized control.', 'multivendorx'),
+        },
+        {
+            icon: 'adminlib-franchises-module',
+            text: __('Invoice & Packing Slip', 'multivendorx'),
+            des: __('Professional invoices and packing slips for every order - build trust and credibility.', 'multivendorx'),
         },
     ],
     btnLink: [
         {
             site: '1',
             price: '$299',
-            link: 'https://multivendorx.com/checkout/'
+            link: 'https://multivendorx.com/cart/?add-to-cart=143434&variation_id=143443&attribute_pa_site-license=1-site-yearly'
         },
         {
             site: '3',
             price: '$399',
-            link: 'https://multivendorx.com/checkout/$399'
+            link: 'https://multivendorx.com/cart/?add-to-cart=143434&variation_id=143445&attribute_pa_site-license=3-site-yearly'
         },
         {
             site: '10',
             price: '$599',
-            link: 'https://multivendorx.com/checkout/$599'
+            link: 'https://multivendorx.com/cart/?add-to-cart=143434&variation_id=143440&attribute_pa_site-license=10-site-yearly'
         },
     ]
 };
@@ -88,7 +113,6 @@ const ShowProPopup: React.FC<PopupProps> = (props) => {
     const modulePopupContent = {
         moduleName: props.moduleName,
         message: sprintf(
-            /* translators: %s: Module name */
             __(
                 'This feature is currently unavailable. To activate it, please enable the %s',
                 'multivendorx'

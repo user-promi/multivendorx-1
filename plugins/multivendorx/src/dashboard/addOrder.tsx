@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { SelectInput } from "zyra";
+import { BasicInput, SelectInput, TextArea } from "zyra";
 import axios from "axios";
 
 
@@ -146,31 +146,31 @@ const AddOrder = () => {
                             </div>
 
                             {showAddProduct && (
-                                    <div className="select-product-wrapper">
-                                        <label>Select Product</label>
+                                <div className="select-product-wrapper">
+                                    <label>Select Product</label>
 
-                                        <select
-                                            className="basic-input"
-                                            onChange={(e) => {
-                                                const prod = allProducts.find(p => p.id == e.target.value);
-                                                if (prod) {
-                                                    setAddedProducts(prev => [...prev, { ...prod, qty: 1 }]);
-                                                }
-                                                setShowAddProduct(false);
-                                            }}
-                                        >
-                                            <option value="">Select a product</option>
-                                            {allProducts.map((p) => (
-                                                <option key={p.id} value={p.id}>
-                                                    {p.name}
-                                                </option>
-                                            ))}
-                                        </select>
+                                    <select
+                                        className="basic-input"
+                                        onChange={(e) => {
+                                            const prod = allProducts.find(p => p.id == e.target.value);
+                                            if (prod) {
+                                                setAddedProducts(prev => [...prev, { ...prod, qty: 1 }]);
+                                            }
+                                            setShowAddProduct(false);
+                                        }}
+                                    >
+                                        <option value="">Select a product</option>
+                                        {allProducts.map((p) => (
+                                            <option key={p.id} value={p.id}>
+                                                {p.name}
+                                            </option>
+                                        ))}
+                                    </select>
 
-                                        {/* <button className="admin-btn btn-red mt-2" onClick={() => setShowAddProduct(false)}>
+                                    {/* <button className="admin-btn btn-red mt-2" onClick={() => setShowAddProduct(false)}>
                                             Close
                                         </button> */}
-                                    </div>
+                                </div>
                             )}
                         </div>
                     </div>
@@ -185,14 +185,9 @@ const AddOrder = () => {
                                 </div>
                                 {/* <div className="des">Approve, decline, or tweak before they go live.</div> */}
                             </div>
-                            {/* <div className="right">
-                                <i className="adminlib-more-vertical"></i>
-                            </div> */}
                         </div>
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                {/* <label htmlFor="country">Country</label> */}
-
                                 <SelectInput
                                     name="new_owner"
                                     // value={selectedOwner?.value}
@@ -200,6 +195,86 @@ const AddOrder = () => {
                                     type="single-select"
                                 // onChange={(val) => val && setSelectedOwner(val)}
                                 />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="card-content">
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Customer details
+                                </div>
+                            </div>
+                        </div>
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <SelectInput
+                                    name="new_owner"
+                                    options={ownerOptions}
+                                    type="single-select"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="card-content">
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Order note
+                                </div>
+                            </div>
+                        </div>
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <TextArea name="shipping_policy" wrapperClass="setting-from-textarea"
+                                    inputClass="textarea-input"
+                                    descClass="settings-metabox-description"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="card-content">
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">
+                                    Billing address
+                                </div>
+                            </div>
+                        </div>
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="product-name">Company</label>
+                                <BasicInput name="name" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                            </div>
+                        </div>
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="product-name">Address</label>
+                                <BasicInput name="name" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                            </div>
+                        </div>
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="product-name">City</label>
+                                <BasicInput name="name" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                            </div>
+                        </div>
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="product-name">Postcode / ZIP</label>
+                                <BasicInput name="name" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                            </div>
+                        </div>
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="product-name">Country / Region</label>
+                                <SelectInput name="country" options={[]} type="single-select" />
+                            </div>
+                        </div>
+                        <div className="form-group-wrapper">
+                            <div className="form-group">
+                                <label htmlFor="product-name">State / County</label>
+                                <SelectInput name="country" options={[]} type="single-select" />
                             </div>
                         </div>
                     </div>

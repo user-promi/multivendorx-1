@@ -438,6 +438,7 @@ const StoreReview: React.FC = () => {
                     open={!!selectedReview}
                     onClose={() => setSelectedReview(null)}
                     width="500px"
+                    height="70%"
                     header={
                         <>
                             <div className="title">
@@ -463,7 +464,7 @@ const StoreReview: React.FC = () => {
                             </button>
                             <button
                                 onClick={handleSaveReply}
-                                className="admin-btn btn-purple"
+                                className="admin-btn btn-purple-bg"
                             >
                                 Save
                             </button>
