@@ -280,7 +280,57 @@ class Rest {
                 $response->data['commission_total']  = (float) $commission->store_payable;
             }
         }
-        
+
+        $refund_items = [];
+
+        foreach ($object->get_items() as $item_id => $item) {
+
+            $refunded_line_total = -1 * $object->get_total_refunded_for_item($item_id);
+            $refunded_tax = 0;
+            foreach ( $object->get_refunds() as $refund ) {
+                foreach ( $refund->get_items() as $refund_item ) {
+                    if ( $refund_item->get_meta('_refunded_item_id') == $item_id ) {
+                        $refunded_tax += array_sum( $refund_item->get_taxes()['total'] ?? [] );
+                    }
+                }
+            }
+
+            $refund_items[] = [
+                'item_id' => $item_id,
+                'type'    => 'product',
+                'name'    => $item->get_name(),
+                'refunded_line_total' => (float) $refunded_line_total,
+                'refunded_tax'        => (float) $refunded_tax,
+            ];
+        }
+
+        foreach ($object->get_items('shipping') as $item_id => $item) {
+
+            $refunded_shipping = -1 * $object->get_total_refunded_for_item($item_id, 'shipping');
+
+            $refunded_shipping_tax = 0;
+            foreach ( $object->get_refunds() as $refund ) {
+                foreach ( $refund->get_items('shipping') as $refund_item ) {
+                    if ( $refund_item->get_meta('_refunded_item_id') == $item_id ) {
+                        $refunded_shipping_tax += array_sum( $refund_item->get_taxes()['total'] ?? [] );
+                    }
+                }
+            }
+
+            $refund_items[] = [
+                'item_id' => $item_id,
+                'type'    => 'shipping',
+                'name'    => $item->get_name(),
+                'refunded_shipping'      => (float) $refunded_shipping,
+                'refunded_shipping_tax'  => (float) $refunded_shipping_tax,
+            ];
+        }
+
+        $response->data['refund_items'] = $refund_items;
+
+        $order_notes = wc_get_order_notes([ 'order_id' => $object->get_id() ]);
+        $response->data['order_notes'] = $order_notes;
+       
         return $response;
     }
 

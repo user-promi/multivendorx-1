@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { __ } from '@wordpress/i18n';
 import { BasicInput, SelectInput, getApiLink } from "zyra";
 import axios from "axios";
@@ -34,11 +34,12 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                 },
             };
 
-            // Recalculate total refund amount
             const refundAmount = Object.values(updated).reduce((sum, item) => {
-                return sum + (item.total ? Number(item.total) : 0);
+                const itemTotal = item.total ? Number(item.total) : 0;
+                const itemTax = item.tax ? Number(item.tax) : 0;
+                return sum + (itemTotal + itemTax);
             }, 0);
-
+            
             setRefundDetails((prevDetails) => ({
                 ...prevDetails,
                 refundAmount,
@@ -99,11 +100,29 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
         }
     };
 console.log('orderData', orderData)
+
+
     useEffect(() => {
         if (!orderId) return;
 
         fetchOrder();
     }, [orderId]);
+
+    const refundMap = useMemo(() => {
+        const map = {};
+        if (orderData?.refund_items) {
+            orderData.refund_items.forEach((r) => {
+                map[r.item_id] = r;
+            });
+        }
+        return map;
+    }, [orderData]);
+
+    const totalRefunded = (orderData?.refunds ?? []).reduce((sum, item) => {
+        const total = Math.abs(Number(item.total ?? 0));
+        return sum + total;
+    }, 0);
+
 
     const handleStatusChange = async (newStatus) => {
         const response = await axios.put(
@@ -257,7 +276,11 @@ console.log('orderData', orderData)
                                                         {/* Total (editable only in refund mode) */}
                                                         <td className="admin-column">
                                                           <div className="price">   ${parseFloat(item.subtotal).toFixed(2)} </div>
-
+                                                            {refundMap[item.id]?.refunded_line_total !== 0 && (
+                                                                <div>
+                                                                    {refundMap[item.id].refunded_line_total}
+                                                                </div>
+                                                            )}
                                                             {isRefund && (
                                                                 <input
                                                                     type="number"
@@ -272,7 +295,11 @@ console.log('orderData', orderData)
                                                         </td>
                                                         <td className="admin-column">
                                                          <div className="price"> ${parseFloat(item.subtotal_tax).toFixed(2)} </div>
-
+                                                            {refundMap[item.id]?.refunded_tax !== 0 && (
+                                                                <div>
+                                                                    {refundMap[item.id].refunded_tax}
+                                                                </div>
+                                                            )}
                                                             {isRefund && (
                                                                 <input
                                                                     type="number"
@@ -331,6 +358,11 @@ console.log('orderData', orderData)
                                                             ) : (
                                                                 item.total
                                                             )}
+                                                            {refundMap[item.id]?.refunded_shipping !== 0 && (
+                                                                <div>
+                                                                    {refundMap[item.id].refunded_shipping}
+                                                                </div>
+                                                            )}
                                                         </td>
                                                         <td className="admin-column">
                                                             {isRefund ? (
@@ -345,6 +377,11 @@ console.log('orderData', orderData)
                                                                 />
                                                             ) : (
                                                                 item.total_tax
+                                                            )}
+                                                            {refundMap[item.id]?.refunded_shipping_tax !== 0 && (
+                                                                <div>
+                                                                    {refundMap[item.id].refunded_shipping_tax}
+                                                                </div>
                                                             )}
                                                         </td>
                                                     </tr>
@@ -421,11 +458,11 @@ console.log('orderData', orderData)
                                                             />
                                                         </td>
                                                     </tr>
-                                                    <tr><td>Amount already refunded:</td><td>-$0.00</td></tr>
+                                                    <tr><td>Amount already refunded:</td><td>- {formatCurrency(totalRefunded)}</td></tr>
                                                     <tr>
 
                                                         <td>Total available to refund:</td>
-                                                        <td>$20.00</td>
+                                                        <td>{formatCurrency(orderData.commission_total - totalRefunded)}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Refund amount:</td>
@@ -652,10 +689,12 @@ console.log('orderData', orderData)
                                         </div>
                                     </div>
                                 </div>
-                                <div>45 Roker Terrace</div>
-                                <div>Latheronwheel</div>
-                                <div>KW5 8NW, London</div>
-                                <div>UK</div>
+                                <div>{orderData?.shipping.address_1}</div>
+                                {orderData?.shipping.address_2 && <div>{orderData?.shipping.address_2}</div>}
+
+                                <div>{orderData?.shipping.city}, {orderData?.shipping.state} {orderData?.shipping.postcode}</div>
+
+                                <div>{orderData?.shipping.country}</div>
                             </div>
 
                             <div className="card-content">
@@ -718,9 +757,9 @@ console.log('orderData', orderData)
                                                         </div>
                                                         <div
                                                             className="des"
-                                                            dangerouslySetInnerHTML={{ __html: note.note || "" }}
+                                                            dangerouslySetInnerHTML={{ __html: note.content || "" }}
                                                         ></div>
-                                                        <span>{new Date(note.date_created).toLocaleString()}</span>
+                                                        <span>{new Date(note.date_created.date).toLocaleString()}</span>
                                                     </div>
                                                 </li>
                                             ))}
