@@ -4,23 +4,12 @@
     margin-left: auto;
 }
 
-.admin-table-wrapper {
-    // padding: 2rem;
-    // margin: 1rem;
-    // background: #fff;
-}
-
 .admin-top-filter {
     display: flex;
     align-items: center;
-
-    // border-bottom: $border-light-small;
     margin-bottom: 1.813rem;
-
-    // padding-bottom: 1.25rem;
     justify-content: space-between;
 }
-
 
 .admin-filter-wrapper {
     display: flex;
@@ -60,8 +49,6 @@
         input {
             background: transparent;
             border: none !important;
-
-            // background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%235007aa'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 0.75rem center;
             background-size: 1rem;
@@ -74,7 +61,6 @@
             &:focus {
                 outline: none;
                 box-shadow: none !important;
-
                 /* for overwrite common style */
             }
         }
@@ -98,14 +84,10 @@
                 display: flex;
                 align-items: center;
 
-                &.row{
+                &.row {
                     border: 0.063rem solid #727272;
                     border-radius: 0.313rem;
                 }
-            }
-
-            button{
-
             }
 
             .select {
@@ -234,12 +216,8 @@
         position: relative;
         border: none;
         border-collapse: collapse;
-
-        // border: $border-light-small;
         margin: 0;
         background: #e7e7e7;
-
-        // border-bottom: 0;
         border-top-left-radius: 0.313rem;
         border-top-right-radius: 0.313rem;
 
@@ -303,10 +281,6 @@
 
         .admin-table-body {
             .table-row-custom {
-                // display: flex;
-                // align-items: center;
-                // gap: 0.5rem;
-
                 .name {
                     font-weight: 500;
                 }
@@ -336,9 +310,6 @@
                 align-items: center;
                 width: 100%;
                 box-sizing: border-box;
-
-                // border-bottom: $border-light-small;
-                // border-radius: 0.313rem;
                 background: #fff;
                 margin: 0.725rem 0;
                 border: 0.063rem solid transparent;
@@ -350,14 +321,7 @@
                     display: flex;
                     flex: 1 0 0;
                     border: none;
-
-                    // box-sizing: border-box;
-                    // overflow: hidden;
-
-                    // .admin-badge {
-                    //     padding: 0.45rem;
-                    //     font-size: 0.9rem;
-                    // }
+                    overflow: hidden;
 
                     .table-row-custom {
                         display: flex;
@@ -367,11 +331,6 @@
                         font-size: 1rem;
                     }
 
-                    // img {
-                    //     width: 3.125rem;
-                    //     height: -webkit-max-content;
-                    //     border: 0.063rem solid #e0e4e9;
-                    // }
 
                     .main-input {
                         background: transparent;
@@ -384,7 +343,7 @@
 
                     &.select,
                     &.id {
-                        // padding-top: 0.313rem;
+
                         max-width: 2rem;
                         padding-right: 0;
                         flex-grow: 1;
@@ -393,8 +352,6 @@
                     &.action {
                         flex-grow: 0;
                         min-width: 5rem;
-
-                        // justify-content: end;
                     }
 
                     &.notificaton {
@@ -439,7 +396,6 @@
                         }
 
                         li {
-                            // display: flex;
                             gap: 0.625rem;
                             margin: 0;
                             border-bottom: $border-light-small;
@@ -496,7 +452,6 @@
             }
 
             .admin-row:has(input[type="checkbox"]:checked) {
-                // background: $theme-background-color;
                 border: 0.063rem solid $theme-color;
             }
 
@@ -585,7 +540,7 @@
                 font-size: 1.313rem;
             }
 
-            &:hover{
+            &:hover {
                 color: $theme-color;
             }
         }
@@ -628,7 +583,6 @@
                     flex-direction: column;
                     padding: 0;
 
-                    // display: flex;
                     .rating-wrapper {
                         padding-bottom: 0.45rem;
                     }
@@ -658,8 +612,6 @@
     min-height: 3.125rem;
     border-bottom-left-radius: 0.313rem;
     border-bottom-right-radius: 0.313rem;
-
-    // border: $border-light-small;
     border-top: 0;
 
     .pagination-arrow {

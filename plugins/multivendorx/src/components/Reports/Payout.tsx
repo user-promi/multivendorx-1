@@ -50,7 +50,30 @@ const Transactions: React.FC = () => {
   const [pageCount, setPageCount] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
   const [pieData, setPieData] = useState<{ name: string; value: number }[]>([]);
+  const Counter = ({ value, duration = 1200 }) => {
+    const [count, setCount] = React.useState(0);
 
+    React.useEffect(() => {
+      let start = 0;
+      const end = parseInt(value);
+      if (start === end) return;
+
+      const increment = end / (duration / 16);
+
+      const timer = setInterval(() => {
+        start += increment;
+        if (start >= end) {
+          start = end;
+          clearInterval(timer);
+        }
+        setCount(Math.floor(start));
+      }, 16);
+
+      return () => clearInterval(timer);
+    }, [value, duration]);
+
+    return <>{count}</>;
+  };
   // Fetch total rows on mount
   useEffect(() => {
     axios({
@@ -460,7 +483,7 @@ const Transactions: React.FC = () => {
                   <i className={item.icon}></i>
                 </div>
                 <div className="details">
-                  <div className="number">{item.count}</div>
+                  <div className="number"><Counter value={item.count} /></div>
                   <div className="text">{item.label}</div>
                 </div>
               </div>
