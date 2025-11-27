@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { __ } from '@wordpress/i18n';
 import { BasicInput, SelectInput, getApiLink } from "zyra";
 import axios from "axios";
+import { formatCurrency } from '../services/commonFunction';
 
 interface OrderDetailsProps {
     order?: any; // optionally pass order data
@@ -33,11 +34,12 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                 },
             };
 
-            // Recalculate total refund amount
             const refundAmount = Object.values(updated).reduce((sum, item) => {
-                return sum + (item.total ? Number(item.total) : 0);
+                const itemTotal = item.total ? Number(item.total) : 0;
+                const itemTax = item.tax ? Number(item.tax) : 0;
+                return sum + (itemTotal + itemTax);
             }, 0);
-
+            
             setRefundDetails((prevDetails) => ({
                 ...prevDetails,
                 refundAmount,
@@ -65,7 +67,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
         })
             .then((response) => {
                 if (response.data.success) {
-
+                    window.location.reload();
                 }
             })
         // onRefund(payload); // send to your API here
@@ -97,12 +99,30 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
             console.error("Error fetching order:", error);
         }
     };
+console.log('orderData', orderData)
+
 
     useEffect(() => {
         if (!orderId) return;
 
         fetchOrder();
     }, [orderId]);
+
+    const refundMap = useMemo(() => {
+        const map = {};
+        if (orderData?.refund_items) {
+            orderData.refund_items.forEach((r) => {
+                map[r.item_id] = r;
+            });
+        }
+        return map;
+    }, [orderData]);
+
+    const totalRefunded = (orderData?.refunds ?? []).reduce((sum, item) => {
+        const total = Math.abs(Number(item.total ?? 0));
+        return sum + total;
+    }, 0);
+
 
     const handleStatusChange = async (newStatus) => {
         const response = await axios.put(
@@ -238,16 +258,16 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 
                                                         {/* Qty (editable only in refund mode) */}
                                                         <td className="admin-column">
-                                                          <div className="price">  ${parseFloat(item.total).toFixed(2)} </div>
+                                                          <div className="price"> x {item.quantity} </div>
 
                                                             {isRefund && (
                                                                 <input
                                                                     type="number"
                                                                     min="0"
                                                                     className="basic-input"
-                                                                    value={refundItems[item.id]?.total ?? 0}
+                                                                    value={refundItems[item.id]?.quantity ?? 0}
                                                                     onChange={(e) =>
-                                                                        handleItemChange(item.id, "total", +e.target.value)
+                                                                        handleItemChange(item.id, "quantity", +e.target.value)
                                                                     }
                                                                 />
                                                             )}
@@ -255,8 +275,12 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 
                                                         {/* Total (editable only in refund mode) */}
                                                         <td className="admin-column">
-                                                          <div className="price">   ${parseFloat(item.total).toFixed(2)} </div>
-
+                                                          <div className="price">   ${parseFloat(item.subtotal).toFixed(2)} </div>
+                                                            {refundMap[item.id]?.refunded_line_total !== 0 && (
+                                                                <div>
+                                                                    {refundMap[item.id].refunded_line_total}
+                                                                </div>
+                                                            )}
                                                             {isRefund && (
                                                                 <input
                                                                     type="number"
@@ -270,16 +294,20 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                                             )}
                                                         </td>
                                                         <td className="admin-column">
-                                                         <div className="price"> ${parseFloat(item.total).toFixed(2)} </div>
-
+                                                         <div className="price"> ${parseFloat(item.subtotal_tax).toFixed(2)} </div>
+                                                            {refundMap[item.id]?.refunded_tax !== 0 && (
+                                                                <div>
+                                                                    {refundMap[item.id].refunded_tax}
+                                                                </div>
+                                                            )}
                                                             {isRefund && (
                                                                 <input
                                                                     type="number"
                                                                     min="0"
                                                                     className="basic-input"
-                                                                    value={refundItems[item.id]?.total ?? 0}
+                                                                    value={refundItems[item.id]?.tax ?? 0}
                                                                     onChange={(e) =>
-                                                                        handleItemChange(item.id, "total", +e.target.value)
+                                                                        handleItemChange(item.id, "tax", +e.target.value)
                                                                     }
                                                                 />
                                                             )}
@@ -294,47 +322,91 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                                     </td>
                                                 </tr>
                                             )}
-                                            <tr className="admin-row simple">
-                                                <td className="admin-column" colSpan={3}>
-                                                    <div className="item-details">
-                                                        <div className="icon">
-                                                            <i className="adminlib-cart green"></i>
-                                                        </div>
-                                                        <div className="detail">
-                                                            <div className="name">Free shipping</div>
-                                                            <div className="sub-text"><span>Items:</span> Charcoal Detox × 1</div>
-                                                            <div className="sub-text"><span>package_qty:</span></div>
-                                                            <div className="sub-text"><span>_vendor_order_shipping_item_id:</span> 337</div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td className="admin-column"></td>
-                                                <td className="admin-column"></td>
-                                                <td className="admin-column">
-                                                    {isRefund ? (
-                                                        <input
-                                                            type="number"
-                                                            min="0"
-                                                            className="basic-input"
-                                                            value="$95"
-                                                        />
-                                                    ) : (
-                                                        '$95'
-                                                    )}
-                                                </td>
-                                                <td className="admin-column">
-                                                    {isRefund ? (
-                                                        <input
-                                                            type="number"
-                                                            min="0"
-                                                            className="basic-input"
-                                                            value="$195"
-                                                        />
-                                                    ) : (
-                                                        '$195'
-                                                    )}
-                                                </td>
-                                            </tr>
+                                            {orderData?.shipping_lines?.length > 0 && (
+                                                orderData.shipping_lines.map((item) => (
+                                                    <tr className="admin-row simple">
+                                                        <td className="admin-column" colSpan={3}>
+                                                            <div className="item-details">
+                                                                <div className="icon">
+                                                                    <i className="adminlib-cart green"></i>
+                                                                </div>
+                                                                <div className="detail">
+                                                                    <div className="name">{item.method_title}</div>
+                                                                    {/* {item?.meta_data?.map((data) => (
+                                                                        <div className="sub-text" key={data.id}>
+                                                                            <span>{data.display_key || data.key}:</span> {data.display_value || data.value}
+                                                                        </div>
+                                                                    ))} */}
+                                                                        {/* <div className="sub-text"><span>_vendor_order_shipping_item_id:</span> 337</div> */}
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td className="admin-column"></td>
+                                                        <td className="admin-column"></td>
+                                                        <td className="admin-column">
+                                                            {isRefund ? (
+                                                                <input
+                                                                    type="number"
+                                                                    min="0"
+                                                                    className="basic-input"
+                                                                    // value="$95"
+                                                                    value={refundItems[item.id]?.total ?? 0}
+                                                                    onChange={(e) =>
+                                                                        handleItemChange(item.id, "total", +e.target.value)
+                                                                    }
+                                                                />
+                                                            ) : (
+                                                                item.total
+                                                            )}
+                                                            {refundMap[item.id]?.refunded_shipping !== 0 && (
+                                                                <div>
+                                                                    {refundMap[item.id].refunded_shipping}
+                                                                </div>
+                                                            )}
+                                                        </td>
+                                                        <td className="admin-column">
+                                                            {isRefund ? (
+                                                                <input
+                                                                    type="number"
+                                                                    min="0"
+                                                                    className="basic-input"
+                                                                    value={refundItems[item.id]?.tax ?? 0}
+                                                                    onChange={(e) =>
+                                                                        handleItemChange(item.id, "tax", +e.target.value)
+                                                                    }
+                                                                />
+                                                            ) : (
+                                                                item.total_tax
+                                                            )}
+                                                            {refundMap[item.id]?.refunded_shipping_tax !== 0 && (
+                                                                <div>
+                                                                    {refundMap[item.id].refunded_shipping_tax}
+                                                                </div>
+                                                            )}
+                                                        </td>
+                                                    </tr>
+                                                )))}
+                                            {orderData?.refunds?.length > 0 && (
+                                                orderData.refunds.map((item) => (
+                                                    <tr className="admin-row simple">
+                                                        <td className="admin-column" colSpan={3}>
+                                                            <div className="item-details">
+                                                                <div className="icon">
+                                                                    <i className="adminlib-cart green"></i>
+                                                                </div>
+                                                                <div className="detail">
+                                                                    <div className="name">Refunds #{item.id}</div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td className="admin-column"></td>
+                                                        <td className="admin-column"></td>
+                                                        <td className="admin-column">
+                                                            {item.total}
+                                                        </td>
+                                                        <td className="admin-column"></td>
+                                                    </tr>
+                                                )))}
                                         </tbody>
                                     </table>
                                 </div>
@@ -386,11 +458,11 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                                             />
                                                         </td>
                                                     </tr>
-                                                    <tr><td>Amount already refunded:</td><td>-$0.00</td></tr>
+                                                    <tr><td>Amount already refunded:</td><td>- {formatCurrency(totalRefunded)}</td></tr>
                                                     <tr>
 
                                                         <td>Total available to refund:</td>
-                                                        <td>$20.00</td>
+                                                        <td>{formatCurrency(orderData.commission_total - totalRefunded)}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Refund amount:</td>
@@ -433,10 +505,10 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                         <div className="right">
                                             <table>
                                                 <tbody>
-                                                    <tr><td>Commission:</td><td>$29</td></tr>
-                                                    <tr><td>Shipping:</td><td>$29</td></tr>
-                                                    <tr><td>Total:</td><td>$29</td></tr>
-                                                    <tr><td>Total Earned:</td><td>$529</td></tr>
+                                                    <tr><td>Commission:</td><td>{formatCurrency(orderData?.commission_amount)}</td></tr>
+                                                    <tr><td>Shipping:</td><td>{formatCurrency(orderData?.shipping_total)}</td></tr>
+                                                    <tr><td>Total:</td><td>{formatCurrency(orderData?.total)}</td></tr>
+                                                    <tr><td>Total Earned:</td><td>{formatCurrency(orderData?.commission_total)}</td></tr>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -617,10 +689,12 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                         </div>
                                     </div>
                                 </div>
-                                <div>45 Roker Terrace</div>
-                                <div>Latheronwheel</div>
-                                <div>KW5 8NW, London</div>
-                                <div>UK</div>
+                                <div>{orderData?.shipping.address_1}</div>
+                                {orderData?.shipping.address_2 && <div>{orderData?.shipping.address_2}</div>}
+
+                                <div>{orderData?.shipping.city}, {orderData?.shipping.state} {orderData?.shipping.postcode}</div>
+
+                                <div>{orderData?.shipping.country}</div>
                             </div>
 
                             <div className="card-content">
@@ -683,9 +757,9 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                                         </div>
                                                         <div
                                                             className="des"
-                                                            dangerouslySetInnerHTML={{ __html: note.note || "" }}
+                                                            dangerouslySetInnerHTML={{ __html: note.content || "" }}
                                                         ></div>
-                                                        <span>{new Date(note.date_created).toLocaleString()}</span>
+                                                        <span>{new Date(note.date_created.date).toLocaleString()}</span>
                                                     </div>
                                                 </li>
                                             ))}

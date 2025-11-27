@@ -258,25 +258,23 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
             }
 
             foreach ($items as $item_id => $value) {
-                $line_items[$item_id]['qty'] = max($value['qty'], 0);
-                $line_items[$item_id]['refund_total'] = wc_format_decimal($value['total']);
+
+                $qty   = isset($value['qty']) ? max($value['qty'], 0) : 0;
+                $total = isset($value['total']) ? $value['total'] : 0;
+                $tax   = isset($value['tax']) ? $value['tax'] : 0;
+
+                $line_items[$item_id]['qty']          = $qty;
+                $line_items[$item_id]['refund_total'] = wc_format_decimal($total);
+                $line_items[$item_id]['refund_tax']   = wc_format_decimal($tax);
 
                 $parent_item_id = $this->get_vendor_parent_order_item_id($item_id);
-                if( $parent_item_id && in_array($parent_item_id, $parent_items_ids) ){
-                    $parent_line_items[$parent_item_id]['qty'] = max($value['qty'], 0);
-                    $parent_line_items[$parent_item_id]['refund_total'] = wc_format_decimal($value['total']);
+
+                if ( $parent_item_id && in_array($parent_item_id, $parent_items_ids) ) {
+                    $parent_line_items[$parent_item_id]['qty']          = $qty;
+                    $parent_line_items[$parent_item_id]['refund_total'] = wc_format_decimal($total);
+                    $parent_line_items[$parent_item_id]['refund_tax']   = wc_format_decimal($tax);
                 }
             }
-
-
-            // foreach ($line_item_tax_totals as $item_id => $tax_totals) {
-            //     $line_items[$item_id]['refund_tax'] = array_filter(array_map('wc_format_decimal', $tax_totals));
-                
-            //     $parent_item_id = $this->get_vendor_parent_order_item_id($item_id);
-            //     if( $parent_item_id && in_array($parent_item_id, $parent_items_ids) ){
-            //         $parent_line_items[$parent_item_id]['refund_tax'] = array_filter(array_map('wc_format_decimal', $tax_totals));
-            //     }
-            // }
 
             if ( $line_items ) {
                 // Create the refund object.

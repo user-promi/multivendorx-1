@@ -561,7 +561,7 @@ const EditStore = () => {
                                                             )}
                                                         </div>
                                                     ) : (
-                                                        <span>&nbsp;</span>
+                                                        <span>Enter your description</span>
                                                     )}
 
                                                     <span

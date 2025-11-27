@@ -113,9 +113,31 @@ const Store = () => {
     };
 
     const handleSubmit = async () => {
-        if (!formData || Object.keys(formData).length === 0) return;
+        // if (!formData || Object.keys(formData).length === 0) return;
 
         const { name, slug, email, store_owners } = formData;
+
+        if (!name?.trim()) {
+            setError((prev) => ({
+                ...prev,
+                name: {
+                    type: 'invalid-massage',
+                    message: 'Store name is required.',
+                },
+            }));
+            return;
+        }
+
+        if (!slug?.trim()) {
+            setError((prev) => ({
+                ...prev,
+                slug: {
+                    type: 'invalid-massage',
+                    message: 'Store slug is required.',
+                },
+            }));
+            return;
+        }
 
         if (!formData.primary_email?.trim()) {
             setError((prev) => ({
@@ -303,6 +325,8 @@ const Store = () => {
                                             // onBlur={handleNameBlur}
                                             required={true}
                                         />
+                                        {error?.name?.message && <div className="invalid-massage">{error?.name?.message}</div>}
+
                                     </div>
 
                                     <div className="form-group">
@@ -320,6 +344,8 @@ const Store = () => {
                                             onclickCallback={handleNameBlur}
                                             msg={error.slug}
                                         />
+                                        {error?.slug?.message && <div className="invalid-massage">{error?.slug?.message}</div>}
+
                                     </div>
 
                                     <div className="form-group">
