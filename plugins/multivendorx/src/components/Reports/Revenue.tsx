@@ -19,14 +19,6 @@ import { CalendarInput, getApiLink, Table, TableCell } from "zyra";
 import axios from "axios";
 import { PaginationState, RowSelectionState, ColumnDef } from "@tanstack/react-table";
 import { formatCurrency } from '../../services/commonFunction';
-
-const overview = [
-  { id: "sales", label: "Total Products", count: 15, icon: "adminlib-single-product red" },
-  { id: "earnings", label: "New Products", count: 625, icon: "adminlib-per-product-shipping green" },
-  { id: "Vendors", label: "Low Stock", count: 8, icon: "adminlib-multi-product yellow" },
-  { id: "free", label: "Out of Stock", count: 8, icon: "adminlib-out-of-stock blue" },
-];
-
 type ProductRow = {
   id: number;
   title: string;
@@ -77,9 +69,6 @@ const Revenue: React.FC = () => {
   const [inStockCount, setInStockCount] = useState(0);
   const [outOfStockCount, setOutOfStockCount] = useState(0);
   const [onBackorderCount, setOnBackorderCount] = useState(0);
-  const [lowStockCount, setLowStockCount] = useState(0);
-  const [totalProducts, setTotalProducts] = useState(0);
-  const [newProducts, setNewProducts] = useState(0);
 
 
   const toggleReviewedCard = (key: string) => {
@@ -89,202 +78,32 @@ const Revenue: React.FC = () => {
   const toggleSellingCard = (key: string) => {
     setOpenSellingCards((prev) => ({ ...prev, [key]: !prev[key] }));
   };
+  const Counter = ({ value, duration = 1200 }) => {
+    const [count, setCount] = React.useState(0);
 
-  /**
-   * Fetch store list on mount
-   */
-  // useEffect(() => {
-  //   // Fetch store list
-  //   axios
-  //     .get(getApiLink(appLocalizer, 'store'), {
-  //       headers: { 'X-WP-Nonce': appLocalizer.nonce },
-  //     })
-  //     .then((response) => setStore(response.data.stores || []))
-  //     .catch(() => {
-  //       setError(__('Failed to load stores', 'multivendorx'));
-  //       setStore([]);
-  //     });
+    React.useEffect(() => {
+      let start = 0;
+      const end = parseInt(value);
+      if (start === end) return;
 
-  //   // Fetch total orders count
-  //   axios({
-  //     method: 'GET',
-  //     url: `${appLocalizer.apiUrl}/wc/v3/products`,
-  //     headers: { 'X-WP-Nonce': appLocalizer.nonce },
-  //     params: { meta_key: 'multivendorx_store_id' },
-  //   })
-  //     .then((response) => {
-  //       const total = Number(response.headers['x-wp-total']) || 0;
-  //       setTotalRows(total);
-  //       setPageCount(Math.ceil(total / pagination.pageSize));
-  //     })
-  //     .catch(() => {
-  //       setError(__('Failed to load total rows', 'multivendorx'));
-  //     });
+      const increment = end / (duration / 16);
 
-  //   axios({
-  //     method: "GET",
-  //     url: `${appLocalizer.apiUrl}/wc/v3/products`,
-  //     headers: { "X-WP-Nonce": appLocalizer.nonce },
-  //     params: { meta_key: "multivendorx_store_id", per_page: 20 },
-  //   })
-  //     .then((response) => {
-  //       const products = response.data || [];
+      const timer = setInterval(() => {
+        start += increment;
+        if (start >= end) {
+          start = end;
+          clearInterval(timer);
+        }
+        setCount(Math.floor(start));
+      }, 16);
 
-  //       const data = products
-  //         .filter((p: any) => Number(p.total_sales) > 0)
-  //         .map((p: any) => ({
-  //           name: p.name,
-  //           net_sales:
-  //             parseFloat(p.price || 0) * parseInt(p.total_sales || 0),
-  //           items_sold: parseInt(p.total_sales || 0),
-  //         }));
+      return () => clearInterval(timer);
+    }, [value, duration]);
 
-  //       setChartData(data);
-  //     })
-  //     .catch(() => {
-  //       setError("Failed to load product sales data");
-  //     });
+    return <>{count}</>;
+  };
 
-  //   axios({
-  //     method: 'GET',
-  //     url: `${appLocalizer.apiUrl}/wc/v3/products`,
-  //     headers: { 'X-WP-Nonce': appLocalizer.nonce },
-  //     params: {
-  //       per_page: 5,
-  //       meta_key: 'multivendorx_store_id',
-  //       orderby: 'rating',
-  //       order: 'desc',
-  //     },
-  //   })
-  //     .then(response => {
-  //       const filtered = response.data.filter(
-  //         (product: any) => parseFloat(product.average_rating) > 0
-  //       );
-  //       console.log("Top reviewed products:", filtered);
-  //       setToReviewedProduct(filtered);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error fetching top reviewed products:', error);
-  //     });
-
-  //   axios({
-  //     method: 'GET',
-  //     url: `${appLocalizer.apiUrl}/wc/v3/products`,
-  //     headers: { 'X-WP-Nonce': appLocalizer.nonce },
-  //     params: {
-  //       per_page: 5,
-  //       meta_key: 'multivendorx_store_id',
-  //       orderby: 'popularity',
-  //       order: 'desc',
-  //     },
-  //   })
-  //     .then(response => {
-  //       const filtered = response.data.filter(
-  //         (product: any) => Number(product.total_sales) > 0
-  //       );
-  //       console.log("Top selling products:", filtered);
-  //       setToSellingProduct(filtered);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error fetching top selling products:', error);
-  //     });
-
-  //   axios({
-  //     method: 'GET',
-  //     url: `${appLocalizer.apiUrl}/wc/v3/products`,
-  //     headers: { 'X-WP-Nonce': appLocalizer.nonce },
-  //     params: {
-  //       per_page: 1, // Get only 1 product, but retrieve the count of all matching products
-  //       stock_status: 'outofstock', // Filter for out-of-stock products
-  //     },
-  //   })
-  //     .then(response => {
-  //       // 2. Get the Count from the Header
-  //       const outOfStockCount = response.headers['x-wp-total'];
-
-  //       console.log("Total Out of Stock Count:", outOfStockCount);
-  //       // You can set this count to a state variable here, e.g., setOutOfStockCount(outOfStockCount);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error fetching out of stock count:', error);
-  //     });
-  //   axios({
-  //     method: 'GET',
-  //     url: `${appLocalizer.apiUrl}/wc/v3/products`,
-  //     headers: { 'X-WP-Nonce': appLocalizer.nonce },
-  //     params: {
-  //       per_page: 1, // Crucial: only request 1 item to minimize data transfer
-  //       stock_status: 'onbackorder', // Filter for products available for backorder
-  //       // Include this if you need to filter by a specific store/vendor:
-  //       // meta_key: 'multivendorx_store_id', 
-  //     },
-  //   })
-  //     .then(response => {
-  //       // 💡 The total count is provided in the 'X-WP-Total' response header
-  //       const onBackorderCount = response.headers['x-wp-total'];
-
-  //       console.log("Total On Backorder Count:", onBackorderCount);
-
-  //       // You can now use this variable to update your UI or state
-  //       // setOnBackorderCount(onBackorderCount);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error fetching on backorder count:', error);
-  //     });
-  //   axios({
-  //     method: 'GET',
-  //     url: `${appLocalizer.apiUrl}/wc/v3/products`,
-  //     headers: { 'X-WP-Nonce': appLocalizer.nonce },
-  //     params: {
-  //       per_page: 1, // Only need 1 result to retrieve the total count from the header
-  //       stock_status: 'instock', // <-- Filter for in-stock products
-  //       // Include this if you are filtering by a specific store/vendor ID:
-  //       // meta_key: 'multivendorx_store_id', 
-  //     },
-  //   })
-  //     .then(response => {
-  //       // Access the total count from the custom header 'x-wp-total'
-  //       const inStockCount = response.headers['x-wp-total'];
-
-  //       console.log("Total In Stock Count:", inStockCount);
-
-  //       // You can set this value to a state variable here, e.g., setInStockCount(inStockCount);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error fetching in stock count:', error);
-  //     });
-
-  //   // Define your low stock threshold (e.g., 2)
-  //   const lowStockThreshold = 2;
-
-  //   axios({
-  //     method: 'GET',
-  //     url: `${appLocalizer.apiUrl}/wc/v3/products`,
-  //     headers: { 'X-WP-Nonce': appLocalizer.nonce },
-  //     params: {
-  //       per_page: 1,
-  //       stock_status: 'instock',         // Must be in stock
-  //       min_stock_quantity: 1,           // Stock must be greater than or equal to 1
-  //       max_stock_quantity: lowStockThreshold, // Stock must be less than or equal to the threshold
-  //       // meta_key: 'multivendorx_store_id', // Keep if filtering by vendor
-  //     },
-  //   })
-  //     .then(response => {
-  //       // Access the total count from the 'X-WP-Total' header
-  //       const lowStockCount = response.headers['x-wp-total'];
-
-  //       console.log(`Total Low Stock Count (Stock <= ${lowStockThreshold}):`, lowStockCount);
-
-  //       // setLowStockCount(lowStockCount);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error fetching low stock count:', error);
-  //     });
-
-  // }, []);
-
-
-
+  
   useEffect(() => {
     // Fetch store list
     axios
@@ -723,29 +542,12 @@ const Revenue: React.FC = () => {
     <div className="dashboard-overview">
       {/* Keep entire top dashboard layout */}
       <div className="row">
-        {/* <div className="column">
-          <div className="card-header">
-            <div className="left"><div className="title">Revenue Trend Analysis</div></div>
-          </div>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={[]}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="revenue" stroke="#5007aa" strokeWidth={3} />
-              <Line type="monotone" dataKey="net_sale" stroke="#ff7300" strokeWidth={3} />
-              <Line type="monotone" dataKey="admin_amount" stroke="#00c49f" strokeWidth={3} />
-            </LineChart>
-          </ResponsiveContainer>
-        </div> */}
         <div className="column transparent">
           <div className="analytics-container report">
             {overview.map((item, idx) => (
               <div key={idx} className="analytics-item">
                 <div className="analytics-icon"><i className={item.icon}></i></div>
-                <div className="details"><div className="number">{item.count}</div><div className="text">{item.label}</div></div>
+                <div className="details"><div className="number"><Counter value={item.count} /></div><div className="text">{item.label}</div></div>
               </div>
             ))}
           </div>

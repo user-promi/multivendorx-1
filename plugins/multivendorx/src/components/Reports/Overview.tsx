@@ -47,6 +47,31 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
   const [topCustomers, setTopCustomers] = useState<any[]>([]);
   const [topStores, setTopStores] = useState<any[]>([]);
 
+  const Counter = ({ value, duration = 1200, format }) => {
+    const [count, setCount] = React.useState(0);
+
+    React.useEffect(() => {
+      let start = 0;
+      const end = Number(value);
+      if (isNaN(end)) return;
+
+      const step = end / (duration / 16);
+
+      const timer = setInterval(() => {
+        start += step;
+        if (start >= end) {
+          start = end;
+          clearInterval(timer);
+        }
+        setCount(start);
+      }, 16);
+
+      return () => clearInterval(timer);
+    }, [value]);
+
+    return <>{format ? format(count) : Math.floor(count)}</>;
+  };
+
   const fetchCommissionDetails = async () => {
     axios({
       method: 'GET',
@@ -66,49 +91,57 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
           {
             id: 'total_order_amount',
             label: 'Total Order Amount',
-            count: formatCurrency(data.total_order_amount),
+            count: Number(data.total_order_amount),
+            formatted: formatCurrency(data.total_order_amount),
             icon: 'adminlib-order green',
           },
           {
             id: 'facilitator_fee',
             label: 'Facilitator Fee',
-            count: formatCurrency(data.facilitator_fee),
+            count: Number(data.facilitator_fee),
+            formatted: formatCurrency(data.facilitator_fee),
             icon: 'adminlib-facilitator blue',
           },
           {
             id: 'gateway_fee',
             label: 'Gateway Fee',
-            count: formatCurrency(data.gateway_fee),
+            count: Number(data.gateway_fee),
+            formatted: formatCurrency(data.gateway_fee),
             icon: 'adminlib-credit-card red',
           },
           {
             id: 'shipping_amount',
             label: 'Shipping Amount',
-            count: formatCurrency(data.shipping_amount),
+            count: Number(data.shipping_amount),
+            formatted: formatCurrency(data.shipping_amount),
             icon: 'adminlib-shipping green',
           },
           {
             id: 'tax_amount',
             label: 'Tax Amount',
-            count: formatCurrency(data.tax_amount),
+            count: Number(data.tax_amount),
+            formatted: formatCurrency(data.tax_amount),
             icon: 'adminlib-tax-compliance blue',
           },
           {
             id: 'shipping_tax_amount',
             label: 'Shipping Tax Amount',
-            count: formatCurrency(data.shipping_tax_amount),
+            count: Number(data.shipping_tax_amount),
+            formatted: formatCurrency(data.shipping_tax_amount),
             icon: 'adminlib-per-product-shipping purple',
           },
           {
             id: 'commission_total',
             label: 'Commission Total',
-            count: formatCurrency(data.commission_total),
+            count: Number(data.commission_total),
+            formatted: formatCurrency(data.commission_total),
             icon: 'adminlib-commission yellow',
           },
           {
             id: 'commission_refunded',
             label: 'Commission Refunded',
-            count: formatCurrency(data.commission_refunded),
+            count: Number(data.commission_refunded),
+            formatted: formatCurrency(data.commission_refunded),
             icon: 'adminlib-marketplace-refund red',
           },
         ];
@@ -269,7 +302,7 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
                   <i className={item.icon}></i>
                 </div>
                 <div className="details">
-                  <div className="number">{item.count}</div>
+                  <div className="number"><Counter value={item.count} format={formatCurrency} /></div>
                   <div className="text">{item.label}</div>
                 </div>
               </div>
@@ -579,7 +612,7 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
                       rel="noopener noreferrer"
                     >
                       <div >
-                        {}
+                        { }
                       </div>
                       <div className="avatar">
                         <span>{((store.store_name?.trim())?.charAt(0) || "").toUpperCase()}</span>

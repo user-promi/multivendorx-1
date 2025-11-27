@@ -315,7 +315,7 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 								<label htmlFor="product-name">Fixed</label>
 								<BasicInput preInsideText={"$"} postText={"+"} name="commission_fixed" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.commission_fixed} onChange={handleChange} />
 							</div>
-
+								
 							<div className="form-group">
 								<label htmlFor="product-name">Percentage</label>
 								<BasicInput postInsideText={"%"} name="commission_percentage" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.commission_percentage} onChange={handleChange} />
