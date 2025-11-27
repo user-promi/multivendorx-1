@@ -74,13 +74,19 @@ class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
 
 
     /**
-     * get tour status
-     *
-     * @return \WP_Error|\WP_REST_Response
+     * Get tour status
      */
     public function get_items( $request ) {
-        // $status = MultivendorX()->setting->get_option( 'multivendorx_tour_active', false );
-        return array( 'active' => true );
+
+        // Directly fetch stored value
+        $status = get_option( 'multivendorx_tour_active', false );
+
+        // Force boolean
+        $status = filter_var( $status, FILTER_VALIDATE_BOOLEAN );
+
+        return array(
+            'active' => $status,
+        );
     }
 
     /**
