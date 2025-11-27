@@ -263,7 +263,7 @@ const StatusAndTools: React.FC< SettingsProps > = () => {
                 brandImg={ Brand }
                 supprot={ supportLink }
                 Link={ Link }
-                settingName={'Status And Tools'}
+                settingName={'Status & Tools'}
             />
         </SettingProvider>
     );
