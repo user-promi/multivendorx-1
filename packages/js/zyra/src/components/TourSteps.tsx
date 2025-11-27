@@ -10,16 +10,17 @@ import { getApiLink } from '../utils/apiService';
 
 // Types
 interface AppLocalizer {
-    enquiry_form_settings_url: string;
-    module_page_url: string;
-    settings_page_url: string;
-    customization_settings_url: string;
-    apiUrl: string;
+    enquiry_form_settings_url?: string;
+    module_page_url?: string;
+    settings_page_url?: string;
+    customization_settings_url?: string;
+    apiUrl?: string;
     nonce?: any;
+    site_url?:any;
 }
 
 interface TourStep {
-    selector: string;
+    selector: any;
     placement?: 'top' | 'bottom' | 'left' | 'right' | 'auto';
     content: () => JSX.Element;
 }
@@ -52,25 +53,27 @@ const Tour: React.FC<TourProps> = ({ appLocalizer }) => {
             }
         });
 
-    const navigateTo = async (
-        url: string,
-        step: number,
-        selector: string
-    ): Promise<void> => {
-        setIsNavigating(true);
-        setIsOpen(false); // Close the tour
-        window.location.href = url; // Navigate to the new page
-
-        // Wait for the element to load
-        await waitForElement(selector);
-
-        // Ensure a short delay to handle rendering latencies
-        setTimeout(() => {
-            setCurrentStep(step); // Move to the next step
-            setIsOpen(true); // Reopen the tour
-            setIsNavigating(false);
-        }, 500); // Adjust delay as needed
-    };
+        const navigateTo = async (
+            url: string,
+            step: number,
+            selector?: string // optional
+        ): Promise<void> => {
+            setIsNavigating(true);
+            setIsOpen(false); // Close the tour
+            window.location.href = url; // Navigate to the new page
+        
+            // Wait for the element only if selector is provided
+            if (selector) {
+                await waitForElement(selector);
+            }
+        
+            // Short delay to handle page rendering
+            setTimeout(() => {
+                setCurrentStep(step); // Move to the next step
+                setIsOpen(true); // Reopen the tour
+                setIsNavigating(false);
+            }, 500);
+        };
 
     const finishTour = async (): Promise<void> => {
         setIsOpen(false); // Close the tour
@@ -96,103 +99,25 @@ const Tour: React.FC<TourProps> = ({ appLocalizer }) => {
 
     const settingsTourSteps: TourStep[] = [
         {
-            selector: '[data="catalog-showcase-tour"]',
-            placement: 'top',
+            selector: undefined,
+            placement: 'right',
             content: () => (
                 <div className="tour-box">
-                    <h3>Enable Catalog Mode</h3>
-                    <h4>
-                        Activate Catalog mode to display your site as a product
-                        catalog, removing the &quot;Add to Cart&quot; button and
-                        optionally hiding prices.
-                    </h4>
-                    <div className="tour-footer">
-                        <button
-                            className="admin-btn btn-purple"
-                            onClick={() => setCurrentStep(1)}
-                        >
-                            Next
-                        </button>
-                        <button
-                            className="admin-btn btn-purple end-tour-btn"
-                            onClick={() => finishTour()}
-                        >
-                            End Tour
-                        </button>
-                    </div>
-                </div>
-            ),
-        },
-        {
-            selector: '[data="enquiry-showcase-tour"]',
-            content: () => (
-                <div className="tour-box">
-                    <h3>Enable Enquiry Mode</h3>
-                    <h4>
-                        Turn on Enquiry mode to add an &quot;Enquiry&quot;
-                        button for customers, allowing direct communication via
-                        submitted forms, viewable in the admin dashboard or via
-                        email.
-                    </h4>
-                    <div className="tour-footer">
-                        <button
-                            className="admin-btn btn-purple"
-                            onClick={() => {
-                                const checkbox =
-                                    document.querySelector<HTMLInputElement>(
-                                        `[id="toggle-switch-enquiry"]`
-                                    );
-
-                                if (checkbox?.checked) {
-                                    navigateTo(
-                                        appLocalizer.enquiry_form_settings_url,
-                                        2,
-                                        '.button-visibility'
-                                    );
-                                } else {
-                                    setCurrentStep(3);
-                                }
-                            }}
-                        >
-                            Next
-                        </button>
-                        <button
-                            className="admin-btn btn-purple end-tour-btn"
-                            onClick={() => finishTour()}
-                        >
-                            End Tour
-                        </button>
-                    </div>
-                </div>
-            ),
-        },
-        {
-            selector: '.button-visibility .adminlib-eye-blocked',
-            content: () => (
-                <div className="tour-box">
-                    <h3>Customize Enquiry Form</h3>
-                    <h4>
-                        Head to the Enquiry Form Builder to enable the fields
-                        customers need to fill out when submitting product
-                        inquiries.
-                    </h4>
+                    <h3>Store Commissionstest from zyra</h3>
+                    <h4>Manage your store commission settings here.</h4>
                     <div className="tour-footer">
                         <button
                             className="admin-btn btn-purple"
                             onClick={() =>
                                 navigateTo(
-                                    appLocalizer.module_page_url,
-                                    3,
-                                    '[data="quote-showcase-tour"]'
+                                    `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=disbursement`,
+                                    1
                                 )
                             }
                         >
                             Next
                         </button>
-                        <button
-                            className="admin-btn btn-purple end-tour-btn"
-                            onClick={() => finishTour()}
-                        >
+                        <button className="admin-btn btn-purple" onClick={() => finishTour()}>
                             End Tour
                         </button>
                     </div>
@@ -200,78 +125,25 @@ const Tour: React.FC<TourProps> = ({ appLocalizer }) => {
             ),
         },
         {
-            selector: '[data="quote-showcase-tour"]',
+            selector: undefined,
+            placement: 'auto',
             content: () => (
                 <div className="tour-box">
-                    <h3>Enable Quote Module</h3>
-                    <h4>
-                        Activate the Quote module to let customers request
-                        personalized product quotations. Admins can review the
-                        quotes and provide tailored pricing for customers to
-                        proceed with purchases.
-                    </h4>
+                    <h3>Disbursement</h3>
+                    <h4>View and configure your disbursement settings here.</h4>
                     <div className="tour-footer">
                         <button
                             className="admin-btn btn-purple"
-                            onClick={() => {
-                                const checkbox =
-                                    document.querySelector<HTMLInputElement>(
-                                        `[id="toggle-switch-quote"]`
-                                    );
-
-                                if (checkbox?.checked) {
-                                    navigateTo(
-                                        appLocalizer.settings_page_url,
-                                        4,
-                                        '[data="quote-permission"]'
-                                    );
-                                } else {
-                                    navigateTo(
-                                        appLocalizer.customization_settings_url,
-                                        5,
-                                        '.enquiry-btn'
-                                    );
-                                }
-                            }}
-                        >
-                            Next
-                        </button>
-                        <button
-                            className="admin-btn btn-purple end-tour-btn"
-                            onClick={() => finishTour()}
-                        >
-                            End Tour
-                        </button>
-                    </div>
-                </div>
-            ),
-        },
-        {
-            selector: '[data="quote-permission"]',
-            content: () => (
-                <div className="tour-box">
-                    <h3>Configure Quote Settings</h3>
-                    <h4>
-                        Set up your quotation settings by defining whether to
-                        limit quote requests to logged-in users only.
-                    </h4>
-                    <div className="tour-footer">
-                        <button
-                            className="btn-purple"
                             onClick={() =>
                                 navigateTo(
-                                    appLocalizer.customization_settings_url,
-                                    5,
-                                    '.enquiry-btn'
+                                    `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=payment-integration`,
+                                    2
                                 )
                             }
                         >
                             Next
                         </button>
-                        <button
-                            className="admin-btn btn-purple end-tour-btn"
-                            onClick={() => finishTour()}
-                        >
+                        <button className="admin-btn btn-purple" onClick={() => finishTour()}>
                             End Tour
                         </button>
                     </div>
@@ -279,43 +151,71 @@ const Tour: React.FC<TourProps> = ({ appLocalizer }) => {
             ),
         },
         {
-            selector: '.enquiry-btn',
-            content: () => {
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                const handleImageLoad = () => {
-                    // Recalculate position after the image is loaded
-                    const element = document.querySelector('.enquiry-btn');
-                    element?.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'center',
-                    });
-                };
-
-                return (
-                    <div className="tour-box">
-                        <h3>Arrange Enquiry Button</h3>
-                        <img
-                            // src={gif}
-                            alt="Guide"
-                            width="160"
-                        // onLoad={handleImageLoad} // Handle image load event
-                        />
-                        <h4>
-                            With the Enquiry tab selected, drag and drop to
-                            position the Enquiry button and customize its look.
-                        </h4>
-                        <div className="tour-footer">
-                            <button
-                                className="admin-btn btn-purple"
-                                onClick={() => finishTour()}
-                            >
-                                Finish
-                            </button>
-                        </div>
+            selector: undefined,
+            placement: 'auto',
+            content: () => (
+                <div className="tour-box">
+                    <h3>Payment Integration</h3>
+                    <h4>Set up your payment integration settings here.</h4>
+                    <div className="tour-footer">
+                        <button
+                            className="admin-btn btn-purple"
+                            onClick={() =>
+                                navigateTo(
+                                    `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-registration-form`,
+                                    3
+                                )
+                            }
+                        >
+                            Next
+                        </button>
+                        <button className="admin-btn btn-purple" onClick={() => finishTour()}>
+                            End Tour
+                        </button>
                     </div>
-                );
-            },
-            placement: 'auto', // Adjust dynamically based on space
+                </div>
+            ),
+        },
+        {
+            selector: undefined,
+            placement: 'auto',
+            content: () => (
+                <div className="tour-box">
+                    <h3>Store Registration Form</h3>
+                    <h4>Manage the registration form for new stores.</h4>
+                    <div className="tour-footer">
+                        <button
+                            className="admin-btn btn-purple"
+                            onClick={() =>
+                                navigateTo(
+                                    `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=modules`,
+                                    4
+                                )
+                            }
+                        >
+                            Next
+                        </button>
+                        <button className="admin-btn btn-purple" onClick={() => finishTour()}>
+                            End Tour
+                        </button>
+                    </div>
+                </div>
+            ),
+        },
+        {
+            selector: undefined,
+            placement: 'auto',
+            content: () => (
+                <div className="tour-box">
+                    <h3>Modules</h3>
+                    <h4>Here you can enable or disable marketplace modules.</h4>
+                    <div className="tour-footer">
+                        <button className="admin-btn btn-purple" onClick={() => finishTour()}>
+                            Finish Tour
+                        </button>
+                    </div>
+                </div>
+            ),
         },
     ];
 
