@@ -97,29 +97,14 @@ const LatestRefundRequest: React.FC<LatestRefundRequestProps> = ({ store_id }) =
             ),
         },
         {
+            id: 'status',
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => {
-                const status = row.original.status || '';
-                const formattedStatus = status
-                    ?.replace(/[-_]/g, " ")
-                    .toLowerCase()
-                    .replace(/^\w/, c => c.toUpperCase());
-
-                const getStatusBadge = (status: string) => {
-                    switch (status) {
-                        case 'completed':
-                            return <span className="admin-badge green">Completed</span>;
-                        case 'private':
-                            return <span className="admin-badge yellow">Private</span>;
-                        default:
-                            return <span className="admin-badge gray">{formattedStatus}</span>;
-                    }
-                };
-
                 return (
-                    <TableCell title={`${status}`}>
-                        {getStatusBadge(status)}
-                    </TableCell>
+                    <TableCell
+                        type="status"
+                        status={row.original.status}
+                    />
                 );
             },
         },

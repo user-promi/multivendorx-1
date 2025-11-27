@@ -365,20 +365,16 @@ export const KnowledgeBase: React.FC = () => {
             },
         },
         {
+            id: 'status',
             header: __('Status', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.status || ''}>
-                    {row.original.status ? (
-                        <>
-                            {row.original.status === 'publish' && <span className="admin-badge green">Published</span>}
-                            {row.original.status === 'pending' && <span className="admin-badge yellow">Pending</span>}
-                            {row.original.status === 'draft' && <span className="admin-badge blue">Draft</span>}
-                        </>
-                    ) : (
-                        '-'
-                    )}
-                </TableCell>
-            ),
+            cell: ({ row }) => {
+                return (
+                    <TableCell
+                        type="status"
+                        status={row.original.status}
+                    />
+                );
+            },
         },
         {
             id: 'action',

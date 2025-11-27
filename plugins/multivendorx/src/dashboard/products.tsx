@@ -7,7 +7,7 @@ import {
     PaginationState,
 } from '@tanstack/react-table';
 import axios from 'axios';
-import {formatCurrency} from '../services/commonFunction';
+import { formatCurrency } from '../services/commonFunction';
 
 type ProductRow = {
     id: number;
@@ -310,20 +310,16 @@ const AllProduct: React.FC = () => {
             ),
         },
         {
+            id: 'status',
             header: __('Status', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell>
-                    {row.original.status === 'publish' && (
-                        <span className="admin-badge green">Published</span>
-                    )}
-                    {row.original.status === 'pending' && (
-                        <span className="admin-badge yellow">Pending</span>
-                    )}
-                    {row.original.status === 'draft' && (
-                        <span className="admin-badge gray">Draft</span>
-                    )}
-                </TableCell>
-            ),
+            cell: ({ row }) => {
+                return (
+                    <TableCell
+                        type="status"
+                        status={row.original.status}
+                    />
+                );
+            },
         },
         {
             id: 'action',
@@ -338,8 +334,8 @@ const AllProduct: React.FC = () => {
                                 label: __('Edit', 'multivendorx'),
                                 icon: 'adminlib-edit',
                                 onClick: (rowData) => {
-                                     let url = appLocalizer.permalink_structure
-                                        ? `${appLocalizer.add_product_link}/${rowData.id}` 
+                                    let url = appLocalizer.permalink_structure
+                                        ? `${appLocalizer.add_product_link}/${rowData.id}`
                                         : `${appLocalizer.add_product_link}&context_id=${rowData.id}`;
                                     window.location.assign(url);
                                 },
@@ -357,7 +353,7 @@ const AllProduct: React.FC = () => {
                                 icon: 'adminlib-vendor-form-copy',
                                 onClick: () => {
                                     const url = row.original.permalink;
-                                    navigator.clipboard.writeText(url).catch(() => {});
+                                    navigator.clipboard.writeText(url).catch(() => { });
                                 },
                             },
                             // {
@@ -603,11 +599,11 @@ const AllProduct: React.FC = () => {
     const handleDelete = async (productId) => {
         const res = await axios.delete(
             `${appLocalizer.apiUrl}/wc/v3/products/${productId}`, {
-                headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            }
-            );
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        }
+        );
 
-            requestData();
+        requestData();
     }
 
     return (

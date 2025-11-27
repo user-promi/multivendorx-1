@@ -141,23 +141,17 @@ const History: React.FC = () => {
             ),
         },
         {
+            id: 'status',
             header: __('Status', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.status || ""}>
-                    {row.original.status === "Active" && (
-                        <span className="admin-badge green">Active</span>
-                    )}
-                    {row.original.status === "Inactive" && (
-                        <span className="admin-badge ">Inactive</span>
-                    )}
-                    {row.original.status === "Expired" && (
-                        <span className="admin-badge red">Expired</span>
-                    )}
-                </TableCell>
-
-
-            ),
-        },
+            cell: ({ row }) => {
+              return (
+                <TableCell
+                  type="status"
+                  status={row.original.status}
+                />
+              );
+            },
+          },
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (

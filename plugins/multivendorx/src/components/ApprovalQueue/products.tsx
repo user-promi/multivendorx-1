@@ -298,17 +298,6 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                 return <TableCell title={formatted}>{formatted}</TableCell>;
             },
         },
-        // {
-        //     header: __('Status', 'multivendorx'),
-        //     cell: ({ row }) => <TableCell title={row.original.status || ''}>
-        //         {row.original.status === "active" && (
-        //             <span className="admin-badge green">Active</span>
-        //         )}
-        //         {row.original.status === "pending" && (
-        //             <span className="admin-badge yellow">Pending</span>
-        //         )}
-        //     </TableCell>,
-        // },
         {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) =>

@@ -382,6 +382,18 @@ const Transactions: React.FC = () => {
       },
     },
     {
+      id: 'status',
+      header: __('Status', 'multivendorx'),
+      cell: ({ row }) => {
+        return (
+          <TableCell
+            type="status"
+            status={row.original.status}
+          />
+        );
+      },
+    },
+    {
       header: __('Order Total', 'multivendorx'),
       cell: ({ row }) => (
         <TableCell title={`${currencySymbol}${row.original.commission.total_order_amount || ''}`}>

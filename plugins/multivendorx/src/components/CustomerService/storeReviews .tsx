@@ -400,19 +400,14 @@ const StoreReviews: React.FC = () => {
         {
             id: 'status',
             header: __('Status', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.status}>
-                    {row.original.status === "Approved" && (
-                        <span className="admin-badge green">Active</span>
-                    )}
-                    {row.original.status === "Pending" && (
-                        <span className="admin-badge yellow">Pending</span>
-                    )}
-                    {row.original.status === "Rejected" && (
-                        <span className="admin-badge red">Rejected</span>
-                    )}
-                </TableCell>
-            ),
+            cell: ({ row }) => {
+                return (
+                    <TableCell
+                        type="status"
+                        status={row.original.status}
+                    />
+                );
+            },
         },
         {
             id: 'date_created',

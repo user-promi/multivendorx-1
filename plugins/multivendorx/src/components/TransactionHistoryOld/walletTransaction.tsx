@@ -456,31 +456,11 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             id: 'status',
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => {
-                const status = row.original.status || '';
-                const formattedStatus = status
-                    ?.replace(/[-_]/g, " ")
-                    .toLowerCase()
-                    .replace(/^\w/, c => c.toUpperCase());
-
-                const getStatusBadge = (status: string) => {
-                    switch (status) {
-                        case 'Completed':
-                            return <span className="admin-badge green">Completed</span>;
-                        case 'Processed':
-                            return <span className="admin-badge yellow">Processed</span>;
-                        case 'Upcoming':
-                            return <span className="admin-badge blue">Upcoming</span>;
-                        case 'Failed':
-                            return <span className="admin-badge red">Failed</span>;
-                        default:
-                            return <span className="admin-badge gray">{formattedStatus}</span>;
-                    }
-                };
-
                 return (
-                    <TableCell title={`${status}`}>
-                        {getStatusBadge(status)}
-                    </TableCell>
+                    <TableCell
+                        type="status"
+                        status={row.original.status}
+                    />
                 );
             },
         },
@@ -615,7 +595,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
 
                 else if (type === 'refund') {
                     displayValue = `Refund - Order #${orderId || '-'}`;
-                
+
                     const orderEditUrl = `${appLocalizer.site_url}/wp-admin/admin.php?page=wc-orders&action=edit&id=${orderId}`;
                     content = orderId ? (
                         <a
@@ -630,8 +610,8 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                         displayValue
                     );
                 }
-                
-                
+
+
 
                 // Generic fallback
                 else if (row.original.transaction_type) {

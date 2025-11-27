@@ -283,50 +283,15 @@ const StoreTable: React.FC = () => {
             id: 'status',
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => {
-                const status = row.original.status || '';
-                const rawDate = row.original.applied_on;
-                let formattedDate = '-';
-                if (rawDate) {
-                    const dateObj = new Date(rawDate);
-                    formattedDate = new Intl.DateTimeFormat('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                    }).format(dateObj);
-                }
-                const formattedStatus = status
-                    ?.replace(/[-_]/g, " ")
-                    .toLowerCase()
-                    .replace(/^\w/, c => c.toUpperCase());
-
-                const getStatusBadge = (status: string) => {
-                    switch (status) {
-                        case 'active':
-                            return <span className="admin-badge green">Active</span>;
-                        case 'pending':
-                            return <span className="admin-badge yellow">Pending</span>;
-                        case 'rejected':
-                            return <span className="admin-badge red">Rejected</span>;
-                        case 'permanently_rejected':
-                            return <span className="admin-badge red">Permanently Rejected</span>;
-                        case 'under_review':
-                            return <span className="admin-badge yellow">Under Review</span>;
-                        case 'suspended':
-                            return <span className="admin-badge red">Suspended</span>;
-                        case 'deactivated':
-                            return <span className="admin-badge red">Deactivated</span>;
-                        default:
-                            return <span className="admin-badge gray">-</span>;
-                    }
-                };
-
                 return (
-                    <TableCell title={`${status} - ${formattedDate}`}>
-                        {getStatusBadge(status)}
-                    </TableCell>
+                    <TableCell 
+                        type="status"
+                        status={row.original.status}
+                    />
                 );
             },
         },
+
         {
             id: 'action',
             header: __('Action', 'multivendorx'),

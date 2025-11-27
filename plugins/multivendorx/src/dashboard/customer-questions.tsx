@@ -320,30 +320,14 @@ const CustomerQuestions: React.FC = () => {
             cell: ({ row }) => <TableCell title={String(row.original.total_votes) || ''}>{row.original.total_votes ?? 0}</TableCell>
         },
         {
-            header: __('Visibility', 'multivendorx'),
-            enableSorting: true,
+            id: 'status',
+            header: __('Status', 'multivendorx'),
             cell: ({ row }) => {
-                const visibility = row.original.question_visibility || '';
-                const formattedvisibility = visibility
-                    ?.replace(/[-_]/g, " ")
-                    .toLowerCase()
-                    .replace(/^\w/, c => c.toUpperCase());
-
-                const getStatusBadge = (status: string) => {
-                    switch (status) {
-                        case 'public':
-                            return <span className="admin-badge green">Public</span>;
-                        case 'private':
-                            return <span className="admin-badge yellow">Private</span>;
-                        default:
-                            return <span className="admin-badge gray">{formattedvisibility}</span>;
-                    }
-                };
-
                 return (
-                    <TableCell title={`${visibility}`}>
-                        {getStatusBadge(visibility)}
-                    </TableCell>
+                    <TableCell
+                        type="status"
+                        status={row.original.status}
+                    />
                 );
             },
         },
