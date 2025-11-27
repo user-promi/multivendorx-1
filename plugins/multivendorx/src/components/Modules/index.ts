@@ -235,16 +235,6 @@ export default {
             pro_module: true,
             category: 'payment_management'
         },
-        // {
-        //     id: 'stripe-connect',
-        //     name: __('Stripe Connect', 'multivendorx'),
-        //     desc: "Connect to vendors stripe account and make hassle-free transfers as scheduled.",
-        //     icon: 'adminlib-rules',
-        //     doc_link: 'https://multivendorx.com/docs/knowledgebase/stripe-connect',
-        //     //settings_link: admin_url('admin.php?page=mvx#&submenu=payment&name=payment-stripe-connect'),
-        //     pro_module: false,
-        //     category: 'payment_management'
-        // },
         {
             id: 'stripe-marketplace',
             name: __('Stripe Marketplace', 'multivendorx'),

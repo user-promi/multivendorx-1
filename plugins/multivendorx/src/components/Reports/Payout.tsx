@@ -242,27 +242,8 @@ const Transactions: React.FC = () => {
   const currencySymbol = appLocalizer?.currency_symbol;
 
   const columns: ColumnDef<StoreRow>[] = [
-    // {
-    //   id: 'select',
-    //   header: ({ table }) => (
-    //     <input
-    //       type="checkbox"
-    //       checked={table.getIsAllRowsSelected()}
-    //       onChange={table.getToggleAllRowsSelectedHandler()}
-    //     />
-    //   ),
-    //   cell: ({ row }) => (
-    //     <input
-    //       type="checkbox"
-    //       checked={row.getIsSelected()}
-    //       onChange={row.getToggleSelectedHandler()}
-    //     />
-    //   ),
-    // },
+
     {
-      // id: 'store_name',
-      // accessorKey: 'store_name',
-      // enableSorting: true,
       header: __('Store', 'multivendorx'),
       cell: ({ row }) => {
         const status = row.original.status || '';
@@ -315,21 +296,8 @@ const Transactions: React.FC = () => {
         );
       },
     },
-    // {
-    //   header: __('Contact', 'multivendorx'),
-    //   cell: ({ row }) => (
-    //     <TableCell title={row.original.email || ''}>
-    //       <div className="table-content">
 
-    //       </div>
-    //     </TableCell>
-    //   ),
-    // },
     {
-      // id: 'primary_owner',
-      // accessorKey: 'primary_owner',
-      // enableSorting: true,
-      // accessorFn: (row) => row.primary_owner?.data.display_name || row.primary_owner?.data.user_email || '',
       header: __('Primary Owner', 'multivendorx'),
       cell: ({ row }) => {
         const primaryOwner = row.original.primary_owner;
@@ -520,8 +488,6 @@ const Transactions: React.FC = () => {
         </div>
       </div>
 
-      {/* <div className="row">
-        <div className="column"> */}
       <div className="card-header p-top">
         <div className="left">
           <div className="title">
@@ -548,8 +514,6 @@ const Transactions: React.FC = () => {
         searchFilter={searchFilter}
         realtimeFilter={realtimeFilter}
       />
-      {/* </div>
-      </div> */}
     </>
   );
 };

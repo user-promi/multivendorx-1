@@ -4,7 +4,6 @@ import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { getApiLink, Table, TableCell, CommonPopup, TextArea, CalendarInput } from 'zyra';
 import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
-import { formatCurrency } from '../../services/commonFunction';
 
 type CouponRow = {
     store_name: string;
@@ -233,11 +232,6 @@ const Coupons: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                 return <TableCell title={formattedType}>{row.original?.amount ?? '-'} {formattedType}</TableCell>;
             },
         },
-        // {
-        //     header: __('Amount', 'multivendorx'),
-        //     accessorFn: (row) => parseFloat(row.amount || '0'), // sorting numeric
-        //     cell: ({ row }) => <TableCell title={row.original?.amount ?? '-'}>{formatCurrency(row.original?.amount)}</TableCell>
-        // },
         {
             id: 'date',
             accessorKey: 'date',
@@ -257,18 +251,6 @@ const Coupons: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                     <span className="admin-btn btn-red" onClick={() => handleSingleAction('reject_coupon', row.original.id!)}><i className="adminlib-close"></i> Reject</span>
                 </TableCell>,
         },
-        // {
-        //     id: 'action',
-        //     header: __('Action', 'multivendorx'),
-        //     cell: ({ row }) => (
-        //         <TableCell type="action-dropdown" rowData={row.original} header={{
-        //             actions: [
-        //                 { label: __('Approve Coupon', 'multivendorx'), icon: 'adminlib-check', onClick: (rowData) => handleSingleAction('approve_coupon', rowData.id!), hover: true },
-        //                 { label: __('Reject Coupon', 'multivendorx'), icon: 'adminlib-close', onClick: (rowData) => handleSingleAction('reject_coupon', rowData.id!), hover: true },
-        //             ]
-        //         }} />
-        //     )
-        // }
     ];
 
 

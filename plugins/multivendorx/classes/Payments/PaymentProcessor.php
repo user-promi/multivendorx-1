@@ -151,37 +151,6 @@ class PaymentProcessor {
     }
 
 
-    // public function after_real_time_payment_complete($store_id, $order_id) {
-    //     global $wpdb;
-
-    //     $order         = $order_id > 0 ? wc_get_order($order_id) : null;
-    //     $commission_id = $order ? $order->get_meta('multivendorx_commission_id', true) : null;
-    //     $commission    = $commission_id ? CommissionUtil::get_commission_db($commission_id) : null;
-
-    //     $amount = $commission ? (float) $commission->commission_total : 0.00;
-
-    //     $data = [
-    //         'receiver_id'      => (int) $store_id,
-    //         'order_id'         => $order_id > 0 ? (int) $order_id : null,
-    //         'commission_id'    => $commission_id ? (int) $commission_id : null,
-    //         'receiver_type'    => 'Store',
-    //         'amount'           => $amount,
-    //         'currency'         => get_woocommerce_currency(),
-    //         'narration'        => "Payment Successful",
-    //     ];
-
-    //     $format = ["%d", "%d", "%d", "%s", "%f", "%s", "%s"];
-
-    //     $wpdb->insert(
-    //         $wpdb->prefix . Utill::TABLES['real_time_transaction'],
-    //         $data,
-    //         $format
-    //     );
-
-            // $transaction_id = $wpdb->insert_id;
-            // do_action('multivendorx_additional_table_entry', $transaction_id, $commission, $order);
-    // }
-
     public function cod_order_process($order_id, $old_status, $new_status, $order) {
         if ($order->get_parent_id() == 0) {
             return;

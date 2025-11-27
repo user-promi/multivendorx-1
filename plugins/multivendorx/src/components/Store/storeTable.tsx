@@ -325,14 +325,6 @@ const StoreTable: React.FC = () => {
                                     }
                                 ]
                                 : []),
-                            // {
-                            //     label: __('Delete', 'multivendorx'),
-                            //     icon: 'adminlib-vendor-form-delete',
-                            //     onClick: (rowData) => {
-                            //         window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
-                            //     },
-                            //     hover: true
-                            // },
                         ],
                     }}
                 />

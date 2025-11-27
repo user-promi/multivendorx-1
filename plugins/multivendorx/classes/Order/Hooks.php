@@ -135,12 +135,6 @@ class Hooks {
             }
         }
 
-        // $suborders = MultiVendorX()->order->get_suborders( $order_id, [], false);
-        // if ($suborders) {
-        //     foreach ( $suborders as $v_order_id ) {
-        //         wp_delete_post($v_order_id, true);
-        //     }
-        // }
         $this->create_vendor_order($order_id );
 
     }
@@ -170,11 +164,7 @@ class Hooks {
         // Check if order have suborder then sync
         $suborders = MultiVendorX()->order->get_suborders($order);
         if ( $suborders ) {
-            // foreach ( $suborders as $suborder ) {
-            //     $suborder->update_status($new_status, _x('Update via parent order: ', 'Order note', 'multivendorx'));
-            // }
-            // $order->update_meta_data('mvx_vendor_order_status_synchronized', true);
-            // $order->save();
+
             foreach ($suborders as $suborder) {
                 if ($suborder && $suborder->get_status() !== $new_status) {
                     $suborder->update_status($new_status, _x('Update via parent order: ', 'Order note', 'multivendorx'));
@@ -207,14 +197,6 @@ class Hooks {
         // $vendor_order = new VendorOrder($order);
 
         if( $vendor_id === get_current_user_id() ) {
-        //     if ( current_user_can('administrator')
-        //         && $new_status != $old_status
-        //         && apply_filters('mvx_vendor_notified_when_admin_change_status', true)
-        //     ) {
-        //         // $email_admin = WC()->mailer()->emails['WC_Email_Admin_Change_Order_Status'];
-        //         // $vendor = $vendor_order->get_vendor();
-        //         // $email_admin->trigger($order_id, $new_status, $vendor);
-        //     }
 
             $parent_order_id = $order->get_parent_id();
             if( $parent_order_id ) {

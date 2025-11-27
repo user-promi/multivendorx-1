@@ -334,13 +334,6 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
           <i onClick={onClose} className="icon adminlib-close"></i>
         </>
       }
-    // footer={
-    //   <>
-    //     <div onClick={onClose} className="admin-btn btn-red">
-    //       {__("Cancel", "multivendorx")}
-    //     </div>
-    //   </>
-    // }
     >
       <div className="content multi">
         {/* your existing code untouched */}
@@ -367,15 +360,6 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
                   <b>Email:</b> {storeData.email.split(/\s*[\n,]\s*/)[0]}
                 </div>
               )}
-
-              {/* {orderData?.payment_method_title && (
-                <div className="method">
-                  <i className="adminlib-form-paypal-email"></i>
-                  <b>Payment Method:</b>{" "}
-                  <span className="admin-badge blue">{orderData.payment_method_title}</span>
-                </div>
-              )} */}
-
             </div>
           </div>
 

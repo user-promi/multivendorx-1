@@ -1,7 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Tabs } from 'zyra';
-import Brand from '../../../assets/images/brand-logo.png';
-import BrandSmall from '../../../assets/images/brand-icon.png';
+
 import MessageAndMail from './messageAndMail';
 
 
@@ -76,8 +75,6 @@ const Memberships = () => {
                 getForm={getForm}
                 prepareUrl={prepareUrl}
                 appLocalizer={appLocalizer}
-                // brandImg={Brand}
-                // smallbrandImg={BrandSmall}
                 Link={Link}
                 settingName={'Memberships'}
             />

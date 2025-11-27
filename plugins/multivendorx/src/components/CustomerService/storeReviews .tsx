@@ -4,7 +4,6 @@ import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { Table, TableCell, CommonPopup, getApiLink, ToggleSetting, CalendarInput } from 'zyra';
 import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
-import ReviewsRatings from '../Settings/Marketplace/ReviewsRatings';
 
 type Review = {
     review_id: number;
@@ -374,46 +373,6 @@ const StoreReviews: React.FC = () => {
                 );
             },
         },
-        // {
-        //     id: 'title',
-        //     header: __('Title', 'multivendorx'),
-        //     cell: ({ row }) => (
-        //         <TableCell title={row.original.review_title}>
-        //             {row.original.review_title || '-'}
-        //         </TableCell>
-        //     ),
-        // },
-        // {
-        //     id: 'content',
-        //     header: __('Review', 'multivendorx'),
-        //     cell: ({ row }) => {
-        //         const content = row.original.review_content || '';
-        //         const shortText = content.length > 40 ? content.substring(0, 40) + '...' : content;
-
-        //         return (
-        //             <TableCell title={content}>
-        //                 {shortText || '-'}
-        //             </TableCell>
-        //         );
-        //     },
-        // },
-        // {
-        //     id: 'status',
-        //     header: __('Status', 'multivendorx'),
-        //     cell: ({ row }) => (
-        //         <TableCell title={row.original.status}>
-        //             {row.original.status === "Approved" && (
-        //                 <span className="admin-badge green">Active</span>
-        //             )}
-        //             {row.original.status === "Pending" && (
-        //                 <span className="admin-badge yellow">Pending</span>
-        //             )}
-        //             {row.original.status === "Rejected" && ( 
-        //                 <span className="admin-badge red">Rejected</span>
-        //             )}
-        //         </TableCell>
-        //     ),
-        // },
         {
             id: 'status',
             header: __('Status', 'multivendorx'),

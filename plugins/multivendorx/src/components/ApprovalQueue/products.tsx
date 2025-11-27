@@ -63,41 +63,7 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 
     const formatDateToISO8601 = (date: Date) => date.toISOString().slice(0, 19);
 
-    // const requestData = (
-    //     rowsPerPage = 10,
-    //     currentPage = 1,
-    //     store = '',
-    //     startDate?: Date,
-    //     endDate?: Date
-    // ) => {
-    //     const now = new Date();
-    //     const formattedStartDate = formatDateToISO8601(startDate || new Date(now.getFullYear(), now.getMonth() - 1, now.getDate()));
-    //     const formattedEndDate = formatDateToISO8601(endDate || now);
-
-    //     setData(null);
-
-    //     axios
-    //         .get(`${appLocalizer.apiUrl}/wc/v3/products`, {
-    //             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-    //             params: {
-    //                 page: currentPage,
-    //                 per_page: rowsPerPage,
-    //                 meta_key: 'multivendorx_store_id',
-    //                 status: 'pending',
-    //                 after: formattedStartDate,
-    //                 before: formattedEndDate,
-    //                 // Ensure all fields are included
-    //                 _fields: 'id,name,sku,price,price_html,status,images,categories,meta_data,store_name,store_slug'
-    //             },
-    //         })
-    //         .then((response) => {
-    //             const totalCount = parseInt(response.headers['x-wp-total'], 10) || 0;
-    //             setTotalRows(totalCount);
-    //             setPageCount(Math.ceil(totalCount / pagination.pageSize));
-    //             setData(response.data || []);
-    //         })
-    //         .catch(() => setData([]));
-    // };
+   
     const requestData = (
         rowsPerPage = 10,
         currentPage = 1,
@@ -229,7 +195,6 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                             rel="noreferrer"
                             className="product-wrapper"
                         >
-                            {/* <img src={image} alt={product.name} /> */}
                             {image ? (
                                 <img
                                     src={image}
@@ -256,22 +221,7 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                 return <TableCell title={categoryNames}>{categoryNames}</TableCell>;
             },
         },
-        // {
-        //     header: __('Store', 'multivendorx'),
-        //     cell: ({ row }) => {
-        //         const storeName = row.original.store_name || [];
-        //         return <TableCell title={storeName}></TableCell>;
-        //     },
-        // },
-        // {
-        //     header: __('SKU', 'multivendorx'),
-        //     cell: ({ row }) => <TableCell title={row.original.sku || ''}>{row.original.sku || '-'}</TableCell>,
-        // },
         {
-            // id: 'price',
-            // accessorKey: 'price',
-            // accessorFn: (row) => parseFloat(row.price || '0'),
-            // enableSorting: true,
             header: __('Price', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.price || ''}>

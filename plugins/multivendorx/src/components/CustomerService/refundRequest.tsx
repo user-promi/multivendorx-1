@@ -272,38 +272,6 @@ const RefundRequest: React.FC = () => {
                 return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
             },
         },
-        // {
-        //     id: 'action',
-        //     header: __('Action', 'multivendorx'),
-        //     cell: ({ row }) => (
-        //         <TableCell
-        //             type="action-dropdown"
-        //             rowData={row.original}
-        //             header={{
-        //                 actions: [
-        //                     {
-        //                         label: __('View', 'multivendorx'),
-        //                         icon: 'adminlib-eye',
-        //                         hover: true,
-        //                         onClick: (rowData) => handleViewDetails(rowData),
-        //                     },
-        //                     {
-        //                         label: __('Approve', 'multivendorx'),
-        //                         icon: 'adminlib-check',
-        //                         hover: true,
-        //                         onClick: (rowData) => handleApproveRefund(rowData),
-        //                     },
-        //                     {
-        //                         label: __('Reject', 'multivendorx'),
-        //                         icon: 'adminlib-close',
-        //                         hover: true,
-        //                         onClick: (rowData) => handleRejectRefund(rowData),
-        //                     },
-        //                 ],
-        //             }}
-        //         />
-        //     ),
-        // },
     ];
 
     // Fetch data from backend

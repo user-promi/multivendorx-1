@@ -834,54 +834,6 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                         <div className="form-group-wrapper">
                             <div className="form-group">
                                 <label>Store email(s)</label>
-                                {/* <div
-                                    ref={inputRef}
-                                    className="emails-section"
-                                    onClick={() => inputRef.current?.querySelector('input')?.focus()}
-                                >
-                                    {emails.map((email) => (
-                                        <div
-                                            className={`admin-badge ${primaryEmail === email ? 'yellow' : ''}`}
-                                            key={email}
-                                        >
-                                            <i
-                                                onClick={(e) => { e.stopPropagation(); togglePrimary(email); }}
-                                                title="Set as primary"
-                                                className={`stat-icon adminlib-star${primaryEmail === email ? ' primary' : '-o'}`}
-                                            ></i>
-                                            <span>{email}</span>
-                                            <i className="adminlib-delete close-icon"
-                                                onClick={(e) => { e.stopPropagation(); removeEmail(email); }}
-                                            >
-                                            </i>
-                                        </div>
-                                    ))}
-
-                                    <div className="input-wrapper">
-                                        <input
-                                            type="text"
-                                            value={inputValue}
-                                            onChange={(e) => setInputValue(e.target.value)}
-                                            onKeyDown={handleInputKeyDown}
-                                            placeholder={emails.length === 0 ? "Enter email addresses..." : ""}
-                                            autoFocus={emails.length === 0}
-                                        />
-
-                                        {inputValue && !inputValue.endsWith(' ') && !inputValue.endsWith(',') && isValidEmail(inputValue) && !emails.includes(inputValue.trim()) && (
-                                            <div
-                                                onClick={() => {
-                                                    const email = inputValue.trim();
-                                                    const newEmails = [...emails, email];
-                                                    setEmails(newEmails);
-                                                    setInputValue('');
-                                                    saveEmails(newEmails, primaryEmail || email);
-                                                }}
-                                            >
-                                                {inputValue.trim()}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div> */}
                                 <EmailsInput
                                     value={emails}
                                     primary={primaryEmail}

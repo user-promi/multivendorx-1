@@ -47,15 +47,6 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 	useEffect(() => {
 		if (!id) return;
 
-		// axios({
-		// 	method: 'GET',
-		// 	url: getApiLink(appLocalizer, `store/${id}`),
-		// 	headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		// }).then((res) => {
-		// 	const data = res.data || {};
-		// 	setFormData((prev) => ({ ...prev, ...data }));
-		// });
-
 		if (data) {
 			setFormData(data);
 		}

@@ -130,13 +130,6 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 									))}
 
 								{/* Registration Data */}
-								{/* {formData.registration_data &&
-									Object.entries(formData.registration_data).map(([label, value]) => (
-										<div className="form-details" key={label}>
-											<label className="label">{label} :</label>
-											<div className="value">{value || "[Not Provided]"}</div>
-										</div>
-									))} */}
 							</div>
 						</>
 					)}
@@ -163,14 +156,6 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 
 						</div>
 
-						{/* Core Data */}
-						{/* {formData.core_data &&
-							Object.entries(formData.core_data).map(([label, value]) => (
-								<div className="form-details" key={label}>
-									<label className="label">{label} :</label>
-									<div className="value">{value || "[Not Provided]"}</div>
-								</div>
-							))} */}
 
 						{/* Registration Data */}
 						{formData.registration_data && Object.keys(formData.registration_data).length > 0 ? (

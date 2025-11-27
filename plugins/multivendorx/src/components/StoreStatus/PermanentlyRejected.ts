@@ -34,11 +34,5 @@ export default {
                 },
             ],
         },
-        // {
-        //     key: 'permanent_rejected_msg',
-        //     label: 'Message shown to permantly rejected stores',
-        //     type: 'textarea',
-        //     des: 'What pending stores can do',
-        // },
     ],
 };
