@@ -8,8 +8,6 @@ use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Dashboard_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Store_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Commission_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Status_Controller;
-use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Announcement_Controller;
-use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Knowledge_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Products_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Notifications_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Payouts_Controller;
@@ -387,8 +385,6 @@ class Rest {
             'store'     => new MultiVendorX_REST_Store_Controller(),
             'commission'=> new MultiVendorX_REST_Commission_Controller(),
             'status'    => new MultiVendorX_REST_Status_Controller(),
-            'announcement' => new MultiVendorX_REST_Announcement_Controller(),
-            'knowledge' => new MultiVendorX_REST_Knowledge_Controller(),
             'payouts'   => new MultiVendorX_REST_Payouts_Controller(),
             'transaction'=> new MultiVendorX_REST_Transaction_Controller(),
             'report'=> new MultiVendorX_REST_Reports_Controller(),
