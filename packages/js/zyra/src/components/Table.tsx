@@ -293,7 +293,7 @@ export const TableCell: React.FC<TableCellProps> = ({
             content = (
                 <div
                     title={fieldValue as string}
-                    className="order-status table-row-custom"
+                    className="table-row-custom"
                 >
                     <h4 className="hide-title">{title}</h4>
                     {children}
