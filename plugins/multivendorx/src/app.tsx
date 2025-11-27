@@ -15,7 +15,6 @@ import { searchIndex, SearchItem } from './searchIndex';
 import { __ } from '@wordpress/i18n';
 import Announcements from './components/Announcements/announcements';
 import Knowledgebase from './components/Knowledgebase/knowledgebase';
-import Blogs from './components/Blogs/blogs';
 import Commission from './components/Commission/commission';
 import Analytics from './components/Reports/Reports';
 import Advertisement from './components/Advertisement/Advertisement';
@@ -119,7 +118,6 @@ const Route = () => {
       {tab === 'announcement' && <Announcements />}
       {tab === 'knowledgebase' && <Knowledgebase />}
       {tab === 'transaction-history' && <TransactionHistory />}
-      {tab === 'blogs' && <Blogs />}
       {tab === 'reports' && <Analytics />}
       {tab === 'advertisement' && <Advertisement />}
       {tab === 'help-support' && <HelpSupport />}
