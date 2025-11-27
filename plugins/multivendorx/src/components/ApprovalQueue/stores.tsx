@@ -162,15 +162,6 @@ const Stores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                              href={storeLink}
                             className="product-wrapper"
                         >
-                            {/* {row.original.image ? (
-                                <img
-                                    src={row.original.image}
-                                    alt={row.original.store_name}
-                                />
-                            ) : (
-                                <i className="adminlib-store-inventory"></i>
-                            )} */}
-
                             <div className="details">
                                 <span className="title">{store_name || '-'}</span>
                             </div>

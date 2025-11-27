@@ -15,28 +15,6 @@ class Disbursement {
         
     }
 
-    // public function disbursement_process($order_id, $old_status, $new_status, $order) {
-    //     if ($order->get_parent_id() == 0) {
-    //         return;
-    //     }
-
-    //     $disbursement_status = MultiVendorX()->setting->get_setting( 'disbursement_order_status' );
-    //     if( !empty($disbursement_status) && in_array($new_status, $disbursement_status)){
-    //         $disbursement_method = MultiVendorX()->setting->get_setting( 'disbursement_method' );
-            
-    //         if ($disbursement_method == 'instantly') {
-    //             $commission_id = $order->get_meta( 'multivendorx_commission_id', true) ?? '';
-    //             $commission = CommissionUtil::get_commission_db($commission_id);
-
-    //             $store_id = $commission->store_id;
-    //             $amount = $commission->commission_total;
-
-    //             MultiVendorX()->payments->processor->process_payment($store_id, $amount, $order_id);
-
-    //         }
-    //     }
-
-    // }
 
     public function transaction_status_update() {
         global $wpdb;

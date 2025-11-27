@@ -16,7 +16,6 @@ class Payments {
     public $providers = array();
     public function __construct() {
         $this->init_classes();
-        // $this->providers = apply_filters('multivendorx_payment_providers', $this->providers);
 
         add_action('init', [$this, 'load_all_providers']);
 

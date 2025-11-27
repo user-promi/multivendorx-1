@@ -284,27 +284,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                         Manage your weekly schedule and special hours
                                     </div>
                                 </div>
-                                {/* <div className="des">
-                                    Manage your weekly schedule and special hours
-                                </div> */}
                             </div>
-
-                            {/* <div className="store-owner-details">
-                                <div className="profile">
-                                    <div className="avater">
-                                        <span className="adminlib-calendar"></span>
-                                    </div>
-                                    <div className="details">
-                                        <div className="name">$5,420</div>
-                                        <div className="des">Oct 15, 2024</div>
-                                    </div>
-                                </div>
-                                <div className="right-details">
-                                    <div className="price">$356 .35</div>
-                                    <div className="div">Lorem, ipsum dolor.</div>
-                                </div>
-                            </div> */}
-
                             <div className="store-time-wrapper">
 
                                 <div className="row">
@@ -335,15 +315,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                         </div>
 
                         <div className="overview-wrapper">
-                            {/* <div className="items">
-                                <div className="title">
-                                    View application
-                                </div>
-                                <div className="details">
-
-                                </div>
-                            </div> */}
-
                             <div className="items">
                                 <div className="title">
                                     Created on

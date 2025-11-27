@@ -1,6 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import StoreTable from './storeTable';
-import ViewStore from './viewStore';
 import EditStore from './Edit/editStore';
 import {
     AdminBreadcrumbs,
@@ -21,7 +20,6 @@ const Store = () => {
     const [formData, setFormData] = useState<Record<string, string>>({});
     const [imagePreview, setImagePreview] = useState<string>('');
     const [emails, setEmails] = useState<string[]>([]); 
-    // const [error, setError] = useState<{ type: string; message: string } | null>(null);
     const [error, setError] = useState<{ [key: string]: { type: string; message: string }; }>({});
 
 
@@ -63,11 +61,6 @@ const Store = () => {
     ) => {
         const { name, value } = e.target;
         const updated = { ...formData, [name]: value };
-
-        // if (name === 'name') {
-        //     const newSlug = generateSlug(value);
-        //     updated.slug = newSlug;
-        // }
 
         if (name === "slug") {
             const clean = value.replace(/[^a-zA-Z0-9-]/g, "");
@@ -237,7 +230,6 @@ const Store = () => {
 
     return (
         <>
-            {/* {isTabActive && isViewStore && !isAddStore && <ViewStore />} */}
             {isTabActive && iseditStore && !isAddStore && (
                 <EditStore />
             )}
@@ -322,7 +314,6 @@ const Store = () => {
                                             name="name"
                                             value={formData.name || ''}
                                             onChange={handleChange}
-                                            // onBlur={handleNameBlur}
                                             required={true}
                                         />
                                         {error?.name?.message && <div className="invalid-massage">{error?.name?.message}</div>}
@@ -352,14 +343,6 @@ const Store = () => {
                                         <label htmlFor="store-name">
                                             Store Email
                                         </label>
-                                        {/* <BasicInput
-                                            type="text"
-                                            name="email"
-                                            value={formData.email || ''}
-                                            onChange={handleChange}
-                                            required={true}
-                                            msg={error.email}
-                                        /> */}
                                         <EmailsInput
                                             value={emails}
                                             enablePrimary={true}

@@ -259,8 +259,6 @@ const Qna: React.FC = () => {
                                 {store_id ? (
                                     <>
                                         <span
-                                            // href={storeLink}
-                                            // target="_blank"
                                             className="des"
                                         >
                                             By  {store_name || '-'}
@@ -297,14 +295,6 @@ const Qna: React.FC = () => {
                 </TableCell>;
             }
         },
-        // {
-        //     header: __('Answer', 'multivendorx'),
-        //     cell: ({ row }) => {
-        //         const text = row.original.answer_text ?? '-';
-        //         const displayText = text.length > 50 ? text.slice(0, 50) + '…' : text;
-        //         return <TableCell title={text}>{displayText}</TableCell>;
-        //     }
-        // },
         {
             id: 'question_date',
             header: __('Date', 'multivendorx'),
@@ -316,33 +306,6 @@ const Qna: React.FC = () => {
                 return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
             }
         },
-        // {
-        //     header: __('Store', 'multivendorx'),
-        //     cell: ({ row }) => {
-        //         const { store_id, store_name } = row.original;
-        //         const baseUrl = `${window.location.origin}/wp-admin/admin.php?page=multivendorx#&tab=stores`;
-        //         const storeLink = store_id
-        //             ? `${baseUrl}&edit/${store_id}/&subtab=store-overview`
-        //             : '#';
-
-        //         return (
-        //             <TableCell title={store_name || ''}>
-        //                 {store_id ? (
-        //                     <a
-        //                         href={storeLink}
-        //                         target="_blank"
-        //                         rel="noopener noreferrer"
-        //                         className="text-purple-600 hover:underline"
-        //                     >
-        //                         {store_name || '-'}
-        //                     </a>
-        //                 ) : (
-        //                     store_name || '-'
-        //                 )}
-        //             </TableCell>
-        //         );
-        //     },
-        // },
         {
             header: __('Votes', 'multivendorx'),
             cell: ({ row }) => <TableCell title={String(row.original.total_votes) || ''}>{row.original.total_votes ?? 0}</TableCell>
@@ -427,11 +390,6 @@ const Qna: React.FC = () => {
                     >
                         <option value="">Public</option>
                         <option value="">Private</option>
-                        {/* {store?.map((s: any) => (
-                            <option key={s.id} value={s.id}>
-                                {s.store_name.charAt(0).toUpperCase() + s.store_name.slice(1)}
-                            </option>
-                        ))} */}
                     </select>
 
                 </div>
@@ -550,7 +508,6 @@ const Qna: React.FC = () => {
                                 <ToggleSetting
                                     wrapperClass="setting-form-input"
                                     descClass="settings-metabox-description"
-                                    //description="Select whether this question is visible to the public or private."
                                     options={[
                                         { key: 'public', value: 'public', label: __('Public', 'multivendorx') },
                                         { key: 'private', value: 'private', label: __('Private', 'multivendorx') },

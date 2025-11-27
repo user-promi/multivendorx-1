@@ -300,27 +300,7 @@ const StoreOrders: React.FC = () => {
       header: __('Date', 'multivendorx'),
       cell: ({ row }) => <TableCell>{row.original.date}</TableCell>,
     },
-    // {
-    //   header: __('Status', 'multivendorx'),
-    //   cell: ({ row }) => {
-    //     const status = row.original.status;
-    //     const badgeClass =
-    //       status === 'completed'
-    //         ? 'green'
-    //         : status === 'processing'
-    //           ? 'blue'
-    //           : status === 'refunded'
-    //             ? 'red'
-    //             : 'yellow';
-    //     return (
-    //       <TableCell>
-    //         <span className={`admin-badge ${badgeClass}`}>
-    //           {status.charAt(0).toUpperCase() + status.slice(1)}
-    //         </span>
-    //       </TableCell>
-    //     );
-    //   },
-    // },
+
     {
       header: __('Status', 'multivendorx'),
       cell: ({ row }) => {

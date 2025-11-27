@@ -18,15 +18,6 @@ const CustomerServices = () => {
     // Modules from global store
 
     const { modules } = useModules();
-    /**
-     * Fetch counts on mount
-     */
-    // useEffect(() => {
-    //     if (tabs.length > 0) {
-    //         setActiveTab(tabs[0].id);
-    //     }
-    // }, [modules]);
-
     useEffect(() => {
         axios
             .get(getApiLink(appLocalizer, 'report-abuse'), {
@@ -172,41 +163,6 @@ const CustomerServices = () => {
                     </div>
                 </div>
             )}
-            {/* <div className="general-wrapper">
-                {tabs.length > 0 ? (
-                    <>
-                        <div className="tab-titles hover">
-                            {tabs.map((tab) => (
-                                <div
-                                    key={tab.id}
-                                    className={`title ${activeTab === tab.id ? "active" : ""}`}
-                                    onClick={() => setActiveTab(tab.id)}
-                                >
-                                    <i className={`icon ${tab.icon}`}></i>
-                                    <p>{tab.label}</p>
-                                </div>
-                            ))}
-                        </div>
-
-                        <div className="tab-content">
-                            {tabs.map(
-                                (tab) =>
-                                    activeTab === tab.id && (
-                                        <div key={tab.id} className="tab-panel">
-                                            {tab.content}
-                                        </div>
-                                    )
-                            )}
-                        </div>
-                    </>
-                ) : (
-                    <div className="permission-wrapper">
-                        <i className="adminlib-info red"></i>
-                        <div className="title">Looks like customer support isn’t set up yet! Turn on a support module to start assisting your customers.</div>
-                        <a href={appLocalizer.module_page_url} className="admin-btn btn-purple" >Enable Now</a>
-                    </div>
-                )}
-            </div> */}
         </>
     );
 };

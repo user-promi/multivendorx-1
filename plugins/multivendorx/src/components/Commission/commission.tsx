@@ -1,15 +1,13 @@
 /* global appLocalizer */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { DateRangePicker, RangeKeyDict, Range } from 'react-date-range';
 import { Table, getApiLink, TableCell, AdminBreadcrumbs, useModules, CalendarInput } from 'zyra';
 import {
     ColumnDef,
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
-import { useLocation } from 'react-router-dom';
 import ViewCommission from './viewCommission';
 import { formatCurrency } from '../../services/commonFunction';
 
@@ -166,7 +164,6 @@ const BulkActions: React.FC<{
                 data={data}
                 filterData={filterData}
             />
-            {/* Add other bulk actions here if needed */}
         </div>
     );
 };
@@ -285,14 +282,6 @@ const Commission: React.FC = () => {
                 </>
             ),
         },
-        // {
-        //     name: 'exportAll',
-        //     render: () => (
-        //         <div className="action-icons">
-        //             <i className="adminlib-more-vertical"></i>
-        //         </div>
-        //     ),
-        // },
     ];
 
     // Export All CSV Button Component - Downloads ALL filtered data
@@ -454,82 +443,6 @@ const Commission: React.FC = () => {
             header: __('Order Amount', 'multivendorx'),
             cell: ({ row }) => <TableCell title={row.original.totalOrderAmount ? `${row.original.totalOrderAmount}` : '-'}>{formatCurrency(row.original.totalOrderAmount)}</TableCell>,
         },
-        // {
-        //     id: 'commission-summary',
-        //     enableSorting: true,
-        //     header: __('Commission Summary', 'multivendorx'),
-        //     cell: ({ row }) => {
-        //         const isExpanded = expandedRows[row.original.id!];
-
-        //         return (
-        //             <TableCell>
-        //                 <ul className={`details ${isExpanded ? '' : 'overflow'}`}>
-        //                     <li>
-        //                         <div className="item">
-        //                             <div className="des">Commission Earned</div>
-        //                             <div className="title">{formatCurrency(row.original.commissionAmount)}</div>
-        //                         </div>
-        //                     </li>
-
-        //                     <li>
-        //                         <div className="item">
-        //                             <div className="des">Shipping</div>
-        //                             <div className="title">+ {formatCurrency(row.original.shippingAmount)}</div>
-        //                         </div>
-        //                         <div className="item">
-        //                             <div className="des">Tax</div>
-        //                             <div className="title">+ {formatCurrency(row.original.taxAmount)}</div>
-        //                         </div>
-        //                     </li>
-
-        //                     <li>
-        //                         {modules.includes('marketplace-gateway') && (
-        //                             <div className="item">
-        //                                 <div className="des">Gateway Fee</div>
-        //                                 <div className="title">- {formatCurrency(row.original.gatewayFee)}</div>
-        //                             </div>
-        //                         )}
-        //                         {modules.includes('facilitator') && (
-        //                             <div className="item">
-        //                                 <div className="des">Facilitator Fee</div>
-        //                                 <div className="title">- {formatCurrency(row.original.facilitatorFee)}</div>
-        //                             </div>
-        //                         )}
-        //                         {modules.includes('marketplace-fee') && (
-        //                             <div className="item">
-        //                                 <div className="des">Marketplace Fee</div>
-        //                                 <div className="title">- {formatCurrency(row.original.marketplaceFee)}</div>
-        //                             </div>
-        //                         )}
-        //                     </li>
-
-        //                     <span
-        //                         className="more-btn"
-        //                         onClick={() =>
-        //                             setExpandedRows(prev => ({
-        //                                 ...prev,
-        //                                 [row.original.id!]: !prev[row.original.id!]
-        //                             }))
-        //                         }
-        //                     >
-        //                         {isExpanded ? (
-        //                             <>Less <i className="adminlib-arrow-up"></i></>
-        //                         ) : (
-        //                             <>More <i className="adminlib-arrow-down"></i></>
-        //                         )}
-        //                     </span>
-        //                 </ul>
-        //             </TableCell>
-        //         );
-        //     },
-        // },
-        // {
-        //     id: 'commission_total',
-        //     accessorKey: 'commission_total',
-        //     enableSorting: true,
-        //     header: __('Total Earned', 'multivendorx'),
-        //     cell: ({ row }) => <TableCell title={''}>{formatCurrency(row.original.commissionTotal)}</TableCell>,
-        // },
         {
             id: 'commission-summary',
             enableSorting: true,
@@ -677,26 +590,6 @@ const Commission: React.FC = () => {
                 );
             },
         },
-        // {
-        //     id: 'action',
-        //     header: __('Action', 'multivendorx'),
-        //     cell: ({ row }) => (
-        //         <TableCell>
-        //             <div
-        //                 className="admin-badge yellow hover"
-        //                 role="button"
-        //                 tabIndex={0}
-        //                 onClick={() => {
-        //                     const rowData: any = row.original;
-        //                     setSelectedCommissionId(rowData.id ?? null);
-        //                     setViewCommission(true);
-        //                 }}
-        //             >
-        //                 <i className="adminlib-eye"></i>
-        //             </div>
-        //         </TableCell>
-        //     ),
-        // }
         {
             id: 'action',
             header: __('Action', 'multivendorx'),
@@ -720,12 +613,6 @@ const Commission: React.FC = () => {
                                 icon: 'adminlib-refresh',
                                 onClick: (rowData: any) => {
                                     handleSingleAction('regenerate', rowData)
-                                    // if (rowData?.orderId) {
-                                    //     const url = `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/admin.php?page=wc-orders&action=edit&id=${rowData.orderId}`;
-                                    //     window.open(url, '_blank');
-                                    // } else {
-                                    //     alert(__('Order ID missing for this commission.', 'multivendorx'));
-                                    // }
                                 },
 
                                 hover: true,

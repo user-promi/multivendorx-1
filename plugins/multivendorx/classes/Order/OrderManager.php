@@ -205,13 +205,6 @@ class OrderManager {
              */
             do_action('mvx_checkout_create_order', $parent_order, $order, $items);
 
-            // wp_update_post(
-            //     [
-            //         'ID' => $order->get_id(),
-            //         'post_author' => $store_id,
-            //     ]
-            // );
-
             return $order;
 
         } catch (\Exception $e) {

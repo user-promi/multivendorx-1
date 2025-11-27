@@ -227,15 +227,11 @@ const Advertisement: React.FC = () => {
                     defaultRowsPerPage={10}
                     pageCount={pageCount}
                     pagination={pagination}
-                    // realtimeFilter={realtimeFilter}
                     onPaginationChange={setPagination}
-                    // handlePagination={requestApiForData}
                     perPageOption={[10, 25, 50]}
-                    // typeCounts={announcementStatus as AnnouncementStatus[]}
                     onRowClick={(row: any) => {
                         handleEdit(row.id);
                     }}
-                // bulkActionComp={() => <BulkAction />}
                 />
             </div>
         </>

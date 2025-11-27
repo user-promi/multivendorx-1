@@ -271,12 +271,6 @@ const EditStore = () => {
         setData(prev => ({ ...prev, ...updatedFields }));
     }, []);
 
-    // const visibleTabs = useMemo(() => {
-    //     if (data?.status === 'pending' || data?.status === 'rejected' || data?.status === 'permanently_rejected') {
-    //         return tabData.filter(tab => tab.content.id === 'application-details');
-    //     }
-    //     return tabData;
-    // }, [tabData, data?.status]);
 
     const visibleTabs = useMemo(() => {
         const updatedTabs = tabData.map(tab =>
@@ -306,29 +300,6 @@ const EditStore = () => {
         return updatedTabs;
     }, [tabData, data?.status]);
 
-
-    // const getForm = (tabId: string) => {
-    //     switch (tabId) {
-    //         case 'store-overview':
-    //             return <Overview id={editId} storeData={data} />;
-    //         case 'store':
-    //             return <StoreSettings id={editId} data={data} onUpdate={handleUpdateData} />;
-    //         case 'staff':
-    //             return <StoreSquad id={editId} />;
-    //         case 'payment':
-    //             return <PaymentSettings id={editId} data={data} />;
-    //         case 'shipping':
-    //             return <ShippingSettings id={editId} data={data} />;
-    //         case 'store-policy':
-    //             return <PolicySettings id={editId} data={data} />;
-    //         case 'application-details':
-    //             return <StoreRegistration id={editId} />;
-    //         case 'store-facilitator':
-    //             return <Facilitator id={editId} data={data} />;
-    //         default:
-    //             return <div></div>;
-    //     }
-    // };
     const [expanded, setExpanded] = useState(false);
 
     const words = data?.description?.split(" ") || [];
@@ -783,39 +754,6 @@ const EditStore = () => {
                                     setSelectedOwner(null);
                                 }}
                             />
-                            {/* <RadioInput
-                                    wrapperClass="settings-form-group-radio"
-                                    inputWrapperClass="radio-basic-input-wrap"
-                                    inputClass="setting-form-input"
-                                    descClass="settings-metabox-description"
-                                    activeClass="radio-select-active"
-                                    name='store_delete_option'
-                                    keyName='store_delete_option'
-                                    options={[
-                                        {
-                                            key: 'set_store_owner',
-                                            name: 'set_store_owner',
-                                            value: 'set_store_owner',
-                                            label: 'Change Store owner',
-                                        },
-                                        {
-                                            key: 'product_assign_admin',
-                                            name: 'product_assign_admin',
-                                            value: 'product_assign_admin',
-                                            label: 'Product Assign to Admin',
-                                        },
-                                        {
-                                            key: 'permanent_delete',
-                                            name: 'permanent_delete',
-                                            value: 'permanent_delete',
-                                            label: 'Permanently Delete',
-                                        },
-                                    ]}
-                                    onChange={(e) => {
-                                        setDeleteOption(e.target.value);
-                                        setSelectedOwner(null);
-                                    }}
-                                /> */}
                         </div>
                         <div className="form-group">
                             {deleteOption == 'set_store_owner' && (

@@ -25,8 +25,6 @@ const Financial = ({ id }: { id: string | null }) => {
                                 </div>
                             </div>
                             <div className="right-details">
-                                {/* <div className="price">$356 .35</div>
-                                <div className="div">Lorem, ipsum dolor.</div> */}
                                 <div className="admin-badge green">Completed</div>
                             </div>
                         </div>
@@ -41,8 +39,6 @@ const Financial = ({ id }: { id: string | null }) => {
                                 </div>
                             </div>
                             <div className="right-details">
-                                {/* <div className="price">$356 .35</div>
-                                <div className="div">Lorem, ipsum dolor.</div> */}
                                 <div className="admin-badge green">Completed</div>
                             </div>
                         </div>
@@ -57,8 +53,6 @@ const Financial = ({ id }: { id: string | null }) => {
                                 </div>
                             </div>
                             <div className="right-details">
-                                {/* <div className="price">$356 .35</div>
-                                <div className="div">Lorem, ipsum dolor.</div> */}
                                 <div className="admin-badge green">Completed</div>
                             </div>
                         </div>

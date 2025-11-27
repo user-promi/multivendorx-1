@@ -299,7 +299,7 @@ const AdminDashboard = () => {
         <i className="close-icon adminlib-close"></i>
       );
     }
-    return value; // text like "Basic" or "Advanced"
+    return value;
   };
 
   const Modules: Module[] = [
@@ -346,12 +346,6 @@ const AdminDashboard = () => {
                     <div className="description">Expand your WooCommerce store by creating a marketplace for multiple stores. Manage, grow, and scale seamlessly.</div>
 
                     <div className="button-wrapper">
-
-                      {/* <a href='https://multivendorx.com/pricing/' target="blank" className="admin-btn btn-purple">
-                        <i className="adminlib-pro-tag"></i>
-                        Upgrade Now
-                        <i className="adminlib-arrow-right icon-pro-btn"></i>
-                      </a> */}
 
                       {renderUpgradeButton("Upgrade Now")}
 
@@ -408,11 +402,6 @@ const AdminDashboard = () => {
                         Join 8,000+ successful marketplace owners
                       </div>
                       <div className="des">Create, manage, and grow your marketplace with confidence. Trusted by thousands of entrepreneurs worldwide.</div>
-                      {/* <a href='https://multivendorx.com/pricing/' target="blank" className="admin-btn btn-purple">
-                    <i className="adminlib-pro-tag"></i>
-                    Upgrade now
-                    <i className="adminlib-arrow-right icon-pro-btn"></i>
-                  </a> */}
 
                       {renderUpgradeButton("Upgrade Now")}
 
@@ -445,7 +434,6 @@ const AdminDashboard = () => {
                       <div className="module-header">
                         <i className={`font ${module.iconClass}`}></i>
 
-                        {/*Updated condition (keeps your original structure) */}
                         {(!module.pro || appLocalizer.khali_dabba) ? (
                           <div className="toggle-checkbox" data-tour={`id-showcase-tour`}>
                             <input
@@ -487,7 +475,6 @@ const AdminDashboard = () => {
                 </div>
                 <div className="cards-wrapper plugin">
 
-                  {/* Show PRO versions if free plugins are installed, otherwise show free versions */}
                   {pluginStatus['woocommerce-catalog-enquiry'] ? (
                     // CatalogX PRO
                     <div className="cards">
@@ -627,31 +614,12 @@ const AdminDashboard = () => {
                   </div>
                   <div className="right">
                     <a href="https://multivendorx.com/pricing/" className="admin-btn btn-purple">
-                      {/* <i className="adminlib-pro-tag"></i> */}
                       Get Pro Access Today!
                       <i className="adminlib-arrow-right icon-pro-btn"></i>
                     </a>
                   </div>
                 </div>
                 <div id="free-vs-pro" className="free-vs-pro">
-                  {/* <table>
-                    <thead>
-                      <tr>
-                        <td>Feature</td>
-                        <td>Free</td>
-                        <td>Pro</td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {features.map((feature, i) => (
-                        <tr key={i}>
-                          <td>{feature.name}</td>
-                          <td>{renderCell(feature.free)}</td>
-                          <td>{renderCell(feature.pro)}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table> */}
 
                   {sections.map((section, idx) => (
                     <table>
