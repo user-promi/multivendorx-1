@@ -106,6 +106,7 @@ const CustomerServices = () => {
                 id: 'review',
                 name: 'Store Reviews',
                 icon: "store-review",
+                desc: 'Track and manage reviews for all stores.',
                 tabTitle: 'Store reviews at a glance',
                 tabDes: 'Track and manage reviews for all stores.',
             },
@@ -131,63 +132,11 @@ const CustomerServices = () => {
             case 'review':
                 return <StoreReviews />;
             case 'support-ticket':
-                return  <div className="row"><div className="column"><h1>Upcoming Feature</h1></div></div>;
+                return <div className="row"><div className="column"><h1>Upcoming Feature</h1></div></div>;
             default:
                 return <div></div>;
         }
     };
-
-
-    /**
-     * Tabs — only visible if related module is active
-     */
-    // const tabs = [
-    //     {
-    //         id: "questions",
-    //         label: "Questions",
-    //         module: "question-answer",
-    //         icon: "adminlib-question",
-    //         des: "Waiting for your response",
-    //         count: qnaCount,
-    //         content: <Qna />
-    //     },
-    //     {
-    //         id: "review",
-    //         label: "Store Reviews",
-    //         module: "store-review",
-    //         icon: "adminlib-store-review",
-    //         count: storeReviewCount,
-    //         des: "Shared by customers",
-    //         content: <StoreReviews />
-    //     },
-    //     {
-    //         id: "refund-requests",
-    //         label: "Refund Requests",
-    //         module: "marketplace-refund",
-    //         icon: "adminlib-marketplace-refund",
-    //         des: "Need your decision",
-    //         count: refundCount,
-    //         content: <RefundRequest />
-    //     },
-    //     {
-    //         id: "support-ticket",
-    //         label: "Support Ticket",
-    //         icon: "adminlib-vacation",
-    //         module: 'customer-support',
-    //         des: "Flagged for abuse review",
-    //         count: abuseCount,
-    //         content: <div className="row"><div className="column"><h1>Upcoming Feature</h1></div></div>,
-    //     },
-    // ].filter(tab => !tab.module || modules.includes(tab.module));
-    // const [activeTab, setActiveTab] = useState(() => tabs?.[0]?.id ?? "");
-    // // Update URL hash when activeTab changes
-    // useEffect(() => {
-    //     if (activeTab) {
-    //         const baseHash = '#&tab=customer-support';
-    //         window.location.hash = `${baseHash}&subtab=${activeTab}`;
-    //     }
-    // }, [activeTab]);
-
 
     return (
         <>
@@ -215,10 +164,12 @@ const CustomerServices = () => {
                     menuIcon={true}
                 />
             ) : (
-                <div className="permission-wrapper">
-                    <i className="adminlib-info red"></i>
-                    <div className="title">Looks like customer support isn’t set up yet! Turn on a support module to start assisting your customers.</div>
-                    <a href={appLocalizer.module_page_url} className="admin-btn btn-purple" >Enable Now</a>
+                <div className="general-wrapper">
+                    <div className="permission-wrapper">
+                        <i className="adminlib-info red"></i>
+                        <div className="title">Looks like customer support isn’t set up yet! Turn on a support module to start assisting your customers.</div>
+                        <a href={appLocalizer.module_page_url} className="admin-btn btn-purple" >Enable Now</a>
+                    </div>
                 </div>
             )}
             {/* <div className="general-wrapper">

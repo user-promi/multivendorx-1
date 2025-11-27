@@ -722,22 +722,6 @@ const AdminDashboard = () => {
 
   return (
     <>
-      {/* <Dialog
-        className="admin-module-popup"
-        open={modelOpen}
-        onClose={() => setModelOpen(false)}
-      >
-        <button
-          className="admin-font adminlib-cross"
-          onClick={() => setModelOpen(false)}
-          aria-label="Close dialog"
-        ></button>
-        <ProPopup
-          proUrl={proPopupContent.proUrl}
-          title={proPopupContent.title}
-          messages={proPopupContent.messages}
-        />
-      </Dialog> */}
       <div className="general-wrapper admin-dashboard">
         <div className="row">
           <div className="column admin-tab">
@@ -753,11 +737,6 @@ const AdminDashboard = () => {
               ))}
             </div>
             <div className="right">
-              {/* <a href='https://multivendorx.com/pricing/' target="black" className="admin-btn btn-purple">
-                <i className="adminlib-pro-tag"></i>
-                Upgrade Now
-                <i className="adminlib-arrow-right icon-pro-btn"></i>
-              </a> */}
               {renderUpgradeButton("Upgrade Now")}
 
             </div>

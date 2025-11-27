@@ -738,6 +738,9 @@
     font-size: 0.813rem;
 }
 
+.admin-pro-tag.module:has(.adminlib-spmv) {
+    text-transform: uppercase;
+}
 
 
 // settings shipping add country start
@@ -821,6 +824,7 @@
         margin: 1rem 0;
     }
 }
+
 // settings shipping add country end
 
 
