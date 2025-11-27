@@ -22,14 +22,12 @@ interface TourSetupProps extends Omit<ProviderProps, 'steps'> {
 }
 
 /**
- * TourSetup component wraps the Tour component with TourProvider.
- * This ensures that the useTour() hook inside the Tour component
- * finds its context provider within the same rendering environment.
+ * Wraps the Tour component with context
  */
 const TourSetup: FC<TourSetupProps> = ({ appLocalizer, steps, ...rest }) => {
   return (
-    <TourProvider steps={steps} {...rest}>
-      <Tour appLocalizer={appLocalizer} />
+    <TourProvider steps={[]} {...rest}>
+      <Tour appLocalizer={appLocalizer} steps={steps} />
     </TourProvider>
   );
 };
