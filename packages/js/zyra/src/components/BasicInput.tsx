@@ -146,7 +146,19 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                     {type === 'button' ? (
                         <DisplayButton
                             wraperClass={inputClass || 'admin-btn default-btn'}
-                            onClick={(e) => onClick && onClick(e as any)}
+                            // onClick={(e) => onClick && onClick(e as any)}
+                            onClick={(e) => {
+                                e.preventDefault();
+
+                                if (onclickCallback) {
+                                    onclickCallback(e);
+                                    return;
+                                }
+
+                                if (onClick) {
+                                    onClick(e as any);
+                                }
+                            }}
                         >
                             <span className="text">{name}</span>
                         </DisplayButton>

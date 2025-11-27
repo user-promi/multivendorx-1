@@ -46,6 +46,7 @@ import SystemInfo from './SystemInfo';
 import MultiInput from './MultiInput';
 import { useModules } from '../contexts/ModuleContext';
 import TreeSelectInput from './TreeSelectInput';
+import axios from 'axios';
 
 // Types
 declare const wp: any;
@@ -1031,6 +1032,16 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                     onClick={(e) => {
                                         e.preventDefault();
                                         window.open(inputField.link, '_blank');
+                                    }}
+                                    onclickCallback={() => {
+                                        axios({
+                                            url: getApiLink(appLocalizer, String(inputField.apilink)),
+                                            method: 'GET',
+                                            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+                                            params: {key: inputField.key}
+                                        }).then((res) => {
+                                          console.log('res', res)
+                                        });
                                     }}
                                 />
                             </div>
