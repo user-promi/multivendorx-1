@@ -149,9 +149,9 @@ const Qna: React.FC = () => {
                     { key: 'has_answer', name: 'Answered', count: response.data.answered || 0 },
                     { key: 'no_answer', name: 'Unanswered', count: response.data.unanswered || 0 },
                 ];
-                
+
                 setStatus(statuses.filter(status => status.count > 0));
-                
+
             })
             .catch(() => {
                 setError(__('Failed to load Q&A', 'multivendorx'));
@@ -349,29 +349,12 @@ const Qna: React.FC = () => {
         },
         {
             header: __('Visibility', 'multivendorx'),
-            enableSorting: true,
             cell: ({ row }) => {
-                const visibility = row.original.question_visibility || '';
-                const formattedvisibility = visibility
-                    ?.replace(/[-_]/g, " ")
-                    .toLowerCase()
-                    .replace(/^\w/, c => c.toUpperCase());
-
-                const getStatusBadge = (status: string) => {
-                    switch (status) {
-                        case 'public':
-                            return <span className="admin-badge green">Public</span>;
-                        case 'private':
-                            return <span className="admin-badge yellow">Private</span>;
-                        default:
-                            return <span className="admin-badge gray">{formattedvisibility}</span>;
-                    }
-                };
-
                 return (
-                    <TableCell title={`${visibility}`}>
-                        {getStatusBadge(visibility)}
-                    </TableCell>
+                    <TableCell
+                        type="status"
+                        status={row.original.question_visibility}
+                    />
                 );
             },
         },

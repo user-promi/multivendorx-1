@@ -79,7 +79,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                    Method Type
+                                    Method type
                                 </div>
                             </div>
                         </div>

@@ -51,6 +51,7 @@ interface TableCellProps {
     onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
     showDropdown?: number | null;
     rowData?: any;
+    status?: string;
 }
 
 interface RealtimeFilter {
@@ -80,6 +81,7 @@ export const TableCell: React.FC<TableCellProps> = ({
     children,
     type = '',
     header,
+    status,
     onChange,
     rowId,
     onToggleRow,
@@ -91,6 +93,26 @@ export const TableCell: React.FC<TableCellProps> = ({
 
     const toggleDropdown = (id: number) => {
         setShowDropdown(prev => (prev === id ? null : id));
+    };
+    const statusGroups = {
+        green: ['completed', 'active', 'approved', 'paid', 'public', 'publish'],
+        yellow: ['pending', 'on-hold', 'partially_refunded'],
+        blue: ['under_review', 'private', 'Upcoming', 'draft'],
+        red: ['rejected', 'unpaid', 'cancelled', 'Failed', 'Expired'],
+        teal: [''],
+        orange: ['refunded', 'Processed', 'processing'],
+        purple: ['locked'],
+        indigo: ['deactivated'],
+        pink: ['permanently_rejected', 'inactive']
+    };
+    const getStatusColor = (status: string = '') => {
+        // const key = status.toLowerCase();
+        for (const color in statusGroups) {
+            if (statusGroups[color].includes(status)) {
+                return color;
+            }
+        }
+        return 'gray';
     };
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -289,11 +311,24 @@ export const TableCell: React.FC<TableCellProps> = ({
 
             );
             break;
+        case 'status':
+            const displayStatus =
+                status
+                    ?.replace(/-/g, ' ')
+                    ?.replace(/\b\w/g, (c) => c.toUpperCase()) || '-';
+            const color = getStatusColor(status);
+
+            content = (
+                <span className={`admin-badge ${color}`}>
+                    {displayStatus}
+                </span>
+            );
+            break;
         default:
             content = (
                 <div
                     title={fieldValue as string}
-                    className="order-status table-row-custom"
+                    className="table-row-custom"
                 >
                     <h4 className="hide-title">{title}</h4>
                     {children}
@@ -916,7 +951,7 @@ const Table: React.FC<TableProps> = ({
                                                 <i className="adminlib-refresh"></i> Reset
                                             </span>
                                         </div>
-                                    )} 
+                                    )}
                                 </div>
                             )}
 

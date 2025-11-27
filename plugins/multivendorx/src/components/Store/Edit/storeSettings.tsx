@@ -891,7 +891,10 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                     }}
                                 />
 
-                                <div className="settings-metabox-description"> <strong>Tip:</strong> You can add multiple email addresses. Type an email and press Enter.<br/> <strong>Primary email</strong>: Click the star icon to designate it as primary. This email will be shown on your storefront and receive all notifications.<br /> <strong>Additional emails</strong>: These emails remain private and will receive notifications only. </div>
+                                <div className="settings-metabox-description">
+                                    <b> Tip: </b> You can add multiple email addresses. All added emails will receive notifications. <br />
+                                    <b> Primary email: </b> Click the star icon to set an email as primary. This email will appear on your storefront, and all other email IDs will be hidden from display.
+                                </div>
                             </div>
                         </div>
                         <div className="form-group-wrapper">
@@ -1105,7 +1108,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                         {/* Facebook */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="facebook"><i className="adminlib-facebook-fill"></i> Facebook</label>
+                                <label htmlFor="facebook"><i className="adminlib-facebook-fill facebook"></i> Facebook</label>
                                 <BasicInput
                                     name="facebook"
                                     wrapperClass="setting-form-input"
@@ -1119,7 +1122,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                         {/* x */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="twitter"><i className="adminlib-twitter"></i> X</label>
+                                <label htmlFor="twitter"><i className="adminlib-twitter twitter"></i> X</label>
                                 <BasicInput
                                     name="twitter"
                                     wrapperClass="setting-form-input"
@@ -1133,7 +1136,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                         {/* LinkedIn */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="linkedin"><i className="adminlib-linkedin-border"></i> LinkedIn</label>
+                                <label htmlFor="linkedin"><i className="adminlib-linkedin-border linkedin"></i> LinkedIn</label>
                                 <BasicInput
                                     name="linkedin"
                                     wrapperClass="setting-form-input"
@@ -1147,7 +1150,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                         {/* YouTube */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="youtube"><i className="adminlib-youtube"></i> YouTube</label>
+                                <label htmlFor="youtube"><i className="adminlib-youtube youtube"></i> YouTube</label>
                                 <BasicInput
                                     name="youtube"
                                     wrapperClass="setting-form-input"
@@ -1161,7 +1164,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                         {/* Instagram */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="instagram"><i className="adminlib-supervised-user-circle"></i> Instagram</label>
+                                <label htmlFor="instagram"><i className="adminlib-instagram instagram"></i> Instagram</label>
                                 <BasicInput
                                     name="instagram"
                                     wrapperClass="setting-form-input"

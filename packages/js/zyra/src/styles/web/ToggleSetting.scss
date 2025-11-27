@@ -202,7 +202,8 @@ div:has(.exclusion-modal) {
     div {
         list-style-type: none;
         margin: 0;
-        input{
+
+        input {
             display: none; // for radio button hide
         }
 
@@ -222,7 +223,7 @@ div:has(.exclusion-modal) {
             align-items: center;
             gap: 0.5rem;
 
-            img{
+            img {
                 height: 3rem;
             }
 
@@ -240,8 +241,6 @@ div:has(.exclusion-modal) {
         &:first-child label {
             border-top-left-radius: 0.313rem;
             border-bottom-left-radius: 0.313rem;
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
         }
 
         input:checked+label {

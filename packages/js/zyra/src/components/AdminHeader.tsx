@@ -227,7 +227,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
               <span className="count">{messages.length}</span>
 
               {messageOpen && (
-                <div className="dropdown-menu notification">
+                <div className="dropdown notification">
                   <div className="title">
                     Messages <span className="admin-badge green">{messages.length} New</span>
                   </div>
@@ -272,7 +272,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
                 }}
               ></i>
               {profileOpen && (
-                <div className="dropdown-menu">
+                <div className="dropdown">
                   <div className="dropdown-body">
                     <ul>
                       {profileItems.map((item, index) => (
@@ -282,6 +282,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
                               href={item.link}
                               target={item.targetBlank ? "_blank" : "_self"}
                               rel={item.targetBlank ? "noopener noreferrer" : undefined}
+                              className="item"
                             >
                               {item.icon && <i className={item.icon}></i>}
                               {item.title}
@@ -289,6 +290,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
                           ) : (
                             <a
                               href="#"
+                              className="item"
                               onClick={(e) => {
                                 e.preventDefault();
                                 item.action?.();

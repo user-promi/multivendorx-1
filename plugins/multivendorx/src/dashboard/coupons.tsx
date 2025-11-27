@@ -718,13 +718,13 @@ const AllCoupon: React.FC = () => {
                     {row.original.discount_type === 'percent'
                         ? 'Percentage discount'
                         : row.original.discount_type === 'fixed_cart'
-                        ? 'Fixed cart discount'
-                        : row.original.discount_type === 'fixed_product'
-                        ? 'Fixed product discount'
-                        : '-'}
+                            ? 'Fixed cart discount'
+                            : row.original.discount_type === 'fixed_product'
+                                ? 'Fixed product discount'
+                                : '-'}
                 </TableCell>
             ),
-        },  
+        },
         {
             id: 'amount',
             accessorKey: 'amount',
@@ -768,23 +768,16 @@ const AllCoupon: React.FC = () => {
             ),
         },
         {
+            id: 'status',
             header: __('Status', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell>
-                    {row.original.status === 'publish' && (
-                        <span className="admin-badge green">Publish</span>
-                    )}
-                    {row.original.status === 'draft' && (
-                        <span className="admin-badge blue">Draft</span>
-                    )}
-                    {row.original.status === 'trash' && (
-                        <span className="admin-badge red">Trash</span>
-                    )}
-                    {row.original.status === 'pending' && (
-                        <span className="admin-badge yellow">Pending</span>
-                    )}
-                </TableCell>
-            ),
+            cell: ({ row }) => {
+                return (
+                    <TableCell
+                        type="status"
+                        status={row.original.status}
+                    />
+                );
+            },
         },
         {
             id: 'action',

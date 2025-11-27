@@ -140,7 +140,7 @@ const Transactions: React.FC = () => {
             id: 'pending',
             label: 'Pending Stores',
             count: response.data.pending || 0,
-            icon: 'adminlib-pending',
+            icon: 'adminlib-pending yellow',
           },
           {
             id: 'deactivated',
@@ -378,6 +378,18 @@ const Transactions: React.FC = () => {
             {getStatusBadge(status)}
             <div className="des">Since {formattedDate}</div>
           </TableCell>
+        );
+      },
+    },
+    {
+      id: 'status',
+      header: __('Status', 'multivendorx'),
+      cell: ({ row }) => {
+        return (
+          <TableCell
+            type="status"
+            status={row.original.status}
+          />
         );
       },
     },

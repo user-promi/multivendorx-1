@@ -160,7 +160,7 @@ const Refund: React.FC = () => {
             cell: ({ row }: any) => {
                 const orderId = row.original.order_id;
                 const orderLink = `/dashboard/sales/orders/#view/${orderId}`;
-        
+
                 return (
                     <TableCell title={orderId ? `#${orderId}` : '-'}>
                         {orderId ? (
@@ -175,7 +175,7 @@ const Refund: React.FC = () => {
                     </TableCell>
                 );
             },
-        },        
+        },
         {
             header: __('Customer', 'multivendorx'),
             cell: ({ row }: any) => {
@@ -186,7 +186,7 @@ const Refund: React.FC = () => {
                     </TableCell>
                 );
             },
-        },        
+        },
         {
             header: __('Refund Amount', 'multivendorx'),
             cell: ({ row }: any) => (
@@ -204,29 +204,14 @@ const Refund: React.FC = () => {
             ),
         },
         {
+            id: 'status',
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => {
-                const status = row.original.status || '';
-                const formattedStatus = status
-                    ?.replace(/[-_]/g, " ")
-                    .toLowerCase()
-                    .replace(/^\w/, c => c.toUpperCase());
-
-                const getStatusBadge = (status: string) => {
-                    switch (status) {
-                        case 'completed':
-                            return <span className="admin-badge green">Completed</span>;
-                        case 'private':
-                            return <span className="admin-badge yellow">Private</span>;
-                        default:
-                            return <span className="admin-badge gray">{formattedStatus}</span>;
-                    }
-                };
-
                 return (
-                    <TableCell title={`${status}`}>
-                        {getStatusBadge(status)}
-                    </TableCell>
+                    <TableCell
+                        type="status"
+                        status={row.original.status}
+                    />
                 );
             },
         },

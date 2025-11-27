@@ -22,7 +22,7 @@ export default {
         {
             key: 'enable_franchise',
             label: __('Enable Franchise System', 'multivendorx'),
-            settingDescription: __('Activate franchise functionality across your entire marketplace. All other settings require this to be enabled.', 'multivendorx'),
+            z: __('Activate franchise functionality across your entire marketplace. All other settings require this to be enabled.', 'multivendorx'),
             type: 'checkbox',
             options: [
                 {

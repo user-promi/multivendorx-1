@@ -470,31 +470,11 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
             id: 'status',
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => {
-                const status = row.original.status || '';
-                const formattedStatus = status
-                    ?.replace(/[-_]/g, " ")
-                    .toLowerCase()
-                    .replace(/^\w/, c => c.toUpperCase());
-
-                const getStatusBadge = (status: string) => {
-                    switch (status) {
-                        case 'Completed':
-                            return <span className="admin-badge green">Completed</span>;
-                        case 'Processed':
-                            return <span className="admin-badge yellow">Processed</span>;
-                        case 'Upcoming':
-                            return <span className="admin-badge blue">Upcoming</span>;
-                        case 'Failed':
-                            return <span className="admin-badge red">Failed</span>;
-                        default:
-                            return <span className="admin-badge gray">{formattedStatus}</span>;
-                    }
-                };
-
                 return (
-                    <TableCell title={`${status}`}>
-                        {getStatusBadge(status)}
-                    </TableCell>
+                    <TableCell
+                        type="status"
+                        status={row.original.status}
+                    />
                 );
             },
         },
@@ -789,7 +769,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
 
     // fee calculation
     const fee = (amount * (percentage / 100)) + fixed;
-console.log(wallet?.withdrawal_setting)
+    console.log(wallet?.withdrawal_setting)
     return (
         <>
             <div className="general-wrapper">
@@ -916,11 +896,11 @@ console.log(wallet?.withdrawal_setting)
                                         <div className="card-title">Free Withdrawals</div>
 
                                         <div className="card-price">
-                                        {wallet?.withdrawal_setting?.[0]?.free_withdrawals - wallet?.free_withdrawal} Left
+                                            {wallet?.withdrawal_setting?.[0]?.free_withdrawals - wallet?.free_withdrawal} Left
                                         </div>
 
-                                       <div className="card-des">
-                                            Then {(Number(wallet?.withdrawal_setting?.[0]?.withdrawal_percentage) || 0)}% + 
+                                        <div className="card-des">
+                                            Then {(Number(wallet?.withdrawal_setting?.[0]?.withdrawal_percentage) || 0)}% +
                                             {formatCurrency(Number(wallet?.withdrawal_setting?.[0]?.withdrawal_fixed) || 0)} fee
                                         </div>
 
@@ -1089,7 +1069,7 @@ console.log(wallet?.withdrawal_setting)
 
                             <div className="form-group">
                                 <label htmlFor="amount">Amount</label>
-                                    
+
                                 <BasicInput
                                     type="number"
                                     name="amount"
@@ -1100,20 +1080,20 @@ console.log(wallet?.withdrawal_setting)
                                 <div className="free-wrapper">
                                     {wallet?.withdrawal_setting?.length > 0 && wallet?.withdrawal_setting?.[0]?.free_withdrawals ? (
                                         <>
-                                        {freeLeft > 0 ? (
-                                            <span>Burning 1 out of {freeLeft} free withdrawals</span>
-                                        ) : (
-                                            <span> Free withdrawal limit reached</span>
-                                        )}
+                                            {freeLeft > 0 ? (
+                                                <span>Burning 1 out of {freeLeft} free withdrawals</span>
+                                            ) : (
+                                                <span> Free withdrawal limit reached</span>
+                                            )}
                                             <span>Total: {formatCurrency(amount || 0)}</span>
                                             <span>| Fee: {formatCurrency(fee)}</span>
                                         </>
                                     ) : (
                                         <span>Actual withdrawal: {formatCurrency(amount || 0)}</span>
                                     )}
-                                    </div>
+                                </div>
 
-                                
+
                                 {validationErrors.amount && (
                                     <div className="invalid-massage">{validationErrors.amount}</div>
                                 )}

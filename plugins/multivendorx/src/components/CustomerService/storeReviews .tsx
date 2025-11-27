@@ -397,22 +397,34 @@ const StoreReviews: React.FC = () => {
         //         );
         //     },
         // },
+        // {
+        //     id: 'status',
+        //     header: __('Status', 'multivendorx'),
+        //     cell: ({ row }) => (
+        //         <TableCell title={row.original.status}>
+        //             {row.original.status === "Approved" && (
+        //                 <span className="admin-badge green">Active</span>
+        //             )}
+        //             {row.original.status === "Pending" && (
+        //                 <span className="admin-badge yellow">Pending</span>
+        //             )}
+        //             {row.original.status === "Rejected" && ( 
+        //                 <span className="admin-badge red">Rejected</span>
+        //             )}
+        //         </TableCell>
+        //     ),
+        // },
         {
             id: 'status',
             header: __('Status', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.status}>
-                    {row.original.status === "Approved" && (
-                        <span className="admin-badge green">Active</span>
-                    )}
-                    {row.original.status === "Pending" && (
-                        <span className="admin-badge yellow">Pending</span>
-                    )}
-                    {row.original.status === "Rejected" && (
-                        <span className="admin-badge red">Rejected</span>
-                    )}
-                </TableCell>
-            ),
+            cell: ({ row }) => {
+                return (
+                    <TableCell
+                        type="status"
+                        status={row.original.status}
+                    />
+                );
+            },
         },
         {
             id: 'date_created',
@@ -511,6 +523,7 @@ const StoreReviews: React.FC = () => {
                     open={!!selectedReview}
                     onClose={() => setSelectedReview(null)}
                     width="500px"
+                    height="60%"
                     header={
                         <>
                             <div className="title">
@@ -602,7 +615,6 @@ const StoreReviews: React.FC = () => {
                                 <ToggleSetting
                                     wrapperclassName="setting-form-input"
                                     descclassName="settings-metabox-description"
-                                    //description={__('Change review status', 'multivendorx')}
                                     options={[
                                         { key: 'pending', value: 'Pending', label: __('Pending', 'multivendorx') },
                                         { key: 'approved', value: 'Approved', label: __('Approved', 'multivendorx') },

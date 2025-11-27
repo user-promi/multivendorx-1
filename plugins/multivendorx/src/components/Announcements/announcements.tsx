@@ -75,7 +75,7 @@ export const Announcements: React.FC = () => {
         try {
             const response = await axios.get(getApiLink(appLocalizer, 'store'), {
                 headers: { 'X-WP-Nonce': appLocalizer.nonce },
-                params:{filter_status:'active'}
+                params: { filter_status: 'active' }
             });
             const stores = response.data?.stores || [];
             const options = [
@@ -413,27 +413,14 @@ export const Announcements: React.FC = () => {
             ),
         },
         {
+            id: 'status',
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => {
-                const status = row.original.status || '';
-
-                const getStatusBadge = (status: string) => {
-                    switch (status) {
-                        case 'publish':
-                            return <span className="admin-badge green">Published</span>;
-                        case 'pending':
-                            return <span className="admin-badge yellow">Pending</span>;
-                        case 'draft':
-                            return <span className="admin-badge blue">Draft</span>;
-                        default:
-                            return <span className="admin-badge gray">{status}</span>;
-                    }
-                };
-
                 return (
-                    <TableCell title={row.original.status || ''}>
-                        {getStatusBadge(status)}
-                    </TableCell>
+                    <TableCell
+                        type="status"
+                        status={row.original.status}
+                    />
                 );
             },
         },
@@ -441,27 +428,27 @@ export const Announcements: React.FC = () => {
             header: __('Recipients', 'multivendorx'),
             cell: ({ row }) => {
                 const storeString = row.original.store_name;
-        
+
                 // 🔹 If store_name is empty, null, or undefined → show All Stores
                 if (!storeString) {
                     return <TableCell>{__('All Stores', 'multivendorx')}</TableCell>;
                 }
-        
+
                 // 🔹 Otherwise, split and format store names
                 const stores = storeString.split(',').map(s => s.trim());
                 let displayStores = stores;
-        
+
                 if (stores.length > 2) {
                     displayStores = [...stores.slice(0, 2), '...'];
                 }
-        
+
                 return (
                     <TableCell title={stores.join(', ')}>
                         {displayStores.join(', ')}
                     </TableCell>
                 );
             },
-        },        
+        },
         {
             id: 'date',
             accessorKey: 'date',
@@ -670,7 +657,7 @@ export const Announcements: React.FC = () => {
                                                 return updated;
                                             });
                                         }
-                                        
+
                                     }}
                                 />
                                 {validationErrors.stores && <div className="invalid-massage">{validationErrors.stores}</div>}

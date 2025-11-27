@@ -100,70 +100,69 @@ const demoData: StoreRow[] = [
   { id: 10, vendor: "Kitchen King", amount: "$980", commission: "$98", date: "2025-09-10", status: "Unpaid" },
 ];
 
-  const columns: ColumnDef<StoreRow>[] = [
-    {
-      id: 'select',
-      header: ({ table }) => (
-        <input
-          type="checkbox"
-          checked={table.getIsAllRowsSelected()}
-          onChange={table.getToggleAllRowsSelectedHandler()}
+const columns: ColumnDef<StoreRow>[] = [
+  {
+    id: 'select',
+    header: ({ table }) => (
+      <input
+        type="checkbox"
+        checked={table.getIsAllRowsSelected()}
+        onChange={table.getToggleAllRowsSelectedHandler()}
+      />
+    ),
+    cell: ({ row }) => (
+      <input
+        type="checkbox"
+        checked={row.getIsSelected()}
+        onChange={row.getToggleSelectedHandler()}
+      />
+    ),
+  },
+  {
+    header: __('Store', 'multivendorx'),
+    cell: ({ row }) => (
+      <TableCell title={row.original.store_name || ''}>
+        {row.original.vendor || '-'}
+      </TableCell>
+    ),
+  },
+  {
+    header: __('Amount', 'multivendorx'),
+    cell: ({ row }) => (
+      <TableCell title={row.original.store_slug || ''}>
+        {row.original.amount || '-'}
+      </TableCell>
+    ),
+  },
+  {
+    header: __('Commission', 'multivendorx'),
+    cell: ({ row }) => (
+      <TableCell title={row.original.store_slug || ''}>
+        {row.original.commission || '-'}
+      </TableCell>
+    ),
+  },
+  {
+    header: __('Date', 'multivendorx'),
+    cell: ({ row }) => (
+      <TableCell title={row.original.store_slug || ''}>
+        {row.original.date || '-'}
+      </TableCell>
+    ),
+  },
+  {
+    id: 'status',
+    header: __('Status', 'multivendorx'),
+    cell: ({ row }) => {
+      return (
+        <TableCell
+          type="status"
+          status={row.original.status}
         />
-      ),
-      cell: ({ row }) => (
-        <input
-          type="checkbox"
-          checked={row.getIsSelected()}
-          onChange={row.getToggleSelectedHandler()}
-        />
-      ),
+      );
     },
-    {
-      header: __('Store', 'multivendorx'),
-      cell: ({ row }) => (
-        <TableCell title={row.original.store_name || ''}>
-          {row.original.vendor || '-'}
-        </TableCell>
-      ),
-    },
-    {
-      header: __('Amount', 'multivendorx'),
-      cell: ({ row }) => (
-        <TableCell title={row.original.store_slug || ''}>
-          {row.original.amount || '-'}
-        </TableCell>
-      ),
-    },
-    {
-      header: __('Commission', 'multivendorx'),
-      cell: ({ row }) => (
-        <TableCell title={row.original.store_slug || ''}>
-          {row.original.commission || '-'}
-        </TableCell>
-      ),
-    },
-    {
-      header: __('Date', 'multivendorx'),
-      cell: ({ row }) => (
-        <TableCell title={row.original.store_slug || ''}>
-          {row.original.date || '-'}
-        </TableCell>
-      ),
-    },
-    {
-      header: __('Status', 'multivendorx'),
-      cell: ({ row }) => (
-        <TableCell title={row.original.status || ''}>
-          {row.original.status === "Paid" && (
-            <span className="admin-badge green">Paid</span>
-          )}
-          {row.original.status === "Unpaid" && (
-            <span className="admin-badge red">Unpaid</span>
-          )}
-        </TableCell>
-      ),
-    },
-  ];
+  },
+];
 const RevenueOld: React.FC = () => {
   return (
     <div className="dashboard-overview">
@@ -199,18 +198,18 @@ const RevenueOld: React.FC = () => {
         </div>
       </div>
       <Table
-          data={demoData}
-          columns={columns as ColumnDef<Record<string, any>, any>[]}
-          // rowSelection={rowSelection}
-          // onRowSelectionChange={setRowSelection}
-          defaultRowsPerPage={10}
-          // pageCount={pageCount}
-          // pagination={pagination}
-          // onPaginationChange={setPagination}
-          // handlePagination={requestApiForData}
-          // perPageOption={[10, 25, 50]}
-          // typeCounts={[]}
-        />
+        data={demoData}
+        columns={columns as ColumnDef<Record<string, any>, any>[]}
+        // rowSelection={rowSelection}
+        // onRowSelectionChange={setRowSelection}
+        defaultRowsPerPage={10}
+      // pageCount={pageCount}
+      // pagination={pagination}
+      // onPaginationChange={setPagination}
+      // handlePagination={requestApiForData}
+      // perPageOption={[10, 25, 50]}
+      // typeCounts={[]}
+      />
     </div>
   );
 };

@@ -4,6 +4,7 @@
   src:  url('./assets/fonts/adminlibrary.eot?xfjp3c#iefix') format('embedded-opentype'),
     url('./assets/fonts/adminlibrary.ttf?xfjp3c') format('truetype'),
     url('./assets/fonts/adminlibrary.woff?xfjp3c') format('woff');
+
     // url('./assets/fonts/adminlibrary.svg?xfjp3c#adminlibrary') format('svg');
   font-weight: normal;
   font-style: normal;
@@ -24,89 +25,15 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-.adminlib-franchises-module:before {
-  content: "\e92e";
-}
-.adminlib-pending:before {
-  content: "\e92f";
-}
-.adminlib-version-control:before {
-  content: "\e930";
-}
-.adminlib-setup:before {
-  content: "\e931";
-}
-.adminlib-out-of-stock:before {
-  content: "\e932";
-}
-.adminlib-migration:before {
-  content: "\e933";
-}
-.adminlib-document:before {
-  content: "\e934";
-}
-.adminlib-database:before {
-  content: "\e935";
-}
-.adminlib-store-reject:before {
-  content: "\e936";
-}
-.adminlib-store-reactivated:before {
-  content: "\e937";
-}
-.adminlib-refund:before {
-  content: "\e938";
-}
-.adminlib-order-shipped:before {
-  content: "\e939";
-}
-.adminlib-order-completed:before {
-  content: "\e93a";
-}
-.adminlib-wordpress:before {
-  content: "\e93b";
-}
-.adminlib-profile:before {
-  content: "\e93c";
-}
-.adminlib-forum:before {
-  content: "\e93d";
-}
-.adminlib-faq:before {
-  content: "\e93e";
-}
-.adminlib-coding .path1:before {
-  content: "\e93f";
-  color: rgb(0, 0, 0);
-}
-.adminlib-coding .path2:before {
-  content: "\e940";
-  margin-left: -1em;
-  color: rgb(255, 255, 255);
-}
-.adminlib-coding .path3:before {
-  content: "\e941";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
-}
-.adminlib-coding .path4:before {
-  content: "\e942";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
-}
-.adminlib-coding .path5:before {
-  content: "\e943";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
-}
-.adminlib-wallet-open:before {
+
+.adminlib-coding:before {
   content: "\e900";
 }
-.adminlib-wallet-in:before {
+.adminlib-twitter:before {
   content: "\e901";
 }
-.adminlib-wallet:before {
-  content: "\e902";
+.adminlib-instagram:before {
+  content: "\e906";
 }
 .adminlib-cart:before {
   content: "\8907";
@@ -180,131 +107,206 @@
 .adminlib-plus-circle-o:before {
   content: "\e8f7";
 }
-.adminlib-mapbox:before {
-  content: "\e903";
-}
-.adminlib-google:before {
-  content: "\e904";
-}
-.adminlib-close-delete:before {
-  content: "\e905";
-}
-.adminlib-under-review:before {
-  content: "\e906";
-}
-.adminlib-rejected:before {
+.adminlib-wallet-open:before {
   content: "\e907";
 }
-.adminlib-rejecte:before {
+.adminlib-wallet-in:before {
   content: "\e908";
 }
-.adminlib-active:before {
+.adminlib-wallet:before {
+  content: "\e909";
+}
+.adminlib-mapbox:before {
   content: "\e90a";
 }
-.adminlib-recycle:before {
+.adminlib-google:before {
   content: "\e90b";
 }
-.adminlib-resources:before {
+.adminlib-close-delete:before {
   content: "\e90c";
 }
-.adminlib-coupon:before {
+.adminlib-under-review:before {
   content: "\e90d";
 }
-.adminlib-wallet1:before {
+.adminlib-rejected:before {
   content: "\e90e";
 }
-.adminlib-sales:before {
+.adminlib-rejecte:before {
   content: "\e90f";
 }
-.adminlib-question:before {
+.adminlib-active:before {
   content: "\e910";
 }
-.adminlib-facilitator:before {
+.adminlib-recycle:before {
   content: "\e911";
 }
-.adminlib-edit:before {
+.adminlib-resources:before {
   content: "\e912";
 }
-.adminlib-direct-transaction:before {
+.adminlib-coupon:before {
   content: "\e913";
 }
-.adminlib-geo-location:before {
+.adminlib-wallet1:before {
   content: "\e914";
 }
-.adminlib-product-addon:before {
+.adminlib-sales:before {
   content: "\e915";
 }
-.adminlib-advertise-product:before {
+.adminlib-question:before {
   content: "\e916";
 }
-.adminlib-marketplace-gateway:before {
+.adminlib-facilitator:before {
   content: "\e917";
 }
-.adminlib-marketplace-fee:before {
+.adminlib-edit:before {
   content: "\e918";
 }
-.adminlib-compliance:before {
+.adminlib-direct-transaction:before {
   content: "\e919";
 }
-.adminlib-lock:before {
+.adminlib-geo-location:before {
   content: "\e91a";
 }
-.adminlib-pros-and-cons:before {
+.adminlib-product-addon:before {
   content: "\e91b";
 }
-.adminlib-like:before {
+.adminlib-advertise-product:before {
   content: "\e91c";
 }
-.adminlib-home:before {
+.adminlib-marketplace-gateway:before {
   content: "\e91d";
 }
-.adminlib-dollar:before {
+.adminlib-marketplace-fee:before {
   content: "\e91e";
 }
-.adminlib-bank:before {
+.adminlib-compliance:before {
   content: "\e91f";
 }
-.adminlib-question-answer:before {
+.adminlib-lock:before {
   content: "\e920";
 }
-.adminlib-zone-wise-shipping:before {
+.adminlib-pros-and-cons:before {
   content: "\e921";
 }
-.adminlib-approval:before {
+.adminlib-like:before {
   content: "\e922";
 }
-.adminlib-cash:before {
+.adminlib-home:before {
   content: "\e923";
 }
-.adminlib-view-files:before {
+.adminlib-dollar:before {
   content: "\e924";
 }
-.adminlib-automation:before {
+.adminlib-bank:before {
   content: "\e925";
 }
-.adminlib-shipping:before {
+.adminlib-question-answer:before {
   content: "\e926";
 }
-.adminlib-delivery-person:before {
+.adminlib-zone-wise-shipping:before {
   content: "\e927";
 }
-.adminlib-delivery:before {
+.adminlib-approval:before {
   content: "\e928";
 }
-.adminlib-tax-compliance:before {
+.adminlib-cash:before {
   content: "\e929";
 }
-.adminlib-legal-compliance:before {
+.adminlib-view-files:before {
   content: "\e92a";
 }
-.adminlib-seller-verification:before {
+.adminlib-automation:before {
   content: "\e92b";
 }
-.adminlib-new:before {
+.adminlib-shipping:before {
   content: "\e92c";
 }
-.adminlib-feature:before {
+.adminlib-delivery-person:before {
   content: "\e92d";
+}
+.adminlib-delivery:before {
+  content: "\e92e";
+}
+.adminlib-tax-compliance:before {
+  content: "\e92f";
+}
+.adminlib-legal-compliance:before {
+  content: "\e930";
+}
+.adminlib-seller-verification:before {
+  content: "\e931";
+}
+.adminlib-new:before {
+  content: "\e932";
+}
+.adminlib-feature:before {
+  content: "\e933";
+}
+.adminlib-franchises-module:before {
+  content: "\e934";
+}
+.adminlib-pending:before {
+  content: "\e935";
+}
+.adminlib-version-control:before {
+  content: "\e936";
+}
+.adminlib-setup:before {
+  content: "\e937";
+}
+.adminlib-out-of-stock:before {
+  content: "\e938";
+}
+.adminlib-migration:before {
+  content: "\e939";
+}
+.adminlib-document:before {
+  content: "\e93a";
+}
+.adminlib-database:before {
+  content: "\e93b";
+}
+.adminlib-store-reject:before {
+  content: "\e93c";
+}
+.adminlib-store-reactivated:before {
+  content: "\e93d";
+}
+.adminlib-refund:before {
+  content: "\e93e";
+}
+.adminlib-order-shipped:before {
+  content: "\e93f";
+}
+.adminlib-order-completed:before {
+  content: "\e940";
+}
+.adminlib-wordpress:before {
+  content: "\e941";
+}
+.adminlib-profile:before {
+  content: "\e942";
+}
+.adminlib-forum:before {
+  content: "\e943";
+}
+.adminlib-faq:before {
+  content: "\e944";
+}
+.adminlib-uniE945:before {
+  content: "\e945";
+}
+.adminlib-uniE946:before {
+  content: "\e946";
+}
+.adminlib-uniE947:before {
+  content: "\e947";
+}
+.adminlib-uniE948:before {
+  content: "\e948";
+}
+.adminlib-uniE949:before {
+  content: "\e949";
 }
 .adminlib-accommodation:before {
   content: "\ef35";
@@ -555,7 +557,7 @@
 .adminlib-verification1:before {
   content: "\ef87";
 }
-.adminlib-twitter:before {
+.adminlib-twitter1:before {
   content: "\ef88";
 }
 .adminlib-social-share:before {

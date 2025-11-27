@@ -12,19 +12,23 @@
         .devider{
             width: 100%;
         }
+
         &.single-line{
             .before{
                 width: 10rem;
             }
         }
+
         &.multiple {
             padding: 1rem;
             margin-top: 1.5rem;
             background: #ece2f92e;
         }
+
         &:first-child{
             margin-top: 0;
         }
+
         .form-wrapper {
             display: flex;
             gap: 0.5rem;
@@ -33,6 +37,7 @@
         label {
             font-size: 0.95rem;
             display: inline-block;
+
             // color: $text-color;
         }
 

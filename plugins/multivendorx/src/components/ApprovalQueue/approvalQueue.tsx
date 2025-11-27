@@ -158,7 +158,7 @@ const ApprovalQueue = () => {
                 id: 'wholesale-customer',
                 name: 'Customers',
                 desc: 'Ready for your approval',
-                icon: 'user-circle yellow',
+                icon: 'user-circle pink',
                 count: 9,
             },
         },
@@ -182,7 +182,7 @@ const ApprovalQueue = () => {
                 id: 'report-abuse',
                 name: 'Flagged',
                 desc: 'Product reported for assessment',
-                icon: 'product blue',
+                icon: 'product indigo',
                 tabTitle: 'Flagged products awaiting action',
                 tabDes: 'Review reports and maintain quality.',
                 count: reportAbuseCount,
@@ -195,7 +195,7 @@ const ApprovalQueue = () => {
                 id: 'withdrawal',
                 name: 'Withdrawals',
                 desc: 'Queued for disbursement',
-                icon: 'bank blue',
+                icon: 'bank orange',
                 tabTitle: 'Withdrawals awaiting approval',
                 tabDes: 'Review and process store payouts.',
                 count: withdrawCount,
@@ -207,7 +207,7 @@ const ApprovalQueue = () => {
                 id: 'deactivate-requests',
                 name: 'Deactivations',
                 desc: 'Permanent store closure request',
-                icon: 'bank blue',
+                icon: 'rejecte teal',
                 tabTitle: 'Stores requesting deactivation',
                 tabDes: 'Approve or reject marketplace joiners.',
                 count: deactivateCount,
@@ -245,7 +245,7 @@ const ApprovalQueue = () => {
 
             case 'deactivate-requests':
                 return <DeactivateRequests onUpdated={refreshCounts} />;
-
+                
             default:
                 return <div></div>;
         }

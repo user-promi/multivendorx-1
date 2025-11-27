@@ -22,60 +22,78 @@ $border-radius-medium: 0.438rem;
 $border-radius-large: 0.5rem;
 $border-radius-button: 8rem;
 
-
 $color-palette: (
   red: (
-    lightColor: #fde8e4,
-    color: #f06b4f
+    light-color: #fff3f1,
+    color: #f7a79a
   ),
   green: (
-    lightColor: #c6f6d5,
-    color: #276749
+    light-color: #e8fbea,
+    color: #6bbf8f
   ),
   teal: (
-    lightColor: #b2f5ea,
-    color: #285e61
+    light-color: #e6fcf9,
+    color: #5baab3
   ),
-  orange:(
-  lightColor: #fff0e1,
-    color: #9c4221
+  orange: (
+    light-color: #fff7ec,
+    color: #d88c5c
   ),
   yellow: (
-    lightColor: #fefcbf,
-    color: #975a16
+    light-color: #fffce8,
+    color: #d4b86a
   ),
   blue: (
-    lightColor: #bee3f8,
-    color: #2c5282
+    light-color: #e6f4ff,
+    color: #6e9fd1
   ),
   purple: (
-    lightColor: #e9d8fd,
-    color: #553c9a
+    light-color: #f4eaff,
+    color: #8a6fce
   ),
   indigo: (
-    lightColor: #c3dafe,
-    color: #434190
+    light-color: #e8efff,
+    color: #6f78c7
   ),
   pink: (
-    lightColor: #fed7e2,
-    color: #97266d
+    light-color: #ffe9f1,
+    color: #d676a4
   ),
+
+  
+  facebook:(
+    color: #1877F2,
+  ),
+  twitter:(
+    color: #000,
+  ),
+  linkedin:(
+    color: #0A66C2,
+  ),
+  youtube:(
+    color: #FF0000,
+  ),
+  instagram:(
+    color: #E4405F,
+  )
 );
+
+
 // $icon-color-palette: (
 //   red: (
-//     lightColor: #fde8e4,
+//     light-color: #fde8e4,
 //     color: #f06b4f
 //   ),
 //   green: (
-//     lightColor: #d9f5f0,
+//     light-color: #d9f5f0,
 //     color: #06be9f
 //   ),
 //   yellow: (
-//     lightColor: #fff0e1,
+//     light-color: #fff0e1,
 //     color: #ff9f43
 //   ),
 //   blue: (
-//     lightColor: #bfdeed6e,
+//     light-color: #bfdeed6e,
 //     color: #003d66de
 //   ),
   

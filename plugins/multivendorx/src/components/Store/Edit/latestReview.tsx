@@ -157,23 +157,6 @@ const LatestReview: React.FC<LatestReviewProps> = ({ store_id }) => {
             },
         },
         {
-            id: 'status',
-            header: __('Status', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.status}>
-                    {row.original.status === "Approved" && (
-                        <span className="admin-badge green">Active</span>
-                    )}
-                    {row.original.status === "Pending" && (
-                        <span className="admin-badge yellow">Pending</span>
-                    )}
-                    {row.original.status === "Rejected" && (
-                        <span className="admin-badge red">Rejected</span>
-                    )}
-                </TableCell>
-            ),
-        },
-        {
             header: __('Date', 'multivendorx'),
             cell: ({ row }) => {
                 const rawDate = row.original.date_created;

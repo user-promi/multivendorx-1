@@ -152,31 +152,11 @@ const Transactions: React.FC = () => {
             id: 'status',
             header: __('Status', 'multivendorx'),
             cell: ({ row }) => {
-                const status = row.original.status || '';
-                const formattedStatus = status
-                    ?.replace(/[-_]/g, " ")
-                    .toLowerCase()
-                    .replace(/^\w/, c => c.toUpperCase());
-
-                const getStatusBadge = (status: string) => {
-                    switch (status) {
-                        case 'Completed':
-                            return <span className="admin-badge green">Completed</span>;
-                        case 'Processed':
-                            return <span className="admin-badge yellow">Processed</span>;
-                        case 'Upcoming':
-                            return <span className="admin-badge blue">Upcoming</span>;
-                        case 'Failed':
-                            return <span className="admin-badge red">Failed</span>;
-                        default:
-                            return <span className="admin-badge gray">{formattedStatus}</span>;
-                    }
-                };
-
                 return (
-                    <TableCell title={`${status}`}>
-                        {getStatusBadge(status)}
-                    </TableCell>
+                    <TableCell
+                        type="status"
+                        status={row.original.status}
+                    />
                 );
             },
         },
@@ -256,7 +236,7 @@ const Transactions: React.FC = () => {
             header: __('Debit', 'multivendorx'),
             cell: ({ row }) => {
                 const debit = row.original.debit;
-                const status = row.original.status || '';             
+                const status = row.original.status || '';
 
                 return (
                     <TableCell>
@@ -411,7 +391,7 @@ const Transactions: React.FC = () => {
                         onClose={() => setModalTransaction(null)}
                     />
 
-                    
+
                 )}
             </div>
         </>

@@ -384,7 +384,6 @@ const Dashboard: React.FC = () => {
         const rawStatus = row.original.status || '';
         const status = rawStatus.toLowerCase();
 
-        // Define color mapping for known statuses
         const statusColorMap: Record<string, string> = {
           completed: 'green',
           processing: 'blue',
@@ -398,7 +397,6 @@ const Dashboard: React.FC = () => {
 
         const badgeClass = statusColorMap[status] || 'gray';
 
-        // Format status for display (refund-requested → Refund Requested)
         const displayStatus =
           status
             ?.replace(/-/g, ' ')

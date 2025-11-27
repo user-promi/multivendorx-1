@@ -1,4 +1,4 @@
- @import url("https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css");
+ @import url(https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css);
 
  // Variables
 
@@ -75,7 +75,7 @@
              i {
                  font-size: 0.9rem;
 
-                 &:before {
+                 &::before {
                      padding: 0.313rem;
                      background: #fff;
                      border-radius: 50%;
@@ -622,7 +622,7 @@
      }
 
      .rating .adminlib-star {
-         color: #ffcc00;
+         color: #fc0;
      }
 
      .rating i.inactive {

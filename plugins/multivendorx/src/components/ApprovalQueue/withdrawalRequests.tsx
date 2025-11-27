@@ -151,21 +151,30 @@ const WithdrawalRequests: React.FC<Props> = ({ onUpdated }) => {
                 </TableCell>
             ),
         },
+        // {
+        //     id: 'action',
+        //     header: __('Action', 'multivendorx'),
+        //     cell: ({ row }) => (
+        //         <TableCell
+        //             type="action-dropdown"
+        //             rowData={row.original}
+        //             header={{
+        //                 actions: [
+        //                     { label: __('Approve', 'multivendorx'), icon: 'adminlib-check', onClick: (row: any) => handleSingleAction('approve', row), hover: true },
+        //                     { label: __('Reject', 'multivendorx'), icon: 'adminlib-close', onClick: (row: any) => handleSingleAction('reject', row), hover: true },
+        //                 ],
+        //             }}
+        //         />
+        //     ),
+        // },
         {
-            id: 'action',
             header: __('Action', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell
-                    type="action-dropdown"
-                    rowData={row.original}
-                    header={{
-                        actions: [
-                            { label: __('Approve', 'multivendorx'), icon: 'adminlib-check', onClick: (row: any) => handleSingleAction('approve', row), hover: true },
-                            { label: __('Reject', 'multivendorx'), icon: 'adminlib-close', onClick: (row: any) => handleSingleAction('reject', row), hover: true },
-                        ],
-                    }}
-                />
-            ),
+            cell: ({ row }) =>
+                <TableCell title={row.original.status || ''}>
+                    <span className="admin-btn btn-purple" onClick={() => { handleSingleAction('approve', row) }}><i className="adminlib-check"></i> Approve</span>
+
+                    <span className="admin-btn btn-red" onClick={() => handleSingleAction('reject', row)}><i className="adminlib-close"></i> Reject</span>
+                </TableCell>,
         },
     ];
 

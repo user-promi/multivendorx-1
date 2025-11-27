@@ -18,6 +18,8 @@ const AddOrder = () => {
     const [addedProducts, setAddedProducts] = useState([]);
     const [showAddressEdit, setShowAddressEdit] = useState(false);
 
+    const [showCreateCustomer, setShowCreateCustomer] = useState(false);
+
     const addressEditRef = useRef(null);
     const [shippingLines, setShippingLines] = useState([]);
     const [availableShippingMethods, setAvailableShippingMethods] = useState([]);
@@ -55,16 +57,16 @@ const AddOrder = () => {
 
     useEffect(() => {
         axios.get(`${appLocalizer.apiUrl}/wc/v3/customers`, {
-            headers: { 
+            headers: {
                 'X-WP-Nonce': appLocalizer.nonce
             },
             params: {
                 per_page: 100,
             }
         })
-        .then((response) => {
-            setCustomers(response.data); 
-        });
+            .then((response) => {
+                setCustomers(response.data);
+            });
     }, []);
 
     const customerOptions = [
@@ -84,16 +86,16 @@ const AddOrder = () => {
                 per_page: 100
             }
         })
-        .then((res) => {
-            const products = res.data;
+            .then((res) => {
+                const products = res.data;
 
-            const filtered = products.filter(p => {
-                const storeId = p.meta_data?.find(m => m.key === "multivendorx_store_id")?.value;
-                return storeId === appLocalizer.store_id || !storeId;
-            });
+                const filtered = products.filter(p => {
+                    const storeId = p.meta_data?.find(m => m.key === "multivendorx_store_id")?.value;
+                    return storeId === appLocalizer.store_id || !storeId;
+                });
 
-            setAllProducts(filtered);
-        })
+                setAllProducts(filtered);
+            })
     }, [showAddProduct]);
 
 
@@ -116,17 +118,17 @@ const AddOrder = () => {
         axios.get(`${appLocalizer.apiUrl}/wc/v3/payment_gateways`, {
             headers: { "X-WP-Nonce": appLocalizer.nonce }
         })
-        .then(res => {
-            const enabled = res.data.filter(m => m.enabled === true);
+            .then(res => {
+                const enabled = res.data.filter(m => m.enabled === true);
 
-            const formatted = enabled.map(m => ({
-                label: m.title,
-                value: m.id,
-                method_title: m.title
-            }));
+                const formatted = enabled.map(m => ({
+                    label: m.title,
+                    value: m.id,
+                    method_title: m.title
+                }));
 
-            setPaymentMethods(formatted);
-        })
+                setPaymentMethods(formatted);
+            })
     }, []);
 
     useEffect(() => {
@@ -202,6 +204,14 @@ const AddOrder = () => {
                     <div className="des">
                         Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quas accusantium obcaecati labore nam quibusdam minus.
                     </div>
+                </div>
+                <div className="buttons">
+                    <button
+                        className="admin-btn btn-purple-bg"
+                        onClick={createOrder}
+                    >
+                        Create Order
+                    </button>
                 </div>
             </div>
 
@@ -414,15 +424,6 @@ const AddOrder = () => {
                             </div>
                         </div>
                     </div> */}
-                    <div className="buttons">
-                        <button
-                            className="admin-btn btn-purple-bg"
-                            onClick={createOrder}
-                        >
-                            Create Order
-                        </button>
-                    </div>
-
 
                     <div className="card-content">
                         <div className="card-header">
@@ -488,8 +489,8 @@ const AddOrder = () => {
 
                                     <div className="details">
                                         <div className="name">
-                                            {selectedCustomer 
-                                                ? `${selectedCustomer.first_name} ${selectedCustomer.last_name}` 
+                                            {selectedCustomer
+                                                ? `${selectedCustomer.first_name} ${selectedCustomer.last_name}`
                                                 : "Guest Customer"}
                                         </div>
 
@@ -512,9 +513,44 @@ const AddOrder = () => {
                                 </div>
                             </div>
                         )}
-                        
-
+                        <div className="admin-btn btn-purple-bg" onClick={() => setShowCreateCustomer(!showCreateCustomer)}>Add New Customer</div>
                     </div>
+                    {showCreateCustomer && (
+                        <div className="card-content">
+                            <div className="card-header">
+                                <div className="left">
+                                    <div className="title">
+                                        Create customer
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="form-group-wrapper">
+                                <div className="form-group">
+                                    <label htmlFor="product-name">First name</label>
+                                    <BasicInput name="address" wrapperClass="setting-form-input" />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="product-name">Last name</label>
+                                    <BasicInput name="address" wrapperClass="setting-form-input" />
+                                </div>
+                            </div>
+                            <div className="form-group-wrapper">
+                                <div className="form-group">
+                                    <label htmlFor="product-name">Email</label>
+                                    <BasicInput name="address" wrapperClass="setting-form-input" />
+                                </div>
+                            </div>
+                            <div className="form-group-wrapper">
+                                <div className="form-group">
+                                    <label htmlFor="product-name">Phone number</label>
+                                    <BasicInput name="address" wrapperClass="setting-form-input" />
+                                </div>
+                            </div>
+                            <div className="buttons-wrapper">
+                                <div className="admin-btn btn-purple-bg" onClick={() => setShowCreateCustomer(!showCreateCustomer)}>Create</div>
+                            </div>
+                        </div>
+                    )}
 
                     <div className="card-content">
                         <div className="card-header">

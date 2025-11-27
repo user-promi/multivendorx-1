@@ -66,20 +66,38 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
             });
 
     }, []);
+    useEffect(() => {
+        const highlightId = location.state?.highlightTarget;
+        if (highlightId) {
+            const target = document.getElementById(highlightId);
 
+            if (target) {
+                target.scrollIntoView({ behavior: "smooth", block: "center" });
+                target.classList.add("highlight");
+                const handleClick = () => {
+                    target.classList.remove("highlight");
+                    document.removeEventListener("click", handleClick);
+                };
+                setTimeout(() => {
+                    document.addEventListener("click", handleClick);
+                }, 100);
+            }
+
+        }
+    }, [location.state]);
     const overviewData = [
         {
-            icon: "adminlib-book red",
+            icon: "adminlib-wallet red",
             number: formatCurrency(storeData.transactions?.balance ?? 0),
             text: "Wallet balance",
         },
         {
-            icon: "adminlib-global-community yellow",
+            icon: "adminlib-dollar yellow",
             number: formatCurrency(storeData.transactions?.locking_balance ?? 0),
             text: "Upcoming balance",
         },
         {
-            icon: "adminlib-global-community blue",
+            icon: "adminlib-wallet-in blue",
             number: formatCurrency(storeData.request_withdrawal_amount ?? 0),
             text: "Requested payout",
         },
@@ -195,9 +213,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                                     <div className="des">
                                                         sku: {product.sku}
                                                     </div>
-
-                                                    {/* Optional extra text */}
-                                                    {/* <div className="small-text">Additional info</div> */}
                                                 </div>
                                             </div>
 
@@ -221,7 +236,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                 <div className="card-header">
                                     <div className="left">
                                         <div className="title">
-                                            Latest Reviews
+                                            Latest reviews
                                         </div>
                                     </div>
                                     <div className="right">
@@ -240,7 +255,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                 <div className="card-header">
                                     <div className="left">
                                         <div className="title">
-                                            Latest Refund
+                                            Latest refunds
                                         </div>
                                     </div>
                                     <div className="right">
@@ -369,18 +384,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                             )}
                         </div>
 
-                        {/* <div className="analytics-container">
-                            <div className="analytics-item">
-                                <div className="analytics-icon">
-                                    <i className="adminlib-tools green"></i>
-                                </div>
-                                <div className="details">
-                                    <div className="number">{formatCurrency(storeData.commission?.commission_total ?? 0)}</div>
-                                    <div className="text">Lifetime earnings</div>
-                                </div>
-                            </div>
-                        </div> */}
-
                         {appLocalizer.khali_dabba && (
                             <div className="description-wrapper">
                                 <div className="title">
@@ -396,7 +399,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                    Store staffs
+                                    Store staff
                                 </div>
                             </div>
                             <div className="right">
@@ -412,8 +415,22 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                     <i className="item-icon adminlib-person"></i>
                                 </div>
                                 <div className="details">
-                                    <div className="name">{storeData.primary_owner_info?.data?.display_name ?? <Skeleton variant="text" width={150} />
-                                    } <div className="admin-badge blue">Primary Owner</div></div>
+                                    <div className="name">
+                                        {storeData.primary_owner_info?.data?.display_name ?? <Skeleton variant="text" width={150} />}
+                                        <div className="admin-badge green">Primary Owner</div> <span className="admin-badge blue">
+                                            <i className="adminlib-edit"
+                                                onClick={() => {
+                                                    navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`, {
+                                                        state: { highlightTarget: "primary-owner" },
+                                                    });
+
+                                                    setTimeout(() => {
+                                                        navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`, {
+                                                            replace: true,
+                                                        });
+                                                    }, 500);
+                                                }}></i></span>
+                                    </div>
                                     <div className="des">Email: {storeData.primary_owner_info?.data?.user_email ?? <Skeleton variant="text" width={150} />}</div>
                                 </div>
                             </div>

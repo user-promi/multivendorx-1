@@ -471,23 +471,23 @@ const Revenue: React.FC = () => {
 
   //Fixed table columns for WooCommerce products
   const columns: ColumnDef<ProductRow>[] = [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <input
-          type="checkbox"
-          checked={table.getIsAllRowsSelected()}
-          onChange={table.getToggleAllRowsSelectedHandler()}
-        />
-      ),
-      cell: ({ row }) => (
-        <input
-          type="checkbox"
-          checked={row.getIsSelected()}
-          onChange={row.getToggleSelectedHandler()}
-        />
-      ),
-    },
+    // {
+    //   id: "select",
+    //   header: ({ table }) => (
+    //     <input
+    //       type="checkbox"
+    //       checked={table.getIsAllRowsSelected()}
+    //       onChange={table.getToggleAllRowsSelectedHandler()}
+    //     />
+    //   ),
+    //   cell: ({ row }) => (
+    //     <input
+    //       type="checkbox"
+    //       checked={row.getIsSelected()}
+    //       onChange={row.getToggleSelectedHandler()}
+    //     />
+    //   ),
+    // },
     {
       header: __("Product", "multivendorx"),
       cell: ({ row }) => (

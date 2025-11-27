@@ -93,7 +93,7 @@ const HeaderNotifications = () => {
 
     return (
         <>
-            <div className="dropdown-menu notification">
+            <div className="dropdown notification">
                 <div className="title">
                     Notifications
                     {notifications && notifications.length > 0 && (
