@@ -97,6 +97,7 @@
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.1",
         "@mui/material": "^7.3.2",
+        "@reactour/tour": "^3.8.0",
         "@stripe/connect-js": "^3.3.30",
         "@stripe/react-connect-js": "^3.3.30",
         "@tanstack/react-table": "^8.21.3",
@@ -106,6 +107,7 @@
         "@wordpress/i18n": "wp-6.6",
         "@wordpress/react-i18n": "wp-6.6",
         "@wordpress/scripts": "^30.23.0",
+        "body-scroll-lock": "4.0.0-beta.0",
         "d3-geo": "^3.1.1",
         "d3-scale": "^4.0.2",
         "d3-zoom": "^3.0.0",
@@ -128,6 +130,7 @@
     },
     "devDependencies": {
         "@babel/preset-react": "^7.27.1",
+        "@types/body-scroll-lock": "^3.1.2",
         "@types/leaflet": "^1.9.20",
         "@types/mark.js": "^8.11.12",
         "@types/react": "18.3.24",

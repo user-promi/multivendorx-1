@@ -59,6 +59,7 @@ export { default as PaymentTabsComponent } from './components/PaymentTabsCompone
 export { default as CommonPopup } from './components/CommonPopup';
 export { default as SuccessNotice } from './components/SuccessNotice';
 export { default as EmailsInput } from './components/EmailsInput';
+export { default as TourSetup } from './components/TourSetup';
 
 export {
     useModules,

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { BasicInput, SelectInput, TextArea } from "zyra";
 import axios from "axios";
+import { formatCurrency } from "@/services/commonFunction";
 
 
 const AddOrder = () => {
@@ -20,6 +21,8 @@ const AddOrder = () => {
     const [showCreateCustomer, setShowCreateCustomer] = useState(false);
 
     const addressEditRef = useRef(null);
+    const [shippingLines, setShippingLines] = useState([]);
+    const [availableShippingMethods, setAvailableShippingMethods] = useState([]);
 
     useEffect(() => {
         if (!showAddressEdit) return;
@@ -100,14 +103,15 @@ const AddOrder = () => {
         return sum + item.price * (item.qty || 1);
     }, 0);
 
-    const taxRate = 0.18; // 18% GST example
-    const tax = subtotal * taxRate;
+    // const taxRate = 0.18; // 18% GST example
+    // const tax = subtotal * taxRate;
 
-    const shipping = 50; // Example flat shipping
+    // const shipping = 50; // Example flat shipping
 
-    const discount = 0; // If you add discount input later
+    // const discount = 0; // If you add discount input later
 
-    const grandTotal = subtotal + tax + shipping - discount;
+    // const grandTotal = subtotal + tax + shipping - discount;
+
     const hasCustomer = !!selectedCustomer;
 
     useEffect(() => {
@@ -126,6 +130,22 @@ const AddOrder = () => {
                 setPaymentMethods(formatted);
             })
     }, []);
+
+    useEffect(() => {
+        axios.get(`${appLocalizer.apiUrl}/wc/v3/shipping_methods`, {
+            headers: { "X-WP-Nonce": appLocalizer.nonce }
+        })
+        .then(res => {
+            const formatted = res.data.map(method => ({
+                label: method.title,
+                value: method.id,
+                ...method
+            }));
+            setAvailableShippingMethods(formatted);
+        })
+    }, []);
+
+    const totalShipping = shippingLines.reduce((sum, s) => sum + Number(s.cost || 0), 0);
 
     const paymentOptions = [
         { label: "Select Payment Method", value: "" },
@@ -151,6 +171,12 @@ const AddOrder = () => {
             //         total: "50"
             //     }
             // ],
+            shipping_lines: shippingLines.map(s => ({
+                method_id: s.method_id,
+                method_title: s.name,
+                total: String(s.cost.toFixed(2))
+            })),
+
 
             payment_method: selectedPayment?.value,
             payment_method_title: selectedPayment?.method_title,
@@ -160,11 +186,12 @@ const AddOrder = () => {
         axios.post(`${appLocalizer.apiUrl}/wc/v3/orders`, orderData, {
             headers: { "X-WP-Nonce": appLocalizer.nonce },
         })
-            .then(res => {
-                console.log("Order created:", res.data);
-                window.location.assign(window.location.pathname);
-            })
+        .then(res => {
+            console.log("Order created:", res.data);
+            window.location.assign(window.location.pathname);
+        })
     };
+    const grandTotal = subtotal + totalShipping;
 
     return (
         <>
@@ -245,6 +272,62 @@ const AddOrder = () => {
                                             </tr>
                                         ))
                                     }
+
+                                    {shippingLines.map(ship => (
+                                        <tr key={`ship-${ship.id}`} className="admin-row shipping-row">
+
+                                            <td className="admin-column">
+                                                <div className="item-details">
+                                                    <div className="icon">
+                                                        <i className="adminlib-cart green"></i>
+                                                    </div>
+
+                                                    <div className="detail">
+                                                        <div className="name">Shipping</div>
+                                                        <SelectInput
+                                                            name="shipping_method"
+                                                            type="single-select"
+                                                            options={availableShippingMethods}
+                                                            value={availableShippingMethods.find(o => o.value === ship.method_id)}
+                                                            onChange={(selected) => {
+
+                                                                const method_id = selected.value;
+                                                                const method_title = selected.label;
+
+                                                                setShippingLines(prev =>
+                                                                    prev.map(s => s.id === ship.id ? {
+                                                                        ...s,
+                                                                        method_id,
+                                                                        name: method_title
+                                                                    } : s)
+                                                                );
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td className="admin-column"></td>
+                                            <td className="admin-column"></td>
+
+                                            <td className="admin-column">
+                                                <input
+                                                    type="number"
+                                                    min="0"
+                                                    className="basic-input"
+                                                    value={ship.cost}
+                                                    onChange={e => {
+                                                        const cost = parseFloat(e.target.value) || 0;
+                                                        setShippingLines(prev =>
+                                                            prev.map(s => s.id === ship.id ? { ...s, cost } : s)
+                                                        );
+                                                    }}
+                                                />
+                                            </td>
+
+                                        </tr>
+                                    ))}
+
                                 </tbody>
                             </table>
                             <div className="card-content">
@@ -254,14 +337,14 @@ const AddOrder = () => {
                                         <span>${subtotal.toFixed(2)}</span>
                                     </div>
 
-                                    <div className="row">
+                                    {/* <div className="row">
                                         <span>Tax (18%):</span>
                                         <span>${tax.toFixed(2)}</span>
-                                    </div>
+                                    </div> */}
 
                                     <div className="row">
                                         <span>Shipping:</span>
-                                        <span>${shipping.toFixed(2)}</span>
+                                        <span>{formatCurrency(totalShipping)}</span>
                                     </div>
 
                                     <div className="row total">
@@ -273,6 +356,21 @@ const AddOrder = () => {
                                     <button className="admin-btn btn-purple-bg" onClick={() => setShowAddProduct(true)}>
                                         + Add Product
                                     </button>
+                                    <button
+                                        className="admin-btn btn-purple-bg"
+                                        onClick={() => {
+                                            setShippingLines(prev => [
+                                                ...prev,
+                                                {
+                                                    name: "Shipping",
+                                                    cost: 0
+                                                }
+                                            ]);
+                                        }}
+                                    >
+                                        + Add Shipping
+                                    </button>
+
                                 </div>
 
                                 {showAddProduct && (

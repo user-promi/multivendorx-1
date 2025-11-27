@@ -1,13 +1,12 @@
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { AdminHeader, Banner, initializeModules } from 'zyra';
+import { AdminHeader, Banner, TourSetup } from 'zyra';
 
 import Settings from './components/Settings/Settings';
 import Modules from './components/Modules/modules';
 import Store from './components/Store/store';
 import AdminDashboard from './components/AdminDashboard/adminDashboard';
 import StatusAndTools from './components/StatusAndTools/statusAndTools';
-import SetupWizard from './blocks/setupWizard/SetupWizard';
 import CustomerServices from './components/CustomerService/customerServices';
 import Memberships from './components/Membership/membership';
 
@@ -25,6 +24,7 @@ import ApprovalQueue from './components/ApprovalQueue/approvalQueue';
 import HeaderNotification from './components/Notifications/HeaderNotifications';
 import Notifications from './components/Notifications/Notifications';
 import TransactionHistory from './components/TransactionHistory/transactionHistory';
+import { getTourSteps } from './components/Tour/tourSteps';
 
 localStorage.setItem('force_multivendorx_context_reload', 'true');
 
@@ -217,7 +217,6 @@ const App = () => {
         free={appLocalizer.freeVersion}
         pro={appLocalizer.pro_data.version}
         managePlanUrl={appLocalizer.pro_data.manage_plan_url}
-        // chatUrl="https://tawk.to/chat/6504346eb1aaa13b7a77026c/1hac6pkpm"
         chatUrl=""
         showProfile={true}
         profileItems={profileItems}   // <-- add this
@@ -227,7 +226,6 @@ const App = () => {
           { value: 'modules', label: 'Modules' },
           { value: 'settings', label: 'Settings' },
         ]}
-        // showMessages={true}
         notifications={<HeaderNotification />}
         showNotifications={true}
         messages={[
@@ -241,6 +239,11 @@ const App = () => {
           }
         ]}
         messagesLink="/messages"
+      />
+
+      <TourSetup
+        appLocalizer={appLocalizer}
+        steps={getTourSteps(appLocalizer)}
       />
 
       <Route />

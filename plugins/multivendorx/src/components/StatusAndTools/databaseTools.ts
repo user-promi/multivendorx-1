@@ -51,6 +51,7 @@ export default {
                 'This tool will install all the missing MultiVendorX pages. Pages already defined and set up will not be replaced',
                 'multivendorx'
             ),
+            apilink: "status",
         },
 
         {
