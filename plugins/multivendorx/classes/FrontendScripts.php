@@ -489,6 +489,7 @@ class FrontendScripts {
 						'vendor_dashboard_pages'   => $vendor_dashboard_pages,
 						'pro_url'                  => esc_url( MULTIVENDORX_PRO_SHOP_URL ),
                         'open_uploader'            => 'Upload Image',
+                        'module_page_url'           => admin_url( 'admin.php?page=multivendorx#&tab=modules' ),
                         'color'                    => MultiVendorX()->setting->get_setting( 'store_color_settings' ),
                         'tax'                      => MultiVendorX()->setting->get_setting( 'give_tax' ),
                         'taxes_enabled'            => get_option( 'woocommerce_calc_taxes' ),
