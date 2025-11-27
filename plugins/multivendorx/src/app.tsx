@@ -1,13 +1,12 @@
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { AdminHeader, Banner, initializeModules, TourSetup } from 'zyra';
+import { AdminHeader, Banner, TourSetup } from 'zyra';
 
 import Settings from './components/Settings/Settings';
 import Modules from './components/Modules/modules';
 import Store from './components/Store/store';
 import AdminDashboard from './components/AdminDashboard/adminDashboard';
 import StatusAndTools from './components/StatusAndTools/statusAndTools';
-import SetupWizard from './blocks/setupWizard/SetupWizard';
 import CustomerServices from './components/CustomerService/customerServices';
 import Memberships from './components/Membership/membership';
 
@@ -25,12 +24,7 @@ import ApprovalQueue from './components/ApprovalQueue/approvalQueue';
 import HeaderNotification from './components/Notifications/HeaderNotifications';
 import Notifications from './components/Notifications/Notifications';
 import TransactionHistory from './components/TransactionHistory/transactionHistory';
-import { TourProvider } from '@reactour/tour';
-import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
-import Tour from './components/Tour/Tour';
-
-const disableBody = (target: any) => disableBodyScroll(target);
-const enableBody = (target: any) => enableBodyScroll(target);
+import { getTourSteps } from './components/Tour/tourSteps';
 
 localStorage.setItem('force_multivendorx_context_reload', 'true');
 
@@ -249,140 +243,7 @@ const App = () => {
 
       <TourSetup
         appLocalizer={appLocalizer}
-        steps={[
-          {
-            selector: undefined,
-            placement: 'right',
-            content: ({ navigateTo, finishTour, appLocalizer }) => (
-              <div className="tour-box">
-                <h3>Store Commissions test from zyra</h3>
-                <h4>Manage your store commission settings here.</h4>
-
-                <div className="tour-footer">
-                  <button
-                    className="admin-btn btn-purple"
-                    onClick={() =>
-                      navigateTo(
-                        `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=disbursement`,
-                        1
-                      )
-                    }
-                  >
-                    Next
-                  </button>
-
-                  <button className="admin-btn btn-purple" onClick={finishTour}>
-                    End Tour
-                  </button>
-                </div>
-              </div>
-            ),
-          },
-
-          {
-            selector: undefined,
-            placement: 'auto',
-            content: ({ navigateTo, finishTour, appLocalizer }) => (
-              <div className="tour-box">
-                <h3>Disbursement</h3>
-                <h4>View and configure your disbursement settings here.</h4>
-
-                <div className="tour-footer">
-                  <button
-                    className="admin-btn btn-purple"
-                    onClick={() =>
-                      navigateTo(
-                        `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=payment-integration`,
-                        2
-                      )
-                    }
-                  >
-                    Next
-                  </button>
-
-                  <button className="admin-btn btn-purple" onClick={finishTour}>
-                    End Tour
-                  </button>
-                </div>
-              </div>
-            ),
-          },
-
-          {
-            selector: undefined,
-            placement: 'auto',
-            content: ({ navigateTo, finishTour, appLocalizer }) => (
-              <div className="tour-box">
-                <h3>Payment Integration</h3>
-                <h4>Set up your payment integration settings here.</h4>
-
-                <div className="tour-footer">
-                  <button
-                    className="admin-btn btn-purple"
-                    onClick={() =>
-                      navigateTo(
-                        `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-registration-form`,
-                        3
-                      )
-                    }
-                  >
-                    Next
-                  </button>
-
-                  <button className="admin-btn btn-purple" onClick={finishTour}>
-                    End Tour
-                  </button>
-                </div>
-              </div>
-            ),
-          },
-
-          {
-            selector: undefined,
-            placement: 'auto',
-            content: ({ navigateTo, finishTour, appLocalizer }) => (
-              <div className="tour-box">
-                <h3>Store Registration Form</h3>
-                <h4>Manage the registration form for new stores.</h4>
-
-                <div className="tour-footer">
-                  <button
-                    className="admin-btn btn-purple"
-                    onClick={() =>
-                      navigateTo(
-                        `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=modules`,
-                        4
-                      )
-                    }
-                  >
-                    Next
-                  </button>
-
-                  <button className="admin-btn btn-purple" onClick={finishTour}>
-                    End Tour
-                  </button>
-                </div>
-              </div>
-            ),
-          },
-
-          {
-            selector: undefined,
-            placement: 'auto',
-            content: ({ finishTour }) => (
-              <div className="tour-box">
-                <h3>Modules</h3>
-                <h4>Here you can enable or disable marketplace modules.</h4>
-
-                <div className="tour-footer">
-                  <button className="admin-btn btn-purple" onClick={finishTour}>
-                    Finish Tour
-                  </button>
-                </div>
-              </div>
-            ),
-          },
-        ]}
+        steps={getTourSteps(appLocalizer)}
       />
 
       <Route />
