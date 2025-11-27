@@ -73,7 +73,7 @@ final class MultiVendorX
      */
     public function activate()
     {
-        $this->container['install'] = new Install();
+        new Install();
 
         if ( ! get_option( 'multivendorx_installed' ) ) {
             add_option( 'multivendorx_installed', true );
@@ -129,6 +129,7 @@ final class MultiVendorX
      */
     public function init_classes()
     {
+         $this->container['install'] = new Install();
         $this->container['util'] = new Utill();
         $this->container['setting'] = new Setting();
         $this->container['admin'] = new Admin();

@@ -576,19 +576,16 @@ By signing and submitting, the Seller accepts all terms above.
 
         $pages_to_create = [
             [
-                'option_key' => 'mvx_product_vendor_vendor_dashboard_page_id',
                 'slug'       => 'dashboard',
                 'title'      => __( 'Store Dashboard', 'multivendorx' ),
                 'shortcode'  => '[multivendorx_store_dashboard]',
             ],
             [
-                'option_key' => 'mvx_product_vendor_store_registration_page_id',
                 'slug'       => 'store-registration',
                 'title'      => __( 'Store Registration', 'multivendorx' ),
                 'shortcode'  => '[multivendorx_store_registration]',
             ],
             [
-                'option_key' => 'mvx_product_vendor_vendor_orders_page_id',
                 'slug'       => 'vendor-orders',
                 'title'      => __( 'Vendor Orders', 'multivendorx' ),
                 'shortcode'  => '[multivendorx_vendor_orders]',
@@ -606,21 +603,14 @@ By signing and submitting, the Seller accepts all terms above.
     
         foreach ( $pages as $page ) {
             // Validate required keys
-            if ( empty( $page['option_key'] ) || empty( $page['slug'] ) || empty( $page['title'] ) || empty( $page['shortcode'] ) ) {
+            if ( empty( $page['slug'] ) || empty( $page['title'] ) || empty( $page['shortcode'] ) ) {
                 continue;
             }
     
-            $option_key = $page['option_key'];
             $slug       = $page['slug'];
             $title      = $page['title'];
             $shortcode  = $page['shortcode'];
-    
-            // Check if option already set
-            $option_value = get_option( $option_key );
-            if ( $option_value > 0 && get_post( $option_value ) ) {
-                continue;
-            }
-    
+        
             // Check if page with slug exists
             $page_found = get_posts(
                 array(
@@ -633,9 +623,6 @@ By signing and submitting, the Seller accepts all terms above.
             );
     
             if ( $page_found ) {
-                if ( ! $option_value ) {
-                    update_option( $option_key, $page_found[0] );
-                }
                 continue;
             }
     
@@ -652,7 +639,7 @@ By signing and submitting, the Seller accepts all terms above.
     
             $page_id = wp_insert_post( $page_data );
     
-            update_option( $option_key, $page_id );
+            // update_option( $option_key, $page_id );
         }
     }
     

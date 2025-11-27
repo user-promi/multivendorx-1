@@ -65,7 +65,11 @@ class MultiVendorX_REST_Status_Controller extends \WP_REST_Controller {
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
         }
-        
+        $key = $request->get_param('key');
+        if ($key == 'default_pages') {
+            MultiVendorX()->install->plugin_create_pages();
+            return rest_ensure_response(true);
+        }
         $system_info = MultiVendorX()->status->get_system_info();
         return rest_ensure_response( $system_info );
     }
