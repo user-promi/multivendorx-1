@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { AdminHeader, Banner, initializeModules } from 'zyra';
+import { AdminHeader, Banner, initializeModules, TourSetup } from 'zyra';
 
 import Settings from './components/Settings/Settings';
 import Modules from './components/Modules/modules';
@@ -248,7 +248,7 @@ const App = () => {
         ]}
         messagesLink="/messages"
       />
-      <TourProvider
+      {/* <TourProvider
         steps={[]}
         afterOpen={disableBody}
         beforeClose={enableBody}
@@ -257,7 +257,8 @@ const App = () => {
         showCloseButton={false}
       >
         <Tour appLocalizer={appLocalizer} />
-      </TourProvider>
+      </TourProvider> */}
+      <TourSetup appLocalizer={appLocalizer} steps={[]} />
       <Route />
     </>
   );
