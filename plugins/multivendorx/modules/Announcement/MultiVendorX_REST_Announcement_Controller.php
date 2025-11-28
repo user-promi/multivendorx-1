@@ -1,6 +1,6 @@
 <?php
 
-namespace MultiVendorX\RestAPI\Controllers;
+namespace MultiVendorX\Announcement;
 
 defined('ABSPATH') || exit;
 
@@ -13,6 +13,10 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
 	 */
 	protected $rest_base = 'announcement';
 
+    public function __construct() {
+        add_action( 'rest_api_init', array( $this, 'register_routes' ), 10 );
+    }
+    
     public function register_routes() {
         register_rest_route( MultiVendorX()->rest_namespace, '/' . $this->rest_base, [
             [

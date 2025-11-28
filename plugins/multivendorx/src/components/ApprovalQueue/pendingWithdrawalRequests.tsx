@@ -14,13 +14,14 @@ type StoreRow = {
     store_name?: string;
     store_slug?: string;
     status?: string;
+    withdraw_amount?:any;
 };
 
 interface Props {
     onUpdated?: () => void;
 }
 
-const WithdrawalRequests: React.FC<Props> = ({ onUpdated }) => {
+const PendingWithdrawal: React.FC<Props> = ({ onUpdated }) => {
     const [data, setData] = useState<StoreRow[] | null>(null);
 
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -44,7 +45,6 @@ const WithdrawalRequests: React.FC<Props> = ({ onUpdated }) => {
                 setPageCount(Math.ceil(response.data / pagination.pageSize));
             })
             .catch(() => {
-                setError(__('Failed to load total rows', 'multivendorx'));
             });
     }, []);
 
@@ -184,4 +184,4 @@ const WithdrawalRequests: React.FC<Props> = ({ onUpdated }) => {
     );
 };
 
-export default WithdrawalRequests;
+export default PendingWithdrawal;

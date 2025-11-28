@@ -8,6 +8,7 @@ import { formatCurrency } from '../../services/commonFunction';
 interface StoreRow {
   id: number;
   store_name: string;
+  store_id?: string;
   amount: string;
   commission_amount: string;
   date: string;
@@ -29,13 +30,14 @@ type FilterData = {
   store_id?: string;
   orderBy?: any;
   order?: any;
+  date?:any;
 };
 
 interface Props {
   onUpdated?: () => void;
 }
 
-const StoreOrders: React.FC<Props> = ({ onUpdated }) => {
+const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
   const [data, setData] = useState<StoreRow[]>([]);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [pagination, setPagination] = useState<PaginationState>({
@@ -296,7 +298,7 @@ const StoreOrders: React.FC<Props> = ({ onUpdated }) => {
         url: `${appLocalizer.apiUrl}/wc/v3/orders/${rejectOrderId}`,
         headers: { "X-WP-Nonce": appLocalizer.nonce },
         data: {
-          status:'processing',
+          status: 'processing',
           meta_data: [
             {
               key: "_customer_refund_order",
@@ -329,7 +331,7 @@ const StoreOrders: React.FC<Props> = ({ onUpdated }) => {
         const id = row.original.id;
         const url = `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${id}&action=edit`;
         return (
-          <TableCell>
+          <TableCell title={''}>
             <a href={url} target="_blank" rel="noopener noreferrer">
               #{id}
             </a>
@@ -366,11 +368,11 @@ const StoreOrders: React.FC<Props> = ({ onUpdated }) => {
     },
     {
       header: __('Amount', 'multivendorx'),
-      cell: ({ row }) => <TableCell>{row.original.amount}</TableCell>,
+      cell: ({ row }) => <TableCell title={'amount'}>{row.original.amount}</TableCell>,
     },
     {
       header: __('Commission', 'multivendorx'),
-      cell: ({ row }) => <TableCell>{row.original.commission_amount}</TableCell>,
+      cell: ({ row }) => <TableCell title={'commission'}>{row.original.commission_amount}</TableCell>,
     },
     {
       header: __('Refund Reason', 'multivendorx'),
@@ -385,7 +387,7 @@ const StoreOrders: React.FC<Props> = ({ onUpdated }) => {
       accessorKey: 'date',
       enableSorting: true,
       header: __('Date', 'multivendorx'),
-      cell: ({ row }) => <TableCell>{row.original.date}</TableCell>,
+      cell: ({ row }) => <TableCell title={'title'}>{row.original.date}</TableCell>,
     },
     {
       header: __('Action', 'multivendorx'),
@@ -395,6 +397,7 @@ const StoreOrders: React.FC<Props> = ({ onUpdated }) => {
 
         return (
           <TableCell
+            title={'action'}
             type="action-dropdown"
             rowData={row.original}
             header={{
@@ -492,4 +495,4 @@ const StoreOrders: React.FC<Props> = ({ onUpdated }) => {
   );
 };
 
-export default StoreOrders;
+export default PendingRefund;

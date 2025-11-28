@@ -4,6 +4,7 @@ import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { Table, TableCell, CalendarInput, CommonPopup, TextArea, getApiLink } from 'zyra';
 import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
+import { formatWcShortDate } from '@/services/commonFunction';
 
 type StoreRow = {
     id?: number;
@@ -22,7 +23,7 @@ export interface RealtimeFilter {
     render: (updateFilter: (key: string, value: any) => void, filterValue: any) => React.ReactNode;
 }
 
-const Stores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
+const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
     const [data, setData] = useState<StoreRow[] | null>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
@@ -184,12 +185,8 @@ const Stores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
             header: __('Applied On', 'multivendorx'),
             cell: ({ row }) => {
                 const rawDate = row.original.applied_on;
-                let formattedDate = '-';
-                if (rawDate) {
-                    const dateObj = new Date(rawDate);
-                    formattedDate = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(dateObj);
-                }
-                return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
+
+                return <TableCell title={''}>{formatWcShortDate(rawDate)}</TableCell>;
             },
         },
         {
@@ -283,4 +280,4 @@ const Stores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
     );
 };
 
-export default Stores;
+export default PendingStores;
