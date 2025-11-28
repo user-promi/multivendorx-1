@@ -62,6 +62,13 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
                 'submenu' => array(),
                 'capability' => array('manage_products'),
             ),
+            'add-products' => array(
+                'name' => 'Add Products',
+                'slug' => 'add-products',
+                'icon' => 'adminlib-single-product',
+                'submenu' => array(),
+                'capability' => array('manage_products'),
+            ),
             'coupons' => array(
                 'name' => 'Coupons',
                 'slug' => 'coupons',

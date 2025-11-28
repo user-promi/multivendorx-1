@@ -404,27 +404,6 @@ const AddOrder = () => {
                     </div>
                 </div>
                 <div className="card-wrapper w-35">
-                    {/* <div className="card-content">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    Order actions
-                                </div>
-                            </div>
-                        </div>
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <SelectInput
-                                    name="new_owner"
-                                    // value={selectedOwner?.value}
-                                    options={ownerOptions}
-                                    type="single-select"
-                                // onChange={(val) => val && setSelectedOwner(val)}
-                                />
-                            </div>
-                        </div>
-                    </div> */}
-
                     <div className="card-content">
                         <div className="card-header">
                             <div className="left">
@@ -448,7 +427,6 @@ const AddOrder = () => {
                             </div>
                         </div>
                     </div>
-
 
                     <div className="card-content">
                         <div className="card-header">
