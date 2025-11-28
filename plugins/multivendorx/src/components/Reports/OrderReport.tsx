@@ -31,7 +31,7 @@ type FilterData = {
   order?: any;
 };
 
-const StoreOrders: React.FC = () => {
+const OrderReport: React.FC = () => {
   const [data, setData] = useState<StoreRow[]>([]);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [pagination, setPagination] = useState<PaginationState>({
@@ -97,7 +97,7 @@ const StoreOrders: React.FC = () => {
   ) => {
     setData([]);
 
-    // 🧾 Base WooCommerce query params
+    //Base WooCommerce query params
     const params: any = {
       page: currentPage,
       per_page: rowsPerPage,
@@ -371,4 +371,4 @@ const StoreOrders: React.FC = () => {
   );
 };
 
-export default StoreOrders;
+export default OrderReport;

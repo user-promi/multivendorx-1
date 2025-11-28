@@ -456,15 +456,18 @@ export const KnowledgeBase: React.FC = () => {
         <>
             <AdminBreadcrumbs
                 activeTabIcon="adminlib-book"
-                tabTitle="Knowledge Base"
-                description={"Build your knowledge base: add new guides or manage existing ones in one place."}
+                tabTitle={__('Knowledge Base', 'multivendorx')}
+                description={__('Build your knowledge base: add new guides or manage existing ones in one place.', 'multivendorx')}
                 buttons={[
-                    <div className="admin-btn btn-purple-bg" onClick={() => {
-                        setValidationErrors({});
-                        setAddEntry(true);
-                    }}>
+                    <div
+                        className="admin-btn btn-purple-bg"
+                        onClick={() => {
+                            setValidationErrors({});
+                            setAddEntry(true);
+                        }}
+                    >
                         <i className="adminlib-plus-circle-o"></i>
-                        Add New
+                        {__('Add New', 'multivendorx')}
                     </div>,
                 ]}
             />
@@ -474,14 +477,18 @@ export const KnowledgeBase: React.FC = () => {
                     open={addEntry}
                     onClose={handleCloseForm}
                     width="500px"
-                    height='80%'
+                    height="80%"
                     header={
                         <>
                             <div className="title">
                                 <i className="adminlib-book"></i>
-                                {editId ? __('Edit Knowledgebase', 'multivendorx') : __('Add Knowledgebase', 'multivendorx')}
+                                {editId
+                                    ? __('Edit Knowledgebase', 'multivendorx')
+                                    : __('Add Knowledgebase', 'multivendorx')}
                             </div>
-                            <p>Write and publish a new knowledge base article to help stores navigate their dashboard.</p>
+                            <p>
+                                {__('Write and publish a new knowledge base article to help stores navigate their dashboard.', 'multivendorx')}
+                            </p>
                             <i
                                 onClick={handleCloseForm}
                                 className="icon adminlib-close"
@@ -494,7 +501,7 @@ export const KnowledgeBase: React.FC = () => {
                                 onClick={handleCloseForm}
                                 className="admin-btn btn-red"
                             >
-                                Cancel
+                                {__('Cancel', 'multivendorx')}
                             </div>
                             <button
                                 type="button"
@@ -502,7 +509,7 @@ export const KnowledgeBase: React.FC = () => {
                                 className="admin-btn btn-purple"
                                 disabled={submitting}
                             >
-                                {submitting ? 'Saving...' : 'Save'}
+                                {submitting ? __('Saving...', 'multivendorx') : __('Save', 'multivendorx')}
                             </button>
                         </>
                     }
@@ -510,34 +517,46 @@ export const KnowledgeBase: React.FC = () => {
                     <div className="content">
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="title">Title</label>
-                                <BasicInput type="text" name="title" value={formData.title} onChange={handleChange} />
-                                {validationErrors.title && <p className="invalid-massage">{validationErrors.title}</p>}
+                                <label htmlFor="title">{__('Title', 'multivendorx')}</label>
+                                <BasicInput
+                                    type="text"
+                                    name="title"
+                                    value={formData.title}
+                                    onChange={handleChange}
+                                />
+                                {validationErrors.title && (
+                                    <p className="invalid-massage">{validationErrors.title}</p>
+                                )}
                             </div>
                             <div className="form-group">
-                                <label htmlFor="content">Content</label>
+                                <label htmlFor="content">{__('Content', 'multivendorx')}</label>
                                 <TextArea
                                     name="content"
                                     inputClass="textarea-input"
                                     value={formData.content}
                                     onChange={handleChange}
                                     usePlainText={false}
-                                    tinymceApiKey={appLocalizer.settings_databases_value['marketplace-settings']['tinymce_api_section'] ?? ''}
+                                    tinymceApiKey={
+                                        appLocalizer.settings_databases_value['marketplace-settings']['tinymce_api_section'] ?? ''
+                                    }
                                 />
-                                {validationErrors.content && <p className="invalid-massage">{validationErrors.content}</p>}
+                                {validationErrors.content && (
+                                    <p className="invalid-massage">{validationErrors.content}</p>
+                                )}
                             </div>
                             <div className="form-group">
-                                <label htmlFor="status">Status</label>
+                                <label htmlFor="status">{__('Status', 'multivendorx')}</label>
                                 <ToggleSetting
                                     value={formData.status}
                                     options={[
-                                        { label: 'Draft', value: 'draft' },
-                                        { label: 'Pending', value: 'pending' },
-                                        { label: 'Publish', value: 'publish' },
+                                        { label: __('Draft', 'multivendorx'), value: 'draft' },
+                                        { label: __('Pending', 'multivendorx'), value: 'pending' },
+                                        { label: __('Publish', 'multivendorx'), value: 'publish' },
                                     ]}
-                                    onChange={(value) => setFormData(prev => ({ ...prev, status: value }))}
+                                    onChange={(value) =>
+                                        setFormData((prev) => ({ ...prev, status: value }))
+                                    }
                                 />
-
                             </div>
                         </div>
                     </div>

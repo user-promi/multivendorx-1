@@ -3,16 +3,16 @@
 /**
  * Attribute product tab template
  *
-  * Override this template by copying it to yourtheme/MultiVendorX/vendor-dashboard/product-manager/views/html-product-data-attributes.php
+ * Override this template by copying it to yourtheme/MultiVendorX/vendor-dashboard/product-manager/views/html-product-data-attributes.php
  *
- * @author 		MultiVendorX
+ * @author      MultiVendorX
  * @package MultiVendorX/Templates
  * @version   3.3.0
  */
 defined( 'ABSPATH' ) || exit;
-$self = $args['self'];
+$self           = $args['self'];
 $product_object = $args['product_object'];
-$post = $args['post'];
+$post           = $args['post'];
 ?>
 <div role="tabpanel" class="tab-pane fade collapsable-component-wrapper" id="product_attributes_data">
     <div class="row-padding">
@@ -30,7 +30,7 @@ $post = $args['post'];
                         if ( ! empty( $attribute_taxonomies ) ) {
                             foreach ( $attribute_taxonomies as $tax ) {
                                 $attribute_taxonomy_name = wc_attribute_taxonomy_name( $tax->attribute_name );
-                                $label = $tax->attribute_label ? $tax->attribute_label : $tax->attribute_name;
+                                $label                   = $tax->attribute_label ? $tax->attribute_label : $tax->attribute_name;
                                 echo '<option value="' . esc_attr( $attribute_taxonomy_name ) . '">' . esc_html( $label ) . '</option>';
                             }
                         }
@@ -53,17 +53,24 @@ $post = $args['post'];
                     <?php
                     // Product attributes - taxonomies and custom, ordered, with visibility and variation attributes set
                     $attributes = isset( $_POST['wc_attributes'] ) ? $self->prepare_attributes( $_POST['wc_attributes'] ) : $product_object->get_attributes( 'edit' );
-                    $i = -1;
+                    $i          = -1;
                     foreach ( $attributes as $attribute ) {
-                        $i ++;
+                        ++$i;
                         $metabox_class = array();
 
                         if ( $attribute->is_taxonomy() ) {
                             $metabox_class[] = 'taxonomy';
                             $metabox_class[] = $attribute->get_name();
                         }
-                        MultiVendorX()->util->get_template('product/views/html-product-attribute.php', ['attribute' => $attribute, 'metabox_class' => $metabox_class, 'i' => $i, 'self' => $self ] );
-                        
+                        MultiVendorX()->util->get_template(
+                            'product/views/html-product-attribute.php',
+                            array(
+								'attribute'     => $attribute,
+								'metabox_class' => $metabox_class,
+								'i'             => $i,
+								'self'          => $self,
+							)
+                        );
                     }
                     ?>
                 </div>

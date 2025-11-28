@@ -1,10 +1,11 @@
 <?php
 
 namespace MultiVendorX\RestAPI\Controllers;
+
 use MultiVendorX\Store\StoreUtil;
 use MultiVendorX\Utill;
 
-defined('ABSPATH') || exit;
+defined( 'ABSPATH' ) || exit;
 
 class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
 
@@ -16,61 +17,72 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
 	protected $rest_base = 'payouts';
 
     public function register_routes() {
-        register_rest_route( MultiVendorX()->rest_namespace, '/' . $this->rest_base, [
-            [
-                'methods'             => \WP_REST_Server::READABLE,
-                'callback'            => [ $this, 'get_items' ],
-                'permission_callback' => [ $this, 'get_items_permissions_check' ],
-            ],
-            [
-                'methods'             => \WP_REST_Server::CREATABLE,
-                'callback'            => [ $this, 'create_item' ],
-                'permission_callback' => [ $this, 'create_item_permissions_check' ],
-            ],
-        ] );
+        register_rest_route(
+            MultiVendorX()->rest_namespace,
+            '/' . $this->rest_base,
+            array(
+				array(
+					'methods'             => \WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'get_items' ),
+					'permission_callback' => array( $this, 'get_items_permissions_check' ),
+				),
+				array(
+					'methods'             => \WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'create_item' ),
+					'permission_callback' => array( $this, 'create_item_permissions_check' ),
+				),
+			)
+        );
 
-        register_rest_route(MultiVendorX()->rest_namespace, '/' . $this->rest_base . '/(?P<id>[\d]+)', [
-            [
-                'methods'             => \WP_REST_Server::READABLE,
-                'callback'            => [$this, 'get_item'],
-                'permission_callback' => [$this, 'get_items_permissions_check'],
-                'args'                => [
-                    'id' => ['required' => true],
-                ],
-            ],
-            [
-                'methods'             => \WP_REST_Server::EDITABLE,
-                'callback'            => [$this, 'update_item'],
-                'permission_callback' => [$this, 'update_item_permissions_check'],
-            ],
-        ]);
+        register_rest_route(
+            MultiVendorX()->rest_namespace,
+            '/' . $this->rest_base . '/(?P<id>[\d]+)',
+            array(
+				array(
+					'methods'             => \WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'get_item' ),
+					'permission_callback' => array( $this, 'get_items_permissions_check' ),
+					'args'                => array(
+						'id' => array( 'required' => true ),
+					),
+				),
+				array(
+					'methods'             => \WP_REST_Server::EDITABLE,
+					'callback'            => array( $this, 'update_item' ),
+					'permission_callback' => array( $this, 'update_item_permissions_check' ),
+				),
+			)
+        );
 
-        register_rest_route(MultiVendorX()->rest_namespace, '/states/(?P<country>[A-Z]{2})', [
-            'methods'               => \WP_REST_Server::READABLE,
-            'callback'              => [$this, 'get_states_by_country'],
-            'permission_callback'   => [$this, 'get_items_permissions_check'],
-        ]);
-
+        register_rest_route(
+            MultiVendorX()->rest_namespace,
+            '/states/(?P<country>[A-Z]{2})',
+            array(
+				'methods'             => \WP_REST_Server::READABLE,
+				'callback'            => array( $this, 'get_states_by_country' ),
+				'permission_callback' => array( $this, 'get_items_permissions_check' ),
+			)
+        );
     }
 
-    public function get_items_permissions_check($request) {
+    public function get_items_permissions_check( $request ) {
         // return current_user_can( 'read' );
         return true;
     }
 
-     // POST permission
-    public function create_item_permissions_check($request) {
+    // POST permission
+    public function create_item_permissions_check( $request ) {
         // return current_user_can( 'manage_options' );
         return true;
     }
 
-    public function update_item_permissions_check($request) {
+    public function update_item_permissions_check( $request ) {
         // return current_user_can('manage_options');
         return true;
     }
 
 
-    // GET 
+    // GET
     public function get_items( $request ) {
         // Verify nonce
         $nonce = $request->get_header( 'X-WP-Nonce' );
@@ -81,34 +93,40 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
                 array( 'status' => 403 )
             );
         }
-    
+
         // Pagination
         $limit  = max( intval( $request->get_param( 'row' ) ), 10 );
         $page   = max( intval( $request->get_param( 'page' ) ), 1 );
         $offset = ( $page - 1 ) * $limit;
         $count  = $request->get_param( 'count' );
-    
+
         // Count only
         if ( $count ) {
-            $pending_products_count = count( wc_get_products( array(
-                'status'   => 'pending',
-                'limit'    => -1,
-                'return'   => 'ids',
-                'meta_key' => 'multivendorx_store_id',
-            ) ) );
-    
+            $pending_products_count = count(
+                wc_get_products(
+                    array(
+						'status'   => 'pending',
+						'limit'    => -1,
+						'return'   => 'ids',
+						'meta_key' => 'multivendorx_store_id',
+                    )
+                )
+            );
+
             return rest_ensure_response( (int) $pending_products_count );
         }
-    
+
         // Fetch pending products with pagination
-        $pending_products = wc_get_products( array(
-            'status'   => 'pending',
-            'limit'    => $limit,
-            'offset'   => $offset,
-            'return'   => 'objects',
-            'meta_key' => 'multivendorx_store_id',
-        ) );
-    
+        $pending_products = wc_get_products(
+            array(
+				'status'   => 'pending',
+				'limit'    => $limit,
+				'offset'   => $offset,
+				'return'   => 'objects',
+				'meta_key' => 'multivendorx_store_id',
+            )
+        );
+
         $formatted_products = array();
         foreach ( $pending_products as $product ) {
             $formatted_products[] = apply_filters(
@@ -122,10 +140,10 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
                 )
             );
         }
-    
+
         return rest_ensure_response( $formatted_products );
     }
-    
+
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
@@ -133,11 +151,11 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
         }
         $registrations = $request->get_header( 'registrations' );
 
-        $store_data = $request->get_param('formData');
+        $store_data = $request->get_param( 'formData' );
         // Create store object
         $store = new \MultiVendorX\Store\Store();
 
-        $core_fields = [ 'name', 'slug', 'description', 'who_created', 'status' ];
+        $core_fields = array( 'name', 'slug', 'description', 'who_created', 'status' );
         foreach ( $core_fields as $field ) {
             if ( isset( $store_data[ $field ] ) ) {
                 $store->set( $field, $store_data[ $field ] );
@@ -156,10 +174,10 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
 
         if ( $registrations ) {
             // Collect all non-core fields into one array
-            $non_core_fields = [];
+            $non_core_fields = array();
             foreach ( $store_data as $key => $value ) {
                 if ( ! in_array( $key, $core_fields, true ) ) {
-                    $non_core_fields[$key] = $value;
+                    $non_core_fields[ $key ] = $value;
                 }
             }
 
@@ -169,23 +187,25 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
             }
         }
 
-        return rest_ensure_response( [
-            'success' => true,
-            'id'      => $insert_id,
-        ] );
+        return rest_ensure_response(
+            array(
+				'success' => true,
+				'id'      => $insert_id,
+            )
+        );
     }
 
     public function get_item( $request ) {
-        $id = absint( $request->get_param( 'id' ) );
-        $fetch_user = $request->get_param( 'fetch_user' );
+        $id            = absint( $request->get_param( 'id' ) );
+        $fetch_user    = $request->get_param( 'fetch_user' );
         $registrations = $request->get_header( 'registrations' );
-        if ($fetch_user) {
-            $users = StoreUtil::get_store_users($id);
+        if ( $fetch_user ) {
+            $users = StoreUtil::get_store_users( $id );
 
-            $response = [
+            $response = array(
                 'id'           => $id,
                 'store_owners' => $users,
-            ];
+            );
             return rest_ensure_response( $response );
         }
 
@@ -197,14 +217,14 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
             return rest_ensure_response( $response );
         }
 
-        $response = [
+        $response = array(
             'id'          => $store->get_id(),
-            'name'        => $store->get('name'),
-            'slug'        => $store->get('slug'),
-            'description' => $store->get('description'),
-            'who_created' => $store->get('who_created'),
-            'status'      => $store->get('status'),
-        ];
+            'name'        => $store->get( 'name' ),
+            'slug'        => $store->get( 'slug' ),
+            'description' => $store->get( 'description' ),
+            'who_created' => $store->get( 'who_created' ),
+            'status'      => $store->get( 'status' ),
+        );
 
         // Add meta data
         foreach ( $store->meta_data as $key => $values ) {
@@ -221,26 +241,30 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
         $store = new \MultiVendorX\Store\Store( $id );
 
         if ( $data['store_owners'] ) {
-            StoreUtil::add_store_users([
-                'store_id' => $data['id'],
-                'store_owners' => $data['store_owners'],
-                'role_id' => 'store_owner',
-            ]);
+            StoreUtil::add_store_users(
+                array(
+					'store_id'     => $data['id'],
+					'store_owners' => $data['store_owners'],
+					'role_id'      => 'store_owner',
+                )
+            );
 
-            return rest_ensure_response( [
-                'success' => true
-            ] );
+            return rest_ensure_response(
+                array(
+					'success' => true,
+                )
+            );
         }
-        
-        $store->set( 'name',        $data['name'] ?? $store->get('name') );
-        $store->set( 'slug',        $data['slug'] ?? $store->get('slug') );
-        $store->set( 'description', $data['description'] ?? $store->get('description') );
+
+        $store->set( 'name', $data['name'] ?? $store->get( 'name' ) );
+        $store->set( 'slug', $data['slug'] ?? $store->get( 'slug' ) );
+        $store->set( 'description', $data['description'] ?? $store->get( 'description' ) );
         $store->set( 'who_created', 'admin' );
-        $store->set( 'status',      $data['status'] ?? $store->get('status') );
+        $store->set( 'status', $data['status'] ?? $store->get( 'status' ) );
 
         if ( is_array( $data ) ) {
             foreach ( $data as $key => $value ) {
-                if ( ! in_array( $key, [ 'id', 'name', 'slug', 'description', 'who_created', 'status' ], true ) ) {
+                if ( ! in_array( $key, array( 'id', 'name', 'slug', 'description', 'who_created', 'status' ), true ) ) {
                     $store->update_meta( $key, $value );
                 }
             }
@@ -248,28 +272,30 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
 
         $store->save();
 
-        return rest_ensure_response( [
-            'success' => true,
-            'id'      => $store->get_id(),
-        ] );
+        return rest_ensure_response(
+            array(
+				'success' => true,
+				'id'      => $store->get_id(),
+            )
+        );
     }
 
 
-    public function get_states_by_country($request) {
-        $country_code = $request->get_param('country');
-        $states = WC()->countries->get_states($country_code);
+    public function get_states_by_country( $request ) {
+        $country_code = $request->get_param( 'country' );
+        $states       = WC()->countries->get_states( $country_code );
 
-        $state_list = [];
+        $state_list = array();
 
-        if (is_array($states)) {
-            foreach ($states as $code => $name) {
-                $state_list[] = [
+        if ( is_array( $states ) ) {
+            foreach ( $states as $code => $name ) {
+                $state_list[] = array(
                     'label' => $name,
                     'value' => $code,
-                ];
+                );
             }
         }
 
-        return rest_ensure_response($state_list);
+        return rest_ensure_response( $state_list );
     }
 }

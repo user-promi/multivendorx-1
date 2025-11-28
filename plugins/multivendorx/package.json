@@ -147,7 +147,6 @@
         "axios": "^1.12.2",
         "babel-loader": "^10.0.0",
         "clean-css": "^5.3.3",
-        "depcheck": "^1.4.7",
         "eslint": "8.56.0",
         "file-loader": "^6.2.0",
         "fs-extra": "^11.3.2",

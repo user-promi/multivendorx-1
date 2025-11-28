@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import StoreReviews from './storeReviews ';
 import { useLocation, Link } from 'react-router-dom';
+import { __ } from '@wordpress/i18n';
 
 const CustomerServices = () => {
     const [abuseCount, setAbuseCount] = useState(0);
@@ -133,10 +134,9 @@ const CustomerServices = () => {
         <>
             <AdminBreadcrumbs
                 activeTabIcon="adminlib-customer-service"
-                tabTitle="Customer Service"
-                description={'Manage store reviews, support requests, financial transactions, and reported issues.'}
+                tabTitle={__('Customer Service', 'multivendorx')}
+                description={__('Manage store reviews, support requests, financial transactions, and reported issues.', 'multivendorx')}
             />
-
             {tabData.length > 0 ? (
                 <Tabs
                     tabData={tabData}
@@ -158,13 +158,17 @@ const CustomerServices = () => {
                 <div className="general-wrapper">
                     <div className="permission-wrapper">
                         <i className="adminlib-info red"></i>
-                        <div className="title">Looks like customer support isn’t set up yet! Turn on a support module to start assisting your customers.</div>
-                        <a href={appLocalizer.module_page_url} className="admin-btn btn-purple" >Enable Now</a>
+                        <div className="title">
+                            {__('Looks like customer support isn’t set up yet! Turn on a support module to start assisting your customers.', 'multivendorx')}
+                        </div>
+                        <a href={appLocalizer.module_page_url} className="admin-btn btn-purple">
+                            {__('Enable Now', 'multivendorx')}
+                        </a>
                     </div>
                 </div>
             )}
         </>
-    );
+    );    
 };
 
 export default CustomerServices;

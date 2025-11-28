@@ -1,6 +1,3 @@
-// tourSteps.tsx
-import React from "react";
-
 export const getTourSteps = (appLocalizer: any) => [
     {
         selector: '[data-tour="appointment-showcase-tour"]',

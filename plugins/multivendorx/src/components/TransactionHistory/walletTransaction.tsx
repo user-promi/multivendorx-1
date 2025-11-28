@@ -1,7 +1,7 @@
 /* global appLocalizer */
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { Table, getApiLink, TableCell, CalendarInput, CommonPopup, BasicInput, ToggleSetting, TextArea } from 'zyra';
 import {
     ColumnDef,
@@ -25,7 +25,7 @@ type StoreRow = {
     payment_method?: string;
 };
 
-interface TransactionHistoryTableProps {
+interface WalletTransactionProps {
     storeId: number | null;
     dateRange: { startDate: Date | null; endDate: Date | null };
 }
@@ -284,7 +284,7 @@ const TransactionBulkActions: React.FC<{
 
 
 
-const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ storeId, dateRange }) => {
+const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId, dateRange }) => {
     const [data, setData] = useState<StoreRow[] | null>(null);
     const [storeTransaction, setTtoreTransaction] = useState<any>(null);
     const [wallet, setWallet] = useState<any[]>([]);
@@ -482,14 +482,14 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                 const commissionId = row.original.commission_id;
                 const paymentMethod = row.original.payment_method;
                 const orderId = row.original.order_details;
-                const formatText = (text) =>
+                const formatText = (text:any) =>
                     text
                         ?.replace(/-/g, ' ')
-                        ?.replace(/\b\w/g, (c) => c.toUpperCase())
+                        ?.replace(/\b\w/g, (c:any) => c.toUpperCase())
                     || '-';
 
                 let displayValue = '-';
-                let content = displayValue;
+                let content:any = displayValue;
 
                 // Commission Transaction (clickable)
                 if (type === 'commission') {
@@ -689,7 +689,6 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                 console.log("last 3", response.data.transaction)
             })
             .catch((error) => {
-                console.error('Error fetching recent debit transactions:', error);
                 setRecentDebits([]);
             });
     }, [storeId]);
@@ -766,7 +765,6 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
 
     // fee calculation
     const fee = (amount * (percentage / 100)) + fixed;
-    console.log(wallet?.withdrawal_setting)
     return (
         <>
             <div className="general-wrapper">
@@ -774,11 +772,11 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                     <div className="col">
                         <div className="data-card-wrapper">
                             <div className="data-card">
-                                <div className="title">Wallet balance</div>
+                                <div className="title">{__("Wallet balance", "multivendorx")}</div>
                                 <div className="number">{formatCurrency(wallet.wallet_balance)} <i className="adminlib-wallet"></i></div>
                             </div>
                             <div className="data-card">
-                                <div className="title">Upcoming balance</div>
+                                <div className="title">{__("Upcoming balance", "multivendorx")}</div>
                                 <div className="number">{formatCurrency(wallet.locking_balance)} <i className="adminlib-cash "></i></div>
                             </div>
                         </div>
@@ -787,7 +785,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                             <div className="column debit-transactions">
                                 <div className="card-header">
                                     <div className="left">
-                                        <div className="title">Recent Debit Transactions</div>
+                                        <div className="title">{__("Recent Debit Transactions", "multivendorx")}</div>
                                     </div>
                                 </div>
                                 {recentDebits.map((txn) => {
@@ -796,7 +794,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                                         ? txn.payment_method
                                             .replace(/[-_]/g, ' ')                // replace - and _ with spaces
                                             .replace(/\b\w/g, char => char.toUpperCase()) // capitalize each word
-                                        : 'N/A';
+                                        : __("N/A", "multivendorx");
 
                                     return (
                                         <div key={txn.id} className="info-item">
@@ -829,11 +827,11 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                             <div className="column">
                                 <div className="card-header">
                                     <div className="left">
-                                        <div className="title">Recent payouts</div>
+                                        <div className="title">{__("Recent payouts", "multivendorx")}</div>
                                     </div>
                                 </div>
                                 <div className="des">
-                                    No recent payouts transactions found.
+                                    {__("No recent payouts transactions found.", "multivendorx")}
                                 </div>
                             </div>
                         )}
@@ -843,47 +841,47 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                         <div className="payout-wrapper">
                             <div className="payout-header">
                                 <div className="price-wrapper">
-                                    <div className="price-title">Available balance</div>
-                                    <div className="price">{formatCurrency(wallet.available_balance)} <div className="admin-badge green">Ready to withdraw</div></div>
+                                    <div className="price-title">{__("Available balance", "multivendorx")}</div>
+                                    <div className="price">{formatCurrency(wallet.available_balance)} <div className="admin-badge green">{__("Ready to withdraw", "multivendorx")}</div></div>
                                 </div>
                             </div>
 
-                            <div className="small-text"><b>{formatCurrency(storeTransaction?.thresold)} </b> minimum required to withdraw</div>
+                            <div className="small-text"><b>{formatCurrency(storeTransaction?.thresold)} </b> {__("minimum required to withdraw", "multivendorx")}</div>
 
                             <div className="payout-card-wrapper">
                                 <div className="payout-card">
-                                    <div className="card-title">Upcoming Balance</div>
+                                    <div className="card-title">{__("Upcoming Balance", "multivendorx")}</div>
                                     <div className="card-price">{formatCurrency(wallet.locking_balance)}</div>
-                                    <div className="card-des">Pending settinglement. Released soon</div>
+                                    <div className="card-des">{__("Pending settlement. Released soon", "multivendorx")}</div>
                                 </div>
                                 {wallet?.withdrawal_setting?.length > 0 && (
 
                                     <div className="payout-card">
-                                        <div className="card-title">Free Withdrawals</div>
+                                        <div className="card-title">{__("Free Withdrawals", "multivendorx")}</div>
 
                                         <div className="card-price">
-                                            {wallet?.withdrawal_setting?.[0]?.free_withdrawals - wallet?.free_withdrawal} Left
+                                            {wallet?.withdrawal_setting?.[0]?.free_withdrawals - wallet?.free_withdrawal} <span>
+                                                {__("Left", "multivendorx")}
+                                            </span>
                                         </div>
 
                                         <div className="card-des">
-                                            Then {(Number(wallet?.withdrawal_setting?.[0]?.withdrawal_percentage) || 0)}% +
-                                            {formatCurrency(Number(wallet?.withdrawal_setting?.[0]?.withdrawal_fixed) || 0)} fee
+                                            {__("Then", "multivendorx")} {(Number(wallet?.withdrawal_setting?.[0]?.withdrawal_percentage) || 0)}% +
+                                            {formatCurrency(Number(wallet?.withdrawal_setting?.[0]?.withdrawal_fixed) || 0)} {__("fee", "multivendorx")}
                                         </div>
-
-
                                     </div>
                                 )}
                             </div>
-                            <div className="small-text">some funds locked during settlement</div>
+                            <div className="small-text">{__("Some funds locked during settlement", "multivendorx")}</div>
                             {wallet?.payment_schedules ? (
-                                <div className="small-text">Auto payouts run {wallet.payment_schedules}</div>
+                                <div className="small-text">{__("Auto payouts run", "multivendorx")} {wallet.payment_schedules}</div>
                             ) : (
-                                <div className="small-text">Auto payouts not set</div>
+                                <div className="small-text">{__("Auto payouts not set", "multivendorx")}</div>
                             )}
 
                             <div className="buttons-wrapper">
                                 <div className="admin-btn btn-purple-bg" onClick={() => setRequestWithdrawal(true)}>
-                                    Disburse Payment
+                                    {__("Disburse Payment", "multivendorx")}
                                 </div>
                             </div>
 
@@ -899,7 +897,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                         <>
                             <div className="title">
                                 <i className="adminlib-wallet"></i>
-                                Disburse payment
+                                {__("Disburse payment", "multivendorx")}
                             </div>
                             <i
                                 className="icon adminlib-close"
@@ -908,7 +906,12 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                                     resetWithdrawalForm(); //reset form on close
                                 }}
                             ></i>
-                            <div className="des">Release earnings to your stores in a few simple steps - amount, payment processor, and an optional note.</div>
+                            <div className="des">
+                                {__(
+                                    "Release earnings to your stores in a few simple steps - amount, payment processor, and an optional note.",
+                                    "multivendorx"
+                                )}
+                            </div>
                         </>
                     }
                     footer={
@@ -917,7 +920,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                                 className="admin-btn btn-purple"
                                 onClick={() => handleWithdrawal()}
                             >
-                                Disburse
+                                {__("Disburse", "multivendorx")}
                             </div>
                         </>
                     }
@@ -925,10 +928,11 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                     <div className="content">
                         {/* start left section */}
                         <div className="form-group-wrapper">
-                            <div className="available-balance">Withdrawable balance <div>{formatCurrency(wallet.available_balance)}</div></div>
-
+                            <div className="available-balance">
+                                {__("Withdrawable balance", "multivendorx")} <div>{formatCurrency(wallet.available_balance)}</div>
+                            </div>
                             <div className="form-group">
-                                <label htmlFor="payment_method">Payment Processor</label>
+                                <label htmlFor="payment_method">{__("Payment Processor", "multivendorx")}</label>
 
                                 <div className="payment-method">
                                     {storeData?.payment_method ? (
@@ -938,35 +942,35 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                                         </div>
                                     ) : (
                                         <span>
-                                            No payment method saved
+                                            {__("No payment method saved", "multivendorx")}
                                         </span>
                                     )}
                                 </div>
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="amount">Amount</label>
+                                <label htmlFor="amount">{__("Amount", "multivendorx")}</label>
 
                                 <BasicInput
                                     type="number"
                                     name="amount"
                                     value={amount}
-                                    onChange={(e) => AmountChange(Number(e.target.value))}
+                                    onChange={(e:any) => AmountChange(Number(e.target.value))}
                                 />
 
                                 <div className="free-wrapper">
                                     {wallet?.withdrawal_setting?.length > 0 && wallet?.withdrawal_setting?.[0]?.free_withdrawals ? (
                                         <>
                                             {freeLeft > 0 ? (
-                                                <span>Burning 1 out of {freeLeft} free withdrawals</span>
+                                                <span>{sprintf(__("Burning 1 out of %s free withdrawals", "multivendorx"), freeLeft)}</span>
                                             ) : (
-                                                <span> Free withdrawal limit reached</span>
+                                                <span>{__("Free withdrawal limit reached", "multivendorx")}</span>
                                             )}
-                                            <span>Total: {formatCurrency(amount || 0)}</span>
-                                            <span>| Fee: {formatCurrency(fee)}</span>
+                                            <span>{__("Total:", "multivendorx")} {formatCurrency(amount || 0)}</span>
+                                            <span>{__("Fee:", "multivendorx")} {formatCurrency(fee)}</span>
                                         </>
                                     ) : (
-                                        <span>Actual withdrawal: {formatCurrency(amount || 0)}</span>
+                                        <span>{__("Actual withdrawal:", "multivendorx")} {formatCurrency(amount || 0)}</span>
                                     )}
                                 </div>
 
@@ -977,7 +981,7 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="note">Note</label>
+                            <label htmlFor="note">{__("Note", "multivendorx")}</label>
                                 <TextArea
                                     name="note"
                                     wrapperClass="setting-from-textarea"
@@ -1029,4 +1033,4 @@ const TransactionHistoryTable: React.FC<TransactionHistoryTableProps> = ({ store
     );
 };
 
-export default TransactionHistoryTable;
+export default WalletTransaction;

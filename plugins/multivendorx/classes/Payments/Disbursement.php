@@ -1,18 +1,18 @@
 <?php
 
 namespace MultiVendorX\Payments;
+
 use MultiVendorX\Commission\CommissionUtil;
 use MultiVendorX\Store\StoreUtil;
 use MultiVendorX\Utill;
 
-defined('ABSPATH') || exit;
+defined( 'ABSPATH' ) || exit;
 
 class Disbursement {
     public function __construct() {
         // add_action('woocommerce_order_status_changed', array($this, 'disbursement_process'), 30, 4);
-        add_action( 'multivendorx_transaction_status_update', array($this, 'transaction_status_update'));
-        add_action( 'multivendorx_payout_cron', array($this, 'multivendorx_payout_cron'));
-        
+        add_action( 'multivendorx_transaction_status_update', array( $this, 'transaction_status_update' ) );
+        add_action( 'multivendorx_payout_cron', array( $this, 'multivendorx_payout_cron' ) );
     }
 
 
@@ -20,60 +20,62 @@ class Disbursement {
         global $wpdb;
         $table = $wpdb->prefix . Utill::TABLES['transaction'];
 
-        $results = $wpdb->get_results("SELECT * FROM {$table}
+        $results = $wpdb->get_results(
+            "SELECT * FROM {$table}
             WHERE status = 'Upcoming'
             AND available_at IS NOT NULL
             AND available_at < NOW()"
         );
 
-        foreach ($results as $row) {
+        foreach ( $results as $row ) {
             $wpdb->update(
                 $table,
-                [ 'status' => 'Processed' ],
-                [ 'id'     => $row->id ],
-                [ '%s' ],
-                [ '%d' ]
+                array( 'status' => 'Processed' ),
+                array( 'id' => $row->id ),
+                array( '%s' ),
+                array( '%d' )
             );
 
             $wpdb->insert(
                 $table,
-                [
-                    'store_id'        => $row->store_id,
-                    'order_id'        => $row->order_id,
-                    'commission_id'   => $row->commission_id,
-                    'entry_type'      => $row->entry_type,
-                    'transaction_type'=> $row->transaction_type,
-                    'amount'          => $row->amount,
-                    'currency'        => $row->currency,
-                    'narration'       => $row->narration,
-                    'status'          => 'Completed',
-                    'available_at'    => null,
-                    'created_at'      => current_time('mysql'),
-                ],
-                ['%d','%d','%d','%s','%s', '%f','%s','%s', '%s','%s','%s']
+                array(
+                    'store_id'         => $row->store_id,
+                    'order_id'         => $row->order_id,
+                    'commission_id'    => $row->commission_id,
+                    'entry_type'       => $row->entry_type,
+                    'transaction_type' => $row->transaction_type,
+                    'amount'           => $row->amount,
+                    'currency'         => $row->currency,
+                    'narration'        => $row->narration,
+                    'status'           => 'Completed',
+                    'available_at'     => null,
+                    'created_at'       => current_time( 'mysql' ),
+                ),
+                array( '%d', '%d', '%d', '%s', '%s', '%f', '%s', '%s', '%s', '%s', '%s' )
             );
-
         }
     }
 
     public function multivendorx_payout_cron() {
-       
-        $threshold_amount = (int) MultiVendorX()->setting->get_setting( 'payout_threshold_amount', 0 );
+
+        $threshold_amount      = (int) MultiVendorX()->setting->get_setting( 'payout_threshold_amount', 0 );
         $minimum_wallet_amount = (int) MultiVendorX()->setting->get_setting( 'wallet_threshold_amount', 0 );
-        
+
         global $wpdb;
         $table = $wpdb->prefix . Utill::TABLES['transaction'];
-        
-        $results = $wpdb->get_results("
-            SELECT store_id, balance FROM {$table} WHERE id IN ( SELECT MAX(id) FROM {$table} GROUP BY store_id );
-        ");
 
-        foreach ($results as $row) {
-            if (StoreUtil::get_excluded_products('', $row->store_id, true)) {
+        $results = $wpdb->get_results(
+            "
+            SELECT store_id, balance FROM {$table} WHERE id IN ( SELECT MAX(id) FROM {$table} GROUP BY store_id );
+        "
+        );
+
+        foreach ( $results as $row ) {
+            if ( StoreUtil::get_excluded_products( '', $row->store_id, true ) ) {
                 return;
             }
-            if (($threshold_amount + $minimum_wallet_amount) < $row->balance) {
-                MultiVendorX()->payments->processor->process_payment( $row->store_id, $row->balance);
+            if ( ( $threshold_amount + $minimum_wallet_amount ) < $row->balance ) {
+                MultiVendorX()->payments->processor->process_payment( $row->store_id, $row->balance );
             }
         }
     }

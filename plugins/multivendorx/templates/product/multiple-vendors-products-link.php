@@ -9,17 +9,15 @@
  * as little as possible, but it does happen. When this occurs the version of the template file will.
  * be bumped and the readme will list any important changes.
  *
- * 
- * @author 		MultiVendorX
+ * @author      MultiVendorX
  * @package dc-woocommerce-multi-vendor/Templates
  * @version 2.3.4
  */
-global $product; 
+global $product;
 
 $more_products = $args['more_products'];
 if ( count( $more_products ) >= 1 ) {
-    $button_text = apply_filters( 'mvx_more_vendors', __('More Stores', 'multivendorx') );
+    $button_text = apply_filters( 'mvx_more_vendors', __( 'More Stores', 'multivendorx' ) );
     $button_text = apply_filters( 'mvx_single_product_more_vendors_text', $button_text, $product );
-    echo '<a  href="#" class="goto_more_offer_tab button">' . esc_html($button_text) . '</a>';
+    echo '<a  href="#" class="goto_more_offer_tab button">' . esc_html( $button_text ) . '</a>';
 }
-

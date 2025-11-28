@@ -3,18 +3,18 @@
 use MultiVendorX\Store\StoreUtil;
 use MultiVendorX\Store\Store;
 
-$user = wp_get_current_user();
-$store_dashboard_logo = MultiVendorX()->setting->get_setting('store_dashboard_site_logo', array());
-$page_info = MultiVendorX()->rest->dashboard->get_current_page_and_submenu();
+$user                 = wp_get_current_user();
+$store_dashboard_logo = MultiVendorX()->setting->get_setting( 'store_dashboard_site_logo', array() );
+$page_info            = MultiVendorX()->rest->dashboard->get_current_page_and_submenu();
 // Count stores excluding the active one.
 $active_store = $page_info['active_store'] ?? null;
-$store_ids = $page_info['store_ids'] ?? [];
+$store_ids    = $page_info['store_ids'] ?? array();
 
 $available_stores = array_filter(
     $store_ids,
-    function ($id) use ($active_store) {
+    function ( $id ) use ( $active_store ) {
         // Skip the active store if it exists in the list
-        return $active_store ? ($id !== $active_store) : true;
+        return $active_store ? ( $id !== $active_store ) : true;
     }
 );
 
@@ -23,7 +23,7 @@ $available_stores = array_filter(
 <html <?php language_attributes(); ?>>
 
 <head>
-    <meta charset="<?php bloginfo('charset'); ?>">
+    <meta charset="<?php bloginfo( 'charset' ); ?>">
     <?php wp_head(); ?>
 </head>
 
@@ -31,38 +31,38 @@ $available_stores = array_filter(
     <div id="store-dashboard">
         <div class="dashboard-tabs-wrapper">
             <div class="logo-wrapper">
-                <?php if (!empty($store_dashboard_logo)): ?>
-                    <img src="<?php echo esc_url($store_dashboard_logo); ?>" alt="">
-                <?php else: ?>
-                    <span class="site-name"><?php echo esc_html(get_bloginfo('name')); ?></span>
+                <?php if ( ! empty( $store_dashboard_logo ) ) : ?>
+                    <img src="<?php echo esc_url( $store_dashboard_logo ); ?>" alt="">
+                <?php else : ?>
+                    <span class="site-name"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></span>
                 <?php endif; ?>
             </div>
             <div class="dashboard-tabs">
                 <ul>
-                    <?php foreach ($page_info['all_endpoints'] as $section): ?>
+                    <?php foreach ( $page_info['all_endpoints'] as $section ) : ?>
                         <?php
-                        $has_submenu = !empty($section['submenu']);
-                        $is_active = ($page_info['current_page'] === $section['slug'] && empty($page_info['current_sub']));
+                        $has_submenu = ! empty( $section['submenu'] );
+                        $is_active   = ( $page_info['current_page'] === $section['slug'] && empty( $page_info['current_sub'] ) );
                         ?>
                         <li class="tab-name <?php echo $is_active ? 'active' : ''; ?>">
-                            <a class="tab" <?php echo $has_submenu ? 'href="#" onclick="return false;"' : 'href="' . esc_url(StoreUtil::get_endpoint_url($section['slug'])) . '"'; ?>>
-                                <i class="<?php echo esc_attr($section['icon']); ?>"></i>
-                                <span><?php echo esc_html($section['name']); ?></span>
-                                <?php if ($has_submenu): ?>
+                            <a class="tab" <?php echo $has_submenu ? 'href="#" onclick="return false;"' : 'href="' . esc_url( StoreUtil::get_endpoint_url( $section['slug'] ) ) . '"'; ?>>
+                                <i class="<?php echo esc_attr( $section['icon'] ); ?>"></i>
+                                <span><?php echo esc_html( $section['name'] ); ?></span>
+                                <?php if ( $has_submenu ) : ?>
                                     <i class="admin-arrow adminlib-pagination-right-arrow"></i>
                                 <?php endif; ?>
                             </a>
 
-                            <?php if ($has_submenu): ?>
+                            <?php if ( $has_submenu ) : ?>
                                 <ul class="subtabs">
-                                    <?php foreach ($section['submenu'] as $submenu): ?>
+                                    <?php foreach ( $section['submenu'] as $submenu ) : ?>
                                         <?php
-                                        $sub_active = ($page_info['current_page'] === $section['slug'] && $page_info['current_sub'] === $submenu['slug']);
+                                        $sub_active = ( $page_info['current_page'] === $section['slug'] && $page_info['current_sub'] === $submenu['slug'] );
                                         ?>
                                         <li class="<?php echo $sub_active ? 'active' : ''; ?>">
                                             <a
-                                                href="<?php echo esc_url(StoreUtil::get_endpoint_url($section['slug'], $submenu['slug'])); ?>">
-                                                <?php echo esc_html($submenu['name']); ?>
+                                                href="<?php echo esc_url( StoreUtil::get_endpoint_url( $section['slug'], $submenu['slug'] ) ); ?>">
+                                                <?php echo esc_html( $submenu['name'] ); ?>
                                             </a>
                                         </li>
                                     <?php endforeach; ?>
@@ -107,13 +107,13 @@ $available_stores = array_filter(
                                     <div class="dropdown-header">
                                         <div class="user-card">
                                             <div class="user-avatar">
-                                                <?php echo get_avatar($user->ID, 48); ?>
+                                                <?php echo get_avatar( $user->ID, 48 ); ?>
                                             </div>
                                             <div class="user-info">
                                                 <span
-                                                    class="user-name"><?php echo esc_html($user->display_name); ?></span>
+                                                    class="user-name"><?php echo esc_html( $user->display_name ); ?></span>
                                                 <span
-                                                    class="user-email"><?php echo esc_html($user->user_email); ?></span>
+                                                    class="user-email"><?php echo esc_html( $user->user_email ); ?></span>
                                             </div>
                                         </div>
                                     </div>
@@ -136,7 +136,7 @@ $available_stores = array_filter(
                                         </ul>
                                     </div>
 
-                                    <?php if (!empty($available_stores)): ?>
+                                    <?php if ( ! empty( $available_stores ) ) : ?>
                                         <div class="dropdown-header">
                                             <h3><i class="adminlib-switch-store"></i>Switch stores</h3>
                                         </div>
@@ -144,14 +144,14 @@ $available_stores = array_filter(
                                         <div class="store-wrapper">
                                             <ul>
                                                 <?php
-                                                foreach ($available_stores as $store_id):
-                                                    $store = Store::get_store_by_id($store_id);
+                                                foreach ( $available_stores as $store_id ) :
+                                                    $store = Store::get_store_by_id( $store_id );
                                                     ?>
                                                     <li>
                                                         <a href="javascript:void(0);" class="switch-store"
-                                                            data-store-id="<?php echo esc_attr($store_id); ?>">
+                                                            data-store-id="<?php echo esc_attr( $store_id ); ?>">
                                                             <i class="adminlib-storefront"></i>
-                                                            <?php echo esc_html($store->get('name')); ?>
+                                                            <?php echo esc_html( $store->get( 'name' ) ); ?>
                                                         </a>
                                                     </li>
                                                 <?php endforeach; ?>
@@ -161,9 +161,9 @@ $available_stores = array_filter(
 
                                     <div class="footer">
                                         <a class="admin-btn btn-red"
-                                            href="<?php echo esc_url(wp_logout_url(get_permalink((int) MultiVendorX()->setting->get_setting('store_dashboard_page')))); ?>">
+                                            href="<?php echo esc_url( wp_logout_url( get_permalink( (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' ) ) ) ); ?>">
                                             <i class="adminlib-import"></i>
-                                            <?php echo esc_html__('Sign Out', 'multivendorx'); ?>
+                                            <?php echo esc_html__( 'Sign Out', 'multivendorx' ); ?>
                                         </a>
                                     </div>
                                 </div>
@@ -174,17 +174,17 @@ $available_stores = array_filter(
                 </div>
             </div>
 
-            <div class="content-wrapper" id="<?php echo $page_info['id'] ? esc_attr($page_info['id']) : ''; ?>">
-                <?php if (!empty($page_info['error_msg'])) { ?>
+            <div class="content-wrapper" id="<?php echo $page_info['id'] ? esc_attr( $page_info['id'] ) : ''; ?>">
+                <?php if ( ! empty( $page_info['error_msg'] ) ) { ?>
                     <div class="permission-wrapper">
                         <i class="adminlib-info red"></i>
-                        <div class="title"><?php echo wp_kses_post($page_info['error_msg']); ?></div>
-                        <div class="admin-btn btn-purple"><?php echo esc_html__('Contact Admin', 'multivendorx'); ?></div>
+                        <div class="title"><?php echo wp_kses_post( $page_info['error_msg'] ); ?></div>
+                        <div class="admin-btn btn-purple"><?php echo esc_html__( 'Contact Admin', 'multivendorx' ); ?></div>
                     </div>
 
                 <?php } else { ?>
                     <?php
-                    if (!empty($page_info['content'])) {
+                    if ( ! empty( $page_info['content'] ) ) {
                         echo $page_info['content'];
                     }
                     ?>

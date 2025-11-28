@@ -17,7 +17,11 @@ type StoreRow = {
     status?: string;
 };
 
-const TransactionDataTable: React.FC = ({ storeId }) => {
+interface DirectTransactionProps {
+    storeId: number | string; // or whatever type it should be
+}
+
+const DirectTransaction: React.FC<DirectTransactionProps> = ({ storeId }) => {
     const [data, setData] = useState<StoreRow[] | []>([]);
 
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -158,4 +162,4 @@ const TransactionDataTable: React.FC = ({ storeId }) => {
     );
 };
 
-export default TransactionDataTable;
+export default DirectTransaction;

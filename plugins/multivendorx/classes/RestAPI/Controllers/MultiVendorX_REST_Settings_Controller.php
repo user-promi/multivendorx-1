@@ -68,30 +68,30 @@ class MultiVendorX_REST_Settings_Controller extends \WP_REST_Controller {
 
         $all_details['error'] = __( 'Settings Saved', 'multivendorx' );
 
-        if ($settingsname == 'store_capability' || $settingsname == 'user_capability') {
-            $store_cap = MultiVendorX()->setting->get_option('multivendorx_store_capability_settings');
-            $user_cap = MultiVendorX()->setting->get_option('multivendorx_user_capability_settings');
-        
+        if ( $settingsname == 'store_capability' || $settingsname == 'user_capability' ) {
+            $store_cap = MultiVendorX()->setting->get_option( 'multivendorx_store_capability_settings' );
+            $user_cap  = MultiVendorX()->setting->get_option( 'multivendorx_user_capability_settings' );
+
             $store_owner_caps = array();
-            foreach ($store_cap as $caps) {
-                $store_owner_caps = array_merge($store_owner_caps, $caps);
+            foreach ( $store_cap as $caps ) {
+                $store_owner_caps = array_merge( $store_owner_caps, $caps );
             }
 
-            $store_owner_caps = array_unique($store_owner_caps);
+            $store_owner_caps = array_unique( $store_owner_caps );
 
             // Create store_owner entry
-            $result = [
-                'store_owner' => $store_owner_caps
-            ];
+            $result = array(
+                'store_owner' => $store_owner_caps,
+            );
 
-            foreach ($user_cap as $role => $caps) {
-                if ($role !== 'store_owner') {
-                    $user_cap[$role] = array_values(array_intersect($caps, $store_owner_caps));
+            foreach ( $user_cap as $role => $caps ) {
+                if ( $role !== 'store_owner' ) {
+                    $user_cap[ $role ] = array_values( array_intersect( $caps, $store_owner_caps ) );
                 }
             }
 
-            MultiVendorX()->setting->update_option( 'multivendorx_user_capability_settings', array_merge($user_cap, $result) );
-            
+            MultiVendorX()->setting->update_option( 'multivendorx_user_capability_settings', array_merge( $user_cap, $result ) );
+
             $role = get_role( 'store_owner' );
 
             if ( $role ) {
@@ -105,7 +105,6 @@ class MultiVendorX_REST_Settings_Controller extends \WP_REST_Controller {
                     $role->add_cap( $cap, true );
                 }
             }
-        
         }
 
         return $all_details;
@@ -122,7 +121,7 @@ class MultiVendorX_REST_Settings_Controller extends \WP_REST_Controller {
         $action    = $request->get_param( 'action' );
 
         // Setup wizard module.
-        $modules = $request->get_param( 'modules' ) ?? [];
+        $modules = $request->get_param( 'modules' ) ?? array();
         MultiVendorX()->modules->activate_modules( $modules );
 
         // Handle the actions.

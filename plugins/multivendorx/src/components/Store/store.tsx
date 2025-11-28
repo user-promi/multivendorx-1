@@ -13,13 +13,14 @@ import {
 } from 'zyra';
 import { useState } from 'react';
 import axios from 'axios';
+import { __ } from '@wordpress/i18n';
 
 const Store = () => {
     const location = useLocation();
     const [addStore, setaddStore] = useState(false);
     const [formData, setFormData] = useState<Record<string, string>>({});
     const [imagePreview, setImagePreview] = useState<string>('');
-    const [emails, setEmails] = useState<string[]>([]); 
+    const [emails, setEmails] = useState<string[]>([]);
     const [error, setError] = useState<{ [key: string]: { type: string; message: string }; }>({});
 
 
@@ -265,11 +266,10 @@ const Store = () => {
                                 <>
                                     <div className="title">
                                         <i className="adminlib-storefront"></i>
-                                        Add Store
+                                        {__('Add Store', 'multivendorx')}
                                     </div>
                                     <p>
-                                        Create a new store and set it up with
-                                        essential details.
+                                        {__('Create a new store and set it up with essential details.', 'multivendorx')}
                                     </p>
                                     <i
                                         onClick={() => {
@@ -291,14 +291,14 @@ const Store = () => {
                                         }}
                                         className="admin-btn btn-red"
                                     >
-                                        Cancel
+                                        {__('Cancel', 'multivendorx')}
                                     </div>
 
                                     <div
                                         onClick={handleSubmit}
                                         className="admin-btn btn-purple"
                                     >
-                                        Submit
+                                        {__('Submit', 'multivendorx')}
                                     </div>
                                 </>
                             }
@@ -307,7 +307,7 @@ const Store = () => {
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
                                         <label htmlFor="store-name">
-                                            Store name
+                                            {__('Store name', 'multivendorx')}
                                         </label>
                                         <BasicInput
                                             type="text"
@@ -317,12 +317,11 @@ const Store = () => {
                                             required={true}
                                         />
                                         {error?.name?.message && <div className="invalid-massage">{error?.name?.message}</div>}
-
                                     </div>
 
                                     <div className="form-group">
                                         <label htmlFor="store-url">
-                                            Store slug
+                                            {__('Store slug', 'multivendorx')}
                                         </label>
                                         <BasicInput
                                             type="text"
@@ -331,17 +330,16 @@ const Store = () => {
                                             wrapperClass="setting-form-input"
                                             onChange={handleChange}
                                             required={true}
-                                            clickBtnName='Check Slug'
+                                            clickBtnName={__('Check Slug', 'multivendorx')}
                                             onclickCallback={handleNameBlur}
                                             msg={error.slug}
                                         />
                                         {error?.slug?.message && <div className="invalid-massage">{error?.slug?.message}</div>}
-
                                     </div>
 
                                     <div className="form-group">
                                         <label htmlFor="store-name">
-                                            Store Email
+                                            {__('Store Email', 'multivendorx')}
                                         </label>
                                         <EmailsInput
                                             value={emails}
@@ -351,12 +349,11 @@ const Store = () => {
                                             }}
                                         />
                                         {error?.email?.message && <div className="invalid-massage">{error?.email?.message}</div>}
-
                                     </div>
 
                                     <div className="form-group">
                                         <label htmlFor="store-desc">
-                                            Description
+                                            {__('Description', 'multivendorx')}
                                         </label>
                                         <TextArea
                                             name="description"
@@ -370,27 +367,16 @@ const Store = () => {
 
                                     <div className="form-group">
                                         <label htmlFor="store-owner">
-                                            Primary owner
+                                            {__('Primary owner', 'multivendorx')}
                                         </label>
                                         <SelectInput
                                             name="store_owners"
-                                            options={
-                                                appLocalizer?.store_owners || []
-                                            }
+                                            options={appLocalizer?.store_owners || []}
                                             value={formData.store_owners}
                                             type="single-select"
                                             onChange={(newValue: any) => {
-                                                if (
-                                                    !newValue ||
-                                                    Array.isArray(newValue)
-                                                )
-                                                    return;
-
-                                                const updated = {
-                                                    ...formData,
-                                                    store_owners:
-                                                        newValue.value,
-                                                };
+                                                if (!newValue || Array.isArray(newValue)) return;
+                                                const updated = { ...formData, store_owners: newValue.value };
                                                 setFormData(updated);
                                             }}
                                         />
@@ -399,7 +385,7 @@ const Store = () => {
 
                                     <div className="form-group">
                                         <label htmlFor="store-image">
-                                            Profile image
+                                            {__('Profile image', 'multivendorx')}
                                         </label>
                                         <FileInput
                                             value={formData.image || ''}
@@ -409,22 +395,17 @@ const Store = () => {
                                             imageSrc={imagePreview || ''}
                                             imageWidth={75}
                                             imageHeight={75}
-                                            openUploader="Upload Image"
+                                            openUploader={__('Upload Image', 'multivendorx')}
                                             buttonClass="admin-btn btn-purple"
-                                            onButtonClick={() =>
-                                                runUploader('image')
-                                            }
-                                            onRemove={() =>
-                                                handleRemoveImage('image')
-                                            }
-                                            onReplace={() =>
-                                                handleReplaceImage('image')
-                                            }
+                                            onButtonClick={() => runUploader('image')}
+                                            onRemove={() => handleRemoveImage('image')}
+                                            onReplace={() => handleReplaceImage('image')}
                                         />
                                     </div>
                                 </div>
                             </div>
                         </CommonPopup>
+
                     )}
                     <StoreTable />
                 </>

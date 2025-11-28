@@ -20,10 +20,10 @@
 defined( 'ABSPATH' ) || exit;
 
 $variation_object = $args['variation_object'];
-$variation_id = $args['variation_id'];
-$variation_data = $args['variation_data'];
-$variation = $args['variation'];
-$product_object = $args['product_object'];
+$variation_id     = $args['variation_id'];
+$variation_data   = $args['variation_data'];
+$variation        = $args['variation'];
+$product_object   = $args['product_object'];
 
 ?>
 <div class="mvx-metabox-wrapper woocommerce_variation wc-metabox closed">
@@ -37,13 +37,15 @@ $product_object = $args['product_object'];
                 if ( ! $attribute->get_variation() ) {
                     continue;
                 }
-                $selected_value = isset( $attribute_values[sanitize_title( $attribute->get_name() )] ) ? $attribute_values[sanitize_title( $attribute->get_name() )] : '';
+                $selected_value = isset( $attribute_values[ sanitize_title( $attribute->get_name() ) ] ) ? $attribute_values[ sanitize_title( $attribute->get_name() ) ] : '';
                 ?>
                 <select name="attribute_<?php echo sanitize_title( $attribute->get_name() ) . "[{$loop}]"; ?>" class="inline-select form-control">
-                    <option value=""><?php
+                    <option value="">
+                    <?php
                         /* translators: %s: attribute label */
                         printf( esc_html__( 'Any %s&hellip;', 'multivendorx' ), wc_attribute_label( $attribute->get_name() ) );
-                        ?></option>
+					?>
+                        </option>
                     <?php if ( $attribute->is_taxonomy() ) : ?>
                         <?php foreach ( $attribute->get_terms() as $option ) : ?>
                             <option <?php selected( $selected_value, $option->slug ); ?> value="<?php echo esc_attr( $option->slug ); ?>"><?php echo esc_html( apply_filters( 'woocommerce_variation_option_name', $option->name ) ); ?></option>
@@ -85,13 +87,13 @@ $product_object = $args['product_object'];
                             <div class="form-group">
                                 <label for="variable_enabled[<?php echo esc_attr( $loop ); ?>]"><input type="checkbox" class="form-control" id="variable_enabled[<?php echo esc_attr( $loop ); ?>]" name="variable_enabled[<?php echo esc_attr( $loop ); ?>]" <?php checked( in_array( $variation_object->get_status( 'edit' ), array( 'publish', false ), true ), true ); ?> /> <?php esc_html_e( 'Enabled', 'multivendorx' ); ?></label>
                             </div>
-                            <?php if ( MultiVendorX()->setting->get_setting('type_options') == 'downloadable' ) : ?>
+                            <?php if ( MultiVendorX()->setting->get_setting( 'type_options' ) == 'downloadable' ) : ?>
                             <div class="form-group">
                                 <label for="variable_is_downloadable[<?php echo esc_attr( $loop ); ?>]"><input type="checkbox" class="form-control variable_is_downloadable" id="variable_is_downloadable[<?php echo esc_attr( $loop ); ?>]" name="variable_is_downloadable[<?php echo esc_attr( $loop ); ?>]" <?php checked( $variation_object->get_downloadable( 'edit' ), true ); ?> /> <?php esc_html_e( 'Downloadable', 'multivendorx' ); ?></label>
                             </div>
                             <?php endif; ?>
 
-                            <?php if ( MultiVendorX()->setting->get_setting('type_options') == 'virtual' ) : ?>
+                            <?php if ( MultiVendorX()->setting->get_setting( 'type_options' ) == 'virtual' ) : ?>
                                 <div class="form-group">
                                     <label for="variable_is_virtual[<?php echo esc_attr( $loop ); ?>]"><input type="checkbox" class="form-control variable_is_virtual" id="variable_is_virtual[<?php echo esc_attr( $loop ); ?>]" name="variable_is_virtual[<?php echo esc_attr( $loop ); ?>]" <?php checked( $variation_object->get_virtual( 'edit' ), true ); ?> /> <?php esc_html_e( 'Virtual', 'multivendorx' ); ?></label>
                                 </div>
@@ -150,7 +152,7 @@ $product_object = $args['product_object'];
                     <div class="row">
                         <?php
                         $sale_price_dates_from = $variation_object->get_date_on_sale_from( 'edit' ) && ( $date = $variation_object->get_date_on_sale_from( 'edit' )->getOffsetTimestamp() ) ? date_i18n( 'Y-m-d', $date ) : '';
-                        $sale_price_dates_to = $variation_object->get_date_on_sale_to( 'edit' ) && ( $date = $variation_object->get_date_on_sale_to( 'edit' )->getOffsetTimestamp() ) ? date_i18n( 'Y-m-d', $date ) : '';
+                        $sale_price_dates_to   = $variation_object->get_date_on_sale_to( 'edit' ) && ( $date = $variation_object->get_date_on_sale_to( 'edit' )->getOffsetTimestamp() ) ? date_i18n( 'Y-m-d', $date ) : '';
                         ?>
                         <div class="col-md-6">
                             <div class="form-group">
@@ -236,8 +238,9 @@ $product_object = $args['product_object'];
                 </div>
             <?php endif; ?>
             <div class="row">
-                <?php 
-                // if ( afm_is_allowed_vendor_shipping() ) : ?>
+                <?php
+                // if ( afm_is_allowed_vendor_shipping() ) :
+                ?>
                     <?php if ( wc_product_weight_enabled() ) : ?>
                         <div class="col-md-6 hide_if_variation_virtual">
                             <div class="form-group">
@@ -251,7 +254,7 @@ $product_object = $args['product_object'];
                     <?php if ( wc_product_dimensions_enabled() ) : ?>
                         <?php
                         $parent_length = wc_format_localized_decimal( $product_object->get_length() );
-                        $parent_width = wc_format_localized_decimal( $product_object->get_width() );
+                        $parent_width  = wc_format_localized_decimal( $product_object->get_width() );
                         $parent_height = wc_format_localized_decimal( $product_object->get_height() );
                         ?>
                         <div class="col-md-6 dimensions_field hide_if_variation_virtual">
@@ -278,17 +281,20 @@ $product_object = $args['product_object'];
                             <div class="col-md-6">
                                 <select name="variable_shipping_class[<?php esc_attr_e( $loop, 'multivendorx' ); ?>]" class="form-control regular-select">
                                     <option value="-1"><?php esc_html_e( 'Same as parent', 'multivendorx' ); ?></option>
-                                    <?php 
-                                    // foreach ( get_current_vendor_shipping_classes() as $key => $value ) : ?>
+                                    <?php
+                                    // foreach ( get_current_vendor_shipping_classes() as $key => $value ) :
+                                    ?>
                                         <option value="<?php esc_attr_e( $key, 'multivendorx' ); ?>" <?php selected( $variation_object->get_shipping_class_id( 'edit' ), $key ); ?>><?php esc_html_e( $value, 'multivendorx' ); ?></option>
-                                    <?php 
-                                // endforeach; ?>
+                                    <?php
+									// endforeach;
+                                    ?>
                                 </select>
                             </div>    
                         </div>
                     </div>
-                <?php 
-            // endif; ?>
+                <?php
+				// endif;
+                ?>
                 <?php if ( wc_tax_enabled() ) : ?>
                     <div class="col-md-6">
                         <div class="form-group">
@@ -302,7 +308,8 @@ $product_object = $args['product_object'];
                                 </select>
                             </div>    
                         </div> 
-                    </div><?php
+                    </div>
+                    <?php
                     /**
                      * mvx_frontend_dashboard_variation_options_tax action.
                      *
@@ -313,8 +320,8 @@ $product_object = $args['product_object'];
                      * @param WP_Post $variation
                      */
                     do_action( 'mvx_frontend_dashboard_variation_options_tax', $loop, $variation_data, $variation );
-                    ?>  
-                <?php endif; ?>
+                    ?>
+                                    <?php endif; ?>
             </div>
             <div class="row show_if_variation_downloadable" style="display: none;">
                 <div class="col-md-12">
@@ -336,7 +343,7 @@ $product_object = $args['product_object'];
                                         <?php
                                         if ( $downloads = $variation_object->get_downloads( 'edit' ) ) {
                                             foreach ( $downloads as $key => $file ) {
-                                                include( 'html-product-variation-download.php' );
+                                                include 'html-product-variation-download.php';
                                             }
                                         }
                                         ?>
@@ -344,16 +351,18 @@ $product_object = $args['product_object'];
                                     <tfoot>
                                         <tr>
                                             <th colspan="5">
-                                                <a href="#" class="btn btn-default insert" data-row="<?php
-                                                $key = '';
+                                                <a href="#" class="btn btn-default insert" data-row="
+                                                <?php
+                                                $key  = '';
                                                 $file = array(
                                                     'file' => '',
                                                     'name' => '',
                                                 );
                                                 ob_start();
-                                                include( 'html-product-variation-download.php' );
+                                                require 'html-product-variation-download.php';
                                                 echo esc_attr( ob_get_clean() );
-                                                ?>"><?php esc_html_e( 'Add File', 'multivendorx' ); ?></a>
+                                                ?>
+                                                "><?php esc_html_e( 'Add File', 'multivendorx' ); ?></a>
                                             </th>
                                         </tr>
                                     </tfoot>
@@ -366,7 +375,7 @@ $product_object = $args['product_object'];
                     <div class="form-group">
                         <label class="control-label col-md-6">
                             <?php esc_html_e( 'Download limit', 'multivendorx' ); ?>
-                            <span class="img_tip" data-desc="<?php esc_attr_e( 'Leave blank for unlimited re-downloads.', 'multivendorx' ) ?>"></span> 
+                            <span class="img_tip" data-desc="<?php esc_attr_e( 'Leave blank for unlimited re-downloads.', 'multivendorx' ); ?>"></span> 
                         </label>
                         <div class="col-md-6">
                             <input class="form-control" type="number" id="variable_download_limit<?php echo esc_attr( $loop ); ?>" name="variable_download_limit[<?php echo esc_attr( $loop ); ?>]" placeholder="<?php esc_html_e( 'Unlimited', 'multivendorx' ); ?>" value="<?php echo $variation_object->get_download_limit( 'edit' ) < 0 ? '' : $variation_object->get_download_limit( 'edit' ); ?>" step="1" min="0"/>
@@ -377,7 +386,7 @@ $product_object = $args['product_object'];
                     <div class="form-group">
                         <label class="control-label col-md-6">
                             <?php esc_html_e( 'Download expiry', 'multivendorx' ); ?>
-                            <span class="img_tip" data-desc="<?php esc_attr_e( 'Enter the number of days before a download link expires, or leave blank.', 'multivendorx' ) ?>"></span> 
+                            <span class="img_tip" data-desc="<?php esc_attr_e( 'Enter the number of days before a download link expires, or leave blank.', 'multivendorx' ); ?>"></span> 
                         </label>
                         <div class="col-md-6">
                             <input class="form-control" type="number" id="variable_download_expiry<?php echo esc_attr( $loop ); ?>" name="variable_download_expiry[<?php echo esc_attr( $loop ); ?>]" placeholder="<?php esc_html_e( 'Never', 'multivendorx' ); ?>" value="<?php echo $variation_object->get_download_expiry( 'edit' ) < 0 ? '' : $variation_object->get_download_expiry( 'edit' ); ?>" step="1" min="0"/>

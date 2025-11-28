@@ -1,3 +1,4 @@
+import { __ } from "@wordpress/i18n";
 import { AdminBreadcrumbs } from "zyra";
 
 const HelpSupport: React.FC = () => {
@@ -32,7 +33,7 @@ const HelpSupport: React.FC = () => {
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                    Community & forums
+                                    {__('Community & forums', 'multivendorx')}
                                 </div>
                             </div>
                         </div>
@@ -43,8 +44,14 @@ const HelpSupport: React.FC = () => {
                                         <i className="adminlib-facebook-fill"></i>
                                     </div>
                                     <div className="details">
-                                        <div className="name"><a href="https://www.facebook.com/groups/226246620006065/" target="_blank" rel="noopener noreferrer">Facebook community</a></div>
-                                        <div className="des">Connect with other store owners, share tips, and get quick solutions.</div>
+                                        <div className="name">
+                                            <a href="https://www.facebook.com/groups/226246620006065/" target="_blank" rel="noopener noreferrer">
+                                                {__('Facebook community', 'multivendorx')}
+                                            </a>
+                                        </div>
+                                        <div className="des">
+                                            {__('Connect with other store owners, share tips, and get quick solutions.', 'multivendorx')}
+                                        </div>
                                     </div>
                                 </div>
 
@@ -53,36 +60,57 @@ const HelpSupport: React.FC = () => {
                                         <i className="adminlib-wordpress"></i>
                                     </div>
                                     <div className="details">
-                                        <div className="name"><a href="https://wordpress.org/support/plugin/dc-woocommerce-multi-vendor/" target="_blank" rel="noopener noreferrer">WordPress support forum</a></div>
-                                        <div className="des">Ask questions and get expert guidance from the WordPress community.</div>
+                                        <div className="name">
+                                            <a href="https://wordpress.org/support/plugin/dc-woocommerce-multi-vendor/" target="_blank" rel="noopener noreferrer">
+                                                {__('WordPress support forum', 'multivendorx')}
+                                            </a>
+                                        </div>
+                                        <div className="des">
+                                            {__('Ask questions and get expert guidance from the WordPress community.', 'multivendorx')}
+                                        </div>
                                     </div>
                                 </div>
+
                                 <div className="support">
                                     <div className="image">
                                         <i className="adminlib-forum"></i>
                                     </div>
                                     <div className="details">
-                                        <div className="name"><a href="https://multivendorx.com/support-forum/" target="_blank" rel="noopener noreferrer">Our forum</a></div>
-                                        <div className="des">Discuss MultiVendorX features, report issues, and collaborate with other users.</div>
+                                        <div className="name">
+                                            <a href="https://multivendorx.com/support-forum/" target="_blank" rel="noopener noreferrer">
+                                                {__('Our forum', 'multivendorx')}
+                                            </a>
+                                        </div>
+                                        <div className="des">
+                                            {__('Discuss MultiVendorX features, report issues, and collaborate with other users.', 'multivendorx')}
+                                        </div>
                                     </div>
                                 </div>
+
                                 <div className="support">
                                     <div className="image">
                                         <i className="adminlib-live-chat"></i>
                                     </div>
                                     <div className="details">
-                                        <div className="name"><a href="https://tawk.to/chat/5d2eebf19b94cd38bbe7c9ad/1fsg8cq8n" target="_blank" rel="noopener noreferrer">Live chat</a></div>
-                                        <div className="des">Get real-time support from our team for setup, troubleshooting, and guidance.</div>
+                                        <div className="name">
+                                            <a href="https://tawk.to/chat/5d2eebf19b94cd38bbe7c9ad/1fsg8cq8n" target="_blank" rel="noopener noreferrer">
+                                                {__('Live chat', 'multivendorx')}
+                                            </a>
+                                        </div>
+                                        <div className="des">
+                                            {__('Get real-time support from our team for setup, troubleshooting, and guidance.', 'multivendorx')}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <div className="column">
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                    Documentation & Learning
+                                    {__('Documentation & Learning', 'multivendorx')}
                                 </div>
                             </div>
                         </div>
@@ -93,8 +121,14 @@ const HelpSupport: React.FC = () => {
                                         <i className="adminlib-document"></i>
                                     </div>
                                     <div className="details">
-                                        <div className="name"><a href="https://multivendorx.com/docs/knowledgebase/" target="_blank" rel="noopener noreferrer">Official documentation</a></div>
-                                        <div className="des">Step-by-step guides for every MultiVendorX feature.</div>
+                                        <div className="name">
+                                            <a href="https://multivendorx.com/docs/knowledgebase/" target="_blank" rel="noopener noreferrer">
+                                                {__('Official documentation', 'multivendorx')}
+                                            </a>
+                                        </div>
+                                        <div className="des">
+                                            {__('Step-by-step guides for every MultiVendorX feature.', 'multivendorx')}
+                                        </div>
                                     </div>
                                 </div>
 
@@ -103,8 +137,14 @@ const HelpSupport: React.FC = () => {
                                         <i className="adminlib-youtube"></i>
                                     </div>
                                     <div className="details">
-                                        <div className="name"><a href="https://www.youtube.com/@MultiVendorX/videos" target="_blank" rel="noopener noreferrer">YouTube tutorials</a></div>
-                                        <div className="des">Watch videos on marketplace setup, store management, payments, and more.</div>
+                                        <div className="name">
+                                            <a href="https://www.youtube.com/@MultiVendorX/videos" target="_blank" rel="noopener noreferrer">
+                                                {__('YouTube tutorials', 'multivendorx')}
+                                            </a>
+                                        </div>
+                                        <div className="des">
+                                            {__('Watch videos on marketplace setup, store management, payments, and more.', 'multivendorx')}
+                                        </div>
                                     </div>
                                 </div>
 
@@ -113,17 +153,30 @@ const HelpSupport: React.FC = () => {
                                         <i className="adminlib-faq"></i>
                                     </div>
                                     <div className="details">
-                                        <div className="name"><a href="https://multivendorx.com/docs/faqs/" target="_blank" rel="noopener noreferrer">FAQs</a></div>
-                                        <div className="des">Quick answers to the most common questions about features and troubleshooting.</div>
+                                        <div className="name">
+                                            <a href="https://multivendorx.com/docs/faqs/" target="_blank" rel="noopener noreferrer">
+                                                {__('FAQs', 'multivendorx')}
+                                            </a>
+                                        </div>
+                                        <div className="des">
+                                            {__('Quick answers to the most common questions about features and troubleshooting.', 'multivendorx')}
+                                        </div>
                                     </div>
                                 </div>
+
                                 <div className="support">
                                     <div className="image">
                                         <i className="adminlib-coding"></i>
                                     </div>
                                     <div className="details">
-                                        <div className="name"><a href="https://discord.com/channels/1376811097134469191/1376811102020829258" target="_blank" rel="noopener noreferrer">Coding support</a></div>
-                                        <div className="des">Professional help for customizations, integrations, and technical issues.</div>
+                                        <div className="name">
+                                            <a href="https://discord.com/channels/1376811097134469191/1376811102020829258" target="_blank" rel="noopener noreferrer">
+                                                {__('Coding support', 'multivendorx')}
+                                            </a>
+                                        </div>
+                                        <div className="des">
+                                            {__('Professional help for customizations, integrations, and technical issues.', 'multivendorx')}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -136,10 +189,20 @@ const HelpSupport: React.FC = () => {
                         <div className="video-section">
                             <div className="details-wrapper">
                                 <div className="title">
-                                    Master MultiVendorX in minutes!
+                                    {__('Master MultiVendorX in minutes!', 'multivendorx')}
                                 </div>
-                                <div className="des">Watch our top tutorial videos and learn how to set up your marketplace, manage vendors, and enable subscriptions - all in just a few easy steps.</div>
-                                <div className="admin-btn btn-purple"><a href="https://www.youtube.com/@MultiVendorX/videos" target="_blank" rel="noopener noreferrer">Watch All Tutorials</a></div>
+                                <div className="des">
+                                    {__('Watch our top tutorial videos and learn how to set up your marketplace, manage vendors, and enable subscriptions - all in just a few easy steps.', 'multivendorx')}
+                                </div>
+                                <div className="admin-btn btn-purple">
+                                    <a
+                                        href="https://www.youtube.com/@MultiVendorX/videos"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        {__('Watch All Tutorials', 'multivendorx')}
+                                    </a>
+                                </div>
                             </div>
 
                             <div className="video-section">
@@ -155,13 +218,12 @@ const HelpSupport: React.FC = () => {
                                                 allowFullScreen
                                             ></iframe>
 
-                                            <div className="title">{video.title}</div>
-                                            <div className="des">{video.des}</div>
+                                            <div className="title">{__(video.title, 'multivendorx')}</div>
+                                            <div className="des">{__(video.des, 'multivendorx')}</div>
                                         </div>
                                     );
                                 })}
                             </div>
-
                         </div>
                     </div>
                 </div>

@@ -24,21 +24,21 @@ class Utill {
      * @var array
      */
     const TABLES = array(
-        'commission'    => 'multivendorx_commissions',
-        'store'         => 'multivendorx_store',
-        'store_users'   => 'multivendorx_store_users',
-        'store_meta'    => 'multivendorx_store_meta',
-        'transaction'   => 'multivendorx_transactions',
+        'commission'              => 'multivendorx_commissions',
+        'store'                   => 'multivendorx_store',
+        'store_users'             => 'multivendorx_store_users',
+        'store_meta'              => 'multivendorx_store_meta',
+        'transaction'             => 'multivendorx_transactions',
         'real_time_transaction'   => 'multivendorx_real_time_transactions',
-        'product_qna'   => 'multivendorx_questions_and_answers',
-        'report_abuse'   => 'multivendorx_report_abuse',
-        'shipping_zone'   => 'multivendorx_shipping_zone_methods',
-        'shipping_zone_locations'   => 'multivendorx_shipping_zone_locations',
-        'review'   => 'multivendorx_store_reviews',
-        'rating'   => 'multivendorx_store_review_ratings',
-        'products_map'   => 'multivendorx_products_map',
-        'notifications'   => 'multivendorx_store_activity_notifications',
-        'system_events'   => 'multivendorx_system_events',
+        'product_qna'             => 'multivendorx_questions_and_answers',
+        'report_abuse'            => 'multivendorx_report_abuse',
+        'shipping_zone'           => 'multivendorx_shipping_zone_methods',
+        'shipping_zone_locations' => 'multivendorx_shipping_zone_locations',
+        'review'                  => 'multivendorx_store_reviews',
+        'rating'                  => 'multivendorx_store_review_ratings',
+        'products_map'            => 'multivendorx_products_map',
+        'notifications'           => 'multivendorx_store_activity_notifications',
+        'system_events'           => 'multivendorx_system_events',
     );
 
     /**
@@ -95,11 +95,12 @@ class Utill {
 
     /**
      * Utility function add aditional single quote in a string.
+     *
      * @param   string $string
      * @return  string
      */
     public static function add_single_quots( $string ) {
-        if ( is_string( $string) ) {
+        if ( is_string( $string ) ) {
             return "'$string'";
         }
         return $string;
@@ -108,18 +109,18 @@ class Utill {
     public static function is_store_dashboard() {
         $dashboard_page = (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' );
         // if (is_page($dashboard_page)) {
-        //     $has_shortcode = has_shortcode(get_post($dashboard_page)->post_content, 'multivendorx_store_dashboard');
-        //     return $has_shortcode;
+        // $has_shortcode = has_shortcode(get_post($dashboard_page)->post_content, 'multivendorx_store_dashboard');
+        // return $has_shortcode;
         // }
-        return is_page( $dashboard_page);
+        return is_page( $dashboard_page );
     }
 
     public static function is_store_registration_page() {
         $registration_page = (int) MultiVendorX()->setting->get_setting( 'store_registration_page' );
         // if (is_page($registration_page)) {
-        //     $has_shortcode = has_shortcode(get_post($registration_page)->post_content, 'multivendorx_store_registration');
-        //     return $has_shortcode;
+        // $has_shortcode = has_shortcode(get_post($registration_page)->post_content, 'multivendorx_store_registration');
+        // return $has_shortcode;
         // }
-        return is_page($registration_page);
+        return is_page( $registration_page );
     }
 }

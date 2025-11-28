@@ -35,16 +35,15 @@ class Module {
     public function __construct() {
         // Init helper classes.
         $this->init_classes();
-        add_filter('multivendorx_payment_providers', [$this, 'add_payment_provider']);
-
+        add_filter( 'multivendorx_payment_providers', array( $this, 'add_payment_provider' ) );
     }
 
-    public function add_payment_provider($providers) {
-        $providers[] =  [
+    public function add_payment_provider( $providers ) {
+        $providers[] = array(
             'id'    => 'paypal-payout',
             'name'  => 'Paypal Payout',
-            'class' => 'MultiVendorX\\PaypalPayout\\Payment'
-        ];
+            'class' => 'MultiVendorX\\PaypalPayout\\Payment',
+        );
 
         return $providers;
     }

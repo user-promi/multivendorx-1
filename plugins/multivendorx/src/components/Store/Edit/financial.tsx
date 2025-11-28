@@ -1,6 +1,6 @@
+import { __ } from '@wordpress/i18n';
+
 const Financial = ({ id }: { id: string | null }) => {
-
-
     return (
         <>
             <div className="container-wrapper">
@@ -9,7 +9,7 @@ const Financial = ({ id }: { id: string | null }) => {
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                    Recent Payouts
+                                    {__('Recent Payouts', 'multivendorx')}
                                 </div>
                             </div>
                         </div>
@@ -25,9 +25,10 @@ const Financial = ({ id }: { id: string | null }) => {
                                 </div>
                             </div>
                             <div className="right-details">
-                                <div className="admin-badge green">Completed</div>
+                                <div className="admin-badge green">{__('Completed', 'multivendorx')}</div>
                             </div>
                         </div>
+
                         <div className="store-owner-details">
                             <div className="profile">
                                 <div className="avater">
@@ -39,9 +40,10 @@ const Financial = ({ id }: { id: string | null }) => {
                                 </div>
                             </div>
                             <div className="right-details">
-                                <div className="admin-badge green">Completed</div>
+                                <div className="admin-badge green">{__('Completed', 'multivendorx')}</div>
                             </div>
                         </div>
+
                         <div className="store-owner-details">
                             <div className="profile">
                                 <div className="avater">
@@ -53,20 +55,17 @@ const Financial = ({ id }: { id: string | null }) => {
                                 </div>
                             </div>
                             <div className="right-details">
-                                <div className="admin-badge green">Completed</div>
+                                <div className="admin-badge green">{__('Completed', 'multivendorx')}</div>
                             </div>
                         </div>
                     </div>
-
                 </div>
 
                 <div className="card-wrapper w-35">
-
                 </div>
             </div>
         </>
     );
-
 }
 
 export default Financial;

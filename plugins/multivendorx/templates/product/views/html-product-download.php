@@ -4,7 +4,7 @@
  * Add Downloadable file template
  * Override this template by copying it to yourtheme/MultiVendorX/vendor-dashboard/product-manager/views/html-product-download.php
  *
- * @author 		MultiVendorX
+ * @author      MultiVendorX
  * @package MultiVendorX/Templates
  * @version   3.3.0
  */

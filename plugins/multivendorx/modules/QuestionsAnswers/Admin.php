@@ -17,8 +17,5 @@ namespace MultiVendorX\QuestionsAnswers;
 class Admin {
 
     public function __construct() {
-        
     }
-
-    
 }

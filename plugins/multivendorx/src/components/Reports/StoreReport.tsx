@@ -36,7 +36,7 @@ type FilterData = {
   orderBy?: any;
   order?: any;
 };
-const Transactions: React.FC = () => {
+const StoreReport: React.FC = () => {
   const [data, setData] = useState<any[] | null>(null);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [storeStatus, setStoreStatus] = useState<StoreStatus[] | null>(null);
@@ -452,20 +452,22 @@ const Transactions: React.FC = () => {
                 </div>
                 <div className="details">
                   <div className="number"><Counter value={item.count} /></div>
-                  <div className="text">{item.label}</div>
+                  <div className="text">{__(item.label, 'multivendorx')}</div>
                 </div>
               </div>
             ))}
           </div>
         </div>
+
         <div className="column">
           <div className="card-header">
             <div className="left">
               <div className="title">
-                Top revenue-generating stores
+                {__('Top revenue-generating stores', 'multivendorx')}
               </div>
             </div>
           </div>
+
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie
@@ -474,30 +476,40 @@ const Transactions: React.FC = () => {
                 cy="50%"
                 outerRadius={100}
                 dataKey="value"
-                label
+                label={({ name, percent }) =>
+                  `${name} ${(percent * 100).toFixed(1)}%`
+                }
               >
                 {pieData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip
+                formatter={(value) => formatCurrency(value)}
+                contentStyle={{
+                  backgroundColor: '#fff',
+                  borderRadius: '8px',
+                  border: '1px solid #ddd',
+                }}
+              />
               <Legend />
             </PieChart>
           </ResponsiveContainer>
-
         </div>
       </div>
 
       <div className="card-header p-top">
         <div className="left">
-          <div className="title">
-            Account Overview
-          </div>
+          <div className="title">{__('Account Overview', 'multivendorx')}</div>
         </div>
         <div className="right">
-          <span>Updated 1 month ago</span>
+          <span>{__('Updated 1 month ago', 'multivendorx')}</span>
         </div>
       </div>
+
       <Table
         data={data}
         columns={columns as ColumnDef<Record<string, any>, any>[]}
@@ -516,6 +528,7 @@ const Transactions: React.FC = () => {
       />
     </>
   );
+
 };
 
-export default Transactions;
+export default StoreReport;

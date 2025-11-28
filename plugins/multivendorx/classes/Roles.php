@@ -21,14 +21,14 @@ class Roles {
      * Roles class construct function
      */
     public function __construct() {
-        add_action( 'init', [ $this, 'multivendorx_add_custom_role' ] );
-        add_filter( 'user_has_cap', array($this, 'assign_cap_authenticate_user') );
-        add_filter( 'map_meta_cap', [ $this, 'specific_capability' ], 10, 4 );
+        add_action( 'init', array( $this, 'multivendorx_add_custom_role' ) );
+        add_filter( 'user_has_cap', array( $this, 'assign_cap_authenticate_user' ) );
+        add_filter( 'map_meta_cap', array( $this, 'specific_capability' ), 10, 4 );
     }
 
     public function multivendorx_add_custom_role() {
         global $wp_roles;
-        
+
         if ( ! get_role( 'store_owner' ) ) {
             add_role(
                 'store_owner',
@@ -48,13 +48,13 @@ class Roles {
 
 
     public static function multivendorx_get_roles() {
-        $custom_roles = [
-            'store_owner'       =>  __('Store Owner', 'multivendorx'),
-            'store_manager'     =>  __('Store Manager', 'multivendorx'),
-            'product_manager'   =>  __('Product Manager', 'multivendorx'),
-            'customer_support'  =>  __('Customer Support', 'multivendorx'),
-            'order_assistant'   =>  __('Order Assistant', 'multivendorx'),
-        ];
+        $custom_roles = array(
+            'store_owner'      => __( 'Store Owner', 'multivendorx' ),
+            'store_manager'    => __( 'Store Manager', 'multivendorx' ),
+            'product_manager'  => __( 'Product Manager', 'multivendorx' ),
+            'customer_support' => __( 'Customer Support', 'multivendorx' ),
+            'order_assistant'  => __( 'Order Assistant', 'multivendorx' ),
+        );
         return $custom_roles;
     }
 
@@ -73,32 +73,31 @@ class Roles {
     }
 
     public function get_custom_capability() {
-        $capabilities = [
+        $capabilities = array(
             'create_stores',
             'edit_stores',
-            'delete_stores'
-        ];
+            'delete_stores',
+        );
 
         return $capabilities;
     }
 
-    public function specific_capability($caps, $cap, $user_id, $args) {
+    public function specific_capability( $caps, $cap, $user_id, $args ) {
         if ( is_user_logged_in() ) {
-            $user = get_userdata($user_id);
+            $user = get_userdata( $user_id );
 
-            if (in_array('store_owner', (array) $user->roles)) {
-
-                if ($cap === 'edit_posts') {
+            if ( in_array( 'store_owner', (array) $user->roles ) ) {
+                if ( $cap === 'edit_posts' ) {
                     // $segment = get_query_var('segment');
                     // $endpoints = MultiVendorX()->setting->get_setting('menu_manager');
 
                     // do not remove this code
                     // checking add later for edit product page
                     // && ($segment == $endpoints['products']['slug'] || $segment == $endpoints['settings']['slug'])
-                    if (defined('DOING_AJAX') && DOING_AJAX ) {
-                        $caps = array('edit_posts');
+                    if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+                        $caps = array( 'edit_posts' );
                     } else {
-                        $caps = array('do_not_allow');
+                        $caps = array( 'do_not_allow' );
                     }
                 }
             }
