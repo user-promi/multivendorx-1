@@ -35,12 +35,30 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller
 
     public function get_items_permissions_check($request)
     {
-        return current_user_can('read');
+        // return current_user_can('read');
+        return true;
     }
 
     public function get_items($request)
     {
+        $menu_only = $request->get_param('menuOnly');
+
         $endpoints = $this->all_endpoints();
+
+        $other_endpoints = apply_filters('dashboard_other_endpoints', [
+            'view-notifications' => array(
+                'name'       => '',
+                'icon'       => '',
+                'slug'       => 'view-notifications',
+                'submenu'    => array(),
+                'capability' => array('edit_products'),
+                'filename'   => 'view-notifications'
+            )
+        ]);
+
+        if ( !$menu_only ) {
+            $endpoints = array_merge($endpoints, $other_endpoints);
+        }
         return rest_ensure_response($endpoints);
     }
 

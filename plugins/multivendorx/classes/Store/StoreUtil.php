@@ -132,15 +132,25 @@ class StoreUtil {
         $placeholders = implode(', ', array_fill(0, count($excluded_statuses), '%s'));
         $params = array_merge([$user_id], $excluded_statuses);
 
+        // $sql = "
+        //     SELECT su.store_id
+        //     FROM {$store_users} su
+        //     INNER JOIN {$stores} s ON s.ID = su.store_id
+        //     WHERE su.user_id = %d
+        //     AND s.status NOT IN ($placeholders)
+        // ";
         $sql = "
-            SELECT su.store_id
+            SELECT 
+                su.store_id AS id,
+                s.name AS name
             FROM {$store_users} su
             INNER JOIN {$stores} s ON s.ID = su.store_id
             WHERE su.user_id = %d
             AND s.status NOT IN ($placeholders)
         ";
 
-        return $wpdb->get_col($wpdb->prepare($sql, $params));
+        // return $wpdb->get_col($wpdb->prepare($sql, $params));
+        return $wpdb->get_results( $wpdb->prepare($sql, $params), ARRAY_A );
     }
 
 
