@@ -44,7 +44,6 @@ class Module {
      */
     public function init_classes() {
         $this->container['frontend'] = new Frontend();
-        $this->container['knowledge'] = new MultiVendorX_REST_Knowledge_Controller();
     }
 
     /**
