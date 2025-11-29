@@ -7,6 +7,7 @@ import Notifications from './dashboard/notifications';
 const Dashboard = () => {
     const [menu, setMenu] = useState({});
     const [openSubmenus, setOpenSubmenus] = useState({});
+    const [storeData, setStoreData] = useState({});
     const [currentTab, setCurrentTab] = useState('');
     const [siteName, setSiteName] = useState('');
     const [showUserDropdown, setShowUserDropdown] = useState(false);
@@ -32,6 +33,18 @@ const Dashboard = () => {
             return <div>404 not found</div>;
         }
     };
+
+    useEffect(() => {
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, `store/${appLocalizer.store_id}`),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        })
+        .then((res: any) => {
+            const data = res.data || {};
+            setStoreData(data)
+        })
+    }, [appLocalizer.store_id]);
 
     useEffect(() => {
         axios({
@@ -232,9 +245,10 @@ const Dashboard = () => {
         document.addEventListener("click", handleClickOutside);
         return () => document.removeEventListener("click", handleClickOutside);
     }, []);
-console.log('currentTab', currentTab)
+
     return (
         <div id="store-dashboard">
+            
             <div className="dashboard-tabs-wrapper">
                 
                 <div className="logo-wrapper">
@@ -245,84 +259,86 @@ console.log('currentTab', currentTab)
                     )}
                 </div>
 
-                <div className="dashboard-tabs">
-                    <ul>
-                        {Object.entries(menu).map(([key, item]) => {
-                            if (!item.name) return null;
+                {storeData.status === "active" && (
+                    <div className="dashboard-tabs">
+                        <ul>
+                            {Object.entries(menu).map(([key, item]) => {
+                                if (!item.name) return null;
 
-                            const hasSubmenu = item.submenu?.length > 0;
+                                const hasSubmenu = item.submenu?.length > 0;
 
-                            const isParentActive = currentTab === key;
-                            const isOpen = openSubmenus[key] || false;
+                                const isParentActive = currentTab === key;
+                                const isOpen = openSubmenus[key] || false;
 
-                            return (
-                                <li
-                                    key={key}
-                                    className={`tab-name ${isParentActive ? 'active' : ''}`}
-                                >
-                                    <a
-                                        className="tab"
-                                        href={hasSubmenu ? '#' : appLocalizer.permalink_structure
-                                                                    ? `/${appLocalizer.dashboard_slug}/${key}`
-                                                                    : `/?page_id=${appLocalizer.dashboard_page_id}&segment=${key}`}
-                                        onClick={(e) => {
-                                            e.preventDefault();
-
-                                            if (hasSubmenu) {
-                                                toggleSubmenu(key);
-                                            } else {
-                                                handleTabClick(key);
-                                            }
-                                        }}
+                                return (
+                                    <li
+                                        key={key}
+                                        className={`tab-name ${isParentActive ? 'active' : ''}`}
                                     >
-                                        <i className={item.icon}></i>
-                                        <span>{item.name}</span>
+                                        <a
+                                            className="tab"
+                                            href={hasSubmenu ? '#' : appLocalizer.permalink_structure
+                                                                        ? `/${appLocalizer.dashboard_slug}/${key}`
+                                                                        : `/?page_id=${appLocalizer.dashboard_page_id}&segment=${key}`}
+                                            onClick={(e) => {
+                                                e.preventDefault();
+
+                                                if (hasSubmenu) {
+                                                    toggleSubmenu(key);
+                                                } else {
+                                                    handleTabClick(key);
+                                                }
+                                            }}
+                                        >
+                                            <i className={item.icon}></i>
+                                            <span>{item.name}</span>
+
+                                            {hasSubmenu && (
+                                                <i
+                                                    className={`admin-arrow adminlib-pagination-right-arrow ${
+                                                        isOpen ? 'rotate' : ''
+                                                    }`}
+                                                ></i>
+                                            )}
+                                        </a>
 
                                         {hasSubmenu && (
-                                            <i
-                                                className={`admin-arrow adminlib-pagination-right-arrow ${
-                                                    isOpen ? 'rotate' : ''
-                                                }`}
-                                            ></i>
-                                        )}
-                                    </a>
+                                            <ul
+                                                className="subtabs"
+                                            >
+                                                {item.submenu.map((sub) => {
+                                                    const subActive = currentTab === sub.key;
 
-                                    {hasSubmenu && (
-                                        <ul
-                                            className="subtabs"
-                                        >
-                                            {item.submenu.map((sub) => {
-                                                const subActive = currentTab === sub.key;
-
-                                                return (
-                                                    <li
-                                                        key={sub.key}
-                                                        className={subActive ? 'active' : ''}
-                                                    >
-                                                        <a
-                                                            // href={`?segment=${sub.key}`}
-                                                            href={
-                                                                appLocalizer.permalink_structure
-                                                                    ? `/${appLocalizer.dashboard_slug}/${sub.key}`
-                                                                    : `/?page_id=${appLocalizer.dashboard_page_id}&segment=${sub.key}`
-                                                            }
-                                                            onClick={(e) => {
-                                                                e.preventDefault();
-                                                                handleTabClick(sub.key);
-                                                            }}
+                                                    return (
+                                                        <li
+                                                            key={sub.key}
+                                                            className={subActive ? 'active' : ''}
                                                         >
-                                                            {sub.name}
-                                                        </a>
-                                                    </li>
-                                                );
-                                            })}
-                                        </ul>
-                                    )}
-                                </li>
-                            );
-                        })}
-                    </ul>
-                </div>
+                                                            <a
+                                                                // href={`?segment=${sub.key}`}
+                                                                href={
+                                                                    appLocalizer.permalink_structure
+                                                                        ? `/${appLocalizer.dashboard_slug}/${sub.key}`
+                                                                        : `/?page_id=${appLocalizer.dashboard_page_id}&segment=${sub.key}`
+                                                                }
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    handleTabClick(sub.key);
+                                                                }}
+                                                            >
+                                                                {sub.name}
+                                                            </a>
+                                                        </li>
+                                                    );
+                                                })}
+                                            </ul>
+                                        )}
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    </div>
+                )}
             </div>
 
             <div className="dashboard-content tab-wrapper">
@@ -441,7 +457,50 @@ console.log('currentTab', currentTab)
                 </div>
                 
                 {/* <div className="content-wrapper">{loadComponent(currentTab)}</div> */}
-                <div className="content-wrapper">                    
+                <div className="content-wrapper">
+                    
+                        {storeData.status !== "active" ? (
+                            <div className="permission-wrapper">
+                                <i className="adminlib-info red"></i>
+                                <div className="title">
+                                    {storeData.status === "pending"
+                                        ? appLocalizer.settings_databases_value['pending-approval']?.pending_msg
+                                        : storeData.status === "suspended"
+                                        ? appLocalizer.settings_databases_value['suspended']?.suspended_msg
+                                        : storeData.status === "under_review"
+                                        ? appLocalizer.settings_databases_value['under-review']?.under_review_msg
+                                        : storeData.status === "rejected"
+                                        ? 
+                                        <>
+                                        {appLocalizer.settings_databases_value['rejected']?.rejected_msg}
+                                        {" "}
+                                        <a 
+                                            href={appLocalizer.registration_page} 
+                                            className="reapply-link"
+                                            target='__blank'
+                                        >
+                                            Click here to reapply.
+                                        </a>
+                                    </>
+                                        : "Store status unknown."}
+                                </div>
+                                <div className="admin-btn btn-purple">Contact Admin</div>
+                            </div>
+
+                        ) : 
+
+                        noPermission ? (
+                            <div className="permission-wrapper">
+                                <i className="adminlib-info red"></i>
+                                <div className="title">You do not have permission to access this page.</div>
+                                <div className="admin-btn btn-purple">Contact Admin</div>
+                            </div>
+
+                        ) : (
+                            loadComponent(currentTab)
+                        )}
+
+{/* 
                     {noPermission ? (
                         <div class="permission-wrapper">
                             <i class="adminlib-info red"></i>
@@ -450,7 +509,7 @@ console.log('currentTab', currentTab)
                         </div>
                     ) : (
                         loadComponent(currentTab)
-                    )}
+                    )} */}
                 </div>
             </div>
         </div>

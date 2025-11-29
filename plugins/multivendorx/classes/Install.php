@@ -144,7 +144,7 @@ class Install {
             `meta_value` LONGTEXT,
             PRIMARY KEY (`ID`)
         ) $collate;";
-
+         
         $sql_transaction = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['transaction'] . "` (
             `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
             `store_id` bigint(20) unsigned NOT NULL,
@@ -201,7 +201,7 @@ class Install {
             `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (`id`)
         ) $collate;";
-
+        
         $sql_report_abuse = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['report_abuse'] . "` (
             `ID` bigint(20) NOT NULL AUTO_INCREMENT,
             `store_id` bigint(20) NOT NULL,
@@ -223,7 +223,7 @@ class Install {
             PRIMARY KEY (`id`)
         ) $collate;";
 
-        $sql_product_map = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['products_map'] . "` (
+         $sql_product_map = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['products_map'] . "` (
             `ID` bigint(20) NOT NULL AUTO_INCREMENT,
             `product_map_id` BIGINT UNSIGNED NOT NULL DEFAULT 0,
             `product_id` BIGINT UNSIGNED NOT NULL DEFAULT 0,
@@ -248,7 +248,7 @@ class Install {
             `date_modified` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (`review_id`)
         ) $collate;";
-
+        
         $sql_ratings = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['rating'] . "` (
             `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
             `review_id` BIGINT(20) NOT NULL,
@@ -296,12 +296,12 @@ class Install {
             `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (`id`)
         ) $collate;";
-
+        
         // Include upgrade functions if not loaded.
         if ( ! function_exists( 'dbDelta' ) ) {
             require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         }
-
+        
         dbDelta( $sql_commission );
         dbDelta( $sql_store );
         dbDelta( $sql_store_users );
@@ -316,13 +316,14 @@ class Install {
         dbDelta( $sql_ratings );
         dbDelta( $sql_notifications );
         dbDelta( $sql_system_events );
+
     }
 
     public function create_database_triggers() {
         global $wpdb;
 
         // Drop the trigger if it exists
-        $wpdb->query( 'DROP TRIGGER IF EXISTS update_store_balance' );
+        $wpdb->query("DROP TRIGGER IF EXISTS update_store_balance");
 
         // Create the trigger
         $sql = "
@@ -390,7 +391,8 @@ class Install {
         ";
 
         // Execute the trigger
-        $wpdb->query( $sql );
+        $wpdb->query($sql);
+
     }
 
     /**
@@ -400,27 +402,28 @@ class Install {
      */
     private function set_default_settings() {
         // 1. Get the existing option from DB
-        $settings = get_option( 'multivendorx_identity_verification_settings', array() );
+        $settings = get_option('multivendorx_identity_verification_settings', []);
 
-        $order_settings = get_option( 'multivendorx_order_actions_refunds_settings', array() );
+        $order_settings  = get_option('multivendorx_order_actions_refunds_settings', []);
+
 
         // 2. Modify only what you need
-        $settings['all_verification_methods']['ID']['verification_methods'] = array(
+        $settings['all_verification_methods']['ID']['verification_methods'] = [
 
-            array(
+            [
                 'label'    => 'National Id',
                 'required' => true,
                 'active'   => true,
-            ),
-            array(
+            ],
+            [
                 'label'    => 'Voter Id',
                 'required' => true,
                 'active'   => false,
-            ),
-        );
-
-        $legal_settings              = array(
-            'seller_agreement'        => 'This Seller Agreement (“Agreement”) is entered into between Marketplace (“Platform”) and the Seller (“You” or “Seller”) upon registration on the Platform. By submitting this agreement and uploading the required documents, you agree to comply with all rules, policies, and guidelines of the Platform.
+            ],
+        ];
+    
+        $legal_settings = [
+            'seller_agreement'         => 'This Seller Agreement (“Agreement”) is entered into between Marketplace (“Platform”) and the Seller (“You” or “Seller”) upon registration on the Platform. By submitting this agreement and uploading the required documents, you agree to comply with all rules, policies, and guidelines of the Platform.
 
 1. Eligibility and Registration
    - Seller must be at least 18 years old and legally eligible to operate a business.
@@ -454,7 +457,7 @@ class Install {
 
 By signing and submitting, the Seller accepts all terms above.
 ',
-            'terms_conditions'        => '1. General
+            'terms_conditions'         => '1. General
    - Use of the Platform constitutes agreement to these Terms & Conditions.
    - Sellers must act with honesty, transparency, and integrity.
 
@@ -476,7 +479,7 @@ By signing and submitting, the Seller accepts all terms above.
 6. Modification of Terms
    - Terms may be updated; sellers will be notified via dashboard.
 ',
-            'privacy_policy'          => '1. Data Collection
+            'privacy_policy'           => '1. Data Collection
    - Platform collects personal and business info for order processing and compliance.
 
 2. Data Usage
@@ -491,7 +494,7 @@ By signing and submitting, the Seller accepts all terms above.
    - By accepting, sellers consent to collection, storage, and processing.
    - Withdrawal of consent may limit Platform access.
 ',
-            'refund_return_policy'    => '1. Eligibility
+            'refund_return_policy'     => '1. Eligibility
    - Products must meet condition and timeline requirements.
    - Requests must be submitted within 14 days.
 
@@ -507,7 +510,7 @@ By signing and submitting, the Seller accepts all terms above.
    - Provide accurate descriptions and images.
    - Follow Platform refund rules.
 ',
-            'anti_counterfeit_policy' => '1. Product Authenticity
+            'anti_counterfeit_policy'  => '1. Product Authenticity
    - All products must be authentic; certificates must be provided for branded items.
 
 2. Copyright Compliance
@@ -519,94 +522,178 @@ By signing and submitting, the Seller accepts all terms above.
 4. Certification Upload
    - Sellers must upload supporting documents for regulated products.
 ',
-        );
-        $product_compliance_settings = array(
-            'prohibited_product_categories' => array(
+        ];
+        $product_compliance_settings = [
+            'prohibited_product_categories' => [
                 'Weapons & Ammunition',
                 'Illegal Drugs & Substances',
                 'Counterfeit Products',
                 'Stolen Goods',
-            ),
-            'who_can_report'                => 'anyone',
+            ],
+            'who_can_report' =>'anyone',
             // You can add other keys here if needed, e.g. 'required_store_uploads' => [...]
-        );
+        ];
 
-        $pending_store_status = array(
+        $pending_store_status = array (
             'pending_msg' => 'Your store is awaiting approval and will be activated soon.',
         );
 
-        update_option( 'multivendorx_pending_approval_settings', $pending_store_status );
+        update_option('multivendorx_pending_approval_settings', $pending_store_status);        
 
-        $reject_store_status = array(
+        $reject_store_status = array (
             'rejected_msg' => 'Your application was not approved. Please review feedback and reapply.',
         );
 
-        update_option( 'multivendorx_rejected_settings', $reject_store_status );
+        update_option('multivendorx_rejected_settings', $reject_store_status);        
 
-        // $permanent_reject_store_status = array (
-        // 'permanent_rejected_msg' => 'Your application has been permanently rejected. Contact admin for clarification.',
-        // );
-
-        // update_option('multivendorx_permanently_rejected_settings', $permanent_reject_store_status);
-
-        $under_review_store_status = array(
+        $under_review_store_status = array (
             'under_review_msg' => 'Your store is under review. Sales and payouts are temporarily paused.',
         );
 
-        update_option( 'multivendorx_under_review_settings', $under_review_store_status );
+        update_option('multivendorx_under_review_settings', $under_review_store_status);        
 
-        $suspended_store_status = array(
+        $suspended_store_status = array (
             'suspended_msg' => 'Your store is suspended due to a policy issue. Contact admin to resolve it.',
         );
 
-        update_option( 'multivendorx_suspended_settings', $suspended_store_status );
+        update_option('multivendorx_suspended_settings', $suspended_store_status);
+
+        $store_permissions = array (
+                'products' => 
+                    array (
+                        'manage_products',
+                        'read_products',
+                        'edit_products',
+                        'delete_products',
+                        'publish_products',
+                        'upload_files',
+                    ),
+                'orders' => 
+                    array (
+                        'read_shop_orders',
+                        'view_shop_orders',
+                        'edit_shop_orders',
+                        'delete_shop_orders',
+                    ),
+        );
+
+        update_option('multivendorx_store_capability_settings', $store_permissions);
+
+        $user_permissions = array (
+            'store_owner' => 
+                array (
+                    'manage_products',
+                    'read_products',
+                    'edit_products',
+                    'delete_products',
+                    'publish_products',
+                    'upload_files',
+                    'read_shop_orders',
+                    'view_shop_orders',
+                    'edit_shop_orders',
+                    'delete_shop_orders',
+        ));
+
+        update_option('multivendorx_user_capability_settings', $user_permissions);
+
+        $disbursment_settings = array (
+            'disbursement_order_status' => array('completed'),
+            'payment_schedules' => 'mannual',
+            'withdraw_type' => 'manual'
+            );
+
+        update_option('multivendorx_disbursement_settings', $disbursment_settings);
+
+        $payment_settings = array (
+            'payment_methods' => array(
+                'bank-transfer' => ['enable' => true]
+            )
+        );
+
+        update_option('multivendorx_payment_integration_settings', $payment_settings);
+
+        $marketplace_settings = array (
+            // 'store_registration_page' => '11',
+            // 'store_dashboard_page' => '10',
+            'store_url' => 'store',
+        );
+        update_option('multivendorx_marketplace_settings_settings', $marketplace_settings);
+
+        $general_settings = array (
+            'approve_store' => 'manually',
+        );
+        update_option('multivendorx_general_settings', $general_settings);
+
+        $appearance_settings = array (
+            'store_color_settings' => array (
+                'selectedPalette' => 'golden_ray',
+                'colors' => array (
+                    'colorPrimary' => '#0E117A',
+                    'colorSecondary' => '#399169',
+                    'colorAccent' => '#12E2A4',
+                    'colorSupport' => '#DCF516',
+                ),
+            ),
+            'store_banner_template' => array (
+                'selectedPalette' => 'template3',
+                'colors' => []
+            ),
+        );
+        update_option('multivendorx_store_appearance_settings', $appearance_settings);
+
+        $product_settings = array (
+            'type_options' => array ('virtual', 'downloadable'),
+            'products_fields' => array ('general', 'inventory', 'linked_product', 'attribute', 'advanced', 'policies', 'product_tag', 'GTIN'),
+        );
+        update_option('multivendorx_product_preferencess_settings', $product_settings);
 
         // 6. Save back to DB
-        update_option( 'multivendorx_identity_verification_settings', $settings );
-        update_option( 'multivendorx_order_actions_refunds_settings', $order_settings );
-        update_option( 'multivendorx_legal_compliance_settings', $legal_settings );
-        update_option( 'multivendorx_product_compliance_settings', $product_compliance_settings );
+        update_option('multivendorx_identity_verification_settings', $settings);
+        update_option('multivendorx_order_actions_refunds_settings', $order_settings);
+        update_option('multivendorx_legal_compliance_settings', $legal_settings);
+        update_option('multivendorx_product_compliance_settings', $product_compliance_settings);        
     }
-
+    
 
     public function plugin_create_pages() {
 
-        $pages_to_create = array(
-            array(
-                'slug'      => 'dashboard',
-                'title'     => __( 'Store Dashboard', 'multivendorx' ),
-                'shortcode' => '[multivendorx_store_dashboard]',
-            ),
-            array(
-                'slug'      => 'store-registration',
-                'title'     => __( 'Store Registration', 'multivendorx' ),
-                'shortcode' => '[multivendorx_store_registration]',
-            ),
-            array(
-                'slug'      => 'vendor-orders',
-                'title'     => __( 'Vendor Orders', 'multivendorx' ),
-                'shortcode' => '[multivendorx_vendor_orders]',
-            ),
-        );
-
+        $pages_to_create = [
+            [
+                'slug'       => 'dashboard',
+                'title'      => __( 'Store Dashboard', 'multivendorx' ),
+                'shortcode'  => '[multivendorx_store_dashboard]',
+            ],
+            [
+                'slug'       => 'store-registration',
+                'title'      => __( 'Store Registration', 'multivendorx' ),
+                'shortcode'  => '[multivendorx_store_registration]',
+            ],
+            [
+                'slug'       => 'vendor-orders',
+                'title'      => __( 'Vendor Orders', 'multivendorx' ),
+                'shortcode'  => '[multivendorx_vendor_orders]',
+            ],
+        ];
+        
         $this->plugin_create_pages_dynamic( $pages_to_create );
+        
     }
 
-    public function plugin_create_pages_dynamic( $pages = array() ) {
+    public function plugin_create_pages_dynamic( $pages = [] ) {
         if ( empty( $pages ) || ! is_array( $pages ) ) {
             return;
         }
-
+    
         foreach ( $pages as $page ) {
             // Validate required keys
             if ( empty( $page['slug'] ) || empty( $page['title'] ) || empty( $page['shortcode'] ) ) {
                 continue;
             }
-
-            $slug      = $page['slug'];
-            $title     = $page['title'];
-            $shortcode = $page['shortcode'];
-
+    
+            $slug       = $page['slug'];
+            $title      = $page['title'];
+            $shortcode  = $page['shortcode'];
+        
             // Check if page with slug exists
             $page_found = get_posts(
                 array(
@@ -617,11 +704,11 @@ By signing and submitting, the Seller accepts all terms above.
                     'numberposts' => 1,
                 )
             );
-
+    
             if ( $page_found ) {
                 continue;
             }
-
+    
             // Create the page
             $page_data = array(
                 'post_status'    => 'publish',
@@ -632,10 +719,11 @@ By signing and submitting, the Seller accepts all terms above.
                 'post_content'   => $shortcode,
                 'comment_status' => 'closed',
             );
-
+    
             $page_id = wp_insert_post( $page_data );
-
+    
             // update_option( $option_key, $page_id );
         }
     }
+    
 }
