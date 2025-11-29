@@ -70,14 +70,37 @@ class MultiVendorX_REST_Status_Controller extends \WP_REST_Controller {
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
+            $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
+
+            // Log the error
+            if ( is_wp_error( $error ) ) {
+                MultiVendorX()->util->log(
+                    'MVX REST Error: ' .
+                    'Code=' . $error->get_error_code() . '; ' .
+                    'Message=' . $error->get_error_message() . '; ' .
+                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
+                );
+            }            
+
+            return $error;
         }
-        $key = $request->get_param( 'key' );
-        if ( $key == 'default_pages' ) {
-            MultiVendorX()->install->plugin_create_pages();
-            return rest_ensure_response( true );
+        try{
+            $key = $request->get_param( 'key' );
+            if ( $key == 'default_pages' ) {
+                MultiVendorX()->install->plugin_create_pages();
+                return rest_ensure_response( true );
+            }
+            $system_info = MultiVendorX()->status->get_system_info();
+            return rest_ensure_response( $system_info );
+        }catch ( \Exception $e ) {
+            MultiVendorX()->util->log(
+                'MVX REST Exception: ' .
+                'Message=' . $e->getMessage() . '; ' .
+                'File=' . $e->getFile() . '; ' .
+                'Line=' . $e->getLine() . "\n\n"
+            );        
+
+            return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
-        $system_info = MultiVendorX()->status->get_system_info();
-        return rest_ensure_response( $system_info );
     }
 }
