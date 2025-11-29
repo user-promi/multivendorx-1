@@ -24,7 +24,7 @@ interface Feature {
 import "./adminDashboard.scss";
 import "../dashboard.scss";
 import { useEffect, useState } from 'react';
-import { getApiLink, ProPopup, sendApiResponse, useModules } from "zyra";
+import { getApiLink, sendApiResponse, useModules } from "zyra";
 import axios from "axios";
 import { __ } from '@wordpress/i18n';
 
@@ -517,7 +517,7 @@ const AdminDashboard = () => {
                             onClick={(e) => {
                               e.preventDefault();
                               if (!installing) {
-                                installOrActivatePlugin("woocommerce-catalog-enquiry", "active");
+                                installOrActivatePlugin("woocommerce-catalog-enquiry");
                               }
                             }}
                             style={{
@@ -574,7 +574,7 @@ const AdminDashboard = () => {
                             onClick={(e) => {
                               e.preventDefault();
                               if (!installing) {
-                                installOrActivatePlugin("woocommerce-product-stock-alert", "active");
+                                installOrActivatePlugin("woocommerce-product-stock-alert");
                               }
                             }}
                             style={{

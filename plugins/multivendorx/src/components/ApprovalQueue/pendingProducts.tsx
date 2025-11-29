@@ -33,7 +33,7 @@ export interface RealtimeFilter {
     render: (updateFilter: (key: string, value: any) => void, filterValue: any) => React.ReactNode;
 }
 
-const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
+const PendingProducts: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
     const [data, setData] = useState<StoreRow[] | null>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
@@ -363,4 +363,4 @@ const Products: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
     );
 };
 
-export default Products;
+export default PendingProducts;

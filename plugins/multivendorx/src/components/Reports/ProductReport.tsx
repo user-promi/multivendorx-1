@@ -1,17 +1,12 @@
 import React, { useEffect, useState } from "react";
 import {
-  Cell,
   Legend,
-  PieChart,
   ResponsiveContainer,
-  Pie,
   BarChart,
   CartesianGrid,
   XAxis,
   YAxis,
   Bar,
-  LineChart,
-  Line,
   Tooltip
 } from "recharts";
 import { __ } from "@wordpress/i18n";
@@ -49,7 +44,7 @@ export interface RealtimeFilter {
   ) => React.ReactNode;
 }
 
-const Revenue: React.FC = () => {
+const ProductReport: React.FC = () => {
   const [data, setData] = useState<ProductRow[]>([]);
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -103,7 +98,7 @@ const Revenue: React.FC = () => {
     return <>{count}</>;
   };
 
-  
+
   useEffect(() => {
     // Fetch store list
     axios
@@ -531,7 +526,10 @@ const Revenue: React.FC = () => {
             {overview.map((item, idx) => (
               <div key={idx} className="analytics-item">
                 <div className="analytics-icon"><i className={item.icon}></i></div>
-                <div className="details"><div className="number"><Counter value={item.count} /></div><div className="text">{item.label}</div></div>
+                <div className="details">
+                  <div className="number"><Counter value={item.count} /></div>
+                  <div className="text">{__(item.label, 'multivendorx')}</div>
+                </div>
               </div>
             ))}
           </div>
@@ -540,7 +538,7 @@ const Revenue: React.FC = () => {
         <div className="column">
           <div className="card-header">
             <div className="left">
-              <div className="title">Revenue & Sales Comparison</div>
+              <div className="title">{__('Revenue & Sales Comparison', 'multivendorx')}</div>
             </div>
           </div>
 
@@ -554,23 +552,23 @@ const Revenue: React.FC = () => {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="net_sales" fill="#5007aa" name="Net Sales" />
-                <Bar dataKey="items_sold" fill="#00c49f" name="Items Sold" />
+                <Bar dataKey="net_sales" fill="#5007aa" name={__('Net Sales', 'multivendorx')} />
+                <Bar dataKey="items_sold" fill="#00c49f" name={__('Items Sold', 'multivendorx')} />
               </BarChart>
             </ResponsiveContainer>
           ) : (
-            <p className="text-gray-500 p-2">No product sales data found.</p>
+            <p className="text-gray-500 p-2">{__('No product sales data found.', 'multivendorx')}</p>
           )}
         </div>
       </div>
 
-      {/* Keep categories and brands */}
+      {/* Categories and brands */}
       <div className="row">
-        {/*Top Reviewed Products Section */}
+        {/* Top Reviewed Products Section */}
         <div className="column">
           <div className="card-header">
             <div className="left">
-              <div className="title">Top Reviewed Products</div>
+              <div className="title">{__('Top Reviewed Products', 'multivendorx')}</div>
             </div>
           </div>
 
@@ -584,13 +582,12 @@ const Revenue: React.FC = () => {
                   <div className="left">
                     <div className="product-name font-medium">{product.name}</div>
                     <div className="price text-sm text-gray-600">
-                      <b>Rating:</b> {product.average_rating || "0"} ⭐
+                      <b>{__('Rating:', 'multivendorx')}</b> {product.average_rating || "0"} ⭐
                     </div>
                   </div>
                   <div className="right">
                     <i
-                      className={`adminlib-pagination-right-arrow ${openReviewedCards[product.id] ? "rotate-90 transition-transform" : ""
-                        }`}
+                      className={`adminlib-pagination-right-arrow ${openReviewedCards[product.id] ? "rotate-90 transition-transform" : ""}`}
                     ></i>
                   </div>
                 </div>
@@ -601,31 +598,22 @@ const Revenue: React.FC = () => {
                       <div className="left-side flex items-center gap-3 p-2">
                         <div className="avatar">
                           {product.images?.length ? (
-                            <img
-                              src={product.images[0].src}
-                              alt={product.name}
-                            />
+                            <img src={product.images[0].src} alt={product.name} />
                           ) : (
-                            <div>
-                              {product.name?.charAt(0) || '?'}
-                            </div>
+                            <div>{product.name?.charAt(0) || '?'}</div>
                           )}
                         </div>
 
                         <div className="details text-sm leading-6">
                           <div>
-                            <b>Price:</b>{" "}
-                            <span
-                              dangerouslySetInnerHTML={{
-                                __html: product.price_html || product.price || "—",
-                              }}
-                            />
+                            <b>{__('Price:', 'multivendorx')}</b>{" "}
+                            <span dangerouslySetInnerHTML={{ __html: product.price_html || product.price || "—" }} />
                           </div>
                           <div>
-                            <b>Total Sales:</b> {product.total_sales || 0}
+                            <b>{__('Total Sales:', 'multivendorx')}</b> {product.total_sales || 0}
                           </div>
                           <div>
-                            <b>Category:</b>{" "}
+                            <b>{__('Category:', 'multivendorx')}</b>{" "}
                             {product.categories?.map((c: any) => c.name).join(", ") || "-"}
                           </div>
                         </div>
@@ -636,15 +624,14 @@ const Revenue: React.FC = () => {
               </div>
             ))
           ) : (
-            <p className="text-gray-500 p-2">No reviewed products found.</p>
+            <p className="text-gray-500 p-2">{__('No reviewed products found.', 'multivendorx')}</p>
           )}
-
         </div>
 
         <div className="column">
           <div className="card-header">
             <div className="left">
-              <div className="title">Top Selling Products</div>
+              <div className="title">{__('Top Selling Products', 'multivendorx')}</div>
             </div>
           </div>
 
@@ -654,43 +641,31 @@ const Revenue: React.FC = () => {
                 <div className="details-wrapper">
                   <div className="avatar">
                     {product.images?.length ? (
-                      <img
-                        src={product.images[0].src}
-                        alt={product.name}
-                      />
+                      <img src={product.images[0].src} alt={product.name} />
                     ) : (
-                      <div
-
-                      >
-                        {product.name?.charAt(0) || '?'}
-                      </div>
+                      <div>{product.name?.charAt(0) || '?'}</div>
                     )}
                   </div>
                   <div className="details">
                     <div className="name">{product.name}</div>
-                    <div className="des">Total Sales: {product.total_sales || 0}</div>
+                    <div className="des">{__('Total Sales:', 'multivendorx')} {product.total_sales || 0}</div>
                   </div>
                 </div>
                 <div className="right-details">
-                  <div className="price">
-
-                  </div>
+                  <div className="price"></div>
                 </div>
               </div>
             ))
           ) : (
-            <p>No top selling products found.</p>
+            <p>{__('No top selling products found.', 'multivendorx')}</p>
           )}
-
-
         </div>
-
       </div>
 
-      {/*Fixed Table Section */}
+      {/* Fixed Table Section */}
       <div className="card-header p-top">
         <div className="left">
-          <div className="title">Revenue Distribution</div>
+          <div className="title">{__('Revenue Distribution', 'multivendorx')}</div>
         </div>
       </div>
       <Table
@@ -710,6 +685,7 @@ const Revenue: React.FC = () => {
       />
     </div>
   );
+
 };
 
-export default Revenue;
+export default ProductReport;

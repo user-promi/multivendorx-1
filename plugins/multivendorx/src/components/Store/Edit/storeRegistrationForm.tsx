@@ -3,6 +3,7 @@ import axios from 'axios';
 import { TextArea, getApiLink, SuccessNotice } from 'zyra';
 import { Skeleton } from '@mui/material';
 import { jsPDF } from "jspdf";
+import { __ } from '@wordpress/i18n';
 
 
 const StoreRegistration = ({ id }: { id: string | null }) => {
@@ -116,59 +117,61 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 								<div className="card-header">
 									<div className="left">
 										<div className="title">
-											Store details
+											{__('Store details', 'multivendorx')}
 										</div>
 									</div>
 								</div>
+
 								{/* Core Data */}
 								{formData.core_data &&
 									Object.entries(formData.core_data).map(([label, value]) => (
 										<div className="form-details" key={label}>
 											<label className="label">{label} :</label>
-											<div className="value">{value || "[Not Provided]"}</div>
+											<div className="value">{value || __('[Not Provided]', 'multivendorx')}</div>
 										</div>
 									))}
 
-								{/* Registration Data */}
+								{/* Registration Data (if needed) */}
 							</div>
+
 						</>
 					)}
 					<div className="card-content">
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{formData.core_data?.status === 'pending' || formData.core_data?.status === 'rejected' ? 'Registration form details' : 'Archive data'}
-
+									{formData.core_data?.status === 'pending' || formData.core_data?.status === 'rejected'
+										? __('Registration form details', 'multivendorx')
+										: __('Archive data', 'multivendorx')}
 								</div>
 							</div>
 							<div className="right">
 								{formData.registration_data && Object.keys(formData.registration_data).length > 0 && (
 									<div
-										onClick={() => {
-											handleDownloadPDF()
-										}}
+										onClick={() => handleDownloadPDF()}
 										className="admin-btn btn-purple"
 									>
-										<i className="adminlib-import"></i> Download
+										<i className="adminlib-import"></i> {__('Download', 'multivendorx')}
 									</div>
 								)}
 							</div>
-
 						</div>
-
 
 						{/* Registration Data */}
 						{formData.registration_data && Object.keys(formData.registration_data).length > 0 ? (
 							Object.entries(formData.registration_data).map(([label, value]) => (
 								<div className="form-details" key={label}>
 									<label className="label">{label} :</label>
-									<div className="value">{value || "[Not Provided]"}</div>
+									<div className="value">{value || __('[Not Provided]', 'multivendorx')}</div>
 								</div>
 							))
 						) : (
-							<div className="no-data">Store submitted application without filling out registration form.</div>
+							<div className="no-data">
+								{__('Store submitted application without filling out registration form.', 'multivendorx')}
+							</div>
 						)}
 					</div>
+
 				</div>
 
 
@@ -182,7 +185,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 								<div className="card-header">
 									<div className="left">
 										<div className="title">
-											Submited by
+											{__('Submitted by', 'multivendorx')}
 										</div>
 									</div>
 								</div>
@@ -196,7 +199,6 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 											<div className="name">
 												{formData.primary_owner_info?.data?.display_name ?? <Skeleton variant="text" width={150} />}
 											</div>
-											{/* <div className="des">Owner</div> */}
 										</div>
 									</div>
 									<ul className="contact-details">
@@ -208,14 +210,14 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 								</div>
 							</div>
 
-							{/* {( formData.core_data?.status === 'permanently_rejected' ) && ( */}
+
 							<>
 								{previousNotes.length > 0 && (
 									<div className="card-content">
 										<div className="card-header">
 											<div className="left">
 												<div className="title">
-													Previous Notes
+													{__('Previous Notes', 'multivendorx')}
 												</div>
 											</div>
 										</div>
@@ -228,29 +230,32 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 														</li>
 													))}
 												</ul>
-
 											</div>
 										</div>
 									</div>
 								)}
+
 
 								{formData.core_data?.status != 'permanently_rejected' && (
 									<div className="card-content">
 										<div className="card-header">
 											<div className="left">
 												<div className="title">
-													Note
+													{__('Note', 'multivendorx')}
 												</div>
 											</div>
 										</div>
 										<div className="form-group-wrapper">
 											<div className="form-group">
-												<TextArea name="store_application_note" wrapperClass="setting-from-textarea"
-													placeholder='Optional note for approval or rejection'
+												<TextArea
+													name="store_application_note"
+													wrapperClass="setting-from-textarea"
+													placeholder={__('Optional note for approval or rejection', 'multivendorx')}
 													inputClass="textarea-input"
 													descClass="settings-metabox-description"
 													value={formData.store_application_note || ''}
-													onChange={handleChange} />
+													onChange={handleChange}
+												/>
 											</div>
 										</div>
 										<div className="form-group-wrapper">
@@ -262,24 +267,24 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 														checked={formData.store_permanent_reject}
 														onChange={handleChange}
 													/>
-													Reject store permanently
+													{__('Reject store permanently', 'multivendorx')}
 												</label>
 											</div>
 										</div>
 
-										<div className="buttons-wrapper" >
+										<div className="buttons-wrapper">
 											<button
 												className="admin-btn btn-green"
 												onClick={() => handleSubmit('approve')}
 											>
-												Approve
+												{__('Approve', 'multivendorx')}
 											</button>
 
 											<button
 												className="admin-btn btn-red"
 												onClick={() => handleSubmit('rejected')}
 											>
-												Reject
+												{__('Reject', 'multivendorx')}
 											</button>
 										</div>
 									</div>

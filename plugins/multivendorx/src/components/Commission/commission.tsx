@@ -37,14 +37,16 @@ type CommissionRow = {
     paidStatus?: 'paid' | 'unpaid' | string;
     commissionNote?: string | null;
     createTime?: string;
-    // Add other fields that might be needed for CSV
-    totalOrderAmount?: string;
+    totalOrderAmount?: any;
     facilitatorFee?: string;
     marketplaceFee?: string;
     gatewayFee?: string;
     shippingAmount?: string;
     taxAmount?: string;
     status?: string;
+    storeEarning?:any;
+    shippingTaxAmount?:any;
+    platformFee?:any;
 };
 
 type FilterData = {
@@ -145,7 +147,7 @@ const DownloadCSVButton: React.FC<{
             disabled={isDownloading || isLoading || (!hasSelectedRows && !data)}
             className="button"
         >
-            Download CSV
+            {__('Download CSV', 'multivendorx')}
         </button>
     );
 };
@@ -169,7 +171,6 @@ const BulkActions: React.FC<{
 };
 
 const Commission: React.FC = () => {
-    const [error, setError] = useState<String>();
     const [data, setData] = useState<CommissionRow[] | null>(null);
     const [store, setStore] = useState<any[] | null>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -198,7 +199,6 @@ const Commission: React.FC = () => {
                 setStore(response.data.stores);
             })
             .catch(() => {
-                setError(__('Failed to load stores', 'multivendorx'));
                 setStore([]);
             });
 
@@ -213,7 +213,6 @@ const Commission: React.FC = () => {
                 setPageCount(Math.ceil(response.data / pagination.pageSize));
             })
             .catch(() => {
-                setError(__('Failed to load total rows', 'multivendorx'));
             });
     }, []);
 
@@ -266,7 +265,6 @@ const Commission: React.FC = () => {
                 // Remove items where count === 0
                 setCommissionStatus(statuses.filter(status => status.count > 0));
             }).catch(() => {
-                setError(__('Failed to load stores', 'multivendorx'));
                 setData([]);
             });
     }
@@ -350,7 +348,7 @@ const Commission: React.FC = () => {
                 className="admin-btn btn-purple-bg"
             >
                 <span className="adminlib-import"></span>
-                Export Commissions
+                {__('Export Commissions', 'multivendorx')}
             </button>
         );
     };
@@ -399,7 +397,7 @@ const Commission: React.FC = () => {
             enableSorting: true,
             header: __('ID', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell>
+                <TableCell title={'id'}>
                     <span
                         className="link-item"
                         onClick={() => {
@@ -451,7 +449,7 @@ const Commission: React.FC = () => {
                 const isExpanded = expandedRows[row.original.id!];
 
                 return (
-                    <TableCell>
+                    <TableCell title={'commission-summary'}>
                         <ul className={`details ${isExpanded ? '' : 'overflow'}`}>
 
                             {row.original?.storeEarning ? (
@@ -533,9 +531,13 @@ const Commission: React.FC = () => {
                                 }
                             >
                                 {isExpanded ? (
-                                    <>Less <i className="adminlib-arrow-up"></i></>
+                                    <>
+                                        {__('Less', 'multivendorx')}
+                                        <i className="adminlib-arrow-up"></i></>
                                 ) : (
-                                    <>More <i className="adminlib-arrow-down"></i></>
+                                    <>
+                                        {__('More', 'multivendorx')}
+                                        <i className="adminlib-arrow-down"></i></>
                                 )}
                             </span>
                         </ul>
@@ -585,7 +587,6 @@ const Commission: React.FC = () => {
                 return (
                     <TableCell title={`${formattedDate}`}>
                         {formattedDate}
-
                     </TableCell>
                 );
             },
@@ -652,7 +653,7 @@ const Commission: React.FC = () => {
                         value={filterValue || ''}
                         className="basic-select"
                     >
-                        <option value="">All Store</option>
+                        <option value="">{__("All Store", "multivendorx")}</option>
                         {store?.map((s: any) => (
                             <option key={s.id} value={s.id}>
                                 {s.store_name.charAt(0).toUpperCase() + s.store_name.slice(1)}
@@ -686,8 +687,11 @@ const Commission: React.FC = () => {
         <>
             <AdminBreadcrumbs
                 activeTabIcon="adminlib-commission"
-                tabTitle="Commissions"
-                description={'Details of commissions earned by each store for every order, including order amount, commission rate, and payout status.'}
+                tabTitle={__("Commissions", "multivendorx")}
+                description={__(
+                    "Details of commissions earned by each store for every order, including order amount, commission rate, and payout status.",
+                    "multivendorx"
+                )}
             />
             <div className="general-wrapper">
                 <div className="admin-table-wrapper">

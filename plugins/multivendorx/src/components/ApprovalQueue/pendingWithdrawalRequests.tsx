@@ -8,17 +8,21 @@ import {
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
-import {formatCurrency} from '../../services/commonFunction';
 
 type StoreRow = {
     id?: number;
     store_name?: string;
     store_slug?: string;
     status?: string;
+    withdraw_amount?:any;
 };
 
-const TransactionDataTable: React.FC = ({ storeId }) => {
-    const [data, setData] = useState<StoreRow[] | []>([]);
+interface Props {
+    onUpdated?: () => void;
+}
+
+const PendingWithdrawal: React.FC<Props> = ({ onUpdated }) => {
+    const [data, setData] = useState<StoreRow[] | null>(null);
 
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
@@ -28,7 +32,21 @@ const TransactionDataTable: React.FC = ({ storeId }) => {
     });
     const [pageCount, setPageCount] = useState(0);
 
-
+    // Fetch total rows on mount
+    useEffect(() => {
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'store'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { count: true, pending_withdraw: true },
+        })
+            .then((response) => {
+                setTotalRows(response.data || 0);
+                setPageCount(Math.ceil(response.data / pagination.pageSize));
+            })
+            .catch(() => {
+            });
+    }, []);
 
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
@@ -36,15 +54,8 @@ const TransactionDataTable: React.FC = ({ storeId }) => {
         requestData(rowsPerPage, currentPage);
         setPageCount(Math.ceil(totalRows / rowsPerPage));
     }, [pagination]);
-    const [showDropdown, setShowDropdown] = useState(false);
 
-    const toggleDropdown = (id: any) => {
-        if (showDropdown === id) {
-            setShowDropdown(false);
-            return;
-        }
-        setShowDropdown(id);
-    };
+
     // Fetch data from backend.
     function requestData(
         rowsPerPage = 10,
@@ -53,16 +64,18 @@ const TransactionDataTable: React.FC = ({ storeId }) => {
         setData([]);
         axios({
             method: 'GET',
-            url: getApiLink(appLocalizer, 'products'),
+            url: getApiLink(appLocalizer, 'store'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params: {
+                pending_withdraw: true,
                 page: currentPage,
                 row: rowsPerPage,
             },
         })
             .then((response) => {
-                setData(response.data || []);
+                setData(Array.isArray(response.data) ? response.data : []);
             })
+
             .catch(() => {
                 setData([]);
             });
@@ -73,13 +86,28 @@ const TransactionDataTable: React.FC = ({ storeId }) => {
         rowsPerPage: number,
         currentPage: number,
     ) => {
-        setData([]);
+        setData(null);
         requestData(
             rowsPerPage,
             currentPage,
         );
     };
+    const handleSingleAction = (action: string, row: any) => {
+        let storeId = row.id;
+        if (!storeId) return;
 
+        axios({
+            method: 'PUT',
+            url: getApiLink(appLocalizer, `transaction/${storeId}`),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            data: { withdraw: true, action, amount: row.withdraw_amount, store_id: row.id },
+        })
+            .then(() => {
+                requestData(pagination.pageSize, pagination.pageIndex + 1);
+                onUpdated?.();
+            })
+            .catch(console.error);
+    };
     // Column definitions
     const columns: ColumnDef<StoreRow>[] = [
         {
@@ -100,29 +128,10 @@ const TransactionDataTable: React.FC = ({ storeId }) => {
             ),
         },
         {
-            header: __('Product Name', 'multivendorx'),
+            header: __('Store', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.name || ''}>
-                    {row.original.name || '-'}
-                </TableCell>
-            ),
-        },
-        {
-            header: __('SKU', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.sku || ''}>
-                    {row.original.sku || '-'}
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Price', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.price || ''}>
-                    {row.original.price
-                        ? formatCurrency(row.original.price)
-                        : '-'}
-
+                <TableCell title={row.original.store_name || ''}>
+                    {row.original.store_name || '-'}
                 </TableCell>
             ),
         },
@@ -134,7 +143,25 @@ const TransactionDataTable: React.FC = ({ storeId }) => {
                 </TableCell>
             ),
         },
+        {
+            header: __('Withdraw Amount', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.withdraw_amount || ''}>
+                    {row.original.withdraw_amount || '-'}
+                </TableCell>
+            ),
+        },
+        {
+            header: __('Action', 'multivendorx'),
+            cell: ({ row }) =>
+                <TableCell title={row.original.status || ''}>
+                    <span className="admin-btn btn-purple" onClick={() => { handleSingleAction('approve', row) }}><i className="adminlib-check"></i> Approve</span>
+
+                    <span className="admin-btn btn-red" onClick={() => handleSingleAction('reject', row)}><i className="adminlib-close"></i> Reject</span>
+                </TableCell>,
+        },
     ];
+
 
     return (
         <>
@@ -151,11 +178,10 @@ const TransactionDataTable: React.FC = ({ storeId }) => {
                     handlePagination={requestApiForData}
                     perPageOption={[10, 25, 50]}
                     typeCounts={[]}
-                    totalCounts={totalRows}
                 />
             </div>
         </>
     );
 };
 
-export default TransactionDataTable;
+export default PendingWithdrawal;

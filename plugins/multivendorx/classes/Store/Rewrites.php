@@ -2,14 +2,14 @@
 
 namespace MultiVendorX\Store;
 
-defined('ABSPATH') || exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Store Rewrites class
  *
- * @version		2.2.0
- * @package		MultiVendorX
- * @author 		MultiVendorX
+ * @version     2.2.0
+ * @package     MultiVendorX
+ * @author      MultiVendorX
  */
 
 class Rewrites {
@@ -22,12 +22,11 @@ class Rewrites {
     public function __construct() {
         $this->custom_store_url = MultiVendorX()->setting->get_setting( 'store_url', 'store' );
 
-        add_action( 'init', [ $this, 'register_rule' ] );
-        add_filter( 'query_vars', [ $this, 'register_query_var' ] );
-        add_filter( 'template_include', [ $this, 'store_template' ], 10 );
-        add_action( 'wp', [ $this, 'flash_rewrite_rules' ], 99 );
-        add_action( 'pre_get_posts', [ $this, 'store_query_filter' ] );
-
+        add_action( 'init', array( $this, 'register_rule' ) );
+        add_filter( 'query_vars', array( $this, 'register_query_var' ) );
+        add_filter( 'template_include', array( $this, 'store_template' ), 10 );
+        add_action( 'wp', array( $this, 'flash_rewrite_rules' ), 99 );
+        add_action( 'pre_get_posts', array( $this, 'store_query_filter' ) );
     }
 
     public function store_query_filter( $query ) {
@@ -50,7 +49,7 @@ class Rewrites {
             return;
         }
 
-        if (StoreUtil::get_excluded_products('', $store_id)) {
+        if ( StoreUtil::get_excluded_products( '', $store_id ) ) {
             return;
         }
 
@@ -58,32 +57,30 @@ class Rewrites {
         $query->set( 'post_type', 'product' );
 
         // Add vendor filter
-        $meta_query   = $query->get( 'meta_query', [] );
-        $meta_query[] = [
+        $meta_query   = $query->get( 'meta_query', array() );
+        $meta_query[] = array(
             'key'     => 'multivendorx_store_id',
             'value'   => $store_id,
             'compare' => '=',
-        ];
+        );
         $query->set( 'meta_query', $meta_query );
-       
+
         // Pagination fix
         $paged = max( 1, get_query_var( 'paged' ) );
         $query->set( 'paged', $paged );
         $query->set( 'wc_query', 'product_query' ); // WooCommerce flag
-
-
     }
 
     public function register_rule() {
         $page_id = MultiVendorX()->setting->get_setting( 'store_dashboard_page' );
-        
-        $rules = [
-            [
+
+        $rules = array(
+            array(
                 '^' . $this->custom_store_url . '/([^/]+)/?$',
                 'index.php?' . $this->custom_store_url . '=$matches[1]',
                 'top',
-            ],
-            [
+            ),
+            array(
                 '^' . $this->custom_store_url . '/([^/]+)/page/([0-9]{1,})/?$',
                 'index.php?' . $this->custom_store_url . '=$matches[1]&paged=$matches[2]',
                 'top',
@@ -102,18 +99,18 @@ class Rewrites {
     
             // oldddd
             // [
-            //     '^dashboard/?$',
-            //     'index.php?pagename=dashboard',
-            //     'top',
+            // '^dashboard/?$',
+            // 'index.php?pagename=dashboard',
+            // 'top',
             // ],
 
             // [
-            //     '^dashboard/([^/]+)/?([^/]*)/?([0-9]*)/?$',
-            //     'index.php?pagename=dashboard&tab=$matches[1]&subtab=$matches[2]&value=$matches[3]',
-            //     'top',
+            // '^dashboard/([^/]+)/?([^/]*)/?([0-9]*)/?$',
+            // 'index.php?pagename=dashboard&tab=$matches[1]&subtab=$matches[2]&value=$matches[3]',
+            // 'top',
             // ],
 
-        ];
+        );
 
         $rules = apply_filters( 'multivendorx_rewrite_rules', $rules, $this );
 
@@ -139,17 +136,17 @@ class Rewrites {
         $store_name = get_query_var( $this->custom_store_url );
 
         if ( ! empty( $store_name ) ) {
-            $store = Store::get_store_by_slug($store_name);
-            
+            $store = Store::get_store_by_slug( $store_name );
+
             if ( $store ) {
-                MultiVendorX()->util->get_template( 'store/store.php', ['store_id' => $store->get_id()] );
+                MultiVendorX()->util->get_template( 'store/store.php', array( 'store_id' => $store->get_id() ) );
                 exit;
             }
         }
 
         return $template;
     }
-    
+
     public function flash_rewrite_rules() {
         $this->register_rule();
         flush_rewrite_rules();

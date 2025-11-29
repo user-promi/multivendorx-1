@@ -56,10 +56,10 @@ class Setting {
 
         $setting_keys = $this->get_settings_keys();
 
-        $all_options = get_options($setting_keys);
+        $all_options = get_options( $setting_keys );
         // Get all setting from option table.
         foreach ( $setting_keys as $key ) {
-            $this->settings[ $key ] = $all_options[ $key ] ?: [];
+            $this->settings[ $key ] = $all_options[ $key ] ?: array();
         }
     }
 
@@ -116,8 +116,8 @@ class Setting {
                 'multivendorx_payment_integration_settings',
                 'multivendorx_store_appearance_settings',
                 'multivendorx_product_report_abuse_settings',
-                'multivendorx_store_commissions_settings', 
-                'multivendorx_order_actions_refunds_settings', 
+                'multivendorx_store_commissions_settings',
+                'multivendorx_order_actions_refunds_settings',
                 'multivendorx_menu_manager_settings',
                 'multivendorx_geolocation_settings',
                 'multivendorx_shipping_settings',

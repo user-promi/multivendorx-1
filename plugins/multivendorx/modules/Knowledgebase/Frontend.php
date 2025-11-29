@@ -4,7 +4,7 @@ namespace MultiVendorX\Knowledgebase;
 class Frontend {
     public function __construct() {
         // Hook into the filter that defines the admin submenus
-        add_filter( 'multivendorx_submenus', [ $this, 'add_knowledgebase_menu' ], 20 );
+        add_filter( 'multivendorx_submenus', array( $this, 'add_knowledgebase_menu' ), 20 );
     }
 
     /**
@@ -14,14 +14,14 @@ class Frontend {
      * @return array Modified submenu array.
      */
     public function add_knowledgebase_menu( $submenus ) {
-        $new_item = [
+        $new_item = array(
             'knowledgebase' => array(
                 'name'   => __( 'Knowledgebase', 'multivendorx' ),
                 'subtab' => '',
             ),
-        ];
+        );
 
-        $ordered = [];
+        $ordered = array();
         foreach ( $submenus as $key => $menu ) {
             // Copy existing menu
             $ordered[ $key ] = $menu;

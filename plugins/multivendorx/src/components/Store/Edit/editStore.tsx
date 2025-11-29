@@ -1,3 +1,4 @@
+import { __ } from '@wordpress/i18n';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ToggleSetting, getApiLink, SelectInput, Tabs, RadioInput, CommonPopup, useModules } from 'zyra';
 import { Skeleton } from '@mui/material';
@@ -12,8 +13,6 @@ import Facilitator from './facilitator';
 import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import Overview from './overview';
-import Membership from './membership';
-import Financial from './financial';
 import "../viewStore.scss";
 
 const statusOptions = [
@@ -24,7 +23,7 @@ const statusOptions = [
 ];
 
 const EditStore = () => {
-    const [data, setData] = useState({});
+    const [data, setData] = useState<any>({});
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
     const [bannerMenu, setBannerMenu] = useState(false);
     const [actionMenu, setActionMenu] = useState(false);
@@ -34,7 +33,7 @@ const EditStore = () => {
     const wrapperRef = useRef<HTMLDivElement>(null);
     const [editName, setEditName] = useState(false);
     const [editDesc, setEditDesc] = useState(false);
-    const [selectedOwner, setSelectedOwner] = useState(null);
+    const [selectedOwner, setSelectedOwner] = useState<any>(null);
     const location = useLocation();
     const [prevName, setPrevName] = useState("");
     const [prevDesc, setPrevDesc] = useState("");
@@ -150,9 +149,9 @@ const EditStore = () => {
         }
     };
 
-    const deleteStoreApiCall = (option) => {
+    const deleteStoreApiCall = (option: any) => {
 
-        const payload = {
+        const payload: any = {
             delete: true,
             deleteOption: option,
         };
@@ -345,7 +344,9 @@ const EditStore = () => {
                                                 e.stopPropagation();
                                                 setBannerMenu(true);
                                                 setLogoMenu(false);
-                                            }}><i className="adminlib-edit"></i>Edit banner image</span>
+                                            }}>
+                                                <i className="adminlib-edit"></i>{__('Edit banner image', 'multivendorx')}
+                                            </span>
                                             {bannerMenu && (
                                                 <div className="dropdown">
                                                     <div className="dropdown-body">
@@ -357,8 +358,8 @@ const EditStore = () => {
                                                                     setBannerMenu(false);
                                                                 }}>
                                                                 <div className="item">
-                                                                    <i className="adminlib-cloud-upload"
-                                                                    ></i> Upload </div>
+                                                                    <i className="adminlib-cloud-upload"></i> {__('Upload', 'multivendorx')}
+                                                                </div>
                                                             </li>
                                                             <li className="delete"
                                                                 onClick={(e) => {
@@ -368,7 +369,10 @@ const EditStore = () => {
                                                                     autoSave(updated);
                                                                     setBannerMenu(false);
                                                                 }}>
-                                                                <div className="item"><i className="adminlib-delete"></i> Delete </div> </li>
+                                                                <div className="item">
+                                                                    <i className="adminlib-delete"></i> {__('Delete', 'multivendorx')}
+                                                                </div>
+                                                            </li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -391,7 +395,9 @@ const EditStore = () => {
                                                         e.stopPropagation();
                                                         setLogoMenu((prev) => !prev);
                                                         setBannerMenu(false);
-                                                    }}><i className="adminlib-edit"></i></span>
+                                                    }}>
+                                                        <i className="adminlib-edit"></i> {__('Edit logo image', 'multivendorx')}
+                                                    </span>
                                                     {logoMenu && (
                                                         <div className="dropdown">
                                                             <div className="dropdown-body">
@@ -403,8 +409,7 @@ const EditStore = () => {
                                                                             setLogoMenu(false);
                                                                         }}>
                                                                         <div className="item">
-                                                                            <i className="adminlib-cloud-upload"
-                                                                            ></i> Upload
+                                                                            <i className="adminlib-cloud-upload"></i> {__('Upload', 'multivendorx')}
                                                                         </div>
                                                                     </li>
                                                                     <li className="delete"
@@ -415,7 +420,9 @@ const EditStore = () => {
                                                                             autoSave(updated);
                                                                             setLogoMenu(false);
                                                                         }}>
-                                                                        <div className="item"><i className="adminlib-delete"></i> Delete</div>
+                                                                        <div className="item">
+                                                                            <i className="adminlib-delete"></i> {__('Delete', 'multivendorx')}
+                                                                        </div>
                                                                     </li>
                                                                 </ul>
                                                             </div>
@@ -424,6 +431,7 @@ const EditStore = () => {
                                                 </div>
                                             </div>
                                         </div>
+
                                         <div className="details">
                                             <div className="name">
                                                 <div className="store-name" onClick={() => setEditName(true)}>
@@ -452,7 +460,6 @@ const EditStore = () => {
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                             if (editName && !data?.name?.trim()) {
-                                                                // if closing edit and input empty, restore previous name
                                                                 setData({ ...data, name: prevName });
                                                             }
                                                             setEditName(!editName);
@@ -462,21 +469,20 @@ const EditStore = () => {
                                                     </span>
                                                 </div>
 
-                                                {/* <span className="admin-badge green">{data.status}</span> */}
                                                 {data.status === 'active' ? (
-                                                    <span className="status admin-badge green">Active</span>
+                                                    <span className="status admin-badge green">{__('Active', 'multivendorx')}</span>
                                                 ) : data.status === 'pending' ? (
-                                                    <span className="status  admin-badge yellow">Pending</span>
+                                                    <span className="status admin-badge yellow">{__('Pending', 'multivendorx')}</span>
                                                 ) : data.status === 'rejected' ? (
-                                                    <span className="status  admin-badge red">Rejected</span>
+                                                    <span className="status admin-badge red">{__('Rejected', 'multivendorx')}</span>
                                                 ) : data.status === 'suspended' ? (
-                                                    <span className="status  admin-badge blue">Suspended</span>
+                                                    <span className="status admin-badge blue">{__('Suspended', 'multivendorx')}</span>
                                                 ) : data.status === 'permanently_rejected' ? (
-                                                    <span className="status  admin-badge red">Permanently Rejected</span>
+                                                    <span className="status admin-badge red">{__('Permanently Rejected', 'multivendorx')}</span>
                                                 ) : data.status === 'under_review' ? (
-                                                    <span className="status  admin-badge yellow">Under Review</span>
+                                                    <span className="status admin-badge yellow">{__('Under Review', 'multivendorx')}</span>
                                                 ) : data.status === 'deactivated' ? (
-                                                    <span className="status  admin-badge red">Permanently Deactivated</span>
+                                                    <span className="status admin-badge red">{__('Permanently Deactivated', 'multivendorx')}</span>
                                                 ) : (
                                                     <Skeleton variant="text" width={100} />
                                                 )}
@@ -491,7 +497,6 @@ const EditStore = () => {
                                             </div>
 
                                             <div className="des" onClick={() => setEditDesc(true)}>
-
                                                 {editDesc ? (
                                                     <textarea
                                                         value={data.description || ""}
@@ -520,12 +525,12 @@ const EditStore = () => {
                                                                 onClick={() => setExpanded(!expanded)}
                                                                 className="read-more-btn"
                                                             >
-                                                                {expanded ? "Read less" : "Read more"}
+                                                                {expanded ? __('Read less', 'multivendorx') : __('Read more', 'multivendorx')}
                                                             </button>
                                                         )}
                                                     </div>
                                                 ) : (
-                                                    <span>Enter your description</span>
+                                                    <span>{__('Enter your description', 'multivendorx')}</span>
                                                 )}
 
                                                 <span
@@ -541,6 +546,7 @@ const EditStore = () => {
                                                     <i className={editDesc ? "" : "adminlib-edit"}></i>
                                                 </span>
                                             </div>
+
                                             <div className="reviews-wrapper">
                                                 {[...Array(5)].map((_, i) => (
                                                     <i
@@ -554,21 +560,19 @@ const EditStore = () => {
 
                                                 <span>
                                                     {data.total_reviews > 0
-                                                        ? `${data.overall_reviews} (${data.total_reviews} ${data.total_reviews === 1 ? 'Review' : 'Reviews'
-                                                        })`
-                                                        : `(0 Review)`}
+                                                        ? `${data.overall_reviews} (${data.total_reviews} ${data.total_reviews === 1 ? __('Review', 'multivendorx') : __('Reviews', 'multivendorx')})`
+                                                        : `(${__('0 Review', 'multivendorx')})`}
                                                 </span>
                                             </div>
 
                                             <div className="des">
-                                                <b>Storefront link: </b>
+                                                <b>{__('Storefront link:', 'multivendorx')} </b>
                                                 {appLocalizer.store_page_url + '/'}
                                                 {data?.slug ? (
                                                     <>
                                                         {data.slug}{' '}
 
                                                         {(data?.status != 'pending' && data?.status != 'rejected' && data?.status != 'permanently_rejected') && (
-
                                                             <span className="edit-icon admin-badge blue" onClick={() => {
                                                                 navigate(`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`, {
                                                                     state: { highlightTarget: "store-slug" },
@@ -580,7 +584,7 @@ const EditStore = () => {
                                                                     });
                                                                 }, 500);
                                                             }}>
-                                                                <i className="adminlib-edit" ></i>
+                                                                <i className="adminlib-edit"></i>
                                                             </span>
                                                         )}
                                                     </>
@@ -594,11 +598,10 @@ const EditStore = () => {
                                         </div>
                                     </div>
                                     <div className="right-section">
-                                        <div className="tag-wrapper">
-
-                                        </div>
+                                        <div className="tag-wrapper"></div>
                                     </div>
                                 </div>
+
                             </div>
 
                         </div>
@@ -629,7 +632,7 @@ const EditStore = () => {
                                                         rel="noopener noreferrer"
                                                         className="item"
                                                     >
-                                                        <i className="adminlib-storefront"></i> View Storefront <i className="external adminlib-external"></i>
+                                                        <i className="adminlib-storefront"></i> {__('View Storefront', 'multivendorx')} <i className="external adminlib-external"></i>
                                                     </a>
                                                 </li>
                                             }
@@ -644,22 +647,22 @@ const EditStore = () => {
                                                     });
                                                 }, 5000);
                                             }}>
-                                                <span className="item"> <i className="adminlib-form-multi-select"></i> Manage status </span>
+                                                <span className="item"> <i className="adminlib-form-multi-select"></i> {__('Manage status', 'multivendorx')} </span>
                                             </li>
                                             <li>
                                                 <a
                                                     href={`${appLocalizer.admin_url}edit.php?post_type=product&multivendorx_store_id=${data.id}`}
                                                     className="item"
                                                 >
-                                                    <i className="adminlib-single-product"></i> Products
+                                                    <i className="adminlib-single-product"></i> {__('Products', 'multivendorx')}
                                                 </a>
                                             </li>
 
                                             <li onClick={() => {
                                                 navigate(`?page=multivendorx#&tab=reports`);
                                             }}
-                                            ><span className="item"><i className="adminlib-order"></i> Orders </span></li>
-                                            <li onClick={handleStoreDelete}><span className="item"> <i className="adminlib-delete"></i> Delete store </span></li>
+                                            ><span className="item"><i className="adminlib-order"></i> {__('Orders', 'multivendorx')} </span></li>
+                                            <li onClick={handleStoreDelete}><span className="item"> <i className="adminlib-delete"></i> {__('Delete store', 'multivendorx')} </span></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -667,9 +670,10 @@ const EditStore = () => {
                         </div>
                     </>
                 }
+
             />
 
-            < CommonPopup
+            <CommonPopup
                 open={deleteModal}
                 onClose={() => setDeleteModal(false)}
                 width="600px"
@@ -678,11 +682,13 @@ const EditStore = () => {
                     <>
                         <div className="title">
                             <i className="adminlib-storefront"></i>
-                            Manage store deletion
+                            {__('Manage store deletion', 'multivendorx')}
                         </div>
-                        <p>Choose the appropriate action to take when deleting this store.</p>
+                        <p>
+                            {__('Choose the appropriate action to take when deleting this store.', 'multivendorx')}
+                        </p>
                         <i
-                            onClose={() => setDeleteModal(false)}
+                            onClick={() => setDeleteModal(false)}
                             className="icon adminlib-close"
                         ></i>
                     </>
@@ -694,61 +700,64 @@ const EditStore = () => {
                             onClick={() => setDeleteModal(false)}
                             className="admin-btn btn-red"
                         >
-                            Cancel
+                            {__('Cancel', 'multivendorx')}
                         </button>
-                        <button onClick={() => {
-                            if (deleteOption) {
-                                deleteStoreApiCall(deleteOption);
-                            }
-                        }} className="admin-btn btn-purple">
-                            Delete
+                        <button
+                            onClick={() => {
+                                if (deleteOption) {
+                                    deleteStoreApiCall(deleteOption);
+                                }
+                            }}
+                            className="admin-btn btn-purple"
+                        >
+                            {__('Delete', 'multivendorx')}
                         </button>
                     </>
                 }
-
             >
                 <div className="content">
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label htmlFor="title">Deletion method</label>
+                            <label htmlFor="title">{__('Deletion method', 'multivendorx')}</label>
                             <ToggleSetting
                                 wrapperClass="setting-form-input"
                                 descClass="settings-metabox-description"
-                                // key='store_delete_option'
                                 options={[
                                     {
                                         value: 'set_store_owner',
                                         key: 'set_store_owner',
-                                        label: 'Change store owner',
+                                        label: __('Change store owner', 'multivendorx'),
                                     },
                                     {
                                         value: 'product_assign_admin',
                                         key: 'product_assign_admin',
-                                        label: 'Assign product to Admin',
+                                        label: __('Assign product to Admin', 'multivendorx'),
                                     },
                                     {
                                         value: 'permanent_delete',
                                         key: 'permanent_delete',
-                                        label: 'Permanently Delete',
+                                        label: __('Permanently Delete', 'multivendorx'),
                                     },
                                 ]}
                                 value={deleteOption}
-                                onChange={(value) => {
+                                onChange={(value: any) => {
                                     setDeleteOption(value);
                                     setSelectedOwner(null);
                                 }}
                             />
                         </div>
                         <div className="form-group">
-                            {deleteOption == 'set_store_owner' && (
+                            {deleteOption === 'set_store_owner' && (
                                 <>
-                                    <label htmlFor="title">Assign new store owner</label>
+                                    <label htmlFor="title">
+                                        {__('Assign new store owner', 'multivendorx')}
+                                    </label>
                                     <SelectInput
                                         name="new_owner"
                                         value={selectedOwner?.value}
                                         options={appLocalizer.store_owners}
                                         type="single-select"
-                                        onChange={(val) => {
+                                        onChange={(val: any) => {
                                             if (val) {
                                                 setSelectedOwner(val);
                                             }
@@ -759,7 +768,8 @@ const EditStore = () => {
                         </div>
                     </div>
                 </div>
-            </CommonPopup >
+            </CommonPopup>
+
 
         </>
     );

@@ -40,7 +40,7 @@ interface PaginationState {
   pageSize: number;
 }
 
-const RefundedOrderOld: React.FC = () => {
+const RefundedOrderReport: React.FC = () => {
   const [data, setData] = useState<StoreRow[] | null>(null);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [pagination, setPagination] = useState<PaginationState>({
@@ -408,4 +408,4 @@ const RefundedOrderOld: React.FC = () => {
   );
 };
 
-export default RefundedOrderOld;
+export default RefundedOrderReport;

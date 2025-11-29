@@ -28,24 +28,6 @@ import { getTourSteps } from './components/Tour/tourSteps';
 localStorage.setItem('force_multivendorx_context_reload', 'true');
 
 const profileItems = [
-  // {
-  //   title: "What's New",
-  //   icon: "adminlib-person",
-  //   link: appLocalizer?.pro_data?.manage_plan_url??'',
-  //   targetBlank: true,
-  // },
-  // {
-  //   title: "Get Support",
-  //   icon: "adminlib-person",
-  //   link: appLocalizer?.pro_data?.manage_plan_url??'',
-  //   targetBlank: true,
-  // },
-  // {
-  //   title: "FAQ",
-  //   icon: "adminlib-person",
-  //   link: appLocalizer?.pro_data?.manage_plan_url??'',
-  //   targetBlank: true,
-  // },
   {
     title: "What's New",
     icon: "adminlib-new",
@@ -70,12 +52,6 @@ const profileItems = [
     link: "https://multivendorx.com/docs/knowledgebase/?utm_source=settings&utm_medium=plugin&utm_campaign=promotion",
     targetBlank: true,
   },
-  // {
-  //   title: "FAQ",
-  //   icon: "adminlib-question-circle",
-  //   link: "https://multivendorx.com/docs/faqs/?utm_source=settings&utm_medium=plugin&utm_campaign=promotion",
-  //   targetBlank: true,
-  // },
   {
     title: "Request a Feature",
     icon: "adminlib-blocks",

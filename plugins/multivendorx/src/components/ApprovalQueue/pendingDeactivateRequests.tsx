@@ -20,7 +20,7 @@ interface Props {
     onUpdated?: () => void;
 }
 
-const DeactivateRequests: React.FC<Props> = ({ onUpdated }) => {
+const PendingDeactivateRequests: React.FC<Props> = ({ onUpdated }) => {
     const [data, setData] = useState<StoreRow[] | null>(null);
 
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -187,4 +187,4 @@ const DeactivateRequests: React.FC<Props> = ({ onUpdated }) => {
     );
 };
 
-export default DeactivateRequests;
+export default PendingDeactivateRequests;

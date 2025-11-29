@@ -6,6 +6,7 @@
  */
 
 namespace MultiVendorX;
+
 use MultiVendorX\Store\Store;
 use MultiVendorX\Store\StoreUtil;
 
@@ -25,15 +26,14 @@ class Product {
      * Constructor: Add hooks.
      */
     public function __construct() {
-        add_filter( 'manage_edit-product_columns', [ $this, 'add_store_column_to_product_list' ], 10 );
-        add_action( 'manage_product_posts_custom_column', [ $this, 'display_store_column_content' ], 10, 2 );
-        
-        add_action('restrict_manage_posts', [ $this, 'restrict_manage_posts' ] );
-        add_action('parse_query', [ $this, 'filter_products_by_store_query' ] );
+        add_filter( 'manage_edit-product_columns', array( $this, 'add_store_column_to_product_list' ), 10 );
+        add_action( 'manage_product_posts_custom_column', array( $this, 'display_store_column_content' ), 10, 2 );
 
-        add_action( 'woocommerce_product_bulk_edit_end', [ $this, 'add_product_store_bulk_edit' ]);
-        add_action( 'woocommerce_product_bulk_edit_save', [ $this, 'save_product_store_bulk_edit' ]);
+        add_action( 'restrict_manage_posts', array( $this, 'restrict_manage_posts' ) );
+        add_action( 'parse_query', array( $this, 'filter_products_by_store_query' ) );
 
+        add_action( 'woocommerce_product_bulk_edit_end', array( $this, 'add_product_store_bulk_edit' ) );
+        add_action( 'woocommerce_product_bulk_edit_save', array( $this, 'save_product_store_bulk_edit' ) );
     }
 
     /**
@@ -43,7 +43,7 @@ class Product {
      * @return array Modified columns.
      */
     public function add_store_column_to_product_list( $columns ) {
-        $new_columns = [];
+        $new_columns = array();
         foreach ( $columns as $key => $title ) {
             $new_columns[ $key ] = $title;
 
@@ -86,42 +86,44 @@ class Product {
         global $typenow;
 
         // Only show on Products admin list
-        if ($typenow !== 'product') {
+        if ( $typenow !== 'product' ) {
             return;
         }
 
-        $products = wc_get_products([
-            'limit'        => -1,
-            'return'       => 'ids',
-            'meta_key'     => 'multivendorx_store_id',
-            'meta_compare' => 'EXISTS',
-        ]);
+        $products = wc_get_products(
+            array(
+				'limit'        => -1,
+				'return'       => 'ids',
+				'meta_key'     => 'multivendorx_store_id',
+				'meta_compare' => 'EXISTS',
+            )
+        );
 
-        $store_ids = [];
-        foreach ($products as $product_id) {
-            $store_id = get_post_meta($product_id, 'multivendorx_store_id', true);
-            if (!empty($store_id)) {
-                $store_ids[$store_id] = $store_id;
+        $store_ids = array();
+        foreach ( $products as $product_id ) {
+            $store_id = get_post_meta( $product_id, 'multivendorx_store_id', true );
+            if ( ! empty( $store_id ) ) {
+                $store_ids[ $store_id ] = $store_id;
             }
         }
 
-        if (empty($store_ids)) {
+        if ( empty( $store_ids ) ) {
             return;
         }
 
         // Build dropdown
-        $selected_store = sanitize_text_field(filter_input(INPUT_GET, 'multivendorx_store_id', FILTER_DEFAULT)) ?: '';
+        $selected_store = sanitize_text_field( filter_input( INPUT_GET, 'multivendorx_store_id', FILTER_DEFAULT ) ) ?: '';
 
         echo '<select name="multivendorx_store_id">';
         echo '<option value="">Filter by Store</option>';
 
-        foreach ($store_ids as $store_id) {
+        foreach ( $store_ids as $store_id ) {
             $store = Store::get_store_by_id( $store_id );
             printf(
                 '<option value="%s" %s>%s</option>',
-                esc_attr($store_id),
-                selected($selected_store, $store_id, false),
-                esc_html($store->get('name'))
+                esc_attr( $store_id ),
+                selected( $selected_store, $store_id, false ),
+                esc_html( $store->get( 'name' ) )
             );
         }
 
@@ -131,22 +133,22 @@ class Product {
     /**
      * Filter products list by Store ID
      */
-    public function filter_products_by_store_query($query) {
+    public function filter_products_by_store_query( $query ) {
         global $typenow, $pagenow;
-        $store_id  = filter_input(INPUT_GET, 'multivendorx_store_id', FILTER_SANITIZE_NUMBER_INT);
+        $store_id = filter_input( INPUT_GET, 'multivendorx_store_id', FILTER_SANITIZE_NUMBER_INT );
 
         if (
             $pagenow === 'edit.php' &&
-            !empty($store_id) &&
+            ! empty( $store_id ) &&
             'product' == $typenow
         ) {
-            $meta_query = [
-                [
+            $meta_query = array(
+                array(
                     'key'   => 'multivendorx_store_id',
                     'value' => $store_id,
-                ],
-            ];
-            $query->set('meta_query', $meta_query);
+                ),
+            );
+            $query->set( 'meta_query', $meta_query );
         }
     }
 
@@ -178,5 +180,4 @@ class Product {
             update_post_meta( $product->get_id(), 'multivendorx_store_id', $store_id );
         }
     }
-
 }

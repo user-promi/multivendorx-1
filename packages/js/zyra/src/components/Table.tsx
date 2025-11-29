@@ -77,20 +77,19 @@ interface actionButton {
 }
 export const TableCell: React.FC<TableCellProps> = ({
     title,
-    fieldValue,
-    children,
+    fieldValue = '',
+    children = undefined,
     type = '',
-    header,
-    status,
-    onChange,
-    rowId,
-    onToggleRow,
-    rowData,
+    header = {},
+    status = '',
+    onChange = () => {},
+    rowId = null,
+    onToggleRow = () => {},
+    rowData = {},
 }) => {
     const [cellData, setCellData] = useState(fieldValue);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const [showDropdown, setShowDropdown] = useState<number | null>(null);
-
     const toggleDropdown = (id: number) => {
         setShowDropdown(prev => (prev === id ? null : id));
     };

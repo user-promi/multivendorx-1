@@ -200,12 +200,12 @@ const StoreReviews: React.FC = () => {
                         value={filterValue || ''}
                         className="basic-select"
                     >
-                        <option value="">All ratings</option>
-                        <option value="5">5 Stars & Up</option>
-                        <option value="4">4 Stars & Up</option>
-                        <option value="3">3 Stars & Up</option>
-                        <option value="2">2 Stars & Up</option>
-                        <option value="1">1 Star & Up</option>
+                        <option value="">{__('All ratings', 'multivendorx')}</option>
+                        <option value="5">{__('5 Stars & Up', 'multivendorx')}</option>
+                        <option value="4">{__('4 Stars & Up', 'multivendorx')}</option>
+                        <option value="3">{__('3 Stars & Up', 'multivendorx')}</option>
+                        <option value="2">{__('2 Stars & Up', 'multivendorx')}</option>
+                        <option value="1">{__('1 Star & Up', 'multivendorx')}</option>
                     </select>
 
                 </div>
@@ -508,7 +508,7 @@ const StoreReviews: React.FC = () => {
                                 onClick={handleSaveReply}
                                 className="admin-btn btn-purple"
                             >
-                                Save
+                                {__('Save', 'multivendorx')}
                             </button>
                         </>
                     }
@@ -549,7 +549,6 @@ const StoreReviews: React.FC = () => {
                                             </div>
                                         </div>
                                     )}
-
                                 </div>
 
                                 <div className="review">

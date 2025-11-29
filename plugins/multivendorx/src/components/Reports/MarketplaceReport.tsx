@@ -2,21 +2,13 @@ import React, { useEffect, useState } from "react";
 import { __ } from '@wordpress/i18n';
 import {
   ResponsiveContainer,
-  LineChart,
-  Line,
-  CartesianGrid,
-  XAxis,
-  YAxis,
   Tooltip,
   Legend,
-  BarChart,
-  Bar,
   PieChart,
   Pie,
   Cell,
 } from "recharts";
 import axios from "axios";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { getApiLink } from "zyra";
 import { formatCurrency } from "@/services/commonFunction";
 
@@ -26,12 +18,8 @@ type Stat = {
   icon: string;
   label: string;
 };
-type Product = {
-  id: number;
-  title: string;
-  price: string;
-};
-type OverviewProps = {
+
+type MarketplaceReportProps = {
   overview: Stat[];
   data: { month: string; revenue: number; net_sale: number; admin_amount: number }[];
   overviewData: { name: string; orders: number; sold_out: number }[];
@@ -39,7 +27,7 @@ type OverviewProps = {
   COLORS?: string[];
 };
 
-const Overview: React.FC<OverviewProps> = ({ }) => {
+const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
   const [commissionDetails, setCommissionDeatils] = useState<any[]>([]);
   const [earningSummary, setEarningSummary] = useState<any[]>([]);
   const [pieData, setPieData] = useState<any>([]);
@@ -290,7 +278,8 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
 
     fetchCommissionDetails();
   }, []);
-  console.log('site_urlcus', topCustomers)
+
+
   return (
     <>
       <div className="row">
@@ -302,22 +291,22 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
                   <i className={item.icon}></i>
                 </div>
                 <div className="details">
-                  <div className="number"><Counter value={item.count} format={formatCurrency} /></div>
-                  <div className="text">{item.label}</div>
+                  <div className="number">
+                    <Counter value={item.count} format={formatCurrency} />
+                  </div>
+                  <div className="text">{__(item.label, 'multivendorx')}</div>
                 </div>
               </div>
             ))}
-
           </div>
         </div>
       </div>
+
       <div className="row">
         <div className="column">
           <div className="card-header">
             <div className="left">
-              <div className="title">
-                Revenue breakdown
-              </div>
+              <div className="title">{__('Revenue breakdown', 'multivendorx')}</div>
             </div>
           </div>
           <div className="top-items">
@@ -335,12 +324,11 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
             ))}
           </div>
         </div>
-        <div className="column ">
+
+        <div className="column">
           <div className="card-header">
             <div className="left">
-              <div className="title">
-                Revenue Breakdown
-              </div>
+              <div className="title">{__('Revenue breakdown', 'multivendorx')}</div>
             </div>
           </div>
 
@@ -355,7 +343,9 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
                   cy="50%"
                   outerRadius={140}
                   innerRadius={80}
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(1)}%`}
+                  label={({ name, percent }) =>
+                    `${name} ${(percent * 100).toFixed(1)}%`
+                  }
                   labelLine={false}
                   isAnimationActive={true}
                 >
@@ -387,7 +377,7 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
         <div className="column">
           <div className="card-header">
             <div className="left">
-              <div className="title">Top Selling Coupons</div>
+              <div className="title">{__('Top Selling Coupons', 'multivendorx')}</div>
             </div>
           </div>
 
@@ -415,13 +405,15 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
                         {coupon.code}
                       </a>
                     </div>
-                    <div className="des">Used {coupon.usage_count || 0} times</div>
+                    <div className="des">
+                      {__('Used', 'multivendorx')} {coupon.usage_count || 0} {__('times', 'multivendorx')}
+                    </div>
                     {coupon.description && (
                       <div className="des">{coupon.description}</div>
                     )}
                     {coupon.store_name && (
                       <div className="des">
-                        <b> Store: </b>{coupon.store_name}
+                        <b>{__('Store:', 'multivendorx')}</b> {coupon.store_name}
                       </div>
                     )}
                   </div>
@@ -441,14 +433,15 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
               </div>
             ))
           ) : (
-            <p>No top coupons found.</p>
+            <p>{__('No top coupons found.', 'multivendorx')}</p>
           )}
         </div>
+
 
         <div className="column">
           <div className="card-header">
             <div className="left">
-              <div className="title">Top Customers</div>
+              <div className="title">{__('Top Customers', 'multivendorx')}</div>
             </div>
           </div>
 
@@ -466,7 +459,6 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
                         <span>{((customer.name?.trim() || customer.username)?.charAt(0) || "").toUpperCase()}</span>
                       </div>
                     </a>
-
                   </div>
 
                   <div className="details">
@@ -479,8 +471,12 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
                         {customer.name?.trim() || customer.username}
                       </a>
                     </div>
-                    <div className="des">Orders: {customer.orders_count || 0}</div>
-                    <div className="des">{customer.email || 'No email'}</div>
+                    <div className="des">
+                      {__('Orders', 'multivendorx')}: {customer.orders_count || 0}
+                    </div>
+                    <div className="des">
+                      {customer.email || __('No email', 'multivendorx')}
+                    </div>
                   </div>
                 </div>
 
@@ -492,14 +488,15 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
               </div>
             ))
           ) : (
-            <p>No top customers found.</p>
+            <p>{__('No top customers found.', 'multivendorx')}</p>
           )}
         </div>
+
 
         <div className="column">
           <div className="card-header">
             <div className="left">
-              <div className="title">Top Stores</div>
+              <div className="title">{__('Top Stores', 'multivendorx')}</div>
             </div>
           </div>
 
@@ -513,9 +510,7 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <div >
-                        { }
-                      </div>
+                      <div></div>
                       <div className="avatar">
                         <span>{((store.store_name?.trim())?.charAt(0) || "").toUpperCase()}</span>
                       </div>
@@ -533,10 +528,10 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
                       </a>
                     </div>
                     <div className="des">
-                      Commission: {formatCurrency(store.commission_total || 0)}
+                      {__('Commission', 'multivendorx')}: {formatCurrency(store.commission_total || 0)}
                     </div>
                     <div className="des">
-                      Refunded: {formatCurrency(store.commission_refunded || 0)}
+                      {__('Refunded', 'multivendorx')}: {formatCurrency(store.commission_refunded || 0)}
                     </div>
                   </div>
                 </div>
@@ -549,13 +544,13 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
               </div>
             ))
           ) : (
-            <p>No top stores found.</p>
+            <p>{__('No top stores found.', 'multivendorx')}</p>
           )}
-
         </div>
+
       </div>
     </>
   );
 };
 
-export default Overview;
+export default MarketplaceReport;

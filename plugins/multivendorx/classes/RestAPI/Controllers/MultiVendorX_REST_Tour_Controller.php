@@ -77,16 +77,42 @@ class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
      * Get tour status
      */
     public function get_items( $request ) {
+        $nonce = $request->get_header( 'X-WP-Nonce' );
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-        // Directly fetch stored value
-        $status = get_option( 'multivendorx_tour_active', false );
+            // Log the error
+            if ( is_wp_error( $error ) ) {
+                MultiVendorX()->util->log(
+                    'MVX REST Error: ' .
+                    'Code=' . $error->get_error_code() . '; ' .
+                    'Message=' . $error->get_error_message() . '; ' .
+                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
+                );
+            }            
 
-        // Force boolean
-        $status = filter_var( $status, FILTER_VALIDATE_BOOLEAN );
+            return $error;
+        }
+        try{
+            // Directly fetch stored value
+            $status = get_option( 'multivendorx_tour_active', false );
 
-        return array(
-            'active' => $status,
-        );
+            // Force boolean
+            $status = filter_var( $status, FILTER_VALIDATE_BOOLEAN );
+
+            return array(
+                'active' => $status,
+            );
+        }catch ( \Exception $e ) {
+            MultiVendorX()->util->log(
+                'MVX REST Exception: ' .
+                'Message=' . $e->getMessage() . '; ' .
+                'File=' . $e->getFile() . '; ' .
+                'Line=' . $e->getLine() . "\n\n"
+            );        
+
+            return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
+        }
     }
 
     /**
@@ -97,7 +123,34 @@ class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
      */
     // active boolean required
     public function create_item( $request ) {
-        update_option( 'multivendorx_tour_active', $request->get_param( 'active' ) );
-        return array( 'success' => true );
+        $nonce = $request->get_header( 'X-WP-Nonce' );
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
+
+            // Log the error
+            if ( is_wp_error( $error ) ) {
+                MultiVendorX()->util->log(
+                    'MVX REST Error: ' .
+                    'Code=' . $error->get_error_code() . '; ' .
+                    'Message=' . $error->get_error_message() . '; ' .
+                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
+                );
+            }            
+
+            return $error;
+        }
+        try{
+            update_option( 'multivendorx_tour_active', $request->get_param( 'active' ) );
+            return array( 'success' => true );
+        }catch ( \Exception $e ) {
+            MultiVendorX()->util->log(
+                'MVX REST Exception: ' .
+                'Message=' . $e->getMessage() . '; ' .
+                'File=' . $e->getFile() . '; ' .
+                'Line=' . $e->getLine() . "\n\n"
+            );        
+
+            return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
+        }
     }
 }

@@ -13,7 +13,7 @@ if ( empty( $store_tabs ) ) {
 }
 
 $current_tab = 'products'; // default
-$request_url = trailingslashit( home_url( add_query_arg( [], $wp->request ) ) );
+$request_url = trailingslashit( home_url( add_query_arg( array(), $wp->request ) ) );
 
 // Loop through tabs
 foreach ( $store_tabs as $key => $tab ) {
@@ -44,11 +44,11 @@ foreach ( $store_tabs as $key => $tab ) {
 <?php
 switch ( $current_tab ) {
     case 'reviews':
-        MultiVendorX()->util->get_template( 'store/store-review.php', ['store_id' => $store_id] );
+        MultiVendorX()->util->get_template( 'store/store-review.php', array( 'store_id' => $store_id ) );
         break;
 
     case 'policy':
-        MultiVendorX()->util->get_template( 'store/store-policy.php', ['store_id' => $store_id] );
+        MultiVendorX()->util->get_template( 'store/store-policy.php', array( 'store_id' => $store_id ) );
         break;
 
     case 'products':
@@ -69,7 +69,10 @@ switch ( $current_tab ) {
 
 				<?php woocommerce_product_loop_start(); ?>
 
-					<?php while ( have_posts() ) : the_post(); ?>
+					<?php
+                    while ( have_posts() ) :
+						the_post();
+						?>
 
 						<?php
 						/**

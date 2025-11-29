@@ -44,10 +44,10 @@ class Module {
      */
     public function init_classes() {
         $this->container['frontend'] = new Frontend();
-        $this->container['admin'] = new Admin();
-        $this->container['util'] = new Util();
-        $this->container['ajax'] = new Ajax();
-        $this->container['rest'] = new MultiVendorX_REST_Qna_Controller();
+        $this->container['admin']    = new Admin();
+        $this->container['util']     = new Util();
+        $this->container['ajax']     = new Ajax();
+        $this->container['rest']     = new MultiVendorX_REST_Qna_Controller();
     }
 
     /**
