@@ -5,10 +5,10 @@
  * @package MultiVendorX
  */
 
-namespace MultiVendorX\Announcement;
+namespace MultiVendorX\DistanceShipping;
 
 /**
- * MultiVendorX Store Policy Module class
+ * MultiVendorX Module class
  *
  * @class       Module class
  * @version     6.0.0
@@ -35,6 +35,8 @@ class Module {
     public function __construct() {
         // Init helper classes.
         $this->init_classes();
+        // Register WooCommerce shipping method
+         add_filter('woocommerce_shipping_methods', [ $this, 'register_shipping_method' ]);
     }
 
     /**
@@ -43,6 +45,7 @@ class Module {
      * @return void
      */
     public function init_classes() {
+        $this->container['distance_shipping'] = new Shipping();
         $this->container['frontend'] = new Frontend();
     }
 
@@ -84,5 +87,12 @@ class Module {
         }
 
         return self::$instance;
+    }
+    /**
+     * Register the shipping method for WooCommerce
+     */
+    public function register_shipping_method( $methods ) {
+        $methods['multivendorx_distance_shipping'] = Shipping::class;
+        return $methods;
     }
 }
