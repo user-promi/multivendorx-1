@@ -84,13 +84,19 @@ class Rewrites {
                 '^' . $this->custom_store_url . '/([^/]+)/page/([0-9]{1,})/?$',
                 'index.php?' . $this->custom_store_url . '=$matches[1]&paged=$matches[2]',
                 'top',
-            ),
-            array(
-                '^dashboard/([^/]+)/?([^/]*)/?([0-9]*)/?$',
-                'index.php?page_id=' . $page_id . '&segment=$matches[1]&element=$matches[2]&context_id=$matches[3]',
-                'top',
-            ),
+            ],     
+            [
 
+                '^dashboard/([^/]*)/?',
+                'index.php?page_id=' . $page_id . '&segment=$matches[1]',
+                'top'
+            ]    
+            // [
+            //     '^dashboard/([^/]+)/?([^/]*)/?([0-9]*)/?$',
+            //     'index.php?page_id=' . $page_id . '&segment=$matches[1]&element=$matches[2]&context_id=$matches[3]',
+            //     'top'
+            // ]
+    
             // oldddd
             // [
             // '^dashboard/?$',
@@ -109,8 +115,8 @@ class Rewrites {
         $rules = apply_filters( 'multivendorx_rewrite_rules', $rules, $this );
 
         add_rewrite_tag( '%segment%', '([^/]+)' );
-        add_rewrite_tag( '%element%', '([^/]*)' );
-        add_rewrite_tag( '%context_id%', '([0-9]*)' );
+        // add_rewrite_tag( '%element%', '([^/]*)' );
+        // add_rewrite_tag( '%context_id%', '([0-9]*)' );
 
         foreach ( $rules as $rule ) {
             add_rewrite_rule( $rule[0], $rule[1], $rule[2] );
@@ -120,8 +126,8 @@ class Rewrites {
     public function register_query_var( $vars ) {
         $vars[] = $this->custom_store_url;
         $vars[] = 'segment';
-        $vars[] = 'element';
-        $vars[] = 'context_id';
+        // $vars[] = 'element';
+        // $vars[] = 'context_id';
 
         return apply_filters( 'multivendorx_query_vars', $vars, $this );
     }
