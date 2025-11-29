@@ -175,7 +175,7 @@ const EditStore = () => {
         });
     };
 
-    const tabData = useMemo(() => [
+    const tabData = [
         {
             type: 'file',
             content: {
@@ -208,6 +208,7 @@ const EditStore = () => {
         },
         {
             type: 'file',
+            module: "store-shipping",
             content: {
                 id: 'shipping',
                 name: 'Shipping',
@@ -216,26 +217,13 @@ const EditStore = () => {
                 icon: 'adminlib-credit-card',
             },
         },
-        ...(modules.includes('store-policy')
-            ? [
-                {
-                    type: 'file',
-                    content: {
-                        id: 'store-policy',
-                        name: 'Policy',
-                        desc: 'Policy',
-                        hideTabHeader: true,
-                        icon: 'adminlib-credit-card',
-                    },
-                },
-            ]
-            : []),
         {
             type: 'file',
+            module: "store-policy",
             content: {
-                id: 'staff',
-                name: 'Staff',
-                desc: 'Staff',
+                id: 'store-policy',
+                name: 'Policy',
+                desc: 'Policy',
                 hideTabHeader: true,
                 icon: 'adminlib-credit-card',
             },
@@ -250,22 +238,18 @@ const EditStore = () => {
                 icon: 'adminlib-credit-card',
             },
         },
-        ...(modules.includes('facilitator')
-            ? [
-                {
-                    type: 'file',
-                    content: {
-                        id: 'store-facilitator',
-                        name: 'Facilitator',
-                        desc: 'Facilitator',
-                        hideTabHeader: true,
-                        icon: 'adminlib-credit-card',
-                    },
-                },
-            ]
-            : []),
-    ], [modules]);
-
+        {
+            type: 'file',
+            module: "facilitator",
+            content: {
+                id: 'store-facilitator',
+                name: 'Facilitator',
+                desc: 'Facilitator',
+                hideTabHeader: true,
+                icon: 'adminlib-credit-card',
+            },
+        },
+    ].filter(tab => !tab.module || modules.includes(tab.module));
 
     const handleUpdateData = useCallback((updatedFields: any) => {
         setData(prev => ({ ...prev, ...updatedFields }));
