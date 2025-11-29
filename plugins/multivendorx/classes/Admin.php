@@ -6,6 +6,7 @@
  */
 
 namespace MultiVendorX;
+
 use MultiVendorX\Store\Store;
 use MultiVendorX\Commission\CommissionUtil;
 
@@ -38,25 +39,24 @@ class Admin {
 		add_filter( 'woocommerce_product_data_tabs', array( $this, 'add_store_tab_in_product' ) );
         add_action( 'woocommerce_product_data_panels', array( $this, 'add_additional_product_data_panels' ) );
         add_action( 'woocommerce_process_product_meta', array( $this, 'save_store_in_product' ) );
-        add_action( 'wp_ajax_search_stores', array( $this, 'multivendorx_get_stores' ));
+        add_action( 'wp_ajax_search_stores', array( $this, 'multivendorx_get_stores' ) );
         // For Variation
-        add_action('woocommerce_product_after_variable_attributes', array($this, 'add_variation_settings'), 10, 3);
-        add_action( 'woocommerce_save_product_variation', array($this, 'save_commission_field_variations'), 10, 2 );
+        add_action( 'woocommerce_product_after_variable_attributes', array( $this, 'add_variation_settings' ), 10, 3 );
+        add_action( 'woocommerce_save_product_variation', array( $this, 'save_commission_field_variations' ), 10, 2 );
         // For Category
-        add_action('product_cat_add_form_fields', array($this, 'add_product_cat_commission_fields'));
-        add_action('product_cat_edit_form_fields', array($this, 'edit_product_cat_commission_fields'), 10);
-        add_action('created_term', array($this, 'save_product_cat_commission_fields'), 10, 3);
-        add_action('edit_term', array($this, 'save_product_cat_commission_fields'), 10, 3);
+        add_action( 'product_cat_add_form_fields', array( $this, 'add_product_cat_commission_fields' ) );
+        add_action( 'product_cat_edit_form_fields', array( $this, 'edit_product_cat_commission_fields' ), 10 );
+        add_action( 'created_term', array( $this, 'save_product_cat_commission_fields' ), 10, 3 );
+        add_action( 'edit_term', array( $this, 'save_product_cat_commission_fields' ), 10, 3 );
 
-        //add store tab in coupons section backend
-        add_filter('woocommerce_coupon_data_tabs', array($this, 'add_store_tab_in_coupon'));
-        add_action('woocommerce_coupon_data_panels', array($this, 'add_content_in_store_tab'), 10, 1);
-        add_action('woocommerce_coupon_options_save', array($this, 'save_store_in_coupon'), 10, 2);
-    
+        // add store tab in coupons section backend
+        add_filter( 'woocommerce_coupon_data_tabs', array( $this, 'add_store_tab_in_coupon' ) );
+        add_action( 'woocommerce_coupon_data_panels', array( $this, 'add_content_in_store_tab' ), 10, 1 );
+        add_action( 'woocommerce_coupon_options_save', array( $this, 'save_store_in_coupon' ), 10, 2 );
+
         // Display radios after order actions for COD order if shipping not found
-        add_action( 'add_meta_boxes', array($this, 'add_option_for_payment'), 10, 2);
-        add_action( 'woocommerce_process_shop_order_meta', array($this, 'save_option_for_payment'));
-
+        add_action( 'add_meta_boxes', array( $this, 'add_option_for_payment' ), 10, 2 );
+        add_action( 'woocommerce_process_shop_order_meta', array( $this, 'save_option_for_payment' ) );
     }
 
     /**
@@ -71,7 +71,7 @@ class Admin {
                 'multivendorx',
                 array( $this, 'create_setting_page' ),
                 'data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIKCSB2aWV3Qm94PSIwIDAgMjU2IDI1NiIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMjU2IDI1NjsiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8c3R5bGUgdHlwZT0idGV4dC9jc3MiPgoJLnN0MHtmaWxsOiNmZmY7fQo8L3N0eWxlPgo8Zz4KCTxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik0yMTUuMDksNTYuNTlDOTcuMiw4Ni45MSw0OC4wMiwyNC45MywyMy4wOSw2Mi42NWMtMTMuNDcsMjEuNTYsMy4zNyw5Ny42OCwxNS40OSwxNjYuNAoJCWMyNS42LDE2Ljg0LDU2LjU5LDI2Ljk1LDg5LjYsMjYuOTVjMzQuMzYsMCw2Ni42OS0xMC43OCw5Mi45Ny0yOC45N0MyMzguNjcsMTU3LjY0LDI1MC4xMyw0Ny44MywyMTUuMDksNTYuNTl6IE0xNDYuMzYsMjA2LjgzCgkJbC0xNi45OC0yMS45OGwtMTYuOTgsMjEuOThINjcuNzRsMzkuNzktNDguNDdMNzAuMzMsMTEyLjdoNDQuODVsMTQuMjcsMTkuMTVsMTQuNTItMTkuMTVoNDQuNjZsLTM3LjAzLDQ1LjU1bDM5LjgsNDguNTdIMTQ2LjM2eiIKCQkvPgoJPHBhdGggY2xhc3M9InN0MCIgZD0iTTkyLjQ4LDM1LjcxYzAtMTYuMTcsMTMuNDctMjkuNjQsMjkuNjQtMjkuNjRoMTYuMTdjMTYuMTcsMCwyOS42NCwxMy40NywyOS42NCwyOS42NHYyMi4yMwoJCWMyLjAyLDAsNC4wNCwwLDYuMDYtMC42N1YzNS43MUMxNzQsMTYuMTcsMTU4LjUxLDAsMTM4LjI5LDBoLTE2LjE3Yy0xOS41NCwwLTM1LjcxLDE2LjE3LTM1LjcxLDM1LjcxdjE0LjgyCgkJYzIuMDIsMC42Nyw0LjA0LDAuNjcsNi4wNiwxLjM1VjM1LjcxeiIvPgo8L2c+Cjwvc3ZnPgo=',
-                 50
+                50
             );
 
             $pro_sticker = ! Utill::is_khali_dabba() ?
@@ -92,81 +92,84 @@ class Admin {
                 "
             > Pro </span>' : '';
 
-            $commission_count = CommissionUtil::get_commissions(['status' => 'unpaid'], true, true);
+            $commission_count = CommissionUtil::get_commissions( array( 'status' => 'unpaid' ), true, true );
             // Array contain multivendorx submenu.
-            $submenus = apply_filters('multivendorx_submenus',array(
-                'dashboard' => array(
-                    'name'   => __( 'Dashboard', 'multivendorx' ),
-                    'subtab' => '',
-                ),
-                'stores' => array(
-                    'name'   => __( 'Stores', 'multivendorx' ),
-                    'subtab' => '',
-                ),
-                'commissions' => array(
-                    'name'   => __( 'Commissions', 'multivendorx' ),
-                    'subtab' => '',
-                    'count'  => $commission_count,
-                ),
-                'transaction-history' => array(
-                    'name'   => __( 'Transaction History', 'multivendorx' ),
-                    'subtab' => '',
-                ),
-                'approval-queue' => array(
-                    'name'   => __( 'Approval Queue', 'multivendorx' ),
-                    'subtab' => '',
-                ),
-                'customer-support' => array(
-                    'name'   => __( 'Customer Support', 'multivendorx' ),
-                    'subtab' => '',
-                ),
-                // 'advertisement' => array(
-                //     'name'   => __( 'Advertisement', 'multivendorx' ),
-                //     'subtab' => '',
-                // ),
-                'reports' => array(
-                    'name'   => __( 'Reports', 'multivendorx' ),
-                    'subtab' => '',
-                ),
-                // 'memberships' => array(
-                //     'name'   => __( 'Memberships', 'multivendorx' ),
-                //     'subtab' => 'payment-membership-message',
-                // ),
-                'settings' => array(
-                    'name'   => __( 'Settings', 'multivendorx' ),
-                    'subtab' => 'marketplace-settings',
-                ),
-                'modules' => array(
-                    'name'   => __( 'Modules', 'multivendorx' ),
-                    'subtab' => '',
-                ),
-                'status-tools' => array(
-                    'name'   => __( 'Status & Tools', 'multivendorx' ),
-                    'subtab' => 'system-status',
-                ),
-                // 'announcement' => array(
-                //     'name'   => __( 'Announcement', 'multivendorx' ),
-                //     'subtab' => '',
-                // ),
-                // 'knowledgebase' => array(
-                //     'name'   => __( 'Knowledgebase', 'multivendorx' ),
-                //     'subtab' => '',
-                // ),
+            $submenus = apply_filters(
+                'multivendorx_submenus',
+                array(
+					'dashboard'           => array(
+						'name'   => __( 'Dashboard', 'multivendorx' ),
+						'subtab' => '',
+					),
+					'stores'              => array(
+						'name'   => __( 'Stores', 'multivendorx' ),
+						'subtab' => '',
+					),
+					'commissions'         => array(
+						'name'   => __( 'Commissions', 'multivendorx' ),
+						'subtab' => '',
+						'count'  => $commission_count,
+					),
+					'transaction-history' => array(
+						'name'   => __( 'Transaction History', 'multivendorx' ),
+						'subtab' => '',
+					),
+					'approval-queue'      => array(
+						'name'   => __( 'Approval Queue', 'multivendorx' ),
+						'subtab' => '',
+					),
+					'customer-support'    => array(
+						'name'   => __( 'Customer Support', 'multivendorx' ),
+						'subtab' => '',
+					),
+					// 'advertisement' => array(
+					// 'name'   => __( 'Advertisement', 'multivendorx' ),
+					// 'subtab' => '',
+					// ),
+					'reports'             => array(
+						'name'   => __( 'Reports', 'multivendorx' ),
+						'subtab' => '',
+					),
+					// 'memberships' => array(
+					// 'name'   => __( 'Memberships', 'multivendorx' ),
+					// 'subtab' => 'payment-membership-message',
+					// ),
+					'settings'            => array(
+						'name'   => __( 'Settings', 'multivendorx' ),
+						'subtab' => 'marketplace-settings',
+					),
+					'modules'             => array(
+						'name'   => __( 'Modules', 'multivendorx' ),
+						'subtab' => '',
+					),
+					'status-tools'        => array(
+						'name'   => __( 'Status & Tools', 'multivendorx' ),
+						'subtab' => 'system-status',
+					),
+					// 'announcement' => array(
+					// 'name'   => __( 'Announcement', 'multivendorx' ),
+					// 'subtab' => '',
+					// ),
+					// 'knowledgebase' => array(
+					// 'name'   => __( 'Knowledgebase', 'multivendorx' ),
+					// 'subtab' => '',
+					// ),
 
-                // 'blogs' => array(
-                //     'name'   => __( 'Blogs', 'multivendorx' ),
-                //     'subtab' => '',
-                // ),
-                'help-support' => array(
-                    'name'   => __( 'Help & Support', 'multivendorx' ),
-                    'subtab' => '',
-                ),
-                'notifications' => array(
-                    'name'   => '',
-                    'subtab' => '',
-                ),
-            ));
-            
+					// 'blogs' => array(
+					// 'name'   => __( 'Blogs', 'multivendorx' ),
+					// 'subtab' => '',
+					// ),
+					'help-support'        => array(
+						'name'   => __( 'Help & Support', 'multivendorx' ),
+						'subtab' => '',
+					),
+					'notifications'       => array(
+						'name'   => '',
+						'subtab' => '',
+					),
+                )
+            );
+
             foreach ( $submenus as $slug => $submenu ) {
                 // prepare subtab if subtab is exist.
                 $subtab = '';
@@ -179,10 +182,10 @@ class Admin {
 
                 if ( isset( $submenu['count'] ) && $submenu['count'] > 0 ) {
                     $menu_name = $menu_name . " <span class='update-plugins count-" . intval( $submenu['count'] ) . "' style='margin-left:0.313rem'>
-                                    <span class='plugin-count'>" . intval( $submenu['count'] ) . "</span>
-                                 </span>";
+                                    <span class='plugin-count'>" . intval( $submenu['count'] ) . '</span>
+                                 </span>';
                 }
-                
+
                 add_submenu_page(
                     'multivendorx',
                     $submenu['name'],
@@ -191,8 +194,6 @@ class Admin {
                     'multivendorx#&tab=' . $slug . $subtab,
                     '__return_null'
                 );
-                
-
             }
 
             // Register upgrade to pro submenu page.
@@ -215,7 +216,7 @@ class Admin {
             }
 
             remove_submenu_page( 'multivendorx', 'multivendorx' );
-            remove_submenu_page('multivendorx', 'multivendorx#&tab=notifications');
+            remove_submenu_page( 'multivendorx', 'multivendorx#&tab=notifications' );
         }
     }
 
@@ -327,8 +328,8 @@ class Admin {
 	public function add_additional_product_data_panels() {
 		global $post;
 
-        $linked_store = get_post_meta( $post->ID, 'multivendorx_store_id', true );
-        $product_fixed_commission = get_post_meta( $post->ID, 'multivendorx_product_fixed_commission', true );
+        $linked_store                  = get_post_meta( $post->ID, 'multivendorx_store_id', true );
+        $product_fixed_commission      = get_post_meta( $post->ID, 'multivendorx_product_fixed_commission', true );
         $product_percentage_commission = get_post_meta( $post->ID, 'multivendorx_product_percentage_commission', true );
 
         ?>
@@ -346,7 +347,7 @@ class Admin {
                     if ( $linked_store ) {
                         $store = Store::get_store_by_id( $linked_store );
                         if ( $store ) {
-                            echo '<option value="' . esc_attr( $store->get_id() ) . '" selected="selected">' . esc_html( $store->get('name') ) . '</option>';
+                            echo '<option value="' . esc_attr( $store->get_id() ) . '" selected="selected">' . esc_html( $store->get( 'name' ) ) . '</option>';
                         }
                     }
                     ?>
@@ -386,11 +387,11 @@ class Admin {
         <?php
     }
 
-    public function save_store_in_product($post_id) {
-        $linked_store_id = absint( filter_input( INPUT_POST, 'linked_store' ) );
-        $fixed_commission_per_product = absint( filter_input( INPUT_POST, 'product_fixed_commission' ) );
+    public function save_store_in_product( $post_id ) {
+        $linked_store_id                   = absint( filter_input( INPUT_POST, 'linked_store' ) );
+        $fixed_commission_per_product      = absint( filter_input( INPUT_POST, 'product_fixed_commission' ) );
         $percentage_commission_per_product = absint( filter_input( INPUT_POST, 'product_percentage_commission' ) );
-        
+
         if ( $linked_store_id ) {
             update_post_meta( $post_id, 'multivendorx_store_id', $linked_store_id );
         }
@@ -404,31 +405,35 @@ class Admin {
         }
     }
 
-    public function add_variation_settings($loop, $variation_data, $variation) {
+    public function add_variation_settings( $loop, $variation_data, $variation ) {
         $commission_percentage = $commission_fixed = '';
-        $commission_percentage = get_post_meta($variation->ID, 'multivendorx_variable_product_percentage_commission', true);
-        $commission_fixed = get_post_meta($variation->ID, 'multivendorx_variable_product_fixed_commission', true);
+        $commission_percentage = get_post_meta( $variation->ID, 'multivendorx_variable_product_percentage_commission', true );
+        $commission_fixed      = get_post_meta( $variation->ID, 'multivendorx_variable_product_fixed_commission', true );
 
-        woocommerce_wp_text_input( array(
-            'id'            => 'variable_product_fixed_commission[' . $variation->ID . ']',
-            'label'         => __( 'Commission Fixed', 'multivendorx' ),
-            'desc_tip'      => true,
-            'description'   => __( 'Fixed Commission.', 'multivendorx' ),
-            'value'         => $commission_fixed ?? '',
-        ) );
+        woocommerce_wp_text_input(
+            array(
+				'id'          => 'variable_product_fixed_commission[' . $variation->ID . ']',
+				'label'       => __( 'Commission Fixed', 'multivendorx' ),
+				'desc_tip'    => true,
+				'description' => __( 'Fixed Commission.', 'multivendorx' ),
+				'value'       => $commission_fixed ?? '',
+            )
+        );
 
-        woocommerce_wp_text_input( array(
-            'id'            => 'variable_product_percentage_commission[' . $variation->ID . ']',
-            'label'         => __( 'Commission Percentage', 'multivendorx' ),
-            'desc_tip'      => true,
-            'description'   => __( 'Percentage Commission.', 'multivendorx' ),
-            'value'         => $commission_percentage ?? '',
-        ) );
+        woocommerce_wp_text_input(
+            array(
+				'id'          => 'variable_product_percentage_commission[' . $variation->ID . ']',
+				'label'       => __( 'Commission Percentage', 'multivendorx' ),
+				'desc_tip'    => true,
+				'description' => __( 'Percentage Commission.', 'multivendorx' ),
+				'value'       => $commission_percentage ?? '',
+            )
+        );
     }
 
     public function save_commission_field_variations( $variation_id, $i ) {
-        $fixed_commissions       = filter_input( INPUT_POST, 'variable_product_fixed_commission', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-        $percentage_commissions  = filter_input( INPUT_POST, 'variable_product_percentage_commission', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $fixed_commissions      = filter_input( INPUT_POST, 'variable_product_fixed_commission', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $percentage_commissions = filter_input( INPUT_POST, 'variable_product_percentage_commission', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 
         if ( isset( $fixed_commissions[ $variation_id ] ) ) {
             $fixed_commission = wc_format_decimal( $fixed_commissions[ $variation_id ] );
@@ -447,11 +452,11 @@ class Admin {
     public function add_product_cat_commission_fields() {
         ?>
             <div class="form-field term-display-type-wrap">
-                <label for="category_percentage_commission"><?php _e('Commission Percentage', 'multivendorx'); ?></label>
+                <label for="category_percentage_commission"><?php _e( 'Commission Percentage', 'multivendorx' ); ?></label>
                 <input type="number" class="short" name="category_percentage_commission" id="category_percentage_commission" value="" placeholder="">
             </div>
             <div class="form-field term-display-type-wrap">
-                <label for="category_fixed_commission"><?php _e('Commission Fixed', 'multivendorx'); ?></label>
+                <label for="category_fixed_commission"><?php _e( 'Commission Fixed', 'multivendorx' ); ?></label>
                 <input type="number" class="short" name="category_fixed_commission" id="category_fixed_commission" value="" placeholder="">
             </div>
         <?php
@@ -459,19 +464,20 @@ class Admin {
 
     /**
      * Add commission field in edit category page
+     *
      * @param Object $term
      */
-    public function edit_product_cat_commission_fields($term) {
-        $commission_percentage = get_term_meta($term->term_id, 'multivendorx_category_percentage_commission', true);
-        $commision_fixed = get_term_meta($term->term_id, 'multivendorx_category_fixed_commission', true);
+    public function edit_product_cat_commission_fields( $term ) {
+        $commission_percentage = get_term_meta( $term->term_id, 'multivendorx_category_percentage_commission', true );
+        $commision_fixed       = get_term_meta( $term->term_id, 'multivendorx_category_fixed_commission', true );
         ?>
         <tr class="form-field">
-            <th scope="row" valign="top"><label for="category_percentage_commission"><?php _e('Commission Percentage', 'multivendorx'); ?></label></th>
+            <th scope="row" valign="top"><label for="category_percentage_commission"><?php _e( 'Commission Percentage', 'multivendorx' ); ?></label></th>
             <td><input type="number" class="short" name="category_percentage_commission" id="category_percentage_commission" value="<?php echo $commission_percentage; ?>" placeholder=""></td>
         </tr>
     
         <tr class="form-field">
-            <th scope="row" valign="top"><label for="category_fixed_commission"><?php _e('Commission Fixed per transaction', 'multivendorx'); ?></label></th>
+            <th scope="row" valign="top"><label for="category_fixed_commission"><?php _e( 'Commission Fixed per transaction', 'multivendorx' ); ?></label></th>
             <td><input type="number" class="short" name="category_fixed_commission" id="category_fixed_commission" value="<?php echo $commision_fixed; ?>" placeholder=""></td>
         </tr>
        
@@ -480,28 +486,29 @@ class Admin {
 
     /**
      * Save commission settings for product category
-     * @param int $term_id
-     * @param int $tt_id
+     *
+     * @param int    $term_id
+     * @param int    $tt_id
      * @param string $taxonomy
      */
-    public function save_product_cat_commission_fields($term_id, $tt_id = '', $taxonomy = '') {
+    public function save_product_cat_commission_fields( $term_id, $tt_id = '', $taxonomy = '' ) {
         if ( 'product_cat' === $taxonomy ) {
             $percentage = filter_input( INPUT_POST, 'category_percentage_commission', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
             $fixed      = filter_input( INPUT_POST, 'category_fixed_commission', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
-            update_term_meta( $term_id, 'multivendorx_category_percentage_commission', (float) $percentage );        
+            update_term_meta( $term_id, 'multivendorx_category_percentage_commission', (float) $percentage );
             update_term_meta( $term_id, 'multivendorx_category_fixed_commission', (float) $fixed );
         }
     }
 
     public function multivendorx_get_stores() {
         $term   = sanitize_text_field( filter_input( INPUT_GET, 'term', FILTER_SANITIZE_FULL_SPECIAL_CHARS ) ?? '' );
-        $stores = Store::get_store_by_name($term);
+        $stores = Store::get_store_by_name( $term );
 
         $results = array();
         foreach ( $stores as $store ) {
             $results[] = array(
                 'id'   => $store->get_id(),
-                'text' => $store->get('name'),
+                'text' => $store->get( 'name' ),
             );
         }
 
@@ -512,15 +519,15 @@ class Admin {
             'label'  => __( 'Store', 'multivendorx' ),
             'target' => 'store_coupon_data',
             'class'  => 'store_coupon_data',
-        );	
-        return $coupon_data_tabs; 
+        );
+        return $coupon_data_tabs;
     }
 
     public function add_content_in_store_tab( $coupon_id ) {
 
         $current_coupon = get_post( $coupon_id );
-        $linked_store = get_post_meta( $coupon_id, 'multivendorx_store_id', true );
-       
+        $linked_store   = get_post_meta( $coupon_id, 'multivendorx_store_id', true );
+
         ?>
         <div id="store_coupon_data" class="panel woocommerce_options_panel">
             <p class="form-field">
@@ -536,7 +543,7 @@ class Admin {
                     if ( $linked_store ) {
                         $store = Store::get_store_by_id( $linked_store );
                         if ( $store ) {
-                            echo '<option value="' . esc_attr( $store->get_id() ) . '" selected="selected">' . esc_html( $store->get('name') ) . '</option>';
+                            echo '<option value="' . esc_attr( $store->get_id() ) . '" selected="selected">' . esc_html( $store->get( 'name' ) ) . '</option>';
                         }
                     }
                     ?>
@@ -546,26 +553,29 @@ class Admin {
         <?php
     }
 
-    public function save_store_in_coupon($post_id) {
+    public function save_store_in_coupon( $post_id ) {
         $linked_store_id = absint( filter_input( INPUT_POST, 'coupon_linked_store' ) );
         if ( $linked_store_id ) {
             update_post_meta( $post_id, 'multivendorx_store_id', $linked_store_id );
         }
     }
 
-    public function add_option_for_payment($page, $order) {
-        if( $page && $page != 'woocommerce_page_wc-orders' ) return;
-        if(  $order->get_parent_id() == 0 ) return;
-        
+    public function add_option_for_payment( $page, $order ) {
+        if ( $page && $page != 'woocommerce_page_wc-orders' ) {
+			return;
+        }
+        if ( $order->get_parent_id() == 0 ) {
+			return;
+        }
+
         add_meta_box(
-            'multivendorx_cod_order_payment_box', 
-            __( 'COD Order Payment', 'multivendorx' ), 
-            [ $this, 'render_multivendorx_cod_order_payment_box' ], 
+            'multivendorx_cod_order_payment_box',
+            __( 'COD Order Payment', 'multivendorx' ),
+            array( $this, 'render_multivendorx_cod_order_payment_box' ),
             $page,
-            'side',  
+            'side',
             'default'
         );
-        
     }
 
     public function render_multivendorx_cod_order_payment_box( $order ) {
@@ -591,11 +601,9 @@ class Admin {
 
         $selected = filter_input( INPUT_POST, 'order_payment', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
         if ( $selected !== null ) {
-            $order = wc_get_order($order_id);
+            $order = wc_get_order( $order_id );
             $order->update_meta_data( 'multivendorx_cod_order_payment', $selected );
             $order->save();
         }
     }
-
-    
 }

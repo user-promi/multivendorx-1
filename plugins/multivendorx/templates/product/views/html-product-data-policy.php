@@ -7,14 +7,14 @@
  *
  * Override this template by copying it to yourtheme/MultiVendorX/vendor-dashboard/product-manager/views/html-product-data-policy.php
  *
- * @author 		MultiVendorX
+ * @author      MultiVendorX
  * @package MultiVendorX/Templates
  * @version   3.3.0
  */
 defined( 'ABSPATH' ) || exit;
 
-$_mvx_shipping_policy = get_post_meta( $id, '_mvx_shipping_policy', true );
-$_mvx_refund_policy = get_post_meta( $id, '_mvx_refund_policy', true );
+$_mvx_shipping_policy     = get_post_meta( $id, '_mvx_shipping_policy', true );
+$_mvx_refund_policy       = get_post_meta( $id, '_mvx_refund_policy', true );
 $_mvx_cancallation_policy = get_post_meta( $id, '_mvx_cancallation_policy', true );
 ?>
 <div role="tabpanel" class="tab-pane fade" id="product_policy_data">
@@ -23,10 +23,11 @@ $_mvx_cancallation_policy = get_post_meta( $id, '_mvx_cancallation_policy', true
         <?php if ( apply_filters( 'can_vendor_edit_shipping_policy_field', true ) ) : ?>
             <div class="form-group">
                 <label class="control-label col-sm-3 col-md-3" for="_mvx_shipping_policy"><?php esc_attr_e( 'Shipping Policy', 'multivendorx' ); ?></label>
-                <div class="col-md-6 col-sm-9"><?php
+                <div class="col-md-6 col-sm-9">
+                <?php
                     $shipping_policy_settings = array(
                         'textarea_name' => '_mvx_shipping_policy',
-                        'textarea_rows' => get_option('default_post_edit_rows', 10),
+                        'textarea_rows' => get_option( 'default_post_edit_rows', 10 ),
                         'quicktags'     => array( 'buttons' => 'em,strong,link' ),
                         'tinymce'       => array(
                             'theme_advanced_buttons1' => 'bold,italic,strikethrough,separator,bullist,numlist,separator,blockquote,separator,justifyleft,justifycenter,justifyright,separator,link,unlink,separator,undo,redo,separator',
@@ -42,10 +43,11 @@ $_mvx_cancallation_policy = get_post_meta( $id, '_mvx_cancallation_policy', true
         <?php if ( apply_filters( 'can_vendor_edit_refund_policy_field', true ) ) : ?>
             <div class="form-group">
                 <label class="control-label col-sm-3 col-md-3" for="_mvx_refund_policy"><?php esc_attr_e( 'Refund Policy', 'multivendorx' ); ?></label>
-                <div class="col-md-6 col-sm-9"><?php
+                <div class="col-md-6 col-sm-9">
+                <?php
                     $refund_policy_settings = array(
                         'textarea_name' => '_mvx_refund_policy',
-                        'textarea_rows' => get_option('default_post_edit_rows', 10),
+                        'textarea_rows' => get_option( 'default_post_edit_rows', 10 ),
                         'quicktags'     => array( 'buttons' => 'em,strong,link' ),
                         'tinymce'       => array(
                             'theme_advanced_buttons1' => 'bold,italic,strikethrough,separator,bullist,numlist,separator,blockquote,separator,justifyleft,justifycenter,justifyright,separator,link,unlink,separator,undo,redo,separator',
@@ -61,10 +63,11 @@ $_mvx_cancallation_policy = get_post_meta( $id, '_mvx_cancallation_policy', true
         <?php if ( apply_filters( 'can_vendor_edit_cancellation_policy_field', true ) ) : ?>
             <div class="form-group">
                 <label class="control-label col-sm-3 col-md-3" for="_mvx_cancallation_policy"><?php esc_attr_e( 'Cancellation/Return/Exchange Policy', 'multivendorx' ); ?></label>
-                <div class="col-md-6 col-sm-9"><?php
+                <div class="col-md-6 col-sm-9">
+                <?php
                     $cancallation_policy_settings = array(
                         'textarea_name' => '_mvx_cancallation_policy',
-                        'textarea_rows' => get_option('default_post_edit_rows', 10),
+                        'textarea_rows' => get_option( 'default_post_edit_rows', 10 ),
                         'quicktags'     => array( 'buttons' => 'em,strong,link' ),
                         'tinymce'       => array(
                             'theme_advanced_buttons1' => 'bold,italic,strikethrough,separator,bullist,numlist,separator,blockquote,separator,justifyleft,justifycenter,justifyright,separator,link,unlink,separator,undo,redo,separator',

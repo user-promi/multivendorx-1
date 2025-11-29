@@ -34,15 +34,15 @@ export default {
                             label: __('Cannot process or fulfill orders', 'multivendorx'),
                             check: false,
                         },
-                    ]
+                    ],
                 },
             ],
         },
         {
             key: 'pending_msg',
-            label: 'Message shown to pending stores',
+            label: __('Message shown to pending stores', 'multivendorx'),
             type: 'textarea',
-            des: 'What pending stores can do',
+            des: __('What pending stores can do', 'multivendorx'),
         },
     ],
 };

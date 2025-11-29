@@ -6,7 +6,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import axios from "axios";
 import { formatCurrency } from '../../services/commonFunction';
 
-// 👉 Type for an order line
+//Type for an order line
 interface OrderItem {
   id: number;
   name: string;
@@ -357,7 +357,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
               {storeData?.email && (
                 <div className="email">
                   <i className="adminlib-mail"></i>
-                  <b>Email:</b> {storeData.email.split(/\s*[\n,]\s*/)[0]}
+                  <b>{__("Email:", "multivendorx")}</b> {storeData.email.split(/\s*[\n,]\s*/)[0]}
                 </div>
               )}
             </div>
@@ -384,7 +384,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
           <div className="heading">{__("Order Overview", "multivendorx")}</div>
           <div className="commission-details">
             <div className="items">
-              <div className="text">Associated Order</div>
+              <div className="text">{__("Associated Order", "multivendorx")}</div>
               <div className="value">
                 {commissionData?.order_id ? (
                   <a
@@ -401,7 +401,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
               </div>
             </div>
             <div className="items">
-              <div className="text">Order Status</div>
+              <div className="text">{__("Order Status", "multivendorx")}</div>
               <div className="value">
                 <span className="admin-badge yellow">
                   {orderData?.status
@@ -421,7 +421,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
 
           <div className="commission-details">
             <div className="items">
-              <div className="text">Commission Status</div>
+              <div className="text">{__("Commission Status", "multivendorx")}</div>
               <div className="value">
                 <span className={`admin-badge ${commissionData?.status === 'paid' ? 'green' : 'red'}`}>
                   {commissionData?.status
@@ -434,7 +434,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
               </div>
             </div>
             <div className="items">
-              <div className="text">Commission Amount</div>
+              <div className="text">{__("Commission Amount", "multivendorx")}</div>
               <div className="value">
                 {formatCurrency(
                   parseFloat(commissionData?.amount ?? 0) +
@@ -443,11 +443,11 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
               </div>
             </div>
             <div className="items">
-              <div className="text">Shipping</div>
+              <div className="text">{__("Shipping", "multivendorx")}</div>
               <div className="value">{formatCurrency(commissionData?.shipping)}</div>
             </div>
             <div className="items">
-              <div className="text">Tax</div>
+              <div className="text">{__("Tax", "multivendorx")}</div>
               <div className="value">
                 {formatCurrency(
                   (Number(commissionData?.tax || 0) +
@@ -457,14 +457,14 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({ open, onClose, commissi
             </div>
             {commissionData?.commission_refunded > 0 && (
               <div className="items">
-                <div className="text">Commission refund</div>
+                <div className="text">{__("Commission refund", "multivendorx")}</div>
                 <div className="value">
                   {formatCurrency(commissionData.commission_refunded)}
                 </div>
               </div>
             )}
             <div className="items">
-              <div className="text">Total</div>
+              <div className="text">{__("Total", "multivendorx")}</div>
               <div className="value">{formatCurrency(commissionData?.total)}</div>
             </div>
           </div>

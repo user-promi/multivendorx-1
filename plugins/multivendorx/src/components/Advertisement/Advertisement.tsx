@@ -9,7 +9,6 @@ export interface RealtimeFilter {
 }
 
 const Advertisement: React.FC = () => {
-    const [data, setData] = useState<StoreRow[] | null>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [pageCount, setPageCount] = useState(0);
     const [pagination, setPagination] = useState<PaginationState>({
@@ -229,9 +228,6 @@ const Advertisement: React.FC = () => {
                     pagination={pagination}
                     onPaginationChange={setPagination}
                     perPageOption={[10, 25, 50]}
-                    onRowClick={(row: any) => {
-                        handleEdit(row.id);
-                    }}
                 />
             </div>
         </>

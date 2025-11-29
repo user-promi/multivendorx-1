@@ -3,7 +3,7 @@ namespace MultiVendorX\Notifications;
 
 use MultiVendorX\Utill;
 
-defined('ABSPATH') || exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * MultiVendorX Notifications class
@@ -13,39 +13,35 @@ defined('ABSPATH') || exit;
  * @author         MultiVendorX
  */
 
-class Notifications
-{
+class Notifications {
 
-    public $events = [];
 
-    public function __construct()
-    {
-        add_action('init', [$this, 'register_notification_hooks']);
+    public $events = array();
+
+    public function __construct() {
+        add_action( 'init', array( $this, 'register_notification_hooks' ) );
         $this->insert_system_events();
 
-        add_action('multivendorx_clear_notifications', [$this, 'multivendorx_clear_notifications']);
-
+        add_action( 'multivendorx_clear_notifications', array( $this, 'multivendorx_clear_notifications' ) );
     }
 
-    public function register_notification_hooks()
-    {
-        foreach ($this->events as $event => $value) {
-            add_action("multivendorx_notify_{$event}", [$this, 'trigger_notifications'], 10, 2);
+    public function register_notification_hooks() {
+        foreach ( $this->events as $event => $value ) {
+            add_action( "multivendorx_notify_{$event}", array( $this, 'trigger_notifications' ), 10, 2 );
         }
     }
 
-    public function insert_system_events()
-    {
+    public function insert_system_events() {
         global $wpdb;
 
         // $all_events = [
-        //     'multivendorx_new_store_approval'   => ['admin', 'store']
+        // 'multivendorx_new_store_approval'   => ['admin', 'store']
         // ];
 
-        $this->events = [
+        $this->events = array(
             // ========== STORE ACTIVITY ==========
             'new_store_approval'        =>
-            [
+            array(
                 'name'           => 'New store approval',
                 'desc'           => 'A new store is approved by the admin.',
                 'admin_enabled'  => true,
@@ -56,9 +52,9 @@ class Notifications
                 'system_message' => 'New store approval [store_name]',
                 'tag'            => 'Store',
                 'category'       => 'activity',
-            ],
+            ),
             'new_store_reject'          =>
-            [
+            array(
                 'name'           => 'New store reject',
                 'desc'           => 'A store application is rejected by the admin.',
                 'admin_enabled'  => true,
@@ -69,9 +65,9 @@ class Notifications
                 'system_message' => 'New Store Rejected',
                 'tag'            => 'Store',
                 'category'       => 'activity',
-            ],
+            ),
 
-            'store_suspended'           => [
+            'store_suspended'           => array(
                 'name'           => 'Store suspended',
                 'desc'           => 'A store is suspended by the admin.',
                 'store_enabled'  => true,
@@ -82,9 +78,9 @@ class Notifications
                 'system_message' => 'Store suspended: [store_name].',
                 'tag'            => 'Store',
                 'category'       => 'activity',
-            ],
+            ),
 
-            'store_reactivated'         => [
+            'store_reactivated'         => array(
                 'name'           => 'Store reactivated',
                 'desc'           => 'A suspended store is reactivated by the admin.',
                 'store_enabled'  => true,
@@ -95,9 +91,9 @@ class Notifications
                 'system_message' => 'Store [store_name] reactivated.',
                 'tag'            => 'Store',
                 'category'       => 'activity',
-            ],
+            ),
 
-            'store_profile_updated'     => [
+            'store_profile_updated'     => array(
                 'name'           => 'Store profile updated',
                 'desc'           => 'A store profile is updated by the store owner.',
                 'admin_enabled'  => true,
@@ -107,10 +103,10 @@ class Notifications
                 'system_message' => 'Store [store_name] updated profile.',
                 'tag'            => 'Store',
                 'category'       => 'activity',
-            ],
+            ),
 
             // ========== ORDER EVENTS ==========
-            'new_order'                 => [
+            'new_order'                 => array(
                 'name'             => 'New order placed',
                 'desc'             => 'A new order is placed on the marketplace.',
                 'admin_enabled'    => true,
@@ -122,9 +118,9 @@ class Notifications
                 'system_message'   => 'Order [order_id] placed successfully.',
                 'tag'              => 'Order',
                 'category'         => 'activity',
-            ],
+            ),
 
-            'order_processing'          => [
+            'order_processing'          => array(
                 'name'             => 'Order processing',
                 'desc'             => 'An order status is changed to processing.',
                 'store_enabled'    => true,
@@ -135,9 +131,9 @@ class Notifications
                 'system_message'   => 'Order [order_id] status: Processing.',
                 'tag'              => 'Order',
                 'category'         => 'activity',
-            ],
+            ),
 
-            'order_shipped'             => [
+            'order_shipped'             => array(
                 'name'             => 'Order shipped',
                 'desc'             => 'An order is marked as shipped.',
                 'store_enabled'    => true,
@@ -148,9 +144,9 @@ class Notifications
                 'system_message'   => 'Order [order_id] is on its way.',
                 'tag'              => 'Order',
                 'category'         => 'activity',
-            ],
+            ),
 
-            'order_completed'           => [
+            'order_completed'           => array(
                 'name'             => 'Order completed',
                 'desc'             => 'An order is completed successfully.',
                 'store_enabled'    => true,
@@ -161,9 +157,9 @@ class Notifications
                 'system_message'   => 'Order [order_id] marked as completed.',
                 'tag'              => 'Order',
                 'category'         => 'activity',
-            ],
+            ),
 
-            'order_cancelled'           => [
+            'order_cancelled'           => array(
                 'name'             => 'Order cancelled',
                 'desc'             => 'An order is cancelled by the customer or admin.',
                 'store_enabled'    => true,
@@ -175,9 +171,9 @@ class Notifications
                 'system_message'   => 'Order [order_id] cancelled.',
                 'tag'              => 'Order',
                 'category'         => 'activity',
-            ],
+            ),
 
-            'order_refunded'            => [
+            'order_refunded'            => array(
                 'name'             => 'Order refunded',
                 'desc'             => 'A refund is issued for an order.',
                 'store_enabled'    => true,
@@ -188,10 +184,10 @@ class Notifications
                 'system_message'   => 'Order [order_id] refunded.',
                 'tag'              => 'Order',
                 'category'         => 'activity',
-            ],
+            ),
 
             // ========== PAYMENT ==========
-            'payment_received'          => [
+            'payment_received'          => array(
                 'name'           => 'Payment received',
                 'desc'           => 'A payment is received for an order.',
                 'store_enabled'  => true,
@@ -202,9 +198,9 @@ class Notifications
                 'system_message' => 'Payment for [order_id] received.',
                 'tag'            => 'Payment',
                 'category'       => 'activity',
-            ],
+            ),
 
-            'payout_failed'             => [
+            'payout_failed'             => array(
                 'name'           => 'Payout failed',
                 'desc'           => 'A payout processing attempt has failed.',
                 'admin_enabled'  => true,
@@ -215,10 +211,10 @@ class Notifications
                 'system_message' => 'Payout error for [store_name].',
                 'tag'            => 'Payment',
                 'category'       => 'activity',
-            ],
+            ),
 
             // ========== REFUND ==========
-            'refund_requested'          => [
+            'refund_requested'          => array(
                 'name'             => 'Refund requested',
                 'desc'             => 'A refund request is submitted by a customer.',
                 'admin_enabled'    => true,
@@ -230,9 +226,9 @@ class Notifications
                 'system_message'   => 'Refund request submitted for [order_id].',
                 'tag'              => 'Refund',
                 'category'         => 'activity',
-            ],
+            ),
 
-            'refund_approved'           => [
+            'refund_approved'           => array(
                 'name'             => 'Refund approved',
                 'desc'             => 'A refund request is approved by the admin.',
                 'store_enabled'    => true,
@@ -243,9 +239,9 @@ class Notifications
                 'system_message'   => 'Refund approved for [order_id].',
                 'tag'              => 'Refund',
                 'category'         => 'activity',
-            ],
+            ),
 
-            'refund_rejected'           => [
+            'refund_rejected'           => array(
                 'name'             => 'Refund rejected',
                 'desc'             => 'A refund request is rejected by the admin.',
                 'customer_enabled' => true,
@@ -255,9 +251,9 @@ class Notifications
                 'system_message'   => 'Refund rejected for [order_id].',
                 'tag'              => 'Refund',
                 'category'         => 'activity',
-            ],
+            ),
 
-            'refund_processed'          => [
+            'refund_processed'          => array(
                 'name'             => 'Refund processed',
                 'desc'             => 'A refund is processed and completed successfully.',
                 'admin_enabled'    => true,
@@ -268,10 +264,10 @@ class Notifications
                 'system_message'   => 'Refund processed successfully.',
                 'tag'              => 'Refund',
                 'category'         => 'activity',
-            ],
+            ),
 
             // ========== PRODUCT ==========
-            'product_added'             => [
+            'product_added'             => array(
                 'name'           => 'New product added',
                 'desc'           => 'A new product is added by a store.',
                 'admin_enabled'  => true,
@@ -282,9 +278,9 @@ class Notifications
                 'system_message' => 'Product “[product_name]” added successfully.',
                 'tag'            => 'Product',
                 'category'       => 'activity',
-            ],
+            ),
 
-            'product_approved'          => [
+            'product_approved'          => array(
                 'name'           => 'Product approved',
                 'desc'           => 'A product is approved by the admin.',
                 'store_enabled'  => true,
@@ -294,9 +290,9 @@ class Notifications
                 'system_message' => 'Product “[product_name]” approved successfully.',
                 'tag'            => 'Product',
                 'category'       => 'notification',
-            ],
+            ),
 
-            'product_rejected'          => [
+            'product_rejected'          => array(
                 'name'           => 'Product rejected',
                 'desc'           => 'A product is rejected during review.',
                 'store_enabled'  => true,
@@ -306,9 +302,9 @@ class Notifications
                 'system_message' => 'Product “[product_name]” rejected.',
                 'tag'            => 'Product',
                 'category'       => 'notification',
-            ],
+            ),
 
-            'product_low_stock'         => [
+            'product_low_stock'         => array(
                 'name'           => 'Low stock alert',
                 'desc'           => 'A product stock level is detected below the set threshold.',
                 'store_enabled'  => true,
@@ -318,9 +314,9 @@ class Notifications
                 'system_message' => 'Low stock alert for “[product_name]”.',
                 'tag'            => 'Product',
                 'category'       => 'notification',
-            ],
+            ),
 
-            'product_out_of_stock'      => [
+            'product_out_of_stock'      => array(
                 'name'           => 'Out of stock alert',
                 'desc'           => 'A product is detected as out of stock.',
                 'store_enabled'  => true,
@@ -330,10 +326,10 @@ class Notifications
                 'system_message' => 'Product “[product_name]” is out of stock.',
                 'tag'            => 'Product',
                 'category'       => 'notification',
-            ],
+            ),
 
             // ========== REVIEWS ==========
-            'product_review_received'   => [
+            'product_review_received'   => array(
                 'name'             => 'New product review',
                 'desc'             => 'A new review is submitted for a product.',
                 'store_enabled'    => true,
@@ -344,9 +340,9 @@ class Notifications
                 'system_message'   => 'New review received for “[product_name]”.',
                 'tag'              => 'Review',
                 'category'         => 'activity',
-            ],
+            ),
 
-            'review_flagged'            => [
+            'review_flagged'            => array(
                 'name'           => 'Review flagged',
                 'desc'           => 'A product review is flagged by a customer.',
                 'admin_enabled'  => true,
@@ -356,10 +352,10 @@ class Notifications
                 'system_message' => 'Review flagged for “[product_name]”.',
                 'tag'            => 'Review',
                 'category'       => 'notification',
-            ],
+            ),
 
             // ========== WITHDRAWALS ==========
-            'withdrawal_requested'      => [
+            'withdrawal_requested'      => array(
                 'name'           => 'Withdrawal requested',
                 'desc'           => 'A withdrawal request is submitted by a store.',
                 'admin_enabled'  => true,
@@ -370,9 +366,9 @@ class Notifications
                 'system_message' => 'Withdrawal requested by [store_name].',
                 'tag'            => 'Payment',
                 'category'       => 'notification',
-            ],
+            ),
 
-            'withdrawal_released'       => [
+            'withdrawal_released'       => array(
                 'name'           => 'Withdrawal released',
                 'desc'           => 'A withdrawal is released successfully.',
                 'store_enabled'  => true,
@@ -382,9 +378,9 @@ class Notifications
                 'system_message' => 'Withdrawal released successfully.',
                 'tag'            => 'Payment',
                 'category'       => 'notification',
-            ],
-            
-            'withdrawl_rejected'           => [
+            ),
+
+            'withdrawl_rejected'        => array(
                 'name'           => 'Withdrawl rejected',
                 'desc'           => 'A withdrawl request is rejected by the admin.',
                 'store_enabled'  => true,
@@ -394,10 +390,10 @@ class Notifications
                 'system_message' => 'Withdrawl Payout rejected: [amount].',
                 'tag'            => 'Payment',
                 'category'       => 'activity',
-            ],
+            ),
 
             // ========== REPORT ABUSE ==========
-            'report_abuse_submitted'    => [
+            'report_abuse_submitted'    => array(
                 'name'             => 'Report abuse submitted',
                 'desc'             => 'A product is reported for abuse by a customer.',
                 'admin_enabled'    => true,
@@ -409,9 +405,9 @@ class Notifications
                 'system_message'   => 'Abuse report for “[product_name]” received.',
                 'tag'              => 'Report',
                 'category'         => 'notification',
-            ],
+            ),
 
-            'report_abuse_action_taken' => [
+            'report_abuse_action_taken' => array(
                 'name'             => 'Report abuse resolved',
                 'desc'             => 'An abuse report is reviewed and resolved by the admin.',
                 'store_enabled'    => true,
@@ -422,10 +418,10 @@ class Notifications
                 'system_message'   => 'Abuse report resolved for “[product_name]”.',
                 'tag'              => 'Report',
                 'category'         => 'notification',
-            ],
+            ),
 
             // ========== ANNOUNCEMENTS ==========
-            'system_announcement'       => [
+            'system_announcement'       => array(
                 'name'             => 'System announcement',
                 'desc'             => 'A system-wide announcement is published by the admin.',
                 'store_enabled'    => true,
@@ -436,9 +432,9 @@ class Notifications
                 'system_message'   => 'New announcement: [announcement_message]',
                 'tag'              => 'System',
                 'category'         => 'notification',
-            ],
+            ),
 
-            'system_maintenance'        => [
+            'system_maintenance'        => array(
                 'name'             => 'System maintenance',
                 'desc'             => 'A scheduled maintenance is announced by the admin.',
                 'store_enabled'    => true,
@@ -450,9 +446,9 @@ class Notifications
                 'system_message'   => 'Scheduled maintenance on [date_time].',
                 'tag'              => 'System',
                 'category'         => 'notification',
-            ],
+            ),
 
-            'policy_update'             => [
+            'policy_update'             => array(
                 'name'             => 'Policy update',
                 'desc'             => 'Marketplace policies are updated by the admin.',
                 'store_enabled'    => true,
@@ -463,9 +459,9 @@ class Notifications
                 'system_message'   => 'Marketplace policy updated.',
                 'tag'              => 'System',
                 'category'         => 'notification',
-            ],
+            ),
 
-            'commission_processed'      => [
+            'commission_processed'      => array(
                 'name'           => 'Commission processed',
                 'desc'           => 'A commission payment is processed for a store.',
                 'store_enabled'  => true,
@@ -476,10 +472,10 @@ class Notifications
                 'system_message' => 'Commission payment processed for [store_name].',
                 'tag'            => 'Commission',
                 'category'       => 'activity',
-            ],
+            ),
 
             // (remaining duplicates/legacy keys retained from original list)
-            'product_review_received'   => [
+            'product_review_received'   => array(
                 'name'           => 'New Review Received',
                 'desc'           => 'A new review is submitted for a product.',
                 'store_enabled'  => true,
@@ -489,8 +485,8 @@ class Notifications
                 'system_message' => 'New review for {product_name} from {customer_name}.',
                 'tag'            => 'Product',
                 'category'       => 'activity',
-            ],
-            'order_completed_alt'       => [
+            ),
+            'order_completed_alt'       => array(
                 'name'             => 'Order Completed',
                 'desc'             => 'An order is completed successfully.',
                 'store_enabled'    => true,
@@ -501,9 +497,9 @@ class Notifications
                 'system_message'   => 'Order #{order_id} completed successfully.',
                 'tag'              => 'Order',
                 'category'         => 'notification',
-            ],
+            ),
 
-            'commission_credit'         => [
+            'commission_credit'         => array(
                 'name'           => 'Commission Credited',
                 'desc'           => 'A commission is credited for an order.',
                 'store_enabled'  => true,
@@ -513,9 +509,9 @@ class Notifications
                 'system_message' => 'Commission received for order #{order_id}.',
                 'tag'            => 'Commission',
                 'category'       => 'notification',
-            ],
-            
-            'adjustment_credit'         => [
+            ),
+
+            'adjustment_credit'         => array(
                 'name'           => 'Adjustment Credit',
                 'desc'           => 'An adjustment credit is issued by the admin.',
                 'store_enabled'  => true,
@@ -525,9 +521,9 @@ class Notifications
                 'system_message' => 'Adjustment credit: {amount} {currency}.',
                 'tag'            => 'Finance',
                 'category'       => 'notification',
-            ],
+            ),
 
-            'adjustment_debit'          => [
+            'adjustment_debit'          => array(
                 'name'           => 'Adjustment Debit',
                 'desc'           => 'An adjustment debit is applied by the admin.',
                 'store_enabled'  => true,
@@ -537,9 +533,9 @@ class Notifications
                 'system_message' => 'Adjustment debit: {amount} {currency}.',
                 'tag'            => 'Finance',
                 'category'       => 'notification',
-            ],
+            ),
 
-            'order_new'                 => [
+            'order_new'                 => array(
                 'name'           => 'New Order Received',
                 'desc'           => 'A new order is received by the store.',
                 'store_enabled'  => true,
@@ -549,9 +545,9 @@ class Notifications
                 'system_message' => 'Order #{order_id} received.',
                 'tag'            => 'Order',
                 'category'       => 'notification',
-            ],
+            ),
 
-            'order_ready_to_ship'       => [
+            'order_ready_to_ship'       => array(
                 'name'           => 'Order Ready to Ship',
                 'desc'           => 'An order is marked as ready to ship.',
                 'store_enabled'  => true,
@@ -561,9 +557,9 @@ class Notifications
                 'system_message' => 'Order #{order_id} ready to ship.',
                 'tag'            => 'Order',
                 'category'       => 'notification',
-            ],
+            ),
 
-            'order_delivered_alt'       => [
+            'order_delivered_alt'       => array(
                 'name'             => 'Order Delivered',
                 'desc'             => 'An order is marked as delivered.',
                 'customer_enabled' => true,
@@ -573,9 +569,9 @@ class Notifications
                 'system_message'   => 'Order #{order_id} delivered.',
                 'tag'              => 'Order',
                 'category'         => 'notification',
-            ],
+            ),
 
-            'order_return_requested'    => [
+            'order_return_requested'    => array(
                 'name'             => 'Return Requested',
                 'desc'             => 'A return request is submitted by the customer.',
                 'store_enabled'    => true,
@@ -586,13 +582,13 @@ class Notifications
                 'system_message'   => 'Return request received for order #{order_id}.',
                 'tag'              => 'Refund',
                 'category'         => 'notification',
-            ],
-        ];
+            ),
+        );
 
-        [
+        array(
             // ========== STORE ACTIVITY ==========
             'new_store_approval'        =>
-            [
+            array(
                 'name'           => 'New store approval',
                 'desc'           => 'Admin approves a new store.',
                 'admin_enabled'  => true,
@@ -603,9 +599,9 @@ class Notifications
                 'system_message' => 'New store approval [store_name]',
                 'tag'            => 'Store',
                 'category'       => 'activity',
-            ],
+            ),
             'new_store_reject'          =>
-            [
+            array(
                 'name'           => 'New store reject',
                 'desc'           => 'Notify stores and admins when a new store is rejected.',
                 'admin_enabled'  => true,
@@ -616,9 +612,9 @@ class Notifications
                 'system_message' => 'New Store Rejected',
                 'tag'            => 'Store',
                 'category'       => 'activity',
-            ],
+            ),
 
-            'store_suspended'           => [
+            'store_suspended'           => array(
                 'name'           => 'Store suspended',
                 'desc'           => 'Notify stores when their store has been suspended.',
                 'store_enabled'  => true,
@@ -629,9 +625,9 @@ class Notifications
                 'system_message' => 'Store suspended: [store_name].',
                 'tag'            => 'Store',
                 'category'       => 'activity',
-            ],
+            ),
 
-            'store_reactivated'         => [
+            'store_reactivated'         => array(
                 'name'           => 'Store reactivated',
                 'desc'           => 'Notify stores when their store is reactivated by admin.',
                 'store_enabled'  => true,
@@ -642,9 +638,9 @@ class Notifications
                 'system_message' => 'Store [store_name] reactivated.',
                 'tag'            => 'Store',
                 'category'       => 'activity',
-            ],
+            ),
 
-            'store_profile_updated'     => [
+            'store_profile_updated'     => array(
                 'name'           => 'Store profile updated',
                 'desc'           => 'Notify admin when a store updates its profile information.',
                 'admin_enabled'  => true,
@@ -654,10 +650,10 @@ class Notifications
                 'system_message' => 'Store [store_name] updated profile.',
                 'tag'            => 'Store',
                 'category'       => 'activity',
-            ],
+            ),
 
             // ========== ORDER EVENTS ==========
-            'new_order'                 => [
+            'new_order'                 => array(
                 'name'             => 'New order placed',
                 'desc'             => 'Notify stores and customers when a new order is placed.',
                 'admin_enabled'    => true,
@@ -669,9 +665,9 @@ class Notifications
                 'system_message'   => 'Order [order_id] placed successfully.',
                 'tag'              => 'Order',
                 'category'         => 'activity',
-            ],
+            ),
 
-            'order_processing'          => [
+            'order_processing'          => array(
                 'name'             => 'Order processing',
                 'desc'             => 'Notify customer when order status changes to processing.',
                 'admin_enabled'    => true,
@@ -683,9 +679,9 @@ class Notifications
                 'system_message'   => 'Order [order_id] status: Processing.',
                 'tag'              => 'Order',
                 'category'         => 'activity',
-            ],
+            ),
 
-            'order_refunded'            => [
+            'order_refunded'            => array(
                 'name'             => 'Order refunded',
                 'desc'             => 'Notify customer and store when an order is refunded.',
                 'admin_enabled'    => true,
@@ -697,10 +693,10 @@ class Notifications
                 'system_message'   => 'Order [order_id] refunded.',
                 'tag'              => 'Order',
                 'category'         => 'activity',
-            ],
+            ),
 
             // ========== PAYMENT ==========
-            'payout_released'           => [
+            'payout_released'           => array(
                 'name'           => 'Store payout released',
                 'desc'           => 'Notify stores that their payout is released.',
                 'store_enabled'  => true,
@@ -710,10 +706,10 @@ class Notifications
                 'system_message' => 'Payout released: [amount].',
                 'tag'            => 'Payment',
                 'category'       => 'activity',
-            ],
+            ),
 
             // ========== REFUND ==========
-            'refund_requested'          => [
+            'refund_requested'          => array(
                 'name'             => 'Customer refund request submitted',
                 'desc'             => 'Notify admin, store, and customer when a refund is requested.',
                 'admin_enabled'    => true,
@@ -725,9 +721,9 @@ class Notifications
                 'system_message'   => 'Refund request submitted for [order_id].',
                 'tag'              => 'Refund',
                 'category'         => 'activity',
-            ],
+            ),
 
-            'refund_approved'           => [
+            'refund_approved'           => array(
                 'name'             => 'Refund request is approved',
                 'desc'             => 'Notify customer and store when a refund is approved by admin.',
                 'store_enabled'    => true,
@@ -738,9 +734,9 @@ class Notifications
                 'system_message'   => 'Refund approved for [order_id].',
                 'tag'              => 'Refund',
                 'category'         => 'activity',
-            ],
+            ),
 
-            'refund_rejected'           => [
+            'refund_rejected'           => array(
                 'name'             => 'Refund request is rejected',
                 'desc'             => 'Notify customer when their refund request is rejected.',
                 'customer_enabled' => true,
@@ -750,9 +746,9 @@ class Notifications
                 'system_message'   => 'Refund rejected for [order_id].',
                 'tag'              => 'Refund',
                 'category'         => 'activity',
-            ],
+            ),
             // ========== PRODUCT ==========
-            'product_added'             => [
+            'product_added'             => array(
                 'name'           => 'New product added by store',
                 'desc'           => 'Notify admin when a new product is added by a store.',
                 'admin_enabled'  => true,
@@ -762,9 +758,9 @@ class Notifications
                 'system_message' => 'Product “[product_name]” added successfully.',
                 'tag'            => 'Product',
                 'category'       => 'activity',
-            ],
+            ),
 
-            'product_approved'          => [
+            'product_approved'          => array(
                 'name'           => 'Admin reviews and approves a product',
                 'desc'           => 'Notify store when a product is approved.',
                 'store_enabled'  => true,
@@ -774,9 +770,9 @@ class Notifications
                 'system_message' => 'Product “[product_name]” approved successfully.',
                 'tag'            => 'Product',
                 'category'       => 'notification',
-            ],
+            ),
 
-            'product_rejected'          => [
+            'product_rejected'          => array(
                 'name'           => 'Admin reviews and rejects a product',
                 'desc'           => 'Notify store when a product is rejected.',
                 'store_enabled'  => true,
@@ -786,9 +782,9 @@ class Notifications
                 'system_message' => 'Product “[product_name]” rejected.',
                 'tag'            => 'Product',
                 'category'       => 'notification',
-            ],
+            ),
 
-            'product_low_stock'         => [
+            'product_low_stock'         => array(
                 'name'           => 'Product stock level drops below the minimum threshold',
                 'desc'           => 'Notify store when a product stock falls below threshold.',
                 'store_enabled'  => true,
@@ -798,9 +794,9 @@ class Notifications
                 'system_message' => 'Low stock alert for “[product_name]”.',
                 'tag'            => 'Product',
                 'category'       => 'notification',
-            ],
+            ),
 
-            'product_out_of_stock'      => [
+            'product_out_of_stock'      => array(
                 'name'           => 'Product out of stock alert',
                 'desc'           => 'Notify store when a product goes out of stock.',
                 'store_enabled'  => true,
@@ -810,37 +806,37 @@ class Notifications
                 'system_message' => 'Product “[product_name]” is out of stock.',
                 'tag'            => 'Product',
                 'category'       => 'notification',
-            ],
+            ),
 
             // ========== REVIEWS ==========
-            'product_review_received'   => [
+            'product_review_received'   => array(
                 'name'             => 'New product review submitted',
                 'desc'             => 'Notify store when a new product review is submitted by a customer.',
                 'store_enabled'    => true,
                 'customer_enabled' => true,
-                'admin_enabled'  => true,
+                'admin_enabled'    => true,
                 'email_subject'    => 'New product review received',
                 'email_body'       => '[rating]-star review received for “[product_name]” by [customer_name].',
                 'sms_content'      => 'New review received for “[product_name]”.',
                 'system_message'   => 'New review received for “[product_name]”.',
-                'tag'            => 'Review',
-                'category'       => 'notification',
-            ],
+                'tag'              => 'Review',
+                'category'         => 'notification',
+            ),
 
             // 'review_flagged'            => [
-            //     'name'           => 'Abuse report submitted for product',
-            //     'desc'           => 'Notify admin when a customer flags a review.',
-            //     'admin_enabled'  => true,
-            //     'email_subject'  => 'Review flagged',
-            //     'email_body'     => 'A review for “[product_name]” has been flagged for moderation.',
-            //     'sms_content'    => 'Review flagged for “[product_name]”.',
-            //     'system_message' => 'Review flagged for “[product_name]”.',
-            //     'tag'            => 'Review',
-            //     'category'       => 'notification',
+            // 'name'           => 'Abuse report submitted for product',
+            // 'desc'           => 'Notify admin when a customer flags a review.',
+            // 'admin_enabled'  => true,
+            // 'email_subject'  => 'Review flagged',
+            // 'email_body'     => 'A review for “[product_name]” has been flagged for moderation.',
+            // 'sms_content'    => 'Review flagged for “[product_name]”.',
+            // 'system_message' => 'Review flagged for “[product_name]”.',
+            // 'tag'            => 'Review',
+            // 'category'       => 'notification',
             // ],
 
             // ========== WITHDRAWALS ==========
-            'withdrawal_requested'      => [
+            'withdrawal_requested'      => array(
                 'name'           => 'Withdrawal requested',
                 'desc'           => 'Notify admin when a store requests withdrawal.',
                 'admin_enabled'  => true,
@@ -851,9 +847,9 @@ class Notifications
                 'system_message' => 'Withdrawal requested by [store_name].',
                 'tag'            => 'Payment',
                 'category'       => 'notification',
-            ],
+            ),
             // ========== REPORT ABUSE ==========
-            'report_abuse_submitted'    => [
+            'report_abuse_submitted'    => array(
                 'name'             => 'Abuse report submitted for product',
                 'desc'             => 'Notify admin and store when a customer reports a product.',
                 'admin_enabled'    => true,
@@ -865,9 +861,9 @@ class Notifications
                 'system_message'   => 'Abuse report for “[product_name]” received.',
                 'tag'              => 'Report',
                 'category'         => 'notification',
-            ],
+            ),
 
-            'report_abuse_action_taken' => [
+            'report_abuse_action_taken' => array(
                 'name'             => 'Product review moderated by admin',
                 'desc'             => 'Notify store and customer when admin takes action on a report.',
                 'store_enabled'    => true,
@@ -878,10 +874,10 @@ class Notifications
                 'system_message'   => 'Abuse report resolved for “[product_name]”.',
                 'tag'              => 'Report',
                 'category'         => 'notification',
-            ],
+            ),
 
             // ========== ANNOUNCEMENTS ==========
-            'system_announcement'       => [
+            'system_announcement'       => array(
                 'name'             => 'Announcement published',
                 'desc'             => 'Notify stores and customers of a new admin announcement.',
                 'store_enabled'    => true,
@@ -892,8 +888,8 @@ class Notifications
                 'system_message'   => 'New announcement: [announcement_message]',
                 'tag'              => 'System',
                 'category'         => 'notification',
-            ],
-            'policy_update'             => [
+            ),
+            'policy_update'             => array(
                 'name'             => 'Store policy update',
                 'desc'             => 'Notify users when marketplace policy changes.',
                 'store_enabled'    => true,
@@ -904,8 +900,8 @@ class Notifications
                 'system_message'   => 'Marketplace policy updated.',
                 'tag'              => 'System',
                 'category'         => 'notification',
-            ],
-            'commission_credit'         => [
+            ),
+            'commission_credit'         => array(
                 'name'           => 'Commission Credited',
                 'desc'           => 'Notify stores when commission is credited for an order.',
                 'store_enabled'  => true,
@@ -915,9 +911,9 @@ class Notifications
                 'system_message' => 'Commission received for order #{order_id}.',
                 'tag'            => 'Commission',
                 'category'       => 'notification',
-            ],
+            ),
 
-            'adjustment_credit'         => [
+            'adjustment_credit'         => array(
                 'name'           => 'Adjustment Credit',
                 'desc'           => 'Notify stores when admin gives adjustment credit.',
                 'store_enabled'  => true,
@@ -927,9 +923,9 @@ class Notifications
                 'system_message' => 'Adjustment credit: {amount} {currency}.',
                 'tag'            => 'Finance',
                 'category'       => 'notification',
-            ],
+            ),
 
-            'adjustment_debit'          => [
+            'adjustment_debit'          => array(
                 'name'           => 'Adjustment Debit',
                 'desc'           => 'Notify stores when admin debits adjustment.',
                 'store_enabled'  => true,
@@ -939,9 +935,9 @@ class Notifications
                 'system_message' => 'Adjustment debit: {amount} {currency}.',
                 'tag'            => 'Finance',
                 'category'       => 'notification',
-            ],
+            ),
 
-            'order_new'                 => [
+            'order_new'                 => array(
                 'name'           => 'New Order Received',
                 'desc'           => 'Notify stores when a new order is received.',
                 'store_enabled'  => true,
@@ -951,9 +947,9 @@ class Notifications
                 'system_message' => 'Order #{order_id} received.',
                 'tag'            => 'Order',
                 'category'       => 'notification',
-            ],
+            ),
 
-            'order_ready_to_ship'       => [
+            'order_ready_to_ship'       => array(
                 'name'           => 'Order Ready to Ship',
                 'desc'           => 'Notify stores when an order is ready to ship.',
                 'store_enabled'  => true,
@@ -963,9 +959,9 @@ class Notifications
                 'system_message' => 'Order #{order_id} ready to ship.',
                 'tag'            => 'Order',
                 'category'       => 'notification',
-            ],
+            ),
 
-            'order_delivered'           => [
+            'order_delivered'           => array(
                 'name'             => 'Order Delivered',
                 'desc'             => 'Notify customers when their order is delivered.',
                 'customer_enabled' => true,
@@ -975,9 +971,9 @@ class Notifications
                 'system_message'   => 'Order #{order_id} delivered.',
                 'tag'              => 'Order',
                 'category'         => 'notification',
-            ],
+            ),
 
-            'order_return_requested'    => [
+            'order_return_requested'    => array(
                 'name'             => 'Return Requested',
                 'desc'             => 'Notify stores and customers when a return is requested.',
                 'store_enabled'    => true,
@@ -988,9 +984,9 @@ class Notifications
                 'system_message'   => 'Return request received for order #{order_id}.',
                 'tag'              => 'Refund',
                 'category'         => 'notification',
-            ],
+            ),
 
-            'system_announcement'       => [
+            'system_announcement'       => array(
                 'name'           => 'System Announcement',
                 'desc'           => 'Notify stores about system-wide announcements.',
                 'store_enabled'  => true,
@@ -1000,9 +996,9 @@ class Notifications
                 'system_message' => '{announcement_message}',
                 'tag'            => 'System',
                 'category'       => 'notification',
-            ],
+            ),
 
-            'system_maintenance'        => [
+            'system_maintenance'        => array(
                 'name'             => 'System Maintenance',
                 'desc'             => 'Notify stores and customers about scheduled maintenance.',
                 'store_enabled'    => true,
@@ -1013,9 +1009,9 @@ class Notifications
                 'system_message'   => 'System maintenance scheduled on {date_time}.',
                 'tag'              => 'System',
                 'category'         => 'notification',
-            ],
+            ),
 
-            'policy_update'             => [
+            'policy_update'             => array(
                 'name'             => 'Policy Update',
                 'desc'             => 'Notify stores and customers when marketplace policy is updated.',
                 'store_enabled'    => true,
@@ -1026,22 +1022,21 @@ class Notifications
                 'system_message'   => 'Marketplace policy updated.',
                 'tag'              => 'System',
                 'category'         => 'notification',
-            ],
-        ];
+            ),
+        );
 
         $count = $wpdb->get_var(
             "SELECT COUNT(*) FROM {$wpdb->prefix}" . Utill::TABLES['system_events']
         );
 
-        if ($count > 0) {
+        if ( $count > 0 ) {
             return;
         }
 
-        foreach ($this->events as $key => $event) {
-
+        foreach ( $this->events as $key => $event ) {
             $wpdb->insert(
                 "{$wpdb->prefix}" . Utill::TABLES['system_events'],
-                [
+                array(
                     'event_name'       => $event['name'],
                     'description'      => $event['desc'],
                     'admin_enabled'    => $event['admin_enabled'] ?? false,
@@ -1054,11 +1049,11 @@ class Notifications
                     'sms_content'      => $event['sms_content'] ?? '',
                     'system_message'   => $event['system_message'] ?? '',
                     'status'           => 'active',
-                    'custom_emails'    => wp_json_encode([]), // empty array
+                    'custom_emails'    => wp_json_encode( array() ), // empty array
                     'tag'              => $event['tag'] ?? '',
                     'category'         => $event['category'] ?? '',
-                ],
-                [
+                ),
+                array(
                     '%s',
                     '%s',
                     '%d',
@@ -1074,77 +1069,70 @@ class Notifications
                     '%s',
                     '%s',
                     '%s',
-                ]
+                )
             );
-
         }
-
     }
 
-    public function trigger_notifications($action_name, $parameters)
-    {
+    public function trigger_notifications( $action_name, $parameters ) {
         global $wpdb;
         $event = $wpdb->get_row(
-            $wpdb->prepare("SELECT * FROM `" . $wpdb->prefix . Utill::TABLES['system_events'] . "` WHERE system_action = %s", $action_name)
+            $wpdb->prepare( 'SELECT * FROM `' . $wpdb->prefix . Utill::TABLES['system_events'] . '` WHERE system_action = %s', $action_name )
         );
 
-        if ($event->admin_enabled) {
+        if ( $event->admin_enabled ) {
             $admin_email = $parameters['admin_email'];
         }
-        if ($event->store_enabled) {
+        if ( $event->store_enabled ) {
             $store_email = $parameters['store_email'];
         }
-        if ($event->customer_enabled) {
+        if ( $event->customer_enabled ) {
             $customer_email = $parameters['customer_email'];
         }
 
-        if ($event->system_enabled) {
-            $this->send_notifications($event, $parameters);
+        if ( $event->system_enabled ) {
+            $this->send_notifications( $event, $parameters );
         }
 
-        if ($event->email_enabled) {
+        if ( $event->email_enabled ) {
             // call email class
         }
 
-        if ($event->sms_enabled) {
+        if ( $event->sms_enabled ) {
             // call sms class
         }
-
     }
 
-    public function send_notifications($event, $parameters)
-    {
+    public function send_notifications( $event, $parameters ) {
 
         global $wpdb;
 
         $wpdb->insert(
             "{$wpdb->prefix}" . Utill::TABLES['notifications'],
-            [
+            array(
                 'store_id' => $parameters['store_id'] ?? null,
                 'category' => $parameters['category'],
                 'type'     => $event->system_action,
                 'title'    => $event->event_name,
                 'message'  => $event->description,
-            ],
-            [
+            ),
+            array(
                 '%d',
                 '%s',
                 '%s',
                 '%s',
                 '%s',
-            ]
+            )
         );
-
     }
 
-    public function get_all_events($id = null)
-    {
+    public function get_all_events( $id = null ) {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['system_events'];
 
-        $events = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table"));
+        $events = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table" ) );
 
-        if (! empty($id)) {
+        if ( ! empty( $id ) ) {
             $events = $wpdb->get_results(
                 $wpdb->prepare(
                     "SELECT * FROM $table WHERE id = %d",
@@ -1152,19 +1140,18 @@ class Notifications
                 )
             );
         } else {
-            $events = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table"));
+            $events = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table" ) );
         }
 
         return $events;
     }
 
 
-    public function get_all_notifications($store_id = null, $args = [])
-    {
+    public function get_all_notifications( $store_id = null, $args = array() ) {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['notifications'];
 
-        if (! empty($store_id)) {
+        if ( ! empty( $store_id ) ) {
             $events = $wpdb->get_results(
                 $wpdb->prepare(
                     "SELECT * FROM $table WHERE store_id = %d AND is_dismissed = %d",
@@ -1181,68 +1168,67 @@ class Notifications
             );
         }
 
-        if (!empty($args)) {
-            $where = [];
-    
+        if ( ! empty( $args ) ) {
+            $where = array();
+
             if ( isset( $args['ID'] ) ) {
-                $ids     = is_array( $args['ID'] ) ? $args['ID'] : [ $args['ID'] ];
+                $ids     = is_array( $args['ID'] ) ? $args['ID'] : array( $args['ID'] );
                 $ids     = implode( ',', array_map( 'intval', $ids ) );
                 $where[] = "ID IN ($ids)";
             }
-        
+
             if ( isset( $args['category'] ) ) {
                 $where[] = "category = '" . esc_sql( $args['category'] ) . "'";
             }
 
             if ( isset( $args['store_id'] ) ) {
                 $where[] = "store_id = '" . esc_sql( $args['store_id'] ) . "'";
-            }   
-        
+            }
+
             if ( isset( $args['start_date'] ) && isset( $args['end_date'] ) ) {
                 $where[] = "create_time BETWEEN '" . esc_sql( $args['start_date'] ) . "' AND '" . esc_sql( $args['end_date'] ) . "'";
             }
-        
+
             $table = $wpdb->prefix . Utill::TABLES['notifications'];
-        
+
             if ( isset( $args['count'] ) ) {
                 $query = "SELECT COUNT(*) FROM {$table}";
             } else {
                 $query = "SELECT * FROM {$table}";
             }
-        
+
             if ( ! empty( $where ) ) {
                 $condition = $args['condition'] ?? ' AND ';
                 $query    .= ' WHERE ' . implode( $condition, $where );
             }
-        
-            //Keep your pagination logic
+
+            // Keep your pagination logic
             if ( isset( $args['limit'] ) && isset( $args['offset'] ) && empty( $args['count'] ) ) {
                 $limit  = intval( $args['limit'] );
                 $offset = intval( $args['offset'] );
                 $query .= " LIMIT $limit OFFSET $offset";
             }
-        
+
             if ( isset( $args['count'] ) ) {
                 $results = $wpdb->get_var( $query );
                 return $results ?? 0;
             } else {
                 $results = $wpdb->get_results( $query, ARRAY_A );
-                return $results ?? [];
+                return $results ?? array();
             }
         }
-    
+
         return $events;
     }
 
-    public function multivendorx_clear_notifications()
-    {
+    public function multivendorx_clear_notifications() {
         global $wpdb;
 
-        $days = MultiVendorX()->setting->get_setting('clear_notifications');
+        $days = MultiVendorX()->setting->get_setting( 'clear_notifications' );
 
         $table = "{$wpdb->prefix}" . Utill::TABLES['notifications'];
 
-        $current_date = current_time('mysql');
+        $current_date = current_time( 'mysql' );
 
         // Delete data older than N days or already expired
         $query = $wpdb->prepare(
@@ -1256,8 +1242,6 @@ class Notifications
             $days
         );
 
-        $wpdb->query($query);
-
+        $wpdb->query( $query );
     }
-
 }

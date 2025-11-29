@@ -5,8 +5,8 @@ import { __ } from '@wordpress/i18n';
 import "../Announcements/announcements.scss";
 import { AdminBreadcrumbs, getApiLink, SelectInput, Tabs } from 'zyra';
 import axios from 'axios';
-import TransactionHistoryTable from './walletTransaction';
-import TransactionDataTable from './transactionDataTable';
+import DirectTransaction from './directTransaction';
+import WalletTransaction from './walletTransaction';
 
 export const TransactionHistory: React.FC = () => {
     const [allStores, setAllStores] = useState<any[]>([]);
@@ -15,7 +15,6 @@ export const TransactionHistory: React.FC = () => {
         startDate: null,
         endDate: null,
     });
-
 
     // Fetch stores on mount
     useEffect(() => {
@@ -36,10 +35,9 @@ export const TransactionHistory: React.FC = () => {
                 }
             })
             .catch((error) => {
-                console.error("Error fetching stores:", error);
+                console.error(__("Error fetching stores:", "multivendorx"), error);
             });
     }, []);
-
 
     const locationUrl = new URLSearchParams(useLocation().hash.substring(1));
 
@@ -48,7 +46,7 @@ export const TransactionHistory: React.FC = () => {
             type: 'file',
             content: {
                 id: 'wallet-transaction',
-                name: 'Wallet transaction',
+                name: __("Wallet Transaction", "multivendorx"),
                 icon: 'wallet-in',
                 hideTabHeader: true,
             },
@@ -57,49 +55,57 @@ export const TransactionHistory: React.FC = () => {
             type: 'file',
             content: {
                 id: 'direct-transaction',
-                name: 'Direct transaction',
+                name: __("Direct Transaction", "multivendorx"),
                 icon: 'direct-transaction',
                 hideTabHeader: true,
             },
         },
-    ]
+    ];
 
     const getForm = (tabId: string) => {
         switch (tabId) {
             case 'wallet-transaction':
-                return <TransactionHistoryTable storeId={selectedStore?.value} dateRange={dateRange} />;
+                return <WalletTransaction storeId={selectedStore?.value} dateRange={dateRange} />;
             case 'direct-transaction':
-                return <TransactionDataTable storeId={selectedStore?.value}  />;
-
+                return <DirectTransaction storeId={selectedStore?.value} />;
             default:
                 return <div></div>;
         }
     };
+
     return (
         <>
             <AdminBreadcrumbs
                 activeTabIcon="adminlib-store-reactivated"
                 tabTitle={
                     selectedStore
-                        ? `Storewise Transaction History - ${selectedStore.label}`
-                        : "Storewise Transaction History"
+                        ? __(
+                              `Storewise Transaction History - ${selectedStore.label}`,
+                              "multivendorx"
+                          )
+                        : __("Storewise Transaction History", "multivendorx")
                 }
                 description={
                     selectedStore
-                        ? `View and manage transactions for ${selectedStore.label} store`
-                        : "View and manage storewise transactions"
+                        ? __(
+                              `View and manage transactions for ${selectedStore.label} store`,
+                              "multivendorx"
+                          )
+                        : __("View and manage storewise transactions", "multivendorx")
                 }
                 customContent={
                     <>
-                        <label><i className="adminlib-switch-store"></i>Switch store</label>
+                        <label>
+                            <i className="adminlib-switch-store"></i>
+                            {__("Switch Store", "multivendorx")}
+                        </label>
+
                         <SelectInput
                             name="store"
                             value={selectedStore?.value || ""}
                             options={allStores}
                             type="select"
-                            onChange={(newValue: any) => {
-                                setSelectedStore(newValue)
-                            }}
+                            onChange={(newValue: any) => setSelectedStore(newValue)}
                             size="12rem"
                         />
                     </>
@@ -114,7 +120,7 @@ export const TransactionHistory: React.FC = () => {
                     `?page=multivendorx#&tab=transaction-history&subtab=${subTab}`
                 }
                 appLocalizer={appLocalizer}
-                supprot={[]}
+                supprot={[]} // keeping your original key
                 Link={Link}
                 hideTitle={true}
                 hideBreadcrumb={true}

@@ -1,14 +1,12 @@
-import { AdminBreadcrumbs, getApiLink, SelectInput, Tabs } from 'zyra';
-import { useEffect, useRef, useState } from 'react';
-
+import { AdminBreadcrumbs, Tabs } from 'zyra';
 import "../../dashboard/dashboardCommon.scss";
-import Overview from './Overview';
-import Transactions from './Payout';
-import Revenue from './Revenue';
-import StoreOrders from './StoreOrders';
-import RefundedOrderOld from './RefundedOrderOld';
-import axios from 'axios';
 import { useLocation, Link } from 'react-router-dom';
+import MarketplaceReport from './MarketplaceReport';
+import ProductReport from './ProductReport';
+import StoreReport from './StoreReport';
+import OrderReport from './OrderReport';
+import RefundedOrderReport from './RefundedOrderReport';
+import { __ } from '@wordpress/i18n';
 
 const Reports = () => {
   // Dummy chart data
@@ -75,15 +73,6 @@ const Reports = () => {
     { name: "Shipping", value: 200 },
   ];
 
-  const [activeTab, setActiveTab] = useState("overview");
-
-  const tabs = [
-    { id: "overview", label: "Marketplace", icon: "adminlib-marketplace-membership", content: <Overview overview={overview} data={data} overviewData={overviewData} pieData={pieData} /> },
-    { id: "revenue", label: "Products", icon: "adminlib-multi-product", content: <Revenue /> },
-    { id: "payout", label: "Stores", icon: "adminlib-store-inventory", content: <Transactions /> },
-    { id: "StoreOrders", icon: "adminlib-order", label: "Store Orders", content: <StoreOrders /> },
-    { id: "RefundedOrderOld", icon: "adminlib-marketplace-refund", label: "Refunded Orders", content: <RefundedOrderOld /> },
-  ];
   const location = new URLSearchParams(useLocation().hash.substring(1));
 
   const tabData = [
@@ -137,15 +126,15 @@ const Reports = () => {
   const getForm = (tabId: string) => {
     switch (tabId) {
       case 'marketplace':
-        return <Overview overview={overview} data={data} overviewData={overviewData} pieData={pieData} />;
+        return <MarketplaceReport overview={overview} data={data} overviewData={overviewData} pieData={pieData} />;
       case 'products':
-        return <Revenue />;
+        return <ProductReport />;
       case 'stores':
-        return <Transactions />;
+        return <StoreReport />;
       case 'store-orders':
-        return <StoreOrders />;
+        return <OrderReport />;
       case 'refunded-orders':
-        return <RefundedOrderOld />;
+        return <RefundedOrderReport />;
       default:
         return <div></div>;
     }
@@ -154,8 +143,8 @@ const Reports = () => {
     <>
       <AdminBreadcrumbs
         activeTabIcon="adminlib-report"
-        tabTitle="Reports"
-        description={'Track sales, earnings, and store performance with real-time marketplace insights.'}
+        tabTitle={__('Reports', 'multivendorx')}
+        description={__('Track sales, earnings, and store performance with real-time marketplace insights.', 'multivendorx')}
       />
 
       <Tabs

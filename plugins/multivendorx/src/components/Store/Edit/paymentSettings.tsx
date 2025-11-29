@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BasicInput, ToggleSetting, getApiLink, SuccessNotice, BlockText } from 'zyra';
+import { __, sprintf } from '@wordpress/i18n';
 
 interface PaymentField {
 	key: any;
@@ -200,7 +201,7 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									Withdrawal methods
+									{__('Withdrawal methods', 'multivendorx')}
 								</div>
 							</div>
 						</div>
@@ -210,13 +211,15 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 								<ToggleSetting
 									wrapperClass="setting-form-input"
 									descClass="settings-metabox-description"
-									description={(paymentOptions && paymentOptions.length === 0)
-										? `You haven’t enabled any payment methods yet. Configure payout options 
-											<a href="?page=multivendorx#&tab=settings&subtab=payment-integration" 
-												>
-												from here
-											</a> to allow stores to receive their earnings.`
-										: ""}
+									description={
+										paymentOptions && paymentOptions.length === 0
+											? sprintf(
+												/* translators: %s: link to payment integration settings */
+												__('You haven’t enabled any payment methods yet. Configure payout options <a href="%s">from here</a> to allow stores to receive their earnings.', 'multivendorx'),
+												'?page=multivendorx#&tab=settings&subtab=payment-integration'
+											)
+											: ''
+									}
 									options={paymentOptions}
 									value={formData.payment_method || ""}
 									onChange={(value) => handleToggleChange(value, 'payment_method')}
@@ -241,10 +244,10 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 								return (
 									<div className="form-group-wrapper" key={field.key}>
 										<div className="form-group">
-											<label htmlFor={field.key}>{field.label}</label>
+											<label htmlFor={field.key}>{__(field.label, 'multivendorx')}</label>
 											<ToggleSetting
 												key={field.key}
-												description={field.desc}
+												description={__(field.desc || '', 'multivendorx')}
 												options={
 													Array.isArray(field.options)
 														? field.options.map((opt) => ({
@@ -265,13 +268,13 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 							return (
 								<div className="form-group-wrapper" key={field.key}>
 									<div className="form-group">
-										<label htmlFor={field.key}>{field.label}</label>
+										<label htmlFor={field.key}>{__(field.label, 'multivendorx')}</label>
 										<BasicInput
 											name={field.key || ""}
 											type={field.type || "text"}
 											wrapperClass="setting-form-input"
 											descClass="settings-metabox-description"
-											placeholder={field.placeholder || ""}
+											placeholder={field.placeholder ? __(field.placeholder, 'multivendorx') : ""}
 											value={formData[field.key]}
 											onChange={handleChange}
 										/>
@@ -287,29 +290,42 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									Store-specific commission
+									{__('Store-specific commission', 'multivendorx')}
 								</div>
 							</div>
 						</div>
 						<BlockText
 							blockTextClass="settings-metabox-note"
-							value={`
-									If no store-specific commission is set, the 
-									<a href="${appLocalizer.plugin_url}settings&subtab=store-commissions">
-									global commission
-									</a> 
-									will automatically apply.
-								`}
+							value={sprintf(
+								/* translators: %s: link to global commission settings */
+								__('If no store-specific commission is set, the <a href="%s">global commission</a> will automatically apply.', 'multivendorx'),
+								`${appLocalizer.plugin_url}settings&subtab=store-commissions`
+							)}
 						/>
 						<div className="form-group-wrapper">
 							<div className="form-group">
-								<label htmlFor="product-name">Fixed</label>
-								<BasicInput preInsideText={"$"} postText={"+"} name="commission_fixed" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.commission_fixed} onChange={handleChange} />
+								<label htmlFor="product-name">{__('Fixed', 'multivendorx')}</label>
+								<BasicInput
+									preInsideText="$"
+									postText="+"
+									name="commission_fixed"
+									wrapperClass="setting-form-input"
+									descClass="settings-metabox-description"
+									value={formData.commission_fixed}
+									onChange={handleChange}
+								/>
 							</div>
-								
+
 							<div className="form-group">
-								<label htmlFor="product-name">Percentage</label>
-								<BasicInput postInsideText={"%"} name="commission_percentage" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.commission_percentage} onChange={handleChange} />
+								<label htmlFor="product-name">{__('Percentage', 'multivendorx')}</label>
+								<BasicInput
+									postInsideText="%"
+									name="commission_percentage"
+									wrapperClass="setting-form-input"
+									descClass="settings-metabox-description"
+									value={formData.commission_percentage}
+									onChange={handleChange}
+								/>
 							</div>
 						</div>
 					</div>

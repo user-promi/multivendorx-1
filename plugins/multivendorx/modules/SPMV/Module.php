@@ -44,9 +44,9 @@ class Module {
      */
     public function init_classes() {
         $this->container['frontend'] = new Frontend();
-        $this->container['admin'] = new Admin();
-        $this->container['ajax'] = new Ajax();
-        $this->container['util'] = new Util();
+        $this->container['admin']    = new Admin();
+        $this->container['ajax']     = new Ajax();
+        $this->container['util']     = new Util();
     }
 
     /**

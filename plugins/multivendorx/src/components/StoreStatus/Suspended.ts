@@ -9,7 +9,7 @@ export default {
     submitUrl: 'settings',
     modal: [
         {
-            key: 'restriction_for_sunspended',
+            key: 'restriction_for_suspended',
             type: 'checkbox',
             label: __('Account capabilities', 'multivendorx'),
             class: 'mvx-toggle-checkbox',
@@ -18,23 +18,28 @@ export default {
                     key: 'store_visible_in_checkout',
                     label: __('Keep store visible but disable checkout', 'multivendorx'),
                     value: 'store_visible_in_checkout',
-                    desc: __('Displays the store and its products but prevents customers from placing new orders.Freeze all pending payments.', 'multivendorx'),
+                    desc: __(
+                        'Displays the store and its products but prevents customers from placing new orders. Freeze all pending payments.',
+                        'multivendorx'
+                    ),
                 },
                 {
                     key: 'disable_payouts',
                     label: __('Disable payouts', 'multivendorx'),
                     value: 'DisablePayouts',
-                    desc: __('Suspends payout processing. Earnings will be released once the store successfully clears the review.', 'multivendorx'),
-
+                    desc: __(
+                        'Suspends payout processing. Earnings will be released once the store successfully clears the review.',
+                        'multivendorx'
+                    ),
                 },
             ],
             selectDeselect: true,
         },
         {
             key: 'suspended_msg',
-            label: 'Message shown to suspended stores',
+            label: __('Message shown to suspended stores', 'multivendorx'),
             type: 'textarea',
-            des: 'What pending stores can do',
+            des: __('What suspended stores can do', 'multivendorx'),
         },
     ],
 };

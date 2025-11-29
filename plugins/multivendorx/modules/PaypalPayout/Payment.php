@@ -2,7 +2,7 @@
 
 namespace MultiVendorX\PaypalPayout;
 
-defined('ABSPATH') || exit;
+defined( 'ABSPATH' ) || exit;
 
 use MultiVendorX\Store\Store;
 // Correct SDK namespaces (note: PaypalPayoutsSDK, not PayPal\Core)
@@ -12,8 +12,8 @@ use PaypalPayoutsSDK\Core\ProductionEnvironment;
 use PaypalPayoutsSDK\Payouts\PayoutsPostRequest;
 
 class Payment {
-    public function __construct(){
-        add_action('multivendorx_process_paypal-payout_payment', array($this, 'process_payment'), 10, 5);
+    public function __construct() {
+        add_action( 'multivendorx_process_paypal-payout_payment', array( $this, 'process_payment' ), 10, 5 );
     }
 
     public function get_id() {
@@ -21,107 +21,115 @@ class Payment {
     }
 
     public function get_settings() {
-        return [
-            'icon'      => 'adminlib-form-paypal-email',
-            'id'        => $this->get_id(),
-            'label'     => 'Paypal Payout',
+        return array(
+            'icon'         => 'adminlib-form-paypal-email',
+            'id'           => $this->get_id(),
+            'label'        => 'Paypal Payout',
             'enableOption' => true,
-            'disableBtn'=> true,
-            'desc'      => 'Full marketplace solution with instant payouts, comprehensive dispute handling, and global coverage. Best for established marketplaces.',
-            'formFields' => [
-                [
-                    'key'   => 'payment_mode',
-                    'type'  => 'setting-toggle',
-                    'label' => __('Payment Mode', 'multivendorx'),
-                    'options' => [
-                        ['key' => 'sandbox', 'label' => __('Sandbox', 'multivendorx'), 'value' => 'sandbox'],
-                        ['key' => 'live', 'label' => __('Live', 'multivendorx'), 'value' => 'live'],
-                    ]
-                ],
-                [
+            'disableBtn'   => true,
+            'desc'         => 'Full marketplace solution with instant payouts, comprehensive dispute handling, and global coverage. Best for established marketplaces.',
+            'formFields'   => array(
+                array(
+                    'key'     => 'payment_mode',
+                    'type'    => 'setting-toggle',
+                    'label'   => __( 'Payment Mode', 'multivendorx' ),
+                    'options' => array(
+                        array(
+							'key'   => 'sandbox',
+							'label' => __( 'Sandbox', 'multivendorx' ),
+							'value' => 'sandbox',
+						),
+                        array(
+							'key'   => 'live',
+							'label' => __( 'Live', 'multivendorx' ),
+							'value' => 'live',
+						),
+                    ),
+                ),
+                array(
                     'key'         => 'client_id',
                     'type'        => 'text',
                     'label'       => 'Client ID',
                     'placeholder' => 'Enter Client id',
-                ],
-                [
+                ),
+                array(
                     'key'         => 'client_secret',
                     'type'        => 'text',
                     'label'       => 'Client Secret Key',
                     'placeholder' => 'Enter Secret Key',
-                ]
-            ]
-        ];
+                ),
+            ),
+        );
     }
 
     public function get_store_payment_settings() {
-        $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', [] );
+        $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
 
-        $paypal_settings = !empty($payment_admin_settings['paypal-payout']) ? $payment_admin_settings['paypal-payout'] : [];
-        
-        if ($paypal_settings && !$paypal_settings['enable']) {
-            return [
-                'id'    => $this->get_id(),
-                'label' => __('Paypal Payout', 'multivendorx'),
-                'fields' => [
-                    [
+        $paypal_settings = ! empty( $payment_admin_settings['paypal-payout'] ) ? $payment_admin_settings['paypal-payout'] : array();
+
+        if ( $paypal_settings && ! $paypal_settings['enable'] ) {
+            return array(
+                'id'     => $this->get_id(),
+                'label'  => __( 'Paypal Payout', 'multivendorx' ),
+                'fields' => array(
+                    array(
                         'name'        => 'paypal_email',
                         'type'        => 'email',
-                        'label'       => __('PayPal Email', 'multivendorx'),
-                        'placeholder' => __('Enter your PayPal email address', 'multivendorx'),
-                    ]
-                ]
-            ];
+                        'label'       => __( 'PayPal Email', 'multivendorx' ),
+                        'placeholder' => __( 'Enter your PayPal email address', 'multivendorx' ),
+                    ),
+                ),
+            );
         }
     }
 
-    public function process_payment($store_id, $amount, $order_id = null, $transaction_id = null, $note = null) {
+    public function process_payment( $store_id, $amount, $order_id = null, $transaction_id = null, $note = null ) {
 
         // quick autoload/class check (helps debugging)
-        $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', [] );
-        $store   = new Store( $store_id );
+        $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
+        $store                  = new Store( $store_id );
 
-        if (!empty($payment_admin_settings['paypal-payout'])) {
+        if ( ! empty( $payment_admin_settings['paypal-payout'] ) ) {
             $paypal_settings = $payment_admin_settings['paypal-payout'];
-            if ($paypal_settings && $paypal_settings['enable']) {
-                //add in paramiters 
-                $receiver_email = $store->get_meta('payment_method') == 'paypal-payout' ? $store->get_meta('paypal_email') : ""; // receiver sandbox email
-                $sandbox = $paypal_settings['payment_mode'] == 'sandbox' ? true : false;   // sandbox mode
-                $clientId = $paypal_settings['client_id'];
-                $clientSecret = $paypal_settings['client_secret'];
-                $currency = get_woocommerce_currency();
+            if ( $paypal_settings && $paypal_settings['enable'] ) {
+                // add in paramiters
+                $receiver_email = $store->get_meta( 'payment_method' ) == 'paypal-payout' ? $store->get_meta( 'paypal_email' ) : ''; // receiver sandbox email
+                $sandbox        = $paypal_settings['payment_mode'] == 'sandbox' ? true : false;   // sandbox mode
+                $clientId       = $paypal_settings['client_id'];
+                $clientSecret   = $paypal_settings['client_secret'];
+                $currency       = get_woocommerce_currency();
 
                 // Choose environment
                 $environment = $sandbox
-                    ? new SandboxEnvironment($clientId, $clientSecret)
-                    : new ProductionEnvironment($clientId, $clientSecret);
+                    ? new SandboxEnvironment( $clientId, $clientSecret )
+                    : new ProductionEnvironment( $clientId, $clientSecret );
 
-                $client = new PayPalHttpClient($environment);
+                $client = new PayPalHttpClient( $environment );
 
                 // Build payout request
-                $request = new PayoutsPostRequest();
-                $request->body = [
-                    "sender_batch_header" => [
-                        "sender_batch_id" => uniqid(),
-                        "email_subject"   => "You have a payment",
-                    ],
-                    "items" => [
-                        [
-                            "recipient_type" => "EMAIL",
-                            "amount" => [
-                                "value"    => number_format($amount, 2, '.', ''),
-                                "currency" => $currency
-                            ],
-                            "receiver" => $receiver_email,
-                            "note"     => "Payment from Store #$store_id"
-                        ]
-                    ]
-                ];
+                $request       = new PayoutsPostRequest();
+                $request->body = array(
+                    'sender_batch_header' => array(
+                        'sender_batch_id' => uniqid(),
+                        'email_subject'   => 'You have a payment',
+                    ),
+                    'items'               => array(
+                        array(
+                            'recipient_type' => 'EMAIL',
+                            'amount'         => array(
+                                'value'    => number_format( $amount, 2, '.', '' ),
+                                'currency' => $currency,
+                            ),
+                            'receiver'       => $receiver_email,
+                            'note'           => "Payment from Store #$store_id",
+                        ),
+                    ),
+                );
 
                 try {
-                    $response = $client->execute($request);
+                    $response = $client->execute( $request );
 
-                    $success = !empty($response->result->batch_header->payout_batch_id);
+                    $success = ! empty( $response->result->batch_header->payout_batch_id );
 
                     $status  = $success ? 'success' : 'failure';
                     $message = $success ? 'Payment successful' : 'Payment failed';
@@ -131,41 +139,41 @@ class Payment {
                         $store_id,
                         'Paypal Payout',
                         $status,
-                        $order_id, $transaction_id, $note, $amount
+                        $order_id,
+                        $transaction_id,
+                        $note,
+                        $amount
                     );
 
-                    return [
+                    return array(
                         'success'  => $success,
                         'message'  => $message,
-                        'response' => $response->result ?? null
-                    ];
+                        'response' => $response->result ?? null,
+                    );
 
                     // if (!empty($response->result->batch_header->payout_batch_id)) {
-                    //     do_action('multivendorx_after_payment_complete', $order_id, $store_id, 'Paypal Payout');
+                    // do_action('multivendorx_after_payment_complete', $order_id, $store_id, 'Paypal Payout');
 
-                    //     return [
-                    //         'success'  => true,
-                    //         'message'  => 'Payment successful',
-                    //         'response' => $response->result
-                    //     ];
+                    // return [
+                    // 'success'  => true,
+                    // 'message'  => 'Payment successful',
+                    // 'response' => $response->result
+                    // ];
                     // } else {
-                    //     return [
-                    //         'success'  => false,
-                    //         'message'  => 'Payment failed',
-                    //         'response' => $response->result ?? null
-                    //     ];
+                    // return [
+                    // 'success'  => false,
+                    // 'message'  => 'Payment failed',
+                    // 'response' => $response->result ?? null
+                    // ];
                     // }
-                } catch (\Exception $e) { // <-- use global Exception inside a namespace
-                    return [
-                        'success' => false,
-                        'message' => 'PayPal SDK Error: ' . $e->getMessage(),
-                        'response' => null
-                    ];
+                } catch ( \Exception $e ) { // <-- use global Exception inside a namespace
+                    return array(
+                        'success'  => false,
+                        'message'  => 'PayPal SDK Error: ' . $e->getMessage(),
+                        'response' => null,
+                    );
                 }
             }
         }
-        
     }
-
 }
-

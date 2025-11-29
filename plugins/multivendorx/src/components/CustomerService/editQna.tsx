@@ -9,7 +9,7 @@ interface QnaItem {
   product_id: number;
   product_name: string;
   product_link: string;
-  product_image: string; // ✅ added
+  product_image: string; //added
   question_text: string;
   answer_text: string | null;
   question_by: number;

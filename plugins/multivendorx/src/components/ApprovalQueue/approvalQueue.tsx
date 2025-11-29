@@ -1,14 +1,14 @@
 import { AdminBreadcrumbs, getApiLink, Tabs, useModules } from 'zyra';
-import Products from './products';
-import Coupons from './coupon';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import Stores from './stores';
-import ReportAbuseTable from './pendingAbuseReports';
-import WithdrawalRequests from './withdrawalRequests';
-import StoreOrders from './StoreOrders';
-import DeactivateRequests from './deactivateRequests';
 import { useLocation, Link } from 'react-router-dom';
+import PendingStores from './pendingStores';
+import PendingProducts from './pendingProducts';
+import PendingCoupons from './pendingCoupons';
+import PendingRefund from './pendingRefund';
+import PendingReportAbuse from './pendingAbuseReports';
+import PendingWithdrawal from './pendingWithdrawalRequests';
+import PendingDeactivateRequests from './pendingDeactivateRequests';
 
 const ApprovalQueue = () => {
     const [storeCount, setStoreCount] = useState<number>(0);
@@ -223,28 +223,28 @@ const ApprovalQueue = () => {
     const getForm = (tabId: string) => {
         switch (tabId) {
             case 'stores':
-                return <Stores onUpdated={refreshCounts} />;
+                return <PendingStores onUpdated={refreshCounts} />;
 
             case 'products':
-                return <Products onUpdated={refreshCounts} />;
+                return <PendingProducts onUpdated={refreshCounts} />;
 
             case 'coupons':
-                return <Coupons onUpdated={refreshCounts} />;
+                return <PendingCoupons onUpdated={refreshCounts} />;
 
             case 'wholesale-customer':
                 return <h1>Upcoming Feature</h1>;
 
             case 'refund-requests':
-                return <StoreOrders onUpdated={refreshCounts} />;
+                return <PendingRefund onUpdated={refreshCounts} />;
 
             case 'report-abuse':
-                return <ReportAbuseTable onUpdated={refreshCounts} />;
+                return <PendingReportAbuse onUpdated={refreshCounts} />;
 
             case 'withdrawal':
-                return <WithdrawalRequests onUpdated={refreshCounts} />;
+                return <PendingWithdrawal onUpdated={refreshCounts} />;
 
             case 'deactivate-requests':
-                return <DeactivateRequests onUpdated={refreshCounts} />;
+                return <PendingDeactivateRequests onUpdated={refreshCounts} />;
                 
             default:
                 return <div></div>;

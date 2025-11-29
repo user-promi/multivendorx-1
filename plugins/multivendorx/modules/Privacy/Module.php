@@ -43,7 +43,6 @@ class Module {
      * @return void
      */
     public function init_classes() {
-
     }
 
     /**

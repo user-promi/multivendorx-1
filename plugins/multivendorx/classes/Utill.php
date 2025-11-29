@@ -24,44 +24,75 @@ class Utill {
      * @var array
      */
     const TABLES = array(
-        'commission'    => 'multivendorx_commissions',
-        'store'         => 'multivendorx_store',
-        'store_users'   => 'multivendorx_store_users',
-        'store_meta'    => 'multivendorx_store_meta',
-        'transaction'   => 'multivendorx_transactions',
+        'commission'              => 'multivendorx_commissions',
+        'store'                   => 'multivendorx_store',
+        'store_users'             => 'multivendorx_store_users',
+        'store_meta'              => 'multivendorx_store_meta',
+        'transaction'             => 'multivendorx_transactions',
         'real_time_transaction'   => 'multivendorx_real_time_transactions',
-        'product_qna'   => 'multivendorx_questions_and_answers',
-        'report_abuse'   => 'multivendorx_report_abuse',
-        'shipping_zone'   => 'multivendorx_shipping_zone_methods',
-        'shipping_zone_locations'   => 'multivendorx_shipping_zone_locations',
-        'review'   => 'multivendorx_store_reviews',
-        'rating'   => 'multivendorx_store_review_ratings',
-        'products_map'   => 'multivendorx_products_map',
-        'notifications'   => 'multivendorx_store_activity_notifications',
-        'system_events'   => 'multivendorx_system_events',
+        'product_qna'             => 'multivendorx_questions_and_answers',
+        'report_abuse'            => 'multivendorx_report_abuse',
+        'shipping_zone'           => 'multivendorx_shipping_zone_methods',
+        'shipping_zone_locations' => 'multivendorx_shipping_zone_locations',
+        'review'                  => 'multivendorx_store_reviews',
+        'rating'                  => 'multivendorx_store_review_ratings',
+        'products_map'            => 'multivendorx_products_map',
+        'notifications'           => 'multivendorx_store_activity_notifications',
+        'system_events'           => 'multivendorx_system_events',
     );
 
     /**
-     * Function to console and debug errors.
+     * MooWoodle LOG function.
      *
-     * @param mixed $data The data to log. Can be a string, array, or object.
+     * @param string $message message.
+     * @return bool
      */
-    public static function log( $data ) {
-        if ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) {
-            return;
-        }
+	public static function log( $message ) {
+		global $wp_filesystem;
 
-        require_once ABSPATH . 'wp-admin/includes/file.php';
-        WP_Filesystem();
+		$message = var_export( $message, true ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export
 
-        global $wp_filesystem;
+		// Init filesystem.
+		if ( empty( $wp_filesystem ) ) {
+			require_once ABSPATH . '/wp-admin/includes/file.php';
+			WP_Filesystem();
+		}
 
-        $log_file = MultiVendorX()->plugin_path . 'log/multivendorx.txt';
-        $message  = wp_json_encode( $data, JSON_PRETTY_PRINT ) . "\n---------------------------\n";
+		// log folder create.
+		if ( ! file_exists( MultiVendorX()->multivendorx_logs_dir . '/.htaccess' ) ) {
+			$result = wp_mkdir_p( MultiVendorX()->multivendorx_logs_dir );
+			if ( true === $result ) {
+				// Create infrastructure to prevent listing contents of the logs directory.
+				try {
+					$wp_filesystem->put_contents( MultiVendorX()->multivendorx_logs_dir . '/.htaccess', 'deny from all' );
+					$wp_filesystem->put_contents( MultiVendorX()->multivendorx_logs_dir . '/index.html', '' );
+				} catch ( Exception $exception ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
+					// Creation failed.
+				}
+			}
+			$message = "MultiVendorX Log file Created\n";
+		}
 
-        $existing = $wp_filesystem->exists( $log_file ) ? $wp_filesystem->get_contents( $log_file ) : '';
-        $wp_filesystem->put_contents( $log_file, $existing . $message, FS_CHMOD_FILE );
-    }
+		// Clear log file.
+		if ( filter_input( INPUT_POST, 'clearlog', FILTER_DEFAULT ) !== null ) {
+			$message = "MultiVendorX Log file Cleared\n";
+		}
+
+		// Write Log.
+		if ( '' !== $message ) {
+			$log_entry        = gmdate( 'd/m/Y H:i:s', time() ) . ': ' . $message;
+			$existing_content = $wp_filesystem->get_contents( MultiVendorX()->log_file );
+
+			// Append existing content.
+			if ( ! empty( $existing_content ) ) {
+				$log_entry = "\n" . $log_entry;
+			}
+
+			return $wp_filesystem->put_contents( MultiVendorX()->log_file, $existing_content . $log_entry );
+		}
+
+		return false;
+	}
 
     /**
      * Check pro plugin is active or not.
@@ -95,11 +126,12 @@ class Utill {
 
     /**
      * Utility function add aditional single quote in a string.
+     *
      * @param   string $string
      * @return  string
      */
     public static function add_single_quots( $string ) {
-        if ( is_string( $string) ) {
+        if ( is_string( $string ) ) {
             return "'$string'";
         }
         return $string;
@@ -108,18 +140,18 @@ class Utill {
     public static function is_store_dashboard() {
         $dashboard_page = (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' );
         // if (is_page($dashboard_page)) {
-        //     $has_shortcode = has_shortcode(get_post($dashboard_page)->post_content, 'multivendorx_store_dashboard');
-        //     return $has_shortcode;
+        // $has_shortcode = has_shortcode(get_post($dashboard_page)->post_content, 'multivendorx_store_dashboard');
+        // return $has_shortcode;
         // }
-        return is_page( $dashboard_page);
+        return is_page( $dashboard_page );
     }
 
     public static function is_store_registration_page() {
         $registration_page = (int) MultiVendorX()->setting->get_setting( 'store_registration_page' );
         // if (is_page($registration_page)) {
-        //     $has_shortcode = has_shortcode(get_post($registration_page)->post_content, 'multivendorx_store_registration');
-        //     return $has_shortcode;
+        // $has_shortcode = has_shortcode(get_post($registration_page)->post_content, 'multivendorx_store_registration');
+        // return $has_shortcode;
         // }
-        return is_page($registration_page);
+        return is_page( $registration_page );
     }
 }

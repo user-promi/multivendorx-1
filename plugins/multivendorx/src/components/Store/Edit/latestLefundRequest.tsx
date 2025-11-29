@@ -15,6 +15,7 @@ type RefundRow = {
     reason: string;
     date: string;
     status: string;
+    customer_edit_link?: string;
 };
 
 interface LatestRefundRequestProps {
@@ -91,22 +92,20 @@ const LatestRefundRequest: React.FC<LatestRefundRequestProps> = ({ store_id }) =
         {
             header: __('Refund Reason', 'multivendorx'),
             cell: ({ row }: any) => (
-                <TableCell title={row.original.customer_reason || ''}>
-                    {row.original.customer_reason || '-'}
+                <TableCell title={row.original.reason || ''}>
+                    {row.original.reason || '-'}
                 </TableCell>
             ),
         },
         {
             id: 'status',
             header: __('Status', 'multivendorx'),
-            cell: ({ row }) => {
-                return (
-                    <TableCell
-                        type="status"
-                        status={row.original.status}
-                    />
-                );
-            },
+            cell: ({ row }) => (
+                <TableCell
+                    type="status"
+                    status={row.original.status}
+                />
+            ),
         },
         {
             header: __('Date', 'multivendorx'),
