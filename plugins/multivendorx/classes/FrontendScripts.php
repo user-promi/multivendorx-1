@@ -347,48 +347,10 @@ class FrontendScripts {
         // Get all tab setting's database value.
         $settings_databases_value = array();
 
-		$tabs_names = apply_filters(
-			'multivendorx_additional_tabs_names',
-            array(
-                'general',
-                'store-registration-form',
-                'menu-manager',
-                'privacy-settings',
-                'store-coupon',
-                'store',
-                'products',
-                'policy',
-                'disbursement',
-                'commissions',
-                'marketplace-settings',
-                'user-capability',
-                'store-capability',
-                'identity-verification',
-                'commission-rule',
-                'payment-integration',
-                'store-appearance',
-                'product-report-abuse',
-                'store-commissions',
-                'store-inventory',
-                'review-management',
-                'order-actions-refunds',
-                'advertising',
-                'product-preferencess',
-                'product-store-category-control',
-                'geolocation',
-                'shipping',
-                'legal-compliance',
-                'product-compliance',
-                'tax-compliance',
-                'custom-css',
-                'single-product-multiple-store',
-                'pending-approval',
-                'rejected',
-                'permanently-rejected',
-                'under-review',
-                'suspended',
-            )
-		);
+        $tabs_names = apply_filters(
+            'multivendorx_additional_tabs_names',
+            array_keys( Utill::ADMIN_SETTINGS )
+        );
 
         foreach ( $tabs_names as $tab_name ) {
             $option_name                           = str_replace( '-', '_', 'multivendorx_' . $tab_name . '_settings' );

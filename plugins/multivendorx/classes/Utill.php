@@ -41,6 +41,46 @@ class Utill {
         'system_events'           => 'multivendorx_system_events',
     );
 
+    const ADMIN_SETTINGS = array(
+        'general'                        => 'multivendorx_general_settings',
+        'store-registration-form'        => 'multivendorx_store-registration-form_settings',
+        'menu-manager'                   => 'multivendorx_menu_manager_settings',
+        'privacy-settings'               => 'multivendorx_privacy_settings_settings',
+        'store-coupon'                   => 'multivendorx_store_coupon_settings',
+        'store'                          => 'multivendorx_store_settings',
+        'products'                       => 'multivendorx_products_settings',
+        'policy'                         => 'multivendorx_policy_settings',
+        'disbursement'                   => 'multivendorx_disbursement_settings',
+        'commissions'                    => 'multivendorx_commissions_settings',
+        'marketplace-settings'           => 'multivendorx_marketplace_settings_settings',
+        'user-capability'                => 'multivendorx_user_capability_settings',
+        'store-capability'               => 'multivendorx_store_capability_settings',
+        'identity-verification'          => 'multivendorx_identity_verification_settings',
+        'commission-rule'                => 'multivendorx_commission_rule_settings',
+        'payment-integration'            => 'multivendorx_payment_integration_settings',
+        'store-appearance'               => 'multivendorx_store_appearance_settings',
+        'product-report-abuse'           => 'multivendorx_product_report_abuse_settings',
+        'store-commissions'              => 'multivendorx_store_commissions_settings',
+        'store-inventory'                => 'multivendorx_store_inventory_settings',
+        'review-management'              => 'multivendorx_review_management_settings',
+        'order-actions-refunds'          => 'multivendorx_order_actions_refunds_settings',
+        'advertising'                    => 'multivendorx_advertising_settings',
+        'product-preferencess'           => 'multivendorx_product_preferencess_settings',
+        'product-store-category-control' => 'multivendorx_product_preferencess_settings',
+        'geolocation'                    => 'multivendorx_geolocation_settings',
+        'shipping'                       => 'multivendorx_shipping_settings',
+        'legal-compliance'               => 'multivendorx_legal_compliance_settings',
+        'product-compliance'             => 'multivendorx_product_compliance_settings',
+        'tax-compliance'                 => 'multivendorx_tax_compliance_settings',
+        'custom-css'                     => 'multivendorx_custom_css_settings',
+        'single-product-multiple-store'  => 'multivendorx_single_product_multiple_store_settings',
+        'pending-approval'               => 'multivendorx_pending_approval_settings',
+        'rejected'                       => 'multivendorx_rejected_settings',
+        'permanently-rejected'           => 'multivendorx_permanently_rejected_settings',
+        'under-review'                   => 'multivendorx_under_review_settings',
+        'suspended'                      => 'multivendorx_suspended_settings',
+    );
+
     /**
      * MooWoodle LOG function.
      *
