@@ -44,6 +44,7 @@ class Module {
      */
     public function init_classes() {
         $this->container['frontend'] = new Frontend();
+        $this->container['announcement'] = new MultiVendorX_REST_Announcement_Controller();
     }
 
     /**
