@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { BasicInput, SelectInput, TextArea } from "zyra";
+import { BasicInput, SelectInput, TextArea, getApiLink } from "zyra";
 import axios from "axios";
 import { formatCurrency } from "@/services/commonFunction";
 
@@ -17,19 +17,63 @@ const AddOrder = () => {
 
     const [addedProducts, setAddedProducts] = useState([]);
     const [showAddressEdit, setShowAddressEdit] = useState(false);
+    const [showShippingAddressEdit, setShowShippingAddressEdit] = useState(false);
 
     const [showCreateCustomer, setShowCreateCustomer] = useState(false);
 
     const addressEditRef = useRef(null);
+    const shippingAddressEditRef = useRef(null);
     const [shippingLines, setShippingLines] = useState([]);
     const [availableShippingMethods, setAvailableShippingMethods] = useState([]);
 
     useEffect(() => {
-        if (!showAddressEdit) return;
+        // if (!showAddressEdit) return;
 
         function handleClickOutside(e) {
             if (addressEditRef.current && !addressEditRef.current.contains(e.target)) {
+                const payload = {
+                    billing: {
+                        first_name: selectedCustomer?.first_name,
+                        last_name: selectedCustomer?.last_name,
+                        address_1: billingAddress.address_1,
+                        address_2: '',
+                        city: billingAddress.city,
+                        state: billingAddress.state,
+                        postcode: billingAddress.postcode,
+                        country: billingAddress.country,
+                    }
+                };
+                axios.put(`${appLocalizer.apiUrl}/wc/v3/customers/${selectedCustomer?.id}`, payload, {
+                    headers: { "X-WP-Nonce": appLocalizer.nonce }
+                })
+                .then(res => {
+                    setBillingAddress(res.data.billing);
+                });
+
                 setShowAddressEdit(false);
+            }
+            if (shippingAddressEditRef.current && !shippingAddressEditRef.current.contains(e.target)) {
+
+                const payload = {
+                    shipping: {
+                        first_name: selectedCustomer?.first_name,
+                        last_name: selectedCustomer?.last_name,
+                        address_1: shippingAddress.address_1,
+                        address_2: '',
+                        city: shippingAddress.city,
+                        state: shippingAddress.state,
+                        postcode: shippingAddress.postcode,
+                        country: shippingAddress.country,
+                    }
+                };
+                axios.put(`${appLocalizer.apiUrl}/wc/v3/customers/${selectedCustomer?.id}`, payload, {
+                    headers: { "X-WP-Nonce": appLocalizer.nonce }
+                })
+                .then(res => {
+                    setShippingAddress(res.data.shipping);
+                });
+
+                setShowShippingAddressEdit(false);
             }
         }
 
@@ -38,22 +82,7 @@ const AddOrder = () => {
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, [showAddressEdit]);
-
-    // useEffect(() => {
-    //     axios.get(`${appLocalizer.apiUrl}/wp/v2/users?roles=customer&per_page=100`, {
-    //         headers: { "X-WP-Nonce": appLocalizer.nonce },
-    //     })
-    //         .then((res) => {
-    //             const mapped = res.data.map(c => ({
-    //                 label: c.name || c.username,
-    //                 value: c.id,
-    //                 raw: c,
-    //             }));
-    //             setCustomers(mapped);
-    //         })
-    //         .catch(err => console.log("Error loading customers", err));
-    // }, []);
+    }, [showAddressEdit, showShippingAddressEdit, shippingAddress, billingAddress]);
 
     useEffect(() => {
         axios.get(`${appLocalizer.apiUrl}/wc/v3/customers`, {
@@ -152,46 +181,212 @@ const AddOrder = () => {
         ...paymentMethods
     ];
 
+    const [taxRates, setTaxRates] = useState([]);
+
+    useEffect(() => {
+        axios.get(`${appLocalizer.apiUrl}/wc/v3/taxes`, {
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { per_page: 100 }
+        })
+        .then(res => setTaxRates(res.data));
+    }, []);
+
+    const [showAddTax, setShowAddTax] = useState(false);
+    const [selectedTaxRate, setSelectedTaxRate] = useState(null);
+
+    const applyTaxToOrder = () => {
+        if (!selectedTaxRate) return;
+
+        const rate = Number(selectedTaxRate.rate) / 100;
+
+        setAddedProducts(prev =>
+            prev.map(item => ({
+                ...item,
+                tax_rate_id: selectedTaxRate.id,
+                tax_amount: item.price * (item.qty || 1) * rate
+            }))
+        );
+    };
+
+    // const createOrder = async () => {
+    //     const orderData = {
+    //         customer_id: selectedCustomer.id,
+
+    //         billing: billingAddress,
+    //         shipping: shippingAddress,
+
+    //         line_items: addedProducts.map(item => ({
+    //             product_id: item.id,
+    //             quantity: item.qty || 1,
+    //         })),
+
+    //         // shipping_lines: [
+    //         //     {
+    //         //         method_id: "flat_rate",
+    //         //         method_title: "Flat Rate",
+    //         //         total: "50"
+    //         //     }
+    //         // ],
+    //         shipping_lines: shippingLines.map(s => ({
+    //             method_id: s.method_id,
+    //             method_title: s.name,
+    //             total: String(s.cost.toFixed(2))
+    //         })),
+
+
+    //         payment_method: selectedPayment?.value,
+    //         payment_method_title: selectedPayment?.method_title,
+    //         set_paid: false
+    //     };
+
+    //     axios.post(`${appLocalizer.apiUrl}/wc/v3/orders`, orderData, {
+    //         headers: { "X-WP-Nonce": appLocalizer.nonce },
+    //     })
+    //     .then(res => {
+    //         console.log("Order created:", res.data);
+    //         window.location.assign(window.location.pathname);
+    //     })
+    // };
+
     const createOrder = async () => {
         const orderData = {
-            customer_id: selectedCustomer.id,
+            customer_id: selectedCustomer?.id || 0,
 
             billing: billingAddress,
             shipping: shippingAddress,
 
-            line_items: addedProducts.map(item => ({
-                product_id: item.id,
-                quantity: item.qty || 1,
-            })),
+            line_items: addedProducts.map(item => {
+                const qty = item.qty || 1;
+                const subtotal = item.price * qty;
+                const tax = item.tax_amount || 0;
 
-            // shipping_lines: [
-            //     {
-            //         method_id: "flat_rate",
-            //         method_title: "Flat Rate",
-            //         total: "50"
-            //     }
-            // ],
+                return {
+                    product_id: item.id,
+                    quantity: qty,
+                    subtotal: subtotal.toFixed(2),
+                    total: subtotal.toFixed(2),
+
+                    // Tax
+                    subtotal_tax: tax.toFixed(2),
+                    total_tax: tax.toFixed(2),
+
+                    // Required for tax mapping
+                    taxes: item.tax_rate_id
+                        ? [{ id: item.tax_rate_id, total: tax.toFixed(2) }]
+                        : []
+                }
+            }),
+
+            // Shipping
             shipping_lines: shippingLines.map(s => ({
                 method_id: s.method_id,
                 method_title: s.name,
-                total: String(s.cost.toFixed(2))
+                total: Number(s.cost).toFixed(2)
             })),
 
-
-            payment_method: selectedPayment?.value,
-            payment_method_title: selectedPayment?.method_title,
-            set_paid: false
+            // Payment
+            payment_method: selectedPayment?.value || "",
+            payment_method_title: selectedPayment?.method_title || "",
+            set_paid: false,
         };
 
         axios.post(`${appLocalizer.apiUrl}/wc/v3/orders`, orderData, {
-            headers: { "X-WP-Nonce": appLocalizer.nonce },
+            headers: { "X-WP-Nonce": appLocalizer.nonce }
         })
         .then(res => {
             console.log("Order created:", res.data);
             window.location.assign(window.location.pathname);
         })
     };
-    const grandTotal = subtotal + totalShipping;
+
+    const orderSubtotal = addedProducts.reduce(
+        (sum, item) => sum + item.price * (item.qty || 1),
+        0
+    );
+
+    const orderTaxTotal = addedProducts.reduce(
+        (sum, item) => sum + (item.tax_amount || 0),
+        0
+    );
+
+    const orderShippingTotal = totalShipping;
+
+    const grandTotal = orderSubtotal + orderTaxTotal + orderShippingTotal;
+
+    const [newCustomer, setNewCustomer] = useState({
+        first_name: "",
+        last_name: "",
+        email: "",
+        phone: ""
+    });
+
+    const createCustomer = () => {
+
+        const payload = {
+            email: newCustomer.email,
+            first_name: newCustomer.first_name,
+            last_name: newCustomer.last_name,
+            billing: {
+                first_name: newCustomer.first_name,
+                last_name: newCustomer.last_name,
+                email: newCustomer.email,
+                phone: newCustomer.phone
+            },
+            shipping: {
+                first_name: newCustomer.first_name,
+                last_name: newCustomer.last_name
+            }
+        };
+
+        axios.post(`${appLocalizer.apiUrl}/wc/v3/customers`, payload, {
+            headers: { "X-WP-Nonce": appLocalizer.nonce }
+        })
+        .then(res => {
+            const customer = res.data;
+
+            // Add to dropdown immediately
+            setCustomers(prev => [...prev, customer]);
+
+            // Select this customer automatically
+            setSelectedCustomer(customer);
+            setBillingAddress(customer.billing);
+            setShippingAddress(customer.shipping);
+
+            // Close create form
+            setShowCreateCustomer(false);
+
+            // Clear form
+            setNewCustomer({
+                first_name: "",
+                last_name: "",
+                email: "",
+                phone: ""
+            });
+        })
+    };
+    const [stateOptions, setStateOptions] = useState<{ label: string; value: string }[]>([]);
+
+    const fetchStatesByCountry = (countryCode: string) => {
+        axios({
+            method: 'GET',
+            url: getApiLink(appLocalizer, `states/${countryCode}`),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        }).then((res) => {
+            setStateOptions(res.data || []);
+        })
+    };
+
+    useEffect(() => {
+        if (hasCustomer && billingAddress?.address_1 == '') {
+            setShowAddressEdit(true);
+        }
+    }, [hasCustomer, billingAddress]);
+
+    useEffect(() => {
+        if (hasCustomer && shippingAddress?.address_1 == '') {
+            setShowShippingAddressEdit(true);
+        }
+    }, [hasCustomer, shippingAddress]);
 
     return (
         <>
@@ -337,10 +532,10 @@ const AddOrder = () => {
                                         <span>${subtotal.toFixed(2)}</span>
                                     </div>
 
-                                    {/* <div className="row">
-                                        <span>Tax (18%):</span>
-                                        <span>${tax.toFixed(2)}</span>
-                                    </div> */}
+                                    <div className="row">
+                                        <span>Tax:</span>
+                                        <span>${addedProducts.reduce((sum, p) => sum + (p.tax_amount || 0), 0).toFixed(2)}</span>
+                                    </div>
 
                                     <div className="row">
                                         <span>Shipping:</span>
@@ -370,7 +565,9 @@ const AddOrder = () => {
                                     >
                                         + Add Shipping
                                     </button>
-
+                                    <button className="admin-btn btn-purple-bg" onClick={() => setShowAddTax(true)}>
+                                        + Add Tax
+                                    </button>
                                 </div>
 
                                 {showAddProduct && (
@@ -397,6 +594,52 @@ const AddOrder = () => {
                                                 setShowAddProduct(false);
                                             }}
                                         />
+                                    </div>
+                                )}
+
+                                {showAddTax && (
+                                    <div className="tax-modal">
+                                        <h2>Add tax</h2>
+
+                                        <table className="admin-table">
+                                            <thead>
+                                                <tr>
+                                                    <td></td>
+                                                    <td>Rate name</td>
+                                                    <td>Tax class</td>
+                                                    <td>Rate code</td>
+                                                    <td>Rate %</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {taxRates.map(rate => (
+                                                    <tr key={rate.id} className="admin-row">
+                                                        <td className="admin-column">
+                                                            <input
+                                                                type="radio"
+                                                                name="tax"
+                                                                onChange={() => setSelectedTaxRate(rate)}
+                                                                checked={selectedTaxRate?.id === rate.id}
+                                                            />
+                                                        </td>
+                                                        <td className="admin-column">{rate.name}</td>
+                                                        <td className="admin-column">{rate.class || "Standard"}</td>
+                                                        <td className="admin-column">{`${rate.country}-${rate.state}-${rate.name}`}</td>
+                                                        <td className="admin-column">{rate.rate}%</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+
+                                        <button
+                                            className="admin-btn btn-purple-bg"
+                                            onClick={() => {
+                                                applyTaxToOrder();
+                                                setShowAddTax(false);
+                                            }}
+                                        >
+                                            Add
+                                        </button>
                                     </div>
                                 )}
                             </div>
@@ -436,27 +679,35 @@ const AddOrder = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="product-name">Select Customer</label>
-                                <SelectInput
-                                    name="new_owner"
-                                    options={customerOptions}
-                                    type="single-select"
-                                    onChange={(value) => {
-                                        const customer = customers.find(c => c.id == value.value);
-                                        setSelectedCustomer(customer);
-                                        if (customer) {
-                                            setShippingAddress(customer.shipping);
-                                            setBillingAddress(customer.billing);
-                                        } else {
-                                            setShippingAddress({});
-                                            setBillingAddress({});
-                                        }
-                                    }}
-                                />
-                            </div>
-                        </div>
+                        {!selectedCustomer && (
+                            <>
+                                <div className="form-group-wrapper">
+                                    <div className="form-group">
+                                        <label htmlFor="product-name">Select Customer</label>
+                                        <SelectInput
+                                            name="new_owner"
+                                            options={customerOptions}
+                                            type="single-select"
+                                            onChange={(value) => {
+                                                const customer = customers.find(c => c.id == value.value);
+                                                setSelectedCustomer(customer);
+                                                if (customer) {
+                                                    setShippingAddress(customer.shipping);
+                                                    setBillingAddress(customer.billing);
+                                                    setShowCreateCustomer(false);
+                                                } 
+                                                // else {
+                                                //     setShippingAddress({});
+                                                //     setBillingAddress({});
+                                                // }
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                                
+                                <div className="admin-btn btn-purple-bg" onClick={() => setShowCreateCustomer(!showCreateCustomer)}>Add New Customer</div>
+                            </>
+                        )}
 
                         {selectedCustomer && (
                             <div className="store-owner-details">
@@ -486,14 +737,14 @@ const AddOrder = () => {
                                     </div>
                                 </div>
 
-                                <div className="admin-badge blue">
+                                <div className="admin-badge blue" onClick={() => setSelectedCustomer(false)}>
                                     <i className="adminlib-edit"></i>
                                 </div>
                             </div>
                         )}
-                        <div className="admin-btn btn-purple-bg" onClick={() => setShowCreateCustomer(!showCreateCustomer)}>Add New Customer</div>
+                        
                     </div>
-                    {showCreateCustomer && (
+                    {showCreateCustomer && !selectedCustomer && (
                         <div className="card-content">
                             <div className="card-header">
                                 <div className="left">
@@ -505,27 +756,49 @@ const AddOrder = () => {
                             <div className="form-group-wrapper">
                                 <div className="form-group">
                                     <label htmlFor="product-name">First name</label>
-                                    <BasicInput name="address" wrapperClass="setting-form-input" />
+                                    <BasicInput 
+                                        name="first_name"
+                                        value={newCustomer.first_name}
+                                        onChange={(e) => setNewCustomer({ ...newCustomer, first_name: e.target.value })}
+                                        wrapperClass="setting-form-input"
+                                    />
+
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="product-name">Last name</label>
-                                    <BasicInput name="address" wrapperClass="setting-form-input" />
+                                    <BasicInput 
+                                        name="last_name"
+                                        value={newCustomer.last_name}
+                                        onChange={(e) => setNewCustomer({ ...newCustomer, last_name: e.target.value })}
+                                        wrapperClass="setting-form-input"
+                                    />
                                 </div>
                             </div>
                             <div className="form-group-wrapper">
                                 <div className="form-group">
                                     <label htmlFor="product-name">Email</label>
-                                    <BasicInput name="address" wrapperClass="setting-form-input" />
+                                    <BasicInput 
+                                        name="email"
+                                        value={newCustomer.email}
+                                        onChange={(e) => setNewCustomer({ ...newCustomer, email: e.target.value })}
+                                        wrapperClass="setting-form-input"
+                                    />
                                 </div>
                             </div>
                             <div className="form-group-wrapper">
                                 <div className="form-group">
                                     <label htmlFor="product-name">Phone number</label>
-                                    <BasicInput name="address" wrapperClass="setting-form-input" />
+                                    <BasicInput 
+                                        name="phone"
+                                        value={newCustomer.phone}
+                                        onChange={(e) => setNewCustomer({ ...newCustomer, phone: e.target.value })}
+                                        wrapperClass="setting-form-input"
+                                    />
+
                                 </div>
                             </div>
                             <div className="buttons-wrapper">
-                                <div className="admin-btn btn-purple-bg" onClick={() => setShowCreateCustomer(!showCreateCustomer)}>Create</div>
+                                <div className="admin-btn btn-purple-bg" onClick={createCustomer}>Create</div>
                             </div>
                         </div>
                     )}
@@ -541,12 +814,12 @@ const AddOrder = () => {
                         {!hasCustomer && (
                             <div className="address-wrapper">
                                 <div className="address">
-                                    <span>No shipping address found</span>
+                                    <span>Please Select a customer</span>
                                 </div>
                             </div>
                         )}
 
-                        {hasCustomer && !showAddressEdit && (
+                        {hasCustomer && !showShippingAddressEdit && (
                             <div className="address-wrapper">
                                 <div className="address">
                                     <span>{shippingAddress.address_1}</span>
@@ -555,40 +828,92 @@ const AddOrder = () => {
                                     <span>{shippingAddress.country}</span>
                                 </div>
 
-                                <div className="admin-badge blue" onClick={() => setShowAddressEdit(true)}>
+                                <div className="admin-badge blue" onClick={() => setShowShippingAddressEdit(true)}>
                                     <i className="adminlib-edit"></i>
                                 </div>
                             </div>
                         )}
 
-                        {showAddressEdit && (
-                            < div ref={addressEditRef}>
+                        {showShippingAddressEdit && (
+                            < div ref={shippingAddressEditRef}>
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
                                         <label htmlFor="product-name">Address</label>
-                                        <BasicInput name="address" wrapperClass="setting-form-input" />
+                                        <BasicInput 
+                                            name="address_1"
+                                            value={shippingAddress.address_1} 
+                                            wrapperClass="setting-form-input" 
+                                            onChange={(e) => setShippingAddress(prev => ({
+                                                            ...prev,
+                                                            address_1: e.target.value
+                                                        }))} 
+                                        />
                                     </div>
                                 </div>
 
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
                                         <label htmlFor="product-name">City</label>
-                                        <BasicInput name="city" wrapperClass="setting-form-input" />
+                                        <BasicInput
+                                            name="city"
+                                            value={shippingAddress.city || ""}
+                                            onChange={(e) =>
+                                                setShippingAddress(prev => ({
+                                                    ...prev,
+                                                    city: e.target.value
+                                                }))
+                                            }
+                                            wrapperClass="setting-form-input"
+                                        />
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="product-name">Postcode / ZIP</label>
-                                        <BasicInput name="postcode" wrapperClass="setting-form-input" />
+                                        <BasicInput
+                                            name="postcode"
+                                            value={shippingAddress.postcode || ""}
+                                            onChange={(e) =>
+                                                setShippingAddress(prev => ({
+                                                    ...prev,
+                                                    postcode: e.target.value
+                                                }))
+                                            }
+                                            wrapperClass="setting-form-input"
+                                        />
                                     </div>
                                 </div>
 
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
                                         <label htmlFor="product-name">Country / Region</label>
-                                        <SelectInput name="country" options={[]} type="single-select" />
+                                        <SelectInput
+                                            name="country"
+                                            value={shippingAddress.country}
+                                            options={appLocalizer.country_list || []}
+                                            type="single-select"
+                                            onChange={(selected) => {
+                                                setShippingAddress(prev => ({
+                                                    ...prev,
+                                                    country: selected.value
+                                                }))
+                                                fetchStatesByCountry(selected.value)
+                                            }
+                                            }
+                                        />
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="product-name">State / County</label>
-                                        <SelectInput name="state" options={[]} type="single-select" />
+                                        <SelectInput
+                                            name="state"
+                                            value={shippingAddress.state}
+                                            options={stateOptions}
+                                            type="single-select"
+                                            onChange={(selected) => {
+                                                setShippingAddress(prev => ({
+                                                    ...prev,
+                                                    state: selected.value
+                                                }))
+                                            }}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -631,29 +956,81 @@ const AddOrder = () => {
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
                                         <label htmlFor="product-name">Address</label>
-                                        <BasicInput name="address" wrapperClass="setting-form-input" />
+                                        <BasicInput 
+                                            name="address_1"
+                                            value={billingAddress.address_1} 
+                                            wrapperClass="setting-form-input" 
+                                            onChange={(e) => setBillingAddress(prev => ({
+                                                            ...prev,
+                                                            address_1: e.target.value
+                                                        }))} 
+                                        />
                                     </div>
                                 </div>
 
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
                                         <label htmlFor="product-name">City</label>
-                                        <BasicInput name="city" wrapperClass="setting-form-input" />
+                                        <BasicInput
+                                            name="city"
+                                            value={billingAddress.city || ""}
+                                            onChange={(e) =>
+                                                setBillingAddress(prev => ({
+                                                    ...prev,
+                                                    city: e.target.value
+                                                }))
+                                            }
+                                            wrapperClass="setting-form-input"
+                                        />
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="product-name">Postcode / ZIP</label>
-                                        <BasicInput name="postcode" wrapperClass="setting-form-input" />
+                                        <BasicInput
+                                            name="postcode"
+                                            value={billingAddress.postcode || ""}
+                                            onChange={(e) =>
+                                                setBillingAddress(prev => ({
+                                                    ...prev,
+                                                    postcode: e.target.value
+                                                }))
+                                            }
+                                            wrapperClass="setting-form-input"
+                                        />
                                     </div>
                                 </div>
 
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
                                         <label htmlFor="product-name">Country / Region</label>
-                                        <SelectInput name="country" options={[]} type="single-select" />
+                                        <SelectInput
+                                            name="country"
+                                            value={billingAddress.country}
+                                            options={appLocalizer.country_list || []}
+                                            type="single-select"
+                                            onChange={(selected) => {
+                                                setBillingAddress(prev => ({
+                                                    ...prev,
+                                                    country: selected.value
+                                                }))
+                                                fetchStatesByCountry(selected.value)
+                                            }
+                                            }
+                                        />
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="product-name">State / County</label>
-                                        <SelectInput name="state" options={[]} type="single-select" />
+                                        <SelectInput
+                                            name="state"
+                                            value={billingAddress.state}
+                                            options={stateOptions}
+                                            type="single-select"
+                                            onChange={(selected) => {
+                                                setBillingAddress(prev => ({
+                                                    ...prev,
+                                                    state: selected.value
+                                                }))
+                                            }}
+                                        />
                                     </div>
                                 </div>
                             </div>

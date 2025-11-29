@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import { __ } from '@wordpress/i18n';
 import axios from 'axios';
-import { BasicInput, SelectInput, getApiLink, SuccessNotice, useModules } from 'zyra';
+import { getApiLink, useModules } from 'zyra';
 import { Skeleton } from '@mui/material';
 import { formatCurrency } from '../../../services/commonFunction';
 import LatestReview from './latestReview';
@@ -120,16 +121,16 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                             </div>
                         ))}
                     </div>
+
                     <div className="row">
                         <div className="column">
                             <div className="card-header">
                                 <div className="left">
-                                    <div className="title">
-                                        Recent payouts
-                                    </div>
+                                    <div className="title">{__('Recent payouts', 'multivendorx')}</div>
                                 </div>
                                 <div className="right">
-                                    <i className="adminlib-external"
+                                    <i
+                                        className="adminlib-external"
                                         onClick={() => {
                                             navigate(`?page=multivendorx#&tab=transaction-history&store_id=${id}`);
                                         }}
@@ -137,42 +138,38 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                 </div>
                             </div>
                             {recentDebits && recentDebits.length > 0 ? (
-
                                 recentDebits.map((txn) => (
                                     <div key={txn.id} className="info-item">
                                         <div className="details-wrapper">
                                             <div className="details">
-                                                <div className="name">
-                                                    Bank Transfer
-                                                </div>
+                                                <div className="name">{__('Bank Transfer', 'multivendorx')}</div>
                                                 <div className="des">
-                                                    {new Date(txn.date).toLocaleDateString("en-US", {
-                                                        month: "short",
-                                                        day: "2-digit",
-                                                        year: "numeric",
+                                                    {new Date(txn.date).toLocaleDateString('en-US', {
+                                                        month: 'short',
+                                                        day: '2-digit',
+                                                        year: 'numeric',
                                                     })}
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div className="right-details">
-                                            <div className="price"> {formatCurrency(txn.amount)}</div>
+                                            <div className="price">{formatCurrency(txn.amount)}</div>
                                         </div>
                                     </div>
                                 ))
                             ) : (
-                                <div className="no-products">No recent payout</div>
+                                <div className="no-products">{__('No recent payout', 'multivendorx')}</div>
                             )}
                         </div>
+
                         <div className="column">
                             <div className="card-header">
                                 <div className="left">
-                                    <div className="title">
-                                        Latest products
-                                    </div>
+                                    <div className="title">{__('Latest products', 'multivendorx')}</div>
                                 </div>
                                 <div className="right">
-                                    <i className="adminlib-external"
+                                    <i
+                                        className="adminlib-external"
                                         onClick={() => {
                                             navigate(`?page=multivendorx#&tab=transaction-history&store_id=${id}`);
                                         }}
@@ -185,7 +182,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                         product.images && product.images.length > 0
                                             ? product.images[0].src
                                             : null;
-                                    console.log(product);
                                     const editUrl = `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${product.id}&action=edit`;
 
                                     return (
@@ -201,17 +197,12 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 
                                                 <div className="details">
                                                     <div className="name">
-                                                        <a
-                                                            href={editUrl}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                        >
+                                                        <a href={editUrl} target="_blank" rel="noopener noreferrer">
                                                             {product.name}
                                                         </a>
                                                     </div>
-
                                                     <div className="des">
-                                                        sku: {product.sku}
+                                                        {__('sku', 'multivendorx')}: {product.sku}
                                                     </div>
                                                 </div>
                                             </div>
@@ -223,11 +214,9 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                     );
                                 })
                             ) : (
-                                <p className="no-products">No recent products found.</p>
+                                <p className="no-products">{__('No recent products found.', 'multivendorx')}</p>
                             )}
                         </div>
-
-
                     </div>
 
                     <div className="row">
@@ -235,13 +224,14 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                             <div className="column">
                                 <div className="card-header">
                                     <div className="left">
-                                        <div className="title">
-                                            Latest reviews
-                                        </div>
+                                        <div className="title">{__('Latest reviews', 'multivendorx')}</div>
                                     </div>
                                     <div className="right">
-                                        <i className="adminlib-external"
-                                            onClick={() => { navigate(`?page=multivendorx#&tab=customer-support&subtab=review`) }}
+                                        <i
+                                            className="adminlib-external"
+                                            onClick={() => {
+                                                navigate(`?page=multivendorx#&tab=customer-support&subtab=review`);
+                                            }}
                                         ></i>
                                     </div>
                                 </div>
@@ -249,22 +239,23 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                             </div>
                         )}
                     </div>
+
                     <div className="row">
                         {modules.includes('marketplace-refund') && (
                             <div className="column">
                                 <div className="card-header">
                                     <div className="left">
-                                        <div className="title">
-                                            Latest refunds
-                                        </div>
+                                        <div className="title">{__('Latest refunds', 'multivendorx')}</div>
                                     </div>
                                     <div className="right">
-                                        <i className="adminlib-external"
-                                            onClick={() => { navigate(`?page=multivendorx#&tab=customer-support&subtab=refund-requests`) }}
+                                        <i
+                                            className="adminlib-external"
+                                            onClick={() => {
+                                                navigate(`?page=multivendorx#&tab=customer-support&subtab=refund-requests`);
+                                            }}
                                         ></i>
                                     </div>
                                 </div>
-
                                 <div className="store-owner-details owner">
                                     <LatestRefundRequest store_id={id} />
                                 </div>
@@ -278,23 +269,24 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                             <div className="card-header">
                                 <div className="left">
                                     <div className="title">
-                                        Store hours
+                                        {__('Store hours', 'multivendorx')}
                                     </div>
                                     <div className="des">
-                                        Manage your weekly schedule and special hours
+                                        {__('Manage your weekly schedule and special hours', 'multivendorx')}
                                     </div>
                                 </div>
                             </div>
                             <div className="store-time-wrapper">
-
                                 <div className="row">
                                     <div className="time-wrapper">
-                                        <div className="des">Current status</div>
-                                        <div className="time"><span className="admin-badge green">Open</span></div>
+                                        <div className="des">{__('Current status', 'multivendorx')}</div>
+                                        <div className="time">
+                                            <span className="admin-badge green">{__('Open', 'multivendorx')}</span>
+                                        </div>
                                     </div>
                                     <div className="time-wrapper">
-                                        <div className="des">Next opening</div>
-                                        <div className="time">Mon 9:00 AM</div>
+                                        <div className="des">{__('Next opening', 'multivendorx')}</div>
+                                        <div className="time">{__('Mon 9:00 AM', 'multivendorx')}</div>
                                     </div>
                                 </div>
                             </div>
@@ -304,21 +296,22 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                    Store information
+                                    {__('Store information', 'multivendorx')}
                                 </div>
                             </div>
                             <div className="right">
-                                <i className="adminlib-external"
-                                    onClick={() => { navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=store`) }}
+                                <i
+                                    className="adminlib-external"
+                                    onClick={() => {
+                                        navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=store`);
+                                    }}
                                 ></i>
                             </div>
                         </div>
 
                         <div className="overview-wrapper">
                             <div className="items">
-                                <div className="title">
-                                    Created on
-                                </div>
+                                <div className="title">{__('Created on', 'multivendorx')}</div>
                                 <div className="details">
                                     <div className="sku">
                                         {storeData.create_time}
@@ -328,28 +321,22 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                                 navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=application-details`);
                                             }}
                                         >
-                                            Application Data
+                                            {__('Application Data', 'multivendorx')}
                                         </a>
                                     </div>
                                 </div>
                             </div>
                             <div className="items">
-                                <div className="title">
-                                    Lifetime earnings
-                                </div>
+                                <div className="title">{__('Lifetime earnings', 'multivendorx')}</div>
                                 <div className="details">
-                                    <div className="sku">
-                                        {formatCurrency(storeData.commission?.commission_total ?? 0)}
-                                    </div>
+                                    <div className="sku">{formatCurrency(storeData.commission?.commission_total ?? 0)}</div>
                                 </div>
                             </div>
                             {appLocalizer.khali_dabba && (
                                 <div className="items">
-                                    <div className="title">
-                                        Vacation mode
-                                    </div>
+                                    <div className="title">{__('Vacation mode', 'multivendorx')}</div>
                                     <div className="details">
-                                        <span className="admin-badge red">Inactive</span>
+                                        <span className="admin-badge red">{__('Inactive', 'multivendorx')}</span>
                                     </div>
                                 </div>
                             )}
@@ -359,23 +346,24 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                             <div className="description-wrapper">
                                 <div className="title">
                                     <i className="adminlib-error"></i>
-                                    Gold plan
-                                    <span className="admin-badge green">Active</span>
+                                    {__('Gold plan', 'multivendorx')}
+                                    <span className="admin-badge green">{__('Active', 'multivendorx')}</span>
                                 </div>
-                                <div className="des">Renews on Dec 15, 2024</div>
+                                <div className="des">{__('Renews on Dec 15, 2024', 'multivendorx')}</div>
                             </div>
                         )}
                     </div>
                     <div className="card-content">
                         <div className="card-header">
                             <div className="left">
-                                <div className="title">
-                                    Store staff
-                                </div>
+                                <div className="title">{__('Store staff', 'multivendorx')}</div>
                             </div>
                             <div className="right">
-                                <i className="adminlib-external"
-                                    onClick={() => { navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`) }}
+                                <i
+                                    className="adminlib-external"
+                                    onClick={() => {
+                                        navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`);
+                                    }}
                                 ></i>
                             </div>
                         </div>
@@ -388,21 +376,24 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                 <div className="details">
                                     <div className="name">
                                         {storeData.primary_owner_info?.data?.display_name ?? <Skeleton variant="text" width={150} />}
-                                        <div className="admin-badge green">Primary Owner</div> <span className="admin-badge blue">
-                                            <i className="adminlib-edit"
+                                        <div className="admin-badge green">{__('Primary Owner', 'multivendorx')}</div>
+                                        <span className="admin-badge blue">
+                                            <i
+                                                className="adminlib-edit"
                                                 onClick={() => {
                                                     navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`, {
-                                                        state: { highlightTarget: "primary-owner" },
+                                                        state: { highlightTarget: 'primary-owner' },
                                                     });
-
                                                     setTimeout(() => {
-                                                        navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`, {
-                                                            replace: true,
-                                                        });
+                                                        navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`, { replace: true });
                                                     }, 500);
-                                                }}></i></span>
+                                                }}
+                                            ></i>
+                                        </span>
                                     </div>
-                                    <div className="des">Email: {storeData.primary_owner_info?.data?.user_email ?? <Skeleton variant="text" width={150} />}</div>
+                                    <div className="des">
+                                        {__('Email', 'multivendorx')}: {storeData.primary_owner_info?.data?.user_email ?? <Skeleton variant="text" width={150} />}
+                                    </div>
                                 </div>
                             </div>
                         </div>

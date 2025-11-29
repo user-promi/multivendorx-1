@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { Table, TableCell, getApiLink, ToggleSetting, CalendarInput } from 'zyra';
-import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
+import { Table, TableCell, getApiLink } from 'zyra';
+import { ColumnDef, PaginationState } from '@tanstack/react-table';
 
 type Review = {
     review_id: number;
@@ -37,8 +37,9 @@ export interface RealtimeFilter {
     name: string;
     render: (updateFilter: (key: string, value: any) => void, filterValue: any) => React.ReactNode;
 }
+
 interface LatestReviewProps {
-    store_id?: number; // or required: store_id: number;
+    store_id?: number;
 }
 
 const LatestReview: React.FC<LatestReviewProps> = ({ store_id }) => {
@@ -55,7 +56,6 @@ const LatestReview: React.FC<LatestReviewProps> = ({ store_id }) => {
         const rowsPerPage = pagination.pageSize;
         requestData(rowsPerPage, currentPage);
     }, [pagination]);
-
 
     // Fetch data from backend.
     function requestData(
@@ -80,8 +80,6 @@ const LatestReview: React.FC<LatestReviewProps> = ({ store_id }) => {
             .then((response) => {
                 const items = response.data.items || [];
                 setData(items);
-
-                //Calculate total rows using array length
                 const total = items.length;
                 setTotalRows(total);
             })
@@ -101,7 +99,7 @@ const LatestReview: React.FC<LatestReviewProps> = ({ store_id }) => {
                 const editLink = `${window.location.origin}/wp-admin/user-edit.php?user_id=${customer_id}`;
 
                 return (
-                    <TableCell title={customer_name}>
+                    <TableCell title={customer_name || '-'}>
                         {customer_id ? (
                             <a
                                 href={editLink}
@@ -112,7 +110,7 @@ const LatestReview: React.FC<LatestReviewProps> = ({ store_id }) => {
                                 {customer_name}
                             </a>
                         ) : (
-                            '-'
+                            __('-', 'multivendorx')
                         )}
                     </TableCell>
                 );
@@ -140,16 +138,16 @@ const LatestReview: React.FC<LatestReviewProps> = ({ store_id }) => {
                                             ))}
                                         </>
                                     ) : (
-                                        '-'
+                                        __('-', 'multivendorx')
                                     )}
                                 </div>
                                 <div className="title">
-                                    {row.original.review_title || '-'}
+                                    {row.original.review_title || __('-', 'multivendorx')}
                                 </div>
                             </div>
 
                             <div className="review">
-                                {shortText || '-'}
+                                {shortText || __('-', 'multivendorx')}
                             </div>
                         </div>
                     </TableCell>
@@ -160,19 +158,19 @@ const LatestReview: React.FC<LatestReviewProps> = ({ store_id }) => {
             header: __('Date', 'multivendorx'),
             cell: ({ row }) => {
                 const rawDate = row.original.date_created;
-                const formattedDate = rawDate ? new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(rawDate)) : '-';
+                const formattedDate = rawDate
+                    ? new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(rawDate))
+                    : __('-', 'multivendorx');
                 return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
             }
         }
     ];
 
     return (
-        <>
-            <Table
-                data={data || []}
-                columns={columns as ColumnDef<Record<string, any>, any>[]}
-            />
-        </>
+        <Table
+            data={data || []}
+            columns={columns as ColumnDef<Record<string, any>, any>[]}
+        />
     );
 };
 

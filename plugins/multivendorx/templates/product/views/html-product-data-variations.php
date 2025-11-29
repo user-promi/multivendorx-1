@@ -13,22 +13,22 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @author 		MultiVendorX
- * @package 	MVX_FRONTEND_DASHBOARD/views/products/woocommerce
+ * @author      MultiVendorX
+ * @package     MVX_FRONTEND_DASHBOARD/views/products/woocommerce
  * @version     3.0.0
  */
 defined( 'ABSPATH' ) || exit;
 
 global $wpdb;
 
-$self = $args['self'];
+$self           = $args['self'];
 $product_object = $args['product_object'];
-$post = $args['post'];
+$post           = $args['post'];
 
-$variation_attributes = array_filter( $product_object->get_attributes(), array( $self, 'filter_variation_attributes' ) );
-$default_attributes = $product_object->get_default_attributes();
-$variations_count = absint( $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->posts WHERE post_parent = %d AND post_type = 'product_variation' AND post_status IN ('publish', 'private')", $post->ID ) ) );
-$variations_per_page = absint( apply_filters( 'woocommerce_admin_meta_boxes_variations_per_page', 15 ) );
+$variation_attributes   = array_filter( $product_object->get_attributes(), array( $self, 'filter_variation_attributes' ) );
+$default_attributes     = $product_object->get_default_attributes();
+$variations_count       = absint( $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->posts WHERE post_parent = %d AND post_type = 'product_variation' AND post_status IN ('publish', 'private')", $post->ID ) ) );
+$variations_per_page    = absint( apply_filters( 'woocommerce_admin_meta_boxes_variations_per_page', 15 ) );
 $variations_total_pages = ceil( $variations_count / $variations_per_page );
 
 ?>
@@ -51,7 +51,7 @@ $variations_total_pages = ceil( $variations_count / $variations_per_page );
                     <strong><?php esc_html_e( 'Default Form Values', 'multivendorx' ); ?>: </strong>
                     <?php
                     foreach ( $variation_attributes as $attribute ) {
-                        $selected_value = isset( $default_attributes[sanitize_title( $attribute->get_name() )] ) ? $default_attributes[sanitize_title( $attribute->get_name() )] : '';
+                        $selected_value = isset( $default_attributes[ sanitize_title( $attribute->get_name() ) ] ) ? $default_attributes[ sanitize_title( $attribute->get_name() ) ] : '';
                         ?>
                         <select name="default_attribute_<?php echo esc_attr( sanitize_title( $attribute->get_name() ) ); ?>" data-current="<?php echo esc_attr( $selected_value ); ?>" class="form-control inline-select">
                             <?php /* translators: WooCommerce attribute label */ ?>
@@ -139,13 +139,13 @@ $variations_total_pages = ceil( $variations_count / $variations_per_page );
                 </div>
             </div> 
         </div>
-        <?php
-        // esc_attr does not double encode - htmlspecialchars does.
-        $attributes_data = htmlspecialchars( wp_json_encode( wc_list_pluck( $variation_attributes, 'get_data' ) ) );
-        ?>
+			<?php
+			// esc_attr does not double encode - htmlspecialchars does.
+			$attributes_data = htmlspecialchars( wp_json_encode( wc_list_pluck( $variation_attributes, 'get_data' ) ) );
+			?>
         <div class="row">
             <div class="col-md-12">
-                <div class="woocommerce_variations product-variations-wrapper wc-metaboxes" data-attributes="<?php echo $attributes_data; // WPCS: XSS ok.   ?>" data-total="<?php echo esc_attr( $variations_count ); ?>" data-total_pages="<?php echo esc_attr( $variations_total_pages ); ?>" data-page="1" data-edited="false">
+                <div class="woocommerce_variations product-variations-wrapper wc-metaboxes" data-attributes="<?php echo $attributes_data; // WPCS: XSS ok. ?>" data-total="<?php echo esc_attr( $variations_count ); ?>" data-total_pages="<?php echo esc_attr( $variations_total_pages ); ?>" data-page="1" data-edited="false">
                 </div>
             </div>
         </div>
@@ -168,8 +168,8 @@ $variations_total_pages = ceil( $variations_count / $variations_per_page );
                             <span class="paging-select">
                                 <label for="current-page-selector-1" class="screen-reader-text"><?php esc_html_e( 'Select Page', 'multivendorx' ); ?></label>
                                 <select class="page-selector" id="current-page-selector-1" title="<?php esc_attr_e( 'Current page', 'multivendorx' ); ?>">
-                                    <?php for ( $i = 1; $i <= $variations_total_pages; $i ++ ) : ?>
-                                        <option value="<?php echo $i; // WPCS: XSS ok.  ?>"><?php echo $i; // WPCS: XSS ok.  ?></option>
+                                    <?php for ( $i = 1; $i <= $variations_total_pages; $i++ ) : ?>
+                                        <option value="<?php echo $i; // WPCS: XSS ok. ?>"><?php echo $i; // WPCS: XSS ok. ?></option>
                                     <?php endfor; ?>
                                 </select>
                                 <?php echo esc_html_x( 'of', 'number of pages', 'multivendorx' ); ?> <span class="total-pages"><?php echo esc_html( $variations_total_pages ); ?></span>

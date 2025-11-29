@@ -690,7 +690,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
     };
 
     // Handle state select change (from old code)
-    const handleStateChange = (newValue) => {
+    const handleStateChange = (newValue: any) => {
         if (!newValue || Array.isArray(newValue)) return;
 
         const updated = {
@@ -822,40 +822,43 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
             <SuccessNotice message={successMsg} />
             <div className="container-wrapper ">
                 <div className="card-wrapper w-65">
+
+                    {/* Contact Information */}
                     <div className="card-content">
                         <div className="card-header">
                             <div className="left">
-                                <div className="title">
-                                    Contact information
-                                </div>
+                                <div className="title">{__('Contact information')}</div>
                             </div>
                         </div>
 
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label>Store email(s)</label>
+                                <label>{__('Store email(s)')}</label>
                                 <EmailsInput
                                     value={emails}
                                     primary={primaryEmail}
                                     enablePrimary={true}
-                                    onChange={(list, primary) => {
-                                        saveEmails(list, primary);
-                                    }}
+                                    onChange={(list, primary) => saveEmails(list, primary)}
                                 />
-
                                 <div className="settings-metabox-description">
-                                    <b> Tip: </b> You can add multiple email addresses. All added emails will receive notifications. <br />
-                                    <b> Primary email: </b> Click the star icon to set an email as primary. This email will appear on your storefront, and all other email IDs will be hidden from display.
+                                    <b>{__('Tip:')}</b> {__('You can add multiple email addresses. All added emails will receive notifications.')} <br />
+                                    <b>{__('Primary email:')}</b> {__('Click the star icon to set an email as primary. This email will appear on your storefront, and all other email IDs will be hidden from display.')}
                                 </div>
                             </div>
                         </div>
+
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="product-name">Phone</label>
-                                <BasicInput name="phone" value={formData.phone} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={handleChange} />
+                                <label htmlFor="phone">{__('Phone')}</label>
+                                <BasicInput
+                                    name="phone"
+                                    value={formData.phone}
+                                    wrapperClass="setting-form-input"
+                                    descClass="settings-metabox-description"
+                                    onChange={handleChange}
+                                />
+                                {errorMsg.phone && <p className="invalid-massage">{errorMsg.phone}</p>}
                             </div>
-                            {errorMsg.phone && <p className="invalid-massage">{errorMsg.phone}</p>}
-
                         </div>
 
                         {/* Hidden coordinates */}
@@ -863,18 +866,17 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                         <input type="hidden" name="location_lng" value={addressData.location_lng} />
                     </div>
 
+                    {/* Communication Address */}
                     <div className="card-content">
                         <div className="card-header">
                             <div className="left">
-                                <div className="title">
-                                    Communication address
-                                </div>
+                                <div className="title">{__('Communication address')}</div>
                             </div>
                         </div>
 
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="location_address">Address *</label>
+                                <label htmlFor="location_address">{__('Address *')}</label>
                                 <BasicInput
                                     name="location_address"
                                     value={addressData.location_address}
@@ -887,7 +889,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
 
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="city">City</label>
+                                <label htmlFor="city">{__('City')}</label>
                                 <BasicInput
                                     name="city"
                                     value={addressData.city}
@@ -897,7 +899,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                 />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="zip">Zip code</label>
+                                <label htmlFor="zip">{__('Zip code')}</label>
                                 <BasicInput
                                     name="zip"
                                     value={addressData.zip}
@@ -908,10 +910,10 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                             </div>
                         </div>
 
-                        {/* Country and State Select Inputs (from old code) */}
+                        {/* Country and State */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="product-name">Country</label>
+                                <label htmlFor="country">{__('Country')}</label>
                                 <SelectInput
                                     name="country"
                                     value={formData.country}
@@ -921,7 +923,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                 />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="product-name">State</label>
+                                <label htmlFor="state">{__('State')}</label>
                                 <SelectInput
                                     name="state"
                                     value={formData.state}
@@ -934,78 +936,51 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
 
                         {modules.includes('geo-location') &&
                             !!(appLocalizer?.settings_databases_value?.geolocation?.google_api_key?.trim() ||
-                                appLocalizer?.settings_databases_value?.geolocation?.mapbox_api_key?.trim()) &&
-                            <div>
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label htmlFor="store-location-autocomplete">Search Location</label>
-                                        <div id="store-location-autocomplete-container">
-                                            <input
-                                                ref={autocompleteInputRef}
-                                                id="store-location-autocomplete"
-                                                type="text"
-                                                className="basic-input"
-                                                placeholder="Search your store address..."
-                                                defaultValue={addressData.location_address}
-                                            />
+                                appLocalizer?.settings_databases_value?.geolocation?.mapbox_api_key?.trim()) && (
+                                <>
+                                    <div className="form-group-wrapper">
+                                        <div className="form-group">
+                                            <label htmlFor="store-location-autocomplete">{__('Search Location')}</label>
+                                            <div id="store-location-autocomplete-container">
+                                                <input
+                                                    ref={autocompleteInputRef}
+                                                    id="store-location-autocomplete"
+                                                    type="text"
+                                                    className="basic-input"
+                                                    placeholder={__('Search your store address...')}
+                                                    defaultValue={addressData.location_address}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label>Location Map *</label>
-                                        <div
-                                            id="location-map"
-                                        ></div>
-                                        <span className="settings-metabox-description">
-                                            Click on the map or drag the marker to set your exact location
-                                        </span>
+                                    <div className="form-group-wrapper">
+                                        <div className="form-group">
+                                            <label>{__('Location Map *')}</label>
+                                            <div id="location-map"></div>
+                                            <span className="settings-metabox-description">
+                                                {__('Click on the map or drag the marker to set your exact location')}
+                                            </span>
+                                        </div>
+                                        {/* Hidden coordinates */}
+                                        <input type="hidden" name="location_lat" value={addressData.location_lat} />
+                                        <input type="hidden" name="location_lng" value={addressData.location_lng} />
                                     </div>
-                                    {/* Hidden coordinates */}
-                                    <input type="hidden" name="location_lat" value={addressData.location_lat} />
-                                    <input type="hidden" name="location_lng" value={addressData.location_lng} />
-                                </div>
-                            </div>
-                        }
-                        {/* Map Display */}
-                        <div className="form-group-wrapper">
-                            {/* <div className="form-group">
-								<label>Location Map *</label>
-								<div
-									id="location-map"
-									style={{
-										height: '300px',
-										width: '100%',
-										borderRadius: '8px',
-										border: '1px solid #ddd',
-										marginTop: '8px'
-									}}
-								></div>
-								<small style={{ color: '#666', marginTop: '5px', display: 'block' }}>
-									Click on the map or drag the marker to set your exact location
-								</small>
-							</div> */}
-                            {/* Hidden coordinates */}
-                            {/* <input type="hidden" name="location_lat" value={addressData.location_lat} />
-                            <input type="hidden" name="location_lng" value={addressData.location_lng} /> */}
-                        </div>
+                                </>
+                            )}
                     </div>
                 </div>
-
                 <div className="card-wrapper w-35">
+
+                    {/* Manage Store Status */}
                     <div id="store-status" className="card-content">
                         <div className="card-header">
                             <div className="left">
-                                <div className="title">
-                                    Manage store status
-                                </div>
+                                <div className="title">{__('Manage store status', 'multivendorx')}</div>
                             </div>
                         </div>
-
-                        {/* Updated Email Section */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="store-email">Current status</label>
+                                <label htmlFor="store-status">{__('Current status', 'multivendorx')}</label>
                                 <SelectInput
                                     name="status"
                                     value={formData.status}
@@ -1013,7 +988,6 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                     type="single-select"
                                     onChange={(newValue: any) => {
                                         if (!newValue || Array.isArray(newValue)) return;
-
                                         const updated = { ...formData, status: newValue.value };
                                         onUpdate({ status: newValue.value });
                                         setFormData(updated);
@@ -1023,18 +997,17 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                             </div>
                         </div>
                     </div>
+
+                    {/* Manage Storefront Link */}
                     <div id="store-slug" className="card-content">
                         <div className="card-header">
                             <div className="left">
-                                <div className="title">
-                                    Manage storefront link
-                                </div>
+                                <div className="title">{__('Manage storefront link', 'multivendorx')}</div>
                             </div>
                         </div>
-
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="store-email">Current storefront link</label>
+                                <label htmlFor="slug">{__('Current storefront link', 'multivendorx')}</label>
                                 <BasicInput
                                     name="slug"
                                     wrapperClass="setting-form-input"
@@ -1042,92 +1015,54 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                     value={formData.slug}
                                     onChange={handleChange}
                                 />
-                                <div className="settings-metabox-description slug">Store Url : <a className="link-item" target="blank" href={appLocalizer.store_page_url + '/' + formData.slug}> {appLocalizer.store_page_url + '/' + formData.slug} <i className="adminlib-external"></i></a></div>
+                                <div className="settings-metabox-description slug">
+                                    {__('Store URL', 'multivendorx')} :{' '}
+                                    <a
+                                        className="link-item"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        href={`${appLocalizer.store_page_url}/${formData.slug}`}
+                                    >
+                                        {`${appLocalizer.store_page_url}/${formData.slug}`} <i className="adminlib-external"></i>
+                                    </a>
+                                </div>
+                                {errorMsg.slug && <p className="invalid-massage">{errorMsg.slug}</p>}
                             </div>
-                            {errorMsg.slug && <p className="invalid-massage">{errorMsg.slug}</p>}
-
                         </div>
                     </div>
 
+                    {/* Social Information */}
                     <div className="card-content">
                         <div className="card-header">
                             <div className="left">
-                                <div className="title">
-                                    Social information
+                                <div className="title">{__('Social information', 'multivendorx')}</div>
+                            </div>
+                        </div>
+
+                        {['facebook', 'twitter', 'linkedin', 'youtube', 'instagram'].map((network) => {
+                            const iconClass = `adminlib-${network === 'twitter' ? 'x' : network}${network === 'linkedin' ? '-border' : ''} ${network}`;
+                            const defaultUrl = `https://${network === 'twitter' ? 'twitter.com' : network}.com/`;
+
+                            return (
+                                <div className="form-group-wrapper" key={network}>
+                                    <div className="form-group">
+                                        <label htmlFor={network}>
+                                            <i className={iconClass}></i> {network === 'twitter' ? 'X' : network.charAt(0).toUpperCase() + network.slice(1)}
+                                        </label>
+                                        <BasicInput
+                                            name={network}
+                                            wrapperClass="setting-form-input"
+                                            descClass="settings-metabox-description"
+                                            value={formData[network]?.trim() || defaultUrl}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        {/* Facebook */}
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="facebook"><i className="adminlib-facebook-fill facebook"></i> Facebook</label>
-                                <BasicInput
-                                    name="facebook"
-                                    wrapperClass="setting-form-input"
-                                    descClass="settings-metabox-description"
-                                    value={formData.facebook?.trim() || "https://facebook.com/"}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                        </div>
-
-                        {/* x */}
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="twitter"><i className="adminlib-twitter twitter"></i> X</label>
-                                <BasicInput
-                                    name="twitter"
-                                    wrapperClass="setting-form-input"
-                                    descClass="settings-metabox-description"
-                                    value={formData.twitter?.trim() || "https://twitter.com/"}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                        </div>
-
-                        {/* LinkedIn */}
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="linkedin"><i className="adminlib-linkedin-border linkedin"></i> LinkedIn</label>
-                                <BasicInput
-                                    name="linkedin"
-                                    wrapperClass="setting-form-input"
-                                    descClass="settings-metabox-description"
-                                    value={formData.linkedin?.trim() || "https://linkedin.com/"}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                        </div>
-
-                        {/* YouTube */}
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="youtube"><i className="adminlib-youtube youtube"></i> YouTube</label>
-                                <BasicInput
-                                    name="youtube"
-                                    wrapperClass="setting-form-input"
-                                    descClass="settings-metabox-description"
-                                    value={formData.youtube?.trim() || "https://youtube.com/"}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                        </div>
-
-                        {/* Instagram */}
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="instagram"><i className="adminlib-instagram instagram"></i> Instagram</label>
-                                <BasicInput
-                                    name="instagram"
-                                    wrapperClass="setting-form-input"
-                                    descClass="settings-metabox-description"
-                                    value={formData.instagram?.trim() || "https://instagram.com/"}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                        </div>
+                            );
+                        })}
                     </div>
                 </div>
+
             </div>
         </>
     );

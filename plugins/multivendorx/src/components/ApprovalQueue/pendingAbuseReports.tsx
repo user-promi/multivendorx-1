@@ -42,7 +42,7 @@ type FilterData = {
     transactionType?: string;
     transactionStatus?: string;
 };
-const ReportAbuseTable: React.FC<Props> = ({ onUpdated }) => {
+const PendingReportAbuse: React.FC<Props> = ({ onUpdated }) => {
     const [data, setData] = useState<ReportRow[] | null>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
@@ -361,4 +361,4 @@ const ReportAbuseTable: React.FC<Props> = ({ onUpdated }) => {
     );
 };
 
-export default ReportAbuseTable;
+export default PendingReportAbuse;

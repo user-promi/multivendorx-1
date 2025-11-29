@@ -4,20 +4,20 @@ namespace MultiVendorX\Store;
 
 use MultiVendorX\Utill;
 
-defined('ABSPATH') || exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * MultiVendorX Main Store class
  *
- * @version		PRODUCT_VERSION
- * @package		MultiVendorX
- * @author 		MultiVendorX
+ * @version     PRODUCT_VERSION
+ * @package     MultiVendorX
+ * @author      MultiVendorX
  */
 class Store {
 
-    protected $id = 0;
-    protected $data = [];
-    protected $meta_data = [];
+    protected $id        = 0;
+    protected $data      = array();
+    protected $meta_data = array();
 
     private $container = array();
 
@@ -27,7 +27,7 @@ class Store {
 
         if ( $store_id > 0 ) {
             $this->load( $store_id );
-        }   
+        }
     }
 
     /**
@@ -46,14 +46,17 @@ class Store {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['store'];
 
-        $row = $wpdb->get_row( $wpdb->prepare(
-            "SELECT * FROM $table WHERE ID = %d",
-            $store_id,
-        ), ARRAY_A );
+        $row = $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT * FROM $table WHERE ID = %d",
+                $store_id,
+            ),
+            ARRAY_A
+        );
 
         if ( $row ) {
-            $this->id   = $row['ID'];
-            $this->data = $row;
+            $this->id        = $row['ID'];
+            $this->data      = $row;
             $this->meta_data = $this->get_all_meta();
         }
     }
@@ -74,18 +77,18 @@ class Store {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['store'];
 
-        $data = [
+        $data = array(
             'name'        => $this->data['name'] ?? '',
             'slug'        => $this->data['slug'] ?? sanitize_title( $this->data['name'] ?? '' ),
             'description' => $this->data['description'] ?? '',
             'who_created' => $this->data['who_created'] ?? 'admin',
             'status'      => $this->data['status'] ?? 'active',
-        ];
+        );
 
-        $formats = [ '%s', '%s', '%s', '%s', '%s' ];
+        $formats = array( '%s', '%s', '%s', '%s', '%s' );
 
         if ( $this->id > 0 ) {
-            $wpdb->update( $table, $data, [ 'ID' => $this->id ], $formats, [ '%d' ] );
+            $wpdb->update( $table, $data, array( 'ID' => $this->id ), $formats, array( '%d' ) );
         } else {
             $wpdb->insert( $table, $data, $formats );
             $this->id = $wpdb->insert_id;
@@ -101,15 +104,21 @@ class Store {
         $table = "{$wpdb->prefix}" . Utill::TABLES['store_meta'];
 
         if ( $single ) {
-            return ( $wpdb->get_var( $wpdb->prepare(
-                "SELECT meta_value FROM $table WHERE store_id = %d AND meta_key = %s LIMIT 1",
-                $this->id, $key
-            ) ) );
-        } else {
-            $values = $wpdb->get_col( $wpdb->prepare(
-                "SELECT meta_value FROM $table WHERE store_id = %d AND meta_key = %s",
-                $this->id, $key
+            return ( $wpdb->get_var(
+                $wpdb->prepare(
+                    "SELECT meta_value FROM $table WHERE store_id = %d AND meta_key = %s LIMIT 1",
+                    $this->id,
+                    $key
+                )
             ) );
+        } else {
+            $values = $wpdb->get_col(
+                $wpdb->prepare(
+                    "SELECT meta_value FROM $table WHERE store_id = %d AND meta_key = %s",
+                    $this->id,
+                    $key
+                )
+            );
             return $values;
         }
     }
@@ -118,14 +127,17 @@ class Store {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['store_meta'];
 
-        $rows = $wpdb->get_results( $wpdb->prepare(
-            "SELECT meta_key, meta_value FROM $table WHERE store_id = %d",
-            $this->id
-        ), ARRAY_A );
+        $rows = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT meta_key, meta_value FROM $table WHERE store_id = %d",
+                $this->id
+            ),
+            ARRAY_A
+        );
 
-        $meta = [];
+        $meta = array();
         foreach ( $rows as $row ) {
-            $meta[ $row['meta_key'] ] =  $row['meta_value'];
+            $meta[ $row['meta_key'] ] = $row['meta_value'];
         }
 
         return $meta;
@@ -139,28 +151,31 @@ class Store {
             $value = wp_json_encode( $value );
         }
 
-        $exists = $wpdb->get_var($wpdb->prepare(
-            "SELECT ID FROM $table WHERE store_id = %d AND meta_key = %s",
-            $this->id, $key
-        ));
+        $exists = $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT ID FROM $table WHERE store_id = %d AND meta_key = %s",
+                $this->id,
+                $key
+            )
+        );
 
         if ( $exists ) {
             $wpdb->update(
                 $table,
-                [ 'meta_value' => $value],
-                [ 'ID' => $exists ],
-                [ '%s' ],
-                [ '%d' ]
+                array( 'meta_value' => $value ),
+                array( 'ID' => $exists ),
+                array( '%s' ),
+                array( '%d' )
             );
         } else {
             $wpdb->insert(
                 $table,
-                [
+                array(
                     'store_id'   => $this->id,
                     'meta_key'   => $key,
                     'meta_value' => $value,
-                ],
-                [ '%d','%s','%s' ]
+                ),
+                array( '%d', '%s', '%s' )
             );
         }
     }
@@ -184,21 +199,24 @@ class Store {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['store'];
 
-        $id = $wpdb->get_var( $wpdb->prepare(
-            "SELECT ID FROM $table WHERE slug = %s LIMIT 1", $slug
-        ) );
+        $id = $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT ID FROM $table WHERE slug = %s LIMIT 1",
+                $slug
+            )
+        );
 
         return $id ? new self( $id ) : null;
     }
 
     // public static function store_slug_exists($slug) {
-    //     global $wpdb;
-    //     $table = "{$wpdb->prefix}"  . Utill::TABLES['store'];
+    // global $wpdb;
+    // $table = "{$wpdb->prefix}"  . Utill::TABLES['store'];
 
-    //     $exists = $wpdb->get_var(
-    //         $wpdb->prepare("SELECT COUNT(*) FROM {$table} WHERE slug = %s", $slug)
-    //     );
-    //     return $exists;
+    // $exists = $wpdb->get_var(
+    // $wpdb->prepare("SELECT COUNT(*) FROM {$table} WHERE slug = %s", $slug)
+    // );
+    // return $exists;
     // }
 
     public static function store_slug_exists( $slug, $exclude_id = 0 ) {
@@ -226,19 +244,22 @@ class Store {
 
     public static function get_store_by_name( $name ) {
         global $wpdb;
-        if ( empty( $name ) ) return false;
+        if ( empty( $name ) ) {
+			return false;
+        }
 
-        $table = "{$wpdb->prefix}" . Utill::TABLES['store'];
-        $like = '%' . $wpdb->esc_like( $name ) . '%';
+        $table   = "{$wpdb->prefix}" . Utill::TABLES['store'];
+        $like    = '%' . $wpdb->esc_like( $name ) . '%';
         $results = $wpdb->get_results(
             $wpdb->prepare(
                 "SELECT * FROM {$table} WHERE name LIKE %s AND status = %s",
-                $like, 'active'
+                $like,
+                'active'
             ),
             ARRAY_A
         );
 
-        $stores = [];
+        $stores = array();
         if ( ! empty( $results ) ) {
             foreach ( $results as $row ) {
                 $stores[] = new self( (int) $row['ID'] );
@@ -247,7 +268,7 @@ class Store {
 
         return $stores;
     }
-    
+
     /**
      * Delete a store meta key.
      *
@@ -259,11 +280,11 @@ class Store {
 
         $wpdb->delete(
             $table,
-            [
+            array(
                 'store_id' => $this->id,
-                'meta_key' => $key
-            ],
-            [ '%d', '%s' ]
+                'meta_key' => $key,
+            ),
+            array( '%d', '%s' )
         );
     }
 
@@ -273,8 +294,8 @@ class Store {
 
         $deleted = $wpdb->delete(
             $table,
-            [ 'store_id' => (int) $this->id ],
-            [ '%d' ]
+            array( 'store_id' => (int) $this->id ),
+            array( '%d' )
         );
 
         return $deleted !== false;
@@ -296,11 +317,10 @@ class Store {
         $store_meta_table  = "{$wpdb->prefix}" . Utill::TABLES['store_meta'];
 
         // Run deletions
-        $wpdb->delete( $store_meta_table, [ 'store_id' => $store_id ], [ '%d' ] );
-        $wpdb->delete( $store_users_table, [ 'store_id' => $store_id ], [ '%d' ] );
-        $wpdb->delete( $store_table, [ 'ID' => $store_id ], [ '%d' ] );
+        $wpdb->delete( $store_meta_table, array( 'store_id' => $store_id ), array( '%d' ) );
+        $wpdb->delete( $store_users_table, array( 'store_id' => $store_id ), array( '%d' ) );
+        $wpdb->delete( $store_table, array( 'ID' => $store_id ), array( '%d' ) );
 
         return true;
     }
-
 }

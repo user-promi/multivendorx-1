@@ -8,6 +8,7 @@ import {
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
+import {formatCurrency} from '../../services/commonFunction';
 
 type StoreRow = {
     id?: number;
@@ -16,12 +17,12 @@ type StoreRow = {
     status?: string;
 };
 
-interface Props {
-    onUpdated?: () => void;
+interface DirectTransactionProps {
+    storeId: number | string; // or whatever type it should be
 }
 
-const WithdrawalRequests: React.FC<Props> = ({ onUpdated }) => {
-    const [data, setData] = useState<StoreRow[] | null>(null);
+const DirectTransaction: React.FC<DirectTransactionProps> = ({ storeId }) => {
+    const [data, setData] = useState<StoreRow[] | []>([]);
 
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
@@ -31,22 +32,7 @@ const WithdrawalRequests: React.FC<Props> = ({ onUpdated }) => {
     });
     const [pageCount, setPageCount] = useState(0);
 
-    // Fetch total rows on mount
-    useEffect(() => {
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'store'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true, pending_withdraw: true },
-        })
-            .then((response) => {
-                setTotalRows(response.data || 0);
-                setPageCount(Math.ceil(response.data / pagination.pageSize));
-            })
-            .catch(() => {
-                setError(__('Failed to load total rows', 'multivendorx'));
-            });
-    }, []);
+
 
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
@@ -54,8 +40,15 @@ const WithdrawalRequests: React.FC<Props> = ({ onUpdated }) => {
         requestData(rowsPerPage, currentPage);
         setPageCount(Math.ceil(totalRows / rowsPerPage));
     }, [pagination]);
+    const [showDropdown, setShowDropdown] = useState(false);
 
-
+    const toggleDropdown = (id: any) => {
+        if (showDropdown === id) {
+            setShowDropdown(false);
+            return;
+        }
+        setShowDropdown(id);
+    };
     // Fetch data from backend.
     function requestData(
         rowsPerPage = 10,
@@ -64,18 +57,16 @@ const WithdrawalRequests: React.FC<Props> = ({ onUpdated }) => {
         setData([]);
         axios({
             method: 'GET',
-            url: getApiLink(appLocalizer, 'store'),
+            url: getApiLink(appLocalizer, 'products'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params: {
-                pending_withdraw: true,
                 page: currentPage,
                 row: rowsPerPage,
             },
         })
             .then((response) => {
-                setData(Array.isArray(response.data) ? response.data : []);
+                setData(response.data || []);
             })
-
             .catch(() => {
                 setData([]);
             });
@@ -86,28 +77,13 @@ const WithdrawalRequests: React.FC<Props> = ({ onUpdated }) => {
         rowsPerPage: number,
         currentPage: number,
     ) => {
-        setData(null);
+        setData([]);
         requestData(
             rowsPerPage,
             currentPage,
         );
     };
-    const handleSingleAction = (action: string, row: any) => {
-        let storeId = row.id;
-        if (!storeId) return;
 
-        axios({
-            method: 'PUT',
-            url: getApiLink(appLocalizer, `transaction/${storeId}`),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            data: { withdraw: true, action, amount: row.withdraw_amount, store_id: row.id },
-        })
-            .then(() => {
-                requestData(pagination.pageSize, pagination.pageIndex + 1);
-                onUpdated?.();
-            })
-            .catch(console.error);
-    };
     // Column definitions
     const columns: ColumnDef<StoreRow>[] = [
         {
@@ -128,10 +104,29 @@ const WithdrawalRequests: React.FC<Props> = ({ onUpdated }) => {
             ),
         },
         {
-            header: __('Store', 'multivendorx'),
+            header: __('Product Name', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.store_name || ''}>
-                    {row.original.store_name || '-'}
+                <TableCell title={row.original.name || ''}>
+                    {row.original.name || '-'}
+                </TableCell>
+            ),
+        },
+        {
+            header: __('SKU', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.sku || ''}>
+                    {row.original.sku || '-'}
+                </TableCell>
+            ),
+        },
+        {
+            header: __('Price', 'multivendorx'),
+            cell: ({ row }) => (
+                <TableCell title={row.original.price || ''}>
+                    {row.original.price
+                        ? formatCurrency(row.original.price)
+                        : '-'}
+
                 </TableCell>
             ),
         },
@@ -143,25 +138,7 @@ const WithdrawalRequests: React.FC<Props> = ({ onUpdated }) => {
                 </TableCell>
             ),
         },
-        {
-            header: __('Withdraw Amount', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.withdraw_amount || ''}>
-                    {row.original.withdraw_amount || '-'}
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Action', 'multivendorx'),
-            cell: ({ row }) =>
-                <TableCell title={row.original.status || ''}>
-                    <span className="admin-btn btn-purple" onClick={() => { handleSingleAction('approve', row) }}><i className="adminlib-check"></i> Approve</span>
-
-                    <span className="admin-btn btn-red" onClick={() => handleSingleAction('reject', row)}><i className="adminlib-close"></i> Reject</span>
-                </TableCell>,
-        },
     ];
-
 
     return (
         <>
@@ -178,10 +155,11 @@ const WithdrawalRequests: React.FC<Props> = ({ onUpdated }) => {
                     handlePagination={requestApiForData}
                     perPageOption={[10, 25, 50]}
                     typeCounts={[]}
+                    totalCounts={totalRows}
                 />
             </div>
         </>
     );
 };
 
-export default WithdrawalRequests;
+export default DirectTransaction;

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { SuccessNotice, SelectInput, getApiLink, useModules } from 'zyra';
+import { __ } from '@wordpress/i18n';
 
 const StoreSquad = ({ id }: { id: string | null }) => {
     const { modules } = useModules();
@@ -47,12 +48,11 @@ const StoreSquad = ({ id }: { id: string | null }) => {
                     <div className="card-content">
                         <div className="card-header">
                             <div className="left">
-                                <div className="title">
-                                    Store owners
-                                </div>
+                                <div className="title">{__('Store owners', 'multivendorx')}</div>
                             </div>
                         </div>
-                        {/* Other form groups remain the same */}
+
+                        {/* Store owners multi-select */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
                                 <SelectInput
@@ -67,144 +67,51 @@ const StoreSquad = ({ id }: { id: string | null }) => {
                                     })}
                                     onChange={(selected: any) => {
                                         const store_owners =
-                                            (selected as any[])?.map(
-                                                (option) => option.value
-                                            ) || [];
-                                        const updated = {
-                                            ...formData,
-                                            store_owners,
-                                            state: '',
-                                        };
+                                            (selected as any[])?.map(option => option.value) || [];
+                                        const updated = { ...formData, store_owners, state: '' };
                                         setFormData(updated);
                                         autoSave(updated);
                                     }}
                                 />
                             </div>
                         </div>
+
                         {modules.includes('staff-manager') && (
                             <>
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label>Store managers</label>
-                                        <SelectInput
-                                            name="store_managers"
-                                            options={appLocalizer?.managers_list || []}
-                                            type="multi-select"
-                                            value={(formData.store_managers || []).map((id: any) => {
-                                                const match = (appLocalizer?.managers_list || []).find(
-                                                    (opt: any) => String(opt.value) === String(id)
-                                                );
-                                                return match ? match.value : String(id);
-                                            })}
-                                            onChange={(selected: any) => {
-                                                const store_managers =
-                                                    (selected as any[])?.map(
-                                                        (option) => option.value
-                                                    ) || [];
-                                                const updated = {
-                                                    ...formData,
-                                                    store_managers,
-                                                    state: '',
-                                                };
-                                                setFormData(updated);
-                                                autoSave(updated);
-                                            }}
-                                        />
+                                {[
+                                    { label: __('Store managers', 'multivendorx'), name: 'store_managers', options: appLocalizer?.managers_list },
+                                    { label: __('Product managers', 'multivendorx'), name: 'product_managers', options: appLocalizer?.product_managers_list },
+                                    { label: __('Customer supports', 'multivendorx'), name: 'customer_supports', options: appLocalizer?.customer_support_list },
+                                    { label: __('Order assistants', 'multivendorx'), name: 'order_assistants', options: appLocalizer?.assistants_list },
+                                ].map(({ label, name, options }) => (
+                                    <div className="form-group-wrapper" key={name}>
+                                        <div className="form-group">
+                                            <label>{label}</label>
+                                            <SelectInput
+                                                name={name}
+                                                options={options || []}
+                                                type="multi-select"
+                                                value={(formData[name] || []).map((id: any) => {
+                                                    const match = (options || []).find((opt: any) => String(opt.value) === String(id));
+                                                    return match ? match.value : String(id);
+                                                })}
+                                                onChange={(selected: any) => {
+                                                    const updatedValues = (selected as any[])?.map(option => option.value) || [];
+                                                    const updated = { ...formData, [name]: updatedValues, state: '' };
+                                                    setFormData(updated);
+                                                    autoSave(updated);
+                                                }}
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label>Product managers</label>
-                                        <SelectInput
-                                            name="product_managers"
-                                            options={appLocalizer?.product_managers_list || []}
-                                            type="multi-select"
-                                            value={(formData.product_managers || []).map((id: any) => {
-                                                const match = (appLocalizer?.product_managers_list || []).find(
-                                                    (opt: any) => String(opt.value) === String(id)
-                                                );
-                                                return match ? match.value : String(id);
-                                            })}
-                                            onChange={(selected: any) => {
-                                                const product_managers =
-                                                    (selected as any[])?.map(
-                                                        (option) => option.value
-                                                    ) || [];
-                                                const updated = {
-                                                    ...formData,
-                                                    product_managers,
-                                                    state: '',
-                                                };
-                                                setFormData(updated);
-                                                autoSave(updated);
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label>Customer supports</label>
-                                        <SelectInput
-                                            name="customer_supports"
-                                            options={appLocalizer?.customer_support_list || []}
-                                            type="multi-select"
-                                            value={(formData.customer_supports || []).map((id: any) => {
-                                                const match = (appLocalizer?.customer_support_list || []).find(
-                                                    (opt: any) => String(opt.value) === String(id)
-                                                );
-                                                return match ? match.value : String(id);
-                                            })}
-                                            onChange={(selected: any) => {
-                                                const customer_supports =
-                                                    (selected as any[])?.map(
-                                                        (option) => option.value
-                                                    ) || [];
-                                                const updated = {
-                                                    ...formData,
-                                                    customer_supports,
-                                                    state: '',
-                                                };
-                                                setFormData(updated);
-                                                autoSave(updated);
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label>Order assistants</label>
-                                        <SelectInput
-                                            name="order_assistants"
-                                            options={appLocalizer?.assistants_list || []}
-                                            type="multi-select"
-                                            value={(formData.order_assistants || []).map((id: any) => {
-                                                const match = (appLocalizer?.assistants_list || []).find(
-                                                    (opt: any) => String(opt.value) === String(id)
-                                                );
-                                                return match ? match.value : String(id);
-                                            })}
-                                            onChange={(selected: any) => {
-                                                const order_assistants =
-                                                    (selected as any[])?.map(
-                                                        (option) => option.value
-                                                    ) || [];
-                                                const updated = {
-                                                    ...formData,
-                                                    order_assistants,
-                                                    state: '',
-                                                };
-                                                setFormData(updated);
-                                                autoSave(updated);
-                                            }}
-                                        />
-                                    </div>
-                                </div>
+                                ))}
                             </>
                         )}
+
                         {modules.includes('facilitator') && (
                             <div className="form-group-wrapper">
                                 <div className="form-group">
-                                    <label>Facilitators</label>
+                                    <label>{__('Facilitators', 'multivendorx')}</label>
                                     <SelectInput
                                         name="facilitators"
                                         options={appLocalizer?.facilitators_list || []}
@@ -216,15 +123,8 @@ const StoreSquad = ({ id }: { id: string | null }) => {
                                             return match ? match.value : String(id);
                                         })}
                                         onChange={(selected: any) => {
-                                            const facilitators =
-                                                (selected as any[])?.map(
-                                                    (option) => option.value
-                                                ) || [];
-                                            const updated = {
-                                                ...formData,
-                                                facilitators,
-                                                state: '',
-                                            };
+                                            const facilitators = (selected as any[])?.map(option => option.value) || [];
+                                            const updated = { ...formData, facilitators, state: '' };
                                             setFormData(updated);
                                             autoSave(updated);
                                         }}
@@ -233,21 +133,18 @@ const StoreSquad = ({ id }: { id: string | null }) => {
                             </div>
                         )}
                     </div>
-
                 </div>
+
                 <div className="card-wrapper w-35">
                     <div id="primary-owner" className="card-content">
                         <div className="card-header">
                             <div className="left">
-                                <div className="title">
-                                    Primary owner
-                                </div>
+                                <div className="title">{__('Primary owner', 'multivendorx')}</div>
                             </div>
                         </div>
-                        {/* FIXED: Corrected label typo and fixed primary_owner handling */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label></label>
+                                <label>{__('Select primary owner', 'multivendorx')}</label>
                                 <SelectInput
                                     name="primary_owner"
                                     options={appLocalizer?.store_owners || []}
@@ -255,7 +152,6 @@ const StoreSquad = ({ id }: { id: string | null }) => {
                                     type="single-select"
                                     onChange={(newValue: any) => {
                                         if (!newValue || Array.isArray(newValue)) return;
-
                                         const updated = { ...formData, primary_owner: newValue.value };
                                         setFormData(updated);
                                         autoSave(updated);
@@ -265,11 +161,8 @@ const StoreSquad = ({ id }: { id: string | null }) => {
                         </div>
                     </div>
                 </div>
+
             </div>
-
-
-
-
         </>
     );
 

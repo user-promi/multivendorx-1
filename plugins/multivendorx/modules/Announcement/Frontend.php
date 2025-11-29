@@ -4,7 +4,7 @@ namespace MultiVendorX\Announcement;
 class Frontend {
     public function __construct() {
         // Hook into the filter that defines the admin submenus
-        add_filter( 'multivendorx_submenus', [ $this, 'add_announcement_menu' ], 20 );
+        add_filter( 'multivendorx_submenus', array( $this, 'add_announcement_menu' ), 20 );
     }
 
     /**
@@ -14,14 +14,14 @@ class Frontend {
      * @return array Modified submenu array.
      */
     public function add_announcement_menu( $submenus ) {
-        $new_item = [
+        $new_item = array(
             'announcement' => array(
                 'name'   => __( 'Announcement', 'multivendorx' ),
                 'subtab' => '',
             ),
-        ];
+        );
 
-        $ordered = [];
+        $ordered = array();
         foreach ( $submenus as $key => $menu ) {
             // Copy existing menu
             $ordered[ $key ] = $menu;

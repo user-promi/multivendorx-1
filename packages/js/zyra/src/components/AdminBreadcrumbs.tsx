@@ -18,7 +18,7 @@ interface AdminBreadcrumbsProps {
   renderBreadcrumb?: () => React.ReactNode;
   renderMenuItems?: (items: any[]) => React.ReactNode;
   tabData?: any[];
-  buttons?: any[];
+  buttons?: React.ReactNode[];
   premium?: boolean;
   goPremium?: boolean;
   goPremiumLink?: string;

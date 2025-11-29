@@ -30,7 +30,7 @@ export interface RealtimeFilter {
     render: (updateFilter: (key: string, value: any) => void, filterValue: any) => React.ReactNode;
 }
 
-const Coupons: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
+const PendingCoupons: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
     const [data, setData] = useState<CouponRow[] | null>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
@@ -316,4 +316,4 @@ const Coupons: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
     );
 };
 
-export default Coupons;
+export default PendingCoupons;

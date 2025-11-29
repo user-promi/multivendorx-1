@@ -2,7 +2,7 @@
 namespace MultiVendorX\GeoLocation;
 
 class Module {
-    private $container = array();
+    private $container       = array();
     private static $instance = null;
 
     public function __construct() {
@@ -12,33 +12,33 @@ class Module {
 
     public function init_classes() {
         // Ensure classes are loaded before instantiation
-        if (!class_exists('MultiVendorX\\Geolocation\\StoreGeolocation')) {
-            require_once plugin_dir_path(__FILE__) . 'StoreGeolocation.php';
+        if ( ! class_exists( 'MultiVendorX\\Geolocation\\StoreGeolocation' ) ) {
+            require_once plugin_dir_path( __FILE__ ) . 'StoreGeolocation.php';
         }
-        
-        if (!class_exists('MultiVendorX\\Geolocation\\GeoLocation')) {
-            require_once plugin_dir_path(__FILE__) . 'GeoLocation.php';
+
+        if ( ! class_exists( 'MultiVendorX\\Geolocation\\GeoLocation' ) ) {
+            require_once plugin_dir_path( __FILE__ ) . 'GeoLocation.php';
         }
-        
+
         $this->container['geo_location'] = new GeoLocation();
     }
 
     public function init_hooks() {
-        add_action('plugins_loaded', array($this, 'ensure_class_autoloading'));
+        add_action( 'plugins_loaded', array( $this, 'ensure_class_autoloading' ) );
     }
 
     public function ensure_class_autoloading() {
         // Manual class loading as fallback
-        $class_files = [
+        $class_files = array(
             'StoreGeolocation' => 'StoreGeolocation.php',
-            'GeoLocation' => 'GeoLocation.php'
-        ];
+            'GeoLocation'      => 'GeoLocation.php',
+        );
 
-        foreach ($class_files as $class_name => $file) {
+        foreach ( $class_files as $class_name => $file ) {
             $full_class = 'MultiVendorX\\Geolocation\\' . $class_name;
-            if (!class_exists($full_class)) {
-                $file_path = plugin_dir_path(__FILE__) . $file;
-                if (file_exists($file_path)) {
+            if ( ! class_exists( $full_class ) ) {
+                $file_path = plugin_dir_path( __FILE__ ) . $file;
+                if ( file_exists( $file_path ) ) {
                     require_once $file_path;
                 }
             }

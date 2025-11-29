@@ -38,15 +38,15 @@ export default {
                             label: __('Cannot sell or fulfill orders', 'multivendorx'),
                             check: false,
                         },
-                    ]
+                    ],
                 },
             ],
         },
         {
             key: 'rejected_msg',
-            label: 'Message shown to rejected stores',
+            label: __('Message shown to rejected stores', 'multivendorx'),
             type: 'textarea',
-            des: 'What pending stores can do',
+            des: __('What rejected stores can do', 'multivendorx'),
         },
     ],
 };

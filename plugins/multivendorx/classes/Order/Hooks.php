@@ -4,47 +4,48 @@ namespace MultiVendorX\Order;
 
 use MultiVendorX\Store\StoreUtil;
 
-defined('ABSPATH') || exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * MultiVendorX Order Hook class
  *
- * @version		PRODUCT_VERSION
- * @package		MultiVendorX
- * @author 		MultiVendorX
+ * @version     PRODUCT_VERSION
+ * @package     MultiVendorX
+ * @author      MultiVendorX
  */
 
 class Hooks {
     function __construct() {
-        add_action('woocommerce_checkout_create_order_line_item', [$this, 'add_metadata_for_line_item'], 10, 4);
-        add_action('woocommerce_checkout_create_order_shipping_item', [$this, 'add_metadate_for_shipping_item'], 10, 4);
-        add_action('woocommerce_analytics_update_order_stats', [$this, 'remove_suborder_analytics'], 10, 1);
+        add_action( 'woocommerce_checkout_create_order_line_item', array( $this, 'add_metadata_for_line_item' ), 10, 4 );
+        add_action( 'woocommerce_checkout_create_order_shipping_item', array( $this, 'add_metadate_for_shipping_item' ), 10, 4 );
+        add_action( 'woocommerce_analytics_update_order_stats', array( $this, 'remove_suborder_analytics' ), 10, 1 );
 
         // Create store order after valid checkout processed.
-        add_action('woocommerce_checkout_order_processed', [$this, 'create_vendor_order'] );
-        add_action('woocommerce_store_api_checkout_order_processed', [$this, 'create_vendor_order'] );
+        add_action( 'woocommerce_checkout_order_processed', array( $this, 'create_vendor_order' ) );
+        add_action( 'woocommerce_store_api_checkout_order_processed', array( $this, 'create_vendor_order' ) );
 
         // Create store order from backend.
-        add_action('woocommerce_new_order', array($this, 'manually_create_vendor_order'), 10, 2 );
+        add_action( 'woocommerce_new_order', array( $this, 'manually_create_vendor_order' ), 10, 2 );
 
         // After crate suborder order try to sync order status.
-        add_action('woocommerce_order_status_changed', [$this, 'parent_order_to_vendor_order_status_sync'], 10, 4);
-        add_action('woocommerce_order_status_changed', [$this, 'vendor_order_to_parent_order_status_sync'], 10, 4);
+        add_action( 'woocommerce_order_status_changed', array( $this, 'parent_order_to_vendor_order_status_sync' ), 10, 4 );
+        add_action( 'woocommerce_order_status_changed', array( $this, 'vendor_order_to_parent_order_status_sync' ), 10, 4 );
     }
-    
+
     /**
      * Add metadata for line item in time of checkout process.
+     *
      * @param   mixed $item
      * @param   mixed $item_key
      * @param   mixed $values
      * @param   mixed $order
      * @return  void
      */
-    public function add_metadata_for_line_item($item, $item_key, $values, $order) {
-        if ( $order &&  $order->get_parent_id() == 0 ) {
-            $vendor = StoreUtil::get_products_vendor($item['product_id']);
-            if ($vendor) {
-                $item->add_meta_data('multivendorx_sold_by', $vendor->get('name'));
+    public function add_metadata_for_line_item( $item, $item_key, $values, $order ) {
+        if ( $order && $order->get_parent_id() == 0 ) {
+            $vendor = StoreUtil::get_products_vendor( $item['product_id'] );
+            if ( $vendor ) {
+                $item->add_meta_data( 'multivendorx_sold_by', $vendor->get( 'name' ) );
                 // $item->add_meta_data('multivendorx_store_id', $vendor->get_id());
             }
         }
@@ -52,48 +53,52 @@ class Hooks {
 
     /**
      * Add metadata for shipping item in time of checkout process.
+     *
      * @param mixed $item
      * @param mixed $package_key
      * @param mixed $package
      * @param mixed $order
      * @return void
      */
-    public function add_metadate_for_shipping_item($item, $package_key, $package, $order) {
+    public function add_metadate_for_shipping_item( $item, $package_key, $package, $order ) {
         $store_id = $package['store_id'] ?? $package_key;
-        if( $order && $order->get_parent_id() == 0 ) {
-            $item->add_meta_data('multivendorx_store_id', $store_id, true);
-            $package_qty = array_sum(wp_list_pluck($package['contents'], 'quantity'));
-            $item->add_meta_data('package_qty', $package_qty, true);
-            do_action('mvx_add_shipping_package_meta');
+        if ( $order && $order->get_parent_id() == 0 ) {
+            $item->add_meta_data( 'multivendorx_store_id', $store_id, true );
+            $package_qty = array_sum( wp_list_pluck( $package['contents'], 'quantity' ) );
+            $item->add_meta_data( 'package_qty', $package_qty, true );
+            do_action( 'mvx_add_shipping_package_meta' );
         }
     }
 
     /**
-     * Woocommerce admin dashboard restrict dual order report 
+     * Woocommerce admin dashboard restrict dual order report
+     *
      * @param   int $order_id
      * @return  void
      */
-    public function remove_suborder_analytics($order_id) {
+    public function remove_suborder_analytics( $order_id ) {
         global $wpdb;
-        $order = new VendorOrder($order_id);
+        $order = new VendorOrder( $order_id );
         if ( $order->is_vendor_order() ) {
-            $wpdb->delete( $wpdb->prefix.'wc_order_stats', [ 'order_id' => $order_id ] );
+            $wpdb->delete( $wpdb->prefix . 'wc_order_stats', array( 'order_id' => $order_id ) );
             \WC_Cache_Helper::get_transient_version( 'woocommerce_reports', true );
         }
     }
 
     /**
      * Create the store orders of a main order form backend.
+     *
      * @param   object $order
      * @return  void
      */
     public function manually_create_vendor_order( $order_id, $order ) {
-        $this->create_vendor_order($order);
+        $this->create_vendor_order( $order );
     }
 
 
     /**
      * Create the vendor orders of a main order.
+     *
      * @param   mixed $order_id
      * @param   mixed $old_status
      * @param   mixed $new_status
@@ -105,120 +110,126 @@ class Hooks {
             $order = wc_get_order( $order );
         }
 
-        if ( $order->get_parent_id() || $order->get_meta('has_multivendorx_sub_order') ) {
+        if ( $order->get_parent_id() || $order->get_meta( 'has_multivendorx_sub_order' ) ) {
             return;
         }
 
-        MultiVendorX()->order->create_vendor_orders($order);
+        MultiVendorX()->order->create_vendor_orders( $order );
 
-        $order->update_meta_data('has_multivendorx_sub_order', true);
+        $order->update_meta_data( 'has_multivendorx_sub_order', true );
         $order->save();
     }
 
-    
+
     public function manually_create_order_item_and_suborder( $order_id = 0 ) {
-        $order = wc_get_order($order_id);
-        if(!$order) return;
+        $order = wc_get_order( $order_id );
+        if ( ! $order ) {
+			return;
+        }
 
         $items = $order->get_items();
-        foreach ($items as $key => $value) {
-            if ( $order || (function_exists('wcs_is_subscription') && wcs_is_subscription( $order )) ) {
-                $general_cap = apply_filters('mvx_sold_by_text', __('Sold By', 'multivendorx'));
-                $vendor = StoreUtil::get_products_vendor($value['product_id']);
-                if ($vendor) {
-                    if ( !wc_get_order_item_meta( $key, 'multivendorx_store_id' ) ) 
-                        wc_add_order_item_meta($key, 'multivendorx_store_id', $vendor->get_id());
-                    
-                    if ( !wc_get_order_item_meta( $key, $general_cap ) ) 
-                        wc_add_order_item_meta($key, $general_cap, $vendor->get('name'));
+        foreach ( $items as $key => $value ) {
+            if ( $order || ( function_exists( 'wcs_is_subscription' ) && wcs_is_subscription( $order ) ) ) {
+                $general_cap = apply_filters( 'mvx_sold_by_text', __( 'Sold By', 'multivendorx' ) );
+                $vendor      = StoreUtil::get_products_vendor( $value['product_id'] );
+                if ( $vendor ) {
+                    if ( ! wc_get_order_item_meta( $key, 'multivendorx_store_id' ) ) {
+                        wc_add_order_item_meta( $key, 'multivendorx_store_id', $vendor->get_id() );
+                    }
+
+                    if ( ! wc_get_order_item_meta( $key, $general_cap ) ) {
+                        wc_add_order_item_meta( $key, $general_cap, $vendor->get( 'name' ) );
+                    }
                 }
             }
         }
 
-        $this->create_vendor_order($order_id );
-
+        $this->create_vendor_order( $order_id );
     }
 
     /**
      * Sync vendor order based on parent order status change for first time.
-     * Except first time whenever parent order status change it skip for vendor order. 
+     * Except first time whenever parent order status change it skip for vendor order.
+     *
      * @param   mixed $order_id
      * @param   mixed $old_status
      * @param   mixed $new_status
      * @param   mixed $order
      * @return  void
      */
-    public function parent_order_to_vendor_order_status_sync($order_id, $old_status, $new_status, $order) {
-        if( !$order_id ) return;
-
-        if ( empty($new_status) ) {
-            $new_status = $order->get_status('edit');
+    public function parent_order_to_vendor_order_status_sync( $order_id, $old_status, $new_status, $order ) {
+        if ( ! $order_id ) {
+			return;
         }
-        
-        // If order is not a main order or sync before then return.
-        if ( $order->get_parent_id() || $order->get_meta('mvx_vendor_order_status_synchronized', true) )
-            return;
 
-        remove_action('woocommerce_order_status_completed', 'wc_paying_customer');
+        if ( empty( $new_status ) ) {
+            $new_status = $order->get_status( 'edit' );
+        }
+
+        // If order is not a main order or sync before then return.
+        if ( $order->get_parent_id() || $order->get_meta( 'mvx_vendor_order_status_synchronized', true ) ) {
+            return;
+        }
+
+        remove_action( 'woocommerce_order_status_completed', 'wc_paying_customer' );
 
         // Check if order have suborder then sync
-        $suborders = MultiVendorX()->order->get_suborders($order);
+        $suborders = MultiVendorX()->order->get_suborders( $order );
         if ( $suborders ) {
+            foreach ( $suborders as $suborder ) {
+                if ( $suborder && $suborder->get_status() !== $new_status ) {
+                    $suborder->update_status( $new_status, _x( 'Update via parent order: ', 'Order note', 'multivendorx' ) );
 
-            foreach ($suborders as $suborder) {
-                if ($suborder && $suborder->get_status() !== $new_status) {
-                    $suborder->update_status($new_status, _x('Update via parent order: ', 'Order note', 'multivendorx'));
-    
                     $updated = true;
                 }
             }
-    
-            if ($updated) {
-                $order->update_meta_data('mvx_vendor_order_status_synchronized', true);
+
+            if ( $updated ) {
+                $order->update_meta_data( 'mvx_vendor_order_status_synchronized', true );
                 $order->save();
             }
         }
 
-        add_action('woocommerce_order_status_completed', 'wc_paying_customer');
+        add_action( 'woocommerce_order_status_completed', 'wc_paying_customer' );
     }
 
     /**
      * Sync parent order base on vendor order.
      * If all vendor order is in same status then change the parent order.
+     *
      * @param   mixed $order_id
      * @param   mixed $old_status
      * @param   mixed $new_status
      * @param   mixed $order
      * @return  void
      */
-    public function vendor_order_to_parent_order_status_sync($order_id, $old_status, $new_status, $order) {
-         
-        $vendor_id = $order ? absint( $order->get_meta( 'multivendorx_store_id', true) ) : 0;
+    public function vendor_order_to_parent_order_status_sync( $order_id, $old_status, $new_status, $order ) {
+
+        $vendor_id = $order ? absint( $order->get_meta( 'multivendorx_store_id', true ) ) : 0;
         // $vendor_order = new VendorOrder($order);
 
-        if( $vendor_id === get_current_user_id() ) {
-
+        if ( $vendor_id === get_current_user_id() ) {
             $parent_order_id = $order->get_parent_id();
-            if( $parent_order_id ) {
+            if ( $parent_order_id ) {
                 // Remove the action to prevent recursion call.
-                remove_action('woocommerce_order_status_changed', [$this, 'parent_order_to_vendor_order_status_sync'], 10, 4);
+                remove_action( 'woocommerce_order_status_changed', array( $this, 'parent_order_to_vendor_order_status_sync' ), 10, 4 );
 
-                $suborders = MultiVendorX()->order->get_suborders($parent_order_id);
+                $suborders        = MultiVendorX()->order->get_suborders( $parent_order_id );
                 $all_status_equal = true;
-                foreach( $suborders as $suborder) {
-                    if ($suborder->get_status('edit') != $new_status) {
+                foreach ( $suborders as $suborder ) {
+                    if ( $suborder->get_status( 'edit' ) != $new_status ) {
                         $all_status_equal = false;
                         break;
                     }
                 }
 
-                if( $all_status_equal ) {
+                if ( $all_status_equal ) {
                     $parent_order = wc_get_order( $parent_order_id );
                     $parent_order->update_status( $new_status, _x( "Sync from vendor's suborders: ", 'Order note', 'multivendorx' ) );
                 }
 
                 // Add the action back.
-                add_action('woocommerce_order_status_changed', [$this, 'parent_order_to_vendor_order_status_sync'], 10, 4);
+                add_action( 'woocommerce_order_status_changed', array( $this, 'parent_order_to_vendor_order_status_sync' ), 10, 4 );
             }
         }
     }

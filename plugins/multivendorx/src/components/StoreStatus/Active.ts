@@ -17,12 +17,14 @@ export default {
                 {
                     key: 'paid_promotion_limit',
                     type: 'setup',
-                    label: 'Configure store permissions',
-                    desc: 'Control what dashboard sections and tools are available to active stores.',
+                    label: __('Configure store permissions', 'multivendorx'),
+                    desc: __(
+                        'Control what dashboard sections and tools are available to active stores.',
+                        'multivendorx'
+                    ),
                     link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-capability`,
                 },
             ],
         },
-
     ],
 };

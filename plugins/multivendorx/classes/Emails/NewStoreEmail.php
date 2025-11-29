@@ -7,14 +7,13 @@
 
 namespace MultiVendorX\Emails;
 
-
 class NewStoreEmail extends MultiVendorXEmails {
     public function __construct() {
-        $this->id             = 'new_store_registered';
-        $this->title          = __( 'New Store Registered', 'multivendorx' );
-        $this->description    = __( 'This email is sent when a new store registers.', 'multivendorx' );
-        $this->heading        = __( 'New Store Registration', 'multivendorx' );
-        $this->subject        = __( '[{site_title}] A new store has registered', 'multivendorx' );
+        $this->id          = 'new_store_registered';
+        $this->title       = __( 'New Store Registered', 'multivendorx' );
+        $this->description = __( 'This email is sent when a new store registers.', 'multivendorx' );
+        $this->heading     = __( 'New Store Registration', 'multivendorx' );
+        $this->subject     = __( '[{site_title}] A new store has registered', 'multivendorx' );
 
         // Call parent constructor (important)
         parent::__construct();
@@ -30,12 +29,12 @@ class NewStoreEmail extends MultiVendorXEmails {
             return;
         }
 
-        $this->send( 
-            $this->get_recipient(), 
-            $this->get_subject(), 
-            $this->get_content(), 
-            $this->get_headers(), 
-            $this->get_attachments() 
+        $this->send(
+            $this->get_recipient(),
+            $this->get_subject(),
+            $this->get_content(),
+            $this->get_headers(),
+            $this->get_attachments()
         );
     }
 
@@ -43,13 +42,11 @@ class NewStoreEmail extends MultiVendorXEmails {
      * Email content HTML
      */
     public function get_content_html() {
-       
     }
 
     /**
      * Email content plain
      */
     public function get_content_plain() {
-        
     }
 }

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { CommonPopup, getApiLink } from 'zyra';
 import axios from 'axios';
 import { Skeleton } from '@mui/material';
+import { __ } from '@wordpress/i18n';
 
 const HeaderNotifications = () => {
 
@@ -34,7 +35,7 @@ const HeaderNotifications = () => {
     };
     // console.log(notifications)
 
-     const renderContent = () => {
+    const renderContent = () => {
         if (notifications === null) {
             return (
                 <>
@@ -64,7 +65,7 @@ const HeaderNotifications = () => {
             return (
                 <li>
                     <div className="item no-notifications">
-                        <span>No notifications</span>
+                        <span>{__('No notifications', 'multivendorx')}</span>
                     </div>
                 </li>
             );
@@ -73,7 +74,6 @@ const HeaderNotifications = () => {
         return notifications.map((item, idx) => (
             <li key={idx}>
                 <div className="item">
-                    {/* <a href={item.link || "#"}> */}
                     <div
                         className={`icon admin-badge green`}
                     >
@@ -86,7 +86,6 @@ const HeaderNotifications = () => {
                     </div>
                     <i className="check-icon adminlib-check"></i>
                 </div>
-                {/* </a> */}
             </li>
         ));
     };
@@ -95,10 +94,10 @@ const HeaderNotifications = () => {
         <>
             <div className="dropdown notification">
                 <div className="title">
-                    Notifications
+                    {__('Notifications', 'multivendorx')}
                     {notifications && notifications.length > 0 && (
                         <span className="admin-badge yellow">
-                            {notifications.length} New
+                            {notifications.length} {__('New', 'multivendorx')}
                         </span>
                     )}
                 </div>
@@ -108,9 +107,12 @@ const HeaderNotifications = () => {
                     </ul>
                 </div>
                 <div className="footer">
-                    <a href={`?page=multivendorx#&tab=notifications`}
-                        className="admin-btn btn-purple">
-                        <i className="adminlib-preview"></i> View all notifications
+                    <a
+                        href={`?page=multivendorx#&tab=notifications`}
+                        className="admin-btn btn-purple"
+                    >
+                        <i className="adminlib-preview"></i>{' '}
+                        {__('View all notifications', 'multivendorx')}
                     </a>
                 </div>
             </div>

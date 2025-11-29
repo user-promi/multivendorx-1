@@ -1,23 +1,23 @@
 <?php
 namespace MultiVendorX\Payments;
+
 use Exception;
 use MultiVendorX\Store\Store;
 use MultiVendorX\Store\StoreUtil;
-defined('ABSPATH') || exit;
+defined( 'ABSPATH' ) || exit;
 
-class StripeConnect
-{
-    
-    public function __construct()
-    {
-        add_action('multivendorx_process_stripe-connect_payment', [$this, 'process_payment'], 10, 5);
-        
+class StripeConnect {
+
+
+    public function __construct() {
+        add_action( 'multivendorx_process_stripe-connect_payment', array( $this, 'process_payment' ), 10, 5 );
+
         // Register AJAX
-        add_action('wp_ajax_create_stripe_account', [$this, 'ajax_create_account']);
-        add_action('wp_ajax_disconnect_stripe_account', [$this, 'ajax_disconnect_account']);
-        
+        add_action( 'wp_ajax_create_stripe_account', array( $this, 'ajax_create_account' ) );
+        add_action( 'wp_ajax_disconnect_stripe_account', array( $this, 'ajax_disconnect_account' ) );
+
         // Use admin_post endpoint for OAuth callback (works whether user is logged-in or not)
-        add_action('admin_post_multivendorx_stripe_oauth_callback', [$this, 'handle_oauth_callback']);
+        add_action( 'admin_post_multivendorx_stripe_oauth_callback', array( $this, 'handle_oauth_callback' ) );
     }
 
     public function get_id() {
@@ -25,266 +25,280 @@ class StripeConnect
     }
 
     public function get_settings() {
-        $redirect_url = admin_url('admin-post.php?action=multivendorx_stripe_oauth_callback');
-        return [
-            'icon'      => 'adminlib-stripe-connect',
-            'id'        => $this->get_id(),
-            'label'     => 'Stripe Connect',
+        $redirect_url = admin_url( 'admin-post.php?action=multivendorx_stripe_oauth_callback' );
+        return array(
+            'icon'         => 'adminlib-stripe-connect',
+            'id'           => $this->get_id(),
+            'label'        => 'Stripe Connect',
             'enableOption' => true,
-            'desc'      => __('Marketplace payouts via Stripe Connect (OAuth).', 'multivendorx'),
-            'disableBtn'=> true,
-            'formFields' => [
-                [
-                    'key'   => 'payment_mode',
-                    'type'  => 'setting-toggle',
-                    'label' => __('Payment mode', 'multivendorx'),
-                    'options' => [
-                        ['key' => 'test', 'label' => __('Test', 'multivendorx'), 'value' => 'test'],
-                        ['key' => 'live', 'label' => __('Live', 'multivendorx'), 'value' => 'live'],
-                    ]
-                ],
-                [
+            'desc'         => __( 'Marketplace payouts via Stripe Connect (OAuth).', 'multivendorx' ),
+            'disableBtn'   => true,
+            'formFields'   => array(
+                array(
+                    'key'     => 'payment_mode',
+                    'type'    => 'setting-toggle',
+                    'label'   => __( 'Payment mode', 'multivendorx' ),
+                    'options' => array(
+                        array(
+							'key'   => 'test',
+							'label' => __( 'Test', 'multivendorx' ),
+							'value' => 'test',
+						),
+                        array(
+							'key'   => 'live',
+							'label' => __( 'Live', 'multivendorx' ),
+							'value' => 'live',
+						),
+                    ),
+                ),
+                array(
                     'key'         => 'client_id',
                     'type'        => 'text',
-                    'label'       => __('Stripe client ID', 'multivendorx'),
-                    'placeholder' => __('Enter Stripe Client ID', 'multivendorx'),
-                ],
-                [
+                    'label'       => __( 'Stripe client ID', 'multivendorx' ),
+                    'placeholder' => __( 'Enter Stripe Client ID', 'multivendorx' ),
+                ),
+                array(
                     'key'         => 'secret_key',
                     'type'        => 'text',
-                    'label'       => __('Secret key', 'multivendorx'),
-                    'placeholder' => __('Enter secret key', 'multivendorx'),
-                ],
-                [
-                    'key'         => 'redirect_url',
-                    'type'        => 'copy-text',
-                    'label'       => __('Redirect url', 'multivendorx'),
+                    'label'       => __( 'Secret key', 'multivendorx' ),
+                    'placeholder' => __( 'Enter secret key', 'multivendorx' ),
+                ),
+                array(
+                    'key'   => 'redirect_url',
+                    'type'  => 'copy-text',
+                    'label' => __( 'Redirect url', 'multivendorx' ),
                     'title' => $redirect_url,
-                    'desc'         =>  __('Copy this URL and add it to your Stripe dashboard as a redirect URL.', 'multivendorx'),
-                ]
-            ]
-        ];
+                    'desc'  => __( 'Copy this URL and add it to your Stripe dashboard as a redirect URL.', 'multivendorx' ),
+                ),
+            ),
+        );
     }
 
     public function get_store_payment_settings() {
-        $payment_admin_settings = MultiVendorX()->setting->get_setting('payment_methods', []);
-        $stripe_settings = $payment_admin_settings['stripe-connect'] ?? [];
+        $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
+        $stripe_settings        = $payment_admin_settings['stripe-connect'] ?? array();
 
-        if (!empty($stripe_settings) && $stripe_settings['enable']) {
-            $store_id = get_user_meta( get_current_user_id(), "multivendorx_active_store", true);
+        if ( ! empty( $stripe_settings ) && $stripe_settings['enable'] ) {
+            $store_id = get_user_meta( get_current_user_id(), 'multivendorx_active_store', true );
 
-            $store = new Store($store_id);
-            $stripe_account_id = $store->get_meta('_stripe_connect_account_id');
+            $store             = new Store( $store_id );
+            $stripe_account_id = $store->get_meta( '_stripe_connect_account_id' );
             $onboarding_status = 'Not Connected';
-            $is_onboarded = false;
+            $is_onboarded      = false;
 
-            if ($stripe_account_id) {
+            if ( $stripe_account_id ) {
                 $onboarding_status = 'Connected';
-                $is_onboarded = true;
+                $is_onboarded      = true;
             }
-            $badge_class = ($onboarding_status === 'Connected') ? 'green' : 'red';
-            $fields = [
-                [
+            $badge_class = ( $onboarding_status === 'Connected' ) ? 'green' : 'red';
+            $fields      = array(
+                array(
                     'type' => 'html',
-                    'html' => '<div class="form-group"><label>' . __('Stripe Status:', 'multivendorx') . ' <span class="admin-badge ' . $badge_class . '">' . $onboarding_status . '</span></label></div>',
-                ],
-            ];
-            
-            if (!is_admin()) {
-                if ($is_onboarded) {
-                    $fields[] = [
-                        'type'  => 'button',
-                        'key'   => 'disconnect_account',
-                        'label' => __('Disconnect Stripe Account', 'multivendorx'),
-                        'action'=> 'disconnect_stripe_account',
-                        'class' => 'mvx-stripe-disconnect-btn',
-                    ];
+                    'html' => '<div class="form-group"><label>' . __( 'Stripe Status:', 'multivendorx' ) . ' <span class="admin-badge ' . $badge_class . '">' . $onboarding_status . '</span></label></div>',
+                ),
+            );
+
+            if ( ! is_admin() ) {
+                if ( $is_onboarded ) {
+                    $fields[] = array(
+                        'type'   => 'button',
+                        'key'    => 'disconnect_account',
+                        'label'  => __( 'Disconnect Stripe Account', 'multivendorx' ),
+                        'action' => 'disconnect_stripe_account',
+                        'class'  => 'mvx-stripe-disconnect-btn',
+                    );
                 } else {
-                    $fields[] = [
-                        'type'  => 'button',
-                        'key'   => 'create_account',
-                        'label' => __('Connect with Stripe', 'multivendorx'),
-                        'action'=> 'create_stripe_account',
-                        'class' => 'mvx-stripe-connect-btn',
-                    ];
+                    $fields[] = array(
+                        'type'   => 'button',
+                        'key'    => 'create_account',
+                        'label'  => __( 'Connect with Stripe', 'multivendorx' ),
+                        'action' => 'create_stripe_account',
+                        'class'  => 'mvx-stripe-connect-btn',
+                    );
                 }
             }
-            
-            return [
-                'id'    => $this->get_id(),
-                'label' => __('Stripe Connect', 'multivendorx'),
-                'fields'=> $fields,
-            ];
+
+            return array(
+                'id'     => $this->get_id(),
+                'label'  => __( 'Stripe Connect', 'multivendorx' ),
+                'fields' => $fields,
+            );
         }
     }
 
-    public function process_payment($store_id, $amount, $order_id = null, $transaction_id = null, $note = null)
-    {
-        $store = new Store($store_id);
-        $stripe_account_id = $store->get_meta('_stripe_connect_account_id');
-        $status = 'failed';
-        if (!$stripe_account_id) {
+    public function process_payment( $store_id, $amount, $order_id = null, $transaction_id = null, $note = null ) {
+        $store             = new Store( $store_id );
+        $stripe_account_id = $store->get_meta( '_stripe_connect_account_id' );
+        $status            = 'failed';
+        if ( ! $stripe_account_id ) {
             $status = 'failed';
         }
 
-        $transfer = $this->create_transfer($amount, $stripe_account_id, $order_id);
+        $transfer = $this->create_transfer( $amount, $stripe_account_id, $order_id );
 
-        if ($transfer) {
+        if ( $transfer ) {
             $status = 'success';
-
         } else {
             $status = 'failed';
         }
 
-        do_action('multivendorx_after_payment_complete', $store_id, 'Stripe Connect', $status, $order_id, $transaction_id, $note, $amount);
-
+        do_action( 'multivendorx_after_payment_complete', $store_id, 'Stripe Connect', $status, $order_id, $transaction_id, $note, $amount );
     }
 
     public function ajax_create_account() {
-        $store_id = get_user_meta( get_current_user_id(), "multivendorx_active_store", true);
-        $payment_admin_settings = MultiVendorX()->setting->get_setting('payment_methods', []);
-        $stripe_settings = $payment_admin_settings['stripe-connect'] ?? [];
-        $client_id = $stripe_settings['client_id'] ?? '';
+        $store_id               = get_user_meta( get_current_user_id(), 'multivendorx_active_store', true );
+        $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
+        $stripe_settings        = $payment_admin_settings['stripe-connect'] ?? array();
+        $client_id              = $stripe_settings['client_id'] ?? '';
 
-        if (empty($client_id)) {
-            wp_send_json_error(['message' => __('Stripe Client ID not configured.', 'multivendorx')]);
+        if ( empty( $client_id ) ) {
+            wp_send_json_error( array( 'message' => __( 'Stripe Client ID not configured.', 'multivendorx' ) ) );
         }
 
         // Use admin-post.php as redirect
-        $redirect_uri = admin_url('admin-post.php?action=multivendorx_stripe_oauth_callback');
-        $state = wp_generate_password(24, false, false);
+        $redirect_uri = admin_url( 'admin-post.php?action=multivendorx_stripe_oauth_callback' );
+        $state        = wp_generate_password( 24, false, false );
 
         // Store store ID in option for verification
-        $store = new Store($store_id);
-        $store->update_meta('stripe_oauth_state', serialize([
-            'state' => $state,
-            'time'  => time(),
-        ]));
+        $store = new Store( $store_id );
+        $store->update_meta(
+            'stripe_oauth_state',
+            serialize(
+                array(
+					'state' => $state,
+					'time'  => time(),
+                )
+            )
+        );
 
-        $onboarding_url = add_query_arg([
-            'response_type' => 'code',
-            'client_id'     => $client_id,
-            'scope'         => 'read_write',
-            'redirect_uri'  => $redirect_uri,
-            'state'         => $state,
-        ], 'https://connect.stripe.com/oauth/authorize');
+        $onboarding_url = add_query_arg(
+            array(
+				'response_type' => 'code',
+				'client_id'     => $client_id,
+				'scope'         => 'read_write',
+				'redirect_uri'  => $redirect_uri,
+				'state'         => $state,
+            ),
+            'https://connect.stripe.com/oauth/authorize'
+        );
 
-        wp_send_json_success([
-            'message'        => __('Redirecting to Stripe onboarding...', 'multivendorx'),
-            'onboarding_url' => $onboarding_url,
-        ]);
+        wp_send_json_success(
+            array(
+				'message'        => __( 'Redirecting to Stripe onboarding...', 'multivendorx' ),
+				'onboarding_url' => $onboarding_url,
+            )
+        );
     }
 
 
     public function handle_oauth_callback() {
-        $code  = sanitize_text_field(filter_input(INPUT_GET, 'code', FILTER_DEFAULT));
-        $state = sanitize_text_field(filter_input(INPUT_GET, 'state', FILTER_DEFAULT));
-        if (!$code || !$state) {
-            wp_safe_redirect($this->get_redirect_url('error', 'stripe_oauth'));
+        $code  = sanitize_text_field( filter_input( INPUT_GET, 'code', FILTER_DEFAULT ) );
+        $state = sanitize_text_field( filter_input( INPUT_GET, 'state', FILTER_DEFAULT ) );
+        if ( ! $code || ! $state ) {
+            wp_safe_redirect( $this->get_redirect_url( 'error', 'stripe_oauth' ) );
             exit;
         }
         // We don't know store_id yet → search it via active vendor store
-        $store_id = get_user_meta(get_current_user_id(), "multivendorx_active_store", true);
-        $store    = new Store($store_id);
-        $state_data = unserialize($store->get_meta('stripe_oauth_state'));
+        $store_id   = get_user_meta( get_current_user_id(), 'multivendorx_active_store', true );
+        $store      = new Store( $store_id );
+        $state_data = unserialize( $store->get_meta( 'stripe_oauth_state' ) );
         if (
-            empty($state_data['state']) ||
+            empty( $state_data['state'] ) ||
             $state_data['state'] !== $state ||
-            (time() - $state_data['time']) > 600
+            ( time() - $state_data['time'] ) > 600
         ) {
             // Invalid or expired
-            $store->delete_meta('stripe_oauth_state');
-            wp_safe_redirect($this->get_redirect_url('error', 'invalid_state'));
+            $store->delete_meta( 'stripe_oauth_state' );
+            wp_safe_redirect( $this->get_redirect_url( 'error', 'invalid_state' ) );
             exit;
         }
 
         // Valid → clean up
-        $store->delete_meta('stripe_oauth_state');
-        $store = new Store($store_id);
-        $payment_admin_settings = MultiVendorX()->setting->get_setting('payment_methods', []);
-        $stripe_settings = $payment_admin_settings['stripe-connect'] ?? [];
-        $secret_key = $stripe_settings['secret_key'] ?? '';
-        $client_id  = $stripe_settings['client_id'] ?? '';
+        $store->delete_meta( 'stripe_oauth_state' );
+        $store                  = new Store( $store_id );
+        $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
+        $stripe_settings        = $payment_admin_settings['stripe-connect'] ?? array();
+        $secret_key             = $stripe_settings['secret_key'] ?? '';
+        $client_id              = $stripe_settings['client_id'] ?? '';
 
         // Stripe OAuth Token Request
         $response = $this->make_stripe_api_call(
             'https://connect.stripe.com/oauth/token',
-            [
+            array(
                 'grant_type'    => 'authorization_code',
                 'client_id'     => $client_id,
                 'client_secret' => $secret_key,
-                'code'          => $code
-            ]
+                'code'          => $code,
+            )
         );
         // Missing stripe_user_id -> fail
-        if ($response && empty($response['stripe_user_id'])) {
-            wp_safe_redirect($this->get_redirect_url('error', 'stripe_connection_failed'));
+        if ( $response && empty( $response['stripe_user_id'] ) ) {
+            wp_safe_redirect( $this->get_redirect_url( 'error', 'stripe_connection_failed' ) );
             exit;
         }
         // Update store meta
-        $meta_updates = [
-            "_stripe_connect_account_id" => $response['stripe_user_id'],
-            "_store_payment_mode"        => 'stripe-connect',
-            "store_connected"            => 1,
-            "admin_client_id"            => $client_id,
-            "access_token"               => $response['access_token'] ?? '',
-            "refresh_token"              => $response['refresh_token'] ?? '',
-            "stripe_publishable_key"     => $response['stripe_publishable_key'] ?? ''
-        ];
-        foreach ($meta_updates as $key => $value) {
-            $store->update_meta($key, sanitize_text_field($value));
+        $meta_updates = array(
+            '_stripe_connect_account_id' => $response['stripe_user_id'],
+            '_store_payment_mode'        => 'stripe-connect',
+            'store_connected'            => 1,
+            'admin_client_id'            => $client_id,
+            'access_token'               => $response['access_token'] ?? '',
+            'refresh_token'              => $response['refresh_token'] ?? '',
+            'stripe_publishable_key'     => $response['stripe_publishable_key'] ?? '',
+        );
+        foreach ( $meta_updates as $key => $value ) {
+            $store->update_meta( $key, sanitize_text_field( $value ) );
         }
         // Success
-        wp_safe_redirect($this->get_redirect_url('', ''));
+        wp_safe_redirect( $this->get_redirect_url( '', '' ) );
         exit;
-        
     }
 
     public function ajax_disconnect_account() {
-        
-        $store_id = get_user_meta( get_current_user_id(), "multivendorx_active_store", true);
-        $store = new Store($store_id);
-        
+
+        $store_id = get_user_meta( get_current_user_id(), 'multivendorx_active_store', true );
+        $store    = new Store( $store_id );
+
         // Delete all Stripe-related meta using the same Store object method
-        $meta_keys = [
-            "_stripe_connect_account_id",
-            "_store_payment_mode",
-            "store_connected",
-            "admin_client_id",
-            "access_token",
-            "refresh_token",
-            "stripe_publishable_key"
-        ];
-        
-        foreach ($meta_keys as $key) {
-            $store->delete_meta($key);
+        $meta_keys = array(
+            '_stripe_connect_account_id',
+            '_store_payment_mode',
+            'store_connected',
+            'admin_client_id',
+            'access_token',
+            'refresh_token',
+            'stripe_publishable_key',
+        );
+
+        foreach ( $meta_keys as $key ) {
+            $store->delete_meta( $key );
         }
-        
-        wp_send_json_success(['message' => __('Your Stripe account has been disconnected.', 'multivendorx')]);
+
+        wp_send_json_success( array( 'message' => __( 'Your Stripe account has been disconnected.', 'multivendorx' ) ) );
     }
 
     /**
      * Get proper redirect URL for dashboard
      */
-    private function get_redirect_url($type, $value) {
+    private function get_redirect_url( $type, $value ) {
         // Dynamically build the correct dashboard settings payout URL.
-        $base_url = StoreUtil::get_endpoint_url('settings') . '#subtab=payout';
-        if ($type === 'connected') {
-            return add_query_arg('connected', $value, $base_url);
-        } elseif ($type === 'error') {
-            return add_query_arg('error', $value, $base_url);
+        $base_url = StoreUtil::get_endpoint_url( 'settings' ) . '#subtab=payout';
+        if ( $type === 'connected' ) {
+            return add_query_arg( 'connected', $value, $base_url );
+        } elseif ( $type === 'error' ) {
+            return add_query_arg( 'error', $value, $base_url );
         }
         return $base_url;
     }
 
-    public function create_transfer($amount, $destination, $order_id) {
+    public function create_transfer( $amount, $destination, $order_id ) {
 
-        $transfer_data = [
+        $transfer_data = array(
             'amount'         => $amount * 100,
             'currency'       => get_woocommerce_currency(),
             'destination'    => $destination,
             'transfer_group' => $order_id,
-        ];
+        );
 
         $transfer = $this->make_stripe_api_call(
             'https://api.stripe.com/v1/transfers',
@@ -293,44 +307,43 @@ class StripeConnect
         );
 
         return $transfer;
-
     }
 
 
     /**
      * Make Stripe API call using WordPress HTTP API
      */
-    private function make_stripe_api_call($url, $data = [], $method = 'POST') {
-        $payment_admin_settings = MultiVendorX()->setting->get_setting('payment_methods', []);
-        $stripe_settings = $payment_admin_settings['stripe-connect'] ?? [];
-        $secret_key = $stripe_settings['secret_key'] ?? '';
-        
-        if (empty($secret_key)) {
+    private function make_stripe_api_call( $url, $data = array(), $method = 'POST' ) {
+        $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
+        $stripe_settings        = $payment_admin_settings['stripe-connect'] ?? array();
+        $secret_key             = $stripe_settings['secret_key'] ?? '';
+
+        if ( empty( $secret_key ) ) {
             return false;
         }
-        $args = [
+        $args = array(
             'method'  => $method,
-            'headers' => [
-                'Authorization' => 'Bearer ' . $secret_key,
-                'Content-Type'  => 'application/x-www-form-urlencoded',
+            'headers' => array(
+                'Authorization'  => 'Bearer ' . $secret_key,
+                'Content-Type'   => 'application/x-www-form-urlencoded',
                 'Stripe-Version' => '2025-10-29.clover',
-            ],
+            ),
             'timeout' => 30,
-        ];
-        
-        if (($method === 'POST' || $method === 'PUT') && !empty($data)) {
-            $args['body'] = http_build_query($data);
+        );
+
+        if ( ( $method === 'POST' || $method === 'PUT' ) && ! empty( $data ) ) {
+            $args['body'] = http_build_query( $data );
         }
-        
-        $response = wp_remote_request($url, $args);
-        
-        if (is_wp_error($response)) {
+
+        $response = wp_remote_request( $url, $args );
+
+        if ( is_wp_error( $response ) ) {
             return false;
         }
-        
-        $body = wp_remote_retrieve_body($response);
-        $decoded_response = json_decode($body, true);
-        
+
+        $body             = wp_remote_retrieve_body( $response );
+        $decoded_response = json_decode( $body, true );
+
         return $decoded_response;
     }
 }

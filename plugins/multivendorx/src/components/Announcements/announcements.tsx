@@ -30,6 +30,7 @@ type AnnouncementStatus = {
 type FilterData = {
     searchField: string;
     typeCount?: any;
+    date?:any;
 };
 
 type AnnouncementForm = {
@@ -304,28 +305,15 @@ export const Announcements: React.FC = () => {
         })
             .then((response) => {
                 setData(response.data.items || []);
-                setAnnouncementStatus([
-                    {
-                        key: 'all',
-                        name: 'All',
-                        count: response.data.all || 0,
-                    },
-                    {
-                        key: 'publish',
-                        name: 'Published',
-                        count: response.data.publish || 0,
-                    },
-                    {
-                        key: 'pending',
-                        name: 'Pending',
-                        count: response.data.pending || 0,
-                    },
-                    {
-                        key: 'draft',
-                        name: 'Draft',
-                        count: response.data.draft || 0,
-                    },
-                ]);
+                const statuses = [
+                    { key: 'all', name: 'All', count: response.data.all || 0 },
+                    { key: 'publish', name: 'Publish', count: response.data.publish || 0 },
+                    { key: 'pending', name: 'Pending', count: response.data.pending || 0 },
+                    { key: 'draft', name: 'Draft', count: response.data.draft || 0 },
+                ];
+
+                // Remove items where count === 0
+                setAnnouncementStatus(statuses.filter(status => status.count > 0));
             })
             .catch(() => {
                 setError(__('Failed to load stores', 'multivendorx'));
@@ -418,8 +406,9 @@ export const Announcements: React.FC = () => {
             cell: ({ row }) => {
                 return (
                     <TableCell
+                        title={'status'}
                         type="status"
-                        status={row.original.status}
+                        status={row.original.status} children={undefined}
                     />
                 );
             },
@@ -431,7 +420,7 @@ export const Announcements: React.FC = () => {
 
                 // 🔹 If store_name is empty, null, or undefined → show All Stores
                 if (!storeString) {
-                    return <TableCell>{__('All Stores', 'multivendorx')}</TableCell>;
+                    return <TableCell title={'stores'}>{__('All Stores', 'multivendorx')}</TableCell>;
                 }
 
                 // 🔹 Otherwise, split and format store names
@@ -473,6 +462,7 @@ export const Announcements: React.FC = () => {
             header: __('Action', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell
+                    title={'action'}
                     type="action-dropdown"
                     rowData={row.original}
                     header={{
@@ -480,7 +470,7 @@ export const Announcements: React.FC = () => {
                             {
                                 label: __('Edit', 'multivendorx'),
                                 icon: 'adminlib-edit',
-                                onClick: (rowData) => {
+                                onClick: (rowData: any) => {
                                     handleEdit(rowData.id); // opens edit popup
                                 },
                                 hover: true,
@@ -488,7 +478,7 @@ export const Announcements: React.FC = () => {
                             {
                                 label: __('Delete', 'multivendorx'),
                                 icon: 'adminlib-delete',
-                                onClick: async (rowData) => {
+                                onClick: async (rowData: any) => {
                                     if (!rowData.id) return;
                                     if (!confirm(__('Are you sure you want to delete this announcement?', 'multivendorx'))) return;
 
@@ -509,8 +499,7 @@ export const Announcements: React.FC = () => {
                                 hover: true,
                             },
                         ],
-                    }}
-                />
+                    }} children={undefined} />
             ),
         },
     ];
@@ -557,135 +546,173 @@ export const Announcements: React.FC = () => {
                         className="admin-btn btn-purple-bg"
                         onClick={async () => {
                             setValidationErrors({});
-                            await fetchStoreOptions(); // fetch stores when Add form opens
+                            await fetchStoreOptions();
                             setAddAnnouncements(true);
                         }}
                     >
                         <i className="adminlib-plus-circle-o"></i>
-                        Add New
-                    </div>,
+                        {__('Add New', 'multivendorx')}
+                    </div>
                 ]}
             />
 
-            {addAnnouncements && (
-                <CommonPopup
-                    open={addAnnouncements}
-                    onClose={handleCloseForm}
-                    width="500px"
-                    header={
-                        <>
-                            <div className="title">
-                                <i className="adminlib-announcement"></i>
-                                {editId ? __('Edit Announcement', 'multivendorx') : __('Add Announcement', 'multivendorx')}
-                            </div>
-                            <p>Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.</p>
-                            <i
-                                onClick={handleCloseForm}
-                                className="icon adminlib-close"
-                            ></i>
-                        </>
-                    }
-                    footer={
-                        <>
-                            <div
-                                onClick={handleCloseForm}
-                                className="admin-btn btn-red"
-                            >
-                                Cancel
-                            </div>
-                            <button
-                                type="button"
-                                onClick={() => handleSubmit()}
-                                className="admin-btn btn-purple"
-                                disabled={submitting}
-                            >
-                                {submitting ? 'Saving...' : 'Save'}
-                            </button>
-                        </>
-                    }
-
-                >
-
-                    <div className="content">
-                        <div className="form-group-wrapper">
-                            <div className={`form-group `}>
-                                <label htmlFor="title">Title</label>
-                                <BasicInput
-                                    type="text"
-                                    name="title"
-                                    value={formData.title}
-                                    onChange={handleChange}
-                                    msg={error}
-
-                                />
-                                {validationErrors.title && <div className="invalid-massage">{validationErrors.title}</div>}
-                            </div>
-                            <div className={`form-group `}>
-                                <label htmlFor="content">Announcement message</label>
-                                <TextArea
-                                    name="content"
-                                    inputClass="textarea-input"
-                                    value={formData.content}
-                                    onChange={handleChange}
-                                    usePlainText={false}
-                                    tinymceApiKey={appLocalizer.settings_databases_value['marketplace-settings']['tinymce_api_section'] ?? ''}
-                                />
-                                {validationErrors.content && <div className="invalid-massage">{validationErrors.content}</div>}
-                            </div>
-
-                            <div className={`form-group `}>
-                                <label htmlFor="stores">Stores</label>
-                                <SelectInput
-                                    name="stores"
-                                    type="multi-select"
-                                    options={storeOptions} // already string values
-                                    value={formData.stores.map(storeId => storeId.toString()) || []} // convert numbers to strings
-                                    onChange={(newValue: any) => {
-                                        // Convert strings back to numbers for your formData
-                                        const selectedValues = Array.isArray(newValue)
-                                            ? newValue.map((opt: any) => Number(opt.value))
-                                            : [];
-                                        setFormData((prev) => ({
-                                            ...prev,
-                                            stores: selectedValues,
-                                        }));
-
-                                        if (selectedValues.length > 0 && validationErrors.stores) {
-                                            setValidationErrors((prev) => {
-                                                const updated = { ...prev };
-                                                delete updated.stores;
-                                                return updated;
-                                            });
-                                        }
-
-                                    }}
-                                />
-                                {validationErrors.stores && <div className="invalid-massage">{validationErrors.stores}</div>}
-                            </div>
-
-                            <div className="form-group">
-                                <label htmlFor="status">Status</label>
-                                <ToggleSetting
-                                    wrapperClass="setting-form-input"
-                                    descClass="settings-metabox-description"
-                                    description="Select the status of the announcement."
-                                    options={[
-                                        { key: 'draft', value: 'draft', label: 'Draft' },
-                                        { key: 'pending', value: 'pending', label: 'Pending' },
-                                        { key: 'publish', value: 'publish', label: 'Publish' },
-                                    ]}
-                                    value={formData.status}
-                                    onChange={handleToggleChange}
-                                />
-                            </div>
-
-                            <span className="space"></span>
+            <CommonPopup
+                open={addAnnouncements}
+                onClose={handleCloseForm}
+                width="500px"
+                header={
+                    <>
+                        <div className="title">
+                            <i className="adminlib-announcement"></i>
+                            {editId
+                                ? __('Edit Announcement', 'multivendorx')
+                                : __('Add Announcement', 'multivendorx')}
                         </div>
-                    </div>
 
-                    {error && <p className="error-text">{error}</p>}
-                </CommonPopup>
-            )}
+                        <p>
+                            {__(
+                                'Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.',
+                                'multivendorx'
+                            )}
+                        </p>
+
+                        <i
+                            onClick={handleCloseForm}
+                            className="icon adminlib-close"
+                        ></i>
+                    </>
+                }
+                footer={
+                    <>
+                        <div
+                            onClick={handleCloseForm}
+                            className="admin-btn btn-red"
+                        >
+                            {__('Cancel', 'multivendorx')}
+                        </div>
+
+                        <button
+                            type="button"
+                            onClick={() => handleSubmit()}
+                            className="admin-btn btn-purple"
+                            disabled={submitting}
+                        >
+                            {submitting
+                                ? __('Saving...', 'multivendorx')
+                                : __('Save', 'multivendorx')}
+                        </button>
+                    </>
+                }
+            >
+                <div className="content">
+                    <div className="form-group-wrapper">
+
+                        <div className="form-group">
+                            <label htmlFor="title">
+                                {__('Title', 'multivendorx')}
+                            </label>
+
+                            <BasicInput
+                                type="text"
+                                name="title"
+                                value={formData.title}
+                                onChange={handleChange}
+                                msg={error}
+                            />
+                            {validationErrors.title && (
+                                <div className="invalid-massage">
+                                    {validationErrors.title}
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="content">
+                                {__('Announcement message', 'multivendorx')}
+                            </label>
+
+                            <TextArea
+                                name="content"
+                                inputClass="textarea-input"
+                                value={formData.content}
+                                onChange={handleChange}
+                                usePlainText={false}
+                                tinymceApiKey={
+                                    appLocalizer.settings_databases_value['marketplace-settings']
+                                    ['tinymce_api_section'] ?? ''
+                                }
+                            />
+
+                            {validationErrors.content && (
+                                <div className="invalid-massage">
+                                    {validationErrors.content}
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="stores">
+                                {__('Stores', 'multivendorx')}
+                            </label>
+
+                            <SelectInput
+                                name="stores"
+                                type="multi-select"
+                                options={storeOptions}
+                                value={formData.stores.map(id => id.toString())}
+                                onChange={(newValue: any) => {
+                                    const selectedValues = Array.isArray(newValue)
+                                        ? newValue.map((opt: any) => Number(opt.value))
+                                        : [];
+
+                                    setFormData(prev => ({
+                                        ...prev,
+                                        stores: selectedValues,
+                                    }));
+
+                                    if (selectedValues.length > 0 && validationErrors.stores) {
+                                        setValidationErrors(prev => {
+                                            const updated = { ...prev };
+                                            delete updated.stores;
+                                            return updated;
+                                        });
+                                    }
+                                }}
+                            />
+
+                            {validationErrors.stores && (
+                                <div className="invalid-massage">
+                                    {validationErrors.stores}
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="status">
+                                {__('Status', 'multivendorx')}
+                            </label>
+
+                            <ToggleSetting
+                                wrapperClass="setting-form-input"
+                                descClass="settings-metabox-description"
+                                description={__('Select the status of the announcement.', 'multivendorx')}
+                                options={[
+                                    { key: 'draft', value: 'draft', label: __('Draft', 'multivendorx') },
+                                    { key: 'pending', value: 'pending', label: __('Pending', 'multivendorx') },
+                                    { key: 'publish', value: 'publish', label: __('Publish', 'multivendorx') },
+                                ]}
+                                value={formData.status}
+                                onChange={handleToggleChange}
+                            />
+                        </div>
+
+                        <span className="space"></span>
+                    </div>
+                </div>
+
+                {error && <p className="error-text">{error}</p>}
+            </CommonPopup>
+
 
             <div className="general-wrapper">
                 <div className="admin-table-wrapper">
