@@ -16,13 +16,14 @@ class Shortcode {
     /**
      * Shortcode class construct function
      */
-    public function __construct() {
-        add_shortcode( 'multivendorx_store_dashboard', array( $this, 'display_store_dashboard' ) );
-        add_shortcode( 'multivendorx_store_registration', array( $this, 'display_store_registration' ) );
-        add_shortcode( 'multivendorx_stores_list', array( $this, 'display_stores_list' ) );
+    public function __construct()
+    {
+        add_shortcode('multivendorx_store_dashboard', [$this, 'display_store_dashboard']);
+        add_shortcode('multivendorx_store_registration', [$this, 'display_store_registration']);
+        add_shortcode('multivendorx_stores_list', array($this, 'display_stores_list'));
 
-        add_action( 'wp_enqueue_scripts', array( $this, 'frontend_scripts' ) );
-        add_action( 'wp_print_styles', array( $this, 'dequeue_all_styles_on_page' ), 99 );
+        add_action('wp_enqueue_scripts', array($this, 'frontend_scripts'));
+        // add_action('wp_print_styles', array($this, 'dequeue_all_styles_on_page'), 99);
     }
 
     public function frontend_scripts() {
@@ -33,14 +34,14 @@ class Shortcode {
         FrontendScripts::enqueue_style( 'multivendorx-dashboard-style' );
         FrontendScripts::enqueue_style( 'multivendorx-store-product-style' );
 
-        if ( Utill::is_store_dashboard() ) {
-            wp_deregister_style( 'wc-blocks-style' );
+        // if (Utill::is_store_dashboard()) {
+            // wp_deregister_style('wc-blocks-style');
 
             wp_enqueue_script( 'wp-element' );
             wp_enqueue_media();
 
-            FrontendScripts::enqueue_script( 'multivendorx-store-dashboard-script' );
-            FrontendScripts::localize_scripts( 'multivendorx-store-dashboard-script' );
+            FrontendScripts::enqueue_script('multivendorx-store-dashboard-script');
+            // FrontendScripts::localize_scripts('multivendorx-store-dashboard-script');
 
             ?>
             <style>
@@ -49,7 +50,7 @@ class Shortcode {
                 ?>
             </style>
             <?php
-        }
+        // }
 
         if ( Utill::is_store_registration_page() ) {
             FrontendScripts::enqueue_script( 'multivendorx-registration-form-script' );
@@ -66,10 +67,10 @@ class Shortcode {
 
     public function display_store_dashboard() {
         ob_start();
-
-        // <div id="multivendorx-vendor-dashboard">
-        // </div>
-
+        ?>
+        <!-- <div id="multivendorx-vendor-dashboard">
+        </div>  -->
+        <?php
         $user = wp_get_current_user();
         if ( ! is_user_logged_in() ) {
             if ( ( 'no' === get_option( 'woocommerce_registration_generate_password' ) && ! is_user_logged_in() ) ) {

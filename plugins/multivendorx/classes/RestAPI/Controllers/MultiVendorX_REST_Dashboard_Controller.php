@@ -32,41 +32,33 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
         );
     }
 
-    public function get_items_permissions_check( $request ) {
-        return current_user_can( 'read' );
+    public function get_items_permissions_check($request)
+    {
+        // return current_user_can('read');
+        return true;
     }
 
-    public function get_items( $request ) {
-        $nonce = $request->get_header( 'X-WP-Nonce' );
-        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
+    public function get_items($request)
+    {
+        $menu_only = $request->get_param('menuOnly');
 
-            // Log the error
-            if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log(
-                    'MVX REST Error: ' .
-                    'Code=' . $error->get_error_code() . '; ' .
-                    'Message=' . $error->get_error_message() . '; ' .
-                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
-                );
-            }            
+        $endpoints = $this->all_endpoints();
 
-            return $error;
+        $other_endpoints = apply_filters('dashboard_other_endpoints', [
+            'view-notifications' => array(
+                'name'       => '',
+                'icon'       => '',
+                'slug'       => 'view-notifications',
+                'submenu'    => array(),
+                'capability' => array('edit_products'),
+                'filename'   => 'view-notifications'
+            )
+        ]);
+
+        if ( !$menu_only ) {
+            $endpoints = array_merge($endpoints, $other_endpoints);
         }
-
-        try{
-            $endpoints = $this->all_endpoints();
-            return rest_ensure_response( $endpoints );
-        }catch ( \Exception $e ) {
-            MultiVendorX()->util->log(
-                'MVX REST Exception: ' .
-                'Message=' . $e->getMessage() . '; ' .
-                'File=' . $e->getFile() . '; ' .
-                'Line=' . $e->getLine() . "\n\n"
-            );        
-
-            return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
-        }
+        return rest_ensure_response($endpoints);
     }
 
     public function all_endpoints() {

@@ -6,7 +6,7 @@ import { Skeleton } from '@mui/material';
 const Notifications = () => {
 
     const [notifications, setNotifications] = useState<[] | null>(null);
-    console.log(appLocalizer.store_id)
+   
     useEffect(() => {
         axios({
             method: 'GET',
@@ -95,7 +95,11 @@ const Notifications = () => {
                     </ul>
                 </div>
                 <div className="footer">
-                    <a href={appLocalizer.view_notifications_link}
+                    <a href={
+                        appLocalizer.permalink_structure
+                            ? `/${appLocalizer.dashboard_slug}/view-notifications`
+                            : `/?page_id=${appLocalizer.dashboard_page_id}&segment=view-notifications`
+                        }
                         className="admin-btn btn-purple">
                         <i className="adminlib-eye"></i> View all notifications
                     </a>
