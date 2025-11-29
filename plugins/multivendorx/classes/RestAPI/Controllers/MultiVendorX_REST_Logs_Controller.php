@@ -63,7 +63,7 @@ class MultiVendorX_REST_Logs_Controller extends \WP_REST_Controller {
 				array(
 					'methods'             => \WP_REST_Server::DELETABLE,
 					'callback'            => array( $this, 'delete_item' ),
-					'permission_callback' => array( $this, 'update_item_permissions_check' ), // Only admins can delete.
+					'permission_callback' => array( $this, 'update_item_permissions_check' ),
 				),
 			)
         );
