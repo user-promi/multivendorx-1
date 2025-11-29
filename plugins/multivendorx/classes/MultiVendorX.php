@@ -48,7 +48,7 @@ final class MultiVendorX {
         $this->container['plugin_url']  = trailingslashit( plugins_url( '', $plugin = $file ) );
         $this->container['plugin_path'] = trailingslashit( dirname( $file ) );
         $this->container['plugin_base'] = plugin_basename( $file );
-
+        $this->container['multivendorx_logs_dir'] = ( trailingslashit( wp_upload_dir( null, false )['basedir'] ) . 'mw-logs' );
         $this->container['version']        = MULTIVENDORX_PLUGIN_VERSION;
         $this->container['rest_namespace'] = 'multivendorx/v1';
         $this->container['block_paths']    = array();
@@ -148,6 +148,8 @@ final class MultiVendorX {
 
         // Load all active modules.
         $this->container['modules']->load_active_modules();
+
+        $this->initialize_multivendorx_log();
 
         flush_rewrite_rules();
     }
@@ -323,6 +325,22 @@ final class MultiVendorX {
         }
 
         return self::$instance;
+    }
+
+    /**
+     * Get moowoodle log file name.
+     */
+    public function initialize_multivendorx_log() {
+        // The log file name is stored in the options table because it is generated with an arbitrary name.
+        $log_file_name = get_option( 'multivendorx_log_file' );
+
+        if ( ! $log_file_name ) {
+            $log_file_name = uniqid( 'error' ) . '.txt';
+            update_option( 'multivendorx_log_file', $log_file_name );
+        }
+
+        $this->container['log_file']          = MultivendorX()->multivendorx_logs_dir . '/' . $log_file_name;
+        // $this->container['show_advanced_log'] = in_array( 'moowoodle_adv_log', MooWoodle()->setting->get_setting( 'moowoodle_adv_log', array() ), true );
     }
 }
 

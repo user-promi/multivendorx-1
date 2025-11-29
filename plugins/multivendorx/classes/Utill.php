@@ -42,26 +42,57 @@ class Utill {
     );
 
     /**
-     * Function to console and debug errors.
+     * MooWoodle LOG function.
      *
-     * @param mixed $data The data to log. Can be a string, array, or object.
+     * @param string $message message.
+     * @return bool
      */
-    public static function log( $data ) {
-        if ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) {
-            return;
-        }
+	public static function log( $message ) {
+		global $wp_filesystem;
 
-        require_once ABSPATH . 'wp-admin/includes/file.php';
-        WP_Filesystem();
+		$message = var_export( $message, true ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export
 
-        global $wp_filesystem;
+		// Init filesystem.
+		if ( empty( $wp_filesystem ) ) {
+			require_once ABSPATH . '/wp-admin/includes/file.php';
+			WP_Filesystem();
+		}
 
-        $log_file = MultiVendorX()->plugin_path . 'log/multivendorx.txt';
-        $message  = wp_json_encode( $data, JSON_PRETTY_PRINT ) . "\n---------------------------\n";
+		// log folder create.
+		if ( ! file_exists( MultiVendorX()->multivendorx_logs_dir . '/.htaccess' ) ) {
+			$result = wp_mkdir_p( MultiVendorX()->multivendorx_logs_dir );
+			if ( true === $result ) {
+				// Create infrastructure to prevent listing contents of the logs directory.
+				try {
+					$wp_filesystem->put_contents( MultiVendorX()->multivendorx_logs_dir . '/.htaccess', 'deny from all' );
+					$wp_filesystem->put_contents( MultiVendorX()->multivendorx_logs_dir . '/index.html', '' );
+				} catch ( Exception $exception ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
+					// Creation failed.
+				}
+			}
+			$message = "MultiVendorX Log file Created\n";
+		}
 
-        $existing = $wp_filesystem->exists( $log_file ) ? $wp_filesystem->get_contents( $log_file ) : '';
-        $wp_filesystem->put_contents( $log_file, $existing . $message, FS_CHMOD_FILE );
-    }
+		// Clear log file.
+		if ( filter_input( INPUT_POST, 'clearlog', FILTER_DEFAULT ) !== null ) {
+			$message = "MultiVendorX Log file Cleared\n";
+		}
+
+		// Write Log.
+		if ( '' !== $message ) {
+			$log_entry        = gmdate( 'd/m/Y H:i:s', time() ) . ': ' . $message;
+			$existing_content = $wp_filesystem->get_contents( MultiVendorX()->log_file );
+
+			// Append existing content.
+			if ( ! empty( $existing_content ) ) {
+				$log_entry = "\n" . $log_entry;
+			}
+
+			return $wp_filesystem->put_contents( MultiVendorX()->log_file, $existing_content . $log_entry );
+		}
+
+		return false;
+	}
 
     /**
      * Check pro plugin is active or not.

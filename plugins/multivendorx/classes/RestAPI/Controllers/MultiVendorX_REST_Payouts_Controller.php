@@ -84,200 +84,294 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
 
     // GET
     public function get_items( $request ) {
-        // Verify nonce
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            return new \WP_Error(
-                'invalid_nonce',
-                __( 'Invalid nonce', 'multivendorx' ),
-                array( 'status' => 403 )
-            );
+            $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
+
+            // Log the error
+            if ( is_wp_error( $error ) ) {
+                MultiVendorX()->util->log(
+                    'MVX REST Error: ' .
+                    'Code=' . $error->get_error_code() . '; ' .
+                    'Message=' . $error->get_error_message() . '; ' .
+                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
+                );
+            }            
+
+            return $error;
         }
+        try{
+            // Pagination
+            $limit  = max( intval( $request->get_param( 'row' ) ), 10 );
+            $page   = max( intval( $request->get_param( 'page' ) ), 1 );
+            $offset = ( $page - 1 ) * $limit;
+            $count  = $request->get_param( 'count' );
 
-        // Pagination
-        $limit  = max( intval( $request->get_param( 'row' ) ), 10 );
-        $page   = max( intval( $request->get_param( 'page' ) ), 1 );
-        $offset = ( $page - 1 ) * $limit;
-        $count  = $request->get_param( 'count' );
-
-        // Count only
-        if ( $count ) {
-            $pending_products_count = count(
-                wc_get_products(
-                    array(
-						'status'   => 'pending',
-						'limit'    => -1,
-						'return'   => 'ids',
-						'meta_key' => 'multivendorx_store_id',
+            // Count only
+            if ( $count ) {
+                $pending_products_count = count(
+                    wc_get_products(
+                        array(
+                            'status'   => 'pending',
+                            'limit'    => -1,
+                            'return'   => 'ids',
+                            'meta_key' => 'multivendorx_store_id',
+                        )
                     )
-                )
-            );
+                );
 
-            return rest_ensure_response( (int) $pending_products_count );
-        }
+                return rest_ensure_response( (int) $pending_products_count );
+            }
 
-        // Fetch pending products with pagination
-        $pending_products = wc_get_products(
-            array(
-				'status'   => 'pending',
-				'limit'    => $limit,
-				'offset'   => $offset,
-				'return'   => 'objects',
-				'meta_key' => 'multivendorx_store_id',
-            )
-        );
-
-        $formatted_products = array();
-        foreach ( $pending_products as $product ) {
-            $formatted_products[] = apply_filters(
-                'multivendorx_product',
+            // Fetch pending products with pagination
+            $pending_products = wc_get_products(
                 array(
-                    'id'     => $product->get_id(),
-                    'name'   => $product->get_name(),
-                    'sku'    => $product->get_sku(),
-                    'price'  => $product->get_price(),
-                    'status' => $product->get_status(),
+                    'status'   => 'pending',
+                    'limit'    => $limit,
+                    'offset'   => $offset,
+                    'return'   => 'objects',
+                    'meta_key' => 'multivendorx_store_id',
                 )
             );
-        }
 
-        return rest_ensure_response( $formatted_products );
+            $formatted_products = array();
+            foreach ( $pending_products as $product ) {
+                $formatted_products[] = apply_filters(
+                    'multivendorx_product',
+                    array(
+                        'id'     => $product->get_id(),
+                        'name'   => $product->get_name(),
+                        'sku'    => $product->get_sku(),
+                        'price'  => $product->get_price(),
+                        'status' => $product->get_status(),
+                    )
+                );
+            }
+
+            return rest_ensure_response( $formatted_products );
+        }catch ( \Exception $e ) {
+            MultiVendorX()->util->log(
+                'MVX REST Exception: ' .
+                'Message=' . $e->getMessage() . '; ' .
+                'File=' . $e->getFile() . '; ' .
+                'Line=' . $e->getLine() . "\n\n"
+            );        
+
+            return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
+        }
     }
 
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
+            $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
+
+            // Log the error
+            if ( is_wp_error( $error ) ) {
+                MultiVendorX()->util->log(
+                    'MVX REST Error: ' .
+                    'Code=' . $error->get_error_code() . '; ' .
+                    'Message=' . $error->get_error_message() . '; ' .
+                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
+                );
+            }            
+
+            return $error;
         }
-        $registrations = $request->get_header( 'registrations' );
+        try{
+            $registrations = $request->get_header( 'registrations' );
 
-        $store_data = $request->get_param( 'formData' );
-        // Create store object
-        $store = new \MultiVendorX\Store\Store();
-
-        $core_fields = array( 'name', 'slug', 'description', 'who_created', 'status' );
-        foreach ( $core_fields as $field ) {
-            if ( isset( $store_data[ $field ] ) ) {
-                $store->set( $field, $store_data[ $field ] );
-            }
-        }
-
-        $insert_id = $store->save();
-
-        if ( $insert_id && ! $registrations ) {
-            foreach ( $store_data as $key => $value ) {
-                if ( ! in_array( $key, $core_fields, true ) ) {
-                    $store->update_meta( $key, $value );
+            $store_data = $request->get_param( 'formData' );
+            // Create store object
+            $store = new \MultiVendorX\Store\Store();
+    
+            $core_fields = array( 'name', 'slug', 'description', 'who_created', 'status' );
+            foreach ( $core_fields as $field ) {
+                if ( isset( $store_data[ $field ] ) ) {
+                    $store->set( $field, $store_data[ $field ] );
                 }
             }
-        }
-
-        if ( $registrations ) {
-            // Collect all non-core fields into one array
-            $non_core_fields = array();
-            foreach ( $store_data as $key => $value ) {
-                if ( ! in_array( $key, $core_fields, true ) ) {
-                    $non_core_fields[ $key ] = $value;
+    
+            $insert_id = $store->save();
+    
+            if ( $insert_id && ! $registrations ) {
+                foreach ( $store_data as $key => $value ) {
+                    if ( ! in_array( $key, $core_fields, true ) ) {
+                        $store->update_meta( $key, $value );
+                    }
                 }
             }
-
-            // Save them under one key
-            if ( ! empty( $non_core_fields ) ) {
-                $store->update_meta( 'multivendorx-registration-data', $non_core_fields );
+    
+            if ( $registrations ) {
+                // Collect all non-core fields into one array
+                $non_core_fields = array();
+                foreach ( $store_data as $key => $value ) {
+                    if ( ! in_array( $key, $core_fields, true ) ) {
+                        $non_core_fields[ $key ] = $value;
+                    }
+                }
+    
+                // Save them under one key
+                if ( ! empty( $non_core_fields ) ) {
+                    $store->update_meta( 'multivendorx-registration-data', $non_core_fields );
+                }
             }
-        }
+    
+            return rest_ensure_response(
+                array(
+                    'success' => true,
+                    'id'      => $insert_id,
+                )
+            );
+        }catch ( \Exception $e ) {
+            MultiVendorX()->util->log(
+                'MVX REST Exception: ' .
+                'Message=' . $e->getMessage() . '; ' .
+                'File=' . $e->getFile() . '; ' .
+                'Line=' . $e->getLine() . "\n\n"
+            );        
 
-        return rest_ensure_response(
-            array(
-				'success' => true,
-				'id'      => $insert_id,
-            )
-        );
+            return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
+        }
     }
 
     public function get_item( $request ) {
-        $id            = absint( $request->get_param( 'id' ) );
-        $fetch_user    = $request->get_param( 'fetch_user' );
-        $registrations = $request->get_header( 'registrations' );
-        if ( $fetch_user ) {
-            $users = StoreUtil::get_store_users( $id );
+        $nonce = $request->get_header( 'X-WP-Nonce' );
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
+            // Log the error
+            if ( is_wp_error( $error ) ) {
+                MultiVendorX()->util->log(
+                    'MVX REST Error: ' .
+                    'Code=' . $error->get_error_code() . '; ' .
+                    'Message=' . $error->get_error_message() . '; ' .
+                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
+                );
+            }            
+
+            return $error;
+        }
+        try{
+            $id            = absint( $request->get_param( 'id' ) );
+            $fetch_user    = $request->get_param( 'fetch_user' );
+            $registrations = $request->get_header( 'registrations' );
+            if ( $fetch_user ) {
+                $users = StoreUtil::get_store_users( $id );
+    
+                $response = array(
+                    'id'           => $id,
+                    'store_owners' => $users,
+                );
+                return rest_ensure_response( $response );
+            }
+    
+            // Load the store
+            $store = new \MultiVendorX\Store\Store( $id );
+            if ( $registrations ) {
+                $response = StoreUtil::get_store_registration_form( $store->get_id() );
+    
+                return rest_ensure_response( $response );
+            }
+    
             $response = array(
-                'id'           => $id,
-                'store_owners' => $users,
+                'id'          => $store->get_id(),
+                'name'        => $store->get( 'name' ),
+                'slug'        => $store->get( 'slug' ),
+                'description' => $store->get( 'description' ),
+                'who_created' => $store->get( 'who_created' ),
+                'status'      => $store->get( 'status' ),
             );
+    
+            // Add meta data
+            foreach ( $store->meta_data as $key => $values ) {
+                $response[ $key ] = is_array( $values ) ? $values[0] : $values;
+            }
+    
             return rest_ensure_response( $response );
+        }catch ( \Exception $e ) {
+            MultiVendorX()->util->log(
+                'MVX REST Exception: ' .
+                'Message=' . $e->getMessage() . '; ' .
+                'File=' . $e->getFile() . '; ' .
+                'Line=' . $e->getLine() . "\n\n"
+            );        
+
+            return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
-
-        // Load the store
-        $store = new \MultiVendorX\Store\Store( $id );
-        if ( $registrations ) {
-            $response = StoreUtil::get_store_registration_form( $store->get_id() );
-
-            return rest_ensure_response( $response );
-        }
-
-        $response = array(
-            'id'          => $store->get_id(),
-            'name'        => $store->get( 'name' ),
-            'slug'        => $store->get( 'slug' ),
-            'description' => $store->get( 'description' ),
-            'who_created' => $store->get( 'who_created' ),
-            'status'      => $store->get( 'status' ),
-        );
-
-        // Add meta data
-        foreach ( $store->meta_data as $key => $values ) {
-            $response[ $key ] = is_array( $values ) ? $values[0] : $values;
-        }
-
-        return rest_ensure_response( $response );
     }
 
     public function update_item( $request ) {
-        $id   = absint( $request->get_param( 'id' ) );
-        $data = $request->get_json_params();
+        $nonce = $request->get_header( 'X-WP-Nonce' );
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-        $store = new \MultiVendorX\Store\Store( $id );
+            // Log the error
+            if ( is_wp_error( $error ) ) {
+                MultiVendorX()->util->log(
+                    'MVX REST Error: ' .
+                    'Code=' . $error->get_error_code() . '; ' .
+                    'Message=' . $error->get_error_message() . '; ' .
+                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
+                );
+            }            
 
-        if ( $data['store_owners'] ) {
-            StoreUtil::add_store_users(
-                array(
-					'store_id'     => $data['id'],
-					'store_owners' => $data['store_owners'],
-					'role_id'      => 'store_owner',
-                )
-            );
-
-            return rest_ensure_response(
-                array(
-					'success' => true,
-                )
-            );
+            return $error;
         }
-
-        $store->set( 'name', $data['name'] ?? $store->get( 'name' ) );
-        $store->set( 'slug', $data['slug'] ?? $store->get( 'slug' ) );
-        $store->set( 'description', $data['description'] ?? $store->get( 'description' ) );
-        $store->set( 'who_created', 'admin' );
-        $store->set( 'status', $data['status'] ?? $store->get( 'status' ) );
-
-        if ( is_array( $data ) ) {
-            foreach ( $data as $key => $value ) {
-                if ( ! in_array( $key, array( 'id', 'name', 'slug', 'description', 'who_created', 'status' ), true ) ) {
-                    $store->update_meta( $key, $value );
+        try{
+            $id   = absint( $request->get_param( 'id' ) );
+            $data = $request->get_json_params();
+    
+            $store = new \MultiVendorX\Store\Store( $id );
+    
+            if ( $data['store_owners'] ) {
+                StoreUtil::add_store_users(
+                    array(
+                        'store_id'     => $data['id'],
+                        'store_owners' => $data['store_owners'],
+                        'role_id'      => 'store_owner',
+                    )
+                );
+    
+                return rest_ensure_response(
+                    array(
+                        'success' => true,
+                    )
+                );
+            }
+    
+            $store->set( 'name', $data['name'] ?? $store->get( 'name' ) );
+            $store->set( 'slug', $data['slug'] ?? $store->get( 'slug' ) );
+            $store->set( 'description', $data['description'] ?? $store->get( 'description' ) );
+            $store->set( 'who_created', 'admin' );
+            $store->set( 'status', $data['status'] ?? $store->get( 'status' ) );
+    
+            if ( is_array( $data ) ) {
+                foreach ( $data as $key => $value ) {
+                    if ( ! in_array( $key, array( 'id', 'name', 'slug', 'description', 'who_created', 'status' ), true ) ) {
+                        $store->update_meta( $key, $value );
+                    }
                 }
             }
+    
+            $store->save();
+    
+            return rest_ensure_response(
+                array(
+                    'success' => true,
+                    'id'      => $store->get_id(),
+                )
+            );
+        }catch ( \Exception $e ) {
+            MultiVendorX()->util->log(
+                'MVX REST Exception: ' .
+                'Message=' . $e->getMessage() . '; ' .
+                'File=' . $e->getFile() . '; ' .
+                'Line=' . $e->getLine() . "\n\n"
+            );        
+
+            return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
-
-        $store->save();
-
-        return rest_ensure_response(
-            array(
-				'success' => true,
-				'id'      => $store->get_id(),
-            )
-        );
     }
 
 

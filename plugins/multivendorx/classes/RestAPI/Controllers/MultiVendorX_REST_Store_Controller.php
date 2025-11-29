@@ -265,12 +265,12 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             // Log the error
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
-                    "MVX REST Error:\n" .
-                    "\tCode: " . $error->get_error_code() . "\n" .
-                    "\tMessage: " . $error->get_error_message() . "\n" .
-                    "\tData: " . wp_json_encode( $error->get_error_data() ) . "\n"
+                    'MVX REST Error: ' .
+                    'Code=' . $error->get_error_code() . '; ' .
+                    'Message=' . $error->get_error_message() . '; ' .
+                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
                 );
-            }
+            }            
 
             return $error;
         }
@@ -502,11 +502,11 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             return rest_ensure_response( $response );
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log(
-                "MVX REST Exception:\n" .
-                "\tMessage: " . $e->getMessage() . "\n" .
-                "\tFile: " . $e->getFile() . "\n" .
-                "\tLine: " . $e->getLine() . "\n"
-            );
+                'MVX REST Exception: ' .
+                'Message=' . $e->getMessage() . '; ' .
+                'File=' . $e->getFile() . '; ' .
+                'Line=' . $e->getLine() . "\n\n"
+            );        
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
@@ -597,383 +597,459 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
+            $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
+
+            // Log the error
+            if ( is_wp_error( $error ) ) {
+                MultiVendorX()->util->log(
+                    'MVX REST Error: ' .
+                    'Code=' . $error->get_error_code() . '; ' .
+                    'Message=' . $error->get_error_message() . '; ' .
+                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
+                );
+            }            
+
+            return $error;
         }
+        try{
+            $registrations = $request->get_header( 'registrations' );
+            $store_data    = $request->get_param( 'formData' );
 
-        $registrations = $request->get_header( 'registrations' );
-        $store_data    = $request->get_param( 'formData' );
+            $current_user = wp_get_current_user();
 
-        $current_user = wp_get_current_user();
+            $core_fields               = array( 'name', 'slug', 'description', 'who_created', 'status' );
+            $store_data['who_created'] = $current_user->ID;
+            $store_data['status']      = 'active';
 
-        $core_fields               = array( 'name', 'slug', 'description', 'who_created', 'status' );
-        $store_data['who_created'] = $current_user->ID;
-        $store_data['status']      = 'active';
+            if ( ! empty( $store_data['id'] ) ) {
+                // Load existing store
+                $store = new \MultiVendorX\Store\Store( (int) $store_data['id'] );
 
-        if ( ! empty( $store_data['id'] ) ) {
-            // Load existing store
-            $store = new \MultiVendorX\Store\Store( (int) $store_data['id'] );
+                unset( $store_data['id'] );
+                unset( $store_data['status'] );
 
-            unset( $store_data['id'] );
-            unset( $store_data['status'] );
-
-            $store_data['status'] = 'pending';
-        } else {
-            // Create store object
-            $store = new \MultiVendorX\Store\Store();
-            if ( ! current_user_can( 'manage_options' ) && MultiVendorX()->setting->get_setting( 'approve_store' ) == 'manually' ) {
                 $store_data['status'] = 'pending';
-            }
-        }
-
-        // Set core fields
-        foreach ( $core_fields as $field ) {
-            if ( isset( $store_data[ $field ] ) ) {
-                $store->set( $field, $store_data[ $field ] );
-            }
-        }
-
-        // Save store
-        $insert_id = $store->save();
-
-        // Save other meta if not registration
-        if ( $insert_id && ! $registrations ) {
-            foreach ( $store_data as $key => $value ) {
-                if ( ! in_array( $key, $core_fields, true ) && $key !== 'store_owners' ) {
-                    $store->update_meta( $key, $value );
+            } else {
+                // Create store object
+                $store = new \MultiVendorX\Store\Store();
+                if ( ! current_user_can( 'manage_options' ) && MultiVendorX()->setting->get_setting( 'approve_store' ) == 'manually' ) {
+                    $store_data['status'] = 'pending';
                 }
             }
-        }
 
-        // Handle registrations
-        if ( $registrations ) {
-            $non_core_fields = array();
-            foreach ( $store_data as $key => $value ) {
-                if ( ! in_array( $key, $core_fields, true ) && $key !== 'store_owners' ) {
-                    if ( in_array( $key, array( 'phone', 'paypal_email', 'address_1', 'address_2', 'city', 'state', 'country', 'postcode' ), true ) ) {
+            // Set core fields
+            foreach ( $core_fields as $field ) {
+                if ( isset( $store_data[ $field ] ) ) {
+                    $store->set( $field, $store_data[ $field ] );
+                }
+            }
+
+            // Save store
+            $insert_id = $store->save();
+
+            // Save other meta if not registration
+            if ( $insert_id && ! $registrations ) {
+                foreach ( $store_data as $key => $value ) {
+                    if ( ! in_array( $key, $core_fields, true ) && $key !== 'store_owners' ) {
                         $store->update_meta( $key, $value );
-                    } else {
-                        $non_core_fields[ $key ] = $value;
                     }
                 }
             }
 
-            if ( ! empty( $non_core_fields ) ) {
-                $store->update_meta( 'multivendorx_registration_data', serialize( $non_core_fields ) );
+            // Handle registrations
+            if ( $registrations ) {
+                $non_core_fields = array();
+                foreach ( $store_data as $key => $value ) {
+                    if ( ! in_array( $key, $core_fields, true ) && $key !== 'store_owners' ) {
+                        if ( in_array( $key, array( 'phone', 'paypal_email', 'address_1', 'address_2', 'city', 'state', 'country', 'postcode' ), true ) ) {
+                            $store->update_meta( $key, $value );
+                        } else {
+                            $non_core_fields[ $key ] = $value;
+                        }
+                    }
+                }
+
+                if ( ! empty( $non_core_fields ) ) {
+                    $store->update_meta( 'multivendorx_registration_data', serialize( $non_core_fields ) );
+                }
+
+                // Assign current user as primary owner if automatic approval
+                if ( MultiVendorX()->setting->get_setting( 'approve_store' ) == 'automatically' ) {
+                    $current_user->set_role( 'store_owner' );
+                } elseif ( ! in_array( 'store_owner', (array) $current_user->roles ) ) {
+                        $role = get_option( 'default_role' );
+                        $current_user->set_role( $role );
+                }
+
+                StoreUtil::set_primary_owner( $current_user->ID, $insert_id );
+                update_user_meta( $current_user->ID, 'multivendorx_active_store', $insert_id );
             }
 
-            // Assign current user as primary owner if automatic approval
-            if ( MultiVendorX()->setting->get_setting( 'approve_store' ) == 'automatically' ) {
-                $current_user->set_role( 'store_owner' );
-            } elseif ( ! in_array( 'store_owner', (array) $current_user->roles ) ) {
-                    $role = get_option( 'default_role' );
-                    $current_user->set_role( $role );
+            // Handle store_owners array if provided
+            if ( ! empty( $store_data['store_owners'] ) ) {
+                StoreUtil::set_primary_owner( $store_data['store_owners'], $insert_id );
+                StoreUtil::add_store_users(
+                    array(
+                        'store_id' => $insert_id,
+                        'users'    => array( $store_data['store_owners'] ),
+                        'role_id'  => 'store_owner',
+                    )
+                );
             }
 
-            StoreUtil::set_primary_owner( $current_user->ID, $insert_id );
-            update_user_meta( $current_user->ID, 'multivendorx_active_store', $insert_id );
-        }
+            if ( $store_data['status'] == 'active' ) {
+                do_action( 'multivendorx_after_store_active', $insert_id );
+            }
 
-        // Handle store_owners array if provided
-        if ( ! empty( $store_data['store_owners'] ) ) {
-            StoreUtil::set_primary_owner( $store_data['store_owners'], $insert_id );
-            StoreUtil::add_store_users(
+            $admin_email = get_option( 'admin_email' );
+            $store_email = 'test@gmail.com';
+            $parameters  = array(
+                'admin_email' => $admin_email,
+                'store_email' => $store_email,
+                'store_id'    => $insert_id,
+                'category'    => 'activity',
+            );
+
+            do_action( 'multivendorx_notify_new_store_approval', 'new_store_approval', $parameters );
+
+            $admin_email = get_option( 'admin_email' );
+            $store_email = 'test@gmail.com';
+            $parameters  = array(
+                'admin_email' => $admin_email,
+                'store_email' => $store_email,
+                'store_id'    => $insert_id,
+                'category'    => 'notification',
+            );
+
+            do_action( 'multivendorx_notify_new_store_approval', 'new_store_approval', $parameters );
+
+            return rest_ensure_response(
                 array(
-					'store_id' => $insert_id,
-					'users'    => array( $store_data['store_owners'] ),
-					'role_id'  => 'store_owner',
+                    'success'  => true,
+                    'id'       => $insert_id,
+                    'redirect' => $registrations ? get_permalink( MultiVendorX()->setting->get_setting( 'store_dashboard_page' ) ) : null,
                 )
             );
+        } catch ( \Exception $e ) {
+            MultiVendorX()->util->log(
+                'MVX REST Exception: ' .
+                'Message=' . $e->getMessage() . '; ' .
+                'File=' . $e->getFile() . '; ' .
+                'Line=' . $e->getLine() . "\n\n"
+            );        
+
+            return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
-
-        if ( $store_data['status'] == 'active' ) {
-            do_action( 'multivendorx_after_store_active', $insert_id );
-        }
-
-        $admin_email = get_option( 'admin_email' );
-        $store_email = 'test@gmail.com';
-        $parameters  = array(
-            'admin_email' => $admin_email,
-            'store_email' => $store_email,
-            'store_id'    => $insert_id,
-            'category'    => 'activity',
-        );
-
-        do_action( 'multivendorx_notify_new_store_approval', 'new_store_approval', $parameters );
-
-        $admin_email = get_option( 'admin_email' );
-        $store_email = 'test@gmail.com';
-        $parameters  = array(
-            'admin_email' => $admin_email,
-            'store_email' => $store_email,
-            'store_id'    => $insert_id,
-            'category'    => 'notification',
-        );
-
-        do_action( 'multivendorx_notify_new_store_approval', 'new_store_approval', $parameters );
-
-        return rest_ensure_response(
-            array(
-				'success'  => true,
-				'id'       => $insert_id,
-				'redirect' => $registrations ? get_permalink( MultiVendorX()->setting->get_setting( 'store_dashboard_page' ) ) : null,
-            )
-        );
     }
 
     public function get_item( $request ) {
-        $id    = absint( $request->get_param( 'id' ) );
-        $store = $request->get_param( 'store' );
-        if ( $store ) {
-            return $this->get_store_products_and_category( $request );
-        }
-        $fetch_user    = $request->get_param( 'fetch_user' );
-        $registrations = $request->get_header( 'registrations' );
-        if ( $fetch_user ) {
-            $users = StoreUtil::get_store_users( $id );
+        $nonce = $request->get_header( 'X-WP-Nonce' );
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
+            // Log the error
+            if ( is_wp_error( $error ) ) {
+                MultiVendorX()->util->log(
+                    'MVX REST Error: ' .
+                    'Code=' . $error->get_error_code() . '; ' .
+                    'Message=' . $error->get_error_message() . '; ' .
+                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
+                );
+            }            
+
+            return $error;
+        }
+        try{
+            $id    = absint( $request->get_param( 'id' ) );
+            $store = $request->get_param( 'store' );
+            if ( $store ) {
+                return $this->get_store_products_and_category( $request );
+            }
+            $fetch_user    = $request->get_param( 'fetch_user' );
+            $registrations = $request->get_header( 'registrations' );
+            if ( $fetch_user ) {
+                $users = StoreUtil::get_store_users( $id );
+    
+                $response = array(
+                    'id'            => $id,
+                    'store_owners'  => $users['users'],
+                    'primary_owner' => (int) $users['primary_owner'],
+                );
+                return rest_ensure_response( $response );
+            }
+    
+            // Load the store
+            $store = new \MultiVendorX\Store\Store( $id );
+            if ( $registrations ) {
+                $response = StoreUtil::get_store_registration_form( $store->get_id() );
+                return rest_ensure_response( $response );
+            }
+    
+            $commission   = CommissionUtil::get_commission_summary_for_store( (int) $id );
+            $transactions = Transaction::get_balances_for_store( (int) $id );
+            // Get primary owner information using Store object
+            $primary_owner_id   = StoreUtil::get_primary_owner( $id );
+            $primary_owner_info = get_userdata( $primary_owner_id );
+    
+            $overall = Util::get_overall_rating( $id );
+    
+            // Get all reviews
+            $reviews       = Util::get_reviews_by_store( $id );
+            $total_reviews = count( $reviews );
+    
             $response = array(
-                'id'            => $id,
-                'store_owners'  => $users['users'],
-                'primary_owner' => (int) $users['primary_owner'],
+                'id'                 => $store->get_id(),
+                'name'               => $store->get( 'name' ),
+                'slug'               => $store->get( 'slug' ),
+                'description'        => $store->get( 'description' ),
+                'who_created'        => $store->get( 'who_created' ),
+                'status'             => $store->get( 'status' ),
+                'create_time'        => date( 'M j, Y', strtotime( $store->get( 'create_time' ) ) ),
+                'commission'         => $commission,
+                'transactions'       => $transactions,
+                'primary_owner_info' => $primary_owner_info,
+                'overall_reviews'    => $overall,
+                'total_reviews'      => $total_reviews,
             );
+    
+            // Add meta data
+            foreach ( $store->meta_data as $key => $values ) {
+                $response[ $key ] = is_array( $values ) ? $values[0] : $values;
+            }
+    
             return rest_ensure_response( $response );
+        }catch ( \Exception $e ) {
+            MultiVendorX()->util->log(
+                'MVX REST Exception: ' .
+                'Message=' . $e->getMessage() . '; ' .
+                'File=' . $e->getFile() . '; ' .
+                'Line=' . $e->getLine() . "\n\n"
+            );        
+
+            return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
-
-        // Load the store
-        $store = new \MultiVendorX\Store\Store( $id );
-        if ( $registrations ) {
-            $response = StoreUtil::get_store_registration_form( $store->get_id() );
-            return rest_ensure_response( $response );
-        }
-
-        $commission   = CommissionUtil::get_commission_summary_for_store( (int) $id );
-        $transactions = Transaction::get_balances_for_store( (int) $id );
-        // Get primary owner information using Store object
-        $primary_owner_id   = StoreUtil::get_primary_owner( $id );
-        $primary_owner_info = get_userdata( $primary_owner_id );
-
-        $overall = Util::get_overall_rating( $id );
-
-        // Get all reviews
-        $reviews       = Util::get_reviews_by_store( $id );
-        $total_reviews = count( $reviews );
-
-        $response = array(
-            'id'                 => $store->get_id(),
-            'name'               => $store->get( 'name' ),
-            'slug'               => $store->get( 'slug' ),
-            'description'        => $store->get( 'description' ),
-            'who_created'        => $store->get( 'who_created' ),
-            'status'             => $store->get( 'status' ),
-            'create_time'        => date( 'M j, Y', strtotime( $store->get( 'create_time' ) ) ),
-            'commission'         => $commission,
-            'transactions'       => $transactions,
-            'primary_owner_info' => $primary_owner_info,
-            'overall_reviews'    => $overall,
-            'total_reviews'      => $total_reviews,
-        );
-
-        // Add meta data
-        foreach ( $store->meta_data as $key => $values ) {
-            $response[ $key ] = is_array( $values ) ? $values[0] : $values;
-        }
-
-        return rest_ensure_response( $response );
     }
 
     public function update_item( $request ) {
-        $id   = absint( $request->get_param( 'id' ) );
-        $data = $request->get_json_params();
+        $nonce = $request->get_header( 'X-WP-Nonce' );
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-        $store = new \MultiVendorX\Store\Store( $id );
+            // Log the error
+            if ( is_wp_error( $error ) ) {
+                MultiVendorX()->util->log(
+                    'MVX REST Error: ' .
+                    'Code=' . $error->get_error_code() . '; ' .
+                    'Message=' . $error->get_error_message() . '; ' .
+                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
+                );
+            }            
 
-        if ( $data['deactivate'] ) {
-            $action = $data['action'] ?: '';
-            if ( $action == 'approve' ) {
-                $store->set( 'status', 'deactivated' );
-                $store->delete_meta( 'deactivation_reason' );
-                $store->delete_meta( 'deactivation_request_date' );
-            }
-
-            if ( $action == 'reject' ) {
-                $store->delete_meta( 'deactivation_reason' );
-                $store->delete_meta( 'deactivation_request_date' );
-            }
-
-            $store->save();
-            return rest_ensure_response( array( 'success' => true ) );
+            return $error;
         }
-
-        if ( ! empty( $data['delete'] ) ) {
-            $delete_option = $data['deleteOption'] ?? '';
-
-            switch ( $delete_option ) {
-                case 'direct':
-                case 'permanent_delete':
-                    $deleted = $store->delete_store_completely();
-                    return rest_ensure_response( array( 'success' => (bool) $deleted ) );
-
-                case 'product_assign_admin':
-                    $admins        = get_users(
-                        array(
-							'role'   => 'administrator',
-							'number' => 1,
-                        )
-                    );
-                    $admin_user_id = $admins[0]->ID ?? 1;
-
-                    $products = wc_get_products(
-                        array(
-							'limit'      => -1,
-							'return'     => 'ids',
-							'meta_key'   => 'multivendorx_store_id',
-							'meta_value' => $id,
-                        )
-                    );
-
-                    if ( $products ) {
-                        foreach ( $products as $product_id ) {
-                            wp_update_post(
-                                array(
-									'ID'          => $product_id,
-									'post_author' => $admin_user_id,
-                                )
-                            );
-                            delete_post_meta( $product_id, 'multivendorx_store_id' );
-                        }
-                    }
-
-                    $deleted = $store->delete_store_completely();
-                    return rest_ensure_response( array( 'success' => (bool) $deleted ) );
-
-                case 'set_store_owner':
-                    if ( empty( $data['new_owner_id'] ) ) {
-                        return rest_ensure_response(
-                            array(
-								'success' => false,
-								'message' => 'New owner ID missing.',
-                            )
-                        );
-                    }
-
-                    StoreUtil::add_store_users(
-                        array(
-							'store_id' => $id,
-							'users'    => (array) $data['new_owner_id'],
-							'role_id'  => 'store_owner',
-                        )
-                    );
-
-                    StoreUtil::set_primary_owner( $data['new_owner_id'], $id );
-                    return rest_ensure_response( array( 'success' => true ) );
-
-                default:
-                    unset( $data['delete'] );
-                    break;
-            }
-        }
-
-        // Handle registration & core data
-        if ( ! empty( $data['registration_data'] ) || ! empty( $data['core_data'] ) ) {
-            if ( isset( $data['status'] ) && $data['status'] === 'approve' ) {
-                $users = StoreUtil::get_store_users( $id );
-                $user  = get_userdata( empty( $users['users'] ) ? $users['primary_owner'] : reset( $users['users'] ) );
-
-                if ( $user ) {
-                    $user->set_role( 'store_owner' );
-                    StoreUtil::set_primary_owner( $user->ID, $id );
-                    $store->set( 'status', 'active' );
-                    $store->save();
-                    do_action( 'multivendorx_after_store_active', $id );
-
-                    return rest_ensure_response( array( 'success' => true ) );
+        try{
+            $id   = absint( $request->get_param( 'id' ) );
+            $data = $request->get_json_params();
+    
+            $store = new \MultiVendorX\Store\Store( $id );
+    
+            if ( $data['deactivate'] ) {
+                $action = $data['action'] ?: '';
+                if ( $action == 'approve' ) {
+                    $store->set( 'status', 'deactivated' );
+                    $store->delete_meta( 'deactivation_reason' );
+                    $store->delete_meta( 'deactivation_request_date' );
                 }
-            } elseif ( isset( $data['status'] ) && $data['status'] === 'rejected' ) {
-                $store->set( 'status', 'rejected' );
-                // Save _reject_note if provided
-                if ( ! empty( $data['store_permanent_reject'] ) ) {
-                    $store->set( 'status', 'permanently_rejected' );
-                    delete_metadata( 'user', 0, 'multivendorx_active_store', '', true );
+    
+                if ( $action == 'reject' ) {
+                    $store->delete_meta( 'deactivation_reason' );
+                    $store->delete_meta( 'deactivation_request_date' );
                 }
-
-                if ( ! empty( $data['store_application_note'] ) ) {
-                    $old_notes = unserialize( $store->get_meta( 'store_reject_note' ) );
-                    if ( ! is_array( $old_notes ) ) {
-                        $old_notes = array();
-                    }
-
-                    $old_notes[] = array(
-                        'note' => sanitize_text_field( $data['store_application_note'] ),
-                        'date' => current_time( 'mysql' ),
-                    );
-
-                    $store->update_meta( 'store_reject_note', serialize( $old_notes ) );
-                }
-
+    
                 $store->save();
                 return rest_ensure_response( array( 'success' => true ) );
             }
-            return;
-        }
-
-        // Handle adding store owners
-        if ( ! empty( $data['store_owners'] ) || ! empty( $data['primary_owner'] ) ) {
-            StoreUtil::add_store_users(
-                array(
-					'store_id' => $data['id'],
-					'users'    => (array) $data['store_owners'],
-					'role_id'  => 'store_owner',
-                )
-            );
-
-            StoreUtil::set_primary_owner( $data['primary_owner'], $data['id'] );
-
-            unset( $data['store_owners'] );
-            unset( $data['primary_owner'] );
-            // return rest_ensure_response([ 'success' => true ]);
-        }
-
-        unset( $data['commission'] );
-        unset( $data['transactions'] );
-        unset( $data['primary_owner_info'] );
-        unset( $data['overall_reviews'] );
-        unset( $data['total_reviews'] );
-
-        if ( $data['status'] == 'deactivated' ) {
-            delete_metadata( 'user', 0, 'multivendorx_active_store', '', true );
-        }
-        // Update basic store info
-        $store->set( 'name', $data['name'] ?? $store->get( 'name' ) );
-        $store->set( 'slug', $data['slug'] ?? $store->get( 'slug' ) );
-        $store->set( 'description', $data['description'] ?? $store->get( 'description' ) );
-        $store->set( 'who_created', 'admin' );
-        $store->set( 'status', $data['status'] ?? $store->get( 'status' ) );
-        $store->set( 'create_time', $data['create_time'] ?? $store->get( 'create_time' ) );
-
-        // Save all other meta dynamically
-        if ( is_array( $data ) ) {
-            foreach ( $data as $key => $value ) {
-                if ( ! in_array( $key, array( 'id', 'name', 'slug', 'description', 'who_created', 'status', 'create_time' ), true ) ) {
-                    $store->update_meta( $key, $value );
-                    if ( $key == 'deactivation_reason' ) {
-                        $store->update_meta( 'deactivation_request_date', current_time( 'mysql' ) );
+    
+            if ( ! empty( $data['delete'] ) ) {
+                $delete_option = $data['deleteOption'] ?? '';
+    
+                switch ( $delete_option ) {
+                    case 'direct':
+                    case 'permanent_delete':
+                        $deleted = $store->delete_store_completely();
+                        return rest_ensure_response( array( 'success' => (bool) $deleted ) );
+    
+                    case 'product_assign_admin':
+                        $admins        = get_users(
+                            array(
+                                'role'   => 'administrator',
+                                'number' => 1,
+                            )
+                        );
+                        $admin_user_id = $admins[0]->ID ?? 1;
+    
+                        $products = wc_get_products(
+                            array(
+                                'limit'      => -1,
+                                'return'     => 'ids',
+                                'meta_key'   => 'multivendorx_store_id',
+                                'meta_value' => $id,
+                            )
+                        );
+    
+                        if ( $products ) {
+                            foreach ( $products as $product_id ) {
+                                wp_update_post(
+                                    array(
+                                        'ID'          => $product_id,
+                                        'post_author' => $admin_user_id,
+                                    )
+                                );
+                                delete_post_meta( $product_id, 'multivendorx_store_id' );
+                            }
+                        }
+    
+                        $deleted = $store->delete_store_completely();
+                        return rest_ensure_response( array( 'success' => (bool) $deleted ) );
+    
+                    case 'set_store_owner':
+                        if ( empty( $data['new_owner_id'] ) ) {
+                            return rest_ensure_response(
+                                array(
+                                    'success' => false,
+                                    'message' => 'New owner ID missing.',
+                                )
+                            );
+                        }
+    
+                        StoreUtil::add_store_users(
+                            array(
+                                'store_id' => $id,
+                                'users'    => (array) $data['new_owner_id'],
+                                'role_id'  => 'store_owner',
+                            )
+                        );
+    
+                        StoreUtil::set_primary_owner( $data['new_owner_id'], $id );
+                        return rest_ensure_response( array( 'success' => true ) );
+    
+                    default:
+                        unset( $data['delete'] );
+                        break;
+                }
+            }
+    
+            // Handle registration & core data
+            if ( ! empty( $data['registration_data'] ) || ! empty( $data['core_data'] ) ) {
+                if ( isset( $data['status'] ) && $data['status'] === 'approve' ) {
+                    $users = StoreUtil::get_store_users( $id );
+                    $user  = get_userdata( empty( $users['users'] ) ? $users['primary_owner'] : reset( $users['users'] ) );
+    
+                    if ( $user ) {
+                        $user->set_role( 'store_owner' );
+                        StoreUtil::set_primary_owner( $user->ID, $id );
+                        $store->set( 'status', 'active' );
+                        $store->save();
+                        do_action( 'multivendorx_after_store_active', $id );
+    
+                        return rest_ensure_response( array( 'success' => true ) );
+                    }
+                } elseif ( isset( $data['status'] ) && $data['status'] === 'rejected' ) {
+                    $store->set( 'status', 'rejected' );
+                    // Save _reject_note if provided
+                    if ( ! empty( $data['store_permanent_reject'] ) ) {
+                        $store->set( 'status', 'permanently_rejected' );
+                        delete_metadata( 'user', 0, 'multivendorx_active_store', '', true );
+                    }
+    
+                    if ( ! empty( $data['store_application_note'] ) ) {
+                        $old_notes = unserialize( $store->get_meta( 'store_reject_note' ) );
+                        if ( ! is_array( $old_notes ) ) {
+                            $old_notes = array();
+                        }
+    
+                        $old_notes[] = array(
+                            'note' => sanitize_text_field( $data['store_application_note'] ),
+                            'date' => current_time( 'mysql' ),
+                        );
+    
+                        $store->update_meta( 'store_reject_note', serialize( $old_notes ) );
+                    }
+    
+                    $store->save();
+                    return rest_ensure_response( array( 'success' => true ) );
+                }
+                return;
+            }
+    
+            // Handle adding store owners
+            if ( ! empty( $data['store_owners'] ) || ! empty( $data['primary_owner'] ) ) {
+                StoreUtil::add_store_users(
+                    array(
+                        'store_id' => $data['id'],
+                        'users'    => (array) $data['store_owners'],
+                        'role_id'  => 'store_owner',
+                    )
+                );
+    
+                StoreUtil::set_primary_owner( $data['primary_owner'], $data['id'] );
+    
+                unset( $data['store_owners'] );
+                unset( $data['primary_owner'] );
+                // return rest_ensure_response([ 'success' => true ]);
+            }
+    
+            unset( $data['commission'] );
+            unset( $data['transactions'] );
+            unset( $data['primary_owner_info'] );
+            unset( $data['overall_reviews'] );
+            unset( $data['total_reviews'] );
+    
+            if ( $data['status'] == 'deactivated' ) {
+                delete_metadata( 'user', 0, 'multivendorx_active_store', '', true );
+            }
+            // Update basic store info
+            $store->set( 'name', $data['name'] ?? $store->get( 'name' ) );
+            $store->set( 'slug', $data['slug'] ?? $store->get( 'slug' ) );
+            $store->set( 'description', $data['description'] ?? $store->get( 'description' ) );
+            $store->set( 'who_created', 'admin' );
+            $store->set( 'status', $data['status'] ?? $store->get( 'status' ) );
+            $store->set( 'create_time', $data['create_time'] ?? $store->get( 'create_time' ) );
+    
+            // Save all other meta dynamically
+            if ( is_array( $data ) ) {
+                foreach ( $data as $key => $value ) {
+                    if ( ! in_array( $key, array( 'id', 'name', 'slug', 'description', 'who_created', 'status', 'create_time' ), true ) ) {
+                        $store->update_meta( $key, $value );
+                        if ( $key == 'deactivation_reason' ) {
+                            $store->update_meta( 'deactivation_request_date', current_time( 'mysql' ) );
+                        }
                     }
                 }
             }
+    
+            $store->save();
+    
+            if ( $store->get( 'status' ) == 'active' ) {
+                do_action( 'multivendorx_after_store_active', $id );
+            }
+    
+            return rest_ensure_response(
+                array(
+                    'success' => true,
+                    'id'      => $store->get_id(),
+                )
+            );
+        }catch ( \Exception $e ) {
+            MultiVendorX()->util->log(
+                'MVX REST Exception: ' .
+                'Message=' . $e->getMessage() . '; ' .
+                'File=' . $e->getFile() . '; ' .
+                'Line=' . $e->getLine() . "\n\n"
+            );        
+
+            return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
-
-        $store->save();
-
-        if ( $store->get( 'status' ) == 'active' ) {
-            do_action( 'multivendorx_after_store_active', $id );
-        }
-
-        return rest_ensure_response(
-            array(
-				'success' => true,
-				'id'      => $store->get_id(),
-            )
-        );
     }
 
 
@@ -1006,7 +1082,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             );
         }
 
-        // ✅ Fetch products for this store
+        // Fetch products for this store
         $products = wc_get_products(
             array(
 				'status'     => 'publish', // or use your $status variable if dynamic
@@ -1030,7 +1106,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             }
         }
 
-        // ✅ Fetch categories
+        //Fetch categories
         $categories = get_terms(
             array(
 				'taxonomy'   => 'product_cat',
@@ -1077,7 +1153,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             $followers = array();
         }
 
-        // ✅ Handle old format (plain array of user IDs)
+        //Handle old format (plain array of user IDs)
         // Convert to new format with id + empty date
         if ( isset( $followers[0] ) && is_int( $followers[0] ) ) {
             $followers = array_map(

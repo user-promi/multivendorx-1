@@ -73,160 +73,178 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            return new \WP_Error(
-                'invalid_nonce',
-                __( 'Invalid nonce', 'multivendorx' ),
-                array( 'status' => 403 )
-            );
+            $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
+
+            // Log the error
+            if ( is_wp_error( $error ) ) {
+                MultiVendorX()->util->log(
+                    'MVX REST Error: ' .
+                    'Code=' . $error->get_error_code() . '; ' .
+                    'Message=' . $error->get_error_message() . '; ' .
+                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
+                );
+            }            
+
+            return $error;
         }
-
-        // Check if CSV download is requested
-        $format = $request->get_param( 'format' );
-        if ( $format === 'csv' ) {
-            return $this->download_csv( $request );
-        }
-
-        $storeId = $request->get_param( 'store_id' );
-
-        if ( $format === 'reports' ) {
-            $top_stores = $request->get_param( 'top_stores' );
-
-            if ( $storeId ) {
-                // If a specific store ID is provided, return commission summary for that store
-                return CommissionUtil::get_commission_summary_for_store( $storeId );
+        try{
+            // Check if CSV download is requested
+            $format = $request->get_param( 'format' );
+            if ( $format === 'csv' ) {
+                return $this->download_csv( $request );
             }
 
-            if ( $top_stores ) {
-                // If top_stores is provided, return commission summary for top stores
-                return CommissionUtil::get_commission_summary_for_store( null, $top_stores, $top_stores );
+            $storeId = $request->get_param( 'store_id' );
+
+            if ( $format === 'reports' ) {
+                $top_stores = $request->get_param( 'top_stores' );
+
+                if ( $storeId ) {
+                    // If a specific store ID is provided, return commission summary for that store
+                    return CommissionUtil::get_commission_summary_for_store( $storeId );
+                }
+
+                if ( $top_stores ) {
+                    // If top_stores is provided, return commission summary for top stores
+                    return CommissionUtil::get_commission_summary_for_store( null, $top_stores, $top_stores );
+                }
+
+                // Default: return summary for all stores
+                return CommissionUtil::get_commission_summary_for_store();
             }
 
-            // Default: return summary for all stores
-            return CommissionUtil::get_commission_summary_for_store();
-        }
+            $limit      = max( intval( $request->get_param( 'row' ) ), 10 );
+            $page       = max( intval( $request->get_param( 'page' ) ), 1 );
+            $offset     = ( $page - 1 ) * $limit;
+            $count      = $request->get_param( 'count' );
+            $status     = $request->get_param( 'status' );
+            $start_date = date( 'Y-m-d 00:00:00', strtotime( sanitize_text_field( $request->get_param( 'startDate' ) ) ) );
+            $end_date   = date( 'Y-m-d 23:59:59', strtotime( sanitize_text_field( $request->get_param( 'endDate' ) ) ) );
 
-        $limit      = max( intval( $request->get_param( 'row' ) ), 10 );
-        $page       = max( intval( $request->get_param( 'page' ) ), 1 );
-        $offset     = ( $page - 1 ) * $limit;
-        $count      = $request->get_param( 'count' );
-        $status     = $request->get_param( 'status' );
-        $start_date = date( 'Y-m-d 00:00:00', strtotime( sanitize_text_field( $request->get_param( 'startDate' ) ) ) );
-        $end_date   = date( 'Y-m-d 23:59:59', strtotime( sanitize_text_field( $request->get_param( 'endDate' ) ) ) );
+            // ADD THESE LINES FOR SORTING
+            $orderBy = sanitize_text_field( $request->get_param( 'orderBy' ) );
+            $order   = sanitize_text_field( $request->get_param( 'order' ) );
 
-        // ADD THESE LINES FOR SORTING
-        $orderBy = sanitize_text_field( $request->get_param( 'orderBy' ) );
-        $order   = sanitize_text_field( $request->get_param( 'order' ) );
-
-        // Prepare filter for CommissionUtil
-        $filter = array(
-            'perpage' => $limit,
-            'page'    => $page,
-        );
-
-        if ( ! empty( $storeId ) ) {
-            $filter['store_id'] = intval( $storeId );
-        }
-
-        if ( ! empty( $status ) ) {
-            $filter['status'] = $status;
-        }
-
-        if ( ! empty( $start_date ) && ! empty( $end_date ) ) {
-            $filter['created_at'] = array(
-                'compare' => 'BETWEEN',
-                'value'   => array( $start_date, $end_date ),
+            // Prepare filter for CommissionUtil
+            $filter = array(
+                'perpage' => $limit,
+                'page'    => $page,
             );
-        }
-
-        // ADD SORTING TO FILTER
-        if ( ! empty( $orderBy ) && ! empty( $order ) ) {
-            $filter['orderBy'] = $orderBy;
-            $filter['order']   = $order;
-        }
-
-        if ( $count ) {
-            global $wpdb;
-            $table_name = "{$wpdb->prefix}" . Utill::TABLES['commission'];
 
             if ( ! empty( $storeId ) ) {
-                $total_count = $wpdb->get_var(
-                    $wpdb->prepare(
-                        "SELECT COUNT(*) FROM $table_name WHERE store_id = %d",
-                        $storeId
-                    )
-                );
-            } else {
-                $total_count = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
+                $filter['store_id'] = intval( $storeId );
             }
 
-            return rest_ensure_response( (int) $total_count );
-        }
-        // Rest of your existing code remains the same...
-        $commissions = CommissionUtil::get_commissions(
-            $filter,
-            false
-        );
+            if ( ! empty( $status ) ) {
+                $filter['status'] = $status;
+            }
 
-        $formatted_commissions = array();
+            if ( ! empty( $start_date ) && ! empty( $end_date ) ) {
+                $filter['created_at'] = array(
+                    'compare' => 'BETWEEN',
+                    'value'   => array( $start_date, $end_date ),
+                );
+            }
 
-        foreach ( $commissions as $commission ) {
-            $store      = new Store( $commission->store_id );
-            $store_name = $store ? $store->get( 'name' ) : '';
+            // ADD SORTING TO FILTER
+            if ( ! empty( $orderBy ) && ! empty( $order ) ) {
+                $filter['orderBy'] = $orderBy;
+                $filter['order']   = $order;
+            }
 
-            $formatted_commissions[] = apply_filters(
-                'multivendorx_commission_table',
-                array(
-                    'id'                    => (int) $commission->ID,
-                    'orderId'               => (int) $commission->order_id,
-                    'storeId'               => (int) $commission->store_id,
-                    'storeName'             => $store_name,
-                    'totalOrderAmount'      => $commission->total_order_value,
-                    'netItemsCost'          => $commission->net_items_cost,
-                    'marketplaceCommission' => $commission->marketplace_commission,
-                    'storeEarning'          => $commission->store_earning,
-                    'gatewayFee'            => $commission->gateway_fee,
-                    'shippingAmount'        => $commission->store_shipping,
-                    'taxAmount'             => $commission->store_tax,
-                    'shippingTaxAmount'     => $commission->store_shipping_tax,
-                    'storeDiscount'         => $commission->store_discount,
-                    'adminDiscount'         => $commission->admin_discount,
-                    'storePayable'          => $commission->store_payable,
-                    'marketplacePayable'    => $commission->marketplace_payable,
-                    'storeRefunded'         => $commission->store_refunded,
-                    'currency'              => $commission->currency,
-                    'status'                => $commission->status,
-                    'commissionNote'        => $commission->commission_note,
-                    'createdAt'             => $commission->created_at,
-                    'updatedAt'             => $commission->updated_at,
-                ),
-                $commission
+            if ( $count ) {
+                global $wpdb;
+                $table_name = "{$wpdb->prefix}" . Utill::TABLES['commission'];
+
+                if ( ! empty( $storeId ) ) {
+                    $total_count = $wpdb->get_var(
+                        $wpdb->prepare(
+                            "SELECT COUNT(*) FROM $table_name WHERE store_id = %d",
+                            $storeId
+                        )
+                    );
+                } else {
+                    $total_count = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
+                }
+
+                return rest_ensure_response( (int) $total_count );
+            }
+            // Rest of your existing code remains the same...
+            $commissions = CommissionUtil::get_commissions(
+                $filter,
+                false
             );
+
+            $formatted_commissions = array();
+
+            foreach ( $commissions as $commission ) {
+                $store      = new Store( $commission->store_id );
+                $store_name = $store ? $store->get( 'name' ) : '';
+
+                $formatted_commissions[] = apply_filters(
+                    'multivendorx_commission_table',
+                    array(
+                        'id'                    => (int) $commission->ID,
+                        'orderId'               => (int) $commission->order_id,
+                        'storeId'               => (int) $commission->store_id,
+                        'storeName'             => $store_name,
+                        'totalOrderAmount'      => $commission->total_order_value,
+                        'netItemsCost'          => $commission->net_items_cost,
+                        'marketplaceCommission' => $commission->marketplace_commission,
+                        'storeEarning'          => $commission->store_earning,
+                        'gatewayFee'            => $commission->gateway_fee,
+                        'shippingAmount'        => $commission->store_shipping,
+                        'taxAmount'             => $commission->store_tax,
+                        'shippingTaxAmount'     => $commission->store_shipping_tax,
+                        'storeDiscount'         => $commission->store_discount,
+                        'adminDiscount'         => $commission->admin_discount,
+                        'storePayable'          => $commission->store_payable,
+                        'marketplacePayable'    => $commission->marketplace_payable,
+                        'storeRefunded'         => $commission->store_refunded,
+                        'currency'              => $commission->currency,
+                        'status'                => $commission->status,
+                        'commissionNote'        => $commission->commission_note,
+                        'createdAt'             => $commission->created_at,
+                        'updatedAt'             => $commission->updated_at,
+                    ),
+                    $commission
+                );
+            }
+
+            // Prepare base filter (for store-specific counts)
+            $base_filter = array();
+            if ( ! empty( $storeId ) && ! current_user_can( 'manage_options' ) ) {
+                $base_filter['store_id'] = intval( $storeId );
+            }
+
+            // Status-wise counts with store/date filters applied
+            $all                = CommissionUtil::get_commissions( $base_filter, true, true );
+            $paid               = CommissionUtil::get_commissions( array_merge( $base_filter, array( 'status' => 'paid' ) ), true, true );
+            $unpaid             = CommissionUtil::get_commissions( array_merge( $base_filter, array( 'status' => 'unpaid' ) ), true, true );
+            $refunded           = CommissionUtil::get_commissions( array_merge( $base_filter, array( 'status' => 'refunded' ) ), true, true );
+            $partially_refunded = CommissionUtil::get_commissions( array_merge( $base_filter, array( 'status' => 'partially_refunded' ) ), true, true );
+            $cancelled          = CommissionUtil::get_commissions( array_merge( $base_filter, array( 'status' => 'cancelled' ) ), true, true );
+
+            $response = array(
+                'commissions'        => $formatted_commissions,
+                'all'                => $all,
+                'paid'               => $paid,
+                'unpaid'             => $unpaid,
+                'refunded'           => $refunded,
+                'partially_refunded' => $partially_refunded,
+                'cancelled'          => $cancelled,
+            );
+            return rest_ensure_response( $response );
+        }catch ( \Exception $e ) {
+            MultiVendorX()->util->log(
+                'MVX REST Exception: ' .
+                'Message=' . $e->getMessage() . '; ' .
+                'File=' . $e->getFile() . '; ' .
+                'Line=' . $e->getLine() . "\n\n"
+            );        
+
+            return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
-
-        // Prepare base filter (for store-specific counts)
-        $base_filter = array();
-        if ( ! empty( $storeId ) && ! current_user_can( 'manage_options' ) ) {
-            $base_filter['store_id'] = intval( $storeId );
-        }
-
-        // Status-wise counts with store/date filters applied
-        $all                = CommissionUtil::get_commissions( $base_filter, true, true );
-        $paid               = CommissionUtil::get_commissions( array_merge( $base_filter, array( 'status' => 'paid' ) ), true, true );
-        $unpaid             = CommissionUtil::get_commissions( array_merge( $base_filter, array( 'status' => 'unpaid' ) ), true, true );
-        $refunded           = CommissionUtil::get_commissions( array_merge( $base_filter, array( 'status' => 'refunded' ) ), true, true );
-        $partially_refunded = CommissionUtil::get_commissions( array_merge( $base_filter, array( 'status' => 'partially_refunded' ) ), true, true );
-        $cancelled          = CommissionUtil::get_commissions( array_merge( $base_filter, array( 'status' => 'cancelled' ) ), true, true );
-
-        $response = array(
-            'commissions'        => $formatted_commissions,
-            'all'                => $all,
-            'paid'               => $paid,
-            'unpaid'             => $unpaid,
-            'refunded'           => $refunded,
-            'partially_refunded' => $partially_refunded,
-            'cancelled'          => $cancelled,
-        );
-        return rest_ensure_response( $response );
     }
 
     private function download_csv( $request ) {
@@ -354,113 +372,149 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         // Verify nonce
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            return new \WP_Error(
-                'invalid_nonce',
-                __( 'Invalid nonce', 'multivendorx' ),
-                array( 'status' => 403 )
-            );
+            $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
+
+            // Log the error
+            if ( is_wp_error( $error ) ) {
+                MultiVendorX()->util->log(
+                    'MVX REST Error: ' .
+                    'Code=' . $error->get_error_code() . '; ' .
+                    'Message=' . $error->get_error_message() . '; ' .
+                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
+                );
+            }            
+
+            return $error;
         }
+        try{
+            // Get commission ID from request
+            $id = absint( $request->get_param( 'id' ) );
 
-        // Get commission ID from request
-        $id = absint( $request->get_param( 'id' ) );
+            // Fetch raw commission data (stdClass)
+            $commission = \MultiVendorX\Commission\CommissionUtil::get_commission_db( $id );
+            if ( ! $commission || empty( $commission->ID ) ) {
+                return new \WP_Error(
+                    'not_found',
+                    __( 'Commission not found', 'multivendorx' ),
+                    array( 'status' => 404 )
+                );
+            }
 
-        // Fetch raw commission data (stdClass)
-        $commission = \MultiVendorX\Commission\CommissionUtil::get_commission_db( $id );
-        if ( ! $commission || empty( $commission->ID ) ) {
-            return new \WP_Error(
-                'not_found',
-                __( 'Commission not found', 'multivendorx' ),
-                array( 'status' => 404 )
+            // Validate order ID
+            if ( empty( $commission->order_id ) ) {
+                return new \WP_Error(
+                    'missing_order',
+                    __( 'Order ID missing in commission data', 'multivendorx' ),
+                    array( 'status' => 400 )
+                );
+            }
+
+            $order_id = absint( $commission->order_id );
+            $order    = wc_get_order( $order_id );
+
+            if ( ! $order ) {
+                return new \WP_Error(
+                    'order_not_found',
+                    __( 'Order not found', 'multivendorx' ),
+                    array( 'status' => 404 )
+                );
+            }
+
+            // Build line items
+            $items = array();
+            foreach ( $order->get_items() as $item_id => $item ) {
+                $product = $item->get_product();
+
+                $items[] = array(
+                    'product_id' => $item->get_product_id(),
+                    'name'       => $item->get_name(),
+                    'sku'        => $product ? $product->get_sku() : '',
+                    'price'      => wc_price( $order->get_item_subtotal( $item, false, true ) ),
+                    'qty'        => $item->get_quantity(),
+                    'total'      => wc_price( $order->get_line_total( $item, true, true ) ),
+                );
+            }
+
+            // Prepare response
+            $response = array(
+                'commission_id'          => absint( $commission->ID ),
+                'order_id'               => $order_id,
+                'store_id'               => absint( $commission->store_id ),
+                'status'                 => $commission->status,
+
+                // Corrected variable mappings
+                'amount'                 => wc_format_decimal( $commission->store_earning, 2 ),
+                'shipping'               => wc_format_decimal( $commission->store_shipping, 2 ),
+                'tax'                    => wc_format_decimal( $commission->store_tax, 2 ),
+                'shipping_tax_amount'    => wc_format_decimal( $commission->store_shipping_tax, 2 ),
+
+                // Total payable to vendor (your earlier 'commission_total' does not exist)
+                'total'                  => wc_format_decimal( $commission->store_payable, 2 ),
+
+                // Refund stored as store_refunded
+                'commission_refunded'    => wc_format_decimal( $commission->store_refunded ?? 0, 2 ),
+
+                'marketplace_commission' => wc_format_decimal( $commission->marketplace_commission, 2 ),
+                'facilitator_fee'        => wc_format_decimal( $commission->facilitator_fee, 2 ),
+                'gateway_fee'            => wc_format_decimal( $commission->gateway_fee, 2 ),
+                'platform_fee'           => wc_format_decimal( $commission->platform_fee, 2 ),
+                'discount_applied'       => wc_format_decimal( $commission->discount_applied, 2 ),
+
+                'note'                   => $commission->commission_note,
+                'created'                => $commission->created_at,
+                'items'                  => $items,
             );
+
+            return rest_ensure_response( $response );
+        }catch ( \Exception $e ) {
+            MultiVendorX()->util->log(
+                'MVX REST Exception: ' .
+                'Message=' . $e->getMessage() . '; ' .
+                'File=' . $e->getFile() . '; ' .
+                'Line=' . $e->getLine() . "\n\n"
+            );        
+
+            return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
-
-        // Validate order ID
-        if ( empty( $commission->order_id ) ) {
-            return new \WP_Error(
-                'missing_order',
-                __( 'Order ID missing in commission data', 'multivendorx' ),
-                array( 'status' => 400 )
-            );
-        }
-
-        $order_id = absint( $commission->order_id );
-        $order    = wc_get_order( $order_id );
-
-        if ( ! $order ) {
-            return new \WP_Error(
-                'order_not_found',
-                __( 'Order not found', 'multivendorx' ),
-                array( 'status' => 404 )
-            );
-        }
-
-        // Build line items
-        $items = array();
-        foreach ( $order->get_items() as $item_id => $item ) {
-            $product = $item->get_product();
-
-            $items[] = array(
-                'product_id' => $item->get_product_id(),
-                'name'       => $item->get_name(),
-                'sku'        => $product ? $product->get_sku() : '',
-                'price'      => wc_price( $order->get_item_subtotal( $item, false, true ) ),
-                'qty'        => $item->get_quantity(),
-                'total'      => wc_price( $order->get_line_total( $item, true, true ) ),
-            );
-        }
-
-        // Prepare response
-        $response = array(
-            'commission_id'          => absint( $commission->ID ),
-            'order_id'               => $order_id,
-            'store_id'               => absint( $commission->store_id ),
-            'status'                 => $commission->status,
-
-            // Corrected variable mappings
-            'amount'                 => wc_format_decimal( $commission->store_earning, 2 ),
-            'shipping'               => wc_format_decimal( $commission->store_shipping, 2 ),
-            'tax'                    => wc_format_decimal( $commission->store_tax, 2 ),
-            'shipping_tax_amount'    => wc_format_decimal( $commission->store_shipping_tax, 2 ),
-
-            // Total payable to vendor (your earlier 'commission_total' does not exist)
-            'total'                  => wc_format_decimal( $commission->store_payable, 2 ),
-
-            // Refund stored as store_refunded
-            'commission_refunded'    => wc_format_decimal( $commission->store_refunded ?? 0, 2 ),
-
-            'marketplace_commission' => wc_format_decimal( $commission->marketplace_commission, 2 ),
-            'facilitator_fee'        => wc_format_decimal( $commission->facilitator_fee, 2 ),
-            'gateway_fee'            => wc_format_decimal( $commission->gateway_fee, 2 ),
-            'platform_fee'           => wc_format_decimal( $commission->platform_fee, 2 ),
-            'discount_applied'       => wc_format_decimal( $commission->discount_applied, 2 ),
-
-            'note'                   => $commission->commission_note,
-            'created'                => $commission->created_at,
-            'items'                  => $items,
-        );
-
-        return rest_ensure_response( $response );
     }
 
     public function update_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            return new \WP_Error(
-                'invalid_nonce',
-                __( 'Invalid nonce', 'multivendorx' ),
-                array( 'status' => 403 )
-            );
+            $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
+
+            // Log the error
+            if ( is_wp_error( $error ) ) {
+                MultiVendorX()->util->log(
+                    'MVX REST Error: ' .
+                    'Code=' . $error->get_error_code() . '; ' .
+                    'Message=' . $error->get_error_message() . '; ' .
+                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
+                );
+            }            
+
+            return $error;
         }
-
-        $order_id = absint( $request->get_param( 'orderId' ) );
-        $action   = $request->get_param( 'action' );
-
-        if ( $action == 'regenerate' ) {
-            $order = wc_get_order( $order_id );
-            if ( $order ) {
-                MultiVendorX()->order->admin->regenerate_order_commissions( $order );
-                return rest_ensure_response( array( 'success' => true ) );
+        try{
+            $order_id = absint( $request->get_param( 'orderId' ) );
+            $action   = $request->get_param( 'action' );
+    
+            if ( $action == 'regenerate' ) {
+                $order = wc_get_order( $order_id );
+                if ( $order ) {
+                    MultiVendorX()->order->admin->regenerate_order_commissions( $order );
+                    return rest_ensure_response( array( 'success' => true ) );
+                }
             }
+        }catch ( \Exception $e ) {
+            MultiVendorX()->util->log(
+                'MVX REST Exception: ' .
+                'Message=' . $e->getMessage() . '; ' .
+                'File=' . $e->getFile() . '; ' .
+                'Line=' . $e->getLine() . "\n\n"
+            );        
+
+            return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
     }
 }
