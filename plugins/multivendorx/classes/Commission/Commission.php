@@ -14,16 +14,22 @@ defined( 'ABSPATH' ) || exit;
  * @package     MultiVendorX
  * @author      MultiVendorX
  */
-
 class Commission {
-    // Member variable of commission class.
+    /**
+     * commission id.
+     * @var int
+     */
     private $id;
+    /**
+     * commission information.
+     * @var 
+     */
     private $commission;
 
     /**
      * Constructor function.
      *
-     * @param int | object $commission commission id
+     * @param int | object $commission commission id.
      */
     public function __construct( $commission ) {
         if ( is_int( $commission ) ) {
@@ -47,7 +53,7 @@ class Commission {
     /**
      * Get commission information.
      *
-     * @param   string $key
+     * @param   string $key commission key.
      * @return  mixed
      */
     public function get_data( $key ) {

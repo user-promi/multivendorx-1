@@ -138,7 +138,7 @@ class Ajax {
         $previous_vote = $voters[ $user_id ] ?? 0;
 
         if ( $previous_vote === $type ) {
-            // Clicking the same vote again does nothing
+            // Clicking the same vote again does nothing.
             wp_send_json_success(
                 array(
 					'total_votes' => $total_votes,
@@ -146,13 +146,13 @@ class Ajax {
                 )
             );
         } else {
-            // Remove previous vote effect if exists
+            // Remove previous vote effect if exists.
             $total_votes -= $previous_vote;
-            // Add new vote
+            // Add new vote.
             $voters[ $user_id ] = $type;
             $total_votes       += $type;
 
-            // Update database
+            // Update database.
             $wpdb->update(
                 $table,
                 array(
