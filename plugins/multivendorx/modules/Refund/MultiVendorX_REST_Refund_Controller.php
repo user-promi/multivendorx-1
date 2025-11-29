@@ -56,165 +56,182 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
      * 100% WooCommerce-native (no raw SQL).
      */
     public function get_items( $request ) {
-        // Verify nonce
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            return new \WP_Error(
-                'invalid_nonce',
-                __( 'Invalid nonce', 'multivendorx' ),
-                array( 'status' => 403 )
-            );
+            $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
+
+            // Log the error
+            if ( is_wp_error( $error ) ) {
+                MultiVendorX()->util->log(
+                    'MVX REST Error: ' .
+                    'Code=' . $error->get_error_code() . '; ' .
+                    'Message=' . $error->get_error_message() . '; ' .
+                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
+                );
+            }            
+
+            return $error;
         }
+        try{
+            // Parameters
+            $limit         = max( 1, intval( $request->get_param( 'row' ) ) );
+            $page          = max( 1, intval( $request->get_param( 'page' ) ) );
+            $count_only    = filter_var( $request->get_param( 'count' ), FILTER_VALIDATE_BOOLEAN );
+            $store_id      = $request->get_param( 'store_id' );
+            $search_action = strtolower( $request->get_param( 'searchAction' ) );
+            $search_field  = strtolower( trim( $request->get_param( 'searchField' ) ) );
+            $order_by      = $request->get_param( 'orderBy' );
+            $order         = strtolower( $request->get_param( 'order' ) ) === 'asc' ? 'ASC' : 'DESC';
+            $start_date    = $request->get_param( 'startDate' );
+            $end_date      = $request->get_param( 'endDate' );
 
-        // Parameters
-        $limit         = max( 1, intval( $request->get_param( 'row' ) ) );
-        $page          = max( 1, intval( $request->get_param( 'page' ) ) );
-        $count_only    = filter_var( $request->get_param( 'count' ), FILTER_VALIDATE_BOOLEAN );
-        $store_id      = $request->get_param( 'store_id' );
-        $search_action = strtolower( $request->get_param( 'searchAction' ) );
-        $search_field  = strtolower( trim( $request->get_param( 'searchField' ) ) );
-        $order_by      = $request->get_param( 'orderBy' );
-        $order         = strtolower( $request->get_param( 'order' ) ) === 'asc' ? 'ASC' : 'DESC';
-        $start_date    = $request->get_param( 'startDate' );
-        $end_date      = $request->get_param( 'endDate' );
-
-        // Build meta query
-        $meta_query = array();
-        if ( ! empty( $store_id ) ) {
-            $meta_query[] = array(
-                'key'     => 'multivendorx_store_id',
-                'value'   => $store_id,
-                'compare' => '=',
-            );
-        } else {
-            $meta_query[] = array(
-                'key'     => 'multivendorx_store_id',
-                'compare' => 'EXISTS',
-            );
-        }
-
-        // 🗓 Date filter
-        $date_filter = '';
-        if ( $start_date || $end_date ) {
-            $start = $start_date ? gmdate( 'Y-m-d 00:00:00', strtotime( $start_date ) ) : '';
-            $end   = $end_date ? gmdate( 'Y-m-d 23:59:59', strtotime( $end_date ) ) : '';
-            if ( $start && $end ) {
-                $date_filter = $start . '...' . $end;
-            } elseif ( $start ) {
-                $date_filter = '>' . $start;
-            } elseif ( $end ) {
-                $date_filter = '<' . $end;
+            // Build meta query
+            $meta_query = array();
+            if ( ! empty( $store_id ) ) {
+                $meta_query[] = array(
+                    'key'     => 'multivendorx_store_id',
+                    'value'   => $store_id,
+                    'compare' => '=',
+                );
+            } else {
+                $meta_query[] = array(
+                    'key'     => 'multivendorx_store_id',
+                    'compare' => 'EXISTS',
+                );
             }
-        }
 
-        // If count only — return minimal data (fast)
-        if ( $count_only ) {
-            $count_args = array(
+            // 🗓 Date filter
+            $date_filter = '';
+            if ( $start_date || $end_date ) {
+                $start = $start_date ? gmdate( 'Y-m-d 00:00:00', strtotime( $start_date ) ) : '';
+                $end   = $end_date ? gmdate( 'Y-m-d 23:59:59', strtotime( $end_date ) ) : '';
+                if ( $start && $end ) {
+                    $date_filter = $start . '...' . $end;
+                } elseif ( $start ) {
+                    $date_filter = '>' . $start;
+                } elseif ( $end ) {
+                    $date_filter = '<' . $end;
+                }
+            }
+
+            // If count only — return minimal data (fast)
+            if ( $count_only ) {
+                $count_args = array(
+                    'type'       => 'shop_order_refund',
+                    'meta_query' => $meta_query,
+                    'return'     => 'ids',
+                );
+
+                $refund_ids = wc_get_orders( $count_args );
+                return rest_ensure_response( count( $refund_ids ) );
+            }
+
+            // Build full query (for listing)
+            $args = array(
                 'type'       => 'shop_order_refund',
                 'meta_query' => $meta_query,
-                'return'     => 'ids',
+                'limit'      => $limit,
+                'paged'      => $page,
+                'return'     => 'objects',
+                'paginate'   => false,
             );
 
-            $refund_ids = wc_get_orders( $count_args );
-            return rest_ensure_response( count( $refund_ids ) );
-        }
+            if ( $date_filter ) {
+                $args['date_created'] = $date_filter;
+            }
 
-        // Build full query (for listing)
-        $args = array(
-            'type'       => 'shop_order_refund',
-            'meta_query' => $meta_query,
-            'limit'      => $limit,
-            'paged'      => $page,
-            'return'     => 'objects',
-            'paginate'   => false,
-        );
+            if ( in_array( $order_by, array( 'date', 'order_id' ), true ) ) {
+                $args['orderby'] = $order_by === 'order_id' ? 'ID' : 'date';
+                $args['order']   = $order;
+            }
 
-        if ( $date_filter ) {
-            $args['date_created'] = $date_filter;
-        }
+            // Fetch refunds
+            $refunds = wc_get_orders( $args );
 
-        if ( in_array( $order_by, array( 'date', 'order_id' ), true ) ) {
-            $args['orderby'] = $order_by === 'order_id' ? 'ID' : 'date';
-            $args['order']   = $order;
-        }
+            // Search filtering (only after fetching)
+            if ( $search_action && $search_field ) {
+                $refunds = array_filter(
+                    $refunds,
+                    function ( $refund ) use ( $search_action, $search_field ) {
+                        /** @var WC_Order_Refund $refund */
+                        $order = wc_get_order( $refund->get_parent_id() );
+                        if ( ! $order ) {
+                            return false;
+                        }
 
-        // Fetch refunds
-        $refunds = wc_get_orders( $args );
+                        switch ( $search_action ) {
+                            case 'order_id':
+                                return (string) $order->get_id() === $search_field;
 
-        // Search filtering (only after fetching)
-        if ( $search_action && $search_field ) {
-            $refunds = array_filter(
-                $refunds,
-                function ( $refund ) use ( $search_action, $search_field ) {
-					/** @var WC_Order_Refund $refund */
-					$order = wc_get_order( $refund->get_parent_id() );
-					if ( ! $order ) {
-						return false;
-					}
+                            case 'customer':
+                                $name  = strtolower( $order->get_formatted_billing_full_name() );
+                                $email = strtolower( $order->get_billing_email() );
+                                return str_contains( $name, $search_field ) || str_contains( $email, $search_field );
 
-					switch ( $search_action ) {
-						case 'order_id':
-							return (string) $order->get_id() === $search_field;
-
-						case 'customer':
-							$name  = strtolower( $order->get_formatted_billing_full_name() );
-							$email = strtolower( $order->get_billing_email() );
-							return str_contains( $name, $search_field ) || str_contains( $email, $search_field );
-
-						default:
-							return true;
-					}
-				}
-            );
-        }
-
-        // Build response
-        $refund_list = array_map(
-            function ( $refund ) {
-                /** @var WC_Order_Refund $refund */
-                $store_id   = $refund->get_meta( 'multivendorx_store_id' );
-                $store      = new Store( $store_id );
-                $store_name = $store ? $store->get( 'name' ) : '';
-
-                $order = wc_get_order( $refund->get_parent_id() );
-
-                $customer_id    = $order ? $order->get_customer_id() : 0;
-                $customer_name  = $order ? $order->get_formatted_billing_full_name() : '';
-                $customer_email = $order ? $order->get_billing_email() : '';
-
-                // Build admin edit link if the customer exists
-                $customer_edit_link = $customer_id
-                ? admin_url( 'user-edit.php?user_id=' . $customer_id )
-                : '';
-
-                return array(
-                    'refund_id'          => $refund->get_id(),
-                    'store_id'           => $store_id,
-                    'store_name'         => $store_name,
-                    'order_id'           => $refund->get_parent_id(),
-                    'amount'             => $refund->get_amount(),
-                    'reason'             => $refund->get_reason(),
-                    'customer_reason'    => $order ? $order->get_meta( '_customer_refund_reason', true ) : '',
-                    'currency'           => $refund->get_currency(),
-                    'date'               => $refund->get_date_created()
-                                                ? $refund->get_date_created()->date_i18n( 'Y-m-d H:i:s' )
-                                                : '',
-                    'status'             => $refund->get_status(),
-                    'customer_id'        => $customer_id,
-                    'customer_name'      => $customer_name,
-                    'customer_email'     => $customer_email,
-                    'customer_edit_link' => $customer_edit_link,
+                            default:
+                                return true;
+                        }
+                    }
                 );
-            },
-            $refunds
-        );
+            }
 
-        // Sort by order_id manually if needed
-        if ( $order_by === 'order_id' ) {
-            usort( $refund_list, fn( $a, $b ) => ( $order === 'ASC' ? $a['order_id'] <=> $b['order_id'] : $b['order_id'] <=> $a['order_id'] ) );
+            // Build response
+            $refund_list = array_map(
+                function ( $refund ) {
+                    /** @var WC_Order_Refund $refund */
+                    $store_id   = $refund->get_meta( 'multivendorx_store_id' );
+                    $store      = new Store( $store_id );
+                    $store_name = $store ? $store->get( 'name' ) : '';
+
+                    $order = wc_get_order( $refund->get_parent_id() );
+
+                    $customer_id    = $order ? $order->get_customer_id() : 0;
+                    $customer_name  = $order ? $order->get_formatted_billing_full_name() : '';
+                    $customer_email = $order ? $order->get_billing_email() : '';
+
+                    // Build admin edit link if the customer exists
+                    $customer_edit_link = $customer_id
+                    ? admin_url( 'user-edit.php?user_id=' . $customer_id )
+                    : '';
+
+                    return array(
+                        'refund_id'          => $refund->get_id(),
+                        'store_id'           => $store_id,
+                        'store_name'         => $store_name,
+                        'order_id'           => $refund->get_parent_id(),
+                        'amount'             => $refund->get_amount(),
+                        'reason'             => $refund->get_reason(),
+                        'customer_reason'    => $order ? $order->get_meta( '_customer_refund_reason', true ) : '',
+                        'currency'           => $refund->get_currency(),
+                        'date'               => $refund->get_date_created()
+                                                    ? $refund->get_date_created()->date_i18n( 'Y-m-d H:i:s' )
+                                                    : '',
+                        'status'             => $refund->get_status(),
+                        'customer_id'        => $customer_id,
+                        'customer_name'      => $customer_name,
+                        'customer_email'     => $customer_email,
+                        'customer_edit_link' => $customer_edit_link,
+                    );
+                },
+                $refunds
+            );
+
+            // Sort by order_id manually if needed
+            if ( $order_by === 'order_id' ) {
+                usort( $refund_list, fn( $a, $b ) => ( $order === 'ASC' ? $a['order_id'] <=> $b['order_id'] : $b['order_id'] <=> $a['order_id'] ) );
+            }
+
+            return rest_ensure_response( array_values( $refund_list ) );
+        }catch ( \Exception $e ) {
+            MultiVendorX()->util->log(
+                'MVX REST Exception: ' .
+                'Message=' . $e->getMessage() . '; ' .
+                'File=' . $e->getFile() . '; ' .
+                'Line=' . $e->getLine() . "\n\n"
+            );        
+
+            return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
-
-        return rest_ensure_response( array_values( $refund_list ) );
     }
 
 
