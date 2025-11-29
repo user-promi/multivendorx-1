@@ -127,131 +127,149 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            return new \WP_Error(
-                'invalid_nonce',
-                __( 'Invalid nonce', 'multivendorx' ),
-                array( 'status' => 403 )
-            );
-        }
+            $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-        // Check if CSV download is requested
-        $format = $request->get_param( 'format' );
-        if ( $format === 'csv' ) {
-            return $this->download_transaction_csv( $request );
-        }
+            // Log the error
+            if ( is_wp_error( $error ) ) {
+                MultiVendorX()->util->log(
+                    'MVX REST Error: ' .
+                    'Code=' . $error->get_error_code() . '; ' .
+                    'Message=' . $error->get_error_message() . '; ' .
+                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
+                );
+            }            
 
-        $limit         = intval( $request->get_param( 'row' ) ) ?: 10;
-        $page          = intval( $request->get_param( 'page' ) ) ?: 1;
-        $offset        = ( $page - 1 ) * $limit;
-        $count         = $request->get_param( 'count' );
-        $store_id      = intval( $request->get_param( 'store_id' ) );
-        $status        = $request->get_param( 'status' );
-        $filter_status = $request->get_param( 'filter_status' );
+            return $error;
+        }
+        try{
+            // Check if CSV download is requested
+            $format = $request->get_param( 'format' );
+            if ( $format === 'csv' ) {
+                return $this->download_transaction_csv( $request );
+            }
 
-        // 🔹 Handle date range from request
-        $start_date         = $request->get_param( 'start_date' );
-        $end_date           = $request->get_param( 'end_date' );
-        $transaction_type   = $request->get_param( 'transaction_type' );
-        $transaction_status = $request->get_param( 'transaction_status' );
-        $orderBy            = sanitize_text_field( $request->get_param( 'orderBy' ) );
-        $order              = strtoupper( sanitize_text_field( $request->get_param( 'order' ) ) );
+            $limit         = intval( $request->get_param( 'row' ) ) ?: 10;
+            $page          = intval( $request->get_param( 'page' ) ) ?: 1;
+            $offset        = ( $page - 1 ) * $limit;
+            $count         = $request->get_param( 'count' );
+            $store_id      = intval( $request->get_param( 'store_id' ) );
+            $status        = $request->get_param( 'status' );
+            $filter_status = $request->get_param( 'filter_status' );
 
-        if ( $start_date ) {
-            $start_date = date( 'Y-m-d H:i:s', strtotime( $start_date ) );
-        }
-        if ( $end_date ) {
-            $end_date = date( 'Y-m-d H:i:s', strtotime( $end_date ) );
-        }
+            // 🔹 Handle date range from request
+            $start_date         = $request->get_param( 'start_date' );
+            $end_date           = $request->get_param( 'end_date' );
+            $transaction_type   = $request->get_param( 'transaction_type' );
+            $transaction_status = $request->get_param( 'transaction_status' );
+            $orderBy            = sanitize_text_field( $request->get_param( 'orderBy' ) );
+            $order              = strtoupper( sanitize_text_field( $request->get_param( 'order' ) ) );
 
-        $args = array();
-        if ( $count ) {
-			$args['count'] = true;
-        }
-        if ( $status ) {
-			$args['status'] = $status;
-        }
-        if ( $store_id ) {
-			$args['store_id'] = $store_id;
-        }
+            if ( $start_date ) {
+                $start_date = date( 'Y-m-d H:i:s', strtotime( $start_date ) );
+            }
+            if ( $end_date ) {
+                $end_date = date( 'Y-m-d H:i:s', strtotime( $end_date ) );
+            }
 
-        // Add date filters
-        if ( $start_date ) {
-			$args['start_date'] = $start_date;
-        }
-        if ( $end_date ) {
-			$args['end_date'] = $end_date;
-        }
-        if ( $filter_status ) {
-			$args['entry_type'] = $filter_status;
-        }
+            $args = array();
+            if ( $count ) {
+                $args['count'] = true;
+            }
+            if ( $status ) {
+                $args['status'] = $status;
+            }
+            if ( $store_id ) {
+                $args['store_id'] = $store_id;
+            }
 
-        if ( $count ) {
+            // Add date filters
+            if ( $start_date ) {
+                $args['start_date'] = $start_date;
+            }
+            if ( $end_date ) {
+                $args['end_date'] = $end_date;
+            }
+            if ( $filter_status ) {
+                $args['entry_type'] = $filter_status;
+            }
+
+            if ( $count ) {
+                $transactions = Transaction::get_transaction_information( $args );
+                return rest_ensure_response( (int) $transactions );
+            }
+            if ( $transaction_status ) {
+                $args['entry_type'] = $transaction_status;
+            }
+            if ( $transaction_type ) {
+                $args['transaction_type'] = $transaction_type;
+            }
+            $args['limit']  = $limit;
+            $args['offset'] = $offset;
+
+            if ( ! empty( $orderBy ) ) {
+                $args['orderBy'] = $orderBy;
+            }
+            if ( in_array( $order, array( 'ASC', 'DESC' ), true ) ) {
+                $args['order'] = $order;
+            }
+
             $transactions = Transaction::get_transaction_information( $args );
-            return rest_ensure_response( (int) $transactions );
+
+            $formatted = array_map(
+                function ( $row ) {
+                    $store = new \MultiVendorX\Store\Store( $row['store_id'] );
+                    return array(
+                        'id'               => $row['id'],
+                        'commission_id'    => $row['commission_id'],
+                        'store_name'       => $store ? $store->get( 'name' ) : '-',
+                        'amount'           => $row['amount'],
+                        'balance'          => $row['balance'],
+                        'status'           => $row['status'],
+                        'payment_method'   => $row['payment_method'] ?? '',
+                        'account_number'   => $store ? $store->get_meta( 'account_number' ) : '',
+                        'credit'           => $row['entry_type'] === 'Cr' ? $row['amount'] : 0,
+                        'debit'            => $row['entry_type'] === 'Dr' ? $row['amount'] : 0,
+                        'date'             => $row['created_at'],
+                        'order_details'    => $row['order_id'],
+                        'transaction_type' => $row['transaction_type'],
+                    );
+                },
+                $transactions
+            );
+
+            $countArgs = array(
+                'count' => true,
+            );
+
+            if ( $store_id ) {
+                $countArgs['store_id'] = $store_id;
+            }
+
+            $all       = Transaction::get_transaction_information( $countArgs );
+            $completed = Transaction::get_transaction_information( array_merge( $countArgs, array( 'status' => 'Completed' ) ) );
+            $processed = Transaction::get_transaction_information( array_merge( $countArgs, array( 'status' => 'Processed' ) ) );
+            $upcoming  = Transaction::get_transaction_information( array_merge( $countArgs, array( 'status' => 'Upcoming' ) ) );
+            $failed    = Transaction::get_transaction_information( array_merge( $countArgs, array( 'status' => 'Failed' ) ) );
+
+            $response = array(
+                'transaction' => $formatted,
+                'all'         => $all,
+                'completed'   => $completed,
+                'processed'   => $processed,
+                'upcoming'    => $upcoming,
+                'failed'      => $failed,
+            );
+            return rest_ensure_response( $response );
+        }catch ( \Exception $e ) {
+            MultiVendorX()->util->log(
+                'MVX REST Exception: ' .
+                'Message=' . $e->getMessage() . '; ' .
+                'File=' . $e->getFile() . '; ' .
+                'Line=' . $e->getLine() . "\n\n"
+            );        
+
+            return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
-        if ( $transaction_status ) {
-			$args['entry_type'] = $transaction_status;
-        }
-        if ( $transaction_type ) {
-			$args['transaction_type'] = $transaction_type;
-        }
-        $args['limit']  = $limit;
-        $args['offset'] = $offset;
-
-        if ( ! empty( $orderBy ) ) {
-			$args['orderBy'] = $orderBy;
-        }
-        if ( in_array( $order, array( 'ASC', 'DESC' ), true ) ) {
-			$args['order'] = $order;
-        }
-
-        $transactions = Transaction::get_transaction_information( $args );
-
-        $formatted = array_map(
-            function ( $row ) {
-				$store = new \MultiVendorX\Store\Store( $row['store_id'] );
-				return array(
-					'id'               => $row['id'],
-					'commission_id'    => $row['commission_id'],
-					'store_name'       => $store ? $store->get( 'name' ) : '-',
-					'amount'           => $row['amount'],
-					'balance'          => $row['balance'],
-					'status'           => $row['status'],
-					'payment_method'   => $row['payment_method'] ?? '',
-					'account_number'   => $store ? $store->get_meta( 'account_number' ) : '',
-					'credit'           => $row['entry_type'] === 'Cr' ? $row['amount'] : 0,
-					'debit'            => $row['entry_type'] === 'Dr' ? $row['amount'] : 0,
-					'date'             => $row['created_at'],
-					'order_details'    => $row['order_id'],
-					'transaction_type' => $row['transaction_type'],
-				);
-			},
-            $transactions
-        );
-
-        $countArgs = array(
-            'count' => true,
-        );
-
-        if ( $store_id ) {
-            $countArgs['store_id'] = $store_id;
-        }
-
-        $all       = Transaction::get_transaction_information( $countArgs );
-        $completed = Transaction::get_transaction_information( array_merge( $countArgs, array( 'status' => 'Completed' ) ) );
-        $processed = Transaction::get_transaction_information( array_merge( $countArgs, array( 'status' => 'Processed' ) ) );
-        $upcoming  = Transaction::get_transaction_information( array_merge( $countArgs, array( 'status' => 'Upcoming' ) ) );
-        $failed    = Transaction::get_transaction_information( array_merge( $countArgs, array( 'status' => 'Failed' ) ) );
-
-        $response = array(
-            'transaction' => $formatted,
-            'all'         => $all,
-            'completed'   => $completed,
-            'processed'   => $processed,
-            'upcoming'    => $upcoming,
-            'failed'      => $failed,
-        );
-        return rest_ensure_response( $response );
     }
 
     /**
