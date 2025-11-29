@@ -125,16 +125,18 @@ class Utill {
 
 
     /**
-     * Utility function add aditional single quote in a string.
+     * Utility function to wrap a string in single quotes.
      *
-     * @param   string $text
-     * @return  string
+     * @param string $value The input string to be wrapped.
+     *
+     * @return string The string wrapped in single quotes, or the original value if not a string.
      */
-    public static function add_single_quots( $text ) {
-        if ( is_string( $text ) ) {
-            return "'$text'";
+    public static function add_single_quotes( $value ) {
+        if ( is_string( $value ) ) {
+            return "'" . $value . "'";
         }
-        return $text;
+
+        return $value;
     }
 
     /**
