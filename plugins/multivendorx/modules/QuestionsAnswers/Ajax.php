@@ -17,6 +17,11 @@ use MultiVendorX\Utill;
  * @author      MultiVendorX
  */
 class Ajax {
+    /**
+     * Constructor
+     *
+     * @return void
+     */
     public function __construct() {
 
         add_action( 'wp_ajax_qna_submit', array( $this, 'multivendorx_qna_submit' ) );
@@ -28,7 +33,11 @@ class Ajax {
         add_action( 'wp_ajax_qna_vote', array( $this, 'multivendorx_qna_vote' ) );
     }
 
-    // Submit Question
+    /**
+     * Submit a question.
+     *
+     * @return void
+     */
     public function multivendorx_qna_submit() {
         check_ajax_referer( 'qna_ajax_nonce', 'nonce' );
         if ( ! is_user_logged_in() ) {
@@ -38,7 +47,9 @@ class Ajax {
         global $wpdb;
         $table      = $wpdb->prefix . Utill::TABLES['product_qna'];
         $user_id    = get_current_user_id();
-        $question   = sanitize_textarea_field( $_POST['question'] );
+        $question   = sanitize_textarea_field(
+            filter_input( INPUT_POST, 'question', FILTER_UNSAFE_RAW )
+        );
         $product_id = filter_input( INPUT_POST, 'product_id', FILTER_VALIDATE_INT ) ?: 0;
         $store_id   = intval( get_post_meta( $product_id, 'multivendorx_store_id', true ) ?: 0 );
 
@@ -66,11 +77,18 @@ class Ajax {
         );
     }
 
+    /**
+     * Search for questions by product ID and search term.
+     *
+     * @return void
+     */
     public function multivendorx_qna_search() {
         check_ajax_referer( 'qna_ajax_nonce', 'nonce' );
 
-        $product_id = intval( $_POST['product_id'] );
-        $search     = sanitize_text_field( $_POST['search'] );
+        $product_id = filter_input( INPUT_POST, 'product_id', FILTER_VALIDATE_INT );
+        $search     = sanitize_text_field(
+            filter_input( INPUT_POST, 'search', FILTER_UNSAFE_RAW )
+        );
 
         // Get filtered questions (you may update Util::get_questions to handle $search).
         $rows = Util::get_questions( $product_id, $search );
@@ -116,7 +134,11 @@ class Ajax {
     }
 
 
-    // Voting.
+    /**
+     * Vote on a question or answer.
+     *
+     * @return void
+     */
     public function multivendorx_qna_vote() {
         check_ajax_referer( 'qna_ajax_nonce', 'nonce' );
 
@@ -127,8 +149,8 @@ class Ajax {
         global $wpdb;
         $table   = $wpdb->prefix . Utill::TABLES['product_qna'];
         $user_id = get_current_user_id();
-        $qna_id  = intval( $_POST['qna_id'] );
-        $type    = $_POST['type'] === 'up' ? 1 : -1;
+        $qna_id  = filter_input( INPUT_POST, 'qna_id', FILTER_VALIDATE_INT );
+        $type    = ( sanitize_text_field( filter_input( INPUT_POST, 'type', FILTER_UNSAFE_RAW ) ) === 'up' ) ? 1 : -1;
 
         // Get current voters and total_votes.
         $row         = $wpdb->get_row( $wpdb->prepare( "SELECT voters, total_votes FROM $table WHERE id = %d", $qna_id ) );

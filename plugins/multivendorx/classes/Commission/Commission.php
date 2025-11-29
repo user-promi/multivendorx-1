@@ -4,6 +4,7 @@
  *
  * @package MultiVendorX\Commission
  */
+
 namespace MultiVendorX\Commission;
 
 use MultiVendorX\Vendor\VendorUtil;

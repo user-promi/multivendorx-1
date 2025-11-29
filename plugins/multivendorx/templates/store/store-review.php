@@ -15,7 +15,7 @@ $user         = wp_get_current_user();
 $parameters   = MultiVendorX()->setting->get_setting( 'ratings_parameters', array() );
 
 // Default values.
-$review_status          = '';
+$review_status = '';
 // Default true.
 $is_verified_buyer      = 0;
 $is_verified_buyer_only = reset( MultiVendorX()->setting->get_setting( 'is_storereview_varified', array() ) ) ?? false;

@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Vendor Util class
+ *
+ * @package MultivendorX
+ */
 namespace MultiVendorX\Vendor;
 
 defined( 'ABSPATH' ) || exit;
@@ -11,12 +15,11 @@ defined( 'ABSPATH' ) || exit;
  * @package     MultiVendorX
  * @author      MultiVendorX
  */
-
 class VendorUtil {
     /**
      * Get the vendor object of product
      *
-     * @param   mixed $product_id
+     * @param   mixed $product_id ID of product.
      * @return  object
      */
     public static function get_products_vendor( $product_id ) {
@@ -46,7 +49,7 @@ class VendorUtil {
     /**
      * Get individual vendor info by term id
      *
-     * @param   int $term_id ID of term
+     * @param   int $term_id ID of term.
      * @return  object | null
      */
     public static function get_vendor_by_term( $term_id ) {
@@ -64,7 +67,7 @@ class VendorUtil {
      * Get the vendor object from vendor id.
      * If the id is not a vendor id it return null.
      *
-     * @param   mixed $vendor_id
+     * @param   mixed $vendor_id Vendor id.
      * @return  \MVX_Vendor|null
      */
     public static function get_vendor( $vendor_id = 0 ) {
@@ -79,7 +82,7 @@ class VendorUtil {
     /**
      * Check if a user is vendor or not.
      *
-     * @param   mixed $user
+     * @param   mixed $user User id to check for vendor role.
      * @return  mixed
      */
     public static function is_user_vendor( $user ) {
@@ -87,13 +90,13 @@ class VendorUtil {
             if ( ! is_object( $user ) ) {
                 $user = new \WP_User( absint( $user ) );
             }
-            return apply_filters( 'is_user_mvx_vendor', ( is_array( $user->roles ) && in_array( 'dc_vendor', $user->roles ) ), $user );
+            return apply_filters( 'is_user_mvx_vendor', ( is_array( $user->roles ) && in_array( 'dc_vendor', $user->roles, true ) ), $user );
         }
         return false;
     }
 
     /**
-     * get current logged in vendor id
+     * Get current logged in vendor id
      *
      * @return int
      */

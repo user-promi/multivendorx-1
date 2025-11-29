@@ -13,6 +13,7 @@
  * @package dc-woocommerce-multi-vendor/Templates
  * @version 2.3.4
  */
+
 global $product;
 
 $more_products = $args['more_products'];

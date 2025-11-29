@@ -8,22 +8,34 @@ defined( 'ABSPATH' ) || exit;
 
 class StripeConnect {
 
-
+    /**
+     * Constructor
+     */
     public function __construct() {
         add_action( 'multivendorx_process_stripe-connect_payment', array( $this, 'process_payment' ), 10, 5 );
 
-        // Register AJAX
+        // Register AJAX.
         add_action( 'wp_ajax_create_stripe_account', array( $this, 'ajax_create_account' ) );
         add_action( 'wp_ajax_disconnect_stripe_account', array( $this, 'ajax_disconnect_account' ) );
 
-        // Use admin_post endpoint for OAuth callback (works whether user is logged-in or not)
+        // Use admin_post endpoint for OAuth callback (works whether user is logged-in or not).
         add_action( 'admin_post_multivendorx_stripe_oauth_callback', array( $this, 'handle_oauth_callback' ) );
     }
 
+    /**
+     * Get payment method ID
+     *
+     * @return string
+     */
     public function get_id() {
         return 'stripe-connect';
     }
 
+    /**
+     * Get payment method settings
+     *
+     * @return array
+     */
     public function get_settings() {
         $redirect_url = admin_url( 'admin-post.php?action=multivendorx_stripe_oauth_callback' );
         return array(
@@ -74,6 +86,9 @@ class StripeConnect {
         );
     }
 
+    /**
+     * Get store payment settings
+     */
     public function get_store_payment_settings() {
         $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
         $stripe_settings        = $payment_admin_settings['stripe-connect'] ?? array();
@@ -126,6 +141,15 @@ class StripeConnect {
         }
     }
 
+    /**
+     * Process payment
+     *
+     * @param int    $store_id
+     * @param float  $amount
+     * @param int    $order_id
+     * @param string $transaction_id
+     * @param string $note
+     */
     public function process_payment( $store_id, $amount, $order_id = null, $transaction_id = null, $note = null ) {
         $store             = new Store( $store_id );
         $stripe_account_id = $store->get_meta( '_stripe_connect_account_id' );
@@ -145,6 +169,9 @@ class StripeConnect {
         do_action( 'multivendorx_after_payment_complete', $store_id, 'Stripe Connect', $status, $order_id, $transaction_id, $note, $amount );
     }
 
+    /**
+     * Create Stripe account
+     */
     public function ajax_create_account() {
         $store_id               = get_user_meta( get_current_user_id(), 'multivendorx_active_store', true );
         $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
@@ -155,11 +182,11 @@ class StripeConnect {
             wp_send_json_error( array( 'message' => __( 'Stripe Client ID not configured.', 'multivendorx' ) ) );
         }
 
-        // Use admin-post.php as redirect
+        // Use admin-post.php as redirect.
         $redirect_uri = admin_url( 'admin-post.php?action=multivendorx_stripe_oauth_callback' );
         $state        = wp_generate_password( 24, false, false );
 
-        // Store store ID in option for verification
+        // Store store ID in option for verification.
         $store = new Store( $store_id );
         $store->update_meta(
             'stripe_oauth_state',
@@ -190,7 +217,9 @@ class StripeConnect {
         );
     }
 
-
+    /**
+     * Handle Stripe OAuth callback
+     */
     public function handle_oauth_callback() {
         $code  = sanitize_text_field( filter_input( INPUT_GET, 'code', FILTER_DEFAULT ) );
         $state = sanitize_text_field( filter_input( INPUT_GET, 'state', FILTER_DEFAULT ) );
@@ -198,7 +227,7 @@ class StripeConnect {
             wp_safe_redirect( $this->get_redirect_url( 'error', 'stripe_oauth' ) );
             exit;
         }
-        // We don't know store_id yet → search it via active vendor store
+        // We don't know store_id yet → search it via active vendor store.
         $store_id   = get_user_meta( get_current_user_id(), 'multivendorx_active_store', true );
         $store      = new Store( $store_id );
         $state_data = unserialize( $store->get_meta( 'stripe_oauth_state' ) );
@@ -207,7 +236,7 @@ class StripeConnect {
             $state_data['state'] !== $state ||
             ( time() - $state_data['time'] ) > 600
         ) {
-            // Invalid or expired
+            // Invalid or expired.
             $store->delete_meta( 'stripe_oauth_state' );
             wp_safe_redirect( $this->get_redirect_url( 'error', 'invalid_state' ) );
             exit;
@@ -221,7 +250,7 @@ class StripeConnect {
         $secret_key             = $stripe_settings['secret_key'] ?? '';
         $client_id              = $stripe_settings['client_id'] ?? '';
 
-        // Stripe OAuth Token Request
+        // Stripe OAuth Token Request.
         $response = $this->make_stripe_api_call(
             'https://connect.stripe.com/oauth/token',
             array(
@@ -231,12 +260,12 @@ class StripeConnect {
                 'code'          => $code,
             )
         );
-        // Missing stripe_user_id -> fail
+        // Missing stripe_user_id -> fail.
         if ( $response && empty( $response['stripe_user_id'] ) ) {
             wp_safe_redirect( $this->get_redirect_url( 'error', 'stripe_connection_failed' ) );
             exit;
         }
-        // Update store meta
+        // Update store meta.
         $meta_updates = array(
             '_stripe_connect_account_id' => $response['stripe_user_id'],
             '_store_payment_mode'        => 'stripe-connect',
@@ -249,17 +278,20 @@ class StripeConnect {
         foreach ( $meta_updates as $key => $value ) {
             $store->update_meta( $key, sanitize_text_field( $value ) );
         }
-        // Success
+        // Success.
         wp_safe_redirect( $this->get_redirect_url( '', '' ) );
         exit;
     }
 
+    /**
+     * Disconnect Stripe account
+     */
     public function ajax_disconnect_account() {
 
         $store_id = get_user_meta( get_current_user_id(), 'multivendorx_active_store', true );
         $store    = new Store( $store_id );
 
-        // Delete all Stripe-related meta using the same Store object method
+        // Delete all Stripe-related meta using the same Store object method.
         $meta_keys = array(
             '_stripe_connect_account_id',
             '_store_payment_mode',
@@ -291,6 +323,9 @@ class StripeConnect {
         return $base_url;
     }
 
+    /**
+     * Create transfer
+     */
     public function create_transfer( $amount, $destination, $order_id ) {
 
         $transfer_data = array(

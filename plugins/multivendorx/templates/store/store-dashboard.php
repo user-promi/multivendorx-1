@@ -13,7 +13,7 @@ $store_ids    = $page_info['store_ids'] ?? array();
 $available_stores = array_filter(
     $store_ids,
     function ( $id ) use ( $active_store ) {
-        // Skip the active store if it exists in the list
+        // Skip the active store if it exists in the list.
         return $active_store ? ( $id !== $active_store ) : true;
     }
 );

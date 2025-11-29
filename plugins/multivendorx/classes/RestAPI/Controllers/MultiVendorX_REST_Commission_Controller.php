@@ -17,6 +17,11 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
 	 */
 	protected $rest_base = 'commission';
 
+    /**
+	 * Register routes.
+	 *
+	 * @return void
+	 */
     public function register_routes() {
         register_rest_route(
             MultiVendorX()->rest_namespace,
@@ -56,20 +61,42 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         );
     }
 
+    /**
+     * GET permission check.
+     *
+     * @param object $request
+     * @return bool
+     */
     public function get_items_permissions_check( $request ) {
         return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
     }
 
-    // POST permission
+    /**
+     * POST permission check.
+     *
+     * @param object $request
+     * @return bool
+     */
     public function create_item_permissions_check( $request ) {
         return current_user_can( 'manage_options' ) || current_user_can( 'edit_stores' );
     }
 
+    /**
+     * PUT permission check.
+     *
+     * @param object $request
+     * @return bool
+     */
     public function update_item_permissions_check( $request ) {
         return current_user_can( 'manage_options' ) || current_user_can( 'edit_stores' );
     }
 
-    // GET
+    /**
+     * GET all commissions.
+     *
+     * @param object $request
+     * @return object
+     */
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
@@ -88,7 +115,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
             return $error;
         }
         try {
-            // Check if CSV download is requested
+            // Check if CSV download is requested.
             $format = $request->get_param( 'format' );
             if ( $format === 'csv' ) {
                 return $this->download_csv( $request );
@@ -100,16 +127,16 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
                 $top_stores = $request->get_param( 'top_stores' );
 
                 if ( $storeId ) {
-                    // If a specific store ID is provided, return commission summary for that store
+                    // If a specific store ID is provided, return commission summary for that store.
                     return CommissionUtil::get_commission_summary_for_store( $storeId );
                 }
 
                 if ( $top_stores ) {
-                    // If top_stores is provided, return commission summary for top stores
+                    // If top_stores is provided, return commission summary for top stores.
                     return CommissionUtil::get_commission_summary_for_store( null, $top_stores, $top_stores );
                 }
 
-                // Default: return summary for all stores
+                // Default: return summary for all stores.
                 return CommissionUtil::get_commission_summary_for_store();
             }
 
@@ -121,11 +148,11 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
             $start_date = date( 'Y-m-d 00:00:00', strtotime( sanitize_text_field( $request->get_param( 'startDate' ) ) ) );
             $end_date   = date( 'Y-m-d 23:59:59', strtotime( sanitize_text_field( $request->get_param( 'endDate' ) ) ) );
 
-            // ADD THESE LINES FOR SORTING
+            // ADD THESE LINES FOR SORTING.
             $orderBy = sanitize_text_field( $request->get_param( 'orderBy' ) );
             $order   = sanitize_text_field( $request->get_param( 'order' ) );
 
-            // Prepare filter for CommissionUtil
+            // Prepare filter for CommissionUtil.
             $filter = array(
                 'perpage' => $limit,
                 'page'    => $page,
@@ -146,7 +173,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
                 );
             }
 
-            // ADD SORTING TO FILTER
+            // ADD SORTING TO FILTER.
             if ( ! empty( $orderBy ) && ! empty( $order ) ) {
                 $filter['orderBy'] = $orderBy;
                 $filter['order']   = $order;
@@ -211,13 +238,13 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
                 );
             }
 
-            // Prepare base filter (for store-specific counts)
+            // Prepare base filter (for store-specific counts).
             $base_filter = array();
             if ( ! empty( $storeId ) && ! current_user_can( 'manage_options' ) ) {
                 $base_filter['store_id'] = intval( $storeId );
             }
 
-            // Status-wise counts with store/date filters applied
+            // Status-wise counts with store/date filters applied.
             $all                = CommissionUtil::get_commissions( $base_filter, true, true );
             $paid               = CommissionUtil::get_commissions( array_merge( $base_filter, array( 'status' => 'paid' ) ), true, true );
             $unpaid             = CommissionUtil::get_commissions( array_merge( $base_filter, array( 'status' => 'unpaid' ) ), true, true );
@@ -247,6 +274,11 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         }
     }
 
+    /**
+     * Download CSV for commission data.
+     *
+     * @param object $request The request object.
+     */
     private function download_csv( $request ) {
         $storeId    = $request->get_param( 'store_id' );
         $status     = $request->get_param( 'status' );
@@ -256,7 +288,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         $page       = $request->get_param( 'page' );
         $per_page   = $request->get_param( 'row' );
 
-        // Prepare filter for CommissionUtil - NO pagination by default
+        // Prepare filter for CommissionUtil - NO pagination by default.
         $filter = array();
 
         if ( ! empty( $storeId ) ) {
@@ -274,25 +306,25 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
             );
         }
 
-        // If specific IDs are requested (selected rows from bulk action)
+        // If specific IDs are requested (selected rows from bulk action).
         if ( ! empty( $ids ) ) {
             $filter['id__in'] = array_map( 'intval', explode( ',', $ids ) );
         }
-        // If pagination parameters are provided (current page export from bulk action)
+        // If pagination parameters are provided (current page export from bulk action).
         elseif ( ! empty( $page ) && ! empty( $per_page ) ) {
             $filter['perpage'] = intval( $per_page );
             $filter['page']    = intval( $page );
         }
-        // Otherwise, export ALL data with current filters (no pagination - from Export All button)
+        // Otherwise, export ALL data with current filters (no pagination - from Export All button).
 
-        // Fetch commissions
+        // Fetch commissions.
         $commissions = \MultiVendorX\Commission\CommissionUtil::get_commissions( $filter, false );
 
         if ( empty( $commissions ) ) {
             return new \WP_Error( 'no_data', __( 'No commission data found.', 'multivendorx' ), array( 'status' => 404 ) );
         }
 
-        // CSV headers
+        // CSV headers.
         $headers = array(
             'ID',
             'Order ID',
@@ -310,11 +342,11 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
             'Currency',
         );
 
-        // Build CSV data
+        // Build CSV data.
         $csv_output = fopen( 'php://output', 'w' );
         ob_start();
 
-        // Add BOM for UTF-8 compatibility
+        // Add BOM for UTF-8 compatibility.
         fwrite( $csv_output, "\xEF\xBB\xBF" );
 
         fputcsv( $csv_output, $headers );
@@ -347,7 +379,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         fclose( $csv_output );
         $csv = ob_get_clean();
 
-        // Determine filename based on context
+        // Determine filename based on context.
         $filename = 'commissions_';
         if ( ! empty( $ids ) ) {
             $filename .= 'selected_';
@@ -358,7 +390,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         }
         $filename .= date( 'Y-m-d' ) . '.csv';
 
-        // Send headers for browser download
+        // Send headers for browser download.
         header( 'Content-Type: text/csv; charset=UTF-8' );
         header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
         header( 'Pragma: no-cache' );
@@ -368,6 +400,11 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         exit;
     }
 
+    /**
+     * Get a single commission.
+     *
+     * @param object $request The request object.
+     */
     public function get_item( $request ) {
         // Verify nonce
         $nonce = $request->get_header( 'X-WP-Nonce' );
@@ -387,10 +424,10 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
             return $error;
         }
         try {
-            // Get commission ID from request
+            // Get commission ID from request.
             $id = absint( $request->get_param( 'id' ) );
 
-            // Fetch raw commission data (stdClass)
+            // Fetch raw commission data (stdClass).
             $commission = \MultiVendorX\Commission\CommissionUtil::get_commission_db( $id );
             if ( ! $commission || empty( $commission->ID ) ) {
                 return new \WP_Error(
@@ -400,7 +437,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
                 );
             }
 
-            // Validate order ID
+            // Validate order ID.
             if ( empty( $commission->order_id ) ) {
                 return new \WP_Error(
                     'missing_order',
@@ -420,7 +457,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
                 );
             }
 
-            // Build line items
+            // Build line items.
             $items = array();
             foreach ( $order->get_items() as $item_id => $item ) {
                 $product = $item->get_product();
@@ -435,23 +472,23 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
                 );
             }
 
-            // Prepare response
+            // Prepare response.
             $response = array(
                 'commission_id'          => absint( $commission->ID ),
                 'order_id'               => $order_id,
                 'store_id'               => absint( $commission->store_id ),
                 'status'                 => $commission->status,
 
-                // Corrected variable mappings
+                // Corrected variable mappings.
                 'amount'                 => wc_format_decimal( $commission->store_earning, 2 ),
                 'shipping'               => wc_format_decimal( $commission->store_shipping, 2 ),
                 'tax'                    => wc_format_decimal( $commission->store_tax, 2 ),
                 'shipping_tax_amount'    => wc_format_decimal( $commission->store_shipping_tax, 2 ),
 
-                // Total payable to vendor (your earlier 'commission_total' does not exist)
+                // Total payable to vendor (your earlier 'commission_total' does not exist).
                 'total'                  => wc_format_decimal( $commission->store_payable, 2 ),
 
-                // Refund stored as store_refunded
+                // Refund stored as store_refunded.
                 'commission_refunded'    => wc_format_decimal( $commission->store_refunded ?? 0, 2 ),
 
                 'marketplace_commission' => wc_format_decimal( $commission->marketplace_commission, 2 ),
@@ -478,6 +515,11 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         }
     }
 
+    /**
+     * Update a commission.
+     *
+     * @param object $request The request object.
+     */
     public function update_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {

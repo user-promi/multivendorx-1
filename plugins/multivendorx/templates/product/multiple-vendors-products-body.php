@@ -23,14 +23,14 @@ $more_product_array = $args['more_product_array'];
 $single_pro = $product;
 if ( isset( $more_product_array ) && is_array( $more_product_array ) && count( $more_product_array ) > 0 ) {
 	if ( isset( $sorting ) && ! empty( $sorting ) ) {
-		if ( $sorting == 'price' ) {
+		if ( 'price' == $sorting ) {
 			usort(
                 $more_product_array,
                 function ( $a, $b ) {
 					return $a['price_val'] - $b['price_val'];
 				}
             );
-		} elseif ( $sorting == 'price_high' ) {
+		} elseif ( 'price_high' == $sorting ) {
 			usort(
                 $more_product_array,
                 function ( $a, $b ) {
@@ -69,7 +69,7 @@ if ( isset( $more_product_array ) && is_array( $more_product_array ) && count( $
 			</div>
 			<div class="rowsub">
 				<?php
-                                // reset global $product variable
+                                // reset global $product variable.
                                 global $product;
                                 $product = $_product;
                                 woocommerce_template_loop_add_to_cart(
@@ -86,7 +86,7 @@ if ( isset( $more_product_array ) && is_array( $more_product_array ) && count( $
 		
 		<?php
 	}
-        // reset again with global product
+        // reset again with global product.
         global $product;
         $product = $single_pro;
 }

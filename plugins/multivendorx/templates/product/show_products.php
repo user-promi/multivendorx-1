@@ -1,4 +1,9 @@
 <?php
+/**
+ * Template for displaying vendor products list table.
+ *
+ * @package MultiVendorX
+ */
 $query = $args['query'];
 
 $view_products_list_table_headers = apply_filters(

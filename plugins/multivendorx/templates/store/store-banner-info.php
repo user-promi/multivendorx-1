@@ -1,4 +1,11 @@
 <?php
+/**
+ * Template to display the vendor store banner and details.
+ *
+ * @package MultiVendorX
+ * @subpackage Templates
+ */
+
 use MultiVendorX\store\store;
 
 $store_id = $args['store_id'];
@@ -9,16 +16,16 @@ if ( ! $store ) {
     return;
 }
 
-$meta_data        = $store->get_all_meta();
-$banner           = $meta_data['banner'] ?? MultiVendorX()->plugin_url . 'assets/images/banner-placeholder.jpg';
-$profile          = $meta_data['image'] ?? MultiVendorX()->plugin_url . 'assets/images/default-store.jpg';
-$description      = $store->get( 'description' );
-$template         = MultiVendorX()->setting->get_setting( 'store_banner_template', array() );
-$selectedTemplate = isset( $template['selectedPalette'] ) ? $template['selectedPalette'] : 'template1';
+$meta_data         = $store->get_all_meta();
+$banner            = $meta_data['banner'] ?? MultiVendorX()->plugin_url . 'assets/images/banner-placeholder.jpg';
+$profile           = $meta_data['image'] ?? MultiVendorX()->plugin_url . 'assets/images/default-store.jpg';
+$description       = $store->get( 'description' );
+$template          = MultiVendorX()->setting->get_setting( 'store_banner_template', array() );
+$selected_template = isset( $template['selectedPalette'] ) ? $template['selectedPalette'] : 'template1';
 
 ?>
 
-<div class="multivendorx-banner <?php echo esc_attr( $selectedTemplate ); ?>">
+<div class="multivendorx-banner <?php echo esc_attr( $selected_template ); ?>">
     <div class="banner-img">
         <?php if ( ! empty( $banner ) ) : ?>
             <img src="<?php echo esc_url( $banner ); ?>" alt="">
@@ -83,19 +90,19 @@ $selectedTemplate = isset( $template['selectedPalette'] ) ? $template['selectedP
                 <div class="contact-details">
                     <div class="row">
                         <?php
-                        // Show email if not hidden
+                        // Show email if not hidden.
                         if ( ! empty( $meta_data['email'] ) && ( $meta_data['hideEmail'] ?? 'no' ) === 'no' ) {
                             echo '<div class="store-email"><i class="adminlib-mail"></i> ' . esc_html( $meta_data['email'] ) . '</div>';
                         }
 
-                        // Show phone if not hidden
+                        // Show phone if not hidden.
                         if ( ! empty( $meta_data['phone'] ) && ( $meta_data['hidePhone'] ?? 'no' ) === 'no' ) {
                             echo '<div class="store-phone"> <i class="adminlib-form-phone"></i>' . esc_html( $meta_data['phone'] ) . '</div>';
                         }
                         ?>
                     </div>
                     <?php
-                    // Show full address
+                    // Show full address.
                     $address = trim( ( $meta_data['address_1'] ?? '' ) . ' ' . ( $meta_data['address_2'] ?? '' ) );
                     if ( ! empty( $address ) ) {
                         echo '<div class="store-address"> <i class="adminlib-location"></i>' . esc_html( $address ) . '</div>';

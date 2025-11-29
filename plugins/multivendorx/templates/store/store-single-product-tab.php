@@ -10,7 +10,7 @@ if ( $store ) {
 
     $details = MultiVendorX()->frontend->show_store_info( $product->get_id() );
     if ( $details ) {
-        // Filter to control whether to show "Meet our ..." format
+        // Filter to control whether to show "Meet our ..." format.
         $show_meet_text = apply_filters( 'mvx_show_meet_seller_text', true, $details );
 
         if ( $show_meet_text ) {
@@ -30,7 +30,7 @@ if ( $store ) {
             $heading_text = esc_html( $details['name'] );
         }
 
-        // Start vendor info block
+        // Start vendor info block.
         $html .= '<div class="product-store-info">';
         $html .= '<div class="header">' . $details['logo_html'];
         $html .= '<div class="heading-wrapper"> <h4 class="heading">' . $heading_text . '</h4>';

@@ -26,6 +26,11 @@ class Frontend {
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
     }
 
+    /**
+     * Load scripts
+     *
+     * @return void
+     */
     public function load_scripts() {
         FrontendScripts::load_scripts();
         FrontendScripts::enqueue_script( 'multivendorx-qna-frontend-script' );
@@ -58,7 +63,7 @@ class Frontend {
                 )
             );
 
-            $qna_count = intval( $qna_count ); // ensure integer
+            $qna_count = intval( $qna_count );
         }
 
         $tabs['product_qna'] = array(

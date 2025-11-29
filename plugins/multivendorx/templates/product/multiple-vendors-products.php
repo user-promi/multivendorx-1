@@ -13,6 +13,7 @@
  * @package dc-woocommerce-multi-vendor/Templates
  * @version 2.3.4
  */
+
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
@@ -29,7 +30,7 @@ if ( count( $more_product_array ) > 0 ) {
             <div class="rowsub "><?php echo esc_html_e( 'Vendor', 'multivendorx' ); ?></div>
             <div class="rowsub"><?php echo esc_html_e( 'Price', 'multivendorx' ); ?></div>
             <div class="rowsub">
-                <select name="mvx_multiple_product_sorting" id="mvx_multiple_product_sorting" class="mvx_multiple_product_sorting" attrid="<?php echo $post->ID; ?>" >
+                <select name="mvx_multiple_product_sorting" id="mvx_multiple_product_sorting" class="mvx_multiple_product_sorting" attrid="<?php echo esc_attr( $post->ID ); ?>" >
                     <option value="price"><?php echo esc_html_e( 'Price Low To High', 'multivendorx' ); ?></option>
                     <option value="price_high"><?php echo esc_html_e( 'Price High To Low', 'multivendorx' ); ?></option>
                     <option value="rating"><?php echo esc_html_e( 'Rating High To Low', 'multivendorx' ); ?></option>

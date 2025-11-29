@@ -68,7 +68,7 @@ class Roles {
     /**
      * Assign capability to authenticate user
      *
-     * @param array $allcaps
+     * @param array $allcaps All capabilities.
      *
      * @return array
      */
@@ -104,10 +104,10 @@ class Roles {
     /**
      * Specific capability for store owner
      *
-     * @param array  $caps
-     * @param string $cap
-     * @param int    $user_id
-     * @param array  $args
+     * @param array  $caps Capabilities.
+     * @param string $cap Capability.
+     * @param int    $user_id User ID.
+     * @param array  $args Arguments.
      *
      * @return array
      */

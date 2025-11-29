@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * The template for displaying vendor add product
  * Override this template by copying it to yourtheme/MultiVendorX/vendor-dashboard/product-manager/add-product.php
  *
@@ -14,12 +14,12 @@ $self = $args['self'];
 
 $current_vendor_id = apply_filters( 'mvx_current_loggedin_vendor_id', get_current_user_id() );
 
-// If vendor does not have product submission cap then show message
+// If vendor does not have product submission cap then show message.
 if ( is_user_logged_in() && ! current_user_can( 'edit_products' ) ) {
     ?>
     <div class="col-md-12">
         <div class="panel panel-default">
-            <?php _e( 'You do not have enough permission to submit a new product. Please contact site administrator.', 'multivendorx' ); ?>
+            <?php esc_html_e( 'You do not have enough permission to submit a new product. Please contact site administrator.', 'multivendorx' ); ?>
         </div>
     </div>
     <?php
@@ -39,12 +39,12 @@ if ( is_user_logged_in() && ! current_user_can( 'edit_products' ) ) {
             <div class="cat-step1" >
                 <div class="panel panel-default pannel-outer-heading mt-0">
                     <div class="panel-heading d-flex">
-                        <h1><span class="primary-color"><span><?php _e( 'Step 1 of', 'multivendorx' ); ?></span> <?php _e( '2:', 'multivendorx' ); ?></span> <?php _e( 'Select a product category', 'multivendorx' ); ?></h1>
-                        <h3><?php _e( 'Once a category is assigned to a product, it cannot be altered.', 'multivendorx' ); ?></h3>
+                        <h1><span class="primary-color"><span><?php esc_html_e( 'Step 1 of', 'multivendorx' ); ?></span> <?php esc_html_e( '2:', 'multivendorx' ); ?></span> <?php esc_html_e( 'Select a product category', 'multivendorx' ); ?></h1>
+                        <h3><?php esc_html_e( 'Once a category is assigned to a product, it cannot be altered.', 'multivendorx' ); ?></h3>
                     </div>
                     <div class="panel-body panel-content-padding form-horizontal breadcrumb-panel">
                         <div class="product-search-wrapper categories-search-wrapper">
-                            <div class="form-text"><?php _e( 'Search category', 'multivendorx' ); ?></div>
+                            <div class="form-text"><?php esc_html_e( 'Search category', 'multivendorx' ); ?></div>
                             <div class="form-input">
                                 <input id="search-categories-keyword" type="text" placeholder="<?php esc_attr_e( 'Example: tshirt, music, album etc...', 'multivendorx' ); ?>">
                                 <ul id="searched-categories-results" class="list-group">
@@ -87,9 +87,9 @@ if ( is_user_logged_in() && ! current_user_can( 'edit_products' ) ) {
             <div class="panel panel-default pannel-outer-heading mt-0"> 
                 <div class="panel-body panel-content-padding form-horizontal text-center">
                     <img src="<?php echo MultiVendorX()->plugin_url . 'assets/images/add-product-graphic.png'; ?>" alt="">
-                    <h1 class="heading-underline"><?php _e( 'List a New Product', 'multivendorx' ); ?></h1>
+                    <h1 class="heading-underline"><?php esc_html_e( 'List a New Product', 'multivendorx' ); ?></h1>
                     <div class="serach-product-cat-wrapper">
-                        <h2><?php _e( 'Search from our existing Product Catalog', 'multivendorx' ); ?></h2>
+                        <h2><?php esc_html_e( 'Search from our existing Product Catalog', 'multivendorx' ); ?></h2>
                         <form class="search-pro-by-name-gtin">
                             <input type="text" placeholder="<?php esc_attr_e( 'Product name, UPC, ISBN ...', 'multivendorx' ); ?>" class="form-control inline-input search-product-name-gtin-keyword" required>
                             <button type="button" class="btn btn-default search-product-name-gtin-btn"><?php echo strtoupper( __( 'Search', 'multivendorx' ) ); ?></button> 
@@ -111,12 +111,12 @@ if ( is_user_logged_in() && ! current_user_can( 'edit_products' ) ) {
                             $url = $category_url;
                         }
                         ?>
-                        <p><?php _e( 'Not in the catalog?', 'multivendorx' ); ?> <a href="<?php echo $url; ?>" class="cat-step-btn"><?php _e( 'Create a new product', 'multivendorx' ); ?> <i class="mvx-font ico-right-arrow-icon"></i></a></p>
+                        <p><?php esc_html_e( 'Not in the catalog?', 'multivendorx' ); ?> <a href="<?php echo $url; ?>" class="cat-step-btn"><?php esc_html_e( 'Create a new product', 'multivendorx' ); ?> <i class="mvx-font ico-right-arrow-icon"></i></a></p>
                     </div>
                 </div>
             </div>
             <div class="panel panel-custom mt-15 product-search-panel searched-products-name-gtin-panel">
-                <div class="panel-heading d-flex"><?php _e( 'Your search results:', 'multivendorx' ); ?></div>
+                <div class="panel-heading d-flex"><?php esc_html_e( 'Your search results:', 'multivendorx' ); ?></div>
                 <div class="panel-body search-result-holder p-0 searched-result-products-name-gtin"></div>
             </div>
             <div id="result-view-all-products-name"></div>          

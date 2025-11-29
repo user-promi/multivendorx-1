@@ -154,6 +154,11 @@ final class MultiVendorX {
         flush_rewrite_rules();
     }
 
+    /**
+     * Register setup wizard.
+     *
+     * @return void
+     */
     public function multivendorx_register_setup_wizard() {
         new SetupWizard();
         if ( get_option( 'multivendorx_plugin_activated' ) ) {

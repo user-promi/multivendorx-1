@@ -1,7 +1,10 @@
 <?php
 /**
  * Multivendorx REST API Logs Controller class.
+ *
+ * @package multivendorx
  */
+
 namespace MultiVendorX\RestAPI\Controllers;
 
 defined( 'ABSPATH' ) || exit;

@@ -47,7 +47,7 @@ class Product {
         foreach ( $columns as $key => $title ) {
             $new_columns[ $key ] = $title;
 
-            // Insert the custom column 'store_id' after 'name'
+            // Insert the custom column 'store_id' after 'name'.
             if ( 'name' === $key ) {
                 $new_columns['store_id'] = __( 'Store', 'multivendorx' );
             }
@@ -82,11 +82,14 @@ class Product {
         }
     }
 
+    /**
+     * Add the store dropdown to the products list
+     */
     public function restrict_manage_posts() {
         global $typenow;
 
-        // Only show on Products admin list
-        if ( $typenow !== 'product' ) {
+        // Only show on Products admin list.
+        if ( 'product' !== $typenow ) {
             return;
         }
 
@@ -111,9 +114,11 @@ class Product {
             return;
         }
 
-        // Build dropdown
-        $selected_store = sanitize_text_field( filter_input( INPUT_GET, 'multivendorx_store_id', FILTER_DEFAULT ) ) ?: '';
-
+        // Build dropdown.
+        $selected_store = sanitize_text_field(
+            filter_input( INPUT_GET, 'multivendorx_store_id', FILTER_DEFAULT )
+        );
+        $selected_store = ! empty( $selected_store ) ? $selected_store : '';
         echo '<select name="multivendorx_store_id">';
         echo '<option value="">Filter by Store</option>';
 
@@ -132,13 +137,15 @@ class Product {
 
     /**
      * Filter products list by Store ID
+     *
+     * @param WP_Query $query The current query.
      */
     public function filter_products_by_store_query( $query ) {
         global $typenow, $pagenow;
         $store_id = filter_input( INPUT_GET, 'multivendorx_store_id', FILTER_SANITIZE_NUMBER_INT );
 
         if (
-            $pagenow === 'edit.php' &&
+            'edit.php' === $pagenow &&
             ! empty( $store_id ) &&
             'product' == $typenow
         ) {
@@ -152,8 +159,11 @@ class Product {
         }
     }
 
+    /**
+     * Add the store dropdown to the bulk edit panel
+     */
     public function add_product_store_bulk_edit() {
-        $stores = StoreUtil::get_store(); // fetch stores
+        $stores = StoreUtil::get_store(); // Fetch stores.
         ?>
         <div class="inline-edit-group">
             <label class="alignleft">
@@ -163,7 +173,7 @@ class Product {
                     <?php
                     if ( ! empty( $stores ) ) {
                         foreach ( $stores as $store ) {
-                            echo '<option value="' . esc_attr( $store['ID'] ) . '">' . $store['name'] . '</option>';
+                            echo '<option value="' . esc_attr( $store['ID'] ) . '">' . esc_html( $store['name'] ) . '</option>';
                         }
                     }
                     ?>
@@ -173,6 +183,11 @@ class Product {
         <?php
     }
 
+    /**
+     * Save the store ID when bulk editing products
+     *
+     * @param $product Product object.
+     */
     public function save_product_store_bulk_edit( $product ) {
         $store_id = filter_input( INPUT_GET, 'multivendorx_store_id', FILTER_SANITIZE_NUMBER_INT );
 

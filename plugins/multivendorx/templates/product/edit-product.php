@@ -308,24 +308,26 @@ $product_fileds        = MultiVendorX()->setting->get_setting( 'products_fields'
                                     foreach ( $attachments as $attachment_id ) {
                                         $attachment = wp_get_attachment_image( $attachment_id, 'thumbnail' );
 
-                                        // if attachment is empty skip
+                                        // If attachment is empty skip.
                                         if ( empty( $attachment ) ) {
                                             $update_meta = true;
                                             continue;
                                         }
 
-                                        echo '<li class="image" data-attachment_id="' . esc_attr( $attachment_id ) . '">
-                                                ' . $attachment . '
-                                                <ul class="actions">
-                                                    <li><a href="#" class="delete tips" data-tip="' . esc_attr__( 'Delete image', 'multivendorx' ) . '">' . __( 'Delete', 'multivendorx' ) . '</a></li>
+                                        echo '<li class="image" data-attachment_id="' . esc_attr( $attachment_id ) . '">'
+                                                . wp_kses_post( $attachment ) .
+                                                '<ul class="actions">
+                                                    <li><a href="#" class="delete tips" data-tip="' . esc_attr__( 'Delete image', 'multivendorx' ) . '">'
+                                                    . esc_html__( 'Delete', 'multivendorx' ) . '</a></li>
                                                 </ul>
                                             </li>';
 
-                                        // rebuild ids to be saved
+
+                                        // Rebuild ids to be saved.
                                         $updated_gallery_ids[] = $attachment_id;
                                     }
 
-                                    // need to update product meta to set new gallery ids
+                                    // Need to update product meta to set new gallery ids.
                                     if ( $update_meta ) {
                                         update_post_meta( $post->ID, '_product_image_gallery', implode( ',', $updated_gallery_ids ) );
                                     }
@@ -360,7 +362,7 @@ $product_fileds        = MultiVendorX()->setting->get_setting( 'products_fields'
                             <div class="panel panel-default pannel-outer-heading">
                                 <div class="panel-body panel-content-padding form-group-wrapper">
                                     <?php
-                                    echo $product_categories;
+                                    echo wp_kses_post( $product_categories );
                                     ?>
                                 </div>
                             </div>
@@ -379,13 +381,13 @@ $product_fileds        = MultiVendorX()->setting->get_setting( 'products_fields'
                         <?php
                         $product_tags = $self->mvx_get_product_terms_HTML( 'product_tag', $post->ID, apply_filters( 'mvx_vendor_can_add_product_tag', true, get_current_user_id() ), false );
                         ?>
-                        <?php if ( $product_tags && ! empty( $product_fileds ) && in_array( 'product_tag', $product_fileds ) ) : ?>
+                        <?php if ( $product_tags && ! empty( $product_fileds ) && in_array( 'product_tag', $product_fileds, true ) ) : ?>
                             <div class="panel panel-default pannel-outer-heading">
                                 <div class="panel-body panel-content-padding form-group-wrapper">
                                     <div class="form-group">
                                         <div class="col-md-12">
                                             <?php
-                                            echo $product_tags;
+                                            echo wp_kses_post( $product_tags );
                                             ?>
                                         </div>
                                     </div>
@@ -410,7 +412,7 @@ $product_fileds        = MultiVendorX()->setting->get_setting( 'products_fields'
                             <div class="panel panel-default pannel-outer-heading">
                                 <div class="panel-body panel-content-padding form-group-wrapper">
                                     <?php
-                                    echo $product_brands;
+                                    echo wp_kses_post( $product_brands );
                                     ?>
                                 </div>
                             </div>
@@ -454,7 +456,11 @@ $product_fileds        = MultiVendorX()->setting->get_setting( 'products_fields'
                                     echo '<div class="form-group"><label><input type="radio" name="_visibility" id="_visibility_' . esc_attr( $name ) . '" value="' . esc_attr( $name ) . '" ' . checked( $current_visibility, $name, false ) . ' data-label="' . esc_attr( $label ) . '" /> <span for="_visibility_' . esc_attr( $name ) . '" class="selectit">' . esc_html( $label ) . '</span></label></div>';
                                 }
                                 if ( apply_filters( 'mvx_feature_product_is_enable', true ) ) {
-                                    echo '<hr><div class="form-group"><label><input type="checkbox" name="_featured" class="mt-0" id="_featured" ' . checked( $current_featured, 'yes', false ) . ' data-label="' . __( 'Featured', 'multivendorx' ) . '" /> <span for="_featured">' . esc_html__( 'This is a featured product', 'multivendorx' ) . '</label></label></div>';
+                                    echo '<hr><div class="form-group"><label><input type="checkbox" name="_featured" class="mt-0" id="_featured" '
+                                        . checked( $current_featured, 'yes', false )
+                                        . ' data-label="' . esc_attr__( 'Featured', 'multivendorx' ) . '" />'
+                                        . ' <span for="_featured">' . esc_html__( 'This is a featured product', 'multivendorx' ) . '</span>'
+                                        . '</label></div>';
                                 }
                                 ?>
                                 <div class="buttons-wrapper">

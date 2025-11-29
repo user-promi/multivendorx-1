@@ -16,12 +16,21 @@ namespace MultiVendorX\StorePolicy;
  */
 class Admin {
 
+    /**
+     * Constructor
+     */
     public function __construct() {
         add_filter( 'woocommerce_product_data_tabs', array( $this, 'add_policy_tab_in_product' ) );
         add_action( 'woocommerce_product_data_panels', array( $this, 'add_policy_product_data_panels' ) );
         add_action( 'woocommerce_process_product_meta', array( $this, 'save_policy_in_product' ) );
     }
 
+    /**
+     * Add policy tab in product data panel.
+     *
+     * @param array $product_data_tabs Product data tabs.
+     * @return array
+     */
     public function add_policy_tab_in_product( $product_data_tabs ) {
 		$product_data_tabs['policy'] = array(
 			'label'  => __( 'Policy', 'multivendorx' ),
@@ -30,6 +39,9 @@ class Admin {
 		return $product_data_tabs;
 	}
 
+    /**
+     * Add policy product data panels.
+     */
     public function add_policy_product_data_panels() {
         global $post;
 
@@ -45,7 +57,7 @@ class Admin {
 						?>
                         <label><?php _e( 'Shipping Policy', 'multivendorx' ); ?></label>
                         <?php
-                        // Show TinyMCE editor
+                        // Show TinyMCE editor.
                         wp_editor(
                             $shipping_policy,
                             'shipping_policy',
@@ -77,7 +89,7 @@ class Admin {
                         ?>
                         <label><?php _e( 'Refund Policy', 'multivendorx' ); ?></label>
                         <?php
-                        // Show TinyMCE editor
+                        // Show TinyMCE editor.
                         wp_editor(
                             $refund_policy,
                             'refund_policy',
@@ -110,7 +122,7 @@ class Admin {
 						?>
                         <label><?php _e( 'Cancellation Policy', 'multivendorx' ); ?></label>
                         <?php
-                        // Show TinyMCE editor
+                        // Show TinyMCE editor.
                         wp_editor(
                             $cancellation_policy,
                             'cancellation_policy',
@@ -139,6 +151,11 @@ class Admin {
         <?php
     }
 
+    /**
+     * Save policy in product.
+     *
+     * @param int $post_id Post ID.
+     */
     public function save_policy_in_product( $post_id ) {
         $shipping_policy     = wp_kses_post( filter_input( INPUT_POST, 'shipping_policy', FILTER_UNSAFE_RAW ) );
         $refund_policy       = wp_kses_post( filter_input( INPUT_POST, 'refund_policy', FILTER_UNSAFE_RAW ) );
