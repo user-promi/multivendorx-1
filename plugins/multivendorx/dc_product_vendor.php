@@ -14,6 +14,7 @@
  * Text Domain: multivendorx
  * Requires Plugins: woocommerce
  * Domain Path: /languages/
+ *
  * @package MultiVendorX
  */
 

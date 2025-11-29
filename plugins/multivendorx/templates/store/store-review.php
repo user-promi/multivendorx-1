@@ -5,18 +5,19 @@
  * @package MultiVendorX
  */
 
- if ( ! defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
 $store_id     = $args['store_id'] ?? 0;
 $is_logged_in = is_user_logged_in();
-$user = wp_get_current_user();
+$user         = wp_get_current_user();
 $parameters   = MultiVendorX()->setting->get_setting( 'ratings_parameters', array() );
 
 // Default values.
 $review_status          = '';
-$is_verified_buyer      = 0; // Default true.
+// Default true.
+$is_verified_buyer      = 0;
 $is_verified_buyer_only = reset( MultiVendorX()->setting->get_setting( 'is_storereview_varified', array() ) ) ?? false;
 
 if ( $is_logged_in && $store_id ) {

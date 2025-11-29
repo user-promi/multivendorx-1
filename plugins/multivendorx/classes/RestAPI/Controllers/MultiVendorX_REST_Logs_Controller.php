@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Multivendorx REST API Logs Controller class.
+ */
 namespace MultiVendorX\RestAPI\Controllers;
 
 defined( 'ABSPATH' ) || exit;
@@ -68,24 +70,27 @@ class MultiVendorX_REST_Logs_Controller extends \WP_REST_Controller {
     }
 
     /**
-     * get_items_permissions_check checks the get items permissions.
-     * @param mixed $request
+     * Get_items_permissions_check checks the get items permissions.
+     *
+     * @param mixed $request all requests params from api.
      */
     public function get_items_permissions_check( $request ) {
         return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
     }
 
     /**
-     * create_item_permissions_check creates the item permissions check.
-     * @param mixed $request
+     * Create_item_permissions_check creates the item permissions check.
+     *
+     * @param mixed $request all requests params from api.
      */
     public function create_item_permissions_check( $request ) {
         return current_user_can( 'manage_options' );
     }
 
     /**
-     * update_item_permissions_check updates the item permissions check.
-     * @param mixed $request
+     * Update_item_permissions_check updates the item permissions check.
+     *
+     * @param mixed $request all requests params from api.
      */
     public function update_item_permissions_check( $request ) {
         return current_user_can( 'manage_options' );

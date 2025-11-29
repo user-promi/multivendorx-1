@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Commission class file.
+ *
+ * @package MultiVendorX\Commission
+ */
 namespace MultiVendorX\Commission;
 
 use MultiVendorX\Vendor\VendorUtil;
@@ -16,13 +20,15 @@ defined( 'ABSPATH' ) || exit;
  */
 class Commission {
     /**
-     * commission id.
+     * Commission id.
+     *
      * @var int
      */
     private $id;
     /**
-     * commission information.
-     * @var 
+     * Commission information.
+     *
+     * @var object
      */
     private $commission;
 

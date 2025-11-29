@@ -72,10 +72,10 @@ class Ajax {
         $product_id = intval( $_POST['product_id'] );
         $search     = sanitize_text_field( $_POST['search'] );
 
-        // Get filtered questions (you may update Util::get_questions to handle $search)
+        // Get filtered questions (you may update Util::get_questions to handle $search).
         $rows = Util::get_questions( $product_id, $search );
 
-        // Filter only answered
+        // Filter only answered.
         $answered_rows = array_filter(
             $rows,
             function ( $q ) {
@@ -116,7 +116,7 @@ class Ajax {
     }
 
 
-    // Voting
+    // Voting.
     public function multivendorx_qna_vote() {
         check_ajax_referer( 'qna_ajax_nonce', 'nonce' );
 
@@ -130,7 +130,7 @@ class Ajax {
         $qna_id  = intval( $_POST['qna_id'] );
         $type    = $_POST['type'] === 'up' ? 1 : -1;
 
-        // Get current voters and total_votes
+        // Get current voters and total_votes.
         $row         = $wpdb->get_row( $wpdb->prepare( "SELECT voters, total_votes FROM $table WHERE id = %d", $qna_id ) );
         $voters      = $row->voters ? maybe_unserialize( $row->voters ) : array();
         $total_votes = intval( $row->total_votes );
