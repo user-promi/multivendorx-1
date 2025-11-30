@@ -23,9 +23,6 @@ class Frontend {
         //     add_action( 'mvx_process_product_object', array( $this, 'mvx_save_generated_sku') );
         // }
 
-            add_action( 'mvx_process_product_object', array( $this, 'mvx_save_generated_sku' ) );
-        }
-
         add_action( 'woocommerce_after_shop_loop_item', array( $this, 'add_text_in_shop_and_single_product_page' ), 6 );
         add_action( 'woocommerce_product_meta_start', array( $this, 'add_text_in_shop_and_single_product_page' ), 25 );
         add_action( 'woocommerce_get_item_data', array( $this, 'add_sold_by_text_cart' ), 30, 2 );
