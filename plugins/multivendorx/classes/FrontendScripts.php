@@ -591,7 +591,6 @@ class FrontendScripts {
                         'thousand_sep'             => wc_get_price_thousand_separator(),
                         'decimals'                 => wc_get_price_decimals(),
                         'edit_order_capability'    => current_user_can( 'edit_shop_orders' ),
-                        'add_product_link'         => StoreUtil::get_endpoint_url( 'products', 'edit' ),
                         'permalink_structure'      => get_option( Utill::WORDPRESS_SETTINGS['permalink'] ) ? true : false,
                         'view_notifications_link'  => StoreUtil::get_endpoint_url( 'view-notifications' ),
                         'all_zones'                => apply_filters( 'multivendorx_get_all_store_zones', array() ),

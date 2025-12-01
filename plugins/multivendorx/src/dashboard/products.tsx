@@ -6,7 +6,7 @@ import {
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { formatCurrency } from '../services/commonFunction';
 import AddProductCom from "./add-products";
@@ -71,10 +71,15 @@ const AllProduct: React.FC = () => {
     const [pageCount, setPageCount] = useState(0);
     const [activeTab, setActiveTab] = useState("general");
     const { modules } = useModules();
+    const [newProductId, setNewProductId] = useState(null);
 
     const location = useLocation();
-    const hash = location.hash.replace(/^#/, '') || '';
-    const isAddProduct = hash.includes('add');
+    const navigate = useNavigate();
+
+    const query = new URLSearchParams(location.search);
+    const element = query.get("element");
+
+    const isAddProduct = element === "edit";
 
     const tabs = [
         {
@@ -340,10 +345,11 @@ const AllProduct: React.FC = () => {
                                 label: __('Edit', 'multivendorx'),
                                 icon: 'adminlib-edit',
                                 onClick: (rowData) => {
-                                    // let url = appLocalizer.permalink_structure
-                                    //     ? `${appLocalizer.add_product_link}/${rowData.id}`
-                                    //     : `${appLocalizer.add_product_link}&context_id=${rowData.id}`;
-                                    // window.location.assign(url);
+                                    if (appLocalizer.permalink_structure) {
+                                        navigate(`/${appLocalizer.dashboard_slug}/products/edit/${rowData.id}`);
+                                    } else {
+                                        navigate(`?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=edit&context_id=${rowData.id}`);
+                                    }
                                 },
                                 hover: true
                             },
@@ -612,6 +618,37 @@ const AllProduct: React.FC = () => {
         requestData();
     }
 
+    const createAutoDraftProduct = () => {
+        try {
+            const payload = {
+                title: "Auto Draft",
+                status: "auto-draft"
+            };
+
+            axios.post(`${appLocalizer.apiUrl}/wc/v3/products/`, payload, {
+                headers: { "X-WP-Nonce": appLocalizer.nonce }
+            })
+            .then(res => {
+                console.log("Auto-draft created:", res.data);
+                setNewProductId(res.data.id); 
+            });
+ 
+        } catch (err) {
+            console.error("Error creating auto-draft:", err.response?.data || err);
+        }
+    };
+
+    useEffect(() => {
+        if (!newProductId) return;
+
+        if (appLocalizer.permalink_structure) {
+            navigate(`/${appLocalizer.dashboard_slug}/products/edit/${newProductId}`);
+        } else {
+            navigate(`?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=edit&context_id=${newProductId}`);
+        }
+    }, [newProductId]);
+
+
     return (
         <>
         {!isAddProduct && (
@@ -732,11 +769,13 @@ const AllProduct: React.FC = () => {
                         )}
                         <div
                             className="admin-btn btn-purple-bg"
-                            onClick={() => window.location.hash = `add`}
+                            onClick={() =>{
+                                createAutoDraftProduct();
+                            }}
                         >
-                            <i className="adminlib-plus-circle-o"></i>
-                            Add New
+                            <i className="adminlib-plus-circle-o"></i> Add New
                         </div>
+
                     </div>
                 </div>
                 <div className="admin-table-wrapper">
