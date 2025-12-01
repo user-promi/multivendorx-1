@@ -67,7 +67,7 @@ a {
     .dashboard-tabs {
         height: 87vh;
         position: relative;
-        opacity: 0;
+        // opacity: 0;
     }
 
     ul {
@@ -1049,7 +1049,7 @@ a {
             .tab-name span,
             .admin-arrow,
             .site-name {
-                display: none;
+                // display: none;
             }
         }
 
@@ -1177,7 +1177,7 @@ a {
     border-radius: 0.313rem;
     transition: all 0.3s ease;
     z-index: 9999;
-    display: none;
+    // display: none;
 
     .dropdown-header {
         padding: 1rem 1rem 1rem 1.125rem;

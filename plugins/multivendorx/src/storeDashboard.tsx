@@ -117,12 +117,6 @@ const Dashboard = () => {
     //     setCurrentTab(tab);
     // }, [location.search, endpoints]);
 
-    useEffect(() => {
-        fetch('/wp-json')
-            .then((res) => res.json())
-            .then((data) => setSiteName(data?.name || ''));
-    }, []);
-
     const getCurrentTabFromURL = () => {
         const slug = appLocalizer.dashboard_slug;
 
@@ -255,11 +249,11 @@ const Dashboard = () => {
                     {store_dashboard_logo ? (
                         <img src={store_dashboard_logo} alt="Site Logo" />
                     ) : (
-                        <span className="site-name">{siteName}</span>
+                        <span className="site-name">{appLocalizer.site_name}</span>
                     )}
                 </div>
 
-                {storeData.status === "active" && (
+                {storeData.status == "active" && (
                     <div className="dashboard-tabs">
                         <ul>
                             {Object.entries(menu).map(([key, item]) => {
@@ -458,20 +452,19 @@ const Dashboard = () => {
                 
                 {/* <div className="content-wrapper">{loadComponent(currentTab)}</div> */}
                 <div className="content-wrapper">
-                    
-                        {storeData.status !== "active" ? (
-                            <div className="permission-wrapper">
-                                <i className="adminlib-info red"></i>
-                                <div className="title">
-                                    {storeData.status === "pending"
-                                        ? appLocalizer.settings_databases_value['pending-approval']?.pending_msg
-                                        : storeData.status === "suspended"
-                                        ? appLocalizer.settings_databases_value['suspended']?.suspended_msg
-                                        : storeData.status === "under_review"
-                                        ? appLocalizer.settings_databases_value['under-review']?.under_review_msg
-                                        : storeData.status === "rejected"
-                                        ? 
-                                        <>
+                    {storeData.length > 0 && storeData.status !== "active" ? (
+                        <div className="permission-wrapper">
+                            <i className="adminlib-info red"></i>
+                            <div className="title">
+                                {storeData.status === "pending"
+                                    ? appLocalizer.settings_databases_value['pending-approval']?.pending_msg
+                                    : storeData.status === "suspended"
+                                    ? appLocalizer.settings_databases_value['suspended']?.suspended_msg
+                                    : storeData.status === "under_review"
+                                    ? appLocalizer.settings_databases_value['under-review']?.under_review_msg
+                                    : storeData.status === "rejected"
+                                    ? 
+                                    <>
                                         {appLocalizer.settings_databases_value['rejected']?.rejected_msg}
                                         {" "}
                                         <a 
@@ -482,34 +475,25 @@ const Dashboard = () => {
                                             Click here to reapply.
                                         </a>
                                     </>
-                                        : "Store status unknown."}
-                                </div>
-                                <div className="admin-btn btn-purple">Contact Admin</div>
+                                    : "No active store select for this user."
+                                }
                             </div>
-
-                        ) : 
-
-                        noPermission ? (
-                            <div className="permission-wrapper">
-                                <i className="adminlib-info red"></i>
-                                <div className="title">You do not have permission to access this page.</div>
-                                <div className="admin-btn btn-purple">Contact Admin</div>
-                            </div>
-
-                        ) : (
-                            loadComponent(currentTab)
-                        )}
-
-{/* 
-                    {noPermission ? (
-                        <div class="permission-wrapper">
-                            <i class="adminlib-info red"></i>
-                            <div class="title">You do not have permission to access this page.</div>
-                            <div class="admin-btn btn-purple">Contact Admin</div>
+                            <div className="admin-btn btn-purple">Contact Admin</div>
                         </div>
+
+                    ) : 
+
+                    noPermission ? (
+                        <div className="permission-wrapper">
+                            <i className="adminlib-info red"></i>
+                            <div className="title">You do not have permission to access this page.</div>
+                            <div className="admin-btn btn-purple">Contact Admin</div>
+                        </div>
+
                     ) : (
                         loadComponent(currentTab)
-                    )} */}
+                    )}
+
                 </div>
             </div>
         </div>
