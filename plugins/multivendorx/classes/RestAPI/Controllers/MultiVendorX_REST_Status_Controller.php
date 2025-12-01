@@ -1,6 +1,7 @@
 <?php
 
 namespace MultiVendorX\RestAPI\Controllers;
+use MultiVendorX\Install as Install;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -87,7 +88,8 @@ class MultiVendorX_REST_Status_Controller extends \WP_REST_Controller {
         try {
             $key = $request->get_param( 'key' );
             if ( $key == 'default_pages' ) {
-                MultiVendorX()->install->plugin_create_pages();
+                $install = new Install();
+                $install->plugin_create_pages();
                 return rest_ensure_response( true );
             }
             $system_info = MultiVendorX()->status->get_system_info();

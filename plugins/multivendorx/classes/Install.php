@@ -58,32 +58,6 @@ class Install {
         // Get the charset collate for the tables.
         $collate = $wpdb->get_charset_collate();
 
-        // $sql_commission = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['commission'] . "` (
-        // `ID` bigint(20) NOT NULL AUTO_INCREMENT,
-        // `order_id` bigint(20) NOT NULL,
-        // `store_id` bigint(20) NOT NULL,
-        // `facilitator_id` bigint(20) NOT NULL DEFAULT 0,
-        // `customer_id` bigint(20) NOT NULL,
-        // `total_order_amount` float(10, 2) NOT NULL DEFAULT 0,
-        // `commission_amount` float(20, 2) NOT NULL DEFAULT 0,
-        // `facilitator_fee` float(20, 2) NOT NULL DEFAULT 0,
-        // `gateway_fee` float(20, 2) NOT NULL DEFAULT 0,
-        // `marketplace_fee` float(20, 2) NOT NULL DEFAULT 0,
-        // `shipping_amount` float(20, 2) NOT NULL DEFAULT 0,
-        // `tax_amount` float(20, 2) NOT NULL DEFAULT 0,
-        // `shipping_tax_amount` float(20, 2) NOT NULL DEFAULT 0,
-        // `discount_amount` float(20, 2) NOT NULL DEFAULT 0,
-        // `commission_total` float(20, 2) NOT NULL DEFAULT 0,
-        // `commission_refunded` float(20, 2) NOT NULL DEFAULT 0,
-        // `currency` varchar(10) NOT NULL,
-        // `status` enum('unpaid', 'paid','refunded','partially_refunded','cancelled') DEFAULT 'unpaid',
-        // `commission_note`  longtext NULL,
-        // `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        // `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        // `rules_applied` LONGTEXT,
-        // PRIMARY KEY (`ID`)
-        // ) $collate;";
-
         $sql_commission = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['commission'] . "` (
             `ID` bigint(20) NOT NULL AUTO_INCREMENT,
             `order_id` bigint(20) NOT NULL,
@@ -682,17 +656,17 @@ By signing and submitting, the Seller accepts all terms above.
         $pages_to_create = array(
             array(
                 'slug'      => 'dashboard',
-                'title'     => __( 'Store Dashboard', 'multivendorx' ),
+                'title'     => 'Store Dashboard',
                 'shortcode' => '[multivendorx_store_dashboard]',
             ),
             array(
                 'slug'      => 'store-registration',
-                'title'     => __( 'Store Registration', 'multivendorx' ),
+                'title'     => 'Store Registration',
                 'shortcode' => '[multivendorx_store_registration]',
             ),
             array(
                 'slug'      => 'vendor-orders',
-                'title'     => __( 'Vendor Orders', 'multivendorx' ),
+                'title'     => 'Vendor Orders',
                 'shortcode' => '[multivendorx_vendor_orders]',
             ),
         );
