@@ -76,11 +76,11 @@ class Store {
         $table = "{$wpdb->prefix}" . Utill::TABLES['store'];
 
         $data = array(
-            'name'        => $this->data['name'] ?? '',
-            'slug'        => $this->data['slug'] ?? sanitize_title( $this->data['name'] ?? '' ),
-            'description' => $this->data['description'] ?? '',
-            'who_created' => $this->data['who_created'] ?? 'admin',
-            'status'      => $this->data['status'] ?? 'active',
+            Utill::STORE_SETTINGS_KEYS['name']        => $this->data['name'] ?? '',
+            Utill::STORE_SETTINGS_KEYS['slug']        => $this->data['slug'] ?? sanitize_title( $this->data['name'] ?? '' ),
+            Utill::STORE_SETTINGS_KEYS['description'] => $this->data['description'] ?? '',
+            Utill::STORE_SETTINGS_KEYS['who_created'] => $this->data['who_created'] ?? 'admin',
+            Utill::STORE_SETTINGS_KEYS['status']      => $this->data['status'] ?? 'active',
         );
 
         $formats = array( '%s', '%s', '%s', '%s', '%s' );

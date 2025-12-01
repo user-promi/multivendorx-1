@@ -94,10 +94,10 @@ class StripeConnect {
         $stripe_settings        = $payment_admin_settings['stripe-connect'] ?? array();
 
         if ( ! empty( $stripe_settings ) && $stripe_settings['enable'] ) {
-            $store_id = get_user_meta( get_current_user_id(), 'multivendorx_active_store', true );
+            $store_id = get_user_meta( get_current_user_id(), Utill::POST_META_SETTINGS['active_store'], true );
 
             $store             = new Store( $store_id );
-            $stripe_account_id = $store->get_meta( '_stripe_connect_account_id' );
+            $stripe_account_id = $store->get_meta( Utill::STORE_SETTINGS_KEYS['stripe_account_id'] );
             $onboarding_status = 'Not Connected';
             $is_onboarded      = false;
 
@@ -152,7 +152,7 @@ class StripeConnect {
      */
     public function process_payment( $store_id, $amount, $order_id = null, $transaction_id = null, $note = null ) {
         $store             = new Store( $store_id );
-        $stripe_account_id = $store->get_meta( '_stripe_connect_account_id' );
+        $stripe_account_id = $store->get_meta( Utill::STORE_SETTINGS_KEYS['stripe_account_id'] );
         $status            = 'failed';
         if ( ! $stripe_account_id ) {
             $status = 'failed';
@@ -173,7 +173,7 @@ class StripeConnect {
      * Create Stripe account
      */
     public function ajax_create_account() {
-        $store_id               = get_user_meta( get_current_user_id(), 'multivendorx_active_store', true );
+        $store_id               = get_user_meta( get_current_user_id(), Utill::POST_META_SETTINGS['active_store'], true );
         $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
         $stripe_settings        = $payment_admin_settings['stripe-connect'] ?? array();
         $client_id              = $stripe_settings['client_id'] ?? '';
@@ -228,22 +228,22 @@ class StripeConnect {
             exit;
         }
         // We don't know store_id yet → search it via active vendor store.
-        $store_id   = get_user_meta( get_current_user_id(), 'multivendorx_active_store', true );
+        $store_id   = get_user_meta( get_current_user_id(), Utill::POST_META_SETTINGS['active_store'], true );
         $store      = new Store( $store_id );
-        $state_data = unserialize( $store->get_meta( 'stripe_oauth_state' ) );
+        $state_data = unserialize( $store->get_meta( Utill::STORE_SETTINGS_KEYS['stripe_oauth_state'] ) );
         if (
             empty( $state_data['state'] ) ||
             $state_data['state'] !== $state ||
             ( time() - $state_data['time'] ) > 600
         ) {
             // Invalid or expired.
-            $store->delete_meta( 'stripe_oauth_state' );
+            $store->delete_meta( Utill::STORE_SETTINGS_KEYS['stripe_oauth_state'] );
             wp_safe_redirect( $this->get_redirect_url( 'error', 'invalid_state' ) );
             exit;
         }
 
         // Valid → clean up
-        $store->delete_meta( 'stripe_oauth_state' );
+        $store->delete_meta( Utill::STORE_SETTINGS_KEYS['stripe_oauth_state'] );
         $store                  = new Store( $store_id );
         $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
         $stripe_settings        = $payment_admin_settings['stripe-connect'] ?? array();
@@ -288,7 +288,7 @@ class StripeConnect {
      */
     public function ajax_disconnect_account() {
 
-        $store_id = get_user_meta( get_current_user_id(), 'multivendorx_active_store', true );
+        $store_id = get_user_meta( get_current_user_id(), Utill::POST_META_SETTINGS['active_store'], true );
         $store    = new Store( $store_id );
 
         // Delete all Stripe-related meta using the same Store object method.

@@ -221,12 +221,12 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
                     return array(
                         'id'               => $row['id'],
                         'commission_id'    => $row['commission_id'],
-                        'store_name'       => $store ? $store->get( 'name' ) : '-',
+                        'store_name'       => $store ? $store->get( Utill::STORE_SETTINGS_KEYS['name'] ) : '-',
                         'amount'           => $row['amount'],
                         'balance'          => $row['balance'],
                         'status'           => $row['status'],
                         'payment_method'   => $row['payment_method'] ?? '',
-                        'account_number'   => $store ? $store->get_meta( 'account_number' ) : '',
+                        'account_number'   => $store ? $store->get_meta( Utill::STORE_SETTINGS_KEYS['account_number'] ) : '',
                         'credit'           => $row['entry_type'] === 'Cr' ? $row['amount'] : 0,
                         'debit'            => $row['entry_type'] === 'Dr' ? $row['amount'] : 0,
                         'date'             => $row['created_at'],
@@ -490,7 +490,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
 				'locking_balance'    => $locking_balance,
 				'lifetime_earning'   => $lifetime_earning,
 				'payment_schedules'  => $payment_schedules,
-				'free_withdrawal'    => (int) $store->get_meta( 'withdrawals_count' ),
+				'free_withdrawal'    => (int) $store->get_meta( Utill::STORE_SETTINGS_KEYS['withdrawals_count'] ),
 				'withdrawal_setting' => $withdrawals_fees,
             )
         );
@@ -543,7 +543,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
                 do_action( 'multivendorx_notify_payout_rejected', 'new_store_approval', $parameters );
             }
 
-            $store->delete_meta( 'request_withdrawal_amount' );
+            $store->delete_meta( Utill::STORE_SETTINGS_KEYS['request_withdrawal_amount'] );
 
             return rest_ensure_response(
                 array(
@@ -554,7 +554,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         }
 
         // Check if a withdrawal request already exists
-        $existing_request = $store->get_meta( 'request_withdrawal_amount' );
+        $existing_request = $store->get_meta( Utill::STORE_SETTINGS_KEYS['request_withdrawal_amount'] );
         if ( $existing_request ) {
             return rest_ensure_response(
                 array(
@@ -580,7 +580,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         }
 
         if ( $should_update_meta ) {
-            $store->update_meta( 'request_withdrawal_amount', $amount );
+            $store->update_meta( Utill::STORE_SETTINGS_KEYS['request_withdrawal_amount'], $amount );
         }
 
         return rest_ensure_response(

@@ -509,25 +509,25 @@ By signing and submitting, the Seller accepts all terms above.
             'pending_msg' => 'Your store is awaiting approval and will be activated soon.',
         );
 
-        update_option( 'multivendorx_pending_approval_settings', $pending_store_status );
+        update_option( Utill::ADMIN_SETTINGS['pending-approval'], $pending_store_status );
 
         $reject_store_status = array(
             'rejected_msg' => 'Your application was not approved. Please review feedback and reapply.',
         );
 
-        update_option( 'multivendorx_rejected_settings', $reject_store_status );
+        update_option( Utill::ADMIN_SETTINGS['rejected'], $reject_store_status );
 
         $under_review_store_status = array(
             'under_review_msg' => 'Your store is under review. Sales and payouts are temporarily paused.',
         );
 
-        update_option( 'multivendorx_under_review_settings', $under_review_store_status );
+        update_option( Utill::ADMIN_SETTINGS['under-review'], $under_review_store_status );
 
         $suspended_store_status = array(
             'suspended_msg' => 'Your store is suspended due to a policy issue. Contact admin to resolve it.',
         );
 
-        update_option( 'multivendorx_suspended_settings', $suspended_store_status );
+        update_option( Utill::ADMIN_SETTINGS['suspended'], $suspended_store_status );
 
         $store_permissions = array(
 			'products' =>
@@ -548,7 +548,7 @@ By signing and submitting, the Seller accepts all terms above.
 				),
         );
 
-        update_option( 'multivendorx_store_capability_settings', $store_permissions );
+        update_option( Utill::ADMIN_SETTINGS['store-capability'], $store_permissions );
 
         $user_permissions = array(
             'store_owner' =>
@@ -566,7 +566,7 @@ By signing and submitting, the Seller accepts all terms above.
 				),
 		);
 
-        update_option( 'multivendorx_user_capability_settings', $user_permissions );
+        update_option( Utill::ADMIN_SETTINGS['user-capability'], $user_permissions );
 
         $disbursment_settings = array(
             'disbursement_order_status' => array( 'completed' ),
@@ -574,7 +574,7 @@ By signing and submitting, the Seller accepts all terms above.
             'withdraw_type'             => 'manual',
 		);
 
-        update_option( 'multivendorx_disbursement_settings', $disbursment_settings );
+        update_option( Utill::ADMIN_SETTINGS['disbursement'], $disbursment_settings );
 
         $payment_settings = array(
             'payment_methods' => array(
@@ -582,7 +582,7 @@ By signing and submitting, the Seller accepts all terms above.
             ),
         );
 
-        update_option( 'multivendorx_payment_integration_settings', $payment_settings );
+        update_option( Utill::ADMIN_SETTINGS['payment-integration'], $payment_settings );
 
         $dashboard_page = get_posts(
             array(
@@ -613,12 +613,12 @@ By signing and submitting, the Seller accepts all terms above.
             'store_dashboard_page'    => $store_dashboard_page_id,
             'store_url'               => 'store',
         );
-        update_option( 'multivendorx_marketplace_settings_settings', $marketplace_settings );
+        update_option( Utill::ADMIN_SETTINGS['marketplace-settings'], $marketplace_settings );
 
         $general_settings = array(
             'approve_store' => 'manually',
         );
-        update_option( 'multivendorx_general_settings', $general_settings );
+        update_option( Utill::ADMIN_SETTINGS['general'], $general_settings );
 
         $appearance_settings = array(
             'store_color_settings'  => array(
@@ -635,19 +635,19 @@ By signing and submitting, the Seller accepts all terms above.
                 'colors'          => array(),
             ),
         );
-        update_option( 'multivendorx_store_appearance_settings', $appearance_settings );
+        update_option( Utill::ADMIN_SETTINGS['store-appearance'], $appearance_settings );
 
         $product_settings = array(
             'type_options'    => array( 'virtual', 'downloadable' ),
             'products_fields' => array( 'general', 'inventory', 'linked_product', 'attribute', 'advanced', 'policies', 'product_tag', 'GTIN' ),
         );
-        update_option( 'multivendorx_product_preferencess_settings', $product_settings );
+        update_option( Utill::ADMIN_SETTINGS['product-preferencess'], $product_settings );
 
         // 6. Save back to DB
-        update_option( 'multivendorx_identity_verification_settings', $settings );
-        update_option( 'multivendorx_order_actions_refunds_settings', $order_settings );
-        update_option( 'multivendorx_legal_compliance_settings', $legal_settings );
-        update_option( 'multivendorx_product_compliance_settings', $product_compliance_settings );
+        update_option( Utill::ADMIN_SETTINGS['identity-verification'], $settings );
+        update_option( Utill::ADMIN_SETTINGS['order-actions-refunds'], $order_settings );
+        update_option( Utill::ADMIN_SETTINGS['legal-compliance'], $legal_settings );
+        update_option( Utill::ADMIN_SETTINGS['product-compliance'], $product_compliance_settings );
     }
 
 

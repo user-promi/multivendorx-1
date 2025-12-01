@@ -48,7 +48,7 @@ class Transaction {
         // if (payment method is stripe or paypal marketplace and the check charges then this function return)
         $disbursement_status = MultiVendorX()->setting->get_setting( 'disbursement_order_status' );
         if ( ! empty( $disbursement_status ) && in_array( $new_status, $disbursement_status ) ) {
-            $commission_id = $order->get_meta( 'multivendorx_commission_id', true );
+            $commission_id = $order->get_meta( Utill::POST_META_SETTINGS['commission_id'], true );
             $this->create_transaction( $commission_id, $order );
         }
     }

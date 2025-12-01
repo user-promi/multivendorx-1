@@ -67,34 +67,4 @@ class Commission {
         return $this->commission->{ $key };
     }
 
-    /**
-     * Get the vendor of the commission.
-     *
-     * @return \MVX_Vendor|null
-     */
-    public function get_vendor() {
-        return VendorUtil::get_vendor( $this->get_data( 'vendor_id' ) );
-    }
-
-    /**
-     * Get the commission amount include refund
-     *
-     * @return mixed commission amount include refund
-     */
-    public function get_amount_include_refund() {
-        $commission_amount   = $this->get_data( 'commission_amount' );
-        $commission_refunded = $this->get_data( 'commission_refunded' );
-        return $commission_amount + $commission_refunded;
-    }
-
-    /**
-     * Get the total commission amount include refund.
-     *
-     * @return float total amount include refund.
-     */
-    public function get_total_amount_include_refund() {
-        $commission_total    = $this->get_data( 'commission_total' );
-        $commission_refunded = $this->get_data( 'commission_refunded' );
-        return $commission_total + $commission_refunded;
-    }
 }

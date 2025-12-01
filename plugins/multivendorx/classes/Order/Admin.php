@@ -52,7 +52,7 @@ class Admin {
                         if ( $suborder->get_type() == 'shop_order_refund' ) {
 							continue;
                         }
-                        $vendor            = Store::get_store_by_id( $suborder->get_meta( 'multivendorx_store_id', true ) );
+                        $vendor            = Store::get_store_by_id( $suborder->get_meta( Utill::POST_META_SETTINGS['store_id'], true ) );
                         $vendor_page_title = ( $vendor ) ? $vendor->get( 'name' ) : __( 'Deleted vendor', 'multivendorx' );
                         $order_uri         = apply_filters( 'mvx_admin_vendor_shop_order_edit_url', esc_url( 'admin.php?page=wc-orders&action=edit&id=' . $suborder->get_id() . '' ), $suborder->get_id() );
 
@@ -94,18 +94,18 @@ class Admin {
             return;
         }
 
-        $commission_id = $order->get_meta( 'multivendorx_commission_id', true ) ?? '';
+        $commission_id = $order->get_meta( Utill::POST_META_SETTINGS['commission_id'], true ) ?? '';
 
         if ( ! in_array( $order->get_status(), apply_filters( 'mvx_regenerate_order_commissions_statuses', array( 'on-hold', 'pending', 'processing', 'completed' ), $order ) ) ) {
             return;
         }
 
-        $order->delete_meta_data( 'multivendorx_commissions_processed' );
+        $order->delete_meta_data( Utill::POST_META_SETTINGS['commissions_processed'] );
 
         $regenerate_commission_id = MultiVendorX()->commission->calculate_commission( $order, $commission_id );
 
-        $order->update_meta_data( 'multivendorx_commission_id', $regenerate_commission_id );
-        $order->update_meta_data( 'multivendorx_commissions_processed', 'yes' );
+        $order->update_meta_data( Utill::POST_META_SETTINGS['commission_id'], $regenerate_commission_id );
+        $order->update_meta_data( Utill::POST_META_SETTINGS['commissions_processed'], 'yes' );
         $order->save();
 
         $commission = CommissionUtil::get_commission_db( $regenerate_commission_id );

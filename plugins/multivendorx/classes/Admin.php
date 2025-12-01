@@ -495,8 +495,8 @@ class Admin {
         if ( 'product_cat' === $taxonomy ) {
             $percentage = filter_input( INPUT_POST, 'category_percentage_commission', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
             $fixed      = filter_input( INPUT_POST, 'category_fixed_commission', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
-            update_term_meta( $term_id, 'multivendorx_category_percentage_commission', (float) $percentage );
-            update_term_meta( $term_id, 'multivendorx_category_fixed_commission', (float) $fixed );
+            update_term_meta( $term_id, Utill::POST_META_SETTINGS['category_percentage_commission'], (float) $percentage );
+            update_term_meta( $term_id, Utill::POST_META_SETTINGS['category_fixed_commission'], (float) $fixed );
         }
     }
 
@@ -555,7 +555,7 @@ class Admin {
     public function save_store_in_coupon( $post_id ) {
         $linked_store_id = absint( filter_input( INPUT_POST, 'coupon_linked_store' ) );
         if ( $linked_store_id ) {
-            update_post_meta( $post_id, 'multivendorx_store_id', $linked_store_id );
+            update_post_meta( $post_id, Utill::POST_META_SETTINGS['store_id'], $linked_store_id );
         }
     }
 
@@ -581,7 +581,7 @@ class Admin {
         if ( ! $order ) {
             return;
         }
-        $value = $order ? $order->get_meta( 'multivendorx_cod_order_payment', true ) : '';
+        $value = $order ? $order->get_meta( Utill::WOO_SETTINGS['cod_order_payment'], true ) : '';
         ?>
         <p>
             <label>
@@ -601,7 +601,7 @@ class Admin {
         $selected = filter_input( INPUT_POST, 'order_payment', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
         if ( $selected !== null ) {
             $order = wc_get_order( $order_id );
-            $order->update_meta_data( 'multivendorx_cod_order_payment', $selected );
+            $order->update_meta_data( Utill::WOO_SETTINGS['cod_order_payment'], $selected );
             $order->save();
         }
     }

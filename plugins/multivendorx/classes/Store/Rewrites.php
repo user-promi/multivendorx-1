@@ -59,7 +59,7 @@ class Rewrites {
         // Add vendor filter
         $meta_query   = $query->get( 'meta_query', array() );
         $meta_query[] = array(
-            'key'     => 'multivendorx_store_id',
+            'key'     => Utill::POST_META_SETTINGS['multivendorx_store_id'],
             'value'   => $store_id,
             'compare' => '=',
         );

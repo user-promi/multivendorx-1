@@ -201,7 +201,7 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
                     'multivendorx_stores',
                     array(
                         'store_id'   => (int) $notification['store_id'],
-                        'store_name' => $store->get( 'name' ),
+                        'store_name' => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
                         'type'       => $notification['type'],
                         'title'      => $notification['title'],
                         'date'       => date( 'M j, Y', strtotime( $notification['created_at'] ) ),
