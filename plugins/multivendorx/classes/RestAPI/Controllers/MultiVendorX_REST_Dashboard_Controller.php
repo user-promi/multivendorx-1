@@ -78,11 +78,18 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                 'submenu'    => array(),
                 'capability' => array( 'manage_products' ),
             ),
-            'coupons'       => array(
-                'name'       => 'Coupons',
-                'slug'       => 'coupons',
-                'icon'       => 'adminlib-coupon',
-                'capability' => array( 'read_shop_coupons' ),
+            'add-products' => array(
+                'name' => 'Add Products',
+                'slug' => 'add-products',
+                'icon' => 'adminlib-single-product',
+                'submenu' => array(),
+                'capability' => array('manage_products'),
+            ),
+            'coupons' => array(
+                'name' => 'Coupons',
+                'slug' => 'coupons',
+                'icon' => 'adminlib-coupon',
+                'capability' => array('read_shop_coupons'),
             ),
             'sales'         => array(
                 'name'       => 'Sales',

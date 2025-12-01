@@ -8,7 +8,6 @@
 namespace MultiVendorX;
 
 use MultiVendorX\Store\StoreUtil;
-use MultiVendorX\Vendor\VendorUtil;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -184,12 +183,7 @@ class FrontendScripts {
 				// 'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'react-jsx-runtime', 'jquery-ui-datepicker' ),
 				// 'version' => $version,
 				// ),
-                'multivendorx-product-classify-script'     => array(
-					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/' . MULTIVENDORX_PLUGIN_SLUG . '-product-classify.min.js',
-					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'react-jsx-runtime' ),
-					'version' => $version,
-				),
-                'multivendorx-qna-frontend-script'         => array(
+                'multivendorx-qna-frontend-script' => array(
 					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/QuestionsAnswers/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
@@ -214,12 +208,7 @@ class FrontendScripts {
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
-                'multivendorx-single-product-multiple-vendor-script' => array(
-					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/SPMV/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
-					'deps'    => array( 'jquery' ),
-					'version' => $version,
-				),
-                'multivendorx-stores-list-script'          => array(
+                'multivendorx-stores-list-script'        => array(
 					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/blocks/stores-list/index.js',
 					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'wp-blocks' ),
 					'version' => $version,
@@ -301,11 +290,6 @@ class FrontendScripts {
                 'multivendorx-product-tab-script' => array(
 					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/' . MULTIVENDORX_PLUGIN_SLUG . '-product-tab.min.js',
 					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'react-jsx-runtime' ),
-					'version' => $version,
-				),
-                'multivendorx-admin-product-auto-search-script' => array(
-					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/SPMV/js/' . MULTIVENDORX_PLUGIN_SLUG . '-admin-product-auto-search.min.js',
-					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
             )
@@ -522,17 +506,7 @@ class FrontendScripts {
                 'multivendorx-store-dashboard-script'    => array(
 					'object_name' => 'dashboard',
 					'data'        => array(
-						'ajaxurl' => admin_url( 'admin-ajax.php' ),
-					),
-				),
-                'multivendorx-product-classify-script'   => array(
-					'object_name' => 'mvx_product_classify',
-					'data'        => array(
-						'ajaxurl'             => admin_url( 'admin-ajax.php' ),
-                        'initial_graphic_url' => MultiVendorX()->plugin_url . 'assets/images/select-category-graphic.png',
-                        'i18n'                => array(
-                            'select_cat_list' => __( 'Select a category from the list', 'multivendorx' ),
-                        ),
+						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
 					),
 				),
                 'multivendorx-qna-frontend-script' => array(
@@ -573,24 +547,9 @@ class FrontendScripts {
                 'multivendorx-review-frontend-script'    => array(
 					'object_name' => 'review',
 					'data'        => array(
-						'ajaxurl'    => admin_url( 'admin-ajax.php' ),
-                        'nonce'      => wp_create_nonce( 'review_ajax_nonce' ),
-                        'parameters' => MultiVendorX()->setting->get_setting( 'ratings_parameters', array() ),
-					),
-				),
-                'multivendorx-admin-product-auto-search-script' => array(
-					'object_name' => 'admin_product_auto_search',
-					'data'        => array(
-						'ajaxurl'               => admin_url( 'admin-ajax.php' ),
-                        'search_products_nonce' => wp_create_nonce( 'search-products' ),
-					),
-				),
-                'multivendorx-single-product-multiple-vendor-script' => array(
-					'object_name' => 'single_product_multiple_vendors',
-					'data'        => array(
-						'ajaxurl'         => admin_url( 'admin-ajax.php' ),
-                        'dashboard_nonce' => wp_create_nonce( 'mvx-dashboard' ),
-                        'vendors_nonce'   => wp_create_nonce( 'mvx-vendors' ),
+						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+                        'nonce'    => wp_create_nonce('review_ajax_nonce'),
+                        'parameters' => MultiVendorX()->setting->get_setting('ratings_parameters', []),
 					),
 				),
                 'multivendorx-dashboard-script'          => array(
@@ -638,8 +597,9 @@ class FrontendScripts {
                         'user_logout_url'          => esc_url(wp_logout_url(get_permalink((int) MultiVendorX()->setting->get_setting('store_dashboard_page')))),
                         'store_ids'                => StoreUtil::get_stores_from_user_id(get_current_user_id()),
                         'active_store'             => get_user_meta(get_current_user_id(), 'multivendorx_active_store', true),
-                        'dashboard_page_id'      => (int) MultiVendorX()->setting->get_setting('store_dashboard_page'),
-                        'dashboard_slug'      => (int) MultiVendorX()->setting->get_setting('store_dashboard_page') ? get_post_field('post_name', (int) MultiVendorX()->setting->get_setting('store_dashboard_page')) : 'dashboard'
+                        'dashboard_page_id'        => (int) MultiVendorX()->setting->get_setting('store_dashboard_page'),
+                        'dashboard_slug'           => (int) MultiVendorX()->setting->get_setting('store_dashboard_page') ? get_post_field('post_name', (int) MultiVendorX()->setting->get_setting('store_dashboard_page')) : 'dashboard',
+                        'registration_page'        => esc_url(get_permalink((int) MultiVendorX()->setting->get_setting('store_registration_page'))),
                     ),
                 ),
                 'multivendorx-registration-form-script'  => array(
@@ -648,7 +608,7 @@ class FrontendScripts {
                         'apiUrl'              => untrailingslashit( get_rest_url() ),
                         'restUrl'             => MultiVendorX()->rest_namespace,
                         'nonce'               => wp_create_nonce( 'wp_rest' ),
-                        'settings'            => VendorUtil::get_vendor_registration_form() ?? array(),
+                        'settings'            => MultiVendorX()->setting->get_setting( 'store_registration_from', array()),
                         'content_before_form' => apply_filters( 'multivendorx_add_content_before_form', '' ),
                         'content_after_form'  => apply_filters( 'multivendorx_add_content_after_form', '' ),
                         'error_strings'       => array(
