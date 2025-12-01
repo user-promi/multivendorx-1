@@ -41,7 +41,7 @@ class CommissionManager {
         global $wpdb;
 
         if ( $order ) {
-            $store_id = $order->get_meta( 'multivendorx_store_id' );
+            $store_id = $order->get_meta( Utill::POST_META_SETTINGS['store_id'] );
             $vendor   = Store::get_store_by_id( $store_id );
 
             $commission_type = MultiVendorX()->setting->get_setting( 'commission_type' );

@@ -682,17 +682,17 @@ By signing and submitting, the Seller accepts all terms above.
         $pages_to_create = array(
             array(
                 'slug'      => 'dashboard',
-                'title'     => __( 'Store Dashboard', 'multivendorx' ),
+                'title'     => 'Store Dashboard',
                 'shortcode' => '[multivendorx_store_dashboard]',
             ),
             array(
                 'slug'      => 'store-registration',
-                'title'     => __( 'Store Registration', 'multivendorx' ),
+                'title'     => 'Store Registration',
                 'shortcode' => '[multivendorx_store_registration]',
             ),
             array(
                 'slug'      => 'vendor-orders',
-                'title'     => __( 'Vendor Orders', 'multivendorx' ),
+                'title'     => 'Vendor Orders',
                 'shortcode' => '[multivendorx_vendor_orders]',
             ),
         );
