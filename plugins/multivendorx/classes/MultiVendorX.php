@@ -162,7 +162,7 @@ final class MultiVendorX {
     public function multivendorx_register_setup_wizard() {
         new SetupWizard();
         if ( get_option( Utill::OTHER_SETTINGS['plugin_activated'] ) ) {
-            delete_option( Utill::OTHER_SETTINGS['plugin_activated']  );
+            delete_option( Utill::OTHER_SETTINGS['plugin_activated'] );
             wp_safe_redirect( admin_url( 'admin.php?page=multivendorx-setup' ) );
             exit;
         }

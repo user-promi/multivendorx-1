@@ -760,19 +760,21 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             return $error;
         }
         try {
-            $id    = absint( $request->get_param( 'id' ) );
+            $id     = absint( $request->get_param( 'id' ) );
             $action = $request->get_param( 'action' );
 
-            if ($id && $action == 'switch') {
-                update_user_meta(get_current_user_id(), 'multivendorx_active_store', $id);
+            if ( $id && $action == 'switch' ) {
+                update_user_meta( get_current_user_id(), 'multivendorx_active_store', $id );
 
-                $dashboard_page_id = (int) MultiVendorX()->setting->get_setting('store_dashboard_page');
-                if ($dashboard_page_id) {
-                    $redirect_url = get_permalink($dashboard_page_id);
+                $dashboard_page_id = (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' );
+                if ( $dashboard_page_id ) {
+                    $redirect_url = get_permalink( $dashboard_page_id );
                 }
-                return rest_ensure_response([
-                    'redirect' => $redirect_url
-                ]);
+                return rest_ensure_response(
+                    array(
+						'redirect' => $redirect_url,
+                    )
+                );
             }
 
             $store = $request->get_param( 'store' );

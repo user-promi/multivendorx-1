@@ -7,7 +7,13 @@
 
 namespace MultiVendorX\Emails;
 
+/**
+ * New Store Email class
+ */
 class NewStoreEmail extends MultiVendorXEmails {
+    /**
+     * Constructor
+     */
     public function __construct() {
         $this->id          = 'new_store_registered';
         $this->title       = __( 'New Store Registered', 'multivendorx' );
@@ -15,7 +21,7 @@ class NewStoreEmail extends MultiVendorXEmails {
         $this->heading     = __( 'New Store Registration', 'multivendorx' );
         $this->subject     = __( '[{site_title}] A new store has registered', 'multivendorx' );
 
-        // Call parent constructor (important)
+        // Call parent constructor (important).
         parent::__construct();
     }
 

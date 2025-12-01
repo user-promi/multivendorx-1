@@ -183,7 +183,7 @@ class FrontendScripts {
 				// 'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'react-jsx-runtime', 'jquery-ui-datepicker' ),
 				// 'version' => $version,
 				// ),
-                'multivendorx-qna-frontend-script' => array(
+                'multivendorx-qna-frontend-script'         => array(
 					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/QuestionsAnswers/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
@@ -208,7 +208,7 @@ class FrontendScripts {
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
-                'multivendorx-stores-list-script'        => array(
+                'multivendorx-stores-list-script'          => array(
 					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/blocks/stores-list/index.js',
 					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'wp-blocks' ),
 					'version' => $version,
@@ -506,10 +506,10 @@ class FrontendScripts {
                 'multivendorx-store-dashboard-script'    => array(
 					'object_name' => 'dashboard',
 					'data'        => array(
-						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+						'ajaxurl' => admin_url( 'admin-ajax.php' ),
 					),
 				),
-                'multivendorx-qna-frontend-script' => array(
+                'multivendorx-qna-frontend-script'       => array(
 					'object_name' => 'qnaFrontend',
 					'data'        => array(
 						'ajaxurl' => admin_url( 'admin-ajax.php' ),
@@ -547,9 +547,9 @@ class FrontendScripts {
                 'multivendorx-review-frontend-script'    => array(
 					'object_name' => 'review',
 					'data'        => array(
-						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
-                        'nonce'    => wp_create_nonce('review_ajax_nonce'),
-                        'parameters' => MultiVendorX()->setting->get_setting('ratings_parameters', []),
+						'ajaxurl'    => admin_url( 'admin-ajax.php' ),
+                        'nonce'      => wp_create_nonce( 'review_ajax_nonce' ),
+                        'parameters' => MultiVendorX()->setting->get_setting( 'ratings_parameters', array() ),
 					),
 				),
                 'multivendorx-dashboard-script'          => array(
@@ -593,13 +593,13 @@ class FrontendScripts {
                         'whatsapp_pre_filled'      => MultiVendorX()->setting->get_setting( ' whatsapp_pre_filled' ),
                         'settings_databases_value' => $settings_databases_value,
                         'current_user'             => wp_get_current_user(),
-                        'current_user_image'       => get_avatar_url(get_current_user_id(), ['size' => 48]),
-                        'user_logout_url'          => esc_url(wp_logout_url(get_permalink((int) MultiVendorX()->setting->get_setting('store_dashboard_page')))),
-                        'store_ids'                => StoreUtil::get_stores_from_user_id(get_current_user_id()),
-                        'active_store'             => get_user_meta(get_current_user_id(), 'multivendorx_active_store', true),
-                        'dashboard_page_id'        => (int) MultiVendorX()->setting->get_setting('store_dashboard_page'),
-                        'dashboard_slug'           => (int) MultiVendorX()->setting->get_setting('store_dashboard_page') ? get_post_field('post_name', (int) MultiVendorX()->setting->get_setting('store_dashboard_page')) : 'dashboard',
-                        'registration_page'        => esc_url(get_permalink((int) MultiVendorX()->setting->get_setting('store_registration_page'))),
+                        'current_user_image'       => get_avatar_url( get_current_user_id(), array( 'size' => 48 ) ),
+                        'user_logout_url'          => esc_url( wp_logout_url( get_permalink( (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' ) ) ) ),
+                        'store_ids'                => StoreUtil::get_stores_from_user_id( get_current_user_id() ),
+                        'active_store'             => get_user_meta( get_current_user_id(), 'multivendorx_active_store', true ),
+                        'dashboard_page_id'        => (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' ),
+                        'dashboard_slug'           => (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' ) ? get_post_field( 'post_name', (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' ) ) : 'dashboard',
+                        'registration_page'        => esc_url( get_permalink( (int) MultiVendorX()->setting->get_setting( 'store_registration_page' ) ) ),
                     ),
                 ),
                 'multivendorx-registration-form-script'  => array(
@@ -608,7 +608,7 @@ class FrontendScripts {
                         'apiUrl'              => untrailingslashit( get_rest_url() ),
                         'restUrl'             => MultiVendorX()->rest_namespace,
                         'nonce'               => wp_create_nonce( 'wp_rest' ),
-                        'settings'            => MultiVendorX()->setting->get_setting( 'store_registration_from', array()),
+                        'settings'            => MultiVendorX()->setting->get_setting( 'store_registration_from', array() ),
                         'content_before_form' => apply_filters( 'multivendorx_add_content_before_form', '' ),
                         'content_after_form'  => apply_filters( 'multivendorx_add_content_after_form', '' ),
                         'error_strings'       => array(

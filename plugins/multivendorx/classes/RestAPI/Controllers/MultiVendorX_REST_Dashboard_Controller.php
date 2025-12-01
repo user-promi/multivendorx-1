@@ -32,33 +32,34 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
         );
     }
 
-    public function get_items_permissions_check($request)
-    {
+    public function get_items_permissions_check( $request ) {
         // return current_user_can('read');
         return true;
     }
 
-    public function get_items($request)
-    {
-        $menu_only = $request->get_param('menuOnly');
+    public function get_items( $request ) {
+        $menu_only = $request->get_param( 'menuOnly' );
 
         $endpoints = $this->all_endpoints();
 
-        $other_endpoints = apply_filters('dashboard_other_endpoints', [
-            'view-notifications' => array(
-                'name'       => '',
-                'icon'       => '',
-                'slug'       => 'view-notifications',
-                'submenu'    => array(),
-                'capability' => array('edit_products'),
-                'filename'   => 'view-notifications'
-            )
-        ]);
+        $other_endpoints = apply_filters(
+            'dashboard_other_endpoints',
+            array(
+				'view-notifications' => array(
+					'name'       => '',
+					'icon'       => '',
+					'slug'       => 'view-notifications',
+					'submenu'    => array(),
+					'capability' => array( 'edit_products' ),
+					'filename'   => 'view-notifications',
+				),
+			)
+        );
 
-        if ( !$menu_only ) {
-            $endpoints = array_merge($endpoints, $other_endpoints);
+        if ( ! $menu_only ) {
+            $endpoints = array_merge( $endpoints, $other_endpoints );
         }
-        return rest_ensure_response($endpoints);
+        return rest_ensure_response( $endpoints );
     }
 
     public function all_endpoints() {
@@ -78,18 +79,18 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                 'submenu'    => array(),
                 'capability' => array( 'manage_products' ),
             ),
-            'add-products' => array(
-                'name' => 'Add Products',
-                'slug' => 'add-products',
-                'icon' => 'adminlib-single-product',
-                'submenu' => array(),
-                'capability' => array('manage_products'),
+            'add-products'  => array(
+                'name'       => 'Add Products',
+                'slug'       => 'add-products',
+                'icon'       => 'adminlib-single-product',
+                'submenu'    => array(),
+                'capability' => array( 'manage_products' ),
             ),
-            'coupons' => array(
-                'name' => 'Coupons',
-                'slug' => 'coupons',
-                'icon' => 'adminlib-coupon',
-                'capability' => array('read_shop_coupons'),
+            'coupons'       => array(
+                'name'       => 'Coupons',
+                'slug'       => 'coupons',
+                'icon'       => 'adminlib-coupon',
+                'capability' => array( 'read_shop_coupons' ),
             ),
             'sales'         => array(
                 'name'       => 'Sales',

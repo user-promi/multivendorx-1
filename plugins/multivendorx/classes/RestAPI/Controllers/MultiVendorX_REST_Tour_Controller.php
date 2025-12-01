@@ -139,7 +139,7 @@ class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
 
             return $error;
         }
-        try{
+        try {
             update_option( Utill::OTHER_SETTINGS['tour_active'], $request->get_param( 'active' ) );
             return array( 'success' => true );
         } catch ( \Exception $e ) {

@@ -6,13 +6,13 @@
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
-  <meta charset="<?php bloginfo('charset'); ?>">
-  <?php wp_head(); ?>
+    <meta charset="<?php bloginfo( 'charset' ); ?>">
+    <?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
 
-  <div id="multivendorx-vendor-dashboard"></div>
+    <div id="multivendorx-vendor-dashboard"></div>
 
-  <?php wp_footer(); ?>
+    <?php wp_footer(); ?>
 </body>
 </html>
