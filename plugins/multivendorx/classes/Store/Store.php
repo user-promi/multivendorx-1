@@ -36,9 +36,7 @@ class Store {
     public function init_classes() {
         $this->container = array(
             'rewrites'  => new Rewrites(),
-            'storeutil' => new StoreUtil(),
-            'ajax'      => new Ajax(),
-            'products'  => new Products(),
+            'storeutil' => new StoreUtil()
         );
     }
 
