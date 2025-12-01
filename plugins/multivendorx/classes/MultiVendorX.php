@@ -44,15 +44,15 @@ final class MultiVendorX {
     public function __construct( $file ) {
         require_once trailingslashit( dirname( $file ) ) . '/config.php';
 
-        $this->file                     = $file;
-        $this->container['plugin_url']  = trailingslashit( plugins_url( '', $plugin = $file ) );
-        $this->container['plugin_path'] = trailingslashit( dirname( $file ) );
-        $this->container['plugin_base'] = plugin_basename( $file );
+        $this->file                               = $file;
+        $this->container['plugin_url']            = trailingslashit( plugins_url( '', $plugin = $file ) );
+        $this->container['plugin_path']           = trailingslashit( dirname( $file ) );
+        $this->container['plugin_base']           = plugin_basename( $file );
         $this->container['multivendorx_logs_dir'] = ( trailingslashit( wp_upload_dir( null, false )['basedir'] ) . 'mw-logs' );
-        $this->container['version']        = MULTIVENDORX_PLUGIN_VERSION;
-        $this->container['rest_namespace'] = 'multivendorx/v1';
-        $this->container['block_paths']    = array();
-        $this->container['is_dev']         = defined( 'WP_ENV' ) && WP_ENV === 'development';
+        $this->container['version']               = MULTIVENDORX_PLUGIN_VERSION;
+        $this->container['rest_namespace']        = 'multivendorx/v1';
+        $this->container['block_paths']           = array();
+        $this->container['is_dev']                = defined( 'WP_ENV' ) && WP_ENV === 'development';
 
         register_activation_hook( $file, array( $this, 'activate' ) );
         register_deactivation_hook( $file, array( $this, 'deactivate' ) );
@@ -154,10 +154,15 @@ final class MultiVendorX {
         flush_rewrite_rules();
     }
 
+    /**
+     * Register setup wizard.
+     *
+     * @return void
+     */
     public function multivendorx_register_setup_wizard() {
         new SetupWizard();
         if ( get_option( Utill::OTHER_SETTINGS['plugin_activated'] ) ) {
-            delete_option( Utill::OTHER_SETTINGS['plugin_activated']  );
+            delete_option( Utill::OTHER_SETTINGS['plugin_activated'] );
             wp_safe_redirect( admin_url( 'admin.php?page=multivendorx-setup' ) );
             exit;
         }
@@ -339,7 +344,7 @@ final class MultiVendorX {
             update_option( Utill::OTHER_SETTINGS['log_file'], $log_file_name );
         }
 
-        $this->container['log_file']          = MultivendorX()->multivendorx_logs_dir . '/' . $log_file_name;
+        $this->container['log_file'] = MultivendorX()->multivendorx_logs_dir . '/' . $log_file_name;
         // $this->container['show_advanced_log'] = in_array( 'moowoodle_adv_log', MooWoodle()->setting->get_setting( 'moowoodle_adv_log', array() ), true );
     }
 }

@@ -1,9 +1,19 @@
 <?php
+/**
+ * Knowledgebase frontend class.
+ */
+
 namespace MultiVendorX\Knowledgebase;
 
+/**
+ * Class Frontend for knowledgebase.
+ */
 class Frontend {
+    /**
+     * Initialize the class.
+     */
     public function __construct() {
-        // Hook into the filter that defines the admin submenus
+        // Hook into the filter that defines the admin submenus.
         add_filter( 'multivendorx_submenus', array( $this, 'add_knowledgebase_menu' ), 20 );
     }
 
@@ -23,11 +33,11 @@ class Frontend {
 
         $ordered = array();
         foreach ( $submenus as $key => $menu ) {
-            // Copy existing menu
+            // Copy existing menu.
             $ordered[ $key ] = $menu;
 
-            // Insert advertisement right after "status-tools"
-            if ( $key === 'announcement' || $key === 'status-tools' ) {
+            // Insert advertisement right after "status-tools".
+            if ( 'announcement' === $key || 'status-tools' === $key ) {
                 $ordered = array_merge( $ordered, $new_item );
             }
         }

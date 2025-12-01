@@ -1,6 +1,8 @@
 <?php
 /**
- * MultiVendorX class file
+ * MultiVendorX Gateway Fee Admin
+ *
+ * Handles gateway fee logic for commissions.
  *
  * @package MultiVendorX
  */
@@ -10,18 +12,34 @@ namespace MultiVendorX\GatewayFee;
 use MultiVendorX\Commission\CommissionUtil;
 
 /**
- * MultiVendorX Gateway Fee Admin class
+ * MultiVendorX Gateway Fee Admin class.
  *
  * @class       Admin class
  * @version     6.0.0
  * @author      MultiVendorX
  */
 class Admin {
+
+    /**
+     * Constructor.
+     *
+     * Adds required filters for gateway fee calculation.
+     */
     public function __construct() {
         add_filter( 'multivendorx_before_commission_insert', array( $this, 'gateway_fee_calculation' ), 10, 5 );
     }
 
-
+    /**
+     * Calculate gateway fees and update commission data.
+     *
+     * @param array  $filtered Filtered commission data.
+     * @param object $store Vendor store object.
+     * @param float  $total Order total.
+     * @param object $order WC_Order object.
+     * @param bool   $refund Whether this is a refund.
+     *
+     * @return array Modified commission data including gateway fee.
+     */
     public function gateway_fee_calculation( $filtered, $store, $total, $order, $refund ) {
 
         if ( ! empty( MultiVendorX()->setting->get_setting( 'gateway_fees' ) ) ) {
@@ -43,16 +61,27 @@ class Admin {
                 ?? 0
             );
 
-            $gateway_fee = $order->get_total() > 0 ? ( (float) $order->get_total() * ( (float) $percentage_fee / 100 ) + (float) $fixed_fee ) : 0;
+            $gateway_fee = $order->get_total() > 0
+                ? ( (float) $order->get_total() * ( (float) $percentage_fee / 100 ) ) + (float) $fixed_fee
+                : 0;
 
             if ( $refund ) {
                 $commission_id     = $order->get_meta( 'multivendorx_commission_id', true );
                 $commission        = CommissionUtil::get_commission_db( $commission_id );
                 $remaining_payable = (float) ( $order->get_total() - $order->get_total_refunded() );
-                $gateway_fee       = $remaining_payable > 0 ? ( ( $remaining_payable * ( (float) $percentage_fee / 100 ) ) + (float) $fixed_fee ) : 0;
+
+                $gateway_fee = $remaining_payable > 0
+                    ? ( ( $remaining_payable * ( (float) $percentage_fee / 100 ) ) + (float) $fixed_fee )
+                    : 0;
             }
 
-            $rules                = unserialize( $filtered['data']['rules_applied'] );
+            // Decode applied rules safely using JSON.
+            $rules = array();
+            if ( ! empty( $filtered['data']['rules_applied'] ) ) {
+                $rules = json_decode( $filtered['data']['rules_applied'], true );
+                $rules = is_array( $rules ) ? $rules : array();
+            }
+
             $rules['gateway_fee'] = array(
                 'fixed'      => $fixed_fee,
                 'percentage' => $percentage_fee,
@@ -66,7 +95,9 @@ class Admin {
                 $filtered['data']['store_refunded']       = (float) $filtered['data']['store_refunded'] - (float) ( $commission->gateway_fee - $gateway_fee );
                 $filtered['data']['marketplace_refunded'] = (float) $filtered['data']['marketplace_refunded'] + (float) ( $commission->gateway_fee - $gateway_fee );
             }
-            $filtered['data']['rules_applied'] = serialize( $rules );
+
+            // Encode rules safely.
+            $filtered['data']['rules_applied'] = wp_json_encode( $rules );
 
             $filtered['format'][] = '%f';
         }

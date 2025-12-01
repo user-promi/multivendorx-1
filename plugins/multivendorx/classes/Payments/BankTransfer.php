@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Bank transfer payment gateway class.
+ *
+ * @package MultiVendorX\Payments
+ */
 namespace MultiVendorX\Payments;
 
 defined( 'ABSPATH' ) || exit;
@@ -9,14 +13,27 @@ use MultiVendorX\Store\Store;
 
 class BankTransfer {
 
+    /**
+     * Constructor.
+     */
     public function __construct() {
         add_action( 'multivendorx_process_bank-transfer_payment', array( $this, 'process_payment' ), 10, 5 );
     }
 
+    /**
+     * Get payment gateway id.
+     *
+     * @return string
+     */
     public function get_id() {
         return 'bank-transfer';
     }
 
+    /**
+     * Get payment gateway settings.
+     *
+     * @return array
+     */
     public function get_settings() {
         return array(
             'icon'         => 'adminlib-bank',
@@ -81,6 +98,9 @@ class BankTransfer {
         );
     }
 
+    /**
+     * Get store payment settings.
+     */
     public function get_store_payment_settings() {
         $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
 
@@ -144,9 +164,18 @@ class BankTransfer {
         }
     }
 
+    /**
+     * Process payment.
+     *
+     * @param int    $store_id
+     * @param float  $amount
+     * @param int    $order_id
+     * @param string $transaction_id
+     * @param string $note
+     */
     public function process_payment( $store_id, $amount, $order_id = null, $transaction_id = null, $note = null ) {
 
-        // quick autoload/class check (helps debugging)
+        // quick autoload/class check (helps debugging).
         $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
         $store                  = new Store( $store_id );
 

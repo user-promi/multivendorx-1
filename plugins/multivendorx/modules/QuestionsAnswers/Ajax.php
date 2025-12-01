@@ -17,6 +17,11 @@ use MultiVendorX\Utill;
  * @author      MultiVendorX
  */
 class Ajax {
+    /**
+     * Constructor
+     *
+     * @return void
+     */
     public function __construct() {
 
         add_action( 'wp_ajax_qna_submit', array( $this, 'multivendorx_qna_submit' ) );
@@ -28,7 +33,11 @@ class Ajax {
         add_action( 'wp_ajax_qna_vote', array( $this, 'multivendorx_qna_vote' ) );
     }
 
-    // Submit Question
+    /**
+     * Submit a question.
+     *
+     * @return void
+     */
     public function multivendorx_qna_submit() {
         check_ajax_referer( 'qna_ajax_nonce', 'nonce' );
         if ( ! is_user_logged_in() ) {
@@ -38,7 +47,9 @@ class Ajax {
         global $wpdb;
         $table      = $wpdb->prefix . Utill::TABLES['product_qna'];
         $user_id    = get_current_user_id();
-        $question   = sanitize_textarea_field( $_POST['question'] );
+        $question   = sanitize_textarea_field(
+            filter_input( INPUT_POST, 'question', FILTER_UNSAFE_RAW )
+        );
         $product_id = filter_input( INPUT_POST, 'product_id', FILTER_VALIDATE_INT ) ?: 0;
         $store_id   = intval( get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true ) ?: 0 );
 
@@ -66,16 +77,23 @@ class Ajax {
         );
     }
 
+    /**
+     * Search for questions by product ID and search term.
+     *
+     * @return void
+     */
     public function multivendorx_qna_search() {
         check_ajax_referer( 'qna_ajax_nonce', 'nonce' );
 
-        $product_id = intval( $_POST['product_id'] );
-        $search     = sanitize_text_field( $_POST['search'] );
+        $product_id = filter_input( INPUT_POST, 'product_id', FILTER_VALIDATE_INT );
+        $search     = sanitize_text_field(
+            filter_input( INPUT_POST, 'search', FILTER_UNSAFE_RAW )
+        );
 
-        // Get filtered questions (you may update Util::get_questions to handle $search)
+        // Get filtered questions (you may update Util::get_questions to handle $search).
         $rows = Util::get_questions( $product_id, $search );
 
-        // Filter only answered
+        // Filter only answered.
         $answered_rows = array_filter(
             $rows,
             function ( $q ) {
@@ -116,7 +134,11 @@ class Ajax {
     }
 
 
-    // Voting
+    /**
+     * Vote on a question or answer.
+     *
+     * @return void
+     */
     public function multivendorx_qna_vote() {
         check_ajax_referer( 'qna_ajax_nonce', 'nonce' );
 
@@ -127,10 +149,10 @@ class Ajax {
         global $wpdb;
         $table   = $wpdb->prefix . Utill::TABLES['product_qna'];
         $user_id = get_current_user_id();
-        $qna_id  = intval( $_POST['qna_id'] );
-        $type    = $_POST['type'] === 'up' ? 1 : -1;
+        $qna_id  = filter_input( INPUT_POST, 'qna_id', FILTER_VALIDATE_INT );
+        $type    = ( sanitize_text_field( filter_input( INPUT_POST, 'type', FILTER_UNSAFE_RAW ) ) === 'up' ) ? 1 : -1;
 
-        // Get current voters and total_votes
+        // Get current voters and total_votes.
         $row         = $wpdb->get_row( $wpdb->prepare( "SELECT voters, total_votes FROM $table WHERE id = %d", $qna_id ) );
         $voters      = $row->voters ? maybe_unserialize( $row->voters ) : array();
         $total_votes = intval( $row->total_votes );
@@ -138,7 +160,7 @@ class Ajax {
         $previous_vote = $voters[ $user_id ] ?? 0;
 
         if ( $previous_vote === $type ) {
-            // Clicking the same vote again does nothing
+            // Clicking the same vote again does nothing.
             wp_send_json_success(
                 array(
 					'total_votes' => $total_votes,
@@ -146,13 +168,13 @@ class Ajax {
                 )
             );
         } else {
-            // Remove previous vote effect if exists
+            // Remove previous vote effect if exists.
             $total_votes -= $previous_vote;
-            // Add new vote
+            // Add new vote.
             $voters[ $user_id ] = $type;
             $total_votes       += $type;
 
-            // Update database
+            // Update database.
             $wpdb->update(
                 $table,
                 array(

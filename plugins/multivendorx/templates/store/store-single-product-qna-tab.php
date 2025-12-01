@@ -1,10 +1,16 @@
 <?php
+/**
+ * Template for displaying the Q&A tab on single product pages.
+ *
+ * @package MultiVendorX
+ */
+
 use MultiVendorX\QuestionsAnswers\Util;
 
 $product_id = $args['product_id'];
 $questions  = Util::get_questions( $product_id );
 
-// Filter only questions with answers
+// Filter only questions with answers.
 $answered_questions = array_filter(
     $questions,
     function ( $q ) {
@@ -12,7 +18,7 @@ $answered_questions = array_filter(
 	}
 );
 $current_url        = get_permalink( $product_id );
-// Get My Account page URL with redirect parameter
+// Get My Account page URL with redirect parameter.
 $myaccount_url = wc_get_page_permalink( 'myaccount' );
 $login_url     = add_query_arg( 'redirect_to', $current_url, $myaccount_url );
 ?>

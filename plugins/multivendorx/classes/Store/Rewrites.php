@@ -84,19 +84,19 @@ class Rewrites {
                 '^' . $this->custom_store_url . '/([^/]+)/page/([0-9]{1,})/?$',
                 'index.php?' . $this->custom_store_url . '=$matches[1]&paged=$matches[2]',
                 'top',
-            ),     
-            [
+            ),
+            array(
 
                 '^dashboard/([^/]*)/?',
                 'index.php?page_id=' . $page_id . '&segment=$matches[1]',
-                'top'
-            ]    
+                'top',
+            ),
             // [
-            //     '^dashboard/([^/]+)/?([^/]*)/?([0-9]*)/?$',
-            //     'index.php?page_id=' . $page_id . '&segment=$matches[1]&element=$matches[2]&context_id=$matches[3]',
-            //     'top'
+            // '^dashboard/([^/]+)/?([^/]*)/?([0-9]*)/?$',
+            // 'index.php?page_id=' . $page_id . '&segment=$matches[1]&element=$matches[2]&context_id=$matches[3]',
+            // 'top'
             // ]
-    
+
             // oldddd
             // [
             // '^dashboard/?$',

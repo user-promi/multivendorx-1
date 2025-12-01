@@ -1,19 +1,37 @@
 <?php
-
+/**
+ * Custom payment gateway class.
+ */
 namespace MultiVendorX\Payments;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Custom payment class.
+ */
 class CustomPayment {
 
+    /**
+     * Constructor.
+     */
     public function __construct() {
         add_action( 'multivendorx_process_custom-gateway_payment', array( $this, 'process_payment' ), 10, 5 );
     }
 
+    /**
+     * Get payment method id.
+     *
+     * @return string
+     */
     public function get_id() {
         return 'custom-gateway';
     }
 
+    /**
+     * Get payment settings.
+     *
+     * @return array
+     */
     public function get_settings() {
         return array(
             'icon'         => 'adminlib-cogs-on-wheels',
@@ -36,8 +54,17 @@ class CustomPayment {
     public function get_store_payment_settings() {
     }
 
+    /**
+     * Process payment.
+     *
+     * @param int    $store_id
+     * @param float  $amount
+     * @param int    $order_id
+     * @param string $transaction_id
+     * @param string $note
+     */
     public function process_payment( $store_id, $amount, $order_id = null, $transaction_id = null, $note = null ) {
-        // quick autoload/class check (helps debugging)
+        // quick autoload/class check (helps debugging).
         $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
         $settings               = ! empty( $payment_admin_settings['custom-gateway'] ) ? $payment_admin_settings['custom-gateway'] : array();
 

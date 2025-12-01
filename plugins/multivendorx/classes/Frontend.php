@@ -20,7 +20,7 @@ class Frontend {
         add_filter( 'template_include', array( $this, 'vendor_dashboard_template' ) );
 
         // if ( current_user_can( 'edit_products' ) ) {
-        //     add_action( 'mvx_process_product_object', array( $this, 'mvx_save_generated_sku') );
+        // add_action( 'mvx_process_product_object', array( $this, 'mvx_save_generated_sku') );
         // }
 
         add_action( 'woocommerce_after_shop_loop_item', array( $this, 'add_text_in_shop_and_single_product_page' ), 6 );
@@ -306,15 +306,15 @@ class Frontend {
     public function vendor_dashboard_template( $template ) {
         $user = wp_get_current_user();
 
-        //checking change later when all function ready
+        // checking change later when all function ready
         // if ( is_user_logged_in() && Utill::is_store_dashboard() && in_array( 'store_owner', $user->roles, true ) ) {
-        if ( is_user_logged_in() && is_page() && has_shortcode(get_post()->post_content, 'multivendorx_store_dashboard')  ) {
+        if ( is_user_logged_in() && is_page() && has_shortcode( get_post()->post_content, 'multivendorx_store_dashboard' ) ) {
             return MultiVendorX()->plugin_path . 'templates/store/store-dashboard.php';
         }
         return $template;
     }
 
-    //Generate a simple / parent product SKU from the product slug or ID.
+    // Generate a simple / parent product SKU from the product slug or ID.
     protected function generate_product_sku( $product ) {
         if ( $product ) {
             switch ( MultiVendorX()->setting->get_setting( 'sku_generator', '' ) ) {

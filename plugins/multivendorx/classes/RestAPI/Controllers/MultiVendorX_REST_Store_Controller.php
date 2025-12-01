@@ -270,7 +270,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                     'Message=' . $error->get_error_message() . '; ' .
                     'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
                 );
-            }            
+            }
 
             return $error;
         }
@@ -506,7 +506,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 'Message=' . $e->getMessage() . '; ' .
                 'File=' . $e->getFile() . '; ' .
                 'Line=' . $e->getLine() . "\n\n"
-            );        
+            );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
@@ -607,11 +607,11 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                     'Message=' . $error->get_error_message() . '; ' .
                     'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
                 );
-            }            
+            }
 
             return $error;
         }
-        try{
+        try {
             $registrations = $request->get_header( 'registrations' );
             $store_data    = $request->get_param( 'formData' );
 
@@ -736,7 +736,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 'Message=' . $e->getMessage() . '; ' .
                 'File=' . $e->getFile() . '; ' .
                 'Line=' . $e->getLine() . "\n\n"
-            );        
+            );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
@@ -755,24 +755,26 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                     'Message=' . $error->get_error_message() . '; ' .
                     'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
                 );
-            }            
+            }
 
             return $error;
         }
-        try{
-            $id    = absint( $request->get_param( 'id' ) );
+        try {
+            $id     = absint( $request->get_param( 'id' ) );
             $action = $request->get_param( 'action' );
 
-            if ($id && $action == 'switch') {
-                update_user_meta(get_current_user_id(), 'multivendorx_active_store', $id);
+            if ( $id && $action == 'switch' ) {
+                update_user_meta( get_current_user_id(), 'multivendorx_active_store', $id );
 
-                $dashboard_page_id = (int) MultiVendorX()->setting->get_setting('store_dashboard_page');
-                if ($dashboard_page_id) {
-                    $redirect_url = get_permalink($dashboard_page_id);
+                $dashboard_page_id = (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' );
+                if ( $dashboard_page_id ) {
+                    $redirect_url = get_permalink( $dashboard_page_id );
                 }
-                return rest_ensure_response([
-                    'redirect' => $redirect_url
-                ]);
+                return rest_ensure_response(
+                    array(
+						'redirect' => $redirect_url,
+                    )
+                );
             }
 
             $store = $request->get_param( 'store' );
@@ -783,7 +785,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             $registrations = $request->get_header( 'registrations' );
             if ( $fetch_user ) {
                 $users = StoreUtil::get_store_users( $id );
-    
+
                 $response = array(
                     'id'            => $id,
                     'store_owners'  => $users['users'],
@@ -791,26 +793,26 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 );
                 return rest_ensure_response( $response );
             }
-    
+
             // Load the store
             $store = new \MultiVendorX\Store\Store( $id );
             if ( $registrations ) {
                 $response = StoreUtil::get_store_registration_form( $store->get_id() );
                 return rest_ensure_response( $response );
             }
-    
+
             $commission   = CommissionUtil::get_commission_summary_for_store( (int) $id );
             $transactions = Transaction::get_balances_for_store( (int) $id );
             // Get primary owner information using Store object
             $primary_owner_id   = StoreUtil::get_primary_owner( $id );
             $primary_owner_info = get_userdata( $primary_owner_id );
-    
+
             $overall = Util::get_overall_rating( $id );
-    
+
             // Get all reviews
             $reviews       = Util::get_reviews_by_store( $id );
             $total_reviews = count( $reviews );
-    
+
             $response = array(
                 'id'                 => $store->get_id(),
                 'name'               => $store->get( 'name' ),
@@ -825,20 +827,20 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 'overall_reviews'    => $overall,
                 'total_reviews'      => $total_reviews,
             );
-    
+
             // Add meta data
             foreach ( $store->meta_data as $key => $values ) {
                 $response[ $key ] = is_array( $values ) ? $values[0] : $values;
             }
-    
+
             return rest_ensure_response( $response );
-        }catch ( \Exception $e ) {
+        } catch ( \Exception $e ) {
             MultiVendorX()->util->log(
                 'MVX REST Exception: ' .
                 'Message=' . $e->getMessage() . '; ' .
                 'File=' . $e->getFile() . '; ' .
                 'Line=' . $e->getLine() . "\n\n"
-            );        
+            );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
@@ -857,16 +859,16 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                     'Message=' . $error->get_error_message() . '; ' .
                     'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
                 );
-            }            
+            }
 
             return $error;
         }
-        try{
+        try {
             $id   = absint( $request->get_param( 'id' ) );
             $data = $request->get_json_params();
-    
+
             $store = new \MultiVendorX\Store\Store( $id );
-    
+
             if ( $data['deactivate'] ) {
                 $action = $data['action'] ?: '';
                 if ( $action == 'approve' ) {
@@ -874,25 +876,25 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                     $store->delete_meta( 'deactivation_reason' );
                     $store->delete_meta( 'deactivation_request_date' );
                 }
-    
+
                 if ( $action == 'reject' ) {
                     $store->delete_meta( 'deactivation_reason' );
                     $store->delete_meta( 'deactivation_request_date' );
                 }
-    
+
                 $store->save();
                 return rest_ensure_response( array( 'success' => true ) );
             }
-    
+
             if ( ! empty( $data['delete'] ) ) {
                 $delete_option = $data['deleteOption'] ?? '';
-    
+
                 switch ( $delete_option ) {
                     case 'direct':
                     case 'permanent_delete':
                         $deleted = $store->delete_store_completely();
                         return rest_ensure_response( array( 'success' => (bool) $deleted ) );
-    
+
                     case 'product_assign_admin':
                         $admins        = get_users(
                             array(
@@ -901,7 +903,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                             )
                         );
                         $admin_user_id = $admins[0]->ID ?? 1;
-    
+
                         $products = wc_get_products(
                             array(
                                 'limit'      => -1,
@@ -910,7 +912,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                                 'meta_value' => $id,
                             )
                         );
-    
+
                         if ( $products ) {
                             foreach ( $products as $product_id ) {
                                 wp_update_post(
@@ -922,10 +924,10 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                                 delete_post_meta( $product_id, 'multivendorx_store_id' );
                             }
                         }
-    
+
                         $deleted = $store->delete_store_completely();
                         return rest_ensure_response( array( 'success' => (bool) $deleted ) );
-    
+
                     case 'set_store_owner':
                         if ( empty( $data['new_owner_id'] ) ) {
                             return rest_ensure_response(
@@ -935,7 +937,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                                 )
                             );
                         }
-    
+
                         StoreUtil::add_store_users(
                             array(
                                 'store_id' => $id,
@@ -943,29 +945,29 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                                 'role_id'  => 'store_owner',
                             )
                         );
-    
+
                         StoreUtil::set_primary_owner( $data['new_owner_id'], $id );
                         return rest_ensure_response( array( 'success' => true ) );
-    
+
                     default:
                         unset( $data['delete'] );
                         break;
                 }
             }
-    
+
             // Handle registration & core data
             if ( ! empty( $data['registration_data'] ) || ! empty( $data['core_data'] ) ) {
                 if ( isset( $data['status'] ) && $data['status'] === 'approve' ) {
                     $users = StoreUtil::get_store_users( $id );
                     $user  = get_userdata( empty( $users['users'] ) ? $users['primary_owner'] : reset( $users['users'] ) );
-    
+
                     if ( $user ) {
                         $user->set_role( 'store_owner' );
                         StoreUtil::set_primary_owner( $user->ID, $id );
                         $store->set( 'status', 'active' );
                         $store->save();
                         do_action( 'multivendorx_after_store_active', $id );
-    
+
                         return rest_ensure_response( array( 'success' => true ) );
                     }
                 } elseif ( isset( $data['status'] ) && $data['status'] === 'rejected' ) {
@@ -975,27 +977,27 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                         $store->set( 'status', 'permanently_rejected' );
                         delete_metadata( 'user', 0, 'multivendorx_active_store', '', true );
                     }
-    
+
                     if ( ! empty( $data['store_application_note'] ) ) {
                         $old_notes = unserialize( $store->get_meta( 'store_reject_note' ) );
                         if ( ! is_array( $old_notes ) ) {
                             $old_notes = array();
                         }
-    
+
                         $old_notes[] = array(
                             'note' => sanitize_text_field( $data['store_application_note'] ),
                             'date' => current_time( 'mysql' ),
                         );
-    
+
                         $store->update_meta( 'store_reject_note', serialize( $old_notes ) );
                     }
-    
+
                     $store->save();
                     return rest_ensure_response( array( 'success' => true ) );
                 }
                 return;
             }
-    
+
             // Handle adding store owners
             if ( ! empty( $data['store_owners'] ) || ! empty( $data['primary_owner'] ) ) {
                 StoreUtil::add_store_users(
@@ -1005,20 +1007,20 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                         'role_id'  => 'store_owner',
                     )
                 );
-    
+
                 StoreUtil::set_primary_owner( $data['primary_owner'], $data['id'] );
-    
+
                 unset( $data['store_owners'] );
                 unset( $data['primary_owner'] );
                 // return rest_ensure_response([ 'success' => true ]);
             }
-    
+
             unset( $data['commission'] );
             unset( $data['transactions'] );
             unset( $data['primary_owner_info'] );
             unset( $data['overall_reviews'] );
             unset( $data['total_reviews'] );
-    
+
             if ( $data['status'] == 'deactivated' ) {
                 delete_metadata( 'user', 0, 'multivendorx_active_store', '', true );
             }
@@ -1029,7 +1031,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             $store->set( 'who_created', 'admin' );
             $store->set( 'status', $data['status'] ?? $store->get( 'status' ) );
             $store->set( 'create_time', $data['create_time'] ?? $store->get( 'create_time' ) );
-    
+
             // Save all other meta dynamically
             if ( is_array( $data ) ) {
                 foreach ( $data as $key => $value ) {
@@ -1041,26 +1043,26 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                     }
                 }
             }
-    
+
             $store->save();
-    
+
             if ( $store->get( 'status' ) == 'active' ) {
                 do_action( 'multivendorx_after_store_active', $id );
             }
-    
+
             return rest_ensure_response(
                 array(
                     'success' => true,
                     'id'      => $store->get_id(),
                 )
             );
-        }catch ( \Exception $e ) {
+        } catch ( \Exception $e ) {
             MultiVendorX()->util->log(
                 'MVX REST Exception: ' .
                 'Message=' . $e->getMessage() . '; ' .
                 'File=' . $e->getFile() . '; ' .
                 'Line=' . $e->getLine() . "\n\n"
-            );        
+            );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
@@ -1120,7 +1122,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             }
         }
 
-        //Fetch categories
+        // Fetch categories
         $categories = get_terms(
             array(
 				'taxonomy'   => 'product_cat',
@@ -1167,7 +1169,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             $followers = array();
         }
 
-        //Handle old format (plain array of user IDs)
+        // Handle old format (plain array of user IDs)
         // Convert to new format with id + empty date
         if ( isset( $followers[0] ) && is_int( $followers[0] ) ) {
             $followers = array_map(

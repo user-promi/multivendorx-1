@@ -15,10 +15,16 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
 	 */
 	protected $rest_base = 'review';
 
+    /**
+	 * Constructor.
+	 */
     public function __construct() {
         add_action( 'rest_api_init', array( $this, 'register_routes' ), 10 );
     }
 
+    /**
+	 * Register the routes for store reviews.
+	 */
     public function register_routes() {
         register_rest_route(
             MultiVendorX()->rest_namespace,
@@ -66,15 +72,32 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
         );
     }
 
+    /**
+     * GET permission.
+     *
+     * @param object $request
+     * @return bool
+     */
     public function get_items_permissions_check( $request ) {
         return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
     }
 
-    // POST permission
+    /**
+     * POST permission.
+     *
+     * @param object $request
+     * @return bool
+     */
     public function create_item_permissions_check( $request ) {
         return current_user_can( 'create_stores' );
     }
 
+    /**
+     * PUT permission.
+     *
+     * @param object $request
+     * @return bool
+     */
     public function update_item_permissions_check( $request ) {
         return current_user_can( 'edit_stores' );
     }
@@ -95,12 +118,12 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
                     'Message=' . $error->get_error_message() . '; ' .
                     'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
                 );
-            }            
+            }
 
             return $error;
         }
-        try{
-            // --- Step 2: Collect Request Parameters ---
+        try {
+            // --- Step 2: Collect Request Parameters ---.
             $store_id       = $request->get_param( 'store_id' );
             $limit          = max( intval( $request->get_param( 'row' ) ), 10 );
             $page           = max( intval( $request->get_param( 'page' ) ), 1 );
@@ -114,19 +137,19 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
             $overall_rating = $request->get_param( 'overall_rating' );
             $args           = array();
 
-            // --- Step 3: Apply Store Filter ---
+            // --- Step 3: Apply Store Filter ---.
             if ( $store_id ) {
                 $args['store_id'] = intval( $store_id );
             }
 
-            // --- Step 4: Handle Count-Only Request ---
+            // --- Step 4: Handle Count-Only Request ---.
             if ( $count ) {
                 $args['count'] = true;
                 $total_count   = Util::get_review_information( $args );
                 return rest_ensure_response( (int) $total_count );
             }
 
-            // --- Step 5: Add Filters (status, date, pagination) ---
+            // --- Step 5: Add Filters (status, date, pagination) ---.
             if ( $status ) {
                 $args['status'] = $status;
             }
@@ -142,20 +165,20 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
                 $args['end_date'] = $end_date;
             }
 
-            // --- Step 5.2: Filter by Overall Rating (like "4 stars & up") ---
+            // --- Step 5.2: Filter by Overall Rating (like "4 stars & up") ---.
             if ( $overall_rating !== null && $overall_rating !== '' ) {
                 $rating = floatval( $overall_rating );
 
-                // Prevent invalid or below 1 ratings
+                // Prevent invalid or below 1 ratings.
                 if ( $rating < 1 ) {
                     $rating = 1;
                 }
 
-                // Pass to query args
+                // Pass to query args.
                 $args['overall_rating'] = $rating;
             }
 
-            // --- Step 5.1: Add Sorting ---
+            // --- Step 5.1: Add Sorting ---.
             if ( ! empty( $orderBy ) && ! empty( $order ) ) {
                 $args['order_by']  = $orderBy;
                 $args['order_dir'] = ! empty( $order ) ? strtoupper( $order ) : 'DESC';
@@ -165,10 +188,10 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
                 $args['order_dir'] = 'DESC';
             }
 
-            // --- Step 6: Fetch Review Data ---
+            // --- Step 6: Fetch Review Data ---.
             $reviews = Util::get_review_information( $args );
 
-            // --- Step 7: Format Data for Response ---
+            // --- Step 7: Format Data for Response ---.
             $formatted = array_map(
                 function ( $review ) {
                     $customer      = get_userdata( $review['customer_id'] );
@@ -196,7 +219,7 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
                 $reviews ?: array()
             );
 
-            // --- Step 8: Get Status Counters ---
+            // --- Step 8: Get Status Counters ---.
             $base_args = $args;
             unset( $base_args['limit'], $base_args['offset'], $base_args['status'] );
 
@@ -221,7 +244,7 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
             $rejected_args['status'] = 'rejected';
             $rejected_count          = Util::get_review_information( $rejected_args );
 
-            // --- Step 9: Return Final Response ---
+            // --- Step 9: Return Final Response ---.
             return rest_ensure_response(
                 array(
                     'items'    => $formatted,
@@ -231,24 +254,29 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
                     'rejected' => (int) $rejected_count,
                 )
             );
-        }catch ( \Exception $e ) {
+        } catch ( \Exception $e ) {
             MultiVendorX()->util->log(
                 'MVX REST Exception: ' .
                 'Message=' . $e->getMessage() . '; ' .
                 'File=' . $e->getFile() . '; ' .
                 'Line=' . $e->getLine() . "\n\n"
-            );        
+            );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
     }
 
+    /**
+     * Create a single item.
+     *
+     * @param object $request Full data about the request.
+     */
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -256,18 +284,23 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
                     'Message=' . $error->get_error_message() . '; ' .
                     'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
                 );
-            }            
+            }
 
             return $error;
         }
     }
 
+    /**
+     * Get a single item.
+     *
+     * @param object $request Full data about the request.
+     */
     public function get_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -275,30 +308,35 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
                     'Message=' . $error->get_error_message() . '; ' .
                     'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
                 );
-            }            
+            }
 
             return $error;
         }
-        try{
+        try {
             return rest_ensure_response( $data );
-        }catch ( \Exception $e ) {
+        } catch ( \Exception $e ) {
             MultiVendorX()->util->log(
                 'MVX REST Exception: ' .
                 'Message=' . $e->getMessage() . '; ' .
                 'File=' . $e->getFile() . '; ' .
                 'Line=' . $e->getLine() . "\n\n"
-            );        
+            );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
     }
 
+    /**
+     * Update a single item.
+     *
+     * @param object $request Full data about the request.
+     */
     public function update_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -306,12 +344,12 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
                     'Message=' . $error->get_error_message() . '; ' .
                     'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
                 );
-            }            
+            }
 
             return $error;
         }
-        try{
-            // Get review ID
+        try {
+            // Get review ID.
             $id = absint( $request->get_param( 'id' ) );
             if ( ! $id ) {
                 return new \WP_Error(
@@ -321,7 +359,7 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
                 );
             }
 
-            // Fetch review info (replace this with your correct util function)
+            // Fetch review info (replace this with your correct util function).
             $review = reset( Util::get_review_information( array( 'id' => $id ) ) );
             if ( ! $review ) {
                 return new \WP_Error(
@@ -331,19 +369,19 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
                 );
             }
 
-            // Fields that can be updated
+            // Fields that can be updated.
             $reply  = $request->get_param( 'reply' );
             $status = $request->get_param( 'status' );
 
             $data_to_update = array();
 
-            // Save reply text
+            // Save reply text.
             if ( isset( $reply ) ) {
                 $data_to_update['reply']      = sanitize_textarea_field( $reply );
                 $data_to_update['reply_date'] = current_time( 'mysql' );
             }
 
-            // Save status (Pending / Approved / Rejected)
+            // Save status (Pending / Approved / Rejected).
             if ( isset( $status ) ) {
                 $allowed = array( 'Pending', 'Approved', 'Rejected' );
                 if ( in_array( $status, $allowed, true ) ) {
@@ -365,7 +403,7 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
                 );
             }
 
-            // 💾 Save to DB (replace with your helper function)
+            // 💾 Save to DB (replace with your helper function).
             $updated = Util::update_review( $id, $data_to_update );
 
             if ( ! $updated ) {
@@ -381,25 +419,29 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
                     ),
                 )
             );
-        }catch ( \Exception $e ) {
+        } catch ( \Exception $e ) {
             MultiVendorX()->util->log(
                 'MVX REST Exception: ' .
                 'Message=' . $e->getMessage() . '; ' .
                 'File=' . $e->getFile() . '; ' .
                 'Line=' . $e->getLine() . "\n\n"
-            );        
+            );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
     }
 
-
+    /**
+     * Delete a single item.
+     *
+     * @param object $request Full data about the request.
+     */
     public function delete_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -407,12 +449,12 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
                     'Message=' . $error->get_error_message() . '; ' .
                     'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
                 );
-            }            
+            }
 
             return $error;
         }
-        try{
-            // 🔹 Get review ID
+        try {
+            // 🔹 Get review ID.
             $id = absint( $request->get_param( 'id' ) );
             if ( ! $id ) {
                 return new \WP_Error(
@@ -422,7 +464,7 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
                 );
             }
 
-            // 🔹 Fetch the review (to confirm it exists)
+            // 🔹 Fetch the review (to confirm it exists).
             $review = reset( Util::get_review_information( array( 'review_id' => $id ) ) );
             if ( ! $review ) {
                 return new \WP_Error(
@@ -432,7 +474,7 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
                 );
             }
 
-            // Delete via Util helper (this also deletes rating rows)
+            // Delete via Util helper (this also deletes rating rows).
             $deleted = Util::delete_review( $id );
 
             if ( ! $deleted ) {
@@ -443,15 +485,15 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
                 );
             }
 
-            //Success response
+            // Success response.
             return rest_ensure_response( array( 'success' => true ) );
-        }catch ( \Exception $e ) {
+        } catch ( \Exception $e ) {
             MultiVendorX()->util->log(
                 'MVX REST Exception: ' .
                 'Message=' . $e->getMessage() . '; ' .
                 'File=' . $e->getFile() . '; ' .
                 'Line=' . $e->getLine() . "\n\n"
-            );        
+            );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }

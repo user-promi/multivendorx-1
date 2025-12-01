@@ -26,7 +26,7 @@ class DeprecatedActionHooks extends \WC_Deprecated_Hooks {
      * @var array
      */
     protected $deprecated_hooks = array(
-        // 'new'   => 'old'
+        // 'new' => 'old'
     );
 
     /**

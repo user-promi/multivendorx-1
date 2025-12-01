@@ -82,45 +82,45 @@ class Utill {
     );
 
     const OTHER_SETTINGS = array(
-        'installed'                        => 'multivendorx_installed',
-        'plugin_activated'                 => 'multivendorx_plugin_activated',
-        'plugin_db_version'                => 'dc_product_vendor_plugin_db_version',
-        'plugin_page_install'              => 'dc_product_vendor_plugin_page_install',
-        'log_file'                         => 'multivendorx_log_file',
-        'tour_active'                      => 'multivendorx_tour_active',
-        'admin_email'                      => 'admin_email',
-        'default_role'                     => 'default_role',
+        'installed'           => 'multivendorx_installed',
+        'plugin_activated'    => 'multivendorx_plugin_activated',
+        'plugin_db_version'   => 'dc_product_vendor_plugin_db_version',
+        'plugin_page_install' => 'dc_product_vendor_plugin_page_install',
+        'log_file'            => 'multivendorx_log_file',
+        'tour_active'         => 'multivendorx_tour_active',
+        'admin_email'         => 'admin_email',
+        'default_role'        => 'default_role',
     );
 
     const WOO_SETTINGS = array(
-        'taxes'                           => 'woocommerce_calc_taxes',
-        'generate_password'               => 'woocommerce_registration_generate_password',
-        'default_country'                 => 'woocommerce_default_country',
-        'manage_stock'                    => 'woocommerce_manage_stock',
-        'weight_unit'                     => 'woocommerce_weight_unit',
-        'dimension_unit'                  => 'woocommerce_dimension_unit',
-        'notify_low_stock'                => 'woocommerce_notify_low_stock_amount',
+        'taxes'             => 'woocommerce_calc_taxes',
+        'generate_password' => 'woocommerce_registration_generate_password',
+        'default_country'   => 'woocommerce_default_country',
+        'manage_stock'      => 'woocommerce_manage_stock',
+        'weight_unit'       => 'woocommerce_weight_unit',
+        'dimension_unit'    => 'woocommerce_dimension_unit',
+        'notify_low_stock'  => 'woocommerce_notify_low_stock_amount',
     );
 
     const WORDPRESS_SETTINGS = array(
-        'permalink'                       => 'permalink_structure',
-        'rows'                            => 'default_post_edit_rows',
+        'permalink' => 'permalink_structure',
+        'rows'      => 'default_post_edit_rows',
     );
     const POST_META_SETTINGS = array(
-        'store_id'                        => 'multivendorx_store_id',
-        'fixed_commission'                => 'multivendorx_product_fixed_commission',
-        'percentage_commission'           => 'multivendorx_product_percentage_commission',
-        'variable_product_percentage'     => 'multivendorx_variable_product_percentage_commission',
-        'variable_product_fixed'          => 'multivendorx_variable_product_fixed_commission',
-        'do_list'                         => '_dismiss_to_do_list',
-        'spmv_map_id'                     => '_mvx_spmv_map_id',
-        'gtin_code'                       => '_mvx_gtin_code',
-        'shipping_policy'                 => 'multivendorx_shipping_policy',
-        'refund_policy'                   => 'multivendorx_refund_policy',
-        'cancellation_policy'             => 'multivendorx_cancellation_policy',
-        'announcement_stores'             => 'multivendorx_announcement_stores',
-        'announcement_url'                => 'multivendorx_announcement_url',
-        
+        'store_id'                    => 'multivendorx_store_id',
+        'fixed_commission'            => 'multivendorx_product_fixed_commission',
+        'percentage_commission'       => 'multivendorx_product_percentage_commission',
+        'variable_product_percentage' => 'multivendorx_variable_product_percentage_commission',
+        'variable_product_fixed'      => 'multivendorx_variable_product_fixed_commission',
+        'do_list'                     => '_dismiss_to_do_list',
+        'spmv_map_id'                 => '_mvx_spmv_map_id',
+        'gtin_code'                   => '_mvx_gtin_code',
+        'shipping_policy'             => 'multivendorx_shipping_policy',
+        'refund_policy'               => 'multivendorx_refund_policy',
+        'cancellation_policy'         => 'multivendorx_cancellation_policy',
+        'announcement_stores'         => 'multivendorx_announcement_stores',
+        'announcement_url'            => 'multivendorx_announcement_url',
+
 
     );
     const ACTIVE_MODULES_DB_KEY = 'multivendorx_all_active_module_list';
@@ -209,18 +209,25 @@ class Utill {
 
 
     /**
-     * Utility function add aditional single quote in a string.
+     * Utility function to wrap a string in single quotes.
      *
-     * @param   string $string
-     * @return  string
+     * @param string $value The input string to be wrapped.
+     *
+     * @return string The string wrapped in single quotes, or the original value if not a string.
      */
-    public static function add_single_quots( $string ) {
-        if ( is_string( $string ) ) {
-            return "'$string'";
+    public static function add_single_quotes( $value ) {
+        if ( is_string( $value ) ) {
+            return "'" . $value . "'";
         }
-        return $string;
+
+        return $value;
     }
 
+    /**
+     * Check if current page is store dashboard page.
+     *
+     * @return bool
+     */
     public static function is_store_dashboard() {
         $dashboard_page = (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' );
         // if (is_page($dashboard_page)) {
@@ -230,6 +237,11 @@ class Utill {
         return is_page( $dashboard_page );
     }
 
+    /**
+     * Check if current page is store registration page.
+     *
+     * @return bool
+     */
     public static function is_store_registration_page() {
         $registration_page = (int) MultiVendorX()->setting->get_setting( 'store_registration_page' );
         // if (is_page($registration_page)) {

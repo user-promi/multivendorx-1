@@ -139,11 +139,11 @@ class StoreUtil {
         $params            = array_merge( array( $user_id ), $excluded_statuses );
 
         // $sql = "
-        //     SELECT su.store_id
-        //     FROM {$store_users} su
-        //     INNER JOIN {$stores} s ON s.ID = su.store_id
-        //     WHERE su.user_id = %d
-        //     AND s.status NOT IN ($placeholders)
+        // SELECT su.store_id
+        // FROM {$store_users} su
+        // INNER JOIN {$stores} s ON s.ID = su.store_id
+        // WHERE su.user_id = %d
+        // AND s.status NOT IN ($placeholders)
         // ";
         $sql = "
             SELECT 
@@ -156,7 +156,7 @@ class StoreUtil {
         ";
 
         // return $wpdb->get_col($wpdb->prepare($sql, $params));
-        return $wpdb->get_results( $wpdb->prepare($sql, $params), ARRAY_A );
+        return $wpdb->get_results( $wpdb->prepare( $sql, $params ), ARRAY_A );
     }
 
 
