@@ -421,7 +421,11 @@ class FrontendScripts {
                 'module'     => 'store-inventory',
             ),
         );
-
+        $store_ids           = StoreUtil::get_stores_from_user_id( get_current_user_id() );
+        $active_store        = get_user_meta( get_current_user_id(), 'multivendorx_active_store', true );
+        if ( empty( $active_store ) ) {
+            update_user_meta( get_current_user_id(), 'multivendorx_active_store', reset( $store_ids )['id'] );
+        }
         $localize_scripts = apply_filters(
             'multivendorx_localize_scripts',
             array(
@@ -592,6 +596,7 @@ class FrontendScripts {
                         'whatsapp_opening_pattern' => MultiVendorX()->setting->get_setting( ' whatsapp_opening_pattern' ),
                         'whatsapp_pre_filled'      => MultiVendorX()->setting->get_setting( ' whatsapp_pre_filled' ),
                         'settings_databases_value' => $settings_databases_value,
+                        'site_name'             => get_bloginfo('name'),
                         'current_user'             => wp_get_current_user(),
                         'current_user_image'       => get_avatar_url(get_current_user_id(), ['size' => 48]),
                         'user_logout_url'          => esc_url(wp_logout_url(get_permalink((int) MultiVendorX()->setting->get_setting('store_dashboard_page')))),
