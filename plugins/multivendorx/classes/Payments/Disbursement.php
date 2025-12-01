@@ -1,4 +1,9 @@
 <?php
+/**
+ * Class Disbursement
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\Payments;
 
@@ -8,14 +13,26 @@ use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * MultiVendorX Disbursement Class.
+ *
+ * @class       Module class
+ * @version     6.0.0
+ * @author      MultiVendorX
+ */
 class Disbursement {
+    /**
+     * Constructor
+     */
     public function __construct() {
         // add_action('woocommerce_order_status_changed', array($this, 'disbursement_process'), 30, 4);
         add_action( 'multivendorx_transaction_status_update', array( $this, 'transaction_status_update' ) );
         add_action( 'multivendorx_payout_cron', array( $this, 'multivendorx_payout_cron' ) );
     }
 
-
+    /**
+     * Transaction status update
+     */
     public function transaction_status_update() {
         global $wpdb;
         $table = $wpdb->prefix . Utill::TABLES['transaction'];
@@ -56,6 +73,9 @@ class Disbursement {
         }
     }
 
+    /**
+     * Payout cron job
+     */
     public function multivendorx_payout_cron() {
 
         $threshold_amount      = (int) MultiVendorX()->setting->get_setting( 'payout_threshold_amount', 0 );

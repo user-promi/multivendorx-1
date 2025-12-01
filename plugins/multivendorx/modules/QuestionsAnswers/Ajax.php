@@ -50,8 +50,11 @@ class Ajax {
         $question   = sanitize_textarea_field(
             filter_input( INPUT_POST, 'question', FILTER_UNSAFE_RAW )
         );
-        $product_id = filter_input( INPUT_POST, 'product_id', FILTER_VALIDATE_INT ) ?: 0;
-        $store_id   = intval( get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true ) ?: 0 );
+        $product_id = filter_input( INPUT_POST, 'product_id', FILTER_VALIDATE_INT );
+        $product_id = ! empty( $product_id ) ? $product_id : 0;
+
+        $meta_store_id = get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true );
+        $store_id      = ! empty( $meta_store_id ) ? intval( $meta_store_id ) : 0;
 
         $wpdb->insert(
             $table,
@@ -72,7 +75,7 @@ class Ajax {
 				'id'       => $insert_id,
 				'question' => $question,
 				'votes'    => 0,
-				'date'     => current_time( 'mysql' ),
+				'date'     => current_time(),
             )
         );
     }
@@ -110,7 +113,7 @@ class Ajax {
                     <p class="qna-question"><strong>Q:</strong> <?php echo esc_html( $row->question_text ); ?></p>
                     <small class="qna-meta">
                         By <?php echo esc_html( get_the_author_meta( 'display_name', $row->question_by ) ); ?>,
-                        <?php echo esc_html( human_time_diff( strtotime( $row->question_date ), current_time( 'timestamp' ) ) ) . ' ago'; ?>
+                        <?php echo esc_html( human_time_diff( strtotime( $row->question_date ), current_time() ) ) . ' ago'; ?>
                     </small>
     
                     <p class="qna-answer"><strong>A:</strong> <?php echo esc_html( $row->answer_text ); ?></p>

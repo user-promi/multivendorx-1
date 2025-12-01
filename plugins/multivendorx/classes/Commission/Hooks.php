@@ -1,4 +1,9 @@
 <?php
+/**
+ * Modules Commission Hooks
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\Commission;
 
@@ -7,13 +12,16 @@ use MultiVendorX\Order\VendorOrder;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * MultiVendorX Commission Hooks class
+ * MultiVendorX Commission Hooks.
  *
- * @version     PRODUCT_VERSION
- * @package     MultiVendorX
+ * @class       Module class
+ * @version     6.0.0
  * @author      MultiVendorX
  */
 class Hooks {
+    /**
+     * Constructor
+     */
     function __construct() {
         add_action( 'mvx_checkout_vendor_order_processed', array( $this, 'create_commission' ), 10, 3 );
         add_action( 'woocommerce_order_refunded', array( $this, 'create_commission_refunds' ), 10, 2 );
@@ -22,9 +30,9 @@ class Hooks {
     /**
      * Create commission of vendor order.
      *
-     * @param   int    $vendor_order_id
-     * @param   object $vendor_order
-     * @param   object $main_order
+     * @param   int    $vendor_order_id Vendor order ID.
+     * @param   object $vendor_order Vendor order object.
+     * @param   object $main_order Main order object.
      * @return  void
      */
     public function create_commission( $vendor_order, $main_order ) {
@@ -43,15 +51,15 @@ class Hooks {
     /**
      * Create refunds for vendor commission
      *
-     * @param mixed $order_id
-     * @param mixed $refund_id
+     * @param mixed $order_id Order ID.
+     * @param mixed $refund_id Refund ID.
      * @return void
      */
     public function create_commission_refunds( $order_id, $refund_id ) {
         $order  = wc_get_order( $order_id );
         $refund = wc_get_order( $refund_id );
 
-        if ( $order->get_parent_id() == 0 ) {
+        if ( $order->get_parent_id() === 0 ) {
 			return;
         }
 

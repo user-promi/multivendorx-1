@@ -1,4 +1,9 @@
 <?php
+/**
+ * Modules REST API controller
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\RestAPI\Controllers;
 
@@ -7,6 +12,13 @@ use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * MultiVendorX REST API controller for Payouts.
+ *
+ * @class       Module class
+ * @version     6.0.0
+ * @author      MultiVendorX
+ */
 class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
 
 	/**
@@ -16,6 +28,9 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
 	 */
 	protected $rest_base = 'payouts';
 
+    /**
+     * Register routes.
+     */
     public function register_routes() {
         register_rest_route(
             MultiVendorX()->rest_namespace,
@@ -65,30 +80,47 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
         );
     }
 
+    /**
+     * Get a collection of items.
+     *
+     * @param object $request Full details about the request.
+     */
     public function get_items_permissions_check( $request ) {
         // return current_user_can( 'read' );
         return true;
     }
 
-    // POST permission
+    /**
+     * Create a single item.
+     *
+     * @param object $request Full details about the request.
+     */
     public function create_item_permissions_check( $request ) {
         // return current_user_can( 'manage_options' );
         return true;
     }
 
+    /**
+     * Update a single item.
+     *
+     * @param object $request Full details about the request.
+     */
     public function update_item_permissions_check( $request ) {
         // return current_user_can('manage_options');
         return true;
     }
 
-
-    // GET
+    /**
+     * Get a collection of items.
+     *
+     * @param object $request Full details about the request.
+     */
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -101,13 +133,13 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
             return $error;
         }
         try {
-            // Pagination
+            // Pagination.
             $limit  = max( intval( $request->get_param( 'row' ) ), 10 );
             $page   = max( intval( $request->get_param( 'page' ) ), 1 );
             $offset = ( $page - 1 ) * $limit;
             $count  = $request->get_param( 'count' );
 
-            // Count only
+            // Count only.
             if ( $count ) {
                 $pending_products_count = count(
                     wc_get_products(
@@ -123,7 +155,7 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
                 return rest_ensure_response( (int) $pending_products_count );
             }
 
-            // Fetch pending products with pagination
+            // Fetch pending products with pagination.
             $pending_products = wc_get_products(
                 array(
                     'status'   => 'pending',
@@ -161,12 +193,17 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
         }
     }
 
+    /**
+     * Create a single item.
+     *
+     * @param object $request Full details about the request.
+     */
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -182,7 +219,7 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
             $registrations = $request->get_header( 'registrations' );
 
             $store_data = $request->get_param( 'formData' );
-            // Create store object
+            // Create store object.
             $store = new \MultiVendorX\Store\Store();
 
             $core_fields = array( 'name', 'slug', 'description', 'who_created', 'status' );
@@ -203,7 +240,7 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
             }
 
             if ( $registrations ) {
-                // Collect all non-core fields into one array
+                // Collect all non-core fields into one array.
                 $non_core_fields = array();
                 foreach ( $store_data as $key => $value ) {
                     if ( ! in_array( $key, $core_fields, true ) ) {
@@ -211,7 +248,7 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
                     }
                 }
 
-                // Save them under one key
+                // Save them under one key.
                 if ( ! empty( $non_core_fields ) ) {
                     $store->update_meta( 'multivendorx-registration-data', $non_core_fields );
                 }
@@ -235,12 +272,17 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
         }
     }
 
+    /**
+     * Get a specific item from the collection.
+     *
+     * @param object $request Full details about the request.
+     */
     public function get_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -266,7 +308,7 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
                 return rest_ensure_response( $response );
             }
 
-            // Load the store
+            // Load the store.
             $store = new \MultiVendorX\Store\Store( $id );
             if ( $registrations ) {
                 $response = StoreUtil::get_store_registration_form( $store->get_id() );
@@ -283,7 +325,7 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
                 'status'      => $store->get( 'status' ),
             );
 
-            // Add meta data
+            // Add meta data.
             foreach ( $store->meta_data as $key => $values ) {
                 $response[ $key ] = is_array( $values ) ? $values[0] : $values;
             }
@@ -301,12 +343,17 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
         }
     }
 
+    /**
+     * Update an existing item.
+     *
+     * @param object $request Request object.
+     */
     public function update_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -374,7 +421,11 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
         }
     }
 
-
+    /**
+     * Get states by country code.
+     *
+     * @param object $request
+     */
     public function get_states_by_country( $request ) {
         $country_code = $request->get_param( 'country' );
         $states       = WC()->countries->get_states( $country_code );

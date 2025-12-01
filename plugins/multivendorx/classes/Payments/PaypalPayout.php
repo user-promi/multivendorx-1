@@ -1,15 +1,37 @@
 <?php
+/**
+ * MultiVendorX PaypalPayout
+ *
+ * @package MultiVendorX
+ */
+
 namespace MultiVendorX\Payments;
 
 defined( 'ABSPATH' ) || exit;
 use MultiVendorX\Store\Store;
+/**
+ * MultiVendorX MultiVendorXEmails
+ *
+ * @class       Module class
+ * @version     6.0.0
+ * @author      MultiVendorX
+ */
 class PaypalPayout {
+    /**
+     * Constructor
+     */
     public function __construct() {
         add_action( 'multivendorx_process_paypal-payout_payment', array( $this, 'process_payment' ), 10, 5 );
     }
+    /**
+     * Get id
+     */
     public function get_id() {
         return 'paypal-payout';
     }
+    /**
+     * Get settings
+     */
     public function get_settings() {
         return array(
             'icon'         => 'adminlib-form-paypal-email',
@@ -51,6 +73,9 @@ class PaypalPayout {
             ),
         );
     }
+    /**
+     * Get store payment settings
+     */
     public function get_store_payment_settings() {
         $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
         $paypal_settings        = ! empty( $payment_admin_settings['paypal-payout'] ) ? $payment_admin_settings['paypal-payout'] : array();
@@ -69,6 +94,17 @@ class PaypalPayout {
             );
         }
     }
+    /**
+     * Process payment
+     *
+     * @param int    $store_id store id.
+     * @param float  $amount amount.
+     * @param int    $order_id order id.
+     * @param string $transaction_id transaction id.
+     * @param string $note note.
+     *
+     * @return void
+     */
     public function process_payment( $store_id, $amount, $order_id = null, $transaction_id = null, $note = null ) {
         $payment_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
         $paypal_settings  = $payment_settings['paypal-payout'] ?? null;
@@ -81,7 +117,7 @@ class PaypalPayout {
             $client_id      = $paypal_settings['client_id'] ?? '';
             $client_secret  = $paypal_settings['client_secret'] ?? '';
             if ( $receiver_email && $client_id && $client_secret ) {
-                $sandbox  = ( $paypal_settings['payment_mode'] == 'sandbox' );
+                $sandbox  = ( 'sandbox' === $paypal_settings['payment_mode'] );
                 $currency = get_woocommerce_currency();
 
                 // 1. access token
@@ -97,7 +133,7 @@ class PaypalPayout {
                         $sandbox
                     );
 
-                    // success when batch id exists
+                    // Success when batch id exists.
                     if ( ! empty( $payout_response ) && ! empty( $payout_response['batch_header']['payout_batch_id'] ) ) {
                         $status = 'success';
                     }
@@ -118,6 +154,12 @@ class PaypalPayout {
     }
     /**
      * Get PayPal access token using client credentials
+     *
+     * @param string $client_id client id.
+     * @param string $client_secret client secret.
+     * @param bool   $sandbox sandbox mode.
+     *
+     * @return string|bool access token or false on failure
      */
     private function get_paypal_access_token( $client_id, $client_secret, $sandbox = false ) {
         $base_url = $sandbox
@@ -133,7 +175,7 @@ class PaypalPayout {
             'body'    => 'grant_type=client_credentials',
             'timeout' => 30,
         );
-        // Add Basic Auth header
+        // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
         $args['headers']['Authorization'] = 'Basic ' . base64_encode( $client_id . ':' . $client_secret );
         $response                         = wp_remote_post( $base_url . '/v1/oauth2/token', $args );
         if ( is_wp_error( $response ) ) {
@@ -147,6 +189,15 @@ class PaypalPayout {
 
     /**
      * Create PayPal payout
+     *
+     * @param string $access_token access token.
+     * @param string $receiver_email receiver email.
+     * @param float  $amount amount.
+     * @param string $currency currency.
+     * @param int    $store_id store id.
+     * @param bool   $sandbox sandbox mode.
+     *
+     * @return array payout response
      */
     private function create_paypal_payout( $access_token, $receiver_email, $amount, $currency, $store_id, $sandbox = false ) {
         $base_url        = $sandbox
@@ -179,7 +230,7 @@ class PaypalPayout {
                 'Content-Type'  => 'application/json',
                 'Authorization' => 'Bearer ' . $access_token,
             ),
-            'body'    => json_encode( $payout_data ),
+            'body'    => wp_json_encode( $payout_data ),
             'timeout' => 30,
         );
         $response        = wp_remote_post( $base_url . '/v1/payments/payouts', $args );

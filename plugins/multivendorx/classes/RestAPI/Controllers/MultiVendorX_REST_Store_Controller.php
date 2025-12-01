@@ -986,7 +986,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
                         $old_notes[] = array(
                             'note' => sanitize_text_field( $data['store_application_note'] ),
-                            'date' => current_time( 'mysql' ),
+                            'date' => current_time(),
                         );
 
                         $store->update_meta( 'store_reject_note', serialize( $old_notes ) );
@@ -1038,7 +1038,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                     if ( ! in_array( $key, array( 'id', 'name', 'slug', 'description', 'who_created', 'status', 'create_time' ), true ) ) {
                         $store->update_meta( $key, $value );
                         if ( $key == 'deactivation_reason' ) {
-                            $store->update_meta( 'deactivation_request_date', current_time( 'mysql' ) );
+                            $store->update_meta( 'deactivation_request_date', current_time() );
                         }
                     }
                 }

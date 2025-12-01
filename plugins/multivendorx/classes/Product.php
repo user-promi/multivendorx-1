@@ -114,8 +114,8 @@ class Product {
             return;
         }
 
-        // Build dropdown
-        $selected_store = sanitize_text_field( filter_input( INPUT_GET, Utill::POST_META_SETTINGS['store_id'], FILTER_DEFAULT ) ) ?: '';
+        // Build dropdown.
+        $selected_store = sanitize_text_field( filter_input( INPUT_GET, Utill::POST_META_SETTINGS['store_id'], FILTER_DEFAULT ) ) ? sanitize_text_field( filter_input( INPUT_GET, Utill::POST_META_SETTINGS['store_id'], FILTER_DEFAULT ) ) : '';
 
         echo '<select name="multivendorx_store_id">';
         echo '<option value="">Filter by Store</option>';
@@ -145,7 +145,7 @@ class Product {
         if (
             'edit.php' === $pagenow &&
             ! empty( $store_id ) &&
-            'product' == $typenow
+            'product' === $typenow
         ) {
             $meta_query = array(
                 array(
@@ -184,7 +184,7 @@ class Product {
     /**
      * Save the store ID when bulk editing products
      *
-     * @param $product Product object.
+     * @param object $product Product object.
      */
     public function save_product_store_bulk_edit( $product ) {
         $store_id = filter_input( INPUT_GET, 'multivendorx_store_id', FILTER_SANITIZE_NUMBER_INT );

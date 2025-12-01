@@ -1,9 +1,25 @@
 <?php
+/**
+ * Modules class file
+ *
+ * @package MultiVendorX
+ */
+
 namespace MultiVendorX\Announcement;
 
+/**
+ * MultiVendorX Announcement module.
+ *
+ * @class       Module class
+ * @version     6.0.0
+ * @author      MultiVendorX
+ */
 class Frontend {
+    /**
+     * Initialize the class.
+     */
     public function __construct() {
-        // Hook into the filter that defines the admin submenus
+        // Hook into the filter that defines the admin submenus.
         add_filter( 'multivendorx_submenus', array( $this, 'add_announcement_menu' ), 20 );
     }
 
@@ -23,11 +39,11 @@ class Frontend {
 
         $ordered = array();
         foreach ( $submenus as $key => $menu ) {
-            // Copy existing menu
+            // Copy existing menu.
             $ordered[ $key ] = $menu;
 
-            // Insert advertisement right after "status-tools"
-            if ( $key === 'status-tools' ) {
+            // Insert advertisement right after "status-tools".
+            if ( 'status-tools' === $key ) {
                 $ordered = array_merge( $ordered, $new_item );
             }
         }

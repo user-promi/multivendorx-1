@@ -378,7 +378,7 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
             // Save reply text.
             if ( isset( $reply ) ) {
                 $data_to_update['reply']      = sanitize_textarea_field( $reply );
-                $data_to_update['reply_date'] = current_time( 'mysql' );
+                $data_to_update['reply_date'] = current_time();
             }
 
             // Save status (Pending / Approved / Rejected).

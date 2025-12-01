@@ -76,11 +76,7 @@ class Admin {
             }
 
             // Decode applied rules safely using JSON.
-            $rules = array();
-            if ( ! empty( $filtered['data']['rules_applied'] ) ) {
-                $rules = json_decode( $filtered['data']['rules_applied'], true );
-                $rules = is_array( $rules ) ? $rules : array();
-            }
+            $rules = unserialize( $filtered['data']['rules_applied'] );
 
             $rules['gateway_fee'] = array(
                 'fixed'      => $fixed_fee,
@@ -97,7 +93,7 @@ class Admin {
             }
 
             // Encode rules safely.
-            $filtered['data']['rules_applied'] = wp_json_encode( $rules );
+            $filtered['data']['rules_applied'] = serialize( $rules );
 
             $filtered['format'][] = '%f';
         }

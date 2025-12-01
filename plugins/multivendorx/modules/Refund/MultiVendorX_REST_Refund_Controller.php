@@ -1,10 +1,22 @@
 <?php
+/**
+ * Modules class file
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\Refund;
 
 use MultiVendorX\Store\Store;
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * MultiVendorX REST API Refund controller.
+ *
+ * @class       Module class
+ * @version     6.0.0
+ * @author      MultiVendorX
+ */
 class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
 
     /**
@@ -14,10 +26,16 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
      */
     protected $rest_base = 'refund';
 
+    /**
+     * Constructor.
+     */
     public function __construct() {
         add_action( 'rest_api_init', array( $this, 'register_routes' ), 10 );
     }
 
+    /**
+     * Register the routes for the objects of the controller.
+     */
     public function register_routes() {
         register_rest_route(
             MultiVendorX()->rest_namespace,
@@ -42,10 +60,20 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
         );
     }
 
+    /**
+     * Get all refunds filtered by store, search, and date.
+     *
+     * @param object $request Full details about the request.
+     */
     public function get_items_permissions_check( $request ) {
         return current_user_can( 'read_shop_orders' ) || current_user_can( 'edit_shop_orders' );
     }
 
+    /**
+     * Update an existing refund.
+     *
+     * @param object $request Full details about the request.
+     */
     public function update_item_permissions_check( $request ) {
         return current_user_can( 'edit_shop_orders' );
     }
@@ -60,7 +88,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -73,7 +101,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
             return $error;
         }
         try {
-            // Parameters
+            // Parameters.
             $limit         = max( 1, intval( $request->get_param( 'row' ) ) );
             $page          = max( 1, intval( $request->get_param( 'page' ) ) );
             $count_only    = filter_var( $request->get_param( 'count' ), FILTER_VALIDATE_BOOLEAN );
@@ -85,7 +113,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
             $start_date    = $request->get_param( 'startDate' );
             $end_date      = $request->get_param( 'endDate' );
 
-            // Build meta query
+            // Build meta query.
             $meta_query = array();
             if ( ! empty( $store_id ) ) {
                 $meta_query[] = array(
@@ -100,7 +128,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
                 );
             }
 
-            // 🗓 Date filter
+            // Date filter.
             $date_filter = '';
             if ( $start_date || $end_date ) {
                 $start = $start_date ? gmdate( 'Y-m-d 00:00:00', strtotime( $start_date ) ) : '';
@@ -114,7 +142,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
                 }
             }
 
-            // If count only — return minimal data (fast)
+            // If count only — return minimal data (fast).
             if ( $count_only ) {
                 $count_args = array(
                     'type'       => 'shop_order_refund',
@@ -126,7 +154,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
                 return rest_ensure_response( count( $refund_ids ) );
             }
 
-            // Build full query (for listing)
+            // Build full query (for listing).
             $args = array(
                 'type'       => 'shop_order_refund',
                 'meta_query' => $meta_query,
@@ -145,10 +173,10 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
                 $args['order']   = $order;
             }
 
-            // Fetch refunds
+            // Fetch refunds.
             $refunds = wc_get_orders( $args );
 
-            // Search filtering (only after fetching)
+            // Search filtering (only after fetching).
             if ( $search_action && $search_field ) {
                 $refunds = array_filter(
                     $refunds,
@@ -175,7 +203,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
                 );
             }
 
-            // Build response
+            // Build response.
             $refund_list = array_map(
                 function ( $refund ) {
                     /** @var WC_Order_Refund $refund */
@@ -189,7 +217,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
                     $customer_name  = $order ? $order->get_formatted_billing_full_name() : '';
                     $customer_email = $order ? $order->get_billing_email() : '';
 
-                    // Build admin edit link if the customer exists
+                    // Build admin edit link if the customer exists.
                     $customer_edit_link = $customer_id
                     ? admin_url( 'user-edit.php?user_id=' . $customer_id )
                     : '';
@@ -216,7 +244,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
                 $refunds
             );
 
-            // Sort by order_id manually if needed
+            // Sort by order_id manually if needed.
             if ( $order_by === 'order_id' ) {
                 usort( $refund_list, fn( $a, $b ) => ( $order === 'ASC' ? $a['order_id'] <=> $b['order_id'] : $b['order_id'] <=> $a['order_id'] ) );
             }
@@ -234,7 +262,11 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
         }
     }
 
-
+    /**
+     * Create a new refund.
+     *
+     * @param object $request Full data about the request.
+     */
     public function update_item( $request ) {
         $refund_info = $request->get_param( 'payload' );
 
@@ -278,7 +310,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
                     'refund_tax'   => array(),
                 );
                 $parent_item_id         = $this->get_vendor_parent_order_item_id( $item_id );
-                if ( $parent_item_id && in_array( $parent_item_id, $parent_items_ids ) ) {
+                if ( $parent_item_id && in_array( $parent_item_id, $parent_items_ids, true ) ) {
                     $parent_line_items[ $parent_item_id ] = array(
                         'qty'          => 0,
                         'refund_total' => 0,
@@ -298,7 +330,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
 
                 $parent_item_id = $this->get_vendor_parent_order_item_id( $item_id );
 
-                if ( $parent_item_id && in_array( $parent_item_id, $parent_items_ids ) ) {
+                if ( $parent_item_id && in_array( $parent_item_id, $parent_items_ids, true ) ) {
                     $parent_line_items[ $parent_item_id ]['qty']          = $qty;
                     $parent_line_items[ $parent_item_id ]['refund_total'] = wc_format_decimal( $total );
                     $parent_line_items[ $parent_item_id ]['refund_tax']   = wc_format_decimal( $tax );
@@ -358,6 +390,12 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
         }
     }
 
+    /**
+     * Get parent order item id from vendor order item id
+     *
+     * @param int $item_id
+     * @return int
+     */
     public function get_vendor_parent_order_item_id( $item_id ) {
         global $wpdb;
         $vendor_item_id = $wpdb->get_var( $wpdb->prepare( "SELECT meta_value FROM {$wpdb->order_itemmeta} WHERE meta_key=%s AND order_item_id=%d", 'store_order_item_id', absint( $item_id ) ) );

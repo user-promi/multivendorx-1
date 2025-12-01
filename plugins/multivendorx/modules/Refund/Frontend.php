@@ -25,6 +25,11 @@ class Frontend {
         add_action( 'wp', array( $this, 'mvx_handler_cust_requested_refund' ) );
     }
 
+    /**
+     * Add refund button on customer my account order view page
+     *
+     * @param object $order
+     */
     public function mvx_refund_btn_customer_my_account( $order ) {
         if ( ! is_wc_endpoint_url( 'view-order' ) ) {
             return;
@@ -33,16 +38,16 @@ class Frontend {
             return;
         }
         $allowed_statuses = MultiVendorX()->setting->get_setting( 'customer_refund_status', array() );
-        // Get current order status
+        // Get current order status.
         $order_status = $order->get_status(); // e.g., 'pending', 'completed'
-        // Check if current order status is allowed
+        // Check if current order status is allowed.
         if ( ! in_array( $order_status, $allowed_statuses, true ) ) {
-            return; // don't show button
+            return; // Don't show button.
         }
         $refund_settings       = MultiVendorX()->setting->get_option( 'multivendorx_order_actions_refunds_settings', array() );
         $refund_reason_options = MultiVendorX()->setting->get_setting( 'refund_reasons', array() );
         $refund_button_text    = apply_filters( 'mvx_customer_my_account_refund_request_button_text', __( 'Request a refund', 'multivendorx' ), $order );
-        // Print refund messages, if any
+        // Print refund messages, if any.
         if ( $msg_data = $this->mvx_get_customer_refund_order_msg( $order, $refund_settings ) ) {
             $type = isset( $msg_data['type'] ) ? $msg_data['type'] : 'info';
             ?>
@@ -93,7 +98,7 @@ class Frontend {
                             ' . esc_html( $reason['value'] ) . '
                         </label></p>';
                     }
-                    // Add others reason
+                    // Add others reason.
                     echo '<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                         <label class="refund_reason_option" for="refund_reason_option-other">
                             <input type="radio" class="woocommerce-Input input-radio" name="refund_reason_option" id="refund_reason_option-other" value="others" />
@@ -237,7 +242,7 @@ class Frontend {
         $refund_product           = wc_clean( $_REQUEST['refund_product'] ?? '' );
 
         $refund_reason_options = MultiVendorX()->setting->get_setting( 'refund_reasons', array() );
-        $refund_reason         = $reason_option === 'others' ? $refund_reason_other : ( $refund_reason_options[ $reason_option ] ? $refund_reason_options[ $reason_option ]['value'] : '' );
+        $refund_reason         = 'others' === $reason_option ? $refund_reason_other : ( $refund_reason_options[ $reason_option ] ? $refund_reason_options[ $reason_option ]['value'] : '' );
 
         $uploaded_image_urls = array();
         $attach_ids          = array();
@@ -259,7 +264,7 @@ class Frontend {
             $file_keys = array_keys( $_FILES['product_img']['name'] );
 
             foreach ( $file_keys as $index ) {
-                if ( $_FILES['product_img']['error'][ $index ] !== UPLOAD_ERR_OK ) {
+                if ( UPLOAD_ERR_OK !== $_FILES['product_img']['error'][ $index ] ) {
                     continue;
                 }
 

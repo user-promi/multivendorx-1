@@ -1,9 +1,21 @@
 <?php
+/**
+ * Modules REST API Announcement controller
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\Announcement;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * MultiVendorX REST API Announcement controller.
+ *
+ * @class       Module class
+ * @version     6.0.0
+ * @author      MultiVendorX
+ */
 class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
 
 	/**
@@ -13,10 +25,16 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
 	 */
 	protected $rest_base = 'announcement';
 
+    /**
+     * Constructor.
+     */
     public function __construct() {
         add_action( 'rest_api_init', array( $this, 'register_routes' ), 10 );
     }
 
+    /**
+     * Register the routes for the objects of the controller.
+     */
     public function register_routes() {
         register_rest_route(
             MultiVendorX()->rest_namespace,
@@ -63,25 +81,44 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
         );
     }
 
+    /**
+     * Get items permissions check.
+     *
+     * @param object $request
+     */
     public function get_items_permissions_check( $request ) {
         return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
     }
 
-    // POST permission
+    /**
+     * Create item permissions check.
+     *
+     * @param object $request
+     */
     public function create_item_permissions_check( $request ) {
         return current_user_can( 'manage_options' );
     }
 
+    /**
+     * Update item permissions check.
+     *
+     * @param object $request
+     */
     public function update_item_permissions_check( $request ) {
         return current_user_can( 'manage_options' );
     }
 
+    /**
+     * Get all announcements.
+     *
+     * @param object $request
+     */
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -110,7 +147,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             $start_date = $start_timestamp ? date( 'Y-m-d 00:00:00', $start_timestamp ) : '';
             $end_date   = $end_timestamp ? date( 'Y-m-d 23:59:59', $end_timestamp ) : '';
 
-            // Existing count logic
+            // Existing count logic.
             if ( $count_param ) {
                 $posts = get_posts(
                     array(
@@ -123,16 +160,16 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                 return rest_ensure_response( count( $posts ) );
             }
 
-            // Base query args — always show latest first
+            // Base query args — always show latest first.
             $query_args = array(
                 'post_type'        => 'multivendorx_an',
                 'posts_per_page'   => $limit,
                 'offset'           => $offset,
                 'post_status'      => $status_param ? $status_param : 'any',
-                'orderby'          => 'date',          // sort by post_date
-                'order'            => 'DESC',          // latest first
-                'suppress_filters' => false,           // ensure no filters override sorting
-                'no_found_rows'    => false,           // enables pagination count
+                'orderby'          => 'date',          // sort by post_date.
+                'order'            => 'DESC',          // latest first.
+                'suppress_filters' => false,           // ensure no filters override sorting.
+                'no_found_rows'    => false,           // enables pagination count.
             );
 
             $store_id_raw = $request->get_param( 'store_id' );
@@ -142,14 +179,14 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                 $query_args['meta_query'] = array(
                     'relation' => 'OR',
 
-                    // Match specific store ID
+                    // Match specific store ID.
                     array(
                         'key'     => 'multivendorx_announcement_stores',
                         'value'   => ';i:' . $store_id . ';',
                         'compare' => 'LIKE',
                     ),
 
-                    // Match announcements intended for ALL stores (value = 0)
+                    // Match announcements intended for ALL stores (value = 0).
                     array(
                         'key'     => 'multivendorx_announcement_stores',
                         'value'   => ';i:0;',
@@ -158,7 +195,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                 );
             }
 
-            // Add date filter if provided
+            // Add date filter if provided.
             if ( $start_date && $end_date ) {
                 $query_args['date_query'] = array(
                     array(
@@ -168,9 +205,9 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                     ),
                 );
             }
-            // Add title search only if searchField has value
+            // Add title search only if searchField has value.
             if ( ! empty( $searchField ) ) {
-                $query_args['s'] = $searchField; // WP_Query searches post_title + content
+                $query_args['s'] = $searchField; // WP_Query searches post_title + content.
             }
 
             $posts = get_posts( $query_args );
@@ -197,7 +234,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                 );
             }
 
-            // Counts (no date or search filter applied)
+            // Counts (no date or search filter applied).
             $counter = function ( $status ) {
                 $args = array(
                     'post_type'      => 'multivendorx_an',
@@ -244,7 +281,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -277,12 +314,12 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                     )
                 );
             }
-            // Save stores if provided
+            // Save stores if provided.
             if ( ! empty( $stores ) ) {
                 update_post_meta( $post_id, 'multivendorx_announcement_stores', $stores );
             }
 
-            // Optionally save URL as post meta
+            // Optionally save URL as post meta.
             $url = $formData['url'] ?? '';
             if ( ! empty( $url ) ) {
                 update_post_meta( $post_id, 'multivendorx_announcement_url', esc_url_raw( $url ) );
@@ -311,12 +348,17 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
         }
     }
 
+    /**
+     * Update an announcement.
+     *
+     * @param object $request The request object.
+     */
     public function update_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -332,7 +374,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             $data   = $request->get_params();
             $stores = $request->get_param( 'stores' ) ?: array();
 
-            // Bulk update handling
+            // Bulk update handling.
             if ( isset( $data['bulk'] ) && ! empty( $data['ids'] ) && ! empty( $data['action'] ) ) {
                 $action = sanitize_key( $data['action'] );
                 $ids    = array_map( 'absint', $data['ids'] );
@@ -362,7 +404,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                 );
             }
 
-            // Normal single update
+            // Normal single update.
             $post_id = absint( $request->get_param( 'id' ) );
             $post    = get_post( $post_id );
 
@@ -370,7 +412,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                 return new \WP_Error( 'not_found', __( 'Announcement not found', 'multivendorx' ), array( 'status' => 404 ) );
             }
 
-            // Update post with new title/content/status
+            // Update post with new title/content/status.
             $updated_id = wp_update_post(
                 array(
                     'ID'           => $post_id,
@@ -392,7 +434,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                 );
             }
 
-            // Update stores meta
+            // Update stores meta.
             update_post_meta( $post_id, 'multivendorx_announcement_stores', $stores );
 
             return rest_ensure_response(
@@ -417,13 +459,18 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
         }
     }
 
+    /**
+     * Get a single announcement.
+     *
+     * @param object $request The request object.
+     */
     public function get_item( $request ) {
 
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -490,12 +537,17 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
         }
     }
 
+    /**
+     * Delete an announcement.
+     *
+     * @param object $request The request object.
+     */
     public function delete_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -514,11 +566,11 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             }
 
             $post = get_post( $post_id );
-            if ( ! $post || $post->post_type !== 'multivendorx_an' ) {
+            if ( 'multivendorx_an' !== ! $post || $post->post_type ) {
                 return new \WP_Error( 'not_found', __( 'Announcement not found', 'multivendorx' ), array( 'status' => 404 ) );
             }
 
-            $deleted = wp_delete_post( $post_id, true ); // true = force delete
+            $deleted = wp_delete_post( $post_id, true ); // True = force delete.
             if ( ! $deleted ) {
                 return new \WP_Error( 'delete_failed', __( 'Failed to delete announcement', 'multivendorx' ), array( 'status' => 500 ) );
             }

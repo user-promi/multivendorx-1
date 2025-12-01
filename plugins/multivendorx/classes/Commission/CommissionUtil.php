@@ -1,4 +1,9 @@
 <?php
+/**
+ * Modules Commission Util
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\Commission;
 
@@ -8,13 +13,12 @@ use MultiVendorX\Store\Store;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * MultiVendorX Commission class
+ * MultiVendorX Commission Util.
  *
- * @version     PRODUCT_VERSION
- * @package     MultiVendorX
+ * @class       Module class
+ * @version     6.0.0
  * @author      MultiVendorX
  */
-
 class CommissionUtil {
 
     /**
@@ -42,6 +46,12 @@ class CommissionUtil {
         return new Commission( $id );
     }
 
+    /**
+     * Get the commission object of Commission class by store id and order id.
+     *
+     * @param   int $store_id Store ID
+     * @param   int $order_id Order ID
+     */
     public static function get_commission_by_store_and_order_id( $store_id, $order_id ) {
         global $wpdb;
         $commission = $wpdb->get_row(
@@ -62,30 +72,30 @@ class CommissionUtil {
     public static function get_commissions( $filter = array(), $object = true, $count = false ) {
         global $wpdb;
 
-        // Remove 'fields' if object requested
+        // Remove 'fields' if object requested.
         if ( $object && isset( $filter['fields'] ) ) {
             unset( $filter['fields'] );
         }
 
-        // Handle fields separately
+        // Handle fields separately.
         if ( isset( $filter['fields'] ) && is_array( $filter['fields'] ) && ! $count ) {
             $fields = implode( ', ', $filter['fields'] );
         } else {
             $fields = $count ? 'COUNT(*) as total' : '*';
         }
 
-        // Extract pagination
+        // Extract pagination.
         $page    = $filter['page'] ?? 0;
         $perpage = $filter['perpage'] ?? 0;
 
-        // Extract sorting
+        // Extract sorting.
         $orderBy = $filter['orderBy'] ?? '';
         $order   = strtoupper( $filter['order'] ?? 'ASC' );
 
-        // Remove non-column keys so they don’t appear in WHERE clause
+        // Remove non-column keys so they don’t appear in WHERE clause.
         unset( $filter['page'], $filter['perpage'], $filter['orderBy'], $filter['order'] );
 
-        // Build WHERE conditions
+        // Build WHERE conditions.
         $predicate = array();
         foreach ( $filter as $column => $value ) {
             if ( is_array( $value ) ) {
@@ -104,14 +114,14 @@ class CommissionUtil {
             }
         }
 
-        // Start query
+        // Start query.
         $query = "SELECT {$fields} FROM `" . $wpdb->prefix . Utill::TABLES['commission'] . '`';
 
         if ( ! empty( $predicate ) ) {
             $query .= ' WHERE ' . implode( ' AND ', $predicate );
         }
 
-        // Sorting (safe & only if not count)
+        // Sorting (safe & only if not count).
         if ( ! $count && ! empty( $orderBy ) ) {
             $orderBy = esc_sql( $orderBy );
             if ( ! in_array( $order, array( 'ASC', 'DESC' ), true ) ) {
@@ -120,22 +130,22 @@ class CommissionUtil {
             $query .= " ORDER BY {$orderBy} {$order}";
         }
 
-        // Pagination
+        // Pagination.
         if ( ! $count && $page && $perpage && $perpage != -1 ) {
             $limit  = intval( $perpage );
             $offset = ( $page - 1 ) * $limit;
             $query .= " LIMIT {$limit} OFFSET {$offset}";
         }
 
-        // If only count requested
+        // If only count requested.
         if ( $count ) {
             return (int) $wpdb->get_var( $query ) ?? 0;
         }
 
-        // Execute query
+        // Execute query.
         $commissions = $wpdb->get_results( $query );
 
-        // Return object or raw array
+        // Return object or raw array.
         if ( ! $object ) {
             return $commissions;
         }
@@ -148,12 +158,21 @@ class CommissionUtil {
         );
     }
 
+    /**
+     * Get commission summary for a store or top N stores.
+     *
+     * @param   int  $store_id  Store ID
+     * @param   bool $top_stores  If true, fetch top N stores by total order value.
+     * @param   int  $limit  Number of stores to fetch.
+     *
+     * @return  array  Array of commission summary.
+     */
     public static function get_commission_summary_for_store( $store_id = null, $top_stores = false, $limit = 3 ) {
         global $wpdb;
 
         $table_name = $wpdb->prefix . Utill::TABLES['commission'];
 
-        // If $top_stores = true, fetch top N stores by total order value
+        // If $top_stores = true, fetch top N stores by total order value.
         if ( $top_stores ) {
             $query = $wpdb->prepare(
                 "
@@ -199,7 +218,7 @@ class CommissionUtil {
             );
         }
 
-        // Summary for a specific store
+        // Summary for a specific store.
         $query = "
             SELECT 
                 COALESCE(SUM(total_order_value), 0) AS total_order_amount,

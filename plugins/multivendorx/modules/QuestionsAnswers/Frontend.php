@@ -46,6 +46,13 @@ class Frontend {
     // return $tabs;
     // }
 
+    /**
+     * Add Question and answer tab
+     *
+     * @param array $tabs Tabs.
+     *
+     * @return array
+     */
     public function product_questions_answers_tab( $tabs ) {
         global $product;
 
@@ -67,6 +74,7 @@ class Frontend {
         }
 
         $tabs['product_qna'] = array(
+            /* translators: %d: Number of answered questions for this product */
             'title'    => sprintf( __( 'Questions & Answers (%d)', 'multivendorx' ), $qna_count ),
             'priority' => 50,
             'callback' => array( $this, 'multivendorx_product_qna_tab_content' ),

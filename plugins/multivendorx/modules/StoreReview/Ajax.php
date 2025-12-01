@@ -1,12 +1,28 @@
 <?php
+/**
+ * MultiVendorX AJAX handlers.
+ *
+ * @package MultiVendorX
+ */
+
 namespace MultiVendorX\StoreReview;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * MultiVendorX AJAX handlers.
+ *
+ * @class       Module class
+ * @version     6.0.0
+ * @author      MultiVendorX
+ */
 class Ajax {
 
+    /**
+     * Constructor.
+     */
     public function __construct() {
         add_action( 'wp_ajax_multivendorx_store_review_submit', array( $this, 'submit_review' ) );
         add_action( 'wp_ajax_nopriv_multivendorx_store_review_submit', array( $this, 'submit_review' ) );
@@ -18,6 +34,9 @@ class Ajax {
         add_action( 'wp_ajax_nopriv_multivendorx_store_review_avg', array( $this, 'get_avg_ratings' ) );
     }
 
+    /**
+     * Submit a review.
+     */
     public function submit_review() {
         check_ajax_referer( 'review_ajax_nonce', 'nonce' );
 
@@ -51,7 +70,7 @@ class Ajax {
         $order_id = Util::is_verified_buyer( $store_id, $user_id );
         $overall  = array_sum( $ratings ) / count( $ratings );
 
-        // Handle image uploads
+        // Handle image uploads.
         $uploaded_images = array();
         if ( ! empty( $_FILES['review_images']['name'][0] ) ) {
             require_once ABSPATH . 'wp-admin/includes/file.php';
@@ -75,13 +94,16 @@ class Ajax {
             }
         }
 
-        // Insert review with image data
+        // Insert review with image data.
         $review_id = Util::insert_review( $store_id, $user_id, $review_title, $review_content, $overall, $order_id, $uploaded_images );
         Util::insert_ratings( $review_id, $ratings );
 
         wp_send_json_success( array( 'message' => __( 'Review submitted successfully!', 'multivendorx' ) ) );
     }
 
+    /**
+     * Get reviews for a store.
+     */
     public function get_reviews() {
         $store_id = filter_input( INPUT_POST, 'store_id', FILTER_SANITIZE_NUMBER_INT );
         $reviews  = Util::get_reviews_by_store( $store_id );
@@ -97,7 +119,7 @@ class Ajax {
                 echo '<div class="avater">B</div> <div class="name">' . esc_html( $reviewer_name ) . '</div> <span class="time">1 day ago</span></div> ';
                 echo '</div>';
                 echo '<div class="body">';
-                $overall_rating = round( floatval( $review->overall_rating ) ); // assuming your review object has overall_rating
+                $overall_rating = round( floatval( $review->overall_rating ) ); // Assuming your review object has overall_rating.
 
                 echo '<div class="rating">';
                 for ( $i = 1; $i <= 5; $i++ ) {
@@ -143,6 +165,9 @@ class Ajax {
         wp_send_json_success( array( 'html' => ob_get_clean() ) );
     }
 
+    /**
+     * Get average ratings for a store.
+     */
     public function get_avg_ratings() {
         $store_id   = filter_input( INPUT_POST, 'store_id', FILTER_SANITIZE_NUMBER_INT );
         $parameters = MultiVendorX()->setting->get_setting( 'ratings_parameters', array() );
@@ -150,11 +175,11 @@ class Ajax {
         $averages = Util::get_avg_ratings( $store_id, $parameters );
         $overall  = Util::get_overall_rating( $store_id );
 
-        // Get all reviews
+        // Get all reviews.
         $reviews       = Util::get_reviews_by_store( $store_id );
         $total_reviews = count( $reviews );
 
-        // Initialize breakdown
+        // Initialize breakdown.
         $breakdown = array(
             5 => 0,
             4 => 0,
@@ -164,7 +189,7 @@ class Ajax {
         );
 
         foreach ( $reviews as $review ) {
-            $rating = round( floatval( $review->overall_rating ) ); // Round to nearest star
+            $rating = round( floatval( $review->overall_rating ) ); // Round to nearest star.
             if ( isset( $breakdown[ $rating ] ) ) {
                 ++$breakdown[ $rating ];
             }

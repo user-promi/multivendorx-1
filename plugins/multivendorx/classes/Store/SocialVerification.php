@@ -68,7 +68,7 @@ class SocialVerification {
         $connections = get_user_meta( $user_id, 'social_verification_connections', true ) ?: array();
 
         $connections[ $provider ] = array(
-            'connected_at' => current_time( 'mysql' ),
+            'connected_at' => current_time(),
             'profile_data' => $user_data,
             'is_verified'  => true,
         );

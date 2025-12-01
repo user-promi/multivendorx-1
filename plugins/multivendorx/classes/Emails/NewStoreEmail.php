@@ -8,7 +8,11 @@
 namespace MultiVendorX\Emails;
 
 /**
- * New Store Email class
+ * MultiVendorX New Store Email
+ *
+ * @class       Module class
+ * @version     6.0.0
+ * @author      MultiVendorX
  */
 class NewStoreEmail extends MultiVendorXEmails {
     /**
@@ -27,6 +31,8 @@ class NewStoreEmail extends MultiVendorXEmails {
 
     /**
      * Trigger email
+     *
+     * @param int $store_id Store ID.
      */
     public function trigger( $store_id ) {
         $this->recipient = get_option( Utill::OTHER_SETTINGS['admin_email'] );

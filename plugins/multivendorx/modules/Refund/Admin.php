@@ -102,27 +102,33 @@ class Admin {
         if ( $order->get_parent_id() == 0 ) {
 			return;
         }
-        if ( ! isset( $_POST['cust_refund_status'] ) ) {
+        if ( ! filter_input( INPUT_POST, 'cust_refund_status', FILTER_DEFAULT ) ) {
 			return $order_id;
         }
-        if ( isset( $_POST['refund_order_customer'] ) && $_POST['refund_order_customer'] ) {
-            $order->update_meta_data( '_customer_refund_order', wc_clean( wp_unslash( $_POST['refund_order_customer'] ) ) );
+        $refund_order_customer = sanitize_text_field( filter_input( INPUT_POST, 'refund_order_customer', FILTER_DEFAULT ) );
+        if ( ! empty( $refund_order_customer ) ) {
+            $order->update_meta_data( '_customer_refund_order', $refund_order_customer );
             $order->save();
-            // trigger customer email
-            if ( in_array( $_POST['refund_order_customer'], array( 'refund_reject', 'refund_accept' ) ) ) {
+            // Trigger customer email.
+            if ( in_array( $refund_order_customer, array( 'refund_reject', 'refund_accept' ), true ) ) {
+                $admin_reason = sanitize_text_field(
+                    filter_input( INPUT_POST, 'refund_admin_reason_text', FILTER_DEFAULT )
+                );
+    
                 $refund_details = array(
-                    'admin_reason' => isset( $_POST['refund_admin_reason_text'] ) ? wc_clean( $_POST['refund_admin_reason_text'] ) : '',
-				);
+                    'admin_reason' => $admin_reason ?: '',
+                );
 
                 $order_status = '';
-                if ( $_POST['refund_order_customer'] == 'refund_accept' ) {
+                $refund_status = sanitize_text_field( filter_input( INPUT_POST, 'refund_order_customer', FILTER_DEFAULT ) );
+                if ( $refund_status === 'refund_accept' ) {
                     $order_status = __( 'accepted', 'multivendorx' );
-                } elseif ( $_POST['refund_order_customer'] == 'refund_reject' ) {
+                } elseif ( $refund_status === 'refund_reject' ) {
                     $order_status = __( 'rejected', 'multivendorx' );
                 }
-                // Comment note for suborder
+                // Comment note for suborder.
                 $comment_id = $order->add_order_note( __( 'Site admin ', 'multivendorx' ) . $order_status . __( ' refund request for order #', 'multivendorx' ) . $order_id . ' .' );
-                // user info
+                // user info.
                 $user_info = get_userdata( get_current_user_id() );
                 wp_update_comment(
                     array(
@@ -132,7 +138,7 @@ class Admin {
                     )
                 );
 
-                // Comment note for parent order
+                // Comment note for parent order.
                 $parent_order_id   = $order->get_parent_id();
                 $parent_order      = wc_get_order( $parent_order_id );
                 $comment_id_parent = $parent_order->add_order_note( __( 'Site admin ', 'multivendorx' ) . $order_status . __( ' refund request for order #', 'multivendorx' ) . $order_id . '.' );

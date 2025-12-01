@@ -1,4 +1,9 @@
 <?php
+/**
+ * Modules Commission Manager
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\Commission;
 
@@ -8,10 +13,10 @@ use MultiVendorX\Utill;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * MultiVendorX Main Commission class
+ * MultiVendorX AJAX handlers.
  *
- * @version     PRODUCT_VERSION
- * @package     MultiVendorX
+ * @class       Module class
+ * @version     6.0.0
  * @author      MultiVendorX
  */
 class CommissionManager {
@@ -33,9 +38,9 @@ class CommissionManager {
     /**
      * Calculate the commission and insert or update in database.
      *
-     * @param   mixed $order
-     * @param   mixed $commission_id
-     * @return  mixed
+     * @param   mixed $order WC_Order Object.
+     * @param   mixed $commission_id ID of existing commission record.
+     * @return  int|bool
      */
     public function calculate_commission( $order = null, $commission_id = null ) {
         global $wpdb;
@@ -66,18 +71,18 @@ class CommissionManager {
             $marketplace_commission = $commission_amount;
             $store_earning          = (float) ( $order->get_subtotal() - $order->get_discount_total() - $commission_amount );
 
-            // For migrate users
+            // For migrate users.
             if ( $vendor->get_meta( 'revenue_mode_store' ) ) {
                 $marketplace_commission = (float) ( $order->get_subtotal() - $order->get_discount_total() - $commission_amount );
                 $store_earning          = $commission_amount;
             }
 
-            // Coupons
+            // Coupons.
             $coupon              = $this->calc_coupon_split( $order, $store_earning, $marketplace_commission );
             $store_coupon_amount = $coupon['store_coupon_amount'];
             $admin_coupon_amount = $coupon['admin_coupon_amount'];
 
-            // transfer shipping charges
+            // Transfer shipping charges.
             if ( MultiVendorX()->modules->is_active( 'store-shipping' ) ) {
                 $shipping_amount = $order->get_shipping_total();
             }
@@ -97,7 +102,7 @@ class CommissionManager {
                 $status     = $commission->status;
             }
 
-            // insert | update commission into commission table.
+            // Insert | update commission into commission table.
             $data   = array(
                 'order_id'                 => $order->get_id(),
                 'store_id'                 => $store_id,
@@ -148,6 +153,14 @@ class CommissionManager {
         return false;
     }
 
+    /**
+     * Calculate the tax split.
+     *
+     * @param   mixed $order
+     * @param   mixed $store_earning
+     * @param   mixed $marketplace_commission
+     * @return  mixed
+     */
     public function calc_tax_split( $order, $store_earning, $marketplace_commission, $refund = false ) {
         $item_tax_total     = (float) $order->get_cart_tax();
         $shipping_tax_total = (float) $order->get_shipping_tax();
@@ -193,6 +206,17 @@ class CommissionManager {
         );
     }
 
+    /**
+     * Calculate item commission.
+     *
+     * @param   array  $items Order items.
+     * @param   object $order Order object.
+     * @param   object $vendor Vendor object.
+     * @param   array  $commission_rates Commission rates.
+     * @param   bool   $is_refund Is refund.
+     *
+     * @return  array
+     */
     public function calc_item_commissions( $items, $order, $vendor, $commission_rates = array(), $is_refund = false ) {
         $commission_amount = 0;
         $commission_rates  = array();
@@ -207,7 +231,7 @@ class CommissionManager {
             $product_id = ! empty( $item['variation_id'] ) ? $item['variation_id'] : $item['product_id'];
 
             $commission_values = $this->get_commission_amount( $product_id, $item, $vendor );
-            // If refund
+            // If refund.
             $refund_amount = 0;
             if ( $is_refund ) {
                 $refund_amount = $this->get_item_refunded_total( $order, $item_id );
@@ -239,6 +263,13 @@ class CommissionManager {
 		);
     }
 
+    /**
+     * Calculate store order commission.
+     *
+     * @param   object $order Order object.
+     * @param   array  $items   Order items.
+     * @param   bool   $is_refund  Is refund.
+     */
     public function calc_store_order_commission( $order, $items = array(), $is_refund = false ) {
         $commission_amount          = 0;
         $commission_per_store_order = MultiVendorX()->setting->get_setting( 'commission_per_store_order' );
@@ -333,6 +364,13 @@ class CommissionManager {
 		);
     }
 
+    /**
+     * Calculate coupon split between store and admin.
+     *
+     * @param   object $order
+     * @param   float  $store_earning
+     * @param   float  $marketplace_commission
+     */
     public function calc_coupon_split( $order, $store_earning, $marketplace_commission ) {
         $store_coupon_amount = $admin_coupon_amount = 0;
         $store_coupon        = false;
@@ -351,9 +389,9 @@ class CommissionManager {
 
         // 1st check exclude admin coupon setting on and the coupon is not store coupon OR
         // 2nd check the commission_include_coupon set to admin
-        if ( ( ! empty( MultiVendorX()->setting->get_setting( 'admin_coupon_excluded' ) ) && ! $store_coupon ) || MultiVendorX()->setting->get_setting( 'commission_include_coupon' ) == 'admin' ) {
+        if ( ( ! empty( MultiVendorX()->setting->get_setting( 'admin_coupon_excluded' ) ) && ! $store_coupon ) || MultiVendorX()->setting->get_setting( 'commission_include_coupon' ) === 'admin' ) {
             $store_coupon_amount = sprintf( '%+0.2f', ( $order->get_discount_total() * ( $store_earning / $base_total ) ) );
-        } elseif ( MultiVendorX()->setting->get_setting( 'commission_include_coupon' ) == 'store' ) {
+        } elseif ( MultiVendorX()->setting->get_setting( 'commission_include_coupon' ) === 'store' ) {
             $store_coupon_amount = sprintf( '%+0.2f', - ( $order->get_discount_total() * ( $marketplace_commission / $base_total ) ) );
         }
 
@@ -416,18 +454,13 @@ class CommissionManager {
      * @param   mixed $vendor
      * @return  array | bool
      */
-    // product
-    // category
-    // store
-    // global
-
     public function get_commission_amount( $product_id, $item, $vendor ) {
         $data    = array();
         $product = wc_get_product( $product_id );
 
         if ( $product && $vendor ) {
 
-            // Variable Product
+            // Variable Product.
             $data['commission_val']   = $product->get_meta( 'multivendorx_variable_product_percentage_commission', true );
             $data['commission_fixed'] = $product->get_meta( 'multivendorx_variable_product_fixed_commission', true );
 
@@ -435,7 +468,7 @@ class CommissionManager {
                 return $data;
             }
 
-            // Simple Product
+            // Simple Product.
             $data['commission_val']   = $product->get_meta( 'multivendorx_product_percentage_commission', true );
             $data['commission_fixed'] = $product->get_meta( 'multivendorx_product_fixed_commission', true );
 
@@ -443,7 +476,7 @@ class CommissionManager {
                 return $data;
             }
 
-            // Category
+            // Category.
             $category_wise_commission = $this->get_category_wise_commission( $product );
             if ( $category_wise_commission && $category_wise_commission->commission_percentage || $category_wise_commission->commission_fixed ) {
                 return array(
@@ -452,7 +485,7 @@ class CommissionManager {
                 );
             }
 
-            // store commission
+            // Store commission.
             $store_commission_percentage = (float) ( $vendor->get_meta( 'commission_percentage' ) ?? 0 );
             $store_commission_fixed      = (float) ( $vendor->get_meta( 'commission_fixed' ) ?? 0 );
 
@@ -463,7 +496,7 @@ class CommissionManager {
                 );
             }
 
-            // Global
+            // Global.
             $commission_per_item = reset( MultiVendorX()->setting->get_setting( 'commission_per_item', array() ) );
 
             if ( ! empty( $commission_per_item ) ) {
@@ -479,7 +512,7 @@ class CommissionManager {
     /**
      * Calculate category lebel commission of a product.
      *
-     * @param   object $product
+     * @param   object $product WC_Product Object.
      * @return  \stdClass | null
      */
     public function get_category_wise_commission( $product ) {
@@ -518,9 +551,8 @@ class CommissionManager {
     /**
      * Summary of calculate_commission_refunds
      *
-     * @param   mixed $vendor_order
-     * @param   mixed $refund_id
-     * @return  void
+     * @param   mixed $vendor_order vendor order.
+     * @param   mixed $refund_id refund id.
      */
     public function calculate_commission_refunds( $vendor_order, $refund_id ) {
         global $wpdb;
@@ -529,17 +561,19 @@ class CommissionManager {
         $vendor        = Store::get_store_by_id( $store_id );
 
         if ( $commission_id ) {
-            $commission_amount = $marketplace_payable = $store_payable = 0;
+            $commission_amount   = 0;
+            $marketplace_payable = 0;
+            $store_payable       = 0;
 
             if ( ! empty( $vendor_order->get_refunds() ) ) {
                 $commission_type = MultiVendorX()->setting->get_setting( 'commission_type' );
 
                 $commission_rates = array();
 
-                if ( $commission_type == 'per_item' ) {
+                if ( 'per_item' === $commission_type ) {
                     $per_item          = $this->calc_item_commissions( $vendor_order->get_items(), $vendor_order, $vendor, $commission_rates, true );
                     $commission_amount = $per_item['commission_amount'];
-                } elseif ( $commission_type == 'store_order' ) {
+                } elseif ( 'store_order' === $commission_type ) {
                     $store_order_commision = $this->calc_store_order_commission( $vendor_order, $vendor_order->get_items(), true );
                     $commission_amount     = $store_order_commision['commission_amount'];
                 }
@@ -550,13 +584,13 @@ class CommissionManager {
 
             $commission = CommissionUtil::get_commission_db( $commission_id );
 
-            if ( ( $vendor_order->get_total() - $vendor_order->get_total_refunded() ) == 0 ) {
+            if ( ( $vendor_order->get_total() - $vendor_order->get_total_refunded() ) === 0 ) {
                 $status = 'refunded';
             } else {
                 $status = 'partially_refunded';
             }
 
-            // Coupons
+            // Coupons.
             $coupon              = $this->calc_coupon_split( $vendor_order, $store_earning, $marketplace_commission );
             $store_coupon_amount = $coupon['store_coupon_amount'];
             $admin_coupon_amount = $coupon['admin_coupon_amount'];
@@ -636,7 +670,7 @@ class CommissionManager {
             do_action( 'mvx_after_create_commission_refunds', $vendor_order, $commission_id );
 
             $refund_status = MultiVendorX()->setting->get_setting( 'customer_refund_status' );
-            if ( ! empty( $refund_status ) && in_array( $vendor_order->get_status(), $refund_status ) ) {
+            if ( ! empty( $refund_status ) && in_array( $vendor_order->get_status(), $refund_status, true ) ) {
                 $data = array(
                     'store_id'         => (int) $store_id,
                     'order_id'         => (int) $vendor_order->get_id(),
@@ -666,7 +700,7 @@ class CommissionManager {
     /**
      * Get refunded total for specific item OR all items (excluding shipping, taxes, etc.)
      *
-     * @param WC_Order $order
+     * @param object   $order    Order object.
      * @param int|null $item_id  If null, returns total refund for all items.
      * @return float
      */
@@ -674,12 +708,12 @@ class CommissionManager {
 
         $refunded_total = 0;
 
-        // Loop through all refunds in this order
+        // Loop through all refunds in this order.
         foreach ( $order->get_refunds() as $refund ) {
             foreach ( $refund->get_items() as $refund_item ) {
                 $refunded_item_id = $refund_item->get_meta( '_refunded_item_id', true );
 
-                if ( $item_id !== null ) {
+                if ( null !== $item_id ) {
                     if ( (int) $refunded_item_id === (int) $item_id ) {
                         $refunded_total += abs( (float) $refund_item->get_total() );
                     }

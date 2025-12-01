@@ -422,13 +422,13 @@ class FrontendScripts {
             ),
         );
 
-        $store_ids   = StoreUtil::get_stores_from_user_id( get_current_user_id() );
+        $store_ids    = StoreUtil::get_stores_from_user_id( get_current_user_id() );
         $active_store = get_user_meta( get_current_user_id(), 'multivendorx_active_store', true );
 
         if ( empty( $active_store ) && ! empty( $store_ids ) ) {
             $first_store = reset( $store_ids );
 
-            if ( !empty( $first_store['id'] ) ) {
+            if ( ! empty( $first_store['id'] ) ) {
                 update_user_meta( get_current_user_id(), 'multivendorx_active_store', $first_store['id'] );
             }
         }
@@ -603,7 +603,7 @@ class FrontendScripts {
                         'whatsapp_opening_pattern' => MultiVendorX()->setting->get_setting( ' whatsapp_opening_pattern' ),
                         'whatsapp_pre_filled'      => MultiVendorX()->setting->get_setting( ' whatsapp_pre_filled' ),
                         'settings_databases_value' => $settings_databases_value,
-                        'site_name'             => get_bloginfo('name'),
+                        'site_name'                => get_bloginfo( 'name' ),
                         'current_user'             => wp_get_current_user(),
                         'current_user_image'       => get_avatar_url( get_current_user_id(), array( 'size' => 48 ) ),
                         'user_logout_url'          => esc_url( wp_logout_url( get_permalink( (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' ) ) ) ),

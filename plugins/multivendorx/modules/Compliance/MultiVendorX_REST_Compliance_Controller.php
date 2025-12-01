@@ -1,4 +1,9 @@
 <?php
+/**
+ * Modules class file
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\Compliance;
 
@@ -6,6 +11,13 @@ use MultiVendorX\Compliance\Util;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * MultiVendorX REST Compliance Controller.
+ *
+ * @class       Module class
+ * @version     6.0.0
+ * @author      MultiVendorX
+ */
 class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
 
 	/**
@@ -15,10 +27,16 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
 	 */
 	protected $rest_base = 'report-abuse';
 
+    /**
+     * Constructor.
+     */
     public function __construct() {
         add_action( 'rest_api_init', array( $this, 'register_routes' ), 10 );
     }
 
+    /**
+     * Register the routes for compliance.
+     */
     public function register_routes() {
         register_rest_route(
             MultiVendorX()->rest_namespace,
@@ -66,28 +84,46 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
         );
     }
 
+    /**
+     * Check whether a given request has access to read items.
+     *
+     * @param object $request Full data about the request.
+     */
     public function get_items_permissions_check( $request ) {
         return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
     }
 
-    // POST permission
+    /**
+     * Check whether a given request has access to create items.
+     *
+     * @param object $request Full data about the request.
+     */
     public function create_item_permissions_check( $request ) {
         return current_user_can( 'create_stores' );
     }
 
+    /**
+     * Check whether a given request has access to update items.
+     *
+     * @param object $request Full data about the request.
+     */
     public function update_item_permissions_check( $request ) {
         return current_user_can( 'edit_stores' );
     }
 
 
-    // GET
+    /**
+     * Retrieve a collection of items.
+     *
+     * @param object $request Full details about the request.
+     */
     public function get_items( $request ) {
-        // Verify nonce
+        // Verify nonce.
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -104,20 +140,20 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
             $page   = max( intval( $request->get_param( 'page' ) ), 1 );
             $offset = ( $page - 1 ) * $limit;
 
-            // Get filters
+            // Get filters.
             $store_id   = $request->get_param( 'store_id' );
             $start_date = $request->get_param( 'start_date' );
             $end_date   = $request->get_param( 'end_date' );
-            $order_by   = $request->get_param( 'orderBy' ) ?: 'created_at';
+            $order_by = $request->get_param( 'orderBy' ) ? $request->get_param( 'orderBy' ) : 'created_at';
             $order      = strtoupper( $request->get_param( 'order' ) ) === 'ASC' ? 'ASC' : 'DESC';
 
-            // Count only
+            // Count only.
             if ( $request->get_param( 'count' ) ) {
                 $total_count = Util::get_report_abuse_information( array( 'count' => true ) );
                 return rest_ensure_response( (int) $total_count );
             }
 
-            // Prepare args
+            // Prepare args.
             $args = array(
                 'limit'    => $limit,
                 'offset'   => $offset,
@@ -125,7 +161,7 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
                 'order'    => $order,
             );
 
-            if ( isset( $store_id ) && $store_id !== '' ) {
+            if ( '' !== isset( $store_id ) && $store_id ) {
                 $args['store_ids'] = array( intval( $store_id ) );
             }
 
@@ -136,7 +172,7 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
                 );
             }
 
-            // Fetch reports
+            // Fetch reports.
             $reports = Util::get_report_abuse_information( $args );
 
             $formatted = array_map(
@@ -182,12 +218,17 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
         }
     }
 
+    /**
+     * Create a single item.
+     *
+     * @param object $request Full details about the request.
+     */
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -201,12 +242,17 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
         }
     }
 
+    /**
+     * Retrieve a single item.
+     *
+     * @param object $request Full details about the request.
+     */
     public function get_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -232,12 +278,17 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
         }
     }
 
+    /**
+     * Update a single item.
+     *
+     * @param object $request Full details about the request.
+     */
     public function update_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -263,12 +314,17 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
         }
     }
 
+    /**
+     * Delete a single item.
+     *
+     * @param object $request Full details about the request.
+     */
     public function delete_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -281,7 +337,7 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
             return $error;
         }
         try {
-            // Get report ID
+            // Get report ID.
             $id = absint( $request->get_param( 'id' ) );
             if ( ! $id ) {
                 return new \WP_Error(
@@ -291,7 +347,7 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
                 );
             }
 
-            // Fetch the report
+            // Fetch the report.
             $report = reset( Util::get_report_abuse_information( array( 'id' => $id ) ) );
             if ( ! $report ) {
                 return new \WP_Error(
@@ -301,7 +357,7 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
                 );
             }
 
-            // Delete via Util helper
+            // Delete via Util helper.
             $deleted = Util::delete_report_abuse( $id );
 
             if ( ! $deleted ) {
