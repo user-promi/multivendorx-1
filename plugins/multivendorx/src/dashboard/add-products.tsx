@@ -1,8 +1,29 @@
 import { Radio } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { BasicInput, FileInput, SelectInput, TextArea, ToggleSetting } from "zyra";
+import axios from "axios";
+import { useLocation } from 'react-router-dom';
 
 const AddProduct = () => {
+   const location = useLocation();
+     
+   const query = new URLSearchParams(location.search);
+   const productId = query.get("context_id");
+   const [product, setProduct] = useState({});
+
+   useEffect(() => {
+      if (!productId) return;
+
+      axios.get(`${appLocalizer.apiUrl}/wc/v3/products/${productId}`, {
+         headers: { "X-WP-Nonce": appLocalizer.nonce }
+      })
+      .then(function (res) {
+         setProduct(res.data);
+      })
+
+   }, [productId]);
+
+
    const [variants, setVariants] = useState([
       {
          id: 1,
@@ -132,11 +153,25 @@ const AddProduct = () => {
    };
 
    // static data start
+   const typeOptions = [
+      { label: "Select product type", value: "" },
+      { label: "Simple", value: "simple" },
+      { label: "Variable", value: "variable" },
+   ];
+
    const paymentOptions = [
       { label: "Select stock status", value: "" },
-      { label: "In stock", value: "" },
+      { label: "In stock", value: "instock" },
       { label: "out of stock", value: "" },
    ];
+
+   const stockStatusOptions = [
+      { value: '', label: 'Stock Status' },
+      { value: 'instock', label: 'In Stock' },
+      { value: 'outofstock', label: 'Out of Stock' },
+      { value: 'onbackorder', label: 'On Backorder' },
+   ];
+
    const staticvariant = [
       { label: "red", value: "red" },
       { label: "green", value: "green" },
@@ -150,13 +185,58 @@ const AddProduct = () => {
       { label: "width", value: "" },
    ];
 
+   const backorderOptions = [
+      { label: "Do not allow", value: "no" },
+      { label: "Allow, but notify customer", value: "notify" },
+      { label: "Allow", value: "yes" }
+   ];
+
+   const handleChange = (field, value) => {
+      setProduct((prev) => ({
+         ...prev,
+         [field]: value,
+      }));
+   };
+console.log('product', product)
+   const createProduct = () => {
+      try {
+         const payload = {
+               name: product.name,
+               type: product.type,
+               regular_price: product.regular_price,
+               sale_price: product.sale_price,
+               short_description: product.short_description,
+               description: product.description,
+               sku: product.sku,
+               stock_status: product.stock_status,
+               virtual: product.virtual,
+               downloadable: product.downloadable,
+               // images: product.images.map((url) => ({ src: url })),
+
+               meta_data: [
+                  { key: "multivendorx_store_id", value: appLocalizer.store_id },
+               ]
+         };
+
+         axios.post(`${appLocalizer.apiUrl}/wc/v3/products/`, payload, {
+            headers: { "X-WP-Nonce": appLocalizer.nonce }
+         })
+         .then(res => {
+            console.log("Product created:", res.data);
+         });
+
+      } catch (error) {
+         console.error("Error:", error.response);
+      }
+   };
+
 
    return (
       <>
          <div className="page-title-wrapper">
             <div className="page-title">
                <div className="title">
-                  Add Order
+                  Add Product
                </div>
 
                <div className="des">
@@ -171,6 +251,7 @@ const AddProduct = () => {
                </button>
                <button
                   className="admin-btn btn-purple-bg"
+                  onClick={createProduct}
                >
                   Publish
                </button>
@@ -207,15 +288,33 @@ const AddProduct = () => {
                      <div className="form-group-wrapper">
                         <div className="form-group">
                            <label htmlFor="product-name">Product name</label>
-                           <BasicInput name="address" wrapperClass="setting-form-input" />
+                           <BasicInput 
+                              name="name" 
+                              wrapperClass="setting-form-input"
+                              value={product.name}
+                              onChange={(e) => handleChange("name", e.target.value)} />
                         </div>
                      </div>
                      <div className="form-group-wrapper">
                         <div className="form-group">
                            <label htmlFor="product-name">Product short description</label>
-                           <TextArea name="shipping_policy" wrapperClass="setting-from-textarea"
+                           <TextArea name="short_description" wrapperClass="setting-from-textarea"
                               inputClass="textarea-input"
                               descClass="settings-metabox-description"
+                              value={product.short_description}
+                              onChange={(e) => handleChange("short_description", e.target.value)}
+                           />
+                        </div>
+                     </div>
+
+                     <div className="form-group-wrapper">
+                        <div className="form-group">
+                           <label htmlFor="product-name">Product description</label>
+                           <TextArea name="description" wrapperClass="setting-from-textarea"
+                              inputClass="textarea-input"
+                              descClass="settings-metabox-description"
+                              value={product.description}
+                              onChange={(e) => handleChange("description", e.target.value)}
                            />
                         </div>
                      </div>
@@ -223,19 +322,29 @@ const AddProduct = () => {
                         <div className="form-group">
                            <label htmlFor="product-name">Product type</label>
                            <SelectInput
-                              name="payment_method"
-                              options={paymentOptions}
-                              type="single-select"
+                              name="type"
+                              options={typeOptions}
+                              value={product.type}
+                              onChange={(selected) => handleChange("type", selected.value)}
                            />
+
                         </div>
                         <div className="form-group">
                            <div className="checkbox-wrapper">
                               <div className="item">
-                                 <input type="checkbox" />
+                                 <input
+                                    type="checkbox"
+                                    checked={product.virtual}
+                                    onChange={(e) => handleChange("virtual", e.target.checked)}
+                                 />
                                  Virtual
                               </div>
                               <div className="item">
-                                 <input type="checkbox" />
+                                 <input
+                                    type="checkbox"
+                                    checked={product.downloadable}
+                                    onChange={(e) => handleChange("downloadable", e.target.checked)}
+                                 />
                                  Download
                               </div>
                            </div>
@@ -256,24 +365,92 @@ const AddProduct = () => {
                      <div className="form-group-wrapper">
                         <div className="form-group">
                            <label htmlFor="product-name">Regular price</label>
-                           <BasicInput name="address" wrapperClass="setting-form-input" />
+                           <BasicInput 
+                              name="regular_price" 
+                              wrapperClass="setting-form-input" 
+                              value={product.regular_price}
+                              onChange={(e) => handleChange("regular_price", e.target.value)}
+                           />
                         </div>
                         <div className="form-group">
                            <label htmlFor="product-name">Sale price</label>
-                           <BasicInput name="address" wrapperClass="setting-form-input" />
+                           <BasicInput 
+                              name="sale_price" 
+                              wrapperClass="setting-form-input" 
+                              value={product.sale_price}
+                              onChange={(e) => handleChange("sale_price", e.target.value)}
+                           />
                         </div>
                      </div>
                      <div className="form-group-wrapper">
                         <div className="form-group">
                            <label htmlFor="product-name">SKU</label>
-                           <BasicInput name="address" wrapperClass="setting-form-input" />
+                           <BasicInput 
+                              name="sku" 
+                              wrapperClass="setting-form-input" 
+                              value={product.sku}
+                              onChange={(e) => handleChange("sku", e.target.value)}
+                           />
                         </div>
+                        {!product.manage_stock && (
+                           <div className="form-group">
+                              <label htmlFor="product-name">Stock Status</label>
+                              <SelectInput
+                                 name="stock_status"
+                                 options={stockStatusOptions}
+                                 type="single-select"
+                                 value={product.stock_status}
+                                 onChange={(selected) => handleChange("stock_status", selected.value)}
+                              />
+                           </div>
+                        )}
                         <div className="form-group">
-                           <label htmlFor="product-name">Stock Status</label>
-                           <SelectInput
-                              name="payment_method"
-                              options={paymentOptions}
-                              type="single-select"
+                           Stock management
+                           <input
+                              type="checkbox"
+                              checked={product.manage_stock}
+                              onChange={(e) => handleChange("manage_stock", e.target.checked)}
+                           />
+                        </div>
+                        {product.manage_stock && (
+                           <>
+                              <div className="form-group">
+                                 <label htmlFor="product-name">Quantity</label>
+                                 <BasicInput 
+                                    name="stock" 
+                                    wrapperClass="setting-form-input" 
+                                    value={product.stock}
+                                    onChange={(e) => handleChange("stock", e.target.value)}
+                                 />
+                              </div>
+                              <div className="form-group">
+                                 <label htmlFor="product-name">Allow backorders?</label>
+                                 <SelectInput
+                                    name="backorders"
+                                    options={backorderOptions}
+                                    type="single-select"
+                                    value={product.backorders}
+                                    onChange={(selected) => handleChange("backorders", selected.value)}
+                                 />
+                              </div>
+                              <div className="form-group">
+                                 <label htmlFor="product-name">Low stock threshold</label>
+                                 <BasicInput 
+                                    name="low_stock_amount" 
+                                    wrapperClass="setting-form-input" 
+                                    value={product.low_stock_amount}
+                                    onChange={(e) => handleChange("low_stock_amount", e.target.value)}
+                                 />
+                              </div>
+                           </>
+                        )}
+
+                        <div className="form-group">
+                           Sold individually
+                           <input
+                              type="checkbox"
+                              checked={product.sold_individually}
+                              onChange={(e) => handleChange("sold_individually", e.target.checked)}
                            />
                         </div>
                      </div>
