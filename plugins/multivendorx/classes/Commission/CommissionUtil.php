@@ -90,16 +90,16 @@ class CommissionUtil {
         foreach ( $filter as $column => $value ) {
             if ( is_array( $value ) ) {
                 if ( isset( $value['compare'] ) && $value['compare'] === 'BETWEEN' ) {
-                    $start_value = Utill::add_single_quots( $value['value'][0] );
-                    $end_value   = Utill::add_single_quots( $value['value'][1] );
+                    $start_value = Utill::add_single_quotes( $value['value'][0] );
+                    $end_value   = Utill::add_single_quotes( $value['value'][1] );
                     $predicate[] = "{$column} BETWEEN {$start_value} AND {$end_value}";
                 } elseif ( isset( $value['compare'] ) && in_array( $value['compare'], array( 'IN', 'NOT IN' ), true ) ) {
                     $compare     = $value['compare'];
-                    $in_tuple    = '(' . implode( ', ', array_map( array( Utill::class, 'add_single_quots' ), $value['value'] ) ) . ')';
+                    $in_tuple    = '(' . implode( ', ', array_map( array( Utill::class, 'add_single_quotes' ), $value['value'] ) ) . ')';
                     $predicate[] = "{$column} {$compare} {$in_tuple}";
                 }
             } else {
-                $value       = Utill::add_single_quots( $value );
+                $value       = Utill::add_single_quotes( $value );
                 $predicate[] = "{$column} = {$value}";
             }
         }
