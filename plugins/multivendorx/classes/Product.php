@@ -140,7 +140,7 @@ class Product {
      */
     public function filter_products_by_store_query( $query ) {
         global $typenow, $pagenow;
-        $store_id = filter_input( INPUT_GET, 'multivendorx_store_id', FILTER_SANITIZE_NUMBER_INT );
+        $store_id = filter_input( INPUT_GET, Utill::POST_META_SETTINGS['store_id'], FILTER_SANITIZE_NUMBER_INT );
 
         if (
             'edit.php' === $pagenow &&
@@ -149,7 +149,7 @@ class Product {
         ) {
             $meta_query = array(
                 array(
-                    'key'   => 'multivendorx_store_id',
+                    'key'   => Utill::POST_META_SETTINGS['store_id'],
                     'value' => $store_id,
                 ),
             );
@@ -187,10 +187,10 @@ class Product {
      * @param $product Product object.
      */
     public function save_product_store_bulk_edit( $product ) {
-        $store_id = filter_input( INPUT_GET, 'multivendorx_store_id', FILTER_SANITIZE_NUMBER_INT );
+        $store_id = filter_input( INPUT_GET, Utill::POST_META_SETTINGS['store_id'], FILTER_SANITIZE_NUMBER_INT );
 
         if ( $store_id ) {
-            update_post_meta( $product->get_id(), 'multivendorx_store_id', $store_id );
+            update_post_meta( $product->get_id(), Utill::POST_META_SETTINGS['store_id'], $store_id );
         }
     }
 }

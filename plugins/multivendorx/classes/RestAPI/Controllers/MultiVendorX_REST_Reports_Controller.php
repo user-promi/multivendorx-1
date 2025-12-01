@@ -227,8 +227,8 @@ class MultiVendorX_REST_Reports_Controller extends \WP_REST_Controller {
             // --- Fetch Pending Withdraw Amount ---
             $store_meta      = Store::get_store_by_id( $id );
             $withdraw_amount = 0;
-            if ( ! empty( $store_meta->meta_data['request_withdrawal_amount'] ) ) {
-                $withdraw_amount = floatval( $store_meta->meta_data['request_withdrawal_amount'] );
+            if ( ! empty( $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['request_withdrawal_amount'] ] ) ) {
+                $withdraw_amount = floatval( $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['request_withdrawal_amount'] ] );
             }
 
             // --- Merge Data ---

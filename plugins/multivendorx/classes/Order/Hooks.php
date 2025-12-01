@@ -45,7 +45,7 @@ class Hooks {
         if ( $order && $order->get_parent_id() == 0 ) {
             $vendor = StoreUtil::get_products_store( $item['product_id'] );
             if ( $vendor ) {
-                $item->add_meta_data( 'multivendorx_sold_by', $vendor->get( 'name' ) );
+                $item->add_meta_data( Utill::POST_META_SETTINGS['sold_by'], $vendor->get( 'name' ) );
                 // $item->add_meta_data('multivendorx_store_id', $vendor->get_id());
             }
         }
@@ -63,7 +63,7 @@ class Hooks {
     public function add_metadate_for_shipping_item( $item, $package_key, $package, $order ) {
         $store_id = $package['store_id'] ?? $package_key;
         if ( $order && $order->get_parent_id() == 0 ) {
-            $item->add_meta_data( 'multivendorx_store_id', $store_id, true );
+            $item->add_meta_data( Utill::POST_META_SETTINGS['store_id'], $store_id, true );
             $package_qty = array_sum( wp_list_pluck( $package['contents'], 'quantity' ) );
             $item->add_meta_data( 'package_qty', $package_qty, true );
             do_action( 'mvx_add_shipping_package_meta' );
@@ -110,13 +110,13 @@ class Hooks {
             $order = wc_get_order( $order );
         }
 
-        if ( $order->get_parent_id() || $order->get_meta( 'has_multivendorx_sub_order' ) ) {
+        if ( $order->get_parent_id() || $order->get_meta( Utill::POST_META_SETTINGS['has_sub_order'] ) ) {
             return;
         }
 
         MultiVendorX()->order->create_vendor_orders( $order );
 
-        $order->update_meta_data( 'has_multivendorx_sub_order', true );
+        $order->update_meta_data( Utill::POST_META_SETTINGS['has_sub_order'], true );
         $order->save();
     }
 
@@ -133,8 +133,8 @@ class Hooks {
                 $general_cap = apply_filters( 'mvx_sold_by_text', __( 'Sold By', 'multivendorx' ) );
                 $vendor      = StoreUtil::get_products_store( $value['product_id'] );
                 if ( $vendor ) {
-                    if ( ! wc_get_order_item_meta( $key, 'multivendorx_store_id' ) ) {
-                        wc_add_order_item_meta( $key, 'multivendorx_store_id', $vendor->get_id() );
+                    if ( ! wc_get_order_item_meta( $key, Utill::POST_META_SETTINGS['store_id'] ) ) {
+                        wc_add_order_item_meta( $key, Utill::POST_META_SETTINGS['store_id'], $vendor->get_id() );
                     }
 
                     if ( ! wc_get_order_item_meta( $key, $general_cap ) ) {
@@ -167,7 +167,7 @@ class Hooks {
         }
 
         // If order is not a main order or sync before then return.
-        if ( $order->get_parent_id() || $order->get_meta( 'mvx_vendor_order_status_synchronized', true ) ) {
+        if ( $order->get_parent_id() || $order->get_meta( Utill::WOO_SETTINGS['order_status_synchronized'], true ) ) {
             return;
         }
 
@@ -185,7 +185,7 @@ class Hooks {
             }
 
             if ( $updated ) {
-                $order->update_meta_data( 'mvx_vendor_order_status_synchronized', true );
+                $order->update_meta_data( Utill::WOO_SETTINGS['order_status_synchronized'], true );
                 $order->save();
             }
         }
@@ -205,7 +205,7 @@ class Hooks {
      */
     public function vendor_order_to_parent_order_status_sync( $order_id, $old_status, $new_status, $order ) {
 
-        $vendor_id = $order ? absint( $order->get_meta( 'multivendorx_store_id', true ) ) : 0;
+        $vendor_id = $order ? absint( $order->get_meta( Utill::POST_META_SETTINGS['store_id'], true ) ) : 0;
         // $vendor_order = new VendorOrder($order);
 
         if ( $vendor_id === get_current_user_id() ) {

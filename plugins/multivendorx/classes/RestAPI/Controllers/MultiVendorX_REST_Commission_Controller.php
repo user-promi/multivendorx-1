@@ -206,7 +206,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
 
             foreach ( $commissions as $commission ) {
                 $store      = new Store( $commission->store_id );
-                $store_name = $store ? $store->get( 'name' ) : '';
+                $store_name = $store ? $store->get( Utill::STORE_SETTINGS_KEYS['name'] ) : '';
 
                 $formatted_commissions[] = apply_filters(
                     'multivendorx_commission_table',
@@ -353,7 +353,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
 
         foreach ( $commissions as $commission ) {
             $store      = new \MultiVendorX\Store\Store( $commission->store_id );
-            $store_name = $store ? $store->get( 'name' ) : '';
+            $store_name = $store ? $store->get( Utill::STORE_SETTINGS_KEYS['name'] ) : '';
 
             fputcsv(
                 $csv_output,

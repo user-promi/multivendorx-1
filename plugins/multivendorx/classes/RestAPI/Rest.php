@@ -58,8 +58,8 @@ class Rest {
         if ( $store_id ) {
             // Get store information
             $store      = new Store( $store_id );
-            $store_name = $store->get( 'name' );
-            $store_slug = $store->get( 'slug' );
+            $store_name = $store->get( Utill::STORE_SETTINGS_KEYS['name'] );
+            $store_slug = $store->get( Utill::STORE_SETTINGS_KEYS['slug'] );
 
             // Add store data to API response
             $response->data['store_name'] = $store_name ?: '';
@@ -78,7 +78,6 @@ class Rest {
      * Ensure store meta is included in API queries
      */
     public function add_store_meta_to_api_query( $args, $request ) {
-        // Make sure multivendorx_store_id meta is always included when needed
         if ( ! isset( $args['meta_query'] ) ) {
             $args['meta_query'] = array();
         }
@@ -87,11 +86,11 @@ class Rest {
     }
 
     public function filter_low_stock_by_meta_exists( $args ) {
-        if ( isset( $request['meta_key'] ) && $request['meta_key'] === 'multivendorx_store_id' ) {
+        if ( isset( $request['meta_key'] ) && $request['meta_key'] === Utill::POST_META_SETTINGS['store_id'] ) {
 
             // Build the meta query to check for the existence of the MultiVendorX key
             $meta_query = array(
-                'key'     => 'multivendorx_store_id',
+                'key'     => Utill::POST_META_SETTINGS['store_id'],
                 'compare' => 'EXISTS',
             );
 
@@ -159,7 +158,7 @@ class Rest {
      * @return array Modified WP_Query arguments.
      */
     public function filter_products_by_meta_exists( $args, $request ) {
-        if ( isset( $request['meta_key'] ) && $request['meta_key'] === 'multivendorx_store_id' ) {
+        if ( isset( $request['meta_key'] ) && $request['meta_key'] === Utill::POST_META_SETTINGS['store_id'] ) {
 
             // Check if a value (store_id) was passed
             $meta_query = array();
@@ -167,14 +166,14 @@ class Rest {
             if ( isset( $request['value'] ) && ! empty( $request['value'] ) ) {
                 // Filter for exact match
                 $meta_query[] = array(
-                    'key'     => 'multivendorx_store_id',
+                    'key'     => Utill::POST_META_SETTINGS['store_id'],
                     'value'   => sanitize_text_field( $request['value'] ),
                     'compare' => '=',
                 );
             } else {
                 // If no value, just check that the key exists
                 $meta_query[] = array(
-                    'key'     => 'multivendorx_store_id',
+                    'key'     => Utill::POST_META_SETTINGS['store_id'],
                     'compare' => 'EXISTS',
                 );
             }
@@ -197,16 +196,16 @@ class Rest {
         $meta_query = array();
 
         // Handle filtering by store ID (existing logic)
-        if ( isset( $request['meta_key'] ) && $request['meta_key'] === 'multivendorx_store_id' ) {
+        if ( isset( $request['meta_key'] ) && $request['meta_key'] === Utill::POST_META_SETTINGS['store_id'] ) {
             if ( isset( $request['value'] ) && $request['value'] !== '' ) {
                 $meta_query[] = array(
-                    'key'     => 'multivendorx_store_id',
+                    'key'     => Utill::POST_META_SETTINGS['store_id'],
                     'value'   => sanitize_text_field( $request['value'] ),
                     'compare' => '=',
                 );
             } else {
                 $meta_query[] = array(
-                    'key'     => 'multivendorx_store_id',
+                    'key'     => Utill::POST_META_SETTINGS['store_id'],
                     'compare' => 'EXISTS',
                 );
             }
@@ -221,7 +220,7 @@ class Rest {
             );
         }
 
-        // 3️⃣ Merge with existing meta_query if present
+        // Merge with existing meta_query if present
         if ( ! empty( $meta_query ) ) {
             if ( isset( $args['meta_query'] ) ) {
                 $args['meta_query']['relation'] = 'AND';
@@ -241,7 +240,7 @@ class Rest {
         $user_id      = $current_user->ID;
 
         // Fetch custom user meta
-        $active_store = get_user_meta( $user_id, 'multivendorx_active_store', true );
+        $active_store = get_user_meta( $user_id, Utill::POST_META_SETTINGS['active_store'], true );
 
         // Get all users for that store
         $users = StoreUtil::get_store_users( $active_store );
@@ -254,13 +253,13 @@ class Rest {
     }
 
     public function filter_orders_by_meta_exists( $response, $object, $request ) {
-        $store_id = $object->get_meta( 'multivendorx_store_id' );
+        $store_id = $object->get_meta( Utill::POST_META_SETTINGS['store_id'] );
 
         if ( $store_id ) {
             // Get store information
             $store      = new Store( $store_id );
-            $store_name = $store->get( 'name' );
-            $store_slug = $store->get( 'slug' );
+            $store_name = $store->get( Utill::STORE_SETTINGS_KEYS['name'] );
+            $store_slug = $store->get( Utill::STORE_SETTINGS_KEYS['slug'] );
 
             // Add store data to API response
             $response->data['store_name'] = $store_name ?: '';
@@ -268,7 +267,7 @@ class Rest {
             $response->data['store_id']   = $store_id;
         }
 
-        $commission_id = $object->get_meta( 'multivendorx_commission_id' );
+        $commission_id = $object->get_meta( Utill::POST_META_SETTINGS['commission_id'] );
 
         if ( $commission_id ) {
             $commission = CommissionUtil::get_commission_db( $commission_id );
@@ -332,12 +331,12 @@ class Rest {
     }
 
     public function filter_coupons_by_meta_exists_response( $response, $object, $request ) {
-        $store_id = $object->get_meta( 'multivendorx_store_id' );
+        $store_id = $object->get_meta( Utill::POST_META_SETTINGS['multivendorx_store_id'] );
         if ( $store_id ) {
             // Get store information
             $store      = new Store( $store_id );
-            $store_name = $store->get( 'name' );
-            $store_slug = $store->get( 'slug' );
+            $store_name = $store->get( Utill::STORE_SETTINGS_KEYS['name'] );
+            $store_slug = $store->get( Utill::STORE_SETTINGS_KEYS['slug'] );
 
             // Add store data to API response
             $response->data['store_name'] = $store_name ?: '';

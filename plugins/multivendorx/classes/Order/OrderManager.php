@@ -97,7 +97,7 @@ class OrderManager {
         foreach ( $suborders as $order ) {
             if ( $order instanceof WC_Order ) {
                 $order_id     = $order->get_id();
-                $store_id     = $order->get_meta( 'multivendorx_store_id' );
+                $store_id     = $order->get_meta( Utill::POST_META_SETTINGS['store_id'] );
                 $store_exists = Store::get_store_by_id( $store_id );
                 if ( $store_exists ) {
                     $existing_orders[ $order_id ] = $store_id;
@@ -195,8 +195,8 @@ class OrderManager {
 
             if ( ! $is_update ) {
                 // save other details for suborder.
-                $order->set_created_via( 'mvx_vendor_order' );
-                $order->update_meta_data( 'multivendorx_store_id', $store_id );
+                $order->set_created_via( Utill::POST_META_SETTINGS['mvx_vendor_order'] );
+                $order->update_meta_data( Utill::POST_META_SETTINGS['store_id'], $store_id );
                 $order->set_parent_id( $parent_order->get_id() );
             }
 
@@ -321,7 +321,7 @@ class OrderManager {
         $shipping_items = $parent_order->get_items( 'shipping' );
 
         foreach ( $shipping_items as $item_id => $item ) {
-            $shipping_vendor_id = $item->get_meta( 'multivendorx_store_id', true );
+            $shipping_vendor_id = $item->get_meta( Utill::POST_META_SETTINGS['store_id'], true );
             if ( $shipping_vendor_id == $store_id ) {
                 $shipping = new \WC_Order_Item_Shipping();
                 $shipping->set_props(
@@ -338,8 +338,8 @@ class OrderManager {
                     $shipping->add_meta_data( $key, $value, true );
                 }
 
-                $shipping->add_meta_data( 'multivendorx_store_id', $store_id, true );
-                $item->add_meta_data( '_vendor_order_shipping_item_id', $item_id );
+                $shipping->add_meta_data( Utill::POST_META_SETTINGS['store_id'], $store_id, true );
+                $item->add_meta_data( Utill::POST_META_SETTINGS['_vendor_order_shipping_item_id'], $item_id );
 
                 // Action hook to adjust item before save.
                 do_action( 'mvx_vendor_create_order_shipping_item', $shipping, $item_id, $item, $order );

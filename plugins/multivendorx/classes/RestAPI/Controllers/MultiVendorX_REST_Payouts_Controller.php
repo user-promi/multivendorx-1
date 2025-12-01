@@ -115,7 +115,7 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
                             'status'   => 'pending',
                             'limit'    => -1,
                             'return'   => 'ids',
-                            'meta_key' => 'multivendorx_store_id',
+                            'meta_key' => Utill::POST_META_SETTINGS['store_id'],
                         )
                     )
                 );
@@ -130,7 +130,7 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
                     'limit'    => $limit,
                     'offset'   => $offset,
                     'return'   => 'objects',
-                    'meta_key' => 'multivendorx_store_id',
+                    'meta_key' => Utill::POST_META_SETTINGS['store_id'],
                 )
             );
 
@@ -185,7 +185,13 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
             // Create store object
             $store = new \MultiVendorX\Store\Store();
 
-            $core_fields = array( 'name', 'slug', 'description', 'who_created', 'status' );
+            $core_fields = array( 
+                Utill::STORE_SETTINGS_KEYS['name'],
+                Utill::STORE_SETTINGS_KEYS['slug'],
+                Utill::STORE_SETTINGS_KEYS['description'],
+                Utill::STORE_SETTINGS_KEYS['who_created'],
+                Utill::STORE_SETTINGS_KEYS['status'],    
+                );
             foreach ( $core_fields as $field ) {
                 if ( isset( $store_data[ $field ] ) ) {
                     $store->set( $field, $store_data[ $field ] );
@@ -213,7 +219,7 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
 
                 // Save them under one key
                 if ( ! empty( $non_core_fields ) ) {
-                    $store->update_meta( 'multivendorx-registration-data', $non_core_fields );
+                    $store->update_meta( Utill::STORE_SETTINGS_KEYS['registration_data'], $non_core_fields );
                 }
             }
 
@@ -276,11 +282,11 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
 
             $response = array(
                 'id'          => $store->get_id(),
-                'name'        => $store->get( 'name' ),
-                'slug'        => $store->get( 'slug' ),
-                'description' => $store->get( 'description' ),
-                'who_created' => $store->get( 'who_created' ),
-                'status'      => $store->get( 'status' ),
+                'name'        => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+                'slug'        => $store->get( Utill::STORE_SETTINGS_KEYS['slug'] ),
+                'description' => $store->get( Utill::STORE_SETTINGS_KEYS['description'] ),
+                'who_created' => $store->get( Utill::STORE_SETTINGS_KEYS['who_created'] ),
+                'status'      => $store->get( Utill::STORE_SETTINGS_KEYS['status'] ),
             );
 
             // Add meta data
@@ -340,15 +346,22 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
                 );
             }
 
-            $store->set( 'name', $data['name'] ?? $store->get( 'name' ) );
-            $store->set( 'slug', $data['slug'] ?? $store->get( 'slug' ) );
-            $store->set( 'description', $data['description'] ?? $store->get( 'description' ) );
-            $store->set( 'who_created', 'admin' );
-            $store->set( 'status', $data['status'] ?? $store->get( 'status' ) );
+            $store->set( Utill::STORE_SETTINGS_KEYS['name'], $data['name'] ?? $store->get( Utill::STORE_SETTINGS_KEYS['name'] ) );
+            $store->set( Utill::STORE_SETTINGS_KEYS['slug'], $data['slug'] ?? $store->get( Utill::STORE_SETTINGS_KEYS['slug'] ) );
+            $store->set( Utill::STORE_SETTINGS_KEYS['description'], $data['description'] ?? $store->get( Utill::STORE_SETTINGS_KEYS['description'] ) );
+            $store->set( Utill::STORE_SETTINGS_KEYS['who_created'], 'admin' );
+            $store->set( Utill::STORE_SETTINGS_KEYS['status'], $data['status'] ?? $store->get( Utill::STORE_SETTINGS_KEYS['status'] ) );
 
             if ( is_array( $data ) ) {
                 foreach ( $data as $key => $value ) {
-                    if ( ! in_array( $key, array( 'id', 'name', 'slug', 'description', 'who_created', 'status' ), true ) ) {
+                    if ( ! in_array( $key, array(      
+                    Utill::STORE_SETTINGS_KEYS['id'],               
+                    Utill::STORE_SETTINGS_KEYS['name'],
+                    Utill::STORE_SETTINGS_KEYS['slug'],
+                    Utill::STORE_SETTINGS_KEYS['description'],
+                    Utill::STORE_SETTINGS_KEYS['who_created'],
+                    Utill::STORE_SETTINGS_KEYS['status'] 
+                ), true ) ) {
                         $store->update_meta( $key, $value );
                     }
                 }

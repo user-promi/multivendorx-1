@@ -121,11 +121,11 @@ class Frontend {
                 }
             }
 
-            $name        = $store->get( 'name' );
-            $description = $store->get( 'description' );
-            $phone       = $store->get_meta( 'phone' ) ?? '';
-            $email       = $store->get_meta( 'email' ) ?? '';
-            $address_1   = $store->get_meta( 'address_1' ) ?? '';
+            $name        = $store->get( Utill::STORE_SETTINGS_KEYS['name' ]);
+            $description = $store->get( Utill::STORE_SETTINGS_KEYS['description'] );
+            $phone       = $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ) ?? '';
+            $email       = $store->get_meta( Utill::STORE_SETTINGS_KEYS['email'] ) ?? '';
+            $address_1   = $store->get_meta( Utill::STORE_SETTINGS_KEYS['address_1'] ) ?? '';
 
             $logo_html = '';
             if ( in_array( 'show_store_logo_next_to_products', $store_details ) ) {
