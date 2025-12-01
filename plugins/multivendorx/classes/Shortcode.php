@@ -72,32 +72,15 @@ class Shortcode {
         </div>  -->
         <?php
         $user = wp_get_current_user();
-        if ( ! is_user_logged_in() ) {
-            if ( ( 'no' === get_option( Utill::WOO_SETTINGS['generate_password'] ) && ! is_user_logged_in() ) ) {
-                wp_enqueue_script( 'wc-password-strength-meter' );
+        if (!is_user_logged_in()) {
+            if (('no' === get_option('woocommerce_registration_generate_password') && !is_user_logged_in())) {
+                wp_enqueue_script('wc-password-strength-meter');
             }
             echo '<div class="mvx-dashboard woocommerce">';
-            wc_get_template( 'myaccount/form-login.php' );
+            wc_get_template('myaccount/form-login.php');
             echo '</div>';
-        } elseif ( in_array( 'store_owner', $user->roles, true ) ) {
-            MultiVendorX()->util->get_template( 'store/store-dashboard.php', array() );
         } else {
-            $stores         = StoreUtil::get_store_by_primary_owner( 'rejected' );
-            $pending_stores = StoreUtil::get_store_by_primary_owner( 'pending' );
-
-            echo '<div class="mvx-dashboard-message">';
-            if ( ! empty( $stores ) ) {
-                $reapply_url = get_permalink( MultiVendorX()->setting->get_setting( 'store_registration_page' ) );
-                printf(
-                    esc_html__( 'Your application is rejected by admin. %s', 'multivendorx' ),
-                    '<a href="' . esc_url( $reapply_url ) . '">' . esc_html__( 'Click here to reapply.', 'multivendorx' ) . '</a>'
-                );
-            } elseif ( ! empty( $pending_stores ) ) {
-                echo MultiVendorX()->setting->get_setting( 'pending_msg' );
-            } else {
-                echo esc_html__( 'Signup has been disabled.', 'multivendorx' );
-            }
-            echo '</div>';
+            MultiVendorX()->util->get_template('store/store-dashboard.php', []);
         }
 
         return ob_get_clean();
