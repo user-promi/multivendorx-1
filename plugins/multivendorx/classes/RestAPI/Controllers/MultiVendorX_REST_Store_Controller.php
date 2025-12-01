@@ -408,7 +408,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                     $store_ids   = array();
 
                     foreach ( $product_ids as $product_id ) {
-                        $store_id = get_post_meta( $product_id, 'multivendorx_store_id', true );
+                        $store_id = get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true );
 
                         if ( ! empty( $store_id ) ) {
 							$store_ids[] = $store_id;
@@ -420,7 +420,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 }
 
                 if ( ! empty( $filters['product'] ) ) {
-                    $store_id   = get_post_meta( $filters['product'], 'multivendorx_store_id', true );
+                    $store_id   = get_post_meta( $filters['product'], Utill::POST_META_SETTINGS['store_id'], true );
                     $args['ID'] = $store_id;
                 }
             }
@@ -677,7 +677,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 if ( MultiVendorX()->setting->get_setting( 'approve_store' ) == 'automatically' ) {
                     $current_user->set_role( 'store_owner' );
                 } elseif ( ! in_array( 'store_owner', (array) $current_user->roles ) ) {
-                        $role = get_option( 'default_role' );
+                        $role = get_option( Utill::OTHER_SETTINGS['default_role'] );
                         $current_user->set_role( $role );
                 }
 
@@ -701,7 +701,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 do_action( 'multivendorx_after_store_active', $insert_id );
             }
 
-            $admin_email = get_option( 'admin_email' );
+            $admin_email = get_option( Utill::OTHER_SETTINGS['admin_email'] );
             $store_email = 'test@gmail.com';
             $parameters  = array(
                 'admin_email' => $admin_email,
@@ -712,7 +712,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
             do_action( 'multivendorx_notify_new_store_approval', 'new_store_approval', $parameters );
 
-            $admin_email = get_option( 'admin_email' );
+            $admin_email = get_option( Utill::OTHER_SETTINGS['admin_email'] );
             $store_email = 'test@gmail.com';
             $parameters  = array(
                 'admin_email' => $admin_email,
@@ -761,6 +761,20 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         }
         try {
             $id    = absint( $request->get_param( 'id' ) );
+            $action = $request->get_param( 'action' );
+
+            if ($id && $action == 'switch') {
+                update_user_meta(get_current_user_id(), 'multivendorx_active_store', $id);
+
+                $dashboard_page_id = (int) MultiVendorX()->setting->get_setting('store_dashboard_page');
+                if ($dashboard_page_id) {
+                    $redirect_url = get_permalink($dashboard_page_id);
+                }
+                return rest_ensure_response([
+                    'redirect' => $redirect_url
+                ]);
+            }
+
             $store = $request->get_param( 'store' );
             if ( $store ) {
                 return $this->get_store_products_and_category( $request );

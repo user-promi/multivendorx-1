@@ -62,7 +62,7 @@ class StoreUtil {
             update_term_meta( $class_id, 'multivendorx_store_id', $store_id );
 
             // Optional: add origin help
-            update_term_meta( $class_id, 'shipping_origin_country', get_option( 'woocommerce_default_country' ) );
+            update_term_meta( $class_id, 'shipping_origin_country', get_option( Utill::WOO_SETTINGS['default_country'] ) );
         }
     }
 
@@ -138,15 +138,25 @@ class StoreUtil {
         $placeholders      = implode( ', ', array_fill( 0, count( $excluded_statuses ), '%s' ) );
         $params            = array_merge( array( $user_id ), $excluded_statuses );
 
+        // $sql = "
+        //     SELECT su.store_id
+        //     FROM {$store_users} su
+        //     INNER JOIN {$stores} s ON s.ID = su.store_id
+        //     WHERE su.user_id = %d
+        //     AND s.status NOT IN ($placeholders)
+        // ";
         $sql = "
-            SELECT su.store_id
+            SELECT 
+                su.store_id AS id,
+                s.name AS name
             FROM {$store_users} su
             INNER JOIN {$stores} s ON s.ID = su.store_id
             WHERE su.user_id = %d
             AND s.status NOT IN ($placeholders)
         ";
 
-        return $wpdb->get_col( $wpdb->prepare( $sql, $params ) );
+        // return $wpdb->get_col($wpdb->prepare($sql, $params));
+        return $wpdb->get_results( $wpdb->prepare($sql, $params), ARRAY_A );
     }
 
 
@@ -275,10 +285,10 @@ class StoreUtil {
         return $capabilities;
     }
 
-    public static function get_products_vendor( $product_id ) {
+    public static function get_products_store( $product_id ) {
         $vendor_data = false;
         if ( $product_id > 0 ) {
-            $vendor     = get_post_meta( $product_id, 'multivendorx_store_id', true );
+            $vendor     = get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true );
             $vendor_obj = Store::get_store_by_id( $vendor );
 
             if ( $vendor_obj ) {
@@ -456,9 +466,9 @@ class StoreUtil {
         $product  = wc_get_product( $product_id );
         $policies = array();
         if ( $product ) {
-            $shipping_policy     = get_post_meta( $product_id, 'multivendorx_shipping_policy', true );
-            $refund_policy       = get_post_meta( $product_id, 'multivendorx_refund_policy', true );
-            $cancellation_policy = get_post_meta( $product_id, 'multivendorx_cancellation_policy', true );
+            $shipping_policy     = get_post_meta( $product_id, Utill::POST_META_SETTINGS['shipping_policy'], true );
+            $refund_policy       = get_post_meta( $product_id, Utill::POST_META_SETTINGS['refund_policy'], true );
+            $cancellation_policy = get_post_meta( $product_id, Utill::POST_META_SETTINGS['cancellation_policy'], true );
 
             $store_policy = MultiVendorX()->setting->get_setting( 'store_policy', array() );
             if ( ! empty( $shipping_policy ) ) {
@@ -471,7 +481,7 @@ class StoreUtil {
                 $cancellation_policy = MultiVendorX()->setting->get_setting( 'cancellation_policy', array() );
             }
 
-            $store_id                  = get_post_meta( $product_id, 'multivendorx_store_id', true );
+            $store_id                  = get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true );
             $store                     = new Store( $store_id );
             $privacy_override_settings = MultiVendorX()->setting->get_setting( 'store_policy_override', array() );
 
@@ -587,7 +597,7 @@ class StoreUtil {
         $page_id = MultiVendorX()->setting->get_setting( 'store_dashboard_page' );
 
         // Pretty permalinks
-        if ( get_option( 'permalink_structure' ) ) {
+        if ( get_option( Utill::WORDPRESS_SETTINGS['permalink'] ) ) {
             $url = home_url( '/dashboard' );
 
             if ( $tab ) {
@@ -704,7 +714,7 @@ class StoreUtil {
      */
     public static function get_excluded_products( $product_id = '', $store_id = '', $check_payouts = false ) {
 
-        $store_id = ! empty( $store_id ) ? $store_id : get_post_meta( $product_id, 'multivendorx_store_id', true );
+        $store_id = ! empty( $store_id ) ? $store_id : get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true );
 
         if ( ! $store_id ) {
             return false;

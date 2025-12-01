@@ -66,7 +66,7 @@ class Product {
             return;
         }
 
-        $store_id = get_post_meta( $post_id, 'multivendorx_store_id', true );
+        $store_id = get_post_meta( $post_id, Utill::POST_META_SETTINGS['store_id'], true );
 
         if ( ! $store_id ) {
             echo '<span style="color: #999;">— N/A —</span>';
@@ -104,7 +104,7 @@ class Product {
 
         $store_ids = array();
         foreach ( $products as $product_id ) {
-            $store_id = get_post_meta( $product_id, 'multivendorx_store_id', true );
+            $store_id = get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true );
             if ( ! empty( $store_id ) ) {
                 $store_ids[ $store_id ] = $store_id;
             }
@@ -114,11 +114,9 @@ class Product {
             return;
         }
 
-        // Build dropdown.
-        $selected_store = sanitize_text_field(
-            filter_input( INPUT_GET, 'multivendorx_store_id', FILTER_DEFAULT )
-        );
-        $selected_store = ! empty( $selected_store ) ? $selected_store : '';
+        // Build dropdown
+        $selected_store = sanitize_text_field( filter_input( INPUT_GET, Utill::POST_META_SETTINGS['store_id'], FILTER_DEFAULT ) ) ?: '';
+
         echo '<select name="multivendorx_store_id">';
         echo '<option value="">Filter by Store</option>';
 

@@ -65,6 +65,7 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
             url: getApiLink(appLocalizer, apilink),
             method: 'GET',
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: {menuOnly: true}
         }).then((res) => {
             const typedData = res.data as Record<string, Endpoint>;
             const data = Object.entries(typedData).map(([k, v]) => [
