@@ -72,6 +72,7 @@ declare global {
         all_zones:any;
         adminUrl:any;
         module_page_url:any;
+        current_user:any;
     }
     interface Color{
         color: any;
