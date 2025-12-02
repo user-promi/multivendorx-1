@@ -105,6 +105,7 @@ class Utill {
         'cod_order_payment'               => 'multivendorx_cod_order_payment',
         'product_shipping_class'          => 'product_shipping_class',
         'shipping_origin_country'         => 'shipping_origin_country',
+        '_customer_refund_reason'         => '_customer_refund_reason',
     );
 
     const WORDPRESS_SETTINGS = array(
@@ -172,11 +173,17 @@ class Utill {
         'return_policy'              => 'return_policy',
         'exchange_policy'            => 'exchange_policy',
     );
+
     const USER_SETTINGS_KEYS = array(
         'first_name'                  => 'first_name',
         'last_name'                   => 'last_name',
-        'social_verification'         =>'social_verification_connections',
+        'social_verification'         => 'social_verification_connections',
+        'following_stores'        => 'mvx_following_stores',
 
+    );
+    const POST_TYPES = array(
+        'announcement'      => 'multivendorx_an',
+        'knowledge'         => 'multivendorx_kb',
     );
     const ACTIVE_MODULES_DB_KEY = 'multivendorx_all_active_module_list';
 

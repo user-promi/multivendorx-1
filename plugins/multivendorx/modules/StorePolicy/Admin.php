@@ -45,9 +45,9 @@ class Admin {
     public function add_policy_product_data_panels() {
         global $post;
 
-        $shipping_policy     = get_post_meta( $post->ID, 'multivendorx_shipping_policy', true );
-        $refund_policy       = get_post_meta( $post->ID, 'multivendorx_refund_policy', true );
-        $cancellation_policy = get_post_meta( $post->ID, 'multivendorx_cancellation_policy', true );
+        $shipping_policy     = get_post_meta( $post->ID, Utill::POST_META_SETTINGS['shipping_policy'], true );
+        $refund_policy       = get_post_meta( $post->ID, Utill::POST_META_SETTINGS['refund_policy'], true );
+        $cancellation_policy = get_post_meta( $post->ID, Utill::POST_META_SETTINGS['cancellation_policy'], true );
         ?>
         <div id="multivendorx-policy-tab" class="panel woocommerce_options_panel hidden">
             <div class="options_group">
@@ -103,7 +103,7 @@ class Admin {
                     } else {
                         woocommerce_wp_text_input(
                             array(
-                                'id'          => 'multivendorx_refund_policy',
+                                'id'          => Utill::POST_META_SETTINGS['refund_policy'],
                                 'label'       => __( 'Refund Policy', 'multivendorx' ),
                                 'description' => __( 'Refund Policy.', 'multivendorx' ),
                                 'desc_tip'    => true,
@@ -162,15 +162,15 @@ class Admin {
         $cancellation_policy = wp_kses_post( filter_input( INPUT_POST, 'cancellation_policy', FILTER_UNSAFE_RAW ) );
 
         if ( $shipping_policy ) {
-            update_post_meta( $post_id, 'multivendorx_shipping_policy', $shipping_policy );
+            update_post_meta( $post_id, Utill::POST_META_SETTINGS['shipping_policy'], $shipping_policy );
         }
 
         if ( $refund_policy ) {
-            update_post_meta( $post_id, 'multivendorx_refund_policy', $refund_policy );
+            update_post_meta( $post_id, Utill::POST_META_SETTINGS['refund_policy'], $refund_policy );
         }
 
         if ( $cancellation_policy ) {
-            update_post_meta( $post_id, 'multivendorx_cancellation_policy', $cancellation_policy );
+            update_post_meta( $post_id, Utill::POST_META_SETTINGS['cancellation_policy'], $cancellation_policy );
         }
     }
 }
