@@ -1,12 +1,9 @@
 import { Radio } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-<<<<<<< HEAD
 import { BasicInput, FileInput, SelectInput, TextArea, ToggleSetting } from "zyra";
 import axios from "axios";
 import { useLocation } from 'react-router-dom';
-=======
 import { BasicInput, CommonPopup, FileInput, SelectInput, TextArea, ToggleSetting } from "zyra";
->>>>>>> 93d0854b (add product)
 
 const AddProduct = () => {
    const location = useLocation();
