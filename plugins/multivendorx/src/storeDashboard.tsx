@@ -18,6 +18,10 @@ const Dashboard = () => {
     const navigate = useNavigate();
 
     const loadComponent = (key) => {
+        if (!endpoints || endpoints.length === 0) {
+            return;
+        }
+
         try {
             const activeEndpoint = endpoints.find(ep => ep.tab === key);
 
@@ -110,22 +114,20 @@ const Dashboard = () => {
         return list;
     }, [menu]);
 
-
-    // useEffect(() => {
-    //     const query = new URLSearchParams(location.search);
-    //     const tab = query.get('segment') || endpoints[0]?.tab || '';
-    //     setCurrentTab(tab);
-    // }, [location.search, endpoints]);
+    const getBasePath = () => {
+        const sitePath = new URL(appLocalizer.site_url).pathname;
+        return sitePath.replace(/\/$/, '');
+    };
 
     const getCurrentTabFromURL = () => {
         const slug = appLocalizer.dashboard_slug;
+        const base = getBasePath();
 
         if (appLocalizer.permalink_structure) {
-            // const path = location.pathname.replace(`/${slug}/`, '').replace(/^\/+/, '');
-            // if (path) return path;
-
-            let path = location.pathname.replace(`/${slug}/`, '');
-            path = path.replace(/^\/+|\/+$/g, '');
+            let path = location.pathname
+                .replace(base, '')
+                .replace(`/${slug}/`, '')
+                .replace(/^\/+|\/+$/g, '');
 
             if (path) return path;
         }
@@ -134,24 +136,23 @@ const Dashboard = () => {
         return query.get('segment') || '';
     };
 
-
     useEffect(() => {
         const tab = getCurrentTabFromURL() || endpoints[0]?.tab || '';
         setCurrentTab(tab);
     }, [location.pathname, location.search, endpoints]);
 
 
+    // Handle Tab Navigation
     const handleTabClick = (tab) => {
+        const base = getBasePath();
         if (appLocalizer.permalink_structure) {
-            navigate(`/${appLocalizer.dashboard_slug}/${tab}`);
+            navigate(`${base}/${appLocalizer.dashboard_slug}/${tab}`);
         } else {
-            navigate(`/?page_id=${appLocalizer.dashboard_page_id}&segment=${tab}`);
+            navigate(
+                `${base}/?page_id=${appLocalizer.dashboard_page_id}&segment=${tab}`
+            );
         }
     };
-
-    // const handleTabClick = (tab) => {
-    //     navigate(`?segment=${tab}`);
-    // };
 
     useEffect(() => {
         const open = {};

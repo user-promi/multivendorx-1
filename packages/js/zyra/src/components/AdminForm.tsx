@@ -1033,16 +1033,20 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                         e.preventDefault();
                                         window.open(inputField.link, '_blank');
                                     }}
-                                    onclickCallback={() => {
-                                        axios({
-                                            url: getApiLink(appLocalizer, String(inputField.apilink)),
-                                            method: 'GET',
-                                            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-                                            params: {key: inputField.key}
-                                        }).then((res) => {
-                                          console.log('res', res)
-                                        });
-                                    }}
+                                    {...(inputField.apilink
+                                    ? {
+                                        onclickCallback: () => {
+                                            axios({
+                                                url: getApiLink(appLocalizer, String(inputField.apilink)),
+                                                method: "GET",
+                                                headers: { "X-WP-Nonce": appLocalizer.nonce },
+                                                params: { key: inputField.key }
+                                            }).then((res) => {
+                                                console.log("res", res);
+                                            });
+                                        }
+                                    }
+                                    : {})}
                                 />
                             </div>
                         </div>
