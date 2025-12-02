@@ -241,7 +241,7 @@ class Frontend {
 
         foreach ( WC()->cart->get_cart() as $cart_item ) {
             $product_id = $cart_item['product_id'];
-            $store_id   = get_post_meta( $product_id, 'multivendorx_store_id', true );
+            $store_id   = get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true );
 
             if ( $store_id ) {
                 $store         = new \MultiVendorX\Store\Store( $store_id );

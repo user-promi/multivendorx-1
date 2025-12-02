@@ -64,8 +64,8 @@ class Ajax {
         }
 
         // Save updates
-        update_user_meta( $user_id, 'mvx_following_stores', $following );
-        $store->update_meta( 'followers', wp_json_encode( array_values( $followers ) ) );
+        update_user_meta( $user_id, Utill::USER_SETTINGS_KEYS['following_stores'], $following );
+        $store->update_meta( Utill::STORE_SETTINGS_KEYS['followers'], wp_json_encode( array_values( $followers ) ) );
 
         wp_send_json_success( array( 'new_status' => $new_status ) );
     }
@@ -82,13 +82,13 @@ class Ajax {
         }
 
         $store     = new \MultiVendorX\Store\Store( $store_id );
-        $followers = json_decode( $store->meta_data['followers'] ?? '[]', true );
+        $followers = json_decode( $store->meta_data[Utill::STORE_SETTINGS_KEYS['followers']] ?? '[]', true );
 
         if ( ! is_array( $followers ) ) {
             $followers = array();
         }
 
-        // ✅ Handle old format (numeric user IDs)
+        //Handle old format (numeric user IDs)
         if ( isset( $followers[0] ) && is_int( $followers[0] ) ) {
             $followers = array_map(
                 fn( $uid ) => array(
@@ -99,10 +99,10 @@ class Ajax {
             );
         }
 
-        // ✅ Extract user IDs for comparison and count
+        //Extract user IDs for comparison and count
         $follower_ids = array_column( $followers, 'id' );
 
-        $following = $user_id ? get_user_meta( $user_id, 'mvx_following_stores', true ) : array();
+        $following = $user_id ? get_user_meta( $user_id, Utill::USER_SETTINGS_KEYS['following_stores'], true ) : array();
         if ( ! is_array( $following ) ) {
             $following = array();
         }

@@ -398,7 +398,7 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
             );
         }
 
-        // ✅ Add answer_by (current user ID)
+        // Add answer_by (current user ID)
         $current_user_id = get_current_user_id();
         if ( $current_user_id ) {
             $data_to_update['answer_by'] = $current_user_id;
