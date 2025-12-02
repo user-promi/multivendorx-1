@@ -13,7 +13,7 @@ use MultiVendorX\Utill;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * MultiVendorX AJAX handlers.
+ * MultiVendorX Main Commission class
  *
  * @class       Module class
  * @version     PRODUCT_VERSION
