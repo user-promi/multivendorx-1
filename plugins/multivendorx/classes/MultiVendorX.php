@@ -1,18 +1,23 @@
 <?php
+/**
+ * MultiVendorX class file
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX;
 
-/**
- * MultiVendorX Main Class
- *
- * @version     2.2.0
- * @package     MultiVendorX
- * @author      MultiVendorX
- */
 defined( 'ABSPATH' ) || exit;
 use Automattic\WooCommerce\Utilities\FeaturesUtil;
 use MultiVendorX\Notifications\Notifications;
 
+/**
+ * MultiVendorX Class.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 final class MultiVendorX {
 
     /**
@@ -220,7 +225,6 @@ final class MultiVendorX {
      * Accept class name, If valid return reference, else Wp_Error.
      *
      * @param  mixed $class all classes.
-     * @return object | \WP_Error
      */
     public function __get( $class ) {
      // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound

@@ -1,6 +1,8 @@
 <?php
 /**
  * Knowledgebase frontend class.
+ *
+ * @package multivendorx
  */
 
 namespace MultiVendorX\Knowledgebase;

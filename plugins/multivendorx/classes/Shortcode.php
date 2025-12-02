@@ -1,13 +1,18 @@
 <?php
+/**
+ * Modules Shortcode
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX;
 
 use MultiVendorX\Store\StoreUtil;
 
 /**
- * MultiVendorX Shortcode class
+ * MultiVendorX Shortcode class.
  *
- * @class       Shortcode class
+ * @class       Module class
  * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
@@ -25,6 +30,9 @@ class Shortcode {
         // add_action('wp_print_styles', array($this, 'dequeue_all_styles_on_page'), 99);
     }
 
+    /**
+     * Load frontend scripts
+     */
     public function frontend_scripts() {
         FrontendScripts::load_scripts();
         FrontendScripts::enqueue_script( 'multivendorx-dashboard-components-script' );
@@ -45,7 +53,7 @@ class Shortcode {
 		?>
             <style>
                 <?php
-                echo MultiVendorX()->setting->get_setting( 'custom_css_product_page', array() );
+                echo wp_strip_all_tags( MultiVendorX()->setting->get_setting( 'custom_css_product_page', '' ) );
                 ?>
             </style>
             <?php
@@ -57,6 +65,11 @@ class Shortcode {
 			}
     }
 
+    /**
+     * Dequeue all styles on page
+     *
+     * @return void
+     */
     public static function dequeue_all_styles_on_page() {
         if ( Utill::is_store_dashboard() && is_user_logged_in() && in_array( 'store_owner', wp_get_current_user()->roles, true ) ) {
             global $wp_styles;
@@ -64,6 +77,9 @@ class Shortcode {
         }
     }
 
+    /**
+     * Display store dashboard
+     */
     public function display_store_dashboard() {
         ob_start();
         ?>
@@ -85,14 +101,17 @@ class Shortcode {
         return ob_get_clean();
     }
 
+    /**
+     * Display store registration form
+     */
     public function display_store_registration() {
         ob_start();
         if ( is_user_logged_in() ) {
             ?>
             <div id="multivendorx-registration-form" class="woocommerce">
                 <?php
-                // Here you can render the actual registration form if needed
-                // Example: echo do_shortcode('[multivendorx_store_registration]');
+                // Here you can render the actual registration form if needed.
+                // Example: echo do_shortcode('[multivendorx_store_registration]');.
                 ?>
             </div>
             <?php
@@ -103,10 +122,13 @@ class Shortcode {
             echo '</div>';
         }
 
-        // Return the output buffer content
+        // Return the output buffer content.
         return ob_get_clean();
     }
 
+    /**
+     * Display stores list
+     */
     public function display_stores_list() {
         ob_start();
         ?>

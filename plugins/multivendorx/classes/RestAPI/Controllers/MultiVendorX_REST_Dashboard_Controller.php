@@ -1,4 +1,9 @@
 <?php
+/**
+ * Class MultiVendorX_REST_Dashboard_Controller
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\RestAPI\Controllers;
 
@@ -7,9 +12,14 @@ use MultiVendorX\Store\Store;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * MultiVendorX REST API Dashboard Controller.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
-
-
 
     /**
      * Route base.
@@ -18,6 +28,9 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
      */
     protected $rest_base = 'endpoints';
 
+    /**
+     * Register the routes for the objects of the controller.
+     */
     public function register_routes() {
         register_rest_route(
             MultiVendorX()->rest_namespace,
@@ -32,11 +45,21 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
         );
     }
 
+    /**
+     * Check if a given request has access to get items.
+     *
+     * @param object $request Full details about the request.
+     */
     public function get_items_permissions_check( $request ) {
         // return current_user_can('read');
         return true;
     }
 
+    /**
+     * Get all items.
+     *
+     * @param object $request Full details about the request.
+     */
     public function get_items( $request ) {
         $menu_only = $request->get_param( 'menuOnly' );
 
@@ -62,8 +85,13 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
         return rest_ensure_response( $endpoints );
     }
 
+    /**
+     * Get all endpoints.
+     *
+     * @return array
+     */
     public function all_endpoints() {
-        // Default endpoints
+        // Default endpoints.
         $all_endpoints = array(
             'dashboard'     => array(
                 'name'       => 'Dashboard',
@@ -80,11 +108,11 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                 'capability' => array( 'manage_products' ),
             ),
             // 'add-products'  => array(
-            //     'name'       => 'Add Products',
-            //     'slug'       => 'add-products',
-            //     'icon'       => 'adminlib-single-product',
-            //     'submenu'    => array(),
-            //     'capability' => array( 'manage_products' ),
+            // 'name'       => 'Add Products',
+            // 'slug'       => 'add-products',
+            // 'icon'       => 'adminlib-single-product',
+            // 'submenu'    => array(),
+            // 'capability' => array( 'manage_products' ),
             // ),
             'coupons'       => array(
                 'name'       => 'Coupons',
@@ -363,19 +391,27 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
     // );
     // }
 
+    /**
+     * Call edit product template.
+     */
     public function call_edit_product_template() {
         $element    = get_query_var( 'element' );
         $context_id = get_query_var( 'context_id' );
 
-        if ( $element === 'edit' ) {
+        if ( 'edit' === $element ) {
             if ( ! empty( $context_id ) ) {
                 MultiVendorX()->store->products->call_edit_product();
-            } elseif ( MultiVendorX()->setting->get_setting( 'category_pyramid_guide' ) == 'yes' || MultiVendorX()->modules->is_active( 'spmv' ) ) {
+            } elseif ( MultiVendorX()->setting->get_setting( 'category_pyramid_guide' ) === 'yes' || MultiVendorX()->modules->is_active( 'spmv' ) ) {
                 MultiVendorX()->store->products->call_add_product();
             }
         }
     }
 
+    /**
+     * Get current page and submenu.
+     *
+     * @return array
+     */
     public function get_current_page_and_submenu() {
         $dashboard_array = array(
             'all_endpoints' => $this->all_endpoints() ?? array(),
@@ -414,7 +450,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
 
                 foreach ( $endpoint['submenu'] as $submenu_item ) {
 
-                    // if module exists and is disabled → skip entry
+                    // If module exists and is disabled → skip entry.
                     if ( ! empty( $submenu_item['module'] ) && ! in_array( $submenu_item['module'], MultiVendorX()->modules->get_active_modules() ) ) {
                         continue;
                     }
@@ -424,7 +460,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
 
                 $dashboard_array['all_endpoints'][ $key ]['submenu'] = $filtered_submenu;
 
-                // if every submenu was removed → remove the whole endpoint
+                // If every submenu was removed → remove the whole endpoint.
                 if ( empty( $filtered_submenu ) && ! empty( $endpoint['submenu'] ) ) {
                     unset( $dashboard_array['all_endpoints'][ $key ] );
                 }
@@ -510,7 +546,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                     break;
                 }
 
-                if ( $div_id === 'edit' ) {
+                if ( 'edit' === $div_id ) {
                     $dashboard_array['content'] = $this->get_page_content( $div_id );
                 } else {
                     $dashboard_array['id'] = $div_id;
@@ -529,7 +565,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
      */
     private function get_tab_and_subtab(): array {
         if ( get_option( Utill::WORDPRESS_SETTINGS['permalink'] ) ) {
-            $segment = sanitize_key( get_query_var( 'segment' ) ?: 'dashboard' );
+            $segment = sanitize_key( get_query_var( 'segment' ) ? get_query_var( 'segment' ) : 'dashboard' );
             $element = sanitize_key( get_query_var( 'element' ) );
         } else {
             $segment = filter_input( INPUT_GET, 'segment', FILTER_DEFAULT ) ?? 'dashboard';
@@ -540,6 +576,11 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
 
     /**
      * Check user capability for a section.
+     *
+     * @param array $section            The section data.
+     * @param array $capability_settings The user's capability settings.
+     *
+     * @return bool True if the user has the capability, false otherwise.
      */
     private function user_has_section_capability( array $section, array $capability_settings ): bool {
         if ( empty( $section['capability'] ) ) {
@@ -557,6 +598,12 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
 
     /**
      * Resolve submenu access and ID.
+     *
+     * @param array  $section        The section data.
+     * @param string $current_sub    The current subtab.
+     * @param array  $capability_settings The user's capability settings.
+     *
+     * @return array The resolved submenu ID and access status.
      */
     private function resolve_submenu_access( array $section, string $current_sub, array $capability_settings ): array {
         $id      = $current_sub;
@@ -584,6 +631,8 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
 
     /**
      * Load content for special pages.
+     *
+     * @param string $id The page identifier.
      */
     private function get_page_content( string $id ): ?string {
         if ( 'edit' === $id ) {

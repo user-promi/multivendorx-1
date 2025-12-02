@@ -1,4 +1,10 @@
 <?php
+/**
+ * Template for displaying single product tab on product page.
+ *
+ * @package MultiVendorX/Templates
+ */
+
 use MultiVendorX\Store\StoreUtil;
 
 global $product;
@@ -22,6 +28,7 @@ if ( $store ) {
             );
 
             $heading_text = sprintf(
+                // translators: %1$s is the vendor/owner name, %2$s is the clickable store name link.
                 __( 'Meet our %1$s of shop %2$s', 'multivendorx' ),
                 esc_html( $details['owner_name'] ),
                 $store_name_link
@@ -45,7 +52,7 @@ if ( $store ) {
         }
 
         $store_details = MultiVendorX()->setting->get_setting( 'store_branding_details', array() );
-        if ( in_array( 'show_store_description', $store_details ) && ! empty( $details['description'] ) ) {
+        if ( in_array( 'show_store_description', $store_details, true ) && ! empty( $details['description'] ) ) {
             $html .= '<div class="store-description">' . apply_filters( 'the_content', $details['description'] ) . '</div>';
         }
 
@@ -58,6 +65,7 @@ if ( $store ) {
         }
 
         $html .= '<a class="button product_type_simple" href="' . esc_url( MultiVendorX()->store->storeutil->get_store_url( $store->get_id() ) ) . '">'
+            // translators: %1$s is the store/vendor name.
             . sprintf( __( 'More Products from %1$s', 'multivendorx' ), $store->get( 'name' ) ) . '</a>';
 
         $html .= '</div>'; // .mvx-vendor-info
@@ -65,7 +73,7 @@ if ( $store ) {
 
     $html .= apply_filters( 'mvx_after_seller_info_tab', '' );
 
-    echo $html;
+    wp_kses_post( $html );
 
     do_action( 'mvx_after_vendor_tab' );
 }

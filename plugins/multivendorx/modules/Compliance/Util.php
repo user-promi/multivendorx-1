@@ -13,17 +13,23 @@ use MultiVendorX\Utill;
  * MultiVendorX Questions Answers Util class
  *
  * @class       Util class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class Util {
 
+	/**
+	 * Create a new report abuse record.
+	 *
+	 * @param array $data The data for the new report abuse record.
+	 * @return int|false The ID of the new record, or false on failure.
+	 */
 	public static function create_report_abuse( $data = array() ) {
 		global $wpdb;
 
 		$table = $wpdb->prefix . Utill::TABLES['report_abuse'];
 
-		// Sanitize and prepare data
+		// Sanitize and prepare data.
 		$insert_data = array(
 			'store_id'   => isset( $data['store_id'] ) ? intval( $data['store_id'] ) : 0,
 			'product_id' => isset( $data['product_id'] ) ? intval( $data['product_id'] ) : 0,
@@ -32,7 +38,7 @@ class Util {
 			'message'    => isset( $data['message'] ) ? sanitize_textarea_field( $data['message'] ) : '',
 		);
 
-		// Insert data
+		// Insert data.
 		$inserted = $wpdb->insert(
 			$table,
 			$insert_data,
@@ -40,14 +46,19 @@ class Util {
 		);
 
 		if ( $inserted ) {
-			// Return the inserted record ID
+			// Return the inserted record ID.
 			return $wpdb->insert_id;
 		} else {
 			return false;
 		}
 	}
 
-
+	/**
+	 * Get report abuse information.
+	 *
+	 * @param array $args Query arguments.
+	 * @return array|int Array of report abuse records or count if 'count' is set in args.
+	 */
 	public static function get_report_abuse_information( $args = array() ) {
 		global $wpdb;
 
@@ -55,7 +66,7 @@ class Util {
 
 		$table = $wpdb->prefix . Utill::TABLES['report_abuse'];
 
-		// Existing filters
+		// Existing filters.
 		if ( isset( $args['store_ids'] ) && ! empty( $args['store_ids'] ) ) {
 			$store_ids = implode( ',', array_map( 'intval', $args['store_ids'] ) );
 			$where[]   = "store_id IN ($store_ids)";
@@ -65,14 +76,14 @@ class Util {
 			$where[] = $wpdb->prepare( 'email = %s', sanitize_email( $args['email'] ) );
 		}
 
-		// 🔹 Date range filter
+		// Date range filter.
 		if ( isset( $args['date_range'] ) ) {
 			$start   = esc_sql( $args['date_range']['start'] );
 			$end     = esc_sql( $args['date_range']['end'] );
 			$where[] = "DATE(created_at) BETWEEN '$start' AND '$end'";
 		}
 
-		// Build base query
+		// Build base query.
 		$query = isset( $args['count'] ) && $args['count']
 			? "SELECT COUNT(*) FROM $table"
 			: "SELECT * FROM $table";
@@ -81,14 +92,14 @@ class Util {
 			$query .= ' WHERE ' . implode( ' AND ', $where );
 		}
 
-		// 🔹 Order by
+		// Order by.
 		if ( empty( $args['count'] ) && ! empty( $args['order_by'] ) ) {
 			$order_by = esc_sql( $args['order_by'] );
 			$order    = esc_sql( $args['order'] ?? 'DESC' );
 			$query   .= " ORDER BY $order_by $order";
 		}
 
-		// Limit & offset
+		// Limit & offset.
 		if ( isset( $args['limit'], $args['offset'] ) && empty( $args['count'] ) ) {
 			$limit  = intval( $args['limit'] );
 			$offset = intval( $args['offset'] );
@@ -100,8 +111,12 @@ class Util {
 			: (array) $wpdb->get_results( $query, ARRAY_A );
 	}
 
-
-
+	/**
+	 * Delete a report abuse record.
+	 *
+	 * @param int $id The ID of the report abuse record to delete.
+	 * @return bool True on success, false on failure.
+	 */
 	public static function delete_report_abuse( $id ) {
 		global $wpdb;
 
@@ -118,11 +133,11 @@ class Util {
 			array( '%d' )
 		);
 
-		// $wpdb->delete returns number of rows deleted, or false on error
-		if ( $deleted === false ) {
-			return false; // DB error
+		// $wpdb->delete returns number of rows deleted, or false on error.
+		if ( false === $deleted ) {
+			return false; // DB error.
 		}
 
-		return true; // success, even if 0 rows (no row existed)
+		return true; // Success, even if 0 rows (no row existed).
 	}
 }
