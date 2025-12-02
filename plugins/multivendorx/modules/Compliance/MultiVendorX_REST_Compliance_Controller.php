@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX REST Compliance Controller.
  *
  * @class       Module class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
@@ -144,7 +144,7 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
             $store_id   = $request->get_param( 'store_id' );
             $start_date = $request->get_param( 'start_date' );
             $end_date   = $request->get_param( 'end_date' );
-            $order_by = $request->get_param( 'orderBy' ) ? $request->get_param( 'orderBy' ) : 'created_at';
+            $order_by   = $request->get_param( 'orderBy' ) ? $request->get_param( 'orderBy' ) : 'created_at';
             $order      = strtoupper( $request->get_param( 'order' ) ) === 'ASC' ? 'ASC' : 'DESC';
 
             // Count only.

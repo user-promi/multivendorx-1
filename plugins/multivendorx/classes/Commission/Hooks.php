@@ -15,14 +15,14 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX Commission Hooks.
  *
  * @class       Module class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class Hooks {
     /**
      * Constructor
      */
-    function __construct() {
+    public function __construct() {
         add_action( 'mvx_checkout_vendor_order_processed', array( $this, 'create_commission' ), 10, 3 );
         add_action( 'woocommerce_order_refunded', array( $this, 'create_commission_refunds' ), 10, 2 );
     }
@@ -30,7 +30,6 @@ class Hooks {
     /**
      * Create commission of vendor order.
      *
-     * @param   int    $vendor_order_id Vendor order ID.
      * @param   object $vendor_order Vendor order object.
      * @param   object $main_order Main order object.
      * @return  void
@@ -74,7 +73,7 @@ class Hooks {
 
             $store_id = $order->get_meta( Utill::POST_META_SETTINGS['store_id'] );
             if ( $store_id ) {
-                $refund->update_meta_data( Utill::POST_META_SETTINGS['store_id'] , $store_id );
+                $refund->update_meta_data( Utill::POST_META_SETTINGS['store_id'], $store_id );
             }
 
             $refund->save();

@@ -15,7 +15,7 @@ use MultiVendorX\Commission\CommissionUtil;
  * MultiVendorX Gateway Fee Admin class.
  *
  * @class       Admin class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class Admin {

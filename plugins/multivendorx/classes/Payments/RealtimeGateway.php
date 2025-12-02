@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX Realtime Payment Gateway.
  *
  * @class       Module class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class RealtimeGateway extends \WC_Payment_Gateway {

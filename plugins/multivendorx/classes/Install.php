@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX Install class
  *
  * @class       Install class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class Install {
@@ -292,6 +292,9 @@ class Install {
         dbDelta( $sql_system_events );
     }
 
+    /**
+     * Create database triggers.
+     */
     public function create_database_triggers() {
         global $wpdb;
 

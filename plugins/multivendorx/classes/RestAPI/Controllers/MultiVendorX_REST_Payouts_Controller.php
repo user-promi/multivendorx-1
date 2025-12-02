@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX REST API controller for Payouts.
  *
  * @class       Module class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
@@ -222,13 +222,13 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
             // Create store object.
             $store = new \MultiVendorX\Store\Store();
 
-            $core_fields = array( 
+            $core_fields = array(
                 Utill::STORE_SETTINGS_KEYS['name'],
                 Utill::STORE_SETTINGS_KEYS['slug'],
                 Utill::STORE_SETTINGS_KEYS['description'],
                 Utill::STORE_SETTINGS_KEYS['who_created'],
-                Utill::STORE_SETTINGS_KEYS['status'],    
-                );
+                Utill::STORE_SETTINGS_KEYS['status'],
+			);
             foreach ( $core_fields as $field ) {
                 if ( isset( $store_data[ $field ] ) ) {
                     $store->set( $field, $store_data[ $field ] );
@@ -401,14 +401,18 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
 
             if ( is_array( $data ) ) {
                 foreach ( $data as $key => $value ) {
-                    if ( ! in_array( $key, array(      
-                    Utill::STORE_SETTINGS_KEYS['id'],               
-                    Utill::STORE_SETTINGS_KEYS['name'],
-                    Utill::STORE_SETTINGS_KEYS['slug'],
-                    Utill::STORE_SETTINGS_KEYS['description'],
-                    Utill::STORE_SETTINGS_KEYS['who_created'],
-                    Utill::STORE_SETTINGS_KEYS['status'] 
-                ), true ) ) {
+                    if ( ! in_array(
+                        $key,
+                        array(
+							Utill::STORE_SETTINGS_KEYS['id'],
+							Utill::STORE_SETTINGS_KEYS['name'],
+							Utill::STORE_SETTINGS_KEYS['slug'],
+							Utill::STORE_SETTINGS_KEYS['description'],
+							Utill::STORE_SETTINGS_KEYS['who_created'],
+							Utill::STORE_SETTINGS_KEYS['status'],
+                        ),
+                        true
+                    ) ) {
                         $store->update_meta( $key, $value );
                     }
                 }
@@ -437,7 +441,7 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
     /**
      * Get states by country code.
      *
-     * @param object $request
+     * @param object $request Full details about the request.
      */
     public function get_states_by_country( $request ) {
         $country_code = $request->get_param( 'country' );

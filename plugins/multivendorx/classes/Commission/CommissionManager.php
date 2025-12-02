@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX AJAX handlers.
  *
  * @class       Module class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class CommissionManager {
@@ -454,6 +454,11 @@ class CommissionManager {
      * @param   mixed $vendor
      * @return  array | bool
      */
+
+    // product
+    // category
+    // store
+    // global
     public function get_commission_amount( $product_id, $item, $vendor ) {
         $data    = array();
         $product = wc_get_product( $product_id );

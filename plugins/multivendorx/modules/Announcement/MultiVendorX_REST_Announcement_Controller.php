@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX REST API Announcement controller.
  *
  * @class       Module class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
@@ -75,7 +75,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
 				array(
 					'methods'             => \WP_REST_Server::DELETABLE,
 					'callback'            => array( $this, 'delete_item' ),
-					'permission_callback' => array( $this, 'update_item_permissions_check' ), // only admins can delete
+					'permission_callback' => array( $this, 'update_item_permissions_check' ), // Only admins can delete.
 				),
 			)
         );
@@ -84,7 +84,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
     /**
      * Get items permissions check.
      *
-     * @param object $request
+     * @param object $request The request object.
      */
     public function get_items_permissions_check( $request ) {
         return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
@@ -93,7 +93,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
     /**
      * Create item permissions check.
      *
-     * @param object $request
+     * @param object $request The request object.
      */
     public function create_item_permissions_check( $request ) {
         return current_user_can( 'manage_options' );
@@ -102,7 +102,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
     /**
      * Update item permissions check.
      *
-     * @param object $request
+     * @param object $request The request object.
      */
     public function update_item_permissions_check( $request ) {
         return current_user_can( 'manage_options' );
@@ -111,7 +111,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
     /**
      * Get all announcements.
      *
-     * @param object $request
+     * @param object $request The request object.
      */
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
@@ -144,8 +144,8 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             $start_timestamp = ! empty( $start_date_raw ) ? strtotime( str_replace( 'T', ' ', preg_replace( '/\.\d+Z?$/', '', $start_date_raw ) ) ) : false;
             $end_timestamp   = ! empty( $end_date_raw ) ? strtotime( str_replace( 'T', ' ', preg_replace( '/\.\d+Z?$/', '', $end_date_raw ) ) ) : false;
 
-            $start_date = $start_timestamp ? date( 'Y-m-d 00:00:00', $start_timestamp ) : '';
-            $end_date   = $end_timestamp ? date( 'Y-m-d 23:59:59', $end_timestamp ) : '';
+            $start_date = $start_timestamp ? gmdate( 'Y-m-d 00:00:00', $start_timestamp ) : '';
+            $end_date   = $end_timestamp ? gmdate( 'Y-m-d 23:59:59', $end_timestamp ) : '';
 
             // Existing count logic.
             if ( $count_param ) {
@@ -294,7 +294,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             return $error;
         }
         try {
-            $stores = $request->get_param( 'stores' ) ?: array();
+            $stores = $request->get_param( 'stores' ) ? $request->get_param( 'stores' ) : array();
 
             $post_id = wp_insert_post(
                 array(
@@ -372,7 +372,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
         }
         try {
             $data   = $request->get_params();
-            $stores = $request->get_param( 'stores' ) ?: array();
+            $stores = $request->get_param( 'stores' ) ? $request->get_param( 'stores' ) : array();
 
             // Bulk update handling.
             if ( isset( $data['bulk'] ) && ! empty( $data['ids'] ) && ! empty( $data['action'] ) ) {
@@ -408,7 +408,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             $post_id = absint( $request->get_param( 'id' ) );
             $post    = get_post( $post_id );
 
-            if ( ! $post || $post->post_type !== 'multivendorx_an' ) {
+            if ( 'multivendorx_an' !== ! $post || $post->post_type ) {
                 return new \WP_Error( 'not_found', __( 'Announcement not found', 'multivendorx' ), array( 'status' => 404 ) );
             }
 
@@ -493,7 +493,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             }
 
             $post = get_post( $id );
-            if ( ! $post || $post->post_type !== 'multivendorx_an' ) {
+            if ( 'multivendorx_an' !== ! $post || $post->post_type ) {
                 return new \WP_Error(
                     'not_found',
                     __( 'Announcement not found', 'multivendorx' ),

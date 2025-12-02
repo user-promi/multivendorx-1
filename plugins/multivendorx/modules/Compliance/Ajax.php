@@ -13,10 +13,13 @@ use MultiVendorX\Compliance\Util;
  * MultiVendorX Compliance Module.
  *
  * @class       Module class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class Ajax {
+    /**
+     * Constructor.
+     */
     public function __construct() {
         add_action( 'wp_ajax_mvx_submit_report_abuse', array( $this, 'handle_report_abuse' ) );
         add_action( 'wp_ajax_nopriv_mvx_submit_report_abuse', array( $this, 'handle_report_abuse' ) );
@@ -24,6 +27,9 @@ class Ajax {
         add_action( 'wp_ajax_nopriv_get_report_reasons', array( $this, 'get_report_reasons' ) );
     }
 
+    /**
+     * Handle the report abuse form submission.
+     */
     public function handle_report_abuse() {
         // Verify nonce.
         check_ajax_referer( 'report_abuse_ajax_nonce', 'nonce' );

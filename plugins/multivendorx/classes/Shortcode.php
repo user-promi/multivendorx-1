@@ -13,7 +13,7 @@ use MultiVendorX\Store\StoreUtil;
  * MultiVendorX Shortcode class.
  *
  * @class       Module class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class Shortcode {
@@ -53,7 +53,7 @@ class Shortcode {
 		?>
             <style>
                 <?php
-                echo MultiVendorX()->setting->get_setting( 'custom_css_product_page', array() );
+                echo wp_strip_all_tags( MultiVendorX()->setting->get_setting( 'custom_css_product_page', '' ) );
                 ?>
             </style>
             <?php

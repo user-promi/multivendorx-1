@@ -4,6 +4,7 @@
  *
  * @package MultiVendorX
  */
+
 namespace MultiVendorX;
 
 defined( 'ABSPATH' ) || exit;
@@ -12,11 +13,16 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX Status.
  *
  * @class       Module class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class Status {
 
+    /**
+     * Get system info.
+     *
+     * @return array
+     */
     public static function get_system_info() {
 
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';

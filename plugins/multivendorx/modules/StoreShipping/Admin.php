@@ -11,7 +11,7 @@ namespace MultiVendorX\StoreShipping;
  * MultiVendorX Store Shipping Admin Class
  *
  * @class       Module class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class Admin {

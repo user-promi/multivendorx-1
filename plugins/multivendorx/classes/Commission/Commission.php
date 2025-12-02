@@ -66,5 +66,4 @@ class Commission {
     public function get_data( $key ) {
         return $this->commission->{ $key };
     }
-
 }

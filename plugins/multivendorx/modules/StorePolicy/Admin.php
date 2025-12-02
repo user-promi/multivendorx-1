@@ -11,7 +11,7 @@ namespace MultiVendorX\StorePolicy;
  * MultiVendorX Store Policy Admin class
  *
  * @class       Admin class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class Admin {
@@ -55,7 +55,7 @@ class Admin {
                     <?php
                     if ( function_exists( 'wp_editor' ) ) {
 						?>
-                        <label><?php _e( 'Shipping Policy', 'multivendorx' ); ?></label>
+                        <label><?php echo esc_html__( 'Cancellation Policy', 'multivendorx' ); ?></label>
                         <?php
                         // Show TinyMCE editor.
                         wp_editor(

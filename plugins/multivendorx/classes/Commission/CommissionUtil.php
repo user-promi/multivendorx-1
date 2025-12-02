@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX Commission Util.
  *
  * @class       Module class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class CommissionUtil {
@@ -25,7 +25,7 @@ class CommissionUtil {
      * Get a single commission row from databse by using commission id.
      * Return stdClass object represent a single row.
      *
-     * @param   mixed $id
+     * @param   mixed $id Commission ID.
      * @return  array | object | \stdClass
      */
     public static function get_commission_db( $id ) {
@@ -39,8 +39,8 @@ class CommissionUtil {
     /**
      * Get the commission object of Commission class.
      *
-     * @param   int $id Commission ID
-     * @return  Commission Commission Object
+     * @param   int $id Commission ID.
+     * @return  Commission Commission Object.
      */
     public static function get_commission( $id ) {
         return new Commission( $id );
@@ -49,8 +49,8 @@ class CommissionUtil {
     /**
      * Get the commission object of Commission class by store id and order id.
      *
-     * @param   int $store_id Store ID
-     * @param   int $order_id Order ID
+     * @param   int $store_id Store ID.
+     * @param   int $order_id Order ID.
      */
     public static function get_commission_by_store_and_order_id( $store_id, $order_id ) {
         global $wpdb;
@@ -99,7 +99,7 @@ class CommissionUtil {
         $predicate = array();
         foreach ( $filter as $column => $value ) {
             if ( is_array( $value ) ) {
-                if ( isset( $value['compare'] ) && $value['compare'] === 'BETWEEN' ) {
+                if ( 'BETWEEN' === isset( $value['compare'] ) && $value['compare'] ) {
                     $start_value = Utill::add_single_quotes( $value['value'][0] );
                     $end_value   = Utill::add_single_quotes( $value['value'][1] );
                     $predicate[] = "{$column} BETWEEN {$start_value} AND {$end_value}";
@@ -131,7 +131,7 @@ class CommissionUtil {
         }
 
         // Pagination.
-        if ( ! $count && $page && $perpage && $perpage != -1 ) {
+        if ( -1 !== ! $count && $page && $perpage && $perpage ) {
             $limit  = intval( $perpage );
             $offset = ( $page - 1 ) * $limit;
             $query .= " LIMIT {$limit} OFFSET {$offset}";
@@ -161,7 +161,7 @@ class CommissionUtil {
     /**
      * Get commission summary for a store or top N stores.
      *
-     * @param   int  $store_id  Store ID
+     * @param   int  $store_id  Store ID.
      * @param   bool $top_stores  If true, fetch top N stores by total order value.
      * @param   int  $limit  Number of stores to fetch.
      *

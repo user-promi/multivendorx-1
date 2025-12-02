@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX REST API Dashboard Controller.
  *
  * @class       Module class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
@@ -108,11 +108,11 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                 'capability' => array( 'manage_products' ),
             ),
             // 'add-products'  => array(
-            //     'name'       => 'Add Products',
-            //     'slug'       => 'add-products',
-            //     'icon'       => 'adminlib-single-product',
-            //     'submenu'    => array(),
-            //     'capability' => array( 'manage_products' ),
+            // 'name'       => 'Add Products',
+            // 'slug'       => 'add-products',
+            // 'icon'       => 'adminlib-single-product',
+            // 'submenu'    => array(),
+            // 'capability' => array( 'manage_products' ),
             // ),
             'coupons'       => array(
                 'name'       => 'Coupons',
@@ -398,7 +398,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
         $element    = get_query_var( 'element' );
         $context_id = get_query_var( 'context_id' );
 
-        if ( $element === 'edit' ) {
+        if ( 'edit' === $element ) {
             if ( ! empty( $context_id ) ) {
                 MultiVendorX()->store->products->call_edit_product();
             } elseif ( MultiVendorX()->setting->get_setting( 'category_pyramid_guide' ) === 'yes' || MultiVendorX()->modules->is_active( 'spmv' ) ) {
@@ -450,7 +450,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
 
                 foreach ( $endpoint['submenu'] as $submenu_item ) {
 
-                    // if module exists and is disabled → skip entry.
+                    // If module exists and is disabled → skip entry.
                     if ( ! empty( $submenu_item['module'] ) && ! in_array( $submenu_item['module'], MultiVendorX()->modules->get_active_modules() ) ) {
                         continue;
                     }
@@ -460,7 +460,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
 
                 $dashboard_array['all_endpoints'][ $key ]['submenu'] = $filtered_submenu;
 
-                // if every submenu was removed → remove the whole endpoint.
+                // If every submenu was removed → remove the whole endpoint.
                 if ( empty( $filtered_submenu ) && ! empty( $endpoint['submenu'] ) ) {
                     unset( $dashboard_array['all_endpoints'][ $key ] );
                 }
@@ -546,7 +546,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                     break;
                 }
 
-                if ( $div_id === 'edit' ) {
+                if ( 'edit' === $div_id ) {
                     $dashboard_array['content'] = $this->get_page_content( $div_id );
                 } else {
                     $dashboard_array['id'] = $div_id;

@@ -14,7 +14,7 @@ use MultiVendorX\FrontendScripts;
  * MultiVendorX Follow Store Frontend class
  *
  * @class       Frontend class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class Frontend {
@@ -65,7 +65,18 @@ class Frontend {
                 <a href="javascript:void(0);" class="open-report-abuse"><?php echo esc_html( $report_abuse_text ); ?></a>
 
                 <div class="report-abuse-form" style="display:none;">
-                    <h3><?php printf( __( 'Report abuse for "%s"', 'multivendorx' ), $product->get_name() ); ?></h3>
+                    <h3>
+                        <?php
+                            /* translators: %s: Product name for abuse report */
+                            printf(
+                                '<h3>%s</h3>',
+                                sprintf(
+                                    esc_html__( 'Report abuse for "%s"', 'multivendorx' ),
+                                    esc_html( $product->get_name() )
+                                )
+                            );
+                        ?>
+                    </h3>
 
                     <!-- Name & Email -->
                     <p><input type="text" class="report_abuse_name" placeholder="<?php esc_attr_e( 'Name', 'multivendorx' ); ?>"></p>

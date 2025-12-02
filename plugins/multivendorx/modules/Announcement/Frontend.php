@@ -11,7 +11,7 @@ namespace MultiVendorX\Announcement;
  * MultiVendorX Announcement module.
  *
  * @class       Module class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class Frontend {

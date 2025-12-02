@@ -15,7 +15,7 @@ use MultiVendorX\Notifications\Notifications;
  * MultiVendorX Class.
  *
  * @class       Module class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 final class MultiVendorX {

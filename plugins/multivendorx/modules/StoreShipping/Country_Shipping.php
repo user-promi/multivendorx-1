@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX Country Shipping Module.
  *
  * @class       Module class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class Country_Shipping extends \WC_Shipping_Method {
@@ -88,7 +88,7 @@ class Country_Shipping extends \WC_Shipping_Method {
     /**
      * Initialise Gateway Settings Form Fields
      *
-     * @access public 
+     * @access public
      * @return void
      */
     public function init_form_fields() {
@@ -151,7 +151,7 @@ class Country_Shipping extends \WC_Shipping_Method {
             $amount = $this->calculate_per_seller( $products, $destination_country, $destination_state );
 
             // Calculate tax.
-            $tax_rate = ( $this->tax_status == 'none' ) ? false : '';
+            $tax_rate = ( 'none' === $this->tax_status ) ? false : '';
             $tax_rate = apply_filters( 'multivendorx_is_apply_tax_on_shipping_rates', $tax_rate );
 
             $label = ( $amount > 0 ) ? $this->title : __( 'Free Shipping', 'multivendorx' );
@@ -173,14 +173,14 @@ class Country_Shipping extends \WC_Shipping_Method {
     /**
      * Check if shipping for this product is enabled
      *
-     * @param  int $product_id Product ID.
+     * @param  int $store_id Store ID.
      *
      * @return boolean
      */
     public static function is_shipping_enabled_for_seller( $store_id ) {
         $store            = new \MultiVendorX\Store\Store( $store_id );
         $shipping_options = $store->meta_data['shipping_options'] ?? '';
-        return $shipping_options === 'shipping_by_country';
+        return 'shipping_by_country' === $shipping_options;
     }
 
     /**
@@ -350,11 +350,8 @@ class Country_Shipping extends \WC_Shipping_Method {
     /**
      * Add Local Pickup rate per vendor if enabled.
      *
-     * @param int    $vendor_id Vendor ID.
-     * @param array  $products Products in the cart.
-     * @param string $destination_country Destination country.
-     * @param string $destination_state Destination state.
-     * @param mixed  $tax_rate Tax rate.
+     * @param array $products Products in the cart.
+     * @param mixed $tax_rate Tax rate.
      *
      * @return void
      */

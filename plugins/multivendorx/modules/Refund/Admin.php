@@ -11,11 +11,14 @@ namespace MultiVendorX\Refund;
  * MultiVendorX Refund Admin class
  *
  * @class       Admin class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class Admin {
 
+    /**
+     * Constructor
+     */
     public function __construct() {
         add_action( 'init', array( $this, 'register_status_for_refund' ) );
         add_filter( 'wc_order_statuses', array( $this, 'add_refund_requested_to_order_statuses' ) );
@@ -24,6 +27,11 @@ class Admin {
         add_action( 'woocommerce_process_shop_order_meta', array( $this, 'mvx_refund_order_status_save' ) );
     }
 
+    /**
+     * Register the refund status.
+     *
+     * @return void
+     */
     public function register_status_for_refund() {
         register_post_status(
             'wc-refund-requested',
@@ -33,11 +41,18 @@ class Admin {
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
+                // translators: %s: Number of orders with the "Refund Requested" status.
 				'label_count'               => _n_noop( 'Refund Requested (%s)', 'Refund Requested (%s)', 'multivendorx' ),
             )
         );
     }
 
+    /**
+     * Add the refund status to the order statuses.
+     *
+     * @param array $order_statuses Order statuses.
+     * @return array
+     */
     public function add_refund_requested_to_order_statuses( $order_statuses ) {
         $new_statuses = array();
 
@@ -52,17 +67,30 @@ class Admin {
         return $new_statuses;
     }
 
+    /**
+     * Add the refund status meta box to the order page.
+     *
+     * @param string $page Current page.
+     * @param object $order Order object.
+     * @return void
+     */
     public function mvx_refund_order_status_customer_meta( $page, $order ) {
-        if ( $page && $page != 'woocommerce_page_wc-orders' ) {
+        if ( 'woocommerce_page_wc-orders' !== $page && $page ) {
 			return;
         }
-        if ( $order->get_parent_id() == 0 ) {
+        if ( $order->get_parent_id() === 0 ) {
 			return;
         }
         add_meta_box( 'refund_status_customer', __( 'Customer refund status', 'multivendorx' ), array( $this, 'mvx_order_customer_refund_dd' ), $page, 'side', 'core', $order );
         // add_meta_box( 'refund_images_customer', __( 'Refund Request Images', 'multivendorx' ), array( $this, 'mvx_order_customer_refund_images' ), $page, 'side', 'core', $order );
     }
 
+    /**
+     * Display the refund status dropdown for an order.
+     *
+     * @param object $order Order object.
+     * @return void
+     */
     public function mvx_order_customer_refund_dd( $order ) {
         $refund_status   = $order->get_meta( '_customer_refund_order', true ) ?? '';
         $refund_statuses = array(
@@ -74,14 +102,22 @@ class Admin {
         ?>
         <select id="refund_order_customer" name="refund_order_customer" onchange='refund_admin_reason(this.value);'>
             <?php foreach ( $refund_statuses as $key => $value ) { ?>
-            <option value="<?php echo $key; ?>" <?php selected( $refund_status, $key ); ?> ><?php echo $value; ?></option>
+                <option value="<?php echo esc_attr( $key ); ?>" <?php selected( $refund_status, $key ); ?>>
+                    <?php echo esc_html( $value ); ?>
+                </option>
             <?php } ?>
         </select>
         <div class="reason_select_by_admin" id="reason_select_by_admin" style='display:none;'>
-            <label for="additional_massage"><?php _e( 'Please Provide Some Reason', 'multivendorx' ); ?></label>
+        <label for="additional_massage"><?php esc_html_e( 'Please Provide Some Reason', 'multivendorx' ); ?></label>
             <textarea class="woocommerce-Input input-text" name="refund_admin_reason_text" id="refund_admin_reason_text"></textarea>
         </div>
-        <button type="submit" class="button cust-refund-status button-default" name="cust_refund_status" value="<?php echo __( 'Update status', 'multivendorx' ); ?>"><?php echo __( 'Update status', 'multivendorx' ); ?></button>
+        <button type="submit"
+            class="button cust-refund-status button-default"
+            name="cust_refund_status"
+            value="<?php echo esc_attr__( 'Update status', 'multivendorx' ); ?>">
+            <?php echo esc_html__( 'Update status', 'multivendorx' ); ?>
+        </button>
+
         <script>
             function refund_admin_reason(val){
                 var element = document.getElementById('reason_select_by_admin');
@@ -94,12 +130,18 @@ class Admin {
         <?php
     }
 
+    /**
+     * Save the refund status of an order.
+     *
+     * @param int $order_id Order ID.
+     * @return void
+     */
     public function mvx_refund_order_status_save( $order_id ) {
         $order = wc_get_order( $order_id );
-        if ( empty( $order_id ) || ( $order_id && $order->get_type() != 'shop_order' ) ) {
+        if ( empty( $order_id ) || ( $order_id && $order->get_type() !== 'shop_order' ) ) {
 			return;
         }
-        if ( $order->get_parent_id() == 0 ) {
+        if ( $order->get_parent_id() === 0 ) {
 			return;
         }
         if ( ! filter_input( INPUT_POST, 'cust_refund_status', FILTER_DEFAULT ) ) {
@@ -114,16 +156,16 @@ class Admin {
                 $admin_reason = sanitize_text_field(
                     filter_input( INPUT_POST, 'refund_admin_reason_text', FILTER_DEFAULT )
                 );
-    
+
                 $refund_details = array(
-                    'admin_reason' => $admin_reason ?: '',
+                    'admin_reason' => $admin_reason ? $admin_reason : '',
                 );
 
-                $order_status = '';
+                $order_status  = '';
                 $refund_status = sanitize_text_field( filter_input( INPUT_POST, 'refund_order_customer', FILTER_DEFAULT ) );
-                if ( $refund_status === 'refund_accept' ) {
+                if ( 'refund_accept' === $refund_status ) {
                     $order_status = __( 'accepted', 'multivendorx' );
-                } elseif ( $refund_status === 'refund_reject' ) {
+                } elseif ( 'refund_reject' === $refund_status ) {
                     $order_status = __( 'rejected', 'multivendorx' );
                 }
                 // Comment note for suborder.

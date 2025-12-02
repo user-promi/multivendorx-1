@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX REST API tour controller.
  *
  * @class       Module class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
@@ -68,7 +68,7 @@ class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
 				array(
 					'methods'             => \WP_REST_Server::DELETABLE,
 					'callback'            => array( $this, 'delete_item' ),
-					'permission_callback' => array( $this, 'update_item_permissions_check' ), // only admins can delete
+					'permission_callback' => array( $this, 'update_item_permissions_check' ), // Only admins can delete.
 				),
 			)
         );
@@ -77,7 +77,7 @@ class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
     /**
      * Get tour status
      *
-     * @param mixed $request
+     * @param mixed $request Request data.
      */
     public function get_items_permissions_check( $request ) {
         return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
@@ -86,7 +86,7 @@ class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
     /**
      * Create tour status
      *
-     * @param mixed $request
+     * @param mixed $request Request data.
      */
     public function create_item_permissions_check( $request ) {
         return current_user_can( 'manage_options' );
@@ -95,7 +95,7 @@ class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
     /**
      * Update tour status
      *
-     * @param mixed $request
+     * @param mixed $request Request data.
      */
     public function update_item_permissions_check( $request ) {
         return current_user_can( 'manage_options' );
@@ -105,7 +105,7 @@ class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
     /**
      * Get tour status
      *
-     * @param mixed $request
+     * @param mixed $request Request data.
      */
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
@@ -147,9 +147,9 @@ class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
     }
 
     /**
-     * set tour status
+     * Set tour status
      *
-     * @param mixed $request
+     * @param mixed $request Request data.
      */
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );

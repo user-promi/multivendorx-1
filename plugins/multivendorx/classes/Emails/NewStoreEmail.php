@@ -11,7 +11,7 @@ namespace MultiVendorX\Emails;
  * MultiVendorX New Store Email
  *
  * @class       Module class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class NewStoreEmail extends MultiVendorXEmails {

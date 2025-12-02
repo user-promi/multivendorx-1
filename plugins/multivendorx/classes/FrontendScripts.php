@@ -422,13 +422,13 @@ class FrontendScripts {
             ),
         );
 
-        $store_ids   = StoreUtil::get_stores_from_user_id( get_current_user_id() );
+        $store_ids    = StoreUtil::get_stores_from_user_id( get_current_user_id() );
         $active_store = get_user_meta( get_current_user_id(), Utill::POST_META_SETTINGS['active_store'], true );
 
         if ( empty( $active_store ) && ! empty( $store_ids ) ) {
             $first_store = reset( $store_ids );
 
-            if ( !empty( $first_store['id'] ) ) {
+            if ( ! empty( $first_store['id'] ) ) {
                 update_user_meta( get_current_user_id(), Utill::POST_META_SETTINGS['active_store'], $first_store['id'] );
             }
         }

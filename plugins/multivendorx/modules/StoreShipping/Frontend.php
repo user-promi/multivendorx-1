@@ -13,7 +13,7 @@ use MultiVendorX\FrontendScripts;
  * MultiVendorX Store Review Frontend class
  *
  * @class       Frontend class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class Frontend {

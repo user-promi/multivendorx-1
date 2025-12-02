@@ -13,7 +13,7 @@ use MultiVendorX\Utill;
  * MultiVendorX Questions Answers Util class
  *
  * @class       Util class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class Util {
@@ -134,7 +134,7 @@ class Util {
 		);
 
 		// $wpdb->delete returns number of rows deleted, or false on error.
-		if ( $deleted === false ) {
+		if ( false === $deleted ) {
 			return false; // DB error.
 		}
 

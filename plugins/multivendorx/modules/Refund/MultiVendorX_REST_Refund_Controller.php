@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX REST API Refund controller.
  *
  * @class       Module class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {

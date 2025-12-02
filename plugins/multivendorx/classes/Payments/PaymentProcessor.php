@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX Payment Processor.
  *
  * @class       Module class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class PaymentProcessor {
@@ -122,6 +122,7 @@ class PaymentProcessor {
      * @param int    $order_id Order ID.
      * @param int    $transaction_id Transaction ID.
      * @param string $note Note.
+     * @param float  $amount Amount.
      *
      * @return void
      */
@@ -144,7 +145,7 @@ class PaymentProcessor {
             'amount'           => $amount,
             'currency'         => get_woocommerce_currency(),
             'payment_method'   => $store->get_meta( Utill::STORE_SETTINGS_KEYS['payment_method'] ),
-            'narration'        => $note ? $note : ( ( $status === 'success' )
+            'narration'        => $note ? $note : ( ( 'success' === $status )
                                     ? "Withdrawal released via {$method} Payment Processor"
                                     : "Withdrawal failed via {$method} Payment Processor" ),
             'status'           => ( 'success' === $status ) ? 'Completed' : 'Failed',
@@ -158,7 +159,7 @@ class PaymentProcessor {
             $format
         );
 
-        if ( $result && $status == 'success' ) {
+        if ( 'success' === $result && $status ) {
             $withdrawals_count = (int) $store->get_meta( Utill::STORE_SETTINGS_KEYS['withdrawals_count'] );
             $store->update_meta( Utill::STORE_SETTINGS_KEYS['withdrawals_count'], $withdrawals_count + 1 );
         }
@@ -240,7 +241,7 @@ class PaymentProcessor {
                 // );
 				// }
 
-				// if shipping not found then else
+				// If shipping not found then else.
 				$payment = $order->get_meta( Utill::WOO_SETTINGS['cod_order_payment'], true );
 				if ( $payment == 'admin' ) {
 					return;

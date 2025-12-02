@@ -11,7 +11,7 @@ namespace MultiVendorX\Refund;
  * MultiVendorX Refund Frontend class
  *
  * @class       Frontend class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class Frontend {
@@ -28,7 +28,7 @@ class Frontend {
     /**
      * Add refund button on customer my account order view page
      *
-     * @param object $order
+     * @param object $order Order object.
      */
     public function mvx_refund_btn_customer_my_account( $order ) {
         if ( ! is_wc_endpoint_url( 'view-order' ) ) {
@@ -48,25 +48,29 @@ class Frontend {
         $refund_reason_options = MultiVendorX()->setting->get_setting( 'refund_reasons', array() );
         $refund_button_text    = apply_filters( 'mvx_customer_my_account_refund_request_button_text', __( 'Request a refund', 'multivendorx' ), $order );
         // Print refund messages, if any.
-        if ( $msg_data = $this->mvx_get_customer_refund_order_msg( $order, $refund_settings ) ) {
-            $type = isset( $msg_data['type'] ) ? $msg_data['type'] : 'info';
+        $msg_data = $this->mvx_get_customer_refund_order_msg( $order, $refund_settings );
+
+        if ( $msg_data ) {
+            $type = isset( $msg_data['type'] ) ? sanitize_key( $msg_data['type'] ) : 'info';
             ?>
-            <div class="woocommerce-Message woocommerce-Message--<?php echo $type; ?> woocommerce-<?php echo $type; ?>">
-                <?php echo $msg_data['msg']; ?>
+            <div class="woocommerce-Message woocommerce-Message--<?php echo esc_attr( $type ); ?> woocommerce-<?php echo esc_attr( $type ); ?>">
+                <?php echo wp_kses_post( $msg_data['msg'] ); ?>
             </div>
             <?php
             return;
         }
         ?>
         <p><button type="button" class="button wp-element-button" id="cust_request_refund_btn" name="cust_request_refund_btn"
-                value="<?php echo $refund_button_text; ?>"><?php echo $refund_button_text; ?></button></p>
+                value="<?php echo esc_attr( $refund_button_text ); ?>">
+                <?php echo esc_html( $refund_button_text ); ?></button></p>
         <div id="mvx-myac-order-refund-wrap" class="mvx-myac-order-refund-wrap">
             <form method="POST" enctype="multipart/form-data">
                 <?php wp_nonce_field( 'customer_request_refund', 'cust-request-refund-nonce' ); ?>
                 <p class=" form-row form-row-wide">
 
-                    <label
-                        class="section-heading"><?php echo __( 'Choose the product(s) you want a refund for', 'multivendorx' ); ?></label>
+                <label class="section-heading">
+                    <?php echo esc_html__( 'Choose the product(s) you want a refund for', 'multivendorx' ); ?>
+                </label>
                     <?php
                     foreach ( $order->get_items() as $item ) {
                         $product = $item->get_product();
@@ -77,7 +81,7 @@ class Frontend {
                             <input class="product-select-tag" type="checkbox" name="refund_product[]" id="refund_product"
                                 value="<?php echo esc_attr( $product->get_id() ); ?>">
                             <label>
-                                <?php echo $product_image; ?>
+                                <?php echo wp_kses_post( $product_image ); ?>
                                 <?php echo esc_html( $product->get_name() ); ?>
                             </label>
                         </div>
@@ -88,7 +92,17 @@ class Frontend {
                 </p>
                 <p class=" form-row form-row-wide">
                 <label
-                    class="section-heading"><?php echo apply_filters( 'mvx_customer_my_account_refund_reason_label', __( 'Please mention your reason for refund', 'multivendorx' ), $order ); ?></label>
+                    class="section-heading">
+                    <?php
+                    echo esc_html(
+                        apply_filters(
+                            'mvx_customer_my_account_refund_reason_label',
+                            __( 'Please mention your reason for refund', 'multivendorx' ),
+                            $order
+                        )
+                    );
+					?>
+                </label>
                 <?php
                 if ( $refund_reason_options ) {
                     foreach ( $refund_reason_options as $index => $reason ) {
@@ -102,11 +116,11 @@ class Frontend {
                     echo '<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                         <label class="refund_reason_option" for="refund_reason_option-other">
                             <input type="radio" class="woocommerce-Input input-radio" name="refund_reason_option" id="refund_reason_option-other" value="others" />
-                            ' . __( 'Others reason', 'multivendorx' ) . '
+                            ' . esc_html__( 'Others reason', 'multivendorx' ) . '
                         </label></p>';
                     ?>
                     <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide cust-rr-other">
-                        <label for="refund_reason_other"><?php _e( 'Refund reason', 'multivendorx' ); ?></label>
+                        <label for="refund_reason_other"><?php esc_html_e( 'Refund reason', 'multivendorx' ); ?></label>
                         <input type="text" class="woocommerce-Input input-text" name="refund_reason_other" id="refund_reason_other"
                             autocomplete="off" />
                     </p>
@@ -114,7 +128,7 @@ class Frontend {
                 } else {
                     ?>
                     <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                        <label for="refund_reason_other"><?php _e( 'Refund reason', 'multivendorx' ); ?></label>
+                        <label for="refund_reason_other"><?php esc_html_e( 'Refund reason', 'multivendorx' ); ?></label>
                         <input type="text" class="woocommerce-Input input-text" name="refund_reason_other" id="refund_reason_other"
                             autocomplete="off" />
                     </p>
@@ -137,7 +151,7 @@ class Frontend {
 
                 <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                     <button type="submit" class="button wp-element-button" name="cust_request_refund_sbmt"
-                        value="<?php _e( 'Submit', 'multivendorx' ); ?>"><?php _e( 'Submit', 'multivendorx' ); ?></button>
+                        value="<?php esc_attr_e( 'Submit', 'multivendorx' ); ?>"><?php _e( 'Submit', 'multivendorx' ); ?></button>
                 </p>
             </form>
         </div>
@@ -214,17 +228,31 @@ class Frontend {
     public function mvx_handler_cust_requested_refund() {
         global $wp;
 
-        $nonce_value = isset( $_REQUEST['cust-request-refund-nonce'] ) ? wc_get_var( $_REQUEST['cust-request-refund-nonce'], wc_get_var( $_REQUEST['_wpnonce'], '' ) ) : '';
+        $data = filter_input_array(
+            INPUT_POST,
+            array(
+                'cust-request-refund-nonce' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+                'refund_product'            => array(
+                    'filter' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+                    'flags'  => FILTER_REQUIRE_ARRAY,
+                ),
+                'refund_reason_option'      => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+                'refund_reason_other'       => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+                'refund_request_addi_info'  => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+            )
+        );
+
+        $nonce_value = $data['cust-request-refund-nonce'] ?? '';
         if ( ! wp_verify_nonce( $nonce_value, 'customer_request_refund' ) ) {
             return;
         }
 
-        if ( ! isset( $_REQUEST['refund_product'] ) ) {
+        if ( empty( $data['refund_product'] ) ) {
             wc_add_notice( __( 'Kindly choose a product', 'multivendorx' ), 'error' );
             return;
         }
 
-        if ( ! isset( $_REQUEST['refund_reason_option'] ) ) {
+        if ( empty( $data['refund_reason_option'] ) ) {
             wc_add_notice( __( 'Kindly choose a refund reason', 'multivendorx' ), 'error' );
             return;
         }
@@ -233,19 +261,20 @@ class Frontend {
             return;
         }
 
-        $order_id = $wp->query_vars['view-order'];
+        $order_id = absint( $wp->query_vars['view-order'] );
         $order    = wc_get_order( $order_id );
 
-        $reason_option            = wc_clean( wp_unslash( $_REQUEST['refund_reason_option'] ?? '' ) );
-        $refund_reason_other      = wc_clean( wp_unslash( $_REQUEST['refund_reason_other'] ?? '' ) );
-        $refund_request_addi_info = wc_clean( wp_unslash( $_REQUEST['refund_request_addi_info'] ?? '' ) );
-        $refund_product           = wc_clean( $_REQUEST['refund_product'] ?? '' );
+        $reason_option            = wc_clean( $data['refund_reason_option'] ?? '' );
+        $refund_reason_other      = wc_clean( $data['refund_reason_other'] ?? '' );
+        $refund_request_addi_info = wc_clean( $data['refund_request_addi_info'] ?? '' );
+        $refund_product           = wc_clean( $data['refund_product'] ?? '' );
 
         $refund_reason_options = MultiVendorX()->setting->get_setting( 'refund_reasons', array() );
-        $refund_reason         = 'others' === $reason_option ? $refund_reason_other : ( $refund_reason_options[ $reason_option ] ? $refund_reason_options[ $reason_option ]['value'] : '' );
-
-        $uploaded_image_urls = array();
-        $attach_ids          = array();
+        $refund_reason         = 'others' === $reason_option
+            ? $refund_reason_other
+            : ( $refund_reason_options[ $reason_option ]['value'] ?? '' );
+        $uploaded_image_urls   = array();
+        $attach_ids            = array();
 
         if ( isset( $_FILES['product_img'] ) && ! empty( $_FILES['product_img']['name'][0] ) ) {
             if ( ! function_exists( 'wp_handle_upload' ) ) {
@@ -261,9 +290,7 @@ class Frontend {
                 'webp'         => 'image/webp',
             );
 
-            $file_keys = array_keys( $_FILES['product_img']['name'] );
-
-            foreach ( $file_keys as $index ) {
+            foreach ( array_keys( $_FILES['product_img']['name'] ) as $index ) {
                 if ( UPLOAD_ERR_OK !== $_FILES['product_img']['error'][ $index ] ) {
                     continue;
                 }
@@ -318,26 +345,30 @@ class Frontend {
         $order->set_status( 'refund-requested' );
         $order->save();
 
-        $user_info = get_userdata( get_current_user_id() );
+        $user_info  = get_userdata( get_current_user_id() );
+        $comment_id = $order->add_order_note( "Customer requested a refund {$order_id}." );
 
-        $comment_id = $order->add_order_note( __( 'Customer requested a refund ', 'multivendorx' ) . $order_id . '.' );
         wp_update_comment(
             array(
-				'comment_ID'           => $comment_id,
-				'comment_author'       => $user_info->user_login,
-				'comment_author_email' => $user_info->user_email,
+                'comment_ID'           => $comment_id,
+                'comment_author'       => $user_info->user_login,
+                'comment_author_email' => $user_info->user_email,
             )
         );
 
         $parent_order_id = $order->get_parent_id();
         if ( $parent_order_id ) {
-            $parent_order      = wc_get_order( $parent_order_id );
-            $comment_id_parent = $parent_order->add_order_note( __( 'Customer requested a refund for ', 'multivendorx' ) . $order_id . '.' );
+            $parent_order = wc_get_order( $parent_order_id );
+
+            $comment_id_parent = $parent_order->add_order_note(
+                "Customer requested a refund for {$order_id}."
+            );
+
             wp_update_comment(
                 array(
-					'comment_ID'           => $comment_id_parent,
-					'comment_author'       => $user_info->user_login,
-					'comment_author_email' => $user_info->user_email,
+                    'comment_ID'           => $comment_id_parent,
+                    'comment_author'       => $user_info->user_login,
+                    'comment_author_email' => $user_info->user_email,
                 )
             );
         }
