@@ -458,8 +458,9 @@ a:focus {
         display: block;
     }
 }
-.add-variant{
-    .select-variations-wrapper{
+
+.add-variant {
+    .select-variations-wrapper {
         background: $theme-background-color;
         padding: 0.313rem 0.813rem;
         border-radius: 0.313rem;
@@ -1318,5 +1319,35 @@ a:focus {
     .item {
         display: flex;
         gap: 0.125rem;
+    }
+}
+
+// move to zyra
+.settings-form-group-radio {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    margin-top: 0.5rem;
+
+    .radio-basic-input-wrap {
+        display: flex;
+        gap: 0.5rem;
+
+        &.radio-select-active {
+            input {
+                border-color: var(--colorPrimary);
+                position: relative;
+
+                &::after {
+                    position: absolute;
+                    content: "";
+                    border-radius: 50%;
+                    width: 0.5rem;
+                    height: 0.5rem;
+                    background: var(--colorPrimary);
+                    left: 0.125rem;
+                }
+            }
+        }
     }
 }

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useLocation } from 'react-router-dom';
-import { BasicInput, CommonPopup, FileInput, RadioInput, SelectInput, TextArea, ToggleSetting } from "zyra";
+import { BasicInput, CommonPopup, FileInput, MultiCheckBox, RadioInput, SelectInput, TextArea, ToggleSetting } from "zyra";
 
 const AddProduct = () => {
    const location = useLocation();
@@ -204,10 +204,10 @@ const AddProduct = () => {
    const createProduct = () => {
       try {
          const payload = {
-               ...product, 
-               meta_data: [
-                  { key: "multivendorx_store_id", value: appLocalizer.store_id },
-               ]
+            ...product,
+            meta_data: [
+               { key: "multivendorx_store_id", value: appLocalizer.store_id },
+            ]
          };
 
          axios.put(
@@ -215,9 +215,9 @@ const AddProduct = () => {
             payload,
             { headers: { "X-WP-Nonce": appLocalizer.nonce } }
          )
-         .then(res => {
-            console.log("Product created:", res.data);
-         });
+            .then(res => {
+               console.log("Product created:", res.data);
+            });
 
       } catch (error) {
          console.error("Error:", error.response);
@@ -226,19 +226,19 @@ const AddProduct = () => {
 
    useEffect(() => {
       axios.get(
-         `${appLocalizer.apiUrl}/wc/v3/products/shipping_classes`, 
+         `${appLocalizer.apiUrl}/wc/v3/products/shipping_classes`,
          { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
       )
-      .then((res) => {
-         console.log(res.data)
-         const options = res.data.map(cls => ({
-            value: cls.slug,
-            label: cls.name
-         }));
-         
-         setShippingClasses(options);
-      });
-      
+         .then((res) => {
+            console.log(res.data)
+            const options = res.data.map(cls => ({
+               value: cls.slug,
+               label: cls.name
+            }));
+
+            setShippingClasses(options);
+         });
+
    }, [])
 
    return (
@@ -421,6 +421,7 @@ const AddProduct = () => {
                               checked={product.manage_stock}
                               onChange={(e) => handleChange("manage_stock", e.target.checked)}
                            />
+                           
                         </div>
 
                         <div className="form-group">
@@ -433,7 +434,7 @@ const AddProduct = () => {
                         </div>
                      </div>
                      {product.manage_stock && (
-                           <>
+                        <>
                            <div className="form-group-wrapper">
                               <div className="form-group">
                                  <label htmlFor="product-name">Quantity</label>
@@ -463,9 +464,9 @@ const AddProduct = () => {
                                     onChange={(e) => handleChange("low_stock_amount", e.target.value)}
                                  />
                               </div>
-                              </div>
-                           </>
-                        )}
+                           </div>
+                        </>
+                     )}
                      <div className="form-group-wrapper">
                         <div className="form-group">
                            <label htmlFor="product-name">Product URL</label>
@@ -479,7 +480,7 @@ const AddProduct = () => {
                   </div>
                </div>
 
-               { !product.virtual && (
+               {!product.virtual && (
                   <div className="card" id="card-shipping">
                      <div className="card-header">
                         <div className="left">
@@ -491,32 +492,32 @@ const AddProduct = () => {
                         <div className="form-group-wrapper">
                            <div className="form-group">
                               <label htmlFor="product-name">Weight ({appLocalizer.weight_unit})</label>
-                              <BasicInput 
-                                 name="weight" 
-                                 wrapperClass="setting-form-input" 
+                              <BasicInput
+                                 name="weight"
+                                 wrapperClass="setting-form-input"
                                  value={product.weight}
                                  onChange={(e) => handleChange("weight", e.target.value)}
                               />
                            </div>
                            <div className="form-group">
                               <label htmlFor="product-name">Dimensions ({appLocalizer.dimension_unit})</label>
-                              <BasicInput 
-                                 name="product_length" 
-                                 wrapperClass="setting-form-input" 
+                              <BasicInput
+                                 name="product_length"
+                                 wrapperClass="setting-form-input"
                                  value={product.product_length}
                                  placeholder="Length"
                                  onChange={(e) => handleChange("product_length", e.target.value)}
                               />
-                              <BasicInput 
-                                 name="product_width" 
-                                 wrapperClass="setting-form-input" 
+                              <BasicInput
+                                 name="product_width"
+                                 wrapperClass="setting-form-input"
                                  value={product.product_width}
                                  placeholder="Width"
                                  onChange={(e) => handleChange("product_width", e.target.value)}
                               />
-                              <BasicInput 
-                                 name="product_height" 
-                                 wrapperClass="setting-form-input" 
+                              <BasicInput
+                                 name="product_height"
+                                 wrapperClass="setting-form-input"
                                  value={product.product_height}
                                  placeholder="Height"
                                  onChange={(e) => handleChange("product_height", e.target.value)}
@@ -540,7 +541,7 @@ const AddProduct = () => {
                   </div>
                )}
 
-               { product.downloadable && (
+               {product.downloadable && (
                   <div className="card" id="card-downloadable">
                      <div className="card-header">
                         <div className="left">
@@ -549,8 +550,32 @@ const AddProduct = () => {
                         <div className="right"><i className="adminlib-pagination-right-arrow  arrow-icon" onClick={() => toggleCard("card-downloadable")}></i></div>
                      </div>
                      <div className="card-body">
-                        <div className="form-group-wrapper">
-                           
+                        <div className="shipping-country-wrapper">
+                           <div className="shipping-country">
+                              <div className="country item">
+                                 <SelectInput
+                                    name="shipping_class"
+                                    options={shippingClasses}
+                                    value={product.shipping_class}
+                                    size="16rem"
+                                    onChange={(selected) =>
+                                       handleChange("shipping_class", selected.value)
+                                    }
+                                 />
+                                 <BasicInput
+                                    name="product_height"
+                                    wrapperClass="setting-form-input"
+                                    value={product.product_height}
+                                    placeholder="Height"
+                                    onChange={(e) => handleChange("product_height", e.target.value)}
+                                 />
+                                 <div className="admin-btn btn-purple">Upload file</div>
+                                 <div className="delete-icon adminlib-delete"></div>
+                              </div>
+                           </div>
+                        </div>
+                        <div className="admin-btn btn-purple-bg">
+                           <i className="adminlib-plus-circle-o"></i> Add new
                         </div>
                      </div>
                   </div>
