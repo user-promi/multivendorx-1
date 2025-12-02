@@ -13,7 +13,7 @@ use MultiVendorX\Utill;
  * MultiVendorX Questions Answers Util class
  *
  * @class       Util class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class Util {

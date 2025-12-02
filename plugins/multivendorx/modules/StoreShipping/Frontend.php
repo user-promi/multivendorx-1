@@ -13,25 +13,25 @@ use MultiVendorX\FrontendScripts;
  * MultiVendorX Store Review Frontend class
  *
  * @class       Frontend class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class Frontend {
     /**
-     * Frontend class constructor function.
+     * Frontend class constructor function
      */
     public function __construct() {
         add_filter( 'multivendorx_store_shipping_options', array( $this, 'add_shipping_options' ) );
 
-        // Checkout fields and map
+        // Checkout fields and map.
         add_filter( 'woocommerce_checkout_fields', array( $this, 'mvx_checkout_user_location_fields' ), 50 );
         add_action( 'woocommerce_after_checkout_billing_form', array( $this, 'mvx_checkout_user_location_map' ), 50 );
 
-        // // Save session & order meta
+        // // Save session & order meta.
         add_action( 'woocommerce_checkout_update_order_review', array( $this, 'mvx_checkout_user_location_session_set' ), 50 );
         add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'mvx_checkout_user_location_save' ), 50 );
 
-        // // Load Google Maps JS
+        // // Load Google Maps JS.
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
         add_filter( 'woocommerce_cart_shipping_packages', array( $this, 'add_user_location_to_shipping_package' ) );
     }
@@ -39,20 +39,20 @@ class Frontend {
     /**
      * Add shipping options without changing existing ones
      *
-     * @param array $existing_options
+     * @param array $existing_options Existing shipping options.
      * @return array
      */
     public function add_shipping_options( $existing_options ) {
 
-        // Get all shipping module settings
+        // Get all shipping module settings.
         $settings = MultiVendorX()->setting->get_setting( 'shipping_modules' );
 
-        // Check if country-wise shipping is enabled
+        // Check if country-wise shipping is enabled.
         $country_shipping_enabled = isset( $settings['country-wise-shipping']['enable'] )
             ? $settings['country-wise-shipping']['enable']
             : false;
 
-        // Only add if country-wise shipping is enabled
+        // Only add if country-wise shipping is enabled.
         if ( $country_shipping_enabled ) {
             $new_options = array(
                 (object) array(
@@ -62,7 +62,7 @@ class Frontend {
                 ),
             );
 
-            // Merge with existing options without overwriting
+            // Merge with existing options without overwriting.
             $existing_options = array_merge( $existing_options, $new_options );
         }
 
@@ -70,7 +70,7 @@ class Frontend {
         ? $settings['distance-based-shipping']['enable']
         : false;
 
-        // Only add if country-wise shipping is enabled
+        // Only add if country-wise shipping is enabled.
         if ( $distance_based_shipping ) {
             $new_options = array(
                 (object) array(
@@ -80,7 +80,7 @@ class Frontend {
                 ),
             );
 
-            // Merge with existing options without overwriting
+            // Merge with existing options without overwriting.
             $existing_options = array_merge( $existing_options, $new_options );
         }
 
@@ -88,7 +88,7 @@ class Frontend {
         ? $settings['zone-wise-shipping']['enable']
         : false;
 
-        // Only add if country-wise shipping is enabled
+        // Only add if country-wise shipping is enabled.
         if ( $zone_wise_shipping ) {
             $new_options = array(
                 (object) array(
@@ -98,17 +98,23 @@ class Frontend {
                 ),
             );
 
-            // Merge with existing options without overwriting
+            // Merge with existing options without overwriting.
             $existing_options = array_merge( $existing_options, $new_options );
         }
 
-        // Return existing options if module not enabled
+        // Return existing options if module not enabled.
         return $existing_options;
     }
 
+    /**
+     * Add user location fields to checkout
+     *
+     * @param array $fields Checkout fields.
+     * @return array
+     */
     public function mvx_checkout_user_location_fields( $fields ) {
 
-        // show ONLY when distance-based shipping is used
+        // show ONLY when distance-based shipping is used.
         if (
             WC()->cart->needs_shipping()
             && apply_filters( 'mvx_is_allow_checkout_user_location', true )
@@ -146,8 +152,11 @@ class Frontend {
         return $fields;
     }
 
-
-
+    /**
+     * Add map to checkout page
+     *
+     * @param object $checkout Checkout object.
+     */
     public function mvx_checkout_user_location_map( $checkout ) {
         if ( ( true === WC()->cart->needs_shipping() ) && apply_filters( 'mvx_is_allow_checkout_user_location', true ) ) {
             echo '<div class="woocommerce-billing-fields__field-wrapper">';
@@ -166,7 +175,11 @@ class Frontend {
         }
     }
 
-
+    /**
+     * Set user location to session
+     *
+     * @param string $post_data_raw POST data.
+     */
     public function mvx_checkout_user_location_session_set( $post_data_raw ) {
         parse_str( $post_data_raw, $post_data );
         if ( ! empty( $post_data['mvx_user_location'] ) ) {
@@ -180,26 +193,35 @@ class Frontend {
         }
     }
 
+    /**
+     * Save user location to order meta
+     *
+     * @param int $order_id Order ID.
+     */
     public function mvx_checkout_user_location_save( $order_id ) {
         $order = wc_get_order( $order_id );
-        if ( ! empty( $_POST['mvx_user_location'] ) ) {
-            $order->update_meta_data( '_mvx_user_location', sanitize_text_field( $_POST['mvx_user_location'] ) );
+
+        if ( ! empty( filter_input( INPUT_POST, 'mvx_user_location', FILTER_SANITIZE_SPECIAL_CHARS ) ) ) {
+            $order->update_meta_data( '_mvx_user_location', sanitize_text_field( $location ) );
         }
-        if ( ! empty( $_POST['mvx_user_location_lat'] ) ) {
-            $order->update_meta_data( '_mvx_user_location_lat', sanitize_text_field( $_POST['mvx_user_location_lat'] ) );
+        if ( ! empty( filter_input( INPUT_POST, 'mvx_user_location_lat', FILTER_SANITIZE_SPECIAL_CHARS ) ) ) {
+            $order->update_meta_data( '_mvx_user_location_lat', sanitize_text_field( $location_lat ) );
         }
-        if ( ! empty( $_POST['mvx_user_location_lng'] ) ) {
-            $order->update_meta_data( '_mvx_user_location_lng', sanitize_text_field( $_POST['mvx_user_location_lng'] ) );
+        if ( ! empty( filter_input( INPUT_POST, 'mvx_user_location_lng', FILTER_SANITIZE_SPECIAL_CHARS ) ) ) {
+            $order->update_meta_data( '_mvx_user_location_lng', sanitize_text_field( $location_lng ) );
         }
         $order->save();
     }
 
+    /**
+     * Load frontend scripts
+     */
     public function load_scripts() {
-        // Check if distance-based shipping module is enabled
+        // Check if distance-based shipping module is enabled.
         $settings         = MultiVendorX()->setting->get_setting( 'shipping_modules', array() );
         $distance_enabled = $settings['distance-based-shipping']['enable'] ?? false;
 
-        // Load map ONLY when distance module enabled AND cart contains distance shipping store
+        // Load map ONLY when distance module enabled AND cart contains distance shipping store.
         if ( $distance_enabled && $this->cart_has_distance_shipping() ) {
             $google_maps_api_key = MultiVendorX()->setting->get_setting( 'google_api_key', '' );
             if ( ! empty( $google_maps_api_key ) ) {
@@ -212,7 +234,7 @@ class Frontend {
                 );
             }
 
-            // Load addon frontend scripts
+            // Load addon frontend scripts.
             FrontendScripts::load_scripts();
             FrontendScripts::enqueue_script( 'multivendorx-store-shipping-frontend-script' );
             FrontendScripts::localize_scripts( 'multivendorx-store-shipping-frontend-script' );
@@ -221,6 +243,8 @@ class Frontend {
 
     /**
      * Inject user location into shipping packages
+     *
+     * @param array $packages Shipping packages.
      */
     public function add_user_location_to_shipping_package( $packages ) {
         foreach ( $packages as $i => $package ) {
@@ -241,13 +265,13 @@ class Frontend {
 
         foreach ( WC()->cart->get_cart() as $cart_item ) {
             $product_id = $cart_item['product_id'];
-            $store_id   = get_post_meta( $product_id, 'multivendorx_store_id', true );
+            $store_id   = get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true );
 
             if ( $store_id ) {
                 $store         = new \MultiVendorX\Store\Store( $store_id );
                 $shipping_type = $store->meta_data['shipping_options'] ?? '';
 
-                if ( $shipping_type === 'shipping_by_distance' ) {
+                if ( 'shipping_by_distance' === $shipping_type ) {
                     return true;
                 }
             }

@@ -1,4 +1,9 @@
 <?php
+/**
+ * Modules Frontend class
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX;
 
@@ -42,6 +47,12 @@ class Frontend {
         add_action( 'woocommerce_checkout_process', array( $this, 'restrict_products_from_checkout' ) );
     }
 
+    /**
+     * Restrict store products from shop
+     *
+     * @param object $q Query object.
+     * @return void
+     */
     public function restrict_store_products_from_shop( $q ) {
 
         $products = wc_get_products(
@@ -64,6 +75,13 @@ class Frontend {
         }
     }
 
+    /**
+     * Restrict products from cart
+     *
+     * @param bool $passed Passed.
+     * @param int  $product_id Product ID.
+     * @return bool
+     */
     public function restrict_products_from_cart( $passed, $product_id ) {
 
         if ( StoreUtil::get_excluded_products( $product_id ) ) {
@@ -74,6 +92,12 @@ class Frontend {
         return $passed;
     }
 
+    /**
+     * Restrict products already in cart
+     *
+     * @param object $cart Cart object.
+     * @return void
+     */
     public function restrict_products_already_in_cart( $cart ) {
         foreach ( $cart->get_cart() as $cart_key => $item ) {
             $product_id = $item['product_id'];
@@ -84,6 +108,9 @@ class Frontend {
         }
     }
 
+    /**
+     * Restrict products from checkout
+     */
     public function restrict_products_from_checkout() {
 
         foreach ( WC()->cart->get_cart() as $item ) {
@@ -96,6 +123,12 @@ class Frontend {
         }
     }
 
+    /**
+     * Get store info
+     *
+     * @param int $product_id Product ID.
+     * @return array
+     */
     public function show_store_info( $product_id ) {
         $store_details = MultiVendorX()->setting->get_setting( 'store_branding_details', array() );
 
@@ -121,7 +154,7 @@ class Frontend {
                 }
             }
 
-            $name        = $store->get( Utill::STORE_SETTINGS_KEYS['name' ]);
+            $name        = $store->get( Utill::STORE_SETTINGS_KEYS['name'] );
             $description = $store->get( Utill::STORE_SETTINGS_KEYS['description'] );
             $phone       = $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ) ?? '';
             $email       = $store->get_meta( Utill::STORE_SETTINGS_KEYS['email'] ) ?? '';
@@ -147,6 +180,9 @@ class Frontend {
         }
     }
 
+    /**
+     * Add store name in shop and single product page
+     */
     public function add_text_in_shop_and_single_product_page() {
         global $post;
 
@@ -165,6 +201,14 @@ class Frontend {
             }
         }
     }
+
+    /**
+     * Add store name in cart
+     *
+     * @param array $array Array.
+     * @param array $cart_item Cart item.
+     * @return array
+     */
     public function add_sold_by_text_cart( $array, $cart_item ) {
         if ( apply_filters( 'mvx_sold_by_text_in_cart_checkout', true, $cart_item['product_id'] ) ) {
             $product_id = $cart_item['product_id'];
@@ -183,6 +227,11 @@ class Frontend {
         return $array;
     }
 
+    /**
+     * Add store tab in product page
+     *
+     * @param array $tabs Tabs.
+     */
     public function product_store_tab( $tabs ) {
         global $product;
         if ( $product ) {
@@ -199,6 +248,9 @@ class Frontend {
         return $tabs;
     }
 
+    /**
+     * Store tab content
+     */
     public function woocommerce_product_store_tab() {
         MultiVendorX()->util->get_template( 'store/store-single-product-tab.php' );
     }
@@ -206,17 +258,20 @@ class Frontend {
     /**
      * Show related products or not
      *
+     * @param array  $query      Query args.
+     * @param int    $product_id Product ID.
+     * @param string $args       Args.
      * @return array
      */
     public function show_related_products( $query, $product_id, $args ) {
         if ( $product_id ) {
             $store   = StoreUtil::get_products_store( $product_id ) ?? '';
             $related = MultiVendorX()->setting->get_setting( 'recommendation_source', '' );
-            if ( ! empty( $related ) && 'none' == $related ) {
+            if ( ! empty( $related ) && 'none' === $related ) {
                 return array();
-            } elseif ( ! empty( $related ) && 'all_stores' == $related ) {
+            } elseif ( ! empty( $related ) && 'all_stores' === $related ) {
                 return $query;
-            } elseif ( ! empty( $related ) && 'same_store' == $related && $store && ! empty( $store->get_id() ) ) {
+            } elseif ( ! empty( $related ) && 'same_store' === $related && $store && ! empty( $store->get_id() ) ) {
                 $query = get_posts(
                     array(
 						'post_type'   => 'product',
@@ -241,6 +296,9 @@ class Frontend {
         return $query;
     }
 
+    /**
+     * Message multiple vendors cart
+     */
     public function message_multiple_vendors_cart() {
         $stores_in_cart = $this->get_stores_in_cart();
         if ( count( $stores_in_cart ) > 1 ) {
@@ -248,6 +306,13 @@ class Frontend {
         }
     }
 
+    /**
+     * Message multiple vendors cart block
+     *
+     * @param string $block_content Block content.
+     *
+     * @return string
+     */
     public function message_multiple_vendors_cart_block( $block_content ) {
         $message        = '';
         $stores_in_cart = $this->get_stores_in_cart();
@@ -257,6 +322,11 @@ class Frontend {
         return $message . $block_content;
     }
 
+    /**
+     * Get stores in cart
+     *
+     * @return array
+     */
     public function get_stores_in_cart() {
         $cart   = WC()->cart;
         $stores = array();
@@ -274,6 +344,11 @@ class Frontend {
         return array_unique( array_filter( $stores ) );
     }
 
+    /**
+     * Sort cart items by store
+     *
+     * @param object $cart Cart.
+     */
     public function cart_items_sort_by_store( $cart ) {
         $store_groups   = array();
         $admin_products = array();
@@ -303,6 +378,13 @@ class Frontend {
         $cart->cart_contents = $new_cart;
     }
 
+    /**
+     * Vendor dashboard template
+     *
+     * @param string $template Template.
+     *
+     * @return string
+     */
     public function vendor_dashboard_template( $template ) {
         $user = wp_get_current_user();
 
@@ -314,7 +396,11 @@ class Frontend {
         return $template;
     }
 
-    // Generate a simple / parent product SKU from the product slug or ID.
+    /**
+     * Generate a product SKU based on its title
+     *
+     * @param object $product Product data.
+     */
     protected function generate_product_sku( $product ) {
         if ( $product ) {
             switch ( MultiVendorX()->setting->get_setting( 'sku_generator', '' ) ) {
@@ -334,7 +420,11 @@ class Frontend {
         return $product_sku;
     }
 
-    // Generate a product variation SKU using the product slug or ID.
+    /**
+     * Generate a variation SKU based on its attributes
+     *
+     * @param array $variation Variation data.
+     */
     protected function generate_variation_sku( $variation = array() ) {
         if ( $variation ) {
             $variation_sku = '';
@@ -364,13 +454,22 @@ class Frontend {
         return $variation_sku;
     }
 
-    // Get the separator to use between parent / variation SKUs
+    /**
+     * Get the separator used between parent / variation SKUs
+     *
+     * @return string
+     */
     private function get_sku_separator() {
         // Filters the separator used between parent / variation SKUs
         return apply_filters( 'sku_generator_sku_separator', '-' );
     }
 
-    // generate the variation SKU.
+    /**
+     * Save Variation SKU
+     *
+     * @param int    $variation_id Variation ID.
+     * @param object $parent Parent product.
+     */
     protected function mvx_save_variation_sku( $variation_id, $parent, $parent_sku = null ) {
         $variation  = wc_get_product( $variation_id );
         $parent_sku = $parent_sku ? $parent_sku : $parent->get_sku();
@@ -402,7 +501,11 @@ class Frontend {
     // return $row;
     // }
 
-    // Update the product with the generated SKU.
+    /**
+     * Save generated SKU
+     *
+     * @param object $product WC_Product object.
+     */
     public function mvx_save_generated_sku( $product ) {
         if ( is_numeric( $product ) ) {
             $product = wc_get_product( absint( $product ) );

@@ -292,13 +292,16 @@ class Install {
         dbDelta( $sql_system_events );
     }
 
+    /**
+     * Create database triggers.
+     */
     public function create_database_triggers() {
         global $wpdb;
 
-        // Drop the trigger if it exists
+        // Drop the trigger if it exists.
         $wpdb->query( 'DROP TRIGGER IF EXISTS update_store_balance' );
 
-        // Create the trigger
+        // Create the trigger.
         $sql = "
         CREATE TRIGGER update_store_balance
         BEFORE INSERT ON wp_multivendorx_transactions
@@ -363,7 +366,7 @@ class Install {
         END;
         ";
 
-        // Execute the trigger
+        // Execute the trigger.
         $wpdb->query( $sql );
     }
 
@@ -502,7 +505,7 @@ By signing and submitting, the Seller accepts all terms above.
                 'Stolen Goods',
             ),
             'who_can_report'                => 'anyone',
-            // You can add other keys here if needed, e.g. 'required_store_uploads' => [...]
+            // You can add other keys here if needed, e.g. 'required_store_uploads' => [...].
         );
 
         $pending_store_status = array(
@@ -650,7 +653,9 @@ By signing and submitting, the Seller accepts all terms above.
         update_option( Utill::ADMIN_SETTINGS['product-compliance'], $product_compliance_settings );
     }
 
-
+    /**
+     * Create necessary pages for the plugin.
+     */
     public function plugin_create_pages() {
 
         $pages_to_create = array(
@@ -674,13 +679,18 @@ By signing and submitting, the Seller accepts all terms above.
         $this->plugin_create_pages_dynamic( $pages_to_create );
     }
 
+    /**
+     * Create pages dynamically based on provided data.
+     *
+     * @param array $pages Array of page data to create.
+     */
     public function plugin_create_pages_dynamic( $pages = array() ) {
         if ( empty( $pages ) || ! is_array( $pages ) ) {
             return;
         }
 
         foreach ( $pages as $page ) {
-            // Validate required keys
+            // Validate required keys.
             if ( empty( $page['slug'] ) || empty( $page['title'] ) || empty( $page['shortcode'] ) ) {
                 continue;
             }
@@ -689,7 +699,7 @@ By signing and submitting, the Seller accepts all terms above.
             $title     = $page['title'];
             $shortcode = $page['shortcode'];
 
-            // Check if page with slug exists
+            // Check if page with slug exists.
             $page_found = get_posts(
                 array(
                     'name'        => $slug,
@@ -704,7 +714,7 @@ By signing and submitting, the Seller accepts all terms above.
                 continue;
             }
 
-            // Create the page
+            // Create the page.
             $page_data = array(
                 'post_status'    => 'publish',
                 'post_type'      => 'page',

@@ -220,7 +220,7 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
                         'question_date'       => $q['question_date'],
                         'answer_by'           => isset( $q['answer_by'] ) ? (int) $q['answer_by'] : 0,
                         'answer_date'         => $q['answer_date'] ?? '',
-                        'time_ago'            => human_time_diff( strtotime( $q['question_date'] ), current_time( 'timestamp' ) ) . ' ago',
+                        'time_ago'            => human_time_diff( strtotime( $q['question_date'] ), current_time( 'mysql' ) ) . ' ago',
                         'total_votes'         => (int) $q['total_votes'],
                         'question_visibility' => $q['question_visibility'],
                     );
@@ -323,7 +323,7 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
             'question_by'         => (int) $q['question_by'],
             'author_name'         => get_the_author_meta( 'display_name', $q['question_by'] ),
             'question_date'       => $q['question_date'],
-            'time_ago'            => human_time_diff( strtotime( $q['question_date'] ), current_time( 'timestamp' ) ) . ' ago',
+            'time_ago'            => human_time_diff( strtotime( $q['question_date'] ), current_time( 'mysql' ) ) . ' ago',
             'total_votes'         => (int) $q['total_votes'],
             'question_visibility' => $q['question_visibility'],
         );
@@ -398,7 +398,7 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
             );
         }
 
-        // ✅ Add answer_by (current user ID)
+        // Add answer_by (current user ID)
         $current_user_id = get_current_user_id();
         if ( $current_user_id ) {
             $data_to_update['answer_by'] = $current_user_id;

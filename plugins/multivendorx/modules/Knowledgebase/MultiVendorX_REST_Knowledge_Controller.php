@@ -4,10 +4,18 @@
  *
  * @package multivendorx
  */
+
 namespace MultiVendorX\Knowledgebase;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * MultiVendorX REST API knowledge base controller.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
 
     /**
@@ -76,7 +84,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
     /**
      * Get all knowledge base articles.
      *
-     * @param object $request
+     * @param object $request WP_REST_Request object.
      */
     public function get_items_permissions_check( $request ) {
         return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
@@ -85,7 +93,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
     /**
      * Create a knowledge base article.
      *
-     * @param object $request
+     * @param object $request WP_REST_Request object.
      */
     public function create_item_permissions_check( $request ) {
         return current_user_can( 'manage_options' );
@@ -94,7 +102,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
     /**
      * Update an existing knowledge base article.
      *
-     * @param object $request
+     * @param object $request WP_REST_Request object.
      */
     public function update_item_permissions_check( $request ) {
         return current_user_can( 'manage_options' );
@@ -103,7 +111,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
     /**
      * Get all knowledge base articles.
      *
-     * @param object $request
+     * @param object $request WP_REST_Request object.
      */
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
@@ -136,8 +144,8 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
             $start_timestamp = ! empty( $start_date_raw ) ? strtotime( str_replace( 'T', ' ', preg_replace( '/\.\d+Z?$/', '', $start_date_raw ) ) ) : false;
             $end_timestamp   = ! empty( $end_date_raw ) ? strtotime( str_replace( 'T', ' ', preg_replace( '/\.\d+Z?$/', '', $end_date_raw ) ) ) : false;
 
-            $start_date = $start_timestamp ? date( 'Y-m-d 00:00:00', $start_timestamp ) : '';
-            $end_date   = $end_timestamp ? date( 'Y-m-d 23:59:59', $end_timestamp ) : '';
+            $start_date = $start_timestamp ? gmdate( 'Y-m-d 00:00:00', $start_timestamp ) : '';
+            $end_date   = $end_timestamp ? gmdate( 'Y-m-d 23:59:59', $end_timestamp ) : '';
             // Existing count logic.
             if ( $count_param ) {
                 $posts = get_posts(
@@ -153,7 +161,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
 
             // Base query args.
             $query_args = array(
-                'post_type'      => 'multivendorx_kb',
+                'post_type'      => Utill::POST_TYPES['knowledge'],
                 'posts_per_page' => $limit,
                 'offset'         => $offset,
                 'post_status'    => $status_param ? $status_param : 'any',
@@ -193,7 +201,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
             // Counts (no date or search filter applied).
             $counter = function ( $status ) {
                 $args = array(
-                    'post_type'      => 'multivendorx_kb',
+                    'post_type'      => Utill::POST_TYPES['knowledge'],
                     'post_status'    => $status,
                     'posts_per_page' => 1,
                     'fields'         => 'ids',
@@ -235,14 +243,14 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
     /**
      * Create a knowledge base article.
      *
-     * @param object $request
+     * @param object $request REST_Request object.
      */
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -298,7 +306,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
     /**
      * Update a knowledge base article.
      *
-     * @param object $request
+     * @param object $request REST_Request object.
      */
     public function update_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
@@ -353,7 +361,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
             $post_id = absint( $request->get_param( 'id' ) );
             $post    = get_post( $post_id );
 
-            if ( ! $post || $post->post_type !== 'multivendorx_kb' ) {
+            if ( ! $post || $post->post_type !== Utill::POST_TYPES['knowledge'] ) {
                 return new \WP_Error( 'not_found', __( 'Knowledge Base article not found', 'multivendorx' ), array( 'status' => 404 ) );
             }
 
@@ -412,7 +420,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
 
         $post = get_post( absint( $request->get_param( 'id' ) ) );
 
-        if ( ! $post || $post->post_type !== 'multivendorx_kb' ) {
+        if ( ! $post || $post->post_type !== Utill::POST_TYPES['knowledge'] ) {
             return new \WP_Error( 'not_found', __( 'Knowledge Base article not found', 'multivendorx' ), array( 'status' => 404 ) );
         }
 

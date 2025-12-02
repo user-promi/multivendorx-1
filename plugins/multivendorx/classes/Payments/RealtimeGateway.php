@@ -1,4 +1,9 @@
 <?php
+/**
+ * Realtime Payment Gateway.
+ *
+ * @package multivendorx
+ */
 
 namespace MultiVendorX\Payments;
 
@@ -6,15 +11,27 @@ use MultiVendorX\Commission\CommissionUtil;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * MultiVendorX Realtime Payment Gateway.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class RealtimeGateway extends \WC_Payment_Gateway {
 
     // public function __construct() {
     // parent::__construct();
     // }
 
+    /**
+     * Get all information about the order.
+     *
+     * @param int $order_id Order ID.
+     */
     public function get_all_information( $order_id ) {
         $order = wc_get_order( $order_id );
-        if ( ! $order && $order->get_parent_id() == 0 ) {
+        if ( ! $order && $order->get_parent_id() === 0 ) {
             return;
         }
         $all_info = array();

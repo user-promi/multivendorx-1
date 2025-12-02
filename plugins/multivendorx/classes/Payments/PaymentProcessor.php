@@ -1,4 +1,9 @@
 <?php
+/**
+ * MultiVendorX Payment Processor.
+ *
+ * @package multivendorx
+ */
 
 namespace MultiVendorX\Payments;
 
@@ -9,7 +14,19 @@ use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * MultiVendorX Payment Processor.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class PaymentProcessor {
+    /**
+     * Constructor
+     *
+     * @return void
+     */
     public function __construct() {
         add_action( 'multivendorx_after_payment_complete', array( $this, 'after_payment_complete' ), 10, 7 );
         // add_action('multivendorx_after_real_time_payment_complete', array( $this, 'after_real_time_payment_complete'), 10, 2);
@@ -18,7 +35,17 @@ class PaymentProcessor {
         add_action( 'woocommerce_order_status_changed', array( $this, 'cod_order_process' ), 30, 4 );
     }
 
-
+    /**
+     * Process Payment
+     *
+     * @param int         $store_id Store ID.
+     * @param float       $amount Amount to be paid.
+     * @param int|null    $order_id Order ID.
+     * @param string|null $method Payment Method.
+     * @param string|null $note Note.
+     *
+     * @return void
+     */
     public function process_payment( $store_id, $amount, $order_id = null, $method = null, $note = null ) {
         global $wpdb;
         $store = new Store( $store_id );
@@ -86,6 +113,19 @@ class PaymentProcessor {
         do_action( "multivendorx_process_{$payment_method}_payment", $store_id, $amount, $order_id, $transaction_id, $note );
     }
 
+    /**
+     * After Payment Complete
+     *
+     * @param int    $store_id Store ID.
+     * @param string $method Payment Method.
+     * @param string $status Payment Status.
+     * @param int    $order_id Order ID.
+     * @param int    $transaction_id Transaction ID.
+     * @param string $note Note.
+     * @param float  $amount Amount.
+     *
+     * @return void
+     */
     public function after_payment_complete( $store_id, $method, $status, $order_id, $transaction_id, $note, $amount = null ) {
         global $wpdb;
 
@@ -105,10 +145,10 @@ class PaymentProcessor {
             'amount'           => $amount,
             'currency'         => get_woocommerce_currency(),
             'payment_method'   => $store->get_meta( Utill::STORE_SETTINGS_KEYS['payment_method'] ),
-            'narration'        => $note ? $note : ( ( $status === 'success' )
+            'narration'        => $note ? $note : ( ( 'success' === $status )
                                     ? "Withdrawal released via {$method} Payment Processor"
                                     : "Withdrawal failed via {$method} Payment Processor" ),
-            'status'           => ( $status === 'success' ) ? 'Completed' : 'Failed',
+            'status'           => ( 'success' === $status ) ? 'Completed' : 'Failed',
         );
 
         $format = array( '%d', '%d', '%d', '%s', '%s', '%f', '%s', '%s', '%s', '%s' );
@@ -119,12 +159,12 @@ class PaymentProcessor {
             $format
         );
 
-        if ( $result && $status == 'success' ) {
+        if ( 'success' === $result && $status ) {
             $withdrawals_count = (int) $store->get_meta( Utill::STORE_SETTINGS_KEYS['withdrawals_count'] );
             $store->update_meta( Utill::STORE_SETTINGS_KEYS['withdrawals_count'], $withdrawals_count + 1 );
         }
 
-        if ( $status != 'success' ) {
+        if ( 'success' !== $status ) {
             $row = $wpdb->get_row(
                 $wpdb->prepare(
                     "SELECT *
@@ -150,15 +190,24 @@ class PaymentProcessor {
         }
     }
 
-
+    /**
+     * COD Order Process
+     *
+     * @param int    $order_id Order ID.
+     * @param string $old_status Old Status.
+     * @param string $new_status New Status.
+     * @param object $order Order Object.
+     *
+     * @return void
+     */
     public function cod_order_process( $order_id, $old_status, $new_status, $order ) {
-        if ( $order->get_parent_id() == 0 ) {
+        if ( $order->get_parent_id() === 0 ) {
             return;
         }
 
         $payment_method = $order->get_payment_method();
 
-        if ( $payment_method == 'cod' && $new_status == 'completed' ) {
+        if ( 'cod' === $payment_method && 'completed' === $new_status ) {
             global $wpdb;
             $order         = wc_get_order( $order_id );
             $commission_id = $order ? $order->get_meta( Utill::POST_META_SETTINGS['commission_id'], true ) : null;
@@ -192,11 +241,11 @@ class PaymentProcessor {
                 // );
 				// }
 
-				// if shipping not found then else
+				// If shipping not found then else.
 				$payment = $order->get_meta( Utill::WOO_SETTINGS['cod_order_payment'], true );
 				if ( $payment == 'admin' ) {
 					return;
-				} elseif ( $payment == 'store' ) {
+				} elseif ( 'store' === $payment ) {
 					$wpdb->insert(
                         $wpdb->prefix . Utill::TABLES['transaction'],
                         $data,

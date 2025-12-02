@@ -1,9 +1,21 @@
 <?php
+/**
+ * Modules REST API tour controller
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\RestAPI\Controllers;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * MultiVendorX REST API tour controller.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
 
 	/**
@@ -13,6 +25,9 @@ class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
 	 */
 	protected $rest_base = 'tour';
 
+    /**
+     * Register the routes for tour.
+     */
     public function register_routes() {
         register_rest_route(
             MultiVendorX()->rest_namespace,
@@ -53,21 +68,35 @@ class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
 				array(
 					'methods'             => \WP_REST_Server::DELETABLE,
 					'callback'            => array( $this, 'delete_item' ),
-					'permission_callback' => array( $this, 'update_item_permissions_check' ), // only admins can delete
+					'permission_callback' => array( $this, 'update_item_permissions_check' ), // Only admins can delete.
 				),
 			)
         );
     }
 
+    /**
+     * Get tour status
+     *
+     * @param mixed $request Request data.
+     */
     public function get_items_permissions_check( $request ) {
         return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
     }
 
-    // POST permission
+    /**
+     * Create tour status
+     *
+     * @param mixed $request Request data.
+     */
     public function create_item_permissions_check( $request ) {
         return current_user_can( 'manage_options' );
     }
 
+    /**
+     * Update tour status
+     *
+     * @param mixed $request Request data.
+     */
     public function update_item_permissions_check( $request ) {
         return current_user_can( 'manage_options' );
     }
@@ -75,13 +104,15 @@ class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
 
     /**
      * Get tour status
+     *
+     * @param mixed $request Request data.
      */
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -94,10 +125,10 @@ class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
             return $error;
         }
         try {
-            // Directly fetch stored value
+            // Directly fetch stored value.
             $status = get_option( Utill::OTHER_SETTINGS['tour_active'], false );
 
-            // Force boolean
+            // Force boolean.
             $status = filter_var( $status, FILTER_VALIDATE_BOOLEAN );
 
             return array(
@@ -116,18 +147,16 @@ class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
     }
 
     /**
-     * set tour status
+     * Set tour status
      *
-     * @param mixed $request
-     * @return \WP_Error|\WP_REST_Response
+     * @param mixed $request Request data.
      */
-    // active boolean required
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .

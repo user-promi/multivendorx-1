@@ -15,7 +15,7 @@ use MultiVendorX\Commission\CommissionUtil;
  * MultiVendorX Gateway Fee Admin class.
  *
  * @class       Admin class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class Admin {
@@ -66,7 +66,7 @@ class Admin {
                 : 0;
 
             if ( $refund ) {
-                $commission_id     = $order->get_meta( 'multivendorx_commission_id', true );
+                $commission_id     = $order->get_meta( Utill::POST_META_SETTINGS['commission_id'], true );
                 $commission        = CommissionUtil::get_commission_db( $commission_id );
                 $remaining_payable = (float) ( $order->get_total() - $order->get_total_refunded() );
 
@@ -76,11 +76,7 @@ class Admin {
             }
 
             // Decode applied rules safely using JSON.
-            $rules = array();
-            if ( ! empty( $filtered['data']['rules_applied'] ) ) {
-                $rules = json_decode( $filtered['data']['rules_applied'], true );
-                $rules = is_array( $rules ) ? $rules : array();
-            }
+            $rules = unserialize( $filtered['data']['rules_applied'] );
 
             $rules['gateway_fee'] = array(
                 'fixed'      => $fixed_fee,
@@ -97,7 +93,7 @@ class Admin {
             }
 
             // Encode rules safely.
-            $filtered['data']['rules_applied'] = wp_json_encode( $rules );
+            $filtered['data']['rules_applied'] = serialize( $rules );
 
             $filtered['format'][] = '%f';
         }

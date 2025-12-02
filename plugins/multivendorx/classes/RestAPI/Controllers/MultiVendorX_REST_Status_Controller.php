@@ -1,7 +1,8 @@
 <?php
 
 namespace MultiVendorX\RestAPI\Controllers;
-use MultiVendorX\Install as Install;
+
+use MultiVendorX\Install;
 
 defined( 'ABSPATH' ) || exit;
 

@@ -42,55 +42,15 @@ class Distance_Shipping extends \WC_Shipping_Method {
      * Initialize settings
      */
     public function init() {
-        // $this->init_form_fields();
-        // $this->init_settings();
-
-        // add_action( 'woocommerce_cart_calculate_fees', [ $this, 'multivendorx_force_shipping_recalculation' ], 20, 1 );
         add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
     }
 
-    /**
-     * Force WooCommerce to recalculate shipping
-     */
-    public function multivendorx_force_shipping_recalculation() {
-        WC()->cart->calculate_shipping();
-    }
 
     /**
      * Check if shipping is enabled
      */
     public function is_method_enabled() {
         return $this->enabled == 'yes';
-    }
-
-    /**
-     * Initialize admin form fields
-     */
-    public function init_form_fields() {
-        $this->form_fields = array(
-            'enabled'    => array(
-                'title' => __( 'Enable/Disable', 'multivendorx' ),
-                'type'  => 'checkbox',
-                'label' => __( 'Enable Shipping', 'multivendorx' ),
-                // 'default' => 'yes',
-            ),
-            'title'      => array(
-                'title'       => __( 'Method Title', 'multivendorx' ),
-                'type'        => 'text',
-                'description' => __( 'This controls the title which the user sees during checkout.', 'multivendorx' ),
-                'default'     => __( 'Regular Shipping', 'multivendorx' ),
-                'desc_tip'    => true,
-            ),
-            'tax_status' => array(
-                'title'   => __( 'Tax Status', 'multivendorx' ),
-                'type'    => 'select',
-                'default' => 'taxable',
-                'options' => array(
-                    'taxable' => __( 'Taxable', 'multivendorx' ),
-                    'none'    => _x( 'None', 'Tax status', 'multivendorx' ),
-                ),
-            ),
-        );
     }
 
     /**
@@ -101,8 +61,8 @@ class Distance_Shipping extends \WC_Shipping_Method {
 			return;
         }
         $products              = $package['contents'];
-        $mvx_user_location_lat = $package['mvx_user_location_lat'] ?? '';
-        $mvx_user_location_lng = $package['mvx_user_location_lng'] ?? '';
+        $mvx_user_location_lat = $package[ Utill::USER_SETTINGS_KEYS['mvx_user_location_lat'] ] ?? '';
+        $mvx_user_location_lng = $package[ Utill::USER_SETTINGS_KEYS['mvx_user_location_lng'] ] ?? '';
 
         if ( ! $mvx_user_location_lat || ! $mvx_user_location_lng ) {
 			return;
@@ -111,7 +71,7 @@ class Distance_Shipping extends \WC_Shipping_Method {
         $seller_products = array();
 
         foreach ( $products as $product ) {
-            $store_id = get_post_meta( $product['product_id'], 'multivendorx_store_id', true );
+            $store_id = get_post_meta( $product['product_id'], Utll::POST_META_SETTINGS['store_id'], true );
             if ( ! empty( $store_id ) && self::is_shipping_enabled_for_seller( $store_id ) ) {
                 $seller_products[ (int) $store_id ][] = $product;
             }
@@ -125,13 +85,13 @@ class Distance_Shipping extends \WC_Shipping_Method {
             $store = new \MultiVendorX\Store\Store( $store_id );
             $meta  = $store->meta_data;
 
-            $store_lat            = $meta['location_lat'] ?? 0;
-            $store_lng            = $meta['location_lng'] ?? 0;
-            $default_cost         = floatval( $meta['distance_default_cost'] ?? 0 );
-            $max_distance         = floatval( $meta['distance_max_km'] ?? 0 );
-            $local_pickup_cost    = floatval( $meta['distance_local_pickup_cost'] ?? 0 );
-            $free_shipping_amount = floatval( $meta['_free_shipping_amount'] ?? 0 );
-            $distance_rules       = isset( $meta['distance_rules'] ) ? json_decode( $meta['distance_rules'], true ) : array();
+            $store_lat            = $meta[Utill::STORE_SETTINGS_KEYS['location_lat']] ?? 0;
+            $store_lng            = $meta[Utill::STORE_SETTINGS_KEYS['location_lng']] ?? 0;
+            $default_cost         = floatval( $meta[Utill::STORE_SETTINGS_KEYS['distance_default_cost']] ?? 0 );
+            $max_distance         = floatval( $meta[Utill::STORE_SETTINGS_KEYS['distance_max_km']] ?? 0 );
+            $local_pickup_cost    = floatval( $meta[Utill::STORE_SETTINGS_KEYS['distance_local_pickup_cost']] ?? 0 );
+            $free_shipping_amount = floatval( $meta[Utill::STORE_SETTINGS_KEYS['_free_shipping_amount']] ?? 0 );
+            $distance_rules       = isset( $meta[Utill::STORE_SETTINGS_KEYS['distance_rules']] ) ? json_decode( $meta[Utill::STORE_SETTINGS_KEYS['distance_rules']], true ) : array();
 
             if ( ! $store_lat || ! $store_lng ) {
 				continue;
@@ -191,7 +151,7 @@ class Distance_Shipping extends \WC_Shipping_Method {
      */
     public static function is_shipping_enabled_for_seller( $store_id ) {
         $store            = new \MultiVendorX\Store\Store( $store_id );
-        $shipping_options = $store->meta_data['shipping_options'] ?? '';
+        $shipping_options = $store->meta_data[Utill::STORE_SETTINGS_KEYS['shipping_options']] ?? '';
         return $shipping_options === 'shipping_by_distance';
     }
 
