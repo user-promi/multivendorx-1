@@ -75,7 +75,7 @@ class Ajax {
 				'id'       => $insert_id,
 				'question' => $question,
 				'votes'    => 0,
-				'date'     => current_time(),
+				'date'     => current_time( 'mysql' ),
             )
         );
     }
@@ -113,7 +113,7 @@ class Ajax {
                     <p class="qna-question"><strong>Q:</strong> <?php echo esc_html( $row->question_text ); ?></p>
                     <small class="qna-meta">
                         By <?php echo esc_html( get_the_author_meta( 'display_name', $row->question_by ) ); ?>,
-                        <?php echo esc_html( human_time_diff( strtotime( $row->question_date ), current_time() ) ) . ' ago'; ?>
+                        <?php echo esc_html( human_time_diff( strtotime( $row->question_date ), current_time( 'mysql' ) ) ) . ' ago'; ?>
                     </small>
     
                     <p class="qna-answer"><strong>A:</strong> <?php echo esc_html( $row->answer_text ); ?></p>

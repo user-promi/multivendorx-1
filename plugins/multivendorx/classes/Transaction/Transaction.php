@@ -131,7 +131,7 @@ class Transaction {
 
     // $lock_period = (int) MultiVendorX()->setting->get_setting( 'commission_lock_period', 0 );
     // $status = 'Pending';
-    // $time   = current_time();
+    // $time   = current_time( 'mysql' );
 
     // $commission = CommissionUtil::get_commission_db($commission_id);
 
@@ -144,7 +144,7 @@ class Transaction {
 
     // } elseif ($lock_period > 0) {
     // $status = 'Pending';
-    // $time   = date( 'Y-m-d H:i:s', current_time() + ( $lock_period * DAY_IN_SECONDS ) );;
+    // $time   = date( 'Y-m-d H:i:s', current_time( 'mysql' ) + ( $lock_period * DAY_IN_SECONDS ) );;
     // }
     // }
 

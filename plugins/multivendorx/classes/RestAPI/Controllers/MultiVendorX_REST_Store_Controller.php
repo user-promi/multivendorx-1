@@ -1005,7 +1005,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
                         $old_notes[] = array(
                             'note' => sanitize_text_field( $data['store_application_note'] ),
-                            'date' => current_time(),
+                            'date' => current_time( 'mysql' ),
                         );
 
                         $store->update_meta( Utill::STORE_SETTINGS_KEYS['store_reject_note'], serialize( $old_notes ) );
