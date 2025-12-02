@@ -11,22 +11,16 @@ namespace MultiVendorX\FollowStore;
  * MultiVendorX Questions Answers Ajax class
  *
  * @class       Ajax class
- * @version     PRODUCT_VERSION
+ * @version     6.0.0
  * @author      MultiVendorX
  */
 class Ajax {
-    /**
-     * Constructor
-     */
     public function __construct() {
         add_action( 'wp_ajax_mvx_follow_store', array( $this, 'handle_follow_store' ) );
         add_action( 'wp_ajax_nopriv_mvx_get_follow_data', array( $this, 'handle_get_follow_data' ) );
         add_action( 'wp_ajax_mvx_get_follow_data', array( $this, 'handle_get_follow_data' ) );
     }
 
-    /**
-     * Handle follow store
-     */
     public function handle_follow_store() {
         check_ajax_referer( 'follow_store_ajax_nonce', 'nonce' );
 
@@ -44,23 +38,23 @@ class Ajax {
 
         $store = new \MultiVendorX\Store\Store( $store_id );
 
-        // Fetch followers with possible date info.
+        // Fetch followers with possible date info
         $followers_raw = $store->meta_data['followers'] ?? '[]';
         $followers     = json_decode( $followers_raw, true );
         if ( ! is_array( $followers ) ) {
 			$followers = array();
         }
 
-        // Extract only user IDs for checking.
+        // Extract only user IDs for checking
         $follower_ids = array_column( $followers, 'id' );
 
-        if ( in_array( $store_id, $following, true ) ) {
-            // UNFOLLOW.
+        if ( in_array( $store_id, $following ) ) {
+            // UNFOLLOW
             $following  = array_diff( $following, array( $store_id ) );
-            $followers  = array_filter( $followers, fn( $f ) => $f['id'] !== $user_id );
+            $followers  = array_filter( $followers, fn( $f ) => $f['id'] != $user_id );
             $new_status = 'Follow';
         } else {
-            // FOLLOW with timestamp.
+            // FOLLOW with timestamp
             $following[] = $store_id;
             $followers[] = array(
                 'id'   => $user_id,
@@ -69,9 +63,9 @@ class Ajax {
             $new_status  = 'Unfollow';
         }
 
-        // Save updates.
-        update_user_meta( $user_id, 'mvx_following_stores', $following );
-        $store->update_meta( 'followers', wp_json_encode( array_values( $followers ) ) );
+        // Save updates
+        update_user_meta( $user_id, Utill::USER_SETTINGS_KEYS['following_stores'], $following );
+        $store->update_meta( Utill::STORE_SETTINGS_KEYS['followers'], wp_json_encode( array_values( $followers ) ) );
 
         wp_send_json_success( array( 'new_status' => $new_status ) );
     }
@@ -88,13 +82,13 @@ class Ajax {
         }
 
         $store     = new \MultiVendorX\Store\Store( $store_id );
-        $followers = json_decode( $store->meta_data['followers'] ?? '[]', true );
+        $followers = json_decode( $store->meta_data[Utill::STORE_SETTINGS_KEYS['followers']] ?? '[]', true );
 
         if ( ! is_array( $followers ) ) {
             $followers = array();
         }
 
-        // ✅ Handle old format (numeric user IDs)
+        //Handle old format (numeric user IDs)
         if ( isset( $followers[0] ) && is_int( $followers[0] ) ) {
             $followers = array_map(
                 fn( $uid ) => array(
@@ -105,10 +99,10 @@ class Ajax {
             );
         }
 
-        // ✅ Extract user IDs for comparison and count
+        //Extract user IDs for comparison and count
         $follower_ids = array_column( $followers, 'id' );
 
-        $following = $user_id ? get_user_meta( $user_id, 'mvx_following_stores', true ) : array();
+        $following = $user_id ? get_user_meta( $user_id, Utill::USER_SETTINGS_KEYS['following_stores'], true ) : array();
         if ( ! is_array( $following ) ) {
             $following = array();
         }
