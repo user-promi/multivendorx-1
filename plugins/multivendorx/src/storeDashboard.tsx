@@ -21,6 +21,7 @@ const Dashboard = () => {
         if (!endpoints || endpoints.length === 0) {
             return;
         }
+
         try {
             const activeEndpoint = endpoints.find(ep => ep.tab === key);
 
@@ -128,7 +129,8 @@ const Dashboard = () => {
                 .replace(`/${slug}/`, '')
                 .replace(/^\/+|\/+$/g, '');
 
-            if (path) return path;
+            const parts = path.split('/');
+            return parts[0] || '';
         }
 
         const query = new URLSearchParams(location.search);

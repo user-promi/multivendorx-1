@@ -77,7 +77,14 @@ const AllProduct: React.FC = () => {
     const navigate = useNavigate();
 
     const query = new URLSearchParams(location.search);
-    const element = query.get("element");
+    let element = query.get("element");
+
+    if (!element) {
+        const parts = location.pathname.split("/").filter(Boolean);
+        if (parts.length >= 4) {
+            element = element || parts[2]; 
+        }
+    }
 
     const isAddProduct = element === "edit";
 
