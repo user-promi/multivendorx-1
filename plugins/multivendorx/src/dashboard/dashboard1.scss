@@ -1726,6 +1726,7 @@ a {
         gap: 0.313rem;
         padding: 0.5rem 0;
         width: 100%;
+        justify-content: end;
 
         label {
             font-size: 0.9rem;
@@ -1744,6 +1745,9 @@ a {
         margin-bottom: 1rem;
         border: $border-light-small;
 
+        .setting-form-input   {
+            width: 25%;
+        }
         &.rule {
             width: fit-content;
         }

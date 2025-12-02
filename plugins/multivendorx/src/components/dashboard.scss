@@ -752,6 +752,9 @@
         margin-bottom: 1rem;
         border: $border-light-small;
 
+        .basic-input {
+            width: 25%;
+        }
         &.rule {
             width: fit-content;
         }
