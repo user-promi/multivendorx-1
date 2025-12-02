@@ -345,7 +345,7 @@ class FrontendScripts {
         $woocommerce_pages = array( wc_get_page_id( 'shop' ), wc_get_page_id( 'cart' ), wc_get_page_id( 'checkout' ), wc_get_page_id( 'myaccount' ) );
         if ( $pages ) {
             foreach ( $pages as $page ) {
-                if ( ! in_array( $page->ID, $woocommerce_pages ) ) {
+                if ( ! in_array( needle: $page->ID, $woocommerce_pages, true ) ) {
                     $pages_array[] = array(
                         'value' => $page->ID,
                         'label' => $page->post_title,
@@ -400,7 +400,7 @@ class FrontendScripts {
         $gateways     = WC()->payment_gateways->payment_gateways();
         $gateway_list = array();
         foreach ( $gateways as $gateway_id => $gateway ) {
-            if ( $gateway_id === 'cheque' ) {
+            if ( 'cheque' === $gateway_id ) {
                 continue;
             }
             $gateway_list[] = array(
@@ -475,7 +475,7 @@ class FrontendScripts {
 							'admin_url'                => admin_url(),
 							'woocommerce_currency'     => get_woocommerce_currency(),
 							'user_id'                  => get_current_user_id(),
-							'currency'                 => get_woocommerce_currency(),       // e.g., USD
+							'currency'                 => get_woocommerce_currency(),       // E.g., USD.
 							'currency_symbol'          => get_woocommerce_currency_symbol(),
 							'price_format'             => get_woocommerce_price_format(),
 							'decimal_sep'              => wc_get_price_decimal_separator(),
@@ -483,7 +483,6 @@ class FrontendScripts {
 							'decimals'                 => wc_get_price_decimals(),
 							'shop_url'                 => MULTIVENDORX_PRO_SHOP_URL,
 							'payout_payment_options'   => $payment_admin_settings,
-							'module_page_url'          => admin_url( 'admin.php?page=multivendorx#&tab=modules' ),
 							'plugin_url'               => admin_url( 'admin.php?page=multivendorx#&tab=' ),
 							'setup_wizard_url'         => admin_url( 'index.php?page=multivendorx-setup' ),
 							'store_page_url'           => trailingslashit( site_url() ) . untrailingslashit( MultiVendorX()->setting->get_setting( 'store_url', 'store' ) ),
@@ -540,8 +539,8 @@ class FrontendScripts {
                         'ajaxurl'      => admin_url( 'admin-ajax.php' ),
                         'nonce'        => wp_create_nonce( 'distance_shipping_ajax_nonce' ),
                         // 'mapbox_emable'     => \MultiVendorX\DistanceShipping\Frontend::mvx_mapbox_api_enabled(),
-                        'default_lat'  => MultiVendorX()->setting->get_setting( 'default_map_lat', '28.6139' ), // example default lat
-                        'default_lng'  => MultiVendorX()->setting->get_setting( 'default_map_lng', '77.2090' ), // example default lng
+                        'default_lat'  => MultiVendorX()->setting->get_setting( 'default_map_lat', '28.6139' ), // Example default lat.
+                        'default_lng'  => MultiVendorX()->setting->get_setting( 'default_map_lng', '77.2090' ), // Example default lng.
                         'default_zoom' => 13,
                         'store_icon'   => plugin_dir_url( __FILE__ ) . 'assets/images/store-icon.png',
                         'icon_width'   => 40,
@@ -662,7 +661,7 @@ class FrontendScripts {
 	 * @param string $name   JavaScript object name.
 	 * @param array  $data   Data to be made available in JavaScript.
 	 */
-    public static function localize_script( $handle, $name, $data = array(), ) {
+    public static function localize_script( $handle, $name, $data = array() ) {
 		wp_localize_script( $handle, $name, $data );
 	}
 

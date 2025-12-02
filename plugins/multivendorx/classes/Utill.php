@@ -93,19 +93,19 @@ class Utill {
     );
 
     const WOO_SETTINGS = array(
-        'taxes'                           => 'woocommerce_calc_taxes',
-        'generate_password'               => 'woocommerce_registration_generate_password',
-        'default_country'                 => 'woocommerce_default_country',
-        'manage_stock'                    => 'woocommerce_manage_stock',
-        'weight_unit'                     => 'woocommerce_weight_unit',
-        'dimension_unit'                  => 'woocommerce_dimension_unit',
-        'notify_low_stock'                => 'woocommerce_notify_low_stock_amount',
-        'store_item_commission'           => 'multivendorx_store_item_commission',
-        'order_status_synchronized'       => 'mvx_vendor_order_status_synchronized',
-        'cod_order_payment'               => 'multivendorx_cod_order_payment',
-        'product_shipping_class'          => 'product_shipping_class',
-        'shipping_origin_country'         => 'shipping_origin_country',
-        '_customer_refund_reason'         => '_customer_refund_reason',
+        'taxes'                     => 'woocommerce_calc_taxes',
+        'generate_password'         => 'woocommerce_registration_generate_password',
+        'default_country'           => 'woocommerce_default_country',
+        'manage_stock'              => 'woocommerce_manage_stock',
+        'weight_unit'               => 'woocommerce_weight_unit',
+        'dimension_unit'            => 'woocommerce_dimension_unit',
+        'notify_low_stock'          => 'woocommerce_notify_low_stock_amount',
+        'store_item_commission'     => 'multivendorx_store_item_commission',
+        'order_status_synchronized' => 'mvx_vendor_order_status_synchronized',
+        'cod_order_payment'         => 'multivendorx_cod_order_payment',
+        'product_shipping_class'    => 'product_shipping_class',
+        'shipping_origin_country'   => 'shipping_origin_country',
+        '_customer_refund_reason'   => '_customer_refund_reason',
     );
 
     const WORDPRESS_SETTINGS = array(
@@ -126,17 +126,17 @@ class Utill {
         'cancellation_policy'            => 'multivendorx_cancellation_policy',
         'announcement_stores'            => 'multivendorx_announcement_stores',
         'announcement_url'               => 'multivendorx_announcement_url',
-        'category_percentage_commission'  =>'multivendorx_category_percentage_commission',
-        'category_fixed_commission'=>'multivendorx_category_fixed_commission',
-        'commission_id'=>'multivendorx_commission_id',
-        'commissions_processed' => 'multivendorx_commissions_processed',
-        'sold_by'=>'multivendorx_sold_by',
-        'has_sub_order'=>'has_multivendorx_sub_order',
-        'mvx_vendor_order'=>'mvx_vendor_order',
-        '_vendor_order_shipping_item_id'=> '_vendor_order_shipping_item_id',
-        'active_store' =>'multivendorx_active_store',
-        '_additional_qty'             => '_additional_qty',
-        '_additional_price'           => '_additional_price',
+        'category_percentage_commission' => 'multivendorx_category_percentage_commission',
+        'category_fixed_commission'      => 'multivendorx_category_fixed_commission',
+        'commission_id'                  => 'multivendorx_commission_id',
+        'commissions_processed'          => 'multivendorx_commissions_processed',
+        'sold_by'                        => 'multivendorx_sold_by',
+        'has_sub_order'                  => 'has_multivendorx_sub_order',
+        'mvx_vendor_order'               => 'mvx_vendor_order',
+        '_vendor_order_shipping_item_id' => '_vendor_order_shipping_item_id',
+        'active_store'                   => 'multivendorx_active_store',
+        '_additional_qty'                => '_additional_qty',
+        '_additional_price'              => '_additional_price',
     );
 
     const STORE_SETTINGS_KEYS = array(
@@ -191,17 +191,17 @@ class Utill {
         '_vendor_payment_mode'       => '_vendor_payment_mode',
     );
 
-    const USER_SETTINGS_KEYS = array(
-        'first_name'                  => 'first_name',
-        'last_name'                   => 'last_name',
-        'social_verification'         => 'social_verification_connections',
-        'following_stores'            => 'mvx_following_stores',
-        'mvx_user_location_lat'       => 'mvx_user_location_lat',
-        'mvx_user_location_lng'       => 'mvx_user_location_lng',
+    const USER_SETTINGS_KEYS    = array(
+        'first_name'            => 'first_name',
+        'last_name'             => 'last_name',
+        'social_verification'   => 'social_verification_connections',
+        'following_stores'      => 'mvx_following_stores',
+        'mvx_user_location_lat' => 'mvx_user_location_lat',
+        'mvx_user_location_lng' => 'mvx_user_location_lng',
     );
-    const POST_TYPES = array(
-        'announcement'      => 'multivendorx_an',
-        'knowledge'         => 'multivendorx_kb',
+    const POST_TYPES            = array(
+        'announcement' => 'multivendorx_an',
+        'knowledge'    => 'multivendorx_kb',
     );
     const ACTIVE_MODULES_DB_KEY = 'multivendorx_all_active_module_list';
 

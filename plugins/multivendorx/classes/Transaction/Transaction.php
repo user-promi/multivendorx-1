@@ -1,4 +1,9 @@
 <?php
+/**
+ * MultiVendorX Transaction class
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\Transaction;
 
@@ -15,8 +20,16 @@ defined( 'ABSPATH' ) || exit;
  * @author      MultiVendorX
  */
 class Transaction {
+    /**
+	 * Container for classes.
+	 *
+	 * @var array
+	 */
     private $container = array();
 
+    /**
+	 * Constructor.
+	 */
     public function __construct() {
         $this->init_classes();
 
@@ -26,10 +39,19 @@ class Transaction {
         }
     }
 
+    /**
+	 * Init classes.
+	 */
     public function init_classes() {
         $this->container = array();
     }
 
+    /**
+	 * Create transaction for backend order.
+	 *
+	 * @param integer $commission_id Commission Id.
+	 * @param object  $vendor_order  Vendor order object.
+	 */
     public function create_transaction_for_backend_order( $commission_id, $vendor_order ) {
         if ( $commission_id > 0 ) {
             $disbursement_status = MultiVendorX()->setting->get_setting( 'disbursement_order_status' );
@@ -39,13 +61,21 @@ class Transaction {
         }
     }
 
+    /**
+	 * Create transaction for sub order.
+	 *
+	 * @param integer $order_id    Order Id.
+	 * @param string  $old_status  Old status.
+	 * @param string  $new_status  New status.
+	 * @param object  $order       Order object.
+	 */
     public function create_transaction_for_sub_order( $order_id, $old_status, $new_status, $order ) {
         if ( $order->get_parent_id() == 0 ) {
             return;
         }
 
         $payment_method = $order->get_payment_method();
-        // if (payment method is stripe or paypal marketplace and the check charges then this function return)
+        // If (payment method is stripe or paypal marketplace and the check charges then this function return).
         $disbursement_status = MultiVendorX()->setting->get_setting( 'disbursement_order_status' );
         if ( ! empty( $disbursement_status ) && in_array( $new_status, $disbursement_status ) ) {
             $commission_id = $order->get_meta( Utill::POST_META_SETTINGS['commission_id'], true );
@@ -53,6 +83,12 @@ class Transaction {
         }
     }
 
+    /**
+	 * Create transaction.
+	 *
+	 * @param integer $commission_id Commission Id.
+	 * @param object  $order         Order object.
+	 */
     public function create_transaction( $commission_id, $order ) {
         global $wpdb;
 
@@ -174,6 +210,11 @@ class Transaction {
     // }
     // }
 
+    /**
+	 * Get class object.
+	 *
+	 * @param string $class Class name.
+	 */
     public function __get( $class ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound
         if ( array_key_exists( $class, $this->container ) ) {
             return $this->container[ $class ];
@@ -182,6 +223,11 @@ class Transaction {
         return new \WP_Error( sprintf( 'Call to unknown class %s.', $class ) );
     }
 
+    /**
+	 * Get transaction db data.
+	 *
+	 * @param integer $commission_id Commission Id.
+	 */
     public static function get_transaction_db( $commission_id ) {
         global $wpdb;
         $transaction = $wpdb->get_row(
@@ -191,56 +237,63 @@ class Transaction {
         return $transaction ?? array();
     }
 
+    /**
+     * Get transaction information.
+     *
+     * @param array $args Arguments.
+     *
+     * @return array
+     */
     public static function get_transaction_information( $args ) {
         global $wpdb;
 
         $where = array();
 
-        // Extract and sanitize order/orderBy early so they don't go into WHERE
+        // Extract and sanitize order/orderBy early so they don't go into WHERE.
         $orderBy = isset( $args['orderBy'] ) ? esc_sql( $args['orderBy'] ) : '';
         $order   = isset( $args['order'] ) ? strtoupper( esc_sql( $args['order'] ) ) : 'ASC';
 
-        // Remove non-column keys
+        // Remove non-column keys.
         unset( $args['orderBy'], $args['order'] );
 
-        // Filter by id(s)
+        // Filter by id(s).
         if ( isset( $args['id'] ) ) {
             $ids     = is_array( $args['id'] ) ? $args['id'] : array( $args['id'] );
             $ids     = implode( ',', array_map( 'intval', $ids ) );
             $where[] = "id IN ($ids)";
         }
 
-        // Filter by store_id
+        // Filter by store_id.
         if ( isset( $args['store_id'] ) ) {
             $where[] = ' ( store_id = ' . esc_sql( intval( $args['store_id'] ) ) . ' ) ';
         }
 
-        // Filter by order_id
+        // Filter by order_id.
         if ( isset( $args['order_id'] ) ) {
             $where[] = ' ( order_id = ' . esc_sql( intval( $args['order_id'] ) ) . ' ) ';
         }
 
-        // Filter by commission_id
+        // Filter by commission_id.
         if ( isset( $args['commission_id'] ) ) {
             $where[] = ' ( commission_id = ' . esc_sql( intval( $args['commission_id'] ) ) . ' ) ';
         }
 
-        // Filter by transaction_type
+        // Filter by transaction_type.
         if ( isset( $args['transaction_type'] ) ) {
             $where[] = " ( transaction_type = '" . esc_sql( $args['transaction_type'] ) . "' ) ";
         }
 
-        // Filter by entry_type (Cr/Dr)
+        // Filter by entry_type (Cr/Dr).
         if ( isset( $args['entry_type'] ) ) {
             $where[] = " ( entry_type = '" . esc_sql( $args['entry_type'] ) . "' ) ";
         }
 
-        // Filter by status
+        // Filter by status.
         if ( isset( $args['status'] ) ) {
             $where[] = " ( status = '" . esc_sql( $args['status'] ) . "' ) ";
         }
 
-        // Filter by date range
+        // Filter by date range.
         if ( isset( $args['start_date'] ) ) {
             $where[] = " ( created_at >= '" . esc_sql( $args['start_date'] ) . "' ) ";
         }
@@ -250,36 +303,36 @@ class Transaction {
 
         $table = $wpdb->prefix . Utill::TABLES['transaction'];
 
-        // Base query (count or select)
+        // Base query (count or select).
         if ( isset( $args['count'] ) ) {
             $query = "SELECT COUNT(*) FROM $table";
         } else {
             $query = "SELECT * FROM $table";
         }
 
-        // Add WHERE
+        // Add WHERE.
         if ( ! empty( $where ) ) {
             $condition = $args['condition'] ?? ' AND ';
             $query    .= ' WHERE ' . implode( $condition, $where );
         }
 
-        // Add ORDER BY (only for non-count queries)
+        // Add ORDER BY (only for non-count queries).
         if ( ! isset( $args['count'] ) && ! empty( $orderBy ) ) {
-            // Only allow ASC or DESC
+            // Only allow ASC or DESC.
             if ( ! in_array( $order, array( 'ASC', 'DESC' ), true ) ) {
                 $order = 'ASC';
             }
             $query .= " ORDER BY {$orderBy} {$order}";
         }
 
-        // Add limit & offset (only for non-count)
+        // Add limit & offset (only for non-count).
         if ( ! isset( $args['count'] ) && isset( $args['limit'], $args['offset'] ) ) {
             $limit  = intval( $args['limit'] );
             $offset = intval( $args['offset'] );
             $query .= " LIMIT {$limit} OFFSET {$offset}";
         }
 
-        // Run query
+        // Run query.
         if ( isset( $args['count'] ) ) {
             return (int) ( $wpdb->get_var( $query ) ?? 0 );
         }
@@ -287,7 +340,12 @@ class Transaction {
         return $wpdb->get_results( $query, ARRAY_A ) ?? array();
     }
 
-
+    /**
+     * Get balances for a given store ID.
+     *
+     * @param int $store_id The store ID.
+     * @return array An associative array containing 'balance' and 'locking_balance'.
+     */
     public static function get_balances_for_store( $store_id ) {
         global $wpdb;
         $table_name = $wpdb->prefix . Utill::TABLES['transaction'];
@@ -305,7 +363,7 @@ class Transaction {
             $store_id
         );
 
-        // Fetch the result
+        // Fetch the result.
         $result = $wpdb->get_row( $query );
 
         if ( ! $result ) {

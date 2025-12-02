@@ -243,7 +243,7 @@ class PaymentProcessor {
 
 				// If shipping not found then else.
 				$payment = $order->get_meta( Utill::WOO_SETTINGS['cod_order_payment'], true );
-				if ( $payment == 'admin' ) {
+				if ( 'admin' === $payment ) {
 					return;
 				} elseif ( 'store' === $payment ) {
 					$wpdb->insert(

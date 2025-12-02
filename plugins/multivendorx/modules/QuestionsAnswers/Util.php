@@ -18,9 +18,12 @@ use MultiVendorX\Utill;
  */
 class Util {
 
-
     /**
      * Fetch questions & answers for a product
+     *
+     * @param int    $product_id Product id.
+     * @param string $search Search term.
+     * @return array An array of questions with their details.
      */
     public static function get_questions( $product_id, $search = '' ) {
         global $wpdb;
@@ -42,34 +45,36 @@ class Util {
     /**
      * Fetch question information from database
      * Supports filtering by product, store, answer status, date, and count
+     *
+     * @param array $args The arguments to filter the questions.
      */
     public static function get_question_information( $args ) {
         global $wpdb;
         $where = array();
 
-        // Filter by question IDs
+        // Filter by question IDs.
         if ( isset( $args['id'] ) ) {
             $ids     = is_array( $args['id'] ) ? $args['id'] : array( $args['id'] );
             $ids     = implode( ',', array_map( 'intval', $ids ) );
             $where[] = "id IN ($ids)";
         }
 
-        // Filter by product IDs
+        // Filter by product IDs.
         if ( isset( $args['product_ids'] ) && is_array( $args['product_ids'] ) && ! empty( $args['product_ids'] ) ) {
             $product_ids = implode( ',', array_map( 'intval', $args['product_ids'] ) );
             $where[]     = "product_id IN ($product_ids)";
         }
 
-        // Filter by store_id (optional)
+        // Filter by store_id (optional).
         if ( isset( $args['store_id'] ) ) {
             $where[] = 'store_id = ' . intval( $args['store_id'] );
         }
 
-        if ( isset( $args['question_visibility'] ) ) { // remove any tab/space
+        if ( isset( $args['question_visibility'] ) ) { // remove any tab/space.
             $where[] = "question_visibility = '" . esc_sql( $args['question_visibility'] ) . "'";
         }
 
-        // Only apply start/end date filters when NOT ordering manually
+        // Only apply start/end date filters when NOT ordering manually.
         if ( empty( $args['orderBy'] ) && empty( $args['order'] ) ) {
             if ( ! empty( $args['start_date'] ) ) {
                 $where[] = "question_date >= '" . esc_sql( $args['start_date'] ) . "'";
@@ -80,19 +85,19 @@ class Util {
             }
         }
 
-        // Filter by answered (has answer)
+        // Filter by answered (has answer).
         if ( ! empty( $args['has_answer'] ) ) {
             $where[] = "answer_text IS NOT NULL AND answer_text != ''";
         }
 
-        // Filter by unanswered (no answer)
+        // Filter by unanswered (no answer).
         if ( ! empty( $args['no_answer'] ) ) {
             $where[] = "(answer_text IS NULL OR answer_text = '')";
         }
 
         $table = $wpdb->prefix . Utill::TABLES['product_qna'];
 
-        // Build query
+        // Build query.
         if ( isset( $args['count'] ) ) {
             $query = "SELECT COUNT(*) FROM $table";
         } else {
@@ -104,7 +109,7 @@ class Util {
             $query    .= ' WHERE ' . implode( $condition, $where );
         }
 
-        // Add ORDER BY support safely
+        // Add ORDER BY support safely.
         if ( ! isset( $args['count'] ) && ! empty( $args['orderBy'] ) && ! empty( $args['order'] ) ) {
             $allowed_columns = array(
                 'question_date' => 'question_date',
@@ -121,18 +126,24 @@ class Util {
             }
         }
 
-        // Limit & offset (only for data, not count)
+        // Limit & offset (only for data, not count).
         if ( isset( $args['limit'] ) && isset( $args['offset'] ) && ! isset( $args['count'] ) ) {
             $query .= ' LIMIT ' . intval( $args['limit'] ) . ' OFFSET ' . intval( $args['offset'] );
         }
 
-        // Execute query
+        // Execute query.
         if ( isset( $args['count'] ) ) {
             return (int) ( $wpdb->get_var( $query ) ?? 0 );
         }
         return $wpdb->get_results( $query, ARRAY_A ) ?: array();
     }
 
+    /**
+     * Update a question by ID
+     *
+     * @param int   $id   The ID of the question to be updated.
+     * @param array $data The data to be updated.
+     */
     public static function update_question( $id, $data ) {
         global $wpdb;
 
@@ -145,30 +156,30 @@ class Util {
         $update_data   = array();
         $update_format = array();
 
-        // Update answer text
+        // Update answer text.
         if ( isset( $data['question_text'] ) ) {
             $update_data['question_text'] = sanitize_textarea_field( $data['question_text'] );
             $update_format[]              = '%s';
         }
 
-        // Update answer text
+        // Update answer text.
         if ( isset( $data['answer_text'] ) ) {
             $update_data['answer_text'] = sanitize_textarea_field( $data['answer_text'] );
             $update_format[]            = '%s';
         }
 
-        // Update question visibility
+        // Update question visibility.
         if ( isset( $data['question_visibility'] ) ) {
             $update_data['question_visibility'] = sanitize_text_field( $data['question_visibility'] );
             $update_format[]                    = '%s';
         }
 
-        // Update answer_by and always set current date
+        // Update answer_by and always set current date.
         if ( isset( $data['answer_by'] ) ) {
             $update_data['answer_by'] = intval( $data['answer_by'] );
             $update_format[]          = '%d';
 
-            // Always set the current date/time
+            // Always set the current date/time.
             $update_data['answer_date'] = current_time( 'mysql' );
             $update_format[]            = '%s';
         }
@@ -188,10 +199,15 @@ class Util {
             $where_format
         );
 
-        return $updated !== false;
+        return false !== $updated;
     }
 
 
+    /**
+     * Delete a question by ID
+     *
+     * @param int $id The ID of the question to be deleted.
+     */
 	public static function delete_question( $id ) {
 		global $wpdb;
 
@@ -210,9 +226,9 @@ class Util {
 
 		// $wpdb->delete returns number of rows deleted, or false on error
 		if ( $deleted === false ) {
-			return false; // DB error
+			return false; // DB error.
 		}
 
-		return true; // success, even if 0 rows (no row existed)
+		return true; // Success, even if 0 rows (no row existed).
 	}
 }

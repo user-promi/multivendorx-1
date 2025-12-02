@@ -137,27 +137,30 @@ class Frontend {
                 ?>
                 </p>
                 <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                    <label for="additional_info"><?php _e( 'Provide additional information', 'multivendorx' ); ?></label>
+                    <label for="additional_info"><?php echo esc_html__( 'Provide additional information', 'multivendorx' ); ?></label>
                     <textarea class="woocommerce-Input input-text" name="refund_request_addi_info"
                         id="refund_request_addi_info"></textarea>
                 </p>
                 <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                    <label for="product_img"><?php _e( 'Upload an image of the product', 'multivendorx' ); ?></label>
+                    <label for="product_img"><?php echo esc_html__( 'Upload an image of the product', 'multivendorx' ); ?></label>
                     <input type="file" class="woocommerce-Input input-img" name="product_img[]" id="product_img"
                         accept="image/jpeg, image/png, image/gif, image/webp" multiple>
                     <small
-                        style="display:block; color:#666;"><?php _e( 'You can select multiple images.', 'multivendorx' ); ?></small>
+                        style="display:block; color:#666;"><?php echo esc_html__( 'You can select multiple images.', 'multivendorx' ); ?></small>
                 </p>
 
                 <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                     <button type="submit" class="button wp-element-button" name="cust_request_refund_sbmt"
-                        value="<?php esc_attr_e( 'Submit', 'multivendorx' ); ?>"><?php _e( 'Submit', 'multivendorx' ); ?></button>
+                        value="<?php echo esc_attr__( 'Submit', 'multivendorx' ); ?>"><?php echo esc_html__( 'Submit', 'multivendorx' ); ?></button>
                 </p>
             </form>
         </div>
         <?php
     }
 
+    /**
+     * Add scripts
+     */
     public function add_scripts() {
         wp_add_inline_script(
             'woocommerce',
@@ -179,7 +182,12 @@ class Frontend {
         );
     }
 
-
+    /**
+     * Get customer refund order messages
+     *
+     * @param object $order
+     * @param array  $settings
+     */
     public function mvx_get_customer_refund_order_msg( $order, $settings = array() ) {
         if ( ! $order ) {
             return false;
@@ -207,17 +215,17 @@ class Frontend {
             $message['type'] = 'info';
             $message['msg']  = isset( $default_msg['order_refund_period_overed'] ) ? $default_msg['order_refund_period_overed'] : __( 'Your refund period has expired.', 'multivendorx' );
         }
-        if ( ! in_array( $order->get_status(), MultiVendorX()->setting->get_setting( 'customer_refund_status', array() ) ) ) {
+        if ( ! in_array( $order->get_status(), MultiVendorX()->setting->get_setting( 'customer_refund_status', array() ), true ) ) {
             $message['type'] = 'info';
             $message['msg']  = isset( $default_msg['order_status_not_allowed'] ) ? $default_msg['order_status_not_allowed'] : __( 'Refund is not allowed for the current order status.', 'multivendorx' );
         }
-        if ( $cust_refund_status == 'refund_reject' ) {
+        if ( 'refund_reject' === $cust_refund_status ) {
             $message['type'] = 'error';
             $message['msg']  = isset( $default_msg['order_refund_rejected'] ) ? $default_msg['order_refund_rejected'] : __( 'Sorry!! Your request has been rejected', 'multivendorx' );
-        } elseif ( $cust_refund_status == 'refund_request' ) {
+        } elseif ( 'refund_request' === $cust_refund_status ) {
             $message['type'] = 'warning';
             $message['msg']  = isset( $default_msg['order_refund_request_pending'] ) ? $default_msg['order_refund_request_pending'] : __( 'Your request is pending.', 'multivendorx' );
-        } elseif ( $cust_refund_status == 'refund_accept' ) {
+        } elseif ( 'refund_accept' === $cust_refund_status ) {
             $message['type'] = 'success';
             $message['msg']  = isset( $default_msg['order_refund_request_accepted'] ) ? $default_msg['order_refund_request_accepted'] : __( 'Congratulation: *** Your request has been accepted. *** ', 'multivendorx' );
         }
@@ -225,6 +233,9 @@ class Frontend {
         return $message;
     }
 
+    /**
+     * Handle customer requested refund action.
+     */
     public function mvx_handler_cust_requested_refund() {
         global $wp;
 

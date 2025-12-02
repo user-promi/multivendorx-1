@@ -1,4 +1,10 @@
 <?php
+/**
+ * MultiVendorX Stripe Connect payment gateway.
+ *
+ * @package MultiVendorX
+ */
+
 namespace MultiVendorX\Payments;
 
 use Exception;
@@ -6,6 +12,13 @@ use MultiVendorX\Store\Store;
 use MultiVendorX\Store\StoreUtil;
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * MultiVendorX Stripe Connect payment gateway.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class StripeConnect {
 
     /**
@@ -105,7 +118,7 @@ class StripeConnect {
                 $onboarding_status = 'Connected';
                 $is_onboarded      = true;
             }
-            $badge_class = ( $onboarding_status === 'Connected' ) ? 'green' : 'red';
+            $badge_class = ( 'Connected' === $onboarding_status ) ? 'green' : 'red';
             $fields      = array(
                 array(
                     'type' => 'html',
@@ -311,11 +324,16 @@ class StripeConnect {
 
     /**
      * Get proper redirect URL for dashboard
+     *
+     * @param string $type
+     * @param string $value
+     *
+     * @return string
      */
     private function get_redirect_url( $type, $value ) {
         // Dynamically build the correct dashboard settings payout URL.
         $base_url = StoreUtil::get_endpoint_url( 'settings' ) . '#subtab=payout';
-        if ( $type === 'connected' ) {
+        if ( 'connected' === $type ) {
             return add_query_arg( 'connected', $value, $base_url );
         } elseif ( $type === 'error' ) {
             return add_query_arg( 'error', $value, $base_url );
@@ -325,6 +343,12 @@ class StripeConnect {
 
     /**
      * Create transfer
+     *
+     * @param int    $amount
+     * @param string $destination
+     * @param int    $order_id
+     *
+     * @return array|false
      */
     public function create_transfer( $amount, $destination, $order_id ) {
 
@@ -347,6 +371,12 @@ class StripeConnect {
 
     /**
      * Make Stripe API call using WordPress HTTP API
+     *
+     * @param string $url
+     * @param array  $data
+     * @param string $method
+     *
+     * @return array|false
      */
     private function make_stripe_api_call( $url, $data = array(), $method = 'POST' ) {
         $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
@@ -366,7 +396,7 @@ class StripeConnect {
             'timeout' => 30,
         );
 
-        if ( ( $method === 'POST' || $method === 'PUT' ) && ! empty( $data ) ) {
+        if ( ( 'POST' === $method || 'PUT' === $method ) && ! empty( $data ) ) {
             $args['body'] = http_build_query( $data );
         }
 

@@ -1,7 +1,10 @@
 <?php
 /**
  * Template Name: Vendor Dashboard (No Header/Footer)
+ *
+ * @package MultivendorX
  */
+
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>

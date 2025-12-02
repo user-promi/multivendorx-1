@@ -46,20 +46,24 @@ class CommissionManager {
         global $wpdb;
 
         if ( $order ) {
-            $store_id = $order->get_meta( Utill::POST_META_SETTINGS['store_id'] );
-            $vendor   = Store::get_store_by_id( $store_id );
+            $store_id            = $order->get_meta( Utill::POST_META_SETTINGS['store_id'] );
+            $vendor              = Store::get_store_by_id( $store_id );
+            $commission_type     = MultiVendorX()->setting->get_setting( 'commission_type' );
+            $commission_amount   = 0;
+            $shipping_amount     = 0;
+            $tax_amount          = 0;
+            $shipping_tax_amount = 0;
+            $marketplace_payable = 0;
+            $store_payable       = 0;
+            $coupon_amount       = 0;
+            $commission_rates    = $rules_array = array();
 
-            $commission_type = MultiVendorX()->setting->get_setting( 'commission_type' );
-
-            $commission_amount = $shipping_amount = $tax_amount = $shipping_tax_amount = $marketplace_payable = $store_payable = $coupon_amount = 0;
-            $commission_rates  = $rules_array = array();
-
-            if ( $commission_type == 'per_item' ) {
+            if ( 'per_item' === $commission_type ) {
                 $per_item          = $this->calc_item_commissions( $order->get_items(), $order, $vendor, $commission_rates );
                 $commission_amount = $per_item['commission_amount'];
                 $commission_rates  = $per_item['commission_rates'];
                 $rules_array       = $per_item['rules_array'];
-            } elseif ( $commission_type == 'store_order' ) {
+            } elseif ( 'store_order' === $commission_type ) {
                 $store_order_commision = $this->calc_store_order_commission( $order, $order->get_items() );
                 $commission_amount     = $store_order_commision['commission_amount'];
                 $rules_array           = $store_order_commision['rules_array'];
@@ -96,7 +100,7 @@ class CommissionManager {
             $store_payable       = (float) $store_earning + (float) $shipping_amount + (float) $store_tax + (float) $store_shipping_tax + $store_coupon_amount;
             $marketplace_payable = (float) $marketplace_commission + (float) $admin_tax + (float) $admin_shipping_tax + $admin_coupon_amount;
 
-            $status = $order->get_status() == 'cancelled' ? 'cancelled' : 'unpaid';
+            $status = $order->get_status() === 'cancelled' ? 'cancelled' : 'unpaid';
             if ( $commission_id ) {
                 $commission = CommissionUtil::get_commission_db( $commission_id );
                 $status     = $commission->status;
@@ -156,9 +160,10 @@ class CommissionManager {
     /**
      * Calculate the tax split.
      *
-     * @param   mixed $order
-     * @param   mixed $store_earning
-     * @param   mixed $marketplace_commission
+     * @param   mixed $order WC_Order Object.
+     * @param   mixed $store_earning Store Earning.
+     * @param   mixed $marketplace_commission Marketplace Commission.
+     * @param   bool  $refund Is refund.
      * @return  mixed
      */
     public function calc_tax_split( $order, $store_earning, $marketplace_commission, $refund = false ) {
@@ -176,19 +181,19 @@ class CommissionManager {
         }
 
         $tax_on_shipping = MultiVendorX()->setting->get_setting( 'taxable' );
-        if ( MultiVendorX()->setting->get_setting( 'give_tax' ) == 'no_tax' || empty( $tax_on_shipping ) ) {
+        if ( MultiVendorX()->setting->get_setting( 'give_tax' ) === 'no_tax' || empty( $tax_on_shipping ) ) {
             $admin_tax          = $item_tax_total;
             $store_tax          = 0;
             $admin_shipping_tax = $shipping_tax_total;
             $store_shipping_tax = 0;
-        } elseif ( MultiVendorX()->setting->get_setting( 'give_tax' ) == 'full_tax' ) {
+        } elseif ( MultiVendorX()->setting->get_setting( 'give_tax' ) === 'full_tax' ) {
             $admin_tax = 0;
             $store_tax = $item_tax_total;
             if ( ! empty( $tax_on_shipping ) ) {
                 $store_shipping_tax = $shipping_tax_total;
                 $admin_shipping_tax = 0;
             }
-        } elseif ( MultiVendorX()->setting->get_setting( 'give_tax' ) == 'commision_based_tax' ) {
+        } elseif ( MultiVendorX()->setting->get_setting( 'give_tax' ) === 'commision_based_tax' ) {
             $order_total = ( $order->get_subtotal() - $order->get_discount_total() );
             $admin_tax   = $item_tax_total * ( $marketplace_commission / $order_total );
             $store_tax   = $item_tax_total * ( $store_earning / $order_total );
@@ -294,8 +299,8 @@ class CommissionManager {
             switch ( $row['rule_type'] ) {
                 case 'order_value':
                     $base_val = (float) $row['order_value'];
-                    if ( ( $row['rule'] === 'less_than' && $order_total <= $base_val ) ||
-                        ( $row['rule'] === 'more_than' && $order_total > $base_val ) ) {
+                    if ( ( 'less_than' && $order_total <= $base_val === $row['rule'] ) ||
+                        ( 'more_than' && $order_total > $base_val === $row['rule'] ) ) {
                         $commission_amount = $order_total > 0 ? ( $order_total * ( (float) $row['commission_percentage'] / 100 ) + (float) $row['commission_fixed'] ) : 0;
 
                         $rules_array['commission_amount']['rules'][] = array(
@@ -320,7 +325,7 @@ class CommissionManager {
                             $line_total = max( 0, $line_total - (float) $ref_amt * $qty );
                         }
 
-                        if ( $row['rule_type'] === 'price' ) {
+                        if ( 'price' === $row['rule_type'] ) {
                             $compare_value = $line_total;
                             $base_value    = (float) $row['product_price'];
                         } else {
@@ -328,8 +333,8 @@ class CommissionManager {
                             $base_value    = (float) $row['product_qty'];
                         }
 
-                        if ( ( $row['rule'] === 'less_than' && $compare_value <= $base_value ) ||
-                            ( $row['rule'] === 'more_than' && $compare_value > $base_value ) ) {
+                        if ( ( 'less_than' && $compare_value <= $base_value === $row['rule'] ) ||
+                            ( 'more_than' && $compare_value > $base_value === $row['rule'] ) ) {
                             $commission_amount += $line_total > 0 ? ( $line_total * ( (float) $row['commission_percentage'] / 100 ) + (float) $row['commission_fixed'] ) : 0;
 
                             $rules_array['commission_amount']['rules'][] = array(
@@ -367,12 +372,13 @@ class CommissionManager {
     /**
      * Calculate coupon split between store and admin.
      *
-     * @param   object $order
-     * @param   float  $store_earning
-     * @param   float  $marketplace_commission
+     * @param   object $order Order object.
+     * @param   float  $store_earning Store earning.
+     * @param   float  $marketplace_commission Marketplace commission.
      */
     public function calc_coupon_split( $order, $store_earning, $marketplace_commission ) {
-        $store_coupon_amount = $admin_coupon_amount = 0;
+        $store_coupon_amount = 0;
+        $admin_coupon_amount = 0;
         $store_coupon        = false;
         $base_total          = $order->get_subtotal() - $order->get_discount_total();
 
@@ -405,11 +411,13 @@ class CommissionManager {
     /**
      * Get commission value of a item.
      *
-     * @param   int    $product_id
-     * @param   int    $item_id
-     * @param   object $item
-     * @param   object $order
-     * @param   object $vendor
+     * @param   int    $product_id Product id.
+     * @param   int    $item_id Order item id.
+     * @param   object $item Order item object.
+     * @param   object $order Order object.
+     * @param   object $vendor Vendor object.
+     * @param   float  $after_refund_amount After refund amount.
+     *
      * @return  float
      */
     public function get_item_commission( $product_id, $item_id, $item, $order, $vendor, $after_refund_amount = null ) {
@@ -431,7 +439,7 @@ class CommissionManager {
 
             $commission_type = MultiVendorX()->setting->get_setting( 'commission_type' );
 
-            if ( ! empty( $commission ) && $commission_type == 'per_item' ) {
+            if ( ! empty( 'per_item' === $commission ) && $commission_type ) {
                 $amount = $line_total > 0 ? ( (float) $line_total * ( (float) $commission['commission_val'] / 100 ) + ( (float) $commission['commission_fixed'] * $item['qty'] ) ) : 0;
             }
 
@@ -445,27 +453,25 @@ class CommissionManager {
         return apply_filters( 'vendor_commission_amount', $amount, $product_id, $item, $order );
     }
 
-    /**
-     * Get the commission amount associate with a product.
-     *
-     * @param   mixed $product_id
-     * @param   mixed $variation_id
-     * @param   mixed $item
-     * @param   mixed $vendor
-     * @return  array | bool
-     */
-
     // product
     // category
     // store
     // global
+
+    /**
+     * Get the commission amount associate with a product.
+     *
+     * @param   mixed $product_id product id.
+     * @param   mixed $item item.
+     * @param   mixed $vendor vendor.
+     */
     public function get_commission_amount( $product_id, $item, $vendor ) {
         $data    = array();
         $product = wc_get_product( $product_id );
 
         if ( $product && $vendor ) {
 
-            // Variable Product
+            // Variable Product.
             $data['commission_val']   = $product->get_meta( Utill::POST_META_SETTINGS['variable_product_percentage'], true );
             $data['commission_fixed'] = $product->get_meta( Utill::POST_META_SETTINGS['variable_product_fixed'], true );
 
@@ -473,7 +479,7 @@ class CommissionManager {
                 return $data;
             }
 
-            // Simple Product
+            // Simple Product.
             $data['commission_val']   = $product->get_meta( Utill::POST_META_SETTINGS['percentage_commission'], true );
             $data['commission_fixed'] = $product->get_meta( Utill::POST_META_SETTINGS['fixed_commission'], true );
 

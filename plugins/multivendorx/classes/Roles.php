@@ -107,7 +107,6 @@ class Roles {
      * @param array  $caps Capabilities.
      * @param string $cap Capability.
      * @param int    $user_id User ID.
-     * @param array  $args Arguments.
      *
      * @return array
      */

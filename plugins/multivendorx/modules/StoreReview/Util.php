@@ -1,4 +1,10 @@
 <?php
+/**
+ * MultiVendorX StoreReview Module Util Class
+ *
+ * @package MultiVendorX
+ */
+
 namespace MultiVendorX\StoreReview;
 
 use MultiVendorX\Utill;
@@ -7,17 +13,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * MultiVendorX StoreReview Module Utility Class.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class Util {
 
     /**
      * Check if a user has purchased from a specific store
+     *
+     * @param int $store_id Store ID.
+     * @param int $user_id User ID.
      */
     public static function is_verified_buyer( $store_id, $user_id ) {
         if ( empty( $store_id ) || empty( $user_id ) ) {
             return 0;
         }
 
-        // Fetch all relevant orders for this user
+        // Fetch all relevant orders for this user.
         $orders = wc_get_orders(
             array(
 				'customer_id' => $user_id,
@@ -37,7 +53,7 @@ class Util {
                 continue;
             }
 
-            // Loop through all products in the order
+            // Loop through all products in the order.
             foreach ( $order->get_items( 'line_item' ) as $item_id => $item ) {
                 $product_id = $item->get_product_id();
                 $product    = wc_get_product( $product_id );
@@ -45,24 +61,27 @@ class Util {
 					continue;
                 }
 
-                // Get store ID from product meta or item meta
+                // Get store ID from product meta or item meta.
                 $product_store_id = get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true );
                 if ( empty( $product_store_id ) ) {
                     $product_store_id = $item->get_meta( Utill::POST_META_SETTINGS['store_id'] );
                 }
 
-                // Match store ID
+                // Match store ID.
                 if ( (int) $product_store_id === (int) $store_id ) {
                     return (int) $order_id; // Verified buyer — return that order ID
                 }
             }
         }
 
-        return 0; // Not a verified buyer
+        return 0; // Not a verified buyer.
     }
 
     /**
      * Check if user has already submitted a review for a store
+     *
+     * @param int $store_id Store ID.
+     * @param int $user_id User ID.
      */
     public static function has_reviewed( $store_id, $user_id ) {
         global $wpdb;
@@ -79,6 +98,14 @@ class Util {
 
     /**
      * Insert a new review
+     *
+     * @param int    $store_id Store ID.
+     * @param int    $user_id User ID.
+     * @param string $title Review title.
+     * @param string $content Review content.
+     * @param int    $overall Overall rating.
+     * @param int    $order_id Optional. Order ID related to the review.
+     * @param array  $images Optional. Array of image URLs attached to the review.
      */
     public static function insert_review( $store_id, $user_id, $title, $content, $overall, $order_id = 0, $images = array() ) {
         global $wpdb;
@@ -106,6 +133,9 @@ class Util {
 
     /**
      * Insert multiple parameter ratings for a review
+     *
+     * @param int   $review_id Review ID.
+     * @param array $ratings Associative array where keys are parameter names and values are ratings.
      */
     public static function insert_ratings( $review_id, $ratings ) {
         global $wpdb;
@@ -127,6 +157,9 @@ class Util {
 
     /**
      * Fetch all approved reviews for a store
+     *
+     * @param int $store_id Store ID.
+     * @param int $limit Number of reviews to fetch.
      */
     public static function get_reviews_by_store( $store_id, $limit = 20 ) {
         global $wpdb;
@@ -143,6 +176,8 @@ class Util {
 
     /**
      * Get individual parameter ratings for a review
+     *
+     * @param int $review_id Review ID.
      */
     public static function get_ratings_for_review( $review_id ) {
         global $wpdb;
@@ -158,6 +193,9 @@ class Util {
 
     /**
      * Get average rating per parameter
+     *
+     * @param int   $store_id Store ID.
+     * @param array $parameters Array of parameter names.
      */
     public static function get_avg_ratings( $store_id, $parameters ) {
         global $wpdb;
@@ -191,6 +229,8 @@ class Util {
 
     /**
      * Get overall store rating
+     *
+     * @param int $store_id Store ID.
      */
     public static function get_overall_rating( $store_id ) {
         global $wpdb;
@@ -206,6 +246,12 @@ class Util {
         return round( $overall, 2 );
     }
 
+    /**
+     * Get user's review status for a store
+     *
+     * @param int $store_id
+     * @param int $user_id
+     */
     public static function get_user_review_status( $store_id, $user_id ) {
         global $wpdb;
         $table_review = $wpdb->prefix . Utill::TABLES['review'];
@@ -226,82 +272,84 @@ class Util {
     /**
      * Fetch review information from database.
      * Supports filtering by ID, store, customer, date range, pagination, and count.
+     *
+     * @param array $args
      */
     public static function get_review_information( $args ) {
         global $wpdb;
         $where = array();
 
-        // 🔹 Filter by review IDs
+        // Filter by review IDs.
         if ( isset( $args['review_id'] ) ) {
             $ids     = is_array( $args['review_id'] ) ? $args['review_id'] : array( $args['review_id'] );
             $ids     = implode( ',', array_map( 'intval', $ids ) );
             $where[] = "review_id IN ($ids)";
         }
 
-        // 🔹 Filter by store_id
+        // Filter by store_id.
         if ( isset( $args['store_id'] ) ) {
             $where[] = 'store_id = ' . intval( $args['store_id'] );
         }
 
-        // 🔹 Filter by customer_id
+        // Filter by customer_id.
         if ( isset( $args['customer_id'] ) ) {
             $where[] = 'customer_id = ' . intval( $args['customer_id'] );
         }
 
-        // 🔹 Filter by order_id
+        // Filter by order_id.
         if ( isset( $args['order_id'] ) ) {
             $where[] = 'order_id = ' . intval( $args['order_id'] );
         }
 
-        // 🔹 Filter by review status (pending, approved, rejected, etc.)
+        // Filter by review status (pending, approved, rejected, etc.).
         if ( isset( $args['status'] ) && $args['status'] !== '' ) {
             $where[] = "status = '" . esc_sql( $args['status'] ) . "'";
         }
 
-        // 🔹 Filter by reported flag
+        // Filter by reported flag.
         if ( isset( $args['reported'] ) ) {
             $where[] = 'reported = ' . intval( $args['reported'] );
         }
 
-        // 🔹 Filter by start_date
+        // Filter by start_date.
         if ( ! empty( $args['start_date'] ) ) {
             $where[] = "date_created >= '" . esc_sql( $args['start_date'] ) . "'";
         }
 
-        // 🔹 Filter by end_date
+        // Filter by end_date.
         if ( ! empty( $args['end_date'] ) ) {
             $where[] = "date_created <= '" . esc_sql( $args['end_date'] ) . "'";
         }
-        // 🔹 Filter by overall_rating ("X stars & up" style)
+        // Filter by overall_rating ("X stars & up" style).
         if ( isset( $args['overall_rating'] ) && $args['overall_rating'] !== '' ) {
             $rating = floatval( $args['overall_rating'] );
 
-            // Handle invalid ratings gracefully
+            // Handle invalid ratings gracefully.
             if ( $rating < 1 ) {
                 $rating = 1;
             }
 
-            // Flipkart-style filter: show reviews with rating >= selected value
+            // Flipkart-style filter: show reviews with rating >= selected value.
             $where[] = "overall_rating >= {$rating}";
         }
 
-        // 🔹 Table name (update according to your DB structure)
+        // Table name (update according to your DB structure).
         $table = $wpdb->prefix . Utill::TABLES['review'];
 
-        // 🔹 Build query
+        // Build query.
         if ( isset( $args['count'] ) ) {
             $query = "SELECT COUNT(*) FROM $table";
         } else {
             $query = "SELECT * FROM $table";
         }
 
-        // 🔹 Add WHERE conditions
+        // Add WHERE conditions.
         if ( ! empty( $where ) ) {
             $condition = $args['condition'] ?? ' AND ';
             $query    .= ' WHERE ' . implode( $condition, $where );
         }
 
-        // 🔹 Order results safely
+        // Order results safely.
         if ( ! isset( $args['count'] ) ) {
             $allowed_columns = array( 'date_created', 'overall_rating', 'status', 'store_id', 'customer_id' );
             $order_by        = isset( $args['order_by'] ) && in_array( $args['order_by'], $allowed_columns, true )
@@ -315,12 +363,12 @@ class Util {
             $query .= ' ORDER BY ' . esc_sql( $order_by ) . ' ' . esc_sql( $order_dir );
         }
 
-        // 🔹 Limit & offset
+        // Limit & offset.
         if ( isset( $args['limit'] ) && isset( $args['offset'] ) && ! isset( $args['count'] ) ) {
             $query .= ' LIMIT ' . intval( $args['limit'] ) . ' OFFSET ' . intval( $args['offset'] );
         }
 
-        // 🔹 Execute query
+        // Execute query.
         if ( isset( $args['count'] ) ) {
             return (int) $wpdb->get_var( $query );
         } else {
@@ -328,18 +376,24 @@ class Util {
         }
     }
 
+    /**
+     * Update a review.
+     *
+     * @param int   $id   The review ID to update.
+     * @param array $data The data to update.
+     */
     public static function update_review( $id, $data ) {
         global $wpdb;
 
-        // Define main review table
+        // Define main review table.
         $table = $wpdb->prefix . Utill::TABLES['review'];
 
-        // Nothing to update
+        // Nothing to update.
         if ( empty( $data ) ) {
             return false;
         }
 
-        // Sanitize & prepare update data
+        // Sanitize & prepare update data.
         $update_data   = array();
         $update_format = array();
 
@@ -358,7 +412,7 @@ class Util {
             $update_format[]       = '%s';
         }
 
-        // No valid data
+        // No valid data.
         if ( empty( $update_data ) ) {
             return false;
         }
@@ -376,12 +430,17 @@ class Util {
 
         // $wpdb->update returns number of rows updated, or false on error
         if ( $updated === false ) {
-            return false; // DB error
+            return false; // DB error.
         }
 
-        return true; // success, even if no change
+        return true; // Success, even if no change.
     }
 
+    /**
+     * Delete a review and its associated ratings.
+     *
+     * @param int $id The review ID to delete.
+     */
     public static function delete_review( $id ) {
         global $wpdb;
 
@@ -393,17 +452,17 @@ class Util {
             return false;
         }
 
-        // Begin transaction (optional but good practice if supported)
+        // Begin transaction (optional but good practice if supported).
         $wpdb->query( 'START TRANSACTION' );
 
-        // Delete from ratings first
+        // Delete from ratings first.
         $wpdb->delete(
             $rating_table,
             array( 'review_id' => $id ),
             array( '%d' )
         );
 
-        // Delete from main review table
+        // Delete from main review table.
         $deleted = $wpdb->delete(
             $review_table,
             array( 'review_id' => $id ),

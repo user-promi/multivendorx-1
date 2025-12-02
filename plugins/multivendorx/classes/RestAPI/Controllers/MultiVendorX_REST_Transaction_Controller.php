@@ -1,4 +1,9 @@
 <?php
+/**
+ * MultiVendorX REST API Transaction Controller
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\RestAPI\Controllers;
 
@@ -8,6 +13,13 @@ use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * MultiVendorX REST API Transaction Controller
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
 
 	/**
@@ -17,6 +29,9 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
 	 */
 	protected $rest_base = 'transaction';
 
+    /**
+     * Register the routes for transaction.
+     */
     public function register_routes() {
         register_rest_route(
             MultiVendorX()->rest_namespace,
@@ -56,14 +71,29 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         );
     }
 
+    /**
+     * Get items permissions check.
+     *
+     * @param object $request Full details about the request.
+     */
     public function get_items_permissions_check( $request ) {
         return true;
     }
 
+    /**
+     * Create item permissions check.
+     *
+     * @param object $request Full details about the request.
+     */
     public function create_item_permissions_check( $request ) {
         return true;
     }
 
+    /**
+     * Update item endpoint handler.
+     *
+     * @param object $request Full details about the request.
+     */
     public function update_item_permissions_check( $request ) {
         return true;
     }
@@ -124,6 +154,12 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
 
     // return rest_ensure_response( $formatted );
     // }
+
+    /**
+     * Get items endpoint handler.
+     *
+     * @param object $request Full details about the request.
+     */
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
@@ -142,7 +178,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             return $error;
         }
         try {
-            // Check if CSV download is requested
+            // Check if CSV download is requested.
             $format = $request->get_param( 'format' );
             if ( $format === 'csv' ) {
                 return $this->download_transaction_csv( $request );
@@ -156,7 +192,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             $status        = $request->get_param( 'status' );
             $filter_status = $request->get_param( 'filter_status' );
 
-            // 🔹 Handle date range from request
+            // 🔹 Handle date range from request.
             $start_date         = $request->get_param( 'start_date' );
             $end_date           = $request->get_param( 'end_date' );
             $transaction_type   = $request->get_param( 'transaction_type' );
@@ -182,7 +218,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
                 $args['store_id'] = $store_id;
             }
 
-            // Add date filters
+            // Add date filters.
             if ( $start_date ) {
                 $args['start_date'] = $start_date;
             }
@@ -274,6 +310,8 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
 
     /**
      * Download transactions as CSV
+     *
+     * @param object $request
      */
     private function download_transaction_csv( $request ) {
         $store_id           = intval( $request->get_param( 'store_id' ) );
@@ -286,7 +324,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         $page               = $request->get_param( 'page' );
         $per_page           = $request->get_param( 'row' );
 
-        // Prepare filter for Transaction - NO pagination by default
+        // Prepare filter for Transaction - NO pagination by default.
         $args = array();
         if ( ! empty( $store_id ) ) {
             $args['store_id'] = $store_id;
@@ -305,25 +343,25 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             $args['end_date']   = date( 'Y-m-d 23:59:59', strtotime( $end_date ) );
         }
 
-        // If specific IDs are requested (selected rows from bulk action)
+        // If specific IDs are requested (selected rows from bulk action).
         if ( ! empty( $ids ) ) {
             $args['id__in'] = array_map( 'intval', explode( ',', $ids ) );
         }
-        // If pagination parameters are provided (current page export from bulk action)
+        // If pagination parameters are provided (current page export from bulk action).
         elseif ( ! empty( $page ) && ! empty( $per_page ) ) {
             $args['limit']  = intval( $per_page );
             $args['offset'] = ( intval( $page ) - 1 ) * intval( $per_page );
         }
-        // Otherwise, export ALL data with current filters (no pagination - from Export All button)
+        // Otherwise, export ALL data with current filters (no pagination - from Export All button).
 
-        // Fetch transactions
+        // Fetch transactions.
         $transactions = Transaction::get_transaction_information( $args );
 
         if ( empty( $transactions ) ) {
             return new \WP_Error( 'no_data', __( 'No transaction data found.', 'multivendorx' ), array( 'status' => 404 ) );
         }
 
-        // CSV headers
+        // CSV headers.
         $headers = array(
             'Transaction ID',
             'Date',
@@ -338,11 +376,11 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             'Narration',
         );
 
-        // Build CSV data
+        // Build CSV data.
         $csv_output = fopen( 'php://output', 'w' );
         ob_start();
 
-        // Add BOM for UTF-8 compatibility
+        // Add BOM for UTF-8 compatibility.
         fwrite( $csv_output, "\xEF\xBB\xBF" );
 
         fputcsv( $csv_output, $headers );
@@ -351,7 +389,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             $store      = new \MultiVendorX\Store\Store( $transaction['store_id'] );
             $store_name = $store ? $store->get( 'name' ) : '';
 
-            // Format date
+            // Format date.
             $date = ! empty( $transaction['created_at'] ) ? date( 'M j, Y', strtotime( $transaction['created_at'] ) ) : '-';
 
             fputcsv(
@@ -359,14 +397,14 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
                 array(
 					$transaction['id'],
 					$date,
-					$transaction['order_id'] ?: '-',
+					$transaction['order_id'] ? $transaction['order_id'] : '-',
 					$store_name,
-					$transaction['transaction_type'] ?: '-',
-					$transaction['entry_type'] === 'Cr' ? $transaction['amount'] : 0,
-					$transaction['entry_type'] === 'Dr' ? $transaction['amount'] : 0,
+					$transaction['transaction_type'] ? $transaction['transaction_type'] : '-',
+					'Cr' === $transaction['entry_type'] ? $transaction['amount'] : 0,
+					'Dr' === $transaction['entry_type'] ? $transaction['amount'] : 0,
 					$transaction['balance'],
 					$transaction['status'],
-					$transaction['payment_method'] ?? '',
+					$transaction['payment_method'] ? $transaction['payment_method'] ? '',
 					$transaction['narration'],
                 )
             );
@@ -375,7 +413,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         fclose( $csv_output );
         $csv = ob_get_clean();
 
-        // Determine filename based on context
+        // Determine filename based on context.
         $filename = 'transactions_';
         if ( ! empty( $ids ) ) {
             $filename .= 'selected_';
@@ -385,14 +423,14 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             $filename .= 'all_';
         }
 
-        // Add store ID to filename if available
+        // Add store ID to filename if available.
         if ( ! empty( $store_id ) ) {
             $filename .= 'store_' . $store_id . '_';
         }
 
-        $filename .= date( 'Y-m-d' ) . '.csv';
+        $filename .= gmdate( 'Y-m-d' ) . '.csv';
 
-        // Send headers for browser download
+        // Send headers for browser download.
         header( 'Content-Type: text/csv; charset=UTF-8' );
         header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
         header( 'Pragma: no-cache' );
@@ -402,6 +440,11 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         exit;
     }
 
+    /**
+     * Create transaction
+     *
+     * @param object $request
+     */
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
@@ -409,6 +452,11 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         }
     }
 
+    /**
+     * Get store balance
+     *
+     * @param object $request
+     */
     public function get_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
@@ -434,7 +482,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         global $wpdb;
         $table_name = "{$wpdb->prefix}" . Utill::TABLES['transaction'];
 
-        // Fetch last transaction row for the store
+        // Fetch last transaction row for the store.
         $last_transaction = $wpdb->get_row(
             $wpdb->prepare(
                 "SELECT balance, locking_balance 
@@ -450,7 +498,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         $balance         = isset( $last_transaction['balance'] ) ? $last_transaction['balance'] : 0;
         $locking_balance = isset( $last_transaction['locking_balance'] ) ? $last_transaction['locking_balance'] : 0;
 
-        // Calculate total lifetime earnings (sum of all amounts)
+        // Calculate total lifetime earnings (sum of all amounts).
         $total_earning = $wpdb->get_var(
             $wpdb->prepare(
                 "SELECT SUM(amount) 
@@ -462,14 +510,14 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
 
         $total_earning = $total_earning ? $total_earning : 0;
 
-        // Lifetime earning minus locking balance
+        // Lifetime earning minus locking balance.
         $lifetime_earning = $total_earning - $locking_balance;
 
         $payout_threshold = MultiVendorX()->setting->get_setting( 'payout_threshold_amount', 0 );
 
-        // If it's an array, take first value, else use as is
+        // If it's an array, take first value, else use as is.
         if ( is_array( $payout_threshold ) ) {
-            $payout_threshold = reset( $payout_threshold ) ?: 0;
+            $payout_threshold = reset( $payout_threshold ) ? reset( $payout_threshold ) : 0;
         }
 
         $payout_threshold      = floatval( $payout_threshold );
@@ -496,6 +544,11 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         );
     }
 
+    /**
+     * Update item endpoint handler. This method handles both approve and reject actions.
+     *
+     * @param object $request Full details about the request.
+     */
     public function update_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
@@ -531,7 +584,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         }
 
         if ( $withdraw ) {
-            if ( $action === 'approve' && $threshold_amount < $amount ) {
+            if ( 'approve' === $action && $threshold_amount < $amount ) {
                 MultiVendorX()->payments->processor->process_payment( $store_id, $amount );
             } else {
                 $parameters = array(
@@ -553,7 +606,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             );
         }
 
-        // Check if a withdrawal request already exists
+        // Check if a withdrawal request already exists.
         $existing_request = $store->get_meta( Utill::STORE_SETTINGS_KEYS['request_withdrawal_amount'] );
         if ( $existing_request ) {
             return rest_ensure_response(
@@ -569,10 +622,10 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
 
         $should_update_meta = true;
 
-        if ( $withdraw_type === 'automatic' && $threshold_amount < $amount ) {
+        if ( 'automatic' === $withdraw_type && $threshold_amount < $amount ) {
             $payment_method = $store->get_meta( 'payment_method' ) ?? '';
 
-            if ( ! empty( $payment_method ) && ( $payment_method == 'stripe-connect' || $payment_method == 'paypal-payout' ) ) {
+            if ( 'stripe-connect' === ! empty( $payment_method ) && ( $payment_method || 'paypal-payout' === $payment_method ) ) {
                 do_action( "multivendorx_process_{$payment_method}_payment", $store_id, $amount, null, null, null );
             } else {
                 $should_update_meta = true;

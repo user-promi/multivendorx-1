@@ -1,4 +1,9 @@
 <?php
+/**
+ * MultiVendorX REST API Controller for Commission
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\RestAPI\Controllers;
 
@@ -8,6 +13,13 @@ use MultiVendorX\Store\Store;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * MultiVendorX REST API Controller for Commission.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
 
 	/**
@@ -64,7 +76,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
     /**
      * GET permission check.
      *
-     * @param object $request
+     * @param object $request Request data.
      * @return bool
      */
     public function get_items_permissions_check( $request ) {
@@ -74,7 +86,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
     /**
      * POST permission check.
      *
-     * @param object $request
+     * @param object $request Request data.
      * @return bool
      */
     public function create_item_permissions_check( $request ) {
@@ -84,7 +96,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
     /**
      * PUT permission check.
      *
-     * @param object $request
+     * @param object $request Request data.
      * @return bool
      */
     public function update_item_permissions_check( $request ) {
@@ -94,7 +106,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
     /**
      * GET all commissions.
      *
-     * @param object $request
+     * @param object $request Request data.
      * @return object
      */
     public function get_items( $request ) {
@@ -525,7 +537,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -541,7 +553,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
             $order_id = absint( $request->get_param( 'orderId' ) );
             $action   = $request->get_param( 'action' );
 
-            if ( $action == 'regenerate' ) {
+            if ( 'regenerate' === $action ) {
                 $order = wc_get_order( $order_id );
                 if ( $order ) {
                     MultiVendorX()->order->admin->regenerate_order_commissions( $order );

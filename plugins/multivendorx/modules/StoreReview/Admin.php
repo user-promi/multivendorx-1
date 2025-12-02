@@ -16,6 +16,9 @@ namespace MultiVendorX\StoreReview;
  */
 class Admin {
 
+    /**
+     * Constructor
+     */
     public function __construct() {
     }
 }

@@ -276,6 +276,11 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
         }
     }
 
+    /**
+     * Create a single item.
+     *
+     * @param object $request Full data about the request.
+     */
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
@@ -408,7 +413,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             $post_id = absint( $request->get_param( 'id' ) );
             $post    = get_post( $post_id );
 
-            if ( ! $post || $post->post_type !== Utill::POST_TYPES['announcement'] ) {
+            if ( Utill::POST_TYPES['announcement'] !== ! $post || $post->post_type ) {
                 return new \WP_Error( 'not_found', __( 'Announcement not found', 'multivendorx' ), array( 'status' => 404 ) );
             }
 
@@ -434,7 +439,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                 );
             }
 
-            // Update stores meta
+            // Update stores meta.
             update_post_meta( $post_id, Utill::POST_META_SETTINGS['announcement_stores'], $stores );
 
             return rest_ensure_response(
@@ -493,7 +498,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             }
 
             $post = get_post( $id );
-            if ( ! $post || $post->post_type !== Utill::POST_TYPES['announcement'] ) {
+            if ( Utill::POST_TYPES['announcement'] !== ! $post || $post->post_type ) {
                 return new \WP_Error(
                     'not_found',
                     __( 'Announcement not found', 'multivendorx' ),
@@ -566,7 +571,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             }
 
             $post = get_post( $post_id );
-            if ( ! $post || $post->post_type !== Utill::POST_TYPES['announcement'] ) {
+            if ( Utill::POST_TYPES['announcement'] !== ! $post || $post->post_type ) {
                 return new \WP_Error( 'not_found', __( 'Announcement not found', 'multivendorx' ), array( 'status' => 404 ) );
             }
 

@@ -387,6 +387,12 @@ class Admin {
         <?php
     }
 
+    /**
+     * Save store id in product.
+     *
+     * @param int $post_id Product ID.
+     * @return void
+     */
     public function save_store_in_product( $post_id ) {
         $linked_store_id                   = absint( filter_input( INPUT_POST, 'linked_store' ) );
         $fixed_commission_per_product      = absint( filter_input( INPUT_POST, 'product_fixed_commission' ) );
@@ -405,6 +411,13 @@ class Admin {
         }
     }
 
+    /**
+     * Add commission field in variations
+     *
+     * @param int    $loop Variation loop.
+     * @param array  $variation_data Variation data.
+     * @param object $variation Variation object.
+     */
     public function add_variation_settings( $loop, $variation_data, $variation ) {
         $commission_percentage = $commission_fixed = '';
         $commission_percentage = get_post_meta( $variation->ID, Utill::POST_META_SETTINGS['variable_product_percentage'], true );
@@ -431,6 +444,12 @@ class Admin {
         );
     }
 
+    /**
+     * Save commission field in variations
+     *
+     * @param int $variation_id Variation ID.
+     * @param int $i Variation index.
+     */
     public function save_commission_field_variations( $variation_id, $i ) {
         $fixed_commissions      = filter_input( INPUT_POST, 'variable_product_fixed_commission', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
         $percentage_commissions = filter_input( INPUT_POST, 'variable_product_percentage_commission', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
@@ -465,7 +484,7 @@ class Admin {
     /**
      * Add commission field in edit category page
      *
-     * @param Object $term
+     * @param object $term Term Object.
      */
     public function edit_product_cat_commission_fields( $term ) {
         $commission_percentage = get_term_meta( $term->term_id, 'multivendorx_category_percentage_commission', true );
@@ -487,9 +506,9 @@ class Admin {
     /**
      * Save commission settings for product category
      *
-     * @param int    $term_id
-     * @param int    $tt_id
-     * @param string $taxonomy
+     * @param int    $term_id Term ID.
+     * @param int    $tt_id Term Taxonomy ID.
+     * @param string $taxonomy Taxonomy Name.
      */
     public function save_product_cat_commission_fields( $term_id, $tt_id = '', $taxonomy = '' ) {
         if ( 'product_cat' === $taxonomy ) {
@@ -500,6 +519,9 @@ class Admin {
         }
     }
 
+    /**
+     * Get stores for select2
+     */
     public function multivendorx_get_stores() {
         $term   = sanitize_text_field( filter_input( INPUT_GET, 'term', FILTER_SANITIZE_FULL_SPECIAL_CHARS ) ?? '' );
         $stores = Store::get_store_by_name( $term );
@@ -514,6 +536,12 @@ class Admin {
 
         wp_send_json( $results );
     }
+
+    /**
+     * Add store tab in coupon
+     *
+     * @param array $coupon_data_tabs Coupon data tabs.
+     */
     public function add_store_tab_in_coupon( $coupon_data_tabs ) {
         $coupon_data_tabs['store'] = array(
             'label'  => __( 'Store', 'multivendorx' ),
@@ -523,6 +551,11 @@ class Admin {
         return $coupon_data_tabs;
     }
 
+    /**
+     * Add content in store tab
+     *
+     * @param int $coupon_id Coupon ID.
+     */
     public function add_content_in_store_tab( $coupon_id ) {
 
         $current_coupon = get_post( $coupon_id );
@@ -552,6 +585,11 @@ class Admin {
         <?php
     }
 
+    /**
+     * Save store in coupon
+     *
+     * @param int $post_id Post ID.
+     */
     public function save_store_in_coupon( $post_id ) {
         $linked_store_id = absint( filter_input( INPUT_POST, 'coupon_linked_store' ) );
         if ( $linked_store_id ) {
@@ -559,6 +597,12 @@ class Admin {
         }
     }
 
+    /**
+     * Add option for payment in order page.
+     *
+     * @param string $page  Page name.
+     * @param object $order Order object.
+     */
     public function add_option_for_payment( $page, $order ) {
         if ( $page && $page != 'woocommerce_page_wc-orders' ) {
 			return;
@@ -577,6 +621,11 @@ class Admin {
         );
     }
 
+    /**
+     * Render option for payment.
+     *
+     * @param object $order Order object.
+     */
     public function render_multivendorx_cod_order_payment_box( $order ) {
         if ( ! $order ) {
             return;
@@ -596,10 +645,15 @@ class Admin {
         <?php
     }
 
+    /**
+     * Save option for payment.
+     *
+     * @param int $order_id Order ID.
+     */
     public function save_option_for_payment( $order_id ) {
 
         $selected = filter_input( INPUT_POST, 'order_payment', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
-        if ( $selected !== null ) {
+        if ( null !== $selected ) {
             $order = wc_get_order( $order_id );
             $order->update_meta_data( Utill::WOO_SETTINGS['cod_order_payment'], $selected );
             $order->save();

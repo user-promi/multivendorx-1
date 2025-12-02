@@ -388,7 +388,7 @@ class Frontend {
     public function vendor_dashboard_template( $template ) {
         $user = wp_get_current_user();
 
-        // checking change later when all function ready
+        // Checking change later when all function ready.
         // if ( is_user_logged_in() && Utill::is_store_dashboard() && in_array( 'store_owner', $user->roles, true ) ) {
         if ( is_user_logged_in() && is_page() && has_shortcode( get_post()->post_content, 'multivendorx_store_dashboard' ) ) {
             return MultiVendorX()->plugin_path . 'templates/store/store-dashboard.php';
@@ -412,7 +412,7 @@ class Frontend {
                     $product_sku = $product->get_id();
                     break;
 
-                // use the original product SKU if we're not generating it
+                // Use the original product SKU if we're not generating it.
                 default:
                     $product_sku = $product->get_sku();
             }
@@ -429,7 +429,7 @@ class Frontend {
         if ( $variation ) {
             $variation_sku = '';
             if ( 'slugs' === MultiVendorX()->setting->get_setting( 'sku_generator', '' ) ) {
-                // replace spaces in attributes depending on settings
+                // Replace spaces in attributes depending on settings.
                 switch ( MultiVendorX()->setting->get_setting( 'sku_generator_attribute_spaces', '' ) ) {
                     case 'underscore':
                         $variation['attributes'] = str_replace( ' ', '_', $variation['attributes'] );
@@ -460,7 +460,7 @@ class Frontend {
      * @return string
      */
     private function get_sku_separator() {
-        // Filters the separator used between parent / variation SKUs
+        // Filters the separator used between parent / variation SKUs.
         return apply_filters( 'sku_generator_sku_separator', '-' );
     }
 

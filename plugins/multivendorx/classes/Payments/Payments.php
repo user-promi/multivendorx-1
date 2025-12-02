@@ -1,4 +1,9 @@
 <?php
+/**
+ * MultiVendorX Geolocation Module
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\Payments;
 
@@ -12,14 +17,32 @@ defined( 'ABSPATH' ) || exit;
  * @author      MultiVendorX
  */
 class Payments {
+    /**
+     * Container for all payment classes.
+     *
+     * @var array
+     */
     private $container = array();
-    public $providers  = array();
+
+    /**
+     * Container for all payment providers.
+     *
+     * @var array
+     */
+    public $providers = array();
+
+    /**
+     * Constructor.
+     */
     public function __construct() {
         $this->init_classes();
 
         add_action( 'init', array( $this, 'load_all_providers' ) );
     }
 
+    /**
+     * Init all payment classes.
+     */
     public function init_classes() {
         $this->container = array(
             'disbursement'   => new Disbursement(),
@@ -33,11 +56,16 @@ class Payments {
         );
     }
 
+    /**
+     * Load all payment providers.
+     */
     public function load_all_providers() {
         $this->providers = apply_filters( 'multivendorx_payment_providers', $this->providers );
     }
 
-
+    /**
+     * Get all payment settings.
+     */
     public function get_all_payment_settings() {
         $all_settings = array();
 
@@ -80,6 +108,12 @@ class Payments {
         return $all_settings;
     }
 
+    /**
+     * Get class object.
+     *
+     * @param  string $class Class name to return an instance of.
+     * @return object|WP_Error
+     */
     public function __get( $class ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound
         if ( array_key_exists( $class, $this->container ) ) {
             return $this->container[ $class ];
@@ -88,7 +122,9 @@ class Payments {
         return new \WP_Error( sprintf( 'Call to unknown class %s.', $class ) );
     }
 
-
+    /**
+     * Get all store payment settings.
+     */
     public function get_all_store_payment_settings() {
         $store_settings = array();
 

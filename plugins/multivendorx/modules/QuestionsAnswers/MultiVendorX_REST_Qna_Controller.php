@@ -1,4 +1,9 @@
 <?php
+/**
+ * MultiVendorX REST API Controller for Questions and Answers
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\QuestionsAnswers;
 
@@ -6,6 +11,13 @@ use MultiVendorX\QuestionsAnswers\Util;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * MultiVendorX REST API Controller for Questions and Answers.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
 
 	/**
@@ -15,10 +27,16 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
 	 */
 	protected $rest_base = 'qna';
 
+    /**
+     * Constructor.
+     */
     public function __construct() {
         add_action( 'rest_api_init', array( $this, 'register_routes' ), 10 );
     }
 
+    /**
+     * Register the routes for questions and answers.
+     */
     public function register_routes() {
         register_rest_route(
             MultiVendorX()->rest_namespace,
@@ -66,15 +84,29 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
         );
     }
 
+    /**
+     * Get items permissions check.
+     *
+     * @param  object $request Full data about the request.
+     */
     public function get_items_permissions_check( $request ) {
         return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
     }
 
-    // POST permission
+    /**
+     * Create permissions check.
+     *
+     * @param  object $request Full data about the request.
+     */
     public function create_item_permissions_check( $request ) {
         return current_user_can( 'create_stores' );
     }
 
+    /**
+     * Update permissions check.
+     *
+     * @param  object $request Full data about the request.
+     */
     public function update_item_permissions_check( $request ) {
         return current_user_can( 'edit_stores' );
     }
@@ -82,13 +114,15 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
 
     /**
      * Get QnA items with optional pagination, date filters, and counters
+     *
+     * @param  object $request Full data about the request.
      */
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -138,7 +172,7 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
                 $matched_product_ids = $product_query->get_products();
 
                 if ( empty( $matched_product_ids ) ) {
-                    // No matching product found
+                    // No matching product found.
                     return rest_ensure_response(
                         array(
                             'items'      => array(),
@@ -171,9 +205,9 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
             }
 
             // --- Step 6: Add Filter by Status (from frontend tabs) ---
-            if ( $status === 'has_answer' ) {
+            if ( 'has_answer' === $status ) {
                 $args['has_answer'] = true;
-            } elseif ( $status === 'no_answer' ) {
+            } elseif ( 'no_answer' === $status ) {
                 $args['no_answer'] = true;
             }
             if ( $orderBy && $order ) {
@@ -196,10 +230,10 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
 
                     $store_obj = MultivendorX()->store->get_store_by_id( $q['store_id'] );
 
-                    // Get product image
+                    // Get product image.
                     $product_image = '';
                     if ( $product ) {
-                            $image_id = $product->get_image_id(); // Get featured image ID
+                            $image_id = $product->get_image_id(); // Get featured image ID.
                         if ( $image_id ) {
                             $product_image = wp_get_attachment_image_url( $image_id, 'thumbnail' ); // or 'full'
                         }
@@ -225,7 +259,7 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
                         'question_visibility' => $q['question_visibility'],
                     );
                 },
-                $questions ?: array()
+                $questions ? $questions : array()
             );
 
             // --- Step 9: Get Counters ---
@@ -264,7 +298,11 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
         }
     }
 
-
+    /**
+     * Create a single question item.
+     *
+     * @param  object $request Full data about the request.
+     */
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
@@ -272,6 +310,11 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
         }
     }
 
+    /**
+     * Retrieve a single question item.
+     *
+     * @param  object $request Full data about the request.
+     */
     public function get_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
@@ -295,7 +338,7 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
             return new \WP_Error( 'not_found', __( 'Question not found', 'multivendorx' ), array( 'status' => 404 ) );
         }
 
-        // Permission check
+        // Permission check.
         if ( ! in_array( 'administrator', $current_user->roles ) ) {
             if ( in_array( 'store_owner', $current_user->roles ) ) {
                 $product = wc_get_product( $q['product_id'] );
@@ -331,8 +374,13 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
         return rest_ensure_response( $data );
     }
 
+    /**
+     * Update a single question item.
+     *
+     * @param  object $request Full data about the request.
+     */
     public function update_item( $request ) {
-        // Verify nonce
+        // Verify nonce.
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             return new \WP_Error(
@@ -342,7 +390,7 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
             );
         }
 
-        // Get question ID
+        // Get question ID.
         $id = absint( $request->get_param( 'id' ) );
         if ( ! $id ) {
             return new \WP_Error(
@@ -352,7 +400,7 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
             );
         }
 
-        // Fetch the question
+        // Fetch the question.
         $q = reset( Util::get_question_information( array( 'id' => $id ) ) );
         if ( ! $q ) {
             return new \WP_Error(
@@ -362,7 +410,7 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
             );
         }
 
-        // Fields that can be updated
+        // Fields that can be updated.
         $question_text = $request->get_param( 'question_text' );
         $answer_text   = $request->get_param( 'answer_text' );
         $visibility    = $request->get_param( 'question_visibility' );
@@ -398,13 +446,13 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
             );
         }
 
-        // Add answer_by (current user ID)
+        // Add answer_by (current user ID).
         $current_user_id = get_current_user_id();
         if ( $current_user_id ) {
             $data_to_update['answer_by'] = $current_user_id;
         }
 
-        // Save via Util helper
+        // Save via Util helper.
         $updated = Util::update_question( $id, $data_to_update );
 
         if ( ! $updated ) {
@@ -420,9 +468,13 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
         );
     }
 
-
+    /**
+     * Delete a single question item.
+     *
+     * @param  object $request Full data about the request.
+     */
     public function delete_item( $request ) {
-        // Verify nonce
+        // Verify nonce.
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             return new \WP_Error(
@@ -432,7 +484,7 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
             );
         }
 
-        // Get question ID
+        // Get question ID.
         $id = absint( $request->get_param( 'id' ) );
         if ( ! $id ) {
             return new \WP_Error(
@@ -442,7 +494,7 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
             );
         }
 
-        // Fetch the question
+        // Fetch the question.
         $q = reset( Util::get_question_information( array( 'id' => $id ) ) );
         if ( ! $q ) {
             return new \WP_Error(
@@ -452,7 +504,7 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
             );
         }
 
-        // Delete via Util helper (implement delete_question in Util)
+        // Delete via Util helper (implement delete_question in Util).
         $deleted = Util::delete_question( $id );
 
         if ( ! $deleted ) {
