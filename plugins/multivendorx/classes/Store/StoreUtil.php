@@ -28,7 +28,7 @@ class StoreUtil {
         $store = new \MultiVendorX\Store\Store( $store_id );
 
         // Check if class already exists for this store
-        $existing_class_id = $store->get_meta( 'shipping_class_id' );
+        $existing_class_id = $store->get_meta( Utill::STORE_SETTINGS_KEYS['shipping_class_id'] );
         if ( $existing_class_id ) {
             return; // Skip creation
         }
@@ -38,13 +38,13 @@ class StoreUtil {
         $slug       = $store_name . '-' . $store_id;
 
         // Check if the shipping class already exists
-        $shipping_term = get_term_by( 'slug', $slug, 'product_shipping_class', ARRAY_A );
+        $shipping_term = get_term_by( 'slug', $slug, Utill::WOO_SETTINGS['product_shipping_class'], ARRAY_A );
 
         // Create a new shipping class if missing
         if ( ! $shipping_term ) {
             $shipping_term = wp_insert_term(
                 $store->get( 'name' ) . ' Shipping', // Shipping class name
-                'product_shipping_class',
+                Utill::WOO_SETTINGS['product_shipping_class'],
                 array(
                     'slug' => $slug,
                 )
@@ -56,13 +56,13 @@ class StoreUtil {
             $class_id = $shipping_term['term_id'];
 
             // Save class ID in store meta
-            $store->update_meta( 'shipping_class_id', $class_id );
+            $store->update_meta( Utill::STORE_SETTINGS_KEYS['shipping_class_id'], $class_id );
 
             // Save MultiVendorX store reference in term meta
-            update_term_meta( $class_id, 'multivendorx_store_id', $store_id );
+            update_term_meta( $class_id, Utill::POST_META_SETTINGS['store_id'], $store_id );
 
             // Optional: add origin help
-            update_term_meta( $class_id, 'shipping_origin_country', get_option( Utill::WOO_SETTINGS['default_country'] ) );
+            update_term_meta( $class_id, Utill::WOO_SETTINGS['shipping_origin_country'], get_option( Utill::WOO_SETTINGS['default_country'] ) );
         }
     }
 
@@ -317,21 +317,21 @@ class StoreUtil {
         $all_registration_data['id'] = $store_id;
 
         // Get registration form data (serialized meta)
-        $store_meta     = $store->get_meta( 'multivendorx_registration_data' );
+        $store_meta     = $store->get_meta( Utill::STORE_SETTINGS_KEYS['registration_data'] );
         $submitted_data = array();
         if ( ! empty( $store_meta ) && is_serialized( $store_meta ) ) {
             $submitted_data = unserialize( $store_meta );
         }
 
 		$meta_keys = array(
-			'phone',
-			'paypal_email',
-			'address_1',
-			'address_2',
-			'city',
-			'state',
-			'country',
-			'postcode',
+			Utill::STORE_SETTINGS_KEYS['phone'],
+            Utill::STORE_SETTINGS_KEYS['paypal_email'],
+            Utill::STORE_SETTINGS_KEYS['address_1'],
+            Utill::STORE_SETTINGS_KEYS['address_2'],
+            Utill::STORE_SETTINGS_KEYS['city'],
+            Utill::STORE_SETTINGS_KEYS['state'],
+            Utill::STORE_SETTINGS_KEYS['country'],
+            Utill::STORE_SETTINGS_KEYS['postcode'],
 		);
 
         foreach ( $meta_keys as $key ) {
@@ -372,7 +372,7 @@ class StoreUtil {
             'all_registration_data'  => $all_registration_data,
             'primary_owner_info'     => $primary_owner_info,
             'store_application_note' => unserialize( $store->get_meta( 'store_reject_note' ) ),
-            'store_permanent_reject' => $store->get( 'status' ) === 'permanently_rejected',
+            'store_permanent_reject' => $store->get( Utill::STORE_SETTINGS_KEYS['status'] ) === 'permanently_rejected',
         );
 
         foreach ( $submitted_data as $field_name => $field_value ) {
@@ -486,14 +486,14 @@ class StoreUtil {
             $privacy_override_settings = MultiVendorX()->setting->get_setting( 'store_policy_override', array() );
 
             if ( in_array( 'store', $privacy_override_settings ) ) {
-                $store_policy = $store->get_meta( 'store_policy' );
+                $store_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['store_policy'] );
             }
             if ( in_array( 'shipping', $privacy_override_settings ) ) {
-                $shipping_policy = $store->get_meta( 'shipping_policy' );
+                $shipping_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['shipping_policy'] );
             }
             if ( in_array( 'refund_return', $privacy_override_settings ) ) {
-                $refund_policy       = $store->get_meta( 'return_policy' );
-                $cancellation_policy = $store->get_meta( 'exchange_policy' );
+                $refund_policy       = $store->get_meta( Utill::STORE_SETTINGS_KEYS['return_policy'] );
+                $cancellation_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['exchange_policy'] );
             }
 
             if ( ! empty( $store_policy ) ) {
@@ -526,14 +526,14 @@ class StoreUtil {
 			$privacy_override_settings = MultiVendorX()->setting->get_setting( 'store_policy_override', array() );
 
 			if ( in_array( 'store', $privacy_override_settings ) ) {
-				$store_policy = $store->get_meta( 'store_policy' );
+				$store_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['store_policy'] );
 			}
 			if ( in_array( 'shipping', $privacy_override_settings ) ) {
-				$shipping_policy = $store->get_meta( 'shipping_policy' );
+				$shipping_policy = $store->get_meta(  Utill::STORE_SETTINGS_KEYS['shipping_policy'] );
 			}
 			if ( in_array( 'refund_return', $privacy_override_settings ) ) {
-				$refund_policy       = $store->get_meta( 'refund_policy' );
-				$cancellation_policy = $store->get_meta( 'exchange_policy' );
+				$refund_policy       = $store->get_meta( Utill::STORE_SETTINGS_KEYS['refund_policy'] );
+				$cancellation_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['exchange_policy'] );
 			}
 		}
 

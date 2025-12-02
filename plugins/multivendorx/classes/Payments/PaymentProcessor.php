@@ -52,7 +52,7 @@ class PaymentProcessor {
 
         if ( ! $order_id ) {
             $withdrawals_fees  = MultiVendorX()->setting->get_setting( 'withdrawals_fees', array() );
-            $withdrawals_count = (int) $store->get_meta( 'withdrawals_count' );
+            $withdrawals_count = (int) $store->get_meta( Utill::STORE_SETTINGS_KEYS['withdrawals_count'] );
 
             if ( ! empty( $withdrawals_fees['free_withdrawals'] ) && ( (int) $withdrawals_fees['free_withdrawals'] < $withdrawals_count ) ) {
                 $deduct_amount = (float) $amount * ( (float) $withdrawals_fees['withdrawal_percentage'] / 100 ) + (float) $withdrawals_fees['withdrawal_fixed'];
@@ -83,7 +83,7 @@ class PaymentProcessor {
         if ( $method ) {
             $payment_method = $method;
         } else {
-            $payment_method = $store->get_meta( 'payment_method' ) ?? '';
+            $payment_method = $store->get_meta( Utill::STORE_SETTINGS_KEYS['payment_method'] ) ?? '';
         }
 
         if ( empty( $payment_method ) ) {
@@ -130,7 +130,7 @@ class PaymentProcessor {
 
         $store         = new Store( $store_id );
         $order         = $order_id > 0 ? wc_get_order( $order_id ) : null;
-        $commission_id = $order ? $order->get_meta( 'multivendorx_commission_id', true ) : null;
+        $commission_id = $order ? $order->get_meta( Utill::POST_META_SETTINGS['commission_id'], true ) : null;
         $commission    = $commission_id ? CommissionUtil::get_commission_db( $commission_id ) : null;
 
         $amount = $amount ? $amount : ( $commission ? (float) $commission->store_payable : 0.00 );
@@ -143,8 +143,8 @@ class PaymentProcessor {
             'transaction_type' => 'Withdrawal',
             'amount'           => $amount,
             'currency'         => get_woocommerce_currency(),
-            'payment_method'   => $store->get_meta( 'payment_method' ),
-            'narration'        => $note ? $note : ( ( 'success' === $status )
+            'payment_method'   => $store->get_meta( Utill::STORE_SETTINGS_KEYS['payment_method'] ),
+            'narration'        => $note ? $note : ( ( $status === 'success' )
                                     ? "Withdrawal released via {$method} Payment Processor"
                                     : "Withdrawal failed via {$method} Payment Processor" ),
             'status'           => ( 'success' === $status ) ? 'Completed' : 'Failed',
@@ -158,9 +158,9 @@ class PaymentProcessor {
             $format
         );
 
-        if ( $result && 'success' === $status ) {
-            $withdrawals_count = (int) $store->get_meta( 'withdrawals_count' );
-            $store->update_meta( 'withdrawals_count', $withdrawals_count + 1 );
+        if ( $result && $status == 'success' ) {
+            $withdrawals_count = (int) $store->get_meta( Utill::STORE_SETTINGS_KEYS['withdrawals_count'] );
+            $store->update_meta( Utill::STORE_SETTINGS_KEYS['withdrawals_count'], $withdrawals_count + 1 );
         }
 
         if ( 'success' !== $status ) {
@@ -209,7 +209,7 @@ class PaymentProcessor {
         if ( 'cod' === $payment_method && 'completed' === $new_status ) {
             global $wpdb;
             $order         = wc_get_order( $order_id );
-            $commission_id = $order ? $order->get_meta( 'multivendorx_commission_id', true ) : null;
+            $commission_id = $order ? $order->get_meta( Utill::POST_META_SETTINGS['commission_id'], true ) : null;
             $commission    = $commission_id ? CommissionUtil::get_commission_db( $commission_id ) : null;
 
             $amount = $commission ? (float) $commission->store_payable : 0.00;
@@ -223,7 +223,7 @@ class PaymentProcessor {
 					'transaction_type' => 'COD received',
 					'amount'           => $amount,
 					'currency'         => get_woocommerce_currency(),
-					'payment_method'   => $store->get_meta( 'payment_method' ) ?? '',
+					'payment_method'   => $store->get_meta( Utill::STORE_SETTINGS_KEYS['payment_method'] ) ?? '',
 					'narration'        => 'COD payment received for order no. - ' . $order_id,
 					'status'           => 'Completed',
 				);
@@ -240,9 +240,9 @@ class PaymentProcessor {
                 // );
 				// }
 
-				// If shipping not found then else.
-				$payment = $order->get_meta( 'multivendorx_cod_order_payment', true );
-				if ( 'admin' === $payment ) {
+				// if shipping not found then else
+				$payment = $order->get_meta( Utill::WOO_SETTINGS['cod_order_payment'], true );
+				if ( $payment == 'admin' ) {
 					return;
 				} elseif ( 'store' === $payment ) {
 					$wpdb->insert(

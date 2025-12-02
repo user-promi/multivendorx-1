@@ -6,8 +6,10 @@ import {
     RowSelectionState,
     PaginationState,
 } from '@tanstack/react-table';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { formatCurrency } from '../services/commonFunction';
+import AddProductCom from "./add-products";
 
 type ProductRow = {
     id: number;
@@ -69,6 +71,15 @@ const AllProduct: React.FC = () => {
     const [pageCount, setPageCount] = useState(0);
     const [activeTab, setActiveTab] = useState("general");
     const { modules } = useModules();
+    const [newProductId, setNewProductId] = useState(null);
+
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const query = new URLSearchParams(location.search);
+    const element = query.get("element");
+
+    const isAddProduct = element === "edit";
 
     const tabs = [
         {
@@ -334,10 +345,11 @@ const AllProduct: React.FC = () => {
                                 label: __('Edit', 'multivendorx'),
                                 icon: 'adminlib-edit',
                                 onClick: (rowData) => {
-                                    let url = appLocalizer.permalink_structure
-                                        ? `${appLocalizer.add_product_link}/${rowData.id}`
-                                        : `${appLocalizer.add_product_link}&context_id=${rowData.id}`;
-                                    window.location.assign(url);
+                                    if (appLocalizer.permalink_structure) {
+                                        navigate(`/${appLocalizer.dashboard_slug}/products/edit/${rowData.id}`);
+                                    } else {
+                                        navigate(`?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=edit&context_id=${rowData.id}`);
+                                    }
                                 },
                                 hover: true
                             },
@@ -606,149 +618,188 @@ const AllProduct: React.FC = () => {
         requestData();
     }
 
+    const createAutoDraftProduct = () => {
+        try {
+            const payload = {
+                title: "Auto Draft",
+                status: "auto-draft"
+            };
+
+            axios.post(`${appLocalizer.apiUrl}/wc/v3/products/`, payload, {
+                headers: { "X-WP-Nonce": appLocalizer.nonce }
+            })
+            .then(res => {
+                console.log("Auto-draft created:", res.data);
+                setNewProductId(res.data.id); 
+            });
+ 
+        } catch (err) {
+            console.error("Error creating auto-draft:", err.response?.data || err);
+        }
+    };
+
+    useEffect(() => {
+        if (!newProductId) return;
+
+        if (appLocalizer.permalink_structure) {
+            navigate(`/${appLocalizer.dashboard_slug}/products/edit/${newProductId}`);
+        } else {
+            navigate(`?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=edit&context_id=${newProductId}`);
+        }
+    }, [newProductId]);
+
+
     return (
         <>
-            {AddProduct && (
-                <CommonPopup
-                    open={AddProduct}
-                    // onClose= setAddProduct(true)
-                    width="500px"
-                    height="100%"
-                    header={
-                        <>
-                            <div className="title">
-                                <i className="adminlib-cart"></i>
-                                Add Product
-                            </div>
-                            <p>Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.</p>
-                            <i
-                                className="icon adminlib-close"
-                                onClick={() => setAddProduct(false)}
-                            ></i>
-                        </>
-                    }
-                    footer={
-                        <>
-                            <div
-                                className="admin-btn btn-red"
-                                onClick={() => setAddProduct(false)}
-                            >
-                                Draft
-                                <i className="adminlib-contact-form"></i>
-                            </div>
-                            <div
-                                className="admin-btn btn-purple"
-                                onClick={() => setAddProduct(false)}
-                            >
-                                Publish
-                                <i className="adminlib-check"></i>
-                            </div>
-
-                        </>
-                    }
-                >
-
-                    <div className="content">
-                        {/* start left section */}
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="title">Name</label>
-                                <BasicInput
-                                    type="text"
-                                    name="title"
-                                />
-                            </div>
-                        </div>
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="title">Description (optional)</label>
-                                <TextArea
-                                    name="content"
-                                    inputClass="textarea-input"
-                                    rowNumber={6}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="tab-titles">
-                            {tabs.map((tab) => (
-                                <div
-                                    key={tab.id}
-                                    className={`title ${activeTab === tab.id ? "active" : ""}`}
-                                    onClick={() => setActiveTab(tab.id)}
-                                >
-                                    <h2>{tab.label}</h2>
+        {!isAddProduct && (
+            <>
+                {AddProduct && (
+                    <CommonPopup
+                        open={AddProduct}
+                        // onClose= setAddProduct(true)
+                        width="500px"
+                        height="100%"
+                        header={
+                            <>
+                                <div className="title">
+                                    <i className="adminlib-cart"></i>
+                                    Add Product
                                 </div>
-                            ))}
-                        </div>
+                                <p>Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.</p>
+                                <i
+                                    className="icon adminlib-close"
+                                    onClick={() => setAddProduct(false)}
+                                ></i>
+                            </>
+                        }
+                        footer={
+                            <>
+                                <div
+                                    className="admin-btn btn-red"
+                                    onClick={() => setAddProduct(false)}
+                                >
+                                    Draft
+                                    <i className="adminlib-contact-form"></i>
+                                </div>
+                                <div
+                                    className="admin-btn btn-purple"
+                                    onClick={() => setAddProduct(false)}
+                                >
+                                    Publish
+                                    <i className="adminlib-check"></i>
+                                </div>
 
-                        {/* Tab Content */}
-                        <div className="tab-content">
-                            {tabs.map(
-                                (tab) =>
-                                    activeTab === tab.id && (
-                                        <div key={tab.id} className="tab-panel">
-                                            {tab.content}
-                                        </div>
-                                    )
-                            )}
-                        </div>
-                    </div>
-
-                    {/* {error && <p className="error-text">{error}</p>} */}
-                </CommonPopup>
-            )}
-            <div className="page-title-wrapper">
-                <div className="page-title">
-                    <div className="title">All Product</div>
-                    <div className="des">Manage your store information and preferences</div>
-                </div>
-                <div className="buttons-wrapper">
-                    {modules.includes('import-export') && (
-                        <>
-                            <div
-                                className="admin-btn btn-purple-bg"
-                                onClick={() => setAddProduct(true)}
-                            >
-                                <i className="adminlib-import"></i>
-                                import
-                            </div>
-                            <div
-                                className="admin-btn btn-purple-bg"
-                                onClick={() => setAddProduct(true)}
-                            >
-                                <i className="adminlib-export"></i>
-                                Export
-                            </div>
-                        </>
-                    )}
-                    <div
-                        className="admin-btn btn-purple-bg"
-                        onClick={() => window.location.href = appLocalizer.add_product_link}
+                            </>
+                        }
                     >
-                        <i className="adminlib-plus-circle-o"></i>
-                        Add New
+
+                        <div className="content">
+                            {/* start left section */}
+                            <div className="form-group-wrapper">
+                                <div className="form-group">
+                                    <label htmlFor="title">Name</label>
+                                    <BasicInput
+                                        type="text"
+                                        name="title"
+                                    />
+                                </div>
+                            </div>
+                            <div className="form-group-wrapper">
+                                <div className="form-group">
+                                    <label htmlFor="title">Description (optional)</label>
+                                    <TextArea
+                                        name="content"
+                                        inputClass="textarea-input"
+                                        rowNumber={6}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="tab-titles">
+                                {tabs.map((tab) => (
+                                    <div
+                                        key={tab.id}
+                                        className={`title ${activeTab === tab.id ? "active" : ""}`}
+                                        onClick={() => setActiveTab(tab.id)}
+                                    >
+                                        <h2>{tab.label}</h2>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Tab Content */}
+                            <div className="tab-content">
+                                {tabs.map(
+                                    (tab) =>
+                                        activeTab === tab.id && (
+                                            <div key={tab.id} className="tab-panel">
+                                                {tab.content}
+                                            </div>
+                                        )
+                                )}
+                            </div>
+                        </div>
+
+                        {/* {error && <p className="error-text">{error}</p>} */}
+                    </CommonPopup>
+                )}
+                <div className="page-title-wrapper">
+                    <div className="page-title">
+                        <div className="title">All Product</div>
+                        <div className="des">Manage your store information and preferences</div>
+                    </div>
+                    <div className="buttons-wrapper">
+                        {modules.includes('import-export') && (
+                            <>
+                                <div
+                                    className="admin-btn btn-purple-bg"
+                                    onClick={() => setAddProduct(true)}
+                                >
+                                    <i className="adminlib-import"></i>
+                                    import
+                                </div>
+                                <div
+                                    className="admin-btn btn-purple-bg"
+                                    onClick={() => setAddProduct(true)}
+                                >
+                                    <i className="adminlib-export"></i>
+                                    Export
+                                </div>
+                            </>
+                        )}
+                        <div
+                            className="admin-btn btn-purple-bg"
+                            onClick={() =>{
+                                createAutoDraftProduct();
+                            }}
+                        >
+                            <i className="adminlib-plus-circle-o"></i> Add New
+                        </div>
+
                     </div>
                 </div>
-            </div>
-            <div className="admin-table-wrapper">
-                <Table
-                    data={data}
-                    columns={columns as ColumnDef<Record<string, any>, any>[]}
-                    rowSelection={rowSelection}
-                    onRowSelectionChange={setRowSelection}
-                    defaultRowsPerPage={10}
-                    pageCount={pageCount}
-                    pagination={pagination}
-                    onPaginationChange={setPagination}
-                    perPageOption={[10, 25, 50]}
-                    typeCounts={[]}
-                    realtimeFilter={realtimeFilter}
-                    handlePagination={requestApiForData}
-                    totalCounts={totalRows}
-                    searchFilter={searchFilter}
-                />
-            </div>
+                <div className="admin-table-wrapper">
+                    <Table
+                        data={data}
+                        columns={columns as ColumnDef<Record<string, any>, any>[]}
+                        rowSelection={rowSelection}
+                        onRowSelectionChange={setRowSelection}
+                        defaultRowsPerPage={10}
+                        pageCount={pageCount}
+                        pagination={pagination}
+                        onPaginationChange={setPagination}
+                        perPageOption={[10, 25, 50]}
+                        typeCounts={[]}
+                        realtimeFilter={realtimeFilter}
+                        handlePagination={requestApiForData}
+                        totalCounts={totalRows}
+                        searchFilter={searchFilter}
+                    />
+                </div>
+            </>
+        )}
+
+        {isAddProduct && <AddProductCom />}
         </>
     );
 };

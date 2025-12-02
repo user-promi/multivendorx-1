@@ -251,7 +251,7 @@ class CommissionManager {
                 'commission_fixed' => (float) ( $commission_values['commission_fixed'] ?? 0 ),
             );
 
-            wc_update_order_item_meta( $item_id, 'multivendorx_store_item_commission', $item_commission );
+            wc_update_order_item_meta( $item_id, Utill::WOO_SETTINGS['store_item_commission'], $item_commission );
 
             $commission_amount += (float) $item_commission;
         }
@@ -460,17 +460,17 @@ class CommissionManager {
 
         if ( $product && $vendor ) {
 
-            // Variable Product.
-            $data['commission_val']   = $product->get_meta( 'multivendorx_variable_product_percentage_commission', true );
-            $data['commission_fixed'] = $product->get_meta( 'multivendorx_variable_product_fixed_commission', true );
+            // Variable Product
+            $data['commission_val']   = $product->get_meta( Utill::POST_META_SETTINGS['variable_product_percentage'], true );
+            $data['commission_fixed'] = $product->get_meta( Utill::POST_META_SETTINGS['variable_product_fixed'], true );
 
             if ( ! empty( $data['commission_val'] ) || ! empty( $data['commission_fixed'] ) ) {
                 return $data;
             }
 
-            // Simple Product.
-            $data['commission_val']   = $product->get_meta( 'multivendorx_product_percentage_commission', true );
-            $data['commission_fixed'] = $product->get_meta( 'multivendorx_product_fixed_commission', true );
+            // Simple Product
+            $data['commission_val']   = $product->get_meta( Utill::POST_META_SETTINGS['percentage_commission'], true );
+            $data['commission_fixed'] = $product->get_meta( Utill::POST_META_SETTINGS['fixed_commission'], true );
 
             if ( ! empty( $data['commission_val'] ) || ! empty( $data['commission_fixed'] ) ) {
                 return $data;
@@ -528,8 +528,8 @@ class CommissionManager {
         foreach ( $terms as $term ) {
             // calculate current term's commission.
             $total_commission_amount = 0;
-            $commission_percentage   = (float) get_term_meta( $term->term_id, 'multivendorx_category_percentage_commission', true );
-            $commission_fixed        = (float) get_term_meta( $term->term_id, 'multivendorx_category_fixed_commission', true );
+            $commission_percentage   = (float) get_term_meta( $term->term_id, Utill::POST_META_SETTINGS['category_percentage_commission'], true );
+            $commission_fixed        = (float) get_term_meta( $term->term_id, Utill::POST_META_SETTINGS['category_fixed_commission'], true );
             $total_commission_amount = $commission_percentage + $commission_fixed;
 
             // compare current term's commission with previously store term's commission.
@@ -541,8 +541,8 @@ class CommissionManager {
 
         // Store commission value of maximum commission category.
         $category_wise_commission                        = new \stdClass();
-        $category_wise_commission->commission_percentage = (float) ( get_term_meta( $max_commission_term->term_id, 'multivendorx_category_percentage_commission', true ) ?? 0 );
-        $category_wise_commission->commission_fixed      = (float) ( get_term_meta( $max_commission_term->term_id, 'multivendorx_category_fixed_commission', true ) ?? 0 );
+        $category_wise_commission->commission_percentage = (float) ( get_term_meta( $max_commission_term->term_id, Utill::POST_META_SETTINGS['category_percentage_commission'], true ) ?? 0 );
+        $category_wise_commission->commission_fixed      = (float) ( get_term_meta( $max_commission_term->term_id, Utill::POST_META_SETTINGS['category_fixed_commission'], true ) ?? 0 );
 
         // Filter hook to adjust category wise commission after calculation.
         return apply_filters( 'mvx_category_wise_commission', $category_wise_commission, $product );
@@ -556,8 +556,8 @@ class CommissionManager {
      */
     public function calculate_commission_refunds( $vendor_order, $refund_id ) {
         global $wpdb;
-        $commission_id = $vendor_order->get_meta( 'multivendorx_commission_id', true );
-        $store_id      = $vendor_order->get_meta( 'multivendorx_store_id', true );
+        $commission_id = $vendor_order->get_meta( Utill::POST_META_SETTINGS['commission_id'], true );
+        $store_id      = $vendor_order->get_meta( Utill::POST_META_SETTINGS['store_id'], true );
         $vendor        = Store::get_store_by_id( $store_id );
 
         if ( $commission_id ) {

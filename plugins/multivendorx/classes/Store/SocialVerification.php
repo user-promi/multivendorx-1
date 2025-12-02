@@ -56,7 +56,7 @@ class SocialVerification {
         if ( ! $vendor_id ) {
             $vendor_id = get_current_user_id();
         }
-        $connections = get_user_meta( $vendor_id, 'social_verification_connections', true ) ?: array();
+        $connections = get_user_meta( $vendor_id, Utill::USER_SETTINGS_KEYS['social_verification'], true ) ?: array();
 
         return $connections;
     }
@@ -65,7 +65,7 @@ class SocialVerification {
      * Save social connection
      */
     public function save_social_connection( $user_id, $provider, $user_data ) {
-        $connections = get_user_meta( $user_id, 'social_verification_connections', true ) ?: array();
+        $connections = get_user_meta( $user_id, Utill::USER_SETTINGS_KEYS['social_verification'], true ) ?: array();
 
         $connections[ $provider ] = array(
             'connected_at' => current_time(),
@@ -73,7 +73,7 @@ class SocialVerification {
             'is_verified'  => true,
         );
 
-        update_user_meta( $user_id, 'social_verification_connections', $connections );
+        update_user_meta( $user_id, Utill::USER_SETTINGS_KEYS['social_verification'], $connections );
 
         // Log the connection
         $this->log_verification_attempt( $user_id, $provider, 'connected' );
@@ -85,11 +85,11 @@ class SocialVerification {
      * Disconnect social profile
      */
     public function disconnect_social_profile( $vendor_id, $provider ) {
-        $connections = get_user_meta( $vendor_id, 'social_verification_connections', true ) ?: array();
+        $connections = get_user_meta( $vendor_id, Utill::USER_SETTINGS_KEYS['social_verification'], true ) ?: array();
 
         if ( isset( $connections[ $provider ] ) ) {
             unset( $connections[ $provider ] );
-            update_user_meta( $vendor_id, 'social_verification_connections', $connections );
+            update_user_meta( $vendor_id, Utill::USER_SETTINGS_KEYS['social_verification'], $connections );
 
             // Log the disconnection
             $this->log_verification_attempt( $vendor_id, $provider, 'disconnected' );

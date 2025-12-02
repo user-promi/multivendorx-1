@@ -38,7 +38,7 @@ class RealtimeGateway extends \WC_Payment_Gateway {
 
         $suborders = MultiVendorX()->order->get_suborders( $order->get_id() );
         foreach ( $suborders as $suborder ) {
-            $store_id    = $suborder->get_meta( 'multivendorx_store_id', true );
+            $store_id    = $suborder->get_meta( Utill::POST_META_SETTINGS['store_id'], true );
             $suborder_id = $suborder->get_id();
 
             $commission = CommissionUtil::get_commission_by_store_and_order_id( $store_id, $suborder_id );

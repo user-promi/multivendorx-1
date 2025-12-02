@@ -99,7 +99,7 @@ class VendorOrder {
      */
     public function get_commission() {
         if ( $this->commission === null ) {
-            $commission_id    = (int) $this->get_prop( 'multivendorx_commission_id' );
+            $commission_id    = (int) $this->get_prop( Utill::POST_META_SETTINGS['commission_id'] );
             $this->commission = new Commission( $commission_id );
         }
         return $this->commission;

@@ -59,7 +59,7 @@ class Rewrites {
         // Add vendor filter
         $meta_query   = $query->get( 'meta_query', array() );
         $meta_query[] = array(
-            'key'     => 'multivendorx_store_id',
+            'key'     => Utill::POST_META_SETTINGS['multivendorx_store_id'],
             'value'   => $store_id,
             'compare' => '=',
         );
@@ -85,17 +85,17 @@ class Rewrites {
                 'index.php?' . $this->custom_store_url . '=$matches[1]&paged=$matches[2]',
                 'top',
             ),
-            array(
+            // array(
 
-                '^dashboard/([^/]*)/?',
-                'index.php?page_id=' . $page_id . '&segment=$matches[1]',
-                'top',
-            ),
-            // [
-            // '^dashboard/([^/]+)/?([^/]*)/?([0-9]*)/?$',
-            // 'index.php?page_id=' . $page_id . '&segment=$matches[1]&element=$matches[2]&context_id=$matches[3]',
-            // 'top'
-            // ]
+            //     '^dashboard/([^/]*)/?',
+            //     'index.php?page_id=' . $page_id . '&segment=$matches[1]',
+            //     'top',
+            // ),
+            array(
+                '^dashboard/([^/]+)/?([^/]*)/?([0-9]*)/?$',
+                'index.php?page_id=' . $page_id . '&segment=$matches[1]&element=$matches[2]&context_id=$matches[3]',
+                'top'
+            )
 
             // oldddd
             // [

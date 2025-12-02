@@ -128,7 +128,6 @@ final class MultiVendorX {
      * @return void
      */
     public function init_classes() {
-        $this->container['install']         = new Install();
         $this->container['util']            = new Utill();
         $this->container['setting']         = new Setting();
         $this->container['admin']           = new Admin();
