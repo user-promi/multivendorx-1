@@ -120,14 +120,6 @@ class StoreUtil {
         );
     }
 
-    // public static function get_stores_from_user_id($user_id) {
-    // global $wpdb;
-    // $table = "{$wpdb->prefix}" . Utill::TABLES['store_users'];
-
-    // $users = $wpdb->get_col( $wpdb->prepare("SELECT store_id FROM $table WHERE user_id = %d", $user_id) );
-    // return $users;
-    // }
-
     public static function get_stores_from_user_id( $user_id ) {
         global $wpdb;
 
@@ -138,13 +130,6 @@ class StoreUtil {
         $placeholders      = implode( ', ', array_fill( 0, count( $excluded_statuses ), '%s' ) );
         $params            = array_merge( array( $user_id ), $excluded_statuses );
 
-        // $sql = "
-        // SELECT su.store_id
-        // FROM {$store_users} su
-        // INNER JOIN {$stores} s ON s.ID = su.store_id
-        // WHERE su.user_id = %d
-        // AND s.status NOT IN ($placeholders)
-        // ";
         $sql = "
             SELECT 
                 su.store_id AS id,
