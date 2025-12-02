@@ -9,6 +9,7 @@ const AddProduct = () => {
    const query = new URLSearchParams(location.search);
    const productId = query.get("context_id");
    const [product, setProduct] = useState({});
+   const [shippingClasses, setShippingClasses] = useState([]);
 
    useEffect(() => {
       if (!productId) return;
@@ -201,35 +202,42 @@ const AddProduct = () => {
    const createProduct = () => {
       try {
          const payload = {
-            name: product.name,
-            type: product.type,
-            regular_price: product.regular_price,
-            sale_price: product.sale_price,
-            short_description: product.short_description,
-            description: product.description,
-            sku: product.sku,
-            stock_status: product.stock_status,
-            virtual: product.virtual,
-            downloadable: product.downloadable,
-            // images: product.images.map((url) => ({ src: url })),
-
-            meta_data: [
-               { key: "multivendorx_store_id", value: appLocalizer.store_id },
-            ]
+               ...product, 
+               meta_data: [
+                  { key: "multivendorx_store_id", value: appLocalizer.store_id },
+               ]
          };
 
-         axios.post(`${appLocalizer.apiUrl}/wc/v3/products/`, payload, {
-            headers: { "X-WP-Nonce": appLocalizer.nonce }
-         })
-            .then(res => {
-               console.log("Product created:", res.data);
-            });
+         axios.put(
+            `${appLocalizer.apiUrl}/wc/v3/products/${productId}`,
+            payload,
+            { headers: { "X-WP-Nonce": appLocalizer.nonce } }
+         )
+         .then(res => {
+            console.log("Product created:", res.data);
+         });
 
       } catch (error) {
          console.error("Error:", error.response);
       }
    };
 
+   useEffect(() => {
+      axios.get(
+         `${appLocalizer.apiUrl}/wc/v3/products/shipping_classes`, 
+         { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
+      )
+      .then((res) => {
+         console.log(res.data)
+         const options = res.data.map(cls => ({
+            value: cls.slug,
+            label: cls.name
+         }));
+         
+         setShippingClasses(options);
+      });
+      
+   }, [])
 
    return (
       <>
@@ -412,8 +420,19 @@ const AddProduct = () => {
                               onChange={(e) => handleChange("manage_stock", e.target.checked)}
                            />
                         </div>
-                        {product.manage_stock && (
+
+                        <div className="form-group">
+                           Sold individually
+                           <input
+                              type="checkbox"
+                              checked={product.sold_individually}
+                              onChange={(e) => handleChange("sold_individually", e.target.checked)}
+                           />
+                        </div>
+                     </div>
+                     {product.manage_stock && (
                            <>
+                           <div className="form-group-wrapper">
                               <div className="form-group">
                                  <label htmlFor="product-name">Quantity</label>
                                  <BasicInput
@@ -442,18 +461,9 @@ const AddProduct = () => {
                                     onChange={(e) => handleChange("low_stock_amount", e.target.value)}
                                  />
                               </div>
+                              </div>
                            </>
                         )}
-
-                        <div className="form-group">
-                           Sold individually
-                           <input
-                              type="checkbox"
-                              checked={product.sold_individually}
-                              onChange={(e) => handleChange("sold_individually", e.target.checked)}
-                           />
-                        </div>
-                     </div>
                      <div className="form-group-wrapper">
                         <div className="form-group">
                            <label htmlFor="product-name">Product URL</label>
@@ -466,6 +476,83 @@ const AddProduct = () => {
                      </div>
                   </div>
                </div>
+
+               { !product.virtual && (
+                  <div className="card" id="card-shipping">
+                     <div className="card-header">
+                        <div className="left">
+                           <div className="title">Shipping</div>
+                        </div>
+                        <div className="right"><i className="adminlib-pagination-right-arrow  arrow-icon" onClick={() => toggleCard("card-shipping")}></i></div>
+                     </div>
+                     <div className="card-body">
+                        <div className="form-group-wrapper">
+                           <div className="form-group">
+                              <label htmlFor="product-name">Weight ({appLocalizer.weight_unit})</label>
+                              <BasicInput 
+                                 name="weight" 
+                                 wrapperClass="setting-form-input" 
+                                 value={product.weight}
+                                 onChange={(e) => handleChange("weight", e.target.value)}
+                              />
+                           </div>
+                           <div className="form-group">
+                              <label htmlFor="product-name">Dimensions ({appLocalizer.dimension_unit})</label>
+                              <BasicInput 
+                                 name="product_length" 
+                                 wrapperClass="setting-form-input" 
+                                 value={product.product_length}
+                                 placeholder="Length"
+                                 onChange={(e) => handleChange("product_length", e.target.value)}
+                              />
+                              <BasicInput 
+                                 name="product_width" 
+                                 wrapperClass="setting-form-input" 
+                                 value={product.product_width}
+                                 placeholder="Width"
+                                 onChange={(e) => handleChange("product_width", e.target.value)}
+                              />
+                              <BasicInput 
+                                 name="product_height" 
+                                 wrapperClass="setting-form-input" 
+                                 value={product.product_height}
+                                 placeholder="Height"
+                                 onChange={(e) => handleChange("product_height", e.target.value)}
+                              />
+                           </div>
+
+                           <div className="form-group">
+                              <label htmlFor="product-name">Shipping classes</label>
+                              <SelectInput
+                                 name="shipping_class"
+                                 options={shippingClasses}
+                                 value={product.shipping_class}
+                                 onChange={(selected) =>
+                                    handleChange("shipping_class", selected.value)
+                                 }
+                              />
+
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               )}
+
+               { product.downloadable && (
+                  <div className="card" id="card-downloadable">
+                     <div className="card-header">
+                        <div className="left">
+                           <div className="title">Downloadable</div>
+                        </div>
+                        <div className="right"><i className="adminlib-pagination-right-arrow  arrow-icon" onClick={() => toggleCard("card-downloadable")}></i></div>
+                     </div>
+                     <div className="card-body">
+                        <div className="form-group-wrapper">
+                           
+                        </div>
+                     </div>
+                  </div>
+               )}
 
                {/* Variants start */}
                <div className="card" id="card-variants">
