@@ -21,7 +21,6 @@ const Dashboard = () => {
         if (!endpoints || endpoints.length === 0) {
             return;
         }
-
         try {
             const activeEndpoint = endpoints.find(ep => ep.tab === key);
 
