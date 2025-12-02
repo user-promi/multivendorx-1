@@ -1007,27 +1007,26 @@ body:has(.admin-main-wrapper) {
   }
 }
 
-.form-select-field-wrapper {
-  .select-wrapper {
-    display: inline-flex;
-    gap: 0.5rem;
-    align-items: center;
+.select-wrapper {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  width: 100%;
+
+  .react-select {
     width: 100%;
-
-    .react-select {
-      width: 100%;
-    }
-
-    .before,
-    .after {
-      font-size: 0.95rem;
-    }
   }
 
+  .before,
+  .after {
+    font-size: 0.95rem;
+  }
+}
+
+.form-select-field-wrapper {
   input {
     box-shadow: none;
   }
-
 }
 
 // pro image wrapper start
