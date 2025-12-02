@@ -770,7 +770,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId, dateRang
             <div className="general-wrapper">
                 <div className="row">
                     <div className="col">
-                        <div className="data-card-wrapper">
+                        {/* <div className="data-card-wrapper">
                             <div className="data-card">
                                 <div className="title">{__("Wallet balance", "multivendorx")}</div>
                                 <div className="number">{formatCurrency(wallet.wallet_balance)} <i className="adminlib-wallet"></i></div>
@@ -779,7 +779,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId, dateRang
                                 <div className="title">{__("Upcoming balance", "multivendorx")}</div>
                                 <div className="number">{formatCurrency(wallet.locking_balance)} <i className="adminlib-cash "></i></div>
                             </div>
-                        </div>
+                        </div> */}
 
                         {recentDebits.length > 0 ? (
                             <div className="column debit-transactions">
