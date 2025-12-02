@@ -646,7 +646,7 @@ const Dashboard: React.FC = () => {
               <div
                 className="admin-btn btn-purple"
                 onClick={() => {
-                  window.location.href = `${appLocalizer.site_url}/dashboard/wallet/transactions/`;
+                  window.location.href = '/dashboard/wallet/transactions/';
                 }}
               >
                 <i className="adminlib-preview"></i>
