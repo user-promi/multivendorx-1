@@ -1,13 +1,11 @@
-import { Radio } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import { BasicInput, FileInput, SelectInput, TextArea, ToggleSetting } from "zyra";
 import axios from "axios";
 import { useLocation } from 'react-router-dom';
 import { BasicInput, CommonPopup, FileInput, SelectInput, TextArea, ToggleSetting } from "zyra";
 
 const AddProduct = () => {
    const location = useLocation();
-     
+
    const query = new URLSearchParams(location.search);
    const productId = query.get("context_id");
    const [product, setProduct] = useState({});
@@ -18,9 +16,9 @@ const AddProduct = () => {
       axios.get(`${appLocalizer.apiUrl}/wc/v3/products/${productId}`, {
          headers: { "X-WP-Nonce": appLocalizer.nonce }
       })
-      .then(function (res) {
-         setProduct(res.data);
-      })
+         .then(function (res) {
+            setProduct(res.data);
+         })
 
    }, [productId]);
 
@@ -199,33 +197,33 @@ const AddProduct = () => {
          [field]: value,
       }));
    };
-console.log('product', product)
+   console.log('product', product)
    const createProduct = () => {
       try {
          const payload = {
-               name: product.name,
-               type: product.type,
-               regular_price: product.regular_price,
-               sale_price: product.sale_price,
-               short_description: product.short_description,
-               description: product.description,
-               sku: product.sku,
-               stock_status: product.stock_status,
-               virtual: product.virtual,
-               downloadable: product.downloadable,
-               // images: product.images.map((url) => ({ src: url })),
+            name: product.name,
+            type: product.type,
+            regular_price: product.regular_price,
+            sale_price: product.sale_price,
+            short_description: product.short_description,
+            description: product.description,
+            sku: product.sku,
+            stock_status: product.stock_status,
+            virtual: product.virtual,
+            downloadable: product.downloadable,
+            // images: product.images.map((url) => ({ src: url })),
 
-               meta_data: [
-                  { key: "multivendorx_store_id", value: appLocalizer.store_id },
-               ]
+            meta_data: [
+               { key: "multivendorx_store_id", value: appLocalizer.store_id },
+            ]
          };
 
          axios.post(`${appLocalizer.apiUrl}/wc/v3/products/`, payload, {
             headers: { "X-WP-Nonce": appLocalizer.nonce }
          })
-         .then(res => {
-            console.log("Product created:", res.data);
-         });
+            .then(res => {
+               console.log("Product created:", res.data);
+            });
 
       } catch (error) {
          console.error("Error:", error.response);
@@ -290,8 +288,8 @@ console.log('product', product)
                      <div className="form-group-wrapper">
                         <div className="form-group">
                            <label htmlFor="product-name">Product name</label>
-                           <BasicInput 
-                              name="name" 
+                           <BasicInput
+                              name="name"
                               wrapperClass="setting-form-input"
                               value={product.name}
                               onChange={(e) => handleChange("name", e.target.value)} />
@@ -367,18 +365,18 @@ console.log('product', product)
                      <div className="form-group-wrapper">
                         <div className="form-group">
                            <label htmlFor="product-name">Regular price</label>
-                           <BasicInput 
-                              name="regular_price" 
-                              wrapperClass="setting-form-input" 
+                           <BasicInput
+                              name="regular_price"
+                              wrapperClass="setting-form-input"
                               value={product.regular_price}
                               onChange={(e) => handleChange("regular_price", e.target.value)}
                            />
                         </div>
                         <div className="form-group">
                            <label htmlFor="product-name">Sale price</label>
-                           <BasicInput 
-                              name="sale_price" 
-                              wrapperClass="setting-form-input" 
+                           <BasicInput
+                              name="sale_price"
+                              wrapperClass="setting-form-input"
                               value={product.sale_price}
                               onChange={(e) => handleChange("sale_price", e.target.value)}
                            />
@@ -387,9 +385,9 @@ console.log('product', product)
                      <div className="form-group-wrapper">
                         <div className="form-group">
                            <label htmlFor="product-name">SKU</label>
-                           <BasicInput 
-                              name="sku" 
-                              wrapperClass="setting-form-input" 
+                           <BasicInput
+                              name="sku"
+                              wrapperClass="setting-form-input"
                               value={product.sku}
                               onChange={(e) => handleChange("sku", e.target.value)}
                            />
@@ -418,9 +416,9 @@ console.log('product', product)
                            <>
                               <div className="form-group">
                                  <label htmlFor="product-name">Quantity</label>
-                                 <BasicInput 
-                                    name="stock" 
-                                    wrapperClass="setting-form-input" 
+                                 <BasicInput
+                                    name="stock"
+                                    wrapperClass="setting-form-input"
                                     value={product.stock}
                                     onChange={(e) => handleChange("stock", e.target.value)}
                                  />
@@ -437,9 +435,9 @@ console.log('product', product)
                               </div>
                               <div className="form-group">
                                  <label htmlFor="product-name">Low stock threshold</label>
-                                 <BasicInput 
-                                    name="low_stock_amount" 
-                                    wrapperClass="setting-form-input" 
+                                 <BasicInput
+                                    name="low_stock_amount"
+                                    wrapperClass="setting-form-input"
                                     value={product.low_stock_amount}
                                     onChange={(e) => handleChange("low_stock_amount", e.target.value)}
                                  />
@@ -737,17 +735,19 @@ console.log('product', product)
                         <div className="form-group-wrapper">
                            <div className="form-group">
                               <label htmlFor="title">Attribute name</label>
-                              <div className="select-wrapper">
-                                 <SelectInput
-                                    name="payment_method"
-                                    options={paymentOptions}
-                                    type="single-select"
-                                 />
-                                 <div className="admin-btn btn-purple">Add new</div>
-                              </div>
-                              <div className="input-wrapper">
-                                 <label htmlFor="title">Attribute name</label>
-                                 <BasicInput name="address" wrapperClass="setting-form-input" />
+                              <div className="attribute-popup-wrapper">
+                                 <div className="field-wrapper">
+                                    <SelectInput
+                                       name="payment_method"
+                                       options={paymentOptions}
+                                       type="single-select"
+                                    />
+                                    <div className="add-btn"><i className="adminlib-plus-circle-o"></i> Add new</div>
+                                 </div>
+                                 <div className="field-wrapper">
+                                    <BasicInput name="address" wrapperClass="setting-form-input" />
+                                    <div className="add-btn"><i className="adminlib-form-checkboxes"></i> Save </div>
+                                 </div>
                               </div>
                            </div>
                         </div>
