@@ -208,7 +208,7 @@ class Zone_Shipping extends \WC_Shipping_Method {
         $seller_products = array();
 
         foreach ( $products as $product ) {
-            $store_id = get_post_meta( $product['product_id'], 'multivendorx_store_id', true );
+            $store_id = get_post_meta( $product['product_id'], Utill::POST_META_SETTINGS['store_id'], true );
             if ( ! empty( $store_id ) && self::is_shipping_enabled_for_seller( $store_id ) ) {
                 $seller_products[ (int) $store_id ][] = $product;
             }
@@ -426,7 +426,7 @@ class Zone_Shipping extends \WC_Shipping_Method {
         foreach ( $products as $product ) {
             $product_id = isset( $product['product_id'] ) ? $product['product_id'] : 0;
             if ( $product_id ) {
-                $store_id = get_post_meta( $product_id, 'multivendorx_store_id', true );
+                $store_id = get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true );
                 if ( ! empty( $store_id ) ) {
                     break; // found one
                 }
@@ -640,7 +640,7 @@ class Zone_Shipping extends \WC_Shipping_Method {
         foreach ( $products as $product ) {
             if ( isset( $product['product_id'] ) ) {
                 $id       = $product['product_id'];
-                $store_id = get_post_meta( $id, 'multivendorx_store_id', true );
+                $store_id = get_post_meta( $id, Utill::POST_META_SETTINGS['store_id'], true );
                 if ( ! empty( $store_id ) ) {
                     break;
                 }

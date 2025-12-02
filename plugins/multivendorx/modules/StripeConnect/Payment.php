@@ -50,11 +50,6 @@ class Payment {
         );
     }
     public function handle_oauth_callback() {
-        // $log_file = plugin_dir_path(__FILE__) . "/error.log";
-
-        // Log initial callback
-        // file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": OAUTH_CALLBACK_STARTED\n", FILE_APPEND);
-        // file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": GET_PARAMS: " . var_export($_GET, true) . "\n", FILE_APPEND);
 
         if ( ! isset( $_GET['code'], $_GET['state'] ) ) {
             file_put_contents( $log_file, date( 'd/m/Y H:i:s', time() ) . ": ERROR: Missing code or state parameters\n", FILE_APPEND );
@@ -64,9 +59,6 @@ class Payment {
 
         $state     = sanitize_text_field( $_GET['state'] );
         $vendor_id = get_transient( 'mvx_stripe_oauth_state_' . $state );
-
-        // file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": STATE: " . $state . "\n", FILE_APPEND);
-        // file_put_contents($log_file, date("d/m/Y H:i:s", time()) . ": VENDOR_ID_FROM_TRANSIENT: " . var_export($vendor_id, true) . "\n", FILE_APPEND);
 
         delete_transient( 'mvx_stripe_oauth_state_' . $state );
 
@@ -126,8 +118,8 @@ class Payment {
                 }
 
                 // Verify the data was saved
-                $saved_account_id   = $store->get_meta( '_stripe_connect_account_id' );
-                $saved_payment_mode = $store->get_meta( '_vendor_payment_mode' );
+                $saved_account_id   = $store->get_meta( Utill::STORE_SETTINGS_KEYS['stripe_account_id'] );
+                $saved_payment_mode = $store->get_meta( Utill::STORE_SETTINGS_KEYS['_vendor_payment_mode'] );
 
                 file_put_contents( $log_file, date( 'd/m/Y H:i:s', time() ) . ': VERIFICATION - _stripe_connect_account_id: ' . $saved_account_id . "\n", FILE_APPEND );
                 file_put_contents( $log_file, date( 'd/m/Y H:i:s', time() ) . ': VERIFICATION - _vendor_payment_mode: ' . $saved_payment_mode . "\n", FILE_APPEND );
@@ -155,7 +147,7 @@ class Payment {
             wp_send_json_error( array( 'message' => __( 'You must be logged in.', 'multivendorx' ) ) );
         }
         $vendor_id = get_current_user_id();
-        delete_user_meta( $vendor_id, '_stripe_connect_account_id' );
+        delete_user_meta( $vendor_id, Utill::STORE_SETTINGS_KEYS['stripe_account_id'] );
         wp_send_json_success( array( 'message' => __( 'Your Stripe account has been disconnected.', 'multivendorx' ) ) );
     }
     public function init_stripe() {
@@ -217,7 +209,7 @@ class Payment {
         if ( $stripe_settings && $stripe_settings['enable'] ) {
             $vendor_id         = get_current_user_id();
             $store             = new Store( $vendor_id );
-            $stripe_account_id = $store->get_meta( '_stripe_connect_account_id' );
+            $stripe_account_id = $store->get_meta( Utill::STORE_SETTINGS_KEYS['stripe_account_id'] );
             $onboarding_status = 'Not Connected';
             $is_onboarded      = false;
             if ( $stripe_account_id ) {
@@ -261,7 +253,7 @@ class Payment {
     }
     public function process_payment( $store_id, $amount, $order_id = null, $transaction_id = null, $note = null ) {
         $store             = new Store( $store_id );
-        $stripe_account_id = $store->get_meta( '_stripe_connect_account_id' );
+        $stripe_account_id = $store->get_meta( Utill::STORE_SETTINGS_KEYS['stripe_account_id'] );
         if ( ! $stripe_account_id ) {
             return array(
                 'success' => false,
