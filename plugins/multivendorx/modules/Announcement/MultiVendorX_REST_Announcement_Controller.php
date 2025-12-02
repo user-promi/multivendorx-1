@@ -151,7 +151,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             if ( $count_param ) {
                 $posts = get_posts(
                     array(
-                        'post_type'      => 'multivendorx_an',
+                        'post_type'      => Utill::POST_TYPES['announcement'],
                         'posts_per_page' => -1,
                         'fields'         => 'ids',
                         'post_status'    => 'any',
@@ -162,7 +162,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
 
             // Base query args — always show latest first.
             $query_args = array(
-                'post_type'        => 'multivendorx_an',
+                'post_type'        => Utill::POST_TYPES['announcement'],
                 'posts_per_page'   => $limit,
                 'offset'           => $offset,
                 'post_status'      => $status_param ? $status_param : 'any',
@@ -181,14 +181,14 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
 
                     // Match specific store ID.
                     array(
-                        'key'     => 'multivendorx_announcement_stores',
+                        'key'     => Utill::POST_META_SETTINGS['announcement_stores'],
                         'value'   => ';i:' . $store_id . ';',
                         'compare' => 'LIKE',
                     ),
 
                     // Match announcements intended for ALL stores (value = 0).
                     array(
-                        'key'     => 'multivendorx_announcement_stores',
+                        'key'     => Utill::POST_META_SETTINGS['announcement_stores'],
                         'value'   => ';i:0;',
                         'compare' => 'LIKE',
                     ),
@@ -237,7 +237,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             // Counts (no date or search filter applied).
             $counter = function ( $status ) {
                 $args = array(
-                    'post_type'      => 'multivendorx_an',
+                    'post_type'      => Utill::POST_TYPES['announcement'],
                     'post_status'    => $status,
                     'posts_per_page' => 1,
                     'fields'         => 'ids',
@@ -300,7 +300,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                 array(
                     'post_title'   => $request->get_param( 'title' ),
                     'post_content' => $request->get_param( 'content' ),
-                    'post_type'    => 'multivendorx_an',
+                    'post_type'    => Utill::POST_TYPES['announcement'],
                     'post_status'  => $request->get_param( 'status' ) ?? 'draft',
                 ),
                 true
@@ -316,13 +316,13 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             }
             // Save stores if provided.
             if ( ! empty( $stores ) ) {
-                update_post_meta( $post_id, 'multivendorx_announcement_stores', $stores );
+                update_post_meta( $post_id, Utill::POST_META_SETTINGS['announcement_stores'], $stores );
             }
 
             // Optionally save URL as post meta.
             $url = $formData['url'] ?? '';
             if ( ! empty( $url ) ) {
-                update_post_meta( $post_id, 'multivendorx_announcement_url', esc_url_raw( $url ) );
+                update_post_meta( $post_id, Utill::POST_META_SETTINGS['announcement_url'], esc_url_raw( $url ) );
             }
 
             return rest_ensure_response(
@@ -408,7 +408,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             $post_id = absint( $request->get_param( 'id' ) );
             $post    = get_post( $post_id );
 
-            if ( 'multivendorx_an' !== ! $post || $post->post_type ) {
+            if ( ! $post || $post->post_type !== Utill::POST_TYPES['announcement'] ) {
                 return new \WP_Error( 'not_found', __( 'Announcement not found', 'multivendorx' ), array( 'status' => 404 ) );
             }
 
@@ -434,8 +434,8 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                 );
             }
 
-            // Update stores meta.
-            update_post_meta( $post_id, 'multivendorx_announcement_stores', $stores );
+            // Update stores meta
+            update_post_meta( $post_id, Utill::POST_META_SETTINGS['announcement_stores'], $stores );
 
             return rest_ensure_response(
                 array(
@@ -493,7 +493,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             }
 
             $post = get_post( $id );
-            if ( 'multivendorx_an' !== ! $post || $post->post_type ) {
+            if ( ! $post || $post->post_type !== Utill::POST_TYPES['announcement'] ) {
                 return new \WP_Error(
                     'not_found',
                     __( 'Announcement not found', 'multivendorx' ),
@@ -566,7 +566,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             }
 
             $post = get_post( $post_id );
-            if ( 'multivendorx_an' !== ! $post || $post->post_type ) {
+            if ( ! $post || $post->post_type !== Utill::POST_TYPES['announcement'] ) {
                 return new \WP_Error( 'not_found', __( 'Announcement not found', 'multivendorx' ), array( 'status' => 404 ) );
             }
 

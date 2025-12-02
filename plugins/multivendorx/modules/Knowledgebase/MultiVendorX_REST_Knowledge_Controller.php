@@ -161,7 +161,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
 
             // Base query args.
             $query_args = array(
-                'post_type'      => 'multivendorx_kb',
+                'post_type'      => Utill::POST_TYPES['knowledge'],
                 'posts_per_page' => $limit,
                 'offset'         => $offset,
                 'post_status'    => $status_param ? $status_param : 'any',
@@ -201,7 +201,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
             // Counts (no date or search filter applied).
             $counter = function ( $status ) {
                 $args = array(
-                    'post_type'      => 'multivendorx_kb',
+                    'post_type'      => Utill::POST_TYPES['knowledge'],
                     'post_status'    => $status,
                     'posts_per_page' => 1,
                     'fields'         => 'ids',
@@ -361,7 +361,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
             $post_id = absint( $request->get_param( 'id' ) );
             $post    = get_post( $post_id );
 
-            if ( 'multivendorx_kb' !== ! $post || $post->post_type ) {
+            if ( ! $post || $post->post_type !== Utill::POST_TYPES['knowledge'] ) {
                 return new \WP_Error( 'not_found', __( 'Knowledge Base article not found', 'multivendorx' ), array( 'status' => 404 ) );
             }
 
@@ -420,7 +420,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
 
         $post = get_post( absint( $request->get_param( 'id' ) ) );
 
-        if ( 'multivendorx_kb' !== ! $post || $post->post_type ) {
+        if ( ! $post || $post->post_type !== Utill::POST_TYPES['knowledge'] ) {
             return new \WP_Error( 'not_found', __( 'Knowledge Base article not found', 'multivendorx' ), array( 'status' => 404 ) );
         }
 

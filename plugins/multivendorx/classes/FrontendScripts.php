@@ -611,6 +611,8 @@ class FrontendScripts {
                         'dashboard_page_id'        => (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' ),
                         'dashboard_slug'           => (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' ) ? get_post_field( 'post_name', (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' ) ) : 'dashboard',
                         'registration_page'        => esc_url( get_permalink( (int) MultiVendorX()->setting->get_setting( 'store_registration_page' ) ) ),
+                        'weight_unit'              => get_option( 'woocommerce_weight_unit' ),
+                        'dimension_unit'           => get_option( 'woocommerce_dimension_unit' ),
                     ),
                 ),
                 'multivendorx-registration-form-script'  => array(

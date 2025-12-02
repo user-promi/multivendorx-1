@@ -66,7 +66,7 @@ class Admin {
                 : 0;
 
             if ( $refund ) {
-                $commission_id     = $order->get_meta( 'multivendorx_commission_id', true );
+                $commission_id     = $order->get_meta( Utill::POST_META_SETTINGS['commission_id'], true );
                 $commission        = CommissionUtil::get_commission_db( $commission_id );
                 $remaining_payable = (float) ( $order->get_total() - $order->get_total_refunded() );
 

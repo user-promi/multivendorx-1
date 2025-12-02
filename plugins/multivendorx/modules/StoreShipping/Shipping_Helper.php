@@ -17,7 +17,7 @@ class Shipping_Helper {
 
         foreach ( WC()->cart->get_cart() as $item_key => $item ) {
             $product_id = $item['product_id'];
-            $store_id   = get_post_meta( $product_id, 'multivendorx_store_id', true );
+            $store_id   = get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true );
             if ( ! $store_id ) {
 				continue;
             }
@@ -44,7 +44,6 @@ class Shipping_Helper {
             $new_packages[ $store_id ]['contents'][ $item_key ] = $item;
             $new_packages[ $store_id ]['contents_cost']        += $item['line_total'];
         }
-        // file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: pack: " . var_export($new_packages, true) . "\n", FILE_APPEND);
         return array_values( $new_packages );
     }
 }
