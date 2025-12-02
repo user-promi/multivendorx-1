@@ -514,7 +514,7 @@ class StoreUtil {
 				$store_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['store_policy'] );
 			}
 			if ( in_array( 'shipping', $privacy_override_settings ) ) {
-				$shipping_policy = $store->get_meta(  Utill::STORE_SETTINGS_KEYS['shipping_policy'] );
+				$shipping_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['shipping_policy'] );
 			}
 			if ( in_array( 'refund_return', $privacy_override_settings ) ) {
 				$refund_policy       = $store->get_meta( Utill::STORE_SETTINGS_KEYS['refund_policy'] );

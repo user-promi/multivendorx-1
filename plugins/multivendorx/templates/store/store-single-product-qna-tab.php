@@ -41,7 +41,7 @@ $login_url     = add_query_arg( 'redirect_to', $current_url, $myaccount_url );
                     <p class="qna-question"><strong>Q:</strong> <?php echo esc_html( $row->question_text ); ?></p>
                     <small class="qna-meta">
                         By <?php echo esc_html( get_the_author_meta( 'display_name', $row->question_by ) ); ?>,
-                        <?php echo esc_html( human_time_diff( strtotime( $row->question_date ), current_time( 'timestamp' ) ) ) . ' ago'; ?>
+                        <?php echo esc_html( human_time_diff( strtotime( $row->question_date ), current_time( 'mysql' ) ) ) . ' ago'; ?>
                     </small>
 
                     <p class="qna-answer"><strong>A:</strong> <?php echo esc_html( $row->answer_text ); ?></p>

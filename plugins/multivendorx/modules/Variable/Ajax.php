@@ -13,7 +13,7 @@ use MultiVendorX\Store\Products;
  * MultiVendorX Store Policy Frontend class
  *
  * @class       Frontend class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class Ajax {

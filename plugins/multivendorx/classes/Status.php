@@ -1,18 +1,28 @@
 <?php
+/**
+ * Modules Status
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * MultiVendorX Main Status class
+ * MultiVendorX Status.
  *
+ * @class       Module class
  * @version     PRODUCT_VERSION
- * @package     MultiVendorX
  * @author      MultiVendorX
  */
 class Status {
 
+    /**
+     * Get system info.
+     *
+     * @return array
+     */
     public static function get_system_info() {
 
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
@@ -22,7 +32,7 @@ class Status {
             require_once ABSPATH . 'wp-admin/includes/class-wp-debug-data.php';
         }
 
-        // Ensure core update functions are available
+        // Ensure core update functions are available.
         if ( ! function_exists( 'get_core_updates' ) ) {
             require_once ABSPATH . 'wp-admin/includes/update.php';
         }
@@ -69,7 +79,7 @@ class Status {
             )
         );
 
-        // Prepend MVX data
+        // Prepend MVX data.
         $core_data = array( 'mvx' => $mvx ) + $core_data;
 
         return apply_filters( 'mvx_system_info_response', $core_data );

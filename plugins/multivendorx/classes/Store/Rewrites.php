@@ -87,15 +87,15 @@ class Rewrites {
             ),
             // array(
 
-            //     '^dashboard/([^/]*)/?',
-            //     'index.php?page_id=' . $page_id . '&segment=$matches[1]',
-            //     'top',
+            // '^dashboard/([^/]*)/?',
+            // 'index.php?page_id=' . $page_id . '&segment=$matches[1]',
+            // 'top',
             // ),
             array(
                 '^dashboard/([^/]+)/?([^/]*)/?([0-9]*)/?$',
                 'index.php?page_id=' . $page_id . '&segment=$matches[1]&element=$matches[2]&context_id=$matches[3]',
-                'top'
-            )
+                'top',
+            ),
 
             // oldddd
             // [

@@ -9,19 +9,26 @@ namespace MultiVendorX\FollowStore;
 
 use MultiVendorX\FrontendScripts;
 
+/**
+ * MultiVendorX Follow Store Frontend class
+ *
+ * @class       Module class
+ * @version     5.0.0
+ * @author      MultiVendorX
+ */
 class Frontend {
 
     /**
      * Constructor.
      */
     public function __construct() {
-        // Default button on vendor info section
+        // Default button on vendor info section.
         add_action( 'mvx_after_vendor_information', array( $this, 'render_follow_button' ), 10, 1 );
 
-        // Load scripts
+        // Load scripts.
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
 
-        // Register the reusable follow button filter
+        // Register the reusable follow button filter.
         $this->register_follow_button_filter();
     }
 
@@ -36,6 +43,8 @@ class Frontend {
 
     /**
      * Render follow button (default hook)
+     *
+     * @param int $store_id Store ID.
      */
     public function render_follow_button( $store_id = 0 ) {
         if ( empty( $store_id ) ) {
@@ -44,7 +53,7 @@ class Frontend {
 
         $current_user_id = get_current_user_id();
 
-        // Generate HTML
+        // Generate HTML.
         $html  = '<button class="mvx-follow-btn" 
                     data-store-id="' . esc_attr( $store_id ) . '" 
                     data-user-id="' . esc_attr( $current_user_id ) . '">
@@ -52,10 +61,11 @@ class Frontend {
                   </button>';
         $html .= ' <span class="mvx-follower-count" id="followers-count-' . esc_attr( $store_id ) . '">...</span>';
 
-        // Apply filter so it can be reused elsewhere
+        // Apply filter.
         $html = apply_filters( 'mvx_follow_button_html', $html, $store_id, $current_user_id );
 
-        echo $html;
+        // Escape on output.
+        echo wp_kses_post( $html );
     }
 
     /**
@@ -69,7 +79,7 @@ class Frontend {
 					return $html;
 				}
 
-				// Reuse same HTML pattern
+				// Reuse same HTML pattern.
 				$html  = '<div class="buttons-wrapper">
                         <div class="follow-wrapper"> 
                         <button class="follow-btn" 
