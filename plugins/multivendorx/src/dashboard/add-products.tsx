@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useLocation } from 'react-router-dom';
-import { BasicInput, CommonPopup, FileInput, SelectInput, TextArea, ToggleSetting } from "zyra";
+import { BasicInput, CommonPopup, FileInput, MultiCheckBox, RadioInput, SelectInput, TextArea, ToggleSetting } from "zyra";
 
 const AddProduct = () => {
    const location = useLocation();
@@ -48,7 +48,9 @@ const AddProduct = () => {
       }
    ]);
    const [AddAttribute, setAddAttribute] = useState(false);
-
+   const [Addvariant, setAddvariant] = useState(false);
+   const [showAddNew, setShowAddNew] = useState(false);
+   const [visibility, setVisibility] = useState("shop_search");
    const wrapperRef = useRef(null);
 
    useEffect(() => {
@@ -202,10 +204,10 @@ const AddProduct = () => {
    const createProduct = () => {
       try {
          const payload = {
-               ...product, 
-               meta_data: [
-                  { key: "multivendorx_store_id", value: appLocalizer.store_id },
-               ]
+            ...product,
+            meta_data: [
+               { key: "multivendorx_store_id", value: appLocalizer.store_id },
+            ]
          };
 
          axios.put(
@@ -213,9 +215,9 @@ const AddProduct = () => {
             payload,
             { headers: { "X-WP-Nonce": appLocalizer.nonce } }
          )
-         .then(res => {
-            console.log("Product created:", res.data);
-         });
+            .then(res => {
+               console.log("Product created:", res.data);
+            });
 
       } catch (error) {
          console.error("Error:", error.response);
@@ -224,19 +226,19 @@ const AddProduct = () => {
 
    useEffect(() => {
       axios.get(
-         `${appLocalizer.apiUrl}/wc/v3/products/shipping_classes`, 
+         `${appLocalizer.apiUrl}/wc/v3/products/shipping_classes`,
          { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
       )
-      .then((res) => {
-         console.log(res.data)
-         const options = res.data.map(cls => ({
-            value: cls.slug,
-            label: cls.name
-         }));
-         
-         setShippingClasses(options);
-      });
-      
+         .then((res) => {
+            console.log(res.data)
+            const options = res.data.map(cls => ({
+               value: cls.slug,
+               label: cls.name
+            }));
+
+            setShippingClasses(options);
+         });
+
    }, [])
 
    return (
@@ -419,6 +421,7 @@ const AddProduct = () => {
                               checked={product.manage_stock}
                               onChange={(e) => handleChange("manage_stock", e.target.checked)}
                            />
+                           
                         </div>
 
                         <div className="form-group">
@@ -431,7 +434,7 @@ const AddProduct = () => {
                         </div>
                      </div>
                      {product.manage_stock && (
-                           <>
+                        <>
                            <div className="form-group-wrapper">
                               <div className="form-group">
                                  <label htmlFor="product-name">Quantity</label>
@@ -461,9 +464,9 @@ const AddProduct = () => {
                                     onChange={(e) => handleChange("low_stock_amount", e.target.value)}
                                  />
                               </div>
-                              </div>
-                           </>
-                        )}
+                           </div>
+                        </>
+                     )}
                      <div className="form-group-wrapper">
                         <div className="form-group">
                            <label htmlFor="product-name">Product URL</label>
@@ -477,7 +480,7 @@ const AddProduct = () => {
                   </div>
                </div>
 
-               { !product.virtual && (
+               {!product.virtual && (
                   <div className="card" id="card-shipping">
                      <div className="card-header">
                         <div className="left">
@@ -489,32 +492,32 @@ const AddProduct = () => {
                         <div className="form-group-wrapper">
                            <div className="form-group">
                               <label htmlFor="product-name">Weight ({appLocalizer.weight_unit})</label>
-                              <BasicInput 
-                                 name="weight" 
-                                 wrapperClass="setting-form-input" 
+                              <BasicInput
+                                 name="weight"
+                                 wrapperClass="setting-form-input"
                                  value={product.weight}
                                  onChange={(e) => handleChange("weight", e.target.value)}
                               />
                            </div>
                            <div className="form-group">
                               <label htmlFor="product-name">Dimensions ({appLocalizer.dimension_unit})</label>
-                              <BasicInput 
-                                 name="product_length" 
-                                 wrapperClass="setting-form-input" 
+                              <BasicInput
+                                 name="product_length"
+                                 wrapperClass="setting-form-input"
                                  value={product.product_length}
                                  placeholder="Length"
                                  onChange={(e) => handleChange("product_length", e.target.value)}
                               />
-                              <BasicInput 
-                                 name="product_width" 
-                                 wrapperClass="setting-form-input" 
+                              <BasicInput
+                                 name="product_width"
+                                 wrapperClass="setting-form-input"
                                  value={product.product_width}
                                  placeholder="Width"
                                  onChange={(e) => handleChange("product_width", e.target.value)}
                               />
-                              <BasicInput 
-                                 name="product_height" 
-                                 wrapperClass="setting-form-input" 
+                              <BasicInput
+                                 name="product_height"
+                                 wrapperClass="setting-form-input"
                                  value={product.product_height}
                                  placeholder="Height"
                                  onChange={(e) => handleChange("product_height", e.target.value)}
@@ -538,7 +541,7 @@ const AddProduct = () => {
                   </div>
                )}
 
-               { product.downloadable && (
+               {product.downloadable && (
                   <div className="card" id="card-downloadable">
                      <div className="card-header">
                         <div className="left">
@@ -547,8 +550,32 @@ const AddProduct = () => {
                         <div className="right"><i className="adminlib-pagination-right-arrow  arrow-icon" onClick={() => toggleCard("card-downloadable")}></i></div>
                      </div>
                      <div className="card-body">
-                        <div className="form-group-wrapper">
-                           
+                        <div className="shipping-country-wrapper">
+                           <div className="shipping-country">
+                              <div className="country item">
+                                 <SelectInput
+                                    name="shipping_class"
+                                    options={shippingClasses}
+                                    value={product.shipping_class}
+                                    size="16rem"
+                                    onChange={(selected) =>
+                                       handleChange("shipping_class", selected.value)
+                                    }
+                                 />
+                                 <BasicInput
+                                    name="product_height"
+                                    wrapperClass="setting-form-input"
+                                    value={product.product_height}
+                                    placeholder="Height"
+                                    onChange={(e) => handleChange("product_height", e.target.value)}
+                                 />
+                                 <div className="admin-btn btn-purple">Upload file</div>
+                                 <div className="delete-icon adminlib-delete"></div>
+                              </div>
+                           </div>
+                        </div>
+                        <div className="admin-btn btn-purple-bg">
+                           <i className="adminlib-plus-circle-o"></i> Add new
                         </div>
                      </div>
                   </div>
@@ -570,10 +597,6 @@ const AddProduct = () => {
                            Attributes
                         </div>
                         <div className="buttons">
-                           <div className="add-btn">
-                              <div className="i adminlib-plus-circle-o"></div>
-                              Add existing
-                           </div>
                            <div className="add-btn" onClick={() => { setAddAttribute(true); }}>
                               <div className="i adminlib-plus-circle-o"></div>
                               Add attribute
@@ -694,7 +717,7 @@ const AddProduct = () => {
                               <div className="i adminlib-plus-circle-o"></div>
                               Generate variations
                            </div>
-                           <div className="add-btn">
+                           <div className="add-btn" onClick={() => { setAddvariant(true); }}>
                               <div className="i adminlib-plus-circle-o"></div>
                               Add variant
                            </div>
@@ -727,7 +750,7 @@ const AddProduct = () => {
                                  <div className="stock">In stock - 20</div>
                               </div>
                            </div>
-                           <i className="admin-badge yellow adminlib-edit edit-icon"></i>
+                           <i className="admin-badge yellow adminlib-edit edit-icon" onClick={() => { setAddvariant(true); }}></i>
                         </div>
 
                         <div className="variant-box">
@@ -756,7 +779,7 @@ const AddProduct = () => {
                                  <div className="stock">In stock - 20</div>
                               </div>
                            </div>
-                           <i className="admin-badge yellow  adminlib-edit edit-icon"></i>
+                           <i className="admin-badge yellow  adminlib-edit edit-icon" onClick={() => { setAddvariant(true); }}></i>
                         </div>
 
                         <div className="variant-box">
@@ -785,7 +808,7 @@ const AddProduct = () => {
                                  <div className="stock">In stock - 20</div>
                               </div>
                            </div>
-                           <i className="admin-badge yellow adminlib-edit edit-icon"></i>
+                           <i className="admin-badge yellow adminlib-edit edit-icon" onClick={() => { setAddvariant(true); }}></i>
                         </div>
 
 
@@ -812,10 +835,6 @@ const AddProduct = () => {
                            ></i>
                         </>
                      }
-                     footer={
-                        <>
-                        </>
-                     }
                   >
                      <div className="content">
                         {/* start left section */}
@@ -823,24 +842,218 @@ const AddProduct = () => {
                            <div className="form-group">
                               <label htmlFor="title">Attribute name</label>
                               <div className="attribute-popup-wrapper">
-                                 <div className="field-wrapper">
-                                    <SelectInput
-                                       name="payment_method"
-                                       options={paymentOptions}
-                                       type="single-select"
-                                    />
-                                    <div className="add-btn"><i className="adminlib-plus-circle-o"></i> Add new</div>
-                                 </div>
-                                 <div className="field-wrapper">
-                                    <BasicInput name="address" wrapperClass="setting-form-input" />
-                                    <div className="add-btn"><i className="adminlib-form-checkboxes"></i> Save </div>
+                                 {!showAddNew && (
+                                    <div className="field-wrapper">
+                                       <SelectInput
+                                          name="payment_method"
+                                          options={paymentOptions}
+                                          type="single-select"
+                                       />
+                                       <div className="add-btn" onClick={() => setShowAddNew(true)}><i className="adminlib-plus-circle-o"></i> Add new</div>
+                                    </div>
+                                 )}
+                                 {showAddNew && (
+                                    <div className="field-wrapper">
+                                       <BasicInput name="address" wrapperClass="setting-form-input" />
+                                       <div className="add-btn" onClick={() => setShowAddNew(false)}><i className="adminlib-form-checkboxes"></i> Save </div>
+                                    </div>
+                                 )}
+                              </div>
+
+                              <div className="buttons-wrapper left">
+                                 <div className="admin-btn btn-purple">Select all</div>
+                              </div>
+                           </div>
+                        </div>
+                        <div className="form-group-wrapper">
+                           <div className="form-group">
+                              <label htmlFor="title">Attribute value</label>
+                              <div className="attribute-value">
+                                 <TextArea name="short_description" wrapperClass="setting-from-textarea"
+                                    inputClass="textarea-input"
+                                    descClass="settings-metabox-description"
+                                    value={product.short_description}
+                                    onChange={(e) => handleChange("short_description", e.target.value)}
+                                 />
+                                 <div className="input-dropdown">
+                                    <ul>
+                                       <li>Red</li>
+                                       <li>Red</li>
+                                       <li>Red</li>
+                                       <li>Red</li>
+                                    </ul>
                                  </div>
                               </div>
                            </div>
                         </div>
                      </div>
+                  </CommonPopup>
+               )}
 
-                     {/* {error && <p className="error-text">{error}</p>} */}
+               {Addvariant && (
+                  <CommonPopup
+                     open={Addvariant}
+                     onClick={() => setAddvariant(false)}
+                     width="40%"
+                     height="90%"
+                     header={
+                        <>
+                           <div className="title">
+                              <i className="adminlib-coupon"></i>
+                              Add Variant
+                           </div>
+                           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum sint, minus voluptates esse officia enim dolorem, eaque neque error doloremque praesentium facere quidem mollitia deleniti?</p>
+                           <i
+                              className="icon adminlib-close"
+                              onClick={() => setAddvariant(false)}
+                           ></i>
+                        </>
+                     }
+                     footer={
+                        <>
+                           <div className="admin-btn btn-red">Cancel</div>
+                           <div className="admin-btn btn-purple-bg">Save</div>
+                        </>
+                     }
+                  >
+                     <div className="content add-variant">
+                        <div className="form-group-wrapper select-variations-wrapper">
+                           <div className="form-group">
+                              <label htmlFor="">Select variations </label>
+                              <div className="select-wrapper">
+                                 <span>#45</span>
+                                 <SelectInput
+                                    name="payment_method"
+                                    options={paymentOptions}
+                                    type="single-select"
+                                    wrapperClass="variation-select"
+                                    size="10rem"
+                                 />
+                                 <SelectInput
+                                    name="payment_method"
+                                    options={paymentOptions}
+                                    type="single-select"
+                                    wrapperClass="variation-select"
+                                    size="10rem"
+                                 />
+                                 <SelectInput
+                                    name="payment_method"
+                                    options={paymentOptions}
+                                    type="single-select"
+                                    size="10rem"
+                                    wrapperClass="variation-select"
+                                 />
+                              </div>
+                           </div>
+                        </div>
+
+                        <div className="form-group-wrapper">
+                           <div className="form-group">
+                              <FileInput
+                                 // value={formData.image}
+                                 inputClass="form-input"
+                                 name="image"
+                                 type="hidden"
+                                 // onButtonClick={() => runUploader('image')}
+                                 size="medium"
+                                 imageWidth={50}
+                                 imageHeight={50}
+                                 openUploader="Upload Image"
+                                 // imageSrc={imagePreviews.image}
+                                 buttonClass="admin-btn btn-purple"
+                                 descClass="settings-metabox-description"
+                              />
+                           </div>
+                        </div>
+                        <div className="form-group-wrapper">
+                           <div className="form-group">
+                              <label htmlFor="product-name">Regular price</label>
+                              <BasicInput name="address" wrapperClass="setting-form-input" />
+                           </div>
+                           <div className="form-group">
+                              <label htmlFor="product-name">Sale price</label>
+                              <BasicInput name="address" wrapperClass="setting-form-input" />
+                           </div>
+                        </div>
+
+                        <div className="form-group-wrapper">
+                           <div className="form-group">
+                              <label htmlFor="product-name">SKU</label>
+                              <BasicInput name="address" wrapperClass="setting-form-input" />
+                           </div>
+                           <div className="form-group">
+                              <label htmlFor="product-name">Stock status</label>
+                              <SelectInput
+                                 name="payment_method"
+                                 options={paymentOptions}
+                                 type="single-select"
+                                 wrapperClass="variation-select"
+                              />
+                           </div>
+                        </div>
+
+                        <div className="form-group-wrapper">
+                           <div className="form-group">
+                              <div className="checkbox-wrapper">
+                                 <div className="item">
+                                    <input
+                                       type="checkbox"
+                                       checked={product.virtual}
+                                    // onChange={(e) => handleChange("virtual", e.target.checked)}
+                                    />
+                                    Enabled
+                                 </div>
+                                 <div className="item">
+                                    <input
+                                       type="checkbox"
+                                       checked={product.downloadable}
+                                    // onChange={(e) => handleChange("downloadable", e.target.checked)}
+                                    />
+                                    Downloadable
+                                 </div>
+                                 <div className="item">
+                                    <input
+                                       type="checkbox"
+                                       checked={product.downloadable}
+                                    // onChange={(e) => handleChange("downloadable", e.target.checked)}
+                                    />
+                                    Virtual
+                                 </div>
+                                 <div className="item">
+                                    <input
+                                       type="checkbox"
+                                       checked={product.downloadable}
+                                    // onChange={(e) => handleChange("downloadable", e.target.checked)}
+                                    />
+                                    Manage stock
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+
+                        <div className="form-group-wrapper">
+                           <div className="form-group">
+                              <label htmlFor="product-name">Description</label>
+                              <TextArea name="short_description" wrapperClass="setting-from-textarea"
+                                 inputClass="textarea-input"
+                                 descClass="settings-metabox-description"
+                                 value={product.short_description}
+                                 onChange={(e) => handleChange("short_description", e.target.value)}
+                              />
+                           </div>
+                        </div>
+
+                        <div className="form-group-wrapper">
+                           <div className="form-group">
+                              <label htmlFor="product-name">Commission Fixed</label>
+                              <BasicInput name="address" wrapperClass="setting-form-input" />
+                           </div>
+                           <div className="form-group">
+                              <label htmlFor="product-name">Commission Percentage</label>
+                              <BasicInput name="address" wrapperClass="setting-form-input" />
+                           </div>
+                        </div>
+                     </div>
                   </CommonPopup>
                )}
             </div>
@@ -849,7 +1062,7 @@ const AddProduct = () => {
             <div className="column w-35">
                {/* ai assist */}
                <div className="card" id="card-ai-assist">
-                  <div className="card-header">+
+                  <div className="card-header">
                      <div className="left">
                         <div className="title">AI assist</div>
                      </div>
@@ -882,28 +1095,56 @@ const AddProduct = () => {
                <div className="card">
                   <div className="card-header">
                      <div className="left">
-                        <div className="title"></div>
+                        <div className="title">Visibility</div>
                      </div>
                      <div className="right"><i className="adminlib-pagination-right-arrow  arrow-icon"></i></div>
                   </div>
                   <div className="card-body">
                      <div className="form-group-wrapper">
                         <div className="form-group">
-                           <label htmlFor="product-name">Visibility</label>
-                           <ToggleSetting
-                              wrapperClass="setting-form-input"
+                           <label htmlFor="visibility">Visibility</label>
+
+                           <RadioInput
+                              name="visibility"
+                              idPrefix="visibility"
+                              type="radio"
+                              wrapperClass="settings-form-group-radio"
+                              inputWrapperClass="radio-basic-input-wrap"
+                              inputClass="setting-form-input"
                               descClass="settings-metabox-description"
-                              // description="Select the status of the announcement."
+                              activeClass="radio-select-active"
+                              radiSelectLabelClass="radio-label"
                               options={[
-                                 { key: 'draft', value: 'draft', label: 'Shop and search results' },
-                                 { key: 'pending', value: 'pending', label: 'Shop only' },
-                                 // { key: 'publish', value: 'publish', label: 'Search results only' },
-                                 { key: 'publish', value: 'publish', label: 'Hidden' },
+                                 {
+                                    key: "vs1",
+                                    value: "shop_search",
+                                    label: "Shop and search results",
+                                    name: "visibility",
+                                 },
+                                 {
+                                    key: "vs2",
+                                    value: "shop_only",
+                                    label: "Shop only",
+                                    name: "visibility",
+                                 },
+                                 {
+                                    key: "vs3",
+                                    value: "search_only",
+                                    label: "Search results only",
+                                    name: "visibility",
+                                 },
+                                 {
+                                    key: "vs4",
+                                    value: "hidden",
+                                    label: "Hidden",
+                                    name: "visibility",
+                                 },
                               ]}
-                           // value={formData.status}
-                           // onChange={handleToggleChange}
+                              value={visibility}
+                              onChange={(e) => setVisibility(e.target.value)}
                            />
                         </div>
+
                      </div>
                      <div className="form-group-wrapper">
                         <div className="form-group">
