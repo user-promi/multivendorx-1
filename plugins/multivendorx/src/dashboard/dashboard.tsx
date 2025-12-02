@@ -512,24 +512,22 @@ const Dashboard: React.FC = () => {
 
       <div className="row">
         <div className="column transparent">
-          <div className="card">
-            <div className="card-body">
-              <div className="analytics-container">
+          <div className="card-body">
+            <div className="analytics-container">
 
-                {analyticsData.map((item, idx) => (
-                  <div key={idx} className="analytics-item">
-                    <div className="details">
-                      <div className="text">{item.text}</div>
-                      <div className="number">{item.number}</div>
-                      <div className="report"><div>Last 30 days : <span>$189</span>  </div> <div> Previous 30 days: <span>$690</span></div></div>
-                    </div>
-                    <div className="analytics-icon">
-                      <i className={item.icon}></i>
-                    </div>
+              {analyticsData.map((item, idx) => (
+                <div key={idx} className="analytics-item">
+                  <div className="details">
+                    <div className="text">{item.text}</div>
+                    <div className="number">{item.number}</div>
+                    <div className="report"><div>Last 30 days : <span>$189</span>  </div> <div> Previous 30 days: <span>$690</span></div></div>
                   </div>
-                ))}
+                  <div className="analytics-icon">
+                    <i className={item.icon}></i>
+                  </div>
+                </div>
+              ))}
 
-              </div>
             </div>
           </div>
         </div>
@@ -777,49 +775,47 @@ const Dashboard: React.FC = () => {
       <div className="row">
         {/* Best-Selling Products */}
         <div className="column">
-          <div className="card">
-            <div className="card-header">
-              <div className="left">
-                <div className="title">Best-Selling Products</div>
-              </div>
-              <div className="right">
-                <i className="adminlib-external"></i>
-              </div>
+          <div className="card-header">
+            <div className="left">
+              <div className="title">Best-Selling Products</div>
             </div>
+            <div className="right">
+              <i className="adminlib-external"></i>
+            </div>
+          </div>
 
-            <div className="card-body">
-              <div className="table-wrapper top-products">
-                {topProducts && topProducts.length > 0 ? (
-                  <table>
-                    <tr className="header">
-                      <td>#</td>
-                      <td>Name</td>
-                      <td>Popularity</td>
-                      <td>Sales</td>
-                    </tr>
+          <div className="card-body">
+            <div className="table-wrapper top-products">
+              {topProducts && topProducts.length > 0 ? (
+                <table>
+                  <tr className="header">
+                    <td>#</td>
+                    <td>Name</td>
+                    <td>Popularity</td>
+                    <td>Sales</td>
+                  </tr>
 
-                    {topProducts.map((item: any, index) => {
-                      const color = `theme-color${(index % 4) + 1}`;
-                      return (
-                        <tr key={item.id}>
-                          <td>{String(index + 1).padStart(2, '0')}</td>
-                          <td>{item.name}</td>
-                          <td className={`progress-bar ${color}`}>
-                            <div> <span style={{ width: `${item.popularity}%` }}></span></div>
-                          </td>
-                          <td>
-                            <div className={`admin-badge ${color}`}>
-                              {item.popularity}%
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </table>
-                ) : (
-                  <div className="no-data">No products found.</div>
-                )}
-              </div>
+                  {topProducts.map((item: any, index) => {
+                    const color = `theme-color${(index % 4) + 1}`;
+                    return (
+                      <tr key={item.id}>
+                        <td>{String(index + 1).padStart(2, '0')}</td>
+                        <td>{item.name}</td>
+                        <td className={`progress-bar ${color}`}>
+                          <div> <span style={{ width: `${item.popularity}%` }}></span></div>
+                        </td>
+                        <td>
+                          <div className={`admin-badge ${color}`}>
+                            {item.popularity}%
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </table>
+              ) : (
+                <div className="no-data">No products found.</div>
+              )}
             </div>
           </div>
         </div>

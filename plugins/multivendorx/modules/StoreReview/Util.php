@@ -46,9 +46,9 @@ class Util {
                 }
 
                 // Get store ID from product meta or item meta
-                $product_store_id = get_post_meta( $product_id, 'multivendorx_store_id', true );
+                $product_store_id = get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true );
                 if ( empty( $product_store_id ) ) {
-                    $product_store_id = $item->get_meta( 'multivendorx_store_id' );
+                    $product_store_id = $item->get_meta( Utill::POST_META_SETTINGS['store_id'] );
                 }
 
                 // Match store ID

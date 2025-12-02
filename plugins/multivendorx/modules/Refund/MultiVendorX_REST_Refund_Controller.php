@@ -117,13 +117,13 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
             $meta_query = array();
             if ( ! empty( $store_id ) ) {
                 $meta_query[] = array(
-                    'key'     => 'multivendorx_store_id',
+                    'key'     => Utill::POST_META_SETTINGS['store_id'],
                     'value'   => $store_id,
                     'compare' => '=',
                 );
             } else {
                 $meta_query[] = array(
-                    'key'     => 'multivendorx_store_id',
+                    'key'     => Utill::POST_META_SETTINGS['store_id'],
                     'compare' => 'EXISTS',
                 );
             }
@@ -207,7 +207,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
             $refund_list = array_map(
                 function ( $refund ) {
                     /** @var WC_Order_Refund $refund */
-                    $store_id   = $refund->get_meta( 'multivendorx_store_id' );
+                    $store_id   = $refund->get_meta( Utill::POST_META_SETTINGS['store_id'] );
                     $store      = new Store( $store_id );
                     $store_name = $store ? $store->get( 'name' ) : '';
 
@@ -229,7 +229,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
                         'order_id'           => $refund->get_parent_id(),
                         'amount'             => $refund->get_amount(),
                         'reason'             => $refund->get_reason(),
-                        'customer_reason'    => $order ? $order->get_meta( '_customer_refund_reason', true ) : '',
+                        'customer_reason'    => $order ? $order->get_meta( Utill::WOO_SETTINGS['_customer_refund_reason'], true ) : '',
                         'currency'           => $refund->get_currency(),
                         'date'               => $refund->get_date_created()
                                                     ? $refund->get_date_created()->date_i18n( 'Y-m-d H:i:s' )
