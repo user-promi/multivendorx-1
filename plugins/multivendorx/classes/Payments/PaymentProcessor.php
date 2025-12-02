@@ -1,6 +1,6 @@
 <?php
 /**
- * Realtime Payment Gateway.
+ * MultiVendorX Payment Processor.
  *
  * @package multivendorx
  */
