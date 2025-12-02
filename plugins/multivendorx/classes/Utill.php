@@ -105,6 +105,7 @@ class Utill {
         'cod_order_payment'               => 'multivendorx_cod_order_payment',
         'product_shipping_class'          => 'product_shipping_class',
         'shipping_origin_country'         => 'shipping_origin_country',
+        '_customer_refund_reason'         => '_customer_refund_reason',
     );
 
     const WORDPRESS_SETTINGS = array(
@@ -134,6 +135,8 @@ class Utill {
         'mvx_vendor_order'=>'mvx_vendor_order',
         '_vendor_order_shipping_item_id'=> '_vendor_order_shipping_item_id',
         'active_store' =>'multivendorx_active_store',
+        '_additional_qty'             => '_additional_qty',
+        '_additional_price'           => '_additional_price',
     );
 
     const STORE_SETTINGS_KEYS = array(
@@ -171,12 +174,34 @@ class Utill {
         'shipping_policy'            => 'shipping_policy',
         'return_policy'              => 'return_policy',
         'exchange_policy'            => 'exchange_policy',
+        '_local_pickup_cost'         => '_local_pickup_cost',
+        'shipping_rates'             => 'multivendorx_shipping_rates',
+        'additional_qty'             => 'multivendorx_additional_qty',
+        'additional_product'         => 'multivendorx_additional_product',
+        'shipping_type_price'        => 'multivendorx_shipping_type_price',
+        '_free_shipping_amount'      => '_free_shipping_amount',
+        'location_lat'               => 'location_lat',
+        'location_lng'               => 'location_lng',
+        'distance_default_cost'      => 'distance_default_cost',
+        'distance_max_km'            => 'distance_max_km',
+        'distance_local_pickup_cost' => 'distance_local_pickup_cost',
+        '_free_shipping_amount'      => '_free_shipping_amount',
+        'distance_rules'             => 'distance_rules',
+        'shipping_options'           => 'shipping_options',
+        '_vendor_payment_mode'       => '_vendor_payment_mode',
     );
+
     const USER_SETTINGS_KEYS = array(
         'first_name'                  => 'first_name',
         'last_name'                   => 'last_name',
-        'social_verification'         =>'social_verification_connections',
-
+        'social_verification'         => 'social_verification_connections',
+        'following_stores'            => 'mvx_following_stores',
+        'mvx_user_location_lat'       => 'mvx_user_location_lat',
+        'mvx_user_location_lng'       => 'mvx_user_location_lng',
+    );
+    const POST_TYPES = array(
+        'announcement'      => 'multivendorx_an',
+        'knowledge'         => 'multivendorx_kb',
     );
     const ACTIVE_MODULES_DB_KEY = 'multivendorx_all_active_module_list';
 

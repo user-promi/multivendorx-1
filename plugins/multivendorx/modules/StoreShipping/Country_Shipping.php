@@ -50,17 +50,8 @@ class Country_Shipping extends \WC_Shipping_Method {
      * @return void
      */
     function init() {
-        // Load the settings API
-        // $this->init_form_fields();
-        // $this->init_settings();
-
-        // add_action( 'woocommerce_cart_calculate_fees', array( $this, 'multivendorx_force_shipping_recalculation' ), 20, 1 );
         // Save settings in admin if you have any defined
         add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
-    }
-
-    public function multivendorx_force_shipping_recalculation() {
-        WC()->cart->calculate_shipping();
     }
 
     /**
@@ -72,39 +63,6 @@ class Country_Shipping extends \WC_Shipping_Method {
         return $this->enabled == 'yes';
     }
 
-    /**
-     * Initialise Gateway Settings Form Fields
-     *
-     * @access public
-     * @return void
-     */
-    public function init_form_fields() {
-
-        // $this->form_fields = array(
-        // 'enabled' => array(
-        // 'title'         => __( 'Enable/Disable', 'multivendorx' ),
-        // 'type'          => 'checkbox',
-        // 'label'         => __( 'Enable Shipping', 'multivendorx' ),
-        // 'default'       => 'yes'
-        // ),
-        // 'title' => array(
-        // 'title'         => __( 'Method Title', 'multivendorx' ),
-        // 'type'          => 'text',
-        // 'description'   => __( 'This controls the title which the user sees during checkout.', 'multivendorx' ),
-        // 'default'       => __( 'Regular Shipping', 'multivendorx' ),
-        // 'desc_tip'      => true,
-        // ),
-        // 'tax_status' => array(
-        // 'title'         => __( 'Tax Status', 'multivendorx' ),
-        // 'type'          => 'select',
-        // 'default'       => 'taxable',
-        // 'options'       => array(
-        // 'taxable'   => __( 'Taxable', 'multivendorx' ),
-        // 'none'      => _x( 'None', 'Tax status', 'multivendorx' )
-        // ),
-        // ),
-        // );
-    }
 
     public function calculate_shipping( $package = array() ) {
         $products            = $package['contents'];
@@ -120,7 +78,7 @@ class Country_Shipping extends \WC_Shipping_Method {
         // Step 1: Group products per store and only include eligible sellers
         foreach ( $products as $product ) {
             $product_id = $product['product_id'];
-            $store_id   = get_post_meta( $product_id, 'multivendorx_store_id', true );
+            $store_id   = get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true );
 
             if ( ! empty( $store_id ) && self::is_shipping_enabled_for_seller( $store_id ) ) {
                 $seller_products[ (int) $store_id ][] = $product;
@@ -188,7 +146,7 @@ class Country_Shipping extends \WC_Shipping_Method {
         // Group products by store
         foreach ( $products as $product ) {
             $id       = $product['product_id'];
-            $store_id = get_post_meta( $id, 'multivendorx_store_id', true );
+            $store_id = get_post_meta( $id, Utill::POST_META_SETTINGS['store_id'], true );
 
             if ( ! empty( $store_id ) ) {
                 $seller_products[ (int) $store_id ][] = $product;
@@ -204,12 +162,12 @@ class Country_Shipping extends \WC_Shipping_Method {
                 $store = new \MultiVendorX\Store\Store( $store_id );
                 $meta  = $store->meta_data; // All store meta data
 
-                $multivendorx_free_shipping_amount = isset( $meta['_free_shipping_amount'] ) ? $meta['_free_shipping_amount'] : '';
+                $multivendorx_free_shipping_amount = isset( $meta[ Utill::STORE_SETTINGS_KEYS['_free_shipping_amount'] ] ) ? $meta[ Utill::STORE_SETTINGS_KEYS['_free_shipping_amount'] ] : '';
                 $multivendorx_free_shipping_amount = apply_filters( 'multivendorx_free_shipping_minimum_order_amount', $multivendorx_free_shipping_amount, $store_id );
 
-                $default_shipping_price     = isset( $meta['multivendorx_shipping_type_price'] ) ? $meta['multivendorx_shipping_type_price'] : 0;
-                $default_shipping_add_price = isset( $meta['multivendorx_additional_product'] ) ? $meta['multivendorx_additional_product'] : 0;
-                $default_shipping_qty_price = isset( $meta['multivendorx_additional_qty'] ) ? $meta['multivendorx_additional_qty'] : 0;
+                $default_shipping_price     = isset( $meta[ Utill::STORE_SETTINGS_KEYS['shipping_type_price'] ] ) ? $meta[Utill::STORE_SETTINGS_KEYS['shipping_type_price'] ] : 0;
+                $default_shipping_add_price = isset( $meta[ Utill::STORE_SETTINGS_KEYS['additional_product']] ) ? $meta[Utill::STORE_SETTINGS_KEYS['additional_product']] : 0;
+                $default_shipping_qty_price = isset( $meta[ Utill::STORE_SETTINGS_KEYS['additional_qty'] ] ) ? $meta[Utill::STORE_SETTINGS_KEYS['additional_qty']] : 0;
 
                 $downloadable_count  = 0;
                 $products_total_cost = 0;
@@ -231,8 +189,8 @@ class Country_Shipping extends \WC_Shipping_Method {
 
                     // Check if product overrides shipping
                     if ( get_post_meta( $product['product_id'], '_overwrite_shipping', true ) === 'yes' ) {
-                        $shipping_qty_price                     = get_post_meta( $product['product_id'], '_additional_qty', true );
-                        $price[ $store_id ]['addition_price'][] = get_post_meta( $product['product_id'], '_additional_price', true );
+                        $shipping_qty_price                     = get_post_meta( $product['product_id'], Utill::POST_META_SETTINGS['_additional_qty'], true );
+                        $price[ $store_id ]['addition_price'][] = get_post_meta( $product['product_id'], Utill::POST_META_SETTINGS['_additional_price'], true );
                     } else {
                         $shipping_qty_price                     = $default_shipping_qty_price;
                         $price[ $store_id ]['addition_price'][] = 0;
@@ -280,7 +238,7 @@ class Country_Shipping extends \WC_Shipping_Method {
                 // -------------------------
                 // Country/State rates logic
                 // -------------------------
-                $mvx_shipping_rates = isset( $meta['multivendorx_shipping_rates'] ) ? json_decode( $meta['multivendorx_shipping_rates'], true ) : array();
+                $mvx_shipping_rates = isset( $meta[Utill::STORE_SETTINGS_KEYS['shipping_rates']] ) ? json_decode( $meta[Utill::STORE_SETTINGS_KEYS['shipping_rates']], true ) : array();
                 $state_rate         = 0;
                 $country_rate       = null;
                 $everywhere_rate    = null;
@@ -352,7 +310,7 @@ class Country_Shipping extends \WC_Shipping_Method {
         // Group products by store
         foreach ( $products as $product ) {
             $id       = $product['product_id'];
-            $store_id = get_post_meta( $id, 'multivendorx_store_id', true );
+            $store_id = get_post_meta( $id, Utill::POST_META_SETTINGS['store_id'], true );
 
             if ( ! empty( $store_id ) ) {
                 $seller_products[ (int) $store_id ][] = $product;
@@ -367,7 +325,7 @@ class Country_Shipping extends \WC_Shipping_Method {
                 $store = new \MultiVendorX\Store\Store( $store_id );
                 $meta  = $store->meta_data; // All store meta data
 
-                $local_pickup_cost = isset( $meta['_local_pickup_cost'] ) ? $meta['_local_pickup_cost'] : 0;
+                $local_pickup_cost = isset( $meta[Utill::STORE_SETTINGS_KEYS['_local_pickup_cost']] ) ? $meta[Utill::STORE_SETTINGS_KEYS['_local_pickup_cost']] : 0;
 
                 if ( $local_pickup_cost ) {
                     $rate = array(

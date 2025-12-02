@@ -1,12 +1,11 @@
-import { Radio } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import { BasicInput, FileInput, SelectInput, TextArea, ToggleSetting } from "zyra";
 import axios from "axios";
 import { useLocation } from 'react-router-dom';
+import { BasicInput, CommonPopup, FileInput, SelectInput, TextArea, ToggleSetting } from "zyra";
 
 const AddProduct = () => {
    const location = useLocation();
-     
+
    const query = new URLSearchParams(location.search);
    const productId = query.get("context_id");
    const [product, setProduct] = useState({});
@@ -18,9 +17,9 @@ const AddProduct = () => {
       axios.get(`${appLocalizer.apiUrl}/wc/v3/products/${productId}`, {
          headers: { "X-WP-Nonce": appLocalizer.nonce }
       })
-      .then(function (res) {
-         setProduct(res.data);
-      })
+         .then(function (res) {
+            setProduct(res.data);
+         })
 
    }, [productId]);
 
@@ -48,6 +47,7 @@ const AddProduct = () => {
          isEditing: false,
       }
    ]);
+   const [AddAttribute, setAddAttribute] = useState(false);
 
    const wrapperRef = useRef(null);
 
@@ -198,7 +198,7 @@ const AddProduct = () => {
          [field]: value,
       }));
    };
-console.log('product', product)
+   console.log('product', product)
    const createProduct = () => {
       try {
          const payload = {
@@ -296,8 +296,8 @@ console.log('product', product)
                      <div className="form-group-wrapper">
                         <div className="form-group">
                            <label htmlFor="product-name">Product name</label>
-                           <BasicInput 
-                              name="name" 
+                           <BasicInput
+                              name="name"
                               wrapperClass="setting-form-input"
                               value={product.name}
                               onChange={(e) => handleChange("name", e.target.value)} />
@@ -373,18 +373,18 @@ console.log('product', product)
                      <div className="form-group-wrapper">
                         <div className="form-group">
                            <label htmlFor="product-name">Regular price</label>
-                           <BasicInput 
-                              name="regular_price" 
-                              wrapperClass="setting-form-input" 
+                           <BasicInput
+                              name="regular_price"
+                              wrapperClass="setting-form-input"
                               value={product.regular_price}
                               onChange={(e) => handleChange("regular_price", e.target.value)}
                            />
                         </div>
                         <div className="form-group">
                            <label htmlFor="product-name">Sale price</label>
-                           <BasicInput 
-                              name="sale_price" 
-                              wrapperClass="setting-form-input" 
+                           <BasicInput
+                              name="sale_price"
+                              wrapperClass="setting-form-input"
                               value={product.sale_price}
                               onChange={(e) => handleChange("sale_price", e.target.value)}
                            />
@@ -393,9 +393,9 @@ console.log('product', product)
                      <div className="form-group-wrapper">
                         <div className="form-group">
                            <label htmlFor="product-name">SKU</label>
-                           <BasicInput 
-                              name="sku" 
-                              wrapperClass="setting-form-input" 
+                           <BasicInput
+                              name="sku"
+                              wrapperClass="setting-form-input"
                               value={product.sku}
                               onChange={(e) => handleChange("sku", e.target.value)}
                            />
@@ -435,9 +435,9 @@ console.log('product', product)
                            <div className="form-group-wrapper">
                               <div className="form-group">
                                  <label htmlFor="product-name">Quantity</label>
-                                 <BasicInput 
-                                    name="stock" 
-                                    wrapperClass="setting-form-input" 
+                                 <BasicInput
+                                    name="stock"
+                                    wrapperClass="setting-form-input"
                                     value={product.stock}
                                     onChange={(e) => handleChange("stock", e.target.value)}
                                  />
@@ -454,9 +454,9 @@ console.log('product', product)
                               </div>
                               <div className="form-group">
                                  <label htmlFor="product-name">Low stock threshold</label>
-                                 <BasicInput 
-                                    name="low_stock_amount" 
-                                    wrapperClass="setting-form-input" 
+                                 <BasicInput
+                                    name="low_stock_amount"
+                                    wrapperClass="setting-form-input"
                                     value={product.low_stock_amount}
                                     onChange={(e) => handleChange("low_stock_amount", e.target.value)}
                                  />
@@ -554,127 +554,11 @@ console.log('product', product)
                   </div>
                )}
 
-               {/* Attributes start */}
-               {/* <div className="card" id="card-variants">
-                  <div className="card-header">
-                     <div className="left">
-                        <div className="title">Attributes</div>
-                     </div>
-                     <div className="right">
-                        <SelectInput
-                           name="payment_method"
-                           options={staticvariantion}
-                           type="multi-select"
-                           size="fit-content"
-                        />
-                        <div className="admin-btn btn-purple-bg" onClick={addVariant}>Add variant</div>
-                        <i className="adminlib-pagination-right-arrow  arrow-icon" onClick={() => toggleCard("card-variants")}></i>
-                     </div>
-                  </div>
-                  <div className="card-body">
-                     <div className="form-group-wrapper">
-                        <div className="form-group">
-                           <label htmlFor="product-name">Variant name</label>
-                           <div className="variant-wrapper" ref={wrapperRef}>
-                              {variants.map((variant) => (
-                                 <div
-                                    className={`variant ${variant.isEditing ? "edit" : ""}`}
-                                    key={variant.id}
-                                    id={`variant-${variant.id}`}
-                                 >
-                                    {variant.isEditing ? (
-                                       <div className="variant-details">
-
-                                          <div className="variant-name">
-                                             <input
-                                                type="text"
-                                                className="basic-input"
-                                                placeholder="enter variant name"
-                                                value={variant.name}
-                                                onChange={(e) =>
-                                                   updateVariantField(variant.id, "name", e.target.value)
-                                                }
-                                             />
-                                          </div>
-
-                                          <div className="variant-value-edit">
-                                             <input
-                                                type="text"
-                                                className="basic-input"
-                                                placeholder="enter new value"
-                                                value={variant.tempValue}
-                                                onChange={(e) =>
-                                                   updateVariantField(
-                                                      variant.id,
-                                                      "tempValue",
-                                                      e.target.value
-                                                   )
-                                                }
-                                                onKeyDown={(e) => e.key === "Enter" && addValue(variant.id)}
-                                             />
-
-                                             <SelectInput
-                                                name="variant-values"
-                                                options={staticvariant}
-                                                type="multi-select"
-                                                placeholder="add values"
-                                                value={variant.values.map(v => ({
-                                                   label: v,
-                                                   value: v
-                                                }))}
-                                                onChange={(
-                                                   selected
-                                                ) =>
-                                                   updateVariantField(
-                                                      variant.id,
-                                                      "values",
-                                                      (selected || []).map(s => s.value)
-                                                   )
-                                                }
-                                             />
-
-                                          </div>
-                                       </div>
-                                    ) : (
-                                       <div className="variant-details">
-                                          <div className="variant-name">{variant.name}</div>
-
-                                          <div className="variant-value">
-                                             {variant.values.map((v, i) => (
-                                                <span className="admin-badge blue" key={i}>{v}</span>
-                                             ))}
-                                          </div>
-                                       </div>
-                                    )}
-
-                                    <div className="icon-wrapper">
-                                       <i
-                                          className="adminlib-edit"
-                                          onClick={() => editVariant(variant.id)}
-                                          style={{ cursor: "pointer" }}
-                                       ></i>
-
-                                       <i
-                                          className="adminlib-delete delete-icon"
-                                          onClick={() => deleteVariant(variant.id)}
-                                          style={{ cursor: "pointer" }}
-                                       ></i>
-                                    </div>
-                                 </div>
-                              ))}
-                           </div>
-
-
-                        </div>
-                     </div>
-                  </div>
-               </div> */}
-
                {/* Variants start */}
                <div className="card" id="card-variants">
                   <div className="card-header">
                      <div className="left">
-                        <div className="title">variations</div>
+                        <div className="title">Variations</div>
                      </div>
                      <div className="right">
                         <i className="adminlib-pagination-right-arrow  arrow-icon" onClick={() => toggleCard("card-variants")}></i>
@@ -685,9 +569,15 @@ console.log('product', product)
                         <div className="title">
                            Attributes
                         </div>
-                        <div className="add-btn">
-                           <div className="i adminlib-plus-circle-o"></div>
-                           Add attribute
+                        <div className="buttons">
+                           <div className="add-btn">
+                              <div className="i adminlib-plus-circle-o"></div>
+                              Add existing
+                           </div>
+                           <div className="add-btn" onClick={() => { setAddAttribute(true); }}>
+                              <div className="i adminlib-plus-circle-o"></div>
+                              Add attribute
+                           </div>
                         </div>
                      </div>
 
@@ -902,13 +792,64 @@ console.log('product', product)
                      </div>
                   </div>
                </div>
+
+               {AddAttribute && (
+                  <CommonPopup
+                     open={AddAttribute}
+                     onClick={() => setAddAttribute(false)}
+                     width="500px"
+                     height="70%"
+                     header={
+                        <>
+                           <div className="title">
+                              <i className="adminlib-coupon"></i>
+                              Add Attribute
+                           </div>
+                           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum sint, minus voluptates esse officia enim dolorem, eaque neque error doloremque praesentium facere quidem mollitia deleniti?</p>
+                           <i
+                              className="icon adminlib-close"
+                              onClick={() => setAddAttribute(false)}
+                           ></i>
+                        </>
+                     }
+                     footer={
+                        <>
+                        </>
+                     }
+                  >
+                     <div className="content">
+                        {/* start left section */}
+                        <div className="form-group-wrapper">
+                           <div className="form-group">
+                              <label htmlFor="title">Attribute name</label>
+                              <div className="attribute-popup-wrapper">
+                                 <div className="field-wrapper">
+                                    <SelectInput
+                                       name="payment_method"
+                                       options={paymentOptions}
+                                       type="single-select"
+                                    />
+                                    <div className="add-btn"><i className="adminlib-plus-circle-o"></i> Add new</div>
+                                 </div>
+                                 <div className="field-wrapper">
+                                    <BasicInput name="address" wrapperClass="setting-form-input" />
+                                    <div className="add-btn"><i className="adminlib-form-checkboxes"></i> Save </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+
+                     {/* {error && <p className="error-text">{error}</p>} */}
+                  </CommonPopup>
+               )}
             </div>
 
             {/* right column */}
             <div className="column w-35">
                {/* ai assist */}
                <div className="card" id="card-ai-assist">
-                  <div className="card-header">
+                  <div className="card-header">+
                      <div className="left">
                         <div className="title">AI assist</div>
                      </div>
