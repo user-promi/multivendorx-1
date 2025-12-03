@@ -72,7 +72,7 @@ const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
                                     value={formData.shipping_policy}
                                     onChange={handleChange}
                                     usePlainText={false}
-                                    tinymceApiKey={appLocalizer.settings_databases_value['marketplace-settings']['tinymce_api_section'] ?? ''}
+                                    tinymceApiKey={appLocalizer.settings_databases_value['marketplace']['tinymce_api_section'] ?? ''}
                                 />
                             </div>
                         </div>
@@ -96,7 +96,7 @@ const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
                                     value={formData.refund_policy}
                                     onChange={handleChange}
                                     usePlainText={false}
-                                    tinymceApiKey={appLocalizer.settings_databases_value['marketplace-settings']['tinymce_api_section'] ?? ''}
+                                    tinymceApiKey={appLocalizer.settings_databases_value['marketplace']['tinymce_api_section'] ?? ''}
                                 />
                             </div>
                         </div>
@@ -120,7 +120,7 @@ const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
                                     value={formData.exchange_policy}
                                     onChange={handleChange}
                                     usePlainText={false}
-                                    tinymceApiKey={appLocalizer.settings_databases_value['marketplace-settings']['tinymce_api_section'] ?? ''}
+                                    tinymceApiKey={appLocalizer.settings_databases_value['marketplace']['tinymce_api_section'] ?? ''}
                                 />
                             </div>
                         </div>

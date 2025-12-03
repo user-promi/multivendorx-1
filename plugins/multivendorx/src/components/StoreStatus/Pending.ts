@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 
 export default {
-    id: 'pending-approval',
+    id: 'pending',
     priority: 1,
     name: __('Pending Approval', 'multivendorx'),
     desc: '',
