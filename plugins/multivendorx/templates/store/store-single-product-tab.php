@@ -1,8 +1,12 @@
 <?php
 /**
- * Template for displaying single product tab on product page.
+ * Store Single Product Tab Template.
  *
- * @package MultiVendorX/Templates
+ * Override this template by copying it to yourtheme/dc-woocommerce-multi-vendor/store/store-single-product-tab.php
+ *
+ * @package     MultiVendorX/Templates
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
  */
 
 use MultiVendorX\Store\StoreUtil;

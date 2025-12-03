@@ -4,6 +4,7 @@
  *
  * @package multivendorx
  */
+
 namespace MultiVendorX\Payments;
 
 defined( 'ABSPATH' ) || exit;

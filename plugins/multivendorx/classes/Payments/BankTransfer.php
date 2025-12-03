@@ -4,13 +4,21 @@
  *
  * @package MultiVendorX\Payments
  */
-namespace MultiVendorX\Payments;
 
-defined( 'ABSPATH' ) || exit;
+namespace MultiVendorX\Payments;
 
 use MultiVendorX\Store\Store;
 use MultiVendorX\Utill;
 
+defined( 'ABSPATH' ) || exit;
+
+/**
+ * MultiVendorX Bank transfer payment gateway.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class BankTransfer {
 
     /**
@@ -167,11 +175,11 @@ class BankTransfer {
     /**
      * Process payment.
      *
-     * @param int    $store_id
-     * @param float  $amount
-     * @param int    $order_id
-     * @param string $transaction_id
-     * @param string $note
+     * @param int    $store_id Store id.
+     * @param float  $amount Payment amount.
+     * @param int    $order_id Order id.
+     * @param string $transaction_id Transaction id.
+     * @param string $note Payment note.
      */
     public function process_payment( $store_id, $amount, $order_id = null, $transaction_id = null, $note = null ) {
 

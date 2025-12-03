@@ -1,4 +1,9 @@
 <?php
+/**
+ * MultiVendorX Order Manager
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\Order;
 
@@ -15,9 +20,18 @@ defined( 'ABSPATH' ) || exit;
  * @package     MultiVendorX
  * @author      MultiVendorX
  */
-
 class OrderManager {
+
+    /**
+     * Container for all the classes.
+     *
+     * @var array
+     */
     private $container = array();
+
+    /**
+     * Constructor.
+     */
     public function __construct() {
         $this->init_classes();
         add_action( 'init', array( $this, 'filter_woocommerce_order_query' ) );
@@ -34,6 +48,9 @@ class OrderManager {
         );
     }
 
+    /**
+     * Filter the query of order table before it is fetch.
+     */
     public function filter_woocommerce_order_query() {
         // Filter the query of order table before it is fetch.
         if ( is_admin() || is_account_page() ) {
@@ -46,7 +63,7 @@ class OrderManager {
      * By default it trim the vendeor order (parent id is not 0) if query not contain 'parent'.
      * filter 'mvx_order_parent_filter' to filter based on parent.
      *
-     * @param   mixed $query
+     * @param   mixed $query Query arguments.
      * @return  mixed
      */
     public function set_filter_order_query( $query ) {
@@ -62,15 +79,21 @@ class OrderManager {
      * Return array of suborder as WC_order object.
      * Or Array of suborder's id if $object is false.
      *
-     * @param   int | \WC_Order $order
-     * @param   array           $args
-     * @param   boolean         $object
+     * @param   int | \WC_Order $order Order id or object.
+     * @param   array           $args Arguments for query.
+     * @param   boolean         $object Return object or id.
      * @return  object array of suborders.
      */
     public function get_suborders( $order, $args = array(), $object = true ) {
         return wc_get_orders( array( 'parent' => is_numeric( $order ) ? $order : $order->get_id() ) );
     }
 
+    /**
+     * Check if order is multivendorx order.
+     *
+     * @param   int $id Order id.
+     * @return  boolean
+     */
     public function is_multivendorx_order( $id ) {
         if ( $id ) {
             $order = wc_get_order( $id );
@@ -86,8 +109,8 @@ class OrderManager {
      * Create vendor order from a order.
      * It group item based on vendor then create suborder for each group.
      *
-     * @param   int    $order_id
-     * @param   object $order
+     * @param   int    $order_id Order id.
+     * @param   object $order Order object.
      * @return  void
      */
     public function create_vendor_orders( $order ) {
@@ -125,9 +148,9 @@ class OrderManager {
     /**
      * Create suborder of a main order.
      *
-     * @param   object $parent_order
-     * @param   int    $store_id
-     * @param   array  $items
+     * @param   object $parent_order Parent order object.
+     * @param   int    $store_id Vendor store id.
+     * @param   array  $items Grouped item.
      * @return  object
      */
     public static function create_sub_order( $parent_order, $store_id, $items, $suborder_id = 0, $is_update = false ) {
@@ -172,12 +195,12 @@ class OrderManager {
                     $order->remove_item( $item_id );
                 }
 
-                // Remove all shipping items
+                // Remove all shipping items.
                 foreach ( $order->get_items( 'shipping' ) as $item_id => $item ) {
                     $order->remove_item( $item_id );
                 }
 
-                // Remove all coupons
+                // Remove all coupons.
                 foreach ( $order->get_items( 'coupon' ) as $item_id => $item ) {
                     $order->remove_item( $item_id );
                 }
@@ -220,7 +243,7 @@ class OrderManager {
      * Get the basic info of a order items.
      * It group the item based on vendor.
      *
-     * @param   object $order
+     * @param   object $order Order object.
      * @return  array
      */
     public static function group_item_vendor_based( $order ) {
@@ -253,8 +276,8 @@ class OrderManager {
     /**
      * Create new line items for vendor order
      *
-     * @param   object $order
-     * @param   array  $items
+     * @param   object $order Order object.
+     * @param   array  $items Grouped item.
      * @return  void
      */
     public static function create_line_item( $order, $items ) {
@@ -311,8 +334,8 @@ class OrderManager {
     /**
      * Create new shipping items for vendor order
      *
-     * @param   object $order
-     * @param   array  $items
+     * @param   object $order Order object.
+     * @param   array  $items Grouped item.
      * @return  void
      */
     public static function create_shipping_item( $order, $items ) {
@@ -353,8 +376,8 @@ class OrderManager {
     /**
      * Create new coupon items for vendor order
      *
-     * @param   object $order
-     * @param   array  $items
+     * @param   object $order Order object.
+     * @param   array  $items Grouped item.
      * @return  void
      */
     public static function create_coupon_item( $order, $items ) {
@@ -369,11 +392,12 @@ class OrderManager {
         }
 
         foreach ( $parent_order->get_coupons() as $coupon_item ) {
-            $coupon_code = $coupon_item->get_code();        // e.g. "SUMMER10"
+            $coupon_code = $coupon_item->get_code();        // e.g. "SUMMER10".
             $coupon      = new \WC_Coupon( $coupon_code );
             if ( ! in_array(
                 $coupon->get_discount_type(),
-                apply_filters( 'mvx_order_available_coupon_types', array( 'fixed_product', 'percent', 'fixed_cart' ), $order, $coupon )
+                apply_filters( 'mvx_order_available_coupon_types', array( 'fixed_product', 'percent', 'fixed_cart' ), $order, $coupon ),
+                true
             )
             ) {
 				continue;

@@ -6,6 +6,7 @@
  */
 
 namespace MultiVendorX\StoreShipping;
+
 use MultiVendorX\Utill;
 
 /**
@@ -95,6 +96,9 @@ class Module {
     }
     /**
      * Register the shipping method for WooCommerce
+     *
+     * @param array $methods Shipping methods.
+     * @return array
      */
     public function register_shipping_method( $methods ) {
         $methods['multivendorx_distance_shipping'] = Distance_Shipping::class;

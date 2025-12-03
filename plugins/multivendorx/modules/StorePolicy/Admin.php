@@ -6,6 +6,7 @@
  */
 
 namespace MultiVendorX\StorePolicy;
+
 use MultiVendorX\Utill;
 /**
  * MultiVendorX Store Policy Admin class
@@ -87,7 +88,7 @@ class Admin {
                     <?php
                     if ( function_exists( 'wp_editor' ) ) {
                         ?>
-                        <label><?php _e( 'Refund Policy', 'multivendorx' ); ?></label>
+                        <label><?php echo esc_html__( 'Refund Policy', 'multivendorx' ); ?></label>
                         <?php
                         // Show TinyMCE editor.
                         wp_editor(
@@ -120,7 +121,7 @@ class Admin {
                     <?php
                     if ( function_exists( 'wp_editor' ) ) {
 						?>
-                        <label><?php _e( 'Cancellation Policy', 'multivendorx' ); ?></label>
+                        <label><?php echo esc_html__( 'Cancellation Policy', 'multivendorx' ); ?></label>
                         <?php
                         // Show TinyMCE editor.
                         wp_editor(

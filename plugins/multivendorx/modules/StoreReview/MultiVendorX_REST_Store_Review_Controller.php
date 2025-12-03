@@ -1,4 +1,9 @@
 <?php
+/**
+ * MultiVendorX REST API Store Review Controller.
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\StoreReview;
 
@@ -7,6 +12,13 @@ use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * MultiVendorX REST API Store Review Controller.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
 
 	/**
@@ -76,7 +88,7 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
     /**
      * GET permission.
      *
-     * @param object $request
+     * @param object $request Request data.
      * @return bool
      */
     public function get_items_permissions_check( $request ) {
@@ -105,13 +117,15 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
 
     /**
      * Get review items with optional pagination, date filters, and counters
+     *
+     * @param object $request
      */
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -167,7 +181,7 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
             }
 
             // --- Step 5.2: Filter by Overall Rating (like "4 stars & up") ---.
-            if ( $overall_rating !== null && $overall_rating !== '' ) {
+            if ( null !== $overall_rating && '' !== $overall_rating ) {
                 $rating = floatval( $overall_rating );
 
                 // Prevent invalid or below 1 ratings.
@@ -184,7 +198,7 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
                 $args['order_by']  = $orderBy;
                 $args['order_dir'] = ! empty( $order ) ? strtoupper( $order ) : 'DESC';
             } else {
-                // Fallback default sort
+                // Fallback default sort.
                 $args['order_by']  = 'date_created';
                 $args['order_dir'] = 'DESC';
             }
@@ -217,7 +231,7 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
                         'date_modified'  => $review['date_modified'],
                     );
                 },
-                $reviews ?: array()
+                $reviews ? $reviews : array()
             );
 
             // --- Step 8: Get Status Counters ---.

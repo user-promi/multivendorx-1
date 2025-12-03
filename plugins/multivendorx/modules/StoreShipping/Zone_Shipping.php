@@ -1,4 +1,9 @@
 <?php
+/**
+ * MultiVendorX Shipping Zone.
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\StoreShipping;
 
@@ -7,11 +12,41 @@ use MultiVendorX\Utill;
 use WC_Shipping_Zones;
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * MultiVendorX Shipping Zone.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class Zone_Shipping extends \WC_Shipping_Method {
+
+    /**
+     * Default option.
+     *
+     * @var string
+     */
     public $default_option;
+
+    /**
+     * Default option.
+     *
+     * @var string
+     */
     public $default;
+
+    /**
+     * Fee cost.
+     *
+     * @var string
+     */
     public $fee_cost;
 
+    /**
+     * Constructor.
+     *
+     * @param int $instance_id Shipping zone instance ID.
+     */
     public function __construct( $instance_id = 0 ) {
         $this->id                 = 'multivendorx_store_shipping';
         $this->instance_id        = absint( $instance_id );
@@ -22,15 +57,15 @@ class Zone_Shipping extends \WC_Shipping_Method {
 
         $zone_wise_shipping = $shipping_modules['zone-wise-shipping'] ?? array();
 
-        // Enable / disable module
+        // Enable / disable module.
         $this->enabled = ( ! empty( $zone_wise_shipping['enable'] ) && $zone_wise_shipping['enable'] )
             ? 'yes'
             : 'no';
 
-        // Initialize settings
+        // Initialize settings.
         $this->init();
 
-        // additional hooks for post-calculations settings
+        // additional hooks for post-calculations settings.
         add_filter( 'woocommerce_shipping_chosen_method', array( $this, 'select_default_rate' ), 10, 2 );
         add_filter( 'woocommerce_package_rates', array( $this, 'woocommerce_package_rates' ), 99, 2 );
 
@@ -42,20 +77,20 @@ class Zone_Shipping extends \WC_Shipping_Method {
     /**
      * Evaluate a cost from a sum/string.
      *
-     * @param  string $sum
-     * @param  array  $args
+     * @param  string $sum Sum to evaluate.
+     * @param  array  $args Arguments passed to the filter.
      * @return string
      */
     protected function evaluate_cost( $sum, $args = array() ) {
         include_once WC()->plugin_path() . '/includes/libraries/class-wc-eval-math.php';
 
-        // Allow 3rd parties to process shipping cost arguments
+        // Allow 3rd parties to process shipping cost.
         $args           = apply_filters( 'woocommerce_evaluate_shipping_cost_args', $args, $sum, $this );
         $locale         = localeconv();
         $decimals       = array( wc_get_price_decimal_separator(), $locale['decimal_point'], $locale['mon_decimal_point'], ',' );
         $this->fee_cost = $args['cost'];
 
-        // Expand shortcodes
+        // Expand shortcodes.
         add_shortcode( 'fee', array( $this, 'fee' ) );
 
         $sum = do_shortcode(
@@ -68,16 +103,16 @@ class Zone_Shipping extends \WC_Shipping_Method {
 
         remove_shortcode( 'fee', array( $this, 'fee' ) );
 
-        // Remove whitespace from string
+        // Remove whitespace from string.
         $sum = preg_replace( '/\s+/', '', $sum );
 
-        // Remove locale from string
+        // Remove locale from string.
         $sum = str_replace( $decimals, '.', $sum );
 
-        // Trim invalid start/end characters
+        // Trim invalid start/end characters.
         $sum = rtrim( ltrim( $sum, "\t\n\r\0\x0B+*/" ), "\t\n\r\0\x0B+-*/" );
 
-        // Do the math (FIXED: global namespace)
+        // Do the math (FIXED: global namespace).
         return $sum ? \WC_Eval_Math::evaluate( $sum ) : 0;
     }
 
@@ -91,7 +126,7 @@ class Zone_Shipping extends \WC_Shipping_Method {
     /**
      * Work out fee (shortcode).
      *
-     * @param  array $atts
+     * @param  array $atts Shortcode attributes.
      * @return string
      */
     public function fee( $atts ) {
@@ -125,7 +160,7 @@ class Zone_Shipping extends \WC_Shipping_Method {
     /**
      * Get items in package.
      *
-     * @param  array $package
+     * @param  array $package Package being shipped.
      * @return int
      */
     public function get_package_item_qty( $package ) {
@@ -141,7 +176,7 @@ class Zone_Shipping extends \WC_Shipping_Method {
     /**
      * Finds and returns shipping classes and the products with said class.
      *
-     * @param mixed $package
+     * @param mixed $package Package being shipped.
      *
      * @return array
      */
@@ -163,7 +198,7 @@ class Zone_Shipping extends \WC_Shipping_Method {
     }
 
     /**
-     * init function.
+     * Init function.
      * initialize variables to be used
      *
      * @access public
@@ -195,16 +230,16 @@ class Zone_Shipping extends \WC_Shipping_Method {
     }
 
     /**
-     * calculate_shipping function.
+     * Calculate_shipping function.
      *
      * @access public
-     * @param array $package (default: array())
+     * @param array $package (default: array()).
      * @return void
      */
     public function calculate_shipping( $package = array() ) {
         $rates = array();
 
-        // Group products by store ID
+        // Group products by store ID.
         $products        = $package['contents'];
         $seller_products = array();
 
@@ -216,10 +251,10 @@ class Zone_Shipping extends \WC_Shipping_Method {
         }
 
         if ( empty( $seller_products ) ) {
-            return; // no store info found
+            return; // no store info found.
         }
 
-        // Loop through each store
+        // Loop through each store.
         foreach ( $seller_products as $store_id => $products ) {
             $zone             = WC_Shipping_Zones::get_zone_matching_package( $package );
             $shipping_methods = Util::get_shipping_methods( $zone->get_id(), $store_id );
@@ -227,19 +262,19 @@ class Zone_Shipping extends \WC_Shipping_Method {
             if ( empty( $shipping_methods ) ) {
                 continue;
             }
-            // Filter shipping methods (optional)
+            // Filter shipping methods (optional).
             $shipping_methods = apply_filters( 'mvx_get_shipping_methods_for_shipping_address', $shipping_methods, $package, $store_id );
             foreach ( $shipping_methods as $key => $method ) {
-                $tax_rate  = ( $method['settings']['tax_status'] == 'none' ) ? false : '';
+                $tax_rate  = ( 'none' === $method['settings']['tax_status'] ) ? false : '';
                 $has_costs = false;
                 $cost      = 0;
 
-                if ( 'yes' != $method['enabled'] ) {
+                if ( 'yes' !== $method['enabled'] ) {
                     continue;
                 }
 
-                // Flat rate shipping
-                if ( $method['id'] == 'flat_rate' ) {
+                // Flat rate shipping.
+                if ( 'flat_rate' === $method['id'] ) {
                     $setting_cost = isset( $method['settings']['cost'] ) ? stripslashes_deep( $method['settings']['cost'] ) : '';
 
                     if ( '' !== $setting_cost ) {
@@ -253,7 +288,7 @@ class Zone_Shipping extends \WC_Shipping_Method {
                         );
                     }
 
-                    // Shipping class costs
+                    // Shipping class costs.
                     $shipping_classes = WC()->shipping->get_shipping_classes();
 
                     if ( ! empty( $shipping_classes ) ) {
@@ -271,23 +306,19 @@ class Zone_Shipping extends \WC_Shipping_Method {
                                 // 1. Class specific cost: class_cost_12
                                 if ( ! empty( $method['settings'][ $key ] ) ) {
                                     $class_cost_string = stripslashes_deep( $method['settings'][ $key ] );
-                                }
-                                // 2. Fallback to generic class_cost
-                                elseif ( ! empty( $method['settings']['class_cost'] ) ) {
+                                } elseif ( ! empty( $method['settings']['class_cost'] ) ) { // 2. Fallback to generic class_cost
                                     $class_cost_string = stripslashes_deep( $method['settings']['class_cost'] );
-                                }
-                                // 3. Nothing found
-                                else {
+                                } else { // 3. Nothing found.
                                     $class_cost_string = '';
                                 }
                             } else {
-                                // No class → use no_class_cost
+                                // No class → use no_class_cost.
                                 $class_cost_string = ! empty( $method['settings']['no_class_cost'] )
                                     ? $method['settings']['no_class_cost']
                                     : '';
                             }
-                            // Skip if empty
-                            if ( $class_cost_string === '' ) {
+                            // Skip if empty.
+                            if ( '' === $class_cost_string ) {
                                 continue;
                             }
 
@@ -305,27 +336,27 @@ class Zone_Shipping extends \WC_Shipping_Method {
                                 )
                             );
 
-                            // Add or compare
-                            if ( $calculation_type === 'class' ) {
+                            // Add or compare.
+                            if ( 'class' === $calculation_type ) {
                                 $cost += $class_cost;
                             } else {
                                 $highest_class_cost = max( $highest_class_cost, $class_cost );
                             }
                         }
 
-                        // For calculation_type = order
-                        if ( $calculation_type === 'order' && $highest_class_cost ) {
+                        // For calculation_type = order.
+                        if ( 'order' === $calculation_type && $highest_class_cost ) {
                             $cost += $highest_class_cost;
                         }
                     }
-                } elseif ( 'free_shipping' == $method['id'] ) {
+                } elseif ( 'free_shipping' === $method['id'] ) {
                     $is_available = self::free_shipping_is_available( $package, $method );
 
                     if ( $is_available ) {
                         $cost      = '0';
                         $has_costs = true;
                     }
-                } elseif ( isset( $method['settings']['cost'] ) && $method['settings']['cost'] != '' ) { // local pickup or other methods
+                } elseif ( isset( $method['settings']['cost'] ) && '' !== $method['settings']['cost'] ) { // local pickup or other methods.
                         $has_costs = true;
                         $cost      = $method['settings']['cost'];
                 }
@@ -345,10 +376,10 @@ class Zone_Shipping extends \WC_Shipping_Method {
             }
         }
 
-        // Apply filters
+        // Apply filters.
         $rates = apply_filters( 'mvx_get_rates_for_custom_shipping', $rates, $package );
 
-        // Send rates to WooCommerce
+        // Send rates to WooCommerce.
         if ( is_array( $rates ) && count( $rates ) > 0 ) {
             foreach ( $rates as $rate ) {
                 $this->add_rate( apply_filters( 'multivendorx_store_before_add_shipping_rates', $rate, $package ) );
@@ -358,22 +389,27 @@ class Zone_Shipping extends \WC_Shipping_Method {
 
     /**
      * Check if shipping is enabled for a seller
+     *
+     * @param int $store_id
+     *
+     * @return bool
      */
     public static function is_shipping_enabled_for_seller( $store_id ) {
         $store            = new \MultiVendorX\Store\Store( $store_id );
         $shipping_options = $store->meta_data['shipping_options'] ?? '';
-        return $shipping_options === 'shipping_by_zone';
+        return 'shipping_by_zone' === $shipping_options;
     }
 
     /**
      * See if free shipping is available based on the package and cart.
      *
      * @param array $package Shipping package.
+     * @param array $method Shipping method.
      *
      * @return bool
      */
     public static function free_shipping_is_available( $package, $method ) {
-        if ( isset( $method['settings']['requires'] ) && $method['settings']['requires'] == 'coupon' ) {
+        if ( isset( $method['settings']['requires'] ) && 'coupon' === $method['settings']['requires'] ) {
             $coupon_code              = $package['applied_coupons'] ? reset( $package['applied_coupons'] ) : '';
             $coupon                   = new \WC_Coupon( $coupon_code );
             $is_free_shipping_enabled = $coupon->get_free_shipping();
@@ -410,54 +446,52 @@ class Zone_Shipping extends \WC_Shipping_Method {
     /**
      * Is available in specific zone locations
      *
-     * @since 1.0.0
-     *
-     * @return void
+     * @param array $package Shipping package.
      */
     public function is_available( $package ) {
-        // Extract products from the package
+        // Extract products from the package.
         $products = isset( $package['contents'] ) ? $package['contents'] : array();
 
         if ( empty( $products ) ) {
             return false;
         }
 
-        // Try to get the store ID from the first product in the package
+        // Try to get the store ID from the first product in the package.
         $store_id = '';
         foreach ( $products as $product ) {
             $product_id = isset( $product['product_id'] ) ? $product['product_id'] : 0;
             if ( $product_id ) {
                 $store_id = get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true );
                 if ( ! empty( $store_id ) ) {
-                    break; // found one
+                    break; // found one.
                 }
             }
         }
 
-        // No store ID found → not available
+        // No store ID found → not available.
         if ( empty( $store_id ) ) {
             return false;
         }
 
-        // Extract destination info
+        // Extract destination info.
         $destination          = isset( $package['destination'] ) ? $package['destination'] : array();
         $destination_country  = isset( $destination['country'] ) ? $destination['country'] : '';
         $destination_state    = isset( $destination['state'] ) ? $destination['state'] : '';
         $destination_city     = isset( $destination['city'] ) ? $destination['city'] : '';
         $destination_postcode = isset( $destination['postcode'] ) ? trim( $destination['postcode'] ) : '';
 
-        // Get matching shipping zone
+        // Get matching shipping zone.
         $zone = WC_Shipping_Zones::get_zone_matching_package( $package );
 
-        // Get location restrictions for this store in this zone
+        // Get location restrictions for this store in this zone.
         $locations = Util::get_locations( $zone->get_id(), (int) $store_id );
 
-        // If no locations are set → available everywhere
+        // If no locations are set → available everywhere.
         if ( empty( $locations ) ) {
             return true;
         }
 
-        // Group locations by type
+        // Group locations by type.
         $location_group = array();
         foreach ( $locations as $location ) {
             if ( isset( $location['type'] ) && isset( $location['code'] ) ) {
@@ -467,7 +501,7 @@ class Zone_Shipping extends \WC_Shipping_Method {
 
         $is_available = false;
 
-        // Country check
+        // Country check.
         if ( isset( $location_group['country'] ) ) {
             $country_array = wp_list_pluck( $location_group['country'], 'code' );
             if ( ! in_array( $destination_country, $country_array, true ) ) {
@@ -476,7 +510,7 @@ class Zone_Shipping extends \WC_Shipping_Method {
             $is_available = true;
         }
 
-        // State check
+        // State check.
         if ( isset( $location_group['state'] ) ) {
             $states      = wp_list_pluck( $location_group['state'], 'code' );
             $state_array = array_map( array( $this, 'split_state_code' ), $states );
@@ -486,7 +520,7 @@ class Zone_Shipping extends \WC_Shipping_Method {
             $is_available = true;
         }
 
-        // City check
+        // City check.
         if ( isset( $location_group['city'] ) ) {
             $city_array = wp_list_pluck( $location_group['city'], 'code' );
             if ( ! in_array( $destination_city, $city_array, true ) ) {
@@ -495,7 +529,7 @@ class Zone_Shipping extends \WC_Shipping_Method {
             $is_available = true;
         }
 
-        // Postcode check
+        // Postcode check.
         if ( isset( $location_group['postcode'] ) ) {
             $postcode_array = wp_list_pluck( $location_group['postcode'], 'code' );
             $postcode_array = array_map( 'trim', $postcode_array );
@@ -512,7 +546,7 @@ class Zone_Shipping extends \WC_Shipping_Method {
     /**
      * Split state code from country:state string
      *
-     * @param string $value [like: IN:WB]
+     * @param string $value [like: IN:WB].
      *
      * @return string [like: WB ]
      */
@@ -524,14 +558,13 @@ class Zone_Shipping extends \WC_Shipping_Method {
     /**
      * alter the default rate if one is chosen in settings.
      *
-     * @access public
-     *
-     *  @param mixed $package
+     * @param string $chosen_method Chosen shipping method.
+     * @param array  $_available_methods Available shipping methods.
      *
      * @return bool
      */
     public function select_default_rate( $chosen_method, $_available_methods ) {
-        // Select the 'Default' method from WooCommerce settings
+        // Select the 'Default' method from WooCommerce settings.
         if ( is_array( $_available_methods ) && array_key_exists( $this->default, $_available_methods ) ) {
             return $this->default;
         }
@@ -550,11 +583,11 @@ class Zone_Shipping extends \WC_Shipping_Method {
      * @return array
      */
     public function hide_shipping_when_free_is_available( $rates ) {
-        if ( $this->hide_method !== 'yes' ) {
+        if ( 'yes' !== $this->hide_method ) {
 			return $rates;
         }
 
-        // determine if free shipping is available
+        // determine if free shipping is available.
         $free_shipping = false;
         foreach ( $rates as $rate_id => $rate ) {
             if ( 'free_shipping' === $rate->method_id ) {
@@ -562,7 +595,7 @@ class Zone_Shipping extends \WC_Shipping_Method {
                 break;
             }
         }
-        // if available, remove all options from this method
+        // if available, remove all options from this method.
         if ( $free_shipping ) {
             foreach ( $rates as $rate_id => $rate ) {
                 if ( $this->id === $rate->method_id && strpos( $rate_id, $this->id . ':' . $this->instance_id . '-' ) !== false ) {
@@ -586,14 +619,14 @@ class Zone_Shipping extends \WC_Shipping_Method {
     public function hide_other_options( $rates ) {
         $hide_key = false;
 
-        // return if no rates have been added
+        // return if no rates have been added.
         if ( ! isset( $rates ) || empty( $rates ) ) {
             return $rates;
         }
 
-        // cycle through available rates
+        // cycle through available rates.
         foreach ( $rates as $key => $rate ) {
-            if ( $rate['hide_ops'] === 'on' ) {
+            if ( 'on' === $rate['hide_ops'] ) {
                 $hide_key = $key;
             }
         }
@@ -606,37 +639,37 @@ class Zone_Shipping extends \WC_Shipping_Method {
     }
 
     /**
-     * Get shipping method id
+     * Get method rate ID.
      *
-     * @since 3.2.2
-     *
-     * @return void
-     */
-
-    /**
-     * Get shipping method id
-     *
-     * @since 3.2.2
+     * @param array $method Shipping method.
+     * @param int   $store_id Store ID.
      *
      * @return string
      */
     public function get_method_rate_id( $method, $store_id = 0 ) {
-        $store_id = $store_id ?: 0; // ensure store ID exists
+        $store_id = $store_id ? $store_id : 0; // ensure store ID exists.
         $rate_id  = $this->id . ':' . $method['id'] . ':' . $method['instance_id'] . ':' . $store_id;
         return apply_filters( 'multivendorx_get_store_shipping_method_id', $rate_id );
     }
 
-
+    /**
+     * Filter shipping rates to keep only MultiVendorX store shipping methods.
+     *
+     * @param array $rates Array of rates found for the package.
+     * @param array $package Package information.
+     *
+     * @return array
+     */
     public function woocommerce_package_rates( $rates, $package ) {
 
-        // Get products from the package
+        // Get products from the package.
         $products = isset( $package['contents'] ) ? $package['contents'] : array();
 
         if ( empty( $products ) ) {
             return $rates;
         }
 
-        // Try to extract the store ID from any product in the package
+        // Try to extract the store ID from any product in the package.
         $store_id = '';
         foreach ( $products as $product ) {
             if ( isset( $product['product_id'] ) ) {
@@ -648,17 +681,17 @@ class Zone_Shipping extends \WC_Shipping_Method {
             }
         }
 
-        // If no store found, keep all rates (don’t modify)
+        // If no store found, keep all rates (don’t modify).
         if ( empty( $store_id ) ) {
             return $rates;
         }
 
-        // Allow developers to disable filtering logic if needed
+        // Allow developers to disable filtering logic if needed.
         if ( ! apply_filters( 'multivendorx_allow_supported_shipping_in_store_shipping_package', true, $package, $store_id ) && $rates ) {
 
-            // Keep only MultiVendorX store shipping methods
+            // Keep only MultiVendorX store shipping methods.
             foreach ( $rates as $key => $shipping_rate ) {
-                if ( $shipping_rate->method_id !== 'multivendorx_store_shipping' ) {
+                if ( 'multivendorx_store_shipping' !== $shipping_rate->method_id ) {
                     unset( $rates[ $key ] );
                 }
             }

@@ -2,8 +2,11 @@
 /**
  * Template to display the vendor store banner and details.
  *
- * @package MultiVendorX
- * @subpackage Templates
+ * Override this template by copying it to yourtheme/dc-woocommerce-multi-vendor/store/store-banner-info.php
+ *
+ * @package     MultiVendorX/Templates
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
  */
 
 use MultiVendorX\store\store;

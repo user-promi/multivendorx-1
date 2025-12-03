@@ -1,4 +1,9 @@
 <?php
+/**
+ * MultiVendorX Rewrites Class
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\Store;
 
@@ -16,6 +21,11 @@ defined( 'ABSPATH' ) || exit;
 
 class Rewrites {
 
+    /**
+     * Custom store URL
+     *
+     * @var string
+     */
     public $custom_store_url = '';
 
     /**
@@ -31,6 +41,11 @@ class Rewrites {
         add_action( 'pre_get_posts', array( $this, 'store_query_filter' ) );
     }
 
+    /**
+     * Filter store query
+     *
+     * @param object $query The main query object.
+     */
     public function store_query_filter( $query ) {
         if ( is_admin() || ! $query->is_main_query() ) {
             return;
@@ -55,10 +70,10 @@ class Rewrites {
             return;
         }
 
-        // Force query to load products
+        // Force query to load products.
         $query->set( 'post_type', 'product' );
 
-        // Add vendor filter
+        // Add vendor filter.
         $meta_query   = $query->get( 'meta_query', array() );
         $meta_query[] = array(
             'key'     => Utill::POST_META_SETTINGS['multivendorx_store_id'],
@@ -67,12 +82,15 @@ class Rewrites {
         );
         $query->set( 'meta_query', $meta_query );
 
-        // Pagination fix
+        // Pagination fix.
         $paged = max( 1, get_query_var( 'paged' ) );
         $query->set( 'paged', $paged );
         $query->set( 'wc_query', 'product_query' ); // WooCommerce flag
     }
 
+    /**
+     * Register custom rewrite rule for stores
+     */
     public function register_rule() {
         $page_id = MultiVendorX()->setting->get_setting( 'store_dashboard_page' );
 
@@ -125,6 +143,11 @@ class Rewrites {
         }
     }
 
+    /**
+     * Register query vars
+     *
+     * @param array $vars Query vars.
+     */
     public function register_query_var( $vars ) {
         $vars[] = $this->custom_store_url;
         $vars[] = 'segment';
@@ -134,6 +157,12 @@ class Rewrites {
         return apply_filters( 'multivendorx_query_vars', $vars, $this );
     }
 
+    /**
+     * Load store template
+     *
+     * @param string $template Template path.
+     * @return string Modified template path.
+     */
     public function store_template( $template ) {
         $store_name = get_query_var( $this->custom_store_url );
 
@@ -149,6 +178,9 @@ class Rewrites {
         return $template;
     }
 
+    /**
+     * Flush rewrite rules
+     */
     public function flash_rewrite_rules() {
         $this->register_rule();
         flush_rewrite_rules();

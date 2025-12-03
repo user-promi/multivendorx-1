@@ -2,11 +2,11 @@
 /**
  * The template for displaying single product page vendor tab
  *
- * Override this template by copying it to yourtheme/MultiVendorX/policies-tab.php
+ * Override this template by copying it to yourtheme/dc-woocommerce-multi-vendor/store/store-policy.php
  *
- * @author      MultiVendorX
  * @package MultiVendorX/Templates
- * @version   2.3.0
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
  */
 
 use MultiVendorX\Store\StoreUtil;
@@ -18,29 +18,6 @@ if ( empty( $policies ) ) {
     echo 'No policy found.';
 }
 ?>
-<!-- <div class="mvx-product-policies">
-    <?php if ( ! empty( $policies['store_policy'] ) ) { ?>
-    <div class="multivendorx-shipping-policies">
-        <div class="heading"><?php echo esc_html_e( 'Store Policy', 'multivendorx' ); ?></div>
-        <div class="description" ><?php echo wp_kses_post( $policies['store_policy'] ); ?></div>
-    </div>
-    <?php } if ( ! empty( $policies['shipping_policy'] ) ) { ?>
-    <div class="multivendorx-shipping-policies">
-        <div class="heading"><?php echo esc_html_e( 'Shipping Policy', 'multivendorx' ); ?></div>
-        <div class="description" ><?php echo wp_kses_post( $policies['shipping_policy'] ); ?></div>
-    </div>
-    <?php } if ( ! empty( $policies['refund_policy'] ) ) { ?>
-    <div class="multivendorx-shipping-policies">
-        <div class="heading"><?php echo esc_html_e( 'Refund Policy', 'multivendorx' ); ?></div>
-        <div class="description" ><?php echo wp_kses_post( $policies['refund_policy'] ); ?></div>
-    </div>
-    <?php } if ( ! empty( $policies['cancellation_policy'] ) ) { ?>
-    <div class="multivendorx-shipping-policies">
-        <div class="heading"><?php echo esc_html_e( 'Cancellation / Return / Exchange Policy', 'multivendorx' ); ?></div>
-        <div class="description" ><?php echo wp_kses_post( $policies['cancellation_policy'] ); ?></div>
-    </div>
-    <?php } ?>
-</div> -->
 <div class="multivendorx-policies-accordion">
     <?php
     $policies_list = array(

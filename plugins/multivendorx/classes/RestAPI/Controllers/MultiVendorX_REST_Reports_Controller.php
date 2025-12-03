@@ -1,4 +1,9 @@
 <?php
+/**
+ * MultiVendorX REST API Reports controller.
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\RestAPI\Controllers;
 
@@ -9,6 +14,13 @@ use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * MultiVendorX REST API Reports controller.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class MultiVendorX_REST_Reports_Controller extends \WP_REST_Controller {
 
 	/**
@@ -18,6 +30,9 @@ class MultiVendorX_REST_Reports_Controller extends \WP_REST_Controller {
 	 */
 	protected $rest_base = 'reports';
 
+    /**
+     * Register the routes for the objects of the controller.
+     */
     public function register_routes() {
         register_rest_route(
             MultiVendorX()->rest_namespace,
@@ -64,25 +79,44 @@ class MultiVendorX_REST_Reports_Controller extends \WP_REST_Controller {
         );
     }
 
+    /**
+     * Check if a given request has access to read items.
+     *
+     * @param  object $request Full details about the request.
+     */
     public function get_items_permissions_check( $request ) {
         return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
     }
 
-    // POST permission
+    /**
+     * Check if a given request has access to create an item.
+     *
+     * @param  object $request Full details about the request.
+     */
     public function create_item_permissions_check( $request ) {
         return current_user_can( 'manage_options' ) || current_user_can( 'edit_stores' );
     }
 
+    /**
+     * Check if a given request has access to update an item.
+     *
+     * @param  object $request Full details about the request.
+     */
     public function update_item_permissions_check( $request ) {
         return current_user_can( 'manage_options' ) || current_user_can( 'edit_stores' );
     }
 
+    /**
+     * Get a collection of items.
+     *
+     * @param object $request Full details about the request.
+     */
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -120,12 +154,17 @@ class MultiVendorX_REST_Reports_Controller extends \WP_REST_Controller {
         }
     }
 
+    /**
+     * Create a single item.
+     *
+     * @param object $request Full details about the request.
+     */
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -153,12 +192,17 @@ class MultiVendorX_REST_Reports_Controller extends \WP_REST_Controller {
         }
     }
 
+    /**
+     * Update an existing item.
+     *
+     * @param object $request Full details about the request.
+     */
     public function update_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -193,13 +237,17 @@ class MultiVendorX_REST_Reports_Controller extends \WP_REST_Controller {
         }
     }
 
-
+    /**
+     * Get a single item.
+     *
+     * @param object $request Full details about the request.
+     */
     public function get_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -256,14 +304,17 @@ class MultiVendorX_REST_Reports_Controller extends \WP_REST_Controller {
         }
     }
 
-
-
+    /**
+     * Delete a single item.
+     *
+     * @param object $request Full data about the request.
+     */
     public function delete_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .

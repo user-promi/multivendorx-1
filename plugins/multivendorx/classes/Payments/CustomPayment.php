@@ -1,8 +1,12 @@
 <?php
 /**
  * Custom payment gateway class.
+ *
+ * @package multivendorx
  */
+
 namespace MultiVendorX\Payments;
+
 use MultiVendorX\Utill;
 defined( 'ABSPATH' ) || exit;
 
@@ -51,17 +55,20 @@ class CustomPayment {
         );
     }
 
+    /**
+     * Get store payment settings.
+     */
     public function get_store_payment_settings() {
     }
 
     /**
      * Process payment.
      *
-     * @param int    $store_id
-     * @param float  $amount
-     * @param int    $order_id
-     * @param string $transaction_id
-     * @param string $note
+     * @param int    $store_id for the transaction.
+     * @param float  $amount for the transaction.
+     * @param int    $order_id for the transaction.
+     * @param string $transaction_id for the transaction.
+     * @param string $note for the transaction.
      */
     public function process_payment( $store_id, $amount, $order_id = null, $transaction_id = null, $note = null ) {
         // quick autoload/class check (helps debugging).

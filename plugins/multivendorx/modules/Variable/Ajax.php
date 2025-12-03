@@ -37,16 +37,19 @@ class Ajax {
 
         check_ajax_referer( 'add-attribute', 'security' );
 
-        if ( ! current_user_can( 'edit_products' ) || ( ! apply_filters( 'vendor_can_add_custom_attribute', true ) && empty( sanitize_text_field( $_POST['taxonomy'] ) ) ) ) {
+        $taxonomy = filter_input( INPUT_POST, 'taxonomy', FILTER_UNSAFE_RAW );
+        $taxonomy = sanitize_text_field( $taxonomy );
+        $i        = filter_input( INPUT_POST, 'i', FILTER_SANITIZE_NUMBER_INT );
+
+        if ( ! current_user_can( 'edit_products' ) || ( ! apply_filters( 'vendor_can_add_custom_attribute', true ) && empty( $taxonomy ) ) ) {
             wp_die( -1 );
         }
 
-        $i             = absint( $_POST['i'] );
         $metabox_class = array();
         $attribute     = new \WC_Product_Attribute();
 
-        $attribute->set_id( wc_attribute_taxonomy_id_by_name( sanitize_text_field( $_POST['taxonomy'] ) ) );
-        $attribute->set_name( sanitize_text_field( $_POST['taxonomy'] ) );
+        $attribute->set_id( wc_attribute_taxonomy_id_by_name( $taxonomy ) );
+        $attribute->set_name( $taxonomy );
         $attribute->set_visible( apply_filters( 'woocommerce_attribute_default_visibility', 1 ) );
         $attribute->set_variation( apply_filters( 'woocommerce_attribute_default_is_variation', 0 ) );
 
@@ -59,11 +62,11 @@ class Ajax {
         MultiVendorX()->util->get_template(
             'product/views/html-product-attribute.php',
             array(
-				'attribute'     => $attribute,
-				'metabox_class' => $metabox_class,
-				'i'             => $i,
-				'self'          => $self,
-			)
+                'attribute'     => $attribute,
+                'metabox_class' => $metabox_class,
+                'i'             => absint( $i ),
+                'self'          => $self,
+            )
         );
 
         wp_die();
@@ -79,15 +82,19 @@ class Ajax {
             wp_die( -1 );
         }
 
-        parse_str( $_POST['data'], $data );
+        $data_raw = filter_input( INPUT_POST, 'data', FILTER_UNSAFE_RAW );
+        parse_str( $data_raw, $data );
 
         $attr_data = isset( $data['wc_attributes'] ) ? $data['wc_attributes'] : array();
 
-        $attributes   = Products::prepare_attributes( $attr_data );
-        $product_id   = absint( $_POST['post_id'] );
-        $product_type = ! empty( $_POST['product_type'] ) ? wc_clean( $_POST['product_type'] ) : 'simple';
-        $classname    = \WC_Product_Factory::get_product_classname( $product_id, $product_type );
-        $product      = new $classname( $product_id );
+        $product_id   = filter_input( INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT );
+        $product_type = filter_input( INPUT_POST, 'product_type', FILTER_UNSAFE_RAW );
+        $product_type = $product_type ? wc_clean( $product_type ) : 'simple';
+        $product_type = $product_type ? wc_clean( $product_type ) : 'simple';
+
+        $attributes = Products::prepare_attributes( $attr_data );
+        $classname  = \WC_Product_Factory::get_product_classname( $product_id, $product_type );
+        $product    = new $classname( $product_id );
 
         $product->set_attributes( $attributes );
         $product->save();
@@ -102,48 +109,54 @@ class Ajax {
 
         check_ajax_referer( 'load-variations', 'security' );
 
-        if ( ! current_user_can( 'edit_products' ) || empty( $_POST['product_id'] ) ) {
+        $product_id = filter_input( INPUT_POST, 'product_id', FILTER_SANITIZE_NUMBER_INT );
+
+        if ( ! current_user_can( 'edit_products' ) || empty( $product_id ) ) {
             wp_die( -1 );
         }
 
-        // Set $post global so its available, like within the admin screens
         global $post, $MVX_pro;
 
+        $per_page = filter_input( INPUT_POST, 'per_page', FILTER_SANITIZE_NUMBER_INT );
+        $page     = filter_input( INPUT_POST, 'page', FILTER_SANITIZE_NUMBER_INT );
+
+        $per_page = $per_page ? absint( $per_page ) : 10;
+        $page     = $page ? absint( $page ) : 1;
+
         $loop           = 0;
-        $product_id     = absint( $_POST['product_id'] );
         $post           = get_post( $product_id );
         $product_object = wc_get_product( $product_id );
-        $per_page       = ! empty( $_POST['per_page'] ) ? absint( $_POST['per_page'] ) : 10;
-        $page           = ! empty( $_POST['page'] ) ? absint( $_POST['page'] ) : 1;
-        $variations     = wc_get_products(
+
+        $variations = wc_get_products(
             array(
-				'status'  => array( 'private', 'publish' ),
-				'type'    => 'variation',
-				'parent'  => $product_id,
-				'limit'   => $per_page,
-				'page'    => $page,
-				'orderby' => array(
-					'menu_order' => 'ASC',
-					'ID'         => 'DESC',
-				),
-				'return'  => 'objects',
+                'status'  => array( 'private', 'publish' ),
+                'type'    => 'variation',
+                'parent'  => $product_id,
+                'limit'   => $per_page,
+                'page'    => $page,
+                'orderby' => array(
+                    'menu_order' => 'ASC',
+                    'ID'         => 'DESC',
+                ),
+                'return'  => 'objects',
             )
         );
         if ( $variations ) {
             foreach ( $variations as $variation_object ) {
                 $variation_id   = $variation_object->get_id();
                 $variation      = get_post( $variation_id );
-                $variation_data = array_merge( array_map( 'maybe_unserialize', get_post_custom( $variation_id ) ), wc_get_product_variation_attributes( $variation_id ) ); // kept for BW compatibility.
+                $variation_data = array_merge( array_map( 'maybe_unserialize', get_post_custom( $variation_id ) ), wc_get_product_variation_attributes( $variation_id ) );
                 MultiVendorX()->util->get_template(
                     'product/views/html-product-variations.php',
                     array(
-						'variation_object' => $variation_object,
-						'variation_id'     => $variation_id,
-						'variation_data'   => $variation_data,
-						'variation'        => $variation,
-						'product_object'   => $product_object,
+                        'variation_object' => $variation_object,
+                        'variation_id'     => $variation_id,
+                        'variation_data'   => $variation_data,
+                        'variation'        => $variation,
+                        'product_object'   => $product_object,
                     )
                 );
+
                 ++$loop;
             }
         }
@@ -160,29 +173,36 @@ class Ajax {
             wp_die( -1 );
         }
 
-        global $post, $MVX_pro; // Set $post global so its available, like within the admin screens.
+        global $post, $MVX_pro;
 
-        $product_id     = intval( $_POST['post_id'] );
-        $post           = get_post( $product_id );
-        $loop           = intval( $_POST['loop'] );
-        $product_object = wc_get_product( $product_id );
-        $classname      = \WC_Product_Factory::get_product_classname( $product_id, 'variable' );
-        // if the saved product type is not variation, it will return a variation class object
+        $product_id = filter_input( INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT );
+        $loop       = filter_input( INPUT_POST, 'loop', FILTER_SANITIZE_NUMBER_INT );
+
+        $post                    = get_post( $product_id );
+        $product_object          = wc_get_product( $product_id );
+        $classname               = \WC_Product_Factory::get_product_classname( $product_id, 'variable' );
         $variable_product_object = new $classname( $product_id );
         $variation_object        = new \WC_Product_Variation();
         $variation_object->set_parent_id( $product_id );
-        $variation_object->set_attributes( array_fill_keys( array_map( 'sanitize_title', array_keys( $variable_product_object->get_variation_attributes() ) ), '' ) );
+        $variation_object->set_attributes(
+            array_fill_keys(
+                array_map( 'sanitize_title', array_keys( $variable_product_object->get_variation_attributes() ) ),
+                ''
+            )
+        );
+
         $variation_id   = $variation_object->save();
         $variation      = get_post( $variation_id );
-        $variation_data = array_merge( array_map( 'maybe_unserialize', get_post_custom( $variation_id ) ), wc_get_product_variation_attributes( $variation_id ) ); // kept for BW compatibility.
+        $variation_data = array_merge( array_map( 'maybe_unserialize', get_post_custom( $variation_id ) ), wc_get_product_variation_attributes( $variation_id ) );
+
         MultiVendorX()->util->get_template(
             'product/views/html-product-variations.php',
             array(
-				'variation_object' => $variation_object,
-				'variation_id'     => $variation_id,
-				'variation_data'   => $variation_data,
-				'variation'        => $variation,
-				'product_object'   => $product_object,
+                'variation_object' => $variation_object,
+                'variation_id'     => $variation_id,
+                'variation_data'   => $variation_data,
+                'variation'        => $variation,
+                'product_object'   => $product_object,
             )
         );
 

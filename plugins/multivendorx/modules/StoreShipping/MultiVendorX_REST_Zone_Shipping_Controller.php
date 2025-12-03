@@ -1,4 +1,9 @@
 <?php
+/**
+ * MultiVendorX REST API Zone Shipping Controller.
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\StoreShipping;
 
@@ -7,6 +12,13 @@ use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * MultiVendorX REST API Zone Shipping Controller.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
 
 	/**
@@ -16,10 +28,16 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
 	 */
 	protected $rest_base = 'zone-shipping';
 
+    /**
+     * Constructor.
+     */
     public function __construct() {
         add_action( 'rest_api_init', array( $this, 'register_routes' ), 10 );
     }
 
+    /**
+     * Register the routes for shipping methods.
+     */
     public function register_routes() {
         register_rest_route(
             MultiVendorX()->rest_namespace,
@@ -67,27 +85,45 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
         );
     }
 
+    /**
+     * Get shipping methods permissions check
+     *
+     * @param object $request
+     */
     public function get_items_permissions_check( $request ) {
         return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
     }
 
-    // POST permission
+    /**
+     * Create shipping method permissions check
+     *
+     * @param object $request
+     */
     public function create_item_permissions_check( $request ) {
         return current_user_can( 'create_stores' );
     }
 
+    /**
+     * Update shipping method permissions check
+     *
+     * @param object $request
+     */
     public function update_item_permissions_check( $request ) {
         return current_user_can( 'edit_stores' );
     }
 
 
-    // GET
+    /**
+     * Get all shipping methods
+     *
+     * @param object $request
+     */
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -115,13 +151,17 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
         }
     }
 
-
+    /**
+     * Create shipping method
+     *
+     * @param object $request
+     */
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -138,7 +178,7 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
             $zone_id   = intval( $request->get_param( 'zone_id' ) );
             $method_id = sanitize_text_field( $request->get_param( 'method_id' ) );
             $settings  = $request->get_param( 'settings' );
-            // Validate required fields
+            // Validate required fields.
             if ( empty( $method_id ) ) {
                 return rest_ensure_response(
                     array(
@@ -166,28 +206,28 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
                 );
             }
 
-            // Prepare store object
+            // Prepare store object.
             $store = new \MultiVendorX\Store\Store( $store_id );
 
-            // Sanitize settings
+            // Sanitize settings.
             $clean_settings = is_array( $settings )
                 ? array_map( 'sanitize_text_field', $settings )
                 : array();
 
-            // Build dynamic meta key using method_id
+            // Build dynamic meta key using method_id.
             $meta_key = sprintf( '%s_%d', $method_id, $zone_id );
 
-            // Save only the settings as meta value
+            // Save only the settings as meta value.
             $store->update_meta( $meta_key, $clean_settings );
             $store->save();
-            // Process settings in Shipping class
+            // Process settings in Shipping class.
             $shipping = new Zone_Shipping();
             $shipping->set_post_data( $settings );
             $shipping->process_admin_options();
-            // Clear WooCommerce shipping cache
+            // Clear WooCommerce shipping cache.
             \WC_Cache_Helper::get_transient_version( 'shipping', true );
 
-            // Return response
+            // Return response.
             return rest_ensure_response(
                 array(
                     'success'  => true,
@@ -209,12 +249,17 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
         }
     }
 
+    /**
+     * Get single shipping method by id
+     *
+     * @param object $request
+     */
     public function get_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -231,7 +276,7 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
             $method_id = $request->get_param( 'method_id' );
             $zone_id   = $request->get_param( 'zone_id' );
 
-            // Validate required params
+            // Validate required params.
             if ( empty( $store_id ) || empty( $method_id ) || empty( $zone_id ) ) {
                 return rest_ensure_response(
                     array(
@@ -256,12 +301,17 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
         }
     }
 
+    /**
+     * Update shipping method
+     *
+     * @param object $request
+     */
     public function update_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -309,12 +359,12 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
                 );
             }
 
-            // Process settings in Shipping class
+            // Process settings in Shipping class.
             $shipping = new Zone_Shipping();
             $shipping->set_post_data( $settings );
             $shipping->process_admin_options();
 
-            // Clear WooCommerce shipping cache
+            // Clear WooCommerce shipping cache.
             \WC_Cache_Helper::get_transient_version( 'shipping', true );
 
             return rest_ensure_response(
@@ -336,12 +386,17 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
         }
     }
 
+    /**
+     * Delete shipping method
+     *
+     * @param object $request
+     */
     public function delete_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .

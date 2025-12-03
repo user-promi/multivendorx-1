@@ -68,13 +68,11 @@ class Frontend {
                     <h3>
                         <?php
                             /* translators: %s: Product name for abuse report */
-                            printf(
-                                '<h3>%s</h3>',
-                                sprintf(
-                                    esc_html__( 'Report abuse for "%s"', 'multivendorx' ),
-                                    esc_html( $product->get_name() )
-                                )
+                            $report_title = sprintf(
+                                esc_html__( 'Report abuse for "%s"', 'multivendorx' ),
+                                esc_html( $product->get_name() )
                             );
+                            printf( '<h3>%s</h3>', esc_html( $report_title ) );
                         ?>
                     </h3>
 

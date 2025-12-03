@@ -1,4 +1,9 @@
 <?php
+/**
+ * MultiVendorX Store Shipping Util
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\StoreShipping;
 
@@ -9,7 +14,19 @@ use WC_Shipping_Zones;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * MultiVendorX Store Shipping Util.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class Util {
+    /**
+     * Get Zones
+     *
+     * @param int $store_id The ID of the store.
+     */
     public static function get_zones( $store_id ) {
         $data_store = WC_Data_Store::load( 'shipping-zone' );
         $raw_zones  = $data_store->get_zones();
@@ -20,19 +37,19 @@ class Util {
 
             $methods_id = wp_list_pluck( $enabled_methods, 'id' );
 
-            if ( in_array( 'multivendorx_store_shipping', $methods_id ) ) {
+            if ( in_array( 'multivendorx_store_shipping', $methods_id, true ) ) {
                 $zones[ $zone->get_id() ]                            = $zone->get_data();
                 $zones[ $zone->get_id() ]['zone_id']                 = $zone->get_id();
                 $zones[ $zone->get_id() ]['formatted_zone_location'] = $zone->get_formatted_location();
                 $zones[ $zone->get_id() ]['shipping_methods']        = self::get_shipping_methods( $zone->get_id(), $store_id );
             }
         }
-        // Everywhere zone if has method called vendor shipping
+        // Everywhere zone if has method called vendor shipping.
         $overall_zone    = new WC_Shipping_Zone( 0 );
         $enabled_methods = $overall_zone->get_shipping_methods( true );
         $methods_id      = wp_list_pluck( $enabled_methods, 'id' );
 
-        if ( in_array( 'multivendorx_store_shipping', $methods_id ) ) {
+        if ( in_array( 'multivendorx_store_shipping', $methods_id, true ) ) {
             $zones[ $overall_zone->get_id() ]                            = $overall_zone->get_data();
             $zones[ $overall_zone->get_id() ]['zone_id']                 = $overall_zone->get_id();
             $zones[ $overall_zone->get_id() ]['formatted_zone_location'] = $overall_zone->get_formatted_location();
@@ -42,13 +59,19 @@ class Util {
         return $zones;
     }
 
+    /**
+     * Get Zone
+     *
+     * @param int $zone_id The ID of the shipping zone.
+     * @param int $store_id The ID of the store.
+     */
     public static function get_zone( $zone_id, $store_id ) {
         $zone            = array();
         $zone_obj        = WC_Shipping_Zones::get_zone_by( 'zone_id', $zone_id );
         $enabled_methods = $zone_obj->get_shipping_methods( true );
         $methods_ids     = wp_list_pluck( $enabled_methods, 'id' );
 
-        if ( in_array( 'multivendorx_vendor_shipping', $methods_ids ) ) {
+        if ( in_array( 'multivendorx_vendor_shipping', $methods_ids, true ) ) {
             $zone['data']                    = $zone_obj->get_data();
             $zone['formatted_zone_location'] = $zone_obj->get_formatted_location();
             $zone['shipping_methods']        = self::get_shipping_methods( $zone_id, $store_id );
@@ -57,6 +80,12 @@ class Util {
         return $zone;
     }
 
+    /**
+     * Get Shipping Methods
+     *
+     * @param int $zone_id The ID of the shipping zone.
+     * @param int $store_id The ID of the store.
+     */
     public static function get_shipping_methods( $zone_id, $store_id ) {
         $store = new \MultiVendorX\Store\Store( $store_id );
 
@@ -65,11 +94,11 @@ class Util {
         $methods = array();
 
         foreach ( $all_meta as $key => $value ) {
-            // Match keys ending with _{zone_id}
+            // Match keys ending with _{zone_id}.
             if ( preg_match( '/_(\d+)$/', $key, $matches ) && intval( $matches[1] ) === $zone_id ) {
                 $method_id = str_replace( '_' . $zone_id, '', $key );
 
-                // Ensure $value is array (decode if JSON)
+                // Ensure $value is array (decode if JSON).
                 if ( is_string( $value ) ) {
                     $value = json_decode( $value, true );
                 }
@@ -86,13 +115,20 @@ class Util {
         return $methods;
     }
 
+    /**
+     * Get Shipping Method
+     *
+     * @param int    $store_id The ID of the store.
+     * @param string $method_id The ID of the shipping method.
+     * @param int    $zone_id The ID of the shipping zone.
+     */
     public static function get_shipping_method( $store_id, $method_id, $zone_id ) {
         $store = new \MultiVendorX\Store\Store( $store_id );
 
-        // Build the meta key
+        // Build the meta key.
         $meta_key = $method_id . '_' . $zone_id;
 
-        // Get the meta value
+        // Get the meta value.
         $settings = $store->get_meta( $meta_key );
 
         if ( empty( $settings ) ) {
@@ -103,7 +139,7 @@ class Util {
             );
         }
 
-        // Decode JSON if stored as string
+        // Decode JSON if stored as string.
         if ( is_string( $settings ) ) {
             $settings = json_decode( $settings, true );
         }
@@ -112,15 +148,22 @@ class Util {
             'method_id' => $method_id,
             'zone_id'   => $zone_id,
             'settings'  => $settings,
-            'enabled'   => 'yes', // keep previous behavior
+            'enabled'   => 'yes', // Keep previous behavior.
         );
     }
 
+    /**
+     * Delete Shipping Method
+     *
+     * @param int    $store_id The ID of the store.
+     * @param int    $zone_id The ID of the shipping zone.
+     * @param string $method_id The ID of the shipping method to delete.
+     */
     public static function delete_shipping_method( $store_id, $zone_id, $method_id ) {
         $store    = new \MultiVendorX\Store\Store( $store_id );
-        $meta_key = $method_id . '_' . $zone_id; // Same key format as update_shipping_method
+        $meta_key = $method_id . '_' . $zone_id; // Same key format as update_shipping_method.
 
-        // Check if the shipping method exists
+        // Check if the shipping method exists.
         $existing = $store->get_meta( $meta_key );
         if ( ! $existing ) {
             return new \WP_Error(
@@ -130,14 +173,24 @@ class Util {
             );
         }
 
-        // Delete the method from store meta
+        // Delete the method from store meta.
         $store->delete_meta( $meta_key );
 
         return true;
     }
+
+    /**
+     * Update Shipping Method Settings
+     *
+     * @param array $args An associative array containing the following keys:
+     *                     - store_id: The ID of the store.
+     *                     - method_id: The ID of the shipping method being updated.
+     *                     - zone_id: The ID of the shipping zone this method belongs to.
+     *                     - settings: An associative array representing the new settings for this shipping method.
+     */
     public static function update_shipping_method( $args ) {
         $store    = new \MultiVendorX\Store\Store( $args['store_id'] );
-        $meta_key = $args['method_id'] . '_' . $args['zone_id']; // key format: methodId_zoneId
+        $meta_key = $args['method_id'] . '_' . $args['zone_id']; // Key format: methodId_zoneId.
         $store->update_meta( $meta_key, $args['settings'] );
 
         return array(
@@ -148,6 +201,12 @@ class Util {
         );
     }
 
+    /**
+     * Get Shipping Zone Locations
+     *
+     * @param int $zone_id The ID of the shipping zone whose locations you want to retrieve.
+     * @param int $store_id The ID of the store.
+     */
     public static function get_locations( $zone_id, $store_id = 0 ) {
         global $wpdb;
         $table = $wpdb->prefix . Utill::TABLES['shipping_zone_locations'];
@@ -168,10 +227,16 @@ class Util {
         return $locations;
     }
 
+    /**
+     * Save Shipping Zone Locations
+     *
+     * @param array $location Array of locations to be saved. Each item should have a code and type.
+     * @param int   $zone_id  The ID of the shipping zone where these locations will be associated.
+     */
     public static function save_location( $location, $zone_id, $vendor_id = 0 ) {
         global $wpdb;
 
-        // Setup arrays for Actual Values, and Placeholders
+        // Setup arrays for Actual Values, and Placeholders.
         $values        = array();
         $place_holders = array();
         $vendor_id     = $vendor_id ? $vendor_id : apply_filters( 'mvx_current_vendor_id', get_current_user_id() );

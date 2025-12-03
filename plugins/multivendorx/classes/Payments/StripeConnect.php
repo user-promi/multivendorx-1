@@ -1,4 +1,10 @@
 <?php
+/**
+ * MultiVendorX Stripe Connect payment gateway.
+ *
+ * @package MultiVendorX
+ */
+
 namespace MultiVendorX\Payments;
 
 use Exception;
@@ -8,6 +14,13 @@ use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * MultiVendorX Stripe Connect payment gateway.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class StripeConnect {
 
     /**
@@ -107,7 +120,7 @@ class StripeConnect {
                 $onboarding_status = 'Connected';
                 $is_onboarded      = true;
             }
-            $badge_class = ( $onboarding_status === 'Connected' ) ? 'green' : 'red';
+            $badge_class = ( 'Connected' === $onboarding_status ) ? 'green' : 'red';
             $fields      = array(
                 array(
                     'type' => 'html',
@@ -146,11 +159,11 @@ class StripeConnect {
     /**
      * Process payment
      *
-     * @param int    $store_id
-     * @param float  $amount
-     * @param int    $order_id
-     * @param string $transaction_id
-     * @param string $note
+     * @param int    $store_id Store ID.
+     * @param float  $amount Amount to be paid.
+     * @param int    $order_id Order ID.
+     * @param string $transaction_id Transaction ID.
+     * @param string $note Note.
      */
     public function process_payment( $store_id, $amount, $order_id = null, $transaction_id = null, $note = null ) {
         $store             = new Store( $store_id );
@@ -244,7 +257,7 @@ class StripeConnect {
             exit;
         }
 
-        // Valid → clean up
+        // Valid → clean up.
         $store->delete_meta( Utill::STORE_SETTINGS_KEYS['stripe_oauth_state'] );
         $store                  = new Store( $store_id );
         $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
@@ -313,13 +326,18 @@ class StripeConnect {
 
     /**
      * Get proper redirect URL for dashboard
+     *
+     * @param string $type Type.
+     * @param string $value Value.
+     *
+     * @return string
      */
     private function get_redirect_url( $type, $value ) {
         // Dynamically build the correct dashboard settings payout URL.
         $base_url = StoreUtil::get_endpoint_url( 'settings' ) . '#subtab=payout';
-        if ( $type === 'connected' ) {
+        if ( 'connected' === $type ) {
             return add_query_arg( 'connected', $value, $base_url );
-        } elseif ( $type === 'error' ) {
+        } elseif ( 'error' === $type ) {
             return add_query_arg( 'error', $value, $base_url );
         }
         return $base_url;
@@ -327,6 +345,12 @@ class StripeConnect {
 
     /**
      * Create transfer
+     *
+     * @param int    $amount Amount in cents.
+     * @param string $destination Stripe account ID.
+     * @param int    $order_id Order ID.
+     *
+     * @return array|false
      */
     public function create_transfer( $amount, $destination, $order_id ) {
 
@@ -349,6 +373,12 @@ class StripeConnect {
 
     /**
      * Make Stripe API call using WordPress HTTP API
+     *
+     * @param string $url URL.
+     * @param array  $data Data.
+     * @param string $method Method.
+     *
+     * @return array|false
      */
     private function make_stripe_api_call( $url, $data = array(), $method = 'POST' ) {
         $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
@@ -368,7 +398,7 @@ class StripeConnect {
             'timeout' => 30,
         );
 
-        if ( ( $method === 'POST' || $method === 'PUT' ) && ! empty( $data ) ) {
+        if ( ( 'POST' === $method || 'PUT' === $method ) && ! empty( $data ) ) {
             $args['body'] = http_build_query( $data );
         }
 

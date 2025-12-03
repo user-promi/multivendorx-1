@@ -6,6 +6,7 @@
  */
 
 namespace MultiVendorX\Announcement;
+
 use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
@@ -277,6 +278,11 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
         }
     }
 
+    /**
+     * Create a single item.
+     *
+     * @param object $request Full data about the request.
+     */
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
@@ -435,7 +441,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                 );
             }
 
-            // Update stores meta
+            // Update stores meta.
             update_post_meta( $post_id, Utill::POST_META_SETTINGS['announcement_stores'], $stores );
 
             return rest_ensure_response(

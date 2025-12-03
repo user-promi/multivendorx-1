@@ -1,4 +1,9 @@
 <?php
+/**
+ * MultiVendorX Store Util Class
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\Store;
 
@@ -7,43 +12,47 @@ use MultiVendorX\Utill;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Store Util class
+ * MultiVendorX Store Util Class.
  *
- * @version     2.2.0
- * @package     MultiVendorX
+ * @class       Module class
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
-
 class StoreUtil {
 
+    /**
+     * Constructor
+     */
     public function __construct() {
 
         add_action( 'multivendorx_after_store_active', array( $this, 'create_store_shipping_class' ) );
     }
     /**
      * Create a WooCommerce shipping class when store becomes active.
+     *
+     * @param int $store_id Store ID.
      */
     public function create_store_shipping_class( $store_id ) {
-        // Load store object
+        // Load store object.
         $store = new \MultiVendorX\Store\Store( $store_id );
 
-        // Check if class already exists for this store
+        // Check if class already exists for this store.
         $existing_class_id = $store->get_meta( Utill::STORE_SETTINGS_KEYS['shipping_class_id'] );
         if ( $existing_class_id ) {
             return; // Skip creation
         }
 
-        // Prepare unique shipping class slug
+        // Prepare unique shipping class slug.
         $store_name = sanitize_title( $store->get( 'name' ) );
         $slug       = $store_name . '-' . $store_id;
 
-        // Check if the shipping class already exists
+        // Check if the shipping class already exists.
         $shipping_term = get_term_by( 'slug', $slug, Utill::WOO_SETTINGS['product_shipping_class'], ARRAY_A );
 
-        // Create a new shipping class if missing
+        // Create a new shipping class if missing.
         if ( ! $shipping_term ) {
             $shipping_term = wp_insert_term(
-                $store->get( 'name' ) . ' Shipping', // Shipping class name
+                $store->get( 'name' ) . ' Shipping', // Shipping class name.
                 Utill::WOO_SETTINGS['product_shipping_class'],
                 array(
                     'slug' => $slug,
@@ -51,21 +60,26 @@ class StoreUtil {
             );
         }
 
-        // Validate creation
+        // Validate creation.
         if ( ! is_wp_error( $shipping_term ) ) {
             $class_id = $shipping_term['term_id'];
 
-            // Save class ID in store meta
+            // Save class ID in store meta.
             $store->update_meta( Utill::STORE_SETTINGS_KEYS['shipping_class_id'], $class_id );
 
-            // Save MultiVendorX store reference in term meta
+            // Save MultiVendorX store reference in term meta.
             update_term_meta( $class_id, Utill::POST_META_SETTINGS['store_id'], $store_id );
 
-            // Optional: add origin help
+            // Optional: add origin help.
             update_term_meta( $class_id, Utill::WOO_SETTINGS['shipping_origin_country'], get_option( Utill::WOO_SETTINGS['default_country'] ) );
         }
     }
 
+    /**
+     * Add store users
+     *
+     * @param array $args Array of arguments.
+     */
     public static function add_store_users( $args ) {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['store_users'];
@@ -74,7 +88,7 @@ class StoreUtil {
         $role_id  = $args['role_id'] ?? '';
         $owners   = $args['users'] ?? array();
 
-        // remove old users not in list
+        // Remove old users not in list.
         $wpdb->query(
             $wpdb->prepare(
                 "DELETE FROM {$table} WHERE store_id = %d AND role_id = %s AND user_id NOT IN (" . implode( ',', array_map( 'intval', $owners ) ) . ')',
@@ -83,7 +97,7 @@ class StoreUtil {
             )
         );
 
-        // insert new users
+        // Insert new users.
         foreach ( $owners as $user_id ) {
             $exists = $wpdb->get_var(
                 $wpdb->prepare(
@@ -108,6 +122,12 @@ class StoreUtil {
         }
     }
 
+    /**
+     * Get store users
+     *
+     * @param int $store_id Store ID.
+     * @return array
+     */
     public static function get_store_users( $store_id ) {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['store_users'];
@@ -120,6 +140,12 @@ class StoreUtil {
         );
     }
 
+    /**
+     * Get stores from user id
+     *
+     * @param int $user_id User ID.
+     * @return array
+     */
     public static function get_stores_from_user_id( $user_id ) {
         global $wpdb;
 
@@ -144,8 +170,11 @@ class StoreUtil {
         return $wpdb->get_results( $wpdb->prepare( $sql, $params ), ARRAY_A );
     }
 
-
-
+    /**
+     * Get all stores
+     *
+     * @return array
+     */
     public static function get_store() {
         global $wpdb;
 
@@ -155,6 +184,12 @@ class StoreUtil {
         return $store ?: array();
     }
 
+    /**
+     * Get store by primary owner
+     *
+     * @param string $status Store status.
+     * @return array
+     */
     public static function get_store_by_primary_owner( $status = 'active' ) {
         global $wpdb;
 
@@ -164,6 +199,12 @@ class StoreUtil {
         return $stores ?: array();
     }
 
+    /**
+     * Get store tabs
+     *
+     * @param int $store_id Store ID.
+     * @return array
+     */
     public function get_store_tabs( $store_id ) {
 
         $tabs = array(
@@ -176,7 +217,13 @@ class StoreUtil {
         return apply_filters( 'multivendorx_store_tabs', $tabs, $store_id );
     }
 
-
+    /**
+     * Get store URL
+     *
+     * @param int    $store_id Store ID.
+     * @param string $tab Optional tab.
+     * @return string
+     */
     public function get_store_url( $store_id, $tab = '' ) {
         if ( ! $store_id ) {
             return '';
@@ -196,6 +243,11 @@ class StoreUtil {
         return apply_filters( 'multivendorx_get_store_url', home_url( $path ), $custom_store_url, $store_id, $tab );
     }
 
+    /**
+     * Get store capability
+     *
+     * @return array
+     */
     public static function get_store_capability() {
         $capabilities = array(
             'products'   => array(
@@ -270,6 +322,13 @@ class StoreUtil {
         return $capabilities;
     }
 
+    /**
+     * Get store data for a product.
+     *
+     * @param int $product_id Product ID.
+     *
+     * @return object|false
+     */
     public static function get_products_store( $product_id ) {
         $vendor_data = false;
         if ( $product_id > 0 ) {
@@ -283,10 +342,17 @@ class StoreUtil {
         return $vendor_data;
     }
 
+    /**
+     * Get store registration form data.
+     *
+     * @param int $store_id Store ID.
+     *
+     * @return array
+     */
     public static function get_store_registration_form( $store_id ) {
         $store = Store::get_store_by_id( $store_id );
 
-        // Get core fields from store object
+        // Get core fields from store object.
         $core_fields = array(
             'name'        => 'Store Name',
             'description' => 'Store Description',
@@ -301,7 +367,7 @@ class StoreUtil {
 
         $all_registration_data['id'] = $store_id;
 
-        // Get registration form data (serialized meta)
+        // Get registration form data (serialized meta).
         $store_meta     = $store->get_meta( Utill::STORE_SETTINGS_KEYS['registration_data'] );
         $submitted_data = array();
         if ( ! empty( $store_meta ) && is_serialized( $store_meta ) ) {
@@ -326,13 +392,13 @@ class StoreUtil {
             }
         }
 
-        // Fetch form settings
+        // Fetch form settings.
         $form_settings = MultivendorX()->setting->get_option(
             'multivendorx_store_registration_form_settings',
             array()
         );
 
-        // Build map: field_name => field_label
+        // Build map: field_name => field_label.
         $name_label_map = $option_label_map = array();
         if ( isset( $form_settings['store_registration_from']['formfieldlist'] ) ) {
             foreach ( $form_settings['store_registration_from']['formfieldlist'] as $field ) {
@@ -350,7 +416,7 @@ class StoreUtil {
         $primary_owner_id   = self::get_primary_owner( $store_id );
         $primary_owner_info = get_userdata( $primary_owner_id );
 
-        // Prepare structured response
+        // Prepare structured response.
         $response = array(
             'core_data'              => $core_data,
             'registration_data'      => array(),
@@ -377,6 +443,13 @@ class StoreUtil {
         return $response;
     }
 
+    /**
+     * Get stores by status.
+     *
+     * @param string $status Store status.
+     *
+     * @return array Stores.
+     */
     public static function get_stores_by_status( $status ) {
         global $wpdb;
 
@@ -392,6 +465,13 @@ class StoreUtil {
         return $stores ?: array();
     }
 
+    /**
+     * Get primary owner for a store.
+     *
+     * @param int $store_id Store ID.
+     *
+     * @return int User ID.
+     */
     public static function get_primary_owner( $store_id ) {
         global $wpdb;
         $table_name    = $wpdb->prefix . Utill::TABLES['store_users'];
@@ -404,12 +484,20 @@ class StoreUtil {
         return $primary_owner;
     }
 
+    /**
+     * Set primary owner for a store.
+     *
+     * @param int $user_id User ID.
+     * @param int $store_id Store ID.
+     *
+     * @return void
+     */
     public static function set_primary_owner( $user_id, $store_id ) {
         global $wpdb;
 
         $table_name = $wpdb->prefix . Utill::TABLES['store_users'];
 
-        // Check if store_id already exists
+        // Check if store_id already exists.
         $exists = $wpdb->get_var(
             $wpdb->prepare(
                 "SELECT ID FROM $table_name WHERE store_id = %d",
@@ -418,7 +506,7 @@ class StoreUtil {
         );
 
         if ( $exists ) {
-            // Update
+            // Update.
             $wpdb->update(
                 $table_name,
                 array( 'primary_owner' => $user_id ),
@@ -427,7 +515,7 @@ class StoreUtil {
                 array( '%d' )
             );
         } else {
-            // Insert
+            // Insert.
             $wpdb->insert(
                 $table_name,
                 // [
@@ -447,6 +535,13 @@ class StoreUtil {
         }
     }
 
+    /**
+     * Get store product policies
+     *
+     * @param int $product_id
+     *
+     * @return array
+     */
     public static function get_store_product_policies( $product_id = 0 ) {
         $product  = wc_get_product( $product_id );
         $policies = array();
@@ -499,6 +594,12 @@ class StoreUtil {
         return $policies;
     }
 
+    /**
+     * Get store policies
+     *
+     * @param int $store_id
+     * @return array
+     */
     public static function get_store_policies( $store_id = 0 ) {
         $policies                = array();
             $store_policy        = MultiVendorX()->setting->get_setting( 'store_policy', array() );
@@ -540,12 +641,20 @@ class StoreUtil {
         return $policies;
     }
 
+    /**
+     * Get the store dashboard endpoint URL.
+     *
+     * @param string $tab   The tab name.
+     * @param string $sub   The sub-tab name.
+     * @param string $value The value for the sub-tab.
+     * @return string The endpoint URL.
+     */
     public static function get_endpoint_url( $tab = '', $sub = '', $value = '' ) {
 
-        // Set your Dashboard Page ID
+        // Set your Dashboard Page ID.
         $page_id = MultiVendorX()->setting->get_setting( 'store_dashboard_page' );
 
-        // Pretty permalinks
+        // Pretty permalinks.
         if ( get_option( Utill::WORDPRESS_SETTINGS['permalink'] ) ) {
             $url = home_url( '/dashboard' );
 
@@ -630,16 +739,16 @@ class StoreUtil {
             $query    .= ' WHERE ' . implode( $condition, $where );
         }
 
-        // ADD SORTING SUPPORT HERE
+        // ADD SORTING SUPPORT HERE.
         if ( ! empty( $args['orderBy'] ) ) {
-            // Only allow safe columns to sort by (avoid SQL injection)
+            // Only allow safe columns to sort by (avoid SQL injection).
             $allowed_columns = array( 'ID', 'name', 'status', 'slug', 'create_time' );
             $orderBy         = in_array( $args['orderBy'], $allowed_columns, true ) ? $args['orderBy'] : 'ID';
             $order           = ( isset( $args['order'] ) && strtolower( $args['order'] ) === 'desc' ) ? 'DESC' : 'ASC';
             $query          .= " ORDER BY {$orderBy} {$order}";
         }
 
-        // Keep your pagination logic
+        // Keep your pagination logic.
         if ( isset( $args['limit'] ) && isset( $args['offset'] ) && empty( $args['count'] ) ) {
             $limit  = intval( $args['limit'] );
             $offset = intval( $args['offset'] );
@@ -658,7 +767,9 @@ class StoreUtil {
     /**
      * Get all product IDs that should be excluded based on conditions.
      *
-     * @param array $args  Optional: custom conditions.
+     * @param int  $product_id Product ID.
+     * @param int  $store_id Store ID.
+     * @param bool $check_payouts Whether to check for payouts.
      * @return boolean
      */
     public static function get_excluded_products( $product_id = '', $store_id = '', $check_payouts = false ) {
@@ -675,19 +786,19 @@ class StoreUtil {
         $suspend_settings = MultiVendorX()->setting->get_setting( 'restriction_for_sunspended', array() );
 
         if ( $check_payouts ) {
-            if ( $status == 'under_review' && in_array( 'hold_payments_release', $review_settings ) ) {
+            if ( 'under_review' === $status && in_array( 'hold_payments_release', $review_settings ) ) {
                 return true;
             }
 
-            if ( $status == 'suspended' && in_array( 'freeze_all_payments', $suspend_settings ) ) {
+            if ( 'suspended' === $status && in_array( 'freeze_all_payments', $suspend_settings ) ) {
                 return true;
             }
         } else {
-            if ( $status == 'under_review' && in_array( 'pause_selling_products', $review_settings ) ) {
+            if ( 'under_review' === $status && in_array( 'pause_selling_products', $review_settings ) ) {
                 return true;
             }
 
-            if ( $status == 'suspended' && in_array( 'store_visible_in_checkout', $suspend_settings ) ) {
+            if ( 'suspended' === $status && in_array( 'store_visible_in_checkout', $suspend_settings, true ) ) {
                 return true;
             }
         }
@@ -724,193 +835,195 @@ class StoreUtil {
      * @return int|array|mixed
      */
     // public static function get_store_information( $args = array() ) {
-    //     global $wpdb;
+    // global $wpdb;
 
-    //     $defaults = [
-    //         'fields'   => 'all', // 'all' or 'ids'
-    //         'count'    => false, // return count (int)
-    //         'full'     => false, // attach meta + users
-    //         'limit'    => null,
-    //         'offset'   => null,
-    //         'orderBy'  => 'ID',
-    //         'order'    => 'DESC',
-    //         'condition'=> ' AND ', // between where parts
-    //     ];
-    //     $args = wp_parse_args( $args, $defaults );
+    // $defaults = [
+    // 'fields'   => 'all', // 'all' or 'ids'
+    // 'count'    => false, // return count (int)
+    // 'full'     => false, // attach meta + users
+    // 'limit'    => null,
+    // 'offset'   => null,
+    // 'orderBy'  => 'ID',
+    // 'order'    => 'DESC',
+    // 'condition'=> ' AND ', // between where parts
+    // ];
+    // $args = wp_parse_args( $args, $defaults );
 
-    //     $store_table = $wpdb->prefix . Utill::TABLES['store'];
-    //     $meta_table  = $wpdb->prefix . Utill::TABLES['store_meta'];
-    //     $users_table = $wpdb->prefix . Utill::TABLES['store_users'];
+    // $store_table = $wpdb->prefix . Utill::TABLES['store'];
+    // $meta_table  = $wpdb->prefix . Utill::TABLES['store_meta'];
+    // $users_table = $wpdb->prefix . Utill::TABLES['store_users'];
 
-    //     $where_clauses = [];
-    //     $join_meta = false;
-    //     $single_id_request = false;
+    // $where_clauses = [];
+    // $join_meta = false;
+    // $single_id_request = false;
 
-    //     /* --------------------------
-    //     ID filter (single or multiple)
-    //     --------------------------- */
-    //     if ( isset( $args['ID'] ) ) {
-    //         if ( is_array( $args['ID'] ) ) {
-    //             $ids = array_map( 'intval', $args['ID'] );
-    //             if ( empty( $ids ) ) {
-    //                 // nothing to fetch
-    //                 return $args['count'] ? 0 : ( $args['fields'] === 'ids' ? array() : array() );
-    //             }
-    //             $where_clauses[] = $wpdb->prepare( "{$store_table}.ID IN (" . implode( ',', $ids ) . " )" );
-    //         } else {
-    //             $id = intval( $args['ID'] );
-    //             $single_id_request = true;
-    //             $where_clauses[] = $wpdb->prepare( "{$store_table}.ID = %d", $id );
-    //         }
-    //     }
+    // * --------------------------
+    // ID filter (single or multiple)
+    // --------------------------- */
+    // if ( isset( $args['ID'] ) ) {
+    // if ( is_array( $args['ID'] ) ) {
+    // $ids = array_map( 'intval', $args['ID'] );
+    // if ( empty( $ids ) ) {
+    // nothing to fetch
+    // return $args['count'] ? 0 : ( $args['fields'] === 'ids' ? array() : array() );
+    // }
+    // $where_clauses[] = $wpdb->prepare( "{$store_table}.ID IN (" . implode( ',', $ids ) . " )" );
+    // } else {
+    // $id = intval( $args['ID'] );
+    // $single_id_request = true;
+    // $where_clauses[] = $wpdb->prepare( "{$store_table}.ID = %d", $id );
+    // }
+    // }
 
-    //     /* --------------------------
-    //     Basic store filters
-    //     --------------------------- */
-    //     if ( isset( $args['status'] ) ) {
-    //         $where_clauses[] = $wpdb->prepare( "{$store_table}.status = %s", $args['status'] );
-    //     }
+    // * --------------------------
+    // Basic store filters
+    // --------------------------- */
+    // if ( isset( $args['status'] ) ) {
+    // $where_clauses[] = $wpdb->prepare( "{$store_table}.status = %s", $args['status'] );
+    // }
 
-    //     if ( isset( $args['slug'] ) ) {
-    //         $where_clauses[] = $wpdb->prepare( "{$store_table}.slug = %s", $args['slug'] );
-    //     }
+    // if ( isset( $args['slug'] ) ) {
+    // $where_clauses[] = $wpdb->prepare( "{$store_table}.slug = %s", $args['slug'] );
+    // }
 
-    //     if ( isset( $args['name'] ) ) {
-    //         $like = '%' . $wpdb->esc_like( $args['name'] ) . '%';
-    //         $where_clauses[] = $wpdb->prepare( "{$store_table}.name LIKE %s", $like );
-    //     }
+    // if ( isset( $args['name'] ) ) {
+    // $like = '%' . $wpdb->esc_like( $args['name'] ) . '%';
+    // $where_clauses[] = $wpdb->prepare( "{$store_table}.name LIKE %s", $like );
+    // }
 
-    //     if ( isset( $args['searchField'] ) ) {
-    //         $like = '%' . $wpdb->esc_like( $args['searchField'] ) . '%';
-    //         $where_clauses[] = $wpdb->prepare( "({$store_table}.name LIKE %s)", $like );
-    //     }
+    // if ( isset( $args['searchField'] ) ) {
+    // $like = '%' . $wpdb->esc_like( $args['searchField'] ) . '%';
+    // $where_clauses[] = $wpdb->prepare( "({$store_table}.name LIKE %s)", $like );
+    // }
 
-    //     if ( isset( $args['start_date'] ) && isset( $args['end_date'] ) ) {
-    //         $where_clauses[] = $wpdb->prepare( "{$store_table}.create_time BETWEEN %s AND %s", $args['start_date'], $args['end_date'] );
-    //     }
+    // if ( isset( $args['start_date'] ) && isset( $args['end_date'] ) ) {
+    // $where_clauses[] = $wpdb->prepare( "{$store_table}.create_time BETWEEN %s AND %s", $args['start_date'], $args['end_date'] );
+    // }
 
-    //     /* --------------------------
-    //     Meta support
-    //     - meta_key: existence of a key (any value)
-    //     - meta_query: array like WP (subset: relation, key, value, compare)
-    //     --------------------------- */
-    //     if ( isset( $args['meta_key'] ) || isset( $args['meta_query'] ) ) {
-    //         $join_meta = true;
-    //     }
+    // * --------------------------
+    // Meta support
+    // - meta_key: existence of a key (any value)
+    // - meta_query: array like WP (subset: relation, key, value, compare)
+    // --------------------------- */
+    // if ( isset( $args['meta_key'] ) || isset( $args['meta_query'] ) ) {
+    // $join_meta = true;
+    // }
 
-    //     if ( isset( $args['meta_key'] ) ) {
-    //         // existence check
-    //         $where_clauses[] = $wpdb->prepare( "EXISTS (SELECT 1 FROM {$meta_table} mt WHERE mt.store_id = {$store_table}.ID AND mt.meta_key = %s)", $args['meta_key'] );
-    //     }
+    // if ( isset( $args['meta_key'] ) ) {
+    // existence check
+    // $where_clauses[] = $wpdb->prepare( "EXISTS (SELECT 1 FROM {$meta_table} mt WHERE mt.store_id = {$store_table}.ID AND mt.meta_key = %s)", $args['meta_key'] );
+    // }
 
-    //     if ( isset( $args['meta_query'] ) && is_array( $args['meta_query'] ) ) {
-    //         // build meta_query SQL (supports relation=AND|OR and simple compares)
-    //         $meta_sql = self::build_meta_query_sql( $args['meta_query'], $meta_table, $store_table );
-    //         if ( ! empty( $meta_sql ) ) {
-    //             $where_clauses[] = $meta_sql;
-    //             $join_meta = true;
-    //         }
-    //     }
+    // if ( isset( $args['meta_query'] ) && is_array( $args['meta_query'] ) ) {
+    // build meta_query SQL (supports relation=AND|OR and simple compares)
+    // $meta_sql = self::build_meta_query_sql( $args['meta_query'], $meta_table, $store_table );
+    // if ( ! empty( $meta_sql ) ) {
+    // $where_clauses[] = $meta_sql;
+    // $join_meta = true;
+    // }
+    // }
 
-    //     /* --------------------------
-    //     User filter (stores belonging to user)
-    //     --------------------------- */
-    //     if ( isset( $args['user_id'] ) ) {
-    //         $user_id = intval( $args['user_id'] );
-    //         $where_clauses[] = $wpdb->prepare( "{$store_table}.ID IN (SELECT store_id FROM {$users_table} WHERE user_id = %d)", $user_id );
-    //     }
+    // * --------------------------
+    // User filter (stores belonging to user)
+    // --------------------------- */
+    // if ( isset( $args['user_id'] ) ) {
+    // $user_id = intval( $args['user_id'] );
+    // $where_clauses[] = $wpdb->prepare( "{$store_table}.ID IN (SELECT store_id FROM {$users_table} WHERE user_id = %d)", $user_id );
+    // }
 
-    //     /* --------------------------
-    //     SELECT / COUNT / FIELDS
-    //     --------------------------- */
-    //     // fields=ids -> only IDs
-    //     if ( $args['count'] ) {
-    //         // return count integer
-    //         $select = "SELECT COUNT(DISTINCT {$store_table}.ID) AS cnt";
-    //     } elseif ( $args['fields'] === 'ids' ) {
-    //         $select = "SELECT DISTINCT {$store_table}.ID";
-    //     } else {
-    //         // full rows with FOUND_ROWS to get total if pagination used
-    //         $select = "SELECT SQL_CALC_FOUND_ROWS DISTINCT {$store_table}.*";
-    //     }
+    // * --------------------------
+    // SELECT / COUNT / FIELDS
+    // --------------------------- */
+    // fields=ids -> only IDs
+    // if ( $args['count'] ) {
+    // return count integer
+    // $select = "SELECT COUNT(DISTINCT {$store_table}.ID) AS cnt";
+    // } elseif ( $args['fields'] === 'ids' ) {
+    // $select = "SELECT DISTINCT {$store_table}.ID";
+    // } else {
+    // full rows with FOUND_ROWS to get total if pagination used
+    // $select = "SELECT SQL_CALC_FOUND_ROWS DISTINCT {$store_table}.*";
+    // }
 
-    //     $from = " FROM {$store_table}";
+    // $from = " FROM {$store_table}";
 
-    //     // join meta only when required for complex meta SQL (we use EXISTS/subqueries mostly)
-    //     if ( $join_meta ) {
-    //         // For safety we won't add a direct join that multiplies rows; meta conditions use EXISTS or subqueries.
-    //         // But in case you prefer to join, you can uncomment the line below.
-    //         // $from .= " LEFT JOIN {$meta_table} AS m ON m.store_id = {$store_table}.ID";
-    //     }
+    // join meta only when required for complex meta SQL (we use EXISTS/subqueries mostly)
+    // if ( $join_meta ) {
+    // For safety we won't add a direct join that multiplies rows; meta conditions use EXISTS or subqueries.
+    // But in case you prefer to join, you can uncomment the line below.
+    // $from .= " LEFT JOIN {$meta_table} AS m ON m.store_id = {$store_table}.ID";
+    // }
 
-    //     $sql = $select . $from;
+    // $sql = $select . $from;
 
-    //     if ( ! empty( $where_clauses ) ) {
-    //         $sql .= " WHERE " . implode( $args['condition'], $where_clauses );
-    //     }
+    // if ( ! empty( $where_clauses ) ) {
+    // $sql .= " WHERE " . implode( $args['condition'], $where_clauses );
+    // }
 
-    //     /* --------------------------
-    //     ORDER BY
-    //     --------------------------- */
-    //     if ( isset( $args['orderBy'] ) && ! $args['count'] && $args['fields'] !== 'ids' ) {
-    //         $allowed_cols = array( 'ID', 'name', 'status', 'slug', 'create_time' );
-    //         $orderBy = in_array( $args['orderBy'], $allowed_cols, true ) ? $args['orderBy'] : 'ID';
-    //         $order   = ( isset( $args['order'] ) && strtolower( $args['order'] ) === 'desc' ) ? 'DESC' : 'ASC';
-    //         $sql .= " ORDER BY {$orderBy} {$order}";
-    //     }
+    // * --------------------------
+    // ORDER BY
+    // --------------------------- */
+    // if ( isset( $args['orderBy'] ) && ! $args['count'] && $args['fields'] !== 'ids' ) {
+    // $allowed_cols = array( 'ID', 'name', 'status', 'slug', 'create_time' );
+    // $orderBy = in_array( $args['orderBy'], $allowed_cols, true ) ? $args['orderBy'] : 'ID';
+    // $order   = ( isset( $args['order'] ) && strtolower( $args['order'] ) === 'desc' ) ? 'DESC' : 'ASC';
+    // $sql .= " ORDER BY {$orderBy} {$order}";
+    // }
 
-    //     /* --------------------------
-    //     LIMIT / OFFSET (only for non-count)
-    //     --------------------------- */
-    //     if ( ! $args['count'] && $args['limit'] !== null ) {
-    //         $limit = intval( $args['limit'] );
-    //         $offset = isset( $args['offset'] ) ? intval( $args['offset'] ) : 0;
-    //         $sql .= $wpdb->prepare( " LIMIT %d OFFSET %d", $limit, $offset );
-    //     }
+    // * --------------------------
+    // LIMIT / OFFSET (only for non-count)
+    // --------------------------- */
+    // if ( ! $args['count'] && $args['limit'] !== null ) {
+    // $limit = intval( $args['limit'] );
+    // $offset = isset( $args['offset'] ) ? intval( $args['offset'] ) : 0;
+    // $sql .= $wpdb->prepare( " LIMIT %d OFFSET %d", $limit, $offset );
+    // }
 
-    //     /* --------------------------
-    //     EXECUTE
-    //     --------------------------- */
-    //     if ( $args['count'] ) {
-    //         // simple count query
-    //         $count = (int) $wpdb->get_var( $sql );
-    //         return $count;
-    //     }
+    // * --------------------------
+    // EXECUTE
+    // --------------------------- */
+    // if ( $args['count'] ) {
+    // simple count query
+    // $count = (int) $wpdb->get_var( $sql );
+    // return $count;
+    // }
 
-    //     $rows = $wpdb->get_results( $sql, ARRAY_A );
+    // $rows = $wpdb->get_results( $sql, ARRAY_A );
 
-    //     // if fields=ids, convert to simple list of ints
-    //     if ( $args['fields'] === 'ids' ) {
-    //         $ids = array_map( 'intval', wp_list_pluck( $rows, 'ID' ) );
-    //         if ( $single_id_request ) {
-    //             return isset( $ids[0] ) ? $ids[0] : null;
-    //         }
-    //         return $ids;
-    //     }
+    // if fields=ids, convert to simple list of ints
+    // if ( $args['fields'] === 'ids' ) {
+    // $ids = array_map( 'intval', wp_list_pluck( $rows, 'ID' ) );
+    // if ( $single_id_request ) {
+    // return isset( $ids[0] ) ? $ids[0] : null;
+    // }
+    // return $ids;
+    // }
 
-    //     // if single ID requested, return single row (or null)
-    //     if ( $single_id_request ) {
-    //         $single = ( ! empty( $rows ) ) ? $rows[0] : null;
-    //         if ( $single && ! empty( $args['full'] ) ) {
-    //             $single['meta']  = self::get_store_meta_all( $single['ID'] );
-    //             $single['users'] = self::get_store_users( $single['ID'] );
-    //         }
-    //         return $single;
-    //     }
+    // if single ID requested, return single row (or null)
+    // if ( $single_id_request ) {
+    // $single = ( ! empty( $rows ) ) ? $rows[0] : null;
+    // if ( $single && ! empty( $args['full'] ) ) {
+    // $single['meta']  = self::get_store_meta_all( $single['ID'] );
+    // $single['users'] = self::get_store_users( $single['ID'] );
+    // }
+    // return $single;
+    // }
 
-    //     // multiple rows: if full, attach meta + users for each
-    //     if ( ! empty( $args['full'] ) && ! empty( $rows ) ) {
-    //         foreach ( $rows as &$r ) {
-    //             $r['meta']  = self::get_store_meta_all( $r['ID'] );
-    //             $r['users'] = self::get_store_users( $r['ID'] );
-    //         }
-    //     }
+    // multiple rows: if full, attach meta + users for each
+    // if ( ! empty( $args['full'] ) && ! empty( $rows ) ) {
+    // foreach ( $rows as &$r ) {
+    // $r['meta']  = self::get_store_meta_all( $r['ID'] );
+    // $r['users'] = self::get_store_users( $r['ID'] );
+    // }
+    // }
 
-    //     return $rows;
+    // return $rows;
     // }
 
     /**
      * Basic helper: get all meta for a store as key => value (maybe_unserialize).
+     *
+     * @param int $store_id
      */
     public static function get_store_meta_all( $store_id ) {
         global $wpdb;
@@ -921,7 +1034,7 @@ class StoreUtil {
             ARRAY_A
         );
 
-        $meta = [];
+        $meta = array();
         foreach ( $rows as $r ) {
             $meta[ $r['meta_key'] ] = maybe_unserialize( $r['meta_value'] );
         }
@@ -938,6 +1051,10 @@ class StoreUtil {
      *    [ 'key'=>'pincode', 'value'=>'11', 'compare'=>'LIKE' ],
      *    [ 'key'=>'flag', 'compare'=>'EXISTS' ] // exists only
      * ]
+     *
+     * @param array  $meta_query
+     * @param string $meta_table
+     * @param string $store_table
      */
     private static function build_meta_query_sql( $meta_query, $meta_table = null, $store_table = null ) {
         global $wpdb;
@@ -946,11 +1063,11 @@ class StoreUtil {
             return '';
         }
 
-        // if called without table names, use defaults
-        if ( $meta_table === null ) {
+        // if called without table names, use defaults.
+        if ( null === $meta_table ) {
             $meta_table = $wpdb->prefix . Utill::TABLES['store_meta'];
         }
-        if ( $store_table === null ) {
+        if ( null === $store_table ) {
             $store_table = $wpdb->prefix . Utill::TABLES['store'];
         }
 
@@ -969,16 +1086,16 @@ class StoreUtil {
             if ( ! is_array( $mq ) || empty( $mq['key'] ) ) {
                 continue;
             }
-            $key = $mq['key'];
+            $key     = $mq['key'];
             $compare = isset( $mq['compare'] ) ? strtoupper( $mq['compare'] ) : '=';
-            // special: EXISTS (only key)
-            if ( $compare === 'EXISTS' ) {
+            // special: EXISTS (only key).
+            if ( 'EXISTS' === $compare ) {
                 $parts[] = $wpdb->prepare( "EXISTS (SELECT 1 FROM {$meta_table} mt WHERE mt.store_id = {$store_table}.ID AND mt.meta_key = %s)", $key );
                 continue;
             }
 
             if ( ! isset( $mq['value'] ) ) {
-                // nothing to compare against; skip
+                // Nothing to compare against; skip.
                 continue;
             }
 
@@ -986,7 +1103,7 @@ class StoreUtil {
 
             switch ( $compare ) {
                 case 'LIKE':
-                    $v = '%' . $wpdb->esc_like( (string) $value ) . '%';
+                    $v       = '%' . $wpdb->esc_like( (string) $value ) . '%';
                     $parts[] = $wpdb->prepare( "EXISTS (SELECT 1 FROM {$meta_table} mt WHERE mt.store_id = {$store_table}.ID AND mt.meta_key = %s AND mt.meta_value LIKE %s)", $key, $v );
                     break;
 
@@ -1010,8 +1127,8 @@ class StoreUtil {
                 case '>':
                 case '<=':
                 case '>=':
-                    // simple comparison
-                    if ( $compare === '!=' ) {
+                    // simple comparison.
+                    if ( '!=' === $compare ) {
                         $parts[] = $wpdb->prepare( "EXISTS (SELECT 1 FROM {$meta_table} mt WHERE mt.store_id = {$store_table}.ID AND mt.meta_key = %s AND mt.meta_value != %s)", $key, $value );
                     } else {
                         $parts[] = $wpdb->prepare( "EXISTS (SELECT 1 FROM {$meta_table} mt WHERE mt.store_id = {$store_table}.ID AND mt.meta_key = %s AND mt.meta_value {$compare} %s)", $key, $value );
@@ -1019,7 +1136,7 @@ class StoreUtil {
                     break;
 
                 default:
-                    // fallback to exact match
+                    // fallback to exact match.
                     $parts[] = $wpdb->prepare( "EXISTS (SELECT 1 FROM {$meta_table} mt WHERE mt.store_id = {$store_table}.ID AND mt.meta_key = %s AND mt.meta_value = %s)", $key, $value );
                     break;
             }
@@ -1031,5 +1148,4 @@ class StoreUtil {
 
         return '(' . implode( " {$relation} ", $parts ) . ')';
     }
-
 }

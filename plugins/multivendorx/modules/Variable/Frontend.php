@@ -6,6 +6,7 @@
  */
 
 namespace MultiVendorX\Variable;
+
 use MultiVendorX\Utill;
 
 /**
@@ -25,6 +26,13 @@ class Frontend {
         add_action( 'mvx_after_attribute_product_tabs_content', array( $this, 'mvx_product_variable_tab_content' ), 10, 3 );
     }
 
+    /**
+     * Set Product Types
+     *
+     * @param  array $product_types Product types.
+     *
+     * @return array
+     */
     public function set_product_types( $product_types ) {
         $afm_types             = array();
         $afm_types['variable'] = __( 'Variable product', 'multivendorx' );
@@ -32,6 +40,15 @@ class Frontend {
         return array_merge( $product_types, $afm_types );
     }
 
+    /**
+     * Variable product tab content
+     *
+     * @param  object $self Product Object.
+     * @param  object $product_object Product Object.
+     * @param  object $post Post Object.
+     *
+     * @return void
+     */
     public function mvx_product_variable_tab_content( $self, $product_object, $post ) {
         MultiVendorX()->util->get_template(
             'product/views/html-product-data-variations.php',

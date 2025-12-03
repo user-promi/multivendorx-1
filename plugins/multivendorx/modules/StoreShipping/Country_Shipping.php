@@ -6,6 +6,7 @@
  */
 
 namespace MultiVendorX\StoreShipping;
+
 use MultiVendorX\Utill;
 defined( 'ABSPATH' ) || exit;
 
@@ -61,8 +62,8 @@ class Country_Shipping extends \WC_Shipping_Method {
      * @access public
      * @return void
      */
-    function init() {
-        // Save settings in admin if you have any defined
+    public function init() {
+        // Save settings in admin if you have any defined.
         add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
     }
 
@@ -74,6 +75,13 @@ class Country_Shipping extends \WC_Shipping_Method {
     }
 
 
+    /**
+     * Calculate shipping
+     *
+     * @param  array $package Package.
+     *
+     * @return void
+     */
     public function calculate_shipping( $package = array() ) {
         $products            = $package['contents'];
         $destination_country = $package['destination']['country'] ?? '';
@@ -175,9 +183,9 @@ class Country_Shipping extends \WC_Shipping_Method {
                 $multivendorx_free_shipping_amount = isset( $meta[ Utill::STORE_SETTINGS_KEYS['_free_shipping_amount'] ] ) ? $meta[ Utill::STORE_SETTINGS_KEYS['_free_shipping_amount'] ] : '';
                 $multivendorx_free_shipping_amount = apply_filters( 'multivendorx_free_shipping_minimum_order_amount', $multivendorx_free_shipping_amount, $store_id );
 
-                $default_shipping_price     = isset( $meta[ Utill::STORE_SETTINGS_KEYS['shipping_type_price'] ] ) ? $meta[Utill::STORE_SETTINGS_KEYS['shipping_type_price'] ] : 0;
-                $default_shipping_add_price = isset( $meta[ Utill::STORE_SETTINGS_KEYS['additional_product']] ) ? $meta[Utill::STORE_SETTINGS_KEYS['additional_product']] : 0;
-                $default_shipping_qty_price = isset( $meta[ Utill::STORE_SETTINGS_KEYS['additional_qty'] ] ) ? $meta[Utill::STORE_SETTINGS_KEYS['additional_qty']] : 0;
+                $default_shipping_price     = isset( $meta[ Utill::STORE_SETTINGS_KEYS['shipping_type_price'] ] ) ? $meta[ Utill::STORE_SETTINGS_KEYS['shipping_type_price'] ] : 0;
+                $default_shipping_add_price = isset( $meta[ Utill::STORE_SETTINGS_KEYS['additional_product'] ] ) ? $meta[ Utill::STORE_SETTINGS_KEYS['additional_product'] ] : 0;
+                $default_shipping_qty_price = isset( $meta[ Utill::STORE_SETTINGS_KEYS['additional_qty'] ] ) ? $meta[ Utill::STORE_SETTINGS_KEYS['additional_qty'] ] : 0;
 
                 $downloadable_count  = 0;
                 $products_total_cost = 0;
@@ -248,7 +256,7 @@ class Country_Shipping extends \WC_Shipping_Method {
                 // -------------------------
                 // Country/State rates logic
                 // -------------------------
-                $mvx_shipping_rates = isset( $meta[Utill::STORE_SETTINGS_KEYS['shipping_rates']] ) ? json_decode( $meta[Utill::STORE_SETTINGS_KEYS['shipping_rates']], true ) : array();
+                $mvx_shipping_rates = isset( $meta[ Utill::STORE_SETTINGS_KEYS['shipping_rates'] ] ) ? json_decode( $meta[ Utill::STORE_SETTINGS_KEYS['shipping_rates'] ], true ) : array();
                 $state_rate         = 0;
                 $country_rate       = null;
                 $everywhere_rate    = null;
@@ -332,7 +340,7 @@ class Country_Shipping extends \WC_Shipping_Method {
                 $store = new \MultiVendorX\Store\Store( $store_id );
                 $meta  = $store->meta_data; // All store meta data.
 
-                $local_pickup_cost = isset( $meta[Utill::STORE_SETTINGS_KEYS['_local_pickup_cost']] ) ? $meta[Utill::STORE_SETTINGS_KEYS['_local_pickup_cost']] : 0;
+                $local_pickup_cost = isset( $meta[ Utill::STORE_SETTINGS_KEYS['_local_pickup_cost'] ] ) ? $meta[ Utill::STORE_SETTINGS_KEYS['_local_pickup_cost'] ] : 0;
 
                 if ( $local_pickup_cost ) {
                     $rate = array(

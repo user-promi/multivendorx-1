@@ -1,24 +1,34 @@
 <?php
+/**
+ * Store tabs template.
+ *
+ * Override this template by copying it to yourtheme/dc-woocommerce-multi-vendor/store/store-tabs.php
+ *
+ * @package     MultiVendorX/Templates
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 $store_id = $args['store_id'];
 
-// Get store tabs
+// Get store tabs.
 $store_tabs = MultiVendorX()->store->storeutil->get_store_tabs( $store_id );
 
 if ( empty( $store_tabs ) ) {
 	return;
 }
 
-$current_tab = 'products'; // default
+$current_tab = 'products'; // Default.
 $request_url = trailingslashit( home_url( add_query_arg( array(), $wp->request ) ) );
 
-// Loop through tabs
+// Loop through tabs.
 foreach ( $store_tabs as $key => $tab ) {
     if ( ! empty( $tab['url'] ) ) {
-        // Compare current URL with tab URL
+        // Compare current URL with tab URL.
         if ( untrailingslashit( $tab['url'] ) === untrailingslashit( $request_url ) ) {
             $current_tab = $key;
             break;
@@ -80,7 +90,7 @@ switch ( $current_tab ) {
 						 */
 						do_action( 'woocommerce_shop_loop' );
 
-						wc_get_template_part( 'content', 'product' ); // standard product card
+						wc_get_template_part( 'content', 'product' ); // Standard product card.
 						?>
 
 					<?php endwhile; ?>

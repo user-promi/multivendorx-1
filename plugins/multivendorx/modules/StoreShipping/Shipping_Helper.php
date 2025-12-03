@@ -1,20 +1,36 @@
 <?php
+/**
+ * MultiVendorX Shipping Helper Class.
+ *
+ * @package MultiVendorX
+ */
+
 namespace MultiVendorX\StoreShipping;
+
 use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * MultiVendorX Shipping Helper Class.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class Shipping_Helper {
 
     /**
      * Split WooCommerce cart into packages per store/vendor.
+     *
+     * @param array $packages
      */
     public static function split_cart_by_store( $packages ) {
         $new_packages = array();
 
-        // Get user location from session
-        $user_lat = WC()->session->get( '_mvx_user_location_lat' ) ?: '';
-        $user_lng = WC()->session->get( '_mvx_user_location_lng' ) ?: '';
+        // Get user location from session.
+        $user_lat = WC()->session->get( '_mvx_user_location_lat' ) ? WC()->session->get( '_mvx_user_location_lat' ) : '';
+        $user_lng = WC()->session->get( '_mvx_user_location_lng' ) ? WC()->session->get( '_mvx_user_location_lng' ) : '';
 
         foreach ( WC()->cart->get_cart() as $item_key => $item ) {
             $product_id = $item['product_id'];
@@ -28,7 +44,7 @@ class Shipping_Helper {
                     'contents'              => array(),
                     'contents_cost'         => 0,
                     'applied_coupons'       => WC()->cart->get_applied_coupons(),
-                    'store_id'              => $store_id, // store ID
+                    'store_id'              => $store_id, // Store ID.
                     'destination'           => array(
                         'country'   => WC()->customer->get_shipping_country(),
                         'state'     => WC()->customer->get_shipping_state(),

@@ -31,6 +31,14 @@ class Frontend {
         // add_filter( 'template_include', [ $this, 'store_policy_template' ] );
     }
 
+    /**
+     * Add rule for policy
+     *
+     * @param array  $rules rewrite rules.
+     * @param object $instance store instance.
+     *
+     * @return array
+     */
     public function add_rule_for_policy( $rules, $instance ) {
         $rules[] = array(
 			'^' . $instance->custom_store_url . '/([^/]+)/policy?$',
@@ -45,11 +53,26 @@ class Frontend {
         return $rules;
     }
 
+    /**
+     * Add query vars for policy
+     *
+     * @param array $vars query vars.
+     *
+     * @return array
+     */
     public function add_query_vars_for_policy( $vars ) {
         $vars[] = 'store_policy';
         return $vars;
     }
 
+    /**
+     * Add store policy tab
+     *
+     * @param array $tabs store tabs.
+     * @param int   $store_id store id.
+     *
+     * @return array
+     */
     public function add_store_policy_tab( $tabs, $store_id ) {
         $tabs['policy'] = array(
 			'title' => __( 'Policy', 'multivendorx' ),
@@ -58,6 +81,13 @@ class Frontend {
         return $tabs;
     }
 
+    /**
+     * Get store policy url
+     *
+     * @param int $store_id store id.
+     *
+     * @return string
+     */
     public function get_store_policy_url( $store_id ) {
         return MultiVendorX()->store->storeutil->get_store_url( $store_id, 'policy' );
     }
@@ -71,6 +101,13 @@ class Frontend {
     // return $template;
     // }
 
+    /**
+     * Add Polices tab in product page
+     *
+     * @param array $tabs product tabs.
+     *
+     * @return array
+     */
     public function product_policy_tab( $tabs ) {
         global $product;
         if ( $product ) {

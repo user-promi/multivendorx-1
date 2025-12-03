@@ -1,7 +1,14 @@
 <?php
 /**
  * Template Name: Vendor Dashboard (No Header/Footer)
+ *
+ * Override this template by copying it to yourtheme/dc-woocommerce-multi-vendor/store/store-dashboard.php
+ *
+ * @package     MultivendorX/Templates
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
  */
+
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>

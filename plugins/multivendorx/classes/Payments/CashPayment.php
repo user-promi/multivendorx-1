@@ -6,6 +6,7 @@
  */
 
 namespace MultiVendorX\Payments;
+
 use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
@@ -56,6 +57,12 @@ class CashPayment {
 
     /**
      * Process payment.
+     *
+     * @param int    $store_id       Store ID.
+     * @param float  $amount         Amount.
+     * @param int    $order_id       Order ID.
+     * @param string $transaction_id Transaction ID.
+     * @param string $note           Note.
      */
     public function process_payment( $store_id, $amount, $order_id = null, $transaction_id = null, $note = null ) {
         // quick autoload/class check (helps debugging).
