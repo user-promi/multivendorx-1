@@ -1861,14 +1861,10 @@ console.log('product', product)
                                                 <button
                                                     className="remove-tag"
                                                     onClick={() =>
-                                                        setProduct({
-                                                            ...product,
-                                                            tags: product.tags.filter(
-                                                                (t) =>
-                                                                    t.id !==
-                                                                    tag.id
-                                                            ),
-                                                        })
+                                                        setProduct(prev => ({
+                                                            ...prev,
+                                                            tags: prev.tags.filter(t => t.name !== tag.name),
+                                                        }))
                                                     }
                                                 >
                                                     ×
@@ -1879,7 +1875,6 @@ console.log('product', product)
 
                                     <div
                                         className="tag-input-box"
-                                        style={{ position: 'relative' }}
                                     >
                                         <input
                                             type="text"
@@ -1980,60 +1975,6 @@ console.log('product', product)
                         </div>
                     </div>
 
-                    <div className="card" id="card-image-upload">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">Upload image</div>
-                            </div>
-                            <div className="right">
-                                <i
-                                    className="adminlib-pagination-right-arrow  arrow-icon"
-                                    onClick={() =>
-                                        toggleCard('card-image-upload')
-                                    }
-                                ></i>
-                            </div>
-                        </div>
-                        <div className="card-body">
-                            <div className="form-group-wrapper">
-                                <div className="form-group">
-                                    <label htmlFor="product-name">
-                                        Features Image
-                                    </label>
-                                    <FileInput
-                                        inputClass="form-input"
-                                        name="image"
-                                        type="hidden"
-                                        imageWidth={75}
-                                        imageHeight={75}
-                                        openUploader="Upload Image"
-                                        buttonClass="admin-btn btn-purple"
-                                        descClass="settings-metabox-description"
-                                    />
-                                </div>
-                            </div>
-                            <div className="form-group-wrapper">
-                                <div className="form-group">
-                                    <label htmlFor="product-name">
-                                        Product gallery
-                                    </label>
-                                    <FileInput
-                                        // value={formData.image}
-                                        inputClass="form-input"
-                                        name="image"
-                                        type="hidden"
-                                        // onButtonClick={() => runUploader('image')}
-                                        imageWidth={75}
-                                        imageHeight={75}
-                                        openUploader="Upload Image"
-                                        // imageSrc={imagePreviews.image}
-                                        buttonClass="admin-btn btn-purple"
-                                        descClass="settings-metabox-description"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </>
