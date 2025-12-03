@@ -367,16 +367,15 @@ a:focus {
 }
 
 .category-wrapper {
+    width: 100%;
+
     ul {
         list-style-type: none;
         margin: 0;
 
-        ul {
-            padding-top: 0.75rem;
-        }
-
         li {
             font-size: 1.063rem;
+            position: relative;
         }
 
         .category,
@@ -391,6 +390,24 @@ a:focus {
 
     li:has(li) {
         padding-bottom: 0 !important;
+    }
+
+    &.template2 {
+        li {
+            background: $theme-background-color;
+            padding: 0.625rem 1rem;
+            cursor: pointer;
+        }
+
+        .category {
+            input {
+                position: absolute;
+                border-radius: 0;
+                top: 0;
+                left: 0;
+                opacity: 0;
+            }
+        }
     }
 }
 
