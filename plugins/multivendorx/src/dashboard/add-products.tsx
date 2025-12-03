@@ -130,23 +130,20 @@ const AddProduct = () => {
     const [showAddNew, setShowAddNew] = useState(false);
     const [visibility, setVisibility] = useState('shop_search');
     const wrapperRef = useRef(null);
+    // ------------------ STATES ------------------
     const [selectedCat, setSelectedCat] = useState("");
     const [selectedSub, setSelectedSub] = useState("");
     const [selectedChild, setSelectedChild] = useState("");
 
+    // Close on click outside
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-                // Reset all selections
-                setSelectedCat("");
-                setSelectedSub("");
-                setSelectedChild("");
+                resetSelection();
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
+        return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
     // ------------------ CLICK HANDLERS ------------------
@@ -155,14 +152,17 @@ const AddProduct = () => {
         setSelectedSub("");
         setSelectedChild("");
     };
+
     const handleSubClick = (subId) => {
         setSelectedSub(subId);
         setSelectedChild("");
     };
+
     const handleChildClick = (childId) => {
         setSelectedChild(childId);
     };
 
+    // Breadcrumb path click resets below levels
     const handlePathClick = (level) => {
         if (level === "category") {
             setSelectedSub("");
@@ -173,6 +173,7 @@ const AddProduct = () => {
         }
     };
 
+    // ------------------ PRINT PATH ------------------
     const printPath = () => {
         const cat = demoData.find((c) => c.id === selectedCat);
         const sub = cat?.children?.find((s) => s.id === selectedSub);
@@ -188,17 +189,16 @@ const AddProduct = () => {
                         {cat.name}
                     </span>
                 )}
+
                 {sub && (
                     <>
                         {" / "}
-                        <span
-
-                            onClick={() => handlePathClick("sub")}
-                        >
+                        <span onClick={() => handlePathClick("sub")}>
                             {sub.name}
                         </span>
                     </>
                 )}
+
                 {child && (
                     <>
                         {" / "}
@@ -209,11 +209,13 @@ const AddProduct = () => {
         );
     };
 
+    // Reset all
     const resetSelection = () => {
         setSelectedCat("");
         setSelectedSub("");
         setSelectedChild("");
     };
+
     // category end
     useEffect(() => {
         function handleClick(e) {
@@ -2013,89 +2015,73 @@ const AddProduct = () => {
                             </div>
 
                             <div className="form-group-wrapper">
-                                <div className="category-wrapper" ref={wrapperRef}>
+                                <div className="category-wrapper template2" ref={wrapperRef}>
                                     <ul className="settings-form-group-radio">
                                         {demoData.map((cat) => (
-                                            <li
-                                                key={cat.id}
-                                                className="category"
-                                                style={{
-                                                    display:
-                                                        !selectedCat || selectedCat === cat.id ? "block" : "none",
-                                                }}
-                                            >
-                                                <div className={`radio-basic-input-wrap ${selectedCat === cat.id ? "radio-select-active" : ""
-                                                    }`}>
-                                                    <input
-                                                        type="radio"
-                                                        name="category"
-                                                        className="setting-form-input"
-                                                        checked={selectedCat === cat.id}
-                                                        onChange={() => handleCategoryClick(cat.id)}
-                                                    />
-                                                    <label htmlFor="">{cat.name} </label>
-                                                </div>
+                                            <React.Fragment key={cat.id}>
+                                                {/* CATEGORY ITEM */}
+                                                <li
+                                                    className={`category ${selectedCat === cat.id ? "radio-select-active" : ""}`}
+                                                    style={{
+                                                        display: !selectedCat || selectedCat === cat.id ? "block" : "none",
+                                                    }}
+                                                    onClick={() => handleCategoryClick(cat.id)}
+                                                >
+                                                    <div className="radio-basic-input-wrap">
+                                                        <label>{cat.name}</label>
+                                                    </div>
+                                                </li>
+
+                                                {/* CATEGORY CHILD UL */}
                                                 {selectedCat === cat.id && cat.children && (
                                                     <ul className="settings-form-group-radio">
                                                         {cat.children.map((sub) => (
-                                                            <li
-                                                                key={sub.id}
-                                                                className="sub-category"
-                                                                style={{
-                                                                    display:
-                                                                        !selectedSub || selectedSub === sub.id
-                                                                            ? "block"
-                                                                            : "none",
-                                                                }}
-                                                            >
-                                                                <div className={`radio-basic-input-wrap ${selectedSub === sub.id ? "radio-select-active" : ""
-                                                                    }`}>
-                                                                    <input
-                                                                        type="radio"
-                                                                        name="sub-category"
-                                                                        checked={selectedSub === sub.id}
-                                                                        className="setting-form-input"
-                                                                        onChange={() => handleSubClick(sub.id)}
-                                                                    />
-                                                                    <label> {sub.name} </label>
-                                                                </div>
-                                                                {/* CHILD LEVEL */}
+                                                            <React.Fragment key={sub.id}>
+                                                                {/* SUB CATEGORY ITEM */}
+                                                                <li
+                                                                    className={`sub-category ${selectedSub === sub.id ? "radio-select-active" : ""}`}
+                                                                    style={{
+                                                                        display: !selectedSub || selectedSub === sub.id ? "block" : "none",
+                                                                    }}
+                                                                    onClick={() => handleSubClick(sub.id)}
+                                                                >
+                                                                    <div className="radio-basic-input-wrap">
+                                                                        <label>{sub.name}</label>
+                                                                    </div>
+                                                                </li>
+
+                                                                {/* SUB CATEGORY CHILD UL */}
                                                                 {selectedSub === sub.id && sub.children && (
                                                                     <ul className="settings-form-group-radio">
                                                                         {sub.children.map((child) => (
                                                                             <li
                                                                                 key={child.id}
-                                                                                className="sub-category"
+                                                                                className={`sub-category ${selectedChild === child.id ? "radio-select-active" : ""}`}
                                                                                 style={{
                                                                                     display:
                                                                                         !selectedChild || selectedChild === child.id
                                                                                             ? "block"
                                                                                             : "none",
                                                                                 }}
+                                                                                onClick={() => handleChildClick(child.id)}
                                                                             >
-                                                                                <div className={`radio-basic-input-wrap ${selectedChild === child.id ? "radio-select-active" : ""
-                                                                                    }`}>
-                                                                                    <input
-                                                                                        type="radio"
-                                                                                        name="child-category"
-                                                                                        className="setting-form-input"
-                                                                                        checked={selectedChild === child.id}
-                                                                                        onChange={() => handleChildClick(child.id)}
-                                                                                    />
-                                                                                    <label htmlFor={child.id}> {child.name} </label>
+                                                                                <div className="radio-basic-input-wrap">
+                                                                                    <label>{child.name}</label>
                                                                                 </div>
                                                                             </li>
                                                                         ))}
                                                                     </ul>
                                                                 )}
-                                                            </li>
+                                                            </React.Fragment>
                                                         ))}
                                                     </ul>
                                                 )}
-                                            </li>
+                                            </React.Fragment>
                                         ))}
                                     </ul>
+
                                 </div>
+
                             </div>
                             <div className="form-group-wrapper">
                                 <div className="form-group">

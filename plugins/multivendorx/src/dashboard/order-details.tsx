@@ -99,8 +99,6 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
             console.error("Error fetching order:", error);
         }
     };
-console.log('orderData', orderData)
-
 
     useEffect(() => {
         if (!orderId) return;
@@ -174,13 +172,11 @@ console.log('orderData', orderData)
                         <div className="page-title">
                             <div className="title">
                                 Order #{orderData?.number ?? orderId ?? "—"}
-                                {!statusSelect &&
+                                {!statusSelect && orderData?.status?.trim() &&
                                     <div className={statusBadgeClass(orderData?.status)}
                                         onClick={() => setStatusSelect(true)}
                                     >
-                                        {/* choose icon and label dynamically */}
-                                        {orderData?.status === 'completed' ? <i className="adminlib-check"></i> : <i className="adminlib-info"></i>}
-                                        {` ${(orderData?.status || 'Unknown').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}`}
+                                       {(orderData?.status || '').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
                                     </div>
                                 }
                                 {statusSelect &&
@@ -210,7 +206,7 @@ console.log('orderData', orderData)
                         <div className="buttons-wrapper">
                             {onBack && (
                                 <button className="tooltip-btn admin-badge blue" onClick={onBack}>
-                                    <i className="adminlib-eye"></i>
+                                    <i className="adminlib-arrow-right"></i>
                                     <span className="tooltip"> Back to Orders </span>
                                 </button>
                             )}
@@ -701,12 +697,9 @@ console.log('orderData', orderData)
                                 <div className="card-header">
                                     <div className="left">
                                         <div className="title">
-                                            Shipping Tracking
+                                            Shipping Tracking (P)
                                         </div>
                                     </div>
-                                    {/* <div className="right">
-                                        <i className="adminlib-external"></i>
-                                    </div> */}
                                 </div>
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
@@ -732,9 +725,6 @@ console.log('orderData', orderData)
                                             Order notes
                                         </div>
                                     </div>
-                                    {/* <div className="right">
-                                        <i className="adminlib-external"></i>
-                                    </div> */}
                                 </div>
 
                                 {orderData?.order_notes && orderData.order_notes.length > 0 ? (
