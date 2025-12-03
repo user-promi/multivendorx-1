@@ -579,81 +579,81 @@ class StoreUtil {
 
 
 
-    /**
-     * Get store records from the database based on given filters.
-     *
-     * @param array $args Filter options like 'ID', 'status', 'name', 'slug', 'description', 'who_created', 'create_time', 'limit', 'offset', 'count'.
-     * @return array|int List of stores (array) or count (int) if 'count' is set.
-     */
-    public static function get_store_information( $args = array() ) {
-        global $wpdb;
+    // /**
+    //  * Get store records from the database based on given filters.
+    //  *
+    //  * @param array $args Filter options like 'ID', 'status', 'name', 'slug', 'description', 'who_created', 'create_time', 'limit', 'offset', 'count'.
+    //  * @return array|int List of stores (array) or count (int) if 'count' is set.
+    //  */
+    // public static function get_store_information( $args = array() ) {
+    //     global $wpdb;
 
-        $where = array();
+    //     $where = array();
 
-        if ( isset( $args['ID'] ) ) {
-            $ids     = is_array( $args['ID'] ) ? $args['ID'] : array( $args['ID'] );
-            $ids     = implode( ',', array_map( 'intval', $ids ) );
-            $where[] = "ID IN ($ids)";
-        }
+    //     if ( isset( $args['ID'] ) ) {
+    //         $ids     = is_array( $args['ID'] ) ? $args['ID'] : array( $args['ID'] );
+    //         $ids     = implode( ',', array_map( 'intval', $ids ) );
+    //         $where[] = "ID IN ($ids)";
+    //     }
 
-        if ( isset( $args['status'] ) ) {
-            $where[] = "status = '" . esc_sql( $args['status'] ) . "'";
-        }
+    //     if ( isset( $args['status'] ) ) {
+    //         $where[] = "status = '" . esc_sql( $args['status'] ) . "'";
+    //     }
 
-        if ( isset( $args['name'] ) ) {
-            $where[] = "name LIKE '%" . esc_sql( $args['name'] ) . "%'";
-        }
+    //     if ( isset( $args['name'] ) ) {
+    //         $where[] = "name LIKE '%" . esc_sql( $args['name'] ) . "%'";
+    //     }
 
-        if ( isset( $args['slug'] ) ) {
-            $where[] = "slug = '" . esc_sql( $args['slug'] ) . "'";
-        }
+    //     if ( isset( $args['slug'] ) ) {
+    //         $where[] = "slug = '" . esc_sql( $args['slug'] ) . "'";
+    //     }
 
-        if ( isset( $args['searchField'] ) ) {
-            $search  = esc_sql( $args['searchField'] );
-            $where[] = "(name LIKE '%$search%')";
-        }
+    //     if ( isset( $args['searchField'] ) ) {
+    //         $search  = esc_sql( $args['searchField'] );
+    //         $where[] = "(name LIKE '%$search%')";
+    //     }
 
-        if ( isset( $args['start_date'] ) && isset( $args['end_date'] ) ) {
-            $where[] = "create_time BETWEEN '" . esc_sql( $args['start_date'] ) . "' AND '" . esc_sql( $args['end_date'] ) . "'";
-        }
+    //     if ( isset( $args['start_date'] ) && isset( $args['end_date'] ) ) {
+    //         $where[] = "create_time BETWEEN '" . esc_sql( $args['start_date'] ) . "' AND '" . esc_sql( $args['end_date'] ) . "'";
+    //     }
 
-        $table = $wpdb->prefix . Utill::TABLES['store'];
+    //     $table = $wpdb->prefix . Utill::TABLES['store'];
 
-        if ( isset( $args['count'] ) ) {
-            $query = "SELECT COUNT(*) FROM {$table}";
-        } else {
-            $query = "SELECT * FROM {$table}";
-        }
+    //     if ( isset( $args['count'] ) ) {
+    //         $query = "SELECT COUNT(*) FROM {$table}";
+    //     } else {
+    //         $query = "SELECT * FROM {$table}";
+    //     }
 
-        if ( ! empty( $where ) ) {
-            $condition = $args['condition'] ?? ' AND ';
-            $query    .= ' WHERE ' . implode( $condition, $where );
-        }
+    //     if ( ! empty( $where ) ) {
+    //         $condition = $args['condition'] ?? ' AND ';
+    //         $query    .= ' WHERE ' . implode( $condition, $where );
+    //     }
 
-        // ADD SORTING SUPPORT HERE
-        if ( ! empty( $args['orderBy'] ) ) {
-            // Only allow safe columns to sort by (avoid SQL injection)
-            $allowed_columns = array( 'ID', 'name', 'status', 'slug', 'create_time' );
-            $orderBy         = in_array( $args['orderBy'], $allowed_columns, true ) ? $args['orderBy'] : 'ID';
-            $order           = ( isset( $args['order'] ) && strtolower( $args['order'] ) === 'desc' ) ? 'DESC' : 'ASC';
-            $query          .= " ORDER BY {$orderBy} {$order}";
-        }
+    //     // ADD SORTING SUPPORT HERE
+    //     if ( ! empty( $args['orderBy'] ) ) {
+    //         // Only allow safe columns to sort by (avoid SQL injection)
+    //         $allowed_columns = array( 'ID', 'name', 'status', 'slug', 'create_time' );
+    //         $orderBy         = in_array( $args['orderBy'], $allowed_columns, true ) ? $args['orderBy'] : 'ID';
+    //         $order           = ( isset( $args['order'] ) && strtolower( $args['order'] ) === 'desc' ) ? 'DESC' : 'ASC';
+    //         $query          .= " ORDER BY {$orderBy} {$order}";
+    //     }
 
-        // Keep your pagination logic
-        if ( isset( $args['limit'] ) && isset( $args['offset'] ) && empty( $args['count'] ) ) {
-            $limit  = intval( $args['limit'] );
-            $offset = intval( $args['offset'] );
-            $query .= " LIMIT $limit OFFSET $offset";
-        }
+    //     // Keep your pagination logic
+    //     if ( isset( $args['limit'] ) && isset( $args['offset'] ) && empty( $args['count'] ) ) {
+    //         $limit  = intval( $args['limit'] );
+    //         $offset = intval( $args['offset'] );
+    //         $query .= " LIMIT $limit OFFSET $offset";
+    //     }
 
-        if ( isset( $args['count'] ) ) {
-            $results = $wpdb->get_var( $query );
-            return $results ?? 0;
-        } else {
-            $results = $wpdb->get_results( $query, ARRAY_A );
-            return $results ?? array();
-        }
-    }
+    //     if ( isset( $args['count'] ) ) {
+    //         $results = $wpdb->get_var( $query );
+    //         return $results ?? 0;
+    //     } else {
+    //         $results = $wpdb->get_results( $query, ARRAY_A );
+    //         return $results ?? array();
+    //     }
+    // }
 
     /**
      * Get all product IDs that should be excluded based on conditions.
@@ -697,339 +697,339 @@ class StoreUtil {
 
 
 
-    // // this is optimise code
-    // /**
-    //  * Get store records (single or multiple) with support for meta_query, users, pagination, ordering, count and fields.
-    //  *
-    //  * Behavior:
-    //  * - If 'count' is true -> returns integer count.
-    //  * - If 'fields' => 'ids' -> returns ID or array of IDs (single ID => single int).
-    //  * - If a single ID is provided (non-array) -> returns single associative array (or single ID if fields='ids').
-    //  * - Otherwise returns array of associative arrays (or array of IDs if fields='ids').
-    //  *
-    //  * $args supports:
-    //  *  - ID (int or array)
-    //  *  - status, slug, name (LIKE)
-    //  *  - searchField (search in name)
-    //  *  - start_date, end_date (create_time range, strings)
-    //  *  - user_id (filter stores by user)
-    //  *  - meta_key (exists) OR meta_query (WP-like subset)
-    //  *  - orderBy, order ('ASC'|'DESC')
-    //  *  - limit, offset
-    //  *  - count (bool) -> return count (int)
-    //  *  - fields => 'all' | 'ids'
-    //  *  - full => true (attach meta + users)
-    //  *
-    //  * @param array $args
-    //  * @return int|array|mixed
-    //  */
-    // public static function get_store_information( $args = array() ) {
-    //     global $wpdb;
+    // this is optimise code
+    /**
+     * Get store records (single or multiple) with support for meta_query, users, pagination, ordering, count and fields.
+     *
+     * Behavior:
+     * - If 'count' is true -> returns integer count.
+     * - If 'fields' => 'ids' -> returns ID or array of IDs (single ID => single int).
+     * - If a single ID is provided (non-array) -> returns single associative array (or single ID if fields='ids').
+     * - Otherwise returns array of associative arrays (or array of IDs if fields='ids').
+     *
+     * $args supports:
+     *  - ID (int or array)
+     *  - status, slug, name (LIKE)
+     *  - searchField (search in name)
+     *  - start_date, end_date (create_time range, strings)
+     *  - user_id (filter stores by user)
+     *  - meta_key (exists) OR meta_query (WP-like subset)
+     *  - orderBy, order ('ASC'|'DESC')
+     *  - limit, offset
+     *  - count (bool) -> return count (int)
+     *  - fields => 'all' | 'ids'
+     *  - full => true (attach meta + users)
+     *
+     * @param array $args
+     * @return int|array|mixed
+     */
+    public static function get_store_information( $args = array() ) {
+        global $wpdb;
 
-    //     $defaults = [
-    //         'fields'   => 'all', // 'all' or 'ids'
-    //         'count'    => false, // return count (int)
-    //         'full'     => false, // attach meta + users
-    //         'limit'    => null,
-    //         'offset'   => null,
-    //         'orderBy'  => 'ID',
-    //         'order'    => 'DESC',
-    //         'condition'=> ' AND ', // between where parts
-    //     ];
-    //     $args = wp_parse_args( $args, $defaults );
+        $defaults = [
+            'fields'   => 'all', // 'all' or 'ids'
+            'count'    => false, // return count (int)
+            'full'     => false, // attach meta + users
+            'limit'    => null,
+            'offset'   => null,
+            'orderBy'  => 'ID',
+            'order'    => 'DESC',
+            'condition'=> ' AND ', // between where parts
+        ];
+        $args = wp_parse_args( $args, $defaults );
 
-    //     $store_table = $wpdb->prefix . Utill::TABLES['store'];
-    //     $meta_table  = $wpdb->prefix . Utill::TABLES['store_meta'];
-    //     $users_table = $wpdb->prefix . Utill::TABLES['store_users'];
+        $store_table = $wpdb->prefix . Utill::TABLES['store'];
+        $meta_table  = $wpdb->prefix . Utill::TABLES['store_meta'];
+        $users_table = $wpdb->prefix . Utill::TABLES['store_users'];
 
-    //     $where_clauses = [];
-    //     $join_meta = false;
-    //     $single_id_request = false;
+        $where_clauses = [];
+        $join_meta = false;
+        $single_id_request = false;
 
-    //     /* --------------------------
-    //     ID filter (single or multiple)
-    //     --------------------------- */
-    //     if ( isset( $args['ID'] ) ) {
-    //         if ( is_array( $args['ID'] ) ) {
-    //             $ids = array_map( 'intval', $args['ID'] );
-    //             if ( empty( $ids ) ) {
-    //                 // nothing to fetch
-    //                 return $args['count'] ? 0 : ( $args['fields'] === 'ids' ? array() : array() );
-    //             }
-    //             $where_clauses[] = $wpdb->prepare( "{$store_table}.ID IN (" . implode( ',', $ids ) . " )" );
-    //         } else {
-    //             $id = intval( $args['ID'] );
-    //             $single_id_request = true;
-    //             $where_clauses[] = $wpdb->prepare( "{$store_table}.ID = %d", $id );
-    //         }
-    //     }
+        /* --------------------------
+        ID filter (single or multiple)
+        --------------------------- */
+        if ( isset( $args['ID'] ) ) {
+            if ( is_array( $args['ID'] ) ) {
+                $ids = array_map( 'intval', $args['ID'] );
+                if ( empty( $ids ) ) {
+                    // nothing to fetch
+                    return $args['count'] ? 0 : ( $args['fields'] === 'ids' ? array() : array() );
+                }
+                $where_clauses[] = $wpdb->prepare( "{$store_table}.ID IN (" . implode( ',', $ids ) . " )" );
+            } else {
+                $id = intval( $args['ID'] );
+                $single_id_request = true;
+                $where_clauses[] = $wpdb->prepare( "{$store_table}.ID = %d", $id );
+            }
+        }
 
-    //     /* --------------------------
-    //     Basic store filters
-    //     --------------------------- */
-    //     if ( isset( $args['status'] ) ) {
-    //         $where_clauses[] = $wpdb->prepare( "{$store_table}.status = %s", $args['status'] );
-    //     }
+        /* --------------------------
+        Basic store filters
+        --------------------------- */
+        if ( isset( $args['status'] ) ) {
+            $where_clauses[] = $wpdb->prepare( "{$store_table}.status = %s", $args['status'] );
+        }
 
-    //     if ( isset( $args['slug'] ) ) {
-    //         $where_clauses[] = $wpdb->prepare( "{$store_table}.slug = %s", $args['slug'] );
-    //     }
+        if ( isset( $args['slug'] ) ) {
+            $where_clauses[] = $wpdb->prepare( "{$store_table}.slug = %s", $args['slug'] );
+        }
 
-    //     if ( isset( $args['name'] ) ) {
-    //         $like = '%' . $wpdb->esc_like( $args['name'] ) . '%';
-    //         $where_clauses[] = $wpdb->prepare( "{$store_table}.name LIKE %s", $like );
-    //     }
+        if ( isset( $args['name'] ) ) {
+            $like = '%' . $wpdb->esc_like( $args['name'] ) . '%';
+            $where_clauses[] = $wpdb->prepare( "{$store_table}.name LIKE %s", $like );
+        }
 
-    //     if ( isset( $args['searchField'] ) ) {
-    //         $like = '%' . $wpdb->esc_like( $args['searchField'] ) . '%';
-    //         $where_clauses[] = $wpdb->prepare( "({$store_table}.name LIKE %s)", $like );
-    //     }
+        if ( isset( $args['searchField'] ) ) {
+            $like = '%' . $wpdb->esc_like( $args['searchField'] ) . '%';
+            $where_clauses[] = $wpdb->prepare( "({$store_table}.name LIKE %s)", $like );
+        }
 
-    //     if ( isset( $args['start_date'] ) && isset( $args['end_date'] ) ) {
-    //         $where_clauses[] = $wpdb->prepare( "{$store_table}.create_time BETWEEN %s AND %s", $args['start_date'], $args['end_date'] );
-    //     }
+        if ( isset( $args['start_date'] ) && isset( $args['end_date'] ) ) {
+            $where_clauses[] = $wpdb->prepare( "{$store_table}.create_time BETWEEN %s AND %s", $args['start_date'], $args['end_date'] );
+        }
 
-    //     /* --------------------------
-    //     Meta support
-    //     - meta_key: existence of a key (any value)
-    //     - meta_query: array like WP (subset: relation, key, value, compare)
-    //     --------------------------- */
-    //     if ( isset( $args['meta_key'] ) || isset( $args['meta_query'] ) ) {
-    //         $join_meta = true;
-    //     }
+        /* --------------------------
+        Meta support
+        - meta_key: existence of a key (any value)
+        - meta_query: array like WP (subset: relation, key, value, compare)
+        --------------------------- */
+        if ( isset( $args['meta_key'] ) || isset( $args['meta_query'] ) ) {
+            $join_meta = true;
+        }
 
-    //     if ( isset( $args['meta_key'] ) ) {
-    //         // existence check
-    //         $where_clauses[] = $wpdb->prepare( "EXISTS (SELECT 1 FROM {$meta_table} mt WHERE mt.store_id = {$store_table}.ID AND mt.meta_key = %s)", $args['meta_key'] );
-    //     }
+        if ( isset( $args['meta_key'] ) ) {
+            // existence check
+            $where_clauses[] = $wpdb->prepare( "EXISTS (SELECT 1 FROM {$meta_table} mt WHERE mt.store_id = {$store_table}.ID AND mt.meta_key = %s)", $args['meta_key'] );
+        }
 
-    //     if ( isset( $args['meta_query'] ) && is_array( $args['meta_query'] ) ) {
-    //         // build meta_query SQL (supports relation=AND|OR and simple compares)
-    //         $meta_sql = self::build_meta_query_sql( $args['meta_query'], $meta_table, $store_table );
-    //         if ( ! empty( $meta_sql ) ) {
-    //             $where_clauses[] = $meta_sql;
-    //             $join_meta = true;
-    //         }
-    //     }
+        if ( isset( $args['meta_query'] ) && is_array( $args['meta_query'] ) ) {
+            // build meta_query SQL (supports relation=AND|OR and simple compares)
+            $meta_sql = self::build_meta_query_sql( $args['meta_query'], $meta_table, $store_table );
+            if ( ! empty( $meta_sql ) ) {
+                $where_clauses[] = $meta_sql;
+                $join_meta = true;
+            }
+        }
 
-    //     /* --------------------------
-    //     User filter (stores belonging to user)
-    //     --------------------------- */
-    //     if ( isset( $args['user_id'] ) ) {
-    //         $user_id = intval( $args['user_id'] );
-    //         $where_clauses[] = $wpdb->prepare( "{$store_table}.ID IN (SELECT store_id FROM {$users_table} WHERE user_id = %d)", $user_id );
-    //     }
+        /* --------------------------
+        User filter (stores belonging to user)
+        --------------------------- */
+        if ( isset( $args['user_id'] ) ) {
+            $user_id = intval( $args['user_id'] );
+            $where_clauses[] = $wpdb->prepare( "{$store_table}.ID IN (SELECT store_id FROM {$users_table} WHERE user_id = %d)", $user_id );
+        }
 
-    //     /* --------------------------
-    //     SELECT / COUNT / FIELDS
-    //     --------------------------- */
-    //     // fields=ids -> only IDs
-    //     if ( $args['count'] ) {
-    //         // return count integer
-    //         $select = "SELECT COUNT(DISTINCT {$store_table}.ID) AS cnt";
-    //     } elseif ( $args['fields'] === 'ids' ) {
-    //         $select = "SELECT DISTINCT {$store_table}.ID";
-    //     } else {
-    //         // full rows with FOUND_ROWS to get total if pagination used
-    //         $select = "SELECT SQL_CALC_FOUND_ROWS DISTINCT {$store_table}.*";
-    //     }
+        /* --------------------------
+        SELECT / COUNT / FIELDS
+        --------------------------- */
+        // fields=ids -> only IDs
+        if ( $args['count'] ) {
+            // return count integer
+            $select = "SELECT COUNT(DISTINCT {$store_table}.ID) AS cnt";
+        } elseif ( $args['fields'] === 'ids' ) {
+            $select = "SELECT DISTINCT {$store_table}.ID";
+        } else {
+            // full rows with FOUND_ROWS to get total if pagination used
+            $select = "SELECT SQL_CALC_FOUND_ROWS DISTINCT {$store_table}.*";
+        }
 
-    //     $from = " FROM {$store_table}";
+        $from = " FROM {$store_table}";
 
-    //     // join meta only when required for complex meta SQL (we use EXISTS/subqueries mostly)
-    //     if ( $join_meta ) {
-    //         // For safety we won't add a direct join that multiplies rows; meta conditions use EXISTS or subqueries.
-    //         // But in case you prefer to join, you can uncomment the line below.
-    //         // $from .= " LEFT JOIN {$meta_table} AS m ON m.store_id = {$store_table}.ID";
-    //     }
+        // join meta only when required for complex meta SQL (we use EXISTS/subqueries mostly)
+        if ( $join_meta ) {
+            // For safety we won't add a direct join that multiplies rows; meta conditions use EXISTS or subqueries.
+            // But in case you prefer to join, you can uncomment the line below.
+            // $from .= " LEFT JOIN {$meta_table} AS m ON m.store_id = {$store_table}.ID";
+        }
 
-    //     $sql = $select . $from;
+        $sql = $select . $from;
 
-    //     if ( ! empty( $where_clauses ) ) {
-    //         $sql .= " WHERE " . implode( $args['condition'], $where_clauses );
-    //     }
+        if ( ! empty( $where_clauses ) ) {
+            $sql .= " WHERE " . implode( $args['condition'], $where_clauses );
+        }
 
-    //     /* --------------------------
-    //     ORDER BY
-    //     --------------------------- */
-    //     if ( isset( $args['orderBy'] ) && ! $args['count'] && $args['fields'] !== 'ids' ) {
-    //         $allowed_cols = array( 'ID', 'name', 'status', 'slug', 'create_time' );
-    //         $orderBy = in_array( $args['orderBy'], $allowed_cols, true ) ? $args['orderBy'] : 'ID';
-    //         $order   = ( isset( $args['order'] ) && strtolower( $args['order'] ) === 'desc' ) ? 'DESC' : 'ASC';
-    //         $sql .= " ORDER BY {$orderBy} {$order}";
-    //     }
+        /* --------------------------
+        ORDER BY
+        --------------------------- */
+        if ( isset( $args['orderBy'] ) && ! $args['count'] && $args['fields'] !== 'ids' ) {
+            $allowed_cols = array( 'ID', 'name', 'status', 'slug', 'create_time' );
+            $orderBy = in_array( $args['orderBy'], $allowed_cols, true ) ? $args['orderBy'] : 'ID';
+            $order   = ( isset( $args['order'] ) && strtolower( $args['order'] ) === 'desc' ) ? 'DESC' : 'ASC';
+            $sql .= " ORDER BY {$orderBy} {$order}";
+        }
 
-    //     /* --------------------------
-    //     LIMIT / OFFSET (only for non-count)
-    //     --------------------------- */
-    //     if ( ! $args['count'] && $args['limit'] !== null ) {
-    //         $limit = intval( $args['limit'] );
-    //         $offset = isset( $args['offset'] ) ? intval( $args['offset'] ) : 0;
-    //         $sql .= $wpdb->prepare( " LIMIT %d OFFSET %d", $limit, $offset );
-    //     }
+        /* --------------------------
+        LIMIT / OFFSET (only for non-count)
+        --------------------------- */
+        if ( ! $args['count'] && $args['limit'] !== null ) {
+            $limit = intval( $args['limit'] );
+            $offset = isset( $args['offset'] ) ? intval( $args['offset'] ) : 0;
+            $sql .= $wpdb->prepare( " LIMIT %d OFFSET %d", $limit, $offset );
+        }
 
-    //     /* --------------------------
-    //     EXECUTE
-    //     --------------------------- */
-    //     if ( $args['count'] ) {
-    //         // simple count query
-    //         $count = (int) $wpdb->get_var( $sql );
-    //         return $count;
-    //     }
+        /* --------------------------
+        EXECUTE
+        --------------------------- */
+        if ( $args['count'] ) {
+            // simple count query
+            $count = (int) $wpdb->get_var( $sql );
+            return $count;
+        }
 
-    //     $rows = $wpdb->get_results( $sql, ARRAY_A );
+        $rows = $wpdb->get_results( $sql, ARRAY_A );
 
-    //     // if fields=ids, convert to simple list of ints
-    //     if ( $args['fields'] === 'ids' ) {
-    //         $ids = array_map( 'intval', wp_list_pluck( $rows, 'ID' ) );
-    //         if ( $single_id_request ) {
-    //             return isset( $ids[0] ) ? $ids[0] : null;
-    //         }
-    //         return $ids;
-    //     }
+        // if fields=ids, convert to simple list of ints
+        if ( $args['fields'] === 'ids' ) {
+            $ids = array_map( 'intval', wp_list_pluck( $rows, 'ID' ) );
+            if ( $single_id_request ) {
+                return isset( $ids[0] ) ? $ids[0] : null;
+            }
+            return $ids;
+        }
 
-    //     // if single ID requested, return single row (or null)
-    //     if ( $single_id_request ) {
-    //         $single = ( ! empty( $rows ) ) ? $rows[0] : null;
-    //         if ( $single && ! empty( $args['full'] ) ) {
-    //             $single['meta']  = self::get_store_meta_all( $single['ID'] );
-    //             $single['users'] = self::get_store_users( $single['ID'] );
-    //         }
-    //         return $single;
-    //     }
+        // if single ID requested, return single row (or null)
+        if ( $single_id_request ) {
+            $single = ( ! empty( $rows ) ) ? $rows[0] : null;
+            if ( $single && ! empty( $args['full'] ) ) {
+                $single['meta']  = self::get_store_meta_all( $single['ID'] );
+                $single['users'] = self::get_store_users( $single['ID'] );
+            }
+            return $single;
+        }
 
-    //     // multiple rows: if full, attach meta + users for each
-    //     if ( ! empty( $args['full'] ) && ! empty( $rows ) ) {
-    //         foreach ( $rows as &$r ) {
-    //             $r['meta']  = self::get_store_meta_all( $r['ID'] );
-    //             $r['users'] = self::get_store_users( $r['ID'] );
-    //         }
-    //     }
+        // multiple rows: if full, attach meta + users for each
+        if ( ! empty( $args['full'] ) && ! empty( $rows ) ) {
+            foreach ( $rows as &$r ) {
+                $r['meta']  = self::get_store_meta_all( $r['ID'] );
+                $r['users'] = self::get_store_users( $r['ID'] );
+            }
+        }
 
-    //     return $rows;
-    // }
+        return $rows;
+    }
 
-    // /**
-    //  * Basic helper: get all meta for a store as key => value (maybe_unserialize).
-    //  */
-    // public static function get_store_meta_all( $store_id ) {
-    //     global $wpdb;
-    //     $table = $wpdb->prefix . Utill::TABLES['store_meta'];
+    /**
+     * Basic helper: get all meta for a store as key => value (maybe_unserialize).
+     */
+    public static function get_store_meta_all( $store_id ) {
+        global $wpdb;
+        $table = $wpdb->prefix . Utill::TABLES['store_meta'];
 
-    //     $rows = $wpdb->get_results(
-    //         $wpdb->prepare( "SELECT meta_key, meta_value FROM {$table} WHERE store_id = %d", $store_id ),
-    //         ARRAY_A
-    //     );
+        $rows = $wpdb->get_results(
+            $wpdb->prepare( "SELECT meta_key, meta_value FROM {$table} WHERE store_id = %d", $store_id ),
+            ARRAY_A
+        );
 
-    //     $meta = [];
-    //     foreach ( $rows as $r ) {
-    //         $meta[ $r['meta_key'] ] = maybe_unserialize( $r['meta_value'] );
-    //     }
-    //     return $meta;
-    // }
+        $meta = [];
+        foreach ( $rows as $r ) {
+            $meta[ $r['meta_key'] ] = maybe_unserialize( $r['meta_value'] );
+        }
+        return $meta;
+    }
 
-    // /**
-    //  * Build meta_query SQL (basic subset) returning an EXISTS(...) clause suitable for WHERE.
-    //  *
-    //  * $meta_query format:
-    //  * [
-    //  *    'relation' => 'AND', // optional
-    //  *    [ 'key'=>'city', 'value'=>'Delhi', 'compare'=>'=' ],
-    //  *    [ 'key'=>'pincode', 'value'=>'11', 'compare'=>'LIKE' ],
-    //  *    [ 'key'=>'flag', 'compare'=>'EXISTS' ] // exists only
-    //  * ]
-    //  */
-    // private static function build_meta_query_sql( $meta_query, $meta_table = null, $store_table = null ) {
-    //     global $wpdb;
+    /**
+     * Build meta_query SQL (basic subset) returning an EXISTS(...) clause suitable for WHERE.
+     *
+     * $meta_query format:
+     * [
+     *    'relation' => 'AND', // optional
+     *    [ 'key'=>'city', 'value'=>'Delhi', 'compare'=>'=' ],
+     *    [ 'key'=>'pincode', 'value'=>'11', 'compare'=>'LIKE' ],
+     *    [ 'key'=>'flag', 'compare'=>'EXISTS' ] // exists only
+     * ]
+     */
+    private static function build_meta_query_sql( $meta_query, $meta_table = null, $store_table = null ) {
+        global $wpdb;
 
-    //     if ( empty( $meta_query ) || ! is_array( $meta_query ) ) {
-    //         return '';
-    //     }
+        if ( empty( $meta_query ) || ! is_array( $meta_query ) ) {
+            return '';
+        }
 
-    //     // if called without table names, use defaults
-    //     if ( $meta_table === null ) {
-    //         $meta_table = $wpdb->prefix . Utill::TABLES['store_meta'];
-    //     }
-    //     if ( $store_table === null ) {
-    //         $store_table = $wpdb->prefix . Utill::TABLES['store'];
-    //     }
+        // if called without table names, use defaults
+        if ( $meta_table === null ) {
+            $meta_table = $wpdb->prefix . Utill::TABLES['store_meta'];
+        }
+        if ( $store_table === null ) {
+            $store_table = $wpdb->prefix . Utill::TABLES['store'];
+        }
 
-    //     $relation = 'AND';
-    //     if ( isset( $meta_query['relation'] ) ) {
-    //         $rel = strtoupper( $meta_query['relation'] );
-    //         if ( in_array( $rel, array( 'AND', 'OR' ), true ) ) {
-    //             $relation = $rel;
-    //         }
-    //         unset( $meta_query['relation'] );
-    //     }
+        $relation = 'AND';
+        if ( isset( $meta_query['relation'] ) ) {
+            $rel = strtoupper( $meta_query['relation'] );
+            if ( in_array( $rel, array( 'AND', 'OR' ), true ) ) {
+                $relation = $rel;
+            }
+            unset( $meta_query['relation'] );
+        }
 
-    //     $parts = array();
+        $parts = array();
 
-    //     foreach ( $meta_query as $mq ) {
-    //         if ( ! is_array( $mq ) || empty( $mq['key'] ) ) {
-    //             continue;
-    //         }
-    //         $key = $mq['key'];
-    //         $compare = isset( $mq['compare'] ) ? strtoupper( $mq['compare'] ) : '=';
-    //         // special: EXISTS (only key)
-    //         if ( $compare === 'EXISTS' ) {
-    //             $parts[] = $wpdb->prepare( "EXISTS (SELECT 1 FROM {$meta_table} mt WHERE mt.store_id = {$store_table}.ID AND mt.meta_key = %s)", $key );
-    //             continue;
-    //         }
+        foreach ( $meta_query as $mq ) {
+            if ( ! is_array( $mq ) || empty( $mq['key'] ) ) {
+                continue;
+            }
+            $key = $mq['key'];
+            $compare = isset( $mq['compare'] ) ? strtoupper( $mq['compare'] ) : '=';
+            // special: EXISTS (only key)
+            if ( $compare === 'EXISTS' ) {
+                $parts[] = $wpdb->prepare( "EXISTS (SELECT 1 FROM {$meta_table} mt WHERE mt.store_id = {$store_table}.ID AND mt.meta_key = %s)", $key );
+                continue;
+            }
 
-    //         if ( ! isset( $mq['value'] ) ) {
-    //             // nothing to compare against; skip
-    //             continue;
-    //         }
+            if ( ! isset( $mq['value'] ) ) {
+                // nothing to compare against; skip
+                continue;
+            }
 
-    //         $value = $mq['value'];
+            $value = $mq['value'];
 
-    //         switch ( $compare ) {
-    //             case 'LIKE':
-    //                 $v = '%' . $wpdb->esc_like( (string) $value ) . '%';
-    //                 $parts[] = $wpdb->prepare( "EXISTS (SELECT 1 FROM {$meta_table} mt WHERE mt.store_id = {$store_table}.ID AND mt.meta_key = %s AND mt.meta_value LIKE %s)", $key, $v );
-    //                 break;
+            switch ( $compare ) {
+                case 'LIKE':
+                    $v = '%' . $wpdb->esc_like( (string) $value ) . '%';
+                    $parts[] = $wpdb->prepare( "EXISTS (SELECT 1 FROM {$meta_table} mt WHERE mt.store_id = {$store_table}.ID AND mt.meta_key = %s AND mt.meta_value LIKE %s)", $key, $v );
+                    break;
 
-    //             case 'IN':
-    //                 if ( is_array( $value ) && ! empty( $value ) ) {
-    //                     $escaped = array_map( 'esc_sql', $value );
-    //                     $in_list = "'" . implode( "','", $escaped ) . "'";
-    //                     $parts[] = "EXISTS (SELECT 1 FROM {$meta_table} mt WHERE mt.store_id = {$store_table}.ID AND mt.meta_key = '" . esc_sql( $key ) . "' AND mt.meta_value IN ({$in_list}))";
-    //                 }
-    //                 break;
+                case 'IN':
+                    if ( is_array( $value ) && ! empty( $value ) ) {
+                        $escaped = array_map( 'esc_sql', $value );
+                        $in_list = "'" . implode( "','", $escaped ) . "'";
+                        $parts[] = "EXISTS (SELECT 1 FROM {$meta_table} mt WHERE mt.store_id = {$store_table}.ID AND mt.meta_key = '" . esc_sql( $key ) . "' AND mt.meta_value IN ({$in_list}))";
+                    }
+                    break;
 
-    //             case 'BETWEEN':
-    //                 if ( is_array( $value ) && count( $value ) === 2 ) {
-    //                     $parts[] = $wpdb->prepare( "EXISTS (SELECT 1 FROM {$meta_table} mt WHERE mt.store_id = {$store_table}.ID AND mt.meta_key = %s AND mt.meta_value BETWEEN %s AND %s)", $key, $value[0], $value[1] );
-    //                 }
-    //                 break;
+                case 'BETWEEN':
+                    if ( is_array( $value ) && count( $value ) === 2 ) {
+                        $parts[] = $wpdb->prepare( "EXISTS (SELECT 1 FROM {$meta_table} mt WHERE mt.store_id = {$store_table}.ID AND mt.meta_key = %s AND mt.meta_value BETWEEN %s AND %s)", $key, $value[0], $value[1] );
+                    }
+                    break;
 
-    //             case '=':
-    //             case '!=':
-    //             case '<':
-    //             case '>':
-    //             case '<=':
-    //             case '>=':
-    //                 // simple comparison
-    //                 if ( $compare === '!=' ) {
-    //                     $parts[] = $wpdb->prepare( "EXISTS (SELECT 1 FROM {$meta_table} mt WHERE mt.store_id = {$store_table}.ID AND mt.meta_key = %s AND mt.meta_value != %s)", $key, $value );
-    //                 } else {
-    //                     $parts[] = $wpdb->prepare( "EXISTS (SELECT 1 FROM {$meta_table} mt WHERE mt.store_id = {$store_table}.ID AND mt.meta_key = %s AND mt.meta_value {$compare} %s)", $key, $value );
-    //                 }
-    //                 break;
+                case '=':
+                case '!=':
+                case '<':
+                case '>':
+                case '<=':
+                case '>=':
+                    // simple comparison
+                    if ( $compare === '!=' ) {
+                        $parts[] = $wpdb->prepare( "EXISTS (SELECT 1 FROM {$meta_table} mt WHERE mt.store_id = {$store_table}.ID AND mt.meta_key = %s AND mt.meta_value != %s)", $key, $value );
+                    } else {
+                        $parts[] = $wpdb->prepare( "EXISTS (SELECT 1 FROM {$meta_table} mt WHERE mt.store_id = {$store_table}.ID AND mt.meta_key = %s AND mt.meta_value {$compare} %s)", $key, $value );
+                    }
+                    break;
 
-    //             default:
-    //                 // fallback to exact match
-    //                 $parts[] = $wpdb->prepare( "EXISTS (SELECT 1 FROM {$meta_table} mt WHERE mt.store_id = {$store_table}.ID AND mt.meta_key = %s AND mt.meta_value = %s)", $key, $value );
-    //                 break;
-    //         }
-    //     }
+                default:
+                    // fallback to exact match
+                    $parts[] = $wpdb->prepare( "EXISTS (SELECT 1 FROM {$meta_table} mt WHERE mt.store_id = {$store_table}.ID AND mt.meta_key = %s AND mt.meta_value = %s)", $key, $value );
+                    break;
+            }
+        }
 
-    //     if ( empty( $parts ) ) {
-    //         return '';
-    //     }
+        if ( empty( $parts ) ) {
+            return '';
+        }
 
-    //     return '(' . implode( " {$relation} ", $parts ) . ')';
-    // }
+        return '(' . implode( " {$relation} ", $parts ) . ')';
+    }
 
 }
