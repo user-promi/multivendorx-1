@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 
 export default {
-    id: 'marketplace-settings',
+    id: 'marketplace',
     priority: 1,
     name: __( 'Overview', 'multivendorx' ),
     tabTitle: 'Marketplace pages configuration',

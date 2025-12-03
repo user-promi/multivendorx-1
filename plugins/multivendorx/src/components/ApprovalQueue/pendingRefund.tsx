@@ -484,7 +484,7 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
                   value={formData.content}
                   onChange={handleChange}
                   usePlainText={false}
-                  tinymceApiKey={appLocalizer.settings_databases_value['marketplace-settings']['tinymce_api_section'] ?? ''}
+                  tinymceApiKey={appLocalizer.settings_databases_value['marketplace']['tinymce_api_section'] ?? ''}
                 />
               </div>
             </div>

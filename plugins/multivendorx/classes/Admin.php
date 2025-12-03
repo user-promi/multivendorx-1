@@ -136,7 +136,7 @@ class Admin {
 					// ),
 					'settings'            => array(
 						'name'   => __( 'Settings', 'multivendorx' ),
-						'subtab' => 'marketplace-settings',
+						'subtab' => 'marketplace',
 					),
 					'modules'             => array(
 						'name'   => __( 'Modules', 'multivendorx' ),

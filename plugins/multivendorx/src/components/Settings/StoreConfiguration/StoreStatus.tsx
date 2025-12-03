@@ -16,7 +16,7 @@ type SettingItem = Record<string, any>;
 
 const StoreStatus: React.FC = () => {
     const location = new URLSearchParams(useLocation().hash.substring(1));
-    const initialTab = location.get('tabId') || 'pending-approval';
+    const initialTab = location.get('tabId') || 'pending';
 
     const settingsArray: SettingItem[] = getAvailableSettings(
         getTemplateData('storeStatus'),
@@ -31,7 +31,7 @@ const StoreStatus: React.FC = () => {
         {
             type: 'file',
             content: {
-                id: 'pending-approval',
+                id: 'pending',
                 name: 'Pending Approval',
                 desc: 'The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
                 // hideTabHeader: true,

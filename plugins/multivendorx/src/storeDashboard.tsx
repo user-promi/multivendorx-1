@@ -463,7 +463,7 @@ const Dashboard = () => {
                             <i className="adminlib-info red"></i>
                             <div className="title">
                                 {storeData.status === "pending"
-                                    ? appLocalizer.settings_databases_value['pending-approval']?.pending_msg
+                                    ? appLocalizer.settings_databases_value['pending']?.pending_msg
                                     : storeData.status === "suspended"
                                     ? appLocalizer.settings_databases_value['suspended']?.suspended_msg
                                     : storeData.status === "under_review"

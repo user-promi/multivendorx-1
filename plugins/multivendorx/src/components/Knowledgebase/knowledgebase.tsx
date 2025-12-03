@@ -537,7 +537,7 @@ export const KnowledgeBase: React.FC = () => {
                                     onChange={handleChange}
                                     usePlainText={false}
                                     tinymceApiKey={
-                                        appLocalizer.settings_databases_value['marketplace-settings']['tinymce_api_section'] ?? ''
+                                        appLocalizer.settings_databases_value['marketplace']['tinymce_api_section'] ?? ''
                                     }
                                 />
                                 {validationErrors.content && (
