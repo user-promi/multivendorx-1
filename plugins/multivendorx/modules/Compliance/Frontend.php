@@ -72,7 +72,7 @@ class Frontend {
                                 esc_html__( 'Report abuse for "%s"', 'multivendorx' ),
                                 esc_html( $product->get_name() )
                             );
-                            printf( '<h3>%s</h3>', $report_title );
+                            printf( '<h3>%s</h3>', esc_html($report_title) );
                         ?>
                     </h3>
 

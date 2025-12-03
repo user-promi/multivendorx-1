@@ -169,7 +169,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
             }
 
             if ( in_array( $order_by, array( 'date', 'order_id' ), true ) ) {
-                $args['orderby'] = $order_by === 'order_id' ? 'ID' : 'date';
+                $args['orderby'] = 'order_id' === $order_by ? 'ID' : 'date';
                 $args['order']   = $order;
             }
 
@@ -181,7 +181,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
                 $refunds = array_filter(
                     $refunds,
                     function ( $refund ) use ( $search_action, $search_field ) {
-                        /** @var WC_Order_Refund $refund */
+                        /** @var WC_Order_Refund $refund Refund. */
                         $order = wc_get_order( $refund->get_parent_id() );
                         if ( ! $order ) {
                             return false;
@@ -206,7 +206,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
             // Build response.
             $refund_list = array_map(
                 function ( $refund ) {
-                    /** @var WC_Order_Refund $refund */
+                    /** @var WC_Order_Refund $refund Refund. */
                     $store_id   = $refund->get_meta( Utill::POST_META_SETTINGS['store_id'] );
                     $store      = new Store( $store_id );
                     $store_name = $store ? $store->get( 'name' ) : '';
@@ -245,8 +245,8 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
             );
 
             // Sort by order_id manually if needed.
-            if ( $order_by === 'order_id' ) {
-                usort( $refund_list, fn( $a, $b ) => ( $order === 'ASC' ? $a['order_id'] <=> $b['order_id'] : $b['order_id'] <=> $a['order_id'] ) );
+            if ( 'order_id' === $order_by ) {
+                usort( $refund_list, fn( $a, $b ) => ( 'ASC' === $order ? $a['order_id'] <=> $b['order_id'] : $b['order_id'] <=> $a['order_id'] ) );
             }
 
             return rest_ensure_response( array_values( $refund_list ) );
@@ -393,7 +393,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
     /**
      * Get parent order item id from vendor order item id
      *
-     * @param int $item_id
+     * @param int $item_id Vendor order item id.
      * @return int
      */
     public function get_vendor_parent_order_item_id( $item_id ) {

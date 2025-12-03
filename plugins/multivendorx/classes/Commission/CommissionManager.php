@@ -20,7 +20,17 @@ defined( 'ABSPATH' ) || exit;
  * @author      MultiVendorX
  */
 class CommissionManager {
+
+    /**
+     * Container for all objects.
+     *
+     * @var array
+     */
     private $container = array();
+
+    /**
+     * Constructor.
+     */
     public function __construct() {
         $this->init_classes();
         new Hooks();
@@ -56,8 +66,8 @@ class CommissionManager {
             $marketplace_payable = 0;
             $store_payable       = 0;
             $coupon_amount       = 0;
-            $commission_rates    = $rules_array = array();
-
+            $commission_rates    = array();
+            $rules_array         = array();
             if ( 'per_item' === $commission_type ) {
                 $per_item          = $this->calc_item_commissions( $order->get_items(), $order, $vendor, $commission_rates );
                 $commission_amount = $per_item['commission_amount'];

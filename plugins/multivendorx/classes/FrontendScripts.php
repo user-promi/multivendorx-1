@@ -345,7 +345,7 @@ class FrontendScripts {
         $woocommerce_pages = array( wc_get_page_id( 'shop' ), wc_get_page_id( 'cart' ), wc_get_page_id( 'checkout' ), wc_get_page_id( 'myaccount' ) );
         if ( $pages ) {
             foreach ( $pages as $page ) {
-                if ( ! in_array( needle: $page->ID, $woocommerce_pages, true ) ) {
+                if ( ! in_array( $page->ID, $woocommerce_pages, true ) ) {
                     $pages_array[] = array(
                         'value' => $page->ID,
                         'label' => $page->post_title,

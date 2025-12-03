@@ -106,11 +106,13 @@ class Frontend {
                 <?php
                 if ( $refund_reason_options ) {
                     foreach ( $refund_reason_options as $index => $reason ) {
+                        $index_attr = esc_attr( $index );
+                        $reason_text = esc_html( $reason['value'] );
                         echo '<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                        <label class="refund_reason_option" for="refund_reason_option-' . $index . '">
-                            <input type="radio" class="woocommerce-Input input-radio" name="refund_reason_option" id="refund_reason_option-' . $index . '" value="' . $index . '" />
-                            ' . esc_html( $reason['value'] ) . '
-                        </label></p>';
+                            <label class="refund_reason_option" for="refund_reason_option-' . $index_attr . '">
+                                <input type="radio" class="woocommerce-Input input-radio" name="refund_reason_option" id="refund_reason_option-' . $index_attr . '" value="' . $index_attr . '" />
+                                ' . $reason_text . '
+                            </label></p>';
                     }
                     // Add others reason.
                     echo '<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">

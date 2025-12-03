@@ -36,7 +36,8 @@ class Ajax {
 
         check_ajax_referer( 'add-attribute', 'security' );
 
-        $taxonomy = filter_input( INPUT_POST, 'taxonomy', FILTER_SANITIZE_STRING );
+        $taxonomy = filter_input( INPUT_POST, 'taxonomy', FILTER_UNSAFE_RAW );
+        $taxonomy = sanitize_text_field( $taxonomy );
         $i        = filter_input( INPUT_POST, 'i', FILTER_SANITIZE_NUMBER_INT );
 
         if ( ! current_user_can( 'edit_products' ) || ( ! apply_filters( 'vendor_can_add_custom_attribute', true ) && empty( $taxonomy ) ) ) {
@@ -86,7 +87,8 @@ class Ajax {
         $attr_data = isset( $data['wc_attributes'] ) ? $data['wc_attributes'] : array();
 
         $product_id   = filter_input( INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT );
-        $product_type = filter_input( INPUT_POST, 'product_type', FILTER_SANITIZE_STRING );
+        $product_type = filter_input( INPUT_POST, 'product_type', FILTER_UNSAFE_RAW );
+        $product_type = $product_type ? wc_clean( $product_type ) : 'simple';
         $product_type = $product_type ? wc_clean( $product_type ) : 'simple';
 
         $attributes = Products::prepare_attributes( $attr_data );
