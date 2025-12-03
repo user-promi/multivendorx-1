@@ -5,12 +5,53 @@ import {
     BasicInput,
     CalendarInput,
     CommonPopup,
+    DynamicRowSetting,
     FileInput,
+    InputWithSuggestions,
     MultiCheckBox,
     RadioInput,
     SelectInput,
     TextArea,
 } from 'zyra';
+const demoData = [
+    {
+        id: "cat1",
+        name: "Category 1",
+        children: [
+            { id: "sub1", name: "sub category 1" },
+            { id: "sub2", name: "sub category 2" },
+            {
+                id: "sub3",
+                name: "sub category 3",
+                children: [
+                    { id: "child1", name: "sub 1" },
+                    { id: "child2", name: "sub 2" },
+                    { id: "child3", name: "sub 3" },
+                ],
+            },
+            { id: "sub4", name: "sub category 4" },
+        ],
+    },
+    { id: "cat2", name: "Category 2" },
+    { id: "cat3", name: "Category 3" },
+    { id: "cat4", name: "Category 4" },
+];
+const downloadTemplate = {
+    fields: [
+        {
+            key: "name",
+            type: "text",
+            label: "File Name",
+            placeholder: "File name",
+        },
+        {
+            key: "file",
+            type: "text",
+            label: "File URL",
+            placeholder: "File URL",
+        },
+    ],
+};
 
 const AddProduct = () => {
     const location = useLocation();
@@ -26,6 +67,9 @@ const AddProduct = () => {
     const [product, setProduct] = useState({});
     const [shippingClasses, setShippingClasses] = useState([]);
 
+    const [featuredImage, setFeaturedImage] = useState(null);
+    const [galleryImages, setGalleryImages] = useState([]);
+
     useEffect(() => {
         if (!productId) return;
 
@@ -34,6 +78,13 @@ const AddProduct = () => {
                 headers: { 'X-WP-Nonce': appLocalizer.nonce },
             })
             .then(function (res) {
+                const images = res.data.images || [];
+
+                if (images.length > 0) {
+                    setFeaturedImage(images[0]);
+                }
+
+                setGalleryImages(images.slice(1));
                 setProduct(res.data);
             });
     }, [productId]);
@@ -79,7 +130,91 @@ const AddProduct = () => {
     const [showAddNew, setShowAddNew] = useState(false);
     const [visibility, setVisibility] = useState('shop_search');
     const wrapperRef = useRef(null);
+    const [selectedCat, setSelectedCat] = useState("");
+    const [selectedSub, setSelectedSub] = useState("");
+    const [selectedChild, setSelectedChild] = useState("");
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+                // Reset all selections
+                setSelectedCat("");
+                setSelectedSub("");
+                setSelectedChild("");
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    // ------------------ CLICK HANDLERS ------------------
+    const handleCategoryClick = (catId) => {
+        setSelectedCat(catId);
+        setSelectedSub("");
+        setSelectedChild("");
+    };
+    const handleSubClick = (subId) => {
+        setSelectedSub(subId);
+        setSelectedChild("");
+    };
+    const handleChildClick = (childId) => {
+        setSelectedChild(childId);
+    };
+
+    const handlePathClick = (level) => {
+        if (level === "category") {
+            setSelectedSub("");
+            setSelectedChild("");
+        }
+        if (level === "sub") {
+            setSelectedChild("");
+        }
+    };
+
+    const printPath = () => {
+        const cat = demoData.find((c) => c.id === selectedCat);
+        const sub = cat?.children?.find((s) => s.id === selectedSub);
+        const child = sub?.children?.find((c) => c.id === selectedChild);
+
+        return (
+            <>
+                {cat && (
+                    <span
+
+                        onClick={() => handlePathClick("category")}
+                    >
+                        {cat.name}
+                    </span>
+                )}
+                {sub && (
+                    <>
+                        {" / "}
+                        <span
+
+                            onClick={() => handlePathClick("sub")}
+                        >
+                            {sub.name}
+                        </span>
+                    </>
+                )}
+                {child && (
+                    <>
+                        {" / "}
+                        <span>{child.name}</span>
+                    </>
+                )}
+            </>
+        );
+    };
+
+    const resetSelection = () => {
+        setSelectedCat("");
+        setSelectedSub("");
+        setSelectedChild("");
+    };
+    // category end
     useEffect(() => {
         function handleClick(e) {
             if (!wrapperRef.current) return;
@@ -225,9 +360,20 @@ const AddProduct = () => {
     };
 
     const createProduct = () => {
+        const imagePayload = [];
+
+        if (featuredImage) {
+            imagePayload.push({ id: featuredImage.id });
+        }
+
+        galleryImages.forEach(img => {
+            imagePayload.push({ id: img.id });
+        });
+
         try {
             const payload = {
                 ...product,
+                images: imagePayload,
                 meta_data: [
                     {
                         key: 'multivendorx_store_id',
@@ -359,7 +505,54 @@ const AddProduct = () => {
         frame.open();
     };
 
-console.log('product', product)
+    const openFeaturedUploader = () => {
+        const frame = wp.media({
+            title: "Select Featured Image",
+            button: { text: "Use this image" },
+            multiple: false,
+            library: { type: "image" }
+        });
+
+        frame.on("select", () => {
+            const attachment = frame.state().get("selection").first().toJSON();
+
+            const img = {
+                id: attachment.id,
+                src: attachment.url,
+                thumbnail: attachment.sizes?.thumbnail?.url || attachment.url
+            };
+
+            setFeaturedImage(img);
+        });
+
+        frame.open();
+    };
+
+    const openGalleryUploader = () => {
+        const frame = wp.media({
+            title: "Select Gallery Images",
+            button: { text: "Add to gallery" },
+            multiple: true,
+            library: { type: "image" }
+        });
+
+        frame.on("select", () => {
+            const selection = frame.state().get("selection").toJSON();
+
+            const newImages = selection.map(img => ({
+                id: img.id,
+                src: img.url,
+                thumbnail: img.sizes?.thumbnail?.url || img.url
+            }));
+
+            setGalleryImages(prev => [...prev, ...newImages]);
+        });
+
+        frame.open();
+    };
+
+
+    console.log('product', product)
     return (
         <>
             <div className="page-title-wrapper">
@@ -870,7 +1063,7 @@ console.log('product', product)
                             </div>
                             <div className="card-body">
 
-                                {product.downloads?.map((file, index) => (
+                                {/* {product.downloads?.map((file, index) => (
                                     <div key={file.id} className="shipping-country-wrapper">
                                         <div className="shipping-country">
                                             <div className="country item">
@@ -913,8 +1106,32 @@ console.log('product', product)
 
                                 <div className="admin-btn btn-purple-bg" onClick={addDownloadableFile}>
                                     <i className="adminlib-plus-circle-o"></i> Add new
-                                </div>
+                                </div> */}
 
+                                <DynamicRowSetting
+                                    keyName="downloads"
+                                    template={downloadTemplate}
+                                    value={product.downloads}
+                                    addLabel="Add new"
+                                    onChange={(rows: any) =>
+                                        setProduct((prev) => ({ ...prev, downloads: rows }))
+                                    }
+                                    childrenRenderer={(row, index) => (
+                                        <>
+                                            <div
+                                                className="admin-btn btn-purple"
+                                                onClick={() => openMediaUploader(index)}
+                                            >
+                                                Upload file
+                                            </div>
+
+                                            <div
+                                                className="delete-icon adminlib-delete"
+                                                onClick={() => removeDownloadableFile(index)}
+                                            />
+                                        </>
+                                    )}
+                                />
 
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
@@ -1360,16 +1577,16 @@ console.log('product', product)
                                         <label htmlFor="title">
                                             Attribute value
                                         </label>
-                                        <div className="attribute-value">
+                                        {/* <div className="dropdown-field">
                                             <TextArea
                                                 name="short_description"
                                                 wrapperClass="setting-from-textarea"
-                                                inputClass="textarea-input"
+                                                inputClass="textarea-input dropdown-input"
                                                 descClass="settings-metabox-description"
                                                 value={
                                                     product.short_description
                                                 }
-                                                onChange={(e) =>
+                                                onChange={(e:any) =>
                                                     handleChange(
                                                         'short_description',
                                                         e.target.value
@@ -1384,7 +1601,17 @@ console.log('product', product)
                                                     <li>Red</li>
                                                 </ul>
                                             </div>
+                                        </div> */}
+                                        <div className="dropdown-field">
+                                            <InputWithSuggestions
+                                                suggestions={["Red", "Blue", "Green", "Yellow"]} // your dynamic suggestions
+                                                value={product.short_description_list || []}    // current values
+                                                placeholder="Type or select color..."
+                                                addButtonLabel="Add"
+                                                onChange={(list) => handleChange("short_description_list", list)}
+                                            />
                                         </div>
+
                                     </div>
                                 </div>
                                 <div className="buttons-wrapper left">
@@ -1534,7 +1761,7 @@ console.log('product', product)
                                                 <input
                                                     type="checkbox"
                                                     checked={product.virtual}
-                                                    // onChange={(e) => handleChange("virtual", e.target.checked)}
+                                                // onChange={(e) => handleChange("virtual", e.target.checked)}
                                                 />
                                                 Enabled
                                             </div>
@@ -1544,7 +1771,7 @@ console.log('product', product)
                                                     checked={
                                                         product.downloadable
                                                     }
-                                                    // onChange={(e) => handleChange("downloadable", e.target.checked)}
+                                                // onChange={(e) => handleChange("downloadable", e.target.checked)}
                                                 />
                                                 Downloadable
                                             </div>
@@ -1554,7 +1781,7 @@ console.log('product', product)
                                                     checked={
                                                         product.downloadable
                                                     }
-                                                    // onChange={(e) => handleChange("downloadable", e.target.checked)}
+                                                // onChange={(e) => handleChange("downloadable", e.target.checked)}
                                                 />
                                                 Virtual
                                             </div>
@@ -1564,7 +1791,7 @@ console.log('product', product)
                                                     checked={
                                                         product.downloadable
                                                     }
-                                                    // onChange={(e) => handleChange("downloadable", e.target.checked)}
+                                                // onChange={(e) => handleChange("downloadable", e.target.checked)}
                                                 />
                                                 Manage stock
                                             </div>
@@ -1749,12 +1976,12 @@ console.log('product', product)
                                     <CalendarInput
                                         wrapperClass=""
                                         inputClass=""
-                                        // onChange={(range: any) => {
-                                        //    updateFilter('date', {
-                                        //       start_date: range.startDate,
-                                        //       end_date: range.endDate,
-                                        //    });
-                                        // }}
+                                    // onChange={(range: any) => {
+                                    //    updateFilter('date', {
+                                    //       start_date: range.startDate,
+                                    //       end_date: range.endDate,
+                                    //    });
+                                    // }}
                                     />
                                 </div>
                             </div>
@@ -1771,6 +1998,105 @@ console.log('product', product)
                             </div>
                         </div>
                         <div className="card-body">
+                            <div className="category-breadcrumb-wrapper">
+                                <div className="category-breadcrumb">
+                                    {printPath()}
+                                </div>
+                                {(selectedCat || selectedSub || selectedChild) && (
+                                    <button
+                                        onClick={resetSelection}
+                                        className="admin-btn btn-red"
+                                    >
+                                        Reset
+                                    </button>
+                                )}
+                            </div>
+
+                            <div className="form-group-wrapper">
+                                <div className="category-wrapper" ref={wrapperRef}>
+                                    <ul className="settings-form-group-radio">
+                                        {demoData.map((cat) => (
+                                            <li
+                                                key={cat.id}
+                                                className="category"
+                                                style={{
+                                                    display:
+                                                        !selectedCat || selectedCat === cat.id ? "block" : "none",
+                                                }}
+                                            >
+                                                <div className={`radio-basic-input-wrap ${selectedCat === cat.id ? "radio-select-active" : ""
+                                                    }`}>
+                                                    <input
+                                                        type="radio"
+                                                        name="category"
+                                                        className="setting-form-input"
+                                                        checked={selectedCat === cat.id}
+                                                        onChange={() => handleCategoryClick(cat.id)}
+                                                    />
+                                                    <label htmlFor="">{cat.name} </label>
+                                                </div>
+                                                {selectedCat === cat.id && cat.children && (
+                                                    <ul className="settings-form-group-radio">
+                                                        {cat.children.map((sub) => (
+                                                            <li
+                                                                key={sub.id}
+                                                                className="sub-category"
+                                                                style={{
+                                                                    display:
+                                                                        !selectedSub || selectedSub === sub.id
+                                                                            ? "block"
+                                                                            : "none",
+                                                                }}
+                                                            >
+                                                                <div className={`radio-basic-input-wrap ${selectedSub === sub.id ? "radio-select-active" : ""
+                                                                    }`}>
+                                                                    <input
+                                                                        type="radio"
+                                                                        name="sub-category"
+                                                                        checked={selectedSub === sub.id}
+                                                                        className="setting-form-input"
+                                                                        onChange={() => handleSubClick(sub.id)}
+                                                                    />
+                                                                    <label> {sub.name} </label>
+                                                                </div>
+                                                                {/* CHILD LEVEL */}
+                                                                {selectedSub === sub.id && sub.children && (
+                                                                    <ul className="settings-form-group-radio">
+                                                                        {sub.children.map((child) => (
+                                                                            <li
+                                                                                key={child.id}
+                                                                                className="sub-category"
+                                                                                style={{
+                                                                                    display:
+                                                                                        !selectedChild || selectedChild === child.id
+                                                                                            ? "block"
+                                                                                            : "none",
+                                                                                }}
+                                                                            >
+                                                                                <div className={`radio-basic-input-wrap ${selectedChild === child.id ? "radio-select-active" : ""
+                                                                                    }`}>
+                                                                                    <input
+                                                                                        type="radio"
+                                                                                        name="child-category"
+                                                                                        className="setting-form-input"
+                                                                                        checked={selectedChild === child.id}
+                                                                                        onChange={() => handleChildClick(child.id)}
+                                                                                    />
+                                                                                    <label htmlFor={child.id}> {child.name} </label>
+                                                                                </div>
+                                                                            </li>
+                                                                        ))}
+                                                                    </ul>
+                                                                )}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                )}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </div>
                             <div className="form-group-wrapper">
                                 <div className="form-group">
                                     <div className="category-wrapper">
@@ -1835,51 +2161,34 @@ console.log('product', product)
                                     </div>
                                 </div>
                             </div>
-                            {/* <div className="form-group-wrapper">
-                        <div className="form-group">
-                           <label htmlFor="product-name">Product tag</label>
-                           <SelectInput
-                              name="payment_method"
-                              options={paymentOptions}
-                              type="single-select"
-                           />
-                        </div>
-                     </div> */}
 
                             <div className="form-group-wrapper">
                                 <div className="form-group">
                                     <label>Product Tags</label>
 
-                                    {/* SHOW CURRENT TAGS */}
                                     <div className="tag-list">
                                         {product.tags?.map((tag) => (
                                             <span
-                                                className="tag-item"
+                                                className="admin-badge blue"
                                                 key={tag.id}
                                             >
                                                 {tag.name}
-                                                <button
-                                                    className="remove-tag"
+                                                <span
                                                     onClick={() =>
-                                                        setProduct({
-                                                            ...product,
-                                                            tags: product.tags.filter(
-                                                                (t) =>
-                                                                    t.id !==
-                                                                    tag.id
-                                                            ),
-                                                        })
+                                                        setProduct(prev => ({
+                                                            ...prev,
+                                                            tags: prev.tags.filter(t => t.name !== tag.name),
+                                                        }))
                                                     }
                                                 >
-                                                    ×
-                                                </button>
+                                                    <i className="delete-icon adminlib-cross"></i>
+                                                </span>
                                             </span>
                                         ))}
                                     </div>
 
                                     <div
-                                        className="tag-input-box"
-                                        style={{ position: 'relative' }}
+                                        className="dropdown-field"
                                     >
                                         <input
                                             type="text"
@@ -1892,33 +2201,36 @@ console.log('product', product)
                                                 addTag(tagInput)
                                             }
                                             placeholder="Type tag…"
+                                            className="basic-input dropdown-input"
                                         />
 
                                         <button
-                                            className="add-btn"
+                                            className="admin-btn btn-green"
                                             onClick={() => addTag(tagInput)}
                                         >
                                             Add
                                         </button>
 
                                         {suggestions.length > 0 && (
-                                            <div className="dropdown">
-                                                {suggestions.map((tag) => (
-                                                    <div
-                                                        key={tag.id || tag.name}
-                                                        className="dropdown-item"
-                                                        onClick={() =>
-                                                            addTag(tag)
-                                                        }
-                                                    >
-                                                        {tag.name}
-                                                    </div>
-                                                ))}
+                                            <div className="input-dropdown">
+                                                <ul>
+                                                    {suggestions.map((tag) => (
+                                                        <li
+                                                            key={tag.id || tag.name}
+                                                            className="dropdown-item"
+                                                            onClick={() =>
+                                                                addTag(tag)
+                                                            }
+                                                        >
+                                                            {tag.name}
+                                                        </li>
+                                                    ))}
+                                                </ul>
                                             </div>
                                         )}
                                     </div>
                                 </div>
-                            </div>
+                            </div>                            
                         </div>
                     </div>
                     {/* image upload */}
@@ -1943,18 +2255,15 @@ console.log('product', product)
                                         Features Image
                                     </label>
                                     <FileInput
-                                        // value={formData.image}
-                                        inputClass="form-input"
-                                        name="image"
                                         type="hidden"
-                                        // onButtonClick={() => runUploader('image')}
-                                        imageWidth={75}
-                                        imageHeight={75}
-                                        openUploader="Upload Image"
-                                        // imageSrc={imagePreviews.image}
+                                        imageSrc={featuredImage?.thumbnail}
+                                        openUploader="Select Featured Image"
                                         buttonClass="admin-btn btn-purple"
-                                        descClass="settings-metabox-description"
+                                        onButtonClick={openFeaturedUploader}
+                                        onRemove={() => setFeaturedImage(null)}
+                                        onReplace={openFeaturedUploader}
                                     />
+
                                 </div>
                             </div>
                             <div className="form-group-wrapper">
@@ -1962,78 +2271,36 @@ console.log('product', product)
                                     <label htmlFor="product-name">
                                         Product gallery
                                     </label>
-                                    <FileInput
-                                        // value={formData.image}
-                                        inputClass="form-input"
-                                        name="image"
-                                        type="hidden"
-                                        // onButtonClick={() => runUploader('image')}
-                                        imageWidth={75}
-                                        imageHeight={75}
-                                        openUploader="Upload Image"
-                                        // imageSrc={imagePreviews.image}
-                                        buttonClass="admin-btn btn-purple"
-                                        descClass="settings-metabox-description"
-                                    />
+                                    <div className="gallery-wrapper">
+                                        {galleryImages.map((img, index) => (
+                                            <FileInput
+                                                key={img.id}
+                                                type="hidden"
+                                                imageSrc={img.thumbnail}
+                                                openUploader="Replace Image"
+                                                buttonClass="admin-btn btn-purple"
+                                                onRemove={() => {
+                                                    setGalleryImages(galleryImages.filter((i, idx) => idx !== index));
+                                                }}
+                                                onReplace={() => openGalleryUploader()}
+                                            />
+                                        ))}
+
+                                        {/* Add more button */}
+                                        <FileInput
+                                            type="hidden"
+                                            imageSrc={null}
+                                            openUploader="Add Gallery Image"
+                                            buttonClass="admin-btn btn-purple"
+                                            onButtonClick={openGalleryUploader}
+                                        />
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="card" id="card-image-upload">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">Upload image</div>
-                            </div>
-                            <div className="right">
-                                <i
-                                    className="adminlib-pagination-right-arrow  arrow-icon"
-                                    onClick={() =>
-                                        toggleCard('card-image-upload')
-                                    }
-                                ></i>
-                            </div>
-                        </div>
-                        <div className="card-body">
-                            <div className="form-group-wrapper">
-                                <div className="form-group">
-                                    <label htmlFor="product-name">
-                                        Features Image
-                                    </label>
-                                    <FileInput
-                                        inputClass="form-input"
-                                        name="image"
-                                        type="hidden"
-                                        imageWidth={75}
-                                        imageHeight={75}
-                                        openUploader="Upload Image"
-                                        buttonClass="admin-btn btn-purple"
-                                        descClass="settings-metabox-description"
-                                    />
-                                </div>
-                            </div>
-                            <div className="form-group-wrapper">
-                                <div className="form-group">
-                                    <label htmlFor="product-name">
-                                        Product gallery
-                                    </label>
-                                    <FileInput
-                                        // value={formData.image}
-                                        inputClass="form-input"
-                                        name="image"
-                                        type="hidden"
-                                        // onButtonClick={() => runUploader('image')}
-                                        imageWidth={75}
-                                        imageHeight={75}
-                                        openUploader="Upload Image"
-                                        // imageSrc={imagePreviews.image}
-                                        buttonClass="admin-btn btn-purple"
-                                        descClass="settings-metabox-description"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </>
