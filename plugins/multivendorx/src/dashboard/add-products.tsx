@@ -5,7 +5,9 @@ import {
     BasicInput,
     CalendarInput,
     CommonPopup,
+    DynamicRowSetting,
     FileInput,
+    InputWithSuggestions,
     MultiCheckBox,
     RadioInput,
     SelectInput,
@@ -34,6 +36,23 @@ const demoData = [
     { id: "cat3", name: "Category 3" },
     { id: "cat4", name: "Category 4" },
 ];
+const downloadTemplate = {
+    fields: [
+        {
+            key: "name",
+            type: "text",
+            label: "File Name",
+            placeholder: "File name",
+        },
+        {
+            key: "file",
+            type: "text",
+            label: "File URL",
+            placeholder: "File URL",
+        },
+    ],
+};
+
 const AddProduct = () => {
     const location = useLocation();
 
@@ -163,7 +182,7 @@ const AddProduct = () => {
             <>
                 {cat && (
                     <span
-                        
+
                         onClick={() => handlePathClick("category")}
                     >
                         {cat.name}
@@ -173,7 +192,7 @@ const AddProduct = () => {
                     <>
                         {" / "}
                         <span
-                            
+
                             onClick={() => handlePathClick("sub")}
                         >
                             {sub.name}
@@ -533,7 +552,7 @@ const AddProduct = () => {
     };
 
 
-console.log('product', product)
+    console.log('product', product)
     return (
         <>
             <div className="page-title-wrapper">
@@ -1044,7 +1063,7 @@ console.log('product', product)
                             </div>
                             <div className="card-body">
 
-                                {product.downloads?.map((file, index) => (
+                                {/* {product.downloads?.map((file, index) => (
                                     <div key={file.id} className="shipping-country-wrapper">
                                         <div className="shipping-country">
                                             <div className="country item">
@@ -1087,8 +1106,32 @@ console.log('product', product)
 
                                 <div className="admin-btn btn-purple-bg" onClick={addDownloadableFile}>
                                     <i className="adminlib-plus-circle-o"></i> Add new
-                                </div>
+                                </div> */}
 
+                                <DynamicRowSetting
+                                    keyName="downloads"
+                                    template={downloadTemplate}
+                                    value={product.downloads}
+                                    addLabel="Add new"
+                                    onChange={(rows: any) =>
+                                        setProduct((prev) => ({ ...prev, downloads: rows }))
+                                    }
+                                    childrenRenderer={(row, index) => (
+                                        <>
+                                            <div
+                                                className="admin-btn btn-purple"
+                                                onClick={() => openMediaUploader(index)}
+                                            >
+                                                Upload file
+                                            </div>
+
+                                            <div
+                                                className="delete-icon adminlib-delete"
+                                                onClick={() => removeDownloadableFile(index)}
+                                            />
+                                        </>
+                                    )}
+                                />
 
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
@@ -1534,7 +1577,7 @@ console.log('product', product)
                                         <label htmlFor="title">
                                             Attribute value
                                         </label>
-                                        <div className="dropdown-field">
+                                        {/* <div className="dropdown-field">
                                             <TextArea
                                                 name="short_description"
                                                 wrapperClass="setting-from-textarea"
@@ -1543,7 +1586,7 @@ console.log('product', product)
                                                 value={
                                                     product.short_description
                                                 }
-                                                onChange={(e) =>
+                                                onChange={(e:any) =>
                                                     handleChange(
                                                         'short_description',
                                                         e.target.value
@@ -1558,7 +1601,17 @@ console.log('product', product)
                                                     <li>Red</li>
                                                 </ul>
                                             </div>
+                                        </div> */}
+                                        <div className="dropdown-field">
+                                            <InputWithSuggestions
+                                                suggestions={["Red", "Blue", "Green", "Yellow"]} // your dynamic suggestions
+                                                value={product.short_description_list || []}    // current values
+                                                placeholder="Type or select color..."
+                                                addButtonLabel="Add"
+                                                onChange={(list) => handleChange("short_description_list", list)}
+                                            />
                                         </div>
+
                                     </div>
                                 </div>
                                 <div className="buttons-wrapper left">
@@ -2161,23 +2214,23 @@ console.log('product', product)
                                         {suggestions.length > 0 && (
                                             <div className="input-dropdown">
                                                 <ul>
-                                                {suggestions.map((tag) => (
-                                                    <li
-                                                        key={tag.id || tag.name}
-                                                        className="dropdown-item"
-                                                        onClick={() =>
-                                                            addTag(tag)
-                                                        }
-                                                    >
-                                                        {tag.name}
-                                                    </li>
-                                                ))}
+                                                    {suggestions.map((tag) => (
+                                                        <li
+                                                            key={tag.id || tag.name}
+                                                            className="dropdown-item"
+                                                            onClick={() =>
+                                                                addTag(tag)
+                                                            }
+                                                        >
+                                                            {tag.name}
+                                                        </li>
+                                                    ))}
                                                 </ul>
                                             </div>
                                         )}
                                     </div>
                                 </div>
-                            </div>
+                            </div>                            
                         </div>
                     </div>
                     {/* image upload */}
