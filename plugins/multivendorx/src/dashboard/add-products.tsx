@@ -355,6 +355,7 @@ const AddProduct = () => {
             const payload = {
                 ...product,
                 images: imagePayload,
+                categories: selectedCats.map(id => ({ id })),
                 meta_data: [
                     {
                         key: 'multivendorx_store_id',
@@ -532,7 +533,99 @@ const AddProduct = () => {
         frame.open();
     };
 
+    const [categories, setCategories] = useState([]);
+    const [selectedCats, setSelectedCats] = useState([]);
 
+    useEffect(() => {
+        axios.get(`${appLocalizer.apiUrl}/wc/v3/products/categories`, {
+            headers: { "X-WP-Nonce": appLocalizer.nonce }
+        })
+        .then(res => setCategories(res.data));
+    }, []);
+
+    useEffect(() => {
+        if (product && product.categories) {
+            setSelectedCats(product.categories.map(c => c.id));
+        }
+    }, [product]);
+
+
+    const toggleCategory = (id) => {
+    setSelectedCats((prev) =>
+        prev.includes(id)
+            ? prev.filter(item => item !== id)    // remove
+            : [...prev, id]                        // add
+    );
+};
+
+    
+    const buildCategoryTree = (categories) => {
+        const map = {};
+        const roots = [];
+
+        categories.forEach(cat => {
+            map[cat.id] = { ...cat, children: [] };
+        });
+
+        categories.forEach(cat => {
+            if (cat.parent === 0) {
+                roots.push(map[cat.id]);
+            } else if (map[cat.parent]) {
+                map[cat.parent].children.push(map[cat.id]);
+            }
+        });
+
+        return roots;
+    };
+
+    const CategoryItem = ({ category, selectedCats, toggleCategory }) => {
+    return (
+        <li className={category.parent === 0 ? "category" : "sub-category"}>
+            <input
+                type="checkbox"
+                checked={selectedCats.includes(category.id)}   // 💥 previously saved value
+                onChange={() => toggleCategory(category.id)}   // update value
+            />
+            {category.name}
+
+            {category.children?.length > 0 && (
+                <ul>
+                    {category.children.map(child => (
+                        <CategoryItem
+                            key={child.id}
+                            category={child}
+                            selectedCats={selectedCats}
+                            toggleCategory={toggleCategory}
+                        />
+                    ))}
+                </ul>
+            )}
+        </li>
+    );
+};
+
+const CategoryTree = ({ categories, selectedCats, toggleCategory }) => {
+    const nestedCategories = buildCategoryTree(categories);
+
+    return (
+        <div className="category-wrapper">
+            <ul>
+                {nestedCategories.map(cat => (
+                    <CategoryItem
+                        key={cat.id}
+                        category={cat}
+                        selectedCats={selectedCats}
+                        toggleCategory={toggleCategory}
+                    />
+                ))}
+            </ul>
+        </div>
+    );
+};
+
+
+
+console.log('categories', categories)
 console.log('product', product)
     return (
         <>
@@ -2046,66 +2139,12 @@ console.log('product', product)
                             </div>
                             <div className="form-group-wrapper">
                                 <div className="form-group">
-                                    <div className="category-wrapper">
-                                        <ul>
-                                            <li className="category">
-                                                <input type="checkbox" />
-                                                Category 1{/* sub category */}
-                                                <ul>
-                                                    <li className="sub-category">
-                                                        <input type="checkbox" />
-                                                        sub category 1
-                                                    </li>
-                                                    <li className="sub-category">
-                                                        <input type="checkbox" />{' '}
-                                                        sub category 1
-                                                    </li>
-                                                    <li className="sub-category">
-                                                        <input type="checkbox" />{' '}
-                                                        sub category 1
-                                                        <ul>
-                                                            <li className="sub-category">
-                                                                <input type="checkbox" />{' '}
-                                                                sub 1
-                                                            </li>
-                                                            <li className="sub-category">
-                                                                <input type="checkbox" />{' '}
-                                                                sub 1
-                                                            </li>
-                                                            <li className="sub-category">
-                                                                <input type="checkbox" />{' '}
-                                                                sub 1
-                                                            </li>
-                                                            <li className="sub-category">
-                                                                <input type="checkbox" />{' '}
-                                                                sub 1
-                                                            </li>
-                                                        </ul>
-                                                    </li>
-                                                    <li className="sub-category">
-                                                        <input type="checkbox" />
-                                                        sub category 1
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li className="category">
-                                                <input type="checkbox" />
-                                                Category 1
-                                            </li>
-                                            <li className="category">
-                                                <input type="checkbox" />
-                                                Category 1
-                                            </li>
-                                            <li className="category">
-                                                <input type="checkbox" />
-                                                Category 1
-                                            </li>
-                                            <li className="category">
-                                                <input type="checkbox" />
-                                                Category 1
-                                            </li>
-                                        </ul>
-                                    </div>
+                                    <CategoryTree
+                                        categories={categories}
+                                        selectedCats={selectedCats}
+                                        toggleCategory={toggleCategory}
+                                    />
+
                                 </div>
                             </div>
 
