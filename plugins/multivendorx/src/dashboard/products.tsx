@@ -77,7 +77,14 @@ const AllProduct: React.FC = () => {
     const navigate = useNavigate();
 
     const query = new URLSearchParams(location.search);
-    const element = query.get("element");
+    let element = query.get("element");
+
+    if (!element) {
+        const parts = location.pathname.split("/").filter(Boolean);
+        if (parts.length >= 4) {
+            element = element || parts[2]; 
+        }
+    }
 
     const isAddProduct = element === "edit";
 
@@ -346,7 +353,7 @@ const AllProduct: React.FC = () => {
                                 icon: 'adminlib-edit',
                                 onClick: (rowData) => {
                                     if (appLocalizer.permalink_structure) {
-                                        navigate(`/${appLocalizer.dashboard_slug}/products/edit/${rowData.id}`);
+                                        navigate(`/${appLocalizer.dashboard_slug}/products/edit/${rowData.id}/`);
                                     } else {
                                         navigate(`?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=edit&context_id=${rowData.id}`);
                                     }

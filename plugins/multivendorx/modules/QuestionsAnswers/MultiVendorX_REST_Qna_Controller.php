@@ -8,6 +8,7 @@
 namespace MultiVendorX\QuestionsAnswers;
 
 use MultiVendorX\QuestionsAnswers\Util;
+use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
 

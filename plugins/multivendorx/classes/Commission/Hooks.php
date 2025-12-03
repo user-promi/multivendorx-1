@@ -8,6 +8,7 @@
 namespace MultiVendorX\Commission;
 
 use MultiVendorX\Order\VendorOrder;
+use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
 

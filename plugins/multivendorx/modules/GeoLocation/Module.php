@@ -6,6 +6,7 @@
  */
 
 namespace MultiVendorX\GeoLocation;
+use MultiVendorX\Utill;
 
 /**
  * MultiVendorX Geolocation Module
@@ -14,6 +15,7 @@ namespace MultiVendorX\GeoLocation;
  * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
+
 class Module {
     private $container = array();
     /**

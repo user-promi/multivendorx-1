@@ -6,6 +6,7 @@
  */
 
 namespace MultiVendorX\Geolocation;
+use MultiVendorX\Utill;
 
 /**
  * MultiVendorX Geolocation Module.
@@ -14,6 +15,7 @@ namespace MultiVendorX\Geolocation;
  * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
+
 class StoreGeolocation {
     /**
      * Store object.

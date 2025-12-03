@@ -218,7 +218,7 @@ export default {
             desc: "Hide sensitive store information from customers, including contact details, location, or other specified data.",
             icon: 'adminlib-privacy',
             doc_link: 'https://multivendorx.com/docs/knowledgebase/NA',
-            settings_link: `${appLocalizer.plugin_url}settings&subtab=privacy-settings`,
+            settings_link: `${appLocalizer.plugin_url}settings&subtab=privacy`,
             pro_module: false,
             category: 'store_management'
 

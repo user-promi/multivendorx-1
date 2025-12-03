@@ -21,6 +21,7 @@ const Dashboard = () => {
         if (!endpoints || endpoints.length === 0) {
             return;
         }
+
         try {
             const activeEndpoint = endpoints.find(ep => ep.tab === key);
 
@@ -128,7 +129,8 @@ const Dashboard = () => {
                 .replace(`/${slug}/`, '')
                 .replace(/^\/+|\/+$/g, '');
 
-            if (path) return path;
+            const parts = path.split('/');
+            return parts[0] || '';
         }
 
         const query = new URLSearchParams(location.search);
@@ -145,7 +147,7 @@ const Dashboard = () => {
     const handleTabClick = (tab) => {
         const base = getBasePath();
         if (appLocalizer.permalink_structure) {
-            navigate(`${base}/${appLocalizer.dashboard_slug}/${tab}`);
+            navigate(`${base}/${appLocalizer.dashboard_slug}/${tab}/`);
         } else {
             navigate(
                 `${base}/?page_id=${appLocalizer.dashboard_page_id}&segment=${tab}`
@@ -461,7 +463,7 @@ const Dashboard = () => {
                             <i className="adminlib-info red"></i>
                             <div className="title">
                                 {storeData.status === "pending"
-                                    ? appLocalizer.settings_databases_value['pending-approval']?.pending_msg
+                                    ? appLocalizer.settings_databases_value['pending']?.pending_msg
                                     : storeData.status === "suspended"
                                     ? appLocalizer.settings_databases_value['suspended']?.suspended_msg
                                     : storeData.status === "under_review"

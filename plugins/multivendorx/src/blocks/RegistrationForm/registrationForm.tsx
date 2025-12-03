@@ -14,7 +14,6 @@ const RegistrationForm = () => {
     const [allStoreData, setAllStoreData] = useState<any[]>([]);
     const [storeData, setStoreData] = useState<any>(null);
     const formData = registrationForm;
-
     // useEffect(() => {
 
     //     axios({

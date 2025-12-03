@@ -25,7 +25,6 @@ export default {
                     label: "Zone based shipping",
                     disableBtn: true,
                     moduleEnabled: 'store-shipping',
-                    proSetting:true,
                     enableOption: true,
                     desc: "Stores can configure multiple shipping zones.",
                     formFields: [
@@ -48,7 +47,6 @@ export default {
                     label: "Country-wise shipping",
                     moduleEnabled: 'store-shipping',
                     disableBtn: true,
-                    proSetting:true,
                     enableOption: true,
                     desc: "Let store set specific shipping rates based on destination countries.",
                     formFields: [
@@ -66,7 +64,6 @@ export default {
                     label: "Distance-based shipping",
                     disableBtn: true,
                     enableOption: true,
-                    proSetting:true,
                     moduleEnabled: 'store-shipping',
                     desc: "Calculate shipping costs based on actual distance between locations.",
                     formFields: [

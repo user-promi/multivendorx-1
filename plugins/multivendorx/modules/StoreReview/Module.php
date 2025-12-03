@@ -6,6 +6,7 @@
  */
 
 namespace MultiVendorX\StoreReview;
+use MultiVendorX\Utill;
 
 /**
  * MultiVendorX Store Review Module class

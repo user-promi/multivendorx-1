@@ -115,7 +115,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
     return !proSetting && moduleEnabled;
   };
 
-  const handleCopy = (text) => {
+  const handleCopy = (text:any) => {
     navigator.clipboard.writeText(text).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);

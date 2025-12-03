@@ -6,10 +6,10 @@
  */
 
 namespace MultiVendorX\Payments;
+use MultiVendorX\Store\Store;
+use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
-
-use MultiVendorX\Store\Store;
 
 /**
  * MultiVendorX Bank transfer payment gateway.
@@ -18,6 +18,8 @@ use MultiVendorX\Store\Store;
  * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
+
+
 class BankTransfer {
 
     /**

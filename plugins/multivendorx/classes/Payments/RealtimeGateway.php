@@ -8,6 +8,7 @@
 namespace MultiVendorX\Payments;
 
 use MultiVendorX\Commission\CommissionUtil;
+use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
 

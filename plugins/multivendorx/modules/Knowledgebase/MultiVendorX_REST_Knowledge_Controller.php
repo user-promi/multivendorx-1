@@ -6,6 +6,7 @@
  */
 
 namespace MultiVendorX\Knowledgebase;
+use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
 

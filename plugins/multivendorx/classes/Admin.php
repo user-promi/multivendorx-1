@@ -9,6 +9,7 @@ namespace MultiVendorX;
 
 use MultiVendorX\Store\Store;
 use MultiVendorX\Commission\CommissionUtil;
+use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -136,7 +137,7 @@ class Admin {
 					// ),
 					'settings'            => array(
 						'name'   => __( 'Settings', 'multivendorx' ),
-						'subtab' => 'marketplace-settings',
+						'subtab' => 'marketplace',
 					),
 					'modules'             => array(
 						'name'   => __( 'Modules', 'multivendorx' ),

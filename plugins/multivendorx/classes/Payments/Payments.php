@@ -7,6 +7,8 @@
 
 namespace MultiVendorX\Payments;
 
+use MultiVendorX\Utill;
+
 defined( 'ABSPATH' ) || exit;
 
 /**

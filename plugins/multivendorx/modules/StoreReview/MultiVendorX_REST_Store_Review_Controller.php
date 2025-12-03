@@ -8,6 +8,7 @@
 namespace MultiVendorX\StoreReview;
 
 use MultiVendorX\StoreReview\Util;
+use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
 

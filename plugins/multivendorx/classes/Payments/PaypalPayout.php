@@ -9,6 +9,8 @@ namespace MultiVendorX\Payments;
 
 defined( 'ABSPATH' ) || exit;
 use MultiVendorX\Store\Store;
+use MultiVendorX\Utill;
+
 /**
  * MultiVendorX MultiVendorXEmails
  *
