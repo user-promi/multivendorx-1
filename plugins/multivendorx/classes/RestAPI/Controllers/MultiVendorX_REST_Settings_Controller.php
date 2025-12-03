@@ -1,4 +1,9 @@
 <?php
+/**
+ * MultiVendorX REST API Settings controller.
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\RestAPI\Controllers;
 
@@ -7,6 +12,13 @@ use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * MultiVendorX REST API Settings controller.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class MultiVendorX_REST_Settings_Controller extends \WP_REST_Controller {
 
 	/**
@@ -14,9 +26,18 @@ class MultiVendorX_REST_Settings_Controller extends \WP_REST_Controller {
 	 *
 	 * @var string
 	 */
-	protected $rest_base    = 'settings';
+	protected $rest_base = 'settings';
+
+    /**
+	 * Route base.
+	 *
+	 * @var string
+	 */
 	protected $modules_base = 'modules';
 
+    /**
+     * Register the routes for settings.
+     */
     public function register_routes() {
         register_rest_route(
             MultiVendorX()->rest_namespace,
@@ -49,18 +70,26 @@ class MultiVendorX_REST_Settings_Controller extends \WP_REST_Controller {
     }
 
 
-    // POST permission
+    /**
+     * Check if a given request has access to update settings.
+     *
+     * @param object $request The REST request object.
+     */
     public function update_item_permissions_check( $request ) {
         return current_user_can( 'manage_options' ) || current_user_can( 'edit_stores' );
     }
 
-
+    /**
+     * Update settings.
+     *
+     * @param object $request The REST request object.
+     */
     public function update_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -79,14 +108,14 @@ class MultiVendorX_REST_Settings_Controller extends \WP_REST_Controller {
             $settingsname      = str_replace( '-', '_', $settingsname );
             $optionname        = 'multivendorx_' . $settingsname . '_settings';
 
-            // save the settings in database.
+            // Save the settings in database.
             MultiVendorX()->setting->update_option( $optionname, $get_settings_data );
 
             do_action( 'multivendorx_after_save_settings', $settingsname, $get_settings_data );
 
             $all_details['error'] = __( 'Settings Saved', 'multivendorx' );
 
-            if ( $settingsname == 'store_capability' || $settingsname == 'user_capability' ) {
+            if ( 'store_capability' === $settingsname || 'user_capability' === $settingsname ) {
                 $store_cap = MultiVendorX()->setting->get_option( Utill::ADMIN_SETTINGS['store-capability'] );
                 $user_cap  = MultiVendorX()->setting->get_option( Utill::ADMIN_SETTINGS['user-capability'] );
 
@@ -97,7 +126,7 @@ class MultiVendorX_REST_Settings_Controller extends \WP_REST_Controller {
 
                 $store_owner_caps = array_unique( $store_owner_caps );
 
-                // Create store_owner entry
+                // Create store_owner entry.
                 $result = array(
                     'store_owner' => $store_owner_caps,
                 );
@@ -113,12 +142,12 @@ class MultiVendorX_REST_Settings_Controller extends \WP_REST_Controller {
                 $role = get_role( 'store_owner' );
 
                 if ( $role ) {
-                    // Remove all existing caps
+                    // Remove all existing caps.
                     foreach ( $role->capabilities as $cap => $grant ) {
                         $role->remove_cap( $cap );
                     }
 
-                    // Add fresh caps
+                    // Add fresh caps.
                     foreach ( $store_owner_caps as $cap ) {
                         $role->add_cap( $cap, true );
                     }
@@ -141,15 +170,14 @@ class MultiVendorX_REST_Settings_Controller extends \WP_REST_Controller {
     /**
      * Manage module setting. Active or Deactive modules.
      *
-     * @param \WP_REST_Request $request The REST request object.
-     * @return void
+     * @param object $request The REST request object.
      */
     public function set_modules( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .

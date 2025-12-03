@@ -19,6 +19,9 @@ defined( 'ABSPATH' ) || exit;
  */
 class Cron {
 
+    /**
+     * Constructor
+     */
     public function __construct() {
         add_filter( 'cron_schedules', array( $this, 'custom_cron_schedules' ) );
         add_action( 'multivendorx_after_save_settings', array( $this, 'register_cron_based_on_settings' ) );
@@ -32,6 +35,11 @@ class Cron {
         }
     }
 
+    /**
+     * Add custom cron schedules
+     *
+     * @param array $schedules Array of cron schedules
+     */
     public function custom_cron_schedules( $schedules ) {
         $schedules['weekly']      = array(
             'interval' => WEEK_IN_SECONDS,
@@ -48,6 +56,9 @@ class Cron {
         return $schedules;
     }
 
+    /**
+     * Register the payout cron job based on the settings
+     */
     public function register_cron_based_on_settings() {
         $schedule_type = MultiVendorX()->setting->get_setting( 'payment_schedules' );
 
@@ -87,6 +98,8 @@ class Cron {
 
     /**
      * Normalize settings structure from DB into a standard format
+     *
+     * @param string $type Cron schedule type
      */
     public function normalize_settings( $type ) {
         switch ( $type ) {
@@ -128,9 +141,15 @@ class Cron {
         }
     }
 
+    /**
+     * Get the first run time for the cron job
+     *
+     * @param string $schedule Cron schedule name
+     * @param array  $settings Cron settings
+     */
     public function get_first_run( $schedule, $settings ) {
-        $hour   = isset( $settings['time'] ) ? (int) date( 'H', strtotime( $settings['time'] ) ) : 9;
-        $minute = isset( $settings['time'] ) ? (int) date( 'i', strtotime( $settings['time'] ) ) : 0;
+        $hour   = isset( $settings['time'] ) ? (int) gmdate( 'H', strtotime( $settings['time'] ) ) : 9;
+        $minute = isset( $settings['time'] ) ? (int) gmdate( 'i', strtotime( $settings['time'] ) ) : 0;
 
         switch ( $schedule ) {
             case 'daily':
@@ -146,7 +165,7 @@ class Cron {
                 return $ts;
 
             case 'fortnightly':
-                $nth = $settings['nth'] ?? 'first'; // e.g. first, second
+                $nth = $settings['nth'] ?? 'first'; // e.g. first, second.
                 $day = $settings['weekday'] ?? 'monday';
                 $ts  = strtotime( "{$nth} {$day} of this month {$hour}:{$minute}" );
                 if ( $ts <= time() ) {
@@ -156,7 +175,7 @@ class Cron {
 
             case 'monthly':
                 $date = ! empty( $settings['day_of_month'] ) ? (int) $settings['day_of_month'] : 1;
-                $ts   = strtotime( date( "Y-m-{$date} {$hour}:{$minute}:00" ) );
+                $ts   = strtotime( gmdate( "Y-m-{$date} {$hour}:{$minute}:00" ) );
                 if ( $ts <= time() ) {
                     $ts = strtotime( '+1 month', $ts );
                 }
@@ -166,7 +185,7 @@ class Cron {
                 $interval = ! empty( $settings['interval'] ) ? (int) $settings['interval'] : 1;
                 $now      = time();
 
-                $current_minute = (int) date( 'i', $now );
+                $current_minute = (int) gmdate( 'i', $now );
 
                 if ( $current_minute >= $interval ) {
                     $next = strtotime( '+' . ( 60 - $current_minute + $interval ) . ' minutes', $now );
@@ -181,10 +200,13 @@ class Cron {
         }
     }
 
+    /**
+     * Register the payout cron job
+     */
     public function register_cron( $schedule, $settings ) {
         $hook = 'multivendorx_payout_cron';
 
-        // Always clear old cron first
+        // Always clear old cron first.
         wp_clear_scheduled_hook( $hook );
 
         $first_run = $this->get_first_run( $schedule, $settings );
@@ -192,6 +214,9 @@ class Cron {
         wp_schedule_event( $first_run, $schedule, $hook );
     }
 
+    /**
+     * Deregister the payout cron job
+     */
     public function deregister_cron() {
         wp_clear_scheduled_hook( 'multivendorx_payout_cron' );
     }

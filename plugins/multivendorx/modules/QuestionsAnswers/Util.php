@@ -135,7 +135,7 @@ class Util {
         if ( isset( $args['count'] ) ) {
             return (int) ( $wpdb->get_var( $query ) ?? 0 );
         }
-        return $wpdb->get_results( $query, ARRAY_A ) ?: array();
+        return $wpdb->get_results( $query, ARRAY_A ) ? $wpdb->get_results( $query, ARRAY_A ) : array();
     }
 
     /**
@@ -225,7 +225,7 @@ class Util {
 		);
 
 		// $wpdb->delete returns number of rows deleted, or false on error
-		if ( $deleted === false ) {
+		if ( false === $deleted ) {
 			return false; // DB error.
 		}
 

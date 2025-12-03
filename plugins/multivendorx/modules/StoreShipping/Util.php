@@ -22,6 +22,11 @@ defined( 'ABSPATH' ) || exit;
  * @author      MultiVendorX
  */
 class Util {
+    /**
+     * Get Zones
+     *
+     * @param int $store_id The ID of the store.
+     */
     public static function get_zones( $store_id ) {
         $data_store = WC_Data_Store::load( 'shipping-zone' );
         $raw_zones  = $data_store->get_zones();
@@ -32,7 +37,7 @@ class Util {
 
             $methods_id = wp_list_pluck( $enabled_methods, 'id' );
 
-            if ( in_array( 'multivendorx_store_shipping', $methods_id ) ) {
+            if ( in_array( 'multivendorx_store_shipping', $methods_id, true ) ) {
                 $zones[ $zone->get_id() ]                            = $zone->get_data();
                 $zones[ $zone->get_id() ]['zone_id']                 = $zone->get_id();
                 $zones[ $zone->get_id() ]['formatted_zone_location'] = $zone->get_formatted_location();
@@ -44,7 +49,7 @@ class Util {
         $enabled_methods = $overall_zone->get_shipping_methods( true );
         $methods_id      = wp_list_pluck( $enabled_methods, 'id' );
 
-        if ( in_array( 'multivendorx_store_shipping', $methods_id ) ) {
+        if ( in_array( 'multivendorx_store_shipping', $methods_id, true ) ) {
             $zones[ $overall_zone->get_id() ]                            = $overall_zone->get_data();
             $zones[ $overall_zone->get_id() ]['zone_id']                 = $overall_zone->get_id();
             $zones[ $overall_zone->get_id() ]['formatted_zone_location'] = $overall_zone->get_formatted_location();
@@ -66,7 +71,7 @@ class Util {
         $enabled_methods = $zone_obj->get_shipping_methods( true );
         $methods_ids     = wp_list_pluck( $enabled_methods, 'id' );
 
-        if ( in_array( 'multivendorx_vendor_shipping', $methods_ids ) ) {
+        if ( in_array( 'multivendorx_vendor_shipping', $methods_ids, true ) ) {
             $zone['data']                    = $zone_obj->get_data();
             $zone['formatted_zone_location'] = $zone_obj->get_formatted_location();
             $zone['shipping_methods']        = self::get_shipping_methods( $zone_id, $store_id );
@@ -114,8 +119,8 @@ class Util {
      * Get Shipping Method
      *
      * @param int    $store_id The ID of the store.
+     * @param string $method_id The ID of the shipping method.
      * @param int    $zone_id The ID of the shipping zone.
-     * @param string $method_id The ID of the shipping method to retrieve.
      */
     public static function get_shipping_method( $store_id, $method_id, $zone_id ) {
         $store = new \MultiVendorX\Store\Store( $store_id );
@@ -156,7 +161,7 @@ class Util {
      */
     public static function delete_shipping_method( $store_id, $zone_id, $method_id ) {
         $store    = new \MultiVendorX\Store\Store( $store_id );
-        $meta_key = $method_id . '_' . $zone_id; // Same key format as update_shipping_method
+        $meta_key = $method_id . '_' . $zone_id; // Same key format as update_shipping_method.
 
         // Check if the shipping method exists.
         $existing = $store->get_meta( $meta_key );
@@ -178,10 +183,14 @@ class Util {
      * Update Shipping Method Settings
      *
      * @param array $args An associative array containing the following keys:
+     *                     - store_id: The ID of the store.
+     *                     - method_id: The ID of the shipping method being updated.
+     *                     - zone_id: The ID of the shipping zone this method belongs to.
+     *                     - settings: An associative array representing the new settings for this shipping method.
      */
     public static function update_shipping_method( $args ) {
         $store    = new \MultiVendorX\Store\Store( $args['store_id'] );
-        $meta_key = $args['method_id'] . '_' . $args['zone_id']; // key format: methodId_zoneId
+        $meta_key = $args['method_id'] . '_' . $args['zone_id']; // Key format: methodId_zoneId.
         $store->update_meta( $meta_key, $args['settings'] );
 
         return array(
@@ -196,6 +205,7 @@ class Util {
      * Get Shipping Zone Locations
      *
      * @param int $zone_id The ID of the shipping zone whose locations you want to retrieve.
+     * @param int $store_id The ID of the store.
      */
     public static function get_locations( $zone_id, $store_id = 0 ) {
         global $wpdb;

@@ -69,7 +69,7 @@ class Util {
 
                 // Match store ID.
                 if ( (int) $product_store_id === (int) $store_id ) {
-                    return (int) $order_id; // Verified buyer — return that order ID
+                    return (int) $order_id; // Verified buyer — return that order ID.
                 }
             }
         }
@@ -249,8 +249,8 @@ class Util {
     /**
      * Get user's review status for a store
      *
-     * @param int $store_id
-     * @param int $user_id
+     * @param int $store_id Store ID.
+     * @param int $user_id User ID.
      */
     public static function get_user_review_status( $store_id, $user_id ) {
         global $wpdb;
@@ -273,7 +273,7 @@ class Util {
      * Fetch review information from database.
      * Supports filtering by ID, store, customer, date range, pagination, and count.
      *
-     * @param array $args
+     * @param array $args Query arguments.
      */
     public static function get_review_information( $args ) {
         global $wpdb;
@@ -302,7 +302,7 @@ class Util {
         }
 
         // Filter by review status (pending, approved, rejected, etc.).
-        if ( isset( $args['status'] ) && $args['status'] !== '' ) {
+        if ( isset( $args['status'] ) && '' !== $args['status'] ) {
             $where[] = "status = '" . esc_sql( $args['status'] ) . "'";
         }
 
@@ -321,7 +321,7 @@ class Util {
             $where[] = "date_created <= '" . esc_sql( $args['end_date'] ) . "'";
         }
         // Filter by overall_rating ("X stars & up" style).
-        if ( isset( $args['overall_rating'] ) && $args['overall_rating'] !== '' ) {
+        if ( isset( $args['overall_rating'] ) && '' !== $args['overall_rating'] ) {
             $rating = floatval( $args['overall_rating'] );
 
             // Handle invalid ratings gracefully.
@@ -429,7 +429,7 @@ class Util {
         );
 
         // $wpdb->update returns number of rows updated, or false on error
-        if ( $updated === false ) {
+        if ( false === $updated ) {
             return false; // DB error.
         }
 
@@ -469,7 +469,7 @@ class Util {
             array( '%d' )
         );
 
-        if ( $deleted === false ) {
+        if ( false === $deleted ) {
             $wpdb->query( 'ROLLBACK' );
             return false;
         }

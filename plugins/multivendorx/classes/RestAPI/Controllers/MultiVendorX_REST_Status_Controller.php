@@ -1,4 +1,9 @@
 <?php
+/**
+ * MultiVendorX REST API Status Controller.
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\RestAPI\Controllers;
 
@@ -7,6 +12,13 @@ use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * MultiVendorX REST API Status Controller.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class MultiVendorX_REST_Status_Controller extends \WP_REST_Controller {
 
 	/**
@@ -16,6 +28,9 @@ class MultiVendorX_REST_Status_Controller extends \WP_REST_Controller {
 	 */
 	protected $rest_base = 'status';
 
+    /**
+     * Register the routes for the objects of the controller.
+     */
     public function register_routes() {
         register_rest_route(
             MultiVendorX()->rest_namespace,
@@ -55,27 +70,45 @@ class MultiVendorX_REST_Status_Controller extends \WP_REST_Controller {
         );
     }
 
+    /**
+     * Get a single item from the collection
+     *
+     * @param object $request Full details about the request.
+     */
     public function get_items_permissions_check( $request ) {
         return current_user_can( 'read' );
     }
 
-    // POST permission
+    /**
+     * Get a single item from the collection
+     *
+     * @param object $request Full details about the request.
+     */
     public function create_item_permissions_check( $request ) {
         return current_user_can( 'manage_options' );
     }
 
+    /**
+     * Get a single item from the collection
+     *
+     * @param object $request Full details about the request.
+     */
     public function update_item_permissions_check( $request ) {
         return current_user_can( 'manage_options' );
     }
 
 
-    // GET
+    /**
+     * Get all system info data.
+     *
+     * @param  object $request
+     */
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -89,7 +122,7 @@ class MultiVendorX_REST_Status_Controller extends \WP_REST_Controller {
         }
         try {
             $key = $request->get_param( 'key' );
-            if ( $key == 'default_pages' ) {
+            if ( 'default_pages' === $key ) {
                 $install = new Install();
                 $install->plugin_create_pages();
                 return rest_ensure_response( true );

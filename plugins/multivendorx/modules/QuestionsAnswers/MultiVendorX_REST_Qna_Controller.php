@@ -236,7 +236,7 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
                     if ( $product ) {
                             $image_id = $product->get_image_id(); // Get featured image ID.
                         if ( $image_id ) {
-                            $product_image = wp_get_attachment_image_url( $image_id, 'thumbnail' ); // or 'full'
+                            $product_image = wp_get_attachment_image_url( $image_id, 'thumbnail' ); // or 'full'.
                         }
                     }
 
@@ -245,7 +245,7 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
                         'product_id'          => (int) $q['product_id'],
                         'product_name'        => $product ? $product->get_name() : '',
                         'product_link'        => $product ? get_permalink( $product->get_id() ) : '',
-                        'product_image'       => $product_image, // added product image
+                        'product_image'       => $product_image, // added product image.
                         'store_id'            => $q['store_id'],
                         'store_name'          => $store_obj->get( 'name' ),
                         'question_text'       => $q['question_text'],

@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * MultiVendorX Store class
+ *
+ * @package MultiVendorX
+ */
 namespace MultiVendorX\Store;
 
 use MultiVendorX\Utill;
@@ -15,12 +19,39 @@ defined( 'ABSPATH' ) || exit;
  */
 class Store {
 
-    protected $id        = 0;
-    protected $data      = array();
+    /**
+     * Store ID.
+     *
+     * @var int
+     */
+    protected $id = 0;
+
+    /**
+     * Store data.
+     *
+     * @var array
+     */
+    protected $data = array();
+
+    /**
+     * Store meta data.
+     *
+     * @var array
+     */
     protected $meta_data = array();
 
+    /**
+     * Container for store classes.
+     *
+     * @var array
+     */
     private $container = array();
 
+    /**
+     * Constructor.
+     *
+     * @param int $store_id Store ID.
+     */
     public function __construct( $store_id = 0 ) {
 
         $this->init_classes();
@@ -40,6 +71,11 @@ class Store {
         );
     }
 
+    /**
+     * Load store data from the database.
+     *
+     * @param int $store_id Store ID.
+     */
     public function load( $store_id ) {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['store'];
@@ -59,18 +95,35 @@ class Store {
         }
     }
 
+    /**
+     * Get store ID.
+     */
     public function get_id() {
         return $this->id;
     }
 
+    /**
+     * Get store data.
+     *
+     * @param string $key Data key.
+     */
     public function get( $key ) {
         return $this->data[ $key ] ?? null;
     }
 
+    /**
+     * Set store data.
+     *
+     * @param string $key   Data key.
+     * @param mixed  $value Data value.
+     */
     public function set( $key, $value ) {
         $this->data[ $key ] = $value;
     }
 
+    /**
+     * Save store data to the database.
+     */
     public function save() {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['store'];
@@ -95,7 +148,12 @@ class Store {
         return $this->id;
     }
 
-
+    /**
+     * Get store meta value.
+     *
+     * @param string $key     Meta key to look up.
+     * @param bool   $single  Whether to return a single value or an array of values.
+     */
     public function get_meta( $key, $single = true ) {
 
         global $wpdb;
@@ -121,6 +179,9 @@ class Store {
         }
     }
 
+    /**
+     * Get all meta data for this store.
+     */
     public function get_all_meta() {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['store_meta'];
@@ -141,6 +202,12 @@ class Store {
         return $meta;
     }
 
+    /**
+     * Update store meta value.
+     *
+     * @param string $key   Meta key to update.
+     * @param mixed  $value Value to assign to the meta key.
+     */
     public function update_meta( $key, $value ) {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['store_meta'];
@@ -178,6 +245,11 @@ class Store {
         }
     }
 
+    /**
+     * Magic method to access container items.
+     *
+     * @param string $class Class name.
+     */
     public function __get( $class ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound
         if ( property_exists( $this, $class ) ) {
             return $this->$class;
@@ -189,10 +261,20 @@ class Store {
         return new \WP_Error( sprintf( 'Call to unknown class %s.', $class ) );
     }
 
+    /**
+     * Get store by ID.
+     *
+     * @param int $id Store ID to look up.
+     */
     public static function get_store_by_id( $id ) {
         return $id ? new self( $id ) : null;
     }
 
+    /**
+     * Get store by slug.
+     *
+     * @param string $slug Slug to look up.
+     */
     public static function get_store_by_slug( $slug ) {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['store'];
@@ -217,6 +299,13 @@ class Store {
     // return $exists;
     // }
 
+    /**
+     * Check whether a store with given slug exists in the database.
+     *
+     * @param string $slug Slug to check against.
+     * @param int    $exclude_id Optional. ID of the store to exclude from search results. Default 0.
+     * @return bool True if store exists, otherwise false.
+     */
     public static function store_slug_exists( $slug, $exclude_id = 0 ) {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['store'];
@@ -239,7 +328,11 @@ class Store {
         return $exists > 0;
     }
 
-
+    /**
+     * Get stores by name.
+     *
+     * @param string $name Name of the store. Can be partial or full.
+     */
     public static function get_store_by_name( $name ) {
         global $wpdb;
         if ( empty( $name ) ) {
@@ -286,6 +379,11 @@ class Store {
         );
     }
 
+    /**
+     * Delete all meta for the current store.
+     *
+     * @return bool
+     */
     public function delete_all_meta() {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['store_meta'];
@@ -296,10 +394,12 @@ class Store {
             array( '%d' )
         );
 
-        return $deleted !== false;
+        return false !== $deleted;
     }
 
-
+    /**
+     * Delete the current store completely from database.
+     */
     public function delete_store_completely() {
         global $wpdb;
 
@@ -309,12 +409,12 @@ class Store {
             return false;
         }
 
-        // Table names
+        // Table names.
         $store_table       = "{$wpdb->prefix}" . Utill::TABLES['store'];
         $store_users_table = "{$wpdb->prefix}" . Utill::TABLES['store_users'];
         $store_meta_table  = "{$wpdb->prefix}" . Utill::TABLES['store_meta'];
 
-        // Run deletions
+        // Run deletions.
         $wpdb->delete( $store_meta_table, array( 'store_id' => $store_id ), array( '%d' ) );
         $wpdb->delete( $store_users_table, array( 'store_id' => $store_id ), array( '%d' ) );
         $wpdb->delete( $store_table, array( 'ID' => $store_id ), array( '%d' ) );

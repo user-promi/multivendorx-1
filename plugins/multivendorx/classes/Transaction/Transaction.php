@@ -55,7 +55,7 @@ class Transaction {
     public function create_transaction_for_backend_order( $commission_id, $vendor_order ) {
         if ( $commission_id > 0 ) {
             $disbursement_status = MultiVendorX()->setting->get_setting( 'disbursement_order_status' );
-            if ( ! empty( $disbursement_status ) && in_array( $vendor_order->get_status(), $disbursement_status ) ) {
+            if ( ! empty( $disbursement_status ) && in_array( $vendor_order->get_status(), $disbursement_status, true ) ) {
                 $this->create_transaction( $commission_id, $vendor_order );
             }
         }
@@ -70,14 +70,14 @@ class Transaction {
 	 * @param object  $order       Order object.
 	 */
     public function create_transaction_for_sub_order( $order_id, $old_status, $new_status, $order ) {
-        if ( $order->get_parent_id() == 0 ) {
+        if ( $order->get_parent_id() === 0 ) {
             return;
         }
 
         $payment_method = $order->get_payment_method();
         // If (payment method is stripe or paypal marketplace and the check charges then this function return).
         $disbursement_status = MultiVendorX()->setting->get_setting( 'disbursement_order_status' );
-        if ( ! empty( $disbursement_status ) && in_array( $new_status, $disbursement_status ) ) {
+        if ( ! empty( $disbursement_status ) && in_array( $new_status, $disbursement_status, true ) ) {
             $commission_id = $order->get_meta( Utill::POST_META_SETTINGS['commission_id'], true );
             $this->create_transaction( $commission_id, $order );
         }
@@ -103,11 +103,11 @@ class Transaction {
 
         $commission = CommissionUtil::get_commission_db( $commission_id );
 
-        if ( $lock_period == 0 ) {
+        if ( $lock_period === 0 ) {
             $status = 'Completed';
         } elseif ( $lock_period > 0 ) {
             $status = 'Upcoming';
-            $time   = date( 'Y-m-d H:i:s', current_time( 'mysql' ) + ( $lock_period * DAY_IN_SECONDS ) );
+            $time   = gmdate( 'Y-m-d H:i:s', current_time( 'mysql' ) + ( $lock_period * DAY_IN_SECONDS ) );
         }
 
         $data = array(

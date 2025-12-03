@@ -1,4 +1,9 @@
 <?php
+/**
+ * MultiVendorX REST API Notifications controller.
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\RestAPI\Controllers;
 
@@ -7,6 +12,13 @@ use MultiVendorx\Store\Store;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * MultiVendorX REST API Notifications controller.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
 
 	/**
@@ -16,6 +28,9 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
 	 */
 	protected $rest_base = 'notifications';
 
+    /**
+     * Register the routes for notifications.
+     */
     public function register_routes() {
         register_rest_route(
             MultiVendorX()->rest_namespace,
@@ -55,24 +70,44 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
         );
     }
 
+    /**
+     * Check if a given request has access to read notifications.
+     *
+     * @param object $request
+     */
     public function get_items_permissions_check( $request ) {
         return true;
     }
 
+    /**
+     * Check if a given request has access to create a notification.
+     *
+     * @param object $request
+     */
     public function create_item_permissions_check( $request ) {
         return true;
     }
 
+    /**
+     * Check if a given request has access to read notifications.
+     *
+     * @param object $request
+     */
     public function update_item_permissions_check( $request ) {
         return true;
     }
 
+    /**
+     * Get all notifications.
+     *
+     * @param object $request
+     */
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -117,7 +152,7 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
                         ? json_decode( $row->custom_emails, true )
                         : array();
 
-                    // Build recipients array
+                    // Build recipients array.
                     $recipients = array();
                     $id         = 1;
 
@@ -137,7 +172,7 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
                         'canDelete' => false,
                     );
 
-                    // Add any custom emails
+                    // Add any custom emails.
                     foreach ( $custom_emails as $email ) {
                         $recipients[] = array(
                             'id'        => $id++,
@@ -177,7 +212,7 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
                     array(
                         'count'    => true,
                         'category' => $request->get_param( 'notification' ) ? 'notification' : 'activity',
-                        'store_id' => $request->get_param( 'store_id' ) ?: '',
+                        'store_id' => $request->get_param( 'store_id' ) ? $request->get_param( 'store_id' ) : '',
                     )
                 );
             }
@@ -190,7 +225,7 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
                 'limit'    => $limit,
                 'offset'   => $offset,
                 'category' => $request->get_param( 'notification' ) ? 'notification' : 'activity',
-                'store_id' => $request->get_param( 'store_id' ) ?: '',
+                'store_id' => $request->get_param( 'store_id' ) ? $request->get_param( 'store_id' ) : '',
             );
 
             $all_notifications = MultiVendorX()->notifications->get_all_notifications( null, $args );
@@ -204,7 +239,7 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
                         'store_name' => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
                         'type'       => $notification['type'],
                         'title'      => $notification['title'],
-                        'date'       => date( 'M j, Y', strtotime( $notification['created_at'] ) ),
+                        'date'       => gmdate( 'M j, Y', strtotime( $notification['created_at'] ) ),
                     )
                 );
             }
@@ -222,6 +257,11 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
         }
     }
 
+    /**
+     * Calculate time difference between current time and given datetime.
+     *
+     * @param string $datetime Datetime in MySQL format.
+     */
     public function time_ago( $datetime ) {
         if ( empty( $datetime ) ) {
 			return '';
@@ -239,16 +279,21 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
         } elseif ( $diff < 604800 ) {
             return floor( $diff / 86400 ) . ' days ago';
         } else {
-            return date( 'M j, Y', $timestamp );
+            return gmdate( 'M j, Y', $timestamp );
         }
     }
 
+    /**
+     * Update an existing notification.
+     *
+     * @param object $request The request object.
+     */
     public function update_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -331,11 +376,11 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
 
                 if ( ! empty( $notification['recipients'] ) && is_array( $notification['recipients'] ) ) {
                     foreach ( $notification['recipients'] as $recipient ) {
-                        if ( $recipient['type'] === 'Store' ) {
+                        if ( 'Store' === $recipient['type'] ) {
                             $store_enabled = $recipient['enabled'] ?? false;
-                        } elseif ( $recipient['type'] === 'Admin' ) {
+                        } elseif ( 'Admin' === $recipient['type'] ) {
                             $admin_enabled = $recipient['enabled'] ?? false;
-                        } elseif ( $recipient['type'] === 'extra' ) {
+                        } elseif ( 'extra' === $recipient['type'] ) {
                             $custom_emails[] = sanitize_email( $recipient['label'] );
                         }
                     }
@@ -377,12 +422,17 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
         }
     }
 
+    /**
+     * Get a single notification by ID.
+     *
+     * @param object $request The request object.
+     */
     public function get_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .

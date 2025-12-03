@@ -1,4 +1,9 @@
 <?php
+/**
+ * MultiVendorX Vendor Order Class
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\Order;
 
@@ -15,15 +20,39 @@ defined( 'ABSPATH' ) || exit;
  * @author      MultiVendorX
  */
 class VendorOrder {
-    private $id         = 0;
-    private $vendor_id  = 0;
-    private $order      = null;
+
+    /**
+     * Order ID.
+     *
+     * @var int
+     */
+    private $id = 0;
+
+    /**
+     * Vendor ID.
+     *
+     * @var int
+     */
+    private $vendor_id = 0;
+
+    /**
+     * Order object.
+     *
+     * @var object
+     */
+    private $order = null;
+
+    /**
+     * Commission object.
+     *
+     * @var Commission
+     */
     private $commission = null;
 
     /**
      * Get the order if ID is passed, otherwise the order is new and empty.
      *
-     * @param  int | object Order to read.
+     * @param  int | object $order The Order to read.
      */
     public function __construct( $order = 0 ) {
         if ( $order instanceof \WC_Order || $order instanceof \WC_Order_Refund ) {
@@ -41,7 +70,7 @@ class VendorOrder {
      * Check the order is vendor order or not.
      * If the order is vendor order return true else false.
      *
-     * @param   bool $current_vendor
+     * @param   bool $current_vendor Check the order is current vendor order or not.
      * @return  bool
      */
     public function is_vendor_order( $current_vendor = false ) {
@@ -49,7 +78,7 @@ class VendorOrder {
             return false;
         }
         if ( $current_vendor ) {
-            return $this->vendor_id === get_current_user_id();
+            return get_current_user_id() === $this->vendor_id;
         }
         return true;
     }
@@ -58,7 +87,7 @@ class VendorOrder {
      * Get the props of vendor order.
      * Retrives data from vendor meta.
      *
-     * @param  string $prop
+     * @param  string $prop Prop name.
      * @return mixed
      */
     public function get_prop( $prop ) {
@@ -99,7 +128,7 @@ class VendorOrder {
      * @return Commission
      */
     public function get_commission() {
-        if ( $this->commission === null ) {
+        if ( null === $this->commission ) {
             $commission_id    = (int) $this->get_prop( Utill::POST_META_SETTINGS['commission_id'] );
             $this->commission = new Commission( $commission_id );
         }

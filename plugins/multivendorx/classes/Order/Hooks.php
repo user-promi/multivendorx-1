@@ -1,4 +1,9 @@
 <?php
+/**
+ * MultiVendorX Order Hook class
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\Order;
 
@@ -14,8 +19,10 @@ defined( 'ABSPATH' ) || exit;
  * @package     MultiVendorX
  * @author      MultiVendorX
  */
-
 class Hooks {
+    /**
+     * Constructor
+     */
     function __construct() {
         add_action( 'woocommerce_checkout_create_order_line_item', array( $this, 'add_metadata_for_line_item' ), 10, 4 );
         add_action( 'woocommerce_checkout_create_order_shipping_item', array( $this, 'add_metadate_for_shipping_item' ), 10, 4 );
@@ -36,10 +43,10 @@ class Hooks {
     /**
      * Add metadata for line item in time of checkout process.
      *
-     * @param   mixed $item
-     * @param   mixed $item_key
-     * @param   mixed $values
-     * @param   mixed $order
+     * @param   mixed $item Line Item Object.
+     * @param   mixed $item_key Line Item Key.
+     * @param   mixed $values Line Item Array.
+     * @param   mixed $order Order Object.
      * @return  void
      */
     public function add_metadata_for_line_item( $item, $item_key, $values, $order ) {
@@ -55,10 +62,10 @@ class Hooks {
     /**
      * Add metadata for shipping item in time of checkout process.
      *
-     * @param mixed $item
-     * @param mixed $package_key
-     * @param mixed $package
-     * @param mixed $order
+     * @param mixed $item Shipping Item Object.
+     * @param mixed $package_key Package Key.
+     * @param mixed $package Package Array.
+     * @param mixed $order Order Object.
      * @return void
      */
     public function add_metadate_for_shipping_item( $item, $package_key, $package, $order ) {
@@ -74,7 +81,7 @@ class Hooks {
     /**
      * Woocommerce admin dashboard restrict dual order report
      *
-     * @param   int $order_id
+     * @param   int $order_id Parent Order ID.
      * @return  void
      */
     public function remove_suborder_analytics( $order_id ) {
@@ -100,10 +107,10 @@ class Hooks {
     /**
      * Create the vendor orders of a main order.
      *
-     * @param   mixed $order_id
-     * @param   mixed $old_status
-     * @param   mixed $new_status
-     * @param   mixed $order
+     * @param   mixed $order_id Parent Order ID.
+     * @param   mixed $old_status Old Status.
+     * @param   mixed $new_status New Status.
+     * @param   mixed $order Order Object.
      * @return  void
      */
     public function create_vendor_order( $order ) {
@@ -121,7 +128,12 @@ class Hooks {
         $order->save();
     }
 
-
+    /**
+     * Create the store orders of a main order form backend.
+     *
+     * @param   int $order_id Parent Order ID.
+     * @return  void
+     */
     public function manually_create_order_item_and_suborder( $order_id = 0 ) {
         $order = wc_get_order( $order_id );
         if ( ! $order ) {
@@ -152,10 +164,10 @@ class Hooks {
      * Sync vendor order based on parent order status change for first time.
      * Except first time whenever parent order status change it skip for vendor order.
      *
-     * @param   mixed $order_id
-     * @param   mixed $old_status
-     * @param   mixed $new_status
-     * @param   mixed $order
+     * @param   mixed $order_id Parent Order ID.
+     * @param   mixed $old_status Old Status.
+     * @param   mixed $new_status New Status.
+     * @param   mixed $order Order Object.
      * @return  void
      */
     public function parent_order_to_vendor_order_status_sync( $order_id, $old_status, $new_status, $order ) {
@@ -174,7 +186,7 @@ class Hooks {
 
         remove_action( 'woocommerce_order_status_completed', 'wc_paying_customer' );
 
-        // Check if order have suborder then sync
+        // Check if order have suborder then sync.
         $suborders = MultiVendorX()->order->get_suborders( $order );
         if ( $suborders ) {
             foreach ( $suborders as $suborder ) {
@@ -198,10 +210,10 @@ class Hooks {
      * Sync parent order base on vendor order.
      * If all vendor order is in same status then change the parent order.
      *
-     * @param   mixed $order_id
-     * @param   mixed $old_status
-     * @param   mixed $new_status
-     * @param   mixed $order
+     * @param   mixed $order_id Vendor Order ID.
+     * @param   mixed $old_status Old Status.
+     * @param   mixed $new_status New Status.
+     * @param   mixed $order Order Object
      * @return  void
      */
     public function vendor_order_to_parent_order_status_sync( $order_id, $old_status, $new_status, $order ) {

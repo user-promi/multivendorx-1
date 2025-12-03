@@ -1,27 +1,45 @@
 <?php
 /**
- * Social Verification APIs
- * Handles OAuth integration with Facebook, Google, Twitter, and LinkedIn
+ * MultiVendorX Social Verification Class.
+ *
+ * @package MultiVendorX
  */
 
 namespace MultiVendorX\Store;
 
 use MultiVendorX\Utill;
 
-// Prevent direct access
+// Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+/**
+ * MultiVendorX Social Verification.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
+
 class SocialVerification {
 
+    /**
+     * Social verification APIs
+     */
     private $apis = array();
 
+    /**
+     * Constructor
+     */
     public function __construct() {
         $this->initialize_apis();
         add_action( 'init', array( $this, 'handle_oauth_callbacks' ) );
     }
 
+    /**
+     * Initialize social verification APIs
+     */
     private function initialize_apis() {
         $this->apis = array(
             'facebook' => new FacebookVerification(),
@@ -31,12 +49,19 @@ class SocialVerification {
         );
     }
 
+    /**
+     * Get API instance for social provider
+     *
+     * @param string $provider Social provider.
+     */
     public function get_api( $provider ) {
         return isset( $this->apis[ $provider ] ) ? $this->apis[ $provider ] : null;
     }
 
     /**
      * Get auth URL for social provider
+     *
+     * @param string $provider Social provider.
      */
     public function get_auth_url( $provider ) {
         $api = $this->get_api( $provider );
@@ -45,6 +70,10 @@ class SocialVerification {
 
     /**
      * Process OAuth callback
+     *
+     * @param string $provider Social provider.
+     * @param string $code OAuth code.
+     * @param array  $request_data Request data.
      */
     public function process_oauth_callback( $provider, $code, $request_data ) {
         $api = $this->get_api( $provider );
@@ -53,6 +82,8 @@ class SocialVerification {
 
     /**
      * Get connected social profiles for current vendor
+     *
+     * @param int $vendor_id Vendor ID.
      */
     public function get_social_profiles( $vendor_id = null ) {
         if ( ! $vendor_id ) {
@@ -65,6 +96,10 @@ class SocialVerification {
 
     /**
      * Save social connection
+     *
+     * @param int    $user_id User ID.
+     * @param string $provider Social provider.
+     * @param array  $user_data User data.
      */
     public function save_social_connection( $user_id, $provider, $user_data ) {
         $connections = get_user_meta( $user_id, Utill::USER_SETTINGS_KEYS['social_verification'], true ) ?: array();
@@ -77,7 +112,7 @@ class SocialVerification {
 
         update_user_meta( $user_id, Utill::USER_SETTINGS_KEYS['social_verification'], $connections );
 
-        // Log the connection
+        // Log the connection.
         $this->log_verification_attempt( $user_id, $provider, 'connected' );
 
         return true;
@@ -85,6 +120,9 @@ class SocialVerification {
 
     /**
      * Disconnect social profile
+     *
+     * @param int    $vendor_id Vendor ID.
+     * @param string $provider Social provider.
      */
     public function disconnect_social_profile( $vendor_id, $provider ) {
         $connections = get_user_meta( $vendor_id, Utill::USER_SETTINGS_KEYS['social_verification'], true ) ?: array();
@@ -93,7 +131,7 @@ class SocialVerification {
             unset( $connections[ $provider ] );
             update_user_meta( $vendor_id, Utill::USER_SETTINGS_KEYS['social_verification'], $connections );
 
-            // Log the disconnection
+            // Log the disconnection.
             $this->log_verification_attempt( $vendor_id, $provider, 'disconnected' );
 
             return true;
@@ -104,6 +142,8 @@ class SocialVerification {
 
     /**
      * Check if social verification is enabled for provider
+     *
+     * @param string $provider Social provider.
      */
     public function is_social_enabled( $provider ) {
         $settings        = $this->get_social_settings();
@@ -121,9 +161,13 @@ class SocialVerification {
 
     /**
      * Get redirect URL
+     *
+     * @param string $status Status of the verification.
+     * @param string $provider Social provider.
+     * @param string $message Optional message.
      */
     private function get_redirect_url( $status, $provider = '', $message = '' ) {
-        // Redirect to the verification settings page in dashboard
+        // Redirect to the verification settings page in dashboard.
         $redirect_url = home_url( '/?dashboard=1&tab=settings&subtab=verification' );
         $args         = array( 'social_status' => $status );
 
@@ -142,7 +186,7 @@ class SocialVerification {
      * Handle OAuth callbacks
      */
     public function handle_oauth_callbacks() {
-        // Check if this is a social verification callback
+        // Check if this is a social verification callback.
         if ( ! isset( $_GET['social_verification'] ) || ! isset( $_GET['provider'] ) ) {
             return;
         }
@@ -151,7 +195,7 @@ class SocialVerification {
 
         $this->log( 'OAuth callback received for provider: ' . $provider . ' - GET params: ' . json_encode( $_GET ) );
 
-        // For Twitter, we don't need nonce verification in callback as it comes from external service
+        // For Twitter, we don't need nonce verification in callback as it comes from external service.
         if ( $provider !== 'twitter' ) {
             if ( ! wp_verify_nonce( $_GET['_wpnonce'] ?? '', 'social_verification_' . $provider ) ) {
                 wp_die( 'Security verification failed' );
@@ -161,7 +205,7 @@ class SocialVerification {
         $user_id = get_current_user_id();
         if ( ! $user_id ) {
             $this->log( 'User not logged in, storing callback data temporarily' );
-            // Store the data in session/temporary storage and redirect to login
+            // Store the data in session/temporary storage and redirect to login.
             $temp_key = 'social_verification_pending_' . wp_generate_password( 12, false );
             set_transient(
                 $temp_key,
@@ -219,7 +263,7 @@ class SocialVerification {
                     break;
             }
 
-            // Redirect back to verification page with status
+            // Redirect back to verification page with status.
             $redirect_url = $this->get_redirect_url(
                 $success ? 'success' : 'error',
                 $provider,
@@ -243,6 +287,11 @@ class SocialVerification {
         }
     }
 
+    /**
+     * Process OAuth callback
+     *
+     * @param string $provider Social provider.
+     */
     private function log( $message ) {
         $log_file  = plugin_dir_path( __FILE__ ) . '/social_verification.log';
         $timestamp = date( 'd/m/Y H:i:s', time() );
@@ -251,6 +300,10 @@ class SocialVerification {
 
     /**
      * Log verification activity
+     *
+     * @param int    $user_id User ID.
+     * @param string $provider Social provider.
+     * @param string $status Status of the verification.
      */
     private function log_verification_attempt( $user_id, $provider, $status ) {
         global $wpdb;
@@ -289,11 +342,39 @@ class SocialVerification {
     }
 }
 
+/**
+ * MultiVendorX Social Verification.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class FacebookVerification {
+
+    /**
+     * App ID
+     *
+     * @var string
+     */
     private $app_id;
+
+    /**
+     * App secret
+     *
+     * @var string
+     */
     private $app_secret;
+
+    /**
+     * Redirect URI
+     *
+     * @var string
+     */
     private $redirect_uri;
 
+    /**
+     * Constructor
+     */
     public function __construct() {
         $settings    = MultiVendorX()->setting->get_setting( 'all_verification_methods' );
         $fb_settings = $settings['social-verification']['social_verification_methods']['facebook-connect'] ?? array();
@@ -303,6 +384,9 @@ class FacebookVerification {
         $this->redirect_uri = $fb_settings['redirect_uri'] ?? '';
     }
 
+    /**
+     * Check if Facebook verification is configured
+     */
     public function get_auth_url() {
         if ( ! $this->is_configured() ) {
             return false;
@@ -319,12 +403,19 @@ class FacebookVerification {
         return 'https://www.facebook.com/v17.0/dialog/oauth?' . http_build_query( $params );
     }
 
+    /**
+     * Verify callback from Facebook
+     *
+     * @param string $code Facebook code.
+     * @param array  $request_data Request data.
+     * @return array|false
+     */
     public function verify_callback( $code, $request_data ) {
         if ( ! $this->is_configured() ) {
             return false;
         }
 
-        // Exchange code for access token
+        // Exchange code for access token.
         $token_url = 'https://graph.facebook.com/v17.0/oauth/access_token?' . http_build_query(
             array(
 				'client_id'     => $this->app_id,
@@ -344,7 +435,7 @@ class FacebookVerification {
         $data = json_decode( wp_remote_retrieve_body( $response ), true );
 
         if ( isset( $data['access_token'] ) ) {
-            // Get user profile
+            // Get user profile.
             $profile_url = 'https://graph.facebook.com/v17.0/me?' . http_build_query(
                 array(
 					'access_token' => $data['access_token'],
@@ -378,16 +469,47 @@ class FacebookVerification {
         return false;
     }
 
+    /**
+     * Check if Facebook verification is properly configured.
+     */
     private function is_configured() {
         return ! empty( $this->app_id ) && ! empty( $this->app_secret );
     }
 }
 
+/**
+ * MultiVendorX Google Verification Class.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class GoogleVerification {
+
+    /**
+     * Client ID
+     *
+     * @var string
+     */
     private $client_id;
+
+    /**
+     * Client secret
+     *
+     * @var string
+     */
     private $client_secret;
+
+    /**
+     * Redirect URI
+     *
+     * @var string
+     */
     private $redirect_uri;
 
+    /**
+     * Constructor
+     */
     public function __construct() {
         $settings        = MultiVendorX()->setting->get_setting( 'all_verification_methods' );
         $google_settings = $settings['social-verification']['social_verification_methods']['google-connect'] ?? array();
@@ -398,6 +520,11 @@ class GoogleVerification {
         $this->redirect_uri = $google_settings['redirect_uri'] ?? '';
     }
 
+    /**
+     * Get authentication URL
+     *
+     * @return string|false
+     */
     public function get_auth_url() {
         if ( ! $this->is_configured() ) {
             return false;
@@ -419,12 +546,19 @@ class GoogleVerification {
         return 'https://accounts.google.com/o/oauth2/v2/auth?' . http_build_query( $params );
     }
 
+    /**
+     * Verify callback
+     *
+     * @param string $code Code from Google.
+     * @param array  $request_data Request data.
+     * @return array|false
+     */
     public function verify_callback( $code, $request_data ) {
         if ( ! $this->is_configured() ) {
             return false;
         }
 
-        // Exchange code for access token
+        // Exchange code for access token.
         $token_response = wp_remote_post(
             'https://oauth2.googleapis.com/token',
             array(
@@ -446,7 +580,7 @@ class GoogleVerification {
         $token_data = json_decode( wp_remote_retrieve_body( $token_response ), true );
 
         if ( isset( $token_data['access_token'] ) ) {
-            // Get user profile
+            // Get user profile.
             $profile_response = wp_remote_get(
                 'https://www.googleapis.com/oauth2/v2/userinfo',
                 array(
@@ -481,16 +615,49 @@ class GoogleVerification {
         return false;
     }
 
+    /**
+     * Check if the Google verification is properly configured.
+     *
+     * @return bool True if configured, false otherwise.
+     */
     private function is_configured() {
         return ! empty( $this->client_id ) && ! empty( $this->client_secret );
     }
 }
 
+/**
+ * MultiVendorX Twitter Verification Class.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class TwitterVerification {
+
+    /**
+     * The API key for Twitter.
+     *
+     * @var string
+     */
     private $api_key;
+
+    /**
+     * The API secret key for Twitter.
+     *
+     * @var string
+     */
     private $api_secret_key;
+
+    /**
+     * The redirect URI for Twitter callback.
+     *
+     * @var string
+     */
     private $redirect_uri;
 
+    /**
+     * Initialize TwitterVerification.
+     */
     public function __construct() {
         $settings         = MultiVendorX()->setting->get_setting( 'all_verification_methods' );
         $twitter_settings = $settings['social-verification']['social_verification_methods']['twitter-connect'] ?? array();
@@ -498,13 +665,18 @@ class TwitterVerification {
         $this->api_key        = $twitter_settings['api_key'] ?? '';
         $this->api_secret_key = $twitter_settings['api_secret_key'] ?? '';
 
-        // Set proper redirect URI for callback
+        // Set proper redirect URI for callback.
         $this->redirect_uri = $twitter_settings['redirect_uri'] ?? '';
 
-        // Log configuration status
+        // Log configuration status.
         $this->log( 'Twitter Verification initialized - API Key: ' . ( ! empty( $this->api_key ) ? 'Set' : 'Missing' ) );
     }
 
+    /**
+     * Get the authentication URL for Twitter.
+     *
+     * @return string|false The authentication URL or false on failure.
+     */
     public function get_auth_url() {
         if ( ! $this->is_configured() ) {
             $this->log( 'Twitter not configured properly' );
@@ -514,7 +686,7 @@ class TwitterVerification {
         $temp_credentials = $this->get_request_token();
 
         if ( $temp_credentials && isset( $temp_credentials['oauth_token'] ) ) {
-            // Store the token secret for later use
+            // Store the token secret for later use.
             set_transient(
                 'twitter_oauth_token_secret_' . $temp_credentials['oauth_token'],
                 $temp_credentials['oauth_token_secret'],
@@ -530,6 +702,11 @@ class TwitterVerification {
         return false;
     }
 
+    /**
+     * Get request token from Twitter.
+     *
+     * @return array|false The request token data or false on failure.
+     */
     private function get_request_token() {
         $url = 'https://api.twitter.com/oauth/request_token';
 
@@ -569,6 +746,14 @@ class TwitterVerification {
         return false;
     }
 
+    /**
+     * Verify callback from Twitter.
+     *
+     * @param string $oauth_token The OAuth token.
+     * @param array  $request_data The request data.
+     *
+     * @return array|false The user profile data or false on failure.
+     */
     public function verify_callback( $oauth_token, $request_data ) {
         if ( ! $this->is_configured() ) {
             $this->log( 'Twitter not configured in callback' );
@@ -584,7 +769,7 @@ class TwitterVerification {
             return false;
         }
 
-        // Retrieve the token secret we stored earlier
+        // Retrieve the token secret we stored earlier.
         $oauth_token_secret = get_transient( 'twitter_oauth_token_secret_' . $oauth_token );
         delete_transient( 'twitter_oauth_token_secret_' . $oauth_token );
 
@@ -593,13 +778,13 @@ class TwitterVerification {
             return false;
         }
 
-        // Exchange for access token
+        // Exchange for access token.
         $access_token = $this->get_access_token( $oauth_token, $oauth_token_secret, $oauth_verifier );
 
         if ( $access_token && isset( $access_token['user_id'] ) ) {
             $this->log( 'Twitter access token successful for user: ' . $access_token['user_id'] );
 
-            // Get user profile information
+            // Get user profile information.
             $user_profile = $this->get_user_profile( $access_token );
 
             return array(
@@ -616,6 +801,15 @@ class TwitterVerification {
         return false;
     }
 
+    /**
+     * Exchange temporary credentials for access token.
+     *
+     * @param string $oauth_token        The temporary OAuth token.
+     * @param string $oauth_token_secret The temporary OAuth token secret.
+     * @param string $oauth_verifier     The OAuth verifier.
+     *
+     * @return array|false The access token data or false on failure.
+     */
     private function get_access_token( $oauth_token, $oauth_token_secret, $oauth_verifier ) {
         $url = 'https://api.twitter.com/oauth/access_token';
 
@@ -656,6 +850,13 @@ class TwitterVerification {
         return false;
     }
 
+    /**
+     * Get user profile information from Twitter.
+     *
+     * @param array $access_token The access token data.
+     *
+     * @return array The user profile data.
+     */
     private function get_user_profile( $access_token ) {
         $url = 'https://api.twitter.com/1.1/account/verify_credentials.json';
 
@@ -684,6 +885,17 @@ class TwitterVerification {
         return array();
     }
 
+    /**
+     * Build OAuth header for Twitter API requests.
+     *
+     * @param array  $params       Additional parameters for the request.
+     * @param string $url          The request URL.
+     * @param string $method       The request method (default: 'POST').
+     * @param string $token_secret The token secret (default: '').
+     * @param string $oauth_token  The OAuth token (default: '').
+     *
+     * @return string The OAuth header.
+     */
     private function build_oauth_header( $params, $url, $method = 'POST', $token_secret = '', $oauth_token = '' ) {
         $defaults = array(
             'oauth_consumer_key'     => $this->api_key,
@@ -699,7 +911,7 @@ class TwitterVerification {
 
         $params = array_merge( $defaults, $params );
 
-        // Create signature base string
+        // Create signature base string.
         $base_string = $method . '&' . rawurlencode( $url ) . '&';
         $base_params = array();
 
@@ -710,14 +922,14 @@ class TwitterVerification {
         ksort( $base_params );
         $base_string .= rawurlencode( $this->build_http_query( $base_params ) );
 
-        // Create signing key
+        // Create signing key.
         $signing_key = rawurlencode( $this->api_secret_key ) . '&' . rawurlencode( $token_secret );
 
-        // Generate signature
+        // Generate signature.
         $signature                 = base64_encode( hash_hmac( 'sha1', $base_string, $signing_key, true ) );
         $params['oauth_signature'] = $signature;
 
-        // Build header
+        // Build header.
         ksort( $params );
         $header_parts = array();
         foreach ( $params as $key => $value ) {
@@ -753,11 +965,39 @@ class TwitterVerification {
     }
 }
 
+/**
+ * MultiVendorX LinkedIn Verification.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class LinkedInVerification {
+
+    /**
+     * Client ID for LinkedIn.
+     *
+     * @var string
+     */
     private $client_id;
+
+    /**
+     * Client secret for LinkedIn.
+     *
+     * @var string
+     */
     private $client_secret;
+
+    /**
+     * Redirect URI for LinkedIn.
+     *
+     * @var string
+     */
     private $redirect_uri;
 
+    /**
+     * LinkedInVerification constructor.
+     */
     public function __construct() {
         $settings          = MultiVendorX()->setting->get_setting( 'all_verification_methods' );
         $linkedin_settings = $settings['social-verification']['social_verification_methods']['linkedin-connect'] ?? array();
@@ -767,6 +1007,11 @@ class LinkedInVerification {
         $this->redirect_uri  = $linkedin_settings['redirect_uri'] ?? '';
     }
 
+    /**
+     * Get LinkedIn authorization URL.
+     *
+     * @return string|false
+     */
     public function get_auth_url() {
         if ( ! $this->is_configured() ) {
             return false;
@@ -783,12 +1028,20 @@ class LinkedInVerification {
         return 'https://www.linkedin.com/oauth/v2/authorization?' . http_build_query( $params );
     }
 
+    /**
+     * Verify LinkedIn callback.
+     *
+     * @param string $code
+     * @param array  $request_data
+     *
+     * @return array|false
+     */
     public function verify_callback( $code, $request_data ) {
         if ( ! $this->is_configured() ) {
             return false;
         }
 
-        // Exchange code for access token
+        // Exchange code for access token.
         $token_response = wp_remote_post(
             'https://www.linkedin.com/oauth/v2/accessToken',
             array(
@@ -810,7 +1063,7 @@ class LinkedInVerification {
         $token_data = json_decode( wp_remote_retrieve_body( $token_response ), true );
 
         if ( isset( $token_data['access_token'] ) ) {
-            // Get basic profile
+            // Get basic profile.
             $profile_response = wp_remote_get(
                 'https://api.linkedin.com/v2/me',
                 array(
@@ -827,7 +1080,7 @@ class LinkedInVerification {
 
             $profile_data = json_decode( wp_remote_retrieve_body( $profile_response ), true );
 
-            // Get email address
+            // Get email address.
             $email_response = wp_remote_get(
                 'https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))',
                 array(
@@ -856,6 +1109,12 @@ class LinkedInVerification {
         return false;
     }
 
+    /**
+     * Get LinkedIn profile picture
+     *
+     * @param string $access_token Access token.
+     * @return string
+     */
     private function get_linkedin_profile_picture( $access_token ) {
         $picture_response = wp_remote_get(
             'https://api.linkedin.com/v2/me?projection=(profilePicture(displayImage~:playableStreams))',
@@ -874,6 +1133,11 @@ class LinkedInVerification {
         return '';
     }
 
+    /**
+     * Check if LinkedIn is configured
+     *
+     * @return bool
+     */
     private function is_configured() {
         return ! empty( $this->client_id ) && ! empty( $this->client_secret );
     }
@@ -882,21 +1146,46 @@ class LinkedInVerification {
 // // Initialize the social verification system
 // new SocialVerification();
 
+/**
+ * Get the social verification system
+ *
+ * @param string $provider Provider.
+ * @return
+ */
 function get_social_auth_url( $provider ) {
     $social_verification = get_social_verification();
     return $social_verification->get_auth_url( $provider );
 }
 
+/**
+ * Get connected social profiles for a user
+ *
+ * @param int $user_id User ID.
+ * @return array
+ */
 function get_connected_social_profiles( $user_id = null ) {
     $social_verification = get_social_verification();
     return $social_verification->get_social_profiles( $user_id );
 }
 
+/**
+ * Check if a user is connected to a social provider
+ *
+ * @param int    $user_id User ID.
+ * @param string $provider Provider.
+ * @return bool
+ */
 function is_social_connected( $user_id, $provider ) {
     $connections = get_connected_social_profiles( $user_id );
     return isset( $connections[ $provider ] ) && $connections[ $provider ]['is_verified'];
 }
 
+/**
+ * Check if social verification is enabled for a provider
+ *
+ * @param string $provider Provider.
+ * @return bool
+ */
 function is_social_verification_enabled( $provider ) {
     $social_verification = get_social_verification();
     return $social_verification->is_social_enabled( $provider );

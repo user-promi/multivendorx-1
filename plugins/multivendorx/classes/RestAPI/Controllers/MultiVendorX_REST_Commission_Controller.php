@@ -114,7 +114,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -129,13 +129,13 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         try {
             // Check if CSV download is requested.
             $format = $request->get_param( 'format' );
-            if ( $format === 'csv' ) {
+            if ( 'csv' === $format ) {
                 return $this->download_csv( $request );
             }
 
             $storeId = $request->get_param( 'store_id' );
 
-            if ( $format === 'reports' ) {
+            if ( 'reports' === $format ) {
                 $top_stores = $request->get_param( 'top_stores' );
 
                 if ( $storeId ) {
@@ -157,8 +157,8 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
             $offset     = ( $page - 1 ) * $limit;
             $count      = $request->get_param( 'count' );
             $status     = $request->get_param( 'status' );
-            $start_date = date( 'Y-m-d 00:00:00', strtotime( sanitize_text_field( $request->get_param( 'startDate' ) ) ) );
-            $end_date   = date( 'Y-m-d 23:59:59', strtotime( sanitize_text_field( $request->get_param( 'endDate' ) ) ) );
+            $start_date = gmdate( 'Y-m-d 00:00:00', strtotime( sanitize_text_field( $request->get_param( 'startDate' ) ) ) );
+            $end_date   = gmdate( 'Y-m-d 23:59:59', strtotime( sanitize_text_field( $request->get_param( 'endDate' ) ) ) );
 
             // ADD THESE LINES FOR SORTING.
             $orderBy = sanitize_text_field( $request->get_param( 'orderBy' ) );
@@ -314,16 +314,14 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         if ( ! empty( $start_date ) && ! empty( $end_date ) ) {
             $filter['created_at'] = array(
                 'compare' => 'BETWEEN',
-                'value'   => array( date( 'Y-m-d 00:00:00', strtotime( $start_date ) ), date( 'Y-m-d 23:59:59', strtotime( $end_date ) ) ),
+                'value'   => array( gmdate( 'Y-m-d 00:00:00', strtotime( $start_date ) ), gmdate( 'Y-m-d 23:59:59', strtotime( $end_date ) ) ),
             );
         }
 
         // If specific IDs are requested (selected rows from bulk action).
         if ( ! empty( $ids ) ) {
             $filter['id__in'] = array_map( 'intval', explode( ',', $ids ) );
-        }
-        // If pagination parameters are provided (current page export from bulk action).
-        elseif ( ! empty( $page ) && ! empty( $per_page ) ) {
+        } elseif ( ! empty( $page ) && ! empty( $per_page ) ) { // If pagination parameters are provided (current page export from bulk action).
             $filter['perpage'] = intval( $per_page );
             $filter['page']    = intval( $page );
         }
@@ -400,7 +398,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         } else {
             $filename .= 'all_';
         }
-        $filename .= date( 'Y-m-d' ) . '.csv';
+        $filename .= gmdate( 'Y-m-d' ) . '.csv';
 
         // Send headers for browser download.
         header( 'Content-Type: text/csv; charset=UTF-8' );
@@ -408,7 +406,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         header( 'Pragma: no-cache' );
         header( 'Expires: 0' );
 
-        echo $csv;
+        echo esc_html( $csv );
         exit;
     }
 
@@ -418,12 +416,12 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
      * @param object $request The request object.
      */
     public function get_item( $request ) {
-        // Verify nonce
+        // Verify nonce.
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .

@@ -336,7 +336,7 @@ class Admin {
         ?>
         <div id="multivendorx-store-link-tab" class="panel woocommerce_options_panel hidden">
             <p class="form-field">
-                <label for="linked_store"><?php _e( 'Assign Store', 'multivendorx' ); ?></label>
+                <label for="linked_store"><?php esc_html_e( 'Assign Store', 'multivendorx' ); ?></label>
                 <select class="wc-store-search"
                     style="width: 50%;"
                     id="linked_store"
@@ -420,7 +420,8 @@ class Admin {
      * @param object $variation Variation object.
      */
     public function add_variation_settings( $loop, $variation_data, $variation ) {
-        $commission_percentage = $commission_fixed = '';
+        $commission_percentage = '';
+        $commission_fixed      = '';
         $commission_percentage = get_post_meta( $variation->ID, Utill::POST_META_SETTINGS['variable_product_percentage'], true );
         $commission_fixed      = get_post_meta( $variation->ID, Utill::POST_META_SETTINGS['variable_product_fixed'], true );
 
@@ -472,11 +473,11 @@ class Admin {
     public function add_product_cat_commission_fields() {
         ?>
             <div class="form-field term-display-type-wrap">
-                <label for="category_percentage_commission"><?php _e( 'Commission Percentage', 'multivendorx' ); ?></label>
+                <label for="category_percentage_commission"><?php esc_html_e( 'Commission Percentage', 'multivendorx' ); ?></label>
                 <input type="number" class="short" name="category_percentage_commission" id="category_percentage_commission" value="" placeholder="">
             </div>
             <div class="form-field term-display-type-wrap">
-                <label for="category_fixed_commission"><?php _e( 'Commission Fixed', 'multivendorx' ); ?></label>
+                <label for="category_fixed_commission"><?php esc_html_e( 'Commission Fixed', 'multivendorx' ); ?></label>
                 <input type="number" class="short" name="category_fixed_commission" id="category_fixed_commission" value="" placeholder="">
             </div>
         <?php
@@ -492,13 +493,13 @@ class Admin {
         $commision_fixed       = get_term_meta( $term->term_id, 'multivendorx_category_fixed_commission', true );
         ?>
         <tr class="form-field">
-            <th scope="row" valign="top"><label for="category_percentage_commission"><?php _e( 'Commission Percentage', 'multivendorx' ); ?></label></th>
+            <th scope="row" valign="top"><label for="category_percentage_commission"><?php esc_html_e( 'Commission Percentage', 'multivendorx' ); ?></label></th>
             <td><input type="number" class="short" name="category_percentage_commission" id="category_percentage_commission" value="<?php echo $commission_percentage; ?>" placeholder=""></td>
         </tr>
     
         <tr class="form-field">
-            <th scope="row" valign="top"><label for="category_fixed_commission"><?php _e( 'Commission Fixed per transaction', 'multivendorx' ); ?></label></th>
-            <td><input type="number" class="short" name="category_fixed_commission" id="category_fixed_commission" value="<?php echo $commision_fixed; ?>" placeholder=""></td>
+            <th scope="row" valign="top"><label for="category_fixed_commission"><?php esc_html_e( 'Commission Fixed per transaction', 'multivendorx' ); ?></label></th>
+            <td><input type="number" class="short" name="category_fixed_commission" id="category_fixed_commission" value="<?php echo esc_attr( $commision_fixed ); ?>" placeholder=""></td>
         </tr>
        
         <?php
@@ -564,7 +565,7 @@ class Admin {
         ?>
         <div id="store_coupon_data" class="panel woocommerce_options_panel">
             <p class="form-field">
-                <label for="linked_store"><?php _e( 'Assign Store', 'multivendorx' ); ?></label>
+                <label for="linked_store"><?php esc_html_e( 'Assign Store', 'multivendorx' ); ?></label>
                 <select class="wc-store-search"
                     style="width: 50%;"
                     id="linked_store"
@@ -605,10 +606,10 @@ class Admin {
      * @param object $order Order object.
      */
     public function add_option_for_payment( $page, $order ) {
-        if ( $page && $page != 'woocommerce_page_wc-orders' ) {
+        if ( 'woocommerce_page_wc-orders' !== $page && $page ) {
 			return;
         }
-        if ( $order->get_parent_id() == 0 ) {
+        if ( $order->get_parent_id() === 0 ) {
 			return;
         }
 
@@ -636,11 +637,11 @@ class Admin {
         <p>
             <label>
                 <input type="radio" name="order_payment" value="admin" <?php checked( $value, 'admin' ); ?> />
-                <?php _e( 'Admin', 'multivendorx' ); ?>
+                <?php esc_html_e( 'Admin', 'multivendorx' ); ?>
             </label><br>
             <label>
                 <input type="radio" name="order_payment" value="store" <?php checked( $value, 'store' ); ?> />
-                <?php _e( 'Store', 'multivendorx' ); ?>
+                <?php esc_html_e( 'Store', 'multivendorx' ); ?>
             </label>
         </p>
         <?php

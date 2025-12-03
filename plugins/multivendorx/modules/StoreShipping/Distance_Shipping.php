@@ -43,7 +43,7 @@ class Distance_Shipping extends \WC_Shipping_Method {
 
         // Taxable setting.
         $taxable_shipping = MultiVendorX()->setting->get_setting( 'taxable', array() );
-        $this->tax_status = ( ! empty( $taxable_shipping ) && in_array( 'taxable', $taxable_shipping ) )
+        $this->tax_status = ( ! empty( $taxable_shipping ) && in_array( 'taxable', $taxable_shipping, true ) )
             ? 'taxable'
             : 'none';
 
@@ -63,7 +63,7 @@ class Distance_Shipping extends \WC_Shipping_Method {
      * Check if shipping is enabled
      */
     public function is_method_enabled() {
-        return $this->enabled == 'yes';
+        return 'yes' === $this->enabled;
     }
 
     /**
@@ -124,7 +124,7 @@ class Distance_Shipping extends \WC_Shipping_Method {
 
             $store_amount = $this->calculate_per_seller( $products, $distance, $default_cost, $distance_rules, $free_shipping_amount, true );
 
-            $tax_rate = ( $this->tax_status == 'none' ) ? false : '';
+            $tax_rate = ( 'none' === $this->tax_status ) ? false : '';
             $tax_rate = apply_filters( 'multivendorx_is_apply_tax_on_shipping_rates', $tax_rate );
 
             // Set label to Free Shipping if shipping amount is zero.
@@ -174,7 +174,7 @@ class Distance_Shipping extends \WC_Shipping_Method {
     public static function is_shipping_enabled_for_seller( $store_id ) {
         $store            = new \MultiVendorX\Store\Store( $store_id );
         $shipping_options = $store->meta_data[ Utill::STORE_SETTINGS_KEYS['shipping_options'] ] ?? '';
-        return $shipping_options === 'shipping_by_distance';
+        return 'shipping_by_distance' === $shipping_options;
     }
 
     /**

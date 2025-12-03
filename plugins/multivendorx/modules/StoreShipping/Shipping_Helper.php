@@ -2,9 +2,7 @@
 /**
  * MultiVendorX Shipping Helper Class.
  *
- * @class       Module class
- * @version     PRODUCT_VERSION
- * @author      MultiVendorX
+ * @package MultiVendorX
  */
 
 namespace MultiVendorX\StoreShipping;
@@ -14,9 +12,11 @@ use MultiVendorX\Utill;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * MultiVendorX Shipping Helper Class
+ * MultiVendorX Shipping Helper Class.
  *
- * @package MultiVendorX
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
  */
 class Shipping_Helper {
 

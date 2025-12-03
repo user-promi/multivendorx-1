@@ -19,8 +19,6 @@ defined( 'ABSPATH' ) || exit;
  * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
-
-
 class BankTransfer {
 
     /**

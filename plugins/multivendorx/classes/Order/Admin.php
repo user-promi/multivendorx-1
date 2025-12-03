@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * MultiVendorX Order Admin class
+ *
+ * @package MultiVendorX
+ */
 namespace MultiVendorX\Order;
 
 use MultiVendorX\Commission\CommissionUtil;
@@ -15,8 +19,10 @@ defined( 'ABSPATH' ) || exit;
  * @package     MultiVendorX
  * @author      MultiVendorX
  */
-
 class Admin {
+    /**
+     * Constructor
+     */
     public function __construct() {
         add_filter( 'manage_woocommerce_page_wc-orders_columns', array( $this, 'shop_order_columns' ), 99 );
         add_action( 'manage_woocommerce_page_wc-orders_custom_column', array( $this, 'show_shop_order_columns' ), 99, 2 );
@@ -26,12 +32,23 @@ class Admin {
         add_action( 'woocommerce_order_action_regenerate_suborders', array( $this, 'regenerate_suborders' ) );
     }
 
+    /**
+     * Add custom columns to the order list page
+     *
+     * @param  array $columns Columns.
+     */
     public function shop_order_columns( $columns ) {
 
-        if ( ( ! isset( $_GET['post_status'] ) || ( isset( $_GET['post_status'] ) && 'trash' != $_GET['post_status'] ) ) ) {
-            $suborder         = array( 'multivendorx_suborder' => __( 'Suborders', 'multivendorx' ) );
+        $post_status = filter_input( INPUT_GET, 'post_status', FILTER_DEFAULT );
+        $post_status = sanitize_text_field( $post_status );
+        if ( empty( $post_status ) || 'trash' !== $post_status ) {
+            $suborder         = array(
+                'multivendorx_suborder' => __( 'Suborders', 'multivendorx' ),
+            );
             $title_number_pos = array_search( 'order_number', array_keys( $columns ) );
-            $columns          = array_slice( $columns, 0, $title_number_pos + 1, true ) + $suborder + array_slice( $columns, $title_number_pos + 1, count( $columns ) - 1, true );
+            $columns          = array_slice( $columns, 0, $title_number_pos + 1, true )
+                    + $suborder
+                    + array_slice( $columns, $title_number_pos + 1, null, true );
         }
         return $columns;
     }
@@ -39,37 +56,39 @@ class Admin {
     /**
      * Output custom columns for orders
      *
-     * @param  string $column
+     * @param  string $column Column name.
+     * @param  int    $post_id Post ID.
      */
     public function show_shop_order_columns( $column, $post_id ) {
         remove_filter( 'woocommerce_orders_table_query_clauses', array( $this, 'wc_order_list_filter' ) );
         switch ( $column ) {
-			case 'multivendorx_suborder':
+            case 'multivendorx_suborder':
                 $mvx_suborders = MultiVendorX()->order->get_suborders( $post_id );
                 if ( $mvx_suborders ) {
                     echo '<ul class="mvx-order-vendor" style="margin:0px;">';
                     foreach ( $mvx_suborders as $suborder ) {
-                        if ( $suborder->get_type() == 'shop_order_refund' ) {
-							continue;
+                        if ( $suborder->get_type() === 'shop_order_refund' ) {
+                            continue;
                         }
                         $vendor            = Store::get_store_by_id( $suborder->get_meta( Utill::POST_META_SETTINGS['store_id'], true ) );
-                        $vendor_page_title = ( $vendor ) ? $vendor->get( 'name' ) : __( 'Deleted vendor', 'multivendorx' );
-                        $order_uri         = apply_filters( 'mvx_admin_vendor_shop_order_edit_url', esc_url( 'admin.php?page=wc-orders&action=edit&id=' . $suborder->get_id() . '' ), $suborder->get_id() );
+                        $vendor_page_title = ( $vendor ) ? $vendor->get( 'name' ) : esc_html__( 'Deleted vendor', 'multivendorx' );
+
+                        $order_uri = apply_filters( 'mvx_admin_vendor_shop_order_edit_url', esc_url( 'admin.php?page=wc-orders&action=edit&id=' . $suborder->get_id() . '' ), $suborder->get_id() );
 
                         printf(
                             '<li><mark class="%s tips" data-tip="%s">%s</mark> <strong><a href="%s">#%s</a></strong> &ndash; <small class="mvx-order-for-vendor">%s %s</small></li>',
-                            sanitize_title( $suborder->get_status() ),
-                            $suborder->get_status(),
-                            $suborder->get_status(),
-                            $order_uri,
-                            $suborder->get_order_number(),
-                            _x( 'for', 'Order table details', 'multivendorx' ),
-                            $vendor_page_title
+                            esc_attr( sanitize_title( $suborder->get_status() ) ),
+                            esc_attr( $suborder->get_status() ),
+                            esc_html( $suborder->get_status() ),
+                            esc_url( $order_uri ),
+                            esc_html( $suborder->get_order_number() ),
+                            esc_html_x( 'for', 'Order table details', 'multivendorx' ),
+                            esc_html( $vendor_page_title )
                         );
 
                         do_action( 'mvx_after_suborder_details', $suborder );
                     }
-                    echo '<ul>';
+                    echo '</ul>';
                 } else {
                     echo '<span class="na">&ndash;</span>';
                 }
@@ -77,6 +96,12 @@ class Admin {
         }
     }
 
+    /**
+     * Add actions to the order list page
+     *
+     * @param  array  $actions
+     * @param  object $order
+     */
     public function woocommerce_order_actions( $actions, $order ) {
         if ( $order && $order->get_parent_id() ) {
             $actions['regenerate_order_commissions'] = __( 'Regenerate order commissions', 'multivendorx' );
@@ -88,6 +113,11 @@ class Admin {
         return $actions;
     }
 
+    /**
+     * Regenerate order commissions
+     *
+     * @param  object $order Order object.
+     */
     public function regenerate_order_commissions( $order ) {
         global $wpdb;
         if ( ! $order->get_parent_id() ) {
@@ -96,7 +126,7 @@ class Admin {
 
         $commission_id = $order->get_meta( Utill::POST_META_SETTINGS['commission_id'], true ) ?? '';
 
-        if ( ! in_array( $order->get_status(), apply_filters( 'mvx_regenerate_order_commissions_statuses', array( 'on-hold', 'pending', 'processing', 'completed' ), $order ) ) ) {
+        if ( ! in_array( $order->get_status(), apply_filters( 'mvx_regenerate_order_commissions_statuses', array( 'on-hold', 'pending', 'processing', 'completed' ), $order ), true ) ) {
             return;
         }
 
@@ -110,7 +140,7 @@ class Admin {
 
         $commission = CommissionUtil::get_commission_db( $regenerate_commission_id );
 
-        if ( $commission->status != 'unpaid' ) {
+        if ( 'unpaid' !== $commission->status ) {
             $row = $wpdb->get_row(
                 $wpdb->prepare(
                     "SELECT *
@@ -150,6 +180,11 @@ class Admin {
         }
     }
 
+    /**
+     * Regenerate suborders
+     *
+     * @param  object $order
+     */
     public function regenerate_suborders( $order ) {
         MultiVendorX()->order->create_vendor_orders( $order );
     }

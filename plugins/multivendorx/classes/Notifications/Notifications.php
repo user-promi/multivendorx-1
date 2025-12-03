@@ -6,18 +6,28 @@ use MultiVendorX\Utill;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * MultiVendorX Notifications class
+ * MultiVendorX Notifications Class.
  *
- * @version        PRODUCT_VERSION
- * @package        MultiVendorX
- * @author         MultiVendorX
+ * This class handles notifications related functionality.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
  */
-
 class Notifications {
 
-
+    /**
+     * Events
+     *
+     * @var array
+     */
     public $events = array();
 
+    /**
+     * Constructor
+     *
+     * @return void
+     */
     public function __construct() {
         add_action( 'init', array( $this, 'register_notification_hooks' ) );
         $this->insert_system_events();
@@ -25,12 +35,22 @@ class Notifications {
         add_action( 'multivendorx_clear_notifications', array( $this, 'multivendorx_clear_notifications' ) );
     }
 
+    /**
+     * Register notification hooks
+     *
+     * @return void
+     */
     public function register_notification_hooks() {
         foreach ( $this->events as $event => $value ) {
             add_action( "multivendorx_notify_{$event}", array( $this, 'trigger_notifications' ), 10, 2 );
         }
     }
 
+    /**
+     * Insert system events
+     *
+     * @return void
+     */
     public function insert_system_events() {
         global $wpdb;
 
@@ -1011,18 +1031,6 @@ class Notifications {
                 'category'         => 'notification',
             ),
 
-            'policy_update'             => array(
-                'name'             => 'Policy Update',
-                'desc'             => 'Notify stores and customers when marketplace policy is updated.',
-                'store_enabled'    => true,
-                'customer_enabled' => true,
-                'email_subject'    => 'Policy Update',
-                'email_body'       => 'Marketplace policy has been updated. Please review the new terms.',
-                'sms_content'      => 'Policy update: Review new terms.',
-                'system_message'   => 'Marketplace policy updated.',
-                'tag'              => 'System',
-                'category'         => 'notification',
-            ),
         );
 
         $count = $wpdb->get_var(
@@ -1049,7 +1057,7 @@ class Notifications {
                     'sms_content'      => $event['sms_content'] ?? '',
                     'system_message'   => $event['system_message'] ?? '',
                     'status'           => 'active',
-                    'custom_emails'    => wp_json_encode( array() ), // empty array
+                    'custom_emails'    => wp_json_encode( array() ), // empty array.
                     'tag'              => $event['tag'] ?? '',
                     'category'         => $event['category'] ?? '',
                 ),
@@ -1074,6 +1082,13 @@ class Notifications {
         }
     }
 
+    /**
+     * Trigger notifications.
+     *
+     * @param string $action_name Action name.
+     * @param array  $parameters Parameters.
+     * @return void
+     */
     public function trigger_notifications( $action_name, $parameters ) {
         global $wpdb;
         $event = $wpdb->get_row(
@@ -1095,14 +1110,21 @@ class Notifications {
         }
 
         if ( $event->email_enabled ) {
-            // call email class
+            // Call email class.
         }
 
         if ( $event->sms_enabled ) {
-            // call sms class
+            // Call sms class.
         }
     }
 
+    /**
+     * Send notifications.
+     *
+     * @param object $event Event object.
+     * @param array  $parameters Parameters.
+     * @return void
+     */
     public function send_notifications( $event, $parameters ) {
 
         global $wpdb;
@@ -1126,6 +1148,12 @@ class Notifications {
         );
     }
 
+    /**
+     * Get all events.
+     *
+     * @param int|null $id Event ID.
+     * @return array|object
+     */
     public function get_all_events( $id = null ) {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['system_events'];
@@ -1146,7 +1174,12 @@ class Notifications {
         return $events;
     }
 
-
+    /**
+     * Get all notifications.
+     *
+     * @param int|null $store_id Store ID.
+     * @return array|object
+     */
     public function get_all_notifications( $store_id = null, $args = array() ) {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['notifications'];
@@ -1202,7 +1235,7 @@ class Notifications {
                 $query    .= ' WHERE ' . implode( $condition, $where );
             }
 
-            // Keep your pagination logic
+            // Keep your pagination logic.
             if ( isset( $args['limit'] ) && isset( $args['offset'] ) && empty( $args['count'] ) ) {
                 $limit  = intval( $args['limit'] );
                 $offset = intval( $args['offset'] );
@@ -1221,6 +1254,9 @@ class Notifications {
         return $events;
     }
 
+    /**
+     * Clear notifications based on settings.
+     */
     public function multivendorx_clear_notifications() {
         global $wpdb;
 
@@ -1230,7 +1266,7 @@ class Notifications {
 
         $current_date = current_time( 'mysql' );
 
-        // Delete data older than N days or already expired
+        // Delete data older than N days or already expired.
         $query = $wpdb->prepare(
             "
             DELETE FROM $table

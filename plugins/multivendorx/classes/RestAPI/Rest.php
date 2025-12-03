@@ -35,7 +35,15 @@ defined( 'ABSPATH' ) || exit;
  */
 class Rest {
 
+    /**
+     * Container for all our classes
+     *
+     * @var array
+     */
     private $container = array();
+    /**
+     * Constructor
+     */
     public function __construct() {
         $this->init_classes();
         add_action( 'rest_api_init', array( $this, 'register_rest_routes' ), 10 );
@@ -70,8 +78,8 @@ class Rest {
             $store_slug = $store->get( Utill::STORE_SETTINGS_KEYS['slug'] );
 
             // Add store data to API response.
-            $response->data['store_name'] = $store_name ?: '';
-            $response->data['store_slug'] = $store_slug ?: '';
+            $response->data['store_name'] = $store_name ? $store_name : '';
+            $response->data['store_slug'] = $store_slug ? $store_slug : '';
             $response->data['store_id']   = $store_id;
         } else {
             $response->data['store_name'] = '';
@@ -102,7 +110,7 @@ class Rest {
      * @param array $args WP_Query arguments.
      */
     public function filter_low_stock_by_meta_exists( $args ) {
-        if ( isset( $request['meta_key'] ) && $request['meta_key'] === Utill::POST_META_SETTINGS['store_id'] ) {
+        if ( isset( $request['meta_key'] ) && Utill::POST_META_SETTINGS['store_id'] === $request['meta_key'] ) {
 
             // Build the meta query to check for the existence of the MultiVendorX key.
             $meta_query = array(
@@ -180,7 +188,7 @@ class Rest {
      * @return array Modified WP_Query arguments.
      */
     public function filter_products_by_meta_exists( $args, $request ) {
-        if ( isset( $request['meta_key'] ) && $request['meta_key'] === Utill::POST_META_SETTINGS['store_id'] ) {
+        if ( isset( $request['meta_key'] ) && Utill::POST_META_SETTINGS['store_id'] === $request['meta_key'] ) {
 
             // Check if a value (store_id) was passed.
             $meta_query = array();
@@ -223,8 +231,8 @@ class Rest {
         $meta_query = array();
 
         // Handle filtering by store ID (existing logic).
-        if ( isset( $request['meta_key'] ) && $request['meta_key'] === Utill::POST_META_SETTINGS['store_id'] ) {
-            if ( isset( $request['value'] ) && $request['value'] !== '' ) {
+        if ( isset( $request['meta_key'] ) && Utill::POST_META_SETTINGS['store_id'] === $request['meta_key'] ) {
+            if ( isset( $request['value'] ) && '' !== $request['value'] ) {
                 $meta_query[] = array(
                     'key'     => Utill::POST_META_SETTINGS['store_id'],
                     'value'   => sanitize_text_field( $request['value'] ),
@@ -278,13 +286,20 @@ class Rest {
         // Get all users for that store.
         $users = StoreUtil::get_store_users( $active_store );
 
-        if ( is_array( $users ) && in_array( $user_id, $users['users'] ) ) {
+        if ( is_array( $users ) && in_array( $user_id, $users['users'], true ) ) {
             return true;
         }
 
         return $permission; // Fallback to default.
     }
 
+    /**
+     * Filter WooCommerce orders by meta key existence.
+     *
+     * @param array  $response WP_REST_Response object.
+     * @param object $object   Order object.
+     * @param object $request  REST API request object.
+     */
     public function filter_orders_by_meta_exists( $response, $object, $request ) {
         $store_id = $object->get_meta( Utill::POST_META_SETTINGS['store_id'] );
 
@@ -295,8 +310,8 @@ class Rest {
             $store_slug = $store->get( Utill::STORE_SETTINGS_KEYS['slug'] );
 
             // Add store data to API response.
-            $response->data['store_name'] = $store_name ?: '';
-            $response->data['store_slug'] = $store_slug ?: '';
+            $response->data['store_name'] = $store_name ? $store_name : '';
+            $response->data['store_slug'] = $store_slug ? $store_slug : '';
             $response->data['store_id']   = $store_id;
         }
 
@@ -319,7 +334,7 @@ class Rest {
             $refunded_tax        = 0;
             foreach ( $object->get_refunds() as $refund ) {
                 foreach ( $refund->get_items() as $refund_item ) {
-                    if ( $refund_item->get_meta( '_refunded_item_id' ) == $item_id ) {
+                    if ( $refund_item->get_meta( '_refunded_item_id' ) === $item_id ) {
                         $refunded_tax += array_sum( $refund_item->get_taxes()['total'] ?? array() );
                     }
                 }
@@ -340,7 +355,7 @@ class Rest {
             $refunded_shipping_tax = 0;
             foreach ( $object->get_refunds() as $refund ) {
                 foreach ( $refund->get_items( 'shipping' ) as $refund_item ) {
-                    if ( $refund_item->get_meta( '_refunded_item_id' ) == $item_id ) {
+                    if ( $refund_item->get_meta( '_refunded_item_id' ) === $item_id ) {
                         $refunded_shipping_tax += array_sum( $refund_item->get_taxes()['total'] ?? array() );
                     }
                 }
@@ -366,8 +381,9 @@ class Rest {
     /**
      * Filter WooCommerce coupons by meta key existence.
      *
-     * @param array $args     Query arguments.
-     * @param array $request  Request object.
+     * @param array  $response REST API response.
+     * @param object $object   Coupon object.
+     * @param array  $request  Request object.
      * @return array
      */
     public function filter_coupons_by_meta_exists_response( $response, $object, $request ) {
@@ -379,8 +395,8 @@ class Rest {
             $store_slug = $store->get( Utill::STORE_SETTINGS_KEYS['slug'] );
 
             // Add store data to API response.
-            $response->data['store_name'] = $store_name ?: '';
-            $response->data['store_slug'] = $store_slug ?: '';
+            $response->data['store_name'] = $store_name ? $store_name : '';
+            $response->data['store_slug'] = $store_slug ? $store_slug : '';
             $response->data['store_id']   = $store_id;
         }
 
