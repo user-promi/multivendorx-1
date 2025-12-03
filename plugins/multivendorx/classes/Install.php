@@ -512,7 +512,7 @@ By signing and submitting, the Seller accepts all terms above.
             'pending_msg' => 'Your store is awaiting approval and will be activated soon.',
         );
 
-        update_option( Utill::ADMIN_SETTINGS['pending-approval'], $pending_store_status );
+        update_option( Utill::ADMIN_SETTINGS['pending'], $pending_store_status );
 
         $reject_store_status = array(
             'rejected_msg' => 'Your application was not approved. Please review feedback and reapply.',
@@ -616,7 +616,7 @@ By signing and submitting, the Seller accepts all terms above.
             'store_dashboard_page'    => $store_dashboard_page_id,
             'store_url'               => 'store',
         );
-        update_option( Utill::ADMIN_SETTINGS['marketplace-settings'], $marketplace_settings );
+        update_option( Utill::ADMIN_SETTINGS['marketplace'], $marketplace_settings );
 
         $general_settings = array(
             'approve_store' => 'manually',
