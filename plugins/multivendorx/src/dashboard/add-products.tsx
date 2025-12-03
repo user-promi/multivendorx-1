@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useLocation } from 'react-router-dom';
-import { BasicInput, CommonPopup, FileInput, MultiCheckBox, RadioInput, SelectInput, TextArea, ToggleSetting } from "zyra";
+import { BasicInput, CalendarInput, CommonPopup, FileInput, MultiCheckBox, RadioInput, SelectInput, TextArea, ToggleSetting } from "zyra";
 
 const AddProduct = () => {
    const location = useLocation();
@@ -416,18 +416,54 @@ const AddProduct = () => {
                         )}
                         <div className="form-group">
                            Stock management
-                           <input
-                              type="checkbox"
-                              checked={product.manage_stock}
-                              onChange={(e) => handleChange("manage_stock", e.target.checked)}
+                           <MultiCheckBox
+                              wrapperClass="toggle-btn"
+                              descClass="settings-metabox-description"
+                              description=""
+                              inputWrapperClass="toggle-checkbox-header"
+                              inputInnerWrapperClass="toggle-checkbox"
+                              idPrefix="toggle-switch"
+                              key="enable_deactivation"
+                              options={[
+                                 {
+                                    key: "enable_deactivation",
+                                    value: "enable_deactivation",
+                                 },
+                              ]}
+                              value={product.stock_status}
+                              onChange={(selected) => handleChange("stock_status", selected.value)}
                            />
-                           
                         </div>
 
                         <div className="form-group">
                            Sold individually
-                           <input
-                              type="checkbox"
+                           {/* <div className="toggle-checkbox" >
+                              <input
+                                 type="checkbox"
+                                 className="toggle-checkbox"
+                                 id={`toggle-switch-`}
+                                 checked={product.sold_individually}
+                                 onChange={(e) => handleChange("sold_individually", e.target.checked)}
+                              />
+                              <label
+                                 htmlFor={`toggle-switch-`}
+                                 className="toggle-switch"
+                              ></label>
+                           </div> */}
+                           <MultiCheckBox
+                              wrapperClass="toggle-btn"
+                              descClass="settings-metabox-description"
+                              description=""
+                              inputWrapperClass="toggle-checkbox-header"
+                              inputInnerWrapperClass="toggle-checkbox"
+                              idPrefix="toggle-switch"
+                              key="enable_deactivation"
+                              options={[
+                                 {
+                                    key: "enable_deactivation",
+                                    value: "enable_deactivation",
+                                 },
+                              ]}
                               checked={product.sold_individually}
                               onChange={(e) => handleChange("sold_individually", e.target.checked)}
                            />
@@ -499,30 +535,6 @@ const AddProduct = () => {
                                  onChange={(e) => handleChange("weight", e.target.value)}
                               />
                            </div>
-                           <div className="form-group">
-                              <label htmlFor="product-name">Dimensions ({appLocalizer.dimension_unit})</label>
-                              <BasicInput
-                                 name="product_length"
-                                 wrapperClass="setting-form-input"
-                                 value={product.product_length}
-                                 placeholder="Length"
-                                 onChange={(e) => handleChange("product_length", e.target.value)}
-                              />
-                              <BasicInput
-                                 name="product_width"
-                                 wrapperClass="setting-form-input"
-                                 value={product.product_width}
-                                 placeholder="Width"
-                                 onChange={(e) => handleChange("product_width", e.target.value)}
-                              />
-                              <BasicInput
-                                 name="product_height"
-                                 wrapperClass="setting-form-input"
-                                 value={product.product_height}
-                                 placeholder="Height"
-                                 onChange={(e) => handleChange("product_height", e.target.value)}
-                              />
-                           </div>
 
                            <div className="form-group">
                               <label htmlFor="product-name">Shipping classes</label>
@@ -535,6 +547,38 @@ const AddProduct = () => {
                                  }
                               />
 
+                           </div>
+                        </div>
+                        <div className="form-group-wrapper">
+                           <div className="form-group">
+                              <label htmlFor="product-name">Dimensions ({appLocalizer.dimension_unit})</label>
+                              <BasicInput
+                                 name="product_length"
+                                 wrapperClass="setting-form-input"
+                                 value={product.product_length}
+                                 placeholder="Length"
+                                 onChange={(e) => handleChange("product_length", e.target.value)}
+                              />
+                           </div>
+                           <div className="form-group">
+                              <label htmlFor="product-name"> </label>
+                              <BasicInput
+                                 name="product_width"
+                                 wrapperClass="setting-form-input"
+                                 value={product.product_width}
+                                 placeholder="Width"
+                                 onChange={(e) => handleChange("product_width", e.target.value)}
+                              />
+                           </div>
+                           <div className="form-group">
+                              <label htmlFor="product-name"> </label>
+                              <BasicInput
+                                 name="product_height"
+                                 wrapperClass="setting-form-input"
+                                 value={product.product_height}
+                                 placeholder="Height"
+                                 onChange={(e) => handleChange("product_height", e.target.value)}
+                              />
                            </div>
                         </div>
                      </div>
@@ -557,7 +601,7 @@ const AddProduct = () => {
                                     name="shipping_class"
                                     options={shippingClasses}
                                     value={product.shipping_class}
-                                    size="16rem"
+                                    size="25%"
                                     onChange={(selected) =>
                                        handleChange("shipping_class", selected.value)
                                     }
@@ -842,26 +886,21 @@ const AddProduct = () => {
                            <div className="form-group">
                               <label htmlFor="title">Attribute name</label>
                               <div className="attribute-popup-wrapper">
-                                 {!showAddNew && (
-                                    <div className="field-wrapper">
-                                       <SelectInput
-                                          name="payment_method"
-                                          options={paymentOptions}
-                                          type="single-select"
-                                       />
-                                       <div className="add-btn" onClick={() => setShowAddNew(true)}><i className="adminlib-plus-circle-o"></i> Add new</div>
-                                    </div>
-                                 )}
+                                 <div className="field-wrapper">
+                                    <SelectInput
+                                       name="payment_method"
+                                       options={paymentOptions}
+                                       type="single-select"
+                                       size="80%"
+                                    />
+                                    {!showAddNew && (<div className="add-btn" onClick={() => setShowAddNew(true)}><i className="adminlib-plus-circle-o"></i> Add new</div>)}
+                                 </div>
                                  {showAddNew && (
-                                    <div className="field-wrapper">
+                                    <div className="field-wrapper add-new-field">
                                        <BasicInput name="address" wrapperClass="setting-form-input" />
-                                       <div className="add-btn" onClick={() => setShowAddNew(false)}><i className="adminlib-form-checkboxes"></i> Save </div>
+                                       <div className="admin-btn btn-purple-bg" onClick={() => setShowAddNew(false)}><i className="adminlib-form-checkboxes"></i> Save </div>
                                     </div>
                                  )}
-                              </div>
-
-                              <div className="buttons-wrapper left">
-                                 <div className="admin-btn btn-purple">Select all</div>
                               </div>
                            </div>
                         </div>
@@ -885,6 +924,10 @@ const AddProduct = () => {
                                  </div>
                               </div>
                            </div>
+                        </div>
+                        <div className="buttons-wrapper left">
+                           <div className="admin-btn btn-purple">Select all</div>
+                           <div className="admin-btn btn-red">Select none</div>
                         </div>
                      </div>
                   </CommonPopup>
@@ -950,16 +993,13 @@ const AddProduct = () => {
                         <div className="form-group-wrapper">
                            <div className="form-group">
                               <FileInput
-                                 // value={formData.image}
                                  inputClass="form-input"
                                  name="image"
                                  type="hidden"
-                                 // onButtonClick={() => runUploader('image')}
                                  size="medium"
                                  imageWidth={50}
                                  imageHeight={50}
                                  openUploader="Upload Image"
-                                 // imageSrc={imagePreviews.image}
                                  buttonClass="admin-btn btn-purple"
                                  descClass="settings-metabox-description"
                               />
@@ -1144,16 +1184,66 @@ const AddProduct = () => {
                               onChange={(e) => setVisibility(e.target.value)}
                            />
                         </div>
-
                      </div>
                      <div className="form-group-wrapper">
                         <div className="form-group">
-                           <label htmlFor="product-name">Product category</label>
-                           <SelectInput
-                              name="payment_method"
-                              options={paymentOptions}
-                              type="single-select"
+                           <label htmlFor="product-name">Status</label>
+                           <div className="admin-badge green">Publish</div>
+                        </div>
+                     </div>
+                     <div className="form-group-wrapper">
+                        <div className="form-group">
+                           <label htmlFor="product-name">Publish</label>
+                           <CalendarInput
+                              wrapperClass=""
+                              inputClass=""
+                           // onChange={(range: any) => {
+                           //    updateFilter('date', {
+                           //       start_date: range.startDate,
+                           //       end_date: range.endDate,
+                           //    });
+                           // }}
                            />
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+               <div className="card">
+                  <div className="card-header">
+                     <div className="left">
+                        <div className="title">Category</div>
+                     </div>
+                     <div className="right"><i className="adminlib-pagination-right-arrow  arrow-icon"></i></div>
+                  </div>
+                  <div className="card-body">
+                     <div className="form-group-wrapper">
+                        <div className="form-group">
+                           <div className="category-wrapper">
+                              <ul>
+                                 <li className="category"><input type="checkbox" />Category 1
+                                    {/* sub category */}
+                                    <ul>
+                                       <li className="sub-category"><input type="checkbox" />sub category 1</li>
+                                       <li className="sub-category"><input type="checkbox" /> sub category 1</li>
+                                       <li className="sub-category"><input type="checkbox" /> sub category 1
+                                          <ul>
+                                             <li className="sub-category"><input type="checkbox" /> sub 1</li>
+                                             <li className="sub-category"><input type="checkbox" /> sub 1</li>
+                                             <li className="sub-category" ><input type="checkbox" /> sub 1</li>
+                                             <li className="sub-category"><input type="checkbox" /> sub 1</li>
+                                          </ul>
+                                       </li>
+                                       <li className="sub-category"><input type="checkbox" />sub category 1</li>
+                                    </ul>
+                                 </li>
+                                 <li className="category"><input type="checkbox" />Category 1</li>
+                                 <li className="category"><input type="checkbox" />Category 1</li>
+                                 <li className="category"><input type="checkbox" />Category 1</li>
+                                 <li className="category"><input type="checkbox" />Category 1</li>
+
+                              </ul>
+                           </div>
                         </div>
                      </div>
                      <div className="form-group-wrapper">
@@ -1190,6 +1280,50 @@ const AddProduct = () => {
                               imageHeight={75}
                               openUploader="Upload Image"
                               // imageSrc={imagePreviews.image}
+                              buttonClass="admin-btn btn-purple"
+                              descClass="settings-metabox-description"
+                           />
+                        </div>
+                     </div>
+                     <div className="form-group-wrapper">
+                        <div className="form-group">
+                           <label htmlFor="product-name">Product gallery</label>
+                           <FileInput
+                              // value={formData.image}
+                              inputClass="form-input"
+                              name="image"
+                              type="hidden"
+                              // onButtonClick={() => runUploader('image')}
+                              imageWidth={75}
+                              imageHeight={75}
+                              openUploader="Upload Image"
+                              // imageSrc={imagePreviews.image}
+                              buttonClass="admin-btn btn-purple"
+                              descClass="settings-metabox-description"
+                           />
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+               <div className="card" id="card-image-upload">
+                  <div className="card-header">
+                     <div className="left">
+                        <div className="title">Upload image</div>
+                     </div>
+                     <div className="right"><i className="adminlib-pagination-right-arrow  arrow-icon" onClick={() => toggleCard("card-image-upload")}></i></div>
+                  </div>
+                  <div className="card-body">
+                     <div className="form-group-wrapper">
+                        <div className="form-group">
+                           <label htmlFor="product-name">Features Image</label>
+                           <FileInput
+                              inputClass="form-input"
+                              name="image"
+                              type="hidden"
+                              imageWidth={75}
+                              imageHeight={75}
+                              openUploader="Upload Image"
                               buttonClass="admin-btn btn-purple"
                               descClass="settings-metabox-description"
                            />

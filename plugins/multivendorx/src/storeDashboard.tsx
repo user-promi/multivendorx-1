@@ -298,7 +298,11 @@ const Dashboard = () => {
 
                                         {hasSubmenu && (
                                             <ul
-                                                className="subtabs"
+                                                className={`subtabs ${
+                                                        isOpen ? 'open' : ''
+                                                    }`}
+
+                                                
                                             >
                                                 {item.submenu.map((sub) => {
                                                     const subActive = currentTab === sub.key;
