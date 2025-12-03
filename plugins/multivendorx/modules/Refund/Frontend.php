@@ -106,7 +106,7 @@ class Frontend {
                 <?php
                 if ( $refund_reason_options ) {
                     foreach ( $refund_reason_options as $index => $reason ) {
-                        $index_attr = esc_attr( $index );
+                        $index_attr  = esc_attr( $index );
                         $reason_text = esc_html( $reason['value'] );
                         echo '<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                             <label class="refund_reason_option" for="refund_reason_option-' . $index_attr . '">

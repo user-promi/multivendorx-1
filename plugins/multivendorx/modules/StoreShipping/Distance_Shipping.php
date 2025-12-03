@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX Distance Shipping Module.
  *
  * @class       Module class
- * @version     6.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class Distance_Shipping extends \WC_Shipping_Method {

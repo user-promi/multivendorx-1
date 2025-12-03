@@ -40,21 +40,21 @@ class Admin {
         add_action( 'woocommerce_product_data_panels', array( $this, 'add_additional_product_data_panels' ) );
         add_action( 'woocommerce_process_product_meta', array( $this, 'save_store_in_product' ) );
         add_action( 'wp_ajax_search_stores', array( $this, 'multivendorx_get_stores' ) );
-        // For Variation
+        // For Variation.
         add_action( 'woocommerce_product_after_variable_attributes', array( $this, 'add_variation_settings' ), 10, 3 );
         add_action( 'woocommerce_save_product_variation', array( $this, 'save_commission_field_variations' ), 10, 2 );
-        // For Category
+        // For Category.
         add_action( 'product_cat_add_form_fields', array( $this, 'add_product_cat_commission_fields' ) );
         add_action( 'product_cat_edit_form_fields', array( $this, 'edit_product_cat_commission_fields' ), 10 );
         add_action( 'created_term', array( $this, 'save_product_cat_commission_fields' ), 10, 3 );
         add_action( 'edit_term', array( $this, 'save_product_cat_commission_fields' ), 10, 3 );
 
-        // add store tab in coupons section backend
+        // add store tab in coupons section backend.
         add_filter( 'woocommerce_coupon_data_tabs', array( $this, 'add_store_tab_in_coupon' ) );
         add_action( 'woocommerce_coupon_data_panels', array( $this, 'add_content_in_store_tab' ), 10, 1 );
         add_action( 'woocommerce_coupon_options_save', array( $this, 'save_store_in_coupon' ), 10, 2 );
 
-        // Display radios after order actions for COD order if shipping not found
+        // Display radios after order actions for COD order if shipping not found.
         add_action( 'add_meta_boxes', array( $this, 'add_option_for_payment' ), 10, 2 );
         add_action( 'woocommerce_process_shop_order_meta', array( $this, 'save_option_for_payment' ) );
     }
@@ -238,7 +238,7 @@ class Admin {
         if ( get_current_screen()->id === 'toplevel_page_multivendorx' ) {
             wp_enqueue_script( 'wp-element' );
             wp_enqueue_editor();
-            // Support for media
+            // Support for media.
             wp_enqueue_media();
             FrontendScripts::admin_load_scripts();
             FrontendScripts::enqueue_script( 'multivendorx-components-script' );

@@ -2,7 +2,11 @@
 /**
  * Store tabs template.
  *
- * @package multivendorx
+ * Override this template by copying it to yourtheme/dc-woocommerce-multi-vendor/store/store-tabs.php
+ *
+ * @package     MultiVendorX/Templates
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

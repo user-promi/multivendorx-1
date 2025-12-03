@@ -1,8 +1,12 @@
 <?php
 /**
- * Template for displaying the Q&A tab on single product pages.
+ * Template for displaying the Q&A tab on the store page.
  *
- * @package MultiVendorX
+ * Override this template by copying it to yourtheme/dc-woocommerce-multi-vendor/store/single-product-qna-tab.php
+ *
+ * @package     MultiVendorX/Templates
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
  */
 
 use MultiVendorX\QuestionsAnswers\Util;

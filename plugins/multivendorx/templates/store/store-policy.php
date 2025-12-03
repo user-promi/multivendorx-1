@@ -2,11 +2,11 @@
 /**
  * The template for displaying single product page vendor tab
  *
- * Override this template by copying it to yourtheme/MultiVendorX/policies-tab.php
+ * Override this template by copying it to yourtheme/dc-woocommerce-multi-vendor/store/store-policy.php
  *
+ * @package     MultiVendorX/Templates
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
- * @package MultiVendorX/Templates
- * @version   2.3.0
  */
 
 use MultiVendorX\Store\StoreUtil;

@@ -1,7 +1,19 @@
 <?php
+/**
+ * MultiVendorX Geolocation Module.
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\Geolocation;
 
+/**
+ * MultiVendorX Geolocation Module.
+ *
+ * @class       Module class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class StoreGeolocation {
     /**
      * Store object.
@@ -27,7 +39,7 @@ class StoreGeolocation {
      */
     private $meta_fields = array(
         'location_address' => 'store_location_address',
-        'address'          => 'store_address', // Keep both for compatibility
+        'address'          => 'store_address', // Keep both for compatibility.
         'location_lat'     => 'store_location_lat',
         'location_lng'     => 'store_location_lng',
         'city'             => 'store_city',

@@ -165,7 +165,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -180,12 +180,12 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         try {
             // Check if CSV download is requested.
             $format = $request->get_param( 'format' );
-            if ( $format === 'csv' ) {
+            if ( 'csv' === $format ) {
                 return $this->download_transaction_csv( $request );
             }
 
-            $limit         = intval( $request->get_param( 'row' ) ) ?: 10;
-            $page          = intval( $request->get_param( 'page' ) ) ?: 1;
+            $limit         = intval( $request->get_param( 'row' ) ) ? intval( $request->get_param( 'row' ) ) : 10;
+            $page          = intval( $request->get_param( 'page' ) ) ? intval( $request->get_param( 'page' ) ) : 1;
             $offset        = ( $page - 1 ) * $limit;
             $count         = $request->get_param( 'count' );
             $store_id      = intval( $request->get_param( 'store_id' ) );
@@ -201,10 +201,10 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             $order              = strtoupper( sanitize_text_field( $request->get_param( 'order' ) ) );
 
             if ( $start_date ) {
-                $start_date = date( 'Y-m-d H:i:s', strtotime( $start_date ) );
+                $start_date = gmdate( 'Y-m-d H:i:s', strtotime( $start_date ) );
             }
             if ( $end_date ) {
-                $end_date = date( 'Y-m-d H:i:s', strtotime( $end_date ) );
+                $end_date = gmdate( 'Y-m-d H:i:s', strtotime( $end_date ) );
             }
 
             $args = array();
@@ -263,8 +263,8 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
                         'status'           => $row['status'],
                         'payment_method'   => $row['payment_method'] ?? '',
                         'account_number'   => $store ? $store->get_meta( Utill::STORE_SETTINGS_KEYS['account_number'] ) : '',
-                        'credit'           => $row['entry_type'] === 'Cr' ? $row['amount'] : 0,
-                        'debit'            => $row['entry_type'] === 'Dr' ? $row['amount'] : 0,
+                        'credit'           => 'Cr' === $row['entry_type'] ? $row['amount'] : 0,
+                        'debit'            => 'Dr' === $row['entry_type'] ? $row['amount'] : 0,
                         'date'             => $row['created_at'],
                         'order_details'    => $row['order_id'],
                         'transaction_type' => $row['transaction_type'],
@@ -311,7 +311,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
     /**
      * Download transactions as CSV
      *
-     * @param object $request
+     * @param object $request Request object.
      */
     private function download_transaction_csv( $request ) {
         $store_id           = intval( $request->get_param( 'store_id' ) );
@@ -339,8 +339,8 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             $args['entry_type'] = $transaction_status;
         }
         if ( ! empty( $start_date ) && ! empty( $end_date ) ) {
-            $args['start_date'] = date( 'Y-m-d 00:00:00', strtotime( $start_date ) );
-            $args['end_date']   = date( 'Y-m-d 23:59:59', strtotime( $end_date ) );
+            $args['start_date'] = gmdate( 'Y-m-d 00:00:00', strtotime( $start_date ) );
+            $args['end_date']   = gmdate( 'Y-m-d 23:59:59', strtotime( $end_date ) );
         }
 
         // If specific IDs are requested (selected rows from bulk action).
@@ -390,7 +390,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             $store_name = $store ? $store->get( 'name' ) : '';
 
             // Format date.
-            $date = ! empty( $transaction['created_at'] ) ? date( 'M j, Y', strtotime( $transaction['created_at'] ) ) : '-';
+            $date = ! empty( $transaction['created_at'] ) ? gmdate( 'M j, Y', strtotime( $transaction['created_at'] ) ) : '-';
 
             fputcsv(
                 $csv_output,
@@ -404,7 +404,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
 					'Dr' === $transaction['entry_type'] ? $transaction['amount'] : 0,
 					$transaction['balance'],
 					$transaction['status'],
-					$transaction['payment_method'] ? $transaction['payment_method'] ? '',
+					$transaction['payment_method'] ? $transaction['payment_method'] : '',
 					$transaction['narration'],
                 )
             );
@@ -435,7 +435,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
         header( 'Pragma: no-cache' );
         header( 'Expires: 0' );
-
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSV must output raw data
         echo $csv;
         exit;
     }
@@ -443,7 +443,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
     /**
      * Create transaction
      *
-     * @param object $request
+     * @param object $request Request object.
      */
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
@@ -455,7 +455,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
     /**
      * Get store balance
      *
-     * @param object $request
+     * @param object $request Request object.
      */
     public function get_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );

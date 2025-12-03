@@ -2,9 +2,11 @@
 /**
  * Store Shop Template
  *
- * @author      MultiVendorX
+ * Override this template by copying it to yourtheme/dc-woocommerce-multi-vendor/store/store.php
+ *
  * @package     MultiVendorX/Templates
- * @version     3.7
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

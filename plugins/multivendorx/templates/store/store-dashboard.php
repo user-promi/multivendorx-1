@@ -2,7 +2,11 @@
 /**
  * Template Name: Vendor Dashboard (No Header/Footer)
  *
- * @package MultivendorX
+ * Override this template by copying it to yourtheme/dc-woocommerce-multi-vendor/store/store-dashboard.php
+ *
+ * @package     MultivendorX/Templates
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
  */
 
 ?>
