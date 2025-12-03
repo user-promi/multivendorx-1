@@ -60,6 +60,7 @@ export { default as CommonPopup } from './components/CommonPopup';
 export { default as SuccessNotice } from './components/SuccessNotice';
 export { default as EmailsInput } from './components/EmailsInput';
 export { default as TourSetup } from './components/TourSetup';
+export { default as DynamicRowSetting } from './components/DynamicRowSetting';
 
 export {
     useModules,
