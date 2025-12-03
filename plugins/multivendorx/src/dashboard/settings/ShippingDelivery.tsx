@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { BasicInput, getApiLink, SuccessNotice, ToggleSetting } from "zyra";
+import { BasicInput, DynamicRowSetting, getApiLink, SuccessNotice, ToggleSetting } from "zyra";
 import ShippingRatesByCountry from "./ShippingRatesByCountry";
 import DistanceByZoneShipping from "./DistanceByZoneShipping";
 
@@ -269,7 +269,7 @@ const ShippingDelivery = () => {
                                     </div>
 
                                     {/* Distance-Cost Rules */}
-                                    <div className="form-group-wrapper">
+                                    {/* <div className="form-group-wrapper">
                                         <div className="form-group">
                                             <label>Distance-Cost Rules</label>
                                             <div className="shipping-country-wrapper">
@@ -327,7 +327,44 @@ const ShippingDelivery = () => {
                                                 <i className="adminlib-plus-circle-o"></i> Add Rule
                                             </button>
                                         </div>
+                                    </div> */}
+                                    {/* ---------------- DISTANCE - COST RULES ---------------- */}
+                                    <div className="form-group-wrapper">
+                                        <div className="form-group">
+                                            <label>Distance–Cost Rules</label>
+
+                                            <DynamicRowSetting
+                                                keyName="distance_rules"
+                                                addLabel="Add Rule"
+                                                value={formData.distance_rules || []}
+                                                template={{
+                                                    fields: [
+                                                        {
+                                                            key: "max_distance",
+                                                            type: "number",
+                                                            label: "Up to (km)",
+                                                            placeholder: "Up to km",
+                                                            step: "0.1",
+                                                            min: "0",
+                                                        },
+                                                        {
+                                                            key: "cost",
+                                                            type: "number",
+                                                            label: "Cost ($)",
+                                                            placeholder: "Cost $",
+                                                            step: "0.01",
+                                                            min: "0",
+                                                        },
+                                                    ],
+                                                }}
+                                                onChange={(updatedRules: any[]) => {
+                                                    const updated = { ...formData, distance_rules: updatedRules };
+                                                    setFormData(updated);
+                                                    autoSave(updated);
+                                                } } childrenRenderer={undefined}                                            />
+                                        </div>
                                     </div>
+
                                 </>
                             )}
                         </>

@@ -83,7 +83,7 @@ export const TableCell: React.FC<TableCellProps> = ({
     header = {},
     status = '',
     onChange = () => {},
-    rowId = null,
+    rowId,
     onToggleRow = () => {},
     rowData = {},
 }) => {
@@ -105,9 +105,9 @@ export const TableCell: React.FC<TableCellProps> = ({
         pink: ['permanently_rejected', 'inactive']
     };
     const getStatusColor = (status: string = '') => {
-        // const key = status.toLowerCase();
+        const key = status.toLowerCase();
         for (const color in statusGroups) {
-            if (statusGroups[color].includes(status)) {
+            if (statusGroups[color].includes(key)) {
                 return color;
             }
         }
@@ -304,8 +304,6 @@ export const TableCell: React.FC<TableCellProps> = ({
                             </div>
                         )}
                     </div>
-
-
                 </div>
 
             );
@@ -607,62 +605,6 @@ const Table: React.FC<TableProps> = ({
                     }
                 </div>
             )}
-            {/* {(typeCounts?.length > 0 || searchFilter) && (
-                <div className="admin-top-filter">
-                    <div className="filter-wrapper">
-                        {typeCounts ? (
-                            typeCounts.length > 0 ? (
-                                <>
-                                    {typeCounts.map((countInfo, index) => (
-                                        <div
-                                            key={index}
-                                            role="button"
-                                            tabIndex={0}
-                                            onClick={() => setFilterData({ typeCount: countInfo.key })}
-                                            className={
-                                                countInfo.key === typeCountActive
-                                                    ? "filter-item active"
-                                                    : "filter-item"
-                                            }
-                                        >
-                                            {`${countInfo.name} (${countInfo.count})`}
-                                        </div>
-                                    ))}
-                                </>
-                            ) : (
-                                <span>No types found</span>
-                            )
-                        ) : (
-                            <>
-                                <Skeleton variant="text" width={100} />
-                                <Skeleton variant="text" width={120} />
-                                <Skeleton variant="text" width={90} />
-                            </>
-                        )}
-
-                    </div>
-                    <div className="table-action-wrapper">
-                        {searchFilter && (
-                            <div className="search-field">
-                                {searchFilter?.map((filter) => (
-                                    <React.Fragment key={filter.name}>
-                                        {filter.render(handleFilterChange, filterData[filter.name])}
-                                    </React.Fragment>
-                                ))}
-                            </div>
-                        )}
-                        {actionButton && (
-                            <div className="action-wrapper">
-                                {actionButton?.map((filter) => (
-                                    <React.Fragment key={filter.name}>
-                                        {filter.render(handleFilterChange, filterData[filter.name])}
-                                    </React.Fragment>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                </div>
-            )} */}
 
             {loading ? (
                 <LoadingTable />

@@ -58,14 +58,12 @@ const productTypeOptions = [
 ];
 const AllProduct: React.FC = () => {
     const [data, setData] = useState<ProductRow[]>([]);
-
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: 0,
         pageSize: 10,
     });
-
     const [AddProduct, setAddProduct] = useState(false);
     const [categoriesList, setCategoriesList] = useState<{ id: number; name: string }[]>([]);
     const [pageCount, setPageCount] = useState(0);
