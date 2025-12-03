@@ -11,7 +11,29 @@ import {
     SelectInput,
     TextArea,
 } from 'zyra';
-
+const demoData = [
+    {
+        id: "cat1",
+        name: "Category 1",
+        children: [
+            { id: "sub1", name: "sub category 1" },
+            { id: "sub2", name: "sub category 2" },
+            {
+                id: "sub3",
+                name: "sub category 3",
+                children: [
+                    { id: "child1", name: "sub 1" },
+                    { id: "child2", name: "sub 2" },
+                    { id: "child3", name: "sub 3" },
+                ],
+            },
+            { id: "sub4", name: "sub category 4" },
+        ],
+    },
+    { id: "cat2", name: "Category 2" },
+    { id: "cat3", name: "Category 3" },
+    { id: "cat4", name: "Category 4" },
+];
 const AddProduct = () => {
     const location = useLocation();
 
@@ -89,7 +111,91 @@ const AddProduct = () => {
     const [showAddNew, setShowAddNew] = useState(false);
     const [visibility, setVisibility] = useState('shop_search');
     const wrapperRef = useRef(null);
+    const [selectedCat, setSelectedCat] = useState("");
+    const [selectedSub, setSelectedSub] = useState("");
+    const [selectedChild, setSelectedChild] = useState("");
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+                // Reset all selections
+                setSelectedCat("");
+                setSelectedSub("");
+                setSelectedChild("");
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    // ------------------ CLICK HANDLERS ------------------
+    const handleCategoryClick = (catId) => {
+        setSelectedCat(catId);
+        setSelectedSub("");
+        setSelectedChild("");
+    };
+    const handleSubClick = (subId) => {
+        setSelectedSub(subId);
+        setSelectedChild("");
+    };
+    const handleChildClick = (childId) => {
+        setSelectedChild(childId);
+    };
+
+    const handlePathClick = (level) => {
+        if (level === "category") {
+            setSelectedSub("");
+            setSelectedChild("");
+        }
+        if (level === "sub") {
+            setSelectedChild("");
+        }
+    };
+
+    const printPath = () => {
+        const cat = demoData.find((c) => c.id === selectedCat);
+        const sub = cat?.children?.find((s) => s.id === selectedSub);
+        const child = sub?.children?.find((c) => c.id === selectedChild);
+
+        return (
+            <>
+                {cat && (
+                    <span
+                        
+                        onClick={() => handlePathClick("category")}
+                    >
+                        {cat.name}
+                    </span>
+                )}
+                {sub && (
+                    <>
+                        {" / "}
+                        <span
+                            
+                            onClick={() => handlePathClick("sub")}
+                        >
+                            {sub.name}
+                        </span>
+                    </>
+                )}
+                {child && (
+                    <>
+                        {" / "}
+                        <span>{child.name}</span>
+                    </>
+                )}
+            </>
+        );
+    };
+
+    const resetSelection = () => {
+        setSelectedCat("");
+        setSelectedSub("");
+        setSelectedChild("");
+    };
+    // category end
     useEffect(() => {
         function handleClick(e) {
             if (!wrapperRef.current) return;
@@ -1428,11 +1534,11 @@ console.log('product', product)
                                         <label htmlFor="title">
                                             Attribute value
                                         </label>
-                                        <div className="attribute-value">
+                                        <div className="dropdown-field">
                                             <TextArea
                                                 name="short_description"
                                                 wrapperClass="setting-from-textarea"
-                                                inputClass="textarea-input"
+                                                inputClass="textarea-input dropdown-input"
                                                 descClass="settings-metabox-description"
                                                 value={
                                                     product.short_description
@@ -1602,7 +1708,7 @@ console.log('product', product)
                                                 <input
                                                     type="checkbox"
                                                     checked={product.virtual}
-                                                    // onChange={(e) => handleChange("virtual", e.target.checked)}
+                                                // onChange={(e) => handleChange("virtual", e.target.checked)}
                                                 />
                                                 Enabled
                                             </div>
@@ -1612,7 +1718,7 @@ console.log('product', product)
                                                     checked={
                                                         product.downloadable
                                                     }
-                                                    // onChange={(e) => handleChange("downloadable", e.target.checked)}
+                                                // onChange={(e) => handleChange("downloadable", e.target.checked)}
                                                 />
                                                 Downloadable
                                             </div>
@@ -1622,7 +1728,7 @@ console.log('product', product)
                                                     checked={
                                                         product.downloadable
                                                     }
-                                                    // onChange={(e) => handleChange("downloadable", e.target.checked)}
+                                                // onChange={(e) => handleChange("downloadable", e.target.checked)}
                                                 />
                                                 Virtual
                                             </div>
@@ -1632,7 +1738,7 @@ console.log('product', product)
                                                     checked={
                                                         product.downloadable
                                                     }
-                                                    // onChange={(e) => handleChange("downloadable", e.target.checked)}
+                                                // onChange={(e) => handleChange("downloadable", e.target.checked)}
                                                 />
                                                 Manage stock
                                             </div>
@@ -1817,12 +1923,12 @@ console.log('product', product)
                                     <CalendarInput
                                         wrapperClass=""
                                         inputClass=""
-                                        // onChange={(range: any) => {
-                                        //    updateFilter('date', {
-                                        //       start_date: range.startDate,
-                                        //       end_date: range.endDate,
-                                        //    });
-                                        // }}
+                                    // onChange={(range: any) => {
+                                    //    updateFilter('date', {
+                                    //       start_date: range.startDate,
+                                    //       end_date: range.endDate,
+                                    //    });
+                                    // }}
                                     />
                                 </div>
                             </div>
@@ -1839,6 +1945,105 @@ console.log('product', product)
                             </div>
                         </div>
                         <div className="card-body">
+                            <div className="category-breadcrumb-wrapper">
+                                <div className="category-breadcrumb">
+                                    {printPath()}
+                                </div>
+                                {(selectedCat || selectedSub || selectedChild) && (
+                                    <button
+                                        onClick={resetSelection}
+                                        className="admin-btn btn-red"
+                                    >
+                                        Reset
+                                    </button>
+                                )}
+                            </div>
+
+                            <div className="form-group-wrapper">
+                                <div className="category-wrapper" ref={wrapperRef}>
+                                    <ul className="settings-form-group-radio">
+                                        {demoData.map((cat) => (
+                                            <li
+                                                key={cat.id}
+                                                className="category"
+                                                style={{
+                                                    display:
+                                                        !selectedCat || selectedCat === cat.id ? "block" : "none",
+                                                }}
+                                            >
+                                                <div className={`radio-basic-input-wrap ${selectedCat === cat.id ? "radio-select-active" : ""
+                                                    }`}>
+                                                    <input
+                                                        type="radio"
+                                                        name="category"
+                                                        className="setting-form-input"
+                                                        checked={selectedCat === cat.id}
+                                                        onChange={() => handleCategoryClick(cat.id)}
+                                                    />
+                                                    <label htmlFor="">{cat.name} </label>
+                                                </div>
+                                                {selectedCat === cat.id && cat.children && (
+                                                    <ul className="settings-form-group-radio">
+                                                        {cat.children.map((sub) => (
+                                                            <li
+                                                                key={sub.id}
+                                                                className="sub-category"
+                                                                style={{
+                                                                    display:
+                                                                        !selectedSub || selectedSub === sub.id
+                                                                            ? "block"
+                                                                            : "none",
+                                                                }}
+                                                            >
+                                                                <div className={`radio-basic-input-wrap ${selectedSub === sub.id ? "radio-select-active" : ""
+                                                                    }`}>
+                                                                    <input
+                                                                        type="radio"
+                                                                        name="sub-category"
+                                                                        checked={selectedSub === sub.id}
+                                                                        className="setting-form-input"
+                                                                        onChange={() => handleSubClick(sub.id)}
+                                                                    />
+                                                                    <label> {sub.name} </label>
+                                                                </div>
+                                                                {/* CHILD LEVEL */}
+                                                                {selectedSub === sub.id && sub.children && (
+                                                                    <ul className="settings-form-group-radio">
+                                                                        {sub.children.map((child) => (
+                                                                            <li
+                                                                                key={child.id}
+                                                                                className="sub-category"
+                                                                                style={{
+                                                                                    display:
+                                                                                        !selectedChild || selectedChild === child.id
+                                                                                            ? "block"
+                                                                                            : "none",
+                                                                                }}
+                                                                            >
+                                                                                <div className={`radio-basic-input-wrap ${selectedChild === child.id ? "radio-select-active" : ""
+                                                                                    }`}>
+                                                                                    <input
+                                                                                        type="radio"
+                                                                                        name="child-category"
+                                                                                        className="setting-form-input"
+                                                                                        checked={selectedChild === child.id}
+                                                                                        onChange={() => handleChildClick(child.id)}
+                                                                                    />
+                                                                                    <label htmlFor={child.id}> {child.name} </label>
+                                                                                </div>
+                                                                            </li>
+                                                                        ))}
+                                                                    </ul>
+                                                                )}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                )}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </div>
                             <div className="form-group-wrapper">
                                 <div className="form-group">
                                     <div className="category-wrapper">
@@ -1903,31 +2108,19 @@ console.log('product', product)
                                     </div>
                                 </div>
                             </div>
-                            {/* <div className="form-group-wrapper">
-                        <div className="form-group">
-                           <label htmlFor="product-name">Product tag</label>
-                           <SelectInput
-                              name="payment_method"
-                              options={paymentOptions}
-                              type="single-select"
-                           />
-                        </div>
-                     </div> */}
 
                             <div className="form-group-wrapper">
                                 <div className="form-group">
                                     <label>Product Tags</label>
 
-                                    {/* SHOW CURRENT TAGS */}
                                     <div className="tag-list">
                                         {product.tags?.map((tag) => (
                                             <span
-                                                className="tag-item"
+                                                className="admin-badge blue"
                                                 key={tag.id}
                                             >
                                                 {tag.name}
-                                                <button
-                                                    className="remove-tag"
+                                                <span
                                                     onClick={() =>
                                                         setProduct(prev => ({
                                                             ...prev,
@@ -1935,14 +2128,14 @@ console.log('product', product)
                                                         }))
                                                     }
                                                 >
-                                                    ×
-                                                </button>
+                                                    <i className="delete-icon adminlib-cross"></i>
+                                                </span>
                                             </span>
                                         ))}
                                     </div>
 
                                     <div
-                                        className="tag-input-box"
+                                        className="dropdown-field"
                                     >
                                         <input
                                             type="text"
@@ -1955,19 +2148,21 @@ console.log('product', product)
                                                 addTag(tagInput)
                                             }
                                             placeholder="Type tag…"
+                                            className="basic-input dropdown-input"
                                         />
 
                                         <button
-                                            className="add-btn"
+                                            className="admin-btn btn-green"
                                             onClick={() => addTag(tagInput)}
                                         >
                                             Add
                                         </button>
 
                                         {suggestions.length > 0 && (
-                                            <div className="dropdown">
+                                            <div className="input-dropdown">
+                                                <ul>
                                                 {suggestions.map((tag) => (
-                                                    <div
+                                                    <li
                                                         key={tag.id || tag.name}
                                                         className="dropdown-item"
                                                         onClick={() =>
@@ -1975,8 +2170,9 @@ console.log('product', product)
                                                         }
                                                     >
                                                         {tag.name}
-                                                    </div>
+                                                    </li>
                                                 ))}
+                                                </ul>
                                             </div>
                                         )}
                                     </div>
