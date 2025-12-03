@@ -6,6 +6,7 @@
  */
 
 namespace MultiVendorX\Knowledgebase;
+use MultiVendorX\Utill;
 
 /**
  * Class Frontend for knowledgebase.

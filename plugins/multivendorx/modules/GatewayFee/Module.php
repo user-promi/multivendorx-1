@@ -6,6 +6,7 @@
  */
 
 namespace MultiVendorX\GatewayFee;
+use MultiVendorX\Utill;
 
 /**
  * MultiVendorX Marketplace Fee Module class

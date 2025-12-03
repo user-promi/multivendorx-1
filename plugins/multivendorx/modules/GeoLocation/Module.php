@@ -1,6 +1,6 @@
 <?php
 namespace MultiVendorX\GeoLocation;
-
+use MultiVendorX\Utill;
 class Module {
     private $container       = array();
     private static $instance = null;

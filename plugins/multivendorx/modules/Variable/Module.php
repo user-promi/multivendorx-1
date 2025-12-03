@@ -6,6 +6,7 @@
  */
 
 namespace MultiVendorX\Variable;
+use MultiVendorX\Utill;
 
 /**
  * MultiVendorX Variable Module class

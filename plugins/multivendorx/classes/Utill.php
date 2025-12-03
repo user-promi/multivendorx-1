@@ -43,7 +43,7 @@ class Utill {
 
     const ADMIN_SETTINGS = array(
         'general'                        => 'multivendorx_general_settings',
-        'store-registration-form'        => 'multivendorx_store-registration-form_settings',
+        'store-registration-form'        => 'multivendorx_store_registration_form_settings',
         'menu-manager'                   => 'multivendorx_menu_manager_settings',
         'privacy'                        => 'multivendorx_privacy_settings',
         'coupon'                         => 'multivendorx_coupon_settings',
