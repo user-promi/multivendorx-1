@@ -353,7 +353,7 @@ const AllProduct: React.FC = () => {
                                 icon: 'adminlib-edit',
                                 onClick: (rowData) => {
                                     if (appLocalizer.permalink_structure) {
-                                        navigate(`/${appLocalizer.dashboard_slug}/products/edit/${rowData.id}`);
+                                        navigate(`/${appLocalizer.dashboard_slug}/products/edit/${rowData.id}/`);
                                     } else {
                                         navigate(`?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=edit&context_id=${rowData.id}`);
                                     }

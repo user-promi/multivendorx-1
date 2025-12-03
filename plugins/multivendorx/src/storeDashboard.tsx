@@ -147,7 +147,7 @@ const Dashboard = () => {
     const handleTabClick = (tab) => {
         const base = getBasePath();
         if (appLocalizer.permalink_structure) {
-            navigate(`${base}/${appLocalizer.dashboard_slug}/${tab}`);
+            navigate(`${base}/${appLocalizer.dashboard_slug}/${tab}/`);
         } else {
             navigate(
                 `${base}/?page_id=${appLocalizer.dashboard_page_id}&segment=${tab}`

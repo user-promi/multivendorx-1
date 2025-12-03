@@ -613,6 +613,7 @@ class FrontendScripts {
                         'registration_page'        => esc_url( get_permalink( (int) MultiVendorX()->setting->get_setting( 'store_registration_page' ) ) ),
                         'weight_unit'              => get_option( 'woocommerce_weight_unit' ),
                         'dimension_unit'           => get_option( 'woocommerce_dimension_unit' ),
+                        'random_string_generate'   => wp_generate_uuid4(),
                     ),
                 ),
                 'multivendorx-registration-form-script'  => array(

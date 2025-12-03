@@ -244,6 +244,7 @@ const AddProduct = () => {
                 )
                 .then((res) => {
                     console.log('Product created:', res.data);
+                    window.location.reload();
                 });
         } catch (error) {
             console.error('Error:', error.response);
@@ -278,20 +279,6 @@ const AddProduct = () => {
                 setExistingTags(res.data);
             });
     }, []);
-
-    const createTag = async (tagName) => {
-        const res = await axios.post(
-            `${appLocalizer.apiUrl}/wc/v3/products/tags`,
-            { name: tagName },
-            {
-                headers: {
-                    'X-WP-Nonce': appLocalizer.nonce,
-                },
-            }
-        );
-
-        return res.data.name;
-    };
 
     const handleTagInput = (value) => {
         setTagInput(value);
@@ -329,6 +316,50 @@ const AddProduct = () => {
         setSuggestions([]);
     };
 
+    const addDownloadableFile = () => {
+        const newFile = {
+            id: appLocalizer.random_string_generate,
+            name: "",
+            file: ""
+        };
+        setProduct(prev => ({
+            ...prev,
+            downloads: [...prev.downloads, newFile]
+        }));
+    };
+
+    const updateDownloadableFile = (id, field, value) => {
+        setProduct(prev => ({
+            ...prev,
+            downloads: prev.downloads.map(f =>
+                f.id === id ? { ...f, [field]: value } : f
+            )
+        }));
+    };
+
+    const removeDownloadableFile = (id) => {
+        setProduct(prev => ({
+            ...prev,
+            downloads: prev.downloads.filter(f => f.id !== id)
+        }));
+    };
+
+    const openMediaUploader = (id) => {
+        const frame = wp.media({
+            title: "Select or Upload File",
+            button: { text: "Use this file" },
+            multiple: false
+        });
+
+        frame.on("select", () => {
+            const attachment = frame.state().get("selection").first().toJSON();
+            updateDownloadableFile(id, "file", attachment.url);
+        });
+
+        frame.open();
+    };
+
+console.log('product', product)
     return (
         <>
             <div className="page-title-wrapper">
@@ -838,45 +869,92 @@ const AddProduct = () => {
                                 </div>
                             </div>
                             <div className="card-body">
-                                <div className="shipping-country-wrapper">
-                                    <div className="shipping-country">
-                                        <div className="country item">
-                                            <SelectInput
-                                                name="shipping_class"
-                                                options={shippingClasses}
-                                                value={product.shipping_class}
-                                                size="25%"
-                                                onChange={(selected) =>
-                                                    handleChange(
-                                                        'shipping_class',
-                                                        selected.value
-                                                    )
-                                                }
-                                            />
-                                            <BasicInput
-                                                name="product_height"
-                                                wrapperClass="setting-form-input"
-                                                value={product.product_height}
-                                                placeholder="Height"
-                                                onChange={(e) =>
-                                                    handleChange(
-                                                        'product_height',
-                                                        e.target.value
-                                                    )
-                                                }
-                                            />
-                                            <div className="admin-btn btn-purple">
-                                                Upload file
+
+                                {product.downloads?.map((file, index) => (
+                                    <div key={file.id} className="shipping-country-wrapper">
+                                        <div className="shipping-country">
+                                            <div className="country item">
+
+                                                <BasicInput
+                                                    name="file_name"
+                                                    wrapperClass="setting-form-input"
+                                                    value={file.name}
+                                                    placeholder="File name"
+                                                    onChange={(e) =>
+                                                        updateDownloadableFile(file.id, "name", e.target.value)
+                                                    }
+                                                />
+
+                                                <BasicInput
+                                                    name="file_url"
+                                                    wrapperClass="setting-form-input"
+                                                    value={file.file}
+                                                    placeholder="File URL"
+                                                    onChange={(e) =>
+                                                        updateDownloadableFile(file.id, "file", e.target.value)
+                                                    }
+                                                />
+
+                                                <div
+                                                    className="admin-btn btn-purple"
+                                                    onClick={() => openMediaUploader(file.id)}
+                                                >
+                                                    Upload file
+                                                </div>
+
+                                                <div
+                                                    className="delete-icon adminlib-delete"
+                                                    onClick={() => removeDownloadableFile(file.id)}
+                                                />
                                             </div>
-                                            <div className="delete-icon adminlib-delete"></div>
                                         </div>
                                     </div>
+                                ))}
+
+                                <div className="admin-btn btn-purple-bg" onClick={addDownloadableFile}>
+                                    <i className="adminlib-plus-circle-o"></i> Add new
                                 </div>
-                                <div className="admin-btn btn-purple-bg">
-                                    <i className="adminlib-plus-circle-o"></i>{' '}
-                                    Add new
+
+
+                                <div className="form-group-wrapper">
+                                    <div className="form-group">
+                                        <label htmlFor="product-name">
+                                            Download limit
+                                        </label>
+                                        <BasicInput
+                                            name="download_limit"
+                                            type="number"
+                                            wrapperClass="setting-form-input"
+                                            value={product.download_limit}
+                                            onChange={(e) =>
+                                                handleChange(
+                                                    'download_limit',
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label htmlFor="product-name">
+                                            Download expiry
+                                        </label>
+                                        <BasicInput
+                                            name="download_expiry"
+                                            type="number"
+                                            wrapperClass="setting-form-input"
+                                            value={product.download_expiry}
+                                            onChange={(e) =>
+                                                handleChange(
+                                                    'download_expiry',
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
+                                    </div>
                                 </div>
                             </div>
+
                         </div>
                     )}
 
