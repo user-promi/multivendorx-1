@@ -3,6 +3,7 @@
 namespace MultiVendorX\RestAPI\Controllers;
 
 use MultiVendorX\Modules;
+use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
 

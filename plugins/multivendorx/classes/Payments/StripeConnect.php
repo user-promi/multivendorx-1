@@ -4,6 +4,8 @@ namespace MultiVendorX\Payments;
 use Exception;
 use MultiVendorX\Store\Store;
 use MultiVendorX\Store\StoreUtil;
+use MultiVendorX\Utill;
+
 defined( 'ABSPATH' ) || exit;
 
 class StripeConnect {

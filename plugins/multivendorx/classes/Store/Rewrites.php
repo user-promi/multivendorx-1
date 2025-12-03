@@ -2,6 +2,8 @@
 
 namespace MultiVendorX\Store;
 
+use MultiVendorX\Utill;
+
 defined( 'ABSPATH' ) || exit;
 
 /**

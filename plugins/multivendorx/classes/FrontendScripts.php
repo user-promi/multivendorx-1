@@ -8,6 +8,7 @@
 namespace MultiVendorX;
 
 use MultiVendorX\Store\StoreUtil;
+use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -571,7 +572,6 @@ class FrontendScripts {
                         'nonce'                    => wp_create_nonce( 'wp_rest' ),
                         'woo_nonce'                => wp_create_nonce( 'wc_store_api' ),
                         'site_url'                 => site_url(),
-                        // 'country_list'             => WC()->countries->get_shipping_countries(),
                         'state_list'               => WC()->countries->get_states(),
                         'country_list'             => $country_list,
                         'color'                    => MultiVendorX()->setting->get_setting( 'store_color_settings' ),
@@ -606,7 +606,7 @@ class FrontendScripts {
                         'current_user'             => wp_get_current_user(),
                         'current_user_image'       => get_avatar_url( get_current_user_id(), array( 'size' => 48 ) ),
                         'user_logout_url'          => esc_url( wp_logout_url( get_permalink( (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' ) ) ) ),
-                        'store_ids'                => StoreUtil::get_stores_from_user_id( get_current_user_id() ),
+                        'store_ids'                => $store_ids,
                         'active_store'             => get_user_meta( get_current_user_id(), Utill::POST_META_SETTINGS['active_store'], true ),
                         'dashboard_page_id'        => (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' ),
                         'dashboard_slug'           => (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' ) ? get_post_field( 'post_name', (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' ) ) : 'dashboard',

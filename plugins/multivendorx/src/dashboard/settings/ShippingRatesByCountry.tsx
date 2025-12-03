@@ -89,7 +89,7 @@ const ShippingRatesByCountry: React.FC = () => {
                         })),
                     }))
                 ),
-                
+
             };
 
             const response = await axios.put(

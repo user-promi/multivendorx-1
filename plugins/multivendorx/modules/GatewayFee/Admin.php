@@ -10,6 +10,7 @@
 namespace MultiVendorX\GatewayFee;
 
 use MultiVendorX\Commission\CommissionUtil;
+use MultiVendorX\Utill;
 
 /**
  * MultiVendorX Gateway Fee Admin class.

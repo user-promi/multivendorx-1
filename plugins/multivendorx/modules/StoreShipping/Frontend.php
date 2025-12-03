@@ -8,6 +8,7 @@
 namespace MultiVendorX\StoreShipping;
 
 use MultiVendorX\FrontendScripts;
+use MultiVendorX\Utill;
 
 /**
  * MultiVendorX Store Review Frontend class

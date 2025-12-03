@@ -6,7 +6,7 @@
  */
 
 namespace MultiVendorX\Emails;
-
+use MultiVendorX\Utill;
 /**
  * MultiVendorX New Store Email
  *
