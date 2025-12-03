@@ -6,7 +6,7 @@
  */
 
 namespace MultiVendorX\Compliance;
-
+use MultiVendorX\Utill;
 /**
  * MultiVendorX Report Abuse Module class
  *

@@ -6,7 +6,7 @@
  */
 
 namespace MultiVendorX\StoreShipping;
-
+use MultiVendorX\Utill;
 /**
  * MultiVendorX Store Shipping Admin Class
  *

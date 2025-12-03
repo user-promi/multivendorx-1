@@ -1,7 +1,7 @@
 <?php
 
 namespace MultiVendorX\Geolocation;
-
+use MultiVendorX\Utill;
 class StoreGeolocation {
 
     private $store_id;

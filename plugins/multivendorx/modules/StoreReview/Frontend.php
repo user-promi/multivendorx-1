@@ -8,6 +8,7 @@
 namespace MultiVendorX\StoreReview;
 
 use MultiVendorX\FrontendScripts;
+use MultiVendorX\Utill;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

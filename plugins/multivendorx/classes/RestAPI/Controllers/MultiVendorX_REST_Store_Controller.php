@@ -346,58 +346,51 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             if ( $count ) {
                 return StoreUtil::get_store_information( array( 'count' => true ) );
             }
-            
+
             $limit          = max( intval( $request->get_param( 'row' ) ), 10 );
             $page           = max( intval( $request->get_param( 'page' ) ), 1 );
             $offset         = ( $page - 1 ) * $limit;
-            
             $filter_status  = $request->get_param( 'filter_status' );
             $searchField    = sanitize_text_field( $request->get_param( 'searchField' ) );
             $start_date_raw = sanitize_text_field( $request->get_param( 'startDate' ) );
             $end_date_raw   = sanitize_text_field( $request->get_param( 'endDate' ) );
-            
-            // date convert
+
+            // Convert to proper timestamps
             $start_timestamp = ! empty( $start_date_raw ) ? strtotime( str_replace( 'T', ' ', preg_replace( '/\.\d+Z?$/', '', $start_date_raw ) ) ) : false;
             $end_timestamp   = ! empty( $end_date_raw ) ? strtotime( str_replace( 'T', ' ', preg_replace( '/\.\d+Z?$/', '', $end_date_raw ) ) ) : false;
-            
+
             $start_date = $start_timestamp ? date( 'Y-m-d 00:00:00', $start_timestamp ) : '';
             $end_date   = $end_timestamp ? date( 'Y-m-d 23:59:59', $end_timestamp ) : '';
-            
             $orderBy    = sanitize_text_field( $request->get_param( 'orderBy' ) );
             $order      = sanitize_text_field( $request->get_param( 'order' ) );
-            
+
             $args = array(
                 'limit'  => $limit,
                 'offset' => $offset,
-                'full'   => true,
             );
-            
-            // search
+
+            // Pass search to StoreUtil
             if ( $searchField ) {
                 $args['searchField'] = $searchField;
             } elseif ( $start_date && $end_date ) {
+                // Only apply date filter if no search
                 $args['start_date'] = $start_date;
                 $args['end_date']   = $end_date;
             }
-            
-            // status filter
+
             if ( ! empty( $filter_status ) ) {
                 $args['status'] = $filter_status;
             }
-            
-            // sorting
             if ( ! empty( $orderBy ) && ! empty( $order ) ) {
                 $args['orderBy'] = $orderBy;
                 $args['order']   = $order;
             }
-            
-            // Extra filters
+
             $filters = $request->get_param( 'filters' );
-            
+
             if ( ! empty( $filters ) ) {
                 $args['orderBy'] = $filters['sort'];
-            
-                // Category filter → convert category to store IDs
+
                 if ( ! empty( $filters['category'] ) ) {
                     $product_args = array(
                         'return'      => 'ids',
@@ -410,83 +403,94 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                             ),
                         ),
                     );
-            
+
                     $product_ids = wc_get_products( $product_args );
-            
-                    $store_ids = array();
-                    foreach ( $product_ids as $pid ) {
-                        $sid = get_post_meta( $pid, Utill::POST_META_SETTINGS['store_id'], true );
-                        if ( $sid ) {
-                            $store_ids[] = $sid;
+                    $store_ids   = array();
+
+                    foreach ( $product_ids as $product_id ) {
+                        $store_id = get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true );
+
+                        if ( ! empty( $store_id ) ) {
+							$store_ids[] = $store_id;
                         }
                     }
-            
-                    $args['ID'] = array_unique( array_filter( $store_ids ) );
+
+                    $store_ids  = array_unique( array_filter( $store_ids ) );
+                    $args['ID'] = $store_ids;
                 }
-            
-                // Product → get store ID
+
                 if ( ! empty( $filters['product'] ) ) {
-                    $sid = get_post_meta( $filters['product'], Utill::POST_META_SETTINGS['store_id'], true );
-                    $args['ID'] = $sid;
+                    $store_id   = get_post_meta( $filters['product'], Utill::POST_META_SETTINGS['store_id'], true );
+                    $args['ID'] = $store_id;
                 }
             }
-            
-            // Fetch stores using new architecture
             $stores = StoreUtil::get_store_information( $args );
-            
-            // Format API response
+
             $formatted_stores = array();
-            
             foreach ( $stores as $store ) {
-            
-                // Directly available from get_store_information(full=true)
-                $meta  = $store['meta'];
-                $users = $store['users'];
-            
-                $primary_owner_id = $users['primary_owner'];
-                $primary_owner    = get_userdata( $primary_owner_id );
-            
+                $store_meta = Store::get_store_by_id( (int) $store['ID'] );
                 $commission = CommissionUtil::get_commission_summary_for_store( (int) $store['ID'] );
-            
-                $formatted_stores[] = array(
-                    'id'                  => (int) $store['ID'],
-                    'store_name'          => $store['name'],
-                    'store_slug'          => $store['slug'],
-                    'status'              => $store['status'],
-            
-                    'email'               => $meta[ Utill::STORE_SETTINGS_KEYS['primary_email'] ] ?? '',
-                    'phone'               => $meta[ Utill::STORE_SETTINGS_KEYS['phone'] ]
-                                            ?? $meta[ Utill::STORE_SETTINGS_KEYS['_phone'] ]
-                                            ?? $meta[ Utill::STORE_SETTINGS_KEYS['contact_number'] ]
-                                            ?? '',
-            
-                    'primary_owner'       => $primary_owner,
-                    'primary_owner_image' => get_avatar( $primary_owner_id, 48 ),
-            
-                    'applied_on'          => $store['create_time'],
-            
-                    'store_image'         => $meta['image']  ?? '',
-                    'store_banner'        => $meta['banner'] ?? '',
-            
-                    'address_1'           => $meta[ Utill::STORE_SETTINGS_KEYS['address_1'] ] ?? '',
-            
-                    'image'               => ! empty( $meta[ Utill::STORE_SETTINGS_KEYS['image'] ] )
-                                            ? $meta[ Utill::STORE_SETTINGS_KEYS['image'] ]
-                                            : null,
-            
-                    'commission'          => $commission,
+                // Get primary owner information using Store object
+                $primary_owner_id = StoreUtil::get_primary_owner( $store['ID'] );
+                $primary_owner    = get_userdata( $primary_owner_id );
+
+                // Get store image and banner from meta
+                $store_image  = $store_meta->meta_data['image'] ?? '';
+                $store_banner = $store_meta->meta_data['banner'] ?? '';
+
+                $formatted_stores[] = apply_filters(
+                    'multivendorx_stores',
+                    array(
+                        'id'                  => (int) $store['ID'],
+                        'store_name'          => $store['name'],
+                        'store_slug'          => $store['slug'],
+                        'status'              => $store['status'],
+                        'email'               => $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['primary_email'] ] ?? '',
+                        'phone'               => $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['phone'] ] ?? $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['_phone'] ] ?? $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['contact_number'] ] ?? '',
+                        'primary_owner'       => $primary_owner,
+                        'primary_owner_image' => get_avatar( $primary_owner->ID, 48 ),
+                        'applied_on'          => $store['create_time'],
+                        'store_image'         => $store_image, // Add store image
+                        'store_banner'        => $store_banner, // Add store banner
+                        'address_1'           => $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['address_1'] ] ?? '',
+                        'image'               => ! empty( $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['image'] ] ) ? $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['image'] ] : null,
+                        'commission'          => $commission,
+                    )
                 );
             }
-            
+            $all          = StoreUtil::get_store_information( array( 'count' => true ) );
+            $active       = StoreUtil::get_store_information(
+                array(
+					'status' => 'active',
+					'count'  => true,
+				)
+            );
+            $pending      = StoreUtil::get_store_information(
+                array(
+					'status' => 'pending',
+					'count'  => true,
+				)
+            );
+            $under_review = StoreUtil::get_store_information(
+                array(
+					'status' => 'under_review',
+					'count'  => true,
+				)
+            );
+            $suspended    = StoreUtil::get_store_information(
+                array(
+					'status' => 'suspended',
+					'count'  => true,
+				)
+            );
+            $deactivated  = StoreUtil::get_store_information(
+                array(
+					'status' => 'deactivated',
+					'count'  => true,
+				)
+            );
 
-            $all          = StoreUtil::get_store_information( [ 'count' => true ] );
-            $active       = StoreUtil::get_store_information( [ 'status' => 'active', 'count' => true ] );
-            $pending      = StoreUtil::get_store_information( [ 'status' => 'pending', 'count' => true ] );
-            $under_review = StoreUtil::get_store_information( [ 'status' => 'under_review', 'count' => true ] );
-            $suspended    = StoreUtil::get_store_information( [ 'status' => 'suspended', 'count' => true ] );
-            $deactivated  = StoreUtil::get_store_information( [ 'status' => 'deactivated', 'count' => true ] );
-
-            $response = [
+            $response = array(
                 'stores'       => $formatted_stores,
                 'all'          => $all,
                 'active'       => $active,
@@ -494,8 +498,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 'under_review' => $under_review,
                 'suspended'    => $suspended,
                 'deactivated'  => $deactivated,
-            ];
-
+            );
             return rest_ensure_response( $response );
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log(

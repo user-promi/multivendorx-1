@@ -6,6 +6,8 @@
 
 namespace MultiVendorX\Store;
 
+use MultiVendorX\Utill;
+
 // Prevent direct access
 if ( ! defined( 'ABSPATH' ) ) {
     exit;

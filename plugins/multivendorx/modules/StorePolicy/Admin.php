@@ -6,7 +6,7 @@
  */
 
 namespace MultiVendorX\StorePolicy;
-
+use MultiVendorX\Utill;
 /**
  * MultiVendorX Store Policy Admin class
  *

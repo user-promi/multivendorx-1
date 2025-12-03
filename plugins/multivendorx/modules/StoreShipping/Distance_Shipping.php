@@ -1,7 +1,7 @@
 <?php
 
 namespace MultiVendorX\StoreShipping;
-
+use MultiVendorX\Utill;
 defined( 'ABSPATH' ) || exit;
 
 class Distance_Shipping extends \WC_Shipping_Method {

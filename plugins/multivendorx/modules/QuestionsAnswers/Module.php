@@ -6,6 +6,7 @@
  */
 
 namespace MultiVendorX\QuestionsAnswers;
+use MultiVendorX\Utill;
 
 /**
  * MultiVendorX Questions and answers Module class

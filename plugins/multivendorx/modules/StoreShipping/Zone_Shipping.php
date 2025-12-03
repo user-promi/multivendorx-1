@@ -3,6 +3,7 @@
 namespace MultiVendorX\StoreShipping;
 
 use MultiVendorX\StoreShipping\Util;
+use MultiVendorX\Utill;
 use WC_Shipping_Zones;
 defined( 'ABSPATH' ) || exit;
 

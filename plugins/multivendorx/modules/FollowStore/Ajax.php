@@ -6,6 +6,7 @@
  */
 
 namespace MultiVendorX\FollowStore;
+use MultiVendorX\Utill;
 
 /**
  * MultiVendorX Questions Answers Ajax class

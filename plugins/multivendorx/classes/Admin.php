@@ -9,6 +9,7 @@ namespace MultiVendorX;
 
 use MultiVendorX\Store\Store;
 use MultiVendorX\Commission\CommissionUtil;
+use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
 

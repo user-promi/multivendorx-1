@@ -3,7 +3,7 @@
  * Custom payment gateway class.
  */
 namespace MultiVendorX\Payments;
-
+use MultiVendorX\Utill;
 defined( 'ABSPATH' ) || exit;
 
 /**

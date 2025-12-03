@@ -405,6 +405,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId, dateRang
             },
         }).then((response) => {
             setData(response.data.transaction || []);
+
             const statuses = [
                 { key: 'all', name: 'All', count: response.data.all || 0 },
                 { key: 'completed', name: 'Completed', count: response.data.completed || 0 },
@@ -412,9 +413,11 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId, dateRang
                 { key: 'upcoming', name: 'Upcoming', count: response.data.upcoming || 0 },
                 { key: 'failed', name: 'Failed', count: response.data.failed || 0 },
             ];
-
-            setTransactionStatus(statuses);
-
+            
+            // keep only items whose count is NOT zero
+            const filteredStatuses = statuses.filter(item => item.count !== 0);
+            
+            setTransactionStatus(filteredStatuses);
         })
             .catch(() => setData([]));
     }
