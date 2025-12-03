@@ -26,6 +26,9 @@ const AddProduct = () => {
     const [product, setProduct] = useState({});
     const [shippingClasses, setShippingClasses] = useState([]);
 
+    const [featuredImage, setFeaturedImage] = useState(null);
+    const [galleryImages, setGalleryImages] = useState([]);
+
     useEffect(() => {
         if (!productId) return;
 
@@ -34,6 +37,13 @@ const AddProduct = () => {
                 headers: { 'X-WP-Nonce': appLocalizer.nonce },
             })
             .then(function (res) {
+                const images = res.data.images || [];
+
+                if (images.length > 0) {
+                    setFeaturedImage(images[0]);
+                }
+
+                setGalleryImages(images.slice(1));
                 setProduct(res.data);
             });
     }, [productId]);
@@ -225,9 +235,20 @@ const AddProduct = () => {
     };
 
     const createProduct = () => {
+        const imagePayload = [];
+
+        if (featuredImage) {
+            imagePayload.push({ id: featuredImage.id });
+        }
+
+        galleryImages.forEach(img => {
+            imagePayload.push({ id: img.id });
+        });
+
         try {
             const payload = {
                 ...product,
+                images: imagePayload,
                 meta_data: [
                     {
                         key: 'multivendorx_store_id',
@@ -358,6 +379,53 @@ const AddProduct = () => {
 
         frame.open();
     };
+
+    const openFeaturedUploader = () => {
+        const frame = wp.media({
+            title: "Select Featured Image",
+            button: { text: "Use this image" },
+            multiple: false,
+            library: { type: "image" }
+        });
+
+        frame.on("select", () => {
+            const attachment = frame.state().get("selection").first().toJSON();
+
+            const img = {
+                id: attachment.id,
+                src: attachment.url,
+                thumbnail: attachment.sizes?.thumbnail?.url || attachment.url
+            };
+
+            setFeaturedImage(img);
+        });
+
+        frame.open();
+    };
+
+    const openGalleryUploader = () => {
+        const frame = wp.media({
+            title: "Select Gallery Images",
+            button: { text: "Add to gallery" },
+            multiple: true,
+            library: { type: "image" }
+        });
+
+        frame.on("select", () => {
+            const selection = frame.state().get("selection").toJSON();
+
+            const newImages = selection.map(img => ({
+                id: img.id,
+                src: img.url,
+                thumbnail: img.sizes?.thumbnail?.url || img.url
+            }));
+
+            setGalleryImages(prev => [...prev, ...newImages]);
+        });
+
+        frame.open();
+    };
+
 
 console.log('product', product)
     return (
@@ -1938,18 +2006,15 @@ console.log('product', product)
                                         Features Image
                                     </label>
                                     <FileInput
-                                        // value={formData.image}
-                                        inputClass="form-input"
-                                        name="image"
                                         type="hidden"
-                                        // onButtonClick={() => runUploader('image')}
-                                        imageWidth={75}
-                                        imageHeight={75}
-                                        openUploader="Upload Image"
-                                        // imageSrc={imagePreviews.image}
+                                        imageSrc={featuredImage?.thumbnail}
+                                        openUploader="Select Featured Image"
                                         buttonClass="admin-btn btn-purple"
-                                        descClass="settings-metabox-description"
+                                        onButtonClick={openFeaturedUploader}
+                                        onRemove={() => setFeaturedImage(null)}
+                                        onReplace={openFeaturedUploader}
                                     />
+
                                 </div>
                             </div>
                             <div className="form-group-wrapper">
@@ -1957,19 +2022,31 @@ console.log('product', product)
                                     <label htmlFor="product-name">
                                         Product gallery
                                     </label>
-                                    <FileInput
-                                        // value={formData.image}
-                                        inputClass="form-input"
-                                        name="image"
-                                        type="hidden"
-                                        // onButtonClick={() => runUploader('image')}
-                                        imageWidth={75}
-                                        imageHeight={75}
-                                        openUploader="Upload Image"
-                                        // imageSrc={imagePreviews.image}
-                                        buttonClass="admin-btn btn-purple"
-                                        descClass="settings-metabox-description"
-                                    />
+                                    <div className="gallery-wrapper">
+                                        {galleryImages.map((img, index) => (
+                                            <FileInput
+                                                key={img.id}
+                                                type="hidden"
+                                                imageSrc={img.thumbnail}
+                                                openUploader="Replace Image"
+                                                buttonClass="admin-btn btn-purple"
+                                                onRemove={() => {
+                                                    setGalleryImages(galleryImages.filter((i, idx) => idx !== index));
+                                                }}
+                                                onReplace={() => openGalleryUploader()}
+                                            />
+                                        ))}
+
+                                        {/* Add more button */}
+                                        <FileInput
+                                            type="hidden"
+                                            imageSrc={null}
+                                            openUploader="Add Gallery Image"
+                                            buttonClass="admin-btn btn-purple"
+                                            onButtonClick={openGalleryUploader}
+                                        />
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
