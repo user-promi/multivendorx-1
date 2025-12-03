@@ -1310,7 +1310,7 @@ body:has(.admin-main-wrapper) {
 
 // search section
 .search-field {
-  display: flex;
+  // display: flex;
   border: 0.063rem solid #5007aa;
   border-radius: 0.313rem;
   margin-left: auto;
@@ -1320,6 +1320,7 @@ body:has(.admin-main-wrapper) {
   .search-section {
     display: flex;
     align-items: center;
+    width: 100%;
 
     i {
       font-size: 1.25rem;

@@ -20,35 +20,71 @@ const SmptProducts: React.FC = () => {
                     </div>
                 </div>
                 <div className="product-wrapper">
-                    <div className="category">
-                        <i className="product-icon adminlib-cart"></i>
+                    <div className="product">
+                        <i className="product-icon adminlib-multi-product"></i>
                         <div className="name">Product 1</div>
+                        <div className="category">category 1</div>
                         <div className="price">$299</div>
-                        <div className="overley"><i className="adminlib-plus-circle-o"></i></div>
+                        <div className="overley">
+                            <div className="admin-btn btn-purple-bg">
+                                <i className="adminlib-plus-circle-o"></i> Copy
+                            </div>
+                        </div>
                     </div>
-                    <div className="category">
-                        <i className="product-icon adminlib-cart"></i>
-                        <div className="name">Product 2</div>
+                    <div className="product">
+                        <i className="product-icon adminlib-multi-product"></i>
+                        <div className="name">Product 1</div>
+                        <div className="category">category 1</div>
                         <div className="price">$299</div>
-                        <div className="overley"><i className="adminlib-plus-circle-o"></i></div>
+                        <div className="overley">
+                            <div className="admin-btn btn-purple-bg">
+                                <i className="adminlib-plus-circle-o"></i> Copy
+                            </div>
+                        </div>
                     </div>
-                    <div className="category">
-                        <i className="product-icon adminlib-cart"></i>
-                        <div className="name">Product 3</div>
+                    <div className="product">
+                        <i className="product-icon adminlib-multi-product"></i>
+                        <div className="name">Product 1</div>
+                        <div className="category">category 1</div>
                         <div className="price">$299</div>
-                        <div className="overley"><i className="adminlib-plus-circle-o"></i></div>
+                        <div className="overley">
+                            <div className="admin-btn btn-purple-bg">
+                                <i className="adminlib-plus-circle-o"></i> Copy
+                            </div>
+                        </div>
                     </div>
-                    <div className="category">
-                        <i className="product-icon adminlib-cart"></i>
-                        <div className="name">Product 4</div>
+                    <div className="product">
+                        <i className="product-icon adminlib-multi-product"></i>
+                        <div className="name">Product 1</div>
+                        <div className="category">category 1</div>
                         <div className="price">$299</div>
-                        <div className="overley"><i className="adminlib-plus-circle-o"></i></div>
+                        <div className="overley">
+                            <div className="admin-btn btn-purple-bg">
+                                <i className="adminlib-plus-circle-o"></i> Copy
+                            </div>
+                        </div>
                     </div>
-                    <div className="category">
-                        <i className="product-icon adminlib-cart"></i>
-                        <div className="name">Product 5</div>
+                    <div className="product">
+                        <i className="product-icon adminlib-multi-product"></i>
+                        <div className="name">Product 1</div>
+                        <div className="category">category 1</div>
                         <div className="price">$299</div>
-                        <div className="overley"><i className="adminlib-plus-circle-o"></i></div>
+                        <div className="overley">
+                            <div className="admin-btn btn-purple-bg">
+                                <i className="adminlib-plus-circle-o"></i> Copy
+                            </div>
+                        </div>
+                    </div>
+                    <div className="product">
+                        <i className="product-icon adminlib-multi-product"></i>
+                        <div className="name">Product 1</div>
+                        <div className="category">category 1</div>
+                        <div className="price">$299</div>
+                        <div className="overley">
+                            <div className="admin-btn btn-purple-bg">
+                                <i className="adminlib-plus-circle-o"></i> Copy
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

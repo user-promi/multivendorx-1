@@ -1177,7 +1177,7 @@ a:focus {
     border-radius: 0.313rem;
 
     .search-section-wrapper {
-        width: fit-content;
+        width: 60%;
         margin: auto;
     }
 
@@ -1191,40 +1191,48 @@ a:focus {
     .product-wrapper {
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
+        gap: 0.5rem;
         box-sizing: border-box;
         margin-top: 2rem;
 
-        .category {
+        .product {
             width: 24%;
             box-sizing: border-box;
             padding: 1rem;
             border-radius: 0.313rem;
             display: flex;
             flex-direction: column;
-            background-color: color-mix(in srgb, var(--colorPrimary) 7%, transparent);
-            margin-bottom: 0.625rem;
-            gap: 0.625rem;
-            border-radius: 0.313rem;
             cursor: pointer;
             position: relative;
+            border: $border-light-small;
 
             .product-icon {
-                font-size: 1.5rem;
+                font-size: 1.813rem;
                 padding: 0.625rem;
                 background: #fff;
                 color: var(--colorPrimary);
                 width: fit-content;
+                background-color: color-mix(in srgb, var(--colorPrimary) 7%, transparent);
+                margin-bottom: 0.625rem;
             }
 
             .name {
                 font-size: 1.063rem;
+                line-height: 1;
             }
-            .price{
-                font-size: 1.125rem;
+
+            .price {
+                font-size: 1.063rem;
                 font-weight: 600;
+                margin-top: 0.813rem;
             }
-            .overley{
+
+            .category {
+                font-size: 0.813rem;
+                color: $sub-text-color;
+            }
+
+            .overley {
                 position: absolute;
                 width: 100%;
                 height: 100%;
@@ -1236,14 +1244,23 @@ a:focus {
                 display: none;
                 transition: all 0.4s ease;
                 border-radius: 0.313rem;
+                // display: flex;
+                gap: 0.45rem;
 
-                i{
-                    font-size: 1.813rem;
-                    color: var(--colorPrimary);
+                // i{
+                //     font-size: 1.813rem;
+                //     color: var(--colorPrimary);
+                // }
+
+                .admin-btn {
+                    padding: 0.313rem 0.5rem;
+                    font-size: 0.813rem;
+                    gap: 0.25rem;
                 }
             }
-            &:hover{
-                .overley{
+
+            &:hover {
+                .overley {
                     display: flex;
                 }
             }
