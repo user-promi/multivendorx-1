@@ -2,7 +2,7 @@
 /**
  * The template for displaying single product page vendor tab
  *
- * Override this template by copying it to yourtheme/dc-woocommerce-multi-vendor/store/
+ * Override this template by copying it to yourtheme/dc-woocommerce-multi-vendor/store/store-policy.php
  *
  * @package MultiVendorX/Templates
  * @version     PRODUCT_VERSION

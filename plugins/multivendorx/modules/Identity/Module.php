@@ -6,6 +6,7 @@
  */
 
 namespace MultiVendorX\Identity;
+
 use MultiVendorX\Utill;
 /**
  * MultiVendorX Identity Module class
