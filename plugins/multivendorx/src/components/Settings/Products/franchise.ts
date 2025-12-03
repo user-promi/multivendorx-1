@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'franchise',
     priority: 1,
-    name: __( 'Franchise', 'multivendorx' ),
+    name: __('Franchise', 'multivendorx'),
     tabTitle: 'Order creation rules',
     desc: __(
         'Franchise mode lets you run multiple branch stores under one brand, with each outlet managing its own orders and local service areas.',
@@ -48,12 +48,12 @@ export default {
                     key: 'allow_store_orders_admin',
                     value: 'allow_store_orders_admin',
                 },
-                dependent: {
-                key: 'allow_store_orders_admin',
-                set: true,
-                value: 'allow_store_orders_admin',
-            },
             ],
+            dependent: {
+                key: 'allow_store_create_orders',
+                set: true,
+                value: 'allow_store_create_orders',
+            },
             look: 'toggle',
         },
         {
