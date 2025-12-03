@@ -566,11 +566,7 @@ const Dashboard: React.FC = () => {
                     }}
                   />
                   <Legend />
-                  {/* <Bar dataKey="orders" fill="#f1a60e" radius={[6, 6, 0, 0]} name="Sales" />
-                          <Bar dataKey="earnings" fill="#fa7a38" radius={[6, 6, 0, 0]} name="Earnings" />
-                          <Bar dataKey="refunds" fill="#73d860" radius={[6, 6, 0, 0]} name="Orders" /> */}
                   {BarChartData.map((entry, index) => (
-                    // <Cell key={`cell-${index}`} fill={entry.color} />
                     <Bar dataKey={entry.dataKey} fill={entry.color} radius={[6, 6, 0, 0]} name={entry.name} />
                   ))}
                   <Line
@@ -603,23 +599,27 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
           <div className="top-customer-wrapper">
-            {lastWithdraws.map((item: any) => (
-              <div key={item.id} className="customer">
-                <div className="left-section">
-                  <div className="details">
-                    <div className="name">
-                      {item.payment_method === "stripe-connect" && "Stripe"}
-                      {item.payment_method === "bank-transfer" && "Direct to Local Bank (INR)"}
-                      {item.payment_method === "paypal-payout" && "PayPal"}
-                      {item.payment_method === "bank-transfer" ? `Bank Transfer` : ""}
+            {lastWithdraws && lastWithdraws.length > 0 ? (
+              lastWithdraws.map((item: any) => (
+                <div key={item.id} className="customer">
+                  <div className="left-section">
+                    <div className="details">
+                      <div className="name">
+                        {item.payment_method === "stripe-connect" && "Stripe"}
+                        {item.payment_method === "bank-transfer" && "Direct to Local Bank (INR)"}
+                        {item.payment_method === "paypal-payout" && "PayPal"}
+                        {item.payment_method === "bank-transfer" ? `Bank Transfer` : ""}
+                      </div>
+                      <div className="order-number"> {formatWcShortDate(item.date)}</div>
                     </div>
-                    <div className="order-number"> {formatWcShortDate(item.date)}</div>
                   </div>
-                </div>
 
-                <div className="price-section">{formatCurrency(item.amount)}</div>
-              </div>
-            ))}
+                  <div className="price-section">{formatCurrency(item.amount)}</div>
+                </div>
+              ))
+            ) : (
+              <div className="no-data">No withdrawals found.</div>
+            )}
           </div>
           {/* {lastWithdraws && lastWithdraws.length > 0 ? (
             lastWithdraws.map((item: any) => (
@@ -641,73 +641,21 @@ const Dashboard: React.FC = () => {
           ) : (
             <div className="no-data">No withdrawals found.</div>
           )} */}
-
-          <div className="buttons-wrapper">
-            <div
-              className="admin-btn btn-purple"
-              onClick={() => (window.location.href = `${appLocalizer.site_url}/dashboard/wallet/transactions/`)}
-            >
-              <i className="adminlib-preview"></i>
-              View transaction history
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* <div className="row">
-        <div className="column w-35">
-          <ComposableMap projectionConfig={{ scale: 150 }}>
-            <Geographies geography={world}>
-              {({ geographies }) =>
-                geographies.map((geo) => {
-                  const code = geo.properties.ISO_A2;
-                  const value = visitorData[code] || 0;
-
-                  return (
-                    <Geography
-                      key={geo.rsmKey}
-                      geography={geo}
-                      fill={value ? colorScale(value) : "#EEE"}
-                      stroke="#999"
-                      style={{
-                        default: { outline: "none" },
-                        hover: { fill: "#1976d2", outline: "none" },
-                      }}
-                    />
-                  );
-                })
-              }
-            </Geographies>
-          </ComposableMap>
-        </div>
-      </div> */}
-      {/* <div className="row">
-        <div className="column">
-          <div className="card">
-            <div className="card-header">
-              <div className="left">
-                <div className="title">
-                  Recent Orders
-                </div>
-              </div>
-              <div className="right"
+          {lastWithdraws && lastWithdraws.length > 0 && (
+            <div className="buttons-wrapper">
+              <div
+                className="admin-btn btn-purple"
                 onClick={() => {
-                  window.location.href = "/dashboard/sales/orders/";
+                  window.location.href = '/dashboard/wallet/transactions/';
                 }}
               >
-                <i className="adminlib-external"></i>
+                <i className="adminlib-preview"></i>
+                View transaction history
               </div>
             </div>
-            <div className="card-body">
-              <div className="table-wrapper">
-                <Table
-                  data={recentOrder}
-                  columns={columns as ColumnDef<Record<string, any>, any>[]}
-                />
-              </div>
-            </div>
-          </div>
+          )}
         </div>
-      </div> */}
+      </div>
 
       <div className="row">
         <div className="column">
@@ -729,10 +677,10 @@ const Dashboard: React.FC = () => {
                     <tr className="header">
                       <td>Order Id</td>
                       <td>Order Date</td>
-                      <td>Product Name</td>
+                      <td>Product Name(P)</td>
                       <td>Total Amount</td>
                       <td>Order Status</td>
-                      <td>Status</td>
+                      <td>Status (P)</td>
                     </tr>
 
                     {recentOrder.map((item: any, index) => {
@@ -985,7 +933,6 @@ const Dashboard: React.FC = () => {
               </div>
             </div>
           </div>
-
         </div>
       </div>
 
@@ -1075,9 +1022,6 @@ const Dashboard: React.FC = () => {
           </div>
         )}
       </div>
-
-
-
     </>
   );
 };

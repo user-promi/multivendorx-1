@@ -115,6 +115,14 @@ a {
                 }
             }
 
+            .subtabs {
+                display: none;
+
+                &.open {
+                    display: block;
+                }
+            }
+
             &:not(.active) {
                 a:hover {
                     color: var(--colorPrimary);
@@ -442,18 +450,20 @@ a {
         .admin-table-wrapper {
             padding: 0;
         }
+
         // for product page add btn title
-        .card-title{
+        .card-title {
             display: flex;
             justify-content: space-between;
             margin-top: 0.5rem;
 
-            .buttons{
+            .buttons {
                 display: flex;
                 gap: 1.125rem;
                 align-items: center;
             }
         }
+
         &.theme-bg {
             background: var(--colorPrimary);
 
@@ -464,9 +474,11 @@ a {
             }
         }
     }
-    .w-10{
+
+    .w-10 {
         width: 10%;
     }
+
     .w-35 {
         width: 35%;
     }
@@ -694,11 +706,11 @@ a {
             }
 
             i {
-                font-size: 1.25rem;
-                padding: 0.5rem;
+                font-size: 0.95rem;
+                padding: 0.313rem;
                 border-radius: 50%;
                 transition: all 0.4s ease;
-                ;
+                margin-top: -0.5rem;
 
                 &:hover {
                     background: #0000001a;
@@ -1049,7 +1061,7 @@ a {
             .tab-name span,
             .admin-arrow,
             .site-name {
-                // display: none;
+                display: none;
             }
         }
 
@@ -1726,6 +1738,7 @@ a {
         gap: 0.313rem;
         padding: 0.5rem 0;
         width: 100%;
+        justify-content: end;
 
         label {
             font-size: 0.9rem;
@@ -1743,6 +1756,10 @@ a {
         border-radius: 0.313rem;
         margin-bottom: 1rem;
         border: $border-light-small;
+
+        .setting-form-input {
+            width: 25%;
+        }
 
         &.rule {
             width: fit-content;

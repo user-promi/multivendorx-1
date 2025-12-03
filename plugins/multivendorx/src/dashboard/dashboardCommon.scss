@@ -420,6 +420,10 @@ a:focus {
         .setting-form-input {
             width: 100%;
         }
+
+        &.add-new-field {
+            margin-top: 1rem;
+        }
     }
 }
 
@@ -464,6 +468,32 @@ a:focus {
         background: $theme-background-color;
         padding: 0.313rem 0.813rem;
         border-radius: 0.313rem;
+    }
+}
+
+.category-wrapper {
+    ul {
+        list-style-type: none;
+
+        ul{
+            padding-top: 0.75rem;
+        }
+
+        li {
+            font-size: 1.063rem;
+        }
+
+        .category,
+        .sub-category {
+            padding: 0.5rem;
+        }
+
+        ul {
+            padding-left: 1.313rem;
+        }
+    }
+    li:has(li){
+        padding-bottom: 0 !important;
     }
 }
 
