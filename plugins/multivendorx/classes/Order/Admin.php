@@ -4,6 +4,7 @@
  *
  * @package MultiVendorX
  */
+
 namespace MultiVendorX\Order;
 
 use MultiVendorX\Commission\CommissionUtil;
@@ -45,7 +46,7 @@ class Admin {
             $suborder         = array(
                 'multivendorx_suborder' => __( 'Suborders', 'multivendorx' ),
             );
-            $title_number_pos = array_search( 'order_number', array_keys( $columns ) );
+            $title_number_pos = array_search( 'order_number', array_keys( $columns ), true );
             $columns          = array_slice( $columns, 0, $title_number_pos + 1, true )
                     + $suborder
                     + array_slice( $columns, $title_number_pos + 1, null, true );
@@ -99,8 +100,8 @@ class Admin {
     /**
      * Add actions to the order list page
      *
-     * @param  array  $actions
-     * @param  object $order
+     * @param  array  $actions Actions.
+     * @param  object $order Order object.
      */
     public function woocommerce_order_actions( $actions, $order ) {
         if ( $order && $order->get_parent_id() ) {
@@ -183,7 +184,7 @@ class Admin {
     /**
      * Regenerate suborders
      *
-     * @param  object $order
+     * @param  object $order Order object.
      */
     public function regenerate_suborders( $order ) {
         MultiVendorX()->order->create_vendor_orders( $order );

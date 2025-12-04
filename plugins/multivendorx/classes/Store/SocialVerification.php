@@ -428,7 +428,6 @@ class FacebookVerification {
         $response = wp_remote_get( $token_url );
 
         if ( is_wp_error( $response ) ) {
-            error_log( 'Facebook token exchange error: ' . $response->get_error_message() );
             return false;
         }
 
@@ -446,7 +445,6 @@ class FacebookVerification {
             $profile_response = wp_remote_get( $profile_url );
 
             if ( is_wp_error( $profile_response ) ) {
-                error_log( 'Facebook profile fetch error: ' . $profile_response->get_error_message() );
                 return false;
             }
 
@@ -465,7 +463,6 @@ class FacebookVerification {
             }
         }
 
-        error_log( 'Facebook verification failed: ' . wp_remote_retrieve_body( $response ) );
         return false;
     }
 
@@ -573,7 +570,6 @@ class GoogleVerification {
         );
 
         if ( is_wp_error( $token_response ) ) {
-            error_log( 'Google token exchange error: ' . $token_response->get_error_message() );
             return false;
         }
 
@@ -591,7 +587,6 @@ class GoogleVerification {
             );
 
             if ( is_wp_error( $profile_response ) ) {
-                error_log( 'Google profile fetch error: ' . $profile_response->get_error_message() );
                 return false;
             }
 
@@ -611,7 +606,6 @@ class GoogleVerification {
             }
         }
 
-        error_log( 'Google verification failed: ' . wp_remote_retrieve_body( $token_response ) );
         return false;
     }
 
@@ -1031,8 +1025,8 @@ class LinkedInVerification {
     /**
      * Verify LinkedIn callback.
      *
-     * @param string $code
-     * @param array  $request_data
+     * @param string $code         Authorization code.
+     * @param array  $request_data Request data.
      *
      * @return array|false
      */
@@ -1056,7 +1050,6 @@ class LinkedInVerification {
         );
 
         if ( is_wp_error( $token_response ) ) {
-            error_log( 'LinkedIn token exchange error: ' . $token_response->get_error_message() );
             return false;
         }
 
@@ -1074,7 +1067,6 @@ class LinkedInVerification {
             );
 
             if ( is_wp_error( $profile_response ) ) {
-                error_log( 'LinkedIn profile fetch error: ' . $profile_response->get_error_message() );
                 return false;
             }
 
@@ -1105,7 +1097,6 @@ class LinkedInVerification {
             }
         }
 
-        error_log( 'LinkedIn verification failed: ' . wp_remote_retrieve_body( $token_response ) );
         return false;
     }
 
@@ -1150,7 +1141,6 @@ class LinkedInVerification {
  * Get the social verification system
  *
  * @param string $provider Provider.
- * @return
  */
 function get_social_auth_url( $provider ) {
     $social_verification = get_social_verification();
@@ -1161,7 +1151,6 @@ function get_social_auth_url( $provider ) {
  * Get connected social profiles for a user
  *
  * @param int $user_id User ID.
- * @return array
  */
 function get_connected_social_profiles( $user_id = null ) {
     $social_verification = get_social_verification();

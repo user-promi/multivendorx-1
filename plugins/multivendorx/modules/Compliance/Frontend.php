@@ -67,8 +67,8 @@ class Frontend {
                 <div class="report-abuse-form" style="display:none;">
                     <h3>
                         <?php
-                            /* translators: %s: Product name for abuse report */
                             $report_title = sprintf(
+                                /* translators: %s: Product name for abuse report */
                                 esc_html__( 'Report abuse for "%s"', 'multivendorx' ),
                                 esc_html( $product->get_name() )
                             );

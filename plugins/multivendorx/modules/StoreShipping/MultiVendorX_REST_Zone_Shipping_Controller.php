@@ -88,7 +88,7 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
     /**
      * Get shipping methods permissions check
      *
-     * @param object $request
+     * @param object $request Request object.
      */
     public function get_items_permissions_check( $request ) {
         return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
@@ -97,7 +97,7 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
     /**
      * Create shipping method permissions check
      *
-     * @param object $request
+     * @param object $request Request object.
      */
     public function create_item_permissions_check( $request ) {
         return current_user_can( 'create_stores' );
@@ -106,7 +106,7 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
     /**
      * Update shipping method permissions check
      *
-     * @param object $request
+     * @param object $request Request object.
      */
     public function update_item_permissions_check( $request ) {
         return current_user_can( 'edit_stores' );
@@ -116,7 +116,7 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
     /**
      * Get all shipping methods
      *
-     * @param object $request
+     * @param object $request Request object.
      */
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
@@ -154,7 +154,7 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
     /**
      * Create shipping method
      *
-     * @param object $request
+     * @param object $request Request object.
      */
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
@@ -252,7 +252,7 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
     /**
      * Get single shipping method by id
      *
-     * @param object $request
+     * @param object $request Request object.
      */
     public function get_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
@@ -304,7 +304,7 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
     /**
      * Update shipping method
      *
-     * @param object $request
+     * @param object $request Request object.
      */
     public function update_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
@@ -389,7 +389,7 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
     /**
      * Delete shipping method
      *
-     * @param object $request
+     * @param object $request Request data.
      */
     public function delete_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );

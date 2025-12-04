@@ -109,7 +109,6 @@ class OrderManager {
      * Create vendor order from a order.
      * It group item based on vendor then create suborder for each group.
      *
-     * @param   int    $order_id Order id.
      * @param   object $order Order object.
      * @return  void
      */
@@ -133,7 +132,7 @@ class OrderManager {
             if ( in_array( $store_id, $existing_orders, true ) ) {
                 $suborder_id  = array_keys( $existing_orders, $store_id, true );
                 $vendor_order = self::create_sub_order( $order, $store_id, $items, $suborder_id, true );
-                // regenerate commission
+                // Regenerate commission.
                 $this->container['admin']->regenerate_order_commissions( $vendor_order );
             } else {
                 $vendor_order = self::create_sub_order( $order, $store_id, $items );
@@ -148,9 +147,11 @@ class OrderManager {
     /**
      * Create suborder of a main order.
      *
-     * @param   object $parent_order Parent order object.
-     * @param   int    $store_id Vendor store id.
-     * @param   array  $items Grouped item.
+     * @param   object  $parent_order Parent order object.
+     * @param   int     $store_id Vendor store id.
+     * @param   array   $items Grouped item.
+     * @param   int     $suborder_id Suborder id.
+     * @param   boolean $is_update Is it update.
      * @return  object
      */
     public static function create_sub_order( $parent_order, $store_id, $items, $suborder_id = 0, $is_update = false ) {
@@ -252,7 +253,7 @@ class OrderManager {
         // Group each item.
         $grouped_items = array();
         foreach ( $items as $item_id => $item ) {
-            if ( isset( $item['product_id'] ) && $item['product_id'] !== 0 ) {
+            if ( isset( $item['product_id'] ) && 0 !== $item['product_id'] ) {
                 $vendor = StoreUtil::get_products_store( $item['product_id'] );
                 if ( $vendor ) {
                     $grouped_items[ $vendor->get_id() ][ $item_id ] = $item;
@@ -285,7 +286,7 @@ class OrderManager {
 
         // Iterate through each item and create a order's line item.
         foreach ( $line_items as $item_id => $order_item ) {
-            if ( isset( $order_item['product_id'] ) && $order_item['product_id'] !== 0 ) {
+            if ( isset( $order_item['product_id'] ) && 0 !== $order_item['product_id'] ) {
                 $product = wc_get_product( $order_item['product_id'] );
                 $item    = new \WC_Order_Item_Product();
 
@@ -346,7 +347,7 @@ class OrderManager {
 
         foreach ( $shipping_items as $item_id => $item ) {
             $shipping_vendor_id = $item->get_meta( Utill::POST_META_SETTINGS['store_id'], true );
-            if ( $shipping_vendor_id == $store_id ) {
+            if ( $shipping_vendor_id === $store_id ) {
                 $shipping = new \WC_Order_Item_Shipping();
                 $shipping->set_props(
                     array(

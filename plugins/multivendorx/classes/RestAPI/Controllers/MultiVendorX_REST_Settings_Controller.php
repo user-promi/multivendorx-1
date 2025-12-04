@@ -132,7 +132,7 @@ class MultiVendorX_REST_Settings_Controller extends \WP_REST_Controller {
                 );
 
                 foreach ( $user_cap as $role => $caps ) {
-                    if ( $role !== 'store_owner' ) {
+                    if ( 'store_owner' !== $role ) {
                         $user_cap[ $role ] = array_values( array_intersect( $caps, $store_owner_caps ) );
                     }
                 }

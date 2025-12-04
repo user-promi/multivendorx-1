@@ -16,7 +16,6 @@ use MultiVendorX\Utill;
  * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
-
 class StoreGeolocation {
     /**
      * Store object.

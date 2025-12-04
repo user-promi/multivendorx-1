@@ -62,7 +62,7 @@ class CommissionUtil {
     /**
      * Get array of commission object or count based on filter.
      *
-     * @param   array $filter
+     * @param   array $filter  Filter array.
      * @param   bool  $object  Default true. If false function returns raw DB rows or IDs.
      * @param   bool  $count   Default false. If true function returns total count instead of records.
      *

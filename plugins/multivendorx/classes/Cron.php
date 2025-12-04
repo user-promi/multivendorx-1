@@ -38,7 +38,7 @@ class Cron {
     /**
      * Add custom cron schedules
      *
-     * @param array $schedules Array of cron schedules
+     * @param array $schedules Array of cron schedules.
      */
     public function custom_cron_schedules( $schedules ) {
         $schedules['weekly']      = array(
@@ -99,7 +99,7 @@ class Cron {
     /**
      * Normalize settings structure from DB into a standard format
      *
-     * @param string $type Cron schedule type
+     * @param string $type Cron schedule type.
      */
     public function normalize_settings( $type ) {
         switch ( $type ) {
@@ -111,7 +111,7 @@ class Cron {
             case 'daily':
                 $time = MultiVendorX()->setting->get_setting( 'daily_payout_time' );
                 return array(
-                    'time' => $time ?: '09:00',
+                    'time' => $time ? $time : '09:00',
                 );
 
             case 'weekly':
@@ -144,8 +144,8 @@ class Cron {
     /**
      * Get the first run time for the cron job
      *
-     * @param string $schedule Cron schedule name
-     * @param array  $settings Cron settings
+     * @param string $schedule Cron schedule name.
+     * @param array  $settings Cron settings.
      */
     public function get_first_run( $schedule, $settings ) {
         $hour   = isset( $settings['time'] ) ? (int) gmdate( 'H', strtotime( $settings['time'] ) ) : 9;

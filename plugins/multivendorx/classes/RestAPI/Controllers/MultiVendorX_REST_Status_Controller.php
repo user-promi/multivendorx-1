@@ -101,7 +101,7 @@ class MultiVendorX_REST_Status_Controller extends \WP_REST_Controller {
     /**
      * Get all system info data.
      *
-     * @param  object $request
+     * @param  object $request Request data.
      */
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
