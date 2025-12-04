@@ -286,53 +286,6 @@
 
 // card styles start
 
-// task start
-.task-list-wrapper {
-    .task-list {
-        li {
-            padding: 0.5rem 0;
-            border-bottom: $border-light-small;
-            display: flex;
-            gap: 0.625rem;
-
-            span {
-                font-size: 0.95rem;
-                line-height: 1.4rem;
-            }
-
-            .add-mode {
-                margin-top: 1rem;
-                border: 0;
-            }
-
-            input {
-                margin: 0;
-            }
-
-            &:has(input:checked) span {
-                text-decoration: line-through;
-                color: #00000075;
-            }
-
-            .delete-icon {
-                display: none;
-                font-size: 1.25rem;
-                color: #e35047;
-                cursor: pointer;
-            }
-
-            &:hover {
-                .delete-icon {
-                    display: block;
-                }
-            }
-        }
-    }
-}
-
-// task end
-
-
 // action start
 .overview-card-wrapper {
     display: flex;
@@ -447,7 +400,6 @@
         }
     }
 }
-
 // action style end
 
 
@@ -658,29 +610,6 @@
     }
 }
 
-// .payout-notice {
-//     padding: 0.625rem;
-//     border-radius: 0.313rem;
-//     font-size: 1.063rem;
-
-
-//     i {
-//         padding-right: 0.313rem;
-//     }
-
-//     &.error-notice {
-//         color: #ff0000eb;
-//         background: #ff00001c;
-
-//         i {
-//             color: #ff0000eb;
-
-//         }
-
-//     }
-// }
-
-
 .settings-metabox-description.slug i {
     font-size: 0.813rem;
 }
@@ -688,7 +617,6 @@
 .admin-pro-tag.module:has(.adminlib-spmv) {
     text-transform: uppercase;
 }
-
 
 // settings shipping add country start
 .shipping-country-wrapper {

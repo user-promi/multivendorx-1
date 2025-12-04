@@ -547,7 +547,7 @@ const AddOrder = () => {
                                         <strong>${grandTotal.toFixed(2)}</strong>
                                     </div>
                                 </div>
-                                <div className="buttons">
+                                <div className="buttons-wrapper left">
                                     <button className="admin-btn btn-purple-bg" onClick={() => setShowAddProduct(true)}>
                                         <i className="adminlib-plus-circle-o"></i> Add Product
                                     </button>
