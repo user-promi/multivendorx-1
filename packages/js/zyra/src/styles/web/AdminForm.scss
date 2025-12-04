@@ -45,22 +45,11 @@
     }
 
     .form-group.pro-setting {
-      // background: #e3504705;
-      // border-top: 0.063rem solid rgb(227 80 71 / 18%);
-      // padding: 1rem 0;
       position: relative;
-
-      // margin-top: 1rem;
     }
 
     .form-group.module-enabled {
-      // background: #d9f5f059;
-      // border-top: 0.063rem solid #d9f5f0;
-      // padding: 1rem 0;
       position: relative;
-
-      // box-shadow: -0.313rem 0 0 0 #d9f5f059, 0.313rem 0 0 0 #d9f5f059;
-      // margin-top: 1rem;
 
       .adminlib-lock {
         color: blue;
@@ -268,7 +257,6 @@
     }
   }
 }
-
 .uploaded-image {
   display: flex;
   gap: 0.625rem;
@@ -304,7 +292,7 @@
 
 // file input end
 
-// radio input start
+// radio input start (check catalogx and common)
 .radio-group {
   display: flex;
   flex-wrap: wrap;
@@ -389,6 +377,38 @@
       }
     }
   }
+}
+// radio input end
+
+
+// radio input start
+.settings-form-group-radio {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    margin-top: 0.5rem;
+
+    .radio-basic-input-wrap {
+        display: flex;
+        gap: 0.5rem;
+
+        &.radio-select-active {
+            input {
+                border-color: var(--colorPrimary);
+                position: relative;
+
+                &::after {
+                    position: absolute;
+                    content: "";
+                    border-radius: 50%;
+                    width: 0.5rem;
+                    height: 0.5rem;
+                    background: var(--colorPrimary);
+                    left: 0.125rem;
+                }
+            }
+        }
+    }
 }
 
 // radio input end

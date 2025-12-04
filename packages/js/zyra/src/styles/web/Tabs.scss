@@ -139,10 +139,6 @@
       // background: ;
       margin-bottom: 1rem;
     }
-
-    // &.debit-transactions {
-    //     background: #00800052;
-    // }
   }
 
   .col {
@@ -718,3 +714,102 @@
 }
 
 // section divider end
+
+// horizental menu start
+.content-wrapper:has(.horizontal-title-section) {
+    display: flex;
+    gap: 2rem;
+
+    .horizontal-tabs {
+        display: flex;
+        width: 100%;
+
+        .horizontal-title-section {
+            width: 19%;
+            height: auto;
+            // margin-top: 2.5rem;
+
+            .tabs-wrapper {
+                background: transparent;
+
+                .horizontal-tabs-item {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.25rem;
+                    width: 100%;
+
+                    .menu-item {
+                        padding: 0.813rem;
+                        transition: all 0.3s ease;
+                        border-radius: 0.313rem;
+                        margin-bottom: 0.313rem;
+                        cursor: pointer;
+                        margin: 0;
+
+                        i {
+                            padding-right: 0.5rem;
+                        }
+
+                        p {
+                            margin: 0;
+                            font-weight: 500;
+                            font-size: 1.125rem;
+                            line-height: 1rem;
+                        }
+
+                        &:hover {
+                            background: $theme-background-color;
+                            color: var(--colorPrimary);
+                        }
+
+                        &.active-current-tab,
+                        &.active-current-tab:hover {
+                            background: var(--colorPrimary);
+                            color: #fff;
+                        }
+                    }
+
+                    .tab-heading {
+                        font-size: 1.063rem;
+                        color: #0000008f;
+                        font-weight: 600;
+                        padding-bottom: 0.313rem;
+                        border-bottom: $border-light-small;
+                        margin: 0.5rem 0;
+                    }
+                }
+            }
+        }
+
+        .general-wrapper {
+            width: 81%;
+            background: #fff;
+            border: $border-light-small;
+            margin: 0 1rem 1rem;
+            border-radius: 0.313rem;
+
+            .card-content {
+                padding: 0;
+            }
+
+            .middle-child-container {
+                border: none;
+            }
+
+            .tab-content {
+                padding: 1.5rem;
+                box-sizing: border-box;
+
+                .divider-wrapper:first-child {
+                    .divider-section {
+                        margin: 0;
+                        padding-top: 0;
+                        padding-bottom: .5rem;
+                        margin-bottom: 1rem;
+                    }
+                }
+            }
+        }
+    }
+}
+// horizental menu end

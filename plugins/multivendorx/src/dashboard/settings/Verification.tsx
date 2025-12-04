@@ -183,16 +183,6 @@ const Verification = () => {
             }
         ];
 
-        // if (profileLoading) {
-        //     return (
-        //         <div className="varification-wrapper">
-        //             <div className="left">
-        //                 <div className="name">Loading social profiles...</div>
-        //             </div>
-        //         </div>
-        //     );
-        // }
-
         return socialConfigs.map((social) => {
             if (!social.enabled) return null;
             

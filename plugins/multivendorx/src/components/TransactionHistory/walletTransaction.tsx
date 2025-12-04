@@ -413,10 +413,10 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId, dateRang
                 { key: 'upcoming', name: 'Upcoming', count: response.data.upcoming || 0 },
                 { key: 'failed', name: 'Failed', count: response.data.failed || 0 },
             ];
-            
+
             // keep only items whose count is NOT zero
             const filteredStatuses = statuses.filter(item => item.count !== 0);
-            
+
             setTransactionStatus(filteredStatuses);
         })
             .catch(() => setData([]));
@@ -485,14 +485,14 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId, dateRang
                 const commissionId = row.original.commission_id;
                 const paymentMethod = row.original.payment_method;
                 const orderId = row.original.order_details;
-                const formatText = (text:any) =>
+                const formatText = (text: any) =>
                     text
                         ?.replace(/-/g, ' ')
-                        ?.replace(/\b\w/g, (c:any) => c.toUpperCase())
+                        ?.replace(/\b\w/g, (c: any) => c.toUpperCase())
                     || '-';
 
                 let displayValue = '-';
-                let content:any = displayValue;
+                let content: any = displayValue;
 
                 // Commission Transaction (clickable)
                 if (type === 'commission') {
@@ -773,63 +773,58 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId, dateRang
             <div className="general-wrapper">
                 <div className="row">
                     <div className="col">
-                        {recentDebits.length > 0 ? (
-                            <div className="column debit-transactions">
-                                <div className="card-header">
-                                    <div className="left">
-                                        <div className="title">{__("Recent Debit Transactions", "multivendorx")}</div>
-                                    </div>
+                        <div className="column">
+                            <div className="card-header">
+                                <div className="left">
+                                    <div className="title">{__("Recent payouts", "multivendorx")}</div>
                                 </div>
-                                {recentDebits.map((txn) => {
-                                    // Format payment method nicely (e.g., "stripe-connect" -> "Stripe Connect")
-                                    const formattedPaymentMethod = txn.payment_method
-                                        ? txn.payment_method
-                                            .replace(/[-_]/g, ' ')                // replace - and _ with spaces
-                                            .replace(/\b\w/g, char => char.toUpperCase()) // capitalize each word
-                                        : __("N/A", "multivendorx");
+                            </div>
+                            {recentDebits.length > 0 ? (
+                                <>
+                                    {recentDebits.map((txn) => {
+                                        // Format payment method nicely (e.g., "stripe-connect" -> "Stripe Connect")
+                                        const formattedPaymentMethod = txn.payment_method
+                                            ? txn.payment_method
+                                                .replace(/[-_]/g, ' ')                // replace - and _ with spaces
+                                                .replace(/\b\w/g, char => char.toUpperCase()) // capitalize each word
+                                            : __("N/A", "multivendorx");
 
-                                    return (
-                                        <div key={txn.id} className="info-item">
-                                            <div className="details-wrapper">
-                                                <div className="details">
-                                                    <div className="name">{formattedPaymentMethod}</div>
-                                                    <div className="des">
-                                                        {new Date(txn.date).toLocaleDateString("en-US", {
-                                                            month: "short",
-                                                            day: "2-digit",
-                                                            year: "numeric",
-                                                        })}
+                                        return (
+                                            <div key={txn.id} className="info-item">
+                                                <div className="details-wrapper">
+                                                    <div className="details">
+                                                        <div className="name">{formattedPaymentMethod}</div>
+                                                        <div className="des">
+                                                            {new Date(txn.date).toLocaleDateString("en-US", {
+                                                                month: "short",
+                                                                day: "2-digit",
+                                                                year: "numeric",
+                                                            })}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <div
-                                                className={`right-details ${parseFloat(txn.debit) < 0 ? 'negative' : 'positive'
-                                                    }`}
-                                            >
-                                                <div className={`price ${parseFloat(txn.debit) < 0 ? 'negative' : 'positive'
-                                                    }`}>   {formatCurrency(txn.debit)}</div>
+                                                <div
+                                                    className={`right-details ${parseFloat(txn.debit) < 0 ? 'negative' : 'positive'
+                                                        }`}
+                                                >
+                                                    <div className={`price ${parseFloat(txn.debit) < 0 ? 'negative' : 'positive'
+                                                        }`}>   {formatCurrency(txn.debit)}</div>
+                                                </div>
                                             </div>
-
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        ) : (
-                            <div className="column">
-                                <div className="card-header">
-                                    <div className="left">
-                                        <div className="title">{__("Recent payouts", "multivendorx")}</div>
+                                        );
+                                    })}
+                                </>
+                            ) : (
+                                <>
+                                    <div className="des">
+                                        {__("No recent payouts transactions found.", "multivendorx")}
                                     </div>
-                                </div>
-                                <div className="des">
-                                    {__("No recent payouts transactions found.", "multivendorx")}
-                                </div>
-                            </div>
-                        )}
+                                </>
+                            )}
+                        </div>
                     </div>
                     <div className="column">
-
                         <div className="payout-wrapper">
                             <div className="payout-header">
                                 <div className="price-wrapper">
@@ -876,7 +871,6 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId, dateRang
                                     {__("Disburse Payment", "multivendorx")}
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -947,7 +941,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId, dateRang
                                     type="number"
                                     name="amount"
                                     value={amount}
-                                    onChange={(e:any) => AmountChange(Number(e.target.value))}
+                                    onChange={(e: any) => AmountChange(Number(e.target.value))}
                                 />
 
                                 <div className="free-wrapper">
@@ -973,7 +967,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId, dateRang
                             </div>
 
                             <div className="form-group">
-                            <label htmlFor="note">{__("Note", "multivendorx")}</label>
+                                <label htmlFor="note">{__("Note", "multivendorx")}</label>
                                 <TextArea
                                     name="note"
                                     wrapperClass="setting-from-textarea"

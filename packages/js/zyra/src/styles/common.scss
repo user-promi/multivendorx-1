@@ -173,10 +173,6 @@ body:has(.admin-main-wrapper) {
   background: #b7b03c91;
 }
 
-.btn-reject {
-  background-color: #e5e5e5;
-}
-
 .btn-green {
   background: #d9f5f0;
   color: #06be9f;
@@ -192,6 +188,17 @@ body:has(.admin-main-wrapper) {
   // align-items: end;
   gap: 0.25rem;
   border: 0.063rem solid;
+}
+
+.add-btn {
+  display: flex;
+  gap: 0.313rem;
+  align-items: center;
+  border-bottom: 0.063rem solid var(--colorPrimary);
+  padding-bottom: 0.125rem;
+  font-size: 0.813rem;
+  color: var(--colorPrimary);
+  cursor: pointer;
 }
 
 .icon-pro-btn {

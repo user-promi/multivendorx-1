@@ -566,16 +566,6 @@
         line-height: 2rem;
         padding-bottom: 0.5rem;
     }
-
-    .withdrawl-notice {
-        font-size: 1rem;
-        font-weight: 500;
-        line-height: 1.313rem;
-
-        i {
-            color: $theme-color;
-        }
-    }
 }
 
 // tab action cart start
@@ -584,7 +574,6 @@
     padding: 1rem 1.313rem;
     background: #fff;
     border-radius: 0.313rem;
-    // box-shadow: 0 0.125rem 0.5rem 0 rgba(223, 222, 225, 0.43);
     border: 0.063rem solid transparent;
 
     .details-wrapper {

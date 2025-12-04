@@ -229,27 +229,6 @@ a:focus {
 
 // no permission section end
 
-
-.red {
-    background: #fde8e4;
-    color: #f06b4f;
-}
-
-.green {
-    background: #d9f5f0;
-    color: #06be9f;
-}
-
-.yellow {
-    background: #fff0e1;
-    color: #ff9f43;
-}
-
-.blue {
-    background: #bfdeed6e;
-    color: #003d66de;
-}
-
 // card styles start
 .w-35 {
     width: 35%;
@@ -541,7 +520,6 @@ a:focus {
     }
 }
 
-
 .order-overview {
     display: flex;
     justify-content: space-between;
@@ -655,16 +633,108 @@ a:focus {
 
 // payout page price section start 
 .payout-wrapper {
+    .payout-header {
+        .admin-btn {
+            font-size: 1.313rem;
+            padding: .813rem 1.813rem;
+        }
+    }
+
+    .price-title {
+        font-size: 0.95rem;
+        line-height: 1rem;
+        padding-bottom: 0.625rem;
+        color: #00000071;
+    }
+
     .price {
-        font-size: 2rem;
+        font-size: 3rem;
         font-weight: 600;
-        line-height: 2rem;
+        line-height: 2.4rem;
         margin-bottom: 0.813rem;
+        display: flex;
+        align-items: start;
+        gap: 0.5rem;
     }
 
     .des {
-        font-size: 1.063rem;
+        font-size: 0.9rem;
         margin-bottom: 1rem;
+    }
+
+    .small-text {
+        line-height: 1.25rem;
+    }
+
+    .admin-btn {
+        margin-top: 1rem;
+    }
+
+    .right-section {
+        width: 50%;
+    }
+
+    .admin-badge {
+        display: inline-block;
+    }
+
+    .payout-card-wrapper {
+        display: flex;
+        gap: 1rem;
+        margin: 0.813rem 0;
+
+        .payout-card {
+            padding: 1rem;
+            border-radius: 0.313rem;
+            background: #e6e2e275;
+            width: 50%;
+
+            .card-title {
+                font-size: 1.125rem;
+            }
+
+            .card-price {
+                font-size: 1.813rem;
+                font-weight: 600;
+                line-height: 2rem;
+                margin: 0.5rem 0;
+            }
+
+            .card-des {
+                color: #0000009e;
+                font-size: 0.813rem;
+            }
+        }
+    }
+}
+
+.withdrawal-wrapper {
+    background: $theme-background-color;
+    padding: 0.313rem;
+    border-radius: 0.313rem;
+    margin: 1rem 0;
+    color: $theme-color;
+    border: $border-light-small;
+
+    i {
+        color: $theme-color;
+    }
+
+    .title {
+        font-size: 1.45rem;
+        font-weight: 600;
+        line-height: 2rem;
+        padding-bottom: 0.5rem;
+    }
+
+    .withdrawl-notice {
+        font-size: 1rem;
+        font-weight: 500;
+        line-height: 1.313rem;
+
+        i {
+            color: $theme-color;
+        }
     }
 }
 
@@ -694,7 +764,6 @@ a:focus {
         color: #000;
     }
 }
-
 
 // documentation start
 .documentation-wrapper {
@@ -750,7 +819,6 @@ a:focus {
     line-height: 1.45rem;
     font-size: 1.063rem;
 }
-
 // documentation end
 
 
@@ -783,108 +851,6 @@ a:focus {
 // no data found end
 
 
-// horizental menu start -- move to component
-.content-wrapper:has(.horizontal-title-section) {
-    display: flex;
-    gap: 2rem;
-
-    .horizontal-tabs {
-        display: flex;
-        width: 100%;
-
-        .horizontal-title-section {
-            width: 19%;
-            height: auto;
-            // margin-top: 2.5rem;
-
-            .tabs-wrapper {
-                background: transparent;
-
-                .horizontal-tabs-item {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.25rem;
-                    width: 100%;
-
-                    .menu-item {
-                        padding: 0.813rem;
-                        transition: all 0.3s ease;
-                        border-radius: 0.313rem;
-                        margin-bottom: 0.313rem;
-                        cursor: pointer;
-                        margin: 0;
-
-                        i {
-                            padding-right: 0.5rem;
-                        }
-
-                        p {
-                            margin: 0;
-                            font-weight: 500;
-                            font-size: 1.125rem;
-                            line-height: 1rem;
-                        }
-
-                        &:hover {
-                            background: $theme-background-color;
-                            color: var(--colorPrimary);
-                        }
-
-                        &.active-current-tab,
-                        &.active-current-tab:hover {
-                            background: var(--colorPrimary);
-                            color: #fff;
-                        }
-                    }
-
-                    .tab-heading {
-                        font-size: 1.063rem;
-                        color: #0000008f;
-                        font-weight: 600;
-                        padding-bottom: 0.313rem;
-                        border-bottom: $border-light-small;
-                        margin: 0.5rem 0;
-                    }
-                }
-            }
-        }
-
-        .general-wrapper {
-            width: 81%;
-            background: #fff;
-            border: $border-light-small;
-            margin: 0 1rem 1rem;
-            border-radius: 0.313rem;
-
-            .card-content {
-                padding: 0;
-            }
-
-            .middle-child-container {
-                border: none;
-            }
-
-            .tab-content {
-                padding: 1.5rem;
-                box-sizing: border-box;
-
-                .divider-wrapper:first-child {
-                    .divider-section {
-                        margin: 0;
-                        padding-top: 0;
-                        padding-bottom: .5rem;
-                        margin-bottom: 1rem;
-                    }
-                }
-            }
-        }
-    }
-}
-
-// horizental menu end -- move to component
-
-
-
 // add orderpage 
 
 .total-summary {
@@ -903,8 +869,6 @@ a:focus {
         font-size: 1rem;
     }
 }
-
-
 
 // review-popup-wrapper
 .review-popup-wrapper {
@@ -1284,22 +1248,8 @@ a:focus {
         }
     }
 }
-
 // add product category page end
 
-
-
-// common btn and delete
-.add-btn {
-    display: flex;
-    gap: 0.313rem;
-    align-items: center;
-    border-bottom: 0.063rem solid var(--colorPrimary);
-    padding-bottom: 0.125rem;
-    font-size: 0.813rem;
-    color: var(--colorPrimary);
-    cursor: pointer;
-}
 
 .checkbox-wrapper {
     display: flex;
@@ -1309,35 +1259,5 @@ a:focus {
     .item {
         display: flex;
         gap: 0.125rem;
-    }
-}
-
-// move to zyra
-.settings-form-group-radio {
-    display: flex;
-    flex-direction: column;
-    gap: 0.625rem;
-    margin-top: 0.5rem;
-
-    .radio-basic-input-wrap {
-        display: flex;
-        gap: 0.5rem;
-
-        &.radio-select-active {
-            input {
-                border-color: var(--colorPrimary);
-                position: relative;
-
-                &::after {
-                    position: absolute;
-                    content: "";
-                    border-radius: 50%;
-                    width: 0.5rem;
-                    height: 0.5rem;
-                    background: var(--colorPrimary);
-                    left: 0.125rem;
-                }
-            }
-        }
     }
 }

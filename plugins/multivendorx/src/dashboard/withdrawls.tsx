@@ -124,29 +124,45 @@ const History: React.FC = () => {
             </div>
 
             <div className="row">
-                <div className="column w-65">
-                    <div className="card">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    Withdrawable Balance
+                <div className="column">
+                    <div className="card-header">
+                        <div className="left">
+                            <div className="title">Last Withdrawal</div>
+                        </div>
+                    </div>
+
+                    {lastWithdraws && lastWithdraws.length > 0 ? (
+                        lastWithdraws.map((item: any) => (
+                            <div className="last-withdradal-wrapper" key={item.id}>
+                                <div className="left">
+                                    <div className="price">{formatCurrency(item.amount)}</div>
+                                    <div className="des">
+                                        {item.payment_method === "stripe-connect" && "Stripe"}
+                                        {item.payment_method === "bank-transfer" && "Direct to Local Bank (INR)"}
+                                        {item.payment_method === "paypal-payout" && "PayPal"}
+                                        {item.payment_method === "bank-transfer" ? `Bank Transfer` : ""}
+                                    </div>
+                                </div>
+                                <div className="right">
+                                    <div className="date">{formatWcShortDate(item.date)}</div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="payout-wrapper">
-                            <div className="price">
-                                {formatCurrency(data.available_balance)}
-                            </div>
-                            <div className="des">Current available balance ready for withdrawal</div>
+                        ))
+                    ) : (
+                        <div className="no-data">No withdrawals found.</div>
+                    )}
 
-                            <div className="notice"></div>
-                            <div className="admin-btn btn-purple-bg" onClick={() => setRequestWithdrawal(true)}>
-                                Request Withdrawal
-                            </div>
+                    <div className="buttons-wrapper">
+                        <div
+                            className="admin-btn btn-purple-bg"
+                            onClick={() => (window.location.href = `${appLocalizer.site_url}/dashboard/wallet/transactions/`)}
+                        >
+                            <i className="adminlib-preview"></i>
+                            View transaction history
                         </div>
                     </div>
                 </div>
-                <div className="column w-35">
+                {/* <div className="column">
                     <div className="card-header">
                         <div className="left">
                             <div className="title">
@@ -180,10 +196,58 @@ const History: React.FC = () => {
                             ))}
                         </div>
                     </div>
+                </div> */}
+                <div className="column">
+                    <div className="payout-wrapper">
+                        <div className="payout-header">
+                            <div className="price-wrapper">
+                                <div className="price-title">{__("Available balance", "multivendorx")}</div>
+                                <div className="price">{formatCurrency(data.available_balance)} <div className="admin-badge green">{__("Ready to withdraw", "multivendorx")}</div></div>
+                            </div>
+                        </div>
+
+                        <div className="small-text"><b>$25 (p)</b> {__("minimum required to withdraw", "multivendorx")}</div>
+
+                        <div className="payout-card-wrapper">
+                            <div className="payout-card">
+                                <div className="card-title">{__("Upcoming Balance", "multivendorx")}</div>
+                                <div className="card-price">{formatCurrency(data.reserve_balance)}</div>
+                                <div className="card-des">{__("Pending settlement. Released soon", "multivendorx")}</div>
+                            </div>
+                            {/* {wallet?.withdrawal_setting?.length > 0 && ( */}
+
+                            <div className="payout-card">
+                                <div className="card-title">{__("Free Withdrawals", "multivendorx")}</div>
+
+                                <div className="card-price">
+                                    {data.locking_day} Days <span>
+                                        {__("Left", "multivendorx")}
+                                    </span>
+                                </div>
+
+                                <div className="card-des">
+                                    {__("Then", "multivendorx")} $5% (p) +
+                                    $6(p) {__("fee", "multivendorx")}
+                                </div>
+                            </div>
+                            {/* )} */}
+                        </div>
+                        <div className="small-text">{__("Some funds locked during settlement", "multivendorx")}</div>
+
+                        <div className="small-text">{__("Auto payouts run", "multivendorx")} 2-12-25 (p)</div>
+
+                        {/* <div className="small-text">{__("Auto payouts not set", "multivendorx")}</div> */}
+
+                        <div className="buttons-wrapper">
+                            <div className="admin-btn btn-purple-bg" onClick={() => setRequestWithdrawal(true)}>
+                                {__("Request Withdrawal", "multivendorx")}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div className="row">
+            {/* <div className="row">
                 <div className="column">
                     <div className="card">
                         <div className="card-header">
@@ -194,7 +258,6 @@ const History: React.FC = () => {
                             </div>
                         </div>
                         <div className="withdrawal-wrapper">
-                            {/* Show Frequency + Title only if NOT manual */}
                             {data?.payment_schedules !== "mannual" && (
                                 <>
                                     <div className="des">
@@ -208,10 +271,9 @@ const History: React.FC = () => {
                                 </>
                             )}
 
-                            {/* Show threshold line only if > 0 */}
                             {Number(data?.thresold ?? 0) > 0 && (
                                 <div className="withdrawl-notice">
-                                    <i className="adminlib-info"></i>{" "}
+                                    <i className="adminlib-info"></i>
                                     Withdrawal occurs only when your balance reaches {formatCurrency(data.thresold)} or more. View payment calendar
                                 </div>
                             )}
@@ -282,49 +344,6 @@ const History: React.FC = () => {
                     </div>
                 </div>
 
-                {/* <div className="column">
-                    <div className="card-header">
-                        <div className="left">
-                            <div className="title">
-                                Last Withdrawal
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="last-withdradal-wrapper">
-                        <div className="left">
-                            <div className="price">$625.65</div>
-                            <div className="des">Direct to Local Bank (INR)
-                                Account ending in 4352</div>
-                        </div>
-                        <div className="right">
-                            <div className="date">
-                                April 17, 2021
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="last-withdradal-wrapper">
-                        <div className="left">
-                            <div className="price">$965.65</div>
-                            <div className="des">Direct to Local Bank (INR)
-                                Account ending in 4352</div>
-                        </div>
-                        <div className="right">
-                            <div className="date">
-                                April 17, 2021
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="buttons-wrapper">
-                        <div className="admin-btn btn-purple" onClick={`${appLocalizer.site_url}/dashboard/wallet/transactions/`}>
-                            <i className="adminlib-preview"></i>
-                            View transaction history
-                        </div>
-                    </div>
-                </div> */}
-
                 <div className="column">
                     <div className="card-header">
                         <div className="left">
@@ -363,9 +382,7 @@ const History: React.FC = () => {
                         </div>
                     </div>
                 </div>
-
-
-            </div>
+            </div> */}
 
             {requestWithdrawal && (
                 <CommonPopup
