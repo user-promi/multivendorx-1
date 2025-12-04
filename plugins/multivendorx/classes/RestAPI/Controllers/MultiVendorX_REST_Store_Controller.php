@@ -498,7 +498,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                         'store_slug'          => $store['slug'],
                         'status'              => $store['status'],
                         'email'               => $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['primary_email'] ] ?? '',
-                        'phone'               => $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['phone'] ] ?? $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['_phone'] ] ?? $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['contact_number'] ] ?? '',
+                        'phone'               => $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['phone'] ] ?? '',
                         'primary_owner'       => $primary_owner,
                         'primary_owner_image' => get_avatar( $primary_owner->ID, 48 ),
                         'applied_on'          => $store['create_time'],
@@ -763,12 +763,12 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 if ( MultiVendorX()->setting->get_setting( 'approve_store' ) == 'automatically' ) {
                     $current_user->set_role( 'store_owner' );
                 } elseif ( ! in_array( 'store_owner', (array) $current_user->roles ) ) {
-                        $role = get_option( Utill::OTHER_SETTINGS['default_role'] );
+                        $role = get_option( Utill::MULTIVENDORX_OTHER_SETTINGS['default_role'] );
                         $current_user->set_role( $role );
                 }
 
                 StoreUtil::set_primary_owner( $current_user->ID, $insert_id );
-                update_user_meta( $current_user->ID, Utill::POST_META_SETTINGS['active_store'], $insert_id );
+                update_user_meta( $current_user->ID, Utill::USER_SETTINGS_KEYS['active_store'], $insert_id );
             }
 
             // Handle store_owners array if provided.
@@ -787,7 +787,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 do_action( 'multivendorx_after_store_active', $insert_id );
             }
 
-            $admin_email = get_option( Utill::OTHER_SETTINGS['admin_email'] );
+            $admin_email = get_option( Utill::MULTIVENDORX_OTHER_SETTINGS['admin_email'] );
             $store_email = 'test@gmail.com';
             $parameters  = array(
                 'admin_email' => $admin_email,
@@ -798,7 +798,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
             do_action( 'multivendorx_notify_new_store_approval', 'new_store_approval', $parameters );
 
-            $admin_email = get_option( Utill::OTHER_SETTINGS['admin_email'] );
+            $admin_email = get_option( Utill::MULTIVENDORX_OTHER_SETTINGS['admin_email'] );
             $store_email = 'test@gmail.com';
             $parameters  = array(
                 'admin_email' => $admin_email,
@@ -855,7 +855,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             $action = $request->get_param( 'action' );
 
             if ( $id && $action == 'switch' ) {
-                update_user_meta( get_current_user_id(), Utill::POST_META_SETTINGS['active_store'], $id );
+                update_user_meta( get_current_user_id(), Utill::USER_SETTINGS_KEYS['active_store'], $id );
 
                 $dashboard_page_id = (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' );
                 if ( $dashboard_page_id ) {
@@ -1071,7 +1071,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                     // Save _reject_note if provided.
                     if ( ! empty( $data['store_permanent_reject'] ) ) {
                         $store->set( Utill::STORE_SETTINGS_KEYS['status'], 'permanently_rejected' );
-                        delete_metadata( 'user', 0, Utill::POST_META_SETTINGS['active_store'], '', true );
+                        delete_metadata( 'user', 0, Utill::USER_SETTINGS_KEYS['active_store'], '', true );
                     }
 
                     if ( ! empty( $data['store_application_note'] ) ) {
@@ -1118,7 +1118,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             unset( $data['total_reviews'] );
 
             if ( $data['status'] == 'deactivated' ) {
-                delete_metadata( 'user', 0, Utill::POST_META_SETTINGS['active_store'], '', true );
+                delete_metadata( 'user', 0, Utill::USER_SETTINGS_KEYS['active_store'], '', true );
             }
             // Update basic store info.
             $store->set( Utill::STORE_SETTINGS_KEYS['name'], $data['name'] ?? $store->get( Utill::STORE_SETTINGS_KEYS['name'] ) );

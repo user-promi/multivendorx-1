@@ -105,7 +105,7 @@ class Distance_Shipping extends \WC_Shipping_Method {
             $default_cost         = floatval( $meta[ Utill::STORE_SETTINGS_KEYS['distance_default_cost'] ] ?? 0 );
             $max_distance         = floatval( $meta[ Utill::STORE_SETTINGS_KEYS['distance_max_km'] ] ?? 0 );
             $local_pickup_cost    = floatval( $meta[ Utill::STORE_SETTINGS_KEYS['distance_local_pickup_cost'] ] ?? 0 );
-            $free_shipping_amount = floatval( $meta[ Utill::STORE_SETTINGS_KEYS['_free_shipping_amount'] ] ?? 0 );
+            $free_shipping_amount = floatval( $meta[ Utill::STORE_SETTINGS_KEYS['free_shipping_amount'] ] ?? 0 );
             $distance_rules       = isset( $meta[ Utill::STORE_SETTINGS_KEYS['distance_rules'] ] ) ? json_decode( $meta[ Utill::STORE_SETTINGS_KEYS['distance_rules'] ], true ) : array();
 
             if ( ! $store_lat || ! $store_lng ) {

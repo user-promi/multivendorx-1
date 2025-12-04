@@ -109,7 +109,7 @@ class StripeConnect {
         $stripe_settings        = $payment_admin_settings['stripe-connect'] ?? array();
 
         if ( ! empty( $stripe_settings ) && $stripe_settings['enable'] ) {
-            $store_id = get_user_meta( get_current_user_id(), Utill::POST_META_SETTINGS['active_store'], true );
+            $store_id = get_user_meta( get_current_user_id(), Utill::USER_SETTINGS_KEYS['active_store'], true );
 
             $store             = new Store( $store_id );
             $stripe_account_id = $store->get_meta( Utill::STORE_SETTINGS_KEYS['stripe_account_id'] );
@@ -188,7 +188,7 @@ class StripeConnect {
      * Create Stripe account
      */
     public function ajax_create_account() {
-        $store_id               = get_user_meta( get_current_user_id(), Utill::POST_META_SETTINGS['active_store'], true );
+        $store_id               = get_user_meta( get_current_user_id(), Utill::USER_SETTINGS_KEYS['active_store'], true );
         $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
         $stripe_settings        = $payment_admin_settings['stripe-connect'] ?? array();
         $client_id              = $stripe_settings['client_id'] ?? '';
@@ -243,7 +243,7 @@ class StripeConnect {
             exit;
         }
         // We don't know store_id yet → search it via active vendor store.
-        $store_id   = get_user_meta( get_current_user_id(), Utill::POST_META_SETTINGS['active_store'], true );
+        $store_id   = get_user_meta( get_current_user_id(), Utill::USER_SETTINGS_KEYS['active_store'], true );
         $store      = new Store( $store_id );
         $state_data = unserialize( $store->get_meta( Utill::STORE_SETTINGS_KEYS['stripe_oauth_state'] ) );
         if (
@@ -303,7 +303,7 @@ class StripeConnect {
      */
     public function ajax_disconnect_account() {
 
-        $store_id = get_user_meta( get_current_user_id(), Utill::POST_META_SETTINGS['active_store'], true );
+        $store_id = get_user_meta( get_current_user_id(), Utill::USER_SETTINGS_KEYS['active_store'], true );
         $store    = new Store( $store_id );
 
         // Delete all Stripe-related meta using the same Store object method.

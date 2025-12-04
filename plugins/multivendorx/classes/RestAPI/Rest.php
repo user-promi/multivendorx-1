@@ -281,7 +281,7 @@ class Rest {
         $user_id      = $current_user->ID;
 
         // Fetch custom user meta.
-        $active_store = get_user_meta( $user_id, Utill::POST_META_SETTINGS['active_store'], true );
+        $active_store = get_user_meta( $user_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
 
         // Get all users for that store.
         $users = StoreUtil::get_store_users( $active_store );
@@ -315,7 +315,7 @@ class Rest {
             $response->data['store_id']   = $store_id;
         }
 
-        $commission_id = $object->get_meta( Utill::POST_META_SETTINGS['commission_id'] );
+        $commission_id = $object->get_meta( Utill::ORDER_META_SETTINGS['commission_id'] );
 
         if ( $commission_id ) {
             $commission = CommissionUtil::get_commission_db( $commission_id );

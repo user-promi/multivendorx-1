@@ -297,7 +297,7 @@ class Zone_Shipping extends \WC_Shipping_Method {
                         $calculation_type       = ! empty( $method['settings']['calculation_type'] ) ? $method['settings']['calculation_type'] : 'class';
 
                         foreach ( $found_shipping_classes as $shipping_class => $products_in_class ) {
-                            $shipping_class_term = get_term_by( 'slug', $shipping_class, 'product_shipping_class' );
+                            $shipping_class_term = get_term_by( 'slug', $shipping_class, Utill::WORDPRESS_SETTINGS['product_shipping_class'] );
 
                             if ( $shipping_class_term && $shipping_class_term->term_id ) {
                                 $term_id = $shipping_class_term->term_id;

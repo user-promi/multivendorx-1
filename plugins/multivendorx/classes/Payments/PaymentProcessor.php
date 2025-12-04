@@ -131,7 +131,7 @@ class PaymentProcessor {
 
         $store         = new Store( $store_id );
         $order         = $order_id > 0 ? wc_get_order( $order_id ) : null;
-        $commission_id = $order ? $order->get_meta( Utill::POST_META_SETTINGS['commission_id'], true ) : null;
+        $commission_id = $order ? $order->get_meta( Utill::ORDER_META_SETTINGS['commission_id'], true ) : null;
         $commission    = $commission_id ? CommissionUtil::get_commission_db( $commission_id ) : null;
 
         $amount = $amount ? $amount : ( $commission ? (float) $commission->store_payable : 0.00 );
@@ -210,7 +210,7 @@ class PaymentProcessor {
         if ( 'cod' === $payment_method && 'completed' === $new_status ) {
             global $wpdb;
             $order         = wc_get_order( $order_id );
-            $commission_id = $order ? $order->get_meta( Utill::POST_META_SETTINGS['commission_id'], true ) : null;
+            $commission_id = $order ? $order->get_meta( Utill::ORDER_META_SETTINGS['commission_id'], true ) : null;
             $commission    = $commission_id ? CommissionUtil::get_commission_db( $commission_id ) : null;
 
             $amount = $commission ? (float) $commission->store_payable : 0.00;
@@ -242,7 +242,7 @@ class PaymentProcessor {
 				// }
 
 				// If shipping not found then else.
-				$payment = $order->get_meta( Utill::WOO_SETTINGS['cod_order_payment'], true );
+				$payment = $order->get_meta( Utill::ORDER_META_SETTINGS['cod_order_payment'], true );
 				if ( 'admin' === $payment ) {
 					return;
 				} elseif ( 'store' === $payment ) {

@@ -53,7 +53,7 @@ class Hooks {
         if ( $order && $order->get_parent_id() == 0 ) {
             $vendor = StoreUtil::get_products_store( $item['product_id'] );
             if ( $vendor ) {
-                $item->add_meta_data( Utill::POST_META_SETTINGS['sold_by'], $vendor->get( 'name' ) );
+                $item->add_meta_data( Utill::ORDER_META_SETTINGS['sold_by'], $vendor->get( 'name' ) );
                 // $item->add_meta_data('multivendorx_store_id', $vendor->get_id());
             }
         }
@@ -118,13 +118,13 @@ class Hooks {
             $order = wc_get_order( $order );
         }
 
-        if ( $order->get_parent_id() || $order->get_meta( Utill::POST_META_SETTINGS['has_sub_order'] ) ) {
+        if ( $order->get_parent_id() || $order->get_meta( Utill::ORDER_META_SETTINGS['has_sub_order'] ) ) {
             return;
         }
 
         MultiVendorX()->order->create_vendor_orders( $order );
 
-        $order->update_meta_data( Utill::POST_META_SETTINGS['has_sub_order'], true );
+        $order->update_meta_data( Utill::ORDER_META_SETTINGS['has_sub_order'], true );
         $order->save();
     }
 
@@ -180,7 +180,7 @@ class Hooks {
         }
 
         // If order is not a main order or sync before then return.
-        if ( $order->get_parent_id() || $order->get_meta( Utill::WOO_SETTINGS['order_status_synchronized'], true ) ) {
+        if ( $order->get_parent_id() || $order->get_meta( Utill::ORDER_META_SETTINGS['order_status_synchronized'], true ) ) {
             return;
         }
 
@@ -198,7 +198,7 @@ class Hooks {
             }
 
             if ( $updated ) {
-                $order->update_meta_data( Utill::WOO_SETTINGS['order_status_synchronized'], true );
+                $order->update_meta_data( Utill::ORDER_META_SETTINGS['order_status_synchronized'], true );
                 $order->save();
             }
         }

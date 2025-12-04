@@ -116,8 +116,8 @@ class MultiVendorX_REST_Settings_Controller extends \WP_REST_Controller {
             $all_details['error'] = __( 'Settings Saved', 'multivendorx' );
 
             if ( 'store_capability' === $settingsname || 'user_capability' === $settingsname ) {
-                $store_cap = MultiVendorX()->setting->get_option( Utill::ADMIN_SETTINGS['store-capability'] );
-                $user_cap  = MultiVendorX()->setting->get_option( Utill::ADMIN_SETTINGS['user-capability'] );
+                $store_cap = MultiVendorX()->setting->get_option( Utill::MULTIVENDORX_SETTINGS['store-capability'] );
+                $user_cap  = MultiVendorX()->setting->get_option( Utill::MULTIVENDORX_SETTINGS['user-capability'] );
 
                 $store_owner_caps = array();
                 foreach ( $store_cap as $caps ) {
@@ -137,7 +137,7 @@ class MultiVendorX_REST_Settings_Controller extends \WP_REST_Controller {
                     }
                 }
 
-                MultiVendorX()->setting->update_option( Utill::ADMIN_SETTINGS['user-capability'], array_merge( $user_cap, $result ) );
+                MultiVendorX()->setting->update_option( Utill::MULTIVENDORX_SETTINGS['user-capability'], array_merge( $user_cap, $result ) );
 
                 $role = get_role( 'store_owner' );
 

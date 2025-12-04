@@ -180,16 +180,16 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
                                         {/* Free Shipping Minimum Order Amount */}
                                         <div className="form-group-wrapper">
                                             <div className="form-group">
-                                                <label htmlFor="_free_shipping_amount">
+                                                <label htmlFor="free_shipping_amount">
                                                     {__('Free Shipping Minimum Order Amount ($)', 'multivendorx')}
                                                 </label>
                                                 <BasicInput
                                                     type="number"
-                                                    name="_free_shipping_amount"
+                                                    name="free_shipping_amount"
                                                     wrapperClass="setting-form-input"
                                                     descClass="settings-metabox-description"
                                                     placeholder={__('NO Free Shipping', 'multivendorx')}
-                                                    value={formData._free_shipping_amount || ''}
+                                                    value={formData.free_shipping_amount || ''}
                                                     onChange={handleChange}
                                                 />
                                                 <div className="settings-metabox-description">
@@ -201,16 +201,16 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
                                         {/* Local Pickup Cost */}
                                         <div className="form-group-wrapper">
                                             <div className="form-group">
-                                                <label htmlFor="_local_pickup_cost">
+                                                <label htmlFor="local_pickup_cost">
                                                     {__('Local Pickup Cost ($)', 'multivendorx')}
                                                 </label>
                                                 <BasicInput
                                                     type="number"
-                                                    name="_local_pickup_cost"
+                                                    name="local_pickup_cost"
                                                     wrapperClass="setting-form-input"
                                                     descClass="settings-metabox-description"
                                                     placeholder={__('0.00', 'multivendorx')}
-                                                    value={formData._local_pickup_cost || ''}
+                                                    value={formData.local_pickup_cost || ''}
                                                     onChange={handleChange}
                                                 />
                                                 <div className="settings-metabox-description">
