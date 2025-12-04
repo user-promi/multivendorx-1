@@ -16,8 +16,12 @@ use MultiVendorX\Utill;
  * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
-
 class Module {
+    /**
+     * Container for classes.
+     *
+     * @var array
+     */
     private $container = array();
     /**
      * Instance of this module.

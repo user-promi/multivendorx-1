@@ -108,12 +108,12 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
                 'submenu'    => array(),
                 'capability' => array( 'manage_products' ),
             ),
-            'smpt-products'  => array(
-            'name'       => 'Add Products',
-            'slug'       => 'smpt-products',
-            'icon'       => 'adminlib-single-product',
-            'submenu'    => array(),
-            'capability' => array( 'manage_products' ),
+            'smpt-products' => array(
+				'name'       => 'Add Products',
+				'slug'       => 'smpt-products',
+				'icon'       => 'adminlib-single-product',
+				'submenu'    => array(),
+				'capability' => array( 'manage_products' ),
             ),
             'coupons'       => array(
                 'name'       => 'Coupons',
@@ -170,7 +170,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
 
             'store_support' => array(
                 'name'       => 'Store Support',
-                'icon'       => 'adminlib-customer-service',  
+                'icon'       => 'adminlib-customer-service',
                 'slug'       => 'store-support',
                 'submenu'    => array(
                     array(

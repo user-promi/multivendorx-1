@@ -39,7 +39,7 @@ class StoreUtil {
         // Check if class already exists for this store.
         $existing_class_id = $store->get_meta( Utill::STORE_SETTINGS_KEYS['shipping_class_id'] );
         if ( $existing_class_id ) {
-            return; // Skip creation
+            return; // Skip creation.
         }
 
         // Prepare unique shipping class slug.
@@ -183,7 +183,7 @@ class StoreUtil {
         $table = "{$wpdb->prefix}" . Utill::TABLES['store'];
         $store = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table}" ), ARRAY_A );
 
-        return $store ?: array();
+        return $store ? $store : array();
     }
 
     /**
@@ -198,7 +198,7 @@ class StoreUtil {
         $table  = "{$wpdb->prefix}" . Utill::TABLES['store'];
         $stores = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table WHERE who_created = %d AND status = %s", get_current_user_id(), $status ), ARRAY_A );
 
-        return $stores ?: array();
+        return $stores ? $stores : array();
     }
 
     /**
@@ -361,7 +361,8 @@ class StoreUtil {
             'status'      => 'status',
         );
 
-        $core_data = $all_registration_data = array();
+        $core_data             = array();
+        $all_registration_data = array();
         foreach ( $core_fields as $field_key => $field_label ) {
             $core_data[ $field_label ]           = $store->get( $field_key );
             $all_registration_data[ $field_key ] = $store->get( $field_key );
@@ -401,7 +402,8 @@ class StoreUtil {
         );
 
         // Build map: field_name => field_label.
-        $name_label_map = $option_label_map = array();
+        $name_label_map   = array();
+        $option_label_map = array();
         if ( isset( $form_settings['store_registration_from']['formfieldlist'] ) ) {
             foreach ( $form_settings['store_registration_from']['formfieldlist'] as $field ) {
                 if ( ! empty( $field['name'] ) && ! empty( $field['label'] ) ) {
@@ -435,7 +437,7 @@ class StoreUtil {
                     : ( $option_label_map[ $field_value ] ?? $field_value );
 
             $response['all_registration_data'][ $field_name ] = $field_value;
-            if ( in_array( $field_name, $meta_keys ) ) {
+            if ( in_array( $field_name, $meta_keys, true ) ) {
                 $response['core_data'][ $label ] = $field_value;
             } else {
                 $response['registration_data'][ $label ] = $value;
@@ -464,7 +466,7 @@ class StoreUtil {
             ARRAY_A
         );
 
-        return $stores ?: array();
+        return $stores ? $stores : array();
     }
 
     /**
@@ -540,7 +542,7 @@ class StoreUtil {
     /**
      * Get store product policies
      *
-     * @param int $product_id
+     * @param int $product_id Product ID.
      *
      * @return array
      */
@@ -567,13 +569,13 @@ class StoreUtil {
             $store                     = new Store( $store_id );
             $privacy_override_settings = MultiVendorX()->setting->get_setting( 'store_policy_override', array() );
 
-            if ( in_array( 'store', $privacy_override_settings ) ) {
+            if ( in_array( 'store', $privacy_override_settings, true ) ) {
                 $store_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['store_policy'] );
             }
-            if ( in_array( 'shipping', $privacy_override_settings ) ) {
+            if ( in_array( 'shipping', $privacy_override_settings, true ) ) {
                 $shipping_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['shipping_policy'] );
             }
-            if ( in_array( 'refund_return', $privacy_override_settings ) ) {
+            if ( in_array( 'refund_return', $privacy_override_settings, true ) ) {
                 $refund_policy       = $store->get_meta( Utill::STORE_SETTINGS_KEYS['return_policy'] );
                 $cancellation_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['exchange_policy'] );
             }
@@ -599,7 +601,7 @@ class StoreUtil {
     /**
      * Get store policies
      *
-     * @param int $store_id
+     * @param int $store_id Store ID.
      * @return array
      */
     public static function get_store_policies( $store_id = 0 ) {
@@ -613,13 +615,13 @@ class StoreUtil {
 			$store                     = new Store( $store_id );
 			$privacy_override_settings = MultiVendorX()->setting->get_setting( 'store_policy_override', array() );
 
-			if ( in_array( 'store', $privacy_override_settings ) ) {
+			if ( in_array( 'store', $privacy_override_settings, true ) ) {
 				$store_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['store_policy'] );
 			}
-			if ( in_array( 'shipping', $privacy_override_settings ) ) {
+			if ( in_array( 'shipping', $privacy_override_settings, true ) ) {
 				$shipping_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['shipping_policy'] );
 			}
-			if ( in_array( 'refund_return', $privacy_override_settings ) ) {
+			if ( in_array( 'refund_return', $privacy_override_settings, true ) ) {
 				$refund_policy       = $store->get_meta( Utill::STORE_SETTINGS_KEYS['refund_policy'] );
 				$cancellation_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['exchange_policy'] );
 			}
@@ -788,15 +790,15 @@ class StoreUtil {
         $suspend_settings = MultiVendorX()->setting->get_setting( 'restriction_for_sunspended', array() );
 
         if ( $check_payouts ) {
-            if ( 'under_review' === $status && in_array( 'hold_payments_release', $review_settings ) ) {
+            if ( 'under_review' === $status && in_array( 'hold_payments_release', $review_settings, true ) ) {
                 return true;
             }
 
-            if ( 'suspended' === $status && in_array( 'freeze_all_payments', $suspend_settings ) ) {
+            if ( 'suspended' === $status && in_array( 'freeze_all_payments', $suspend_settings, true ) ) {
                 return true;
             }
         } else {
-            if ( 'under_review' === $status && in_array( 'pause_selling_products', $review_settings ) ) {
+            if ( 'under_review' === $status && in_array( 'pause_selling_products', $review_settings, true ) ) {
                 return true;
             }
 
@@ -810,7 +812,7 @@ class StoreUtil {
 
 
 
-    // this is optimise code
+    // This is optimise code.
     /**
      * Get store records (single or multiple) with support for meta_query, users, pagination, ordering, count and fields.
      *
@@ -1025,7 +1027,7 @@ class StoreUtil {
     /**
      * Basic helper: get all meta for a store as key => value (maybe_unserialize).
      *
-     * @param int $store_id
+     * @param int $store_id Store ID.
      */
     public static function get_store_meta_all( $store_id ) {
         global $wpdb;
@@ -1054,9 +1056,9 @@ class StoreUtil {
      *    [ 'key'=>'flag', 'compare'=>'EXISTS' ] // exists only
      * ]
      *
-     * @param array  $meta_query
-     * @param string $meta_table
-     * @param string $store_table
+     * @param array  $meta_query Meta query array.
+     * @param string $meta_table Optional. Default is $wpdb->prefix . Utill::TABLES['store_meta'].
+     * @param string $store_table Optional. Default is $wpdb->prefix . Utill::TABLES['store'].
      */
     private static function build_meta_query_sql( $meta_query, $meta_table = null, $store_table = null ) {
         global $wpdb;

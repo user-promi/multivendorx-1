@@ -494,7 +494,7 @@ class Admin {
         ?>
         <tr class="form-field">
             <th scope="row" valign="top"><label for="category_percentage_commission"><?php esc_html_e( 'Commission Percentage', 'multivendorx' ); ?></label></th>
-            <td><input type="number" class="short" name="category_percentage_commission" id="category_percentage_commission" value="<?php echo $commission_percentage; ?>" placeholder=""></td>
+            <td><input type="number" class="short" name="category_percentage_commission" id="category_percentage_commission" value="<?php echo esc_attr( $commission_percentage ); ?>" placeholder=""></td>
         </tr>
     
         <tr class="form-field">

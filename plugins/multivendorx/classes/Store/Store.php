@@ -4,6 +4,7 @@
  *
  * @package MultiVendorX
  */
+
 namespace MultiVendorX\Store;
 
 use MultiVendorX\Utill;
