@@ -357,7 +357,7 @@ const Notification: React.FC = () => {
                 <CommonPopup
                     open={!!openChannel}
                     onClose={() => setOpenChannel(null)}
-                    width="500px"
+                    width="31.25rem"
                     height="70%"
                     header={
                         <>
@@ -492,7 +492,7 @@ const Notification: React.FC = () => {
                 <CommonPopup
                     open={!!editingNotification}
                     onClose={() => setEditingNotification(null)}
-                    width="500px"
+                    width="31.25rem"
                     height="70%"
                     header={
                         <>

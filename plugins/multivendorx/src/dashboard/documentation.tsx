@@ -153,7 +153,7 @@ const Documentation: React.FC = () => {
                 <>
                     <CommonPopup
                         open={popupOpen}
-                        width="500px"
+                        width="31.25rem"
                         header={
                             <>
                                 <div className="title">

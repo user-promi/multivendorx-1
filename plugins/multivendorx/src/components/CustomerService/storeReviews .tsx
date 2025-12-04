@@ -481,7 +481,7 @@ const StoreReviews: React.FC = () => {
                 <CommonPopup
                     open={!!selectedReview}
                     onClose={() => setSelectedReview(null)}
-                    width="500px"
+                    width="31.25rem"
                     height="60%"
                     header={
                         <>

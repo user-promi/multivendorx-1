@@ -54,7 +54,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
     <CommonPopup
       open={open}
       onClose={onClose}
-      width="500px"
+      width="31.25rem"
       height="100%"
       header={
         <>

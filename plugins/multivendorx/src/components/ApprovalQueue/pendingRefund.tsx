@@ -447,7 +447,7 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
         <CommonPopup
           open={popupOpen}
           onClose={handleCloseForm}
-          width="500px"
+          width="31.25rem"
           header={
             <>
               <div className="title">

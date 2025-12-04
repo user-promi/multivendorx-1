@@ -95,7 +95,7 @@
             }
 
             .read-more-btn {
-                margin-left: 8px;
+                margin-left: 0.5rem;
                 color: $theme-color;
                 background: none;
                 border: none;
@@ -116,7 +116,6 @@
 
                     .store-name {
                         position: relative;
-                        // padding-right: 2rem;
                         display: flex;
                         gap: 0.313rem;
                         align-items: center;
@@ -144,9 +143,6 @@
                 }
 
                 .edit-icon {
-                    // position: absolute;
-                    // right: 0;
-                    // top: -0.2rem;
                     opacity: 0;
                     transition: all 0.4s ease;
                 }
@@ -258,75 +254,6 @@
     }
 }
 
-// .profile {
-//     display: flex;
-//     gap: 0.75rem;
-//     padding-bottom: 1rem;
-
-//     .details {
-//         .name {
-//             font-size: 1.063rem;
-//             color: #000000ed;
-//             font-weight: 500;
-//             // padding-bottom: 0.313rem;
-//             position: relative;
-//             padding-right: 0.625rem;
-//         }
-
-//         .des {
-//             color: #0000007c;
-//         }
-//     }
-// }
-
-// .avater {
-//     padding: 0.5rem;
-//     border-radius: 50%;
-//     background: $theme-color;
-//     width: 1.5rem;
-//     height: 1.5rem;
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-
-//     span {
-//         color: #fff;
-//         font-size: 1.25rem;
-//         font-weight: 600;
-//     }
-
-//     img {
-//         width: 3rem;
-//         border-radius: 0.313rem;
-//     }
-// }
-
-// .store-owner-details {
-//     display: flex;
-//     justify-content: space-between;
-//     margin-bottom: 0.313rem;
-
-//     .contact-details {
-//         flex-direction: column;
-//         gap: 0.5rem;
-//     }
-
-//     .right-details {
-//         text-align: right;
-
-//         .price {
-//             font-size: 1.063rem;
-//             font-weight: 600;
-//             line-height: 1.5rem;
-//             padding-bottom: 0.125rem;
-//         }
-//     }
-
-//     &.owner {
-//         flex-direction: column;
-//     }
-// }
-
 .contact-details {
     display: flex;
     margin: 0;
@@ -343,55 +270,3 @@
         }
     }
 }
-
-// .edit-wrapper {
-//     position: relative;
-
-//     .action-icon {
-//         font-size: 1.25rem;
-//         cursor: pointer;
-//     }
-
-//     ul {
-//         position: absolute;
-//         top: 100%;
-//         background: #fff;
-//         box-shadow: 0 0.125rem 0.5rem 0 rgb(66 62 78 / 12%);
-//         width: 14rem;
-//         right: 0;
-//         margin-top: 0.313rem;
-//         padding: 0.5rem 0;
-//         z-index: 1;
-
-//         li {
-//             padding: 0.5rem 1rem;
-//             font-size: 1rem;
-//             margin: 0;
-//             cursor: pointer;
-//             transition: all 0.4s ease;
-
-//             i {
-//                 font-size: 1.25rem;
-//                 margin-right: 0.313rem;
-//             }
-
-//             a {
-//                 display: flex;
-//                 align-items: end;
-
-//                 .external {
-//                     padding-left: 0.313rem;
-//                     font-size: 1rem;
-//                 }
-//             }
-
-//             &:hover {
-//                 background: #ece2f9c7;
-//             }
-
-//             &.delete {
-//                 color: rgb(199, 7, 7);
-//             }
-//         }
-//     }
-// }

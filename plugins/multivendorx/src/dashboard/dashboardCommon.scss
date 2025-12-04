@@ -22,77 +22,15 @@ $border-radius-medium: 0.438rem;
 $border-radius-large: 0.5rem;
 $border-radius-button: 8rem;
 
-// var(--colorPrimary): #568bf6;
-// var(--colorSecondary): #f1a60e;
-// var(--colorAccent): #fa7a38;
-// var(--colorSupport): #73d860;
-
-// var(--colorPrimary): #e6b924;
-// var(--colorSecondary): #d888c1;
-// var(--colorAccent): #6b7923;
-// var(--colorSupport): #6e97d0;
-
 :root {
-    // --colorPrimary: #d888c1;
-    // --colorPrimary: #e6b924;
-    // --colorSecondary: #d888c1;
-    // --colorAccent: #6b7923;
-    // --colorSupport: #6e97d0;
-
-    // --colorPrimary: #568bf6;
-    // --colorSecondary: #f1a60e;
-    // --colorAccent: #fa7a38;
-    // --colorSupport: #73d860;
-
     --colorPrimary: unset;
     --colorSecondary: unset;
     --colorAccent: unset;
     --colorSupport: unset;
-
-    // --colorPrimary: #6030db;
-    // --colorPrimary: #fe900d;
-    // --colorSecondary: #6030db;
-    // --colorAccent: #17cadb;
-    // --colorSupport: #a52fff;
-
-
-    // --colorPrimary: #04e762;
-    // --colorPrimary: #04e762;
-    // --colorSecondary: #f5b700;
-    // --colorAccent: #dc0073;
-    // --colorSupport: #008bf8;
-
-    // --colorPrimary: #FF5959;
-    // --colorSecondary: #FADD3A;
-    // --colorAccent: #49BEB6;
-    // --colorSupport: #075F63;
-
-    // --colorPrimary: #0E117A;
-    // --colorPrimary: #00eed0;
-    // --colorSecondary: #0197af;
-    // --colorAccent: #4b227a;
-    // --colorSupport: #02153d;
-
-    // --colorPrimary: #7ccc63;
-    // --colorSecondary: #f39c12;
-    // --colorAccent: #e74c3c;
-    // --colorSupport: #2c3e50;
-
-    //  --colorPrimary: #2c3e50;
-    // --colorSecondary: #2c3e50;
-    // --colorAccent: #2c3e50;
-    // --colorSupport: #2c3e50;
 }
 
 body {
     margin: 0;
-}
-
-.basic-input,
-.basic-select,
-.rmdp-input,
-.textarea-input {
-    // min-height: 1.5rem !important;
 }
 
 a:focus {
@@ -102,19 +40,30 @@ a:focus {
 // zyra color overwrite start
 .btn-purple-bg,
 .horizontal-tabs-item .menu-item.active-current-tab {
-    background: var(--colorPrimary) !important;
+    background: var(--colorPrimary) !important; // overwrite zyra coloradd 
     color: #fff;
 }
 
-.btn-purple,
-.horizontal-tabs-item .menu-item:hover {
-    background: color-mix(in srgb, var(--colorPrimary) 20%, transparent) !important;
-    color: var(--colorPrimary) !important;
+.toggle-setting-wrapper div input:checked+label,
+.search-section i,
+.filter-item.active,
+.search-field select,
+.horizontal-tabs-item .menu-item:hover,
+.btn-purple {
+    color: var(--colorPrimary) !important; // overwrite zyra color
 }
 
-.btn-white {
-    background: #fff;
-    color: var(--colorPrimary);
+.toggle-setting-wrapper div input:checked+label,
+.table-action-wrapper .search-field {
+    border-color: var(--colorPrimary) !important; // overwrite zyra color
+}
+
+.filter-item.active,
+.search-field select,
+.toggle-setting-wrapper div input:checked+label,
+.horizontal-tabs-item .menu-item:hover,
+.btn-purple {
+    background: color-mix(in srgb, var(--colorPrimary) 20%, transparent) !important; // overwrite zyra color
 }
 
 .admin-badge,
@@ -180,24 +129,6 @@ a:focus {
     }
 }
 
-// table color overwrite
-.filter-item.active,
-.search-field select {
-    background: color-mix(in srgb, var(--colorPrimary) 20%, transparent) !important;
-}
-
-.table-action-wrapper {
-    .search-field {
-        border-color: var(--colorPrimary);
-    }
-}
-
-.search-section i,
-.filter-item.active,
-.search-field select {
-    color: var(--colorPrimary) !important;
-}
-
 // zyra color overwrite end
 
 // no permission section start
@@ -229,34 +160,25 @@ a:focus {
 
 // no permission section end
 
-
-.red {
-    background: #fde8e4;
-    color: #f06b4f;
-}
-
-.green {
-    background: #d9f5f0;
-    color: #06be9f;
-}
-
-.yellow {
-    background: #fff0e1;
-    color: #ff9f43;
-}
-
-.blue {
-    background: #bfdeed6e;
-    color: #003d66de;
-}
-
 // card styles start
-.w-35 {
-    width: 35%;
+.w-65 {
+    width: 65% !important;
 }
 
-.w-65 {
-    width: 65%;
+.w-35 {
+    width: 35% !important;
+}
+
+.w-45 {
+    width: 45% !important;
+}
+
+.w-40 {
+    width: 40% !important;
+}
+
+.w-60 {
+    width: 60% !important;
 }
 
 .container-wrapper {
@@ -541,7 +463,6 @@ a:focus {
     }
 }
 
-
 .order-overview {
     display: flex;
     justify-content: space-between;
@@ -652,22 +573,6 @@ a:focus {
 
 // information notice end
 
-
-// payout page price section start 
-.payout-wrapper {
-    .price {
-        font-size: 2rem;
-        font-weight: 600;
-        line-height: 2rem;
-        margin-bottom: 0.813rem;
-    }
-
-    .des {
-        font-size: 1.063rem;
-        margin-bottom: 1rem;
-    }
-}
-
 // varification-wrapper start
 .varification-wrapper {
     display: flex;
@@ -694,7 +599,6 @@ a:focus {
         color: #000;
     }
 }
-
 
 // documentation start
 .documentation-wrapper {
@@ -783,108 +687,6 @@ a:focus {
 // no data found end
 
 
-// horizental menu start -- move to component
-.content-wrapper:has(.horizontal-title-section) {
-    display: flex;
-    gap: 2rem;
-
-    .horizontal-tabs {
-        display: flex;
-        width: 100%;
-
-        .horizontal-title-section {
-            width: 19%;
-            height: auto;
-            // margin-top: 2.5rem;
-
-            .tabs-wrapper {
-                background: transparent;
-
-                .horizontal-tabs-item {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.25rem;
-                    width: 100%;
-
-                    .menu-item {
-                        padding: 0.813rem;
-                        transition: all 0.3s ease;
-                        border-radius: 0.313rem;
-                        margin-bottom: 0.313rem;
-                        cursor: pointer;
-                        margin: 0;
-
-                        i {
-                            padding-right: 0.5rem;
-                        }
-
-                        p {
-                            margin: 0;
-                            font-weight: 500;
-                            font-size: 1.125rem;
-                            line-height: 1rem;
-                        }
-
-                        &:hover {
-                            background: $theme-background-color;
-                            color: var(--colorPrimary);
-                        }
-
-                        &.active-current-tab,
-                        &.active-current-tab:hover {
-                            background: var(--colorPrimary);
-                            color: #fff;
-                        }
-                    }
-
-                    .tab-heading {
-                        font-size: 1.063rem;
-                        color: #0000008f;
-                        font-weight: 600;
-                        padding-bottom: 0.313rem;
-                        border-bottom: $border-light-small;
-                        margin: 0.5rem 0;
-                    }
-                }
-            }
-        }
-
-        .general-wrapper {
-            width: 81%;
-            background: #fff;
-            border: $border-light-small;
-            margin: 0 1rem 1rem;
-            border-radius: 0.313rem;
-
-            .card-content {
-                padding: 0;
-            }
-
-            .middle-child-container {
-                border: none;
-            }
-
-            .tab-content {
-                padding: 1.5rem;
-                box-sizing: border-box;
-
-                .divider-wrapper:first-child {
-                    .divider-section {
-                        margin: 0;
-                        padding-top: 0;
-                        padding-bottom: .5rem;
-                        margin-bottom: 1rem;
-                    }
-                }
-            }
-        }
-    }
-}
-
-// horizental menu end -- move to component
-
-
-
 // add orderpage 
 
 .total-summary {
@@ -903,8 +705,6 @@ a:focus {
         font-size: 1rem;
     }
 }
-
-
 
 // review-popup-wrapper
 .review-popup-wrapper {
@@ -1288,19 +1088,6 @@ a:focus {
 // add product category page end
 
 
-
-// common btn and delete
-.add-btn {
-    display: flex;
-    gap: 0.313rem;
-    align-items: center;
-    border-bottom: 0.063rem solid var(--colorPrimary);
-    padding-bottom: 0.125rem;
-    font-size: 0.813rem;
-    color: var(--colorPrimary);
-    cursor: pointer;
-}
-
 .checkbox-wrapper {
     display: flex;
     gap: 1rem;
@@ -1309,35 +1096,5 @@ a:focus {
     .item {
         display: flex;
         gap: 0.125rem;
-    }
-}
-
-// move to zyra
-.settings-form-group-radio {
-    display: flex;
-    flex-direction: column;
-    gap: 0.625rem;
-    margin-top: 0.5rem;
-
-    .radio-basic-input-wrap {
-        display: flex;
-        gap: 0.5rem;
-
-        &.radio-select-active {
-            input {
-                border-color: var(--colorPrimary);
-                position: relative;
-
-                &::after {
-                    position: absolute;
-                    content: "";
-                    border-radius: 50%;
-                    width: 0.5rem;
-                    height: 0.5rem;
-                    background: var(--colorPrimary);
-                    left: 0.125rem;
-                }
-            }
-        }
     }
 }

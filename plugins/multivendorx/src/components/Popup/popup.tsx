@@ -2,7 +2,6 @@
 import React from 'react';
 import { __, sprintf } from '@wordpress/i18n';
 import { ProPopup } from 'zyra';
-import './popup.scss';
 
 interface PopupProps {
     moduleName?: string;

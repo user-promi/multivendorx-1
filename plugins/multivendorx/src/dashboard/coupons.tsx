@@ -906,7 +906,7 @@ const AllCoupon: React.FC = () => {
                 <CommonPopup
                     open={AddCoupon}
                     onClick={() => setAddCoupon(false)}
-                    width="500px"
+                    width="31.25rem"
                     height="100%"
                     header={
                         <>

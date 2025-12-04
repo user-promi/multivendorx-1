@@ -62,7 +62,7 @@ const Financial = ({ id }: { id: string | null }) => {
                 </div>
 
                 <div className="card-wrapper w-35">
-                </div>
+                </div> 
             </div>
         </>
     );

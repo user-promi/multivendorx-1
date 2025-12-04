@@ -66,7 +66,7 @@ class Admin {
             case 'multivendorx_suborder':
                 $mvx_suborders = MultiVendorX()->order->get_suborders( $post_id );
                 if ( $mvx_suborders ) {
-                    echo '<ul class="mvx-order-vendor" style="margin:0px;">';
+                    echo '<ul class="mvx-order-vendor" style="margin:0;">';
                     foreach ( $mvx_suborders as $suborder ) {
                         if ( $suborder->get_type() === 'shop_order_refund' ) {
                             continue;

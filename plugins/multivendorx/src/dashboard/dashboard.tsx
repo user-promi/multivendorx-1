@@ -969,57 +969,57 @@ const Dashboard: React.FC = () => {
 
         </div>
         {modules.includes("store-review") && (
-          <div className="column w-35">
-            <div className="card">
-              <div className="card-header">
-                <div className="left">
-                  <div className="title">Latest Reviews</div>
-                </div>
-                <div
-                  className="right"
-                  onClick={() => {
-                    window.location.href = "/dashboard/store-support/store-review/";
-                  }}
-                >
-                  <i className="adminlib-external"></i>
-                </div>
+        <div className="column w-35">
+          <div className="card">
+            <div className="card-header">
+              <div className="left">
+                <div className="title">Latest Reviews</div>
               </div>
+              <div
+                className="right"
+                onClick={() => {
+                  window.location.href = "/dashboard/store-support/store-review/";
+                }}
+              >
+                <i className="adminlib-external"></i>
+              </div>
+            </div>
 
-              <div className="card-body">
-                <div className="review-wrapper">
-                  {review && review.length > 0 ? (
-                    review.map((reviewItem) => (
-                      <div className="review" key={reviewItem.review_id}>
-                        <div className="details">
-                          <div className="title">
-                            <div className="avatar">
-                              <i className="adminlib-person"></i>
-                            </div>
-                            {reviewItem.review_title}
+            <div className="card-body">
+              <div className="review-wrapper">
+                {review && review.length > 0 ? (
+                  review.map((reviewItem) => (
+                    <div className="review" key={reviewItem.review_id}>
+                      <div className="details">
+                        <div className="title">
+                          <div className="avatar">
+                            <i className="adminlib-person"></i>
                           </div>
-
-                          <div className="star-wrapper">
-                            {[...Array(5)].map((_, index) => (
-                              <i
-                                key={index}
-                                className={`adminlib-star ${index < Math.round(reviewItem.overall_rating) ? "active" : ""
-                                  }`}
-                              ></i>
-                            ))}
-                            <span>{formatWcShortDate(reviewItem.date_created)}</span>
-                          </div>
-
-                          <div className="des">{reviewItem.review_content}</div>
+                          {reviewItem.review_title}
                         </div>
+
+                        <div className="star-wrapper">
+                          {[...Array(5)].map((_, index) => (
+                            <i
+                              key={index}
+                              className={`adminlib-star ${index < Math.round(reviewItem.overall_rating) ? "active" : ""
+                                }`}
+                            ></i>
+                          ))}
+                          <span>{formatWcShortDate(reviewItem.date_created)}</span>
+                        </div>
+
+                        <div className="des">{reviewItem.review_content}</div>
                       </div>
-                    ))
-                  ) : (
-                    <div className="no-data">No reviews found.</div>
-                  )}
-                </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="no-data">No reviews found.</div>
+                )}
               </div>
             </div>
           </div>
+        </div>
         )}
       </div>
     </>

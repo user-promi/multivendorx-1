@@ -61,32 +61,11 @@
     }
 }
 
-.w-65 {
-    width: 65% !important;
-}
-
-.w-35 {
-    width: 35% !important;
-}
-
-.w-45 {
-    width: 45% !important;
-}
-
-.w-40 {
-    width: 40% !important;
-}
-
-.w-60 {
-    width: 60% !important;
-}
-
 .analytics-container {
     display: flex;
     justify-content: space-between;
     gap: 1rem;
     margin-bottom: 1rem;
-    // flex-wrap: wrap;
 
     .analytics-item {
         display: flex;
@@ -555,6 +534,7 @@
     border-radius: 0.313rem;
     margin: 1rem 0;
     color: $theme-color;
+    border: $border-light-small;
 
     i {
         color: $theme-color;
@@ -584,7 +564,6 @@
     padding: 1rem 1.313rem;
     background: #fff;
     border-radius: 0.313rem;
-    // box-shadow: 0 0.125rem 0.5rem 0 rgba(223, 222, 225, 0.43);
     border: 0.063rem solid transparent;
 
     .details-wrapper {
@@ -647,7 +626,6 @@
 .data-card-wrapper {
     display: flex;
     gap: 1rem;
-    // flex-wrap: wrap;
     padding-bottom: 1rem;
     justify-content: space-between;
 
@@ -680,58 +658,27 @@
     }
 }
 
-// transaction debit list
-// .debit-list {
-//     height: 9rem;
-//     overflow: auto;
+// .payout-notice {
+//     padding: 0.625rem;
+//     border-radius: 0.313rem;
+//     font-size: 1.063rem;
 
-//     .data-card {
-//         margin-bottom: 0.75rem;
-//         display: flex;
-//         justify-content: space-between;
 
-//         .title {
-//             .name {
-//                 font-size: 1.063rem;
-//                 margin-bottom: 0.125rem;
-//             }
-
-//             .date {
-//                 color: #0000007d;
-//             }
-//         }
+//     i {
+//         padding-right: 0.313rem;
 //     }
 
-//     .number {
-//         display: flex;
-//         align-items: center;
-//         gap: 0.313rem;
-//         font-size: 1.063rem;
-//         color: rgba(0, 128, 0, 0.842);
+//     &.error-notice {
+//         color: #ff0000eb;
+//         background: #ff00001c;
+
+//         i {
+//             color: #ff0000eb;
+
+//         }
+
 //     }
 // }
-
-.payout-notice {
-    padding: 0.625rem;
-    border-radius: 0.313rem;
-    font-size: 1.063rem;
-
-
-    i {
-        padding-right: 0.313rem;
-    }
-
-    &.error-notice {
-        color: #ff0000eb;
-        background: #ff00001c;
-
-        i {
-            color: #ff0000eb;
-
-        }
-
-    }
-}
 
 
 .settings-metabox-description.slug i {
@@ -755,6 +702,7 @@
         .basic-input {
             width: 25%;
         }
+
         &.rule {
             width: fit-content;
         }
