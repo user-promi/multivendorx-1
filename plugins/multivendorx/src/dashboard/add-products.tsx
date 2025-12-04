@@ -1220,7 +1220,7 @@ const AddProduct = () => {
                                 ))}
 
                                 <div className="admin-btn btn-purple-bg" onClick={addDownloadableFile}>
-                                    <i className="adminlib-plus-circle-o"></i> Add new
+                                    <i className="adminlib-plus-circle"></i> Add new
                                 </div> */}
 
                                 <DynamicRowSetting
@@ -1321,7 +1321,7 @@ const AddProduct = () => {
                                             setAddAttribute(true);
                                         }}
                                     >
-                                        <div className="i adminlib-plus-circle-o"></div>
+                                        <div className="i adminlib-plus-circle"></div>
                                         Add attribute
                                     </div>
                                 </div>
@@ -1484,7 +1484,7 @@ const AddProduct = () => {
                                 <div className="title">Variants</div>
                                 <div className="buttons">
                                     <div className="add-btn">
-                                        <div className="i adminlib-plus-circle-o"></div>
+                                        <div className="i adminlib-plus-circle"></div>
                                         Generate variations
                                     </div>
                                     <div
@@ -1493,7 +1493,7 @@ const AddProduct = () => {
                                             setAddvariant(true);
                                         }}
                                     >
-                                        <div className="i adminlib-plus-circle-o"></div>
+                                        <div className="i adminlib-plus-circle"></div>
                                         Add variant
                                     </div>
                                 </div>
@@ -1670,7 +1670,7 @@ const AddProduct = () => {
                                                             setShowAddNew(true)
                                                         }
                                                     >
-                                                        <i className="adminlib-plus-circle-o"></i>{' '}
+                                                        <i className="adminlib-plus-circle"></i>{' '}
                                                         Add new
                                                     </div>
                                                 )}
