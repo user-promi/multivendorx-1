@@ -76,17 +76,17 @@ class Distance_Shipping extends \WC_Shipping_Method {
 			return;
         }
         $products              = $package['contents'];
-        $mvx_user_location_lat = $package[ Utill::USER_SETTINGS_KEYS['mvx_user_location_lat'] ] ?? '';
-        $mvx_user_location_lng = $package[ Utill::USER_SETTINGS_KEYS['mvx_user_location_lng'] ] ?? '';
+        $multivendorx_user_location_lat = $package[ Utill::USER_SETTINGS_KEYS['multivendorx_user_location_lat'] ] ?? '';
+        $multivendorx_user_location_lng = $package[ Utill::USER_SETTINGS_KEYS['multivendorx_user_location_lng'] ] ?? '';
 
-        if ( ! $mvx_user_location_lat || ! $mvx_user_location_lng ) {
+        if ( ! $multivendorx_user_location_lat || ! $multivendorx_user_location_lng ) {
 			return;
         }
 
         $seller_products = array();
 
         foreach ( $products as $product ) {
-            $store_id = get_post_meta( $product['product_id'], Utll::POST_META_SETTINGS['store_id'], true );
+            $store_id = get_post_meta( $product['product_id'], Utill::POST_META_SETTINGS['store_id'], true );
             if ( ! empty( $store_id ) && self::is_shipping_enabled_for_seller( $store_id ) ) {
                 $seller_products[ (int) $store_id ][] = $product;
             }
@@ -112,7 +112,7 @@ class Distance_Shipping extends \WC_Shipping_Method {
 				continue;
             }
 
-            $distance = self::mvx_get_latlng_distance( $mvx_user_location_lat, $mvx_user_location_lng, $store_lat, $store_lng, 'k' );
+            $distance = self::mvx_get_latlng_distance( $multivendorx_user_location_lat, $multivendorx_user_location_lng, $store_lat, $store_lng, 'k' );
             if ( ! $distance ) {
 				continue;
             }

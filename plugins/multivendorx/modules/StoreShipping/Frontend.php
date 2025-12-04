@@ -133,20 +133,20 @@ class Frontend {
                 'name'        => 'mvx_user_location',
             );
 
-            $fields['billing']['mvx_user_location_lat'] = array(
+            $fields['billing']['multivendorx_user_location_lat'] = array(
                 'required' => false,
                 'class'    => array( 'input-hidden' ),
-                'value'    => WC()->session->get( '_mvx_user_location_lat' ),
+                'value'    => WC()->session->get( '_multivendorx_user_location_lat' ),
                 'type'     => 'hidden',
-                'name'     => 'mvx_user_location_lat',
+                'name'     => 'multivendorx_user_location_lat',
             );
 
-            $fields['billing']['mvx_user_location_lng'] = array(
+            $fields['billing']['multivendorx_user_location_lng'] = array(
                 'required' => false,
                 'class'    => array( 'input-hidden' ),
-                'value'    => WC()->session->get( '_mvx_user_location_lng' ),
+                'value'    => WC()->session->get( '_multivendorx_user_location_lng' ),
                 'type'     => 'hidden',
-                'name'     => 'mvx_user_location_lng',
+                'name'     => 'multivendorx_user_location_lng',
             );
         }
 
@@ -183,14 +183,14 @@ class Frontend {
      */
     public function mvx_checkout_user_location_session_set( $post_data_raw ) {
         parse_str( $post_data_raw, $post_data );
-        if ( ! empty( $post_data['mvx_user_location'] ) ) {
-            WC()->session->set( '_mvx_user_location', sanitize_text_field( $post_data['mvx_user_location'] ) );
+        if ( ! empty( $post_data['multivendorx_user_location'] ) ) {
+            WC()->session->set( '_multivendorx_user_location', sanitize_text_field( $post_data['multivendorx_user_location'] ) );
         }
-        if ( ! empty( $post_data['mvx_user_location_lat'] ) ) {
-            WC()->session->set( '_mvx_user_location_lat', sanitize_text_field( $post_data['mvx_user_location_lat'] ) );
+        if ( ! empty( $post_data['multivendorx_user_location_lat'] ) ) {
+            WC()->session->set( '_multivendorx_user_location_lat', sanitize_text_field( $post_data['multivendorx_user_location_lat'] ) );
         }
-        if ( ! empty( $post_data['mvx_user_location_lng'] ) ) {
-            WC()->session->set( '_mvx_user_location_lng', sanitize_text_field( $post_data['mvx_user_location_lng'] ) );
+        if ( ! empty( $post_data['multivendorx_user_location_lng'] ) ) {
+            WC()->session->set( '_multivendorx_user_location_lng', sanitize_text_field( $post_data['multivendorx_user_location_lng'] ) );
         }
     }
 
@@ -202,14 +202,14 @@ class Frontend {
     public function mvx_checkout_user_location_save( $order_id ) {
         $order = wc_get_order( $order_id );
 
-        if ( ! empty( filter_input( INPUT_POST, 'mvx_user_location', FILTER_SANITIZE_SPECIAL_CHARS ) ) ) {
-            $order->update_meta_data( '_mvx_user_location', sanitize_text_field( $location ) );
+        if ( ! empty( filter_input( INPUT_POST, 'multivendorx_user_location', FILTER_SANITIZE_SPECIAL_CHARS ) ) ) {
+            $order->update_meta_data( '_multivendorx_user_location', sanitize_text_field( $location ) );
         }
-        if ( ! empty( filter_input( INPUT_POST, 'mvx_user_location_lat', FILTER_SANITIZE_SPECIAL_CHARS ) ) ) {
-            $order->update_meta_data( '_mvx_user_location_lat', sanitize_text_field( $location_lat ) );
+        if ( ! empty( filter_input( INPUT_POST, 'multivendorx_user_location_lat', FILTER_SANITIZE_SPECIAL_CHARS ) ) ) {
+            $order->update_meta_data( '_multivendorx_user_location_lat', sanitize_text_field( $location_lat ) );
         }
-        if ( ! empty( filter_input( INPUT_POST, 'mvx_user_location_lng', FILTER_SANITIZE_SPECIAL_CHARS ) ) ) {
-            $order->update_meta_data( '_mvx_user_location_lng', sanitize_text_field( $location_lng ) );
+        if ( ! empty( filter_input( INPUT_POST, 'multivendorx_user_location_lng', FILTER_SANITIZE_SPECIAL_CHARS ) ) ) {
+            $order->update_meta_data( '_multivendorx_user_location_lng', sanitize_text_field( $location_lng ) );
         }
         $order->save();
     }
@@ -249,9 +249,9 @@ class Frontend {
      */
     public function add_user_location_to_shipping_package( $packages ) {
         foreach ( $packages as $i => $package ) {
-            $packages[ $i ]['mvx_user_location']     = WC()->session->get( '_mvx_user_location' );
-            $packages[ $i ]['mvx_user_location_lat'] = WC()->session->get( '_mvx_user_location_lat' );
-            $packages[ $i ]['mvx_user_location_lng'] = WC()->session->get( '_mvx_user_location_lng' );
+            $packages[ $i ]['multivendorx_user_location']     = WC()->session->get( '_multivendorx_user_location' );
+            $packages[ $i ]['multivendorx_user_location_lat'] = WC()->session->get( '_multivendorx_user_location_lat' );
+            $packages[ $i ]['multivendorx_user_location_lng'] = WC()->session->get( '_multivendorx_user_location_lng' );
         }
         return $packages;
     }

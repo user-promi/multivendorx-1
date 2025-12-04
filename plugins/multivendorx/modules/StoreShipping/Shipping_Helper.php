@@ -29,8 +29,8 @@ class Shipping_Helper {
         $new_packages = array();
 
         // Get user location from session.
-        $user_lat = WC()->session->get( '_mvx_user_location_lat' ) ? WC()->session->get( '_mvx_user_location_lat' ) : '';
-        $user_lng = WC()->session->get( '_mvx_user_location_lng' ) ? WC()->session->get( '_mvx_user_location_lng' ) : '';
+        $user_lat = WC()->session->get( '_multivendorx_user_location_lat' ) ? WC()->session->get( '_multivendorx_user_location_lat' ) : '';
+        $user_lng = WC()->session->get( '_multivendorx_user_location_lng' ) ? WC()->session->get( '_multivendorx_user_location_lng' ) : '';
 
         foreach ( WC()->cart->get_cart() as $item_key => $item ) {
             $product_id = $item['product_id'];
@@ -53,8 +53,8 @@ class Shipping_Helper {
                         'address'   => WC()->customer->get_shipping_address(),
                         'address_2' => WC()->customer->get_shipping_address_2(),
                     ),
-                    'mvx_user_location_lat' => $user_lat,
-                    'mvx_user_location_lng' => $user_lng,
+                    'multivendorx_user_location_lat' => $user_lat,
+                    'multivendorx_user_location_lng' => $user_lng,
                 );
             }
 
