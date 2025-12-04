@@ -43,7 +43,7 @@ class Shortcode {
         FrontendScripts::enqueue_style( 'multivendorx-store-product-style' );
 
         // if (Utill::is_store_dashboard()) {
-            // wp_deregister_style('wc-blocks-style');
+            wp_deregister_style('wc-blocks-style');
 
             wp_enqueue_script( 'wp-element' );
             wp_enqueue_media();

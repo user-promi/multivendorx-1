@@ -22,77 +22,15 @@ $border-radius-medium: 0.438rem;
 $border-radius-large: 0.5rem;
 $border-radius-button: 8rem;
 
-// var(--colorPrimary): #568bf6;
-// var(--colorSecondary): #f1a60e;
-// var(--colorAccent): #fa7a38;
-// var(--colorSupport): #73d860;
-
-// var(--colorPrimary): #e6b924;
-// var(--colorSecondary): #d888c1;
-// var(--colorAccent): #6b7923;
-// var(--colorSupport): #6e97d0;
-
 :root {
-    // --colorPrimary: #d888c1;
-    // --colorPrimary: #e6b924;
-    // --colorSecondary: #d888c1;
-    // --colorAccent: #6b7923;
-    // --colorSupport: #6e97d0;
-
-    // --colorPrimary: #568bf6;
-    // --colorSecondary: #f1a60e;
-    // --colorAccent: #fa7a38;
-    // --colorSupport: #73d860;
-
     --colorPrimary: unset;
     --colorSecondary: unset;
     --colorAccent: unset;
     --colorSupport: unset;
-
-    // --colorPrimary: #6030db;
-    // --colorPrimary: #fe900d;
-    // --colorSecondary: #6030db;
-    // --colorAccent: #17cadb;
-    // --colorSupport: #a52fff;
-
-
-    // --colorPrimary: #04e762;
-    // --colorPrimary: #04e762;
-    // --colorSecondary: #f5b700;
-    // --colorAccent: #dc0073;
-    // --colorSupport: #008bf8;
-
-    // --colorPrimary: #FF5959;
-    // --colorSecondary: #FADD3A;
-    // --colorAccent: #49BEB6;
-    // --colorSupport: #075F63;
-
-    // --colorPrimary: #0E117A;
-    // --colorPrimary: #00eed0;
-    // --colorSecondary: #0197af;
-    // --colorAccent: #4b227a;
-    // --colorSupport: #02153d;
-
-    // --colorPrimary: #7ccc63;
-    // --colorSecondary: #f39c12;
-    // --colorAccent: #e74c3c;
-    // --colorSupport: #2c3e50;
-
-    //  --colorPrimary: #2c3e50;
-    // --colorSecondary: #2c3e50;
-    // --colorAccent: #2c3e50;
-    // --colorSupport: #2c3e50;
 }
 
 body {
     margin: 0;
-}
-
-.basic-input,
-.basic-select,
-.rmdp-input,
-.textarea-input {
-    // min-height: 1.5rem !important;
 }
 
 a:focus {
@@ -106,15 +44,26 @@ a:focus {
     color: #fff;
 }
 
-.btn-purple,
-.horizontal-tabs-item .menu-item:hover {
-    background: color-mix(in srgb, var(--colorPrimary) 20%, transparent) !important;
-    color: var(--colorPrimary) !important;
+.toggle-setting-wrapper div input:checked+label,
+.search-section i,
+.filter-item.active,
+.search-field select,
+.horizontal-tabs-item .menu-item:hover,
+.btn-purple{
+    color: var(--colorPrimary);
 }
 
-.btn-white {
-    background: #fff;
-    color: var(--colorPrimary);
+.toggle-setting-wrapper div input:checked+label,
+.table-action-wrapper .search-field{
+    border-color: var(--colorPrimary);
+}
+
+.filter-item.active,
+.search-field select,
+.toggle-setting-wrapper div input:checked+label,
+.horizontal-tabs-item .menu-item:hover,
+.btn-purple {
+    background: color-mix(in srgb, var(--colorPrimary) 20%, transparent) !important;
 }
 
 .admin-badge,
@@ -179,25 +128,6 @@ a:focus {
         background: var(--colorSupport);
     }
 }
-
-// table color overwrite
-.filter-item.active,
-.search-field select {
-    background: color-mix(in srgb, var(--colorPrimary) 20%, transparent) !important;
-}
-
-.table-action-wrapper {
-    .search-field {
-        border-color: var(--colorPrimary);
-    }
-}
-
-.search-section i,
-.filter-item.active,
-.search-field select {
-    color: var(--colorPrimary) !important;
-}
-
 // zyra color overwrite end
 
 // no permission section start
@@ -629,114 +559,6 @@ a:focus {
 }
 
 // information notice end
-
-
-// payout page price section start 
-.payout-wrapper {
-    .payout-header {
-        .admin-btn {
-            font-size: 1.313rem;
-            padding: .813rem 1.813rem;
-        }
-    }
-
-    .price-title {
-        font-size: 0.95rem;
-        line-height: 1rem;
-        padding-bottom: 0.625rem;
-        color: #00000071;
-    }
-
-    .price {
-        font-size: 3rem;
-        font-weight: 600;
-        line-height: 2.4rem;
-        margin-bottom: 0.813rem;
-        display: flex;
-        align-items: start;
-        gap: 0.5rem;
-    }
-
-    .des {
-        font-size: 0.9rem;
-        margin-bottom: 1rem;
-    }
-
-    .small-text {
-        line-height: 1.25rem;
-    }
-
-    .admin-btn {
-        margin-top: 1rem;
-    }
-
-    .right-section {
-        width: 50%;
-    }
-
-    .admin-badge {
-        display: inline-block;
-    }
-
-    .payout-card-wrapper {
-        display: flex;
-        gap: 1rem;
-        margin: 0.813rem 0;
-
-        .payout-card {
-            padding: 1rem;
-            border-radius: 0.313rem;
-            background: #e6e2e275;
-            width: 50%;
-
-            .card-title {
-                font-size: 1.125rem;
-            }
-
-            .card-price {
-                font-size: 1.813rem;
-                font-weight: 600;
-                line-height: 2rem;
-                margin: 0.5rem 0;
-            }
-
-            .card-des {
-                color: #0000009e;
-                font-size: 0.813rem;
-            }
-        }
-    }
-}
-
-.withdrawal-wrapper {
-    background: $theme-background-color;
-    padding: 0.313rem;
-    border-radius: 0.313rem;
-    margin: 1rem 0;
-    color: $theme-color;
-    border: $border-light-small;
-
-    i {
-        color: $theme-color;
-    }
-
-    .title {
-        font-size: 1.45rem;
-        font-weight: 600;
-        line-height: 2rem;
-        padding-bottom: 0.5rem;
-    }
-
-    .withdrawl-notice {
-        font-size: 1rem;
-        font-weight: 500;
-        line-height: 1.313rem;
-
-        i {
-            color: $theme-color;
-        }
-    }
-}
 
 // varification-wrapper start
 .varification-wrapper {
