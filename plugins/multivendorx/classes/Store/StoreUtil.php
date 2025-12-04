@@ -134,8 +134,10 @@ class StoreUtil {
 
         $primary_owner_id = self::get_primary_owner( $store_id );
         $users            = $wpdb->get_results( $wpdb->prepare( "SELECT user_id FROM $table WHERE store_id = %d", $store_id ), ARRAY_A );
+        $user_ids = wp_parse_id_list( wp_list_pluck( $users, 'user_id' ) );
+
         return array(
-            'users'         => wp_list_pluck( $users, 'user_id' ),
+            'users'         => $user_ids,
             'primary_owner' => $primary_owner_id,
         );
     }
