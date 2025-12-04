@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import {
     BasicInput,
-    CalendarInput,
     CommonPopup,
     DynamicRowSetting,
     FileInput,
@@ -13,30 +12,8 @@ import {
     SelectInput,
     TextArea,
 } from 'zyra';
-
-const demoData = [
-    {
-        id: 'cat1',
-        name: 'Category 1',
-        children: [
-            { id: 'sub1', name: 'sub category 1' },
-            { id: 'sub2', name: 'sub category 2' },
-            {
-                id: 'sub3',
-                name: 'sub category 3',
-                children: [
-                    { id: 'child1', name: 'sub 1' },
-                    { id: 'child2', name: 'sub 2' },
-                    { id: 'child3', name: 'sub 3' },
-                ],
-            },
-            { id: 'sub4', name: 'sub category 4' },
-        ],
-    },
-    { id: 'cat2', name: 'Category 2' },
-    { id: 'cat3', name: 'Category 3' },
-    { id: 'cat4', name: 'Category 4' },
-];
+import { applyFilters } from '@wordpress/hooks';
+import { DateTimePicker } from '@wordpress/components';
 
 const downloadTemplate = {
     fields: [
@@ -135,14 +112,22 @@ const AddProduct = () => {
     const [AddAttribute, setAddAttribute] = useState(false);
     const [Addvariant, setAddvariant] = useState(false);
     const [showAddNew, setShowAddNew] = useState(false);
+    const [categories, setCategories] = useState([]);
+    const [selectedCats, setSelectedCats] = useState([]);
+
+    const isPyramidEnabled =
+        appLocalizer.settings_databases_value['category-pyramid-guide']
+            ?.category_pyramid_guide === 'yes';
+
     const wrapperRef = useRef(null);
 
-	const [selectedCat, setSelectedCat] = useState('');
-    const [selectedSub, setSelectedSub] = useState('');
-    const [selectedChild, setSelectedChild] = useState('');
+    const [selectedCat, setSelectedCat] = useState(null);
+    const [selectedSub, setSelectedSub] = useState(null);
+    const [selectedChild, setSelectedChild] = useState(null);
 
     // Close on click outside
     useEffect(() => {
+        if (!isPyramidEnabled) return;
         const handleClickOutside = (event) => {
             if (
                 wrapperRef.current &&
@@ -157,35 +142,41 @@ const AddProduct = () => {
     }, []);
 
     const handleCategoryClick = (catId) => {
+        if (!isPyramidEnabled) return;
         setSelectedCat(catId);
-        setSelectedSub('');
-        setSelectedChild('');
+        setSelectedSub(null);
+        setSelectedChild(null);
     };
 
     const handleSubClick = (subId) => {
+        if (!isPyramidEnabled) return;
         setSelectedSub(subId);
-        setSelectedChild('');
+        setSelectedChild(null);
     };
 
     const handleChildClick = (childId) => {
+        if (!isPyramidEnabled) return;
         setSelectedChild(childId);
     };
 
     // Breadcrumb path click resets below levels
     const handlePathClick = (level) => {
+        if (!isPyramidEnabled) return;
         if (level === 'category') {
-            setSelectedSub('');
-            setSelectedChild('');
+            setSelectedSub(null);
+            setSelectedChild(null);
         }
         if (level === 'sub') {
-            setSelectedChild('');
+            setSelectedChild(null);
         }
     };
 
-    // ------------------ PRINT PATH ------------------
     const printPath = () => {
-        const cat = demoData.find((c) => c.id === selectedCat);
+        if (!isPyramidEnabled) return;
+        const cat = treeData.find((c) => c.id === selectedCat);
+
         const sub = cat?.children?.find((s) => s.id === selectedSub);
+
         const child = sub?.children?.find((c) => c.id === selectedChild);
 
         return (
@@ -217,9 +208,165 @@ const AddProduct = () => {
 
     // Reset all
     const resetSelection = () => {
-        setSelectedCat('');
-        setSelectedSub('');
-        setSelectedChild('');
+        setSelectedCat(null);
+        setSelectedSub(null);
+        setSelectedChild(null);
+    };
+
+    const [treeData, setTreeData] = useState([]);
+
+    const buildTree = (list, parent = 0) =>
+        list
+            .filter((item) => item.parent === parent)
+            .map((item) => ({
+                id: item.id,
+                name: item.name,
+                children: buildTree(list, item.id),
+            }));
+
+    useEffect(() => {
+        if (categories.length) {
+            setTreeData(buildTree(categories));
+        }
+    }, [categories]);
+
+    const preselectCategory = (savedId) => {
+        for (const cat of treeData) {
+            if (cat.id === savedId) {
+                setSelectedCat(cat.id);
+                return;
+            }
+
+            for (const sub of cat.children) {
+                if (sub.id === savedId) {
+                    setSelectedCat(cat.id);
+                    setSelectedSub(sub.id);
+                    return;
+                }
+
+                for (const child of sub.children) {
+                    if (child.id === savedId) {
+                        setSelectedCat(cat.id);
+                        setSelectedSub(sub.id);
+                        setSelectedChild(child.id);
+                        return;
+                    }
+                }
+            }
+        }
+    };
+
+    useEffect(() => {
+        if (!isPyramidEnabled) return;
+        const id = selectedChild || selectedSub || selectedCat;
+
+        if (id) {
+            setProduct((prev) => ({
+                ...prev,
+                categories: [{ id: Number(id) }],
+            }));
+        }
+    }, [selectedCat, selectedSub, selectedChild]);
+
+    const preselectedRef = useRef(false);
+
+    useEffect(() => {
+        if (preselectedRef.current) return;
+
+        if (treeData.length && product?.categories?.length) {
+            const savedId = product.categories[0].id;
+            preselectCategory(savedId);
+            preselectedRef.current = true;
+        }
+    }, [treeData, product]);
+
+    useEffect(() => {
+        axios
+            .get(
+                `${appLocalizer.apiUrl}/wc/v3/products/categories?per_page=100`,
+                {
+                    headers: { 'X-WP-Nonce': appLocalizer.nonce },
+                }
+            )
+            .then((res) => setCategories(res.data));
+    }, []);
+
+    useEffect(() => {
+        if (product && product.categories) {
+            setSelectedCats(product.categories.map((c) => c.id));
+        }
+    }, [product]);
+
+    const toggleCategory = (id) => {
+        setSelectedCats((prev) =>
+            prev.includes(id)
+                ? prev.filter((item) => item !== id)
+                : [...prev, id]
+        );
+    };
+
+    const buildCategoryTree = (categories) => {
+        const map = {};
+        const roots = [];
+
+        categories.forEach((cat) => {
+            map[cat.id] = { ...cat, children: [] };
+        });
+
+        categories.forEach((cat) => {
+            if (cat.parent === 0) {
+                roots.push(map[cat.id]);
+            } else if (map[cat.parent]) {
+                map[cat.parent].children.push(map[cat.id]);
+            }
+        });
+
+        return roots;
+    };
+
+    const CategoryItem = ({ category, selectedCats, toggleCategory }) => {
+        return (
+            <li className={category.parent === 0 ? 'category' : 'sub-category'}>
+                <input
+                    type="checkbox"
+                    checked={selectedCats.includes(category.id)}
+                    onChange={() => toggleCategory(category.id)}
+                />
+                {category.name}
+
+                {category.children?.length > 0 && (
+                    <ul>
+                        {category.children.map((child) => (
+                            <CategoryItem
+                                key={child.id}
+                                category={child}
+                                selectedCats={selectedCats}
+                                toggleCategory={toggleCategory}
+                            />
+                        ))}
+                    </ul>
+                )}
+            </li>
+        );
+    };
+
+    const CategoryTree = ({ categories, selectedCats, toggleCategory }) => {
+        const nestedCategories = buildCategoryTree(categories);
+
+        return (
+            <div className="category-wrapper">
+                <ul>
+                    {nestedCategories.map((cat) => (
+                        <CategoryItem
+                            key={cat.id}
+                            category={cat}
+                            selectedCats={selectedCats}
+                            toggleCategory={toggleCategory}
+                        />
+                    ))}
+                </ul>
+            </div>
+        );
     };
 
     // category end
@@ -242,27 +389,6 @@ const AddProduct = () => {
         return () => document.removeEventListener('click', handleClick);
     }, [variants]);
 
-    const addVariant = () => {
-        setVariants((prev) => [
-            ...prev,
-            {
-                id: Date.now(),
-                name: '',
-                values: [],
-                tempValue: '',
-                isEditing: true,
-            },
-        ]);
-    };
-
-    // update field on change
-    const updateVariantField = (id, field, value) => {
-        setVariants((prev) =>
-            prev.map((v) => (v.id === id ? { ...v, [field]: value } : v))
-        );
-    };
-
-    // when user clicks outside → save & switch to view mode
     const finishEditing = (id) => {
         setVariants((prev) =>
             prev.map((v) => {
@@ -283,34 +409,6 @@ const AddProduct = () => {
         );
     };
 
-    // add new value badge
-    const addValue = (id) => {
-        setVariants((prev) =>
-            prev.map((v) => {
-                if (v.id === id && v.tempValue.trim()) {
-                    return {
-                        ...v,
-                        values: [...v.values, v.tempValue.trim()],
-                        tempValue: '',
-                    };
-                }
-                return v;
-            })
-        );
-    };
-
-    // delete variant
-    const deleteVariant = (id) => {
-        setVariants((prev) => prev.filter((v) => v.id !== id));
-    };
-
-    // enter edit mode again
-    const editVariant = (id) => {
-        setVariants((prev) =>
-            prev.map((v) => (v.id === id ? { ...v, isEditing: true } : v))
-        );
-    };
-
     const toggleCard = (cardId) => {
         const body = document.querySelector(`#${cardId} .card-body`);
         const arrow = document.querySelector(`#${cardId} .arrow-icon`);
@@ -321,7 +419,6 @@ const AddProduct = () => {
         arrow.classList.toggle('rotate');
     };
 
-    // static data start
     const typeOptions = [
         { label: 'Select product type', value: '' },
         { label: 'Simple', value: 'simple' },
@@ -341,19 +438,6 @@ const AddProduct = () => {
         { value: 'onbackorder', label: 'On Backorder' },
     ];
 
-    const staticvariant = [
-        { label: 'red', value: 'red' },
-        { label: 'green', value: 'green' },
-        { label: 'blue', value: 'blue' },
-    ];
-
-    const staticvariantion = [
-        { label: '', value: '' },
-        { label: 'color', value: '' },
-        { label: 'size', value: '' },
-        { label: 'width', value: '' },
-    ];
-
     const backorderOptions = [
         { label: 'Do not allow', value: 'no' },
         { label: 'Allow, but notify customer', value: 'notify' },
@@ -366,6 +450,9 @@ const AddProduct = () => {
             [field]: value,
         }));
     };
+    console.log('selectedChild', selectedChild);
+    console.log('selectedSub', selectedSub);
+    console.log('selectedCat', selectedCat);
 
     const createProduct = () => {
         const imagePayload = [];
@@ -378,11 +465,17 @@ const AddProduct = () => {
             imagePayload.push({ id: img.id });
         });
 
+        const finalCategories =
+            appLocalizer.settings_databases_value['category-pyramid-guide']
+                ?.category_pyramid_guide == 'yes'
+                ? [{ id: Number(selectedChild || selectedSub || selectedCat) }]
+                : selectedCats.map((id) => ({ id }));
+
         try {
             const payload = {
                 ...product,
                 images: imagePayload,
-                categories: selectedCats.map((id) => ({ id })),
+                categories: finalCategories,
                 meta_data: [
                     {
                         key: 'multivendorx_store_id',
@@ -471,17 +564,17 @@ const AddProduct = () => {
         setSuggestions([]);
     };
 
-    const addDownloadableFile = () => {
-        const newFile = {
-            id: appLocalizer.random_string_generate,
-            name: '',
-            file: '',
-        };
-        setProduct((prev) => ({
-            ...prev,
-            downloads: [...prev.downloads, newFile],
-        }));
-    };
+    // const addDownloadableFile = () => {
+    //     const newFile = {
+    //         id: appLocalizer.random_string_generate,
+    //         name: '',
+    //         file: '',
+    //     };
+    //     setProduct((prev) => ({
+    //         ...prev,
+    //         downloads: [...prev.downloads, newFile],
+    //     }));
+    // };
 
     // const updateDownloadableFile = (id, field, value) => {
     //     setProduct(prev => ({
@@ -578,97 +671,13 @@ const AddProduct = () => {
         frame.open();
     };
 
-    const [categories, setCategories] = useState([]);
-    const [selectedCats, setSelectedCats] = useState([]);
-
-    useEffect(() => {
-        axios
-            .get(`${appLocalizer.apiUrl}/wc/v3/products/categories`, {
-                headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            })
-            .then((res) => setCategories(res.data));
-    }, []);
-
-    useEffect(() => {
-        if (product && product.categories) {
-            setSelectedCats(product.categories.map((c) => c.id));
-        }
-    }, [product]);
-
-    const toggleCategory = (id) => {
-        setSelectedCats((prev) =>
-            prev.includes(id)
-                ? prev.filter((item) => item !== id)
-                : [...prev, id]
-        );
-    };
-
-    const buildCategoryTree = (categories) => {
-        const map = {};
-        const roots = [];
-
-        categories.forEach((cat) => {
-            map[cat.id] = { ...cat, children: [] };
-        });
-
-        categories.forEach((cat) => {
-            if (cat.parent === 0) {
-                roots.push(map[cat.id]);
-            } else if (map[cat.parent]) {
-                map[cat.parent].children.push(map[cat.id]);
-            }
-        });
-
-        return roots;
-    };
-
-    const CategoryItem = ({ category, selectedCats, toggleCategory }) => {
-        return (
-            <li className={category.parent === 0 ? 'category' : 'sub-category'}>
-                <input
-                    type="checkbox"
-                    checked={selectedCats.includes(category.id)} // 💥 previously saved value
-                    onChange={() => toggleCategory(category.id)} // update value
-                />
-                {category.name}
-
-                {category.children?.length > 0 && (
-                    <ul>
-                        {category.children.map((child) => (
-                            <CategoryItem
-                                key={child.id}
-                                category={child}
-                                selectedCats={selectedCats}
-                                toggleCategory={toggleCategory}
-                            />
-                        ))}
-                    </ul>
-                )}
-            </li>
-        );
-    };
-
-    const CategoryTree = ({ categories, selectedCats, toggleCategory }) => {
-        const nestedCategories = buildCategoryTree(categories);
-
-        return (
-            <div className="category-wrapper">
-                <ul>
-                    {nestedCategories.map((cat) => (
-                        <CategoryItem
-                            key={cat.id}
-                            category={cat}
-                            selectedCats={selectedCats}
-                            toggleCategory={toggleCategory}
-                        />
-                    ))}
-                </ul>
-            </div>
-        );
-    };
-
-    console.log('categories', categories);
+    console.log('selectedCats', selectedCats);
     console.log('product', product);
+    console.log(
+        'settings',
+        appLocalizer.settings_databases_value['category-pyramid-guide']
+            ?.category_pyramid_guide
+    );
     return (
         <>
             <div className="page-title-wrapper">
@@ -1983,58 +1992,7 @@ const AddProduct = () => {
                 {/* right column */}
                 <div className="column w-35">
                     {/* ai assist */}
-                    <div className="card" id="card-ai-assist">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">AI assist</div>
-                            </div>
-                            <div className="right">
-                                <i
-                                    className="adminlib-pagination-right-arrow  arrow-icon"
-                                    onClick={() => toggleCard('card-ai-assist')}
-                                ></i>
-                            </div>
-                        </div>
-                        <div className="card-body">
-                            <div className="ai-assist-wrapper">
-                                <div className="suggestions-wrapper">
-                                    <div className="suggestions-title">
-                                        Suggestions
-                                    </div>
-                                    <div className="box">
-                                        <span>
-                                            Lorem ipsum dolor sit amet,
-                                            consectetur adipisicing elit. Nisi
-                                            veniam doloremque omnis aspernatur
-                                            similique alias vel illo ut,
-                                            corrupti recusandae quo nulla,
-                                            reprehenderit harum vitae!
-                                        </span>
-                                    </div>
-                                    <div className="box">
-                                        <span>
-                                            Lorem ipsum dolor sit amet,
-                                            consectetur adipisicing elit. Nisi
-                                            veniam doloremque omnis aspernatur
-                                            similique alias vel illo ut,
-                                            corrupti recusandae quo nulla,
-                                            reprehenderit harum vitae!
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className="sender-wrapper">
-                                    <input
-                                        type="text"
-                                        placeholder="Write the prompt or select an example"
-                                    />
-                                    <div className="icon-wrapper">
-                                        <i className="adminlib-mail"></i>
-                                        <i className="adminlib-send"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {applyFilters('product_ai_assist', null, product)}
 
                     <div className="card">
                         <div className="card-header">
@@ -2098,6 +2056,7 @@ const AddProduct = () => {
                                     />
                                 </div>
                             </div>
+
                             <div className="form-group-wrapper">
                                 <div className="form-group">
                                     {/* <label htmlFor="product-name">Status</label>
@@ -2132,20 +2091,22 @@ const AddProduct = () => {
                             <div className="form-group-wrapper">
                                 <div className="form-group">
                                     <label htmlFor="product-name">
-                                        Publish
+                                        Published on
                                     </label>
-                                    <CalendarInput
-                                        wrapperClass=""
-                                        inputClass=""
-                                        // onChange={(range: any) => {
-                                        //    updateFilter('date', {
-                                        //       start_date: range.startDate,
-                                        //       end_date: range.endDate,
-                                        //    });
-                                        // }}
+                                    <DateTimePicker
+                                        currentDate={product.date_created}
+                                        onChange={(value) => {
+                                            // value = ISO datetime string "2025-01-12T09:54:00"
+                                            setProduct((prev) => ({
+                                                ...prev,
+                                                date_created: value,
+                                            }));
+                                        }}
+                                        is12Hour={false}
                                     />
                                 </div>
                             </div>
+
                             <div className="form-group-wrapper">
                                 <div className="form-group">
                                     <label>
@@ -2176,164 +2137,176 @@ const AddProduct = () => {
                             </div>
                         </div>
                         <div className="card-body">
-                            <div className="category-breadcrumb-wrapper">
-                                <div className="category-breadcrumb">
-                                    {printPath()}
-                                </div>
-                                {(selectedCat ||
-                                    selectedSub ||
-                                    selectedChild) && (
-                                    <button
-                                        onClick={resetSelection}
-                                        className="admin-btn btn-red"
-                                    >
-                                        Reset
-                                    </button>
-                                )}
-                            </div>
-
-                            <div className="form-group-wrapper">
-                                <div
-                                    className="category-wrapper template2"
-                                    ref={wrapperRef}
-                                >
-                                    <ul className="settings-form-group-radio">
-                                        {demoData.map((cat) => (
-                                            <React.Fragment key={cat.id}>
-                                                {/* CATEGORY ITEM */}
-                                                <li
-                                                    className={`category ${
-                                                        selectedCat === cat.id
-                                                            ? 'radio-select-active'
-                                                            : ''
-                                                    }`}
-                                                    style={{
-                                                        display:
-                                                            !selectedCat ||
-                                                            selectedCat ===
+                            {appLocalizer.settings_databases_value[
+                                'category-pyramid-guide'
+                            ]?.category_pyramid_guide == 'yes' ? (
+                                <>
+                                    <div className="category-breadcrumb-wrapper">
+                                        <div className="category-breadcrumb">
+                                            {printPath()}
+                                        </div>
+                                        {(selectedCat ||
+                                            selectedSub ||
+                                            selectedChild) && (
+                                            <button
+                                                onClick={resetSelection}
+                                                className="admin-btn btn-red"
+                                            >
+                                                Reset
+                                            </button>
+                                        )}
+                                    </div>
+                                    <div className="form-group-wrapper">
+                                        <div
+                                            className="category-wrapper template2"
+                                            ref={wrapperRef}
+                                        >
+                                            <ul className="settings-form-group-radio">
+                                                {treeData.map((cat) => (
+                                                    <React.Fragment
+                                                        key={cat.id}
+                                                    >
+                                                        {/* CATEGORY */}
+                                                        <li
+                                                            className={`category ${
+                                                                selectedCat ===
                                                                 cat.id
-                                                                ? 'block'
-                                                                : 'none',
-                                                    }}
-                                                    onClick={() =>
-                                                        handleCategoryClick(
-                                                            cat.id
-                                                        )
-                                                    }
-                                                >
-                                                    <div className="radio-basic-input-wrap">
-                                                        <label>
-                                                            {cat.name}
-                                                        </label>
-                                                    </div>
-                                                </li>
-
-                                                {/* CATEGORY CHILD UL */}
-                                                {selectedCat === cat.id &&
-                                                    cat.children && (
-                                                        <ul className="settings-form-group-radio">
-                                                            {cat.children.map(
-                                                                (sub) => (
-                                                                    <React.Fragment
-                                                                        key={
-                                                                            sub.id
-                                                                        }
-                                                                    >
-                                                                        {/* SUB CATEGORY ITEM */}
-                                                                        <li
-                                                                            className={`sub-category ${
-                                                                                selectedSub ===
-                                                                                sub.id
-                                                                                    ? 'radio-select-active'
-                                                                                    : ''
-                                                                            }`}
-                                                                            style={{
-                                                                                display:
-                                                                                    !selectedSub ||
-                                                                                    selectedSub ===
-                                                                                        sub.id
-                                                                                        ? 'block'
-                                                                                        : 'none',
-                                                                            }}
-                                                                            onClick={() =>
-                                                                                handleSubClick(
-                                                                                    sub.id
-                                                                                )
-                                                                            }
-                                                                        >
-                                                                            <div className="radio-basic-input-wrap">
-                                                                                <label>
-                                                                                    {
-                                                                                        sub.name
-                                                                                    }
-                                                                                </label>
-                                                                            </div>
-                                                                        </li>
-
-                                                                        {/* SUB CATEGORY CHILD UL */}
-                                                                        {selectedSub ===
-                                                                            sub.id &&
-                                                                            sub.children && (
-                                                                                <ul className="settings-form-group-radio">
-                                                                                    {sub.children.map(
-                                                                                        (
-                                                                                            child
-                                                                                        ) => (
-                                                                                            <li
-                                                                                                key={
-                                                                                                    child.id
-                                                                                                }
-                                                                                                className={`sub-category ${
-                                                                                                    selectedChild ===
-                                                                                                    child.id
-                                                                                                        ? 'radio-select-active'
-                                                                                                        : ''
-                                                                                                }`}
-                                                                                                style={{
-                                                                                                    display:
-                                                                                                        !selectedChild ||
-                                                                                                        selectedChild ===
-                                                                                                            child.id
-                                                                                                            ? 'block'
-                                                                                                            : 'none',
-                                                                                                }}
-                                                                                                onClick={() =>
-                                                                                                    handleChildClick(
-                                                                                                        child.id
-                                                                                                    )
-                                                                                                }
-                                                                                            >
-                                                                                                <div className="radio-basic-input-wrap">
-                                                                                                    <label>
-                                                                                                        {
-                                                                                                            child.name
-                                                                                                        }
-                                                                                                    </label>
-                                                                                                </div>
-                                                                                            </li>
-                                                                                        )
-                                                                                    )}
-                                                                                </ul>
-                                                                            )}
-                                                                    </React.Fragment>
+                                                                    ? 'radio-select-active'
+                                                                    : ''
+                                                            }`}
+                                                            style={{
+                                                                display:
+                                                                    selectedCat ===
+                                                                        null ||
+                                                                    selectedCat ===
+                                                                        cat.id
+                                                                        ? 'block'
+                                                                        : 'none',
+                                                            }}
+                                                            onClick={() =>
+                                                                handleCategoryClick(
+                                                                    cat.id
                                                                 )
+                                                            }
+                                                        >
+                                                            <label>
+                                                                {cat.name}
+                                                            </label>
+                                                        </li>
+
+                                                        {/* CATEGORY CHILDREN */}
+                                                        {selectedCat ===
+                                                            cat.id &&
+                                                            cat.children
+                                                                ?.length >
+                                                                0 && (
+                                                                <ul className="settings-form-group-radio">
+                                                                    {cat.children.map(
+                                                                        (
+                                                                            sub
+                                                                        ) => (
+                                                                            <React.Fragment
+                                                                                key={
+                                                                                    sub.id
+                                                                                }
+                                                                            >
+                                                                                {/* SUB CATEGORY */}
+                                                                                <li
+                                                                                    className={`sub-category ${
+                                                                                        selectedSub ===
+                                                                                        sub.id
+                                                                                            ? 'radio-select-active'
+                                                                                            : ''
+                                                                                    }`}
+                                                                                    style={{
+                                                                                        display:
+                                                                                            !selectedSub ||
+                                                                                            selectedSub ===
+                                                                                                sub.id
+                                                                                                ? 'block'
+                                                                                                : 'none',
+                                                                                    }}
+                                                                                    onClick={() =>
+                                                                                        handleSubClick(
+                                                                                            sub.id
+                                                                                        )
+                                                                                    }
+                                                                                >
+                                                                                    <label>
+                                                                                        {
+                                                                                            sub.name
+                                                                                        }
+                                                                                    </label>
+                                                                                </li>
+
+                                                                                {/* CHILDREN */}
+                                                                                {selectedSub ===
+                                                                                    sub.id &&
+                                                                                    sub
+                                                                                        .children
+                                                                                        ?.length >
+                                                                                        0 && (
+                                                                                        <ul className="settings-form-group-radio">
+                                                                                            {sub.children.map(
+                                                                                                (
+                                                                                                    child
+                                                                                                ) => (
+                                                                                                    <li
+                                                                                                        key={
+                                                                                                            child.id
+                                                                                                        }
+                                                                                                        className={`sub-category ${
+                                                                                                            selectedChild ===
+                                                                                                            child.id
+                                                                                                                ? 'radio-select-active'
+                                                                                                                : ''
+                                                                                                        }`}
+                                                                                                        style={{
+                                                                                                            display:
+                                                                                                                !selectedChild ||
+                                                                                                                selectedChild ===
+                                                                                                                    child.id
+                                                                                                                    ? 'block'
+                                                                                                                    : 'none',
+                                                                                                        }}
+                                                                                                        onClick={() =>
+                                                                                                            handleChildClick(
+                                                                                                                child.id
+                                                                                                            )
+                                                                                                        }
+                                                                                                    >
+                                                                                                        <label>
+                                                                                                            {
+                                                                                                                child.name
+                                                                                                            }
+                                                                                                        </label>
+                                                                                                    </li>
+                                                                                                )
+                                                                                            )}
+                                                                                        </ul>
+                                                                                    )}
+                                                                            </React.Fragment>
+                                                                        )
+                                                                    )}
+                                                                </ul>
                                                             )}
-                                                        </ul>
-                                                    )}
-                                            </React.Fragment>
-                                        ))}
-                                    </ul>
+                                                    </React.Fragment>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </>
+                            ) : (
+                                <div className="form-group-wrapper">
+                                    <div className="form-group">
+                                        <CategoryTree
+                                            categories={categories}
+                                            selectedCats={selectedCats}
+                                            toggleCategory={toggleCategory}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="form-group-wrapper">
-                                <div className="form-group">
-                                    <CategoryTree
-                                        categories={categories}
-                                        selectedCats={selectedCats}
-                                        toggleCategory={toggleCategory}
-                                    />
-                                </div>
-                            </div>
+                            )}
 
                             <div className="form-group-wrapper">
                                 <div className="form-group">
@@ -2396,9 +2369,10 @@ const AddProduct = () => {
                                                                 tag.name
                                                             }
                                                             className="dropdown-item"
-                                                            onClick={() =>
-                                                                addTag(tag)
-                                                            }
+                                                            // onClick={() =>
+                                                            //     addTag(tag)
+                                                            // }
+                                                            onMouseDown={() => addTag(tag)}
                                                         >
                                                             {tag.name}
                                                         </li>
