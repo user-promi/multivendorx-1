@@ -23,7 +23,7 @@ class Hooks {
     /**
      * Constructor
      */
-    function __construct() {
+    public function __construct() {
         add_action( 'woocommerce_checkout_create_order_line_item', array( $this, 'add_metadata_for_line_item' ), 10, 4 );
         add_action( 'woocommerce_checkout_create_order_shipping_item', array( $this, 'add_metadate_for_shipping_item' ), 10, 4 );
         add_action( 'woocommerce_analytics_update_order_stats', array( $this, 'remove_suborder_analytics' ), 10, 1 );
@@ -50,7 +50,7 @@ class Hooks {
      * @return  void
      */
     public function add_metadata_for_line_item( $item, $item_key, $values, $order ) {
-        if ( $order && $order->get_parent_id() == 0 ) {
+        if ( $order && $order->get_parent_id() === 0 ) {
             $vendor = StoreUtil::get_products_store( $item['product_id'] );
             if ( $vendor ) {
                 $item->add_meta_data( Utill::POST_META_SETTINGS['sold_by'], $vendor->get( 'name' ) );
@@ -70,7 +70,7 @@ class Hooks {
      */
     public function add_metadate_for_shipping_item( $item, $package_key, $package, $order ) {
         $store_id = $package['store_id'] ?? $package_key;
-        if ( $order && $order->get_parent_id() == 0 ) {
+        if ( $order && $order->get_parent_id() === 0 ) {
             $item->add_meta_data( Utill::POST_META_SETTINGS['store_id'], $store_id, true );
             $package_qty = array_sum( wp_list_pluck( $package['contents'], 'quantity' ) );
             $item->add_meta_data( 'package_qty', $package_qty, true );
@@ -96,20 +96,17 @@ class Hooks {
     /**
      * Create the store orders of a main order form backend.
      *
-     * @param   object $order
+     * @param   object $order Order Object.
+     * @param   int    $order_id Parent Order ID.
      * @return  void
      */
     public function manually_create_vendor_order( $order_id, $order ) {
         $this->create_vendor_order( $order );
     }
 
-
     /**
      * Create the vendor orders of a main order.
      *
-     * @param   mixed $order_id Parent Order ID.
-     * @param   mixed $old_status Old Status.
-     * @param   mixed $new_status New Status.
      * @param   mixed $order Order Object.
      * @return  void
      */
@@ -210,10 +207,10 @@ class Hooks {
      * Sync parent order base on vendor order.
      * If all vendor order is in same status then change the parent order.
      *
-     * @param   mixed $order_id Vendor Order ID.
-     * @param   mixed $old_status Old Status.
-     * @param   mixed $new_status New Status.
-     * @param   mixed $order Order Object
+     * @param   mixed  $order_id Vendor Order ID.
+     * @param   mixed  $old_status Old Status.
+     * @param   mixed  $new_status New Status.
+     * @param   object $order Order Object.
      * @return  void
      */
     public function vendor_order_to_parent_order_status_sync( $order_id, $old_status, $new_status, $order ) {
@@ -221,7 +218,7 @@ class Hooks {
         $vendor_id = $order ? absint( $order->get_meta( Utill::POST_META_SETTINGS['store_id'], true ) ) : 0;
         // $vendor_order = new VendorOrder($order);
 
-        if ( $vendor_id === get_current_user_id() ) {
+        if ( get_current_user_id() === $vendor_id ) {
             $parent_order_id = $order->get_parent_id();
             if ( $parent_order_id ) {
                 // Remove the action to prevent recursion call.
@@ -230,7 +227,7 @@ class Hooks {
                 $suborders        = MultiVendorX()->order->get_suborders( $parent_order_id );
                 $all_status_equal = true;
                 foreach ( $suborders as $suborder ) {
-                    if ( $suborder->get_status( 'edit' ) != $new_status ) {
+                    if ( $suborder->get_status( 'edit' ) !== $new_status ) {
                         $all_status_equal = false;
                         break;
                     }

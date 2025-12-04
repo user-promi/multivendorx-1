@@ -98,7 +98,7 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
     /**
      * POST permission.
      *
-     * @param object $request
+     * @param object $request Request data.
      * @return bool
      */
     public function create_item_permissions_check( $request ) {
@@ -108,7 +108,7 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
     /**
      * PUT permission.
      *
-     * @param object $request
+     * @param object $request Request data.
      * @return bool
      */
     public function update_item_permissions_check( $request ) {
@@ -118,7 +118,7 @@ class MultiVendorX_REST_Store_Review_Controller extends \WP_REST_Controller {
     /**
      * Get review items with optional pagination, date filters, and counters
      *
-     * @param object $request
+     * @param object $request Request data.
      */
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );

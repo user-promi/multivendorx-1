@@ -135,6 +135,8 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
     /**
      * Handle social verification callback
+     *
+     * @param object $request Request data.
      */
     public function handle_social_callback( $request ) {
         try {
@@ -411,8 +413,8 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             $start_timestamp = ! empty( $start_date_raw ) ? strtotime( str_replace( 'T', ' ', preg_replace( '/\.\d+Z?$/', '', $start_date_raw ) ) ) : false;
             $end_timestamp   = ! empty( $end_date_raw ) ? strtotime( str_replace( 'T', ' ', preg_replace( '/\.\d+Z?$/', '', $end_date_raw ) ) ) : false;
 
-            $start_date = $start_timestamp ? date( 'Y-m-d 00:00:00', $start_timestamp ) : '';
-            $end_date   = $end_timestamp ? date( 'Y-m-d 23:59:59', $end_timestamp ) : '';
+            $start_date = $start_timestamp ? gmdate( 'Y-m-d 00:00:00', $start_timestamp ) : '';
+            $end_date   = $end_timestamp ? gmdate( 'Y-m-d 23:59:59', $end_timestamp ) : '';
             $orderBy    = sanitize_text_field( $request->get_param( 'orderBy' ) );
             $order      = sanitize_text_field( $request->get_param( 'order' ) );
 
@@ -421,7 +423,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 'offset' => $offset,
             );
 
-            // Pass search to StoreUtil
+            // Pass search to StoreUtil.
             if ( $searchField ) {
                 $args['searchField'] = $searchField;
             } elseif ( $start_date && $end_date ) {
@@ -567,7 +569,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
     /**
      * Get pending stores.
      *
-     * @param WP_REST_Request $request
+     * @param WP_REST_Request $request Request data.
      * @return WP_REST_Response
      */
     public function get_pending_stores( $request ) {
@@ -666,7 +668,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -705,7 +707,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             } else {
                 // Create store object.
                 $store = new \MultiVendorX\Store\Store();
-                if ( ! current_user_can( 'manage_options' ) && MultiVendorX()->setting->get_setting( 'approve_store' ) == 'manually' ) {
+                if ( ! current_user_can( 'manage_options' ) && 'manually' === MultiVendorX()->setting->get_setting( 'approve_store' ) ) {
                     $store_data['status'] = 'pending';
                 }
             }
@@ -723,7 +725,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             // Save other meta if not registration.
             if ( $insert_id && ! $registrations ) {
                 foreach ( $store_data as $key => $value ) {
-                    if ( ! in_array( $key, $core_fields, true ) && $key !== 'store_owners' ) {
+                    if ( ! in_array( $key, $core_fields, true ) && 'store_owners' !== $key ) {
                         $store->update_meta( $key, $value );
                     }
                 }
@@ -733,7 +735,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             if ( $registrations ) {
                 $non_core_fields = array();
                 foreach ( $store_data as $key => $value ) {
-                    if ( ! in_array( $key, $core_fields, true ) && $key !== 'store_owners' ) {
+                    if ( ! in_array( $key, $core_fields, true ) && 'store_owners' !== $key ) {
                         if ( in_array(
                             $key,
                             array(
@@ -760,9 +762,9 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 }
 
                 // Assign current user as primary owner if automatic approval.
-                if ( MultiVendorX()->setting->get_setting( 'approve_store' ) == 'automatically' ) {
+                if ( 'automatically' === MultiVendorX()->setting->get_setting( 'approve_store' ) ) {
                     $current_user->set_role( 'store_owner' );
-                } elseif ( ! in_array( 'store_owner', (array) $current_user->roles ) ) {
+                } elseif ( ! in_array( 'store_owner', (array) $current_user->roles, true ) ) {
                         $role = get_option( Utill::OTHER_SETTINGS['default_role'] );
                         $current_user->set_role( $role );
                 }
@@ -783,7 +785,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 );
             }
 
-            if ( $store_data['status'] == 'active' ) {
+            if ( 'active' === $store_data['status'] ) {
                 do_action( 'multivendorx_after_store_active', $insert_id );
             }
 
@@ -838,7 +840,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -854,7 +856,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             $id     = absint( $request->get_param( 'id' ) );
             $action = $request->get_param( 'action' );
 
-            if ( $id && $action == 'switch' ) {
+            if ( $id && 'switch' === $action ) {
                 update_user_meta( get_current_user_id(), Utill::POST_META_SETTINGS['active_store'], $id );
 
                 $dashboard_page_id = (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' );
@@ -911,7 +913,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 'description'        => $store->get( Utill::STORE_SETTINGS_KEYS['description'] ),
                 'who_created'        => $store->get( Utill::STORE_SETTINGS_KEYS['who_created'] ),
                 'status'             => $store->get( Utill::STORE_SETTINGS_KEYS['status'] ),
-                'create_time'        => date( 'M j, Y', strtotime( $store->get( Utill::STORE_SETTINGS_KEYS['create_time'] ) ) ),
+                'create_time'        => gmdate( 'M j, Y', strtotime( $store->get( Utill::STORE_SETTINGS_KEYS['create_time'] ) ) ),
                 'commission'         => $commission,
                 'transactions'       => $transactions,
                 'primary_owner_info' => $primary_owner_info,
@@ -940,14 +942,14 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
     /**
      * Update store
      *
-     * @param  object $request
+     * @param  object $request Full details about the request.
      */
     public function update_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error
+            // Log the error.
             if ( is_wp_error( $error ) ) {
                 MultiVendorX()->util->log(
                     'MVX REST Error: ' .
@@ -966,14 +968,14 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             $store = new \MultiVendorX\Store\Store( $id );
 
             if ( $data['deactivate'] ) {
-                $action = $data['action'] ?: '';
-                if ( $action == 'approve' ) {
+                $action = $data['action'] ? $data['action'] : '';
+                if ( 'approve' === $action ) {
                     $store->set( Utill::STORE_SETTINGS_KEYS['status'], 'deactivated' );
                     $store->delete_meta( Utill::STORE_SETTINGS_KEYS['deactivation_reason'] );
                     $store->delete_meta( Utill::STORE_SETTINGS_KEYS['deactivation_request_date'] );
                 }
 
-                if ( $action == 'reject' ) {
+                if ( 'reject' === $action ) {
                     $store->delete_meta( Utill::STORE_SETTINGS_KEYS['deactivation_reason'] );
                     $store->delete_meta( Utill::STORE_SETTINGS_KEYS['deactivation_request_date'] );
                 }
@@ -1053,7 +1055,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
             // Handle registration & core data.
             if ( ! empty( $data['registration_data'] ) || ! empty( $data['core_data'] ) ) {
-                if ( isset( $data['status'] ) && $data['status'] === 'approve' ) {
+                if ( isset( $data['status'] ) && 'approve' === $data['status'] ) {
                     $users = StoreUtil::get_store_users( $id );
                     $user  = get_userdata( empty( $users['users'] ) ? $users['primary_owner'] : reset( $users['users'] ) );
 
@@ -1066,7 +1068,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
                         return rest_ensure_response( array( 'success' => true ) );
                     }
-                } elseif ( isset( $data['status'] ) && $data['status'] === 'rejected' ) {
+                } elseif ( isset( $data['status'] ) && 'rejected' === $data['status'] ) {
                     $store->set( Utill::STORE_SETTINGS_KEYS['status'], 'rejected' );
                     // Save _reject_note if provided.
                     if ( ! empty( $data['store_permanent_reject'] ) ) {
@@ -1117,7 +1119,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             unset( $data['overall_reviews'] );
             unset( $data['total_reviews'] );
 
-            if ( $data['status'] == 'deactivated' ) {
+            if ( 'deactivated' === $data['status'] ) {
                 delete_metadata( 'user', 0, Utill::POST_META_SETTINGS['active_store'], '', true );
             }
             // Update basic store info.
@@ -1145,7 +1147,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                         true
                     ) ) {
                         $store->update_meta( $key, $value );
-                        if ( $key == 'deactivation_reason' ) {
+                        if ( 'deactivation_reason' === $key ) {
                             $store->update_meta( Utill::STORE_SETTINGS_KEYS['deactivation_request_date'], current_time( 'mysql' ) );
                         }
                     }
@@ -1154,7 +1156,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
             $store->save();
 
-            if ( $store->get( 'status' ) == 'active' ) {
+            if ( 'active' === $store->get( 'status' ) ) {
                 do_action( 'multivendorx_after_store_active', $id );
             }
 
@@ -1179,7 +1181,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
     /**
      * Get states by country
      *
-     * @param object $request
+     * @param object $request WP_REST_Request object.
      */
     public function get_states_by_country( $request ) {
         $country_code = $request->get_param( 'country' );
@@ -1202,7 +1204,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
     /**
      * Get store products and categories
      *
-     * @param object $request
+     * @param object $request WP_REST_Request object.
      */
     public function get_store_products_and_category( $request ) {
         $id = absint( $request->get_param( 'id' ) );
@@ -1268,7 +1270,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
     /**
      * Get paginated followers of a store
      *
-     * @param object $request
+     * @param object $request WP_REST_Request object.
      */
     public function get_store_follower( $request ) {
         $store_id = intval( $request->get_param( 'store_id' ) );
@@ -1279,7 +1281,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
         // Check if count param is requested.
         $count = $request->get_param( 'count' );
 
-        // Get store object
+        // Get store object.
         $store = new \MultiVendorX\Store\Store( $store_id );
 
         // Fetch followers from meta_data.
@@ -1345,7 +1347,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
     /**
      * Get stores with pending withdrawal requests
      *
-     * @param object $request WP_REST_Request
+     * @param object $request WP_REST_Request.
      * @return array|int
      */
     private function get_stores_with_pending_withdraw( $request ) {
@@ -1385,7 +1387,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
     /**
      * Get stores with deactivate requests
      *
-     * @param object $request
+     * @param object $request Request object.
      * @return array|int
      */
     private function get_stores_with_deactivate_requests( $request ) {

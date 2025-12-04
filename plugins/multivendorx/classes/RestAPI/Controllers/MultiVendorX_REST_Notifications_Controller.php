@@ -73,7 +73,7 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
     /**
      * Check if a given request has access to read notifications.
      *
-     * @param object $request
+     * @param object $request WP_REST_Request object.
      */
     public function get_items_permissions_check( $request ) {
         return true;
@@ -82,7 +82,7 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
     /**
      * Check if a given request has access to create a notification.
      *
-     * @param object $request
+     * @param object $request WP_REST_Request object.
      */
     public function create_item_permissions_check( $request ) {
         return true;
@@ -91,7 +91,7 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
     /**
      * Check if a given request has access to read notifications.
      *
-     * @param object $request
+     * @param object $request WP_REST_Request object.
      */
     public function update_item_permissions_check( $request ) {
         return true;
@@ -100,7 +100,7 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
     /**
      * Get all notifications.
      *
-     * @param object $request
+     * @param object $request WP_REST_Request object.
      */
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );

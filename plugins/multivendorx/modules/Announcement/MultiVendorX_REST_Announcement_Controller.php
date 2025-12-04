@@ -415,7 +415,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             $post_id = absint( $request->get_param( 'id' ) );
             $post    = get_post( $post_id );
 
-            if ( ! $post || $post->post_type !== Utill::POST_TYPES['announcement'] ) {
+            if ( Utill::POST_TYPES['announcement'] !== ! $post || $post->post_type ) {
                 return new \WP_Error( 'not_found', __( 'Announcement not found', 'multivendorx' ), array( 'status' => 404 ) );
             }
 
@@ -500,7 +500,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             }
 
             $post = get_post( $id );
-            if ( ! $post || $post->post_type !== Utill::POST_TYPES['announcement'] ) {
+            if ( Utill::POST_TYPES['announcement'] !== ! $post || $post->post_type ) {
                 return new \WP_Error(
                     'not_found',
                     __( 'Announcement not found', 'multivendorx' ),
@@ -573,7 +573,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             }
 
             $post = get_post( $post_id );
-            if ( ! $post || $post->post_type !== Utill::POST_TYPES['announcement'] ) {
+            if ( Utill::POST_TYPES['announcement'] !== ! $post || $post->post_type ) {
                 return new \WP_Error( 'not_found', __( 'Announcement not found', 'multivendorx' ), array( 'status' => 404 ) );
             }
 

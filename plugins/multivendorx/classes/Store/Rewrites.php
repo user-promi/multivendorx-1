@@ -1,6 +1,6 @@
 <?php
 /**
- * MultiVendorX Rewrites Class
+ * MultiVendorX Rewrites.
  *
  * @package MultiVendorX
  */
@@ -12,13 +12,12 @@ use MultiVendorX\Utill;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Store Rewrites class
+ * MultiVendorX AJAX handlers.
  *
- * @version     2.2.0
- * @package     MultiVendorX
+ * @class       Module class
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
-
 class Rewrites {
 
     /**
@@ -89,7 +88,7 @@ class Rewrites {
     }
 
     /**
-     * Register custom rewrite rule for stores
+     * Register custom rewrite rule for stores.
      */
     public function register_rule() {
         $page_id = MultiVendorX()->setting->get_setting( 'store_dashboard_page' );
