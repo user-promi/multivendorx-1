@@ -317,7 +317,7 @@ const PendingProducts: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) =>
                 <CommonPopup
                     open={rejectPopupOpen}
                     onClose={() => { setRejectPopupOpen(false); setRejectReason(''); setIsSubmitting(false); }}
-                    width="500px"
+                    width="31.25rem"
                     header={
                         <>
                             <div className="title">

@@ -333,7 +333,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({ id }) =
             {addShipping && selectedZone && (
                 <CommonPopup
                     open={addShipping}
-                    width="500px"
+                    width="31.25rem"
                     height="60%"
                     header={
                         <>

@@ -662,7 +662,7 @@ const AllProduct: React.FC = () => {
                     <CommonPopup
                         open={AddProduct}
                         // onClose= setAddProduct(true)
-                        width="500px"
+                        width="31.25rem"
                         height="100%"
                         header={
                             <>

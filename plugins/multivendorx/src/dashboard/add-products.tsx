@@ -1626,7 +1626,7 @@ const AddProduct = () => {
                         <CommonPopup
                             open={AddAttribute}
                             onClick={() => setAddAttribute(false)}
-                            width="500px"
+                            width="31.25rem"
                             height="70%"
                             header={
                                 <>

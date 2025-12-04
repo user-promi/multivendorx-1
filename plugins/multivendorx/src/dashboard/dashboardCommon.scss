@@ -40,7 +40,7 @@ a:focus {
 // zyra color overwrite start
 .btn-purple-bg,
 .horizontal-tabs-item .menu-item.active-current-tab {
-    background: var(--colorPrimary) !important;
+    background: var(--colorPrimary) !important; // overwrite zyra coloradd 
     color: #fff;
 }
 
@@ -49,13 +49,13 @@ a:focus {
 .filter-item.active,
 .search-field select,
 .horizontal-tabs-item .menu-item:hover,
-.btn-purple{
-    color: var(--colorPrimary);
+.btn-purple {
+    color: var(--colorPrimary) !important; // overwrite zyra color
 }
 
 .toggle-setting-wrapper div input:checked+label,
-.table-action-wrapper .search-field{
-    border-color: var(--colorPrimary);
+.table-action-wrapper .search-field {
+    border-color: var(--colorPrimary) !important; // overwrite zyra color
 }
 
 .filter-item.active,
@@ -63,7 +63,7 @@ a:focus {
 .toggle-setting-wrapper div input:checked+label,
 .horizontal-tabs-item .menu-item:hover,
 .btn-purple {
-    background: color-mix(in srgb, var(--colorPrimary) 20%, transparent) !important;
+    background: color-mix(in srgb, var(--colorPrimary) 20%, transparent) !important; // overwrite zyra color
 }
 
 .admin-badge,
@@ -128,6 +128,7 @@ a:focus {
         background: var(--colorSupport);
     }
 }
+
 // zyra color overwrite end
 
 // no permission section start
@@ -160,12 +161,24 @@ a:focus {
 // no permission section end
 
 // card styles start
-.w-35 {
-    width: 35%;
+.w-65 {
+    width: 65% !important;
 }
 
-.w-65 {
-    width: 65%;
+.w-35 {
+    width: 35% !important;
+}
+
+.w-45 {
+    width: 45% !important;
+}
+
+.w-40 {
+    width: 40% !important;
+}
+
+.w-60 {
+    width: 60% !important;
 }
 
 .container-wrapper {
@@ -641,6 +654,7 @@ a:focus {
     line-height: 1.45rem;
     font-size: 1.063rem;
 }
+
 // documentation end
 
 
@@ -1070,6 +1084,7 @@ a:focus {
         }
     }
 }
+
 // add product category page end
 
 

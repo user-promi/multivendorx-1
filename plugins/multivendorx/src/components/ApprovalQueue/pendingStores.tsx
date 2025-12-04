@@ -240,7 +240,7 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
                 <CommonPopup
                     open={rejectPopupOpen}
                     onClose={() => { setRejectPopupOpen(false); setRejectReason(''); }}
-                    width="500px"
+                    width="31.25rem"
                     header={
                         <>
                             <div className="title"><i className="adminlib-cart"></i>{__('Reason', 'multivendorx')}</div>

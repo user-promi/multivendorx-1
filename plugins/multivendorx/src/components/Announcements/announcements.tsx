@@ -559,7 +559,7 @@ export const Announcements: React.FC = () => {
             <CommonPopup
                 open={addAnnouncements}
                 onClose={handleCloseForm}
-                width="500px"
+                width="31.25rem"
                 header={
                     <>
                         <div className="title">

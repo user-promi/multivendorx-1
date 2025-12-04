@@ -549,7 +549,7 @@ const AddOrder = () => {
                                 </div>
                                 <div className="buttons">
                                     <button className="admin-btn btn-purple-bg" onClick={() => setShowAddProduct(true)}>
-                                        + Add Product
+                                        <i className="adminlib-plus-circle-o"></i> Add Product
                                     </button>
                                     <button
                                         className="admin-btn btn-purple-bg"
@@ -563,10 +563,10 @@ const AddOrder = () => {
                                             ]);
                                         }}
                                     >
-                                        + Add Shipping
+                                        <i className="adminlib-plus-circle-o"></i> Add Shipping
                                     </button>
                                     <button className="admin-btn btn-purple-bg" onClick={() => setShowAddTax(true)}>
-                                        + Add Tax
+                                        <i className="adminlib-plus-circle-o"></i> Add Tax
                                     </button>
                                 </div>
 

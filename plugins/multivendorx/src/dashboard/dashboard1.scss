@@ -1,7 +1,4 @@
 @use './dashboardCommon.scss' as *;
-@use './product.scss' as *;
-
-
 
 ul {
     padding: 0;
@@ -1530,10 +1527,7 @@ a {
             }
         }
     }
-
-
 }
-
 
 // form style start
 .form-group-title-wrapper {
@@ -1737,7 +1731,6 @@ a {
         width: 3rem;
     }
 }
-
 // store profile end
 
 // column details start
@@ -1774,5 +1767,4 @@ a {
         }
     }
 }
-
 // column details start

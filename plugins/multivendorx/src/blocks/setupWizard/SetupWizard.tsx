@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react';
-import './SetupWizard.scss';
 import 'zyra/build/index.css';
 import { PaymentTabsComponent } from 'zyra';
 import { __ } from '@wordpress/i18n';

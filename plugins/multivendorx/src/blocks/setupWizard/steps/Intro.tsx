@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 
-import "../SetupWizard.scss";
-
 
 interface Task {
     title: string;

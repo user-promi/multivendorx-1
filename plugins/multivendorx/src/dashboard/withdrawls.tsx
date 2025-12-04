@@ -387,7 +387,7 @@ const History: React.FC = () => {
             {requestWithdrawal && (
                 <CommonPopup
                     open={requestWithdrawal}
-                    width="500px"
+                    width="31.25rem"
                     height="60%"
                     header={
                         <>
