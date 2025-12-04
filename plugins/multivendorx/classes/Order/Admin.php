@@ -125,18 +125,18 @@ class Admin {
             return;
         }
 
-        $commission_id = $order->get_meta( Utill::POST_META_SETTINGS['commission_id'], true ) ?? '';
+        $commission_id = $order->get_meta( Utill::ORDER_META_SETTINGS['commission_id'], true ) ?? '';
 
         if ( ! in_array( $order->get_status(), apply_filters( 'mvx_regenerate_order_commissions_statuses', array( 'on-hold', 'pending', 'processing', 'completed' ), $order ), true ) ) {
             return;
         }
 
-        $order->delete_meta_data( Utill::POST_META_SETTINGS['commissions_processed'] );
+        $order->delete_meta_data( Utill::ORDER_META_SETTINGS['commissions_processed'] );
 
         $regenerate_commission_id = MultiVendorX()->commission->calculate_commission( $order, $commission_id );
 
-        $order->update_meta_data( Utill::POST_META_SETTINGS['commission_id'], $regenerate_commission_id );
-        $order->update_meta_data( Utill::POST_META_SETTINGS['commissions_processed'], 'yes' );
+        $order->update_meta_data( Utill::ORDER_META_SETTINGS['commission_id'], $regenerate_commission_id );
+        $order->update_meta_data( Utill::ORDER_META_SETTINGS['commissions_processed'], 'yes' );
         $order->save();
 
         $commission = CommissionUtil::get_commission_db( $regenerate_commission_id );

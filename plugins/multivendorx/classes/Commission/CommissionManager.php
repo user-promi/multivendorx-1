@@ -266,7 +266,7 @@ class CommissionManager {
                 'commission_fixed' => (float) ( $commission_values['commission_fixed'] ?? 0 ),
             );
 
-            wc_update_order_item_meta( $item_id, Utill::WOO_SETTINGS['store_item_commission'], $item_commission );
+            wc_update_order_item_meta( $item_id, Utill::ORDER_META_SETTINGS['store_item_commission'], $item_commission );
 
             $commission_amount += (float) $item_commission;
         }
@@ -549,8 +549,8 @@ class CommissionManager {
         foreach ( $terms as $term ) {
             // calculate current term's commission.
             $total_commission_amount = 0;
-            $commission_percentage   = (float) get_term_meta( $term->term_id, Utill::POST_META_SETTINGS['category_percentage_commission'], true );
-            $commission_fixed        = (float) get_term_meta( $term->term_id, Utill::POST_META_SETTINGS['category_fixed_commission'], true );
+            $commission_percentage   = (float) get_term_meta( $term->term_id, Utill::WORDPRESS_SETTINGS['category_percentage_commission'], true );
+            $commission_fixed        = (float) get_term_meta( $term->term_id, Utill::WORDPRESS_SETTINGS['category_fixed_commission'], true );
             $total_commission_amount = $commission_percentage + $commission_fixed;
 
             // compare current term's commission with previously store term's commission.
@@ -562,8 +562,8 @@ class CommissionManager {
 
         // Store commission value of maximum commission category.
         $category_wise_commission                        = new \stdClass();
-        $category_wise_commission->commission_percentage = (float) ( get_term_meta( $max_commission_term->term_id, Utill::POST_META_SETTINGS['category_percentage_commission'], true ) ?? 0 );
-        $category_wise_commission->commission_fixed      = (float) ( get_term_meta( $max_commission_term->term_id, Utill::POST_META_SETTINGS['category_fixed_commission'], true ) ?? 0 );
+        $category_wise_commission->commission_percentage = (float) ( get_term_meta( $max_commission_term->term_id, Utill::WORDPRESS_SETTINGS['category_percentage_commission'], true ) ?? 0 );
+        $category_wise_commission->commission_fixed      = (float) ( get_term_meta( $max_commission_term->term_id, Utill::WORDPRESS_SETTINGS['category_fixed_commission'], true ) ?? 0 );
 
         // Filter hook to adjust category wise commission after calculation.
         return apply_filters( 'mvx_category_wise_commission', $category_wise_commission, $product );
@@ -577,7 +577,7 @@ class CommissionManager {
      */
     public function calculate_commission_refunds( $vendor_order, $refund_id ) {
         global $wpdb;
-        $commission_id = $vendor_order->get_meta( Utill::POST_META_SETTINGS['commission_id'], true );
+        $commission_id = $vendor_order->get_meta( Utill::ORDER_META_SETTINGS['commission_id'], true );
         $store_id      = $vendor_order->get_meta( Utill::POST_META_SETTINGS['store_id'], true );
         $vendor        = Store::get_store_by_id( $store_id );
 

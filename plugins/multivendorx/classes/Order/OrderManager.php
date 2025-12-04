@@ -220,7 +220,7 @@ class OrderManager {
 
             if ( ! $is_update ) {
                 // save other details for suborder.
-                $order->set_created_via( Utill::POST_META_SETTINGS['multivendorx_store_order'] );
+                $order->set_created_via( Utill::ORDER_META_SETTINGS['multivendorx_store_order'] );
                 $order->update_meta_data( Utill::POST_META_SETTINGS['store_id'], $store_id );
                 $order->set_parent_id( $parent_order->get_id() );
             }
@@ -364,7 +364,7 @@ class OrderManager {
                 }
 
                 $shipping->add_meta_data( Utill::POST_META_SETTINGS['store_id'], $store_id, true );
-                $item->add_meta_data( Utill::POST_META_SETTINGS['store_order_shipping_item_id'], $item_id );
+                $item->add_meta_data( Utill::ORDER_META_SETTINGS['store_order_shipping_item_id'], $item_id );
 
                 // Action hook to adjust item before save.
                 do_action( 'mvx_vendor_create_order_shipping_item', $shipping, $item_id, $item, $order );

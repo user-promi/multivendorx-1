@@ -40,7 +40,7 @@ class Hooks {
 
         if ( ! $processed ) {
             $commission_id = MultiVendorX()->commission->calculate_commission( $vendor_order );
-            $vendor_order->update_meta_data( Utill::POST_META_SETTINGS['commission_id'], $commission_id );
+            $vendor_order->update_meta_data( Utill::ORDER_META_SETTINGS['commission_id'], $commission_id );
             $vendor_order->update_meta_data( Utill::POST_META_SETTINGS['commissions_processed'], 'yes' );
 
             // Action hook after commission processed.

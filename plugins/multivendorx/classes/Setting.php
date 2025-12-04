@@ -88,7 +88,7 @@ class Setting {
                 array(
                     'multivendorx_extra_settings',
                 ),
-                array_values( Utill::ADMIN_SETTINGS )
+                array_values( Utill::MULTIVENDORX_SETTINGS )
             )
         );
 

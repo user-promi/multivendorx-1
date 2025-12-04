@@ -39,7 +39,7 @@ class Ajax {
             wp_send_json_error( array( 'message' => 'Invalid data.' ) );
         }
 
-        $following = get_user_meta( $user_id, 'mvx_following_stores', true );
+        $following = get_user_meta( $user_id, Utill::USER_SETTINGS_KEYS['following_stores'], true );
         if ( ! is_array( $following ) ) {
 			$following = array();
         }

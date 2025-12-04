@@ -400,15 +400,15 @@ class Admin {
         $percentage_commission_per_product = absint( filter_input( INPUT_POST, 'product_percentage_commission' ) );
 
         if ( $linked_store_id ) {
-            update_post_meta( $post_id, 'multivendorx_store_id', $linked_store_id );
+            update_post_meta( $post_id, Utill::POST_META_SETTINGS['store_id'], $linked_store_id );
         }
 
         if ( $fixed_commission_per_product ) {
-            update_post_meta( $post_id, 'multivendorx_product_fixed_commission', $fixed_commission_per_product );
+            update_post_meta( $post_id, Utill::POST_META_SETTINGS['fixed_commission'], $fixed_commission_per_product );
         }
 
         if ( $percentage_commission_per_product ) {
-            update_post_meta( $post_id, 'multivendorx_product_percentage_commission', $percentage_commission_per_product );
+            update_post_meta( $post_id, Utill::POST_META_SETTINGS['percentage_commission'], $percentage_commission_per_product );
         }
     }
 
@@ -458,12 +458,12 @@ class Admin {
 
         if ( isset( $fixed_commissions[ $variation_id ] ) ) {
             $fixed_commission = wc_format_decimal( $fixed_commissions[ $variation_id ] );
-            update_post_meta( $variation_id, 'multivendorx_variable_product_fixed_commission', $fixed_commission );
+            update_post_meta( $variation_id, Utill::POST_META_SETTINGS['variable_product_fixed'], $fixed_commission );
         }
 
         if ( isset( $percentage_commissions[ $variation_id ] ) ) {
             $percentage_commission = wc_format_decimal( $percentage_commissions[ $variation_id ] );
-            update_post_meta( $variation_id, 'multivendorx_variable_product_percentage_commission', $percentage_commission );
+            update_post_meta( $variation_id, Utill::POST_META_SETTINGS['variable_product_percentage'], $percentage_commission );
         }
     }
 
@@ -489,8 +489,8 @@ class Admin {
      * @param object $term Term Object.
      */
     public function edit_product_cat_commission_fields( $term ) {
-        $commission_percentage = get_term_meta( $term->term_id, 'multivendorx_category_percentage_commission', true );
-        $commision_fixed       = get_term_meta( $term->term_id, 'multivendorx_category_fixed_commission', true );
+        $commission_percentage = get_term_meta( $term->term_id, Utill::WORDPRESS_SETTINGS['category_percentage_commission'], true );
+        $commision_fixed       = get_term_meta( $term->term_id, Utill::WORDPRESS_SETTINGS['category_fixed_commission'], true );
         ?>
         <tr class="form-field">
             <th scope="row" valign="top"><label for="category_percentage_commission"><?php esc_html_e( 'Commission Percentage', 'multivendorx' ); ?></label></th>
@@ -516,8 +516,8 @@ class Admin {
         if ( 'product_cat' === $taxonomy ) {
             $percentage = filter_input( INPUT_POST, 'category_percentage_commission', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
             $fixed      = filter_input( INPUT_POST, 'category_fixed_commission', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
-            update_term_meta( $term_id, Utill::POST_META_SETTINGS['category_percentage_commission'], (float) $percentage );
-            update_term_meta( $term_id, Utill::POST_META_SETTINGS['category_fixed_commission'], (float) $fixed );
+            update_term_meta( $term_id, Utill::WORDPRESS_SETTINGS['category_percentage_commission'], (float) $percentage );
+            update_term_meta( $term_id, Utill::WORDPRESS_SETTINGS['category_fixed_commission'], (float) $fixed );
         }
     }
 
@@ -632,7 +632,7 @@ class Admin {
         if ( ! $order ) {
             return;
         }
-        $value = $order ? $order->get_meta( Utill::WOO_SETTINGS['cod_order_payment'], true ) : '';
+        $value = $order ? $order->get_meta( Utill::ORDER_META_SETTINGS['cod_order_payment'], true ) : '';
         ?>
         <p>
             <label>
@@ -657,7 +657,7 @@ class Admin {
         $selected = filter_input( INPUT_POST, 'order_payment', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
         if ( null !== $selected ) {
             $order = wc_get_order( $order_id );
-            $order->update_meta_data( Utill::WOO_SETTINGS['cod_order_payment'], $selected );
+            $order->update_meta_data( Utill::ORDER_META_SETTINGS['cod_order_payment'], $selected );
             $order->save();
         }
     }

@@ -3,9 +3,9 @@ jQuery(document).ready(function($) {
     var map, geocoder, marker, infowindow;
 
     function initialize() {
-        var lat = $("#mvx_user_location_lat").val() || mvx_checkout_map_options.default_lat;
-        var lng = $("#mvx_user_location_lng").val() || mvx_checkout_map_options.default_lng;
-        var address = $("#mvx_user_location").val() || '';
+        var lat = $("#multivendorx_user_location_lat").val() || mvx_checkout_map_options.default_lat;
+        var lng = $("#multivendorx_user_location_lng").val() || mvx_checkout_map_options.default_lng;
+        var address = $("#multivendorx_user_location").val() || '';
 
         var latlng = new google.maps.LatLng(lat, lng);
 
@@ -74,13 +74,13 @@ jQuery(document).ready(function($) {
     }
 
     function bindDataToForm(address, lat, lng) {
-        $("#mvx_user_location").val(address);
-        $("#mvx_user_location_lat").val(lat);
-        $("#mvx_user_location_lng").val(lng);
+        $("#multivendorx_user_location").val(address);
+        $("#multivendorx_user_location_lat").val(lat);
+        $("#multivendorx_user_location_lng").val(lng);
         $(document.body).trigger('update_checkout');
     }
 
-    if ($("#mvx_user_location_lat").length > 0) {
+    if ($("#multivendorx_user_location_lat").length > 0) {
         setTimeout(initialize, 1000);
     }
 });

@@ -79,9 +79,9 @@ final class MultiVendorX {
     public function activate() {
         new Install();
 
-        if ( ! get_option( Utill::OTHER_SETTINGS['installed'] ) ) {
-            add_option( Utill::OTHER_SETTINGS['installed'], true );
-            add_option( Utill::OTHER_SETTINGS['plugin_activated'], true );
+        if ( ! get_option( Utill::MULTIVENDORX_OTHER_SETTINGS['installed'] ) ) {
+            add_option( Utill::MULTIVENDORX_OTHER_SETTINGS['installed'], true );
+            add_option( Utill::MULTIVENDORX_OTHER_SETTINGS['plugin_activated'], true );
         }
     }
 
@@ -91,8 +91,8 @@ final class MultiVendorX {
      * @return void
      */
     public function deactivate() {
-        delete_option( Utill::OTHER_SETTINGS['installed'] );
-        delete_option( Utill::OTHER_SETTINGS['plugin_page_install'] );
+        delete_option( Utill::MULTIVENDORX_OTHER_SETTINGS['installed'] );
+        delete_option( Utill::MULTIVENDORX_OTHER_SETTINGS['plugin_page_install'] );
         flush_rewrite_rules();
     }
 
@@ -166,8 +166,8 @@ final class MultiVendorX {
      */
     public function multivendorx_register_setup_wizard() {
         new SetupWizard();
-        if ( get_option( Utill::OTHER_SETTINGS['plugin_activated'] ) ) {
-            delete_option( Utill::OTHER_SETTINGS['plugin_activated'] );
+        if ( get_option( Utill::MULTIVENDORX_OTHER_SETTINGS['plugin_activated'] ) ) {
+            delete_option( Utill::MULTIVENDORX_OTHER_SETTINGS['plugin_activated'] );
             wp_safe_redirect( admin_url( 'admin.php?page=multivendorx-setup' ) );
             exit;
         }
@@ -199,7 +199,7 @@ final class MultiVendorX {
      * Migrate data from previous version.
      */
     public function migrate_from_previous_version() {
-        $previous_version = get_option( Utill::OTHER_SETTINGS['plugin_db_version'], '' );
+        $previous_version = get_option( Utill::MULTIVENDORX_OTHER_SETTINGS['plugin_db_version'], '' );
 
         if ( version_compare( $previous_version, MultiVendorX()->version, '<' ) ) {
             new Install();
@@ -341,11 +341,11 @@ final class MultiVendorX {
      */
     public function initialize_multivendorx_log() {
         // The log file name is stored in the options table because it is generated with an arbitrary name.
-        $log_file_name = get_option( Utill::OTHER_SETTINGS['log_file'] );
+        $log_file_name = get_option( Utill::MULTIVENDORX_OTHER_SETTINGS['log_file'] );
 
         if ( ! $log_file_name ) {
             $log_file_name = uniqid( 'error' ) . '.txt';
-            update_option( Utill::OTHER_SETTINGS['log_file'], $log_file_name );
+            update_option( Utill::MULTIVENDORX_OTHER_SETTINGS['log_file'], $log_file_name );
         }
 
         $this->container['log_file'] = MultivendorX()->multivendorx_logs_dir . '/' . $log_file_name;

@@ -47,13 +47,13 @@ class StoreUtil {
         $slug       = $store_name . '-' . $store_id;
 
         // Check if the shipping class already exists.
-        $shipping_term = get_term_by( 'slug', $slug, Utill::WOO_SETTINGS['product_shipping_class'], ARRAY_A );
+        $shipping_term = get_term_by( 'slug', $slug, Utill::WORDPRESS_SETTINGS['product_shipping_class'], ARRAY_A );
 
         // Create a new shipping class if missing.
         if ( ! $shipping_term ) {
             $shipping_term = wp_insert_term(
                 $store->get( 'name' ) . ' Shipping', // Shipping class name.
-                Utill::WOO_SETTINGS['product_shipping_class'],
+                Utill::WORDPRESS_SETTINGS['product_shipping_class'],
                 array(
                     'slug' => $slug,
                 )
@@ -71,7 +71,7 @@ class StoreUtil {
             update_term_meta( $class_id, Utill::POST_META_SETTINGS['store_id'], $store_id );
 
             // Optional: add origin help.
-            update_term_meta( $class_id, Utill::WOO_SETTINGS['shipping_origin_country'], get_option( Utill::WOO_SETTINGS['default_country'] ) );
+            update_term_meta( $class_id, Utill::WORDPRESS_SETTINGS['shipping_origin_country'], get_option( Utill::WOO_SETTINGS['default_country'] ) );
         }
     }
 

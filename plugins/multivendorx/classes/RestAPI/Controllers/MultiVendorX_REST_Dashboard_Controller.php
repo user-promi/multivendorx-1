@@ -441,7 +441,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
 
         $current_user                    = wp_get_current_user();
         $dashboard_array['store_ids']    = StoreUtil::get_stores_from_user_id( $current_user->ID );
-        $dashboard_array['active_store'] = get_user_meta( $current_user->ID, Utill::POST_META_SETTINGS['active_store'], true );
+        $dashboard_array['active_store'] = get_user_meta( $current_user->ID, Utill::USER_SETTINGS_KEYS['active_store'], true );
         $store                           = new Store( $dashboard_array['active_store'] );
         $store_status                    = $store->get( Utill::STORE_SETTINGS_KEYS['status'] );
         $capability_settings             = MultiVendorX()->setting->get_setting( reset( $current_user->roles ), array() );
@@ -477,7 +477,7 @@ class MultiVendorX_REST_Dashboard_Controller extends \WP_REST_Controller {
 
         // Ensure active store is set.
         if ( empty( $dashboard_array['active_store'] ) ) {
-            update_user_meta( $current_user->ID, Utill::POST_META_SETTINGS['active_store'], reset( $dashboard_array['store_ids'] ) );
+            update_user_meta( $current_user->ID, Utill::USER_SETTINGS_KEYS['active_store'], reset( $dashboard_array['store_ids'] ) );
             $dashboard_array['active_store'] = reset( $dashboard_array['store_ids'] );
         }
 
