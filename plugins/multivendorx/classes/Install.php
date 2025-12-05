@@ -200,8 +200,7 @@ class Install {
 
         $sql_product_map = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['products_map'] . "` (
             `ID` bigint(20) NOT NULL AUTO_INCREMENT,
-            `product_map_id` BIGINT UNSIGNED NOT NULL DEFAULT 0,
-            `product_id` BIGINT UNSIGNED NOT NULL DEFAULT 0,
+            `product_map` VARCHAR(255) NOT NULL DEFAULT '',
             `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (`ID`)
         ) $collate;";
