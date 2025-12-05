@@ -68,7 +68,6 @@ const AllProduct: React.FC = () => {
     const [AddProduct, setAddProduct] = useState(false);
     const [categoriesList, setCategoriesList] = useState<{ id: number; name: string }[]>([]);
     const [pageCount, setPageCount] = useState(0);
-    const [activeTab, setActiveTab] = useState("general");
     const { modules } = useModules();
     const [newProductId, setNewProductId] = useState(null);
 
@@ -638,11 +637,11 @@ const AllProduct: React.FC = () => {
             axios.post(`${appLocalizer.apiUrl}/wc/v3/products/`, payload, {
                 headers: { "X-WP-Nonce": appLocalizer.nonce }
             })
-                .then(res => {
-                    console.log("Auto-draft created:", res.data);
-                    setNewProductId(res.data.id);
-                });
-
+            .then(res => {
+                console.log("Auto-draft created:", res.data);
+                setNewProductId(res.data.id); 
+            });
+ 
         } catch (err) {
             console.error("Error creating auto-draft:", err.response?.data || err);
         }
@@ -663,109 +662,10 @@ const AllProduct: React.FC = () => {
         <>
         {!isAddProduct && !isSpmvOn && (
             <>
-                {AddProduct && (
-                    <CommonPopup
-                        open={AddProduct}
-                        // onClose= setAddProduct(true)
-                        width="31.25rem"
-                        height="100%"
-                        header={
-                            <>
-                                <div className="title">
-                                    <i className="adminlib-cart"></i>
-                                    Add Product
-                                </div>
-                                <p>Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.</p>
-                                <i
-                                    className="icon adminlib-close"
-                                    onClick={() => setAddProduct(false)}
-                                ></i>
-                            </>
-                        }
-                        footer={
-                            <>
-                                <div
-                                    className="admin-btn btn-red"
-                                    onClick={() => setAddProduct(false)}
-                                >
-                                    Draft
-                                    <i className="adminlib-contact-form"></i>
-                                </div>
-                                <div
-                                    className="admin-btn btn-purple"
-                                    onClick={() => setAddProduct(false)}
-                                >
-                                    Publish
-                                    <i className="adminlib-check"></i>
-                                </div>
-
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label htmlFor="content">{__("Description (optional)", "multivendorx")}</label>
-                                        <TextArea name="content" inputClass="textarea-input" rowNumber={6} />
-                                    </div>
-                                </div>
-
-                                <div className="tab-titles">
-                                    {tabs.map((tab) => (
-                                        <div
-                                            key={tab.id}
-                                            className={`title ${activeTab === tab.id ? "active" : ""}`}
-                                            onClick={() => setActiveTab(tab.id)}
-                                        >
-                                            <h2>{__(tab.label, "multivendorx")}</h2>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                {/* Tab Content */}
-                                <div className="tab-content">
-                                    {tabs.map(
-                                        (tab) =>
-                                            activeTab === tab.id && (
-                                                <div key={tab.id} className="tab-panel">
-                                                    {tab.content}
-                                                </div>
-                                            )
-                                    )}
-                                </div>
-                            </div>
-                        </CommonPopup>
-                    )}
-
-                    <div className="page-title-wrapper">
-                        <div className="page-title">
-                            <div className="title">{__("All Product", "multivendorx")}</div>
-                            <div className="des">{__("Manage your store information and preferences", "multivendorx")}</div>
-                        </div>
-                        <div className="buttons-wrapper">
-                            {modules.includes('import-export') && (
-                                <>
-                                    <div
-                                        className="admin-btn btn-purple-bg"
-                                        onClick={() => setAddProduct(true)}
-                                    >
-                                        <i className="adminlib-import"></i>
-                                        {__("Import", "multivendorx")}
-                                    </div>
-                                    <div
-                                        className="admin-btn btn-purple-bg"
-                                        onClick={() => setAddProduct(true)}
-                                    >
-                                        <i className="adminlib-export"></i>
-                                        {__("Export", "multivendorx")}
-                                    </div>
-                                </>
-                            )}
-                            <div
-                                className="admin-btn btn-purple-bg"
-                                onClick={() => {
-                                    createAutoDraftProduct();
-                                }}
-                            >
-                                <i className="adminlib-plus-circle-o"></i> {__("Add New", "multivendorx")}
-                            </div>
-                        </div>
+                <div className="page-title-wrapper">
+                    <div className="page-title">
+                        <div className="title">All Product</div>
+                        <div className="des">Manage your store information and preferences</div>
                     </div>
                     <div className="buttons-wrapper">
                         {modules.includes('import-export') && (
@@ -804,24 +704,28 @@ const AllProduct: React.FC = () => {
                             <i className="adminlib-plus-circle-o"></i> Add New
                         </div>
 
-                    <div className="admin-table-wrapper">
-                        <Table
-                            data={data}
-                            columns={columns as ColumnDef<Record<string, any>, any>[]}
-                            rowSelection={rowSelection}
-                            onRowSelectionChange={setRowSelection}
-                            defaultRowsPerPage={10}
-                            pageCount={pageCount}
-                            pagination={pagination}
-                            onPaginationChange={setPagination}
-                            perPageOption={[10, 25, 50]}
-                            typeCounts={[]}
-                            realtimeFilter={realtimeFilter}
-                            handlePagination={requestApiForData}
-                            totalCounts={totalRows}
-                            searchFilter={searchFilter}
-                        />
                     </div>
+                </div>
+                <div className="admin-table-wrapper">
+                    <Table
+                        data={data}
+                        columns={columns as ColumnDef<Record<string, any>, any>[]}
+                        rowSelection={rowSelection}
+                        onRowSelectionChange={setRowSelection}
+                        defaultRowsPerPage={10}
+                        pageCount={pageCount}
+                        pagination={pagination}
+                        onPaginationChange={setPagination}
+                        perPageOption={[10, 25, 50]}
+                        typeCounts={[]}
+                        realtimeFilter={realtimeFilter}
+                        handlePagination={requestApiForData}
+                        totalCounts={totalRows}
+                        searchFilter={searchFilter}
+                    />
+                </div>
+            </>
+        )}
 
         {isAddProduct && <AddProductCom />}
         {isSpmvOn && <SmpvProducts />}
