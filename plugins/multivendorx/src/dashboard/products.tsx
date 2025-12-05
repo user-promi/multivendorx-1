@@ -80,7 +80,7 @@ const AllProduct: React.FC = () => {
     if (!element) {
         const parts = location.pathname.split("/").filter(Boolean);
         if (parts.length >= 4) {
-            element = element || parts[2]; 
+            element = element || parts[2];
         }
     }
 
@@ -89,33 +89,33 @@ const AllProduct: React.FC = () => {
     const tabs = [
         {
             id: "general",
-            label: "General",
+            label: __("General", "multivendorx"),
             content: (
                 <>
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Discount type</label>
+                            <label>{__("Discount type", "multivendorx")}</label>
                             <BasicInput type="text" name="discount_type" />
                         </div>
                     </div>
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Coupon amount</label>
+                            <label>{__("Coupon amount", "multivendorx")}</label>
                             <BasicInput type="number" name="coupon_amount" />
                         </div>
                     </div>
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Allow free shipping</label>
+                            <label>{__("Allow free shipping", "multivendorx")}</label>
                             <BasicInput type="text" name="free_shipping" />
                         </div>
                     </div>
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Coupon expiry date</label>
+                            <label>{__("Coupon expiry date", "multivendorx")}</label>
                             <BasicInput type="date" name="expiry_date" />
                         </div>
                     </div>
@@ -124,26 +124,26 @@ const AllProduct: React.FC = () => {
         },
         {
             id: "limits",
-            label: "Usage Limits",
+            label: __("Usage Limits", "multivendorx"),
             content: (
                 <>
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Usage limit per coupon</label>
+                            <label>{__("Usage limit per coupon", "multivendorx")}</label>
                             <BasicInput type="number" name="limit_per_coupon" />
                         </div>
                     </div>
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Limit usage to X items</label>
+                            <label>{__("Limit usage to X items", "multivendorx")}</label>
                             <BasicInput type="number" name="limit_per_items" />
                         </div>
                     </div>
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Usage limit per user</label>
+                            <label>{__("Usage limit per user", "multivendorx")}</label>
                             <BasicInput type="number" name="limit_per_user" />
                         </div>
                     </div>
@@ -152,68 +152,68 @@ const AllProduct: React.FC = () => {
         },
         {
             id: "restriction",
-            label: "Usage Restriction",
+            label: __("Usage Restriction", "multivendorx"),
             content: (
                 <>
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Minimum spend</label>
+                            <label>{__("Minimum spend", "multivendorx")}</label>
                             <BasicInput type="number" name="min_spend" />
                         </div>
                     </div>
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Maximum spend</label>
+                            <label>{__("Maximum spend", "multivendorx")}</label>
                             <BasicInput type="number" name="max_spend" />
                         </div>
                     </div>
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Individual use only</label>
+                            <label>{__("Individual use only", "multivendorx")}</label>
                             <BasicInput type="checkbox" name="individual_use" />
                         </div>
                     </div>
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Exclude sale items</label>
+                            <label>{__("Exclude sale items", "multivendorx")}</label>
                             <BasicInput type="checkbox" name="exclude_sale_items" />
                         </div>
                     </div>
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Products</label>
+                            <label>{__("Products", "multivendorx")}</label>
                             <BasicInput type="text" name="products" />
                         </div>
                     </div>
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Exclude products</label>
+                            <label>{__("Exclude products", "multivendorx")}</label>
                             <BasicInput type="text" name="exclude_products" />
                         </div>
                     </div>
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Product categories</label>
+                            <label>{__("Product categories", "multivendorx")}</label>
                             <BasicInput type="text" name="product_categories" />
                         </div>
                     </div>
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Exclude categories</label>
+                            <label>{__("Exclude categories", "multivendorx")}</label>
                             <BasicInput type="text" name="exclude_categories" />
                         </div>
                     </div>
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Allowed emails</label>
+                            <label>{__("Allowed emails", "multivendorx")}</label>
                             <BasicInput type="text" name="allowed_emails" />
                         </div>
                     </div>
@@ -633,11 +633,11 @@ const AllProduct: React.FC = () => {
             axios.post(`${appLocalizer.apiUrl}/wc/v3/products/`, payload, {
                 headers: { "X-WP-Nonce": appLocalizer.nonce }
             })
-            .then(res => {
-                console.log("Auto-draft created:", res.data);
-                setNewProductId(res.data.id); 
-            });
- 
+                .then(res => {
+                    console.log("Auto-draft created:", res.data);
+                    setNewProductId(res.data.id);
+                });
+
         } catch (err) {
             console.error("Error creating auto-draft:", err.response?.data || err);
         }
@@ -656,155 +656,148 @@ const AllProduct: React.FC = () => {
 
     return (
         <>
-        {!isAddProduct && (
-            <>
-                {AddProduct && (
-                    <CommonPopup
-                        open={AddProduct}
-                        // onClose= setAddProduct(true)
-                        width="31.25rem"
-                        height="100%"
-                        header={
-                            <>
-                                <div className="title">
-                                    <i className="adminlib-cart"></i>
-                                    Add Product
-                                </div>
-                                <p>Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.</p>
-                                <i
-                                    className="icon adminlib-close"
-                                    onClick={() => setAddProduct(false)}
-                                ></i>
-                            </>
-                        }
-                        footer={
-                            <>
-                                <div
-                                    className="admin-btn btn-red"
-                                    onClick={() => setAddProduct(false)}
-                                >
-                                    Draft
-                                    <i className="adminlib-contact-form"></i>
-                                </div>
-                                <div
-                                    className="admin-btn btn-purple"
-                                    onClick={() => setAddProduct(false)}
-                                >
-                                    Publish
-                                    <i className="adminlib-check"></i>
-                                </div>
-
-                            </>
-                        }
-                    >
-
-                        <div className="content">
-                            {/* start left section */}
-                            <div className="form-group-wrapper">
-                                <div className="form-group">
-                                    <label htmlFor="title">Name</label>
-                                    <BasicInput
-                                        type="text"
-                                        name="title"
-                                    />
-                                </div>
-                            </div>
-                            <div className="form-group-wrapper">
-                                <div className="form-group">
-                                    <label htmlFor="title">Description (optional)</label>
-                                    <TextArea
-                                        name="content"
-                                        inputClass="textarea-input"
-                                        rowNumber={6}
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="tab-titles">
-                                {tabs.map((tab) => (
-                                    <div
-                                        key={tab.id}
-                                        className={`title ${activeTab === tab.id ? "active" : ""}`}
-                                        onClick={() => setActiveTab(tab.id)}
-                                    >
-                                        <h2>{tab.label}</h2>
+            {!isAddProduct && (
+                <>
+                    {AddProduct && (
+                        <CommonPopup
+                            open={AddProduct}
+                            width="31.25rem"
+                            height="100%"
+                            header={
+                                <>
+                                    <div className="title">
+                                        <i className="adminlib-cart"></i>
+                                        {__("Add Product", "multivendorx")}
                                     </div>
-                                ))}
-                            </div>
-
-                            {/* Tab Content */}
-                            <div className="tab-content">
-                                {tabs.map(
-                                    (tab) =>
-                                        activeTab === tab.id && (
-                                            <div key={tab.id} className="tab-panel">
-                                                {tab.content}
-                                            </div>
-                                        )
-                                )}
-                            </div>
-                        </div>
-
-                        {/* {error && <p className="error-text">{error}</p>} */}
-                    </CommonPopup>
-                )}
-                <div className="page-title-wrapper">
-                    <div className="page-title">
-                        <div className="title">All Product</div>
-                        <div className="des">Manage your store information and preferences</div>
-                    </div>
-                    <div className="buttons-wrapper">
-                        {modules.includes('import-export') && (
-                            <>
-                                <div
-                                    className="admin-btn btn-purple-bg"
-                                    onClick={() => setAddProduct(true)}
-                                >
-                                    <i className="adminlib-import"></i>
-                                    import
-                                </div>
-                                <div
-                                    className="admin-btn btn-purple-bg"
-                                    onClick={() => setAddProduct(true)}
-                                >
-                                    <i className="adminlib-export"></i>
-                                    Export
-                                </div>
-                            </>
-                        )}
-                        <div
-                            className="admin-btn btn-purple-bg"
-                            onClick={() =>{
-                                createAutoDraftProduct();
-                            }}
+                                    <p>
+                                        {__("Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.", "multivendorx")}
+                                    </p>
+                                    <i
+                                        className="icon adminlib-close"
+                                        onClick={() => setAddProduct(false)}
+                                    ></i>
+                                </>
+                            }
+                            footer={
+                                <>
+                                    <div
+                                        className="admin-btn btn-red"
+                                        onClick={() => setAddProduct(false)}
+                                    >
+                                        {__("Draft", "multivendorx")}
+                                        <i className="adminlib-contact-form"></i>
+                                    </div>
+                                    <div
+                                        className="admin-btn btn-purple"
+                                        onClick={() => setAddProduct(false)}
+                                    >
+                                        {__("Publish", "multivendorx")}
+                                        <i className="adminlib-check"></i>
+                                    </div>
+                                </>
+                            }
                         >
-                            <i className="adminlib-plus-circle-o"></i> Add New
+                            <div className="content">
+                                {/* start left section */}
+                                <div className="form-group-wrapper">
+                                    <div className="form-group">
+                                        <label htmlFor="title">{__("Name", "multivendorx")}</label>
+                                        <BasicInput type="text" name="title" />
+                                    </div>
+                                </div>
+
+                                <div className="form-group-wrapper">
+                                    <div className="form-group">
+                                        <label htmlFor="content">{__("Description (optional)", "multivendorx")}</label>
+                                        <TextArea name="content" inputClass="textarea-input" rowNumber={6} />
+                                    </div>
+                                </div>
+
+                                <div className="tab-titles">
+                                    {tabs.map((tab) => (
+                                        <div
+                                            key={tab.id}
+                                            className={`title ${activeTab === tab.id ? "active" : ""}`}
+                                            onClick={() => setActiveTab(tab.id)}
+                                        >
+                                            <h2>{__(tab.label, "multivendorx")}</h2>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* Tab Content */}
+                                <div className="tab-content">
+                                    {tabs.map(
+                                        (tab) =>
+                                            activeTab === tab.id && (
+                                                <div key={tab.id} className="tab-panel">
+                                                    {tab.content}
+                                                </div>
+                                            )
+                                    )}
+                                </div>
+                            </div>
+                        </CommonPopup>
+                    )}
+
+                    <div className="page-title-wrapper">
+                        <div className="page-title">
+                            <div className="title">{__("All Product", "multivendorx")}</div>
+                            <div className="des">{__("Manage your store information and preferences", "multivendorx")}</div>
                         </div>
-
+                        <div className="buttons-wrapper">
+                            {modules.includes('import-export') && (
+                                <>
+                                    <div
+                                        className="admin-btn btn-purple-bg"
+                                        onClick={() => setAddProduct(true)}
+                                    >
+                                        <i className="adminlib-import"></i>
+                                        {__("Import", "multivendorx")}
+                                    </div>
+                                    <div
+                                        className="admin-btn btn-purple-bg"
+                                        onClick={() => setAddProduct(true)}
+                                    >
+                                        <i className="adminlib-export"></i>
+                                        {__("Export", "multivendorx")}
+                                    </div>
+                                </>
+                            )}
+                            <div
+                                className="admin-btn btn-purple-bg"
+                                onClick={() => {
+                                    createAutoDraftProduct();
+                                }}
+                            >
+                                <i className="adminlib-plus-circle-o"></i> {__("Add New", "multivendorx")}
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div className="admin-table-wrapper">
-                    <Table
-                        data={data}
-                        columns={columns as ColumnDef<Record<string, any>, any>[]}
-                        rowSelection={rowSelection}
-                        onRowSelectionChange={setRowSelection}
-                        defaultRowsPerPage={10}
-                        pageCount={pageCount}
-                        pagination={pagination}
-                        onPaginationChange={setPagination}
-                        perPageOption={[10, 25, 50]}
-                        typeCounts={[]}
-                        realtimeFilter={realtimeFilter}
-                        handlePagination={requestApiForData}
-                        totalCounts={totalRows}
-                        searchFilter={searchFilter}
-                    />
-                </div>
-            </>
-        )}
 
-        {isAddProduct && <AddProductCom />}
+                    <div className="admin-table-wrapper">
+                        <Table
+                            data={data}
+                            columns={columns as ColumnDef<Record<string, any>, any>[]}
+                            rowSelection={rowSelection}
+                            onRowSelectionChange={setRowSelection}
+                            defaultRowsPerPage={10}
+                            pageCount={pageCount}
+                            pagination={pagination}
+                            onPaginationChange={setPagination}
+                            perPageOption={[10, 25, 50]}
+                            typeCounts={[]}
+                            realtimeFilter={realtimeFilter}
+                            handlePagination={requestApiForData}
+                            totalCounts={totalRows}
+                            searchFilter={searchFilter}
+                        />
+                    </div>
+
+                </>
+            )}
+
+            {isAddProduct && <AddProductCom />}
         </>
     );
 };

@@ -1,6 +1,7 @@
+import { __ } from '@wordpress/i18n';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { BasicInput, TextArea, FileInput, SelectInput, getApiLink, SuccessNotice } from 'zyra';
+import { BasicInput, FileInput, SelectInput, getApiLink, SuccessNotice } from 'zyra';
 
 interface FormData {
     [key: string]: any;
@@ -94,11 +95,11 @@ const Appearance = () => {
             <SuccessNotice message={successMsg} />
             <div className="card-wrapper">
                 <div className="card-content">
-                    <div className="card-title">Appearance </div>
+                    <div className="card-title">{__('Appearance', 'multivendorx')}</div>
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label htmlFor="product-name">Profile Image</label>
+                            <label htmlFor="product-name">{__('Profile Image', 'multivendorx')}</label>
                             <FileInput
                                 value={formData.image}
                                 inputClass="form-input"
@@ -107,7 +108,7 @@ const Appearance = () => {
                                 onButtonClick={() => runUploader('image')}
                                 imageWidth={75}
                                 imageHeight={75}
-                                openUploader="Upload Image"
+                                openUploader={__('Upload Image', 'multivendorx')}
                                 imageSrc={imagePreviews.image}
                                 buttonClass="admin-btn btn-purple"
                                 descClass="settings-metabox-description"
@@ -125,7 +126,7 @@ const Appearance = () => {
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label htmlFor="banner-type">Banner / Cover Image</label>
+                            <label htmlFor="banner-type">{__('Banner / Cover Image', 'multivendorx')}</label>
 
                             {/*IMPORTANT: use banner_type key and autoSave on change */}
                             <SelectInput
@@ -141,13 +142,12 @@ const Appearance = () => {
                                     autoSave(updated);
                                 }}
                             />
-
                         </div>
                     </div>
                     {formData.banner_type === 'static_image' && (
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="product-name">Static Banner Image</label>
+                                <label htmlFor="product-name">{__('Static Banner Image', 'multivendorx')}</label>
                                 <FileInput
                                     value={formData.banner}
                                     inputClass="form-input"
@@ -156,7 +156,7 @@ const Appearance = () => {
                                     onButtonClick={() => runUploader('banner')}
                                     imageWidth={300}
                                     imageHeight={100}
-                                    openUploader="Upload Banner"
+                                    openUploader={__('Upload Banner', 'multivendorx')}
                                     imageSrc={imagePreviews.banner}
                                     buttonClass="admin-btn btn-purple"
                                     descClass="settings-metabox-description"
@@ -175,7 +175,7 @@ const Appearance = () => {
                     {formData.banner_type === 'slider_image' && (
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                Slider upload feature coming soon...
+                                {__('Slider upload feature coming soon...', 'multivendorx')}
                             </div>
                         </div>
                     )}

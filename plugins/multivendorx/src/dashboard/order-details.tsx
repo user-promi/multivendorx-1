@@ -39,7 +39,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                 const itemTax = item.tax ? Number(item.tax) : 0;
                 return sum + (itemTotal + itemTax);
             }, 0);
-            
+
             setRefundDetails((prevDetails) => ({
                 ...prevDetails,
                 refundAmount,
@@ -176,7 +176,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                     <div className={statusBadgeClass(orderData?.status)}
                                         onClick={() => setStatusSelect(true)}
                                     >
-                                       {(orderData?.status || '').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
+                                        {(orderData?.status || '').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
                                     </div>
                                 }
                                 {statusSelect &&
@@ -254,7 +254,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 
                                                         {/* Qty (editable only in refund mode) */}
                                                         <td className="admin-column">
-                                                          <div className="price"> x {item.quantity} </div>
+                                                            <div className="price"> x {item.quantity} </div>
 
                                                             {isRefund && (
                                                                 <input
@@ -271,7 +271,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 
                                                         {/* Total (editable only in refund mode) */}
                                                         <td className="admin-column">
-                                                          <div className="price">   ${parseFloat(item.subtotal).toFixed(2)} </div>
+                                                            <div className="price">   ${parseFloat(item.subtotal).toFixed(2)} </div>
                                                             {refundMap[item.id]?.refunded_line_total !== 0 && (
                                                                 <div>
                                                                     {refundMap[item.id].refunded_line_total}
@@ -290,7 +290,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                                             )}
                                                         </td>
                                                         <td className="admin-column">
-                                                         <div className="price"> ${parseFloat(item.subtotal_tax).toFixed(2)} </div>
+                                                            <div className="price"> ${parseFloat(item.subtotal_tax).toFixed(2)} </div>
                                                             {refundMap[item.id]?.refunded_tax !== 0 && (
                                                                 <div>
                                                                     {refundMap[item.id].refunded_tax}
@@ -312,7 +312,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                                     </tr>
                                                 ))
                                             ) : (
-                                                <tr className="admin-row simple"> 
+                                                <tr className="admin-row simple">
                                                     <td colSpan={4}>
                                                         No items found.
                                                     </td>
@@ -333,7 +333,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                                                             <span>{data.display_key || data.key}:</span> {data.display_value || data.value}
                                                                         </div>
                                                                     ))} */}
-                                                                        {/* <div className="sub-text"><span>_vendor_order_shipping_item_id:</span> 337</div> */}
+                                                                    {/* <div className="sub-text"><span>_vendor_order_shipping_item_id:</span> 337</div> */}
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -532,48 +532,6 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                         )}
 
                                 </div>
-                                {/* <div className="coupons-calculation-wrapper">
-                                <div className="left">
-                                    {!isRefund && (
-                                        <div className="coupon">Coupon(s): <a href="#" className="admin-badge blue">COUPON30</a></div>
-                                    )}
-                                    <div className="admin-btn btn-purple" onClick={() => setIsRefund(!isRefund)}>
-                                        {isRefund ? "Refund Manuall" : "Refund"}
-                                    </div>
-                                </div> */}
-                                {/* <div className="right">
-                                    {!isRefund ? (
-                                        <table>
-                                            <tbody>
-                                                <tr><td>Commission:</td><td>$29</td></tr>
-                                                <tr><td>Discount:</td><td>$29</td></tr>
-                                                <tr><td>Total Earned:</td><td>$529</td></tr>
-                                            </tbody>
-                                        </table>
-                                    ) :
-                                     (
-                                        <></>
-                                        // <table className="refund-table">
-                                        //     <tbody>
-                                        //         <tr><td>Amount already refunded:</td><td>-$50</td></tr>
-                                        //         <tr><td>Total available to refund:</td><td>$60</td></tr>
-                                        //         <tr>
-                                        //             <td>Refund amount:</td>
-                                        //             <td>
-                                        //                 <input
-                                        //                     type="number"
-                                        //                     className="basic-input"
-                                        //                     value={values.shipping}
-                                        //                     onChange={(e) => handleChange("shipping", +e.target.value)}
-                                        //                 />
-                                        //             </td>
-                                        //         </tr>
-                                        //         <tr><td>Reason for refund (optional):</td><td>${values.total.toFixed(2)}</td></tr>
-                                        //     </tbody>
-                                        // </table>
-                                    )}
-                                </div> */}
-                                {/* </div> */}
                             </div>
                         </div>
 
@@ -582,7 +540,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                 <div className="card-header">
                                     <div className="left">
                                         <div className="title">
-                                            Customer details
+                                            {__("Customer details", "multivendorx")}
                                         </div>
                                     </div>
                                 </div>
@@ -591,7 +549,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                         <div className="avater">
                                             <img
                                                 src={customerData?.avatar_url}
-                                                alt={`${orderData?.billing?.first_name || "Customer"} avatar`}
+                                                alt={`${orderData?.billing?.first_name || __("Customer", "multivendorx")} avatar`}
                                             />
                                         </div>
 
@@ -599,9 +557,12 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                             <div className="name">
                                                 {orderData?.billing?.first_name || orderData?.billing?.last_name
                                                     ? `${orderData?.billing?.first_name ?? ""} ${orderData?.billing?.last_name ?? ""}`
-                                                    : "Guest Customer"}
+                                                    : __("Guest Customer", "multivendorx")}
                                             </div>
-                                            <div className="des"> Customer ID: #{orderData?.customer_id && orderData.customer_id !== 0 ? orderData.customer_id : "—"}</div>
+                                            <div className="des">
+                                                {__("Customer ID", "multivendorx")}: #{orderData?.customer_id && orderData.customer_id !== 0 ? orderData.customer_id : "—"}
+                                            </div>
+
                                             {orderData?.billing?.email && (
                                                 <div className="des">
                                                     <i className="adminlib-mail" /> {orderData.billing.email}
@@ -618,22 +579,21 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                 </div>
                             </div>
 
+
                             <div className="card-content">
                                 <div className="card-header">
                                     <div className="left">
                                         <div className="title">
-                                            Billing address
+                                            {__("Billing address", "multivendorx")}
                                         </div>
                                     </div>
-                                    {/* <div className="right">
-                                        <i className="adminlib-external"></i>
-                                    </div> */}
                                 </div>
+
                                 <div className="overview-wrapper">
 
                                     <div className="items">
                                         <div className="title">
-                                            Address
+                                            {__("Address", "multivendorx")}
                                         </div>
                                         <div className="details">
                                             {orderData?.billing?.address_1 ||
@@ -659,20 +619,24 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                                     {orderData.billing.country && <> , {orderData.billing.country}</>}
                                                 </div>
                                             ) : (
-                                                <div className="address">No billing address provided</div>
+                                                <div className="address">
+                                                    {__("No billing address provided", "multivendorx")}
+                                                </div>
                                             )}
                                         </div>
                                     </div>
+
                                     <div className="items">
                                         <div className="title">
-                                            Payment method
+                                            {__("Payment method", "multivendorx")}
                                         </div>
                                         <div className="details">
                                             <div className="admin-badge blue">
-                                                {orderData?.payment_method_title || "Not specified"}
+                                                {orderData?.payment_method_title || __("Not specified", "multivendorx")}
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
 
@@ -681,14 +645,17 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                 <div className="card-header">
                                     <div className="left">
                                         <div className="title">
-                                            Shipping address
+                                            {__("Shipping address", "multivendorx")}
                                         </div>
                                     </div>
                                 </div>
+
                                 <div>{orderData?.shipping.address_1}</div>
                                 {orderData?.shipping.address_2 && <div>{orderData?.shipping.address_2}</div>}
 
-                                <div>{orderData?.shipping.city}, {orderData?.shipping.state} {orderData?.shipping.postcode}</div>
+                                <div>
+                                    {orderData?.shipping.city}, {orderData?.shipping.state} {orderData?.shipping.postcode}
+                                </div>
 
                                 <div>{orderData?.shipping.country}</div>
                             </div>
@@ -697,24 +664,37 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                 <div className="card-header">
                                     <div className="left">
                                         <div className="title">
-                                            Shipping Tracking (P)
+                                            {__("Shipping Tracking (P)", "multivendorx")}
                                         </div>
                                     </div>
                                 </div>
+
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
-                                        <label htmlFor="product-name">Create Shipping</label>
+                                        <label htmlFor="product-name">
+                                            {__("Create Shipping", "multivendorx")}
+                                        </label>
                                         <SelectInput name="country" options={[]} type="single-select" />
                                     </div>
                                 </div>
+
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
-                                        <label htmlFor="product-name">Tracking Number</label>
-                                        <BasicInput name="name" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                                        <label htmlFor="product-name">
+                                            {__("Tracking Number", "multivendorx")}
+                                        </label>
+                                        <BasicInput
+                                            name="name"
+                                            wrapperClass="setting-form-input"
+                                            descClass="settings-metabox-description"
+                                        />
                                     </div>
                                 </div>
+
                                 <div className="buttons-wrapper">
-                                    <div className="admin-btn btn-purple">Create Shipment</div>
+                                    <div className="admin-btn btn-purple">
+                                        {__("Create Shipment", "multivendorx")}
+                                    </div>
                                 </div>
                             </div>
 
@@ -722,7 +702,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                 <div className="card-header">
                                     <div className="left">
                                         <div className="title">
-                                            Order notes
+                                            {__("Order notes", "multivendorx")}
                                         </div>
                                     </div>
                                 </div>
@@ -743,7 +723,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                                     </div>
                                                     <div className="details">
                                                         <div className="notification-title">
-                                                            {note.author || "System Note"}
+                                                            {note.author || __("System Note", "multivendorx")}
                                                         </div>
                                                         <div
                                                             className="des"
@@ -757,7 +737,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
                                     </div>
                                 ) : (
                                     <div className="notification-wrapper">
-                                        <div className="empty">No order notes found.</div>
+                                        <div className="empty">{__("No order notes found.", "multivendorx")}</div>
                                     </div>
                                 )}
                             </div>

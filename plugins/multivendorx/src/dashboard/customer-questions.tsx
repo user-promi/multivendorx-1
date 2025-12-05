@@ -428,8 +428,13 @@ const CustomerQuestions: React.FC = () => {
         <>
             <div className="page-title-wrapper">
                 <div className="page-title">
-                    <div className="title">Product questions in queue</div>
-                    <div className="des">Manage your store information and preferences</div>
+                    <div className="title">
+                        {__("Product questions in queue", "multivendorx")}
+                    </div>
+
+                    <div className="des">
+                        {__("Manage your store information and preferences", "multivendorx")}
+                    </div>
                 </div>
             </div>
             {/* <div className="admin-table-wrapper"> */}
@@ -449,7 +454,6 @@ const CustomerQuestions: React.FC = () => {
                 typeCounts={status as Status[]}
                 searchFilter={searchFilter}
             />
-            {/* </div> */}
 
             {selectedQna && (
                 <CommonPopup
@@ -461,9 +465,16 @@ const CustomerQuestions: React.FC = () => {
                         <>
                             <div className="title">
                                 <i className="adminlib-question"></i>
-                                Answer Question
+                                {__("Answer Question", "multivendorx")}
                             </div>
-                            <p>Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.</p>
+
+                            <p>
+                                {__(
+                                    "Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.",
+                                    "multivendorx"
+                                )}
+                            </p>
+
                             <i
                                 onClick={() => setSelectedQna(null)}
                                 className="icon adminlib-close"
@@ -477,10 +488,15 @@ const CustomerQuestions: React.FC = () => {
                                 onClick={() => setSelectedQna(null)}
                                 className="admin-btn btn-red"
                             >
-                                Cancel
+                                {__("Cancel", "multivendorx")}
                             </button>
-                            <button onClick={handleSaveAnswer} disabled={saving} className="admin-btn btn-purple">
-                                {saving ? "Saving..." : "Save Answer"}
+
+                            <button
+                                onClick={handleSaveAnswer}
+                                disabled={saving}
+                                className="admin-btn btn-purple"
+                            >
+                                {saving ? __("Saving...", "multivendorx") : __("Save Answer", "multivendorx")}
                             </button>
                         </>
                     }
@@ -488,13 +504,26 @@ const CustomerQuestions: React.FC = () => {
                     <div className="content">
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="question">{__("Question", "multivendorx")}</label>
-                                <BasicInput name="phone" value={qna} wrapperClass="setting-form-input" descClass="settings-metabox-description" onChange={(e) => setQna(e.target.value)} />
+                                <label htmlFor="question">
+                                    {__("Question", "multivendorx")}
+                                </label>
+
+                                <BasicInput
+                                    name="phone"
+                                    value={qna}
+                                    wrapperClass="setting-form-input"
+                                    descClass="settings-metabox-description"
+                                    onChange={(e) => setQna(e.target.value)}
+                                />
                             </div>
                         </div>
+
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="ans">{__("Answer", "multivendorx")}</label>
+                                <label htmlFor="ans">
+                                    {__("Answer", "multivendorx")}
+                                </label>
+
                                 <TextArea
                                     name="answer"
                                     inputClass="textarea-input"
@@ -506,18 +535,25 @@ const CustomerQuestions: React.FC = () => {
 
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="visibility">{__("Decide whether this Q&A is visible to everyone or only to the store team.", "multivendorx")}</label>
+                                <label htmlFor="visibility">
+                                    {__(
+                                        "Decide whether this Q&A is visible to everyone or only to the store team.",
+                                        "multivendorx"
+                                    )}
+                                </label>
+
                                 <ToggleSetting
                                     wrapperClass="setting-form-input"
                                     descClass="settings-metabox-description"
-                                    //description="Select whether this question is visible to the public or private."
                                     options={[
-                                        { key: 'public', value: 'public', label: __('Public', 'multivendorx') },
-                                        { key: 'private', value: 'private', label: __('Private', 'multivendorx') },
+                                        { key: "public", value: "public", label: __("Public", "multivendorx") },
+                                        { key: "private", value: "private", label: __("Private", "multivendorx") },
                                     ]}
-                                    value={selectedQna.question_visibility || 'public'}
+                                    value={selectedQna.question_visibility || "public"}
                                     onChange={(value) =>
-                                        setSelectedQna((prev) => prev ? { ...prev, question_visibility: value } : prev)
+                                        setSelectedQna((prev) =>
+                                            prev ? { ...prev, question_visibility: value } : prev
+                                        )
                                     }
                                 />
                             </div>

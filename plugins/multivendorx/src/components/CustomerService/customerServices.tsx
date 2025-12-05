@@ -1,5 +1,4 @@
 import { AdminBreadcrumbs, getApiLink, useModules, Tabs } from 'zyra';
-import RefundRequest from './refundRequest';
 import './customerServices.scss';
 import '../AdminDashboard/adminDashboard.scss';
 import Qna from './qnaTable';
@@ -14,18 +13,6 @@ const CustomerServices = () => {
     const location = new URLSearchParams(useLocation().hash.substring(1));
 
     const tabData = [
-        {
-            type: 'file',
-            module: "marketplace-refund",
-            content: {
-                id: 'refund-requests',
-                name: 'Refund Requests',
-                desc: 'Need your decision',
-                icon: 'marketplace-refund',
-                tabTitle: 'Refund tracker',
-                tabDes: 'Monitor refund trends and stay informed on store returns.',
-            },
-        },
         {
             type: 'file',
             module: "question-answer",
@@ -64,8 +51,6 @@ const CustomerServices = () => {
 
     const getForm = (tabId: string) => {
         switch (tabId) {
-            case 'refund-requests':
-                return <RefundRequest />;
             case 'questions':
                 return <Qna />;
             case 'review':

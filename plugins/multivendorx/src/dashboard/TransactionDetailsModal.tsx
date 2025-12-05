@@ -32,118 +32,65 @@ const TransactionDetailsModal: React.FC<Props> = ({ transaction, onClose }) => {
                     <>
                         <div className="title">
                             <i className="adminlib-cart"></i>
-                            Transaction Details
+                            {__("Transaction Details", "multivendorx")}
                         </div>
-                        <p>Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.</p>
+                        <p>{__("Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.", "multivendorx")}</p>
                         <i
                             className="icon adminlib-close"
                             onClick={onClose}
                         ></i>
-                    </>}
+                    </>
+                }
             >
                 <>
-
                     <div className="heading">{__("Order Overview", "multivendorx")}</div>
 
                     <div className="commission-details">
                         <div className="items">
-                            <div className="text">Date</div>
+                            <div className="text">{__("Date", "multivendorx")}</div>
                             <div className="value">{transaction.date}</div>
                         </div>
                         <div className="items">
-                            <div className="text">Order Details</div>
-                            <div className="value">
-                                {transaction.order_details}
-                            </div>
+                            <div className="text">{__("Order Details", "multivendorx")}</div>
+                            <div className="value">{transaction.order_details}</div>
                         </div>
                         <div className="items">
-                            <div className="text">Transaction Type</div>
-                            <div className="value">
-
-                                {transaction.transaction_type}
-                            </div>
+                            <div className="text">{__("Transaction Type", "multivendorx")}</div>
+                            <div className="value">{transaction.transaction_type}</div>
                         </div>
                         <div className="items">
-                            <div className="text">Payment Mode</div>
+                            <div className="text">{__("Payment Mode", "multivendorx")}</div>
                             <div className="value">{transaction.payment_mode}</div>
                         </div>
-
                         <div className="items">
-                            <div className="text">Credit</div>
+                            <div className="text">{__("Credit", "multivendorx")}</div>
                             <div className="value">{Number(transaction.credit || 0).toFixed(2)}</div>
                         </div>
                         <div className="items">
-                            <div className="text">Debit</div>
+                            <div className="text">{__("Debit", "multivendorx")}</div>
                             <div className="value">{Number(transaction.debit || 0).toFixed(2)}</div>
                         </div>
                         <div className="items">
-                            <div className="text">Balance</div>
+                            <div className="text">{__("Balance", "multivendorx")}</div>
                             <div className="value">{Number(transaction.balance || 0).toFixed(2)}</div>
                         </div>
                         <div className="items">
-                            <div className="text">Status</div>
+                            <div className="text">{__("Status", "multivendorx")}</div>
                             <div className="value">
                                 <span className={`admin-badge ${transaction.status === 'paid' ? 'green' : 'red'}`}>
                                     {transaction.status
                                         ? transaction.status
-                                            .replace(/^wc-/, '') // remove any prefix like 'wc-'
-                                            .replace(/_/g, ' ')  // replace underscores with spaces
-                                            .replace(/\b\w/g, (c) => c.toUpperCase()) // capitalize each word
+                                            .replace(/^wc-/, '') // remove prefix
+                                            .replace(/_/g, ' ')  // underscores → spaces
+                                            .replace(/\b\w/g, (c) => c.toUpperCase()) // capitalize
                                         : ''}
                                 </span>
                             </div>
                         </div>
                     </div>
-
-                    {/* <div className="popup-divider"></div> */}
                 </>
             </CommonPopup>
-            {/* <div className="transaction-modal-overlay">
-                <div className="transaction-modal">
-                    <h2>{__("Transaction Details", "multivendorx")}</h2>
-                    <table className="transaction-details-table">
-                        <tbody>
-                            <tr>
-                                <td>{__("Date", "multivendorx")}</td>
-                                <td>{transaction.date}</td>
-                            </tr>
-                            <tr>
-                                <td>{__("Order Details", "multivendorx")}</td>
-                                <td>{transaction.order_details}</td>
-                            </tr>
-                            <tr>
-                                <td>{__("Transaction Type", "multivendorx")}</td>
-                                <td>{transaction.transaction_type}</td>
-                            </tr>
-                            <tr>
-                                <td>{__("Payment Mode", "multivendorx")}</td>
-                                <td>{transaction.payment_mode}</td>
-                            </tr>
-                            <tr>
-                                <td>{__("Credit", "multivendorx")}</td>
-                                <td>{Number(transaction.credit || 0).toFixed(2)}</td>
-                            </tr>
-                            <tr>
-                                <td>{__("Debit", "multivendorx")}</td>
-                                <td>{Number(transaction.debit || 0).toFixed(2)}</td>
-                            </tr>
-                            <tr>
-                                <td>{__("Balance", "multivendorx")}</td>
-                                <td>{Number(transaction.balance || 0).toFixed(2)}</td>
-                            </tr>
 
-                            <tr>
-                                <td>{__("Status", "multivendorx")}</td>
-                                <td>{transaction.status}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <button className="button button-secondary" onClick={onClose}>
-                        {__("Close", "multivendorx")}
-                    </button>
-                </div>
-            </div> */}
         </>
     );
 };

@@ -386,46 +386,6 @@ const SupportTickets: React.FC = () => {
                 );
             },
         },
-        // {
-        //     id: 'title',
-        //     header: __('Title', 'multivendorx'),
-        //     cell: ({ row }) => (
-        //         <TableCell title={row.original.review_title}>
-        //             {row.original.review_title || '-'}
-        //         </TableCell>
-        //     ),
-        // },
-        // {
-        //     id: 'content',
-        //     header: __('Review', 'multivendorx'),
-        //     cell: ({ row }) => {
-        //         const content = row.original.review_content || '';
-        //         const shortText = content.length > 40 ? content.substring(0, 40) + '...' : content;
-
-        //         return (
-        //             <TableCell title={content}>
-        //                 {shortText || '-'}
-        //             </TableCell>
-        //         );
-        //     },
-        // },
-        // {
-        //     id: 'status',
-        //     header: __('Status', 'multivendorx'),
-        //     cell: ({ row }) => (
-        //         <TableCell title={row.original.status}>
-        //             {row.original.status === "Approved" && (
-        //                 <span className="admin-badge green">Active</span>
-        //             )}
-        //             {row.original.status === "Pending" && (
-        //                 <span className="admin-badge yellow">Pending</span>
-        //             )}
-        //             {row.original.status === "Rejected" && (
-        //                 <span className="admin-badge red">Rejected</span>
-        //             )}
-        //         </TableCell>
-        //     ),
-        // },
         {
             id: 'status',
             header: __('Status', 'multivendorx'),
@@ -492,13 +452,12 @@ const SupportTickets: React.FC = () => {
                                                 }
                                             );
 
-                                            // ✅ Refresh the table after delete
+                                            //Refresh the table after delete
                                             requestData(
                                                 pagination.pageSize,
                                                 pagination.pageIndex + 1
                                             );
                                         } catch (error) {
-                                            console.error(error);
                                             alert(__('Failed to delete review', 'multivendorx'));
                                         }
                                     }
@@ -519,14 +478,7 @@ const SupportTickets: React.FC = () => {
                     <div className="title">Support Tickets</div>
                     <div className="des">Manage your store information and preferences</div>
                 </div>
-                {/* <div
-                    className="admin-btn btn-purple-bg"
-                    onClick={() => { window.location.hash = `add`; }} >
-                    <i className="adminlib-plus-circle-o"></i>
-                    Add New
-                </div> */}
             </div>
-            {/* {error && <div className="error">{error}</div>} */}
             <Table
                 data={data || []}
                 columns={columns as ColumnDef<Record<string, any>, any>[]}
@@ -554,8 +506,6 @@ const SupportTickets: React.FC = () => {
                                 <i className="adminlib-store-review"></i>
                                 {__('Reply to Review', 'multivendorx')} - {selectedReview.store_name}
                             </div>
-                            {/* <p>Review customer inquiries and reply directly. You can choose to display answers publicly or keep them private.
-                            </p> */}
                             <i
                                 onClick={() => setSelectedReview(null)}
                                 className="icon adminlib-close"
@@ -587,17 +537,6 @@ const SupportTickets: React.FC = () => {
                                     <div className="avater">
                                         <i className="item-icon adminlib-person"></i>
                                     </div>
-                                    {/* <div className="name-wrapper">
-                                        <div className="name">{selectedReview.review_title}</div>
-                                        <div className="rating-wrapper">
-                                            <i className="adminlib-star"></i>
-                                            <i className="adminlib-star"></i>
-                                            <i className="adminlib-star"></i>
-                                            <i className="adminlib-star"></i>
-                                            <i className="adminlib-star">
-                                            </i>
-                                            <div className="date">22 Dec 2022</div></div>
-                                    </div> */}
                                     {selectedReview && (
                                         <div className="name-wrapper">
                                             <div

@@ -1,6 +1,7 @@
 import { useState, useEffect, JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal } from 'react';
 import { BasicInput, TextArea, FileInput, SelectInput, getApiLink } from 'zyra';
 import axios from 'axios';
+import { __ } from '@wordpress/i18n';
 
 
 const LiveChat = () => {
@@ -84,12 +85,12 @@ const LiveChat = () => {
 
     return (
         <div className="multivendorx-livechat-admin">
-
             <div className="conversations-section">
-                <h2>Customer Conversations</h2>
+                <h2>{__('Customer Conversations', 'multivendorx')}</h2>
+
                 <div className="conversations-list">
-                    {conversations.map(conversation => (
-                        <div 
+                    {conversations.map((conversation) => (
+                        <div
                             key={conversation.id}
                             className={`conversation-item ${selectedConversation?.id === conversation.id ? 'active' : ''}`}
                             onClick={() => setSelectedConversation(conversation)}
@@ -104,20 +105,24 @@ const LiveChat = () => {
                 {selectedConversation && (
                     <div className="chat-window">
                         <div className="chat-header">
-                            <h3>Chat with {selectedConversation.customer_name}</h3>
+                            <h3>
+                                {__('Chat with', 'multivendorx')} {selectedConversation.customer_name}
+                            </h3>
                         </div>
+
                         <div className="chat-messages">
-                            {selectedConversation.messages.map((message: { id: Key | null | undefined; sender_type: any; content: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; timestamp: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; }) => (
+                            {selectedConversation.messages.map((message) => (
                                 <div key={message.id} className={`message ${message.sender_type}`}>
                                     <div className="message-content">{message.content}</div>
                                     <div className="message-time">{message.timestamp}</div>
                                 </div>
                             ))}
                         </div>
+
                         <div className="chat-input">
                             <TextArea
-                                placeholder="Type your response..."
-                                onKeyPress={(e: { key: string; shiftKey: any; preventDefault: () => void; target: { value: string; }; }) => {
+                                placeholder={__('Type your response...', 'multivendorx')}
+                                onKeyPress={(e: any) => {
                                     if (e.key === 'Enter' && !e.shiftKey) {
                                         e.preventDefault();
                                         sendMessage(e.target.value, selectedConversation.id);
@@ -125,12 +130,14 @@ const LiveChat = () => {
                                     }
                                 }}
                             />
-                            <button onClick={(e) => {
-                                const input = e.target.previousSibling;
-                                sendMessage(input.value, selectedConversation.id);
-                                input.value = '';
-                            }}>
-                                Send
+                            <button
+                                onClick={(e: any) => {
+                                    const input = e.target.previousSibling;
+                                    sendMessage(input.value, selectedConversation.id);
+                                    input.value = '';
+                                }}
+                            >
+                                {__('Send', 'multivendorx')}
                             </button>
                         </div>
                     </div>

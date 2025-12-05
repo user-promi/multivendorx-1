@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { TextArea, getApiLink, SuccessNotice, Section, MultiCheckBox } from 'zyra';
+import { __ } from '@wordpress/i18n';
 
 const Privacy = () => {
     const id = appLocalizer.store_id;
@@ -40,8 +41,8 @@ const Privacy = () => {
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         const updated = { ...formData, [name]: value };
-        
-        if (name ==  'deactivation_reason') {
+
+        if (name == 'deactivation_reason') {
             setUpdateData(updated);
         } else {
             setFormData(updated);
@@ -67,23 +68,16 @@ const Privacy = () => {
             }
         });
     };
-console.log('formdata', formData)
     return (
         <>
             <SuccessNotice message={successMsg} />
 
             <div className="card-wrapper">
                 <div className="card-content">
-                    {/* <div className="settings-metabox-note">
-                        <div className='metabox-note-wrapper'>
-                            <i className="adminlib-info"></i>
-                            <p>Confirm that you have access to johndoe@gmail.com in sender email settings.</p>
-                        </div>
-                    </div> */}
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label htmlFor="shipping_policy">Shipping Policy</label>
+                            <label htmlFor="shipping_policy">{__('Shipping Policy', 'multivendorx')}</label>
                             <TextArea
                                 name="shipping_policy"
                                 inputClass="textarea-input"
@@ -95,7 +89,7 @@ console.log('formdata', formData)
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label htmlFor="refund_policy">Refund Policy</label>
+                            <label htmlFor="refund_policy">{__('Refund Policy', 'multivendorx')}</label>
                             <TextArea
                                 name="refund_policy"
                                 inputClass="textarea-input"
@@ -107,7 +101,9 @@ console.log('formdata', formData)
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label htmlFor="exchange_policy">Cancellation/Return/Exchange Policy</label>
+                            <label htmlFor="exchange_policy">
+                                {__('Cancellation/Return/Exchange Policy', 'multivendorx')}
+                            </label>
                             <TextArea
                                 name="exchange_policy"
                                 inputClass="textarea-input"
@@ -116,9 +112,10 @@ console.log('formdata', formData)
                             />
                         </div>
                     </div>
-                </div>
 
+                </div>
             </div>
+
 
             <Section
                 key='section'
@@ -131,16 +128,17 @@ console.log('formdata', formData)
 
                         {formData.deactivation_reason ? (
                             <div>
-                                When you delete a channel, all messages from this channel will be removed from Slack immediately. 
-                                This can't be undone.
-                                Keep in mind:
-                                Any files uploaded to this channel won't be removed
-                                You can archive a channel instead without removing its messages
+                                {__(
+                                    "When you delete a channel, all messages from this channel will be removed from Slack immediately. This can't be undone. Keep in mind: Any files uploaded to this channel won't be removed. You can archive a channel instead without removing its messages.",
+                                    'multivendorx'
+                                )}
                             </div>
                         ) : (
                             <>
                                 <div className="form-group">
-                                    <label htmlFor="store-description">Enable Deactivation</label>
+                                    <label htmlFor="store-description">
+                                        {__('Enable Deactivation', 'multivendorx')}
+                                    </label>
                                     <MultiCheckBox
                                         wrapperClass="toggle-btn"
                                         descClass="settings-metabox-description"
@@ -165,15 +163,16 @@ console.log('formdata', formData)
                                                 ...formData,
                                                 enable_deactivation: selected.target.value,
                                             });
-                                        }
-                                        }
+                                        }}
                                     />
                                 </div>
 
                                 {formData.enable_deactivation && (
                                     <>
                                         <div className="form-group">
-                                            <label htmlFor="store-description">Deactivation Reason</label>
+                                            <label htmlFor="store-description">
+                                                {__('Deactivation Reason', 'multivendorx')}
+                                            </label>
                                             <TextArea
                                                 name="deactivation_reason"
                                                 inputClass="textarea-input"
@@ -183,7 +182,9 @@ console.log('formdata', formData)
                                         </div>
 
                                         <div className="form-group">
-                                            <button onClick={() => autoSave(updateData)}>Submit</button>
+                                            <button>
+                                                {__('Submit', 'multivendorx')}
+                                            </button>
                                         </div>
                                     </>
                                 )}
@@ -191,7 +192,6 @@ console.log('formdata', formData)
                         )}
 
                     </div>
-
                 </div>
             </div>
         </>
