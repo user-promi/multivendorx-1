@@ -232,39 +232,7 @@ const Refund: React.FC = () => {
 
                 return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
             },
-        },
-        // {
-        //     id: 'action',
-        //     header: __('Action', 'multivendorx'),
-        //     cell: ({ row }) => (
-        //         <TableCell
-        //             type="action-dropdown"
-        //             rowData={row.original}
-        //             header={{
-        //                 actions: [
-        //                     {
-        //                         label: __('View', 'multivendorx'),
-        //                         icon: 'adminlib-eye',
-        //                         hover: true,
-        //                         onClick: (rowData) => handleViewDetails(rowData),
-        //                     },
-        //                     {
-        //                         label: __('Approve', 'multivendorx'),
-        //                         icon: 'adminlib-check',
-        //                         hover: true,
-        //                         onClick: (rowData) => handleApproveRefund(rowData),
-        //                     },
-        //                     {
-        //                         label: __('Reject', 'multivendorx'),
-        //                         icon: 'adminlib-close',
-        //                         hover: true,
-        //                         onClick: (rowData) => handleRejectRefund(rowData),
-        //                     },
-        //                 ],
-        //             }}
-        //         />
-        //     ),
-        // },
+        }
     ];
 
     // Fetch data from backend
@@ -379,8 +347,8 @@ const Refund: React.FC = () => {
         <>
             <div className="page-title-wrapper">
                 <div className="page-title">
-                    <div className="title">Refund</div>
-                    <div className="des">Manage and process refund requests from customers.</div>
+                    <div className="title">{__("Refund", "multivendorx")}</div>
+                    <div className="des">{__("Manage and process refund requests from customers.", "multivendorx")}</div>
                 </div>
             </div>
             <Table
@@ -399,6 +367,7 @@ const Refund: React.FC = () => {
                 totalCounts={totalRows}
             />
         </>
+
     );
 };
 

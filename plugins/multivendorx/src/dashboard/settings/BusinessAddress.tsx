@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { BasicInput, getApiLink, SelectInput, SuccessNotice } from 'zyra';
+import { __ } from '@wordpress/i18n';
 
 declare global {
     interface Window {
@@ -63,19 +64,18 @@ const BusinessAddress = () => {
             setLoading(false);
             return;
         }
-    
+
         const loadStoreData = async () => {
             try {
                 const endpoint = getApiLink(appLocalizer, `store/${id}`); // Use main store endpoint
                 console.log('Fetching from endpoint:', endpoint);
-    
+
                 const res = await axios.get(endpoint, {
                     headers: {
                         'X-WP-Nonce': appLocalizer.nonce
                     }
                 });
-                
-                console.log('Store data loaded successfully:', res.data);
+
                 const data = res.data || {};
 
                 // Use the same structure as admin side
@@ -93,12 +93,12 @@ const BusinessAddress = () => {
 
                 setAddressData(formattedData);
                 setFormData(data); // Also set formData for country/state management
-                
+
                 // Fetch states if country is already set
                 if (data.country) {
                     fetchStatesByCountry(data.country);
                 }
-                
+
                 setLoading(false);
             } catch (error: any) {
                 console.error('Error loading store data:', error);
@@ -151,19 +151,19 @@ const BusinessAddress = () => {
     // Handle country select change (from old code)
     const handleCountryChange = (newValue: any) => {
         if (!newValue || Array.isArray(newValue)) return;
-        
-        const updatedAddressData = { 
-            ...addressData, 
-            country: newValue.value, 
+
+        const updatedAddressData = {
+            ...addressData,
+            country: newValue.value,
             state: '' // reset state when country changes
         };
-        
-        const updatedFormData = { 
-            ...formData, 
-            country: newValue.value, 
-            state: '' 
+
+        const updatedFormData = {
+            ...formData,
+            country: newValue.value,
+            state: ''
         };
-        
+
         setAddressData(updatedAddressData);
         setFormData(updatedFormData);
         autoSave(updatedAddressData);
@@ -173,17 +173,17 @@ const BusinessAddress = () => {
     // Handle state select change (from old code)
     const handleStateChange = (newValue: any) => {
         if (!newValue || Array.isArray(newValue)) return;
-        
-        const updatedAddressData = { 
-            ...addressData, 
-            state: newValue.value 
+
+        const updatedAddressData = {
+            ...addressData,
+            state: newValue.value
         };
-        
-        const updatedFormData = { 
-            ...formData, 
-            state: newValue.value 
+
+        const updatedFormData = {
+            ...formData,
+            state: newValue.value
         };
-        
+
         setAddressData(updatedAddressData);
         setFormData(updatedFormData);
         autoSave(updatedAddressData);
@@ -295,7 +295,7 @@ const BusinessAddress = () => {
 
     const initializeMapboxMap = () => {
         if (!(window as any).mapboxgl || !autocompleteInputRef.current) return;
-    
+
         const geocoderContainer = document.getElementById('location-autocomplete-container');
         if (geocoderContainer) {
             geocoderContainer.innerHTML = '';
@@ -393,12 +393,12 @@ const BusinessAddress = () => {
 
         setAddressData(newAddressData);
         setFormData(newFormData);
-        
+
         // Fetch states if country is set
         if (newAddressData.country) {
             fetchStatesByCountry(newAddressData.country);
         }
-        
+
         autoSave(newAddressData);
     };
 
@@ -437,7 +437,7 @@ const BusinessAddress = () => {
 
                 place.address_components.forEach((component: any) => {
                     const types = component.types;
-                    
+
                     if (types.includes('street_number')) {
                         streetNumber = component.long_name;
                     } else if (types.includes('route')) {
@@ -469,12 +469,12 @@ const BusinessAddress = () => {
             if (place.properties) {
                 components.address = place.properties.address || '';
             }
-            
+
             if (place.context) {
                 place.context.forEach((component: any) => {
                     const idParts = component.id.split('.');
                     const type = idParts[0];
-                    
+
                     if (type === 'postcode') {
                         components.zip = component.text;
                     } else if (type === 'place') {
@@ -508,7 +508,7 @@ const BusinessAddress = () => {
             location_address: updatedData.location_address || updatedData.address || '',
             address: updatedData.address || updatedData.location_address || ''
         };
-    
+
         axios({
             method: 'PUT',
             url: getApiLink(appLocalizer, `store/${id}`), // Use main store endpoint
@@ -530,7 +530,7 @@ const BusinessAddress = () => {
 
             <div className="card-wrapper">
                 <div className="card-content">
-                    <div className="card-title">Business Address & Location</div>
+                    <div className="card-title">{__('Business Address & Location', 'multivendorx')}</div>
 
                     {errorMsg && (
                         <div className="error-message">
@@ -538,52 +538,20 @@ const BusinessAddress = () => {
                         </div>
                     )}
 
-                    {/* <div className="form-group-wrapper">
-                        <div className="form-group">
-                            <label htmlFor="location-autocomplete">Search Location *</label>
-                            <div id="location-autocomplete-container">
-                                <input
-                                    ref={autocompleteInputRef}
-                                    id="location-autocomplete"
-                                    type="text"
-                                    className="setting-form-input"
-                                    placeholder="Search your business address..."
-                                    defaultValue={addressData.location_address}
-                                />
-                            </div>
-                            <div className="settings-metabox-description" >
-                                Type your business name or address and select from suggestions
-                            </div>
-                        </div>
-                    </div> */}
-
-                    {/* Map Display */}
-                    {/* <div className="form-group-wrapper">
-                        <div className="form-group">
-                            <label>Location Map *</label>
-                            <div
-                                id="location-map"
-                            ></div>
-                            <div className="settings-metabox-description" >
-                                Click on the map or drag the marker to set your exact location
-                            </div>
-                        </div>
-                    </div> */}
-
                     {/* Address Field */}
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label htmlFor="location_address">Address *</label>
-                            <BasicInput 
+                            <label htmlFor="location_address">{__('Address *', 'multivendorx')}</label>
+                            <BasicInput
                                 name="location_address"
-                                value={addressData.location_address} 
-                                wrapperClass="setting-form-input" 
-                                descClass="settings-metabox-description" 
-                                onChange={(e) => handleChange('location_address', e.target.value)} 
+                                value={addressData.location_address}
+                                wrapperClass="setting-form-input"
+                                descClass="settings-metabox-description"
+                                onChange={(e) => handleChange('location_address', e.target.value)}
                             />
                             {!addressData.location_address && (
-                                <div class="settings-metabox-description" >
-                                    Address is required. Please select a location from the map or search.
+                                <div className="settings-metabox-description">
+                                    {__('Address is required. Please select a location from the map or search.', 'multivendorx')}
                                 </div>
                             )}
                         </div>
@@ -592,31 +560,31 @@ const BusinessAddress = () => {
                     {/* Address Components */}
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label htmlFor="city">City</label>
-                            <BasicInput 
+                            <label htmlFor="city">{__('City', 'multivendorx')}</label>
+                            <BasicInput
                                 name="city"
-                                value={addressData.city} 
-                                wrapperClass="setting-form-input" 
-                                descClass="settings-metabox-description" 
-                                onChange={(e) => handleChange('city', e.target.value)} 
+                                value={addressData.city}
+                                wrapperClass="setting-form-input"
+                                descClass="settings-metabox-description"
+                                onChange={(e) => handleChange('city', e.target.value)}
                             />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="zip">Zip Code</label>
-                            <BasicInput 
+                            <label htmlFor="zip">{__('Zip Code', 'multivendorx')}</label>
+                            <BasicInput
                                 name="zip"
-                                value={addressData.zip} 
-                                wrapperClass="setting-form-input" 
-                                descClass="settings-metabox-description" 
-                                onChange={(e) => handleChange('zip', e.target.value)} 
+                                value={addressData.zip}
+                                wrapperClass="setting-form-input"
+                                descClass="settings-metabox-description"
+                                onChange={(e) => handleChange('zip', e.target.value)}
                             />
                         </div>
                     </div>
 
-                    {/* Country and State Select Inputs (from old code) */}
+                    {/* Country and State Select Inputs */}
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label htmlFor="country">Country</label>
+                            <label htmlFor="country">{__('Country', 'multivendorx')}</label>
                             <SelectInput
                                 name="country"
                                 value={addressData.country}
@@ -626,7 +594,7 @@ const BusinessAddress = () => {
                             />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="state">State</label>
+                            <label htmlFor="state">{__('State', 'multivendorx')}</label>
                             <SelectInput
                                 name="state"
                                 value={addressData.state}
@@ -639,13 +607,13 @@ const BusinessAddress = () => {
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label htmlFor="timezone">Timezone</label>
-                            <BasicInput 
+                            <label htmlFor="timezone">{__('Timezone', 'multivendorx')}</label>
+                            <BasicInput
                                 name="timezone"
-                                value={addressData.timezone} 
-                                wrapperClass="setting-form-input" 
-                                descClass="settings-metabox-description" 
-                                onChange={(e) => handleChange('timezone', e.target.value)} 
+                                value={addressData.timezone}
+                                wrapperClass="setting-form-input"
+                                descClass="settings-metabox-description"
+                                onChange={(e) => handleChange('timezone', e.target.value)}
                             />
                         </div>
                     </div>

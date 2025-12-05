@@ -491,22 +491,24 @@ const Dashboard: React.FC = () => {
 
   return (
     <>
+
       <div className="page-title-wrapper">
         <div className="page-title">
-          <div className="title">{getGreeting()}, {store?.primary_owner_info?.data?.display_name}!</div>
-          <div className="view-des">You’re viewing: <b>{store?.primary_owner_info?.data?.display_name}’s {store?.name || '-'}</b></div>
+          <div className="title">
+            {getGreeting()}, {store?.primary_owner_info?.data?.display_name}!
+          </div>
+
+          <div className="view-des">
+            {__("You’re viewing:", "multivendorx")}{" "}
+            <b>
+              {store?.primary_owner_info?.data?.display_name}’s{" "}
+              {store?.name || "-"}
+            </b>
+          </div>
         </div>
+
         <div className="buttons-wrapper">
-          <CalendarInput
-            wrapperClass=""
-            inputClass=""
-          // onChange={(range: any) => {
-          //   updateFilter('date', {
-          //     start_date: range.startDate,
-          //     end_date: range.endDate,
-          //   });
-          // }}
-          />
+          <CalendarInput wrapperClass="" inputClass="" />
         </div>
       </div>
 
@@ -518,10 +520,22 @@ const Dashboard: React.FC = () => {
               {analyticsData.map((item, idx) => (
                 <div key={idx} className="analytics-item">
                   <div className="details">
-                    <div className="text">{item.text}</div>
+                    <div className="text">{__(item.text, "multivendorx")}</div>
                     <div className="number">{item.number}</div>
-                    <div className="report"><div>Last 30 days : <span>$189</span>  </div> <div> Previous 30 days: <span>$690</span></div></div>
+
+                    <div className="report">
+                      <div>
+                        {__("Last 30 days:", "multivendorx")}{" "}
+                        <span>$189</span>
+                      </div>
+
+                      <div>
+                        {__("Previous 30 days:", "multivendorx")}{" "}
+                        <span>$690</span>
+                      </div>
+                    </div>
                   </div>
+
                   <div className="analytics-icon">
                     <i className={item.icon}></i>
                   </div>
@@ -533,30 +547,28 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
+
       <div className="row">
         <div className="column w-65">
           <div className="card">
             <div className="card-header">
               <div className="left">
                 <div className="title">
-                  Sales Overview (P)
+                  {__("Sales Overview (P)", "multivendorx")}
                 </div>
-                {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
               </div>
               <div className="right">
                 <i className="adminlib-external"></i>
               </div>
             </div>
+
             <div className="card-body">
               <ResponsiveContainer width="100%" height={250}>
-                <BarChart
-                  data={revenueData}
-                  barSize={12}
-                  barCategoryGap="20%"
-                >
+                <BarChart data={revenueData} barSize={12} barCategoryGap="20%">
                   <CartesianGrid stroke="#f0f0f0" vertical={false} />
                   <XAxis dataKey="month" axisLine={false} tickLine={false} />
                   <YAxis axisLine={false} tickLine={false} />
+
                   <Tooltip
                     contentStyle={{
                       background: "#fff",
@@ -565,19 +577,28 @@ const Dashboard: React.FC = () => {
                       boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
                     }}
                   />
+
                   <Legend />
-                  {BarChartData.map((entry, index) => (
-                    <Bar dataKey={entry.dataKey} fill={entry.color} radius={[6, 6, 0, 0]} name={entry.name} />
+
+                  {BarChartData.map((entry) => (
+                    <Bar
+                      dataKey={entry.dataKey}
+                      fill={entry.color}
+                      radius={[6, 6, 0, 0]}
+                      name={__(entry.name, "multivendorx")}
+                    />
                   ))}
+
                   <Line
                     type="monotone"
                     dataKey="conversion"
                     stroke="#ffa726"
                     strokeWidth={2}
                     dot={{ r: 3 }}
-                    name="Conversion %"
+                    name={__("Conversion %", "multivendorx")}
                     yAxisId={1}
                   />
+
                   <YAxis
                     yAxisId={1}
                     orientation="right"
@@ -589,68 +610,64 @@ const Dashboard: React.FC = () => {
               </ResponsiveContainer>
             </div>
           </div>
-
         </div>
 
-        <div className="column w-35" >
+        {/* Right Column */}
+        <div className="column w-35">
           <div className="card-header">
             <div className="left">
-              <div className="title">Last Withdrawal</div>
+              <div className="title">
+                {__("Last Withdrawal", "multivendorx")}
+              </div>
             </div>
           </div>
+
           <div className="top-customer-wrapper">
             {lastWithdraws && lastWithdraws.length > 0 ? (
-              lastWithdraws.map((item: any) => (
+              lastWithdraws.map((item) => (
                 <div key={item.id} className="customer">
                   <div className="left-section">
                     <div className="details">
                       <div className="name">
-                        {item.payment_method === "stripe-connect" && "Stripe"}
-                        {item.payment_method === "bank-transfer" && "Direct to Local Bank (INR)"}
-                        {item.payment_method === "paypal-payout" && "PayPal"}
-                        {item.payment_method === "bank-transfer" ? `Bank Transfer` : ""}
+                        {item.payment_method === "stripe-connect" &&
+                          __("Stripe", "multivendorx")}
+                        {item.payment_method === "bank-transfer" &&
+                          __("Direct to Local Bank (INR)", "multivendorx")}
+                        {item.payment_method === "paypal-payout" &&
+                          __("PayPal", "multivendorx")}
+                        {item.payment_method === "bank-transfer"
+                          ? __("Bank Transfer", "multivendorx")
+                          : ""}
                       </div>
-                      <div className="order-number"> {formatWcShortDate(item.date)}</div>
+
+                      <div className="order-number">
+                        {formatWcShortDate(item.date)}
+                      </div>
                     </div>
                   </div>
 
-                  <div className="price-section">{formatCurrency(item.amount)}</div>
+                  <div className="price-section">
+                    {formatCurrency(item.amount)}
+                  </div>
                 </div>
               ))
             ) : (
-              <div className="no-data">No withdrawals found.</div>
+              <div className="no-data">
+                {__("No withdrawals found.", "multivendorx")}
+              </div>
             )}
           </div>
-          {/* {lastWithdraws && lastWithdraws.length > 0 ? (
-            lastWithdraws.map((item: any) => (
-              <div className="last-withdradal-wrapper" key={item.id}>
-                <div className="left">
-                  <div className="price">{formatCurrency(item.amount)}</div>
-                  <div className="des">
-                    {item.payment_method === "stripe-connect" && "Stripe"}
-                    {item.payment_method === "bank-transfer" && "Direct to Local Bank (INR)"}
-                    {item.payment_method === "paypal-payout" && "PayPal"}
-                    {item.payment_method === "bank-transfer" ? `Bank Transfer` : ""}
-                  </div>
-                </div>
-                <div className="right">
-                  <div className="date">{formatWcShortDate(item.date)}</div>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="no-data">No withdrawals found.</div>
-          )} */}
+
           {lastWithdraws && lastWithdraws.length > 0 && (
             <div className="buttons-wrapper">
               <div
                 className="admin-btn btn-purple"
                 onClick={() => {
-                  window.location.href = '/dashboard/wallet/transactions/';
+                  window.location.href = "/dashboard/wallet/transactions/";
                 }}
               >
                 <i className="adminlib-preview"></i>
-                View transaction history
+                {__("View transaction history", "multivendorx")}
               </div>
             </div>
           )}
@@ -663,27 +680,28 @@ const Dashboard: React.FC = () => {
             <div className="card-header">
               <div className="left">
                 <div className="title">
-                  Recent Orders
+                  {__('Recent Orders', 'multivendorx')}
                 </div>
               </div>
               <div className="right">
                 <i className="adminlib-external"></i>
               </div>
             </div>
+
             <div className="card-body">
               <div className="table-wrapper">
                 {recentOrder && recentOrder.length > 0 ? (
                   <table className="order-table">
                     <tr className="header">
-                      <td>Order Id</td>
-                      <td>Order Date</td>
-                      <td>Product Name(P)</td>
-                      <td>Total Amount</td>
-                      <td>Order Status</td>
-                      <td>Status (P)</td>
+                      <td>{__('Order Id', 'multivendorx')}</td>
+                      <td>{__('Order Date', 'multivendorx')}</td>
+                      <td>{__('Product Name(P)', 'multivendorx')}</td>
+                      <td>{__('Total Amount', 'multivendorx')}</td>
+                      <td>{__('Order Status', 'multivendorx')}</td>
+                      <td>{__('Status (P)', 'multivendorx')}</td>
                     </tr>
 
-                    {recentOrder.map((item: any, index) => {
+                    {recentOrder.map((item, index) => {
                       const color = `theme-color${(index % 4) + 1}`;
                       const id = item.id;
                       const orderUrl = `/dashboard/sales/orders/#view/${id}`;
@@ -691,7 +709,7 @@ const Dashboard: React.FC = () => {
                         <tr key={item.id}>
                           <td>
                             <a href={orderUrl} target="_blank" rel="noopener noreferrer">
-                              #{id} Customer
+                              #{id} {__('Customer', 'multivendorx')}
                             </a>
                           </td>
                           <td>{item.date}</td>
@@ -712,7 +730,7 @@ const Dashboard: React.FC = () => {
                     })}
                   </table>
                 ) : (
-                  <div className="no-data">No products found.</div>
+                  <div className="no-data">{__('No products found.', 'multivendorx')}</div>
                 )}
               </div>
             </div>
@@ -725,7 +743,7 @@ const Dashboard: React.FC = () => {
         <div className="column">
           <div className="card-header">
             <div className="left">
-              <div className="title">Best-Selling Products</div>
+              <div className="title">{__('Best-Selling Products', 'multivendorx')}</div>
             </div>
             <div className="right">
               <i className="adminlib-external"></i>
@@ -738,19 +756,19 @@ const Dashboard: React.FC = () => {
                 <table>
                   <tr className="header">
                     <td>#</td>
-                    <td>Name</td>
-                    <td>Popularity</td>
-                    <td>Sales</td>
+                    <td>{__('Name', 'multivendorx')}</td>
+                    <td>{__('Popularity', 'multivendorx')}</td>
+                    <td>{__('Sales', 'multivendorx')}</td>
                   </tr>
 
-                  {topProducts.map((item: any, index) => {
+                  {topProducts.map((item, index) => {
                     const color = `theme-color${(index % 4) + 1}`;
                     return (
                       <tr key={item.id}>
                         <td>{String(index + 1).padStart(2, '0')}</td>
                         <td>{item.name}</td>
                         <td className={`progress-bar ${color}`}>
-                          <div> <span style={{ width: `${item.popularity}%` }}></span></div>
+                          <div><span style={{ width: `${item.popularity}%` }}></span></div>
                         </td>
                         <td>
                           <div className={`admin-badge ${color}`}>
@@ -762,17 +780,18 @@ const Dashboard: React.FC = () => {
                   })}
                 </table>
               ) : (
-                <div className="no-data">No products found.</div>
+                <div className="no-data">{__('No products found.', 'multivendorx')}</div>
               )}
             </div>
           </div>
         </div>
 
+        {/* Commission Overview */}
         <div className="column">
           <div className="card">
             <div className="card-header">
               <div className="left">
-                <div className="title">Commission Overview</div>
+                <div className="title">{__('Commission Overview', 'multivendorx')}</div>
               </div>
               <div className="right"
                 onClick={() => {
@@ -782,6 +801,7 @@ const Dashboard: React.FC = () => {
                 <i className="adminlib-external"></i>
               </div>
             </div>
+
             <div className="card-body">
               <div style={{ width: '100%', height: 400 }}>
                 <ResponsiveContainer>
@@ -794,17 +814,17 @@ const Dashboard: React.FC = () => {
                       cy="50%"
                       outerRadius={140}
                       innerRadius={80}
-                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(1)}%`}
+                      label={({ name, percent }) =>
+                        `${name} ${(percent * 100).toFixed(1)}%`
+                      }
                       labelLine={false}
                       isAnimationActive={true}
                     >
                       {chartData.map((item, index) => (
-                        <Cell
-                          key={`cell-${index}`}
-                          fill={item.color}
-                        />
+                        <Cell key={`cell-${index}`} fill={item.color} />
                       ))}
                     </Pie>
+
                     <Tooltip
                       formatter={(value) => formatCurrency(value)}
                       contentStyle={{
@@ -829,7 +849,7 @@ const Dashboard: React.FC = () => {
             <div className="card">
               <div className="card-header">
                 <div className="left">
-                  <div className="title">Admin Announcements</div>
+                  <div className="title">{__('Admin Announcements', 'multivendorx')}</div>
                 </div>
                 <div className="right">
                   <i className="adminlib-external"></i>
@@ -854,19 +874,20 @@ const Dashboard: React.FC = () => {
                       ))}
                     </ul>
                   ) : (
-                    <div className="no-data">No announcements found.</div>
+                    <div className="no-data">{__('No announcements found.', 'multivendorx')}</div>
                   )}
                 </div>
               </div>
             </div>
           </div>
         )}
+
         {modules.includes("marketplace-refund") && (
           <div className="column">
             <div className="card">
               <div className="card-header">
                 <div className="left">
-                  <div className="title">Pending Refunds</div>
+                  <div className="title">{__('Pending Refunds', 'multivendorx')}</div>
                 </div>
                 <div
                   className="right"
@@ -893,26 +914,22 @@ const Dashboard: React.FC = () => {
                       </div>
                     ))
                   ) : (
-                    <div className="no-data">No pending refunds found.</div>
+                    <div className="no-data">{__('No pending refunds found.', 'multivendorx')}</div>
                   )}
                 </div>
               </div>
             </div>
           </div>
         )}
+
         <div className="column">
           <div className="card">
             <div className="card-header">
               <div className="left">
-                <div className="title">
-                  Top customer (P)
-                </div>
-                {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
+                <div className="title">{__('Top customer (P)', 'multivendorx')}</div>
               </div>
-              {/* <div className="right">
-                <i className="adminlib-more-vertical"></i>
-              </div> */}
             </div>
+
             <div className="card-body">
               <div className="top-customer-wrapper">
                 {customers.map((customer) => (
@@ -923,7 +940,9 @@ const Dashboard: React.FC = () => {
                       </div>
                       <div className="details">
                         <div className="name">{customer.name}</div>
-                        <div className="order-number">{customer.orders} orders</div>
+                        <div className="order-number">
+                          {customer.orders} {__('orders', 'multivendorx')}
+                        </div>
                       </div>
                     </div>
 
@@ -942,14 +961,11 @@ const Dashboard: React.FC = () => {
             <div className="card-header">
               <div className="left">
                 <div className="title">
-                  Store Activity (P)
+                  {__('Store Activity (P)', 'multivendorx')}
                 </div>
-                {/* <div className="des">Lorem ipsum dolor sit amet.</div> */}
               </div>
-              {/* <div className="right">
-                <i className="adminlib-more-vertical"></i>
-              </div> */}
             </div>
+
             <div className="card-body">
               <div className="activity-log">
                 {activities.map((a, i) => (
@@ -957,69 +973,74 @@ const Dashboard: React.FC = () => {
                     <div className="title">
                       {a.text}
                     </div>
-                    <div className="des">Your order has been placed successfully</div>
-                    <span>2 minutes ago</span>
-
+                    <div className="des">
+                      {__('Your order has been placed successfully', 'multivendorx')}
+                    </div>
+                    <span>{__('2 minutes ago', 'multivendorx')}</span>
                   </div>
                 ))}
               </div>
-
             </div>
           </div>
-
         </div>
+
         {modules.includes("store-review") && (
-        <div className="column w-35">
-          <div className="card">
-            <div className="card-header">
-              <div className="left">
-                <div className="title">Latest Reviews</div>
-              </div>
-              <div
-                className="right"
-                onClick={() => {
-                  window.location.href = "/dashboard/store-support/store-review/";
-                }}
-              >
-                <i className="adminlib-external"></i>
-              </div>
-            </div>
+          <div className="column w-35">
+            <div className="card">
+              <div className="card-header">
+                <div className="left">
+                  <div className="title">{__('Latest Reviews', 'multivendorx')}</div>
+                </div>
 
-            <div className="card-body">
-              <div className="review-wrapper">
-                {review && review.length > 0 ? (
-                  review.map((reviewItem) => (
-                    <div className="review" key={reviewItem.review_id}>
-                      <div className="details">
-                        <div className="title">
-                          <div className="avatar">
-                            <i className="adminlib-person"></i>
+                <div
+                  className="right"
+                  onClick={() => {
+                    window.location.href = "/dashboard/store-support/store-review/";
+                  }}
+                >
+                  <i className="adminlib-external"></i>
+                </div>
+              </div>
+
+              <div className="card-body">
+                <div className="review-wrapper">
+                  {review && review.length > 0 ? (
+                    review.map((reviewItem) => (
+                      <div className="review" key={reviewItem.review_id}>
+                        <div className="details">
+                          <div className="title">
+                            <div className="avatar">
+                              <i className="adminlib-person"></i>
+                            </div>
+                            {reviewItem.review_title}
                           </div>
-                          {reviewItem.review_title}
-                        </div>
 
-                        <div className="star-wrapper">
-                          {[...Array(5)].map((_, index) => (
-                            <i
-                              key={index}
-                              className={`adminlib-star ${index < Math.round(reviewItem.overall_rating) ? "active" : ""
-                                }`}
-                            ></i>
-                          ))}
-                          <span>{formatWcShortDate(reviewItem.date_created)}</span>
-                        </div>
+                          <div className="star-wrapper">
+                            {[...Array(5)].map((_, index) => (
+                              <i
+                                key={index}
+                                className={`adminlib-star ${index < Math.round(reviewItem.overall_rating)
+                                    ? "active"
+                                    : ""
+                                  }`}
+                              ></i>
+                            ))}
+                            <span>{formatWcShortDate(reviewItem.date_created)}</span>
+                          </div>
 
-                        <div className="des">{reviewItem.review_content}</div>
+                          <div className="des">{reviewItem.review_content}</div>
+                        </div>
                       </div>
+                    ))
+                  ) : (
+                    <div className="no-data">
+                      {__('No reviews found.', 'multivendorx')}
                     </div>
-                  ))
-                ) : (
-                  <div className="no-data">No reviews found.</div>
-                )}
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        </div>
         )}
       </div>
     </>

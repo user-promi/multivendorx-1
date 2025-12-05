@@ -52,7 +52,7 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
       method: 'GET',
       url: getApiLink(appLocalizer, 'commission'),
       headers: { 'X-WP-Nonce': appLocalizer.nonce },
-      params: { format: 'reports',store_id:appLocalizer.store_id },
+      params: { format: 'reports', store_id: appLocalizer.store_id },
     })
       .then((response) => {
         const data = response.data;
@@ -262,8 +262,8 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
     <>
       <div className="page-title-wrapper">
         <div className="page-title">
-          <div className="title">Overview</div>
-          <div className="des">Manage your store information and preferences</div>
+          <div className="title">{__("Overview", "multivendorx")}</div>
+          <div className="des">{__("Manage your store information and preferences", "multivendorx")}</div>
         </div>
       </div>
 
@@ -277,20 +277,19 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
                 </div>
                 <div className="details">
                   <div className="number">{item.count}</div>
-                  <div className="text">{item.label}</div>
+                  <div className="text">{__(item.label, "multivendorx")}</div>
                 </div>
               </div>
             ))}
           </div>
         </div>
       </div>
+
       <div className="row">
         <div className="column">
           <div className="card-header">
             <div className="left">
-              <div className="title">
-                Revenue breakdown
-              </div>
+              <div className="title">{__("Revenue breakdown", "multivendorx")}</div>
             </div>
           </div>
           <div className="top-items">
@@ -298,7 +297,7 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
               <div className="items" key={product.id}>
                 <div className="left-side">
                   <div className="details">
-                    <div className="item-title">{product.title}</div>
+                    <div className="item-title">{__(product.title, "multivendorx")}</div>
                   </div>
                 </div>
                 <div className="right-side">
@@ -308,12 +307,11 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
             ))}
           </div>
         </div>
-        <div className="column ">
+
+        <div className="column">
           <div className="card-header">
             <div className="left">
-              <div className="title">
-                Revenue Breakdown
-              </div>
+              <div className="title">{__("Revenue Breakdown", "multivendorx")}</div>
             </div>
           </div>
 
@@ -328,7 +326,9 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
                   cy="50%"
                   outerRadius={140}
                   innerRadius={80}
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(1)}%`}
+                  label={({ name, percent }) =>
+                    `${__(name, "multivendorx")} ${(percent * 100).toFixed(1)}%`
+                  }
                   labelLine={false}
                   isAnimationActive={true}
                 >

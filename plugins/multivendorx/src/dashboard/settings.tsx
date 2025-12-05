@@ -6,7 +6,7 @@ import Appearance from './settings/Appearance';
 import SocialMedia from './settings/SocialMedia';
 import ContactInformation from './settings/ContactInformation';
 import BusinessAddress from './settings/BusinessAddress';
-import Withdrawl from './withdrawl';
+import Withdrawl from './settings/withdrawl';
 import Privacy from './settings/Privacy';
 import Verification from './settings/Verification';
 import ShippingDelivery from './settings/ShippingDelivery';

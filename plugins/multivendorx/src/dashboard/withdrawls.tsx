@@ -4,7 +4,7 @@ import { __ } from '@wordpress/i18n';
 import { getApiLink, CommonPopup, BasicInput, SuccessNotice } from 'zyra';
 import { formatCurrency, formatWcShortDate } from '../services/commonFunction';
 
-const History: React.FC = () => {
+const Withdrawls: React.FC = () => {
     const [data, setData] = useState<any>([]);
     const [amount, setAmount] = useState<number>(0);
     const [error, setError] = useState<string>("");
@@ -118,8 +118,8 @@ const History: React.FC = () => {
             <SuccessNotice message={message} />
             <div className="page-title-wrapper">
                 <div className="page-title">
-                    <div className="title">Withdrawls</div>
-                    <div className="des">View and keep track of your withdrawls.</div>
+                    <div className="title">{__("Withdrawals", "multivendorx")}</div>
+                    <div className="des">{__("View and keep track of your withdrawals.", "multivendorx")}</div>
                 </div>
             </div>
 
@@ -127,7 +127,7 @@ const History: React.FC = () => {
                 <div className="column">
                     <div className="card-header">
                         <div className="left">
-                            <div className="title">Last Withdrawal</div>
+                            <div className="title">{__("Last Withdrawal", "multivendorx")}</div>
                         </div>
                     </div>
 
@@ -137,10 +137,10 @@ const History: React.FC = () => {
                                 <div className="left">
                                     <div className="price">{formatCurrency(item.amount)}</div>
                                     <div className="des">
-                                        {item.payment_method === "stripe-connect" && "Stripe"}
-                                        {item.payment_method === "bank-transfer" && "Direct to Local Bank (INR)"}
-                                        {item.payment_method === "paypal-payout" && "PayPal"}
-                                        {item.payment_method === "bank-transfer" ? `Bank Transfer` : ""}
+                                        {item.payment_method === "stripe-connect" && __("Stripe", "multivendorx")}
+                                        {item.payment_method === "bank-transfer" && __("Direct to Local Bank (INR)", "multivendorx")}
+                                        {item.payment_method === "paypal-payout" && __("PayPal", "multivendorx")}
+                                        {item.payment_method === "bank-transfer" ? __("Bank Transfer", "multivendorx") : ""}
                                     </div>
                                 </div>
                                 <div className="right">
@@ -149,7 +149,7 @@ const History: React.FC = () => {
                             </div>
                         ))
                     ) : (
-                        <div className="no-data">No withdrawals found.</div>
+                        <div className="no-data">{__("No withdrawals found.", "multivendorx")}</div>
                     )}
 
                     <div className="buttons-wrapper">
@@ -158,51 +158,20 @@ const History: React.FC = () => {
                             onClick={() => (window.location.href = `${appLocalizer.site_url}/dashboard/wallet/transactions/`)}
                         >
                             <i className="adminlib-preview"></i>
-                            View transaction history
+                            {__("View transaction history", "multivendorx")}
                         </div>
                     </div>
                 </div>
-                {/* <div className="column">
-                    <div className="card-header">
-                        <div className="left">
-                            <div className="title">
-                                Balance Breakdown
-                            </div>
-                        </div>
-                    </div>
-                    <div className="card-body">
-                        <div className="analytics-container small-card">
-                            {analyticsData.map((item, idx) => (
-                                <div key={idx} className="analytics-item">
-                                    <div className="analytics-icon">
-                                        <i className={item.icon}></i>
-                                    </div>
-                                    <div className="details">
-                                        <div className="number">{item.number}</div>
-                                        <div className="text">{item.text}</div>
-                                    </div>
-                                </div>
-                            ))}
-                            {analyticsData2.map((item, idx) => (
-                                <div key={idx} className="analytics-item">
-                                    <div className="analytics-icon">
-                                        <i className={item.icon}></i>
-                                    </div>
-                                    <div className="details">
-                                        <div className="number">{item.number}</div>
-                                        <div className="text">{item.text}</div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div> */}
+
                 <div className="column">
                     <div className="payout-wrapper">
                         <div className="payout-header">
                             <div className="price-wrapper">
                                 <div className="price-title">{__("Available balance", "multivendorx")}</div>
-                                <div className="price">{formatCurrency(data.available_balance)} <div className="admin-badge green">{__("Ready to withdraw", "multivendorx")}</div></div>
+                                <div className="price">
+                                    {formatCurrency(data.available_balance)}{" "}
+                                    <div className="admin-badge green">{__("Ready to withdraw", "multivendorx")}</div>
+                                </div>
                             </div>
                         </div>
 
@@ -214,29 +183,20 @@ const History: React.FC = () => {
                                 <div className="card-price">{formatCurrency(data.reserve_balance)}</div>
                                 <div className="card-des">{__("Pending settlement. Released soon", "multivendorx")}</div>
                             </div>
-                            {/* {wallet?.withdrawal_setting?.length > 0 && ( */}
 
                             <div className="payout-card">
                                 <div className="card-title">{__("Free Withdrawals", "multivendorx")}</div>
-
                                 <div className="card-price">
-                                    {data.locking_day} Days <span>
-                                        {__("Left", "multivendorx")}
-                                    </span>
+                                    {data.locking_day} {__("Days", "multivendorx")} <span>{__("Left", "multivendorx")}</span>
                                 </div>
-
                                 <div className="card-des">
-                                    {__("Then", "multivendorx")} $5% (p) +
-                                    $6(p) {__("fee", "multivendorx")}
+                                    {__("Then", "multivendorx")} $5% (p) + $6(p) {__("fee", "multivendorx")}
                                 </div>
                             </div>
-                            {/* )} */}
                         </div>
+
                         <div className="small-text">{__("Some funds locked during settlement", "multivendorx")}</div>
-
                         <div className="small-text">{__("Auto payouts run", "multivendorx")} 2-12-25 (p)</div>
-
-                        {/* <div className="small-text">{__("Auto payouts not set", "multivendorx")}</div> */}
 
                         <div className="buttons-wrapper">
                             <div className="admin-btn btn-purple-bg" onClick={() => setRequestWithdrawal(true)}>
@@ -247,143 +207,6 @@ const History: React.FC = () => {
                 </div>
             </div>
 
-            {/* <div className="row">
-                <div className="column">
-                    <div className="card">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    Withdrawal Schedule
-                                </div>
-                            </div>
-                        </div>
-                        <div className="withdrawal-wrapper">
-                            {data?.payment_schedules !== "mannual" && (
-                                <>
-                                    <div className="des">
-                                        Frequency
-                                    </div>
-                                    <div className="title">
-                                        {data?.payment_schedules
-                                            ? data.payment_schedules.charAt(0).toUpperCase() + data.payment_schedules.slice(1)
-                                            : "N/A"}
-                                    </div>
-                                </>
-                            )}
-
-                            {Number(data?.thresold ?? 0) > 0 && (
-                                <div className="withdrawl-notice">
-                                    <i className="adminlib-info"></i>
-                                    Withdrawal occurs only when your balance reaches {formatCurrency(data.thresold)} or more. View payment calendar
-                                </div>
-                            )}
-                        </div>
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    Withdrawal Methods
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="notification-wrapper">
-                            <ul>
-                                {store.payment_method === "stripe-connect" && (
-                                    <li>
-                                        <div className="icon-wrapper">
-                                            <i className="adminlib-form-stripe orange"></i>
-                                        </div>
-                                        <div className="details">
-                                            <div className="notification-title">Stripe</div>
-                                            <div className="des">Withdrawal request pending</div>
-                                            <span>
-                                                <a href={`${appLocalizer.site_url}/dashboard/settings/#subtab=payout`}>
-                                                    Change
-                                                </a>
-                                            </span>
-                                        </div>
-                                    </li>
-                                )}
-
-                                {store.payment_method === "bank-transfer" && (
-                                    <li>
-                                        <div className="icon-wrapper">
-                                            <i className="adminlib-form-bank blue"></i>
-                                        </div>
-                                        <div className="details">
-                                            <div className="notification-title">Bank Transfer</div>
-                                            <div className="des">Bank transfer setup pending</div>
-                                            <span>
-                                                <a href={`${appLocalizer.site_url}/dashboard/settings/#subtab=payout`}>
-                                                    Change
-                                                </a>
-                                            </span>
-                                        </div>
-                                    </li>
-                                )}
-
-                                {store.payment_method === "paypal-payout" && (
-                                    <li>
-                                        <div className="icon-wrapper">
-                                            <i className="adminlib-form-paypal yellow"></i>
-                                        </div>
-                                        <div className="details">
-                                            <div className="notification-title">PayPal</div>
-                                            <div className="des">PayPal setup pending</div>
-                                            <span>
-                                                <a href={`${appLocalizer.site_url}/dashboard/settings/#subtab=payout`}>
-                                                    Change
-                                                </a>
-                                            </span>
-                                        </div>
-                                    </li>
-                                )}
-                            </ul>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div className="column">
-                    <div className="card-header">
-                        <div className="left">
-                            <div className="title">Last Withdrawal</div>
-                        </div>
-                    </div>
-
-                    {lastWithdraws && lastWithdraws.length > 0 ? (
-                        lastWithdraws.map((item: any) => (
-                            <div className="last-withdradal-wrapper" key={item.id}>
-                                <div className="left">
-                                    <div className="price">{formatCurrency(item.amount)}</div>
-                                    <div className="des">
-                                        {item.payment_method === "stripe-connect" && "Stripe"}
-                                        {item.payment_method === "bank-transfer" && "Direct to Local Bank (INR)"}
-                                        {item.payment_method === "paypal-payout" && "PayPal"}
-                                        {item.payment_method === "bank-transfer" ? `Bank Transfer` : ""}
-                                    </div>
-                                </div>
-                                <div className="right">
-                                    <div className="date">{formatWcShortDate(item.date)}</div>
-                                </div>
-                            </div>
-                        ))
-                    ) : (
-                        <div className="no-data">No withdrawals found.</div>
-                    )}
-
-                    <div className="buttons-wrapper">
-                        <div
-                            className="admin-btn btn-purple-bg"
-                            onClick={() => (window.location.href = `${appLocalizer.site_url}/dashboard/wallet/transactions/`)}
-                        >
-                            <i className="adminlib-preview"></i>
-                            View transaction history
-                        </div>
-                    </div>
-                </div>
-            </div> */}
-
             {requestWithdrawal && (
                 <CommonPopup
                     open={requestWithdrawal}
@@ -393,7 +216,7 @@ const History: React.FC = () => {
                         <>
                             <div className="title">
                                 <i className="adminlib-wallet"></i>
-                                Request Withdrawal
+                                {__("Request Withdrawal", "multivendorx")}
                             </div>
                             <i
                                 className="icon adminlib-close"
@@ -407,18 +230,15 @@ const History: React.FC = () => {
                                 className="admin-btn btn-purple-bg"
                                 onClick={() => handleWithdrawal()}
                             >
-                                Publish
+                                {__("Publish", "multivendorx")}
                             </div>
-
                         </>
                     }
                 >
-
                     <div className="content">
-                        {/* start left section */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="amount">Amount</label>
+                                <label htmlFor="amount">{__("Amount", "multivendorx")}</label>
                                 <BasicInput
                                     type="number"
                                     name="amount"
@@ -435,4 +255,4 @@ const History: React.FC = () => {
     );
 };
 
-export default History;
+export default Withdrawls;

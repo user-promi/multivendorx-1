@@ -81,14 +81,14 @@ const RefundedOrderReport: React.FC = () => {
       .catch(() => {
         setError(__('Failed to load total rows', 'multivendorx'));
       });
-  }, [pagination.pageSize]);
+  }, []);
 
   useEffect(() => {
     const currentPage = pagination.pageIndex + 1;
     const rowsPerPage = pagination.pageSize;
     requestData(rowsPerPage, currentPage);
     setPageCount(Math.ceil(totalRows / rowsPerPage));
-  }, [pagination, totalRows]);
+  }, []);
 
   const columns: ColumnDef<RefundRow>[] = [
     {
@@ -246,8 +246,6 @@ const RefundedOrderReport: React.FC = () => {
     },
   ];
 
-
-  
   // Fetch data from backend
   function requestData(
     rowsPerPage = 10,
@@ -379,16 +377,6 @@ const RefundedOrderReport: React.FC = () => {
 
   return (
     <>
-      <div className="card-header">
-        <div className="left">
-          <div className="title">
-            {__('Revenue Distribution', 'multivendorx')}
-          </div>
-          <div className="des">
-            {__('Total Orders:', 'multivendorx')} {totalRows}
-          </div>
-        </div>
-      </div>
       <Table
         data={data}
         columns={columns as any}

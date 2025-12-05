@@ -126,10 +126,11 @@ const StoreFollower: React.FC = () => {
         <>
             <div className="page-title-wrapper">
                 <div className="page-title">
-                    <div className="title">Store Followers</div>
-                    <div className="des">Manage your store information and preferences</div>
+                    <div className="title">{__("Store Followers", "multivendorx")}</div>
+                    <div className="des">{__("Manage your store information and preferences", "multivendorx")}</div>
                 </div>
             </div>
+
             <div className="admin-table-wrapper">
                 <Table
                     data={data}
@@ -145,6 +146,7 @@ const StoreFollower: React.FC = () => {
                     totalCounts={totalRows}
                 />
             </div>
+
         </>
     );
 };

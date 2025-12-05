@@ -39,10 +39,6 @@ const Orders: React.FC = () => {
     const bulkSelectRef = React.useRef<HTMLSelectElement>(null);
     const hash = location.hash.replace(/^#/, '') || '';
 
-    // const hash = window.location.hash || '';
-    // const isViewOrder = hash.includes('view');
-
-
     const isViewOrder = hash.includes('view');
     const isAddOrder = hash.includes('add');
 
@@ -58,8 +54,6 @@ const Orders: React.FC = () => {
         }
     }, [hash, data]);
 
-    // const path = window.location.pathname;
-    // const isViewOrder = path.includes('/view/');
 
     const selectedOrderIds = Object.keys(rowSelection)
         .map((key) => {
@@ -72,7 +66,7 @@ const Orders: React.FC = () => {
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
         const rowsPerPage = pagination.pageSize;
-    
+
         if (hash === 'refund-requested') {
             // call API with refund-requested filter
             requestApiForData(rowsPerPage, currentPage, {
@@ -83,11 +77,11 @@ const Orders: React.FC = () => {
             requestData(rowsPerPage, currentPage);
         }
     }, [pagination]);
-    
+
 
     const fetchOrderStatusCounts = async () => {
         try {
-            const statuses = ["all", "pending", "processing", "on-hold", "completed", "cancelled","refund-requested", "refunded", "failed", "trash"];
+            const statuses = ["all", "pending", "processing", "on-hold", "completed", "cancelled", "refund-requested", "refunded", "failed", "trash"];
 
             const counts: OrderStatus[] = await Promise.all(
                 statuses.map(async (status) => {
@@ -198,7 +192,7 @@ const Orders: React.FC = () => {
         if (filterData.typeCount && filterData.typeCount !== 'all') {
             params.status = filterData.typeCount;
         }
-        console.log('params',params)
+        console.log('params', params)
         requestData(rowsPerPage, currentPage, startDate, endDate, params);
     };
 
@@ -639,8 +633,8 @@ const Orders: React.FC = () => {
                 <>
                     <div className="page-title-wrapper">
                         <div className="page-title">
-                            <div className="title">Orders</div>
-                            <div className="des">Manage your store information and preferences</div>
+                            <div className="title">{__("Orders", "multivendorx")}</div>
+                            <div className="des">{__("Manage your store information and preferences", "multivendorx")}</div>
                         </div>
                         <div className="buttons-wrapper">
                             <div
@@ -648,17 +642,18 @@ const Orders: React.FC = () => {
                                 onClick={exportAllOrders}  // <-- fixed here
                             >
                                 <i className="adminlib-export"></i>
-                                Export
+                                {__("Export", "multivendorx")}
                             </div>
                             <div
                                 className="admin-btn btn-purple-bg"
                                 onClick={() => { window.location.hash = `add`; }}
                             >
                                 <i className="adminlib-plus-circle-o"></i>
-                                Add New
+                                {__("Add New", "multivendorx")}
                             </div>
                         </div>
                     </div>
+
 
                     <Table
                         data={data}
@@ -676,7 +671,7 @@ const Orders: React.FC = () => {
                         realtimeFilter={realtimeFilter}
                         typeCounts={orderStatus}
                         bulkActionComp={() => <BulkAction />}
-                        defaultCounts={hash? 'refund-requested':'all'}
+                        defaultCounts={hash ? 'refund-requested' : 'all'}
                     />
                 </>
             )}

@@ -147,19 +147,19 @@ const Withdrawl: React.FC = () => {
       <div className="card-content">
         <div className="form-group-title-wrapper">
           <div className="title">
-            Payment information
+            {__('Payment information', 'multivendorx')}
           </div>
         </div>
 
         {/* Payment Method Toggle */}
         <div className="form-group-wrapper">
           <div className="form-group">
-            <label>Payment Method</label>
+            <label>{__('Payment Method', 'multivendorx')}</label>
             <ToggleSetting
               wrapperClass="setting-form-input"
               descClass="settings-metabox-description"
               description={(paymentOptions && paymentOptions.length === 0)
-                ? `You haven’t enabled any payment methods yet.`
+                ? __('You haven’t enabled any payment methods yet.', 'multivendorx')
                 : ""}
               options={paymentOptions}
               value={formData.payment_method || ""}
@@ -191,7 +191,6 @@ const Withdrawl: React.FC = () => {
                         onStepChange={({ step }) => {
                           console.log("Current step:", step);
                           if (step === "complete") {
-                            // Call WP backend to save status
                             axios.post(appLocalizer.ajaxurl, new URLSearchParams({
                               action: 'mark_stripe_onboarding_complete',
                               _ajax_nonce: appLocalizer.nonce,
@@ -199,10 +198,10 @@ const Withdrawl: React.FC = () => {
                             }))
                               .then((res) => {
                                 if (res.data.success) {
-                                  console.log('Stripe onboarding marked complete!');
+                                  console.log(__('Stripe onboarding marked complete!', 'multivendorx'));
                                   window.location.reload();
                                 } else {
-                                  console.error('Failed to update onboarding status', res.data);
+                                  console.error(__('Failed to update onboarding status', 'multivendorx'), res.data);
                                 }
                               });
                           }
@@ -226,7 +225,7 @@ const Withdrawl: React.FC = () => {
                     className="admin-btn btn-purple-bg"
                     onClick={() => handleButtonClick(field, formData)}
                   >
-                    {field.label}
+                    {__(field.label, 'multivendorx')}
                   </button>
                 </div>
               );
@@ -234,12 +233,12 @@ const Withdrawl: React.FC = () => {
 
             if (field.type === 'setting-toggle') {
               return (
-                <div className="form-group-wrapper" >
+                <div className="form-group-wrapper" key={field.key || index}>
                   <div className="form-group">
-                    {field.label && <label htmlFor={field.key}>{field.label}</label>}
+                    {field.label && <label htmlFor={field.key}>{__(field.label, 'multivendorx')}</label>}
                     <ToggleSetting
                       key={field.key}
-                      description={field.desc}
+                      description={field.desc ? __(field.desc, 'multivendorx') : ''}
                       options={
                         Array.isArray(field.options)
                           ? field.options.map((opt) => ({
@@ -259,14 +258,14 @@ const Withdrawl: React.FC = () => {
             return (
               <div className="form-group-wrapper" key={field.key || index}>
                 <div className="form-group">
-                  {field.label && <label htmlFor={field.key}>{field.label}</label>}
+                  {field.label && <label htmlFor={field.key}>{__(field.label, 'multivendorx')}</label>}
                   <BasicInput
                     key={field.key || ""}
                     name={field.key}
                     type={field.type || "text"}
                     wrapperClass="setting-form-input"
                     descClass="settings-metabox-description"
-                    placeholder={field.placeholder || ""}
+                    placeholder={field.placeholder ? __(field.placeholder, 'multivendorx') : ""}
                     value={formData[field.key] || ""}
                     onChange={handleChange}
                   />
@@ -277,6 +276,7 @@ const Withdrawl: React.FC = () => {
       </div>
     </div>
   );
+
 };
 
 export default Withdrawl;

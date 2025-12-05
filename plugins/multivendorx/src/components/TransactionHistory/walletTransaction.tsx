@@ -286,19 +286,14 @@ const TransactionBulkActions: React.FC<{
 
 const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId, dateRange }) => {
     const [data, setData] = useState<StoreRow[] | null>(null);
-    const [storeTransaction, setTtoreTransaction] = useState<any>(null);
     const [wallet, setWallet] = useState<any[]>([]);
     const [recentDebits, setRecentDebits] = useState<any[]>([]);
     const [storeData, setStoreData] = useState<any>(null);
     const [requestWithdrawal, setRequestWithdrawal] = useState(false);
     const [validationErrors, setValidationErrors] = useState<{ amount?: string; paymentMethod?: string }>({});
     const [amount, setAmount] = useState<number>(0);
-    const [error, setError] = useState<string>("");
     const [note, setNote] = useState<any | "">("");
-    const freeAmount = amount ? amount * 0.05 : 0;
-    const totalAmount = amount ? amount + freeAmount : 0;
     const [paymentMethod, setPaymentMethod] = useState<any | "">("");
-    const [optionList, setOptionList] = React.useState([]);
 
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
@@ -307,8 +302,6 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId, dateRang
         pageSize: 10,
     });
     const [pageCount, setPageCount] = useState(0);
-    const [allStores, setAllStores] = useState<any[]>([]);
-    const [filteredStores, setFilteredStores] = useState<any[]>([]);
     const [selectedStore, setSelectedStore] = useState<any>(null);
     const [transactionStatus, setTransactionStatus] = useState<TransactionStatus[] | null>(null);
     const [currentFilterData, setCurrentFilterData] = useState<FilterData>({});
@@ -343,15 +336,6 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId, dateRang
         if (!storeId) return;
 
         const { startDate, endDate } = getEffectiveDateRange();
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, `transaction/${storeId}`),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { id: appLocalizer.store_id }
-        })
-            .then((response) => {
-                setTtoreTransaction(response.data || []);
-            })
 
         axios({
             method: 'GET',
@@ -422,13 +406,12 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId, dateRang
             .catch(() => setData([]));
     }
 
-
     // 🔹 Handle pagination & date changes
     useEffect(() => {
         const currentPage = pagination.pageIndex + 1;
         requestData(pagination.pageSize, currentPage);
         setPageCount(Math.ceil(totalRows / pagination.pageSize));
-    }, [pagination, storeId, dateRange, totalRows]);
+    }, [storeId]);
 
     const requestApiForData = (rowsPerPage: number, currentPage: number, filterData: FilterData) => {
         setCurrentFilterData(filterData);
@@ -629,27 +612,6 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId, dateRang
         },
     ];
 
-    // 🔹 Fetch stores on mount
-    useEffect(() => {
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'store'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { options: true },
-        })
-            .then((response) => {
-                if (response?.data?.length) {
-                    const mappedStores = response.data.map((store: any) => ({
-                        value: store.id,
-                        label: store.store_name,
-                    }));
-                    setAllStores(mappedStores);
-                    setFilteredStores(mappedStores.slice(0, 5));
-                    setSelectedStore(mappedStores[0]);
-                }
-            })
-            .catch((error) => console.error("Error fetching stores:", error));
-    }, []);
     // 🔹 Fetch wallet/transaction overview whenever store changes
     useEffect(() => {
         if (!storeId) return;
@@ -689,18 +651,17 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId, dateRang
         })
             .then((response) => {
                 setRecentDebits(response.data.transaction || []);
-                console.log("last 3", response.data.transaction)
             })
             .catch((error) => {
                 setRecentDebits([]);
             });
     }, [storeId]);
+
     const handleWithdrawal = () => {
         // Clear all old errors first
         setValidationErrors({});
 
         const newErrors: { amount?: string; paymentMethod?: string } = {};
-        console.log('is')
         // Amount validations
         if (!amount || amount <= 0) {
             newErrors.amount = "Please enter a valid amount.";
@@ -718,9 +679,6 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId, dateRang
             setValidationErrors(newErrors);
             return;
         }
-
-        // Clear old generic error
-        setError("");
 
         // Submit request
         axios({
@@ -742,11 +700,9 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId, dateRang
                         window.location.reload();
                     }, 200);
                 } else if (res.data?.message) {
-                    setError(`Server: ${res.data.message}`);
                 }
             })
             .catch((err) => {
-                setError("Server: Failed to submit withdrawal. Please try again.");
                 console.error(err);
             });
     };
@@ -833,7 +789,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId, dateRang
                                 </div>
                             </div>
 
-                            <div className="small-text"><b>{formatCurrency(storeTransaction?.thresold)} </b> {__("minimum required to withdraw", "multivendorx")}</div>
+                            <div className="small-text"><b>{formatCurrency(wallet?.thresold)} </b> {__("minimum required to withdraw", "multivendorx")}</div>
 
                             <div className="payout-card-wrapper">
                                 <div className="payout-card">
@@ -889,7 +845,6 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId, dateRang
                                 className="icon adminlib-close"
                                 onClick={() => {
                                     setRequestWithdrawal(false);
-                                    resetWithdrawalForm(); //reset form on close
                                 }}
                             ></i>
                             <div className="des">

@@ -80,18 +80,13 @@ const AdditionalInformation = () => {
         <>
             <SuccessNotice message={successMsg} />
 
-            {/* <div className="page-title-wrapper">
-                <div className="page-title">
-                    <div className="title">Additional Information</div>
-                    <div className="des">Manage your store information and preferences</div>
-                </div>
-            </div> */}
-
             <div className="container-wrapper">
                 <div className="card-wrapper w-65">
+
                     {/* Message to Buyer */}
                     <div className="card-content">
-                        <div className="card-title">Message to Buyer</div>
+                        <div className="card-title">{__('Message to Buyer', 'zcrm')}</div>
+
                         <div className="form-group-wrapper">
                             <div className="form-group">
                                 <TextArea
@@ -108,16 +103,16 @@ const AdditionalInformation = () => {
 
                     {/* Privacy Controls */}
                     <div className="card-content">
-                        <div className="card-title">Privacy Controls</div>
+                        <div className="card-title">{__('Privacy Controls', 'zcrm')}</div>
 
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label>Hide Address</label>
+                                <label>{__('Hide Address', 'zcrm')}</label>
                                 <ToggleSetting
                                     wrapperClass="setting-form-input"
                                     options={[
-                                        { key: "yes", value: "yes", label: "Yes" },
-                                        { key: "no", value: "no", label: "No" },
+                                        { key: "yes", value: "yes", label: __('Yes', 'zcrm') },
+                                        { key: "no", value: "no", label: __('No', 'zcrm') },
                                     ]}
                                     value={formData.hideAddress || 'no'}
                                     onChange={(val: any) => handleToggleChange("hideAddress", val)}
@@ -127,12 +122,12 @@ const AdditionalInformation = () => {
 
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label>Hide Phone</label>
+                                <label>{__('Hide Phone', 'zcrm')}</label>
                                 <ToggleSetting
                                     wrapperClass="setting-form-input"
                                     options={[
-                                        { key: "yes", value: "yes", label: "Yes" },
-                                        { key: "no", value: "no", label: "No" },
+                                        { key: "yes", value: "yes", label: __('Yes', 'zcrm') },
+                                        { key: "no", value: "no", label: __('No', 'zcrm') },
                                     ]}
                                     value={formData.hidePhone || 'no'}
                                     onChange={(val: any) => handleToggleChange("hidePhone", val)}
@@ -142,12 +137,12 @@ const AdditionalInformation = () => {
 
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label>Hide Email</label>
+                                <label>{__('Hide Email', 'zcrm')}</label>
                                 <ToggleSetting
                                     wrapperClass="setting-form-input"
                                     options={[
-                                        { key: "yes", value: "yes", label: "Yes" },
-                                        { key: "no", value: "no", label: "No" },
+                                        { key: "yes", value: "yes", label: __('Yes', 'zcrm') },
+                                        { key: "no", value: "no", label: __('No', 'zcrm') },
                                     ]}
                                     value={formData.hideEmail || 'no'}
                                     onChange={(val: any) => handleToggleChange("hideEmail", val)}

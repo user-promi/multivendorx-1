@@ -329,6 +329,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { DynamicRowSetting, getApiLink } from "zyra";
+import { __ } from "@wordpress/i18n";
 
 interface ShippingStateRate {
     state: string;
@@ -462,8 +463,7 @@ const ShippingRatesByCountry: React.FC = () => {
         ],
     };
 
-    if (loading) return <div>Loading shipping rates...</div>;
-    console.log('ct', countryOptions)
+    if (loading) return <div>{__('Loading shipping rates...', 'multivendorx')}</div>;
     return (
         <div className="shipping-country-wrapper">
             {error && <div className="mvx-error">{error}</div>}
@@ -472,7 +472,7 @@ const ShippingRatesByCountry: React.FC = () => {
                 keyName="country-rates"
                 template={countryTemplate}
                 value={rates}
-                addLabel="Add Country"
+                addLabel={__('Add Country', 'multivendorx')}
                 onChange={(updatedCountries: any) => {
                     const fixed = updatedCountries.map((r) => ({
                         ...r,
@@ -481,7 +481,7 @@ const ShippingRatesByCountry: React.FC = () => {
                     autoSave(fixed);
                 }}
                 /** Render nested states inside the country row */
-                childrenRenderer={(countryRow: { country: string; states: unknown; }, countryIndex: string | number) => {
+                childrenRenderer={(countryRow: { country: string; states: unknown }, countryIndex: string | number) => {
                     const code = countryRow.country?.toUpperCase() || "";
                     const raw = statesByCountry[code];
 
@@ -496,7 +496,7 @@ const ShippingRatesByCountry: React.FC = () => {
 
                     return (
                         <div className="state-inner-box">
-                            <h4 className="state-title">State / Region Rates</h4>
+                            <h4 className="state-title">{__('State / Region Rates', 'multivendorx')}</h4>
 
                             <DynamicRowSetting
                                 keyName={`state-rates-${countryIndex}`}
@@ -510,7 +510,7 @@ const ShippingRatesByCountry: React.FC = () => {
                                     ],
                                 }}
                                 value={countryRow.states}
-                                addLabel="Add State/Region"
+                                addLabel={__('Add State/Region', 'multivendorx')}
                                 onChange={(updatedStates: any) => {
                                     const clone = [...rates];
                                     clone[countryIndex].states = updatedStates;
@@ -522,6 +522,7 @@ const ShippingRatesByCountry: React.FC = () => {
                 }}
             />
         </div>
+
     );
 };
 
