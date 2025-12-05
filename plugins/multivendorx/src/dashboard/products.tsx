@@ -10,6 +10,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { formatCurrency } from '../services/commonFunction';
 import AddProductCom from "./add-products";
+import SmpvProducts from "./smpv-products";
 
 type ProductRow = {
     id: number;
@@ -79,12 +80,16 @@ const AllProduct: React.FC = () => {
 
     if (!element) {
         const parts = location.pathname.split("/").filter(Boolean);
-        if (parts.length >= 4) {
-            element = element || parts[2];
+        if (parts.length >= 3) {
+            element = element || parts[2]; 
         }
+        // if (parts.length >= 4) {
+        //     element = element || parts[2]; 
+        // }
     }
 
     const isAddProduct = element === "edit";
+    const isSpmvOn = element === "add";
 
     const tabs = [
         {
@@ -656,54 +661,42 @@ const AllProduct: React.FC = () => {
 
     return (
         <>
-            {!isAddProduct && (
-                <>
-                    {AddProduct && (
-                        <CommonPopup
-                            open={AddProduct}
-                            width="31.25rem"
-                            height="100%"
-                            header={
-                                <>
-                                    <div className="title">
-                                        <i className="adminlib-cart"></i>
-                                        {__("Add Product", "multivendorx")}
-                                    </div>
-                                    <p>
-                                        {__("Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.", "multivendorx")}
-                                    </p>
-                                    <i
-                                        className="icon adminlib-close"
-                                        onClick={() => setAddProduct(false)}
-                                    ></i>
-                                </>
-                            }
-                            footer={
-                                <>
-                                    <div
-                                        className="admin-btn btn-red"
-                                        onClick={() => setAddProduct(false)}
-                                    >
-                                        {__("Draft", "multivendorx")}
-                                        <i className="adminlib-contact-form"></i>
-                                    </div>
-                                    <div
-                                        className="admin-btn btn-purple"
-                                        onClick={() => setAddProduct(false)}
-                                    >
-                                        {__("Publish", "multivendorx")}
-                                        <i className="adminlib-check"></i>
-                                    </div>
-                                </>
-                            }
-                        >
-                            <div className="content">
-                                {/* start left section */}
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label htmlFor="title">{__("Name", "multivendorx")}</label>
-                                        <BasicInput type="text" name="title" />
-                                    </div>
+        {!isAddProduct && !isSpmvOn && (
+            <>
+                {AddProduct && (
+                    <CommonPopup
+                        open={AddProduct}
+                        // onClose= setAddProduct(true)
+                        width="31.25rem"
+                        height="100%"
+                        header={
+                            <>
+                                <div className="title">
+                                    <i className="adminlib-cart"></i>
+                                    Add Product
+                                </div>
+                                <p>Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.</p>
+                                <i
+                                    className="icon adminlib-close"
+                                    onClick={() => setAddProduct(false)}
+                                ></i>
+                            </>
+                        }
+                        footer={
+                            <>
+                                <div
+                                    className="admin-btn btn-red"
+                                    onClick={() => setAddProduct(false)}
+                                >
+                                    Draft
+                                    <i className="adminlib-contact-form"></i>
+                                </div>
+                                <div
+                                    className="admin-btn btn-purple"
+                                    onClick={() => setAddProduct(false)}
+                                >
+                                    Publish
+                                    <i className="adminlib-check"></i>
                                 </div>
 
                                 <div className="form-group-wrapper">
@@ -774,6 +767,42 @@ const AllProduct: React.FC = () => {
                             </div>
                         </div>
                     </div>
+                    <div className="buttons-wrapper">
+                        {modules.includes('import-export') && (
+                            <>
+                                <div
+                                    className="admin-btn btn-purple-bg"
+                                    onClick={() => setAddProduct(true)}
+                                >
+                                    <i className="adminlib-import"></i>
+                                    import
+                                </div>
+                                <div
+                                    className="admin-btn btn-purple-bg"
+                                    onClick={() => setAddProduct(true)}
+                                >
+                                    <i className="adminlib-export"></i>
+                                    Export
+                                </div>
+                            </>
+                        )}
+                        <div
+                            className="admin-btn btn-purple-bg"
+                            onClick={() => {
+                                if (modules.includes('spmv')) {
+                                    if (appLocalizer.permalink_structure) {
+                                        navigate(`/${appLocalizer.dashboard_slug}/products/add/`);
+                                    } else {
+                                        navigate(`?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=add`);
+                                    }
+                                } else {
+                                    createAutoDraftProduct();
+                                }
+                            }}
+
+                        >
+                            <i className="adminlib-plus-circle-o"></i> Add New
+                        </div>
 
                     <div className="admin-table-wrapper">
                         <Table
@@ -794,10 +823,8 @@ const AllProduct: React.FC = () => {
                         />
                     </div>
 
-                </>
-            )}
-
-            {isAddProduct && <AddProductCom />}
+        {isAddProduct && <AddProductCom />}
+        {isSpmvOn && <SmpvProducts />}
         </>
     );
 };
