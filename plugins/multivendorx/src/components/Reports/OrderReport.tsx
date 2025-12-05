@@ -57,22 +57,6 @@ const OrderReport: React.FC = () => {
         setError(__('Failed to load stores', 'multivendorx'));
         setStore([]);
       });
-
-    // Fetch total orders count
-    axios({
-      method: 'GET',
-      url: `${appLocalizer.apiUrl}/wc/v3/orders`,
-      headers: { 'X-WP-Nonce': appLocalizer.nonce },
-      params: { meta_key: 'multivendorx_store_id' },
-    })
-      .then((response) => {
-        const total = Number(response.headers['x-wp-total']) || 0;
-        setTotalRows(total);
-        setPageCount(Math.ceil(total / pagination.pageSize));
-      })
-      .catch(() => {
-        setError(__('Failed to load total rows', 'multivendorx'));
-      });
   }, []);
 
   useEffect(() => {
@@ -80,7 +64,7 @@ const OrderReport: React.FC = () => {
     const rowsPerPage = pagination.pageSize;
     requestData(rowsPerPage, currentPage);
     setPageCount(Math.ceil(totalRows / rowsPerPage));
-  }, [pagination.pageIndex, pagination.pageSize, totalRows]);
+  }, []);
 
   /**
    * Fetch data from backend (WooCommerce Orders)
@@ -97,7 +81,6 @@ const OrderReport: React.FC = () => {
   ) => {
     setData([]);
 
-    //Base WooCommerce query params
     const params: any = {
       page: currentPage,
       per_page: rowsPerPage,
@@ -106,14 +89,11 @@ const OrderReport: React.FC = () => {
       search: searchField,
     };
 
-    //Add Date Filtering — only if both are valid Date objects
     if (startDate && endDate) {
-      // Convert to UTC ISO8601 format (WooCommerce expects this)
       params.after = startDate.toISOString();
       params.before = endDate.toISOString();
     }
 
-    //Add Sorting
     if (orderBy) {
       params.orderby = orderBy;
       params.order = order || 'asc';
@@ -126,6 +106,10 @@ const OrderReport: React.FC = () => {
       params,
     })
       .then((response) => {
+        const total = Number(response.headers['x-wp-total']) || 0;
+        setTotalRows(total);
+        setPageCount(Math.ceil(total / rowsPerPage));
+
         const orders: StoreRow[] = response.data.map((order: any) => {
           const metaData = order.meta_data || [];
           const storeMeta = metaData.find(
@@ -316,9 +300,9 @@ const OrderReport: React.FC = () => {
           cancelled: 'gray',
           pending: 'orange',
           failed: 'dark-red',
-          'refund-requested': 'purple', 
+          'refund-requested': 'purple',
         };
-        
+
         const badgeClass = statusColorMap[status] || 'gray';
 
         // Format status for display (refund-requested → Refund Requested)
@@ -341,17 +325,6 @@ const OrderReport: React.FC = () => {
 
   return (
     <>
-      <div className="card-header">
-        <div className="left">
-          <div className="title">
-            {__('Revenue Distribution', 'multivendorx')}
-          </div>
-          <div className="des">
-            {__('Total Orders:', 'multivendorx')} {totalRows}
-          </div>
-        </div>
-      </div>
-
       <Table
         data={data}
         columns={columns as ColumnDef<Record<string, any>, any>[]}

@@ -55,11 +55,9 @@ const ProductReport: React.FC = () => {
   const [pageCount, setPageCount] = useState<number>(0);
   const [store, setStore] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [openCards, setOpenCards] = useState<ToggleState>({});
   const [toReviewedProduct, setToReviewedProduct] = useState<any[]>([]);
   const [toSellingProduct, setToSellingProduct] = useState<any[]>([]);
   const [openReviewedCards, setOpenReviewedCards] = useState<ToggleState>({});
-  const [openSellingCards, setOpenSellingCards] = useState<ToggleState>({});
   const [chartData, setChartData] = useState<any[]>([]);
   const [inStockCount, setInStockCount] = useState(0);
   const [outOfStockCount, setOutOfStockCount] = useState(0);
@@ -70,9 +68,6 @@ const ProductReport: React.FC = () => {
     setOpenReviewedCards((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
-  const toggleSellingCard = (key: string) => {
-    setOpenSellingCards((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
   const Counter = ({ value, duration = 1200 }) => {
     const [count, setCount] = React.useState(0);
 
@@ -100,180 +95,103 @@ const ProductReport: React.FC = () => {
 
 
   useEffect(() => {
-    // Fetch store list
-    axios
-      .get(getApiLink(appLocalizer, 'store'), {
-        headers: { 'X-WP-Nonce': appLocalizer.nonce },
-      })
-      .then((response) => setStore(response.data.stores || []))
-      .catch(() => {
-        setError(__('Failed to load stores', 'multivendorx'));
-        setStore([]);
-      });
+    const fetchData = async () => {
+      try {
+        // 1. Fetch store list
+        axios
+          .get(getApiLink(appLocalizer, 'store'), { headers: { 'X-WP-Nonce': appLocalizer.nonce } })
+          .then((response) => setStore(response.data.stores || []))
+          .catch(() => {
+            setError(__('Failed to load stores', 'multivendorx'));
+            setStore([]);
+          });
 
-    // Fetch total orders count
-    axios({
-      method: 'GET',
-      url: `${appLocalizer.apiUrl}/wc/v3/products`,
-      headers: { 'X-WP-Nonce': appLocalizer.nonce },
-      params: { meta_key: 'multivendorx_store_id' },
-    })
-      .then((response) => {
-        const total = Number(response.headers['x-wp-total']) || 0;
-        setTotalRows(total);
-        setPageCount(Math.ceil(total / pagination.pageSize));
-      })
-      .catch(() => {
-        setError(__('Failed to load total rows', 'multivendorx'));
-      });
+        // 2. Total rows
+        axios({
+          method: 'GET',
+          url: `${appLocalizer.apiUrl}/wc/v3/products`,
+          headers: { 'X-WP-Nonce': appLocalizer.nonce },
+          params: { meta_key: 'multivendorx_store_id', per_page: 1 },
+        })
+          .then((response) => {
+            const total = Number(response.headers['x-wp-total']) || 0;
+            setTotalRows(total);
+            setPageCount(Math.ceil(total / pagination.pageSize));
+          })
+          .catch(() => setError(__('Failed to load total rows', 'multivendorx')));
 
-    // Chart data for revenue trend
-    axios({
-      method: "GET",
-      url: `${appLocalizer.apiUrl}/wc/v3/products`,
-      headers: { "X-WP-Nonce": appLocalizer.nonce },
-      params: { meta_key: "multivendorx_store_id", per_page: 20 },
-    })
-      .then((response) => {
-        const products = response.data || [];
+        // 3. Chart data
+        axios({
+          method: "GET",
+          url: `${appLocalizer.apiUrl}/wc/v3/products`,
+          headers: { "X-WP-Nonce": appLocalizer.nonce },
+          params: { meta_key: "multivendorx_store_id", per_page: 20 },
+        })
+          .then((response) => {
+            const products = response.data || [];
+            const data = products
+              .filter((p: any) => Number(p.total_sales) > 0)
+              .map((p: any) => ({
+                name: p.name,
+                net_sales: parseFloat(p.price || 0) * parseInt(p.total_sales || 0),
+                items_sold: parseInt(p.total_sales || 0),
+              }));
+            setChartData(data);
+          })
+          .catch(() => setError("Failed to load product sales data"));
 
-        const data = products
-          .filter((p: any) => Number(p.total_sales) > 0)
-          .map((p: any) => ({
-            name: p.name,
-            net_sales: parseFloat(p.price || 0) * parseInt(p.total_sales || 0),
-            items_sold: parseInt(p.total_sales || 0),
-          }));
+        // 4. Top reviewed products
+        axios({
+          method: 'GET',
+          url: `${appLocalizer.apiUrl}/wc/v3/products`,
+          headers: { 'X-WP-Nonce': appLocalizer.nonce },
+          params: { per_page: 5, meta_key: 'multivendorx_store_id', orderby: 'rating', order: 'desc' },
+        })
+          .then((response) =>
+            setToReviewedProduct(
+              response.data.filter((product: any) => parseFloat(product.average_rating) > 0)
+            )
+          )
+          .catch((error) => console.error('Error fetching top reviewed products:', error));
 
-        setChartData(data);
-      })
-      .catch(() => {
-        setError("Failed to load product sales data");
-      });
+        // 5. Top selling products
+        axios({
+          method: 'GET',
+          url: `${appLocalizer.apiUrl}/wc/v3/products`,
+          headers: { 'X-WP-Nonce': appLocalizer.nonce },
+          params: { per_page: 5, meta_key: 'multivendorx_store_id', orderby: 'popularity', order: 'desc' },
+        })
+          .then((response) =>
+            setToSellingProduct(
+              response.data.filter((product: any) => Number(product.total_sales) > 0)
+            )
+          )
+          .catch((error) => console.error('Error fetching top selling products:', error));
 
-    // Top reviewed products
-    axios({
-      method: 'GET',
-      url: `${appLocalizer.apiUrl}/wc/v3/products`,
-      headers: { 'X-WP-Nonce': appLocalizer.nonce },
-      params: {
-        per_page: 5,
-        meta_key: 'multivendorx_store_id',
-        orderby: 'rating',
-        order: 'desc',
-      },
-    })
-      .then(response => {
-        const filtered = response.data.filter(
-          (product: any) => parseFloat(product.average_rating) > 0
-        );
-        setToReviewedProduct(filtered);
-      })
-      .catch(error => {
-        console.error('Error fetching top reviewed products:', error);
-      });
+        // 6. Stock counts (each status separate)
+        const stockStatuses = ['instock', 'outofstock', 'onbackorder'];
+        stockStatuses.forEach((status) => {
+          axios({
+            method: 'GET',
+            url: `${appLocalizer.apiUrl}/wc/v3/products`,
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: { meta_key: 'multivendorx_store_id', per_page: 1, stock_status: status },
+          })
+            .then((response) => {
+              const count = Number(response.headers['x-wp-total']) || 0;
+              if (status === 'instock') setInStockCount(count);
+              else if (status === 'outofstock') setOutOfStockCount(count);
+              else if (status === 'onbackorder') setOnBackorderCount(count);
+            })
+            .catch((error) => console.error(`Error fetching ${status} count:`, error));
+        });
+      } catch (err) {
+        console.error('Dashboard fetch failed:', err);
+        setError(__('Failed to load dashboard data', 'multivendorx'));
+      }
+    };
 
-    // Top selling products
-    axios({
-      method: 'GET',
-      url: `${appLocalizer.apiUrl}/wc/v3/products`,
-      headers: { 'X-WP-Nonce': appLocalizer.nonce },
-      params: {
-        per_page: 5,
-        meta_key: 'multivendorx_store_id',
-        orderby: 'popularity',
-        order: 'desc',
-      },
-    })
-      .then(response => {
-        const filtered = response.data.filter(
-          (product: any) => Number(product.total_sales) > 0
-        );
-        setToSellingProduct(filtered);
-      })
-      .catch(error => {
-        console.error('Error fetching top selling products:', error);
-      });
-
-    // Count: Out of stock
-    axios({
-      method: 'GET',
-      url: `${appLocalizer.apiUrl}/wc/v3/products`,
-      headers: { 'X-WP-Nonce': appLocalizer.nonce },
-      params: {
-        meta_key: 'multivendorx_store_id',
-        per_page: 1,
-        stock_status: 'outofstock',
-      },
-    })
-      .then(response => {
-        const outOfStockCount = Number(response.headers['x-wp-total']) || 0;
-        setOutOfStockCount(outOfStockCount);
-      })
-      .catch(error => {
-        console.error('Error fetching out of stock count:', error);
-      });
-
-    // Count: On backorder
-    axios({
-      method: 'GET',
-      url: `${appLocalizer.apiUrl}/wc/v3/products`,
-      headers: { 'X-WP-Nonce': appLocalizer.nonce },
-      params: {
-        meta_key: 'multivendorx_store_id',
-        per_page: 1,
-        stock_status: 'onbackorder',
-      },
-    })
-      .then(response => {
-        const onBackorderCount = Number(response.headers['x-wp-total']) || 0;
-        setOnBackorderCount(onBackorderCount);
-      })
-      .catch(error => {
-        console.error('Error fetching on backorder count:', error);
-      });
-
-    // Count: In stock
-    axios({
-      method: 'GET',
-      url: `${appLocalizer.apiUrl}/wc/v3/products`,
-      headers: { 'X-WP-Nonce': appLocalizer.nonce },
-      params: {
-        meta_key: 'multivendorx_store_id',
-        per_page: 1,
-        stock_status: 'instock',
-      },
-    })
-      .then(response => {
-        const inStockCount = Number(response.headers['x-wp-total']) || 0;
-        setInStockCount(inStockCount);
-      })
-      .catch(error => {
-        console.error('Error fetching in stock count:', error);
-      });
-
-    // Count: Low stock
-    const lowStockThreshold = 2;
-    axios({
-      method: 'GET',
-      url: `${appLocalizer.apiUrl}/wc/v3/products`,
-      headers: { 'X-WP-Nonce': appLocalizer.nonce },
-      params: {
-        per_page: 1,
-        meta_key: 'multivendorx_store_id',
-        stock_status: 'instock',
-        min_stock_quantity: 1,
-        max_stock_quantity: lowStockThreshold,
-      },
-    })
-      .then(response => {
-        const lowStockCount = Number(response.headers['x-wp-total']) || 0;
-        setLowStockCount(lowStockCount);
-      })
-      .catch(error => {
-        console.error('Error fetching low stock count:', error);
-      });
-
+    fetchData();
   }, []);
 
   const overview = [
@@ -285,7 +203,6 @@ const ProductReport: React.FC = () => {
 
   //Fixed table columns for WooCommerce products
   const columns: ColumnDef<ProductRow>[] = [
-
     {
       header: __("Product", "multivendorx"),
       cell: ({ row }) => (
@@ -326,7 +243,6 @@ const ProductReport: React.FC = () => {
     }
 
   ];
-
 
   const requestData = async (
     rowsPerPage = 10,
@@ -439,7 +355,7 @@ const ProductReport: React.FC = () => {
     const rowsPerPage = pagination.pageSize;
     requestData(rowsPerPage, currentPage);
     setPageCount(Math.ceil(totalRows / rowsPerPage));
-  }, [pagination.pageIndex, pagination.pageSize, totalRows]);
+  }, []);
 
   /**
    * Realtime filter logic
