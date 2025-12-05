@@ -2096,7 +2096,6 @@ const AddProduct = () => {
                                     <DateTimePicker
                                         currentDate={product.date_created}
                                         onChange={(value) => {
-                                            // value = ISO datetime string "2025-01-12T09:54:00"
                                             setProduct((prev) => ({
                                                 ...prev,
                                                 date_created: value,

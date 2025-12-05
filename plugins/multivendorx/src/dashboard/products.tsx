@@ -10,6 +10,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { formatCurrency } from '../services/commonFunction';
 import AddProductCom from "./add-products";
+import SmpvProducts from "./smpv-products";
 
 type ProductRow = {
     id: number;
@@ -79,12 +80,16 @@ const AllProduct: React.FC = () => {
 
     if (!element) {
         const parts = location.pathname.split("/").filter(Boolean);
-        if (parts.length >= 4) {
+        if (parts.length >= 3) {
             element = element || parts[2]; 
         }
+        // if (parts.length >= 4) {
+        //     element = element || parts[2]; 
+        // }
     }
 
     const isAddProduct = element === "edit";
+    const isSpmvOn = element === "add";
 
     const tabs = [
         {
@@ -656,7 +661,7 @@ const AllProduct: React.FC = () => {
 
     return (
         <>
-        {!isAddProduct && (
+        {!isAddProduct && !isSpmvOn && (
             <>
                 {AddProduct && (
                     <CommonPopup
@@ -774,9 +779,18 @@ const AllProduct: React.FC = () => {
                         )}
                         <div
                             className="admin-btn btn-purple-bg"
-                            onClick={() =>{
-                                createAutoDraftProduct();
+                            onClick={() => {
+                                if (modules.includes('spmv')) {
+                                    if (appLocalizer.permalink_structure) {
+                                        navigate(`/${appLocalizer.dashboard_slug}/products/add/`);
+                                    } else {
+                                        navigate(`?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=add`);
+                                    }
+                                } else {
+                                    createAutoDraftProduct();
+                                }
                             }}
+
                         >
                             <i className="adminlib-plus-circle-o"></i> Add New
                         </div>
@@ -805,6 +819,7 @@ const AllProduct: React.FC = () => {
         )}
 
         {isAddProduct && <AddProductCom />}
+        {isSpmvOn && <SmpvProducts />}
         </>
     );
 };
