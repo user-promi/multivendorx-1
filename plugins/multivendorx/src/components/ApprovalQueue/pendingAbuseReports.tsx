@@ -85,31 +85,6 @@ const PendingReportAbuse: React.FC<Props> = ({ onUpdated }) => {
             });
     }, []);
 
-    // Fetch paginated data
-    useEffect(() => {
-        const currentPage = pagination.pageIndex + 1;
-        const rowsPerPage = pagination.pageSize;
-        fetchData(rowsPerPage, currentPage);
-        setPageCount(Math.ceil(totalRows / rowsPerPage));
-    }, [pagination]);
-
-    const fetchData = (rowsPerPage = 10, currentPage = 1) => {
-        setData(null);
-        axios
-            .get<ReportRow[]>(getApiLink(appLocalizer, 'report-abuse'), {
-                headers: { 'X-WP-Nonce': appLocalizer.nonce },
-                params: {
-                    page: currentPage,
-                    row: rowsPerPage,
-                },
-            })
-            .then((res) => setData(res.data || []))
-            .catch(() => {
-                console.error('Failed to load report abuse data');
-                setData([]);
-            });
-    };
-
     const columns: ColumnDef<ReportRow>[] = [
         {
             id: 'select',
@@ -231,7 +206,7 @@ const PendingReportAbuse: React.FC<Props> = ({ onUpdated }) => {
                                                 headers: { 'X-WP-Nonce': appLocalizer.nonce },
                                             })
                                             .then(() => {
-                                                fetchData(pagination.pageSize, pagination.pageIndex + 1);
+                                                requestData(pagination.pageSize, pagination.pageIndex + 1);
                                                 onUpdated?.();
                                             })
                                             .catch(() => {
@@ -285,7 +260,7 @@ const PendingReportAbuse: React.FC<Props> = ({ onUpdated }) => {
         const currentPage = pagination.pageIndex + 1;
         requestData(pagination.pageSize, currentPage);
         setPageCount(Math.ceil(totalRows / pagination.pageSize));
-    }, [pagination]);
+    }, []);
 
     const requestApiForData = (rowsPerPage: number, currentPage: number, filterData: FilterData) => {
         requestData(

@@ -411,12 +411,12 @@ const AllCoupon: React.FC = () => {
     const tabs = [
         {
             id: "general",
-            label: "General",
+            label: __('General', 'multivendorx'),
             content: (
                 <>
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Discount type</label>
+                            <label>{__('Discount type', 'multivendorx')}</label>
                             <SelectInput
                                 name="discount_type"
                                 value={formData.discount_type}
@@ -426,13 +426,17 @@ const AllCoupon: React.FC = () => {
                                     setFormData({ ...formData, discount_type: val?.value || "" })
                                 }
                             />
-                            {validationErrors.discount_type && <div className="invalid-massage">{validationErrors.discount_type}</div>}
+                            {validationErrors.discount_type && (
+                                <div className="invalid-massage">
+                                    {validationErrors.discount_type}
+                                </div>
+                            )}
                         </div>
                     </div>
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Coupon amount</label>
+                            <label>{__('Coupon amount', 'multivendorx')}</label>
                             <BasicInput
                                 type="number"
                                 name="coupon_amount"
@@ -446,12 +450,12 @@ const AllCoupon: React.FC = () => {
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Allow free shipping</label>
+                            <label>{__('Allow free shipping', 'multivendorx')}</label>
                             <ToggleSetting
                                 wrapperClass="setting-form-input"
                                 options={[
-                                    { key: "yes", value: "yes", label: "Yes" },
-                                    { key: "no", value: "no", label: "No" },
+                                    { key: "yes", value: "yes", label: __('Yes', 'multivendorx') },
+                                    { key: "no", value: "no", label: __('No', 'multivendorx') },
                                 ]}
                                 value={formData.free_shipping}
                                 onChange={(val: any) =>
@@ -463,7 +467,7 @@ const AllCoupon: React.FC = () => {
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Coupon expiry date</label>
+                            <label>{__('Coupon expiry date', 'multivendorx')}</label>
                             <BasicInput
                                 type="date"
                                 name="expiry_date"
@@ -479,12 +483,12 @@ const AllCoupon: React.FC = () => {
         },
         {
             id: "limits",
-            label: "Usage Limits",
+            label: __('Usage Limits', 'multivendorx'),
             content: (
                 <>
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Usage limit per coupon</label>
+                            <label>{__('Usage limit per coupon', 'multivendorx')}</label>
                             <BasicInput
                                 type="number"
                                 name="usage_limit"
@@ -498,7 +502,7 @@ const AllCoupon: React.FC = () => {
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Limit usage to X items</label>
+                            <label>{__('Limit usage to X items', 'multivendorx')}</label>
                             <BasicInput
                                 type="number"
                                 name="limit_usage_to_x_items"
@@ -509,9 +513,10 @@ const AllCoupon: React.FC = () => {
                             />
                         </div>
                     </div>
+
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Usage limit per user</label>
+                            <label>{__('Usage limit per user', 'multivendorx')}</label>
                             <BasicInput
                                 type="number"
                                 name="usage_limit_per_user"
@@ -527,12 +532,12 @@ const AllCoupon: React.FC = () => {
         },
         {
             id: "restriction",
-            label: "Usage Restriction",
+            label: __('Usage Restriction', 'multivendorx'),
             content: (
                 <>
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Minimum spend</label>
+                            <label>{__('Minimum spend', 'multivendorx')}</label>
                             <BasicInput
                                 type="number"
                                 name="minimum_amount"
@@ -546,7 +551,7 @@ const AllCoupon: React.FC = () => {
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Maximum spend</label>
+                            <label>{__('Maximum spend', 'multivendorx')}</label>
                             <BasicInput
                                 type="number"
                                 name="maximum_amount"
@@ -560,12 +565,12 @@ const AllCoupon: React.FC = () => {
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Individual use only</label>
+                            <label>{__('Individual use only', 'multivendorx')}</label>
                             <ToggleSetting
                                 wrapperClass="setting-form-input"
                                 options={[
-                                    { key: "yes", value: "yes", label: "Yes" },
-                                    { key: "no", value: "no", label: "No" },
+                                    { key: "yes", value: "yes", label: __('Yes', 'multivendorx') },
+                                    { key: "no", value: "no", label: __('No', 'multivendorx') },
                                 ]}
                                 value={formData.individual_use}
                                 onChange={(val: any) =>
@@ -577,12 +582,12 @@ const AllCoupon: React.FC = () => {
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Exclude sale items</label>
+                            <label>{__('Exclude sale items', 'multivendorx')}</label>
                             <ToggleSetting
                                 wrapperClass="setting-form-input"
                                 options={[
-                                    { key: "yes", value: "yes", label: "Yes" },
-                                    { key: "no", value: "no", label: "No" },
+                                    { key: "yes", value: "yes", label: __('Yes', 'multivendorx') },
+                                    { key: "no", value: "no", label: __('No', 'multivendorx') },
                                 ]}
                                 value={formData.exclude_sale_items}
                                 onChange={(val: any) =>
@@ -592,84 +597,9 @@ const AllCoupon: React.FC = () => {
                         </div>
                     </div>
 
-
-                    {/* <div className="form-group-wrapper">
-                        <div className="form-group">
-                            <label>Products</label>
-                            <SelectInput
-                                name="product_ids"
-                                type="multi-select"
-                                options={storeProducts}
-                                value={formData.product_ids}
-                                onChange={(newValue: any) =>
-                                    setFormData({
-                                        ...formData,
-                                        product_ids: newValue.map((item: any) => item.value),
-                                    })
-                                }
-                            />
-                        </div>
-                    </div>
-
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label>Exclude products</label>
-                            <SelectInput
-                                name="exclude_product_ids"
-                                type="multi-select"
-                                options={storeProducts}
-                                value={formData.exclude_product_ids}
-                                onChange={(newValue: any) =>
-                                    setFormData({
-                                        ...formData,
-                                        exclude_product_ids: newValue.map((item: any) => item.value),
-                                    })
-                                }
-                            />
-                        </div>
-                    </div>
-
-                    <div className="form-group-wrapper">
-                        <div className="form-group">
-                            <label>Product categories</label>
-                            <SelectInput
-                                name="product_categories"
-                                type="multi-select"
-                                options={categories}
-                                value={formData.product_categories}
-                                onChange={(newValue: any) =>
-                                    setFormData({
-                                        ...formData,
-                                        product_categories: newValue.map((item: any) => item.value),
-                                    })
-                                }
-                            />
-                        </div>
-                    </div>
-
-                    <div className="form-group-wrapper">
-                        <div className="form-group">
-                            <label>Exclude categories</label>
-                            <SelectInput
-                                name="exclude_product_categories"
-                                type="multi-select"
-                                options={categories}
-                                value={formData.exclude_product_categories}
-                                onChange={(newValue: any) =>
-                                    setFormData({
-                                        ...formData,
-                                        exclude_product_categories: newValue.map(
-                                            (item: any) => item.value
-                                        ),
-                                    })
-                                }
-                            />
-                        </div>
-                    </div> */}
-
-                    <div className="form-group-wrapper">
-                        <div className="form-group">
-                            <label>Allowed emails</label>
+                            <label>{__('Allowed emails', 'multivendorx')}</label>
                             <BasicInput
                                 type="text"
                                 name="customer_email"
@@ -682,7 +612,7 @@ const AllCoupon: React.FC = () => {
                     </div>
                 </>
             ),
-        }
+        },
     ];
 
     const columns: ColumnDef<CouponRow>[] = [
@@ -884,20 +814,23 @@ const AllCoupon: React.FC = () => {
         <>
             <div className="page-title-wrapper">
                 <div className="page-title">
-                    <div className="title">Coupons</div>
-                    <div className="des">Manage your store information and preferences</div>
+                    <div className="title">{__('Coupons', 'multivendorx')}</div>
+                    <div className="des">
+                        {__('Manage your store information and preferences', 'multivendorx')}
+                    </div>
                 </div>
+
                 <div className="button-wrapper">
                     <div
                         className="admin-btn btn-purple-bg"
                         onClick={() => {
-                            setFormData({ ...defaultFormData }); // <-- reset form
+                            setFormData({ ...defaultFormData }); // reset form
                             setActiveTab("general");             // start with General tab
                             setAddCoupon(true);                  // open popup
                         }}
                     >
                         <i className="adminlib-plus-circle-o"></i>
-                        Add New
+                        {__('Add New', 'multivendorx')}
                     </div>
                 </div>
             </div>
@@ -912,9 +845,11 @@ const AllCoupon: React.FC = () => {
                         <>
                             <div className="title">
                                 <i className="adminlib-coupon"></i>
-                                Add Coupon
+                                {__('Add Coupon', 'multivendorx')}
                             </div>
-                            <p>Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.</p>
+                            <p>
+                                {__('Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.', 'multivendorx')}
+                            </p>
                             <i
                                 className="icon adminlib-close"
                                 onClick={() => setAddCoupon(false)}
@@ -927,26 +862,25 @@ const AllCoupon: React.FC = () => {
                                 className="admin-btn btn-red"
                                 onClick={() => handleSave("draft")}
                             >
-                                Draft
-                                {/* <i className="adminlib-contact-form"></i> */}
+                                {__('Draft', 'multivendorx')}
                             </div>
+
                             <div
                                 className="admin-btn btn-purple-bg"
                                 onClick={() => handleSave("publish")}
                             >
-                                Publish
-                                {/* <i className="adminlib-check"></i> */}
+                                {__('Publish', 'multivendorx')}
                             </div>
-
                         </>
                     }
                 >
 
                     <div className="content">
-                        {/* start left section */}
+
+                        {/* Coupon Code */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="title">Coupon code</label>
+                                <label htmlFor="title">{__('Coupon code', 'multivendorx')}</label>
                                 <BasicInput
                                     type="text"
                                     name="title"
@@ -957,12 +891,16 @@ const AllCoupon: React.FC = () => {
                                         setFormData({ ...formData, title: e.target.value })
                                     }
                                 />
-                                {validationErrors.title && <div className="invalid-massage">{validationErrors.title}</div>}
+                                {validationErrors.title && (
+                                    <div className="invalid-massage">{validationErrors.title}</div>
+                                )}
                             </div>
                         </div>
+
+                        {/* Description */}
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <label htmlFor="title">Description (optional)</label>
+                                <label htmlFor="title">{__('Description (optional)', 'multivendorx')}</label>
                                 <TextArea
                                     name="content"
                                     inputClass="textarea-input"
@@ -975,6 +913,7 @@ const AllCoupon: React.FC = () => {
                             </div>
                         </div>
 
+                        {/* Tabs */}
                         <div className="tab-titles">
                             {tabs.map((tab) => (
                                 <div
@@ -982,7 +921,7 @@ const AllCoupon: React.FC = () => {
                                     className={`title ${activeTab === tab.id ? "active" : ""}`}
                                     onClick={() => setActiveTab(tab.id)}
                                 >
-                                    <h2>{tab.label}</h2>
+                                    <h2>{__(tab.label, 'multivendorx')}</h2>
                                 </div>
                             ))}
                         </div>
@@ -999,8 +938,6 @@ const AllCoupon: React.FC = () => {
                             )}
                         </div>
                     </div>
-
-                    {/* {error && <p className="error-text">{error}</p>} */}
                 </CommonPopup>
             )}
             <div className="admin-table-wrapper">

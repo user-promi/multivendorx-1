@@ -6,7 +6,7 @@ import { Skeleton } from '@mui/material';
 const Notifications = () => {
 
     const [notifications, setNotifications] = useState<[] | null>(null);
-   
+
     useEffect(() => {
         axios({
             method: 'GET',
@@ -37,10 +37,10 @@ const Notifications = () => {
         <>
             <div className="dropdown-menu notification">
                 <div className="title">
-                    Notifications
+                    {__("Notifications", "multivendorx")}
                     {notifications && notifications.length > 0 && (
                         <span className="admin-badge green">
-                            {notifications.length} New
+                            {notifications.length} {__("New", "multivendorx")}
                         </span>
                     )}
                 </div>
@@ -49,11 +49,8 @@ const Notifications = () => {
                         {notifications && notifications.length > 0 ? (
                             notifications.map((item, idx) => (
                                 <li key={idx}>
-                                    {/* <a href={item.link || "#"}> */}
                                     <div className="item">
-                                        <div
-                                            className={`icon admin-badge green`}
-                                        >
+                                        <div className={`icon admin-badge green`}>
                                             <i className={item.icon || "adminlib-user-network-icon"}></i>
                                         </div>
                                         <div className="details">
@@ -64,47 +61,46 @@ const Notifications = () => {
 
                                         <span
                                             className="check-icon"
-                                            // onClick={() => dismissNotification(item.id)}
-                                            // title="Dismiss"
+                                        // onClick={() => dismissNotification(item.id)}
+                                        // title={__("Dismiss", "multivendorx")}
                                         >
                                             <i className="adminlib-check"></i>
                                         </span>
-                                        {/* </a> */}
                                     </div>
                                 </li>
-                            ))) : (
+                            ))
+                        ) : (
                             <li>
                                 <div className="item">
                                     <Skeleton variant="text" width={400} height={70} />
-
                                 </div>
                                 <div className="item">
                                     <Skeleton variant="text" width={400} height={70} />
-
                                 </div>
                                 <div className="item">
                                     <Skeleton variant="text" width={400} height={70} />
-
                                 </div>
                                 <div className="item">
                                     <Skeleton variant="text" width={400} height={70} />
-
                                 </div>
                             </li>
                         )}
                     </ul>
                 </div>
                 <div className="footer">
-                    <a href={
-                        appLocalizer.permalink_structure
-                            ? `/${appLocalizer.dashboard_slug}/view-notifications`
-                            : `/?page_id=${appLocalizer.dashboard_page_id}&segment=view-notifications`
+                    <a
+                        href={
+                            appLocalizer.permalink_structure
+                                ? `/${appLocalizer.dashboard_slug}/view-notifications`
+                                : `/?page_id=${appLocalizer.dashboard_page_id}&segment=view-notifications`
                         }
-                        className="admin-btn btn-purple">
-                        <i className="adminlib-eye"></i> View all notifications
+                        className="admin-btn btn-purple"
+                    >
+                        <i className="adminlib-eye"></i> {__("View all notifications", "multivendorx")}
                     </a>
                 </div>
             </div>
+
         </>
     )
 }

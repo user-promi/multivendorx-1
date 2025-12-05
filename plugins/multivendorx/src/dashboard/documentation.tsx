@@ -93,11 +93,11 @@ const Documentation: React.FC = () => {
         <>
             <div className="page-title-wrapper">
                 <div className="page-title">
-                    <div className="title">Documentation</div>
-                    <div className="des">Everything you need to know about store operations</div>
+                    <div className="title">{ __('Documentation', 'multivendorx') }</div>
+                    <div className="des">{ __('Everything you need to know about store operations', 'multivendorx') }</div>
                 </div>
             </div>
-
+    
             <div className="row">
                 <div className="column">
                     <div className="buttons-wrapper">
@@ -105,7 +105,7 @@ const Documentation: React.FC = () => {
                             <div className="search-section">
                                 <input
                                     type="text"
-                                    placeholder="Search documents..."
+                                    placeholder={ __('Search documents...', 'multivendorx') }
                                     value={searchText}
                                     onChange={(e) => setSearchText(e.target.value)}
                                     className="basic-input"
@@ -114,23 +114,22 @@ const Documentation: React.FC = () => {
                             </div>
                         </div>
                     </div>
-
+    
                     <div className="documentation-wrapper">
                         {filteredDocuments.length === 0 && (
                             <div className="permission-wrapper">
                                 <i className="adminlib-info red"></i>
-                                <div className="title">No documents found.</div>
-                                {/* <a href={appLocalizer.module_page_url} className="admin-btn btn-purple" >Enable Now</a> */}
+                                <div className="title">{ __('No documents found.', 'multivendorx') }</div>
                             </div>
                         )}
-
+    
                         {filteredDocuments.map((doc) => (
                             <div key={doc.id} className="document">
                                 <div className="document-icon">
                                     <i className="adminlib-contact-form"></i>
                                 </div>
                                 <div className="document-content">
-                                    <div className="title">{doc.title}</div>
+                                    <div className="title">{ doc.title }</div>
                                     <div className="description">
                                         {truncateText(doc.content || '', 10)}
                                         {(doc.content || '').split(' ').length > 10 && (
@@ -138,7 +137,7 @@ const Documentation: React.FC = () => {
                                                 className="read-more"
                                                 onClick={() => handleReadMore(doc)}
                                             >
-                                                Read More
+                                                { __('Read More', 'multivendorx') }
                                             </a>
                                         )}
                                     </div>
@@ -148,7 +147,7 @@ const Documentation: React.FC = () => {
                     </div>
                 </div>
             </div>
-
+    
             {activeDocument && (
                 <>
                     <CommonPopup
@@ -171,14 +170,14 @@ const Documentation: React.FC = () => {
                                 <div className="buttons-wrapper">
                                     <div className="admin-btn btn-red" onClick={() => setPopupOpen(false)}>
                                         <i className="adminlib-close"></i>
-                                        Close
+                                        { __('Close', 'multivendorx') }
                                     </div>
                                     <div
                                         className="admin-btn btn-purple"
                                         onClick={() => handlePrint(activeDocument)}
                                     >
                                         <i className="adminlib-import"></i>
-                                        Print
+                                        { __('Print', 'multivendorx') }
                                     </div>
                                 </div>
                             </div>
@@ -194,7 +193,7 @@ const Documentation: React.FC = () => {
                 </>
             )}
         </>
-    );
+    );    
 };
 
 export default Documentation;

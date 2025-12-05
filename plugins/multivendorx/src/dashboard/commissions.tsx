@@ -562,16 +562,20 @@ const StoreCommission: React.FC = () => {
         <>
             <div className="page-title-wrapper">
                 <div className="page-title">
-                    <div className="title">Commission</div>
-                    <div className="des">Details of commissions earned by your store for every order, including order amount, commission rate and payout status.</div>
+                    <div className="title">
+                        {__('Commission', 'multivendorx')}
+                    </div>
+                    <div className="des">
+                        {__('Details of commissions earned by your store for every order, including order amount, commission rate and payout status.', 'multivendorx')}
+                    </div>
                 </div>
+
                 <div className="buttons-wrapper">
                     <button className="admin-btn btn-purple-bg" onClick={handleExportAll}>
                         <i className="adminlib-export"></i>
-                        Export
+                        {__('Export', 'multivendorx')}
                     </button>
                 </div>
-
             </div>
             <Table
                 data={data}

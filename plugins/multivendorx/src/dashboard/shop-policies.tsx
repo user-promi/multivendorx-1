@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { TextArea, SuccessNotice, getApiLink } from 'zyra';
+import { __ } from '@wordpress/i18n';
 
-const Policy = () => {
+const ShopPolicies = () => {
     const id = appLocalizer.store_id;
     const [formData, setFormData] = useState<{ [key: string]: string }>({});
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
@@ -71,62 +72,77 @@ const Policy = () => {
 
             <div className="page-title-wrapper">
                 <div className="page-title">
-                    <div className="title">Policy</div>
-                    <div className="des">Manage your store information and preferences</div>
+                    <div className="title">{__("Policy", "multivendorx")}</div>
+                    <div className="des">{__("Manage your store information and preferences", "multivendorx")}</div>
                 </div>
             </div>
             <div className="container-wrapper">
                 <div className="card-wrapper w-65">
                     <div className="card-content">
                         <div className="card-title">
-                            Shipping Policy
+                            {__("Shipping Policy", "multivendorx")}
                         </div>
 
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <TextArea name="shipping_policy" wrapperClass="setting-from-textarea"
+                                <TextArea
+                                    name="shipping_policy"
+                                    wrapperClass="setting-from-textarea"
                                     inputClass="textarea-input"
-                                    descClass="settings-metabox-description" value={formData.shipping_policy} onChange={handleChange} />
+                                    descClass="settings-metabox-description"
+                                    value={formData.shipping_policy}
+                                    onChange={handleChange}
+                                />
                             </div>
                         </div>
-
                     </div>
+
                     <div className="card-content">
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                    Refund Policy
+                                    {__("Refund Policy", "multivendorx")}
                                 </div>
                             </div>
                         </div>
 
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <TextArea name="refund_policy" wrapperClass="setting-from-textarea"
+                                <TextArea
+                                    name="refund_policy"
+                                    wrapperClass="setting-from-textarea"
                                     inputClass="textarea-input"
-                                    descClass="settings-metabox-description" value={formData.refund_policy} onChange={handleChange} />
+                                    descClass="settings-metabox-description"
+                                    value={formData.refund_policy}
+                                    onChange={handleChange}
+                                />
                             </div>
                         </div>
-
                     </div>
+
                     <div className="card-content">
                         <div className="card-title">
-                            Cancellation / Return / Exchange policy
+                            {__("Cancellation / Return / Exchange Policy", "multivendorx")}
                         </div>
 
                         <div className="form-group-wrapper">
                             <div className="form-group">
-                                <TextArea name="exchange_policy" wrapperClass="setting-from-textarea"
+                                <TextArea
+                                    name="exchange_policy"
+                                    wrapperClass="setting-from-textarea"
                                     inputClass="textarea-input"
-                                    descClass="settings-metabox-description" value={formData.exchange_policy} onChange={handleChange} />
+                                    descClass="settings-metabox-description"
+                                    value={formData.exchange_policy}
+                                    onChange={handleChange}
+                                />
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
+
         </>
     );
 };
 
-export default Policy;
+export default ShopPolicies;

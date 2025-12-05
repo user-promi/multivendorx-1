@@ -139,13 +139,18 @@ const StoreReport: React.FC = () => {
 
         setPieData(pieChartData);
 
-        setStoreStatus([
+        const statuses = [
           { key: 'all', name: 'All', count: response.data.all || 0 },
           { key: 'active', name: 'Active', count: response.data.active || 0 },
           { key: 'under_review', name: 'Under Review', count: response.data.under_review || 0 },
           { key: 'suspended', name: 'Suspended', count: response.data.suspended || 0 },
           { key: 'deactivated', name: 'Deactivated', count: response.data.deactivated || 0 },
-        ]);
+        ];
+        
+        setStoreStatus(
+          statuses.filter((item, index) => index === 0 || item.count > 0)
+        );
+        
         setOverviewData([
           {
             id: 'all',

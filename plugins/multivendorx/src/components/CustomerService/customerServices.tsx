@@ -1,84 +1,18 @@
 import { AdminBreadcrumbs, getApiLink, useModules, Tabs } from 'zyra';
-import RefundRequest from './refundRequest';
 import './customerServices.scss';
 import '../AdminDashboard/adminDashboard.scss';
 import Qna from './qnaTable';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
 import StoreReviews from './storeReviews ';
 import { useLocation, Link } from 'react-router-dom';
 import { __ } from '@wordpress/i18n';
 
 const CustomerServices = () => {
-    const [abuseCount, setAbuseCount] = useState(0);
-    const [qnaCount, setQnaCount] = useState(0);
-    const [refundCount, setRefundCount] = useState(0);
-    const [storeCount, setStoreCount] = useState(0);
-    const [storeReviewCount, setStoreReviewCount] = useState(0);
-
-    // Modules from global store
 
     const { modules } = useModules();
-    useEffect(() => {
-        axios
-            .get(getApiLink(appLocalizer, 'report-abuse'), {
-                headers: { 'X-WP-Nonce': appLocalizer.nonce },
-                params: { count: true },
-            })
-            .then((res) => setAbuseCount(res.data || 0))
-            .catch(() => console.error('Failed to load abuse count'));
-
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'qna'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true },
-        })
-            .then((response) => setQnaCount(response.data || 0))
-            .catch(() => console.error('Failed to load qna count'));
-
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'refund'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true },
-        })
-            .then((response) => setRefundCount(response.data || 0))
-            .catch(() => console.error('Failed to load refund count'));
-
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'store'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { pending_withdraw: true },
-        })
-            .then((response) => setStoreCount(response.data.length || 0))
-            .catch(() => setStoreCount(0));
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'review'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true },
-        })
-            .then((response) => setStoreReviewCount(response.data || 0))
-            .catch(() => setStoreReviewCount(0));
-    }, []);
 
     const location = new URLSearchParams(useLocation().hash.substring(1));
 
     const tabData = [
-        {
-            type: 'file',
-            module: "marketplace-refund",
-            content: {
-                id: 'refund-requests',
-                name: 'Refund Requests',
-                desc: 'Need your decision',
-                icon: 'marketplace-refund',
-                tabTitle: 'Refund tracker',
-                tabDes: 'Monitor refund trends and stay informed on store returns.',
-            },
-        },
         {
             type: 'file',
             module: "question-answer",
@@ -117,8 +51,6 @@ const CustomerServices = () => {
 
     const getForm = (tabId: string) => {
         switch (tabId) {
-            case 'refund-requests':
-                return <RefundRequest />;
             case 'questions':
                 return <Qna />;
             case 'review':

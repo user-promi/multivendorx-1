@@ -14,6 +14,7 @@ import {
 } from 'zyra';
 import { applyFilters } from '@wordpress/hooks';
 import { DateTimePicker } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
 
 const downloadTemplate = {
     fields: [
@@ -450,9 +451,6 @@ const AddProduct = () => {
             [field]: value,
         }));
     };
-    console.log('selectedChild', selectedChild);
-    console.log('selectedSub', selectedSub);
-    console.log('selectedCat', selectedCat);
 
     const createProduct = () => {
         const imagePayload = [];
@@ -564,34 +562,6 @@ const AddProduct = () => {
         setSuggestions([]);
     };
 
-    // const addDownloadableFile = () => {
-    //     const newFile = {
-    //         id: appLocalizer.random_string_generate,
-    //         name: '',
-    //         file: '',
-    //     };
-    //     setProduct((prev) => ({
-    //         ...prev,
-    //         downloads: [...prev.downloads, newFile],
-    //     }));
-    // };
-
-    // const updateDownloadableFile = (id, field, value) => {
-    //     setProduct(prev => ({
-    //         ...prev,
-    //         downloads: prev.downloads.map(f =>
-    //             f.id === id ? { ...f, [field]: value } : f
-    //         )
-    //     }));
-    // };
-
-    // const removeDownloadableFile = (id) => {
-    //     setProduct(prev => ({
-    //         ...prev,
-    //         downloads: prev.downloads.filter(f => f.id !== id)
-    //     }));
-    // };
-
     const updateDownloadableFile = (id, key, value) => {
         setProduct((prev) => ({
             ...prev,
@@ -671,73 +641,66 @@ const AddProduct = () => {
         frame.open();
     };
 
-    console.log('selectedCats', selectedCats);
-    console.log('product', product);
-    console.log(
-        'settings',
-        appLocalizer.settings_databases_value['category-pyramid-guide']
-            ?.category_pyramid_guide
-    );
     return (
         <>
             <div className="page-title-wrapper">
                 <div className="page-title">
-                    <div className="title">Add Product</div>
+                    <div className="title">{__("Add Product", "multivendorx")}</div>
 
                     <div className="des">
-                        Lorem, ipsum dolor sit amet consectetur adipisicing
-                        elit. Quas accusantium obcaecati labore nam quibusdam
-                        minus.
+                        {__("Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quas accusantium obcaecati labore nam quibusdam minus.", "multivendorx")}
                     </div>
                 </div>
                 <div className="buttons-wrapper">
-                    <button className="admin-btn btn-blue">Draft</button>
+                    <button className="admin-btn btn-blue">{__("Draft", "multivendorx")}</button>
                     <button
                         className="admin-btn btn-purple-bg"
                         onClick={createProduct}
                     >
-                        Publish
+                        {__("Publish", "multivendorx")}
                     </button>
                 </div>
             </div>
 
+
             <div className="row">
                 <div className="column w-10">
                     <div className="checklist-wrapper">
-                        <div className="checklist-title">Checklist</div>
+                        <div className="checklist-title">{__("Checklist", "multivendorx")}</div>
                         <ul>
                             <li className="checked">
-                                <span></span> Name
+                                <span></span> {__("Name", "multivendorx")}
                             </li>
                             <li className="checked">
-                                <span></span> Image
+                                <span></span> {__("Image", "multivendorx")}
                             </li>
                             <li className="checked">
-                                <span></span> Price
+                                <span></span> {__("Price", "multivendorx")}
                             </li>
                             <li>
-                                <span></span> Name
+                                <span></span> {__("Name", "multivendorx")}
                             </li>
                             <li>
-                                <span></span> Image
+                                <span></span> {__("Image", "multivendorx")}
                             </li>
                             <li>
-                                <span></span> Price
+                                <span></span> {__("Price", "multivendorx")}
                             </li>
                         </ul>
                     </div>
                 </div>
+
 
                 <div className="column w-65">
                     {/* General information */}
                     <div className="card" id="card-general">
                         <div className="card-header">
                             <div className="left">
-                                <div className="title">General information</div>
+                                <div className="title">{__("General information", "multivendorx")}</div>
                             </div>
                             <div className="right">
                                 <i
-                                    className="adminlib-pagination-right-arrow  arrow-icon"
+                                    className="adminlib-pagination-right-arrow arrow-icon"
                                     onClick={() => toggleCard('card-general')}
                                 ></i>
                             </div>
@@ -745,101 +708,72 @@ const AddProduct = () => {
                         <div className="card-body">
                             <div className="form-group-wrapper">
                                 <div className="form-group">
-                                    <label htmlFor="product-name">
-                                        Product name
-                                    </label>
+                                    <label htmlFor="product-name">{__("Product name", "multivendorx")}</label>
                                     <BasicInput
                                         name="name"
                                         wrapperClass="setting-form-input"
                                         value={product.name}
-                                        onChange={(e) =>
-                                            handleChange('name', e.target.value)
-                                        }
-                                    />
-                                </div>
-                            </div>
-                            <div className="form-group-wrapper">
-                                <div className="form-group">
-                                    <label htmlFor="product-name">
-                                        Product short description
-                                    </label>
-                                    <TextArea
-                                        name="short_description"
-                                        wrapperClass="setting-from-textarea"
-                                        inputClass="textarea-input"
-                                        descClass="settings-metabox-description"
-                                        value={product.short_description}
-                                        onChange={(e) =>
-                                            handleChange(
-                                                'short_description',
-                                                e.target.value
-                                            )
-                                        }
+                                        onChange={(e) => handleChange('name', e.target.value)}
                                     />
                                 </div>
                             </div>
 
                             <div className="form-group-wrapper">
                                 <div className="form-group">
-                                    <label htmlFor="product-name">
-                                        Product description
-                                    </label>
+                                    <label htmlFor="product-name">{__("Product short description", "multivendorx")}</label>
+                                    <TextArea
+                                        name="short_description"
+                                        wrapperClass="setting-from-textarea"
+                                        inputClass="textarea-input"
+                                        descClass="settings-metabox-description"
+                                        value={product.short_description}
+                                        onChange={(e) => handleChange('short_description', e.target.value)}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="form-group-wrapper">
+                                <div className="form-group">
+                                    <label htmlFor="product-name">{__("Product description", "multivendorx")}</label>
                                     <TextArea
                                         name="description"
                                         wrapperClass="setting-from-textarea"
                                         inputClass="textarea-input"
                                         descClass="settings-metabox-description"
                                         value={product.description}
-                                        onChange={(e) =>
-                                            handleChange(
-                                                'description',
-                                                e.target.value
-                                            )
-                                        }
+                                        onChange={(e) => handleChange('description', e.target.value)}
                                     />
                                 </div>
                             </div>
+
                             <div className="form-group-wrapper">
                                 <div className="form-group">
-                                    <label htmlFor="product-name">
-                                        Product type
-                                    </label>
+                                    <label htmlFor="product-name">{__("Product type", "multivendorx")}</label>
                                     <SelectInput
                                         name="type"
                                         options={typeOptions}
                                         value={product.type}
-                                        onChange={(selected) =>
-                                            handleChange('type', selected.value)
-                                        }
+                                        onChange={(selected) => handleChange('type', selected.value)}
                                     />
                                 </div>
+
                                 <div className="form-group">
                                     <div className="checkbox-wrapper">
                                         <div className="item">
                                             <input
                                                 type="checkbox"
                                                 checked={product.virtual}
-                                                onChange={(e) =>
-                                                    handleChange(
-                                                        'virtual',
-                                                        e.target.checked
-                                                    )
-                                                }
+                                                onChange={(e) => handleChange('virtual', e.target.checked)}
                                             />
-                                            Virtual
+                                            {__("Virtual", "multivendorx")}
                                         </div>
                                         <div className="item">
                                             <input
                                                 type="checkbox"
                                                 checked={product.downloadable}
-                                                onChange={(e) =>
-                                                    handleChange(
-                                                        'downloadable',
-                                                        e.target.checked
-                                                    )
-                                                }
+                                                onChange={(e) => handleChange('downloadable', e.target.checked)}
                                             />
-                                            Download
+                                            {__("Download", "multivendorx")}
                                         </div>
                                     </div>
                                 </div>
@@ -851,11 +785,11 @@ const AddProduct = () => {
                     <div className="card" id="card-price">
                         <div className="card-header">
                             <div className="left">
-                                <div className="title">Price and stock</div>
+                                <div className="title">{__("Price and stock", "multivendorx")}</div>
                             </div>
                             <div className="right">
                                 <i
-                                    className="adminlib-pagination-right-arrow  arrow-icon"
+                                    className="adminlib-pagination-right-arrow arrow-icon"
                                     onClick={() => toggleCard('card-price')}
                                 ></i>
                             </div>
@@ -863,204 +797,121 @@ const AddProduct = () => {
                         <div className="card-body">
                             <div className="form-group-wrapper">
                                 <div className="form-group">
-                                    <label htmlFor="product-name">
-                                        Regular price
-                                    </label>
+                                    <label htmlFor="product-name">{__("Regular price", "multivendorx")}</label>
                                     <BasicInput
                                         name="regular_price"
                                         wrapperClass="setting-form-input"
                                         value={product.regular_price}
-                                        onChange={(e) =>
-                                            handleChange(
-                                                'regular_price',
-                                                e.target.value
-                                            )
-                                        }
+                                        onChange={(e) => handleChange('regular_price', e.target.value)}
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="product-name">
-                                        Sale price
-                                    </label>
+                                    <label htmlFor="product-name">{__("Sale price", "multivendorx")}</label>
                                     <BasicInput
                                         name="sale_price"
                                         wrapperClass="setting-form-input"
                                         value={product.sale_price}
-                                        onChange={(e) =>
-                                            handleChange(
-                                                'sale_price',
-                                                e.target.value
-                                            )
-                                        }
+                                        onChange={(e) => handleChange('sale_price', e.target.value)}
                                     />
                                 </div>
                             </div>
+
                             <div className="form-group-wrapper">
                                 <div className="form-group">
-                                    <label htmlFor="product-name">SKU</label>
+                                    <label htmlFor="product-name">{__("SKU", "multivendorx")}</label>
                                     <BasicInput
                                         name="sku"
                                         wrapperClass="setting-form-input"
                                         value={product.sku}
-                                        onChange={(e) =>
-                                            handleChange('sku', e.target.value)
-                                        }
+                                        onChange={(e) => handleChange('sku', e.target.value)}
                                     />
                                 </div>
                                 {!product.manage_stock && (
                                     <div className="form-group">
-                                        <label htmlFor="product-name">
-                                            Stock Status
-                                        </label>
+                                        <label htmlFor="product-name">{__("Stock Status", "multivendorx")}</label>
                                         <SelectInput
                                             name="stock_status"
                                             options={stockStatusOptions}
                                             type="single-select"
                                             value={product.stock_status}
-                                            onChange={(selected) =>
-                                                handleChange(
-                                                    'stock_status',
-                                                    selected.value
-                                                )
-                                            }
+                                            onChange={(selected) => handleChange('stock_status', selected.value)}
                                         />
                                     </div>
                                 )}
                                 <div className="form-group">
-                                    Stock management
+                                    {__("Stock management", "multivendorx")}
                                     <MultiCheckBox
                                         wrapperClass="toggle-btn"
                                         inputWrapperClass="toggle-checkbox-header"
                                         inputInnerWrapperClass="toggle-checkbox"
                                         idPrefix="toggle-switch-manage-stock"
                                         type="checkbox"
-                                        value={
-                                            product.manage_stock
-                                                ? ['manage_stock']
-                                                : []
+                                        value={product.manage_stock ? ['manage_stock'] : []}
+                                        onChange={(e) =>
+                                            handleChange('manage_stock', (e as React.ChangeEvent<HTMLInputElement>).target.checked)
                                         }
-                                        onChange={(e) => {
-                                            const checked = (
-                                                e as React.ChangeEvent<HTMLInputElement>
-                                            ).target.checked;
-                                            handleChange(
-                                                'manage_stock',
-                                                checked
-                                            );
-                                        }}
-                                        options={[
-                                            {
-                                                key: 'manage_stock',
-                                                value: 'manage_stock',
-                                            },
-                                        ]}
+                                        options={[{ key: 'manage_stock', value: 'manage_stock' }]}
                                     />
                                 </div>
 
                                 <div className="form-group">
-                                    Sold individually
+                                    {__("Sold individually", "multivendorx")}
                                     <MultiCheckBox
                                         wrapperClass="toggle-btn"
                                         inputWrapperClass="toggle-checkbox-header"
                                         inputInnerWrapperClass="toggle-checkbox"
-                                        idPrefix="toggle-switch-manage-stock"
+                                        idPrefix="toggle-switch-sold-individually"
                                         type="checkbox"
-                                        value={
-                                            product.sold_individually
-                                                ? ['sold_individually']
-                                                : []
+                                        value={product.sold_individually ? ['sold_individually'] : []}
+                                        onChange={(e) =>
+                                            handleChange('sold_individually', (e as React.ChangeEvent<HTMLInputElement>).target.checked)
                                         }
-                                        onChange={(e) => {
-                                            const checked = (
-                                                e as React.ChangeEvent<HTMLInputElement>
-                                            ).target.checked;
-                                            handleChange(
-                                                'sold_individually',
-                                                checked
-                                            );
-                                        }}
-                                        options={[
-                                            {
-                                                key: 'sold_individually',
-                                                value: 'sold_individually',
-                                            },
-                                        ]}
+                                        options={[{ key: 'sold_individually', value: 'sold_individually' }]}
                                     />
                                 </div>
                             </div>
+
                             {product.manage_stock && (
-                                <>
-                                    <div className="form-group-wrapper">
-                                        <div className="form-group">
-                                            <label htmlFor="product-name">
-                                                Quantity
-                                            </label>
-                                            <BasicInput
-                                                name="stock"
-                                                wrapperClass="setting-form-input"
-                                                value={product.stock}
-                                                onChange={(e) =>
-                                                    handleChange(
-                                                        'stock',
-                                                        e.target.value
-                                                    )
-                                                }
-                                            />
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="product-name">
-                                                Allow backorders?
-                                            </label>
-                                            <SelectInput
-                                                name="backorders"
-                                                options={backorderOptions}
-                                                type="single-select"
-                                                value={product.backorders}
-                                                onChange={(selected) =>
-                                                    handleChange(
-                                                        'backorders',
-                                                        selected.value
-                                                    )
-                                                }
-                                            />
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="product-name">
-                                                Low stock threshold
-                                            </label>
-                                            <BasicInput
-                                                name="low_stock_amount"
-                                                wrapperClass="setting-form-input"
-                                                value={product.low_stock_amount}
-                                                onChange={(e) =>
-                                                    handleChange(
-                                                        'low_stock_amount',
-                                                        e.target.value
-                                                    )
-                                                }
-                                            />
-                                        </div>
+                                <div className="form-group-wrapper">
+                                    <div className="form-group">
+                                        <label htmlFor="product-name">{__("Quantity", "multivendorx")}</label>
+                                        <BasicInput
+                                            name="stock"
+                                            wrapperClass="setting-form-input"
+                                            value={product.stock}
+                                            onChange={(e) => handleChange('stock', e.target.value)}
+                                        />
                                     </div>
-                                </>
+                                    <div className="form-group">
+                                        <label htmlFor="product-name">{__("Allow backorders?", "multivendorx")}</label>
+                                        <SelectInput
+                                            name="backorders"
+                                            options={backorderOptions}
+                                            type="single-select"
+                                            value={product.backorders}
+                                            onChange={(selected) => handleChange('backorders', selected.value)}
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="product-name">{__("Low stock threshold", "multivendorx")}</label>
+                                        <BasicInput
+                                            name="low_stock_amount"
+                                            wrapperClass="setting-form-input"
+                                            value={product.low_stock_amount}
+                                            onChange={(e) => handleChange('low_stock_amount', e.target.value)}
+                                        />
+                                    </div>
+                                </div>
                             )}
+
                             <div className="form-group-wrapper">
                                 <div className="form-group">
-                                    <label htmlFor="product-name">
-                                        Product URL
-                                    </label>
-                                    <BasicInput
-                                        name="address"
-                                        wrapperClass="setting-form-input"
-                                    />
+                                    <label htmlFor="product-name">{__("Product URL", "multivendorx")}</label>
+                                    <BasicInput name="address" wrapperClass="setting-form-input" />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="product-name">
-                                        Button text
-                                    </label>
-                                    <BasicInput
-                                        name="address"
-                                        wrapperClass="setting-form-input"
-                                    />
+                                    <label htmlFor="product-name">{__("Button text", "multivendorx")}</label>
+                                    <BasicInput name="address" wrapperClass="setting-form-input" />
                                 </div>
                             </div>
                         </div>
@@ -1311,18 +1162,23 @@ const AddProduct = () => {
                     <div className="card" id="card-variants">
                         <div className="card-header">
                             <div className="left">
-                                <div className="title">Variations</div>
+                                <div className="title">
+                                    {__('Variations', 'text-domain')}
+                                </div>
                             </div>
                             <div className="right">
                                 <i
-                                    className="adminlib-pagination-right-arrow  arrow-icon"
+                                    className="adminlib-pagination-right-arrow arrow-icon"
                                     onClick={() => toggleCard('card-variants')}
                                 ></i>
                             </div>
                         </div>
+
                         <div className="card-body">
                             <div className="card-title">
-                                <div className="title">Attributes</div>
+                                <div className="title">
+                                    {__('Attributes', 'text-domain')}
+                                </div>
                                 <div className="buttons">
                                     <div
                                         className="add-btn"
@@ -1331,7 +1187,7 @@ const AddProduct = () => {
                                         }}
                                     >
                                         <div className="i adminlib-plus-circle-o"></div>
-                                        Add attribute
+                                        {__('Add attribute', 'text-domain')}
                                     </div>
                                 </div>
                             </div>
@@ -1339,154 +1195,95 @@ const AddProduct = () => {
                             <div className="attribute-wrapper">
                                 <div className="attribute-box">
                                     <div className="name-wrapper">
-                                        <div className="name">Colors</div>
+                                        <div className="name">{__('Colors', 'text-domain')}</div>
                                         <div className="icons">
                                             <i className="adminlib-edit"></i>
                                             <i className="adminlib-delete"></i>
                                         </div>
                                     </div>
                                     <div className="value-wrapper">
-                                        <span className="admin-badge blue">
-                                            Red
-                                        </span>
-                                        <span className="admin-badge blue">
-                                            Green
-                                        </span>
-                                        <span className="admin-badge blue">
-                                            Red
-                                        </span>
-                                        <span className="admin-badge blue">
-                                            Red
-                                        </span>
-                                        <span className="admin-badge blue">
-                                            Green
-                                        </span>
-                                        <span className="admin-badge blue">
-                                            Red
-                                        </span>
+                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
+                                        <span className="admin-badge blue">{__('Green', 'text-domain')}</span>
+                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
+                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
+                                        <span className="admin-badge blue">{__('Green', 'text-domain')}</span>
+                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
                                     </div>
                                 </div>
 
                                 <div className="attribute-box">
                                     <div className="name-wrapper">
-                                        <div className="name">Colors</div>
+                                        <div className="name">{__('Colors', 'text-domain')}</div>
                                         <div className="icons">
                                             <i className="adminlib-edit"></i>
                                             <i className="adminlib-delete"></i>
                                         </div>
                                     </div>
                                     <div className="value-wrapper">
-                                        <span className="admin-badge blue">
-                                            Red
-                                        </span>
-                                        <span className="admin-badge blue">
-                                            Green
-                                        </span>
-                                        <span className="admin-badge blue">
-                                            Red
-                                        </span>
-                                        <span className="admin-badge blue">
-                                            Red
-                                        </span>
-                                        <span className="admin-badge blue">
-                                            Green
-                                        </span>
-                                        <span className="admin-badge blue">
-                                            Red
-                                        </span>
+                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
+                                        <span className="admin-badge blue">{__('Green', 'text-domain')}</span>
+                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
+                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
+                                        <span className="admin-badge blue">{__('Green', 'text-domain')}</span>
+                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
                                     </div>
                                 </div>
 
                                 <div className="attribute-box">
                                     <div className="name-wrapper">
-                                        <div className="name">Colors</div>
+                                        <div className="name">{__('Colors', 'text-domain')}</div>
                                         <div className="icons">
                                             <i className="adminlib-edit"></i>
                                             <i className="adminlib-delete"></i>
                                         </div>
                                     </div>
                                     <div className="value-wrapper">
-                                        <span className="admin-badge blue">
-                                            Red
-                                        </span>
-                                        <span className="admin-badge blue">
-                                            Green
-                                        </span>
-                                        <span className="admin-badge blue">
-                                            Red
-                                        </span>
-                                        <span className="admin-badge blue">
-                                            Red
-                                        </span>
-                                        <span className="admin-badge blue">
-                                            Green
-                                        </span>
-                                        <span className="admin-badge blue">
-                                            Red
-                                        </span>
+                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
+                                        <span className="admin-badge blue">{__('Green', 'text-domain')}</span>
+                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
+                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
+                                        <span className="admin-badge blue">{__('Green', 'text-domain')}</span>
+                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
                                     </div>
                                 </div>
 
                                 <div className="attribute-box">
                                     <div className="name-wrapper">
-                                        <div className="name">Colors</div>
+                                        <div className="name">{__('Colors', 'text-domain')}</div>
                                         <div className="icons">
                                             <i className="adminlib-edit"></i>
                                             <i className="adminlib-delete"></i>
                                         </div>
                                     </div>
                                     <div className="value-wrapper">
-                                        <span className="admin-badge blue">
-                                            Red
-                                        </span>
-                                        <span className="admin-badge blue">
-                                            Green
-                                        </span>
-                                        <span className="admin-badge blue">
-                                            Red
-                                        </span>
-                                        <span className="admin-badge blue">
-                                            Red
-                                        </span>
-                                        <span className="admin-badge blue">
-                                            Green
-                                        </span>
-                                        <span className="admin-badge blue">
-                                            Red
-                                        </span>
+                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
+                                        <span className="admin-badge blue">{__('Green', 'text-domain')}</span>
+                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
+                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
+                                        <span className="admin-badge blue">{__('Green', 'text-domain')}</span>
+                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
                                     </div>
                                 </div>
 
                                 <div className="attribute-box">
                                     <div className="name-wrapper">
-                                        <div className="name">Colors</div>
+                                        <div className="name">{__('Colors', 'text-domain')}</div>
                                         <div className="icons">
                                             <i className="adminlib-edit"></i>
                                             <i className="adminlib-delete"></i>
                                         </div>
                                     </div>
                                     <div className="value-wrapper">
-                                        <span className="admin-badge blue">
-                                            Red
-                                        </span>
-                                        <span className="admin-badge blue">
-                                            Green
-                                        </span>
-                                        <span className="admin-badge blue">
-                                            Red
-                                        </span>
-                                        <span className="admin-badge blue">
-                                            Red
-                                        </span>
-                                        <span className="admin-badge blue">
-                                            Green
-                                        </span>
-                                        <span className="admin-badge blue">
-                                            Red
-                                        </span>
+                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
+                                        <span className="admin-badge blue">{__('Green', 'text-domain')}</span>
+                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
+                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
+                                        <span className="admin-badge blue">{__('Green', 'text-domain')}</span>
+                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
                                     </div>
                                 </div>
                             </div>
+
 
                             {/* variants */}
                             <div className="card-title">
@@ -1507,6 +1304,7 @@ const AddProduct = () => {
                                     </div>
                                 </div>
                             </div>
+
                             <div className="variant-wrapper">
                                 <div className="variant-box">
                                     <div className="variant-items">
@@ -1641,14 +1439,13 @@ const AddProduct = () => {
                                 <>
                                     <div className="title">
                                         <i className="adminlib-coupon"></i>
-                                        Add Attribute
+                                        {__('Add Attribute', 'multivendorx')}
                                     </div>
                                     <p>
-                                        Lorem ipsum dolor sit amet consectetur
-                                        adipisicing elit. Earum sint, minus
-                                        voluptates esse officia enim dolorem,
-                                        eaque neque error doloremque praesentium
-                                        facere quidem mollitia deleniti?
+                                        {__(
+                                            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum sint, minus voluptates esse officia enim dolorem, eaque neque error doloremque praesentium facere quidem mollitia deleniti?',
+                                            'multivendorx'
+                                        )}
                                     </p>
                                     <i
                                         className="icon adminlib-close"
@@ -1662,8 +1459,9 @@ const AddProduct = () => {
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
                                         <label htmlFor="title">
-                                            Attribute name
+                                            {__('Attribute name', 'multivendorx')}
                                         </label>
+
                                         <div className="attribute-popup-wrapper">
                                             <div className="field-wrapper">
                                                 <SelectInput
@@ -1672,98 +1470,69 @@ const AddProduct = () => {
                                                     type="single-select"
                                                     size="80%"
                                                 />
+
                                                 {!showAddNew && (
                                                     <div
                                                         className="add-btn"
-                                                        onClick={() =>
-                                                            setShowAddNew(true)
-                                                        }
+                                                        onClick={() => setShowAddNew(true)}
                                                     >
                                                         <i className="adminlib-plus-circle-o"></i>{' '}
-                                                        Add new
+                                                        {__('Add new', 'multivendorx')}
                                                     </div>
                                                 )}
                                             </div>
+
                                             {showAddNew && (
                                                 <div className="field-wrapper add-new-field">
                                                     <BasicInput
                                                         name="address"
                                                         wrapperClass="setting-form-input"
                                                     />
+
                                                     <div
                                                         className="admin-btn btn-purple-bg"
-                                                        onClick={() =>
-                                                            setShowAddNew(false)
-                                                        }
+                                                        onClick={() => setShowAddNew(false)}
                                                     >
                                                         <i className="adminlib-form-checkboxes"></i>{' '}
-                                                        Save{' '}
+                                                        {__('Save', 'multivendorx')}
                                                     </div>
                                                 </div>
                                             )}
                                         </div>
                                     </div>
                                 </div>
+
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
                                         <label htmlFor="title">
-                                            Attribute value
+                                            {__('Attribute value', 'multivendorx')}
                                         </label>
-                                        {/* <div className="dropdown-field">
-                                            <TextArea
-                                                name="short_description"
-                                                wrapperClass="setting-from-textarea"
-                                                inputClass="textarea-input dropdown-input"
-                                                descClass="settings-metabox-description"
-                                                value={
-                                                    product.short_description
-                                                }
-                                                onChange={(e:any) =>
-                                                    handleChange(
-                                                        'short_description',
-                                                        e.target.value
-                                                    )
-                                                }
-                                            />
-                                            <div className="input-dropdown">
-                                                <ul>
-                                                    <li>Red</li>
-                                                    <li>Red</li>
-                                                    <li>Red</li>
-                                                    <li>Red</li>
-                                                </ul>
-                                            </div>
-                                        </div> */}
+
                                         <div className="dropdown-field">
                                             <InputWithSuggestions
                                                 suggestions={[
-                                                    'Red',
-                                                    'Blue',
-                                                    'Green',
-                                                    'Yellow',
-                                                ]} // your dynamic suggestions
-                                                value={
-                                                    product.short_description_list ||
-                                                    []
-                                                } // current values
-                                                placeholder="Type or select color..."
-                                                addButtonLabel="Add"
+                                                    __('Red', 'multivendorx'),
+                                                    __('Blue', 'multivendorx'),
+                                                    __('Green', 'multivendorx'),
+                                                    __('Yellow', 'multivendorx'),
+                                                ]}
+                                                value={product.short_description_list || []}
+                                                placeholder={__('Type or select value...', 'multivendorx')}
+                                                addButtonLabel={__('Add', 'multivendorx')}
                                                 onChange={(list) =>
-                                                    handleChange(
-                                                        'short_description_list',
-                                                        list
-                                                    )
+                                                    handleChange('short_description_list', list)
                                                 }
                                             />
                                         </div>
                                     </div>
                                 </div>
+
                                 <div className="buttons-wrapper left">
                                     <div className="admin-btn btn-purple">
-                                        Select all
+                                        {__('Select all', 'multivendorx')}
                                     </div>
                                     <div className="admin-btn btn-red">
-                                        Select none
+                                        {__('Select none', 'multivendorx')}
                                     </div>
                                 </div>
                             </div>
@@ -1780,14 +1549,13 @@ const AddProduct = () => {
                                 <>
                                     <div className="title">
                                         <i className="adminlib-coupon"></i>
-                                        Add Variant
+                                        {__('Add Variant', 'multivendorx')}
                                     </div>
                                     <p>
-                                        Lorem ipsum dolor sit amet consectetur
-                                        adipisicing elit. Earum sint, minus
-                                        voluptates esse officia enim dolorem,
-                                        eaque neque error doloremque praesentium
-                                        facere quidem mollitia deleniti?
+                                        {__(
+                                            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum sint, minus voluptates esse officia enim dolorem, eaque neque error doloremque praesentium facere quidem mollitia deleniti?',
+                                            'multivendorx'
+                                        )}
                                     </p>
                                     <i
                                         className="icon adminlib-close"
@@ -1798,10 +1566,10 @@ const AddProduct = () => {
                             footer={
                                 <>
                                     <div className="admin-btn btn-red">
-                                        Cancel
+                                        {__('Cancel', 'multivendorx')}
                                     </div>
                                     <div className="admin-btn btn-purple-bg">
-                                        Save
+                                        {__('Save', 'multivendorx')}
                                     </div>
                                 </>
                             }
@@ -1810,7 +1578,7 @@ const AddProduct = () => {
                                 <div className="form-group-wrapper select-variations-wrapper">
                                     <div className="form-group">
                                         <label htmlFor="">
-                                            Select variations{' '}
+                                            {__('Select variations', 'multivendorx')}
                                         </label>
                                         <div className="select-wrapper">
                                             <span>#45</span>
@@ -1848,25 +1616,27 @@ const AddProduct = () => {
                                             size="medium"
                                             imageWidth={50}
                                             imageHeight={50}
-                                            openUploader="Upload Image"
+                                            openUploader={__('Upload Image', 'multivendorx')}
                                             buttonClass="admin-btn btn-purple"
                                             descClass="settings-metabox-description"
                                         />
                                     </div>
                                 </div>
+
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
                                         <label htmlFor="product-name">
-                                            Regular price
+                                            {__('Regular price', 'multivendorx')}
                                         </label>
                                         <BasicInput
                                             name="address"
                                             wrapperClass="setting-form-input"
                                         />
                                     </div>
+
                                     <div className="form-group">
                                         <label htmlFor="product-name">
-                                            Sale price
+                                            {__('Sale price', 'multivendorx')}
                                         </label>
                                         <BasicInput
                                             name="address"
@@ -1875,19 +1645,21 @@ const AddProduct = () => {
                                     </div>
                                 </div>
 
+
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
                                         <label htmlFor="product-name">
-                                            SKU
+                                            {__('SKU', 'multivendorx')}
                                         </label>
                                         <BasicInput
                                             name="address"
                                             wrapperClass="setting-form-input"
                                         />
                                     </div>
+
                                     <div className="form-group">
                                         <label htmlFor="product-name">
-                                            Stock status
+                                            {__('Stock status', 'multivendorx')}
                                         </label>
                                         <SelectInput
                                             name="payment_method"
@@ -1905,39 +1677,36 @@ const AddProduct = () => {
                                                 <input
                                                     type="checkbox"
                                                     checked={product.virtual}
-                                                    // onChange={(e) => handleChange("virtual", e.target.checked)}
+                                                // onChange={(e) => handleChange("virtual", e.target.checked)}
                                                 />
-                                                Enabled
+                                                {__('Enabled', 'multivendorx')}
                                             </div>
+
                                             <div className="item">
                                                 <input
                                                     type="checkbox"
-                                                    checked={
-                                                        product.downloadable
-                                                    }
-                                                    // onChange={(e) => handleChange("downloadable", e.target.checked)}
+                                                    checked={product.downloadable}
+                                                // onChange={(e) => handleChange("downloadable", e.target.checked)}
                                                 />
-                                                Downloadable
+                                                {__('Downloadable', 'multivendorx')}
                                             </div>
+
                                             <div className="item">
                                                 <input
                                                     type="checkbox"
-                                                    checked={
-                                                        product.downloadable
-                                                    }
-                                                    // onChange={(e) => handleChange("downloadable", e.target.checked)}
+                                                    checked={product.downloadable}
+                                                // onChange={(e) => handleChange("downloadable", e.target.checked)}
                                                 />
-                                                Virtual
+                                                {__('Virtual', 'multivendorx')}
                                             </div>
+
                                             <div className="item">
                                                 <input
                                                     type="checkbox"
-                                                    checked={
-                                                        product.downloadable
-                                                    }
-                                                    // onChange={(e) => handleChange("downloadable", e.target.checked)}
+                                                    checked={product.downloadable}
+                                                // onChange={(e) => handleChange("downloadable", e.target.checked)}
                                                 />
-                                                Manage stock
+                                                {__('Manage stock', 'multivendorx')}
                                             </div>
                                         </div>
                                     </div>
@@ -1946,7 +1715,7 @@ const AddProduct = () => {
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
                                         <label htmlFor="product-name">
-                                            Description
+                                            {__('Description', 'multivendorx')}
                                         </label>
                                         <TextArea
                                             name="short_description"
@@ -1967,16 +1736,17 @@ const AddProduct = () => {
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
                                         <label htmlFor="product-name">
-                                            Commission Fixed
+                                            {__('Commission Fixed', 'multivendorx')}
                                         </label>
                                         <BasicInput
                                             name="address"
                                             wrapperClass="setting-form-input"
                                         />
                                     </div>
+
                                     <div className="form-group">
                                         <label htmlFor="product-name">
-                                            Commission Percentage
+                                            {__('Commission Percentage', 'multivendorx')}
                                         </label>
                                         <BasicInput
                                             name="address"
@@ -1984,6 +1754,7 @@ const AddProduct = () => {
                                         />
                                     </div>
                                 </div>
+
                             </div>
                         </CommonPopup>
                     )}
@@ -2147,13 +1918,13 @@ const AddProduct = () => {
                                         {(selectedCat ||
                                             selectedSub ||
                                             selectedChild) && (
-                                            <button
-                                                onClick={resetSelection}
-                                                className="admin-btn btn-red"
-                                            >
-                                                Reset
-                                            </button>
-                                        )}
+                                                <button
+                                                    onClick={resetSelection}
+                                                    className="admin-btn btn-red"
+                                                >
+                                                    Reset
+                                                </button>
+                                            )}
                                     </div>
                                     <div className="form-group-wrapper">
                                         <div
@@ -2167,17 +1938,16 @@ const AddProduct = () => {
                                                     >
                                                         {/* CATEGORY */}
                                                         <li
-                                                            className={`category ${
-                                                                selectedCat ===
+                                                            className={`category ${selectedCat ===
                                                                 cat.id
-                                                                    ? 'radio-select-active'
-                                                                    : ''
-                                                            }`}
+                                                                ? 'radio-select-active'
+                                                                : ''
+                                                                }`}
                                                             style={{
                                                                 display:
                                                                     selectedCat ===
                                                                         null ||
-                                                                    selectedCat ===
+                                                                        selectedCat ===
                                                                         cat.id
                                                                         ? 'block'
                                                                         : 'none',
@@ -2198,7 +1968,7 @@ const AddProduct = () => {
                                                             cat.id &&
                                                             cat.children
                                                                 ?.length >
-                                                                0 && (
+                                                            0 && (
                                                                 <ul className="settings-form-group-radio">
                                                                     {cat.children.map(
                                                                         (
@@ -2211,16 +1981,15 @@ const AddProduct = () => {
                                                                             >
                                                                                 {/* SUB CATEGORY */}
                                                                                 <li
-                                                                                    className={`sub-category ${
-                                                                                        selectedSub ===
+                                                                                    className={`sub-category ${selectedSub ===
                                                                                         sub.id
-                                                                                            ? 'radio-select-active'
-                                                                                            : ''
-                                                                                    }`}
+                                                                                        ? 'radio-select-active'
+                                                                                        : ''
+                                                                                        }`}
                                                                                     style={{
                                                                                         display:
                                                                                             !selectedSub ||
-                                                                                            selectedSub ===
+                                                                                                selectedSub ===
                                                                                                 sub.id
                                                                                                 ? 'block'
                                                                                                 : 'none',
@@ -2244,7 +2013,7 @@ const AddProduct = () => {
                                                                                     sub
                                                                                         .children
                                                                                         ?.length >
-                                                                                        0 && (
+                                                                                    0 && (
                                                                                         <ul className="settings-form-group-radio">
                                                                                             {sub.children.map(
                                                                                                 (
@@ -2254,16 +2023,15 @@ const AddProduct = () => {
                                                                                                         key={
                                                                                                             child.id
                                                                                                         }
-                                                                                                        className={`sub-category ${
-                                                                                                            selectedChild ===
+                                                                                                        className={`sub-category ${selectedChild ===
                                                                                                             child.id
-                                                                                                                ? 'radio-select-active'
-                                                                                                                : ''
-                                                                                                        }`}
+                                                                                                            ? 'radio-select-active'
+                                                                                                            : ''
+                                                                                                            }`}
                                                                                                         style={{
                                                                                                             display:
                                                                                                                 !selectedChild ||
-                                                                                                                selectedChild ===
+                                                                                                                    selectedChild ===
                                                                                                                     child.id
                                                                                                                     ? 'block'
                                                                                                                     : 'none',

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BasicInput, TextArea, SuccessNotice, getApiLink } from 'zyra';
+import { __ } from '@wordpress/i18n';
 
 const GeneralSettings = () => {
     const id = appLocalizer.store_id;
@@ -8,7 +9,6 @@ const GeneralSettings = () => {
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
     const [stateOptions, setStateOptions] = useState<{ label: string; value: string }[]>([]);
     const settings = appLocalizer.settings_databases_value['store-capability']?.edit_store_info_activation || [];
-console.log('settings', settings)
     useEffect(() => {
         if (!id) return;
 
@@ -73,22 +73,21 @@ console.log('settings', settings)
                 <div className="card-content">
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label htmlFor="store-name">Name</label>
+                            <label htmlFor="store-name">{__('Name', 'multivendorx')}</label>
                             <BasicInput
                                 name="name"
                                 wrapperClass="setting-form-input"
                                 descClass="settings-metabox-description"
                                 value={formData.name || ''}
                                 onChange={handleChange}
-                                readOnly={settings.includes('store_name') ? true : false}
+                                readOnly={settings.includes('store_name')}
                             />
                         </div>
                     </div>
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label htmlFor="store-slug">Storefront link</label>
-                            {/* ✅ Fixed: Correct field name */}
+                            <label htmlFor="store-slug">{__('Storefront link', 'multivendorx')}</label>
                             <BasicInput
                                 name="slug"
                                 wrapperClass="setting-form-input"
@@ -101,21 +100,20 @@ console.log('settings', settings)
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label htmlFor="store-description">Description</label>
+                            <label htmlFor="store-description">{__('Description', 'multivendorx')}</label>
                             <TextArea
                                 name="description"
                                 inputClass="textarea-input"
                                 value={formData.description || ''}
                                 onChange={handleChange}
-                                readOnly={settings.includes('store_description') ? true : false}
+                                readOnly={settings.includes('store_description')}
                             />
                         </div>
                     </div>
 
                     <div className="form-group-wrapper">
                         <div className="form-group">
-                            <label htmlFor="message-to-buyer">Buyer welcome message after purchase</label>
-                            {/* ✅ Fixed: Correct field name */}
+                            <label htmlFor="message-to-buyer">{__('Buyer welcome message after purchase', 'multivendorx')}</label>
                             <BasicInput
                                 name="messageToBuyer"
                                 wrapperClass="setting-form-input"
@@ -129,6 +127,7 @@ console.log('settings', settings)
                     <SuccessNotice message={successMsg} />
                 </div>
             </div>
+
         </>
     );
 };

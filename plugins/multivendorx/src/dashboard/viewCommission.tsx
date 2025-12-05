@@ -60,52 +60,47 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
         <>
           <div className="title">
             <i className="adminlib-commission"></i>
-            Commission Details
+            {__("Commission Details", "multivendorx")}
           </div>
-          <p>Details of this commission, including the order breakdown and notes.</p>
+          <p>{__("Details of this commission, including the order breakdown and notes.", "multivendorx")}</p>
           <i
             className="icon adminlib-close"
             onClick={onClose}
           ></i>
-        </>}
+        </>
+      }
     >
       {loading && <p>{__("Loading...", "multivendorx")}</p>}
+
       {!loading && details && (
         <>
-
           <div className="heading">{__("Order Overview", "multivendorx")}</div>
 
           <div className="commission-details">
             <div className="items">
-              <div className="text">Store</div>
-              <div className="value">
-                #{details.orderId}
-              </div>
+              <div className="text">{__("Store", "multivendorx")}</div>
+              <div className="value">#{details.orderId}</div>
             </div>
             <div className="items">
-              <div className="text">Order ID</div>
-              <div className="value">
-                #52
-              </div>
+              <div className="text">{__("Order ID", "multivendorx")}</div>
+              <div className="value">#52</div>
             </div>
             <div className="items">
-              <div className="text">Status</div>
+              <div className="text">{__("Status", "multivendorx")}</div>
               <div className="value">
-                 <span className={`admin-badge ${details.status === 'paid' ? 'green' : 'red'}`}>
+                <span className={`admin-badge ${details.status === 'paid' ? 'green' : 'red'}`}>
                   {details.status
                     ? details.status
-                      .replace(/^wc-/, '') // remove any prefix like 'wc-'
+                      .replace(/^wc-/, '') // remove prefix like 'wc-'
                       .replace(/_/g, ' ')  // replace underscores with spaces
-                      .replace(/\b\w/g, (c) => c.toUpperCase()) // capitalize each word
+                      .replace(/\b\w/g, (c) => c.toUpperCase()) // capitalize words
                     : ''}
                 </span>
               </div>
             </div>
             <div className="items">
-              <div className="text">Created</div>
-              <div className="value">
-                {new Date(details.createTime).toLocaleString()}
-              </div>
+              <div className="text">{__("Created", "multivendorx")}</div>
+              <div className="value">{new Date(details.createTime).toLocaleString()}</div>
             </div>
           </div>
 
@@ -114,102 +109,30 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 
           <div className="commission-details">
             <div className="items">
-              <div className="text">Commission Earned</div>
-              <div className="value">
-                {details.commissionAmount}
-              </div>
+              <div className="text">{__("Commission Earned", "multivendorx")}</div>
+              <div className="value">{details.commissionAmount}</div>
             </div>
             <div className="items">
-              <div className="text">Commission Total</div>
-              <div className="value">
-                {details.commissionTotal}
-              </div>
+              <div className="text">{__("Commission Total", "multivendorx")}</div>
+              <div className="value">{details.commissionTotal}</div>
             </div>
             <div className="items">
-              <div className="text">Shipping</div>
-              <div className="value">
-                {details.shippingAmount || "-"}
-              </div>
+              <div className="text">{__("Shipping", "multivendorx")}</div>
+              <div className="value">{details.shippingAmount || "-"}</div>
             </div>
             <div className="items">
-              <div className="text">Tax</div>
-              <div className="value">
-                {details.taxAmount || "-"}
-              </div>
+              <div className="text">{__("Tax", "multivendorx")}</div>
+              <div className="value">{details.taxAmount || "-"}</div>
             </div>
             <div className="items">
-              <div className="text">Discount</div>
-              <div className="value">
-                {details.discountAmount || "-"}
-              </div>
+              <div className="text">{__("Discount", "multivendorx")}</div>
+              <div className="value">{details.discountAmount || "-"}</div>
             </div>
           </div>
-
-          {/* <div className="content">
-            <div className="form-group-wrapper">
-              <div className="form-group">
-                <label htmlFor="title">{__("Store:", "multivendorx")}</label>
-                #{details.orderId}
-              </div>
-            </div>
-            <div className="form-group-wrapper">
-              <div className="form-group">
-                <label htmlFor="title">{__("Store Name:", "multivendorx")}</label>
-                {details.storeName}
-              </div>
-            </div>
-            <div className="form-group-wrapper">
-              <div className="form-group">
-                <label htmlFor="title">{__("Order ID:", "multivendorx")}</label>
-                {details.storeName}
-              </div>
-            </div>
-            <div className="form-group-wrapper">
-              <div className="form-group">
-                <label htmlFor="title">{__("Commission Earned:", "multivendorx")}</label>
-                {details.commissionAmount}
-              </div>
-            </div>
-            <div className="form-group-wrapper">
-              <div className="form-group">
-                <label htmlFor="title">{__("Commission Total:", "multivendorx")}</label>
-                {details.commissionTotal}
-              </div>
-            </div>
-            <div className="form-group-wrapper">
-              <div className="form-group">
-                <label htmlFor="title">{__("Shipping:", "multivendorx")}</label>
-                {details.shippingAmount || "-"}
-              </div>
-            </div>
-            <div className="form-group-wrapper">
-              <div className="form-group">
-                <label htmlFor="title">{__("Tax:", "multivendorx")}</label>
-                {details.taxAmount || "-"}
-              </div>
-            </div>
-            <div className="form-group-wrapper">
-              <div className="form-group">
-                <label htmlFor="title">{__("Discount:", "multivendorx")}</label>
-                {details.discountAmount || "-"}
-              </div>
-            </div>
-            <div className="form-group-wrapper">
-              <div className="form-group">
-                <label htmlFor="title">{__("Status:", "multivendorx")}</label>
-                {details.status}
-              </div>
-            </div>
-            <div className="form-group-wrapper">
-              <div className="form-group">
-                <label htmlFor="title">{__("Created:", "multivendorx")}</label>
-                {new Date(details.createTime).toLocaleString()}
-              </div>
-            </div>
-          </div> */}
         </>
       )}
     </CommonPopup>
+
   );
 };
 
