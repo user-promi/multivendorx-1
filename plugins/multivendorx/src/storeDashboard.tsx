@@ -3,6 +3,7 @@ import axios from 'axios';
 import { getApiLink } from 'zyra';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Notifications from './dashboard/notifications';
+import "./hooksFilters/aiAssist";
 
 const Dashboard = () => {
     const [menu, setMenu] = useState({});
