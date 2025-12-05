@@ -1,5 +1,4 @@
 @use './dashboardCommon.scss' as *;
-@use '../components/AdminDashboard/adminDashboard';
 
 ul {
     padding: 0;
@@ -833,7 +832,7 @@ a {
             width: 24%;
         }
     }
-}
+}   
 
 // analytics-container end
 
@@ -1058,11 +1057,9 @@ a {
     }
 }
 
-
 // dropdown style common start  common 
 .icon-wrapper {
     position: relative;
-
     .count {
         position: absolute;
         font-size: 0.75rem;
@@ -1557,7 +1554,6 @@ a {
         color: $sub-text-color;
     }
 }
-
 .form-group-wrapper {
     display: flex;
     gap: 1rem;
@@ -1579,92 +1575,6 @@ a {
             display: flex;
             gap: 1rem;
         }
-    }
-}
-
-// settings shipping add country start
-.shipping-country-wrapper {
-    .shipping-country {
-        padding: 1rem;
-        background: #f7f6f69c;
-        border-radius: 0.313rem;
-        margin-bottom: 1rem;
-        border: $border-light-small;
-
-        .setting-form-input {
-            width: 25%;
-        }
-
-        &.rule {
-            width: fit-content;
-        }
-    }
-
-    .item {
-        display: flex;
-        gap: 0.5rem;
-        align-items: center;
-
-        .location-icon {
-            background: #d9f5f0;
-            color: #06be9f;
-            padding: 0.45rem;
-            font-size: 1.313rem;
-            border-radius: 0.313rem;
-        }
-
-        .delete-icon {
-            font-size: 1.125rem;
-            color: #f06b4f;
-            cursor: pointer;
-        }
-
-        .basic-input {
-            background: #fff !important;
-            /*overwrite common style*/
-        }
-
-        &.state {
-            margin-bottom: 0.625rem;
-        }
-    }
-
-    .state-wrapper {
-        padding: 0.813rem;
-        background: #fff;
-        margin-top: 0.813rem;
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 0.813rem;
-            padding-bottom: 0.5rem;
-            border-bottom: $border-light-small;
-
-            .left {
-                width: 75%;
-            }
-
-            .title {
-                font-size: 1.125em;
-                font-weight: 500;
-            }
-
-            .des {
-                font-size: 0.813rem;
-                color: $sub-text-color;
-            }
-        }
-
-    }
-
-    .no-shipping-data {
-        padding: 1rem;
-        border-radius: 0.313rem;
-        font-size: 1rem;
-        background: #c9c9c954;
-        margin: 1rem 0;
     }
 }
 
@@ -1779,5 +1689,4 @@ a {
         }
     }
 }
-
 // column details start

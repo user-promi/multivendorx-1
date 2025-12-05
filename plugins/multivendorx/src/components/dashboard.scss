@@ -3,7 +3,7 @@
 .card-header {
     display: flex;
     justify-content: space-between;
-    width: 100%;
+    // width: 100%;
     padding-bottom: 1rem;
     margin-bottom: 1rem;
     border-bottom: $border-light-small;
@@ -400,7 +400,7 @@
 // }
 // action style end
 
-// payout page price section start --common
+// payout page price section start
 .payout-wrapper {
     .payout-header {
         .admin-btn {
@@ -615,112 +615,111 @@
 }
 
 // settings shipping add country start
-.shipping-country-wrapper {
-    .shipping-country {
-        padding: 1rem;
-        background: #f7f6f69c;
-        border-radius: 0.313rem;
-        margin-bottom: 1rem;
-        border: $border-light-small;
+// .shipping-country-wrapper {
+//     .shipping-country {
+//         padding: 1rem;
+//         background: #f7f6f69c;
+//         border-radius: 0.313rem;
+//         margin-bottom: 1rem;
+//         border: $border-light-small;
 
-        .basic-input {
-            width: 25%;
-        }
+//         .basic-input {
+//             width: 25%;
+//         }
 
-        &.rule {
-            width: fit-content;
-        }
-    }
+//         &.rule {
+//             width: fit-content;
+//         }
+//     }
 
-    .item {
-        display: flex;
-        gap: 0.5rem;
-        align-items: center;
+//     .item {
+//         display: flex;
+//         gap: 0.5rem;
+//         align-items: center;
 
-        .location-icon {
-            background: #d9f5f0;
-            color: #06be9f;
-            padding: 0.45rem;
-            font-size: 1.313rem;
-            border-radius: 0.313rem;
-        }
+//         .location-icon {
+//             background: #d9f5f0;
+//             color: #06be9f;
+//             padding: 0.45rem;
+//             font-size: 1.313rem;
+//             border-radius: 0.313rem;
+//         }
 
-        .delete-icon {
-            font-size: 1.125rem;
-            color: #f06b4f;
-            cursor: pointer;
-        }
+//         .delete-icon {
+//             font-size: 1.125rem;
+//             color: #f06b4f;
+//             cursor: pointer;
+//         }
 
-        .basic-input {
-            background: #fff !important;
-            /*overwrite common style*/
-        }
+//         .basic-input {
+//             background: #fff !important;
+//             /*overwrite common style*/
+//         }
 
-        &.state {
-            margin-bottom: 0.625rem;
-        }
-    }
+//         &.state {
+//             margin-bottom: 0.625rem;
+//         }
+//     }
 
-    .state-wrapper {
-        padding: 0.813rem;
-        background: #fff;
-        margin-top: 0.813rem;
+//     .state-wrapper {
+//         padding: 0.813rem;
+//         background: #fff;
+//         margin-top: 0.813rem;
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 0.813rem;
-            padding-bottom: 0.5rem;
-            border-bottom: $border-light-small;
+//         .header {
+//             display: flex;
+//             justify-content: space-between;
+//             align-items: start;
+//             margin-bottom: 0.813rem;
+//             padding-bottom: 0.5rem;
+//             border-bottom: $border-light-small;
 
-            .left {
-                width: 75%;
-            }
+//             .left {
+//                 width: 75%;
+//             }
 
-            .title {
-                font-size: 1.125em;
-                font-weight: 500;
-            }
+//             .title {
+//                 font-size: 1.125em;
+//                 font-weight: 500;
+//             }
 
-            .des {
-                font-size: 0.813rem;
-                color: $sub-text-color;
-            }
-        }
+//             .des {
+//                 font-size: 0.813rem;
+//                 color: $sub-text-color;
+//             }
+//         }
 
-    }
+//     }
 
-    .no-shipping-data {
-        padding: 1rem;
-        border-radius: 0.313rem;
-        font-size: 1rem;
-        background: #c9c9c954;
-        margin: 1rem 0;
-    }
-}
-
+//     .no-shipping-data {
+//         padding: 1rem;
+//         border-radius: 0.313rem;
+//         font-size: 1rem;
+//         background: #c9c9c954;
+//         margin: 1rem 0;
+//     }
+// }
 // settings shipping add country end
 
 
 // shipping-method-wrapper start  store shipping tab start (move table css)
-.shipping-method-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+// .shipping-method-wrapper {
+//     display: flex;
+//     flex-direction: column;
+//     gap: 0.5rem;
 
-    .shipping-method {
-        display: flex;
-        gap: 0.313rem;
-        align-items: center;
+//     .shipping-method {
+//         display: flex;
+//         gap: 0.313rem;
+//         align-items: center;
 
-        .icon-wrapper {
-            i {
-                cursor: pointer;
-            }
-        }
-    }
-}
+//         .icon-wrapper {
+//             i {
+//                 cursor: pointer;
+//             }
+//         }
+//     }
+// }
 
 // review style
 .reviews-wrapper {

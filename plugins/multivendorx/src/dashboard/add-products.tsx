@@ -2059,16 +2059,10 @@ const AddProduct = () => {
 
                             <div className="form-group-wrapper">
                                 <div className="form-group">
-                                    {/* <label htmlFor="product-name">Status</label>
-                                    <div className="admin-badge green">
-                                        Publish
-                                    </div> */}
-
-                                    {/* <div className="form-group"> */}
                                     <label>Status</label>
 
                                     <select
-                                        className="setting-form-input"
+                                        className="basic-select"
                                         value={product.status}
                                         onChange={(e) =>
                                             handleChange(

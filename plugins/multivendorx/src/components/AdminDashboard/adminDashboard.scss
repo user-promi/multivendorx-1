@@ -1,8 +1,6 @@
 @use '../config.scss' as *;
 
 .admin-dashboard {
-    // margin-top: 2rem !important; //overwrite general wrapper style
-
     .tab-titles {
         margin: 0;
         padding: 0;
@@ -308,7 +306,6 @@
 
     .cards {
         padding: 0.85rem;
-        // padding-top: 1.313rem;
         border-radius: 0.313rem;
         background: transparent;
         border: 0.063rem solid #e0e4e970;
@@ -318,11 +315,6 @@
             font-weight: 500;
             color: $theme-color;
         }
-
-        // i {
-        //     font-size: 1.313rem;
-        //     color: $theme-color;
-        // }
 
         h3 {
             font-size: 0.83rem;
@@ -433,7 +425,6 @@
     }
 }
 
-
 // top items start
 .top-items {
     .items {
@@ -480,9 +471,7 @@
         }
     }
 }
-
 // top items end
-
 
 // support start
 .support-wrapper {
@@ -515,7 +504,6 @@
 }
 
 // support end
-
 
 // recent-activities start
 .recent-activities {
@@ -608,7 +596,6 @@
 
         li {
             width: 48%;
-            // font-size: 0.9rem;
             color: #000;
             line-height: 1rem;
             margin-bottom: 0.625rem;
@@ -726,7 +713,6 @@
 }
 // pricing section end
 
-
 // review start
 .review-wrapper {
     display: flex;
@@ -783,7 +769,6 @@
 }
 
 // review end
-
 
 // features section start
 .features-wrapper {
@@ -877,7 +862,6 @@
     }
 }
 
-
 // notification style start
 .notification-wrapper {
     ul {
@@ -960,7 +944,6 @@
 
 // notification style end
 
-
 // no data found start
 .no-data-found {
     text-align: center;
@@ -1001,7 +984,6 @@
     }
 }
 
-
 .placeholder-400x400 {
     position: relative;
     height: 100%;
@@ -1022,7 +1004,6 @@
         align-items: center;
     }
 }
-
 
 // video section start
 .video-section {

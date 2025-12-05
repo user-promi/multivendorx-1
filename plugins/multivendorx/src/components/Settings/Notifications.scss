@@ -11,7 +11,6 @@
     .product-wrapper.notification {
         .notification-icon {
             position: relative;
-            // font-family: adminlibrary, sans-serif !important;
 
             &::before {
                 position: absolute;
@@ -125,7 +124,6 @@
             color: $theme-color;
             border-radius: 0.313rem;
             font-size: 1.25rem;
-            // font-family: adminlibrary, sans-serif !important;
             position: relative;
 
             &::before {
