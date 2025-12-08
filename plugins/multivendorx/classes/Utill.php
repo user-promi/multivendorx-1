@@ -80,6 +80,7 @@ class Utill {
         'under-review'                  => 'multivendorx_under_review_settings',
         'suspended'                     => 'multivendorx_suspended_settings',
         'ai-automation'                 => 'multivendorx_ai_automation_settings',
+        'log'                           => 'multivendorx_log_settings',
     );
 
     const MULTIVENDORX_OTHER_SETTINGS = array(

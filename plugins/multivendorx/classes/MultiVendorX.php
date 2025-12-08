@@ -349,7 +349,7 @@ final class MultiVendorX {
         }
 
         $this->container['log_file'] = MultivendorX()->multivendorx_logs_dir . '/' . $log_file_name;
-        // $this->container['show_advanced_log'] = in_array( 'moowoodle_adv_log', MooWoodle()->setting->get_setting( 'moowoodle_adv_log', array() ), true );
+        $this->container['show_advanced_log'] = in_array( 'multivendorx_adv_log', MultivendorX()->setting->get_setting( 'multivendorx_adv_log', array() ), true );
     }
 }
 

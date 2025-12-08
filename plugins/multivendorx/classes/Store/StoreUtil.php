@@ -120,6 +120,19 @@ class StoreUtil {
                 );
             }
         }
+
+        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+            MultiVendorX()->util->log(
+                "========= MULTIVENDORX ERROR =========\n" .
+                "Timestamp: " . current_time( 'mysql' ) . "\n" .
+                "Error: " . $wpdb->last_error . "\n" .
+                "Last Query: " . $wpdb->last_query . "\n" .
+                "File: " . __FILE__ . "\n" .
+                "Line: " . __LINE__ . "\n" .
+                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
+                "=========================================\n\n"
+            );
+        }
     }
 
     /**
@@ -135,6 +148,19 @@ class StoreUtil {
         $primary_owner_id = self::get_primary_owner( $store_id );
         $users            = $wpdb->get_results( $wpdb->prepare( "SELECT user_id FROM $table WHERE store_id = %d", $store_id ), ARRAY_A );
         $user_ids = wp_parse_id_list( wp_list_pluck( $users, 'user_id' ) );
+
+        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+            MultiVendorX()->util->log(
+                "========= MULTIVENDORX ERROR =========\n" .
+                "Timestamp: " . current_time( 'mysql' ) . "\n" .
+                "Error: " . $wpdb->last_error . "\n" .
+                "Last Query: " . $wpdb->last_query . "\n" .
+                "File: " . __FILE__ . "\n" .
+                "Line: " . __LINE__ . "\n" .
+                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
+                "=========================================\n\n"
+            );
+        }
 
         return array(
             'users'         => $user_ids,
@@ -167,9 +193,22 @@ class StoreUtil {
             WHERE su.user_id = %d
             AND s.status NOT IN ($placeholders)
         ";
+        $result = $wpdb->get_results( $wpdb->prepare( $sql, $params ), ARRAY_A );
 
-        // return $wpdb->get_col($wpdb->prepare($sql, $params));
-        return $wpdb->get_results( $wpdb->prepare( $sql, $params ), ARRAY_A );
+        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+            MultiVendorX()->util->log(
+                "========= MULTIVENDORX ERROR =========\n" .
+                "Timestamp: " . current_time( 'mysql' ) . "\n" .
+                "Error: " . $wpdb->last_error . "\n" .
+                "Last Query: " . $wpdb->last_query . "\n" .
+                "File: " . __FILE__ . "\n" .
+                "Line: " . __LINE__ . "\n" .
+                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
+                "=========================================\n\n"
+            );
+        }
+
+        return $result;
     }
 
     /**
@@ -182,6 +221,19 @@ class StoreUtil {
 
         $table = "{$wpdb->prefix}" . Utill::TABLES['store'];
         $store = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table}" ), ARRAY_A );
+
+        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+            MultiVendorX()->util->log(
+                "========= MULTIVENDORX ERROR =========\n" .
+                "Timestamp: " . current_time( 'mysql' ) . "\n" .
+                "Error: " . $wpdb->last_error . "\n" .
+                "Last Query: " . $wpdb->last_query . "\n" .
+                "File: " . __FILE__ . "\n" .
+                "Line: " . __LINE__ . "\n" .
+                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
+                "=========================================\n\n"
+            );
+        }
 
         return $store ? $store : array();
     }
@@ -197,6 +249,19 @@ class StoreUtil {
 
         $table  = "{$wpdb->prefix}" . Utill::TABLES['store'];
         $stores = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table WHERE who_created = %d AND status = %s", get_current_user_id(), $status ), ARRAY_A );
+
+        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+            MultiVendorX()->util->log(
+                "========= MULTIVENDORX ERROR =========\n" .
+                "Timestamp: " . current_time( 'mysql' ) . "\n" .
+                "Error: " . $wpdb->last_error . "\n" .
+                "Last Query: " . $wpdb->last_query . "\n" .
+                "File: " . __FILE__ . "\n" .
+                "Line: " . __LINE__ . "\n" .
+                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
+                "=========================================\n\n"
+            );
+        }
 
         return $stores ? $stores : array();
     }
@@ -466,6 +531,19 @@ class StoreUtil {
             ARRAY_A
         );
 
+        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+            MultiVendorX()->util->log(
+                "========= MULTIVENDORX ERROR =========\n" .
+                "Timestamp: " . current_time( 'mysql' ) . "\n" .
+                "Error: " . $wpdb->last_error . "\n" .
+                "Last Query: " . $wpdb->last_query . "\n" .
+                "File: " . __FILE__ . "\n" .
+                "Line: " . __LINE__ . "\n" .
+                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
+                "=========================================\n\n"
+            );
+        }
+
         return $stores ? $stores : array();
     }
 
@@ -485,6 +563,20 @@ class StoreUtil {
                 $store_id
             )
         );
+
+        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+            MultiVendorX()->util->log(
+                "========= MULTIVENDORX ERROR =========\n" .
+                "Timestamp: " . current_time( 'mysql' ) . "\n" .
+                "Error: " . $wpdb->last_error . "\n" .
+                "Last Query: " . $wpdb->last_query . "\n" .
+                "File: " . __FILE__ . "\n" .
+                "Line: " . __LINE__ . "\n" .
+                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
+                "=========================================\n\n"
+            );
+        }
+
         return $primary_owner;
     }
 
@@ -535,6 +627,19 @@ class StoreUtil {
                     'primary_owner' => $user_id,
                 ),
                 array( '%d', '%d', '%s', '%d' )
+            );
+        }
+
+        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+            MultiVendorX()->util->log(
+                "========= MULTIVENDORX ERROR =========\n" .
+                "Timestamp: " . current_time( 'mysql' ) . "\n" .
+                "Error: " . $wpdb->last_error . "\n" .
+                "Last Query: " . $wpdb->last_query . "\n" .
+                "File: " . __FILE__ . "\n" .
+                "Line: " . __LINE__ . "\n" .
+                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
+                "=========================================\n\n"
             );
         }
     }
@@ -761,11 +866,25 @@ class StoreUtil {
 
         if ( isset( $args['count'] ) ) {
             $results = $wpdb->get_var( $query );
-            return $results ?? 0;
         } else {
             $results = $wpdb->get_results( $query, ARRAY_A );
-            return $results ?? array();
         }
+        
+        /** Centralized error logging (only once) */
+        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+            MultiVendorX()->util->log(
+                "========= MULTIVENDORX ERROR =========\n" .
+                "Timestamp: " . current_time( 'mysql' ) . "\n" .
+                "Error: " . $wpdb->last_error . "\n" .
+                "Last Query: " . $wpdb->last_query . "\n" .
+                "File: " . __FILE__ . "\n" .
+                "Line: " . __LINE__ . "\n" .
+                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
+                "=========================================\n\n"
+            );
+        }
+        
+        return $results ?? ( isset( $args['count'] ) ? 0 : array() );        
     }
 
     /**

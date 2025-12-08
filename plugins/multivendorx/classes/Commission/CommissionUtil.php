@@ -32,6 +32,20 @@ class CommissionUtil {
         $commission = $wpdb->get_row(
             $wpdb->prepare( 'SELECT * FROM `' . $wpdb->prefix . Utill::TABLES['commission'] . '` WHERE ID = %d', $id )
         );
+
+        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+            MultiVendorX()->util->log(
+                "========= MULTIVENDORX ERROR =========\n" .
+                "Timestamp: " . current_time( 'mysql' ) . "\n" .
+                "Error: " . $wpdb->last_error . "\n" .
+                "Last Query: " . $wpdb->last_query . "\n" .
+                "File: " . __FILE__ . "\n" .
+                "Line: " . __LINE__ . "\n" .
+                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
+                "=========================================\n\n"
+            );
+        }
+
         return $commission ?? new \stdClass();
     }
 
@@ -56,6 +70,18 @@ class CommissionUtil {
         $commission = $wpdb->get_row(
             $wpdb->prepare( 'SELECT * FROM `' . $wpdb->prefix . Utill::TABLES['commission'] . '` WHERE store_id = %d AND order_id = %d', $store_id, $order_id )
         );
+        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+            MultiVendorX()->util->log(
+                "========= MULTIVENDORX ERROR =========\n" .
+                "Timestamp: " . current_time( 'mysql' ) . "\n" .
+                "Error: " . $wpdb->last_error . "\n" .
+                "Last Query: " . $wpdb->last_query . "\n" .
+                "File: " . __FILE__ . "\n" .
+                "Line: " . __LINE__ . "\n" .
+                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
+                "=========================================\n\n"
+            );
+        }
         return $commission ?? new \stdClass();
     }
 
@@ -144,6 +170,19 @@ class CommissionUtil {
         // Execute query.
         $commissions = $wpdb->get_results( $query );
 
+        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+            MultiVendorX()->util->log(
+                "========= MULTIVENDORX ERROR =========\n" .
+                "Timestamp: " . current_time( 'mysql' ) . "\n" .
+                "Error: " . $wpdb->last_error . "\n" .
+                "Last Query: " . $wpdb->last_query . "\n" .
+                "File: " . __FILE__ . "\n" .
+                "Line: " . __LINE__ . "\n" .
+                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
+                "=========================================\n\n"
+            );
+        }
+
         // Return object or raw array.
         if ( ! $object ) {
             return $commissions;
@@ -195,6 +234,19 @@ class CommissionUtil {
 
             $results = $wpdb->get_results( $query );
 
+            if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+                MultiVendorX()->util->log(
+                    "========= MULTIVENDORX ERROR =========\n" .
+                    "Timestamp: " . current_time( 'mysql' ) . "\n" .
+                    "Error: " . $wpdb->last_error . "\n" .
+                    "Last Query: " . $wpdb->last_query . "\n" .
+                    "File: " . __FILE__ . "\n" .
+                    "Line: " . __LINE__ . "\n" .
+                    "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
+                    "=========================================\n\n"
+                );
+            }
+
             return array_map(
                 function ( $row ) {
                     $store      = new Store( $row->store_id );
@@ -236,6 +288,19 @@ class CommissionUtil {
         }
 
         $result = $wpdb->get_row( $query );
+
+        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+            MultiVendorX()->util->log(
+                "========= MULTIVENDORX ERROR =========\n" .
+                "Timestamp: " . current_time( 'mysql' ) . "\n" .
+                "Error: " . $wpdb->last_error . "\n" .
+                "Last Query: " . $wpdb->last_query . "\n" .
+                "File: " . __FILE__ . "\n" .
+                "Line: " . __LINE__ . "\n" .
+                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
+                "=========================================\n\n"
+            );
+        }
 
         return array(
             'total_order_amount'  => floatval( $result->total_order_amount ),

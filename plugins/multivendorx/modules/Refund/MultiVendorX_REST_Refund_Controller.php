@@ -253,7 +253,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
             return rest_ensure_response( array_values( $refund_list ) );
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log(
-                'MVX REST Exception: ' .
+                'MULTIVENDORX REST Exception: ' .
                 'Message=' . $e->getMessage() . '; ' .
                 'File=' . $e->getFile() . '; ' .
                 'Line=' . $e->getLine() . "\n\n"
@@ -399,7 +399,21 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
      */
     public function get_vendor_parent_order_item_id( $item_id ) {
         global $wpdb;
-        $vendor_item_id = $wpdb->get_var( $wpdb->prepare( "SELECT meta_value FROM {$wpdb->order_itemmeta} WHERE meta_key=%s AND order_item_id=%d", 'store_order_item_id', absint( $item_id ) ) );
-        return $vendor_item_id;
+        $store_item_id = $wpdb->get_var( $wpdb->prepare( "SELECT meta_value FROM {$wpdb->order_itemmeta} WHERE meta_key=%s AND order_item_id=%d", 'store_order_item_id', absint( $item_id ) ) );
+
+        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+			MultiVendorX()->util->log(
+				"========= MULTIVENDORX ERROR =========\n" .
+				"Timestamp: " . current_time( 'mysql' ) . "\n" .
+				"Error: " . $wpdb->last_error . "\n" .
+				"Last Query: " . $wpdb->last_query . "\n" .
+				"File: " . __FILE__ . "\n" .
+				"Line: " . __LINE__ . "\n" .
+				"Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
+				"=========================================\n\n"
+			);
+		}
+
+        return $store_item_id;
     }
 }

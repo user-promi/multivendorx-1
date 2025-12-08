@@ -157,7 +157,7 @@ class MultiVendorX_REST_Settings_Controller extends \WP_REST_Controller {
             return $all_details;
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log(
-                'MVX REST Exception: ' .
+                'MULTIVENDORX REST Exception: ' .
                 'Message=' . $e->getMessage() . '; ' .
                 'File=' . $e->getFile() . '; ' .
                 'Line=' . $e->getLine() . "\n\n"
@@ -209,7 +209,7 @@ class MultiVendorX_REST_Settings_Controller extends \WP_REST_Controller {
             }
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log(
-                'MVX REST Exception: ' .
+                'MULTIVENDORX REST Exception: ' .
                 'Message=' . $e->getMessage() . '; ' .
                 'File=' . $e->getFile() . '; ' .
                 'Line=' . $e->getLine() . "\n\n"
