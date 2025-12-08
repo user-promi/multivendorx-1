@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { BasicInput, DynamicRowSetting, getApiLink, SuccessNotice, ToggleSetting } from "zyra";
 import ShippingRatesByCountry from "./ShippingRatesByCountry";
 import DistanceByZoneShipping from "./DistanceByZoneShipping";
+import { __ } from "@wordpress/i18n";
 
 const ShippingDelivery = () => {
     const [formData, setFormData] = useState<{ [key: string]: any }>({}); // Use 'any' for simplicity here
@@ -81,32 +82,37 @@ const ShippingDelivery = () => {
                         <>
                             <div className="form-group-wrapper">
                                 <div className="form-group">
-                                    <label htmlFor="">Method Type</label>
+                                    <label htmlFor="">
+                                        {__('Method Type', 'multivendorx')}
+                                    </label>
                                     <ToggleSetting
                                         wrapperClass="setting-form-input"
                                         descClass="settings-metabox-description"
-                                        description="Choose your preferred payment method."
+                                        description={__('Choose your preferred shipping method.', 'multivendorx')}
                                         options={appLocalizer.shipping_methods}
                                         value={formData.shipping_options || ""}
                                         onChange={(value: any) => handleToggleChange(value, 'shipping_options')}
                                     />
                                 </div>
                             </div>
-                            {/* //zone by shipping */}
+
+                            {/* Zone by Shipping */}
                             {formData.shipping_options === 'shipping_by_zone' && <DistanceByZoneShipping />}
 
-                            {/* country wise shipping */}
+                            {/* Country-wise shipping */}
                             {formData.shipping_options === 'shipping_by_country' && (
                                 <>
                                     <div className="form-group-title-wrapper">
-                                        <div className="title">Default Shipping Rules</div>
-                                        <div className="des">Set base rates that apply to all orders</div>
+                                        <div className="title">{__('Default Shipping Rules', 'multivendorx')}</div>
+                                        <div className="des">{__('Set base rates that apply to all orders', 'multivendorx')}</div>
                                     </div>
 
                                     {/* Default Shipping Price */}
                                     <div className="form-group-wrapper">
                                         <div className="form-group">
-                                            <label htmlFor="multivendorx_shipping_type_price">Default Shipping Price ($)</label>
+                                            <label htmlFor="multivendorx_shipping_type_price">
+                                                {__('Default Shipping Price ($)', 'multivendorx')}
+                                            </label>
                                             <BasicInput
                                                 type="number"
                                                 name="multivendorx_shipping_type_price"
@@ -117,7 +123,7 @@ const ShippingDelivery = () => {
                                                 onChange={handleChange}
                                             />
                                             <div className="settings-metabox-description">
-                                                This is the shipping cost applied to every order.
+                                                {__('This is the shipping cost applied to every order.', 'multivendorx')}
                                             </div>
                                         </div>
                                     </div>
@@ -125,7 +131,9 @@ const ShippingDelivery = () => {
                                     {/* Per Product Additional Price */}
                                     <div className="form-group-wrapper">
                                         <div className="form-group">
-                                            <label htmlFor="multivendorx_additional_product">Per Product Additional Price ($)</label>
+                                            <label htmlFor="multivendorx_additional_product">
+                                                {__('Per Product Additional Price ($)', 'multivendorx')}
+                                            </label>
                                             <BasicInput
                                                 type="number"
                                                 name="multivendorx_additional_product"
@@ -136,7 +144,7 @@ const ShippingDelivery = () => {
                                                 onChange={handleChange}
                                             />
                                             <div className="settings-metabox-description">
-                                                This amount will be <b>added to the Default Shipping Price </b>for each additional product type in the cart. Example: If Default Shipping is $5 and this is set to $2, a customer buying Product A and Product B will pay $5 (for Product A) + $2 (for Product B) = $7 total shipping.
+                                                {__('This amount will be added to the Default Shipping Price for each additional product type in the cart.', 'multivendorx')}
                                             </div>
                                         </div>
                                     </div>
@@ -144,7 +152,9 @@ const ShippingDelivery = () => {
                                     {/* Per Qty Additional Price */}
                                     <div className="form-group-wrapper">
                                         <div className="form-group">
-                                            <label htmlFor="multivendorx_additional_qty">Per Qty Additional Price ($)</label>
+                                            <label htmlFor="multivendorx_additional_qty">
+                                                {__('Per Qty Additional Price ($)', 'multivendorx')}
+                                            </label>
                                             <BasicInput
                                                 type="number"
                                                 name="multivendorx_additional_qty"
@@ -155,7 +165,7 @@ const ShippingDelivery = () => {
                                                 onChange={handleChange}
                                             />
                                             <div className="settings-metabox-description">
-                                                This amount will be <b>added to the Default Shipping Price </b>for each additional quantity of the same product. Example: If Default Shipping is $5 and this is set to $1, a customer buying 3 units of Product A will pay $5 (first unit) + $1 (second unit) + $1 (third unit) = $7 total shipping.
+                                                {__('This amount will be added to the Default Shipping Price for each additional quantity of the same product.', 'multivendorx')}
                                             </div>
                                         </div>
                                     </div>
@@ -163,18 +173,20 @@ const ShippingDelivery = () => {
                                     {/* Free Shipping Minimum Order Amount */}
                                     <div className="form-group-wrapper">
                                         <div className="form-group">
-                                            <label htmlFor="free_shipping_amount">Free Shipping Minimum Order Amount ($)</label>
+                                            <label htmlFor="free_shipping_amount">
+                                                {__('Free Shipping Minimum Order Amount ($)', 'multivendorx')}
+                                            </label>
                                             <BasicInput
                                                 type="number"
                                                 name="free_shipping_amount"
                                                 wrapperClass="setting-form-input"
                                                 descClass="settings-metabox-description"
-                                                placeholder="NO Free Shipping"
+                                                placeholder={__('NO Free Shipping', 'multivendorx')}
                                                 value={formData.free_shipping_amount || ''}
                                                 onChange={handleChange}
                                             />
                                             <div className="settings-metabox-description">
-                                                If the customer's order total exceeds this amount, shipping becomes free. Leave this field empty if you do not want to offer free shipping.
+                                                {__('If the customer\'s order total exceeds this amount, shipping becomes free. Leave empty if you do not want to offer free shipping.', 'multivendorx')}
                                             </div>
                                         </div>
                                     </div>
@@ -182,7 +194,9 @@ const ShippingDelivery = () => {
                                     {/* Local Pickup Cost */}
                                     <div className="form-group-wrapper">
                                         <div className="form-group">
-                                            <label htmlFor="local_pickup_cost">Local Pickup Cost ($)</label>
+                                            <label htmlFor="local_pickup_cost">
+                                                {__('Local Pickup Cost ($)', 'multivendorx')}
+                                            </label>
                                             <BasicInput
                                                 type="number"
                                                 name="local_pickup_cost"
@@ -193,31 +207,34 @@ const ShippingDelivery = () => {
                                                 onChange={handleChange}
                                             />
                                             <div className="settings-metabox-description">
-                                                This is the fee customers need to pay if they choose Local Pickup as the delivery option.
+                                                {__('This is the fee customers need to pay if they choose Local Pickup as the delivery option.', 'multivendorx')}
                                             </div>
                                         </div>
                                     </div>
 
                                     <div className="form-group-title-wrapper">
-                                        <div className="title">Country-Specific Rates</div>
-                                        <div className="des">Country-specific rates will be <b>added to the Default Shipping Price.</b> If state/region rates are defined, the final shipping cost will be State Rate + Default Shipping Price.</div>
+                                        <div className="title">{__('Country-Specific Rates', 'multivendorx')}</div>
+                                        <div className="des">
+                                            {__('Country-specific rates will be added to the Default Shipping Price. If state/region rates are defined, the final shipping cost will be State Rate + Default Shipping Price.', 'multivendorx')}
+                                        </div>
                                     </div>
                                     <ShippingRatesByCountry />
                                 </>
                             )}
 
-
+                            {/* Distance-based Shipping */}
                             {formData.shipping_options === 'shipping_by_distance' && (
                                 <>
                                     <div className="form-group-title-wrapper">
-                                        <div className="title">
-                                            Distance-wise Shipping Configuration
-                                        </div>
+                                        <div className="title">{__('Distance-wise Shipping Configuration', 'multivendorx')}</div>
                                     </div>
+
                                     {/* Default Cost */}
                                     <div className="form-group-wrapper">
                                         <div className="form-group">
-                                            <label htmlFor="distance_default_cost">Default Cost ($) *</label>
+                                            <label htmlFor="distance_default_cost">
+                                                {__('Default Cost ($) *', 'multivendorx')}
+                                            </label>
                                             <BasicInput
                                                 type="number"
                                                 name="distance_default_cost"
@@ -235,7 +252,9 @@ const ShippingDelivery = () => {
                                     {/* Max Distance */}
                                     <div className="form-group-wrapper">
                                         <div className="form-group">
-                                            <label htmlFor="distance_max_km">Max Distance (km)</label>
+                                            <label htmlFor="distance_max_km">
+                                                {__('Max Distance (km)', 'multivendorx')}
+                                            </label>
                                             <BasicInput
                                                 type="number"
                                                 name="distance_max_km"
@@ -253,7 +272,9 @@ const ShippingDelivery = () => {
                                     {/* Local Pickup Cost */}
                                     <div className="form-group-wrapper">
                                         <div className="form-group">
-                                            <label htmlFor="distance_local_pickup_cost">Local Pickup Cost ($) (Optional)</label>
+                                            <label htmlFor="distance_local_pickup_cost">
+                                                {__('Local Pickup Cost ($) (Optional)', 'multivendorx')}
+                                            </label>
                                             <BasicInput
                                                 type="number"
                                                 name="distance_local_pickup_cost"
@@ -268,90 +289,29 @@ const ShippingDelivery = () => {
                                         </div>
                                     </div>
 
-                                    {/* Distance-Cost Rules */}
-                                    {/* <div className="form-group-wrapper">
-                                        <div className="form-group">
-                                            <label>Distance-Cost Rules</label>
-                                            <div className="shipping-country-wrapper">
-                                                {(formData.distance_rules || []).map((rule: any, index: number) => (
-                                                    <div key={index} className="shipping-country rule">
-                                                        <div className="item">
-                                                            <BasicInput
-                                                                type="number"
-                                                                placeholder="Up to km"
-                                                                value={rule.max_distance || ''}
-                                                                onChange={(e) => {
-                                                                    const updatedRules = [...(formData.distance_rules || [])];
-                                                                    updatedRules[index] = { ...updatedRules[index], max_distance: e.target.value };
-                                                                    setFormData({ ...formData, distance_rules: updatedRules });
-                                                                    autoSave({ ...formData, distance_rules: updatedRules });
-                                                                }}
-                                                                min="0"
-                                                                step="0.1"
-                                                            />
-                                                            <BasicInput
-                                                                type="number"
-                                                                placeholder="Cost $"
-                                                                value={rule.cost || ''}
-                                                                onChange={(e) => {
-                                                                    const updatedRules = [...(formData.distance_rules || [])];
-                                                                    updatedRules[index] = { ...updatedRules[index], cost: e.target.value };
-                                                                    setFormData({ ...formData, distance_rules: updatedRules });
-                                                                    autoSave({ ...formData, distance_rules: updatedRules });
-                                                                }}
-                                                                min="0"
-                                                                step="0.01"
-                                                            />
-                                                            <span
-                                                                className="delete-icon adminlib-delete"
-                                                                onClick={() => {
-                                                                    const updatedRules = (formData.distance_rules || []).filter((_, i) => i !== index);
-                                                                    setFormData({ ...formData, distance_rules: updatedRules });
-                                                                    autoSave({ ...formData, distance_rules: updatedRules });
-                                                                }}
-                                                            >
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                            <button
-                                                type="button"
-                                                className="admin-btn btn-purple-bg"
-                                                onClick={() => {
-                                                    const updatedRules = [...(formData.distance_rules || []), { max_distance: '', cost: '' }];
-                                                    setFormData({ ...formData, distance_rules: updatedRules });
-                                                    autoSave({ ...formData, distance_rules: updatedRules });
-                                                }}
-                                            >
-                                                <i className="adminlib-plus-circle"></i> Add Rule
-                                            </button>
-                                        </div>
-                                    </div> */}
-                                    {/* ---------------- DISTANCE - COST RULES ---------------- */}
+                                    {/* Distance–Cost Rules */}
                                     <div className="form-group-wrapper">
                                         <div className="form-group">
-                                            <label>Distance–Cost Rules</label>
-
+                                            <label>{__('Distance–Cost Rules', 'multivendorx')}</label>
                                             <DynamicRowSetting
                                                 keyName="distance_rules"
-                                                addLabel="Add Rule"
+                                                addLabel={__('Add Rule', 'multivendorx')}
                                                 value={formData.distance_rules || []}
                                                 template={{
                                                     fields: [
                                                         {
                                                             key: "max_distance",
                                                             type: "number",
-                                                            label: "Up to (km)",
-                                                            placeholder: "Up to km",
+                                                            label: __('Up to (km)', 'multivendorx'),
+                                                            placeholder: __('Up to km', 'multivendorx'),
                                                             step: "0.1",
                                                             min: "0",
                                                         },
                                                         {
                                                             key: "cost",
                                                             type: "number",
-                                                            label: "Cost ($)",
-                                                            placeholder: "Cost $",
+                                                            label: __('Cost ($)', 'multivendorx'),
+                                                            placeholder: __('Cost $', 'multivendorx'),
                                                             step: "0.01",
                                                             min: "0",
                                                         },
@@ -361,10 +321,10 @@ const ShippingDelivery = () => {
                                                     const updated = { ...formData, distance_rules: updatedRules };
                                                     setFormData(updated);
                                                     autoSave(updated);
-                                                } } childrenRenderer={undefined}                                            />
+                                                }}
+                                            />
                                         </div>
                                     </div>
-
                                 </>
                             )}
                         </>
