@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { formatCurrency } from '../services/commonFunction';
 
-const SmpvProducts: React.FC = () => {
+const SpmvProducts: React.FC = () => {
     const [products, setProducts] = useState([]);
     const [query, setQuery] = useState('');
     const navigate = useNavigate();
@@ -140,4 +140,4 @@ const SmpvProducts: React.FC = () => {
     );
 };
 
-export default SmpvProducts;
+export default SpmvProducts;
