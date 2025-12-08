@@ -123,18 +123,10 @@ class Admin {
 						'name'   => __( 'Customer Support', 'multivendorx' ),
 						'subtab' => '',
 					),
-					// 'advertisement' => array(
-					// 'name'   => __( 'Advertisement', 'multivendorx' ),
-					// 'subtab' => '',
-					// ),
 					'reports'             => array(
 						'name'   => __( 'Reports', 'multivendorx' ),
 						'subtab' => '',
 					),
-					// 'memberships' => array(
-					// 'name'   => __( 'Memberships', 'multivendorx' ),
-					// 'subtab' => 'payment-membership-message',
-					// ),
 					'settings'            => array(
 						'name'   => __( 'Settings', 'multivendorx' ),
 						'subtab' => 'marketplace',
@@ -147,19 +139,6 @@ class Admin {
 						'name'   => __( 'Status & Tools', 'multivendorx' ),
 						'subtab' => 'system-status',
 					),
-					// 'announcement' => array(
-					// 'name'   => __( 'Announcement', 'multivendorx' ),
-					// 'subtab' => '',
-					// ),
-					// 'knowledgebase' => array(
-					// 'name'   => __( 'Knowledgebase', 'multivendorx' ),
-					// 'subtab' => '',
-					// ),
-
-					// 'blogs' => array(
-					// 'name'   => __( 'Blogs', 'multivendorx' ),
-					// 'subtab' => '',
-					// ),
 					'help-support'        => array(
 						'name'   => __( 'Help & Support', 'multivendorx' ),
 						'subtab' => '',
@@ -362,7 +341,6 @@ class Admin {
 						'label'       => __( 'Commission Fixed', 'multivendorx' ),
 						'placeholder' => wc_format_localized_price( 0 ),
 						'description' => __( 'Fixed commission.', 'multivendorx' ),
-						// 'data_type'   => 'percent' === $coupon->get_discount_type( 'edit' ) ? 'decimal' : 'price',
 						'desc_tip'    => true,
 						'value'       => $product_fixed_commission ?? '',
 					)
@@ -377,7 +355,6 @@ class Admin {
 						'label'       => __( 'Commission Percentage', 'multivendorx' ),
 						'placeholder' => wc_format_localized_price( 0 ),
 						'description' => __( 'Percentage commission.', 'multivendorx' ),
-						// 'data_type'   => 'percent' === $coupon->get_discount_type( 'edit' ) ? 'decimal' : 'price',
 						'desc_tip'    => true,
 						'value'       => $product_percentage_commission ?? '',
 					)
@@ -450,9 +427,8 @@ class Admin {
      * Save commission field in variations
      *
      * @param int $variation_id Variation ID.
-     * @param int $i Variation index.
      */
-    public function save_commission_field_variations( $variation_id, $i ) {
+    public function save_commission_field_variations( $variation_id ) {
         $fixed_commissions      = filter_input( INPUT_POST, 'variable_product_fixed_commission', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
         $percentage_commissions = filter_input( INPUT_POST, 'variable_product_percentage_commission', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 

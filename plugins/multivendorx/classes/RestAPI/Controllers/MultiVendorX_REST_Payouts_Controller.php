@@ -81,33 +81,30 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
     }
 
     /**
-     * Get a collection of items.
+     * Check if the current user can get a collection of items.
      *
-     * @param object $request Full details about the request.
+     * @return bool True if the user has permission, false otherwise.
      */
-    public function get_items_permissions_check( $request ) {
-        // return current_user_can( 'read' );
-        return true;
+    public function get_items_permissions_check() {
+        return current_user_can( 'read' );
     }
 
     /**
-     * Create a single item.
+     * Check if the current user can create a single item.
      *
-     * @param object $request Full details about the request.
+     * @return bool True if the user has permission, false otherwise.
      */
-    public function create_item_permissions_check( $request ) {
-        // return current_user_can( 'manage_options' );
-        return true;
+    public function create_item_permissions_check() {
+        return current_user_can( 'manage_options' );
     }
 
     /**
-     * Update a single item.
+     * Check if the current user can update a single item.
      *
-     * @param object $request Full details about the request.
+     * @return bool True if the user has permission, false otherwise.
      */
-    public function update_item_permissions_check( $request ) {
-        // return current_user_can('manage_options');
-        return true;
+    public function update_item_permissions_check() {
+        return current_user_can( 'manage_options' );
     }
 
     /**

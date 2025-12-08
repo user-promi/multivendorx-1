@@ -140,7 +140,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             $end_date           = $request->get_param( 'end_date' );
             $transaction_type   = $request->get_param( 'transaction_type' );
             $transaction_status = $request->get_param( 'transaction_status' );
-            $orderBy            = sanitize_text_field( $request->get_param( 'orderBy' ) );
+            $order_by           = sanitize_text_field( $request->get_param( 'orderBy' ) );
             $order              = strtoupper( sanitize_text_field( $request->get_param( 'order' ) ) );
 
             if ( $start_date ) {
@@ -185,8 +185,8 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             $args['limit']  = $limit;
             $args['offset'] = $offset;
 
-            if ( ! empty( $orderBy ) ) {
-                $args['orderBy'] = $orderBy;
+            if ( ! empty( $order_by ) ) {
+                $args['orderBy'] = $order_by;
             }
             if ( in_array( $order, array( 'ASC', 'DESC' ), true ) ) {
                 $args['order'] = $order;
@@ -216,19 +216,19 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
                 $transactions
             );
 
-            $countArgs = array(
+            $count_args = array(
                 'count' => true,
             );
 
             if ( $store_id ) {
-                $countArgs['store_id'] = $store_id;
+                $count_args['store_id'] = $store_id;
             }
 
-            $all       = Transaction::get_transaction_information( $countArgs );
-            $completed = Transaction::get_transaction_information( array_merge( $countArgs, array( 'status' => 'Completed' ) ) );
-            $processed = Transaction::get_transaction_information( array_merge( $countArgs, array( 'status' => 'Processed' ) ) );
-            $upcoming  = Transaction::get_transaction_information( array_merge( $countArgs, array( 'status' => 'Upcoming' ) ) );
-            $failed    = Transaction::get_transaction_information( array_merge( $countArgs, array( 'status' => 'Failed' ) ) );
+            $all       = Transaction::get_transaction_information( $count_args );
+            $completed = Transaction::get_transaction_information( array_merge( $count_args, array( 'status' => 'Completed' ) ) );
+            $processed = Transaction::get_transaction_information( array_merge( $count_args, array( 'status' => 'Processed' ) ) );
+            $upcoming  = Transaction::get_transaction_information( array_merge( $count_args, array( 'status' => 'Upcoming' ) ) );
+            $failed    = Transaction::get_transaction_information( array_merge( $count_args, array( 'status' => 'Failed' ) ) );
 
             $response = array(
                 'transaction' => $formatted,
@@ -287,15 +287,13 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         }
 
         // If specific IDs are requested (selected rows from bulk action).
-        if ( ! empty( $ids ) ) {
-            $args['id__in'] = array_map( 'intval', explode( ',', $ids ) );
-        }
+        if ( ! empty( $ids ) ) { $args['id__in'] = array_map( 'intval', explode( ',', $ids ) ); }
+
         // If pagination parameters are provided (current page export from bulk action).
         elseif ( ! empty( $page ) && ! empty( $per_page ) ) {
             $args['limit']  = intval( $per_page );
             $args['offset'] = ( intval( $page ) - 1 ) * intval( $per_page );
         }
-        // Otherwise, export ALL data with current filters (no pagination - from Export All button).
 
         // Fetch transactions.
         $transactions = Transaction::get_transaction_information( $args );

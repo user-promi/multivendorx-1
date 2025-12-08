@@ -85,23 +85,26 @@ class Module {
     /**
      * Get a class instance from the container.
      *
-     * @param string $class The class name.
+     * @param string $class_name The class name.
      */
-    public function __get( $class ) {
-        if ( array_key_exists( $class, $this->container ) ) {
-            return $this->container[ $class ];
+    public function __get( $class_name ) {
+        if ( array_key_exists( $class_name, $this->container ) ) {
+            return $this->container[ $class_name ];
         }
-        return new \WP_Error( sprintf( 'Call to unknown class %s.', $class ) );
+
+        return new \WP_Error(
+            sprintf( 'Call to unknown class %s.', $class_name )
+        );
     }
 
     /**
      * Set a class instance in the container.
      *
-     * @param string $class The class name.
-     * @param mixed  $value The class instance.
+     * @param string $class_name The class name.
+     * @param mixed  $value      The class instance.
      */
-    public function __set( $class, $value ) {
-        $this->container[ $class ] = $value;
+    public function __set( $class_name, $value ) {
+        $this->container[ $class_name ] = $value;
     }
 
     /**

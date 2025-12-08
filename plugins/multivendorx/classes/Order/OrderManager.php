@@ -76,16 +76,23 @@ class OrderManager {
 
     /**
      * Get array of suborders if available.
-     * Return array of suborder as WC_order object.
-     * Or Array of suborder's id if $object is false.
+     * Return array of suborder as WC_Order object or IDs.
      *
-     * @param   int | \WC_Order $order Order id or object.
-     * @param   array           $args Arguments for query.
-     * @param   boolean         $object Return object or id.
-     * @return  object array of suborders.
+     * @param int|\WC_Order $order Order ID or object.
+     * @param array         $args  Arguments for query.
+     * @param bool          $return_objects Return objects or IDs.
+     * @return array
      */
-    public function get_suborders( $order, $args = array(), $object = true ) {
-        return wc_get_orders( array( 'parent' => is_numeric( $order ) ? $order : $order->get_id() ) );
+    public function get_suborders( $order, $args = array(), $return_objects = true ) {
+        $query_args = array_merge(
+            array(
+                'parent' => is_numeric( $order ) ? $order : $order->get_id(),
+                'return' => $return_objects ? 'objects' : 'ids',
+            ),
+            $args
+        );
+
+        return wc_get_orders( $query_args );
     }
 
     /**
@@ -411,9 +418,6 @@ class OrderManager {
                 $item = new \WC_Order_Item_Coupon();
                 $item->set_props(
                     array(
-                        // 'code'         => $coupon->get_code(),
-                        // 'discount'     => $coupon->get_discount_amount(),
-                        // 'discount_tax' => $coupon->get_discount_tax(),
                         'code'         => $coupon_item->get_code(),
                         'discount'     => $coupon_item->get_discount(),
                         'discount_tax' => $coupon_item->get_discount_tax(),

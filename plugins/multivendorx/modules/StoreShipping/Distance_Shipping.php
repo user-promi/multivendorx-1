@@ -75,7 +75,7 @@ class Distance_Shipping extends \WC_Shipping_Method {
         if ( empty( $package['contents'] ) ) {
 			return;
         }
-        $products              = $package['contents'];
+        $products                       = $package['contents'];
         $multivendorx_user_location_lat = $package[ Utill::USER_SETTINGS_KEYS['multivendorx_user_location_lat'] ] ?? '';
         $multivendorx_user_location_lng = $package[ Utill::USER_SETTINGS_KEYS['multivendorx_user_location_lng'] ] ?? '';
 

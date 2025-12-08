@@ -165,12 +165,12 @@ class CommissionManager {
             if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
                 MultiVendorX()->util->log(
                     "========= MULTIVENDORX ERROR =========\n" .
-                    "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                    "Error: " . $wpdb->last_error . "\n" .
-                    "Last Query: " . $wpdb->last_query . "\n" .
-                    "File: " . __FILE__ . "\n" .
-                    "Line: " . __LINE__ . "\n" .
-                    "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
+                    'Timestamp: ' . current_time( 'mysql' ) . "\n" .
+                    'Error: ' . $wpdb->last_error . "\n" .
+                    'Last Query: ' . $wpdb->last_query . "\n" .
+                    'File: ' . __FILE__ . "\n" .
+                    'Line: ' . __LINE__ . "\n" .
+                    'Stack Trace: ' . wp_debug_backtrace_summary() . "\n" .
                     "=========================================\n\n"
                 );
             }
@@ -587,7 +587,7 @@ class CommissionManager {
         global $wpdb;
         $commission_id = $store_order->get_meta( Utill::ORDER_META_SETTINGS['commission_id'], true );
         $store_id      = $store_order->get_meta( Utill::POST_META_SETTINGS['store_id'], true );
-        $store        = Store::get_store_by_id( $store_id );
+        $store         = Store::get_store_by_id( $store_id );
 
         if ( $commission_id ) {
             $commission_amount   = 0;
@@ -725,16 +725,16 @@ class CommissionManager {
             if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
                 MultiVendorX()->util->log(
                     "========= MULTIVENDORX ERROR =========\n" .
-                    "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                    "Error: " . $wpdb->last_error . "\n" .
-                    "Last Query: " . $wpdb->last_query . "\n" .
-                    "File: " . __FILE__ . "\n" .
-                    "Line: " . __LINE__ . "\n" .
-                    "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
+                    'Timestamp: ' . current_time( 'mysql' ) . "\n" .
+                    'Error: ' . $wpdb->last_error . "\n" .
+                    'Last Query: ' . $wpdb->last_query . "\n" .
+                    'File: ' . __FILE__ . "\n" .
+                    'Line: ' . __LINE__ . "\n" .
+                    'Stack Trace: ' . wp_debug_backtrace_summary() . "\n" .
                     "=========================================\n\n"
                 );
             }
-            
+
             return $commission_id;
         }
     }

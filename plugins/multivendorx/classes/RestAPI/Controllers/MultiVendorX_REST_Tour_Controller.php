@@ -81,7 +81,7 @@ class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
      * @param mixed $request Request data.
      */
     public function get_items_permissions_check( $request ) {
-        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
+        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
     /**

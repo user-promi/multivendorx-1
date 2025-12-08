@@ -94,11 +94,11 @@ class Utill {
     );
 
     const WOO_SETTINGS = array(
-        'taxes'                     => 'woocommerce_calc_taxes',
-        'generate_password'         => 'woocommerce_registration_generate_password',
-        'default_country'           => 'woocommerce_default_country',
-        'weight_unit'               => 'woocommerce_weight_unit',
-        'dimension_unit'            => 'woocommerce_dimension_unit',
+        'taxes'             => 'woocommerce_calc_taxes',
+        'generate_password' => 'woocommerce_registration_generate_password',
+        'default_country'   => 'woocommerce_default_country',
+        'weight_unit'       => 'woocommerce_weight_unit',
+        'dimension_unit'    => 'woocommerce_dimension_unit',
     );
 
     const ORDER_META_SETTINGS = array(
@@ -129,16 +129,16 @@ class Utill {
     );
 
     const POST_META_SETTINGS = array(
-        'store_id'                       => 'multivendorx_store_id',
-        'fixed_commission'               => 'multivendorx_product_fixed_commission',
-        'percentage_commission'          => 'multivendorx_product_percentage_commission',
-        'variable_product_percentage'    => 'multivendorx_variable_product_percentage_commission',
-        'variable_product_fixed'         => 'multivendorx_variable_product_fixed_commission',
-        'shipping_policy'                => 'multivendorx_shipping_policy',
-        'refund_policy'                  => 'multivendorx_refund_policy',
-        'cancellation_policy'            => 'multivendorx_cancellation_policy',
-        'announcement_stores'            => 'multivendorx_announcement_stores',
-        'announcement_url'               => 'multivendorx_announcement_url',
+        'store_id'                    => 'multivendorx_store_id',
+        'fixed_commission'            => 'multivendorx_product_fixed_commission',
+        'percentage_commission'       => 'multivendorx_product_percentage_commission',
+        'variable_product_percentage' => 'multivendorx_variable_product_percentage_commission',
+        'variable_product_fixed'      => 'multivendorx_variable_product_fixed_commission',
+        'shipping_policy'             => 'multivendorx_shipping_policy',
+        'refund_policy'               => 'multivendorx_refund_policy',
+        'cancellation_policy'         => 'multivendorx_cancellation_policy',
+        'announcement_stores'         => 'multivendorx_announcement_stores',
+        'announcement_url'            => 'multivendorx_announcement_url',
     );
 
     const STORE_SETTINGS_KEYS = array(
@@ -189,17 +189,17 @@ class Utill {
         'shipping_options'           => 'shipping_options',
     );
 
-    const USER_SETTINGS_KEYS    = array(
+    const USER_SETTINGS_KEYS = array(
         'active_store'                   => 'multivendorx_active_store',
         'first_name'                     => 'first_name',
         'last_name'                      => 'last_name',
         'social_verification'            => 'social_verification_connections',
         'following_stores'               => 'multivendorx_following_stores',
         'multivendorx_user_location_lat' => 'multivendorx_user_location_lat',
-        'multivendorx_user_location_lat' => 'multivendorx_user_location_lng',
+        'multivendorx_user_location_lng' => 'multivendorx_user_location_lng',
     );
 
-    const POST_TYPES            = array(
+    const POST_TYPES = array(
         'announcement' => 'multivendorx_an',
         'knowledge'    => 'multivendorx_kb',
     );
@@ -311,10 +311,6 @@ class Utill {
      */
     public static function is_store_dashboard() {
         $dashboard_page = (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' );
-        // if (is_page($dashboard_page)) {
-        // $has_shortcode = has_shortcode(get_post($dashboard_page)->post_content, 'multivendorx_store_dashboard');
-        // return $has_shortcode;
-        // }
         return is_page( $dashboard_page );
     }
 
@@ -325,10 +321,6 @@ class Utill {
      */
     public static function is_store_registration_page() {
         $registration_page = (int) MultiVendorX()->setting->get_setting( 'store_registration_page' );
-        // if (is_page($registration_page)) {
-        // $has_shortcode = has_shortcode(get_post($registration_page)->post_content, 'multivendorx_store_registration');
-        // return $has_shortcode;
-        // }
         return is_page( $registration_page );
     }
 }

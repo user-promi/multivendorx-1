@@ -121,7 +121,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
-    
+
             // Log the error
             MultiVendorX()->util->log(
                 'MVX REST Error: Code=' . $error->get_error_code() .
@@ -130,28 +130,28 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
             );
             return $error;
         }
-    
+
         try {
-    
+
             // Pagination
             $limit  = max( intval( $request->get_param( 'row' ) ), 10 );
             $page   = max( intval( $request->get_param( 'page' ) ), 1 );
             $offset = ( $page - 1 ) * $limit;
-    
+
             $count_param  = $request->get_param( 'count' );
             $status_param = $request->get_param( 'status' );
             $searchField  = sanitize_text_field( $request->get_param( 'searchField' ) );
-    
+
             // Date filter cleanup
             $start_date_raw = sanitize_text_field( $request->get_param( 'startDate' ) );
             $end_date_raw   = sanitize_text_field( $request->get_param( 'endDate' ) );
-    
+
             $start_timestamp = ! empty( $start_date_raw ) ? strtotime( preg_replace( '/\.\d+Z?$/', '', str_replace( 'T', ' ', $start_date_raw ) ) ) : false;
-            $end_timestamp   = ! empty( $end_date_raw )   ? strtotime( preg_replace( '/\.\d+Z?$/', '', str_replace( 'T', ' ', $end_date_raw ) ) ) : false;
-    
+            $end_timestamp   = ! empty( $end_date_raw ) ? strtotime( preg_replace( '/\.\d+Z?$/', '', str_replace( 'T', ' ', $end_date_raw ) ) ) : false;
+
             $start_date = $start_timestamp ? gmdate( 'Y-m-d 00:00:00', $start_timestamp ) : '';
-            $end_date   = $end_timestamp   ? gmdate( 'Y-m-d 23:59:59', $end_timestamp ) : '';
-    
+            $end_date   = $end_timestamp ? gmdate( 'Y-m-d 23:59:59', $end_timestamp ) : '';
+
             /**
              * COUNT ONLY
              */
@@ -166,7 +166,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
                 );
                 return rest_ensure_response( count( $posts ) );
             }
-    
+
             /**
              * MAIN QUERY
              */
@@ -178,7 +178,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
                 'orderby'        => 'date',
                 'order'          => 'DESC',
             );
-    
+
             // Date filter
             if ( $start_date && $end_date ) {
                 $query_args['date_query'] = array(
@@ -189,15 +189,15 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
                     ),
                 );
             }
-    
+
             // Search filter
             if ( ! empty( $searchField ) ) {
                 $query_args['s'] = $searchField;
             }
-    
+
             $posts = get_posts( $query_args );
             $items = array();
-    
+
             foreach ( $posts as $post ) {
                 $items[] = array(
                     'id'      => $post->ID,
@@ -207,7 +207,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
                     'status'  => $post->post_status,
                 );
             }
-    
+
             /**
              * COUNTS (GLOBAL)
              * Optimized counter function
@@ -225,7 +225,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
                 wp_reset_postdata();
                 return isset( $q->found_posts ) ? intval( $q->found_posts ) : 0;
             };
-    
+
             return rest_ensure_response(
                 array(
                     'items'   => $items,
@@ -235,19 +235,17 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
                     'draft'   => $counter( 'draft' ),
                 )
             );
-    
         } catch ( \Exception $e ) {
-    
             MultiVendorX()->util->log(
                 'MULTIVENDORX REST Exception: Message=' . $e->getMessage() .
                 '; File=' . $e->getFile() .
                 '; Line=' . $e->getLine() . "\n\n"
             );
-    
+
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
     }
-    
+
 
     /**
      * Create a knowledge base article.
@@ -260,24 +258,24 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
-    
+
             // Log the error
             MultiVendorX()->util->log(
                 'MVX REST Error: Code=' . $error->get_error_code() .
                 '; Message=' . $error->get_error_message() .
                 '; Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
             );
-    
+
             return $error;
         }
-    
+
         try {
-    
+
             // Sanitize inputs (no logic change)
             $title   = sanitize_text_field( $request->get_param( 'title' ) );
             $content = wp_kses_post( $request->get_param( 'content' ) );
             $status  = sanitize_key( $request->get_param( 'status' ) ?? 'draft' );
-    
+
             // Insert post
             $post_id = wp_insert_post(
                 array(
@@ -288,7 +286,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
                 ),
                 true
             );
-    
+
             // Error handling
             if ( is_wp_error( $post_id ) ) {
                 return rest_ensure_response(
@@ -298,7 +296,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
                     )
                 );
             }
-    
+
             // Response
             return rest_ensure_response(
                 array(
@@ -309,15 +307,13 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
                     'status'  => $status,
                 )
             );
-    
         } catch ( \Exception $e ) {
-    
             MultiVendorX()->util->log(
                 'MULTIVENDORX REST Exception: Message=' . $e->getMessage() .
                 '; File=' . $e->getFile() .
                 '; Line=' . $e->getLine() . "\n\n"
             );
-    
+
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
     }
@@ -333,27 +329,26 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
-    
+
             MultiVendorX()->util->log(
                 'MVX REST Error: Code=' . $error->get_error_code() .
                 '; Message=' . $error->get_error_message() .
                 '; Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
             );
-    
+
             return $error;
         }
-    
+
         try {
             $data = $request->get_params();
-    
+
             /** -----------------------------------------
              * BULK UPDATE
              * ----------------------------------------- */
             if ( ! empty( $data['bulk'] ) && ! empty( $data['ids'] ) && ! empty( $data['action'] ) ) {
-    
                 $action = sanitize_key( $data['action'] );
                 $ids    = array_map( 'absint', $data['ids'] );
-    
+
                 foreach ( $ids as $id ) {
                     switch ( $action ) {
                         case 'publish':
@@ -365,13 +360,13 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
                                 )
                             );
                             break;
-    
+
                         case 'delete':
                             wp_delete_post( $id, true );
                             break;
                     }
                 }
-    
+
                 return rest_ensure_response(
                     array(
                         'success' => true,
@@ -379,14 +374,14 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
                     )
                 );
             }
-    
+
             /** -----------------------------------------
              * SINGLE UPDATE
              * ----------------------------------------- */
             $post_id = absint( $request->get_param( 'id' ) );
             $post    = get_post( $post_id );
-    
-            //FIXED: your previous condition was WRONG
+
+            // FIXED: your previous condition was WRONG
             if ( ! $post || $post->post_type !== Utill::POST_TYPES['knowledge'] ) {
                 return new \WP_Error(
                     'not_found',
@@ -394,16 +389,16 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
                     array( 'status' => 404 )
                 );
             }
-    
+
             // Prepare sanitized update data
             $new_title   = isset( $data['title'] ) ? sanitize_text_field( $data['title'] ) : $post->post_title;
             $new_content = isset( $data['content'] ) ? wp_kses_post( $data['content'] ) : $post->post_content;
-    
+
             $valid_statuses = array( 'publish', 'pending', 'draft' );
             $new_status     = isset( $data['status'] ) && in_array( $data['status'], $valid_statuses, true )
                                 ? $data['status']
                                 : $post->post_status;
-    
+
             $updated_id = wp_update_post(
                 array(
                     'ID'           => $post_id,
@@ -413,7 +408,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
                 ),
                 true
             );
-    
+
             if ( is_wp_error( $updated_id ) ) {
                 return rest_ensure_response(
                     array(
@@ -422,7 +417,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
                     )
                 );
             }
-    
+
             return rest_ensure_response(
                 array(
                     'success' => true,
@@ -432,15 +427,13 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
                     'status'  => $new_status,
                 )
             );
-    
         } catch ( \Exception $e ) {
-    
             MultiVendorX()->util->log(
                 'MULTIVENDORX REST Exception: Message=' . $e->getMessage() .
                 '; File=' . $e->getFile() .
                 '; Line=' . $e->getLine() . "\n\n"
             );
-    
+
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
     }
@@ -461,12 +454,12 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
                 array( 'status' => 403 )
             );
         }
-    
+
         // Get post ID
-        $id = absint( $request->get_param( 'id' ) );
+        $id   = absint( $request->get_param( 'id' ) );
         $post = get_post( $id );
-    
-        //FIXED your wrong condition
+
+        // FIXED your wrong condition
         // Previous: "Utill::POST_TYPES['knowledge'] !== ! $post || $post->post_type"
         // That was invalid & always wrong.
         if ( ! $post || $post->post_type !== Utill::POST_TYPES['knowledge'] ) {
@@ -476,7 +469,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
                 array( 'status' => 404 )
             );
         }
-    
+
         return rest_ensure_response(
             array(
                 'id'      => $id,
@@ -499,36 +492,40 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
             return new \WP_Error(
                 'invalid_nonce',
                 __( 'Invalid nonce', 'multivendorx' ),
-                [ 'status' => 403 ]
+                array( 'status' => 403 )
             );
         }
-    
+
         $post_id = absint( $request->get_param( 'id' ) );
         $post    = get_post( $post_id );
-    
+
         // Validate post exists & is correct post type
         if ( ! $post || $post->post_type !== Utill::POST_TYPES['knowledge'] ) {
             return new \WP_Error(
                 'not_found',
                 __( 'Knowledge Base article not found', 'multivendorx' ),
-                [ 'status' => 404 ]
+                array( 'status' => 404 )
             );
         }
-    
+
         // Delete the post permanently
         $deleted = wp_delete_post( $post_id, true );
-    
+
         if ( ! $deleted ) {
-            return rest_ensure_response([
-                'success' => false,
-                'message' => __( 'Failed to delete the Knowledge Base article', 'multivendorx' ),
-            ]);
+            return rest_ensure_response(
+                array(
+					'success' => false,
+					'message' => __( 'Failed to delete the Knowledge Base article', 'multivendorx' ),
+                )
+            );
         }
-    
-        return rest_ensure_response([
-            'success' => true,
-            'id'      => $post_id,
-            'message' => __( 'Knowledge Base article deleted successfully', 'multivendorx' ),
-        ]);
+
+        return rest_ensure_response(
+            array(
+				'success' => true,
+				'id'      => $post_id,
+				'message' => __( 'Knowledge Base article deleted successfully', 'multivendorx' ),
+            )
+        );
     }
 }

@@ -26,9 +26,9 @@ class Util {
 	 */
 	public static function create_report_abuse( $data = array() ) {
 		global $wpdb;
-	
+
 		$table = $wpdb->prefix . Utill::TABLES['report_abuse'];
-	
+
 		// Sanitize and prepare data.
 		$insert_data = array(
 			'store_id'   => isset( $data['store_id'] ) ? intval( $data['store_id'] ) : 0,
@@ -37,31 +37,31 @@ class Util {
 			'email'      => isset( $data['email'] ) ? sanitize_email( $data['email'] ) : '',
 			'message'    => isset( $data['message'] ) ? sanitize_textarea_field( $data['message'] ) : '',
 		);
-	
+
 		// Insert data.
 		$inserted = $wpdb->insert(
 			$table,
 			$insert_data,
 			array( '%d', '%d', '%s', '%s', '%s' )
 		);
-	
+
 		if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
 			MultiVendorX()->util->log(
 				"========= MULTIVENDORX ERROR =========\n" .
-				"Timestamp: " . current_time( 'mysql' ) . "\n" .
-				"Error: " . $wpdb->last_error . "\n" .
-				"Last Query: " . $wpdb->last_query . "\n" .
-				"File: " . __FILE__ . "\n" .
-				"Line: " . __LINE__ . "\n" .
-				"Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
+				'Timestamp: ' . current_time( 'mysql' ) . "\n" .
+				'Error: ' . $wpdb->last_error . "\n" .
+				'Last Query: ' . $wpdb->last_query . "\n" .
+				'File: ' . __FILE__ . "\n" .
+				'Line: ' . __LINE__ . "\n" .
+				'Stack Trace: ' . wp_debug_backtrace_summary() . "\n" .
 				"=========================================\n\n"
 			);
 		}
-	
+
 		// Return result AFTER logging
 		return $inserted ? $wpdb->insert_id : false;
 	}
-	
+
 
 	/**
 	 * Get report abuse information.
@@ -123,12 +123,12 @@ class Util {
 		if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
 			MultiVendorX()->util->log(
 				"========= MULTIVENDORX ERROR =========\n" .
-				"Timestamp: " . current_time( 'mysql' ) . "\n" .
-				"Error: " . $wpdb->last_error . "\n" .
-				"Last Query: " . $wpdb->last_query . "\n" .
-				"File: " . __FILE__ . "\n" .
-				"Line: " . __LINE__ . "\n" .
-				"Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
+				'Timestamp: ' . current_time( 'mysql' ) . "\n" .
+				'Error: ' . $wpdb->last_error . "\n" .
+				'Last Query: ' . $wpdb->last_query . "\n" .
+				'File: ' . __FILE__ . "\n" .
+				'Line: ' . __LINE__ . "\n" .
+				'Stack Trace: ' . wp_debug_backtrace_summary() . "\n" .
 				"=========================================\n\n"
 			);
 		}
@@ -160,12 +160,12 @@ class Util {
 		if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
 			MultiVendorX()->util->log(
 				"========= MULTIVENDORX ERROR =========\n" .
-				"Timestamp: " . current_time( 'mysql' ) . "\n" .
-				"Error: " . $wpdb->last_error . "\n" .
-				"Last Query: " . $wpdb->last_query . "\n" .
-				"File: " . __FILE__ . "\n" .
-				"Line: " . __LINE__ . "\n" .
-				"Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
+				'Timestamp: ' . current_time( 'mysql' ) . "\n" .
+				'Error: ' . $wpdb->last_error . "\n" .
+				'Last Query: ' . $wpdb->last_query . "\n" .
+				'File: ' . __FILE__ . "\n" .
+				'Line: ' . __LINE__ . "\n" .
+				'Stack Trace: ' . wp_debug_backtrace_summary() . "\n" .
 				"=========================================\n\n"
 			);
 		}

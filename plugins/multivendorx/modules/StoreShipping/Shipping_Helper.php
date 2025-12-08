@@ -41,11 +41,11 @@ class Shipping_Helper {
 
             if ( ! isset( $new_packages[ $store_id ] ) ) {
                 $new_packages[ $store_id ] = array(
-                    'contents'              => array(),
-                    'contents_cost'         => 0,
-                    'applied_coupons'       => WC()->cart->get_applied_coupons(),
-                    'store_id'              => $store_id, // Store ID.
-                    'destination'           => array(
+                    'contents'                       => array(),
+                    'contents_cost'                  => 0,
+                    'applied_coupons'                => WC()->cart->get_applied_coupons(),
+                    'store_id'                       => $store_id, // Store ID.
+                    'destination'                    => array(
                         'country'   => WC()->customer->get_shipping_country(),
                         'state'     => WC()->customer->get_shipping_state(),
                         'postcode'  => WC()->customer->get_shipping_postcode(),

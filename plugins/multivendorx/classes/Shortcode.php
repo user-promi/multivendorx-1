@@ -42,28 +42,26 @@ class Shortcode {
         FrontendScripts::enqueue_style( 'multivendorx-dashboard-style' );
         FrontendScripts::enqueue_style( 'multivendorx-store-product-style' );
 
-        // if (Utill::is_store_dashboard()) {
-            wp_deregister_style('wc-blocks-style');
+        wp_deregister_style( 'wc-blocks-style' );
 
-            wp_enqueue_script( 'wp-element' );
-            wp_enqueue_media();
+        wp_enqueue_script( 'wp-element' );
+        wp_enqueue_media();
 
-            FrontendScripts::enqueue_script( 'multivendorx-store-dashboard-script' );
-            // FrontendScripts::localize_scripts('multivendorx-store-dashboard-script');
+        FrontendScripts::enqueue_script( 'multivendorx-store-dashboard-script' );
 
-		?>
-            <style>
-                <?php
-                echo wp_strip_all_tags( MultiVendorX()->setting->get_setting( 'custom_css_product_page', '' ) );
-                ?>
-            </style>
-            <?php
-			// }
+        $custom_css = MultiVendorX()->setting->get_setting( 'custom_css_product_page', '' );
 
-			if ( Utill::is_store_registration_page() ) {
-				FrontendScripts::enqueue_script( 'multivendorx-registration-form-script' );
-				FrontendScripts::localize_scripts( 'multivendorx-registration-form-script' );
-			}
+        if ( ! empty( $custom_css ) ) {
+            wp_add_inline_style(
+                'multivendorx-dashboard-style',
+                wp_strip_all_tags( $custom_css )
+            );
+        }
+
+        if ( Utill::is_store_registration_page() ) {
+            FrontendScripts::enqueue_script( 'multivendorx-registration-form-script' );
+            FrontendScripts::localize_scripts( 'multivendorx-registration-form-script' );
+        }
     }
 
     /**

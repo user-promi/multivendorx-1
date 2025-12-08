@@ -277,7 +277,7 @@ class Rest {
      * @param string $post_type Post type.
      */
     public function give_permission( $permission, $context, $object_id, $post_type ) {
-        $user_id      = get_current_user_id();
+        $user_id = get_current_user_id();
 
         // Fetch custom user meta.
         $active_store = get_user_meta( $user_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
