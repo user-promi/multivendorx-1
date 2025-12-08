@@ -10,7 +10,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { formatCurrency } from '../services/commonFunction';
 import AddProductCom from "./add-products";
-import SmpvProducts from "./smpv-products";
+import SpmvProducts from "./spmv-products";
 
 type ProductRow = {
     id: number;
@@ -728,7 +728,7 @@ const AllProduct: React.FC = () => {
         )}
 
         {isAddProduct && <AddProductCom />}
-        {isSpmvOn && <SmpvProducts />}
+        {isSpmvOn && <SpmvProducts />}
         </>
     );
 };
