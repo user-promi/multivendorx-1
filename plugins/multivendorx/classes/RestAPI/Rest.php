@@ -18,6 +18,7 @@ use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Transaction_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Reports_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Tour_Controller;
 use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Logs_Controller;
+use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_AI_Controller;
 
 use MultiVendorX\Store\Store;
 use MultiVendorX\Commission\CommissionUtil;
@@ -449,6 +450,7 @@ class Rest {
             'notifications' => new MultiVendorX_REST_Notifications_Controller(),
             'tour'          => new MultiVendorX_REST_Tour_Controller(),
             'logs'          => new MultiVendorX_REST_Logs_Controller(),
+            'ai_assistant'  => new MultiVendorX_REST_AI_Controller(),
         );
     }
 
