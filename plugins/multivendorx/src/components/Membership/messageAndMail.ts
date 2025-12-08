@@ -2,72 +2,54 @@ import { __ } from '@wordpress/i18n';
 
 export default {
     id: 'payment-membership-message',
-    priority: 4,
-    name: __( 'Database tools', 'multivendorx' ),
+    priority: 1,
+    name: __('Basic Plan Details', 'multivendorx'),
     desc: __(
         'Site errors and events are logged for easy troubleshooting.',
         'multivendorx'
     ),
     icon: 'adminlib-database',
     submitUrl: 'settings',
-    modal: [     
-        {
-            key: 'transients',
-            type: 'button',
-            name:__('Clear transients', 'multivendorx'),
-            label: __( 'MultivendorX Vendors Transients', 'multivendorx' ),
-            desc: __(
-                'This button clears all vendor dashboards transient cache',
-                'multivendorx'
-            ),
-        },
-        {
-            key: 'visitor',
-            type: 'button',
-            name: __( 'Reset database', 'multivendorx' ),
-            label: __( 'Reset visitors Stats Table', 'multivendorx' ),
-            desc: __(
-                'Use this tool to clear all the table data of MultivendorX visitors stats',
-                'multivendorx'
-            ),
-        },
-        {
-            key: 'migrate_order',
-            type: 'button',
-            name: __( 'Order migrate', 'multivendorx' ),
-            label: __( 'Regenerate suborders', 'multivendorx' ),
-            desc: __(
-                'With this tool, you can create missing sub orders',
-                'multivendorx'
-            ),
-        },
-
-        {
-            key: 'default_pages',
-            type: 'button',
-            name: __( 'Create default MultiVendorX Page', 'multivendorx' ),
-            label: __( 'MultiVendorX page', 'multivendorx' ),
-            desc: __(
-                'This tool will install all the missing MultiVendorX pages. Pages already defined and set up will not be replaced',
-                'multivendorx'
-            ),
-            apilink: "status",
-        },
-
-        {
-            key: 'separator_content',
-            type: 'section',
-            wrapperClass: 'divider-wrapper color-red',
-            hint: __("Danger zone", 'multivendorx'),
-            desc: __('', 'multivendorx')
-        },
-
+    modal: [
         {
             key: 'clear_notifications',
-            type: 'number',
-            wrapperClass: 'red-text',
-            label: __( 'Clear notifications', 'multivendorx' ),
+            type: 'text',
+            label: __('Plan Name', 'multivendorx'),
         },
-        
+        {
+            key: 'tinymce_api_section',
+            type: 'text',
+            label: __('Plan Description', 'multivendorx'),
+            desc: __(
+                'Describe the benefits and features of this plan',
+                'multivendorx'
+            ),
+        },
+        {
+            key: 'enable_franchise',
+            label: __('Plan Status', 'multivendorx'),
+            desc: __('Plan is active', 'multivendorx'),
+            type: 'checkbox',
+            options: [
+                {
+                    key: 'enable_franchise',
+                    value: 'enable_franchise',
+                },
+            ],
+            look: 'toggle',
+        },
+        {
+            key: 'enable_franchise',
+            label: __('Mark as Recommended ', 'multivendorx'),
+            desc: __('Show highlight ribbon on this plan', 'multivendorx'),
+            type: 'checkbox',
+            options: [
+                {
+                    key: 'enable_franchise',
+                    value: 'enable_franchise',
+                },
+            ],
+            look: 'toggle',
+        },
     ],
 };
