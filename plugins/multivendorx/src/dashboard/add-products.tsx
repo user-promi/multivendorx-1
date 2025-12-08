@@ -50,42 +50,42 @@ const AddProduct = () => {
             });
     }, [productId]);
 
-    const [variants, setVariants] = useState([
-        {
-            id: 1,
-            name: 'Color',
-            values: [
-                'Red',
-                'Green',
-                'Blue',
-                'Red',
-                'Green',
-                'Blue',
-                'Red',
-                'Green',
-                'Blue',
-                'Red',
-                'Green',
-                'Blue',
-            ],
-            tempValue: '',
-            isEditing: false,
-        },
-        {
-            id: 2,
-            name: 'Size',
-            values: ['S', 'M', 'L', 'XL'],
-            tempValue: '',
-            isEditing: false,
-        },
-        {
-            id: 3,
-            name: 'Material',
-            values: ['Cotton', 'Silk'],
-            tempValue: '',
-            isEditing: false,
-        },
-    ]);
+    // const [variants, setVariants] = useState([
+    //     {
+    //         id: 1,
+    //         name: 'Color',
+    //         values: [
+    //             'Red',
+    //             'Green',
+    //             'Blue',
+    //             'Red',
+    //             'Green',
+    //             'Blue',
+    //             'Red',
+    //             'Green',
+    //             'Blue',
+    //             'Red',
+    //             'Green',
+    //             'Blue',
+    //         ],
+    //         tempValue: '',
+    //         isEditing: false,
+    //     },
+    //     {
+    //         id: 2,
+    //         name: 'Size',
+    //         values: ['S', 'M', 'L', 'XL'],
+    //         tempValue: '',
+    //         isEditing: false,
+    //     },
+    //     {
+    //         id: 3,
+    //         name: 'Material',
+    //         values: ['Cotton', 'Silk'],
+    //         tempValue: '',
+    //         isEditing: false,
+    //     },
+    // ]);
     const [AddAttribute, setAddAttribute] = useState(false);
     const [Addvariant, setAddvariant] = useState(false);
     const [showAddNew, setShowAddNew] = useState(false);
@@ -347,44 +347,44 @@ const AddProduct = () => {
     };
 
     // category end
-    useEffect(() => {
-        function handleClick(e) {
-            if (!wrapperRef.current) return;
+    // useEffect(() => {
+    //     function handleClick(e) {
+    //         if (!wrapperRef.current) return;
 
-            variants.forEach((v) => {
-                if (v.isEditing) {
-                    // If click is outside that variant -> save
-                    const el = document.getElementById(`variant-${v.id}`);
-                    if (el && !el.contains(e.target)) {
-                        finishEditing(v.id);
-                    }
-                }
-            });
-        }
+    //         variants.forEach((v) => {
+    //             if (v.isEditing) {
+    //                 // If click is outside that variant -> save
+    //                 const el = document.getElementById(`variant-${v.id}`);
+    //                 if (el && !el.contains(e.target)) {
+    //                     finishEditing(v.id);
+    //                 }
+    //             }
+    //         });
+    //     }
 
-        document.addEventListener('click', handleClick);
-        return () => document.removeEventListener('click', handleClick);
-    }, [variants]);
+    //     document.addEventListener('click', handleClick);
+    //     return () => document.removeEventListener('click', handleClick);
+    // }, [variants]);
 
-    const finishEditing = (id) => {
-        setVariants((prev) =>
-            prev.map((v) => {
-                if (v.id === id) {
-                    const cleanedValues = v.tempValue.trim()
-                        ? [...v.values, v.tempValue.trim()]
-                        : v.values;
+    // const finishEditing = (id) => {
+    //     setVariants((prev) =>
+    //         prev.map((v) => {
+    //             if (v.id === id) {
+    //                 const cleanedValues = v.tempValue.trim()
+    //                     ? [...v.values, v.tempValue.trim()]
+    //                     : v.values;
 
-                    return {
-                        ...v,
-                        values: cleanedValues,
-                        tempValue: '',
-                        isEditing: false,
-                    };
-                }
-                return v;
-            })
-        );
-    };
+    //                 return {
+    //                     ...v,
+    //                     values: cleanedValues,
+    //                     tempValue: '',
+    //                     isEditing: false,
+    //                 };
+    //             }
+    //             return v;
+    //         })
+    //     );
+    // };
 
     const toggleCard = (cardId) => {
         const body = document.querySelector(`#${cardId} .card-body`);
@@ -398,8 +398,8 @@ const AddProduct = () => {
 
     const typeOptions = [
         { label: 'Select product type', value: '' },
-        { label: 'Simple', value: 'simple' },
-        { label: 'Variable', value: 'variable' },
+        { label: 'Simple Product', value: 'simple' },
+        { label: 'Variable Product', value: 'variable' },
     ];
 
     const paymentOptions = [
@@ -450,6 +450,7 @@ const AddProduct = () => {
                 ...product,
                 images: imagePayload,
                 categories: finalCategories,
+                attributes: productAttributes,
                 meta_data: [
                     {
                         key: 'multivendorx_store_id',
@@ -569,62 +570,297 @@ const AddProduct = () => {
         frame.open();
     };
 
+    const [existingAttributes, setExistingAttributes] = useState([]);
+    const [existingAttributeTerms, setExistingAttributeTerms] = useState({});
+    const [selectedAttribute, setSelectedAttribute] = useState(null);
+
+    const [newAttributeName, setNewAttributeName] = useState('');
+
+    const [attributeValues, setAttributeValues] = useState([]);
+
+    useEffect(() => {
+        axios
+            .get(`${appLocalizer.apiUrl}/wc/v3/products/attributes`, {
+                headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            })
+            .then((res) => {
+                setExistingAttributes(res.data);
+            });
+    }, []);
+
+    useEffect(() => {
+        if (!selectedAttribute || selectedAttribute.value === 0) return;
+
+        axios
+            .get(
+                `${appLocalizer.apiUrl}/wc/v3/products/attributes/${selectedAttribute?.value}/terms`,
+                { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
+            )
+            .then((res) =>
+                setExistingAttributeTerms((prev) => ({
+                    ...prev,
+                    [selectedAttribute.value]: res.data.map((t) => t.name),
+                }))
+            );
+    }, [selectedAttribute]);
+
+    /* Save new attribute to WooCommerce */
+    const saveNewAttribute = () => {
+        if (!newAttributeName.trim()) return;
+
+        axios
+            .post(
+                `${appLocalizer.apiUrl}/wc/v3/products/attributes`,
+                { name: newAttributeName },
+                { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
+            )
+            .then((res) => {
+                setExistingAttributes((prev) => [...prev, res.data]);
+                setSelectedAttribute({
+                    label: res.data.name,
+                    value: res.data.id,
+                });
+                setNewAttributeName('');
+                setShowAddNew(false);
+            });
+    };
+
+    const [productAttributes, setProductAttributes] = useState([]);
+
+    const saveAttributeToList = () => {
+        let newItem;
+
+        if (selectedAttribute && selectedAttribute.value !== 0) {
+            // existing taxonomy attribute
+            newItem = {
+                id: selectedAttribute.value,
+                name: selectedAttribute.label,
+                options: attributeValues,
+                variation: true,
+                visible: true,
+            };
+        } else {
+            // custom attribute
+            newItem = {
+                id: 0,
+                name: newAttributeName,
+                options: attributeValues,
+                variation: true,
+                visible: true,
+            };
+        }
+
+        if (editingIndex !== null) {
+            // UPDATE
+            setProductAttributes((prev) => {
+                const copy = [...prev];
+                copy[editingIndex] = newItem;
+                return copy;
+            });
+        } else {
+            // ADD NEW
+            setProductAttributes((prev) => [...prev, newItem]);
+        }
+
+        setAddAttribute(false);
+        setSelectedAttribute(null);
+        setAttributeValues([]);
+        setShowAddNew(false);
+        setEditingIndex(null); // not editing
+    };
+
+    useEffect(() => {
+        if (!product) return;
+
+        if (product.attributes && product.attributes.length > 0) {
+            setProductAttributes(product.attributes);
+        }
+    }, [product]);
+
+    // for edit mode
+    const [editingIndex, setEditingIndex] = useState(null);
+
+    const openEditPopup = (attr, index) => {
+        setEditingIndex(index);
+
+        // find attribute from existing attributes list
+        const match = existingAttributes.find((a) => a.name === attr.name);
+
+        if (match) {
+            setSelectedAttribute({ label: match.name, value: match.id });
+            setShowAddNew(false);
+        } else {
+            // Custom user attribute
+            setSelectedAttribute(null);
+            setShowAddNew(true);
+            setNewAttributeName(attr.name);
+        }
+
+        setAttributeValues(attr.options || []);
+        setAddAttribute(true);
+    };
+
+    const [variations, setVariations] = useState([]);
+
+    useEffect(() => {
+        if (!product) return;
+
+        axios
+            .get(
+                `${appLocalizer.apiUrl}/wc/v3/products/${product?.id}/variations`,
+                { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
+            )
+            .then((res) => {
+                setVariations(res.data);
+            });
+    }, [product]);
+
+    const getVariationAttributes = (variation) => {
+        return variation?.attributes?.map((att) => ({
+            name: att.name,
+            value: att.option,
+        }));
+    };
+
+    const [editingVariation, setEditingVariation] = useState(null); // for edit mode
+    const [variant, setVariant] = useState({});
+
+    const handleAddVariant = () => {
+        setEditingVariation(null);
+
+        setVariant({});
+
+        setAddvariant(true);
+    };
+
+    const handleEditVariation = (v) => {
+        setEditingVariation(v.id);
+
+        setVariant(v);
+
+        setAddvariant(true);
+    };
+
+    const handleSaveVariant = async () => {
+        if (!product?.id) return;
+
+        const payload = {
+            ...variant,
+
+            // Woo expects this format:
+            attributes: variant.attributes?.map((a) => ({
+                id: a.id,
+                option: a.option,
+            })),
+
+            metadata: variant.metadata || {},
+        };
+
+        try {
+            let res;
+
+            if (editingVariation) {
+                res = await axios.put(
+                    `${appLocalizer.apiUrl}/wc/v3/products/${product.id}/variations/${editingVariation}`,
+                    payload,
+                    { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
+                );
+            } else {
+                // CREATE NEW VARIATION
+                res = await axios.post(
+                    `${appLocalizer.apiUrl}/wc/v3/products/${product.id}/variations`,
+                    payload,
+                    { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
+                );
+            }
+
+            // Update local list
+            setVariations((prev) => {
+                if (editingVariation) {
+                    return prev.map((v) =>
+                        v.id === editingVariation ? res.data : v
+                    );
+                }
+                return [...prev, res.data];
+            });
+
+            // Close popup
+            setAddvariant(false);
+            setEditingVariation(null);
+            setVariant({});
+        } catch (err) {
+            console.error('Variation save error:', err);
+        }
+    };
+
+    console.log('product', product);
+    console.log('variations', variations);
+    console.log('Variant', variant);
     return (
         <>
             <div className="page-title-wrapper">
                 <div className="page-title">
-                    <div className="title">{__("Add Product", "multivendorx")}</div>
+                    <div className="title">
+                        {__('Add Product', 'multivendorx')}
+                    </div>
 
                     <div className="des">
-                        {__("Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quas accusantium obcaecati labore nam quibusdam minus.", "multivendorx")}
+                        {__(
+                            'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quas accusantium obcaecati labore nam quibusdam minus.',
+                            'multivendorx'
+                        )}
                     </div>
                 </div>
                 <div className="buttons-wrapper">
-                    <button className="admin-btn btn-blue">{__("Draft", "multivendorx")}</button>
+                    <button className="admin-btn btn-blue">
+                        {__('Draft', 'multivendorx')}
+                    </button>
                     <button
                         className="admin-btn btn-purple-bg"
                         onClick={createProduct}
                     >
-                        {__("Publish", "multivendorx")}
+                        {__('Publish', 'multivendorx')}
                     </button>
                 </div>
             </div>
 
-
             <div className="row">
                 <div className="column w-10">
                     <div className="checklist-wrapper">
-                        <div className="checklist-title">{__("Checklist", "multivendorx")}</div>
+                        <div className="checklist-title">
+                            {__('Checklist', 'multivendorx')}
+                        </div>
                         <ul>
                             <li className="checked">
-                                <span></span> {__("Name", "multivendorx")}
+                                <span></span> {__('Name', 'multivendorx')}
                             </li>
                             <li className="checked">
-                                <span></span> {__("Image", "multivendorx")}
+                                <span></span> {__('Image', 'multivendorx')}
                             </li>
                             <li className="checked">
-                                <span></span> {__("Price", "multivendorx")}
+                                <span></span> {__('Price', 'multivendorx')}
                             </li>
                             <li>
-                                <span></span> {__("Name", "multivendorx")}
+                                <span></span> {__('Name', 'multivendorx')}
                             </li>
                             <li>
-                                <span></span> {__("Image", "multivendorx")}
+                                <span></span> {__('Image', 'multivendorx')}
                             </li>
                             <li>
-                                <span></span> {__("Price", "multivendorx")}
+                                <span></span> {__('Price', 'multivendorx')}
                             </li>
                         </ul>
                     </div>
                 </div>
-
 
                 <div className="column w-65">
                     {/* General information */}
                     <div className="card" id="card-general">
                         <div className="card-header">
                             <div className="left">
-                                <div className="title">{__("General information", "multivendorx")}</div>
+                                <div className="title">
+                                    {__('General information', 'multivendorx')}
+                                </div>
                             </div>
                             <div className="right">
                                 <i
@@ -636,52 +872,80 @@ const AddProduct = () => {
                         <div className="card-body">
                             <div className="form-group-wrapper">
                                 <div className="form-group">
-                                    <label htmlFor="product-name">{__("Product name", "multivendorx")}</label>
+                                    <label htmlFor="product-name">
+                                        {__('Product name', 'multivendorx')}
+                                    </label>
                                     <BasicInput
                                         name="name"
                                         wrapperClass="setting-form-input"
                                         value={product.name}
-                                        onChange={(e) => handleChange('name', e.target.value)}
+                                        onChange={(e) =>
+                                            handleChange('name', e.target.value)
+                                        }
                                     />
                                 </div>
                             </div>
 
                             <div className="form-group-wrapper">
                                 <div className="form-group">
-                                    <label htmlFor="product-name">{__("Product short description", "multivendorx")}</label>
+                                    <label htmlFor="product-name">
+                                        {__(
+                                            'Product short description',
+                                            'multivendorx'
+                                        )}
+                                    </label>
                                     <TextArea
                                         name="short_description"
                                         wrapperClass="setting-from-textarea"
                                         inputClass="textarea-input"
                                         descClass="settings-metabox-description"
                                         value={product.short_description}
-                                        onChange={(e) => handleChange('short_description', e.target.value)}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                'short_description',
+                                                e.target.value
+                                            )
+                                        }
                                     />
                                 </div>
                             </div>
 
                             <div className="form-group-wrapper">
                                 <div className="form-group">
-                                    <label htmlFor="product-name">{__("Product description", "multivendorx")}</label>
+                                    <label htmlFor="product-name">
+                                        {__(
+                                            'Product description',
+                                            'multivendorx'
+                                        )}
+                                    </label>
                                     <TextArea
                                         name="description"
                                         wrapperClass="setting-from-textarea"
                                         inputClass="textarea-input"
                                         descClass="settings-metabox-description"
                                         value={product.description}
-                                        onChange={(e) => handleChange('description', e.target.value)}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                'description',
+                                                e.target.value
+                                            )
+                                        }
                                     />
                                 </div>
                             </div>
 
                             <div className="form-group-wrapper">
                                 <div className="form-group">
-                                    <label htmlFor="product-name">{__("Product type", "multivendorx")}</label>
+                                    <label htmlFor="product-name">
+                                        {__('Product type', 'multivendorx')}
+                                    </label>
                                     <SelectInput
                                         name="type"
                                         options={typeOptions}
                                         value={product.type}
-                                        onChange={(selected) => handleChange('type', selected.value)}
+                                        onChange={(selected) =>
+                                            handleChange('type', selected.value)
+                                        }
                                     />
                                 </div>
 
@@ -691,17 +955,27 @@ const AddProduct = () => {
                                             <input
                                                 type="checkbox"
                                                 checked={product.virtual}
-                                                onChange={(e) => handleChange('virtual', e.target.checked)}
+                                                onChange={(e) =>
+                                                    handleChange(
+                                                        'virtual',
+                                                        e.target.checked
+                                                    )
+                                                }
                                             />
-                                            {__("Virtual", "multivendorx")}
+                                            {__('Virtual', 'multivendorx')}
                                         </div>
                                         <div className="item">
                                             <input
                                                 type="checkbox"
                                                 checked={product.downloadable}
-                                                onChange={(e) => handleChange('downloadable', e.target.checked)}
+                                                onChange={(e) =>
+                                                    handleChange(
+                                                        'downloadable',
+                                                        e.target.checked
+                                                    )
+                                                }
                                             />
-                                            {__("Download", "multivendorx")}
+                                            {__('Download', 'multivendorx')}
                                         </div>
                                     </div>
                                 </div>
@@ -713,7 +987,9 @@ const AddProduct = () => {
                     <div className="card" id="card-price">
                         <div className="card-header">
                             <div className="left">
-                                <div className="title">{__("Price and stock", "multivendorx")}</div>
+                                <div className="title">
+                                    {__('Price and stock', 'multivendorx')}
+                                </div>
                             </div>
                             <div className="right">
                                 <i
@@ -725,76 +1001,129 @@ const AddProduct = () => {
                         <div className="card-body">
                             <div className="form-group-wrapper">
                                 <div className="form-group">
-                                    <label htmlFor="product-name">{__("Regular price", "multivendorx")}</label>
+                                    <label htmlFor="product-name">
+                                        {__('Regular price', 'multivendorx')}
+                                    </label>
                                     <BasicInput
                                         name="regular_price"
                                         wrapperClass="setting-form-input"
                                         value={product.regular_price}
-                                        onChange={(e) => handleChange('regular_price', e.target.value)}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                'regular_price',
+                                                e.target.value
+                                            )
+                                        }
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="product-name">{__("Sale price", "multivendorx")}</label>
+                                    <label htmlFor="product-name">
+                                        {__('Sale price', 'multivendorx')}
+                                    </label>
                                     <BasicInput
                                         name="sale_price"
                                         wrapperClass="setting-form-input"
                                         value={product.sale_price}
-                                        onChange={(e) => handleChange('sale_price', e.target.value)}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                'sale_price',
+                                                e.target.value
+                                            )
+                                        }
                                     />
                                 </div>
                             </div>
 
                             <div className="form-group-wrapper">
                                 <div className="form-group">
-                                    <label htmlFor="product-name">{__("SKU", "multivendorx")}</label>
+                                    <label htmlFor="product-name">
+                                        {__('SKU', 'multivendorx')}
+                                    </label>
                                     <BasicInput
                                         name="sku"
                                         wrapperClass="setting-form-input"
                                         value={product.sku}
-                                        onChange={(e) => handleChange('sku', e.target.value)}
+                                        onChange={(e) =>
+                                            handleChange('sku', e.target.value)
+                                        }
                                     />
                                 </div>
                                 {!product.manage_stock && (
                                     <div className="form-group">
-                                        <label htmlFor="product-name">{__("Stock Status", "multivendorx")}</label>
+                                        <label htmlFor="product-name">
+                                            {__('Stock Status', 'multivendorx')}
+                                        </label>
                                         <SelectInput
                                             name="stock_status"
                                             options={stockStatusOptions}
                                             type="single-select"
                                             value={product.stock_status}
-                                            onChange={(selected) => handleChange('stock_status', selected.value)}
+                                            onChange={(selected) =>
+                                                handleChange(
+                                                    'stock_status',
+                                                    selected.value
+                                                )
+                                            }
                                         />
                                     </div>
                                 )}
                                 <div className="form-group">
-                                    {__("Stock management", "multivendorx")}
+                                    {__('Stock management', 'multivendorx')}
                                     <MultiCheckBox
                                         wrapperClass="toggle-btn"
                                         inputWrapperClass="toggle-checkbox-header"
                                         inputInnerWrapperClass="toggle-checkbox"
                                         idPrefix="toggle-switch-manage-stock"
                                         type="checkbox"
-                                        value={product.manage_stock ? ['manage_stock'] : []}
-                                        onChange={(e) =>
-                                            handleChange('manage_stock', (e as React.ChangeEvent<HTMLInputElement>).target.checked)
+                                        value={
+                                            product.manage_stock
+                                                ? ['manage_stock']
+                                                : []
                                         }
-                                        options={[{ key: 'manage_stock', value: 'manage_stock' }]}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                'manage_stock',
+                                                (
+                                                    e as React.ChangeEvent<HTMLInputElement>
+                                                ).target.checked
+                                            )
+                                        }
+                                        options={[
+                                            {
+                                                key: 'manage_stock',
+                                                value: 'manage_stock',
+                                            },
+                                        ]}
                                     />
                                 </div>
 
                                 <div className="form-group">
-                                    {__("Sold individually", "multivendorx")}
+                                    {__('Sold individually', 'multivendorx')}
                                     <MultiCheckBox
                                         wrapperClass="toggle-btn"
                                         inputWrapperClass="toggle-checkbox-header"
                                         inputInnerWrapperClass="toggle-checkbox"
                                         idPrefix="toggle-switch-sold-individually"
                                         type="checkbox"
-                                        value={product.sold_individually ? ['sold_individually'] : []}
-                                        onChange={(e) =>
-                                            handleChange('sold_individually', (e as React.ChangeEvent<HTMLInputElement>).target.checked)
+                                        value={
+                                            product.sold_individually
+                                                ? ['sold_individually']
+                                                : []
                                         }
-                                        options={[{ key: 'sold_individually', value: 'sold_individually' }]}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                'sold_individually',
+                                                (
+                                                    e as React.ChangeEvent<HTMLInputElement>
+                                                ).target.checked
+                                            )
+                                        }
+                                        options={[
+                                            {
+                                                key: 'sold_individually',
+                                                value: 'sold_individually',
+                                            },
+                                        ]}
                                     />
                                 </div>
                             </div>
@@ -802,31 +1131,58 @@ const AddProduct = () => {
                             {product.manage_stock && (
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
-                                        <label htmlFor="product-name">{__("Quantity", "multivendorx")}</label>
+                                        <label htmlFor="product-name">
+                                            {__('Quantity', 'multivendorx')}
+                                        </label>
                                         <BasicInput
                                             name="stock"
                                             wrapperClass="setting-form-input"
                                             value={product.stock}
-                                            onChange={(e) => handleChange('stock', e.target.value)}
+                                            onChange={(e) =>
+                                                handleChange(
+                                                    'stock',
+                                                    e.target.value
+                                                )
+                                            }
                                         />
                                     </div>
                                     <div className="form-group">
-                                        <label htmlFor="product-name">{__("Allow backorders?", "multivendorx")}</label>
+                                        <label htmlFor="product-name">
+                                            {__(
+                                                'Allow backorders?',
+                                                'multivendorx'
+                                            )}
+                                        </label>
                                         <SelectInput
                                             name="backorders"
                                             options={backorderOptions}
                                             type="single-select"
                                             value={product.backorders}
-                                            onChange={(selected) => handleChange('backorders', selected.value)}
+                                            onChange={(selected) =>
+                                                handleChange(
+                                                    'backorders',
+                                                    selected.value
+                                                )
+                                            }
                                         />
                                     </div>
                                     <div className="form-group">
-                                        <label htmlFor="product-name">{__("Low stock threshold", "multivendorx")}</label>
+                                        <label htmlFor="product-name">
+                                            {__(
+                                                'Low stock threshold',
+                                                'multivendorx'
+                                            )}
+                                        </label>
                                         <BasicInput
                                             name="low_stock_amount"
                                             wrapperClass="setting-form-input"
                                             value={product.low_stock_amount}
-                                            onChange={(e) => handleChange('low_stock_amount', e.target.value)}
+                                            onChange={(e) =>
+                                                handleChange(
+                                                    'low_stock_amount',
+                                                    e.target.value
+                                                )
+                                            }
                                         />
                                     </div>
                                 </div>
@@ -834,31 +1190,50 @@ const AddProduct = () => {
 
                             <div className="form-group-wrapper">
                                 <div className="form-group">
-                                    <label htmlFor="product-name">{__("Product URL", "multivendorx")}</label>
-                                    <BasicInput name="address" wrapperClass="setting-form-input" />
+                                    <label htmlFor="product-name">
+                                        {__('Product URL', 'multivendorx')}
+                                    </label>
+                                    <BasicInput
+                                        name="address"
+                                        wrapperClass="setting-form-input"
+                                    />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="product-name">{__("Button text", "multivendorx")}</label>
-                                    <BasicInput name="address" wrapperClass="setting-form-input" />
+                                    <label htmlFor="product-name">
+                                        {__('Button text', 'multivendorx')}
+                                    </label>
+                                    <BasicInput
+                                        name="address"
+                                        wrapperClass="setting-form-input"
+                                    />
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    {!product.virtual && (
-                        applyFilters('product_shipping', null, product, handleChange)
-                    )}
+                    {!product.virtual &&
+                        applyFilters(
+                            'product_shipping',
+                            null,
+                            product,
+                            handleChange
+                        )}
 
-                    {product.downloadable && (
-                        applyFilters('product_downloadable', null, product, setProduct, handleChange)
-                    )}
+                    {product.downloadable &&
+                        applyFilters(
+                            'product_downloadable',
+                            null,
+                            product,
+                            setProduct,
+                            handleChange
+                        )}
 
                     {/* Variants start */}
                     <div className="card" id="card-variants">
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
-                                    {__('Variations', 'text-domain')}
+                                    {__('Variations', 'multivendrox')}
                                 </div>
                             </div>
                             <div className="right">
@@ -872,7 +1247,7 @@ const AddProduct = () => {
                         <div className="card-body">
                             <div className="card-title">
                                 <div className="title">
-                                    {__('Attributes', 'text-domain')}
+                                    {__('Attributes', 'multivendrox')}
                                 </div>
                                 <div className="buttons">
                                     <div
@@ -882,103 +1257,66 @@ const AddProduct = () => {
                                         }}
                                     >
                                         <div className="i adminlib-plus-circle-o"></div>
-                                        {__('Add attribute', 'text-domain')}
+                                        {__('Add attribute', 'multivendrox')}
                                     </div>
                                 </div>
                             </div>
 
                             <div className="attribute-wrapper">
-                                <div className="attribute-box">
-                                    <div className="name-wrapper">
-                                        <div className="name">{__('Colors', 'text-domain')}</div>
-                                        <div className="icons">
-                                            <i className="adminlib-edit"></i>
-                                            <i className="adminlib-delete"></i>
-                                        </div>
-                                    </div>
-                                    <div className="value-wrapper">
-                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
-                                        <span className="admin-badge blue">{__('Green', 'text-domain')}</span>
-                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
-                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
-                                        <span className="admin-badge blue">{__('Green', 'text-domain')}</span>
-                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
-                                    </div>
-                                </div>
+                                {productAttributes &&
+                                    productAttributes?.map((attr, index) => (
+                                        <div
+                                            className="attribute-box"
+                                            key={index}
+                                        >
+                                            <div className="name-wrapper">
+                                                <div className="name">
+                                                    {attr.name}
+                                                </div>
 
-                                <div className="attribute-box">
-                                    <div className="name-wrapper">
-                                        <div className="name">{__('Colors', 'text-domain')}</div>
-                                        <div className="icons">
-                                            <i className="adminlib-edit"></i>
-                                            <i className="adminlib-delete"></i>
-                                        </div>
-                                    </div>
-                                    <div className="value-wrapper">
-                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
-                                        <span className="admin-badge blue">{__('Green', 'text-domain')}</span>
-                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
-                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
-                                        <span className="admin-badge blue">{__('Green', 'text-domain')}</span>
-                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
-                                    </div>
-                                </div>
+                                                <div className="icons">
+                                                    <i
+                                                        className="adminlib-edit"
+                                                        onClick={() =>
+                                                            openEditPopup(
+                                                                attr,
+                                                                index
+                                                            )
+                                                        }
+                                                    ></i>
 
-                                <div className="attribute-box">
-                                    <div className="name-wrapper">
-                                        <div className="name">{__('Colors', 'text-domain')}</div>
-                                        <div className="icons">
-                                            <i className="adminlib-edit"></i>
-                                            <i className="adminlib-delete"></i>
-                                        </div>
-                                    </div>
-                                    <div className="value-wrapper">
-                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
-                                        <span className="admin-badge blue">{__('Green', 'text-domain')}</span>
-                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
-                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
-                                        <span className="admin-badge blue">{__('Green', 'text-domain')}</span>
-                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
-                                    </div>
-                                </div>
+                                                    <i
+                                                        className="adminlib-delete"
+                                                        onClick={() => {
+                                                            setProductAttributes(
+                                                                (prev) =>
+                                                                    prev.filter(
+                                                                        (
+                                                                            _,
+                                                                            i
+                                                                        ) =>
+                                                                            i !==
+                                                                            index
+                                                                    )
+                                                            );
+                                                        }}
+                                                    ></i>
+                                                </div>
+                                            </div>
 
-                                <div className="attribute-box">
-                                    <div className="name-wrapper">
-                                        <div className="name">{__('Colors', 'text-domain')}</div>
-                                        <div className="icons">
-                                            <i className="adminlib-edit"></i>
-                                            <i className="adminlib-delete"></i>
+                                            <div className="value-wrapper">
+                                                {attr.options.map((opt, i) => (
+                                                    <span
+                                                        key={i}
+                                                        className="admin-badge blue"
+                                                    >
+                                                        {opt}
+                                                    </span>
+                                                ))}
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="value-wrapper">
-                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
-                                        <span className="admin-badge blue">{__('Green', 'text-domain')}</span>
-                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
-                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
-                                        <span className="admin-badge blue">{__('Green', 'text-domain')}</span>
-                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
-                                    </div>
-                                </div>
-
-                                <div className="attribute-box">
-                                    <div className="name-wrapper">
-                                        <div className="name">{__('Colors', 'text-domain')}</div>
-                                        <div className="icons">
-                                            <i className="adminlib-edit"></i>
-                                            <i className="adminlib-delete"></i>
-                                        </div>
-                                    </div>
-                                    <div className="value-wrapper">
-                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
-                                        <span className="admin-badge blue">{__('Green', 'text-domain')}</span>
-                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
-                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
-                                        <span className="admin-badge blue">{__('Green', 'text-domain')}</span>
-                                        <span className="admin-badge blue">{__('Red', 'text-domain')}</span>
-                                    </div>
-                                </div>
+                                    ))}
                             </div>
-
 
                             {/* variants */}
                             <div className="card-title">
@@ -990,9 +1328,7 @@ const AddProduct = () => {
                                     </div>
                                     <div
                                         className="add-btn"
-                                        onClick={() => {
-                                            setAddvariant(true);
-                                        }}
+                                        onClick={handleAddVariant}
                                     >
                                         <div className="i adminlib-plus-circle-o"></div>
                                         Add variant
@@ -1001,125 +1337,91 @@ const AddProduct = () => {
                             </div>
 
                             <div className="variant-wrapper">
-                                <div className="variant-box">
-                                    <div className="variant-items">
-                                        <div className="variant">
-                                            <div className="value">Green</div>
-                                            <div className="name">Color</div>
-                                        </div>
+                                {variations.length === 0 && (
+                                    <p>No variations found.</p>
+                                )}
 
-                                        <div className="variant">
-                                            <div className="value">XL</div>
-                                            <div className="name">Size</div>
-                                        </div>
-                                        <div className="variant">
-                                            <div className="value">Puma</div>
-                                            <div className="name">Brand</div>
-                                        </div>
-                                    </div>
-                                    <div className="product">
-                                        <div className="image-section">
-                                            <i className="adminlib-multi-product"></i>
-                                        </div>
-                                        <div className="details">
-                                            <div className="sku">
-                                                <b>SKU:</b> product86776
-                                            </div>
-                                            <div className="price">
-                                                $299 - $199
-                                            </div>
-                                            <div className="stock">
-                                                In stock - 20
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <i
-                                        className="admin-badge yellow adminlib-edit edit-icon"
-                                        onClick={() => {
-                                            setAddvariant(true);
-                                        }}
-                                    ></i>
-                                </div>
+                                {variations.map((variation, index) => {
+                                    const attrs =
+                                        getVariationAttributes(variation);
 
-                                <div className="variant-box">
-                                    <div className="variant-items">
-                                        <div className="variant">
-                                            <div className="value">Green</div>
-                                            <div className="name">Color</div>
-                                        </div>
+                                    return (
+                                        <div
+                                            className="variant-box"
+                                            key={variation.id}
+                                        >
+                                            <div className="variant-items">
+                                                {attrs?.map((att, i) => (
+                                                    <div
+                                                        className="variant"
+                                                        key={i}
+                                                    >
+                                                        <div className="value">
+                                                            {att.value}
+                                                        </div>
+                                                        <div className="name">
+                                                            {att.name}
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
 
-                                        <div className="variant">
-                                            <div className="value">XL</div>
-                                            <div className="name">Size</div>
-                                        </div>
-                                        <div className="variant">
-                                            <div className="value">Puma</div>
-                                            <div className="name">Brand</div>
-                                        </div>
-                                    </div>
-                                    <div className="product">
-                                        <div className="image-section">
-                                            <i className="adminlib-multi-product"></i>
-                                        </div>
-                                        <div className="details">
-                                            <div className="sku">
-                                                <b>SKU:</b> product86776
-                                            </div>
-                                            <div className="price">
-                                                $299 - $199
-                                            </div>
-                                            <div className="stock">
-                                                In stock - 20
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <i
-                                        className="admin-badge yellow  adminlib-edit edit-icon"
-                                        onClick={() => {
-                                            setAddvariant(true);
-                                        }}
-                                    ></i>
-                                </div>
+                                            <div className="product">
+                                                <div className="image-section">
+                                                    {variation?.image?.src ? (
+                                                        <img
+                                                            src={
+                                                                variation?.image
+                                                                    .src
+                                                            }
+                                                            width="50"
+                                                        />
+                                                    ) : (
+                                                        <i className="adminlib-multi-product"></i>
+                                                    )}
+                                                </div>
 
-                                <div className="variant-box">
-                                    <div className="variant-items">
-                                        <div className="variant">
-                                            <div className="value">Green</div>
-                                            <div className="name">Color</div>
-                                        </div>
+                                                <div className="details">
+                                                    <div className="sku">
+                                                        <b>SKU:</b>{' '}
+                                                        {variation?.sku || '—'}
+                                                    </div>
 
-                                        <div className="variant">
-                                            <div className="value">XL</div>
-                                            <div className="name">Size</div>
-                                        </div>
-                                        <div className="variant">
-                                            <div className="value">Puma</div>
-                                            <div className="name">Brand</div>
-                                        </div>
-                                    </div>
-                                    <div className="product">
-                                        <div className="image-section">
-                                            <i className="adminlib-multi-product"></i>
-                                        </div>
-                                        <div className="details">
-                                            <div className="sku">
-                                                <b>SKU:</b> product86776
+                                                    <div className="price">
+                                                        $
+                                                        {variation?.regular_price ||
+                                                            '0'}
+                                                        {variation?.sale_price && (
+                                                            <>
+                                                                {' '}
+                                                                - $
+                                                                {
+                                                                    variation?.sale_price
+                                                                }
+                                                            </>
+                                                        )}
+                                                    </div>
+
+                                                    <div className="stock">
+                                                        {variation?.stock_status ===
+                                                        'instock'
+                                                            ? `In stock`
+                                                            : 'Out of stock'}
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div className="price">
-                                                $299 - $199
-                                            </div>
-                                            <div className="stock">
-                                                In stock - 20
-                                            </div>
+
+                                            <i
+                                                className="admin-badge yellow adminlib-edit edit-icon"
+                                                onClick={() =>
+                                                    handleEditVariation(
+                                                        variation
+                                                    )
+                                                }
+                                            ></i>
                                         </div>
-                                    </div>
-                                    <i
-                                        className="admin-badge yellow adminlib-edit edit-icon"
-                                        onClick={() => {
-                                            setAddvariant(true);
-                                        }}
-                                    ></i>
-                                </div>
+                                    );
+                                })}
                             </div>
                         </div>
                     </div>
@@ -1138,7 +1440,7 @@ const AddProduct = () => {
                                     </div>
                                     <p>
                                         {__(
-                                            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum sint, minus voluptates esse officia enim dolorem, eaque neque error doloremque praesentium facere quidem mollitia deleniti?',
+                                            'Lorem ipsum dolor sit amet consectetur adipisicing elit...',
                                             'multivendorx'
                                         )}
                                     </p>
@@ -1150,46 +1452,88 @@ const AddProduct = () => {
                             }
                         >
                             <div className="content">
-                                {/* start left section */}
+                                {/* ATTRIBUTE NAME SECTION */}
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
-                                        <label htmlFor="title">
-                                            {__('Attribute name', 'multivendorx')}
+                                        <label>
+                                            {__(
+                                                'Attribute name',
+                                                'multivendorx'
+                                            )}
                                         </label>
 
                                         <div className="attribute-popup-wrapper">
                                             <div className="field-wrapper">
-                                                <SelectInput
-                                                    name="payment_method"
-                                                    options={paymentOptions}
-                                                    type="single-select"
-                                                    size="80%"
-                                                />
-
                                                 {!showAddNew && (
-                                                    <div
-                                                        className="add-btn"
-                                                        onClick={() => setShowAddNew(true)}
-                                                    >
-                                                        <i className="adminlib-plus-circle-o"></i>{' '}
-                                                        {__('Add new', 'multivendorx')}
-                                                    </div>
+                                                    <>
+                                                        <SelectInput
+                                                            name="attribute_name"
+                                                            type="single-select"
+                                                            size="80%"
+                                                            value={
+                                                                selectedAttribute?.value
+                                                            }
+                                                            options={[
+                                                                ...existingAttributes.map(
+                                                                    (attr) => ({
+                                                                        label: attr.name,
+                                                                        value: attr.id,
+                                                                    })
+                                                                ),
+                                                            ]}
+                                                            onChange={(opt) => {
+                                                                setSelectedAttribute(
+                                                                    opt
+                                                                );
+                                                                setAttributeValues(
+                                                                    []
+                                                                );
+                                                            }}
+                                                        />
+
+                                                        <div
+                                                            className="add-btn"
+                                                            onClick={() =>
+                                                                setShowAddNew(
+                                                                    true
+                                                                )
+                                                            }
+                                                        >
+                                                            <i className="adminlib-plus-circle-o"></i>{' '}
+                                                            {__(
+                                                                'Add new',
+                                                                'multivendorx'
+                                                            )}
+                                                        </div>
+                                                    </>
                                                 )}
                                             </div>
 
+                                            {/* ADD NEW ATTRIBUTE FIELD */}
                                             {showAddNew && (
                                                 <div className="field-wrapper add-new-field">
                                                     <BasicInput
-                                                        name="address"
+                                                        name="new_attribute"
+                                                        value={newAttributeName}
+                                                        onChange={(e) =>
+                                                            setNewAttributeName(
+                                                                e.target.value
+                                                            )
+                                                        }
                                                         wrapperClass="setting-form-input"
                                                     />
 
                                                     <div
                                                         className="admin-btn btn-purple-bg"
-                                                        onClick={() => setShowAddNew(false)}
+                                                        onClick={
+                                                            saveNewAttribute
+                                                        }
                                                     >
                                                         <i className="adminlib-form-checkboxes"></i>{' '}
-                                                        {__('Save', 'multivendorx')}
+                                                        {__(
+                                                            'Save',
+                                                            'multivendorx'
+                                                        )}
                                                     </div>
                                                 </div>
                                             )}
@@ -1197,38 +1541,84 @@ const AddProduct = () => {
                                     </div>
                                 </div>
 
+                                {/* ATTRIBUTE VALUE SECTION */}
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
-                                        <label htmlFor="title">
-                                            {__('Attribute value', 'multivendorx')}
+                                        <label>
+                                            {__(
+                                                'Attribute value',
+                                                'multivendorx'
+                                            )}
                                         </label>
 
                                         <div className="dropdown-field">
                                             <InputWithSuggestions
-                                                suggestions={[
-                                                    __('Red', 'multivendorx'),
-                                                    __('Blue', 'multivendorx'),
-                                                    __('Green', 'multivendorx'),
-                                                    __('Yellow', 'multivendorx'),
-                                                ]}
-                                                value={product.short_description_list || []}
-                                                placeholder={__('Type or select value...', 'multivendorx')}
-                                                addButtonLabel={__('Add', 'multivendorx')}
+                                                suggestions={
+                                                    selectedAttribute &&
+                                                    selectedAttribute.value !==
+                                                        0
+                                                        ? existingAttributeTerms[
+                                                              selectedAttribute
+                                                                  .value
+                                                          ] || []
+                                                        : []
+                                                }
+                                                value={attributeValues}
+                                                placeholder={__(
+                                                    'Type or select value...',
+                                                    'multivendorx'
+                                                )}
+                                                addButtonLabel={__(
+                                                    'Add',
+                                                    'multivendorx'
+                                                )}
                                                 onChange={(list) =>
-                                                    handleChange('short_description_list', list)
+                                                    setAttributeValues(list)
                                                 }
                                             />
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="buttons-wrapper left">
-                                    <div className="admin-btn btn-purple">
-                                        {__('Select all', 'multivendorx')}
-                                    </div>
-                                    <div className="admin-btn btn-red">
-                                        {__('Select none', 'multivendorx')}
-                                    </div>
+                                {/* SELECT ALL / NONE ONLY FOR EXISTING ATTRIBUTES */}
+                                {selectedAttribute &&
+                                    selectedAttribute.value !== 0 && (
+                                        <div className="buttons-wrapper left">
+                                            <div
+                                                className="admin-btn btn-purple"
+                                                onClick={() =>
+                                                    setAttributeValues(
+                                                        existingAttributeTerms[
+                                                            selectedAttribute
+                                                                .value
+                                                        ] || []
+                                                    )
+                                                }
+                                            >
+                                                {__(
+                                                    'Select all',
+                                                    'multivendorx'
+                                                )}
+                                            </div>
+
+                                            <div
+                                                className="admin-btn btn-red"
+                                                onClick={() =>
+                                                    setAttributeValues([])
+                                                }
+                                            >
+                                                {__(
+                                                    'Select none',
+                                                    'multivendorx'
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+                                <div
+                                    className="admin-btn btn-purple"
+                                    onClick={saveAttributeToList}
+                                >
+                                    {__('Add Attribute', 'multivendorx')}
                                 </div>
                             </div>
                         </CommonPopup>
@@ -1244,7 +1634,9 @@ const AddProduct = () => {
                                 <>
                                     <div className="title">
                                         <i className="adminlib-coupon"></i>
-                                        {__('Add Variant', 'multivendorx')}
+                                        {editingVariation
+                                            ? __('Edit Variant', 'multivendorx')
+                                            : __('Add Variant', 'multivendorx')}
                                     </div>
                                     <p>
                                         {__(
@@ -1260,10 +1652,18 @@ const AddProduct = () => {
                             }
                             footer={
                                 <>
-                                    <div className="admin-btn btn-red">
+                                    <div
+                                        className="admin-btn btn-red"
+                                        onClick={() => {
+                                            setAddvariant(false);
+                                        }}
+                                    >
                                         {__('Cancel', 'multivendorx')}
                                     </div>
-                                    <div className="admin-btn btn-purple-bg">
+                                    <div
+                                        className="admin-btn btn-purple-bg"
+                                        onClick={handleSaveVariant}
+                                    >
                                         {__('Save', 'multivendorx')}
                                     </div>
                                 </>
@@ -1273,31 +1673,131 @@ const AddProduct = () => {
                                 <div className="form-group-wrapper select-variations-wrapper">
                                     <div className="form-group">
                                         <label htmlFor="">
-                                            {__('Select variations', 'multivendorx')}
+                                            {__(
+                                                'Select variations',
+                                                'multivendorx'
+                                            )}
                                         </label>
+
                                         <div className="select-wrapper">
-                                            <span>#45</span>
-                                            <SelectInput
-                                                name="payment_method"
-                                                options={paymentOptions}
-                                                type="single-select"
-                                                wrapperClass="variation-select"
-                                                size="10rem"
-                                            />
-                                            <SelectInput
-                                                name="payment_method"
-                                                options={paymentOptions}
-                                                type="single-select"
-                                                wrapperClass="variation-select"
-                                                size="10rem"
-                                            />
-                                            <SelectInput
-                                                name="payment_method"
-                                                options={paymentOptions}
-                                                type="single-select"
-                                                size="10rem"
-                                                wrapperClass="variation-select"
-                                            />
+                                            <p className="attr-label">
+                                                #{variant?.id}
+                                            </p>
+                                            {product.attributes?.length > 0 &&
+                                                product.attributes.map(
+                                                    (attr) => {
+                                                        console.log(
+                                                            'attr',
+                                                            attr
+                                                        );
+
+                                                        const options =
+                                                            attr.options.map(
+                                                                (opt) => ({
+                                                                    label: opt,
+                                                                    value: opt,
+                                                                })
+                                                            );
+
+                                                        // existing selected value
+                                                        const selectedValue =
+                                                            variant?.attributes?.find(
+                                                                (a) =>
+                                                                    a.id ===
+                                                                    attr.id
+                                                            )?.option || '';
+
+                                                        console.log(
+                                                            'selected',
+                                                            selectedValue
+                                                        );
+                                                        console.log(
+                                                            'options',
+                                                            options.find(
+                                                                (o) =>
+                                                                    o.value ===
+                                                                    selectedValue
+                                                            )
+                                                        );
+
+                                                        return (
+                                                            <div
+                                                                key={attr.id}
+                                                                className="variation-attr-row"
+                                                            >
+                                                                <SelectInput
+                                                                    name={`attribute_${attr.id}`}
+                                                                    options={
+                                                                        options
+                                                                    }
+                                                                    type="single-select"
+                                                                    wrapperClass="variation-select"
+                                                                    value={
+                                                                        selectedValue
+                                                                    }
+                                                                    onChange={(
+                                                                        selected
+                                                                    ) => {
+                                                                        const value =
+                                                                            selected?.value ||
+                                                                            ''; // selected is full object
+
+                                                                        setVariant(
+                                                                            (
+                                                                                prev
+                                                                            ) => {
+                                                                                const updated =
+                                                                                    [
+                                                                                        ...prev.attributes,
+                                                                                    ];
+                                                                                const index =
+                                                                                    updated.findIndex(
+                                                                                        (
+                                                                                            a
+                                                                                        ) =>
+                                                                                            a.id ===
+                                                                                            attr.id
+                                                                                    );
+
+                                                                                if (
+                                                                                    index !==
+                                                                                    -1
+                                                                                ) {
+                                                                                    // ✔ Merge existing object, only update option
+                                                                                    updated[
+                                                                                        index
+                                                                                    ] =
+                                                                                        {
+                                                                                            ...updated[
+                                                                                                index
+                                                                                            ],
+                                                                                            option: value,
+                                                                                        };
+                                                                                } else {
+                                                                                    // ✔ Add new attribute entry
+                                                                                    updated.push(
+                                                                                        {
+                                                                                            id: attr.id,
+                                                                                            name: attr.name,
+                                                                                            slug: attr.slug, // keep FULL structure
+                                                                                            option: value,
+                                                                                        }
+                                                                                    );
+                                                                                }
+
+                                                                                return {
+                                                                                    ...prev,
+                                                                                    attributes:
+                                                                                        updated,
+                                                                                };
+                                                                            }
+                                                                        );
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                        );
+                                                    }
+                                                )}
                                         </div>
                                     </div>
                                 </div>
@@ -1308,59 +1808,19 @@ const AddProduct = () => {
                                             inputClass="form-input"
                                             name="image"
                                             type="hidden"
-                                            size="medium"
-                                            imageWidth={50}
-                                            imageHeight={50}
-                                            openUploader={__('Upload Image', 'multivendorx')}
+                                            imageSrc={variant?.image?.src}
+                                            openUploader={__(
+                                                'Upload Image',
+                                                'multivendorx'
+                                            )}
                                             buttonClass="admin-btn btn-purple"
                                             descClass="settings-metabox-description"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label htmlFor="product-name">
-                                            {__('Regular price', 'multivendorx')}
-                                        </label>
-                                        <BasicInput
-                                            name="address"
-                                            wrapperClass="setting-form-input"
-                                        />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="product-name">
-                                            {__('Sale price', 'multivendorx')}
-                                        </label>
-                                        <BasicInput
-                                            name="address"
-                                            wrapperClass="setting-form-input"
-                                        />
-                                    </div>
-                                </div>
-
-
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label htmlFor="product-name">
-                                            {__('SKU', 'multivendorx')}
-                                        </label>
-                                        <BasicInput
-                                            name="address"
-                                            wrapperClass="setting-form-input"
-                                        />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="product-name">
-                                            {__('Stock status', 'multivendorx')}
-                                        </label>
-                                        <SelectInput
-                                            name="payment_method"
-                                            options={paymentOptions}
-                                            type="single-select"
-                                            wrapperClass="variation-select"
+                                            onChange={(img) =>
+                                                setVariant((prev) => ({
+                                                    ...prev,
+                                                    image: img,
+                                                }))
+                                            }
                                         />
                                     </div>
                                 </div>
@@ -1371,8 +1831,20 @@ const AddProduct = () => {
                                             <div className="item">
                                                 <input
                                                     type="checkbox"
-                                                    checked={product.virtual}
-                                                // onChange={(e) => handleChange("virtual", e.target.checked)}
+                                                    checked={
+                                                        variant.status ===
+                                                            'publish' ||
+                                                        variant.status === false
+                                                    }
+                                                    onChange={(e) =>
+                                                        setVariant((prev) => ({
+                                                            ...prev,
+                                                            status: e.target
+                                                                .checked
+                                                                ? 'publish'
+                                                                : 'private',
+                                                        }))
+                                                    }
                                                 />
                                                 {__('Enabled', 'multivendorx')}
                                             </div>
@@ -1380,17 +1852,36 @@ const AddProduct = () => {
                                             <div className="item">
                                                 <input
                                                     type="checkbox"
-                                                    checked={product.downloadable}
-                                                // onChange={(e) => handleChange("downloadable", e.target.checked)}
+                                                    checked={
+                                                        variant.downloadable
+                                                    }
+                                                    onChange={(e) =>
+                                                        setVariant((prev) => ({
+                                                            ...prev,
+                                                            downloadable:
+                                                                e.target
+                                                                    .checked,
+                                                        }))
+                                                    }
                                                 />
-                                                {__('Downloadable', 'multivendorx')}
+                                                {__(
+                                                    'Downloadable',
+                                                    'multivendorx'
+                                                )}
                                             </div>
 
                                             <div className="item">
                                                 <input
                                                     type="checkbox"
-                                                    checked={product.downloadable}
-                                                // onChange={(e) => handleChange("downloadable", e.target.checked)}
+                                                    checked={variant.virtual}
+                                                    onChange={(e) =>
+                                                        setVariant((prev) => ({
+                                                            ...prev,
+                                                            virtual:
+                                                                e.target
+                                                                    .checked,
+                                                        }))
+                                                    }
                                                 />
                                                 {__('Virtual', 'multivendorx')}
                                             </div>
@@ -1398,10 +1889,22 @@ const AddProduct = () => {
                                             <div className="item">
                                                 <input
                                                     type="checkbox"
-                                                    checked={product.downloadable}
-                                                // onChange={(e) => handleChange("downloadable", e.target.checked)}
+                                                    checked={
+                                                        variant.manage_stock
+                                                    }
+                                                    onChange={(e) =>
+                                                        setVariant((prev) => ({
+                                                            ...prev,
+                                                            manage_stock:
+                                                                e.target
+                                                                    .checked,
+                                                        }))
+                                                    }
                                                 />
-                                                {__('Manage stock', 'multivendorx')}
+                                                {__(
+                                                    'Manage stock?',
+                                                    'multivendorx'
+                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -1409,20 +1912,17 @@ const AddProduct = () => {
 
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
-                                        <label htmlFor="product-name">
-                                            {__('Description', 'multivendorx')}
+                                        <label>
+                                            {__('SKU', 'multivendorx')}
                                         </label>
-                                        <TextArea
-                                            name="short_description"
-                                            wrapperClass="setting-from-textarea"
-                                            inputClass="textarea-input"
-                                            descClass="settings-metabox-description"
-                                            value={product.short_description}
+                                        <BasicInput
+                                            wrapperClass="setting-form-input"
+                                            value={variant.sku}
                                             onChange={(e) =>
-                                                handleChange(
-                                                    'short_description',
-                                                    e.target.value
-                                                )
+                                                setVariant((prev) => ({
+                                                    ...prev,
+                                                    sku: e.target.value,
+                                                }))
                                             }
                                         />
                                     </div>
@@ -1430,26 +1930,194 @@ const AddProduct = () => {
 
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
-                                        <label htmlFor="product-name">
-                                            {__('Commission Fixed', 'multivendorx')}
+                                        <label>
+                                            {__(
+                                                'Regular price',
+                                                'multivendorx'
+                                            )}
                                         </label>
                                         <BasicInput
-                                            name="address"
                                             wrapperClass="setting-form-input"
+                                            value={variant.regular_price}
+                                            onChange={(e) =>
+                                                setVariant((prev) => ({
+                                                    ...prev,
+                                                    regular_price:
+                                                        e.target.value,
+                                                }))
+                                            }
                                         />
                                     </div>
 
                                     <div className="form-group">
-                                        <label htmlFor="product-name">
-                                            {__('Commission Percentage', 'multivendorx')}
+                                        <label>
+                                            {__('Sale price', 'multivendorx')}
                                         </label>
                                         <BasicInput
-                                            name="address"
                                             wrapperClass="setting-form-input"
+                                            value={variant.sale_price}
+                                            onChange={(e) =>
+                                                setVariant((prev) => ({
+                                                    ...prev,
+                                                    sale_price: e.target.value,
+                                                }))
+                                            }
                                         />
                                     </div>
                                 </div>
 
+                                <div className="form-group-wrapper">
+                                    <div className="form-group">
+                                        <label>
+                                            {__('Stock status', 'multivendorx')}
+                                        </label>
+                                        <SelectInput
+                                            type="single-select"
+                                            wrapperClass="variation-select"
+                                            options={stockStatusOptions}
+                                            value={variant.stock_status}
+                                            onChange={(value) =>
+                                                setVariant((prev) => ({
+                                                    ...prev,
+                                                    stock_status: value,
+                                                }))
+                                            }
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="form-group-wrapper">
+                                    <div className="form-group">
+                                        <label>
+                                            {__('Weight (kg)', 'multivendorx')}
+                                        </label>
+                                        <BasicInput
+                                            wrapperClass="setting-form-input"
+                                            value={variant.weight}
+                                            onChange={(e) =>
+                                                setVariant((prev) => ({
+                                                    ...prev,
+                                                    weight: e.target.value,
+                                                }))
+                                            }
+                                        />
+                                    </div>
+
+                                    <div className="form-group dimension-group">
+                                        <label>
+                                            {__(
+                                                'Dimensions (L × W × H)',
+                                                'multivendorx'
+                                            )}
+                                        </label>
+
+                                        <BasicInput
+                                            placeholder="Length"
+                                            value={variant.length}
+                                            onChange={(e) =>
+                                                setVariant((prev) => ({
+                                                    ...prev,
+                                                    length: e.target.value,
+                                                }))
+                                            }
+                                        />
+
+                                        <BasicInput
+                                            placeholder="Width"
+                                            value={variant.width}
+                                            onChange={(e) =>
+                                                setVariant((prev) => ({
+                                                    ...prev,
+                                                    width: e.target.value,
+                                                }))
+                                            }
+                                        />
+
+                                        <BasicInput
+                                            placeholder="Height"
+                                            value={variant.height}
+                                            onChange={(e) =>
+                                                setVariant((prev) => ({
+                                                    ...prev,
+                                                    height: e.target.value,
+                                                }))
+                                            }
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="form-group-wrapper">
+                                    <div className="form-group">
+                                        <label>
+                                            {__('Description', 'multivendorx')}
+                                        </label>
+                                        <TextArea
+                                            wrapperClass="setting-from-textarea"
+                                            inputClass="textarea-input"
+                                            value={variant.description}
+                                            onChange={(e) =>
+                                                setVariant((prev) => ({
+                                                    ...prev,
+                                                    description: e.target.value,
+                                                }))
+                                            }
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="form-group-wrapper">
+                                    <div className="form-group">
+                                        <label>
+                                            {__(
+                                                'Commission Fixed',
+                                                'multivendorx'
+                                            )}
+                                        </label>
+                                        <BasicInput
+                                            value={
+                                                variant?.metadata
+                                                    ?.multivendorx_variable_product_fixed_commission ||
+                                                ''
+                                            }
+                                            onChange={(e) =>
+                                                setVariant((prev) => ({
+                                                    ...prev,
+                                                    metadata: {
+                                                        ...prev.metadata,
+                                                        multivendorx_variable_product_fixed_commission:
+                                                            e.target.value,
+                                                    },
+                                                }))
+                                            }
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label>
+                                            {__(
+                                                'Commission Percentage',
+                                                'multivendorx'
+                                            )}
+                                        </label>
+                                        <BasicInput
+                                            value={
+                                                variant?.metadata
+                                                    ?.multivendorx_variable_product_percentage_commission ||
+                                                ''
+                                            }
+                                            onChange={(e) =>
+                                                setVariant((prev) => ({
+                                                    ...prev,
+                                                    metadata: {
+                                                        ...prev.metadata,
+                                                        multivendorx_variable_product_percentage_commission:
+                                                            e.target.value,
+                                                    },
+                                                }))
+                                            }
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </CommonPopup>
                     )}
@@ -1613,13 +2281,13 @@ const AddProduct = () => {
                                         {(selectedCat ||
                                             selectedSub ||
                                             selectedChild) && (
-                                                <button
-                                                    onClick={resetSelection}
-                                                    className="admin-btn btn-red"
-                                                >
-                                                    Reset
-                                                </button>
-                                            )}
+                                            <button
+                                                onClick={resetSelection}
+                                                className="admin-btn btn-red"
+                                            >
+                                                Reset
+                                            </button>
+                                        )}
                                     </div>
                                     <div className="form-group-wrapper">
                                         <div
@@ -1633,16 +2301,17 @@ const AddProduct = () => {
                                                     >
                                                         {/* CATEGORY */}
                                                         <li
-                                                            className={`category ${selectedCat ===
+                                                            className={`category ${
+                                                                selectedCat ===
                                                                 cat.id
-                                                                ? 'radio-select-active'
-                                                                : ''
-                                                                }`}
+                                                                    ? 'radio-select-active'
+                                                                    : ''
+                                                            }`}
                                                             style={{
                                                                 display:
                                                                     selectedCat ===
                                                                         null ||
-                                                                        selectedCat ===
+                                                                    selectedCat ===
                                                                         cat.id
                                                                         ? 'block'
                                                                         : 'none',
@@ -1663,7 +2332,7 @@ const AddProduct = () => {
                                                             cat.id &&
                                                             cat.children
                                                                 ?.length >
-                                                            0 && (
+                                                                0 && (
                                                                 <ul className="settings-form-group-radio">
                                                                     {cat.children.map(
                                                                         (
@@ -1676,15 +2345,16 @@ const AddProduct = () => {
                                                                             >
                                                                                 {/* SUB CATEGORY */}
                                                                                 <li
-                                                                                    className={`sub-category ${selectedSub ===
+                                                                                    className={`sub-category ${
+                                                                                        selectedSub ===
                                                                                         sub.id
-                                                                                        ? 'radio-select-active'
-                                                                                        : ''
-                                                                                        }`}
+                                                                                            ? 'radio-select-active'
+                                                                                            : ''
+                                                                                    }`}
                                                                                     style={{
                                                                                         display:
                                                                                             !selectedSub ||
-                                                                                                selectedSub ===
+                                                                                            selectedSub ===
                                                                                                 sub.id
                                                                                                 ? 'block'
                                                                                                 : 'none',
@@ -1708,7 +2378,7 @@ const AddProduct = () => {
                                                                                     sub
                                                                                         .children
                                                                                         ?.length >
-                                                                                    0 && (
+                                                                                        0 && (
                                                                                         <ul className="settings-form-group-radio">
                                                                                             {sub.children.map(
                                                                                                 (
@@ -1718,15 +2388,16 @@ const AddProduct = () => {
                                                                                                         key={
                                                                                                             child.id
                                                                                                         }
-                                                                                                        className={`sub-category ${selectedChild ===
+                                                                                                        className={`sub-category ${
+                                                                                                            selectedChild ===
                                                                                                             child.id
-                                                                                                            ? 'radio-select-active'
-                                                                                                            : ''
-                                                                                                            }`}
+                                                                                                                ? 'radio-select-active'
+                                                                                                                : ''
+                                                                                                        }`}
                                                                                                         style={{
                                                                                                             display:
                                                                                                                 !selectedChild ||
-                                                                                                                    selectedChild ===
+                                                                                                                selectedChild ===
                                                                                                                     child.id
                                                                                                                     ? 'block'
                                                                                                                     : 'none',
@@ -1834,7 +2505,9 @@ const AddProduct = () => {
                                                             // onClick={() =>
                                                             //     addTag(tag)
                                                             // }
-                                                            onMouseDown={() => addTag(tag)}
+                                                            onMouseDown={() =>
+                                                                addTag(tag)
+                                                            }
                                                         >
                                                             {tag.name}
                                                         </li>
