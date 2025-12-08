@@ -10,7 +10,6 @@ const Dashboard = () => {
     const [openSubmenus, setOpenSubmenus] = useState({});
     const [storeData, setStoreData] = useState({});
     const [currentTab, setCurrentTab] = useState('');
-    const [siteName, setSiteName] = useState('');
     const [showUserDropdown, setShowUserDropdown] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
     const [noPermission, setNoPermission] = useState(false);
@@ -63,7 +62,7 @@ const Dashboard = () => {
         });
     }, []);
 
-    const hasCapability = (capability) => {
+    const hasCapability = (capability:any) => {
         if (!capability) return true;
 
         const userCaps = appLocalizer.current_user?.allcaps || {};

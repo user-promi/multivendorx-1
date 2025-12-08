@@ -101,14 +101,10 @@ export const KnowledgeBase: React.FC = () => {
         }).filter((id): id is number => id !== null);
 
         if (!selectedIds.length) {
-            setModalDetails('Select rows.');
-            setOpenModal(true);
             return;
         }
 
         if (!action) {
-            setModalDetails('Please select an action.');
-            setOpenModal(true);
             return;
         }
 
@@ -239,28 +235,16 @@ export const KnowledgeBase: React.FC = () => {
         })
             .then((response) => {
                 setData(response.data.items || []);
-                setAnnouncementStatus([
-                    {
-                        key: 'all',
-                        name: 'All',
-                        count: response.data.all || 0,
-                    },
-                    {
-                        key: 'publish',
-                        name: 'Published',
-                        count: response.data.publish || 0,
-                    },
-                    {
-                        key: 'pending',
-                        name: 'Pending',
-                        count: response.data.pending || 0,
-                    },
-                    {
-                        key: 'draft',
-                        name: 'Draft',
-                        count: response.data.draft || 0,
-                    },
-                ]);
+
+                const statuses = [
+                    { key: 'all',     name: 'All',       count: response.data.all || 0 },
+                    { key: 'publish', name: 'Published', count: response.data.publish || 0 },
+                    { key: 'pending', name: 'Pending',   count: response.data.pending || 0 },
+                    { key: 'draft',   name: 'Draft',     count: response.data.draft || 0 },
+                ];
+                
+                // Only keep count > 0
+                setAnnouncementStatus(statuses.filter(s => s.count > 0));
             })
             .catch(() => {
                 setError(__('Failed to load stores', 'multivendorx'));

@@ -179,28 +179,6 @@ const Transactions: React.FC = () => {
                 return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
             },
         },
-        // {
-        //     id: 'order_details',
-        //     accessorKey: 'order_details',
-        //     enableSorting: true,
-        //     accessorFn: row => parseInt(row.order_details || '0'),
-        //     header: __('Order ID', 'multivendorx'),
-        //     cell: ({ row }) => {
-        //         const orderId = row.original.order_details;
-        //         const editLink = orderId
-        //             ? `${window.location.origin}/wp-admin/post.php?post=${orderId}&action=edit`
-        //             : '#';
-        //         return (
-        //             <TableCell title={orderId || ''}>
-        //                 {orderId ? (
-        //                     <a href={'#'} target="_blank" rel="noopener noreferrer">
-        //                         #{orderId}
-        //                     </a>
-        //                 ) : '-'}
-        //             </TableCell>
-        //         );
-        //     },
-        // },
         {
             header: __("Transaction Type", "multivendorx"),
             cell: ({ row }) => <TableCell><div className="link-item"> {row.original.transaction_type}</div></TableCell>,
@@ -274,10 +252,6 @@ const Transactions: React.FC = () => {
                 );
             },
         },
-        // {
-        //     header: __("Payment Mode", "multivendorx"),
-        //     cell: ({ row }) => <TableCell>{row.original.payment_mode}</TableCell>,
-        // },
         {
             header: __("Action", "multivendorx"),
             cell: ({ row }) => (
@@ -364,10 +338,11 @@ const Transactions: React.FC = () => {
         <>
             <div className="page-title-wrapper">
                 <div className="page-title">
-                    <div className="title">Transactions</div>
-                    <div className="des">Manage your store information and preferences</div>
+                    <div className="title">{__("Transactions", "multivendorx")}</div>
+                    <div className="des">{__("Manage your store information and preferences", "multivendorx")}</div>
                 </div>
             </div>
+    
             <div className="admin-table-wrapper">
                 <Table
                     data={data}
@@ -384,18 +359,16 @@ const Transactions: React.FC = () => {
                     totalCounts={totalRows}
                     typeCounts={transactionStatus as TransactionStatus[]}
                 />
-
+    
                 {modalTransaction && (
                     <TransactionDetailsModal
                         transaction={modalTransaction}
                         onClose={() => setModalTransaction(null)}
                     />
-
-
                 )}
             </div>
         </>
-    );
+    );    
 };
 
 export default Transactions;

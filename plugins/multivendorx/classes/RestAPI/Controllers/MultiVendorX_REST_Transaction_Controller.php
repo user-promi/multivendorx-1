@@ -98,63 +98,6 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         return true;
     }
 
-    // GET
-    // public function get_items( $request ) {
-    // $nonce = $request->get_header( 'X-WP-Nonce' );
-    // if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-    // return new \WP_Error(
-    // 'invalid_nonce',
-    // __( 'Invalid nonce', 'multivendorx' ),
-    // array( 'status' => 403 )
-    // );
-    // }
-
-    // Get request parameters
-    // $limit    = max( intval( $request->get_param( 'row' ) ), 10 );
-    // $page     = max( intval( $request->get_param( 'page' ) ), 1 );
-    // $offset   = ( $page - 1 ) * $limit;
-    // $count    = $request->get_param( 'count' );
-    // $store_id = intval( $request->get_param( 'store_id' ) );
-    // $status    = $request->get_param( 'status' );
-
-    // $args = array();
-    // if ( $count ) {
-    // $args['count'] = true;
-    // }
-    // if ( $status ) {
-    // $args['status'] = $status;
-    // }
-    // if ( $store_id ) {
-    // $args['store_id'] = $store_id;
-    // }
-    // If requesting count, return immediately
-    // if ( $count ) {
-    // $transactions = Transaction::get_transaction_information( $args );
-    // return rest_ensure_response( (int) $transactions );
-    // }
-    // $args['limit'] = $limit;
-    // $args['offset'] = $offset;
-
-    // Use the reusable transaction query function
-    // $transactions = Transaction::get_transaction_information( $args );
-
-    // Map results to frontend-friendly structure
-    // $formatted = array_map( function( $row ) {
-    // return [
-    // 'date'             => $row['created_at'],
-    // 'order_details'    => $row['narration'],
-    // 'transaction_type' => $row['transaction_type'],
-    // 'payment_mode'     => $row['entry_type'],
-    // 'credit'           => $row['entry_type'] === 'Cr' ? $row['amount'] : 0,
-    // 'debit'            => $row['entry_type'] === 'Dr' ? $row['amount'] : 0,
-    // 'balance'          => $row['balance'],
-    // 'status'           => $row['status'],
-    // ];
-    // }, $transactions );
-
-    // return rest_ensure_response( $formatted );
-    // }
-
     /**
      * Get items endpoint handler.
      *
