@@ -138,7 +138,6 @@ class OrderManager {
                 $vendor_order = self::create_sub_order( $order, $store_id, $items );
                 do_action( 'mvx_checkout_vendor_order_processed', $vendor_order, $order );
             }
-            // hook after vendor order create.
 
             $vendor_order->save();
         }

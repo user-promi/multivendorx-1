@@ -141,7 +141,7 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
             return rest_ensure_response( $zones );
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log(
-                'MVX REST Exception: ' .
+                'MULTIVENDORX REST Exception: ' .
                 'Message=' . $e->getMessage() . '; ' .
                 'File=' . $e->getFile() . '; ' .
                 'Line=' . $e->getLine() . "\n\n"
@@ -239,7 +239,7 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
             );
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log(
-                'MVX REST Exception: ' .
+                'MULTIVENDORX REST Exception: ' .
                 'Message=' . $e->getMessage() . '; ' .
                 'File=' . $e->getFile() . '; ' .
                 'Line=' . $e->getLine() . "\n\n"
@@ -291,7 +291,7 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
             return rest_ensure_response( $method );
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log(
-                'MVX REST Exception: ' .
+                'MULTIVENDORX REST Exception: ' .
                 'Message=' . $e->getMessage() . '; ' .
                 'File=' . $e->getFile() . '; ' .
                 'Line=' . $e->getLine() . "\n\n"
@@ -376,7 +376,7 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
             );
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log(
-                'MVX REST Exception: ' .
+                'MULTIVENDORX REST Exception: ' .
                 'Message=' . $e->getMessage() . '; ' .
                 'File=' . $e->getFile() . '; ' .
                 'Line=' . $e->getLine() . "\n\n"
@@ -441,7 +441,7 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
             );
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log(
-                'MVX REST Exception: ' .
+                'MULTIVENDORX REST Exception: ' .
                 'Message=' . $e->getMessage() . '; ' .
                 'File=' . $e->getFile() . '; ' .
                 'Line=' . $e->getLine() . "\n\n"

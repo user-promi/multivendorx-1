@@ -76,16 +76,6 @@ class Modules {
 						'module_file'  => MultiVendorX()->plugin_path . 'modules/Simple/Module.php',
 						'module_class' => 'MultiVendorX\Simple\Module',
 					),
-					'variable'               => array(
-						'id'           => 'variable',
-						'module_file'  => MultiVendorX()->plugin_path . 'modules/Variable/Module.php',
-						'module_class' => 'MultiVendorX\Variable\Module',
-					),
-                    'identity-verification'  => array(
-						'id'           => 'identity-verification',
-						'module_file'  => MultiVendorX()->plugin_path . 'modules/Identity/Module.php',
-						'module_class' => 'MultiVendorX\Identity\Module',
-					),
                     'store-policy'           => array(
 						'id'           => 'store-policy',
 						'module_file'  => MultiVendorX()->plugin_path . 'modules/StorePolicy/Module.php',
