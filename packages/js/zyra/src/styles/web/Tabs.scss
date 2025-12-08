@@ -7,11 +7,7 @@
   .middle-child-container {
     position: relative;
 
-    // color: #121116;
-    // line-height: 1.5;
-
     .tabs-wrapper {
-      // margin: 0 2rem;
       padding: 0 1rem 1rem;
     }
 
@@ -87,62 +83,6 @@
   &:has(.container-wrapper) {
     background: transparent;
     padding: 0;
-  }
-
-  .row {
-    display: flex;
-    gap: 1rem;
-    padding-bottom: 1rem;
-  }
-
-  .row:has(.transaction) {
-    margin-bottom: 1rem;
-  }
-
-  .column {
-    padding: 1.5rem;
-    border-radius: 0.313rem;
-    box-shadow: 0 0.125rem 0.5rem 0 rgb(223 222 225 / 43%);
-    background: #fff;
-    width: 100%;
-    box-sizing: border-box;
-
-    h3 {
-      padding-bottom: 0.85rem;
-      margin: 0;
-    }
-
-    .table-wrapper {
-      border: 0.063rem solid whitesmoke;
-    }
-
-    .column {
-      width: 94%;
-      padding: 1rem;
-      margin-bottom: 0.813rem;
-
-      .product-name {
-        font-size: 1.063rem;
-      }
-
-      .items {
-        padding: 0.313rem;
-      }
-    }
-
-    &.transparent {
-      background: transparent;
-      box-shadow: none;
-      padding: 0;
-    }
-
-    &.transaction {
-      margin-bottom: 1rem;
-    }
-  }
-
-  .col {
-    width: 100%;
   }
 }
 

@@ -10,6 +10,7 @@ import Dialog from '@mui/material/Dialog';
 import { getApiLink, sendApiResponse } from '../utils/apiService';
 import { useModules } from '../contexts/ModuleContext';
 import AdminBreadcrumbs from './AdminBreadcrumbs';
+import '../styles/web/Modules.scss';
 
 // Types
 interface Module {
@@ -221,17 +222,6 @@ const Modules: React.FC<ModuleProps> = ({
                 </Dialog>
 
                 {successMsg && (
-                    // <div className="admin-notice-wrapper">
-                    //     <i className="admin-font adminlib-icon-yes"></i>
-                    //     {successMsg}
-                    // </div>
-                    // <div className="admin-notice-wrapper notice-error">
-                    //     <i className="admin-font adminlib-info"></i>
-                    //     <div className="notice-details">
-                    //         <div className="title">oops!</div>
-                    //         <div className="desc">{successMsg}</div>
-                    //     </div>
-                    // </div>
                     <div className="admin-notice-wrapper">
                         <i className="admin-font adminlib-icon-yes"></i>
                         <div className="notice-details">
@@ -241,41 +231,7 @@ const Modules: React.FC<ModuleProps> = ({
                     </div>
                 )}
 
-                {/* <div className="tab-name">
-                    <h2>Modules</h2>
-                </div> */}
-
                 <div className="category-filter">
-                    {/* <div className="module-status-filter">
-                        <button
-                            className={`filter-button ${selectedFilter === 'Total' ? 'active' : ''}`}
-                            onClick={() => setSelectedFilter('Total')}
-                        >
-                            Total Modules ({totalModules})
-                        </button>
-                        <button
-                            className={`filter-button ${selectedFilter === 'Active' ? 'active' : ''}`}
-                            onClick={() => setSelectedFilter('Active')}
-                        >
-                            Active Modules ({activeModules})
-                        </button>
-                        <button
-                            className={`filter-button ${selectedFilter === 'Inactive' ? 'active' : ''}`}
-                            onClick={() => setSelectedFilter('Inactive')}
-                        >
-                            Inactive Modules ({inactiveModules})
-                        </button>
-                    </div> */}
-                    {/* <div className="module-search">
-                        <label htmlFor="module-search">Search Modules: </label>
-                        <input
-                            id="module-search"
-                            type="text"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder="Search by module name..."
-                        />
-                    </div> */}
                     {modulesArray.category && categories.length > 1 && (
                         <>
                             {categories.map((category) => (
@@ -312,22 +268,6 @@ const Modules: React.FC<ModuleProps> = ({
                                                 <i className="adminlib-pro-tag"></i>
                                             )}
                                         </div>
-                                        {/* <div
-                                            className="toggle-checkbox"
-                                            data-tour={`${module.id}-showcase-tour`}
-                                        >
-                                            <input
-                                                type="checkbox"
-                                                className="woo-toggle-checkbox"
-                                                id={`toggle-switch-${module.id}`}
-                                                checked={modules.includes(module.id)}
-                                                onChange={(e) => handleOnChange(e, module.id)}
-                                            />
-                                            <label
-                                                htmlFor={`toggle-switch-${module.id}`}
-                                                className="toggle-switch-is_hide_cart_checkout"
-                                            ></label>
-                                        </div> */}
                                     </div>
                                     <div className="module-details">
 

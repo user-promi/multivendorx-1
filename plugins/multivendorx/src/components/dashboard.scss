@@ -1,5 +1,129 @@
 @use './config.scss' as *;
 
+.multivendorx-dashboard,
+#admin-main-wrapper {
+    .row {
+        display: flex;
+        gap: 1rem;
+        padding-bottom: 1rem;
+        width: 100%;
+        position: relative;
+    }
+
+    .row:has(.transaction) {
+        margin-bottom: 1rem;
+    }
+
+    .column {
+        border-radius: 0.313rem;
+        box-shadow: 0 0.125rem 0.5rem 0 #dfdee16e;
+        background: #fff;
+        width: 100%;
+        box-sizing: border-box;
+
+        .table-wrapper {
+            border: 0.063rem solid #f5f5f5;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            padding-bottom: 1rem;
+            margin: 1.5rem;
+            margin-bottom: 0;
+            border-bottom: $border-light-small;
+            align-items: start;
+
+            .left {
+                .title {
+                    font-size: 1.125rem;
+                    font-weight: 500;
+                    display: flex;
+                    gap: 0.5rem;
+                    align-items: center;
+                }
+
+                .des {
+                    padding-top: 0.125rem;
+                    color: #00000094;
+                }
+            }
+
+            .right {
+                display: flex;
+                gap: 0.5rem;
+
+                span {
+                    font-size: 0.875rem;
+                    color: #0000009e;
+                }
+
+                i {
+                    font-size: 0.95rem;
+                    padding: 0.313rem;
+                    border-radius: 50%;
+                    transition: all 0.4s ease;
+                    cursor: pointer;
+                    margin-top: -0.313rem;
+
+                    &:hover {
+                        background: #5a59591a;
+                    }
+                }
+
+                .admin-btn {
+                    i {
+                        padding: 0;
+                        font-size: 1rem;
+                    }
+                }
+            }
+
+            &.p-top {
+                padding-top: 2rem;
+                margin-bottom: 1.5rem;
+            }
+        }
+
+        .card-body {
+            padding: 1.5rem;
+            transition: all 0.5s ease;
+
+            .settings-metabox-note{
+                padding: 0 0 1rem;
+            }
+        }
+
+        // .column {
+        //     width: 94%;
+        //     padding: 1rem;
+        //     margin-bottom: 0.813rem;
+
+        //     .product-name {
+        //         font-size: 1.063rem;
+        //     }
+
+        //     .items {
+        //         padding: 0.313rem;
+        //     }
+        // }
+
+        &.transparent {
+            background: transparent;
+            box-shadow: none;
+            padding: 0;
+        }
+
+        &.transaction {
+            margin-bottom: 1rem;
+        }
+    }
+
+    .col {
+        width: 100%;
+    }
+}
+
 .w-10 {
     width: 10%;
 }
@@ -7,73 +131,13 @@
 .w-35 {
     width: 35%;
 }
-.w-50{
+
+.w-50 {
     width: 50%;
 }
+
 .w-65 {
     width: 65%;
-}
-
-
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    // width: 100%;
-    padding-bottom: 1rem;
-    margin-bottom: 1rem;
-    border-bottom: $border-light-small;
-    align-items: start;
-
-    .left {
-        .title {
-            font-size: 1.125rem;
-            font-weight: 500;
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-        }
-
-        .des {
-            font-size: 0.95rem;
-            padding-top: 0.45rem;
-            color: #00000094;
-        }
-    }
-
-    .right {
-        display: flex;
-        gap: 0.5rem;
-
-        span {
-            font-size: 0.875rem;
-            color: #0000009e;
-        }
-
-        i {
-            font-size: 0.95rem;
-            padding: 0.313rem;
-            border-radius: 50%;
-            transition: all 0.4s ease;
-            cursor: pointer;
-            margin-top: -0.313rem;
-
-            &:hover {
-                background: #5a59591a;
-            }
-        }
-
-        .admin-btn {
-            i {
-                padding: 0;
-                font-size: 1rem;
-            }
-        }
-    }
-
-    &.p-top {
-        padding-top: 2rem;
-        margin-bottom: 1.5rem;
-    }
 }
 
 .analytics-container {
@@ -296,115 +360,7 @@
         }
     }
 }
-
 // card styles start
-
-// payout page price section start
-.payout-wrapper {
-    .payout-header {
-        .admin-btn {
-            font-size: 1.313rem;
-            padding: .813rem 1.813rem;
-        }
-    }
-
-    .price-title {
-        font-size: 0.95rem;
-        line-height: 1rem;
-        padding-bottom: 0.625rem;
-        color: #00000071;
-    }
-
-    .price {
-        font-size: 3rem;
-        font-weight: 600;
-        line-height: 2.4rem;
-        margin-bottom: 0.813rem;
-        display: flex;
-        align-items: start;
-        gap: 0.5rem;
-    }
-
-    .des {
-        font-size: 0.9rem;
-        margin-bottom: 1rem;
-    }
-
-    .small-text {
-        line-height: 1.25rem;
-    }
-
-    .admin-btn {
-        margin-top: 1rem;
-    }
-
-    .right-section {
-        width: 50%;
-    }
-
-    .admin-badge {
-        display: inline-block;
-    }
-
-    .payout-card-wrapper {
-        display: flex;
-        gap: 1rem;
-        margin: 0.813rem 0;
-
-        .payout-card {
-            padding: 1rem;
-            border-radius: 0.313rem;
-            background: #e6e2e275;
-            width: 50%;
-
-            .card-title {
-                font-size: 1.125rem;
-            }
-
-            .card-price {
-                font-size: 1.813rem;
-                font-weight: 600;
-                line-height: 2rem;
-                margin: 0.5rem 0;
-            }
-
-            .card-des {
-                color: #0000009e;
-                font-size: 0.813rem;
-            }
-        }
-    }
-}
-
-.withdrawal-wrapper {
-    background: $theme-background-color;
-    padding: 0.313rem;
-    border-radius: 0.313rem;
-    margin: 1rem 0;
-    color: $theme-color;
-    border: $border-light-small;
-
-    i {
-        color: $theme-color;
-    }
-
-    .title {
-        font-size: 1.45rem;
-        font-weight: 600;
-        line-height: 2rem;
-        padding-bottom: 0.5rem;
-    }
-
-    .withdrawl-notice {
-        font-size: 1rem;
-        font-weight: 500;
-        line-height: 1.313rem;
-
-        i {
-            color: $theme-color;
-        }
-    }
-}
 
 // tab action cart start
 .tab-action {
@@ -458,7 +414,6 @@
         }
     }
 }
-
 // tab action cart end
 
 // location map box style start
@@ -636,3 +591,91 @@
         display: flex;
     }
 }
+
+
+// info section start 
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.45rem;
+
+    &.owner {
+        flex-direction: column;
+    }
+
+    .details-wrapper {
+        display: flex;
+        gap: 0.75rem;
+
+        .avatar {
+            span {
+                color: #fff;
+                font-size: 1.25rem;
+                font-weight: 600;
+            }
+
+            img {
+                width: 3rem;
+                border-radius: 0.313rem;
+            }
+
+            i,
+            span {
+                padding: 0.5rem;
+                border-radius: 50%;
+                background: $theme-color;
+                width: 1.5rem;
+                height: 1.5rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 1.625rem;
+                color: #fff;
+            }
+        }
+
+        .details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+
+            .name {
+                font-size: 1.063rem;
+                line-height: 1rem;
+                color: #000000ed;
+                font-weight: 500;
+                position: relative;
+                padding-right: 0.625rem;
+                display: flex;
+                align-items: end;
+                gap: 0.625rem;
+            }
+
+            .des {
+                color: #0000007c;
+            }
+
+            .small-text {
+                font-size: 0.875rem;
+                color: #00000060;
+            }
+        }
+    }
+
+    .right-details {
+        text-align: right;
+
+        .price {
+            font-size: 1.063rem;
+            font-weight: 600;
+            line-height: 1.5rem;
+            padding-bottom: 0.125rem;
+        }
+    }
+
+    .contact-details {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+// info section end
