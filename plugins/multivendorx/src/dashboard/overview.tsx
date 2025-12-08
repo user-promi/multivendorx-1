@@ -292,19 +292,21 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
               <div className="title">{__("Revenue breakdown", "multivendorx")}</div>
             </div>
           </div>
-          <div className="top-items">
-            {earningSummary.map((product) => (
-              <div className="items" key={product.id}>
-                <div className="left-side">
-                  <div className="details">
-                    <div className="item-title">{__(product.title, "multivendorx")}</div>
+          <div className="card-body">
+            <div className="top-items">
+              {earningSummary.map((product) => (
+                <div className="items" key={product.id}>
+                  <div className="left-side">
+                    <div className="details">
+                      <div className="item-title">{__(product.title, "multivendorx")}</div>
+                    </div>
+                  </div>
+                  <div className="right-side">
+                    <div className="price">{product.price}</div>
                   </div>
                 </div>
-                <div className="right-side">
-                  <div className="price">{product.price}</div>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
 
@@ -314,43 +316,45 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
               <div className="title">{__("Revenue Breakdown", "multivendorx")}</div>
             </div>
           </div>
-
-          <div style={{ width: '100%', height: 400 }}>
-            <ResponsiveContainer>
-              <PieChart>
-                <Pie
-                  data={pieData}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={140}
-                  innerRadius={80}
-                  label={({ name, percent }) =>
-                    `${__(name, "multivendorx")} ${(percent * 100).toFixed(1)}%`
-                  }
-                  labelLine={false}
-                  isAnimationActive={true}
-                >
-                  {pieData.map((_, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={['#0088FE', '#00C49F', '#FF8042'][index % 3]}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip
-                  formatter={(value) => formatCurrency(value)}
-                  contentStyle={{
-                    backgroundColor: '#fff',
-                    borderRadius: '8px',
-                    border: '1px solid #ddd',
-                  }}
-                />
-                <Legend verticalAlign="bottom" height={36} />
-              </PieChart>
-            </ResponsiveContainer>
+          <div className="card-body">
+            <div style={{ width: '100%', height: 400 }}>
+              <ResponsiveContainer>
+                <PieChart>
+                  <Pie
+                    data={pieData}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={140}
+                    innerRadius={80}
+                    label={({ name, percent }) =>
+                      `${__(name, "multivendorx")} ${(percent * 100).toFixed(1)}%`
+                    }
+                    labelLine={false}
+                    isAnimationActive={true}
+                  >
+                    {pieData.map((_, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={['#0088FE', '#00C49F', '#FF8042'][index % 3]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    formatter={(value) => formatCurrency(value)}
+                    contentStyle={{
+                      backgroundColor: '#fff',
+                      borderRadius: '8px',
+                      border: '1px solid #ddd',
+                    }}
+                  />
+                  <Legend verticalAlign="bottom" height={36} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
           </div>
+
         </div>
       </div>
     </>

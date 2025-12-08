@@ -701,7 +701,7 @@ const AllProduct: React.FC = () => {
                             }}
 
                         >
-                            <i className="adminlib-plus-circle-o"></i> Add New
+                            <i className="adminlib-plus-circle"></i> Add New
                         </div>
 
                     </div>

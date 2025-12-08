@@ -14,7 +14,7 @@ export default {
         {
             key: 'mvx_tinymce_api_section',
             type: 'number',
-            classes: 'vertical width-50',
+            classes: 'vertical w-50',
             label: __( 'Invoice number format', 'multivendorx' ),            
             placeholder: 'Invoice number format',
             moduleEnabled: 'invoice',
@@ -23,7 +23,7 @@ export default {
         {
             key: 'mvx_tinymce_api_section',
             type: 'number',
-            classes: 'vertical width-50',
+            classes: 'vertical w-50',
             label: __( 'Starting invoice number', 'multivendorx' ),            
             placeholder: 'Starting invoice number',
             moduleEnabled: 'invoice',
@@ -33,7 +33,7 @@ export default {
             key: 'commission_type',
             type: 'setting-toggle',
             label: __( 'Invoice PDF page size', 'multivendorx' ),
-            classes: 'vertical width-50',
+            classes: 'vertical w-50',
             desc: __( 'Choose the page size for generated invoice PDFs', 'multivendorx' ),
             moduleEnabled: 'invoice',
             options: [
@@ -59,7 +59,7 @@ export default {
             key: 'commission_type',
             type: 'setting-toggle',
             label: __( 'PDF layout orientation', 'multivendorx' ),
-            classes: 'vertical width-50',
+            classes: 'vertical w-50',
             desc: __( 'Choose whether invoices are generated in portrait or landscape mode', 'multivendorx' ),
             moduleEnabled: 'invoice',
             options: [
@@ -118,7 +118,7 @@ export default {
         {
             key: 'mvx_tinymce_api_section',
             type: 'number',
-            classes: 'vertical width-50',
+            classes: 'vertical w-50',
             label: __( 'GST number', 'multivendorx' ),            
             placeholder: 'Enter GST registration number',
             moduleEnabled: 'invoice',
@@ -127,7 +127,7 @@ export default {
         {
             key: 'mvx_tinymce_api_section',
             type: 'number',
-            classes: 'vertical width-50',
+            classes: 'vertical w-50',
             label: __( 'Tax ID number', 'multivendorx' ),            
             placeholder: 'Enter tax ID number',
             moduleEnabled: 'invoice',

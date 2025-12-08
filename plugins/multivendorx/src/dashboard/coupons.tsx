@@ -829,7 +829,7 @@ const AllCoupon: React.FC = () => {
                             setAddCoupon(true);                  // open popup
                         }}
                     >
-                        <i className="adminlib-plus-circle-o"></i>
+                        <i className="adminlib-plus-circle"></i>
                         {__('Add New', 'multivendorx')}
                     </div>
                 </div>

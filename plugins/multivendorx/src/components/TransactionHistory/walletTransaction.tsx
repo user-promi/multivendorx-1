@@ -726,61 +726,61 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId, dateRang
     const fee = (amount * (percentage / 100)) + fixed;
     return (
         <>
-            <div className="general-wrapper">
-                <div className="row">
-                    <div className="col">
-                        <div className="column">
-                            <div className="card-header">
-                                <div className="left">
-                                    <div className="title">{__("Recent payouts", "multivendorx")}</div>
-                                </div>
-                            </div>
-                            {recentDebits.length > 0 ? (
-                                <>
-                                    {recentDebits.map((txn) => {
-                                        // Format payment method nicely (e.g., "stripe-connect" -> "Stripe Connect")
-                                        const formattedPaymentMethod = txn.payment_method
-                                            ? txn.payment_method
-                                                .replace(/[-_]/g, ' ')                // replace - and _ with spaces
-                                                .replace(/\b\w/g, char => char.toUpperCase()) // capitalize each word
-                                            : __("N/A", "multivendorx");
-
-                                        return (
-                                            <div key={txn.id} className="info-item">
-                                                <div className="details-wrapper">
-                                                    <div className="details">
-                                                        <div className="name">{formattedPaymentMethod}</div>
-                                                        <div className="des">
-                                                            {new Date(txn.date).toLocaleDateString("en-US", {
-                                                                month: "short",
-                                                                day: "2-digit",
-                                                                year: "numeric",
-                                                            })}
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div
-                                                    className={`right-details ${parseFloat(txn.debit) < 0 ? 'negative' : 'positive'
-                                                        }`}
-                                                >
-                                                    <div className={`price ${parseFloat(txn.debit) < 0 ? 'negative' : 'positive'
-                                                        }`}>   {formatCurrency(txn.debit)}</div>
-                                                </div>
-                                            </div>
-                                        );
-                                    })}
-                                </>
-                            ) : (
-                                <>
-                                    <div className="des">
-                                        {__("No recent payouts transactions found.", "multivendorx")}
-                                    </div>
-                                </>
-                            )}
+            <div className="row">
+                <div className="column">
+                    <div className="card-header">
+                        <div className="left">
+                            <div className="title">{__("Recent payouts", "multivendorx")}</div>
                         </div>
                     </div>
-                    <div className="column">
+                    <div className="card-body">
+                        {recentDebits.length > 0 ? (
+                            <>
+                                {recentDebits.map((txn) => {
+                                    // Format payment method nicely (e.g., "stripe-connect" -> "Stripe Connect")
+                                    const formattedPaymentMethod = txn.payment_method
+                                        ? txn.payment_method
+                                            .replace(/[-_]/g, ' ')                // replace - and _ with spaces
+                                            .replace(/\b\w/g, char => char.toUpperCase()) // capitalize each word
+                                        : __("N/A", "multivendorx");
+
+                                    return (
+                                        <div key={txn.id} className="info-item">
+                                            <div className="details-wrapper">
+                                                <div className="details">
+                                                    <div className="name">{formattedPaymentMethod}</div>
+                                                    <div className="des">
+                                                        {new Date(txn.date).toLocaleDateString("en-US", {
+                                                            month: "short",
+                                                            day: "2-digit",
+                                                            year: "numeric",
+                                                        })}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div
+                                                className={`right-details ${parseFloat(txn.debit) < 0 ? 'negative' : 'positive'
+                                                    }`}
+                                            >
+                                                <div className={`price ${parseFloat(txn.debit) < 0 ? 'negative' : 'positive'
+                                                    }`}>   {formatCurrency(txn.debit)}</div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </>
+                        ) : (
+                            <>
+                                <div className="des">
+                                    {__("No recent payouts transactions found.", "multivendorx")}
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </div>
+                <div className="column">
+                    <div className="card-body">
                         <div className="payout-wrapper">
                             <div className="payout-header">
                                 <div className="price-wrapper">
@@ -830,112 +830,113 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId, dateRang
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <CommonPopup
-                    open={requestWithdrawal}
-                    width="450px"
-                    height="75%"
-                    header={
-                        <>
-                            <div className="title">
-                                <i className="adminlib-wallet"></i>
-                                {__("Disburse payment", "multivendorx")}
-                            </div>
-                            <i
-                                className="icon adminlib-close"
-                                onClick={() => {
-                                    setRequestWithdrawal(false);
-                                }}
-                            ></i>
-                            <div className="des">
-                                {__(
-                                    "Release earnings to your stores in a few simple steps - amount, payment processor, and an optional note.",
-                                    "multivendorx"
+            <CommonPopup
+                open={requestWithdrawal}
+                width="450px"
+                height="75%"
+                header={
+                    <>
+                        <div className="title">
+                            <i className="adminlib-wallet"></i>
+                            {__("Disburse payment", "multivendorx")}
+                        </div>
+                        <i
+                            className="icon adminlib-close"
+                            onClick={() => {
+                                setRequestWithdrawal(false);
+                            }}
+                        ></i>
+                        <div className="des">
+                            {__(
+                                "Release earnings to your stores in a few simple steps - amount, payment processor, and an optional note.",
+                                "multivendorx"
+                            )}
+                        </div>
+                    </>
+                }
+                footer={
+                    <>
+                        <div
+                            className="admin-btn btn-purple"
+                            onClick={() => handleWithdrawal()}
+                        >
+                            {__("Disburse", "multivendorx")}
+                        </div>
+                    </>
+                }
+            >
+                <div className="content">
+                    {/* start left section */}
+                    <div className="form-group-wrapper">
+                        <div className="available-balance">
+                            {__("Withdrawable balance", "multivendorx")} <div>{formatCurrency(wallet.available_balance)}</div>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="payment_method">{__("Payment Processor", "multivendorx")}</label>
+
+                            <div className="payment-method">
+                                {storeData?.payment_method ? (
+                                    <div className="method">
+                                        <i className="adminlib-bank"></i>
+                                        {formatMethod(storeData.payment_method)}
+                                    </div>
+                                ) : (
+                                    <span>
+                                        {__("No payment method saved", "multivendorx")}
+                                    </span>
                                 )}
-                            </div>
-                        </>
-                    }
-                    footer={
-                        <>
-                            <div
-                                className="admin-btn btn-purple"
-                                onClick={() => handleWithdrawal()}
-                            >
-                                {__("Disburse", "multivendorx")}
-                            </div>
-                        </>
-                    }
-                >
-                    <div className="content">
-                        {/* start left section */}
-                        <div className="form-group-wrapper">
-                            <div className="available-balance">
-                                {__("Withdrawable balance", "multivendorx")} <div>{formatCurrency(wallet.available_balance)}</div>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="payment_method">{__("Payment Processor", "multivendorx")}</label>
-
-                                <div className="payment-method">
-                                    {storeData?.payment_method ? (
-                                        <div className="method">
-                                            <i className="adminlib-bank"></i>
-                                            {formatMethod(storeData.payment_method)}
-                                        </div>
-                                    ) : (
-                                        <span>
-                                            {__("No payment method saved", "multivendorx")}
-                                        </span>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className="form-group">
-                                <label htmlFor="amount">{__("Amount", "multivendorx")}</label>
-
-                                <BasicInput
-                                    type="number"
-                                    name="amount"
-                                    value={amount}
-                                    onChange={(e: any) => AmountChange(Number(e.target.value))}
-                                />
-
-                                <div className="free-wrapper">
-                                    {wallet?.withdrawal_setting?.length > 0 && wallet?.withdrawal_setting?.[0]?.free_withdrawals ? (
-                                        <>
-                                            {freeLeft > 0 ? (
-                                                <span>{sprintf(__("Burning 1 out of %s free withdrawals", "multivendorx"), freeLeft)}</span>
-                                            ) : (
-                                                <span>{__("Free withdrawal limit reached", "multivendorx")}</span>
-                                            )}
-                                            <span>{__("Total:", "multivendorx")} {formatCurrency(amount || 0)}</span>
-                                            <span>{__("Fee:", "multivendorx")} {formatCurrency(fee)}</span>
-                                        </>
-                                    ) : (
-                                        <span>{__("Actual withdrawal:", "multivendorx")} {formatCurrency(amount || 0)}</span>
-                                    )}
-                                </div>
-
-
-                                {validationErrors.amount && (
-                                    <div className="invalid-massage">{validationErrors.amount}</div>
-                                )}
-                            </div>
-
-                            <div className="form-group">
-                                <label htmlFor="note">{__("Note", "multivendorx")}</label>
-                                <TextArea
-                                    name="note"
-                                    wrapperClass="setting-from-textarea"
-                                    inputClass="textarea-input"
-                                    descClass="settings-metabox-description"
-                                    value={note}
-                                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNote(e.target.value)}
-                                />
                             </div>
                         </div>
+
+                        <div className="form-group">
+                            <label htmlFor="amount">{__("Amount", "multivendorx")}</label>
+
+                            <BasicInput
+                                type="number"
+                                name="amount"
+                                value={amount}
+                                onChange={(e: any) => AmountChange(Number(e.target.value))}
+                            />
+
+                            <div className="free-wrapper">
+                                {wallet?.withdrawal_setting?.length > 0 && wallet?.withdrawal_setting?.[0]?.free_withdrawals ? (
+                                    <>
+                                        {freeLeft > 0 ? (
+                                            <span>{sprintf(__("Burning 1 out of %s free withdrawals", "multivendorx"), freeLeft)}</span>
+                                        ) : (
+                                            <span>{__("Free withdrawal limit reached", "multivendorx")}</span>
+                                        )}
+                                        <span>{__("Total:", "multivendorx")} {formatCurrency(amount || 0)}</span>
+                                        <span>{__("Fee:", "multivendorx")} {formatCurrency(fee)}</span>
+                                    </>
+                                ) : (
+                                    <span>{__("Actual withdrawal:", "multivendorx")} {formatCurrency(amount || 0)}</span>
+                                )}
+                            </div>
+
+
+                            {validationErrors.amount && (
+                                <div className="invalid-massage">{validationErrors.amount}</div>
+                            )}
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="note">{__("Note", "multivendorx")}</label>
+                            <TextArea
+                                name="note"
+                                wrapperClass="setting-from-textarea"
+                                inputClass="textarea-input"
+                                descClass="settings-metabox-description"
+                                value={note}
+                                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNote(e.target.value)}
+                            />
+                        </div>
                     </div>
-                </CommonPopup>
-            </div>
+                </div>
+            </CommonPopup>
+
             <div className="admin-table-wrapper">
                 <Table
                     data={data}
