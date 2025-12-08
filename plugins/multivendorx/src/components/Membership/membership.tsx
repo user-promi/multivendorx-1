@@ -1,17 +1,41 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Tabs } from 'zyra';
 
-import MessageAndMail from './messageAndMail';
+import React, { useEffect, JSX } from 'react';
+import { __ } from '@wordpress/i18n';
+// Context
+import { SettingProvider, useSetting } from '../../contexts/SettingContext';
+// Services
+import { getTemplateData } from '../../services/templateService';
+// Utils
+import {
+    getAvailableSettings,
+    getSettingById,
+    AdminForm,
+    Tabs,
+    useModules
+} from 'zyra';
+
+// Types
+type SettingItem = Record< string, any >;
+
+interface SettingsProps {
+    id: string;
+}
 
 
 const Memberships = () => {
-    const location = useLocation();
-    const hash = location.hash.replace(/^#/, '');
+    const settingsArray: SettingItem[] = getAvailableSettings(
+        getTemplateData('membership'),
+        []
+    );
+    const location = new URLSearchParams( useLocation().hash.substring( 1 ) );
+    // const location = useLocation();
+    // const hash = location.hash.replace(/^#/, '');
 
-    const hashParams = new URLSearchParams(hash);
-    const currentTab = hashParams.get('subtab') || 'payment-membership-message';
+    // const hashParams = new URLSearchParams(hash);
+    // const currentTab = hashParams.get('subtab') || 'payment-membership-message';
 
-    const prepareUrl = (tabId: string) => `?page=multivendorx#&tab=memberships&subtab=${tabId}`;
+    // const prepareUrl = (tabId: string) => `?page=multivendorx#&tab=memberships&subtab=${tabId}`;
 
     const tabData = [
         {
@@ -52,24 +76,80 @@ const Memberships = () => {
         },
     ];
 
-    const getForm = (tabId: string) => {
-        switch (tabId) {
-            case 'payment-membership-message':
-                return <MessageAndMail id=''/>;
-            case 'payment-membership-design':
-                return <h1>design</h1>;
-            case 'payment-membership-subscribers':
-                return <h1>Subscriber</h1>;
-            case 'payment-membership-plans':
-                return <h1>Plans</h1>;
-            default:
-                return <div></div>;
+    // const getForm = (tabId: string) => {
+    //     switch (tabId) {
+    //         case 'payment-membership-message':
+    //             return <MessageAndMail id=''/>;
+    //         case 'payment-membership-design':
+    //             return <h1>design</h1>;
+    //         case 'payment-membership-subscribers':
+    //             return <h1>Subscriber</h1>;
+    //         case 'payment-membership-plans':
+    //             return <h1>Plans</h1>;
+    //         default:
+    //             return <div></div>;
+    //     }
+    // };
+
+    const GetForm = (currentTab: string | null): JSX.Element | null => {
+        // get the setting context
+        const { setting, settingName, setSetting, updateSetting } =
+            useSetting();
+        const { modules } = useModules();
+
+        if ( ! currentTab ) return null;
+        const settingModal = getSettingById( settingsArray as any, currentTab );
+        const [storeTabSetting, setStoreTabSetting] = React.useState<any>(null);
+
+        // Ensure settings context is initialized
+        if ( settingName !== currentTab ) {
+            setSetting(
+                currentTab,
+                appLocalizer.settings_databases_value[ currentTab ] || {}
+            );
         }
+
+        useEffect(() => {
+            if (settingName === currentTab) {
+                appLocalizer.settings_databases_value[settingName] = setting;
+            }
+
+        }, [setting, settingName, currentTab]);
+
+        return settingName === currentTab ? (
+            <AdminForm
+                settings={settingModal as any}
+                proSetting={appLocalizer.pro_settings_list}
+                setting={setting}
+                updateSetting={updateSetting}
+                appLocalizer={appLocalizer}
+                modules={modules}
+                storeTabSetting={storeTabSetting}
+            />
+        ) : (
+            <>Loading...</>
+        );
     };
 
     return (
         <>
-            <Tabs
+        <SettingProvider>
+           
+                <Tabs
+                    tabData={ settingsArray as any }
+                    currentTab={ location.get( 'subtab' ) as string }
+                    getForm={ GetForm }
+                    prepareUrl={ ( subTab: string ) =>
+                        `?page=multivendorx#&tab=memberships&subtab=${ subTab }`
+                    }
+                    appLocalizer={ appLocalizer }
+                    supprot={[]}
+                    Link={ Link }
+                    settingName={'Memberships'}
+                />
+          
+        </SettingProvider>
+            {/* <Tabs
                 tabData={tabData}
                 currentTab={currentTab}
                 getForm={getForm}
@@ -77,7 +157,7 @@ const Memberships = () => {
                 appLocalizer={appLocalizer}
                 Link={Link}
                 settingName={'Memberships'}
-            />
+            /> */}
         </>
     );
 };
