@@ -131,10 +131,10 @@ class Admin {
 						'name'   => __( 'Reports', 'multivendorx' ),
 						'subtab' => '',
 					),
-					// 'memberships' => array(
-					// 'name'   => __( 'Memberships', 'multivendorx' ),
-					// 'subtab' => 'payment-membership-message',
-					// ),
+					'memberships' => array(
+					'name'   => __( 'Memberships', 'multivendorx' ),
+					'subtab' => 'payment-membership-message',
+					),
 					'settings'            => array(
 						'name'   => __( 'Settings', 'multivendorx' ),
 						'subtab' => 'marketplace',
