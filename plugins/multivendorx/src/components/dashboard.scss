@@ -1,5 +1,20 @@
 @use './config.scss' as *;
 
+.w-10 {
+    width: 10%;
+}
+
+.w-35 {
+    width: 35%;
+}
+.w-50{
+    width: 50%;
+}
+.w-65 {
+    width: 65%;
+}
+
+
 .card-header {
     display: flex;
     justify-content: space-between;
@@ -283,122 +298,6 @@
 }
 
 // card styles start
-
-// action start
-// .overview-card-wrapper {
-//     display: flex;
-//     gap: 1rem;
-//     width: 100%;
-//     flex-wrap: wrap;
-
-//     &.tab {
-//         cursor: pointer;
-//         padding-bottom: 1.5rem;
-
-//         .tab-action {
-//             width: 24%;
-//             box-sizing: border-box;
-
-//             &:hover {
-//                 background: $theme-color;
-//                 color: #fff;
-
-//                 .details-wrapper {
-//                     color: #fff;
-
-//                     i {
-//                         background: #fff;
-//                         color: $theme-color;
-//                     }
-//                 }
-//             }
-//         }
-
-//         .details-wrapper {
-//             align-items: end;
-
-//             .title {
-//                 span {
-//                     font-size: 3rem;
-//                 }
-//             }
-//         }
-//     }
-
-//     .action {
-//         width: 100%;
-//         padding: 1rem;
-//         border-radius: 0.313rem;
-
-//         .title {
-//             justify-content: space-between;
-//             display: flex;
-//             font-size: 2.5rem;
-//             line-height: 2.5rem;
-//             color: #000;
-//             margin-bottom: 1.313rem;
-
-//             i {
-//                 font-size: 1.5rem;
-//             }
-//         }
-
-//         .description {
-//             font-size: 1.125rem;
-//             color: #000;
-//             font-weight: 500;
-//         }
-//     }
-
-//     .action:nth-child(1) {
-//         background: #5007aa14;
-
-//         i {
-//             color: $theme-color;
-//         }
-//     }
-
-//     .action:nth-child(2) {
-//         background: #bfdeed;
-
-//         i {
-//             color: #003d66;
-//         }
-//     }
-
-//     .action:nth-child(3) {
-//         background: #d9f5f0;
-
-//         i {
-//             color: #06be9f;
-//         }
-//     }
-
-//     .action:nth-child(4) {
-//         background: #5007aa14;
-
-//         i {
-//             color: $theme-color;
-//         }
-//     }
-
-//     .action:nth-child(5) {
-//         background: #b89d0325;
-
-//         i {
-//             color: #b89d03;
-//         }
-//     }
-
-//     .action:nth-child(6) {
-//         background: #b8039a1f;
-
-//         i {
-//             color: #b8039a;
-//         }
-//     }
-// }
-// action style end
 
 // payout page price section start
 .payout-wrapper {
