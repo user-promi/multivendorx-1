@@ -50,42 +50,6 @@ const AddProduct = () => {
             });
     }, [productId]);
 
-    // const [variants, setVariants] = useState([
-    //     {
-    //         id: 1,
-    //         name: 'Color',
-    //         values: [
-    //             'Red',
-    //             'Green',
-    //             'Blue',
-    //             'Red',
-    //             'Green',
-    //             'Blue',
-    //             'Red',
-    //             'Green',
-    //             'Blue',
-    //             'Red',
-    //             'Green',
-    //             'Blue',
-    //         ],
-    //         tempValue: '',
-    //         isEditing: false,
-    //     },
-    //     {
-    //         id: 2,
-    //         name: 'Size',
-    //         values: ['S', 'M', 'L', 'XL'],
-    //         tempValue: '',
-    //         isEditing: false,
-    //     },
-    //     {
-    //         id: 3,
-    //         name: 'Material',
-    //         values: ['Cotton', 'Silk'],
-    //         tempValue: '',
-    //         isEditing: false,
-    //     },
-    // ]);
     const [AddAttribute, setAddAttribute] = useState(false);
     const [Addvariant, setAddvariant] = useState(false);
     const [showAddNew, setShowAddNew] = useState(false);
@@ -346,46 +310,6 @@ const AddProduct = () => {
         );
     };
 
-    // category end
-    // useEffect(() => {
-    //     function handleClick(e) {
-    //         if (!wrapperRef.current) return;
-
-    //         variants.forEach((v) => {
-    //             if (v.isEditing) {
-    //                 // If click is outside that variant -> save
-    //                 const el = document.getElementById(`variant-${v.id}`);
-    //                 if (el && !el.contains(e.target)) {
-    //                     finishEditing(v.id);
-    //                 }
-    //             }
-    //         });
-    //     }
-
-    //     document.addEventListener('click', handleClick);
-    //     return () => document.removeEventListener('click', handleClick);
-    // }, [variants]);
-
-    // const finishEditing = (id) => {
-    //     setVariants((prev) =>
-    //         prev.map((v) => {
-    //             if (v.id === id) {
-    //                 const cleanedValues = v.tempValue.trim()
-    //                     ? [...v.values, v.tempValue.trim()]
-    //                     : v.values;
-
-    //                 return {
-    //                     ...v,
-    //                     values: cleanedValues,
-    //                     tempValue: '',
-    //                     isEditing: false,
-    //                 };
-    //             }
-    //             return v;
-    //         })
-    //     );
-    // };
-
     const toggleCard = (cardId) => {
         const body = document.querySelector(`#${cardId} .card-body`);
         const arrow = document.querySelector(`#${cardId} .arrow-icon`);
@@ -444,7 +368,7 @@ const AddProduct = () => {
                 ?.category_pyramid_guide == 'yes'
                 ? [{ id: Number(selectedChild || selectedSub || selectedCat) }]
                 : selectedCats.map((id) => ({ id }));
-
+        console.log('product in create', product);
         try {
             const payload = {
                 ...product,
@@ -631,7 +555,6 @@ const AddProduct = () => {
         let newItem;
 
         if (selectedAttribute && selectedAttribute.value !== 0) {
-            // existing taxonomy attribute
             newItem = {
                 id: selectedAttribute.value,
                 name: selectedAttribute.label,
@@ -640,7 +563,6 @@ const AddProduct = () => {
                 visible: true,
             };
         } else {
-            // custom attribute
             newItem = {
                 id: 0,
                 name: newAttributeName,
@@ -650,23 +572,28 @@ const AddProduct = () => {
             };
         }
 
+        let updatedAttributes;
+
         if (editingIndex !== null) {
-            // UPDATE
-            setProductAttributes((prev) => {
-                const copy = [...prev];
-                copy[editingIndex] = newItem;
-                return copy;
-            });
+            updatedAttributes = productAttributes.map((attr, i) =>
+                i === editingIndex ? newItem : attr
+            );
         } else {
-            // ADD NEW
-            setProductAttributes((prev) => [...prev, newItem]);
+            updatedAttributes = [...productAttributes, newItem];
         }
+
+        setProductAttributes(updatedAttributes);
+
+        setProduct((prev) => ({
+            ...prev,
+            attributes: updatedAttributes,
+        }));
 
         setAddAttribute(false);
         setSelectedAttribute(null);
         setAttributeValues([]);
         setShowAddNew(false);
-        setEditingIndex(null); // not editing
+        setEditingIndex(null);
     };
 
     useEffect(() => {
@@ -677,20 +604,17 @@ const AddProduct = () => {
         }
     }, [product]);
 
-    // for edit mode
     const [editingIndex, setEditingIndex] = useState(null);
 
     const openEditPopup = (attr, index) => {
         setEditingIndex(index);
 
-        // find attribute from existing attributes list
         const match = existingAttributes.find((a) => a.name === attr.name);
 
         if (match) {
             setSelectedAttribute({ label: match.name, value: match.id });
             setShowAddNew(false);
         } else {
-            // Custom user attribute
             setSelectedAttribute(null);
             setShowAddNew(true);
             setNewAttributeName(attr.name);
@@ -722,7 +646,7 @@ const AddProduct = () => {
         }));
     };
 
-    const [editingVariation, setEditingVariation] = useState(null); // for edit mode
+    const [editingVariation, setEditingVariation] = useState(null);
     const [variant, setVariant] = useState({});
 
     const handleAddVariant = () => {
@@ -747,7 +671,6 @@ const AddProduct = () => {
         const payload = {
             ...variant,
 
-            // Woo expects this format:
             attributes: variant.attributes?.map((a) => ({
                 id: a.id,
                 option: a.option,
@@ -766,7 +689,6 @@ const AddProduct = () => {
                     { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
                 );
             } else {
-                // CREATE NEW VARIATION
                 res = await axios.post(
                     `${appLocalizer.apiUrl}/wc/v3/products/${product.id}/variations`,
                     payload,
@@ -774,7 +696,6 @@ const AddProduct = () => {
                 );
             }
 
-            // Update local list
             setVariations((prev) => {
                 if (editingVariation) {
                     return prev.map((v) =>
@@ -784,7 +705,6 @@ const AddProduct = () => {
                 return [...prev, res.data];
             });
 
-            // Close popup
             setAddvariant(false);
             setEditingVariation(null);
             setVariant({});
@@ -793,9 +713,81 @@ const AddProduct = () => {
         }
     };
 
+    const generateCombinations = (arrays) => {
+        if (arrays.length === 0) return [];
+
+        return arrays.reduce(
+            (acc, curr) => {
+                const result = [];
+                acc.forEach((a) => {
+                    curr.forEach((b) => {
+                        result.push([...a, b]);
+                    });
+                });
+                return result;
+            },
+            [[]]
+        );
+    };
+
+    const handleGenerateVariations = () => {
+        if (!product.attributes || product.attributes.length === 0) {
+            return;
+        }
+
+        const attributesWithOptions = product.attributes.filter(
+            (attr) => attr.options && attr.options.length > 0
+        );
+
+        if (attributesWithOptions.length === 0) {
+            return;
+        }
+
+        const optionSets = attributesWithOptions.map((attr) =>
+            attr.options.map((opt) => ({
+                id: attr.id,
+                name: attr.name,
+                slug: attr.slug,
+                option: opt,
+            }))
+        );
+
+        // Generate all attribute combinations
+        const combinations = generateCombinations(optionSets);
+
+        const newVariants = combinations.map((combo, index) => ({
+            id: index, // temporary ID
+            attributes: combo,
+            image: null,
+            status: 'publish',
+            downloadable: false,
+            virtual: false,
+            manage_stock: false,
+            sku: '',
+            regular_price: '',
+            sale_price: '',
+            stock_status: 'instock',
+            weight: '',
+            length: '',
+            width: '',
+            height: '',
+            description: '',
+            metadata: {},
+        }));
+
+        setVariations((prev) => {
+            const exists = (v, combo) =>
+                JSON.stringify(v.attributes) === JSON.stringify(combo);
+
+            const filtered = newVariants.filter(
+                (v) => !prev.some((p) => exists(p, v.attributes))
+            );
+
+            return [...prev, ...filtered];
+        });
+    };
+
     console.log('product', product);
-    console.log('variations', variations);
-    console.log('Variant', variant);
     return (
         <>
             <div className="page-title-wrapper">
@@ -1322,10 +1314,14 @@ const AddProduct = () => {
                             <div className="card-title">
                                 <div className="title">Variants</div>
                                 <div className="buttons">
-                                    <div className="add-btn">
+                                    <div
+                                        className="add-btn"
+                                        onClick={handleGenerateVariations}
+                                    >
                                         <div className="i adminlib-plus-circle-o"></div>
                                         Generate variations
                                     </div>
+
                                     <div
                                         className="add-btn"
                                         onClick={handleAddVariant}
@@ -1686,11 +1682,6 @@ const AddProduct = () => {
                                             {product.attributes?.length > 0 &&
                                                 product.attributes.map(
                                                     (attr) => {
-                                                        console.log(
-                                                            'attr',
-                                                            attr
-                                                        );
-
                                                         const options =
                                                             attr.options.map(
                                                                 (opt) => ({
@@ -1699,26 +1690,12 @@ const AddProduct = () => {
                                                                 })
                                                             );
 
-                                                        // existing selected value
                                                         const selectedValue =
                                                             variant?.attributes?.find(
                                                                 (a) =>
                                                                     a.id ===
                                                                     attr.id
                                                             )?.option || '';
-
-                                                        console.log(
-                                                            'selected',
-                                                            selectedValue
-                                                        );
-                                                        console.log(
-                                                            'options',
-                                                            options.find(
-                                                                (o) =>
-                                                                    o.value ===
-                                                                    selectedValue
-                                                            )
-                                                        );
 
                                                         return (
                                                             <div
@@ -1740,7 +1717,7 @@ const AddProduct = () => {
                                                                     ) => {
                                                                         const value =
                                                                             selected?.value ||
-                                                                            ''; // selected is full object
+                                                                            '';
 
                                                                         setVariant(
                                                                             (
@@ -1748,7 +1725,8 @@ const AddProduct = () => {
                                                                             ) => {
                                                                                 const updated =
                                                                                     [
-                                                                                        ...prev.attributes,
+                                                                                        ...(prev.attributes ||
+                                                                                            []),
                                                                                     ];
                                                                                 const index =
                                                                                     updated.findIndex(
@@ -1763,7 +1741,7 @@ const AddProduct = () => {
                                                                                     index !==
                                                                                     -1
                                                                                 ) {
-                                                                                    // ✔ Merge existing object, only update option
+                                                                                    // Merge existing object, only update option
                                                                                     updated[
                                                                                         index
                                                                                     ] =
@@ -1774,12 +1752,12 @@ const AddProduct = () => {
                                                                                             option: value,
                                                                                         };
                                                                                 } else {
-                                                                                    // ✔ Add new attribute entry
+                                                                                    // Add new attribute entry
                                                                                     updated.push(
                                                                                         {
                                                                                             id: attr.id,
                                                                                             name: attr.name,
-                                                                                            slug: attr.slug, // keep FULL structure
+                                                                                            slug: attr.slug,
                                                                                             option: value,
                                                                                         }
                                                                                     );
