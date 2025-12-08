@@ -15,6 +15,17 @@ FOUND 2 ERRORS AND 2 WARNINGS AFFECTING 2 LINES
 ------------------------------------------------------------------------------------------------
 
 
+FILE: modules/QuestionsAnswers/Frontend.php
+------------------------------------------------------------------------------------------------
+FOUND 1 ERROR AND 1 WARNING AFFECTING 2 LINES
+------------------------------------------------------------------------------------------------
+ 40 | WARNING | This comment is 55% valid code; is this commented out code?
+    |         | (Squiz.PHP.CommentedOutCode.Found)
+ 47 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
+    |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
+------------------------------------------------------------------------------------------------
+
+
 FILE: classes/RestAPI/Controllers/MultiVendorX_REST_Commission_Controller.php
 ------------------------------------------------------------------------------------------------
 FOUND 17 ERRORS AND 11 WARNINGS AFFECTING 25 LINES
@@ -101,23 +112,9 @@ FOUND 17 ERRORS AND 11 WARNINGS AFFECTING 25 LINES
 ------------------------------------------------------------------------------------------------
 
 
-FILE: classes/RestAPI/Controllers/MultiVendorX_REST_Logs_Controller.php
-------------------------------------------------------------------------------------------------
-FOUND 0 ERRORS AND 1 WARNING AFFECTING 1 LINE
-------------------------------------------------------------------------------------------------
- 83 | WARNING | Found unknown capability "edit_stores" in function call to current_user_can().
-    |         | Please check the spelling of the capability. If this is a custom capability,
-    |         | please verify the capability is registered with WordPress via a call to
-    |         | WP_Role(s)->add_cap().
-    |         | Custom capabilities can be made known to this sniff by setting the
-    |         | "custom_capabilities" property in the PHPCS ruleset.
-    |         | (WordPress.WP.Capabilities.Unknown)
-------------------------------------------------------------------------------------------------
-
-
 FILE: classes/Install.php
 ------------------------------------------------------------------------------------------------
-FOUND 2 ERRORS AND 7 WARNINGS AFFECTING 4 LINES
+FOUND 2 ERRORS AND 6 WARNINGS AFFECTING 3 LINES
 ------------------------------------------------------------------------------------------------
  295 | WARNING | Use of a direct database call is discouraged.
      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
@@ -133,24 +130,10 @@ FOUND 2 ERRORS AND 7 WARNINGS AFFECTING 4 LINES
      |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
  363 | ERROR   | Use placeholders and $wpdb->prepare(); found $sql
      |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 373 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 736 | WARNING | This comment is 60% valid code; is this commented out code?
+ 737 | WARNING | This comment is 60% valid code; is this commented out code?
      |         | (Squiz.PHP.CommentedOutCode.Found)
- 736 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
+ 737 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
      |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
-------------------------------------------------------------------------------------------------
-
-
-FILE: modules/QuestionsAnswers/Frontend.php
-------------------------------------------------------------------------------------------------
-FOUND 1 ERROR AND 1 WARNING AFFECTING 2 LINES
-------------------------------------------------------------------------------------------------
- 40 | WARNING | This comment is 55% valid code; is this commented out code?
-    |         | (Squiz.PHP.CommentedOutCode.Found)
- 47 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-    |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
 ------------------------------------------------------------------------------------------------
 
 
@@ -249,135 +232,57 @@ FOUND 19 ERRORS AND 18 WARNINGS AFFECTING 31 LINES
 ------------------------------------------------------------------------------------------------
 
 
-FILE: modules/Refund/Frontend.php
+FILE: modules/QuestionsAnswers/Util.php
 ------------------------------------------------------------------------------------------------
-FOUND 14 ERRORS AFFECTING 9 LINES
+FOUND 4 ERRORS AND 10 WARNINGS AFFECTING 5 LINES
 ------------------------------------------------------------------------------------------------
- 306 | ERROR | Detected usage of a non-sanitized input variable: $_FILES['product_img']['name']
-     |       | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
- 307 | ERROR | Detected usage of a possibly undefined superglobal array index:
-     |       | $_FILES['product_img']['error'][$index]. Check that the array index exists
-     |       | before using it. (WordPress.Security.ValidatedSanitizedInput.InputNotValidated)
- 311 | ERROR | Detected usage of a possibly undefined superglobal array index:
-     |       | $_FILES['product_img']['size'][$index]. Check that the array index exists before
-     |       | using it. (WordPress.Security.ValidatedSanitizedInput.InputNotValidated)
- 315 | ERROR | Detected usage of a possibly undefined superglobal array index:
-     |       | $_FILES['product_img']['name'][$index]. Check that the array index exists before
-     |       | using it. (WordPress.Security.ValidatedSanitizedInput.InputNotValidated)
- 315 | ERROR | Detected usage of a non-sanitized input variable:
-     |       | $_FILES['product_img']['name'][$index]
-     |       | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
- 321 | ERROR | Detected usage of a possibly undefined superglobal array index:
-     |       | $_FILES['product_img']['name'][$index]. Check that the array index exists before
-     |       | using it. (WordPress.Security.ValidatedSanitizedInput.InputNotValidated)
- 322 | ERROR | Detected usage of a possibly undefined superglobal array index:
-     |       | $_FILES['product_img']['type'][$index]. Check that the array index exists before
-     |       | using it. (WordPress.Security.ValidatedSanitizedInput.InputNotValidated)
- 322 | ERROR | Detected usage of a non-sanitized input variable:
-     |       | $_FILES['product_img']['type'][$index]
-     |       | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
- 323 | ERROR | Detected usage of a possibly undefined superglobal array index:
-     |       | $_FILES['product_img']['tmp_name'][$index]. Check that the array index exists
-     |       | before using it. (WordPress.Security.ValidatedSanitizedInput.InputNotValidated)
- 323 | ERROR | Detected usage of a non-sanitized input variable:
-     |       | $_FILES['product_img']['tmp_name'][$index]
-     |       | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
- 324 | ERROR | Detected usage of a possibly undefined superglobal array index:
-     |       | $_FILES['product_img']['error'][$index]. Check that the array index exists
-     |       | before using it. (WordPress.Security.ValidatedSanitizedInput.InputNotValidated)
- 324 | ERROR | Detected usage of a non-sanitized input variable:
-     |       | $_FILES['product_img']['error'][$index]
-     |       | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
- 325 | ERROR | Detected usage of a possibly undefined superglobal array index:
-     |       | $_FILES['product_img']['size'][$index]. Check that the array index exists before
-     |       | using it. (WordPress.Security.ValidatedSanitizedInput.InputNotValidated)
- 325 | ERROR | Detected usage of a non-sanitized input variable:
-     |       | $_FILES['product_img']['size'][$index]
-     |       | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+  42 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+  42 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+  42 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
+     |         | (WordPress.DB.PreparedSQL.NotPrepared)
+ 136 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 136 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 136 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
+     |         | (WordPress.DB.PreparedSQL.NotPrepared)
+ 138 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 138 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 138 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
+     |         | (WordPress.DB.PreparedSQL.NotPrepared)
+ 138 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
+     |         | (WordPress.DB.PreparedSQL.NotPrepared)
+ 194 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 194 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 236 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 236 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
 ------------------------------------------------------------------------------------------------
 
 
-FILE: classes/Commission/CommissionUtil.php
+FILE: classes/RestAPI/Controllers/MultiVendorX_REST_Logs_Controller.php
 ------------------------------------------------------------------------------------------------
-FOUND 14 ERRORS AND 18 WARNINGS AFFECTING 19 LINES
+FOUND 0 ERRORS AND 1 WARNING AFFECTING 1 LINE
 ------------------------------------------------------------------------------------------------
-  32 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
-  32 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
-  33 | ERROR   | Use placeholders and $wpdb->prepare(); found Utill
-     |         | (WordPress.DB.PreparedSQL.NotPrepared)
-  33 | ERROR   | Use placeholders and $wpdb->prepare(); found TABLES
-     |         | (WordPress.DB.PreparedSQL.NotPrepared)
-  44 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
-  70 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
-  70 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
-  71 | ERROR   | Use placeholders and $wpdb->prepare(); found Utill
-     |         | (WordPress.DB.PreparedSQL.NotPrepared)
-  71 | ERROR   | Use placeholders and $wpdb->prepare(); found TABLES
-     |         | (WordPress.DB.PreparedSQL.NotPrepared)
-  81 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
-  97 | WARNING | It is recommended not to use reserved keyword "object" as function parameter
-     |         | name. Found: $object
-     |         | (Universal.NamingConventions.NoReservedKeywordParameterNames.objectFound)
- 117 | ERROR   | Variable "$orderBy" is not in valid snake_case format, try "$order_by"
-     |         | (WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase)
- 150 | ERROR   | Variable "$orderBy" is not in valid snake_case format, try "$order_by"
-     |         | (WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase)
- 151 | ERROR   | Variable "$orderBy" is not in valid snake_case format, try "$order_by"
-     |         | (WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase)
- 151 | ERROR   | Variable "$orderBy" is not in valid snake_case format, try "$order_by"
-     |         | (WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase)
- 155 | ERROR   | Variable "$orderBy" is not in valid snake_case format, try "$order_by"
-     |         | (WordPress.NamingConventions.ValidVariableName.InterpolatedVariableNotSnakeCase)
- 167 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 167 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 167 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
-     |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 171 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 171 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 171 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
-     |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 181 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 227 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
-     |         | {$table_name} at                 FROM {$table_name}
-     |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 235 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 235 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 235 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
-     |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 245 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 290 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 290 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 290 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
-     |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 300 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
+ 83 | WARNING | Found unknown capability "edit_stores" in function call to current_user_can().
+    |         | Please check the spelling of the capability. If this is a custom capability,
+    |         | please verify the capability is registered with WordPress via a call to
+    |         | WP_Role(s)->add_cap().
+    |         | Custom capabilities can be made known to this sniff by setting the
+    |         | "custom_capabilities" property in the PHPCS ruleset.
+    |         | (WordPress.WP.Capabilities.Unknown)
 ------------------------------------------------------------------------------------------------
 
 
@@ -453,57 +358,51 @@ FOUND 0 ERRORS AND 1 WARNING AFFECTING 1 LINE
 ------------------------------------------------------------------------------------------------
 
 
-FILE: modules/QuestionsAnswers/Util.php
+FILE: modules/Refund/Frontend.php
 ------------------------------------------------------------------------------------------------
-FOUND 4 ERRORS AND 11 WARNINGS AFFECTING 6 LINES
+FOUND 14 ERRORS AFFECTING 9 LINES
 ------------------------------------------------------------------------------------------------
-  42 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
-  42 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
-  42 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
-     |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 136 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 136 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 136 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
-     |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 138 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 138 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 138 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
-     |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 138 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
-     |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 194 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 194 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 211 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 235 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 235 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
-------------------------------------------------------------------------------------------------
-
-
-FILE: classes/Payments/RealtimeGateway.php
-------------------------------------------------------------------------------------------------
-FOUND 1 ERROR AND 1 WARNING AFFECTING 2 LINES
-------------------------------------------------------------------------------------------------
- 24 | WARNING | This comment is 56% valid code; is this commented out code?
-    |         | (Squiz.PHP.CommentedOutCode.Found)
- 26 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-    |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
+ 306 | ERROR | Detected usage of a non-sanitized input variable: $_FILES['product_img']['name']
+     |       | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 307 | ERROR | Detected usage of a possibly undefined superglobal array index:
+     |       | $_FILES['product_img']['error'][$index]. Check that the array index exists
+     |       | before using it. (WordPress.Security.ValidatedSanitizedInput.InputNotValidated)
+ 311 | ERROR | Detected usage of a possibly undefined superglobal array index:
+     |       | $_FILES['product_img']['size'][$index]. Check that the array index exists before
+     |       | using it. (WordPress.Security.ValidatedSanitizedInput.InputNotValidated)
+ 315 | ERROR | Detected usage of a possibly undefined superglobal array index:
+     |       | $_FILES['product_img']['name'][$index]. Check that the array index exists before
+     |       | using it. (WordPress.Security.ValidatedSanitizedInput.InputNotValidated)
+ 315 | ERROR | Detected usage of a non-sanitized input variable:
+     |       | $_FILES['product_img']['name'][$index]
+     |       | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 321 | ERROR | Detected usage of a possibly undefined superglobal array index:
+     |       | $_FILES['product_img']['name'][$index]. Check that the array index exists before
+     |       | using it. (WordPress.Security.ValidatedSanitizedInput.InputNotValidated)
+ 322 | ERROR | Detected usage of a possibly undefined superglobal array index:
+     |       | $_FILES['product_img']['type'][$index]. Check that the array index exists before
+     |       | using it. (WordPress.Security.ValidatedSanitizedInput.InputNotValidated)
+ 322 | ERROR | Detected usage of a non-sanitized input variable:
+     |       | $_FILES['product_img']['type'][$index]
+     |       | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 323 | ERROR | Detected usage of a possibly undefined superglobal array index:
+     |       | $_FILES['product_img']['tmp_name'][$index]. Check that the array index exists
+     |       | before using it. (WordPress.Security.ValidatedSanitizedInput.InputNotValidated)
+ 323 | ERROR | Detected usage of a non-sanitized input variable:
+     |       | $_FILES['product_img']['tmp_name'][$index]
+     |       | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 324 | ERROR | Detected usage of a possibly undefined superglobal array index:
+     |       | $_FILES['product_img']['error'][$index]. Check that the array index exists
+     |       | before using it. (WordPress.Security.ValidatedSanitizedInput.InputNotValidated)
+ 324 | ERROR | Detected usage of a non-sanitized input variable:
+     |       | $_FILES['product_img']['error'][$index]
+     |       | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+ 325 | ERROR | Detected usage of a possibly undefined superglobal array index:
+     |       | $_FILES['product_img']['size'][$index]. Check that the array index exists before
+     |       | using it. (WordPress.Security.ValidatedSanitizedInput.InputNotValidated)
+ 325 | ERROR | Detected usage of a non-sanitized input variable:
+     |       | $_FILES['product_img']['size'][$index]
+     |       | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
 ------------------------------------------------------------------------------------------------
 
 
@@ -524,6 +423,109 @@ FOUND 3 ERRORS AND 2 WARNINGS AFFECTING 4 LINES
 ------------------------------------------------------------------------------------------------
 
 
+FILE: classes/Commission/CommissionUtil.php
+------------------------------------------------------------------------------------------------
+FOUND 14 ERRORS AND 13 WARNINGS AFFECTING 14 LINES
+------------------------------------------------------------------------------------------------
+  32 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+  32 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+  33 | ERROR   | Use placeholders and $wpdb->prepare(); found Utill
+     |         | (WordPress.DB.PreparedSQL.NotPrepared)
+  33 | ERROR   | Use placeholders and $wpdb->prepare(); found TABLES
+     |         | (WordPress.DB.PreparedSQL.NotPrepared)
+  71 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+  71 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+  72 | ERROR   | Use placeholders and $wpdb->prepare(); found Utill
+     |         | (WordPress.DB.PreparedSQL.NotPrepared)
+  72 | ERROR   | Use placeholders and $wpdb->prepare(); found TABLES
+     |         | (WordPress.DB.PreparedSQL.NotPrepared)
+  99 | WARNING | It is recommended not to use reserved keyword "object" as function parameter
+     |         | name. Found: $object
+     |         | (Universal.NamingConventions.NoReservedKeywordParameterNames.objectFound)
+ 119 | ERROR   | Variable "$orderBy" is not in valid snake_case format, try "$order_by"
+     |         | (WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase)
+ 152 | ERROR   | Variable "$orderBy" is not in valid snake_case format, try "$order_by"
+     |         | (WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase)
+ 153 | ERROR   | Variable "$orderBy" is not in valid snake_case format, try "$order_by"
+     |         | (WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase)
+ 153 | ERROR   | Variable "$orderBy" is not in valid snake_case format, try "$order_by"
+     |         | (WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase)
+ 157 | ERROR   | Variable "$orderBy" is not in valid snake_case format, try "$order_by"
+     |         | (WordPress.NamingConventions.ValidVariableName.InterpolatedVariableNotSnakeCase)
+ 169 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 169 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 169 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
+     |         | (WordPress.DB.PreparedSQL.NotPrepared)
+ 173 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 173 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 173 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
+     |         | (WordPress.DB.PreparedSQL.NotPrepared)
+ 230 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
+     |         | {$table_name} at                 FROM {$table_name}
+     |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 238 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 238 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 238 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
+     |         | (WordPress.DB.PreparedSQL.NotPrepared)
+ 294 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 294 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 294 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
+     |         | (WordPress.DB.PreparedSQL.NotPrepared)
+------------------------------------------------------------------------------------------------
+
+
+FILE: classes/Payments/RealtimeGateway.php
+------------------------------------------------------------------------------------------------
+FOUND 1 ERROR AND 1 WARNING AFFECTING 2 LINES
+------------------------------------------------------------------------------------------------
+ 24 | WARNING | This comment is 56% valid code; is this commented out code?
+    |         | (Squiz.PHP.CommentedOutCode.Found)
+ 26 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
+    |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
+------------------------------------------------------------------------------------------------
+
+
+FILE: modules/StorePolicy/Frontend.php
+------------------------------------------------------------------------------------------------
+FOUND 4 ERRORS AND 4 WARNINGS AFFECTING 6 LINES
+------------------------------------------------------------------------------------------------
+  31 | WARNING | This comment is 59% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+  31 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
+     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
+  95 | WARNING | This comment is 50% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+  95 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
+     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
+  97 | WARNING | This comment is 53% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+  99 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
+     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
+ 101 | WARNING | This comment is 58% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+ 102 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
+     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
+------------------------------------------------------------------------------------------------
+
+
 FILE: modules/Refund/Admin.php
 ------------------------------------------------------------------------------------------------
 FOUND 2 ERRORS AND 2 WARNINGS AFFECTING 2 LINES
@@ -539,9 +541,47 @@ FOUND 2 ERRORS AND 2 WARNINGS AFFECTING 2 LINES
 ------------------------------------------------------------------------------------------------
 
 
+FILE: modules/QuestionsAnswers/MultiVendorX_REST_Qna_Controller.php
+------------------------------------------------------------------------------------------------
+FOUND 3 ERRORS AND 5 WARNINGS AFFECTING 8 LINES
+------------------------------------------------------------------------------------------------
+  94 | WARNING | Found unknown capability "edit_stores" in function call to current_user_can().
+     |         | Please check the spelling of the capability. If this is a custom capability,
+     |         | please verify the capability is registered with WordPress via a call to
+     |         | WP_Role(s)->add_cap().
+     |         | Custom capabilities can be made known to this sniff by setting the
+     |         | "custom_capabilities" property in the PHPCS ruleset.
+     |         | (WordPress.WP.Capabilities.Unknown)
+ 103 | WARNING | Found unknown capability "create_stores" in function call to
+     |         | current_user_can(). Please check the spelling of the capability. If this is a
+     |         | custom capability, please verify the capability is registered with WordPress
+     |         | via a call to WP_Role(s)->add_cap().
+     |         | Custom capabilities can be made known to this sniff by setting the
+     |         | "custom_capabilities" property in the PHPCS ruleset.
+     |         | (WordPress.WP.Capabilities.Unknown)
+ 112 | WARNING | Found unknown capability "edit_stores" in function call to current_user_can().
+     |         | Please check the spelling of the capability. If this is a custom capability,
+     |         | please verify the capability is registered with WordPress via a call to
+     |         | WP_Role(s)->add_cap().
+     |         | Custom capabilities can be made known to this sniff by setting the
+     |         | "custom_capabilities" property in the PHPCS ruleset.
+     |         | (WordPress.WP.Capabilities.Unknown)
+ 148 | ERROR   | Variable "$orderBy" is not in valid snake_case format, try "$order_by"
+     |         | (WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase)
+ 164 | WARNING | Detected usage of meta_query, possible slow query.
+     |         | (WordPress.DB.SlowDBQuery.slow_db_query_meta_query)
+ 214 | ERROR   | Variable "$orderBy" is not in valid snake_case format, try "$order_by"
+     |         | (WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase)
+ 215 | ERROR   | Variable "$orderBy" is not in valid snake_case format, try "$order_by"
+     |         | (WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase)
+ 239 | WARNING | This comment is 50% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+------------------------------------------------------------------------------------------------
+
+
 FILE: classes/Store/SocialVerification.php
 ------------------------------------------------------------------------------------------------
-FOUND 42 ERRORS AND 15 WARNINGS AFFECTING 44 LINES
+FOUND 42 ERRORS AND 14 WARNINGS AFFECTING 43 LINES
 ------------------------------------------------------------------------------------------------
    23 | ERROR   | There must be no blank lines after the class comment
       |         | (Squiz.Commenting.ClassComment.SpacingAfter)
@@ -632,119 +672,48 @@ FOUND 42 ERRORS AND 15 WARNINGS AFFECTING 44 LINES
       |         | (WordPress.Security.ValidatedSanitizedInput.MissingUnslash)
   319 | ERROR   | Detected usage of a non-sanitized input variable: $_SERVER['HTTP_USER_AGENT']
       |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
-  333 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-      |         | production.
-      |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
-  347 | ERROR   | $_SERVER[$key] not unslashed before sanitization. Use wp_unslash() or similar
+  348 | ERROR   | $_SERVER[$key] not unslashed before sanitization. Use wp_unslash() or similar
       |         | (WordPress.Security.ValidatedSanitizedInput.MissingUnslash)
-  347 | ERROR   | Detected usage of a non-sanitized input variable: $_SERVER[$key]
+  348 | ERROR   | Detected usage of a non-sanitized input variable: $_SERVER[$key]
       |         | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
-  365 | ERROR   | Only one object structure is allowed in a file
+  366 | ERROR   | Only one object structure is allowed in a file
       |         | (Generic.Files.OneObjectStructurePerFile.MultipleFound)
-  426 | WARNING | The method parameter $request_data is never used
+  427 | WARNING | The method parameter $request_data is never used
       |         | (Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed)
-  497 | ERROR   | Only one object structure is allowed in a file
+  498 | ERROR   | Only one object structure is allowed in a file
       |         | (Generic.Files.OneObjectStructurePerFile.MultipleFound)
-  566 | WARNING | The method parameter $request_data is never used
+  567 | WARNING | The method parameter $request_data is never used
       |         | (Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed)
-  642 | ERROR   | Only one object structure is allowed in a file
+  643 | ERROR   | Only one object structure is allowed in a file
       |         | (Generic.Files.OneObjectStructurePerFile.MultipleFound)
-  748 | ERROR   | Use Yoda Condition checks, you must. (WordPress.PHP.YodaConditions.NotYoda)
-  852 | ERROR   | Use Yoda Condition checks, you must. (WordPress.PHP.YodaConditions.NotYoda)
-  936 | WARNING | base64_encode() can be used to obfuscate code which is strongly discouraged.
+  749 | ERROR   | Use Yoda Condition checks, you must. (WordPress.PHP.YodaConditions.NotYoda)
+  853 | ERROR   | Use Yoda Condition checks, you must. (WordPress.PHP.YodaConditions.NotYoda)
+  937 | WARNING | base64_encode() can be used to obfuscate code which is strongly discouraged.
       |         | Please verify that the function is used for benign reasons.
       |         | (WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode)
-  949 | ERROR   | Missing doc comment for function build_http_query()
+  950 | ERROR   | Missing doc comment for function build_http_query()
       |         | (Squiz.Commenting.FunctionComment.Missing)
-  957 | ERROR   | Missing doc comment for function is_configured()
+  958 | ERROR   | Missing doc comment for function is_configured()
       |         | (Squiz.Commenting.FunctionComment.Missing)
-  968 | ERROR   | Missing doc comment for function log()
+  969 | ERROR   | Missing doc comment for function log()
       |         | (Squiz.Commenting.FunctionComment.Missing)
-  970 | ERROR   | date() is affected by runtime timezone changes which can cause date/time to
+  971 | ERROR   | date() is affected by runtime timezone changes which can cause date/time to
       |         | be incorrectly displayed. Use gmdate() instead.
       |         | (WordPress.DateTime.RestrictedFunctions.date_date)
-  971 | WARNING | File operations should use WP_Filesystem methods instead of direct PHP
+  972 | WARNING | File operations should use WP_Filesystem methods instead of direct PHP
       |         | filesystem calls. Found: file_put_contents().
       |         | (WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents)
-  982 | ERROR   | Only one object structure is allowed in a file
+  983 | ERROR   | Only one object structure is allowed in a file
       |         | (Generic.Files.OneObjectStructurePerFile.MultipleFound)
- 1046 | WARNING | The method parameter $request_data is never used
+ 1047 | WARNING | The method parameter $request_data is never used
       |         | (Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed)
- 1150 | WARNING | This comment is 50% valid code; is this commented out code?
+ 1151 | WARNING | This comment is 50% valid code; is this commented out code?
       |         | (Squiz.PHP.CommentedOutCode.Found)
- 1158 | ERROR   | A file should either contain function declarations or OO structure
+ 1159 | ERROR   | A file should either contain function declarations or OO structure
       |         | declarations, but not both. Found 4 function declaration(s) and 5 OO
       |         | structure declaration(s). The first function declaration was found on line
-      |         | 1158; the first OO declaration was found on line 25
+      |         | 1159; the first OO declaration was found on line 25
       |         | (Universal.Files.SeparateFunctionsFromOO.Mixed)
-------------------------------------------------------------------------------------------------
-
-
-FILE: modules/StorePolicy/Frontend.php
-------------------------------------------------------------------------------------------------
-FOUND 4 ERRORS AND 4 WARNINGS AFFECTING 6 LINES
-------------------------------------------------------------------------------------------------
-  31 | WARNING | This comment is 59% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
-  31 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
-  95 | WARNING | This comment is 50% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
-  95 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
-  97 | WARNING | This comment is 53% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
-  99 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
- 101 | WARNING | This comment is 58% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
- 102 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
-------------------------------------------------------------------------------------------------
-
-
-FILE: classes/Payments/Disbursement.php
-------------------------------------------------------------------------------------------------
-FOUND 4 ERRORS AND 10 WARNINGS AFFECTING 9 LINES
-------------------------------------------------------------------------------------------------
-  28 | WARNING | This comment is 73% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
-  28 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
-  40 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
-  40 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
-  41 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable {$table} at
-     |         | "SELECT * FROM {$table}
-     |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
-  48 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
-  48 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
-  56 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
-  82 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 100 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 100 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 102 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable {$table} at
-     |         |             SELECT store_id, balance FROM {$table} WHERE id IN ( SELECT
-     |         | MAX(id) FROM {$table} GROUP BY store_id );
-     |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 102 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable {$table} at
-     |         |             SELECT store_id, balance FROM {$table} WHERE id IN ( SELECT
-     |         | MAX(id) FROM {$table} GROUP BY store_id );
-     |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 114 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
 ------------------------------------------------------------------------------------------------
 
 
@@ -770,103 +739,6 @@ FOUND 4 ERRORS AND 5 WARNINGS AFFECTING 9 LINES
      |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
  153 | WARNING | This comment is 67% valid code; is this commented out code?
      |         | (Squiz.PHP.CommentedOutCode.Found)
-------------------------------------------------------------------------------------------------
-
-
-FILE: modules/Refund/MultiVendorX_REST_Refund_Controller.php
-------------------------------------------------------------------------------------------------
-FOUND 6 ERRORS AND 9 WARNINGS AFFECTING 13 LINES
-------------------------------------------------------------------------------------------------
-  50 | WARNING | This comment is 52% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
-  70 | WARNING | Found unknown capability "read_shop_orders" in function call to
-     |         | current_user_can(). Please check the spelling of the capability. If this is a
-     |         | custom capability, please verify the capability is registered with WordPress
-     |         | via a call to WP_Role(s)->add_cap().
-     |         | Custom capabilities can be made known to this sniff by setting the
-     |         | "custom_capabilities" property in the PHPCS ruleset.
-     |         | (WordPress.WP.Capabilities.Unknown)
-  83 | ERROR   | Doc comment for parameter "$request" missing
-     |         | (Squiz.Commenting.FunctionComment.MissingParamTag)
- 150 | WARNING | Detected usage of meta_query, possible slow query.
-     |         | (WordPress.DB.SlowDBQuery.slow_db_query_meta_query)
- 161 | WARNING | Detected usage of meta_query, possible slow query.
-     |         | (WordPress.DB.SlowDBQuery.slow_db_query_meta_query)
- 185 | ERROR   | Missing short description in doc comment
-     |         | (Generic.Commenting.DocComment.MissingShort)
- 198 | ERROR   | The function str_contains() is not present in PHP version 7.4 or earlier
-     |         | (PHPCompatibility.FunctionUse.NewFunctions.str_containsFound)
- 198 | ERROR   | The function str_contains() is not present in PHP version 7.4 or earlier
-     |         | (PHPCompatibility.FunctionUse.NewFunctions.str_containsFound)
- 210 | ERROR   | Missing short description in doc comment
-     |         | (Generic.Commenting.DocComment.MissingShort)
- 276 | WARNING | This comment is 70% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
- 297 | WARNING | This comment is 60% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
- 299 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
- 402 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 402 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 412 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
-------------------------------------------------------------------------------------------------
-
-
-FILE: modules/QuestionsAnswers/MultiVendorX_REST_Qna_Controller.php
-------------------------------------------------------------------------------------------------
-FOUND 3 ERRORS AND 5 WARNINGS AFFECTING 8 LINES
-------------------------------------------------------------------------------------------------
-  94 | WARNING | Found unknown capability "edit_stores" in function call to current_user_can().
-     |         | Please check the spelling of the capability. If this is a custom capability,
-     |         | please verify the capability is registered with WordPress via a call to
-     |         | WP_Role(s)->add_cap().
-     |         | Custom capabilities can be made known to this sniff by setting the
-     |         | "custom_capabilities" property in the PHPCS ruleset.
-     |         | (WordPress.WP.Capabilities.Unknown)
- 103 | WARNING | Found unknown capability "create_stores" in function call to
-     |         | current_user_can(). Please check the spelling of the capability. If this is a
-     |         | custom capability, please verify the capability is registered with WordPress
-     |         | via a call to WP_Role(s)->add_cap().
-     |         | Custom capabilities can be made known to this sniff by setting the
-     |         | "custom_capabilities" property in the PHPCS ruleset.
-     |         | (WordPress.WP.Capabilities.Unknown)
- 112 | WARNING | Found unknown capability "edit_stores" in function call to current_user_can().
-     |         | Please check the spelling of the capability. If this is a custom capability,
-     |         | please verify the capability is registered with WordPress via a call to
-     |         | WP_Role(s)->add_cap().
-     |         | Custom capabilities can be made known to this sniff by setting the
-     |         | "custom_capabilities" property in the PHPCS ruleset.
-     |         | (WordPress.WP.Capabilities.Unknown)
- 148 | ERROR   | Variable "$orderBy" is not in valid snake_case format, try "$order_by"
-     |         | (WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase)
- 164 | WARNING | Detected usage of meta_query, possible slow query.
-     |         | (WordPress.DB.SlowDBQuery.slow_db_query_meta_query)
- 214 | ERROR   | Variable "$orderBy" is not in valid snake_case format, try "$order_by"
-     |         | (WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase)
- 215 | ERROR   | Variable "$orderBy" is not in valid snake_case format, try "$order_by"
-     |         | (WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase)
- 239 | WARNING | This comment is 50% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
-------------------------------------------------------------------------------------------------
-
-
-FILE: modules/GatewayFee/Admin.php
-------------------------------------------------------------------------------------------------
-FOUND 0 ERRORS AND 2 WARNINGS AFFECTING 2 LINES
-------------------------------------------------------------------------------------------------
- 80 | WARNING | unserialize() found. Serialized data has known vulnerability problems with
-    |         | Object Injection. JSON is generally a better approach for serializing data. See
-    |         | https://www.owasp.org/index.php/PHP_Object_Injection
-    |         | (WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize)
- 97 | WARNING | serialize() found. Serialized data has known vulnerability problems with Object
-    |         | Injection. JSON is generally a better approach for serializing data. See
-    |         | https://www.owasp.org/index.php/PHP_Object_Injection
-    |         | (WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize)
 ------------------------------------------------------------------------------------------------
 
 
@@ -912,6 +784,45 @@ FOUND 6 ERRORS AND 8 WARNINGS AFFECTING 5 LINES
 ------------------------------------------------------------------------------------------------
 
 
+FILE: classes/Payments/Disbursement.php
+------------------------------------------------------------------------------------------------
+FOUND 4 ERRORS AND 8 WARNINGS AFFECTING 7 LINES
+------------------------------------------------------------------------------------------------
+  28 | WARNING | This comment is 73% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+  28 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
+     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
+  40 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+  40 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+  41 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable {$table} at
+     |         | "SELECT * FROM {$table}
+     |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+  48 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+  48 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+  56 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 101 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 101 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 103 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable {$table} at
+     |         |             SELECT store_id, balance FROM {$table} WHERE id IN ( SELECT
+     |         | MAX(id) FROM {$table} GROUP BY store_id );
+     |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 103 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable {$table} at
+     |         |             SELECT store_id, balance FROM {$table} WHERE id IN ( SELECT
+     |         | MAX(id) FROM {$table} GROUP BY store_id );
+     |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+------------------------------------------------------------------------------------------------
+
+
 FILE: modules/QuestionsAnswers/Ajax.php
 ------------------------------------------------------------------------------------------------
 FOUND 1 ERROR AND 5 WARNINGS AFFECTING 3 LINES
@@ -943,196 +854,117 @@ FOUND 0 ERRORS AND 1 WARNING AFFECTING 1 LINE
 ------------------------------------------------------------------------------------------------
 
 
-FILE: classes/Store/StoreUtil.php
+FILE: modules/Refund/MultiVendorX_REST_Refund_Controller.php
 ------------------------------------------------------------------------------------------------
-FOUND 15 ERRORS AND 39 WARNINGS AFFECTING 34 LINES
+FOUND 6 ERRORS AND 8 WARNINGS AFFECTING 12 LINES
 ------------------------------------------------------------------------------------------------
-  92 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
-  92 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
-  94 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable {$table} at
-     |         | "DELETE FROM {$table} WHERE store_id = %d AND role_id = %s AND user_id NOT IN
-     |         | (" (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
-  94 | ERROR   | Use placeholders and $wpdb->prepare(); found array_map
-     |         | (WordPress.DB.PreparedSQL.NotPrepared)
-  94 | ERROR   | Use placeholders and $wpdb->prepare(); found $owners
-     |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 102 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 102 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 104 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable {$table} at
-     |         | "SELECT ID FROM {$table} WHERE store_id = %d AND role_id = %s AND user_id =
-     |         | %d" (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 112 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 132 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 149 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 149 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 149 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable $table at
-     |         | "SELECT user_id FROM $table WHERE store_id = %d"
-     |         | (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 160 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 196 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 196 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 196 | ERROR   | Use placeholders and $wpdb->prepare(); found $sql
-     |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 206 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 223 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 223 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 223 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable {$table} at
-     |         | "SELECT * FROM {$table}" (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 233 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 251 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 251 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 251 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable $table at
-     |         | "SELECT * FROM $table WHERE who_created = %d AND status = %s"
-     |         | (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 261 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 325 | WARNING | This comment is 67% valid code; is this commented out code?
+  50 | WARNING | This comment is 52% valid code; is this commented out code?
      |         | (Squiz.PHP.CommentedOutCode.Found)
- 442 | WARNING | unserialize() found. Serialized data has known vulnerability problems with
-     |         | Object Injection. JSON is generally a better approach for serializing data.
-     |         | See https://www.owasp.org/index.php/PHP_Object_Injection
-     |         | (WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize)
- 494 | WARNING | unserialize() found. Serialized data has known vulnerability problems with
-     |         | Object Injection. JSON is generally a better approach for serializing data.
-     |         | See https://www.owasp.org/index.php/PHP_Object_Injection
-     |         | (WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize)
- 526 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 526 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 528 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable {$table} at
-     |         | "SELECT * FROM {$table} WHERE status = %s"
-     |         | (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 542 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 560 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 560 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 562 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable $table_name
-     |         | at "SELECT primary_owner FROM $table_name WHERE store_id = %d"
-     |         | (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 575 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 597 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 597 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 599 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable $table_name
-     |         | at "SELECT ID FROM $table_name WHERE store_id = %d"
-     |         | (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 606 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 606 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 615 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 617 | WARNING | This comment is 50% valid code; is this commented out code?
+  70 | WARNING | Found unknown capability "read_shop_orders" in function call to
+     |         | current_user_can(). Please check the spelling of the capability. If this is a
+     |         | custom capability, please verify the capability is registered with WordPress
+     |         | via a call to WP_Role(s)->add_cap().
+     |         | Custom capabilities can be made known to this sniff by setting the
+     |         | "custom_capabilities" property in the PHPCS ruleset.
+     |         | (WordPress.WP.Capabilities.Unknown)
+  83 | ERROR   | Doc comment for parameter "$request" missing
+     |         | (Squiz.Commenting.FunctionComment.MissingParamTag)
+ 150 | WARNING | Detected usage of meta_query, possible slow query.
+     |         | (WordPress.DB.SlowDBQuery.slow_db_query_meta_query)
+ 161 | WARNING | Detected usage of meta_query, possible slow query.
+     |         | (WordPress.DB.SlowDBQuery.slow_db_query_meta_query)
+ 185 | ERROR   | Missing short description in doc comment
+     |         | (Generic.Commenting.DocComment.MissingShort)
+ 198 | ERROR   | The function str_contains() is not present in PHP version 7.4 or earlier
+     |         | (PHPCompatibility.FunctionUse.NewFunctions.str_containsFound)
+ 198 | ERROR   | The function str_contains() is not present in PHP version 7.4 or earlier
+     |         | (PHPCompatibility.FunctionUse.NewFunctions.str_containsFound)
+ 210 | ERROR   | Missing short description in doc comment
+     |         | (Generic.Commenting.DocComment.MissingShort)
+ 276 | WARNING | This comment is 70% valid code; is this commented out code?
      |         | (Squiz.PHP.CommentedOutCode.Found)
- 641 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 855 | ERROR   | Variable "$orderBy" is not in valid snake_case format, try "$order_by"
-     |         | (WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase)
- 857 | ERROR   | Variable "$orderBy" is not in valid snake_case format, try "$order_by"
-     |         | (WordPress.NamingConventions.ValidVariableName.InterpolatedVariableNotSnakeCase)
- 868 | WARNING | Use of a direct database call is discouraged.
+ 297 | WARNING | This comment is 60% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+ 299 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
+     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
+ 402 | WARNING | Use of a direct database call is discouraged.
      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 868 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+ 402 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
      |         | wp_cache_set() or wp_cache_delete().
      |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 868 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
-     |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 870 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 870 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 870 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
-     |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 882 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
 ------------------------------------------------------------------------------------------------
 
 
-FILE: classes/Commission/CommissionManager.php
+FILE: modules/GatewayFee/Admin.php
 ------------------------------------------------------------------------------------------------
-FOUND 6 ERRORS AND 10 WARNINGS AFFECTING 14 LINES
+FOUND 0 ERRORS AND 2 WARNINGS AFFECTING 2 LINES
 ------------------------------------------------------------------------------------------------
- 139 | WARNING | serialize() found. Serialized data has known vulnerability problems with
-     |         | Object Injection. JSON is generally a better approach for serializing data.
-     |         | See https://www.owasp.org/index.php/PHP_Object_Injection
-     |         | (WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize)
- 159 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 162 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 162 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 173 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 438 | ERROR   | Doc comment for parameter $item_id does not match actual variable name $item
-     |         | (Squiz.Commenting.FunctionComment.ParamNameNoMatch)
- 439 | ERROR   | Doc comment for parameter $item does not match actual variable name $order
-     |         | (Squiz.Commenting.FunctionComment.ParamNameNoMatch)
- 440 | ERROR   | Doc comment for parameter $order does not match actual variable name $store
-     |         | (Squiz.Commenting.FunctionComment.ParamNameNoMatch)
- 441 | ERROR   | Doc comment for parameter $store does not match actual variable name
-     |         | $after_refund_amount (Squiz.Commenting.FunctionComment.ParamNameNoMatch)
- 442 | ERROR   | Superfluous parameter comment
-     |         | (Squiz.Commenting.FunctionComment.ExtraParamComment)
- 510 | ERROR   | Mixing different binary boolean operators within an expression without using
-     |         | parentheses to clarify precedence is not allowed.
-     |         | (Generic.CodeAnalysis.RequireExplicitBooleanOperatorPrecedence.MissingParentheses)
- 586 | WARNING | The method parameter $refund_id is never used
-     |         | (Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed)
- 697 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 697 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 718 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 733 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
+ 80 | WARNING | unserialize() found. Serialized data has known vulnerability problems with
+    |         | Object Injection. JSON is generally a better approach for serializing data. See
+    |         | https://www.owasp.org/index.php/PHP_Object_Injection
+    |         | (WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize)
+ 97 | WARNING | serialize() found. Serialized data has known vulnerability problems with Object
+    |         | Injection. JSON is generally a better approach for serializing data. See
+    |         | https://www.owasp.org/index.php/PHP_Object_Injection
+    |         | (WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize)
+------------------------------------------------------------------------------------------------
+
+
+FILE: modules/StoreShipping/MultiVendorX_REST_Zone_Shipping_Controller.php
+------------------------------------------------------------------------------------------------
+FOUND 0 ERRORS AND 4 WARNINGS AFFECTING 4 LINES
+------------------------------------------------------------------------------------------------
+  94 | WARNING | Found unknown capability "edit_stores" in function call to current_user_can().
+     |         | Please check the spelling of the capability. If this is a custom capability,
+     |         | please verify the capability is registered with WordPress via a call to
+     |         | WP_Role(s)->add_cap().
+     |         | Custom capabilities can be made known to this sniff by setting the
+     |         | "custom_capabilities" property in the PHPCS ruleset.
+     |         | (WordPress.WP.Capabilities.Unknown)
+ 103 | WARNING | Found unknown capability "create_stores" in function call to
+     |         | current_user_can(). Please check the spelling of the capability. If this is a
+     |         | custom capability, please verify the capability is registered with WordPress
+     |         | via a call to WP_Role(s)->add_cap().
+     |         | Custom capabilities can be made known to this sniff by setting the
+     |         | "custom_capabilities" property in the PHPCS ruleset.
+     |         | (WordPress.WP.Capabilities.Unknown)
+ 112 | WARNING | Found unknown capability "edit_stores" in function call to current_user_can().
+     |         | Please check the spelling of the capability. If this is a custom capability,
+     |         | please verify the capability is registered with WordPress via a call to
+     |         | WP_Role(s)->add_cap().
+     |         | Custom capabilities can be made known to this sniff by setting the
+     |         | "custom_capabilities" property in the PHPCS ruleset.
+     |         | (WordPress.WP.Capabilities.Unknown)
+ 237 | WARNING | Detected usage of meta_key, possible slow query.
+     |         | (WordPress.DB.SlowDBQuery.slow_db_query_meta_key)
+------------------------------------------------------------------------------------------------
+
+
+FILE: modules/Compliance/MultiVendorX_REST_Compliance_Controller.php
+------------------------------------------------------------------------------------------------
+FOUND 0 ERRORS AND 3 WARNINGS AFFECTING 3 LINES
+------------------------------------------------------------------------------------------------
+  94 | WARNING | Found unknown capability "edit_stores" in function call to current_user_can().
+     |         | Please check the spelling of the capability. If this is a custom capability,
+     |         | please verify the capability is registered with WordPress via a call to
+     |         | WP_Role(s)->add_cap().
+     |         | Custom capabilities can be made known to this sniff by setting the
+     |         | "custom_capabilities" property in the PHPCS ruleset.
+     |         | (WordPress.WP.Capabilities.Unknown)
+ 103 | WARNING | Found unknown capability "create_stores" in function call to
+     |         | current_user_can(). Please check the spelling of the capability. If this is a
+     |         | custom capability, please verify the capability is registered with WordPress
+     |         | via a call to WP_Role(s)->add_cap().
+     |         | Custom capabilities can be made known to this sniff by setting the
+     |         | "custom_capabilities" property in the PHPCS ruleset.
+     |         | (WordPress.WP.Capabilities.Unknown)
+ 112 | WARNING | Found unknown capability "edit_stores" in function call to current_user_can().
+     |         | Please check the spelling of the capability. If this is a custom capability,
+     |         | please verify the capability is registered with WordPress via a call to
+     |         | WP_Role(s)->add_cap().
+     |         | Custom capabilities can be made known to this sniff by setting the
+     |         | "custom_capabilities" property in the PHPCS ruleset.
+     |         | (WordPress.WP.Capabilities.Unknown)
 ------------------------------------------------------------------------------------------------
 
 
@@ -1231,42 +1063,28 @@ FOUND 12 ERRORS AND 18 WARNINGS AFFECTING 23 LINES
 ------------------------------------------------------------------------------------------------
 
 
-FILE: classes/Deprecated/DeprecatedActionHooks.php
+FILE: modules/Compliance/Util.php
 ------------------------------------------------------------------------------------------------
-FOUND 0 ERRORS AND 1 WARNING AFFECTING 1 LINE
+FOUND 3 ERRORS AND 5 WARNINGS AFFECTING 5 LINES
 ------------------------------------------------------------------------------------------------
- 29 | WARNING | This comment is 60% valid code; is this commented out code?
-    |         | (Squiz.PHP.CommentedOutCode.Found)
-------------------------------------------------------------------------------------------------
-
-
-FILE: modules/StoreShipping/MultiVendorX_REST_Zone_Shipping_Controller.php
-------------------------------------------------------------------------------------------------
-FOUND 0 ERRORS AND 4 WARNINGS AFFECTING 4 LINES
-------------------------------------------------------------------------------------------------
-  94 | WARNING | Found unknown capability "edit_stores" in function call to current_user_can().
-     |         | Please check the spelling of the capability. If this is a custom capability,
-     |         | please verify the capability is registered with WordPress via a call to
-     |         | WP_Role(s)->add_cap().
-     |         | Custom capabilities can be made known to this sniff by setting the
-     |         | "custom_capabilities" property in the PHPCS ruleset.
-     |         | (WordPress.WP.Capabilities.Unknown)
- 103 | WARNING | Found unknown capability "create_stores" in function call to
-     |         | current_user_can(). Please check the spelling of the capability. If this is a
-     |         | custom capability, please verify the capability is registered with WordPress
-     |         | via a call to WP_Role(s)->add_cap().
-     |         | Custom capabilities can be made known to this sniff by setting the
-     |         | "custom_capabilities" property in the PHPCS ruleset.
-     |         | (WordPress.WP.Capabilities.Unknown)
- 112 | WARNING | Found unknown capability "edit_stores" in function call to current_user_can().
-     |         | Please check the spelling of the capability. If this is a custom capability,
-     |         | please verify the capability is registered with WordPress via a call to
-     |         | WP_Role(s)->add_cap().
-     |         | Custom capabilities can be made known to this sniff by setting the
-     |         | "custom_capabilities" property in the PHPCS ruleset.
-     |         | (WordPress.WP.Capabilities.Unknown)
- 237 | WARNING | Detected usage of meta_key, possible slow query.
-     |         | (WordPress.DB.SlowDBQuery.slow_db_query_meta_key)
+  42 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+  62 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
+     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
+ 121 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 121 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 121 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
+     |         | (WordPress.DB.PreparedSQL.NotPrepared)
+ 122 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
+     |         | (WordPress.DB.PreparedSQL.NotPrepared)
+ 156 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 156 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
 ------------------------------------------------------------------------------------------------
 
 
@@ -1278,15 +1096,6 @@ FOUND 1 ERROR AND 1 WARNING AFFECTING 2 LINES
      |         | (Squiz.PHP.CommentedOutCode.Found)
  126 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
      |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
-------------------------------------------------------------------------------------------------
-
-
-FILE: templates/store/store-single-product-tab.php
-------------------------------------------------------------------------------------------------
-FOUND 0 ERRORS AND 1 WARNING AFFECTING 1 LINE
-------------------------------------------------------------------------------------------------
- 50 | WARNING | This comment is 62% valid code; is this commented out code?
-    |         | (Squiz.PHP.CommentedOutCode.Found)
 ------------------------------------------------------------------------------------------------
 
 
@@ -1324,31 +1133,440 @@ FOUND 3 ERRORS AND 3 WARNINGS AFFECTING 6 LINES
 ------------------------------------------------------------------------------------------------
 
 
-FILE: modules/Compliance/MultiVendorX_REST_Compliance_Controller.php
+FILE: classes/Store/StoreUtil.php
 ------------------------------------------------------------------------------------------------
-FOUND 0 ERRORS AND 3 WARNINGS AFFECTING 3 LINES
+FOUND 15 ERRORS AND 30 WARNINGS AFFECTING 25 LINES
 ------------------------------------------------------------------------------------------------
-  94 | WARNING | Found unknown capability "edit_stores" in function call to current_user_can().
-     |         | Please check the spelling of the capability. If this is a custom capability,
-     |         | please verify the capability is registered with WordPress via a call to
-     |         | WP_Role(s)->add_cap().
-     |         | Custom capabilities can be made known to this sniff by setting the
-     |         | "custom_capabilities" property in the PHPCS ruleset.
-     |         | (WordPress.WP.Capabilities.Unknown)
- 103 | WARNING | Found unknown capability "create_stores" in function call to
-     |         | current_user_can(). Please check the spelling of the capability. If this is a
-     |         | custom capability, please verify the capability is registered with WordPress
-     |         | via a call to WP_Role(s)->add_cap().
-     |         | Custom capabilities can be made known to this sniff by setting the
-     |         | "custom_capabilities" property in the PHPCS ruleset.
-     |         | (WordPress.WP.Capabilities.Unknown)
- 112 | WARNING | Found unknown capability "edit_stores" in function call to current_user_can().
-     |         | Please check the spelling of the capability. If this is a custom capability,
-     |         | please verify the capability is registered with WordPress via a call to
-     |         | WP_Role(s)->add_cap().
-     |         | Custom capabilities can be made known to this sniff by setting the
-     |         | "custom_capabilities" property in the PHPCS ruleset.
-     |         | (WordPress.WP.Capabilities.Unknown)
+  92 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+  92 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+  94 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable {$table} at
+     |         | "DELETE FROM {$table} WHERE store_id = %d AND role_id = %s AND user_id NOT IN
+     |         | (" (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+  94 | ERROR   | Use placeholders and $wpdb->prepare(); found array_map
+     |         | (WordPress.DB.PreparedSQL.NotPrepared)
+  94 | ERROR   | Use placeholders and $wpdb->prepare(); found $owners
+     |         | (WordPress.DB.PreparedSQL.NotPrepared)
+ 102 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 102 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 104 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable {$table} at
+     |         | "SELECT ID FROM {$table} WHERE store_id = %d AND role_id = %s AND user_id =
+     |         | %d" (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 112 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 150 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 150 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 150 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable $table at
+     |         | "SELECT user_id FROM $table WHERE store_id = %d"
+     |         | (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 198 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 198 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 198 | ERROR   | Use placeholders and $wpdb->prepare(); found $sql
+     |         | (WordPress.DB.PreparedSQL.NotPrepared)
+ 226 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 226 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 226 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable {$table} at
+     |         | "SELECT * FROM {$table}" (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 255 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 255 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 255 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable $table at
+     |         | "SELECT * FROM $table WHERE who_created = %d AND status = %s"
+     |         | (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 330 | WARNING | This comment is 67% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+ 447 | WARNING | unserialize() found. Serialized data has known vulnerability problems with
+     |         | Object Injection. JSON is generally a better approach for serializing data.
+     |         | See https://www.owasp.org/index.php/PHP_Object_Injection
+     |         | (WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize)
+ 499 | WARNING | unserialize() found. Serialized data has known vulnerability problems with
+     |         | Object Injection. JSON is generally a better approach for serializing data.
+     |         | See https://www.owasp.org/index.php/PHP_Object_Injection
+     |         | (WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize)
+ 531 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 531 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 533 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable {$table} at
+     |         | "SELECT * FROM {$table} WHERE status = %s"
+     |         | (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 566 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 566 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 568 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable $table_name
+     |         | at "SELECT primary_owner FROM $table_name WHERE store_id = %d"
+     |         | (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 604 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 604 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 606 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable $table_name
+     |         | at "SELECT ID FROM $table_name WHERE store_id = %d"
+     |         | (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 613 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 613 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 622 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 624 | WARNING | This comment is 50% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+ 863 | ERROR   | Variable "$orderBy" is not in valid snake_case format, try "$order_by"
+     |         | (WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase)
+ 865 | ERROR   | Variable "$orderBy" is not in valid snake_case format, try "$order_by"
+     |         | (WordPress.NamingConventions.ValidVariableName.InterpolatedVariableNotSnakeCase)
+ 876 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 876 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 876 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
+     |         | (WordPress.DB.PreparedSQL.NotPrepared)
+ 878 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 878 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 878 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
+     |         | (WordPress.DB.PreparedSQL.NotPrepared)
+------------------------------------------------------------------------------------------------
+
+
+FILE: templates/store/store-single-product-tab.php
+------------------------------------------------------------------------------------------------
+FOUND 0 ERRORS AND 1 WARNING AFFECTING 1 LINE
+------------------------------------------------------------------------------------------------
+ 50 | WARNING | This comment is 62% valid code; is this commented out code?
+    |         | (Squiz.PHP.CommentedOutCode.Found)
+------------------------------------------------------------------------------------------------
+
+
+FILE: classes/Commission/CommissionManager.php
+------------------------------------------------------------------------------------------------
+FOUND 6 ERRORS AND 8 WARNINGS AFFECTING 12 LINES
+------------------------------------------------------------------------------------------------
+ 139 | WARNING | serialize() found. Serialized data has known vulnerability problems with
+     |         | Object Injection. JSON is generally a better approach for serializing data.
+     |         | See https://www.owasp.org/index.php/PHP_Object_Injection
+     |         | (WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize)
+ 159 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 162 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 162 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 439 | ERROR   | Doc comment for parameter $item_id does not match actual variable name $item
+     |         | (Squiz.Commenting.FunctionComment.ParamNameNoMatch)
+ 440 | ERROR   | Doc comment for parameter $item does not match actual variable name $order
+     |         | (Squiz.Commenting.FunctionComment.ParamNameNoMatch)
+ 441 | ERROR   | Doc comment for parameter $order does not match actual variable name $store
+     |         | (Squiz.Commenting.FunctionComment.ParamNameNoMatch)
+ 442 | ERROR   | Doc comment for parameter $store does not match actual variable name
+     |         | $after_refund_amount (Squiz.Commenting.FunctionComment.ParamNameNoMatch)
+ 443 | ERROR   | Superfluous parameter comment
+     |         | (Squiz.Commenting.FunctionComment.ExtraParamComment)
+ 511 | ERROR   | Mixing different binary boolean operators within an expression without using
+     |         | parentheses to clarify precedence is not allowed.
+     |         | (Generic.CodeAnalysis.RequireExplicitBooleanOperatorPrecedence.MissingParentheses)
+ 587 | WARNING | The method parameter $refund_id is never used
+     |         | (Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed)
+ 698 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 698 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 719 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+------------------------------------------------------------------------------------------------
+
+
+FILE: classes/Deprecated/DeprecatedActionHooks.php
+------------------------------------------------------------------------------------------------
+FOUND 0 ERRORS AND 1 WARNING AFFECTING 1 LINE
+------------------------------------------------------------------------------------------------
+ 29 | WARNING | This comment is 60% valid code; is this commented out code?
+    |         | (Squiz.PHP.CommentedOutCode.Found)
+------------------------------------------------------------------------------------------------
+
+
+FILE: classes/Payments/PaymentProcessor.php
+------------------------------------------------------------------------------------------------
+FOUND 2 ERRORS AND 8 WARNINGS AFFECTING 8 LINES
+------------------------------------------------------------------------------------------------
+  32 | WARNING | This comment is 69% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+  32 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
+     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
+  73 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 118 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 184 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 210 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 210 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 219 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 298 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
+     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
+ 305 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+------------------------------------------------------------------------------------------------
+
+
+FILE: modules/StoreShipping/Shipping_Helper.php
+------------------------------------------------------------------------------------------------
+FOUND 1 ERROR AND 1 WARNING AFFECTING 2 LINES
+------------------------------------------------------------------------------------------------
+ 26 | ERROR   | Missing parameter comment
+    |         | (Squiz.Commenting.FunctionComment.MissingParamComment)
+ 28 | WARNING | The method parameter $packages is never used
+    |         | (Generic.CodeAnalysis.UnusedFunctionParameter.Found)
+------------------------------------------------------------------------------------------------
+
+
+FILE: modules/StoreReview/Util.php
+------------------------------------------------------------------------------------------------
+FOUND 17 ERRORS AND 28 WARNINGS AFFECTING 29 LINES
+------------------------------------------------------------------------------------------------
+  90 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+  90 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+  92 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
+     |         | {$table_review} at "SELECT COUNT(*) FROM {$table_review} WHERE store_id = %d
+     |         | AND customer_id = %d" (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 129 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 175 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 211 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 211 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 213 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
+     |         | {$table_review} at "SELECT * FROM {$table_review} WHERE store_id = %d AND
+     |         | status = 'approved' ORDER BY date_created DESC LIMIT %d"
+     |         | (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 245 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 245 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 247 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
+     |         | {$table_rating} at "SELECT * FROM {$table_rating} WHERE review_id = %d"
+     |         | (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 287 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 287 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 289 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
+     |         | {$table_rating} at "SELECT AVG(rating_value) FROM {$table_rating}
+     |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 290 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
+     |         | {$table_review} at                  INNER JOIN {$table_review} ON
+     |         | {$table_review}.review_id = {$table_rating}.review_id
+     |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 290 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
+     |         | {$table_review} at                  INNER JOIN {$table_review} ON
+     |         | {$table_review}.review_id = {$table_rating}.review_id
+     |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 290 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
+     |         | {$table_rating} at                  INNER JOIN {$table_review} ON
+     |         | {$table_review}.review_id = {$table_rating}.review_id
+     |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 291 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
+     |         | {$table_review} at                  WHERE {$table_review}.store_id = %d
+     |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 292 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
+     |         | {$table_rating} at                  AND {$table_rating}.parameter = %s
+     |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 293 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
+     |         | {$table_review} at                  AND {$table_review}.status = 'approved'"
+     |         | (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 328 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 328 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 330 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
+     |         | {$table_review} at "SELECT AVG(overall_rating) FROM {$table_review} WHERE
+     |         | store_id = %d AND status = 'approved'"
+     |         | (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 362 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 362 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 364 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
+     |         | {$table_review} at "SELECT status FROM {$table_review} 
+     |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 489 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
+     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
+ 491 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 491 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 491 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
+     |         | (WordPress.DB.PreparedSQL.NotPrepared)
+ 492 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
+     |         | (WordPress.DB.PreparedSQL.NotPrepared)
+ 494 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
+     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
+ 509 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
+     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
+ 559 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 559 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 606 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 606 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 609 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 609 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 616 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 616 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 623 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 623 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 627 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 627 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+------------------------------------------------------------------------------------------------
+
+
+FILE: templates/store/store-tabs.php
+------------------------------------------------------------------------------------------------
+FOUND 2 ERRORS AFFECTING 2 LINES
+------------------------------------------------------------------------------------------------
+ 29 | ERROR | Overriding WordPress globals is prohibited. Found assignment to $tab
+    |       | (WordPress.WP.GlobalVariablesOverride.Prohibited)
+ 41 | ERROR | Overriding WordPress globals is prohibited. Found assignment to $tab
+    |       | (WordPress.WP.GlobalVariablesOverride.Prohibited)
+------------------------------------------------------------------------------------------------
+
+
+FILE: modules/Announcement/MultiVendorX_REST_Announcement_Controller.php
+------------------------------------------------------------------------------------------------
+FOUND 0 ERRORS AND 1 WARNING AFFECTING 1 LINE
+------------------------------------------------------------------------------------------------
+ 184 | WARNING | Detected usage of meta_query, possible slow query.
+     |         | (WordPress.DB.SlowDBQuery.slow_db_query_meta_query)
+------------------------------------------------------------------------------------------------
+
+
+FILE: modules/StoreReview/Ajax.php
+------------------------------------------------------------------------------------------------
+FOUND 1 ERROR AFFECTING 1 LINE
+------------------------------------------------------------------------------------------------
+ 79 | ERROR | Detected usage of a non-sanitized input variable: $_FILES['review_images']
+    |       | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
+------------------------------------------------------------------------------------------------
+
+
+FILE: templates/store/store-review.php
+------------------------------------------------------------------------------------------------
+FOUND 0 ERRORS AND 1 WARNING AFFECTING 1 LINE
+------------------------------------------------------------------------------------------------
+ 23 | WARNING | This comment is 50% valid code; is this commented out code?
+    |         | (Squiz.PHP.CommentedOutCode.Found)
+------------------------------------------------------------------------------------------------
+
+
+FILE: classes/Payments/StripeConnect.php
+------------------------------------------------------------------------------------------------
+FOUND 0 ERRORS AND 2 WARNINGS AFFECTING 2 LINES
+------------------------------------------------------------------------------------------------
+ 208 | WARNING | serialize() found. Serialized data has known vulnerability problems with
+     |         | Object Injection. JSON is generally a better approach for serializing data.
+     |         | See https://www.owasp.org/index.php/PHP_Object_Injection
+     |         | (WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize)
+ 248 | WARNING | unserialize() found. Serialized data has known vulnerability problems with
+     |         | Object Injection. JSON is generally a better approach for serializing data.
+     |         | See https://www.owasp.org/index.php/PHP_Object_Injection
+     |         | (WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize)
+------------------------------------------------------------------------------------------------
+
+
+FILE: classes/Frontend.php
+------------------------------------------------------------------------------------------------
+FOUND 6 ERRORS AND 9 WARNINGS AFFECTING 15 LINES
+------------------------------------------------------------------------------------------------
+  27 | WARNING | This comment is 53% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+  29 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
+     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
+ 198 | WARNING | This comment is 67% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+ 212 | WARNING | It is recommended not to use reserved keyword "array" as function parameter
+     |         | name. Found: $array
+     |         | (Universal.NamingConventions.NoReservedKeywordParameterNames.arrayFound)
+ 222 | WARNING | This comment is 62% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+ 266 | WARNING | The method parameter $args is never used
+     |         | (Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed)
+ 281 | WARNING | Detected usage of meta_query, possible slow query.
+     |         | (WordPress.DB.SlowDBQuery.slow_db_query_meta_query)
+ 392 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
+     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
+ 467 | ERROR   | Doc comment for parameter "$parent_sku" missing
+     |         | (Squiz.Commenting.FunctionComment.MissingParamTag)
+ 473 | WARNING | It is recommended not to use reserved keyword "parent" as function parameter
+     |         | name. Found: $parent
+     |         | (Universal.NamingConventions.NoReservedKeywordParameterNames.parentFound)
+ 477 | ERROR   | Mixing different binary boolean operators within an expression without using
+     |         | parentheses to clarify precedence is not allowed.
+     |         | (Generic.CodeAnalysis.RequireExplicitBooleanOperatorPrecedence.MissingParentheses)
+ 494 | WARNING | This comment is 53% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+ 497 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
+     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
+ 499 | WARNING | This comment is 52% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+ 502 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
+     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
 ------------------------------------------------------------------------------------------------
 
 
@@ -1395,80 +1613,87 @@ FOUND 0 ERRORS AND 17 WARNINGS AFFECTING 13 LINES
 ------------------------------------------------------------------------------------------------
 
 
-FILE: classes/Payments/PaymentProcessor.php
+FILE: classes/Transaction/Transaction.php
 ------------------------------------------------------------------------------------------------
-FOUND 2 ERRORS AND 13 WARNINGS AFFECTING 13 LINES
+FOUND 13 ERRORS AND 23 WARNINGS AFFECTING 27 LINES
 ------------------------------------------------------------------------------------------------
-  32 | WARNING | This comment is 69% valid code; is this commented out code?
+ 106 | ERROR   | Use Yoda Condition checks, you must. (WordPress.PHP.YodaConditions.NotYoda)
+ 128 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 137 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 137 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 164 | WARNING | This comment is 60% valid code; is this commented out code?
      |         | (Squiz.PHP.CommentedOutCode.Found)
-  32 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
+ 165 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
      |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
-  73 | WARNING | Use of a direct database call is discouraged.
+ 167 | WARNING | This comment is 53% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+ 169 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
+     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
+ 171 | WARNING | This comment is 51% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+ 182 | WARNING | This comment is 54% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+ 186 | WARNING | This comment is 64% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+ 188 | WARNING | This comment is 53% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+ 189 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
+     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
+ 191 | WARNING | This comment is 49% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+ 195 | WARNING | This comment is 44% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+ 201 | WARNING | This comment is 50% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+ 214 | WARNING | This comment is 65% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+ 216 | WARNING | This comment is 50% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+ 222 | WARNING | This comment is 50% valid code; is this commented out code?
+     |         | (Squiz.PHP.CommentedOutCode.Found)
+ 247 | WARNING | Use of a direct database call is discouraged.
      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
-  87 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 117 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 131 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 182 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 196 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 207 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 207 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+ 247 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
      |         | wp_cache_set() or wp_cache_delete().
      |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 216 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 238 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 294 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
- 301 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 314 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
-------------------------------------------------------------------------------------------------
-
-
-FILE: modules/Compliance/Util.php
-------------------------------------------------------------------------------------------------
-FOUND 3 ERRORS AND 8 WARNINGS AFFECTING 8 LINES
-------------------------------------------------------------------------------------------------
-  42 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
-  56 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
-  61 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
- 120 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 120 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 120 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
+ 248 | ERROR   | Use placeholders and $wpdb->prepare(); found Utill
      |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 121 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
+ 248 | ERROR   | Use placeholders and $wpdb->prepare(); found TABLES
      |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 131 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 154 | WARNING | Use of a direct database call is discouraged.
+ 282 | ERROR   | Variable "$orderBy" is not in valid snake_case format, try "$order_by"
+     |         | (WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase)
+ 349 | ERROR   | Variable "$orderBy" is not in valid snake_case format, try "$order_by"
+     |         | (WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase)
+ 354 | ERROR   | Variable "$orderBy" is not in valid snake_case format, try "$order_by"
+     |         | (WordPress.NamingConventions.ValidVariableName.InterpolatedVariableNotSnakeCase)
+ 366 | WARNING | Use of a direct database call is discouraged.
      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 154 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+ 366 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
      |         | wp_cache_set() or wp_cache_delete().
      |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 168 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
+ 366 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
+     |         | (WordPress.DB.PreparedSQL.NotPrepared)
+ 368 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 368 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 368 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
+     |         | (WordPress.DB.PreparedSQL.NotPrepared)
+ 402 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
+     |         | {$table_name} at             FROM {$table_name}
+     |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 411 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 411 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 411 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
+     |         | (WordPress.DB.PreparedSQL.NotPrepared)
 ------------------------------------------------------------------------------------------------
 
 
@@ -1483,242 +1708,6 @@ FOUND 0 ERRORS AND 1 WARNING AFFECTING 1 LINE
     |         | Custom capabilities can be made known to this sniff by setting the
     |         | "custom_capabilities" property in the PHPCS ruleset.
     |         | (WordPress.WP.Capabilities.Unknown)
-------------------------------------------------------------------------------------------------
-
-
-FILE: templates/store/store-tabs.php
-------------------------------------------------------------------------------------------------
-FOUND 2 ERRORS AFFECTING 2 LINES
-------------------------------------------------------------------------------------------------
- 29 | ERROR | Overriding WordPress globals is prohibited. Found assignment to $tab
-    |       | (WordPress.WP.GlobalVariablesOverride.Prohibited)
- 41 | ERROR | Overriding WordPress globals is prohibited. Found assignment to $tab
-    |       | (WordPress.WP.GlobalVariablesOverride.Prohibited)
-------------------------------------------------------------------------------------------------
-
-
-FILE: classes/FrontendScripts.php
-------------------------------------------------------------------------------------------------
-FOUND 0 ERRORS AND 3 WARNINGS AFFECTING 3 LINES
-------------------------------------------------------------------------------------------------
- 157 | WARNING | This comment is 50% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
- 182 | WARNING | This comment is 50% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
- 542 | WARNING | This comment is 60% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
-------------------------------------------------------------------------------------------------
-
-
-FILE: classes/Payments/StripeConnect.php
-------------------------------------------------------------------------------------------------
-FOUND 0 ERRORS AND 2 WARNINGS AFFECTING 2 LINES
-------------------------------------------------------------------------------------------------
- 208 | WARNING | serialize() found. Serialized data has known vulnerability problems with
-     |         | Object Injection. JSON is generally a better approach for serializing data.
-     |         | See https://www.owasp.org/index.php/PHP_Object_Injection
-     |         | (WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize)
- 248 | WARNING | unserialize() found. Serialized data has known vulnerability problems with
-     |         | Object Injection. JSON is generally a better approach for serializing data.
-     |         | See https://www.owasp.org/index.php/PHP_Object_Injection
-     |         | (WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize)
-------------------------------------------------------------------------------------------------
-
-
-FILE: modules/StoreReview/Util.php
-------------------------------------------------------------------------------------------------
-FOUND 17 ERRORS AND 39 WARNINGS AFFECTING 40 LINES
-------------------------------------------------------------------------------------------------
-  90 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
-  90 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
-  92 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
-     |         | {$table_review} at "SELECT COUNT(*) FROM {$table_review} WHERE store_id = %d
-     |         | AND customer_id = %d" (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 106 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 128 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 151 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 173 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 192 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 208 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 208 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 210 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
-     |         | {$table_review} at "SELECT * FROM {$table_review} WHERE store_id = %d AND
-     |         | status = 'approved' ORDER BY date_created DESC LIMIT %d"
-     |         | (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 224 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 241 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 241 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 243 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
-     |         | {$table_rating} at "SELECT * FROM {$table_rating} WHERE review_id = %d"
-     |         | (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 256 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 282 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 282 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 284 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
-     |         | {$table_rating} at "SELECT AVG(rating_value) FROM {$table_rating}
-     |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 285 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
-     |         | {$table_review} at                  INNER JOIN {$table_review} ON
-     |         | {$table_review}.review_id = {$table_rating}.review_id
-     |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 285 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
-     |         | {$table_review} at                  INNER JOIN {$table_review} ON
-     |         | {$table_review}.review_id = {$table_rating}.review_id
-     |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 285 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
-     |         | {$table_rating} at                  INNER JOIN {$table_review} ON
-     |         | {$table_review}.review_id = {$table_rating}.review_id
-     |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 286 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
-     |         | {$table_review} at                  WHERE {$table_review}.store_id = %d
-     |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 287 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
-     |         | {$table_rating} at                  AND {$table_rating}.parameter = %s
-     |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 288 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
-     |         | {$table_review} at                  AND {$table_review}.status = 'approved'"
-     |         | (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 305 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 322 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 322 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 324 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
-     |         | {$table_review} at "SELECT AVG(overall_rating) FROM {$table_review} WHERE
-     |         | store_id = %d AND status = 'approved'"
-     |         | (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 337 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 355 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 355 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 357 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
-     |         | {$table_review} at "SELECT status FROM {$table_review} 
-     |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 375 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 481 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
- 483 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 483 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 483 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
-     |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 484 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
-     |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 486 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
- 495 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 500 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
- 550 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 550 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 566 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 596 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 596 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 599 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 599 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 606 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 606 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 613 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 613 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 617 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 617 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 627 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
-------------------------------------------------------------------------------------------------
-
-
-FILE: templates/store/store-review.php
-------------------------------------------------------------------------------------------------
-FOUND 0 ERRORS AND 1 WARNING AFFECTING 1 LINE
-------------------------------------------------------------------------------------------------
- 23 | WARNING | This comment is 50% valid code; is this commented out code?
-    |         | (Squiz.PHP.CommentedOutCode.Found)
-------------------------------------------------------------------------------------------------
-
-
-FILE: modules/Announcement/MultiVendorX_REST_Announcement_Controller.php
-------------------------------------------------------------------------------------------------
-FOUND 6 ERRORS AND 2 WARNINGS AFFECTING 8 LINES
-------------------------------------------------------------------------------------------------
-  92 | WARNING | Found unknown capability "edit_stores" in function call to current_user_can().
-     |         | Please check the spelling of the capability. If this is a custom capability,
-     |         | please verify the capability is registered with WordPress via a call to
-     |         | WP_Role(s)->add_cap().
-     |         | Custom capabilities can be made known to this sniff by setting the
-     |         | "custom_capabilities" property in the PHPCS ruleset.
-     |         | (WordPress.WP.Capabilities.Unknown)
- 146 | ERROR   | Variable "$searchField" is not in valid snake_case format, try "$search_field"
-     |         | (WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase)
- 187 | WARNING | Detected usage of meta_query, possible slow query.
-     |         | (WordPress.DB.SlowDBQuery.slow_db_query_meta_query)
- 215 | ERROR   | Variable "$searchField" is not in valid snake_case format, try "$search_field"
-     |         | (WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase)
- 216 | ERROR   | Variable "$searchField" is not in valid snake_case format, try "$search_field"
-     |         | (WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase)
- 607 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
- 675 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
- 687 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
 ------------------------------------------------------------------------------------------------
 
 
@@ -1795,171 +1784,136 @@ FOUND 16 ERRORS AND 17 WARNINGS AFFECTING 32 LINES
 ------------------------------------------------------------------------------------------------
 
 
-FILE: classes/Frontend.php
+FILE: classes/Order/Hooks.php
 ------------------------------------------------------------------------------------------------
-FOUND 6 ERRORS AND 9 WARNINGS AFFECTING 15 LINES
+FOUND 0 ERRORS AND 2 WARNINGS AFFECTING 1 LINE
 ------------------------------------------------------------------------------------------------
-  27 | WARNING | This comment is 53% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
-  29 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
- 198 | WARNING | This comment is 67% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
- 212 | WARNING | It is recommended not to use reserved keyword "array" as function parameter
-     |         | name. Found: $array
-     |         | (Universal.NamingConventions.NoReservedKeywordParameterNames.arrayFound)
- 222 | WARNING | This comment is 62% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
- 266 | WARNING | The method parameter $args is never used
-     |         | (Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed)
- 281 | WARNING | Detected usage of meta_query, possible slow query.
-     |         | (WordPress.DB.SlowDBQuery.slow_db_query_meta_query)
- 392 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
- 467 | ERROR   | Doc comment for parameter "$parent_sku" missing
-     |         | (Squiz.Commenting.FunctionComment.MissingParamTag)
- 473 | WARNING | It is recommended not to use reserved keyword "parent" as function parameter
-     |         | name. Found: $parent
-     |         | (Universal.NamingConventions.NoReservedKeywordParameterNames.parentFound)
- 477 | ERROR   | Mixing different binary boolean operators within an expression without using
-     |         | parentheses to clarify precedence is not allowed.
-     |         | (Generic.CodeAnalysis.RequireExplicitBooleanOperatorPrecedence.MissingParentheses)
- 494 | WARNING | This comment is 53% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
- 497 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
- 499 | WARNING | This comment is 52% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
- 502 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
+ 90 | WARNING | Use of a direct database call is discouraged.
+    |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 90 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+    |         | wp_cache_set() or wp_cache_delete().
+    |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
 ------------------------------------------------------------------------------------------------
 
 
-FILE: modules/StoreShipping/Frontend.php
+FILE: classes/Notifications/Notifications.php
 ------------------------------------------------------------------------------------------------
-FOUND 0 ERRORS AND 2 WARNINGS AFFECTING 2 LINES
+FOUND 19 ERRORS AND 23 WARNINGS AFFECTING 25 LINES
 ------------------------------------------------------------------------------------------------
- 161 | WARNING | The method parameter $checkout is never used
-     |         | (Generic.CodeAnalysis.UnusedFunctionParameter.Found)
- 233 | WARNING | Resource version not set in call to wp_enqueue_script(). This means new
-     |         | versions of the script may not always be loaded due to browser caching.
-     |         | (WordPress.WP.EnqueuedResourceParameters.MissingVersion)
+    6 | ERROR   | There must be exactly one blank line after the file comment
+      |         | (Squiz.Commenting.FileComment.SpacingAfterComment)
+  499 | ERROR   | Duplicate array key found. The value will be overwritten. The string array
+      |         | key "product_review_received" was first seen on line 353
+      |         | (Universal.Arrays.DuplicateArrayKey.Found)
+  847 | WARNING | This comment is 51% valid code; is this commented out code?
+      |         | (Squiz.PHP.CommentedOutCode.Found)
+ 1010 | ERROR   | Duplicate array key found. The value will be overwritten. The string array
+      |         | key "system_announcement" was first seen on line 901
+      |         | (Universal.Arrays.DuplicateArrayKey.Found)
+ 1037 | WARNING | Use of a direct database call is discouraged.
+      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 1037 | WARNING | Direct database call without caching detected. Consider using wp_cache_get()
+      |         | / wp_cache_set() or wp_cache_delete().
+      |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 1038 | ERROR   | Use placeholders and $wpdb->prepare(); found Utill
+      |         | (WordPress.DB.PreparedSQL.NotPrepared)
+ 1038 | ERROR   | Use placeholders and $wpdb->prepare(); found TABLES
+      |         | (WordPress.DB.PreparedSQL.NotPrepared)
+ 1046 | WARNING | Use of a direct database call is discouraged.
+      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 1095 | WARNING | Use of a direct database call is discouraged.
+      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 1095 | WARNING | Direct database call without caching detected. Consider using wp_cache_get()
+      |         | / wp_cache_set() or wp_cache_delete().
+      |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 1096 | ERROR   | Use placeholders and $wpdb->prepare(); found Utill
+      |         | (WordPress.DB.PreparedSQL.NotPrepared)
+ 1096 | ERROR   | Use placeholders and $wpdb->prepare(); found TABLES
+      |         | (WordPress.DB.PreparedSQL.NotPrepared)
+ 1113 | ERROR   | Empty IF statement detected (Generic.CodeAnalysis.EmptyStatement.DetectedIf)
+ 1117 | ERROR   | Empty IF statement detected (Generic.CodeAnalysis.EmptyStatement.DetectedIf)
+ 1133 | WARNING | Use of a direct database call is discouraged.
+      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 1162 | WARNING | Use of a direct database call is discouraged.
+      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 1162 | WARNING | Direct database call without caching detected. Consider using wp_cache_get()
+      |         | / wp_cache_set() or wp_cache_delete().
+      |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 1162 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable $table at
+      |         | "SELECT * FROM $table" (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 1165 | WARNING | Use of a direct database call is discouraged.
+      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 1165 | WARNING | Direct database call without caching detected. Consider using wp_cache_get()
+      |         | / wp_cache_set() or wp_cache_delete().
+      |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 1167 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable $table at
+      |         | "SELECT * FROM $table WHERE id = %d"
+      |         | (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 1172 | WARNING | Use of a direct database call is discouraged.
+      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 1172 | WARNING | Direct database call without caching detected. Consider using wp_cache_get()
+      |         | / wp_cache_set() or wp_cache_delete().
+      |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 1172 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable $table at
+      |         | "SELECT * FROM $table" (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 1178 | ERROR   | Doc comment for parameter "$args" missing
+      |         | (Squiz.Commenting.FunctionComment.MissingParamTag)
+ 1189 | WARNING | Use of a direct database call is discouraged.
+      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 1189 | WARNING | Direct database call without caching detected. Consider using wp_cache_get()
+      |         | / wp_cache_set() or wp_cache_delete().
+      |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 1191 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable $table at
+      |         | "SELECT * FROM $table WHERE store_id = %d AND is_dismissed = %d"
+      |         | (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 1197 | WARNING | Use of a direct database call is discouraged.
+      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 1197 | WARNING | Direct database call without caching detected. Consider using wp_cache_get()
+      |         | / wp_cache_set() or wp_cache_delete().
+      |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 1199 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable $table at
+      |         | "SELECT * FROM $table WHERE is_dismissed = %d"
+      |         | (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 1247 | WARNING | Use of a direct database call is discouraged.
+      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 1247 | WARNING | Direct database call without caching detected. Consider using wp_cache_get()
+      |         | / wp_cache_set() or wp_cache_delete().
+      |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 1247 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
+      |         | (WordPress.DB.PreparedSQL.NotPrepared)
+ 1250 | WARNING | Use of a direct database call is discouraged.
+      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 1250 | WARNING | Direct database call without caching detected. Consider using wp_cache_get()
+      |         | / wp_cache_set() or wp_cache_delete().
+      |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 1250 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
+      |         | (WordPress.DB.PreparedSQL.NotPrepared)
+ 1273 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable $table at 
+      |         |            DELETE FROM $table
+      |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 1282 | WARNING | Use of a direct database call is discouraged.
+      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 1282 | WARNING | Direct database call without caching detected. Consider using wp_cache_get()
+      |         | / wp_cache_set() or wp_cache_delete().
+      |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 1282 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
+      |         | (WordPress.DB.PreparedSQL.NotPrepared)
 ------------------------------------------------------------------------------------------------
 
 
-FILE: modules/StoreReview/Ajax.php
+FILE: classes/Order/Admin.php
 ------------------------------------------------------------------------------------------------
-FOUND 1 ERROR AFFECTING 1 LINE
+FOUND 0 ERRORS AND 4 WARNINGS AFFECTING 3 LINES
 ------------------------------------------------------------------------------------------------
- 79 | ERROR | Detected usage of a non-sanitized input variable: $_FILES['review_images']
-    |       | (WordPress.Security.ValidatedSanitizedInput.InputNotSanitized)
-------------------------------------------------------------------------------------------------
-
-
-FILE: modules/StoreShipping/Shipping_Helper.php
-------------------------------------------------------------------------------------------------
-FOUND 1 ERROR AND 1 WARNING AFFECTING 2 LINES
-------------------------------------------------------------------------------------------------
- 26 | ERROR   | Missing parameter comment
-    |         | (Squiz.Commenting.FunctionComment.MissingParamComment)
- 28 | WARNING | The method parameter $packages is never used
-    |         | (Generic.CodeAnalysis.UnusedFunctionParameter.Found)
-------------------------------------------------------------------------------------------------
-
-
-FILE: classes/Transaction/Transaction.php
-------------------------------------------------------------------------------------------------
-FOUND 13 ERRORS AND 27 WARNINGS AFFECTING 31 LINES
-------------------------------------------------------------------------------------------------
- 106 | ERROR   | Use Yoda Condition checks, you must. (WordPress.PHP.YodaConditions.NotYoda)
- 128 | WARNING | Use of a direct database call is discouraged.
+ 145 | WARNING | Use of a direct database call is discouraged.
      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 137 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 137 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+ 145 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
      |         | wp_cache_set() or wp_cache_delete().
      |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 154 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 163 | WARNING | This comment is 60% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
- 164 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
- 166 | WARNING | This comment is 53% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
- 168 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
- 170 | WARNING | This comment is 51% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
- 181 | WARNING | This comment is 54% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
- 185 | WARNING | This comment is 64% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
- 187 | WARNING | This comment is 53% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
- 188 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
- 190 | WARNING | This comment is 49% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
- 194 | WARNING | This comment is 44% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
- 200 | WARNING | This comment is 50% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
- 213 | WARNING | This comment is 65% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
- 215 | WARNING | This comment is 50% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
- 221 | WARNING | This comment is 50% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
- 246 | WARNING | Use of a direct database call is discouraged.
+ 154 | WARNING | Use of a direct database call is discouraged.
      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 246 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 247 | ERROR   | Use placeholders and $wpdb->prepare(); found Utill
-     |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 247 | ERROR   | Use placeholders and $wpdb->prepare(); found TABLES
-     |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 259 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 280 | ERROR   | Variable "$orderBy" is not in valid snake_case format, try "$order_by"
-     |         | (WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase)
- 347 | ERROR   | Variable "$orderBy" is not in valid snake_case format, try "$order_by"
-     |         | (WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase)
- 352 | ERROR   | Variable "$orderBy" is not in valid snake_case format, try "$order_by"
-     |         | (WordPress.NamingConventions.ValidVariableName.InterpolatedVariableNotSnakeCase)
- 364 | WARNING | Use of a direct database call is discouraged.
+ 168 | WARNING | Use of a direct database call is discouraged.
      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 364 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 364 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
-     |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 366 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 366 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 366 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
-     |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 376 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 399 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable
-     |         | {$table_name} at             FROM {$table_name}
-     |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 408 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 408 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 408 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
-     |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 427 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
 ------------------------------------------------------------------------------------------------
 
 
@@ -2015,252 +1969,53 @@ FOUND 0 ERRORS AND 3 WARNINGS AFFECTING 3 LINES
 ------------------------------------------------------------------------------------------------
 
 
-FILE: classes/Order/Hooks.php
-------------------------------------------------------------------------------------------------
-FOUND 2 ERRORS AND 5 WARNINGS AFFECTING 6 LINES
-------------------------------------------------------------------------------------------------
-  57 | WARNING | This comment is 79% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
-  91 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
-  91 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 101 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
- 113 | ERROR   | Doc comment for parameter $order does not match actual variable name $order_id
-     |         | (Squiz.Commenting.FunctionComment.ParamNameNoMatch)
- 114 | ERROR   | Doc comment for parameter $order_id does not match actual variable name $order
-     |         | (Squiz.Commenting.FunctionComment.ParamNameNoMatch)
- 233 | WARNING | This comment is 64% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
-------------------------------------------------------------------------------------------------
-
-
-FILE: classes/Notifications/Notifications.php
-------------------------------------------------------------------------------------------------
-FOUND 19 ERRORS AND 24 WARNINGS AFFECTING 26 LINES
-------------------------------------------------------------------------------------------------
-    1 | ERROR   | Missing file doc comment (Squiz.Commenting.FileComment.Missing)
-   57 | WARNING | This comment is 58% valid code; is this commented out code?
-      |         | (Squiz.PHP.CommentedOutCode.Found)
-  498 | ERROR   | Duplicate array key found. The value will be overwritten. The string array
-      |         | key "product_review_received" was first seen on line 352
-      |         | (Universal.Arrays.DuplicateArrayKey.Found)
-  846 | WARNING | This comment is 51% valid code; is this commented out code?
-      |         | (Squiz.PHP.CommentedOutCode.Found)
- 1009 | ERROR   | Duplicate array key found. The value will be overwritten. The string array
-      |         | key "system_announcement" was first seen on line 900
-      |         | (Universal.Arrays.DuplicateArrayKey.Found)
- 1036 | WARNING | Use of a direct database call is discouraged.
-      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 1036 | WARNING | Direct database call without caching detected. Consider using wp_cache_get()
-      |         | / wp_cache_set() or wp_cache_delete().
-      |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 1037 | ERROR   | Use placeholders and $wpdb->prepare(); found Utill
-      |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 1037 | ERROR   | Use placeholders and $wpdb->prepare(); found TABLES
-      |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 1045 | WARNING | Use of a direct database call is discouraged.
-      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 1094 | WARNING | Use of a direct database call is discouraged.
-      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 1094 | WARNING | Direct database call without caching detected. Consider using wp_cache_get()
-      |         | / wp_cache_set() or wp_cache_delete().
-      |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 1095 | ERROR   | Use placeholders and $wpdb->prepare(); found Utill
-      |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 1095 | ERROR   | Use placeholders and $wpdb->prepare(); found TABLES
-      |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 1112 | ERROR   | Empty IF statement detected (Generic.CodeAnalysis.EmptyStatement.DetectedIf)
- 1116 | ERROR   | Empty IF statement detected (Generic.CodeAnalysis.EmptyStatement.DetectedIf)
- 1132 | WARNING | Use of a direct database call is discouraged.
-      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 1161 | WARNING | Use of a direct database call is discouraged.
-      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 1161 | WARNING | Direct database call without caching detected. Consider using wp_cache_get()
-      |         | / wp_cache_set() or wp_cache_delete().
-      |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 1161 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable $table at
-      |         | "SELECT * FROM $table" (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 1164 | WARNING | Use of a direct database call is discouraged.
-      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 1164 | WARNING | Direct database call without caching detected. Consider using wp_cache_get()
-      |         | / wp_cache_set() or wp_cache_delete().
-      |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 1166 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable $table at
-      |         | "SELECT * FROM $table WHERE id = %d"
-      |         | (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 1171 | WARNING | Use of a direct database call is discouraged.
-      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 1171 | WARNING | Direct database call without caching detected. Consider using wp_cache_get()
-      |         | / wp_cache_set() or wp_cache_delete().
-      |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 1171 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable $table at
-      |         | "SELECT * FROM $table" (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 1177 | ERROR   | Doc comment for parameter "$args" missing
-      |         | (Squiz.Commenting.FunctionComment.MissingParamTag)
- 1188 | WARNING | Use of a direct database call is discouraged.
-      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 1188 | WARNING | Direct database call without caching detected. Consider using wp_cache_get()
-      |         | / wp_cache_set() or wp_cache_delete().
-      |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 1190 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable $table at
-      |         | "SELECT * FROM $table WHERE store_id = %d AND is_dismissed = %d"
-      |         | (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 1196 | WARNING | Use of a direct database call is discouraged.
-      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 1196 | WARNING | Direct database call without caching detected. Consider using wp_cache_get()
-      |         | / wp_cache_set() or wp_cache_delete().
-      |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 1198 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable $table at
-      |         | "SELECT * FROM $table WHERE is_dismissed = %d"
-      |         | (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 1246 | WARNING | Use of a direct database call is discouraged.
-      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 1246 | WARNING | Direct database call without caching detected. Consider using wp_cache_get()
-      |         | / wp_cache_set() or wp_cache_delete().
-      |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 1246 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
-      |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 1249 | WARNING | Use of a direct database call is discouraged.
-      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 1249 | WARNING | Direct database call without caching detected. Consider using wp_cache_get()
-      |         | / wp_cache_set() or wp_cache_delete().
-      |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 1249 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
-      |         | (WordPress.DB.PreparedSQL.NotPrepared)
- 1272 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable $table at 
-      |         |            DELETE FROM $table
-      |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 1281 | WARNING | Use of a direct database call is discouraged.
-      |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 1281 | WARNING | Direct database call without caching detected. Consider using wp_cache_get()
-      |         | / wp_cache_set() or wp_cache_delete().
-      |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 1281 | ERROR   | Use placeholders and $wpdb->prepare(); found $query
-      |         | (WordPress.DB.PreparedSQL.NotPrepared)
-------------------------------------------------------------------------------------------------
-
-
-FILE: classes/Order/Admin.php
-------------------------------------------------------------------------------------------------
-FOUND 0 ERRORS AND 5 WARNINGS AFFECTING 4 LINES
-------------------------------------------------------------------------------------------------
- 145 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 145 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
-     |         | wp_cache_set() or wp_cache_delete().
-     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 154 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 168 | WARNING | Use of a direct database call is discouraged.
-     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 190 | WARNING | wp_debug_backtrace_summary() found. Debug code should not normally be used in
-     |         | production.
-     |         | (WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary)
-------------------------------------------------------------------------------------------------
-
-
-FILE: classes/SetupWizard.php
-------------------------------------------------------------------------------------------------
-FOUND 1 ERROR AND 1 WARNING AFFECTING 1 LINE
-------------------------------------------------------------------------------------------------
- 64 | WARNING | This comment is 53% valid code; is this commented out code?
-    |         | (Squiz.PHP.CommentedOutCode.Found)
- 64 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-    |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
-------------------------------------------------------------------------------------------------
-
-
 FILE: classes/RestAPI/Controllers/MultiVendorX_REST_Transaction_Controller.php
 ------------------------------------------------------------------------------------------------
-FOUND 4 ERRORS AND 8 WARNINGS AFFECTING 9 LINES
+FOUND 3 ERRORS AND 8 WARNINGS AFFECTING 9 LINES
 ------------------------------------------------------------------------------------------------
- 290 | ERROR   | [x] Newline required after opening brace
-     |         |     (Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace)
- 290 | ERROR   | [ ] Expected 1 space after closing brace; newline found
-     |         |     (Squiz.ControlStructures.ControlSignature.SpaceAfterCloseBrace)
- 325 | WARNING | [ ] File operations should use WP_Filesystem methods instead of direct PHP
-     |         |     filesystem calls. Found: fwrite().
-     |         |     (WordPress.WP.AlternativeFunctions.file_system_operations_fwrite)
- 327 | WARNING | [ ] The $escape parameter must be passed when calling fputcsv() as its default
-     |         |     value will change in a future PHP version.
-     |         |     (PHPCompatibility.ParameterValues.RemovedProprietaryCSVEscaping.DeprecatedParamNotPassed)
- 336 | WARNING | [ ] The $escape parameter must be passed when calling fputcsv() as its default
-     |         |     value will change in a future PHP version.
-     |         |     (PHPCompatibility.ParameterValues.RemovedProprietaryCSVEscaping.DeprecatedParamNotPassed)
- 354 | WARNING | [ ] File operations should use WP_Filesystem methods instead of direct PHP
-     |         |     filesystem calls. Found: fclose().
-     |         |     (WordPress.WP.AlternativeFunctions.file_system_operations_fclose)
- 427 | WARNING | [ ] Use of a direct database call is discouraged.
-     |         |     (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 427 | WARNING | [ ] Direct database call without caching detected. Consider using
-     |         |     wp_cache_get() / wp_cache_set() or wp_cache_delete().
-     |         |     (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 430 | ERROR   | [ ] Use placeholders and $wpdb->prepare(); found interpolated variable
-     |         |     $table_name at                  FROM $table_name 
-     |         |      (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
- 444 | WARNING | [ ] Use of a direct database call is discouraged.
-     |         |     (WordPress.DB.DirectDatabaseQuery.DirectQuery)
- 444 | WARNING | [ ] Direct database call without caching detected. Consider using
-     |         |     wp_cache_get() / wp_cache_set() or wp_cache_delete().
-     |         |     (WordPress.DB.DirectDatabaseQuery.NoCaching)
- 447 | ERROR   | [ ] Use placeholders and $wpdb->prepare(); found interpolated variable
-     |         |     {$table_name_escaped} at                  FROM {$table_name_escaped} 
-     |         |      (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
-------------------------------------------------------------------------------------------------
-PHPCBF CAN FIX THE 1 MARKED SNIFF VIOLATIONS AUTOMATICALLY
-------------------------------------------------------------------------------------------------
-
-
-FILE: classes/MultiVendorX.php
-------------------------------------------------------------------------------------------------
-FOUND 4 ERRORS AND 7 WARNINGS AFFECTING 10 LINES
-------------------------------------------------------------------------------------------------
- 230 | WARNING | It is recommended not to use reserved keyword "class" as function parameter
-     |         | name. Found: $class
-     |         | (Universal.NamingConventions.NoReservedKeywordParameterNames.classFound)
- 246 | WARNING | It is recommended not to use reserved keyword "class" as function parameter
-     |         | name. Found: $class
-     |         | (Universal.NamingConventions.NoReservedKeywordParameterNames.classFound)
- 357 | WARNING | This comment is 74% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
- 357 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
- 360 | WARNING | This comment is 84% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
- 368 | WARNING | This comment is 57% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
- 373 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
- 381 | WARNING | This comment is 51% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
- 386 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
- 394 | WARNING | This comment is 45% valid code; is this commented out code?
-     |         | (Squiz.PHP.CommentedOutCode.Found)
- 410 | ERROR   | Inline comments must end in full-stops, exclamation marks, or question marks
-     |         | (Squiz.Commenting.InlineComment.InvalidEndChar)
-------------------------------------------------------------------------------------------------
-
-
-FILE: classes/Cron.php
-------------------------------------------------------------------------------------------------
-FOUND 2 ERRORS AFFECTING 1 LINE
-------------------------------------------------------------------------------------------------
- 203 | ERROR | Doc comment for parameter "$schedule" missing
-     |       | (Squiz.Commenting.FunctionComment.MissingParamTag)
- 203 | ERROR | Doc comment for parameter "$settings" missing
-     |       | (Squiz.Commenting.FunctionComment.MissingParamTag)
+ 291 | ERROR   | Expected 1 space after closing brace; newline found
+     |         | (Squiz.ControlStructures.ControlSignature.SpaceAfterCloseBrace)
+ 326 | WARNING | File operations should use WP_Filesystem methods instead of direct PHP
+     |         | filesystem calls. Found: fwrite().
+     |         | (WordPress.WP.AlternativeFunctions.file_system_operations_fwrite)
+ 328 | WARNING | The $escape parameter must be passed when calling fputcsv() as its default
+     |         | value will change in a future PHP version.
+     |         | (PHPCompatibility.ParameterValues.RemovedProprietaryCSVEscaping.DeprecatedParamNotPassed)
+ 337 | WARNING | The $escape parameter must be passed when calling fputcsv() as its default
+     |         | value will change in a future PHP version.
+     |         | (PHPCompatibility.ParameterValues.RemovedProprietaryCSVEscaping.DeprecatedParamNotPassed)
+ 355 | WARNING | File operations should use WP_Filesystem methods instead of direct PHP
+     |         | filesystem calls. Found: fclose().
+     |         | (WordPress.WP.AlternativeFunctions.file_system_operations_fclose)
+ 428 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 428 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 431 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable $table_name
+     |         | at                  FROM $table_name 
+     |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
+ 444 | WARNING | Use of a direct database call is discouraged.
+     |         | (WordPress.DB.DirectDatabaseQuery.DirectQuery)
+ 444 | WARNING | Direct database call without caching detected. Consider using wp_cache_get() /
+     |         | wp_cache_set() or wp_cache_delete().
+     |         | (WordPress.DB.DirectDatabaseQuery.NoCaching)
+ 447 | ERROR   | Use placeholders and $wpdb->prepare(); found interpolated variable $table_name
+     |         | at                  FROM $table_name 
+     |         |  (WordPress.DB.PreparedSQL.InterpolatedNotPrepared)
 ------------------------------------------------------------------------------------------------
 
 
 FILE: classes/RestAPI/Controllers/MultiVendorX_REST_Payouts_Controller.php
 ------------------------------------------------------------------------------------------------
-FOUND 0 ERRORS AND 2 WARNINGS AFFECTING 2 LINES
+FOUND 3 ERRORS AND 2 WARNINGS AFFECTING 5 LINES
 ------------------------------------------------------------------------------------------------
+  83 | ERROR   | Doc comment for parameter "$request" missing
+     |         | (Squiz.Commenting.FunctionComment.MissingParamTag)
+  92 | ERROR   | Doc comment for parameter "$request" missing
+     |         | (Squiz.Commenting.FunctionComment.MissingParamTag)
+ 101 | ERROR   | Doc comment for parameter "$request" missing
+     |         | (Squiz.Commenting.FunctionComment.MissingParamTag)
  147 | WARNING | Detected usage of meta_key, possible slow query.
      |         | (WordPress.DB.SlowDBQuery.slow_db_query_meta_key)
  162 | WARNING | Detected usage of meta_key, possible slow query.

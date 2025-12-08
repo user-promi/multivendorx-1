@@ -33,7 +33,7 @@ class Hooks {
         add_action( 'woocommerce_store_api_checkout_order_processed', array( $this, 'create_vendor_order' ) );
 
         // Create store order from backend.
-        add_action( 'woocommerce_new_order', array( $this, 'manually_create_vendor_order' ), 10, 2 );
+        add_action( 'woocommerce_new_order', array( $this, 'manually_create_store_order' ), 10, 2 );
 
         // After crate suborder order try to sync order status.
         add_action( 'woocommerce_order_status_changed', array( $this, 'parent_order_to_vendor_order_status_sync' ), 10, 4 );
@@ -51,10 +51,9 @@ class Hooks {
      */
     public function add_metadata_for_line_item( $item, $item_key, $values, $order ) {
         if ( $order && $order->get_parent_id() === 0 ) {
-            $vendor = StoreUtil::get_products_store( $item['product_id'] );
-            if ( $vendor ) {
-                $item->add_meta_data( Utill::ORDER_META_SETTINGS['sold_by'], $vendor->get( 'name' ) );
-                // $item->add_meta_data('multivendorx_store_id', $vendor->get_id());
+            $store = StoreUtil::get_products_store( $item['product_id'] );
+            if ( $store ) {
+                $item->add_meta_data( Utill::ORDER_META_SETTINGS['sold_by'], $store->get( 'name' ) );
             }
         }
     }
@@ -98,6 +97,7 @@ class Hooks {
                     'Last Query: ' . $wpdb->last_query . "\n" .
                     'File: ' . __FILE__ . "\n" .
                     'Line: ' . __LINE__ . "\n" .
+                    // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary
                     'Stack Trace: ' . wp_debug_backtrace_summary() . "\n" .
                     "=========================================\n\n"
                 );
@@ -108,13 +108,13 @@ class Hooks {
     }
 
     /**
-     * Create the store orders of a main order form backend.
+     * Create the store orders of a main order from backend.
      *
-     * @param   object $order Order Object.
-     * @param   int    $order_id Parent Order ID.
-     * @return  void
+     * @param int    $order_id Parent Order ID.
+     * @param object $order    Order Object.
+     * @return void
      */
-    public function manually_create_vendor_order( $order_id, $order ) {
+    public function manually_create_store_order( $order_id, $order ) {
         $this->create_vendor_order( $order );
     }
 
@@ -229,10 +229,9 @@ class Hooks {
      */
     public function vendor_order_to_parent_order_status_sync( $order_id, $old_status, $new_status, $order ) {
 
-        $vendor_id = $order ? absint( $order->get_meta( Utill::POST_META_SETTINGS['store_id'], true ) ) : 0;
-        // $vendor_order = new VendorOrder($order);
+        $store_id = $order ? absint( $order->get_meta( Utill::POST_META_SETTINGS['store_id'], true ) ) : 0;
 
-        if ( get_current_user_id() === $vendor_id ) {
+        if ( get_current_user_id() === $store_id ) {
             $parent_order_id = $order->get_parent_id();
             if ( $parent_order_id ) {
                 // Remove the action to prevent recursion call.

@@ -154,11 +154,6 @@ class FrontendScripts {
         $register_scripts = apply_filters(
             'multivendorx_register_scripts',
             array(
-				// 'multivendorx-frontend-script' => array(
-				// 'src'         => MultiVendorX()->plugin_url . 'assets/js/' . self::get_script_name( 'frontend' ) . '.js',
-				// 'deps'        => array( 'jquery', 'wp-element', 'wp-components' ),
-				// 'version'     => $version,
-				// ),
                 'multivendorx-dashboard-script'            => array(
 					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/index.js',
 					'deps'    => $index_asset['dependencies'],
@@ -179,11 +174,6 @@ class FrontendScripts {
 					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'react-jsx-runtime' ),
 					'version' => $version,
 				),
-                // 'multivendorx-store-products-script' => array(
-				// 'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/' . MULTIVENDORX_PLUGIN_SLUG . '-store-products.min.js',
-				// 'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'react-jsx-runtime', 'jquery-ui-datepicker' ),
-				// 'version' => $version,
-				// ),
                 'multivendorx-qna-frontend-script'         => array(
 					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/QuestionsAnswers/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
 					'deps'    => array( 'jquery' ),
@@ -539,7 +529,6 @@ class FrontendScripts {
                     'data'        => array(
                         'ajaxurl'      => admin_url( 'admin-ajax.php' ),
                         'nonce'        => wp_create_nonce( 'distance_shipping_ajax_nonce' ),
-                        // 'mapbox_emable'     => \MultiVendorX\DistanceShipping\Frontend::mvx_mapbox_api_enabled(),
                         'default_lat'  => MultiVendorX()->setting->get_setting( 'default_map_lat', '28.6139' ), // Example default lat.
                         'default_lng'  => MultiVendorX()->setting->get_setting( 'default_map_lng', '77.2090' ), // Example default lng.
                         'default_zoom' => 13,

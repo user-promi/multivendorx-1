@@ -89,7 +89,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
      * @param object $request The request object.
      */
     public function get_items_permissions_check( $request ) {
-        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
+        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
     /**
@@ -125,25 +125,23 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                 array( 'status' => 403 )
             );
 
-            if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log(
-                    'MVX REST Error: Code=' . $error->get_error_code() .
-                    '; Message=' . $error->get_error_message() .
-                    '; Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
-                );
-            }
+            MultiVendorX()->util->log(
+                'MVX REST Error: Code=' . $error->get_error_code() .
+                '; Message=' . $error->get_error_message() .
+                '; Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
+            );
 
             return $error;
         }
+
         try {
             // ----- Input Handling -----
-            $limit  = max( 10, intval( $request->get_param( 'row' ) ) );
-            $page   = max( 1, intval( $request->get_param( 'page' ) ) );
-            $offset = ( $page - 1 ) * $limit;
-
+            $limit        = max( 10, intval( $request->get_param( 'row' ) ) );
+            $page         = max( 1, intval( $request->get_param( 'page' ) ) );
+            $offset       = ( $page - 1 ) * $limit;
             $count_param  = $request->get_param( 'count' );
             $status_param = sanitize_key( $request->get_param( 'status' ) );
-            $searchField  = sanitize_text_field( $request->get_param( 'searchField' ) );
+            $search_field = sanitize_text_field( $request->get_param( 'searchField' ) );
 
             // ----- Date Filter -----
             $start_raw = sanitize_text_field( $request->get_param( 'startDate' ) );
@@ -157,7 +155,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
 
             // ----- Count Only (FAST) -----
             if ( $count_param ) {
-                $q = new \WP_Query(
+                $query = new \WP_Query(
                     array(
                         'post_type'      => Utill::POST_TYPES['announcement'],
                         'posts_per_page' => 1,
@@ -166,7 +164,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                         'no_found_rows'  => false,
                     )
                 );
-                return rest_ensure_response( intval( $q->found_posts ) );
+                return rest_ensure_response( intval( $query->found_posts ) );
             }
 
             // ----- Build Query -----
@@ -182,11 +180,9 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
 
             // ----- Store Filtering -----
             $store_id = intval( $request->get_param( 'store_id' ) );
-
             if ( $store_id > 0 ) {
                 $query_args['meta_query'] = array(
                     'relation' => 'OR',
-
                     array(
                         'key'     => Utill::POST_META_SETTINGS['announcement_stores'],
                         'value'   => ';i:' . $store_id . ';',
@@ -212,8 +208,8 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             }
 
             // ----- Search Filter -----
-            if ( ! empty( $searchField ) ) {
-                $query_args['s'] = $searchField;
+            if ( ! empty( $search_field ) ) {
+                $query_args['s'] = $search_field;
             }
 
             // ----- Fetch Posts -----
@@ -221,12 +217,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             $items = array();
 
             foreach ( $posts as $post ) {
-                $store_ids = (array) get_post_meta(
-                    $post->ID,
-                    Utill::POST_META_SETTINGS['announcement_stores'],
-                    true
-                );
-
+                $store_ids   = (array) get_post_meta( $post->ID, Utill::POST_META_SETTINGS['announcement_stores'], true );
                 $store_names = array();
 
                 foreach ( $store_ids as $sid ) {
@@ -248,7 +239,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
 
             // ----- Status Counts -----
             $counter = function ( $status ) {
-                $q = new \WP_Query(
+                $query = new \WP_Query(
                     array(
                         'post_type'      => Utill::POST_TYPES['announcement'],
                         'post_status'    => $status,
@@ -257,7 +248,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                         'no_found_rows'  => false,
                     )
                 );
-                return intval( $q->found_posts );
+                return intval( $query->found_posts );
             };
 
             return rest_ensure_response(
@@ -283,6 +274,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             );
         }
     }
+
 
 
     /**
@@ -604,7 +596,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                 'content' => $post->post_content,
                 'status'  => $post->post_status,
                 'url'     => get_post_meta( $id, Utill::POST_META_SETTINGS['announcement_url'], true ),
-                'stores'  => $store_data, // fixed
+                'stores'  => $store_data,
                 'date'    => get_post_time( 'Y-m-d H:i:s', true, $post ),
             );
 
@@ -672,7 +664,6 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
              * ------------------------- */
             $post = get_post( $post_id );
 
-            // Yoda-style + proper logic
             if ( null === $post || Utill::POST_TYPES['announcement'] !== $post->post_type ) {
                 return new \WP_Error(
                     'not_found',
@@ -684,7 +675,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             /** -------------------------
              *  Delete Post
              * ------------------------- */
-            $deleted = wp_delete_post( $post_id, true ); // force delete
+            $deleted = wp_delete_post( $post_id, true );
 
             if ( false === $deleted ) {
                 return new \WP_Error(

@@ -201,7 +201,12 @@ class Cron {
     }
 
     /**
-     * Register the payout cron job
+     * Register the payout cron job.
+     *
+     * @param string $schedule The cron schedule (e.g., 'daily', 'hourly').
+     * @param array  $settings Settings used to determine first run time.
+     *
+     * @return void
      */
     public function register_cron( $schedule, $settings ) {
         $hook = 'multivendorx_payout_cron';

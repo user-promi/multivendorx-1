@@ -287,7 +287,8 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
         }
 
         // If specific IDs are requested (selected rows from bulk action).
-        if ( ! empty( $ids ) ) { $args['id__in'] = array_map( 'intval', explode( ',', $ids ) ); }
+        if ( ! empty( $ids ) ) {
+			$args['id__in'] = array_map( 'intval', explode( ',', $ids ) ); }
 
         // If pagination parameters are provided (current page export from bulk action).
         elseif ( ! empty( $page ) && ! empty( $per_page ) ) {

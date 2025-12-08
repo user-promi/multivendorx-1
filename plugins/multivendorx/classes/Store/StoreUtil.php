@@ -129,6 +129,7 @@ class StoreUtil {
                 'Last Query: ' . $wpdb->last_query . "\n" .
                 'File: ' . __FILE__ . "\n" .
                 'Line: ' . __LINE__ . "\n" .
+                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary
                 'Stack Trace: ' . wp_debug_backtrace_summary() . "\n" .
                 "=========================================\n\n"
             );
@@ -157,6 +158,7 @@ class StoreUtil {
                 'Last Query: ' . $wpdb->last_query . "\n" .
                 'File: ' . __FILE__ . "\n" .
                 'Line: ' . __LINE__ . "\n" .
+                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary
                 'Stack Trace: ' . wp_debug_backtrace_summary() . "\n" .
                 "=========================================\n\n"
             );
@@ -203,6 +205,7 @@ class StoreUtil {
                 'Last Query: ' . $wpdb->last_query . "\n" .
                 'File: ' . __FILE__ . "\n" .
                 'Line: ' . __LINE__ . "\n" .
+                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary
                 'Stack Trace: ' . wp_debug_backtrace_summary() . "\n" .
                 "=========================================\n\n"
             );
@@ -230,6 +233,7 @@ class StoreUtil {
                 'Last Query: ' . $wpdb->last_query . "\n" .
                 'File: ' . __FILE__ . "\n" .
                 'Line: ' . __LINE__ . "\n" .
+                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary
                 'Stack Trace: ' . wp_debug_backtrace_summary() . "\n" .
                 "=========================================\n\n"
             );
@@ -258,6 +262,7 @@ class StoreUtil {
                 'Last Query: ' . $wpdb->last_query . "\n" .
                 'File: ' . __FILE__ . "\n" .
                 'Line: ' . __LINE__ . "\n" .
+                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary
                 'Stack Trace: ' . wp_debug_backtrace_summary() . "\n" .
                 "=========================================\n\n"
             );
@@ -539,6 +544,7 @@ class StoreUtil {
                 'Last Query: ' . $wpdb->last_query . "\n" .
                 'File: ' . __FILE__ . "\n" .
                 'Line: ' . __LINE__ . "\n" .
+                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary
                 'Stack Trace: ' . wp_debug_backtrace_summary() . "\n" .
                 "=========================================\n\n"
             );
@@ -572,6 +578,7 @@ class StoreUtil {
                 'Last Query: ' . $wpdb->last_query . "\n" .
                 'File: ' . __FILE__ . "\n" .
                 'Line: ' . __LINE__ . "\n" .
+                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary
                 'Stack Trace: ' . wp_debug_backtrace_summary() . "\n" .
                 "=========================================\n\n"
             );
@@ -638,6 +645,7 @@ class StoreUtil {
                 'Last Query: ' . $wpdb->last_query . "\n" .
                 'File: ' . __FILE__ . "\n" .
                 'Line: ' . __LINE__ . "\n" .
+                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary
                 'Stack Trace: ' . wp_debug_backtrace_summary() . "\n" .
                 "=========================================\n\n"
             );
@@ -879,6 +887,7 @@ class StoreUtil {
                 'Last Query: ' . $wpdb->last_query . "\n" .
                 'File: ' . __FILE__ . "\n" .
                 'Line: ' . __LINE__ . "\n" .
+                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary
                 'Stack Trace: ' . wp_debug_backtrace_summary() . "\n" .
                 "=========================================\n\n"
             );

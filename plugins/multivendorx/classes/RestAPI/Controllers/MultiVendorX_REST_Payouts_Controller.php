@@ -85,7 +85,7 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
      *
      * @return bool True if the user has permission, false otherwise.
      */
-    public function get_items_permissions_check() {
+    public function get_items_permissions_check( $request ) {
         return current_user_can( 'read' );
     }
 
@@ -94,7 +94,7 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
      *
      * @return bool True if the user has permission, false otherwise.
      */
-    public function create_item_permissions_check() {
+    public function create_item_permissions_check( $request ) {
         return current_user_can( 'manage_options' );
     }
 
@@ -103,7 +103,7 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
      *
      * @return bool True if the user has permission, false otherwise.
      */
-    public function update_item_permissions_check() {
+    public function update_item_permissions_check( $request ) {
         return current_user_can( 'manage_options' );
     }
 
