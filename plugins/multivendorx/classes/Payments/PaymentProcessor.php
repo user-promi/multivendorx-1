@@ -76,6 +76,19 @@ class PaymentProcessor {
                     $format
                 );
 
+                if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+                    MultiVendorX()->util->log(
+                        "========= MULTIVENDORX ERROR =========\n" .
+                        "Timestamp: " . current_time( 'mysql' ) . "\n" .
+                        "Error: " . $wpdb->last_error . "\n" .
+                        "Last Query: " . $wpdb->last_query . "\n" .
+                        "File: " . __FILE__ . "\n" .
+                        "Line: " . __LINE__ . "\n" .
+                        "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
+                        "=========================================\n\n"
+                    );
+                }
+
                 $transaction_id = $wpdb->insert_id;
             }
         }
@@ -106,6 +119,19 @@ class PaymentProcessor {
                 $data,
                 $format
             );
+
+            if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+                MultiVendorX()->util->log(
+                    "========= MULTIVENDORX ERROR =========\n" .
+                    "Timestamp: " . current_time( 'mysql' ) . "\n" .
+                    "Error: " . $wpdb->last_error . "\n" .
+                    "Last Query: " . $wpdb->last_query . "\n" .
+                    "File: " . __FILE__ . "\n" .
+                    "Line: " . __LINE__ . "\n" .
+                    "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
+                    "=========================================\n\n"
+                );
+            }
 
             return;
         }
@@ -159,6 +185,19 @@ class PaymentProcessor {
             $format
         );
 
+        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+            MultiVendorX()->util->log(
+                "========= MULTIVENDORX ERROR =========\n" .
+                "Timestamp: " . current_time( 'mysql' ) . "\n" .
+                "Error: " . $wpdb->last_error . "\n" .
+                "Last Query: " . $wpdb->last_query . "\n" .
+                "File: " . __FILE__ . "\n" .
+                "Line: " . __LINE__ . "\n" .
+                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
+                "=========================================\n\n"
+            );
+        }
+
         if ( 'success' === $result && $status ) {
             $withdrawals_count = (int) $store->get_meta( Utill::STORE_SETTINGS_KEYS['withdrawals_count'] );
             $store->update_meta( Utill::STORE_SETTINGS_KEYS['withdrawals_count'], $withdrawals_count + 1 );
@@ -187,6 +226,19 @@ class PaymentProcessor {
                 ),
                 array( '%d', '%s', '%s', '%f', '%s', '%s', '%s' )
             );
+
+            if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+                MultiVendorX()->util->log(
+                    "========= MULTIVENDORX ERROR =========\n" .
+                    "Timestamp: " . current_time( 'mysql' ) . "\n" .
+                    "Error: " . $wpdb->last_error . "\n" .
+                    "Last Query: " . $wpdb->last_query . "\n" .
+                    "File: " . __FILE__ . "\n" .
+                    "Line: " . __LINE__ . "\n" .
+                    "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
+                    "=========================================\n\n"
+                );
+            }
         }
     }
 
@@ -251,6 +303,18 @@ class PaymentProcessor {
                         $data,
                         $format
 					);
+                    if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+                        MultiVendorX()->util->log(
+                            "========= MULTIVENDORX ERROR =========\n" .
+                            "Timestamp: " . current_time( 'mysql' ) . "\n" .
+                            "Error: " . $wpdb->last_error . "\n" .
+                            "Last Query: " . $wpdb->last_query . "\n" .
+                            "File: " . __FILE__ . "\n" .
+                            "Line: " . __LINE__ . "\n" .
+                            "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
+                            "=========================================\n\n"
+                        );
+                    }
 				} else {
 					$order->set_status( $old_status );
 					$order->save();
