@@ -144,7 +144,7 @@ class MultiVendorX_REST_Reports_Controller extends \WP_REST_Controller {
             );
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log(
-                'MVX REST Exception: ' .
+                'MULTIVENDORX REST Exception: ' .
                 'Message=' . $e->getMessage() . '; ' .
                 'File=' . $e->getFile() . '; ' .
                 'Line=' . $e->getLine() . "\n\n"
@@ -182,7 +182,7 @@ class MultiVendorX_REST_Reports_Controller extends \WP_REST_Controller {
             );
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log(
-                'MVX REST Exception: ' .
+                'MULTIVENDORX REST Exception: ' .
                 'Message=' . $e->getMessage() . '; ' .
                 'File=' . $e->getFile() . '; ' .
                 'Line=' . $e->getLine() . "\n\n"
@@ -227,7 +227,7 @@ class MultiVendorX_REST_Reports_Controller extends \WP_REST_Controller {
             );
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log(
-                'MVX REST Exception: ' .
+                'MULTIVENDORX REST Exception: ' .
                 'Message=' . $e->getMessage() . '; ' .
                 'File=' . $e->getFile() . '; ' .
                 'Line=' . $e->getLine() . "\n\n"
@@ -294,7 +294,7 @@ class MultiVendorX_REST_Reports_Controller extends \WP_REST_Controller {
             return rest_ensure_response( $merged_data );
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log(
-                'MVX REST Exception: ' .
+                'MULTIVENDORX REST Exception: ' .
                 'Message=' . $e->getMessage() . '; ' .
                 'File=' . $e->getFile() . '; ' .
                 'Line=' . $e->getLine() . "\n\n"
@@ -336,7 +336,7 @@ class MultiVendorX_REST_Reports_Controller extends \WP_REST_Controller {
             );
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log(
-                'MVX REST Exception: ' .
+                'MULTIVENDORX REST Exception: ' .
                 'Message=' . $e->getMessage() . '; ' .
                 'File=' . $e->getFile() . '; ' .
                 'Line=' . $e->getLine() . "\n\n"

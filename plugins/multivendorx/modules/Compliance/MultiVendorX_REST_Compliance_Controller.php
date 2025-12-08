@@ -209,7 +209,7 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
             return rest_ensure_response( $formatted );
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log(
-                'MVX REST Exception: ' .
+                'MULTIVENDORX REST Exception: ' .
                 'Message=' . $e->getMessage() . '; ' .
                 'File=' . $e->getFile() . '; ' .
                 'Line=' . $e->getLine() . "\n\n"
@@ -269,7 +269,7 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
             return rest_ensure_response( $data );
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log(
-                'MVX REST Exception: ' .
+                'MULTIVENDORX REST Exception: ' .
                 'Message=' . $e->getMessage() . '; ' .
                 'File=' . $e->getFile() . '; ' .
                 'Line=' . $e->getLine() . "\n\n"
@@ -305,7 +305,7 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
             return rest_ensure_response( array( 'success' => true ) );
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log(
-                'MVX REST Exception: ' .
+                'MULTIVENDORX REST Exception: ' .
                 'Message=' . $e->getMessage() . '; ' .
                 'File=' . $e->getFile() . '; ' .
                 'Line=' . $e->getLine() . "\n\n"
@@ -372,7 +372,7 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
             return rest_ensure_response( array( 'success' => true ) );
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log(
-                'MVX REST Exception: ' .
+                'MULTIVENDORX REST Exception: ' .
                 'Message=' . $e->getMessage() . '; ' .
                 'File=' . $e->getFile() . '; ' .
                 'Line=' . $e->getLine() . "\n\n"

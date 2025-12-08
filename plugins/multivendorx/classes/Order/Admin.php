@@ -64,15 +64,15 @@ class Admin {
         remove_filter( 'woocommerce_orders_table_query_clauses', array( $this, 'wc_order_list_filter' ) );
         switch ( $column ) {
             case 'multivendorx_suborder':
-                $mvx_suborders = MultiVendorX()->order->get_suborders( $post_id );
-                if ( $mvx_suborders ) {
+                $multivendorx_suborders = MultiVendorX()->order->get_suborders( $post_id );
+                if ( $multivendorx_suborders ) {
                     echo '<ul class="mvx-order-vendor" style="margin:0;">';
-                    foreach ( $mvx_suborders as $suborder ) {
+                    foreach ( $multivendorx_suborders as $suborder ) {
                         if ( $suborder->get_type() === 'shop_order_refund' ) {
                             continue;
                         }
-                        $vendor            = Store::get_store_by_id( $suborder->get_meta( Utill::POST_META_SETTINGS['store_id'], true ) );
-                        $vendor_page_title = ( $vendor ) ? $vendor->get( 'name' ) : esc_html__( 'Deleted vendor', 'multivendorx' );
+                        $store            = Store::get_store_by_id( $suborder->get_meta( Utill::POST_META_SETTINGS['store_id'], true ) );
+                        $store_page_title = ( $store ) ? $store->get( 'name' ) : esc_html__( 'Deleted store', 'multivendorx' );
 
                         $order_uri = apply_filters( 'mvx_admin_vendor_shop_order_edit_url', esc_url( 'admin.php?page=wc-orders&action=edit&id=' . $suborder->get_id() . '' ), $suborder->get_id() );
 
@@ -84,7 +84,7 @@ class Admin {
                             esc_url( $order_uri ),
                             esc_html( $suborder->get_order_number() ),
                             esc_html_x( 'for', 'Order table details', 'multivendorx' ),
-                            esc_html( $vendor_page_title )
+                            esc_html( $store_page_title )
                         );
 
                         do_action( 'mvx_after_suborder_details', $suborder );
@@ -178,6 +178,19 @@ class Admin {
                 ),
                 array( '%d', '%s', '%s', '%f', '%s', '%s', '%s' )
             );
+
+            if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+                MultiVendorX()->util->log(
+                    "========= MULTIVENDORX ERROR =========\n" .
+                    "Timestamp: " . current_time( 'mysql' ) . "\n" .
+                    "Error: " . $wpdb->last_error . "\n" .
+                    "Last Query: " . $wpdb->last_query . "\n" .
+                    "File: " . __FILE__ . "\n" .
+                    "Line: " . __LINE__ . "\n" .
+                    "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
+                    "=========================================\n\n"
+                );
+            }
         }
     }
 
