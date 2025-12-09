@@ -26,11 +26,11 @@ class Frontend {
 
         // Checkout fields and map.
         add_filter( 'woocommerce_checkout_fields', array( $this, 'mvx_checkout_user_location_fields' ), 50 );
-        add_action( 'woocommerce_after_checkout_billing_form', array( $this, 'mvx_checkout_user_location_map' ), 50 );
+        add_action( 'woocommerce_after_checkout_billing_form', array( $this, 'multivendorx_checkout_user_location_map' ), 50 );
 
         // // Save session & order meta.
         add_action( 'woocommerce_checkout_update_order_review', array( $this, 'mvx_checkout_user_location_session_set' ), 50 );
-        add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'mvx_checkout_user_location_save' ), 50 );
+        add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'multivendorx_checkout_user_location_save' ), 50 );
 
         // // Load Google Maps JS.
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
@@ -155,10 +155,8 @@ class Frontend {
 
     /**
      * Add map to checkout page
-     *
-     * @param object $checkout Checkout object.
      */
-    public function mvx_checkout_user_location_map( $checkout ) {
+    public function multivendorx_checkout_user_location_map() {
         if ( ( true === WC()->cart->needs_shipping() ) && apply_filters( 'mvx_is_allow_checkout_user_location', true ) ) {
             echo '<div class="woocommerce-billing-fields__field-wrapper">';
             echo '<div id="mvx-user-locaton-map" style="width:100%; height:18.75rem; margin-bottom:1.25rem;"></div>';
@@ -199,7 +197,7 @@ class Frontend {
      *
      * @param int $order_id Order ID.
      */
-    public function mvx_checkout_user_location_save( $order_id ) {
+    public function multivendorx_checkout_user_location_save( $order_id ) {
         $order = wc_get_order( $order_id );
 
         if ( ! empty( filter_input( INPUT_POST, 'multivendorx_user_location', FILTER_SANITIZE_SPECIAL_CHARS ) ) ) {
@@ -230,7 +228,7 @@ class Frontend {
                     'google-maps',
                     'https://maps.googleapis.com/maps/api/js?key=' . $google_maps_api_key . '&libraries=places',
                     array( 'jquery' ),
-                    null,
+                    '3.57',
                     true
                 );
             }

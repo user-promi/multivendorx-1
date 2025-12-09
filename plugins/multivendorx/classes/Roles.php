@@ -7,7 +7,6 @@
 
 namespace MultiVendorX;
 
-use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -118,12 +117,6 @@ class Roles {
 
             if ( in_array( 'store_owner', (array) $user->roles, true ) ) {
                 if ( 'edit_posts' === $cap ) {
-                    // $segment = get_query_var('segment');
-                    // $endpoints = MultiVendorX()->setting->get_setting('menu_manager');
-
-                    // do not remove this code
-                    // checking add later for edit product page
-                    // && ($segment == $endpoints['products']['slug'] || $segment == $endpoints['settings']['slug'])
                     if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
                         $caps = array( 'edit_posts' );
                     } else {

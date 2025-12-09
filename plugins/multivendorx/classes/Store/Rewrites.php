@@ -72,7 +72,7 @@ class Rewrites {
         // Force query to load products.
         $query->set( 'post_type', 'product' );
 
-        // Add vendor filter.
+        // Add store filter.
         $meta_query   = $query->get( 'meta_query', array() );
         $meta_query[] = array(
             'key'     => Utill::POST_META_SETTINGS['multivendorx_store_id'],
@@ -84,7 +84,7 @@ class Rewrites {
         // Pagination fix.
         $paged = max( 1, get_query_var( 'paged' ) );
         $query->set( 'paged', $paged );
-        $query->set( 'wc_query', 'product_query' ); // WooCommerce flag
+        $query->set( 'wc_query', 'product_query' );
     }
 
     /**
@@ -104,39 +104,18 @@ class Rewrites {
                 'index.php?' . $this->custom_store_url . '=$matches[1]&paged=$matches[2]',
                 'top',
             ),
-            // array(
 
-            // '^dashboard/([^/]*)/?',
-            // 'index.php?page_id=' . $page_id . '&segment=$matches[1]',
-            // 'top',
-            // ),
             array(
                 '^dashboard/([^/]+)/?([^/]*)/?([0-9]*)/?$',
                 'index.php?page_id=' . $page_id . '&segment=$matches[1]&element=$matches[2]&context_id=$matches[3]',
                 'top',
             ),
 
-            // oldddd
-            // [
-            // '^dashboard/?$',
-            // 'index.php?pagename=dashboard',
-            // 'top',
-            // ],
-
-            // [
-            // '^dashboard/([^/]+)/?([^/]*)/?([0-9]*)/?$',
-            // 'index.php?pagename=dashboard&tab=$matches[1]&subtab=$matches[2]&value=$matches[3]',
-            // 'top',
-            // ],
-
         );
 
         $rules = apply_filters( 'multivendorx_rewrite_rules', $rules, $this );
 
         add_rewrite_tag( '%segment%', '([^/]+)' );
-        // add_rewrite_tag( '%element%', '([^/]*)' );
-        // add_rewrite_tag( '%context_id%', '([0-9]*)' );
-
         foreach ( $rules as $rule ) {
             add_rewrite_rule( $rule[0], $rule[1], $rule[2] );
         }

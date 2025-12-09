@@ -8,7 +8,6 @@
 namespace MultiVendorX\Payments;
 
 use MultiVendorX\Store\Store;
-use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -182,10 +181,6 @@ class BankTransfer {
      * @param string $note Payment note.
      */
     public function process_payment( $store_id, $amount, $order_id = null, $transaction_id = null, $note = null ) {
-
-        // quick autoload/class check (helps debugging).
-        $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
-        $store                  = new Store( $store_id );
 
         $status = 'success';
         do_action(

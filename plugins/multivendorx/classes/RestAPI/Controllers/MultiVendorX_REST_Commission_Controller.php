@@ -80,7 +80,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
      * @return bool
      */
     public function get_items_permissions_check( $request ) {
-        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
+        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
     /**
@@ -90,7 +90,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
      * @return bool
      */
     public function create_item_permissions_check( $request ) {
-        return current_user_can( 'manage_options' ) || current_user_can( 'edit_stores' );
+        return current_user_can( 'manage_options' ) || current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
     /**
@@ -100,7 +100,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
      * @return bool
      */
     public function update_item_permissions_check( $request ) {
-        return current_user_can( 'manage_options' ) || current_user_can( 'edit_stores' );
+        return current_user_can( 'manage_options' ) || current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
     /**
@@ -110,22 +110,18 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
      * @return object
      */
     public function get_items( $request ) {
+
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log(
-                    'MVX REST Error: ' .
-                    'Code=' . $error->get_error_code() . '; ' .
-                    'Message=' . $error->get_error_message() . '; ' .
-                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
-                );
+                MultiVendorX()->util->log( $error );
             }
 
             return $error;
         }
+
         try {
             // Check if CSV download is requested.
             $format = $request->get_param( 'format' );
@@ -133,22 +129,19 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
                 return $this->download_csv( $request );
             }
 
-            $storeId = $request->get_param( 'store_id' );
+            $store_id = $request->get_param( 'store_id' );
 
             if ( 'reports' === $format ) {
                 $top_stores = $request->get_param( 'top_stores' );
 
-                if ( $storeId ) {
-                    // If a specific store ID is provided, return commission summary for that store.
-                    return CommissionUtil::get_commission_summary_for_store( $storeId );
+                if ( $store_id ) {
+                    return CommissionUtil::get_commission_summary_for_store( $store_id );
                 }
 
                 if ( $top_stores ) {
-                    // If top_stores is provided, return commission summary for top stores.
                     return CommissionUtil::get_commission_summary_for_store( null, $top_stores, $top_stores );
                 }
 
-                // Default: return summary for all stores.
                 return CommissionUtil::get_commission_summary_for_store();
             }
 
@@ -160,18 +153,18 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
             $start_date = gmdate( 'Y-m-d 00:00:00', strtotime( sanitize_text_field( $request->get_param( 'startDate' ) ) ) );
             $end_date   = gmdate( 'Y-m-d 23:59:59', strtotime( sanitize_text_field( $request->get_param( 'endDate' ) ) ) );
 
-            // ADD THESE LINES FOR SORTING.
-            $orderBy = sanitize_text_field( $request->get_param( 'orderBy' ) );
-            $order   = sanitize_text_field( $request->get_param( 'order' ) );
+            // Sorting params.
+            $order_by = sanitize_text_field( $request->get_param( 'orderBy' ) );
+            $order    = sanitize_text_field( $request->get_param( 'order' ) );
 
-            // Prepare filter for CommissionUtil.
+            // Prepare filter.
             $filter = array(
                 'perpage' => $limit,
                 'page'    => $page,
             );
 
-            if ( ! empty( $storeId ) ) {
-                $filter['store_id'] = intval( $storeId );
+            if ( ! empty( $store_id ) ) {
+                $filter['store_id'] = intval( $store_id );
             }
 
             if ( ! empty( $status ) ) {
@@ -185,34 +178,36 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
                 );
             }
 
-            // ADD SORTING TO FILTER.
-            if ( ! empty( $orderBy ) && ! empty( $order ) ) {
-                $filter['orderBy'] = $orderBy;
+            if ( ! empty( $order_by ) && ! empty( $order ) ) {
+                $filter['orderBy'] = $order_by;
                 $filter['order']   = $order;
             }
 
+            // Handle count only.
             if ( $count ) {
                 global $wpdb;
+
                 $table_name = "{$wpdb->prefix}" . Utill::TABLES['commission'];
 
-                if ( ! empty( $storeId ) ) {
-                    $total_count = $wpdb->get_var(
-                        $wpdb->prepare(
-                            "SELECT COUNT(*) FROM $table_name WHERE store_id = %d",
-                            $storeId
-                        )
+                if ( ! empty( $store_id ) ) {
+                    // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+                    $sql = $wpdb->prepare(
+                        "SELECT COUNT(*) FROM `{$table_name}` WHERE store_id = %d",
+                        $store_id
                     );
                 } else {
-                    $total_count = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
+                    // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+                    $sql = "SELECT COUNT(*) FROM `{$table_name}`";
                 }
 
-                return rest_ensure_response( (int) $total_count );
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+                $total_count = (int) $wpdb->get_var( $sql );
+
+                return rest_ensure_response( $total_count );
             }
-            // Rest of your existing code remains the same...
-            $commissions = CommissionUtil::get_commissions(
-                $filter,
-                false
-            );
+
+            // Fetch commissions.
+            $commissions = CommissionUtil::get_commissions( $filter, false );
 
             $formatted_commissions = array();
 
@@ -250,37 +245,25 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
                 );
             }
 
-            // Prepare base filter (for store-specific counts).
+            // Base filter for counts.
             $base_filter = array();
-            if ( ! empty( $storeId ) && ! current_user_can( 'manage_options' ) ) {
-                $base_filter['store_id'] = intval( $storeId );
+            if ( ! empty( $store_id ) && ! current_user_can( 'manage_options' ) ) {
+                $base_filter['store_id'] = intval( $store_id );
             }
-
-            // Status-wise counts with store/date filters applied.
-            $all                = CommissionUtil::get_commissions( $base_filter, true, true );
-            $paid               = CommissionUtil::get_commissions( array_merge( $base_filter, array( 'status' => 'paid' ) ), true, true );
-            $unpaid             = CommissionUtil::get_commissions( array_merge( $base_filter, array( 'status' => 'unpaid' ) ), true, true );
-            $refunded           = CommissionUtil::get_commissions( array_merge( $base_filter, array( 'status' => 'refunded' ) ), true, true );
-            $partially_refunded = CommissionUtil::get_commissions( array_merge( $base_filter, array( 'status' => 'partially_refunded' ) ), true, true );
-            $cancelled          = CommissionUtil::get_commissions( array_merge( $base_filter, array( 'status' => 'cancelled' ) ), true, true );
 
             $response = array(
                 'commissions'        => $formatted_commissions,
-                'all'                => $all,
-                'paid'               => $paid,
-                'unpaid'             => $unpaid,
-                'refunded'           => $refunded,
-                'partially_refunded' => $partially_refunded,
-                'cancelled'          => $cancelled,
+                'all'                => CommissionUtil::get_commissions( $base_filter, true, true ),
+                'paid'               => CommissionUtil::get_commissions( array_merge( $base_filter, array( 'status' => 'paid' ) ), true, true ),
+                'unpaid'             => CommissionUtil::get_commissions( array_merge( $base_filter, array( 'status' => 'unpaid' ) ), true, true ),
+                'refunded'           => CommissionUtil::get_commissions( array_merge( $base_filter, array( 'status' => 'refunded' ) ), true, true ),
+                'partially_refunded' => CommissionUtil::get_commissions( array_merge( $base_filter, array( 'status' => 'partially_refunded' ) ), true, true ),
+                'cancelled'          => CommissionUtil::get_commissions( array_merge( $base_filter, array( 'status' => 'cancelled' ) ), true, true ),
             );
+
             return rest_ensure_response( $response );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log(
-                'MULTIVENDORX REST Exception: ' .
-                'Message=' . $e->getMessage() . '; ' .
-                'File=' . $e->getFile() . '; ' .
-                'Line=' . $e->getLine() . "\n\n"
-            );
+            MultiVendorX()->util->log( $e );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
@@ -292,7 +275,8 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
      * @param object $request The request object.
      */
     private function download_csv( $request ) {
-        $storeId    = $request->get_param( 'store_id' );
+
+        $store_id   = $request->get_param( 'store_id' );
         $status     = $request->get_param( 'status' );
         $ids        = $request->get_param( 'ids' );
         $start_date = sanitize_text_field( $request->get_param( 'startDate' ) );
@@ -300,11 +284,11 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         $page       = $request->get_param( 'page' );
         $per_page   = $request->get_param( 'row' );
 
-        // Prepare filter for CommissionUtil - NO pagination by default.
+        // Prepare filter (no pagination by default).
         $filter = array();
 
-        if ( ! empty( $storeId ) ) {
-            $filter['store_id'] = intval( $storeId );
+        if ( ! empty( $store_id ) ) {
+            $filter['store_id'] = intval( $store_id );
         }
 
         if ( ! empty( $status ) ) {
@@ -314,18 +298,22 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
         if ( ! empty( $start_date ) && ! empty( $end_date ) ) {
             $filter['created_at'] = array(
                 'compare' => 'BETWEEN',
-                'value'   => array( gmdate( 'Y-m-d 00:00:00', strtotime( $start_date ) ), gmdate( 'Y-m-d 23:59:59', strtotime( $end_date ) ) ),
+                'value'   => array(
+                    gmdate( 'Y-m-d 00:00:00', strtotime( $start_date ) ),
+                    gmdate( 'Y-m-d 23:59:59', strtotime( $end_date ) ),
+                ),
             );
         }
 
-        // If specific IDs are requested (selected rows from bulk action).
+        // Specific IDs (bulk selected rows).
         if ( ! empty( $ids ) ) {
             $filter['id__in'] = array_map( 'intval', explode( ',', $ids ) );
-        } elseif ( ! empty( $page ) && ! empty( $per_page ) ) { // If pagination parameters are provided (current page export from bulk action).
+
+			// Page-based export.
+        } elseif ( ! empty( $page ) && ! empty( $per_page ) ) {
             $filter['perpage'] = intval( $per_page );
             $filter['page']    = intval( $page );
         }
-        // Otherwise, export ALL data with current filters (no pagination - from Export All button).
 
         // Fetch commissions.
         $commissions = \MultiVendorX\Commission\CommissionUtil::get_commissions( $filter, false );
@@ -334,7 +322,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
             return new \WP_Error( 'no_data', __( 'No commission data found.', 'multivendorx' ), array( 'status' => 404 ) );
         }
 
-        // CSV headers.
+        // CSV header row.
         $headers = array(
             'ID',
             'Order ID',
@@ -352,14 +340,17 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
             'Currency',
         );
 
-        // Build CSV data.
+        // Open CSV output.
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
         $csv_output = fopen( 'php://output', 'w' );
         ob_start();
 
-        // Add BOM for UTF-8 compatibility.
+        // BOM for UTF-8 (Excel support).
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite
         fwrite( $csv_output, "\xEF\xBB\xBF" );
 
-        fputcsv( $csv_output, $headers );
+        // Write headers.
+        fputcsv( $csv_output, $headers, ',', '"', '\\' );
 
         foreach ( $commissions as $commission ) {
             $store      = new \MultiVendorX\Store\Store( $commission->store_id );
@@ -368,39 +359,47 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
             fputcsv(
                 $csv_output,
                 array(
-					$commission->ID,
-					$commission->order_id,
-					$store_name,
-					$commission->total_order_amount,
-					$commission->commission_amount,
-					$commission->facilitator_fee,
-					$commission->gateway_fee,
-					$commission->shipping_amount,
-					$commission->tax_amount,
-					$commission->commission_total,
-					$commission->status,
-					$commission->created_at,
-					$commission->commission_refunded,
-					$commission->currency,
-                )
+                    $commission->ID,
+                    $commission->order_id,
+                    $store_name,
+                    $commission->total_order_amount,
+                    $commission->commission_amount,
+                    $commission->facilitator_fee,
+                    $commission->gateway_fee,
+                    $commission->shipping_amount,
+                    $commission->tax_amount,
+                    $commission->commission_total,
+                    $commission->status,
+                    $commission->created_at,
+                    $commission->commission_refunded,
+                    $commission->currency,
+                ),
+                ',',
+                '"',
+                '\\'
             );
         }
 
+        // Close handle.
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
         fclose( $csv_output );
+
         $csv = ob_get_clean();
 
-        // Determine filename based on context.
+        // Filename generator.
         $filename = 'commissions_';
+
         if ( ! empty( $ids ) ) {
             $filename .= 'selected_';
         } elseif ( ! empty( $page ) ) {
-            $filename .= 'page_' . $page . '_';
+            $filename .= 'page_' . intval( $page ) . '_';
         } else {
             $filename .= 'all_';
         }
+
         $filename .= gmdate( 'Y-m-d' ) . '.csv';
 
-        // Send headers for browser download.
+        // Output headers.
         header( 'Content-Type: text/csv; charset=UTF-8' );
         header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
         header( 'Pragma: no-cache' );
@@ -423,12 +422,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log(
-                    'MVX REST Error: ' .
-                    'Code=' . $error->get_error_code() . '; ' .
-                    'Message=' . $error->get_error_message() . '; ' .
-                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
-                );
+                MultiVendorX()->util->log( $error );
             }
 
             return $error;
@@ -514,12 +508,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
 
             return rest_ensure_response( $response );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log(
-                'MULTIVENDORX REST Exception: ' .
-                'Message=' . $e->getMessage() . '; ' .
-                'File=' . $e->getFile() . '; ' .
-                'Line=' . $e->getLine() . "\n\n"
-            );
+            MultiVendorX()->util->log( $e );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
@@ -537,12 +526,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log(
-                    'MVX REST Error: ' .
-                    'Code=' . $error->get_error_code() . '; ' .
-                    'Message=' . $error->get_error_message() . '; ' .
-                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
-                );
+                MultiVendorX()->util->log( $error );
             }
 
             return $error;
@@ -559,12 +543,7 @@ class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
                 }
             }
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log(
-                'MULTIVENDORX REST Exception: ' .
-                'Message=' . $e->getMessage() . '; ' .
-                'File=' . $e->getFile() . '; ' .
-                'Line=' . $e->getLine() . "\n\n"
-            );
+            MultiVendorX()->util->log( $e );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }

@@ -69,7 +69,6 @@ class Zone_Shipping extends \WC_Shipping_Method {
         add_filter( 'woocommerce_shipping_chosen_method', array( $this, 'select_default_rate' ), 10, 2 );
         add_filter( 'woocommerce_package_rates', array( $this, 'woocommerce_package_rates' ), 99, 2 );
 
-        // add_action( 'woocommerce_cart_calculate_fees', [ $this, 'multivendorx_force_shipping_recalculation' ], 20, 1 );
         add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
     }
 
@@ -112,7 +111,6 @@ class Zone_Shipping extends \WC_Shipping_Method {
         // Trim invalid start/end characters.
         $sum = rtrim( ltrim( $sum, "\t\n\r\0\x0B+*/" ), "\t\n\r\0\x0B+-*/" );
 
-        // Do the math (FIXED: global namespace).
         return $sum ? \WC_Eval_Math::evaluate( $sum ) : 0;
     }
 
@@ -388,11 +386,11 @@ class Zone_Shipping extends \WC_Shipping_Method {
     }
 
     /**
-     * Check if shipping is enabled for a seller
+     * Check if shipping is enabled for a seller.
      *
-     * @param int $store_id
+     * @param int $store_id Store ID.
      *
-     * @return bool
+     * @return bool True if shipping by zone is enabled, otherwise false.
      */
     public static function is_shipping_enabled_for_seller( $store_id ) {
         $store            = new \MultiVendorX\Store\Store( $store_id );
@@ -556,12 +554,12 @@ class Zone_Shipping extends \WC_Shipping_Method {
     }
 
     /**
-     * alter the default rate if one is chosen in settings.
+     * Alter the default rate if one is chosen in settings.
      *
-     * @param string $chosen_method Chosen shipping method.
+     * @param string $chosen_method      Chosen shipping method.
      * @param array  $_available_methods Available shipping methods.
      *
-     * @return bool
+     * @return string Selected shipping method.
      */
     public function select_default_rate( $chosen_method, $_available_methods ) {
         // Select the 'Default' method from WooCommerce settings.

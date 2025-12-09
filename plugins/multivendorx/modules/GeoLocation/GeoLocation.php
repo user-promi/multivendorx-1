@@ -69,22 +69,20 @@ class GeoLocation {
     /**
      * Check if a given request has access to read items
      *
-     * @param object $request Full data about the request.
      * @return WP_Error|bool
      */
-    public function get_items_permissions_check( $request ) {
-        $has_permission = current_user_can( 'read' ) || current_user_can( 'edit_stores' );
+    public function get_items_permissions_check() {
+        $has_permission = current_user_can( 'read' ) || current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
         return $has_permission;
     }
 
     /**
      * Check if a given request has access to update a specific item
      *
-     * @param object $request Full data about the request.
      * @return WP_Error|bool
      */
-    public function update_item_permissions_check( $request ) {
-        $has_permission = current_user_can( 'edit_stores' );
+    public function update_item_permissions_check() {
+        $has_permission = current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
         return $has_permission;
     }
 
@@ -101,7 +99,7 @@ class GeoLocation {
             return new \WP_Error( 'missing_address', 'Address is required', array( 'status' => 400 ) );
         }
 
-        $url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode( $address ) . '&key=' . $this->api_key;
+        $url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' . rawurlencode( $address ) . '&key=' . $this->api_key;
 
         $response = wp_remote_get(
             $url,

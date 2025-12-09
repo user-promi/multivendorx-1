@@ -7,8 +7,6 @@
 
 namespace MultiVendorX\Payments;
 
-use MultiVendorX\Utill;
-
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -65,8 +63,6 @@ class CashPayment {
      * @param string $note           Note.
      */
     public function process_payment( $store_id, $amount, $order_id = null, $transaction_id = null, $note = null ) {
-        // quick autoload/class check (helps debugging).
-        $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
 
         $status = 'success';
         do_action(

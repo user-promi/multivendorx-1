@@ -94,11 +94,11 @@ class Utill {
     );
 
     const WOO_SETTINGS = array(
-        'taxes'                     => 'woocommerce_calc_taxes',
-        'generate_password'         => 'woocommerce_registration_generate_password',
-        'default_country'           => 'woocommerce_default_country',
-        'weight_unit'               => 'woocommerce_weight_unit',
-        'dimension_unit'            => 'woocommerce_dimension_unit',
+        'taxes'             => 'woocommerce_calc_taxes',
+        'generate_password' => 'woocommerce_registration_generate_password',
+        'default_country'   => 'woocommerce_default_country',
+        'weight_unit'       => 'woocommerce_weight_unit',
+        'dimension_unit'    => 'woocommerce_dimension_unit',
     );
 
     const ORDER_META_SETTINGS = array(
@@ -129,16 +129,16 @@ class Utill {
     );
 
     const POST_META_SETTINGS = array(
-        'store_id'                       => 'multivendorx_store_id',
-        'fixed_commission'               => 'multivendorx_product_fixed_commission',
-        'percentage_commission'          => 'multivendorx_product_percentage_commission',
-        'variable_product_percentage'    => 'multivendorx_variable_product_percentage_commission',
-        'variable_product_fixed'         => 'multivendorx_variable_product_fixed_commission',
-        'shipping_policy'                => 'multivendorx_shipping_policy',
-        'refund_policy'                  => 'multivendorx_refund_policy',
-        'cancellation_policy'            => 'multivendorx_cancellation_policy',
-        'announcement_stores'            => 'multivendorx_announcement_stores',
-        'announcement_url'               => 'multivendorx_announcement_url',
+        'store_id'                    => 'multivendorx_store_id',
+        'fixed_commission'            => 'multivendorx_product_fixed_commission',
+        'percentage_commission'       => 'multivendorx_product_percentage_commission',
+        'variable_product_percentage' => 'multivendorx_variable_product_percentage_commission',
+        'variable_product_fixed'      => 'multivendorx_variable_product_fixed_commission',
+        'shipping_policy'             => 'multivendorx_shipping_policy',
+        'refund_policy'               => 'multivendorx_refund_policy',
+        'cancellation_policy'         => 'multivendorx_cancellation_policy',
+        'announcement_stores'         => 'multivendorx_announcement_stores',
+        'announcement_url'            => 'multivendorx_announcement_url',
     );
 
     const STORE_SETTINGS_KEYS = array(
@@ -189,17 +189,17 @@ class Utill {
         'shipping_options'           => 'shipping_options',
     );
 
-    const USER_SETTINGS_KEYS    = array(
+    const USER_SETTINGS_KEYS = array(
         'active_store'                   => 'multivendorx_active_store',
         'first_name'                     => 'first_name',
         'last_name'                      => 'last_name',
         'social_verification'            => 'social_verification_connections',
         'following_stores'               => 'multivendorx_following_stores',
         'multivendorx_user_location_lat' => 'multivendorx_user_location_lat',
-        'multivendorx_user_location_lat' => 'multivendorx_user_location_lng',
+        'multivendorx_user_location_lng' => 'multivendorx_user_location_lng',
     );
 
-    const POST_TYPES            = array(
+    const POST_TYPES = array(
         'announcement' => 'multivendorx_an',
         'knowledge'    => 'multivendorx_kb',
     );
@@ -207,57 +207,115 @@ class Utill {
     const ACTIVE_MODULES_DB_KEY = 'multivendorx_all_active_module_list';
 
     /**
-     * MooWoodle LOG function.
+     * Write a formatted log entry for MultiVendorX.
      *
-     * @param string $message message.
-     * @return bool
+     * Handles:
+     * - Exceptions
+     * - WP_Error objects
+     * - WordPress DB errors
+     * - Normal text messages
+     *
+     * @param mixed  $message Log message, Exception, or WP_Error.
+     * @param string $type    Log type (INFO, ERROR, EXCEPTION, WP_ERROR).
+     * @param array  $extra   Additional metadata to include.
+     * @return bool           True on success, false on failure.
      */
-	public static function log( $message ) {
-		global $wp_filesystem;
+    public static function log( $message = '', $type = 'INFO', $extra = array() ) {
+        global $wp_filesystem, $wpdb;
 
-		$message = var_export( $message, true ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export
+        // Initialize the WordPress filesystem API.
+        if ( empty( $wp_filesystem ) ) {
+            require_once ABSPATH . '/wp-admin/includes/file.php';
+            WP_Filesystem();
+        }
 
-		// Init filesystem.
-		if ( empty( $wp_filesystem ) ) {
-			require_once ABSPATH . '/wp-admin/includes/file.php';
-			WP_Filesystem();
-		}
+        // Create the logs directory and protect it with .htaccess.
+        if ( ! file_exists( MultiVendorX()->multivendorx_logs_dir . '/.htaccess' ) ) {
+            wp_mkdir_p( MultiVendorX()->multivendorx_logs_dir );
+            try {
+                $wp_filesystem->put_contents(
+                    MultiVendorX()->multivendorx_logs_dir . '/.htaccess',
+                    'deny from all'
+                );
+                $wp_filesystem->put_contents(
+                    MultiVendorX()->multivendorx_logs_dir . '/index.html',
+                    ''
+                );
+            } catch ( Exception $e ) {// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
+                // Directory creation failed but logging should continue.
+            }
+        }
 
-		// log folder create.
-		if ( ! file_exists( MultiVendorX()->multivendorx_logs_dir . '/.htaccess' ) ) {
-			$result = wp_mkdir_p( MultiVendorX()->multivendorx_logs_dir );
-			if ( true === $result ) {
-				// Create infrastructure to prevent listing contents of the logs directory.
-				try {
-					$wp_filesystem->put_contents( MultiVendorX()->multivendorx_logs_dir . '/.htaccess', 'deny from all' );
-					$wp_filesystem->put_contents( MultiVendorX()->multivendorx_logs_dir . '/index.html', '' );
-				} catch ( Exception $exception ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
-					// Creation failed.
-				}
-			}
-			$message = "MultiVendorX Log file Created\n";
-		}
+        // Convert Exception into structured metadata.
+        if ( $message instanceof \Exception ) {
+            $type             = 'EXCEPTION';
+            $extra['Message'] = $message->getMessage();
+            $extra['Code']    = $message->getCode();
+            $extra['File']    = $message->getFile();
+            $extra['Line']    = $message->getLine();
+            // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
+            $extra['Stack'] = $message->getTraceAsString();
+            $message        = 'Exception occurred';
+        }
 
-		// Clear log file.
-		if ( filter_input( INPUT_POST, 'clearlog', FILTER_DEFAULT ) !== null ) {
-			$message = "MultiVendorX Log file Cleared\n";
-		}
+        // Convert WP_Error into structured metadata.
+        if ( $message instanceof \WP_Error ) {
+            $type             = 'WP_ERROR';
+            $extra['Code']    = $message->get_error_code();
+            $extra['Message'] = $message->get_error_message();
+            // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
+            $extra['Data'] = $message->get_error_data();
+            $message       = 'WP_Error occurred';
+        }
 
-		// Write Log.
-		if ( '' !== $message ) {
-			$log_entry        = gmdate( 'd/m/Y H:i:s', time() ) . ': ' . $message;
-			$existing_content = $wp_filesystem->get_contents( MultiVendorX()->log_file );
+        // Automatically capture database errors.
+        if ( isset( $wpdb ) && ! empty( $wpdb->last_error ) ) {
+            $extra['DB Error']   = $wpdb->last_error;
+            $extra['Last Query'] = $wpdb->last_query;
+        }
 
-			// Append existing content.
-			if ( ! empty( $existing_content ) ) {
-				$log_entry = "\n" . $log_entry;
-			}
+        // Automatic metadata.
+        $meta = array_merge(
+            array(
+                'Type'      => $type,
+                'Timestamp' => current_time( 'mysql' ),
+                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_debug_backtrace
+                'File'      => debug_backtrace()[1]['file'] ?? '',
+                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_debug_backtrace
+                'Line'      => debug_backtrace()[1]['line'] ?? '',
+                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary
+                'Stack'     => wp_debug_backtrace_summary(),
+            ),
+            $extra
+        );
 
-			return $wp_filesystem->put_contents( MultiVendorX()->log_file, $existing_content . $log_entry );
-		}
+        $timestamp = $meta['Timestamp'];
+        $log_lines = array();
 
-		return false;
-	}
+        foreach ( $meta as $key => $val ) {
+            // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
+            $val         = trim( print_r( $val, true ) );
+            $log_lines[] = "{$timestamp} : {$key}: {$val}";
+        }
+
+        // Add the main message.
+        // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
+        $log_lines[] = "{$timestamp} : Message: " . trim( print_r( $message, true ) );
+
+        // Build final entry block.
+        $log_entry = implode( "\n", $log_lines ) . "\n";
+
+        $existing = $wp_filesystem->get_contents( MultiVendorX()->log_file );
+        if ( ! empty( $existing ) ) {
+            $log_entry = "\n" . $log_entry; // Add spacing.
+        }
+
+        return $wp_filesystem->put_contents(
+            MultiVendorX()->log_file,
+            $existing . $log_entry
+        );
+    }
+
 
     /**
      * Check pro plugin is active or not.
@@ -311,10 +369,6 @@ class Utill {
      */
     public static function is_store_dashboard() {
         $dashboard_page = (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' );
-        // if (is_page($dashboard_page)) {
-        // $has_shortcode = has_shortcode(get_post($dashboard_page)->post_content, 'multivendorx_store_dashboard');
-        // return $has_shortcode;
-        // }
         return is_page( $dashboard_page );
     }
 
@@ -325,10 +379,6 @@ class Utill {
      */
     public static function is_store_registration_page() {
         $registration_page = (int) MultiVendorX()->setting->get_setting( 'store_registration_page' );
-        // if (is_page($registration_page)) {
-        // $has_shortcode = has_shortcode(get_post($registration_page)->post_content, 'multivendorx_store_registration');
-        // return $has_shortcode;
-        // }
         return is_page( $registration_page );
     }
 }

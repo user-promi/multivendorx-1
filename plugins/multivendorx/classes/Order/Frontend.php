@@ -27,7 +27,7 @@ class Frontend {
         // customer's order list (my account).
         add_filter( 'woocommerce_my_account_my_orders_query', array( $this, 'woocommerce_my_account_my_orders_query' ), 99 );
         add_filter( 'woocommerce_account_orders_columns', array( $this, 'woocommerce_my_account_my_orders_columns' ), 99 );
-        add_action( 'woocommerce_my_account_my_orders_column_mvx_suborder', array( $this, 'woocommerce_my_account_my_orders_column_mvx_suborder' ), 99 );
+        add_action( 'woocommerce_my_account_my_orders_column_multivendorx_suborder', array( $this, 'woocommerce_my_account_my_orders_column_multivendorx_suborder' ), 99 );
 
         add_filter( 'woocommerce_customer_available_downloads', array( $this, 'woocommerce_customer_available_downloads' ), 99 );
     }
@@ -51,7 +51,7 @@ class Frontend {
      * @return array
      */
     public function woocommerce_my_account_my_orders_columns( $columns ) {
-        $suborder_column['mvx_suborder'] = __( 'Suborders', 'multivendorx' );
+        $suborder_column['multivendorx_suborder'] = __( 'Suborders', 'multivendorx' );
         $columns                         = array_slice( $columns, 0, 1, true ) + $suborder_column + array_slice( $columns, 1, count( $columns ) - 1, true );
         return $columns;
     }
@@ -62,13 +62,13 @@ class Frontend {
      * @param  object $order Order object.
      * @return void
      */
-    public function woocommerce_my_account_my_orders_column_mvx_suborder( $order ) {
-        $mvx_suborders = MultiVendorX()->order->get_suborders( $order->get_id(), array( 'type' => 'shop_order' ) );
+    public function woocommerce_my_account_my_orders_column_multivendorx_suborder( $order ) {
+        $multivendorx_suborders = MultiVendorX()->order->get_suborders( $order->get_id(), array( 'type' => 'shop_order' ) );
 
-        if ( $mvx_suborders ) {
+        if ( $multivendorx_suborders ) {
             echo '<ul class="mvx-order-vendor" style="margin:0;list-style:none;">';
-            foreach ( $mvx_suborders as $suborder ) {
-                $vendor    = Store::get_store_by_id( $suborder->get_meta( Utill::POST_META_SETTINGS['store_id'], true ) );
+            foreach ( $multivendorx_suborders as $suborder ) {
+                $store    = Store::get_store_by_id( $suborder->get_meta( Utill::POST_META_SETTINGS['store_id'], true ) );
                 $order_uri = esc_url( $suborder->get_view_order_url() );
 
                 printf(
@@ -77,7 +77,7 @@ class Frontend {
                     esc_attr( sanitize_title( $suborder->get_status() ) ),
                     esc_html( $suborder->get_order_number() ),
                     esc_html_x( 'for', 'Order table details', 'multivendorx' ),
-                    esc_html( $vendor->get( 'name' ) )
+                    esc_html( $store->get( 'name' ) )
                 );
 
                 do_action( 'mvx_after_suborder_details', $suborder );

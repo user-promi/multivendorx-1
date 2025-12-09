@@ -7,7 +7,6 @@
 
 namespace MultiVendorX\Commission;
 
-use MultiVendorX\Order\VendorOrder;
 use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
@@ -29,27 +28,27 @@ class Hooks {
     }
 
     /**
-     * Create commission of vendor order.
+     * Create commission of store order.
      *
-     * @param   object $vendor_order Vendor order object.
+     * @param   object $store_order Store order object.
      * @param   object $main_order Main order object.
      * @return  void
      */
-    public function create_commission( $vendor_order, $main_order ) {
-        $processed = $vendor_order->get_meta( Utill::POST_META_SETTINGS['commissions_processed'], true );
+    public function create_commission( $store_order, $main_order ) {
+        $processed = $store_order->get_meta( Utill::POST_META_SETTINGS['commissions_processed'], true );
 
         if ( ! $processed ) {
-            $commission_id = MultiVendorX()->commission->calculate_commission( $vendor_order );
-            $vendor_order->update_meta_data( Utill::ORDER_META_SETTINGS['commission_id'], $commission_id );
-            $vendor_order->update_meta_data( Utill::POST_META_SETTINGS['commissions_processed'], 'yes' );
+            $commission_id = MultiVendorX()->commission->calculate_commission( $store_order );
+            $store_order->update_meta_data( Utill::ORDER_META_SETTINGS['commission_id'], $commission_id );
+            $store_order->update_meta_data( Utill::POST_META_SETTINGS['commissions_processed'], 'yes' );
 
             // Action hook after commission processed.
-            do_action( 'multivendorx_after_calculate_commission', $commission_id, $vendor_order, $main_order );
+            do_action( 'multivendorx_after_calculate_commission', $commission_id, $store_order, $main_order );
         }
     }
 
     /**
-     * Create refunds for vendor commission
+     * Create refunds for store commission
      *
      * @param mixed $order_id Order ID.
      * @param mixed $refund_id Refund ID.

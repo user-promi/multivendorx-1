@@ -9,7 +9,6 @@ namespace MultiVendorX\Payments;
 
 use MultiVendorX\Store\Store;
 use MultiVendorX\Commission\CommissionUtil;
-use MultiVendorX\MultiVendorX;
 use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
@@ -29,7 +28,6 @@ class PaymentProcessor {
      */
     public function __construct() {
         add_action( 'multivendorx_after_payment_complete', array( $this, 'after_payment_complete' ), 10, 7 );
-        // add_action('multivendorx_after_real_time_payment_complete', array( $this, 'after_real_time_payment_complete'), 10, 2);
 
         // COD payments.
         add_action( 'woocommerce_order_status_changed', array( $this, 'cod_order_process' ), 30, 4 );
@@ -77,16 +75,7 @@ class PaymentProcessor {
                 );
 
                 if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-                    MultiVendorX()->util->log(
-                        "========= MULTIVENDORX ERROR =========\n" .
-                        "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                        "Error: " . $wpdb->last_error . "\n" .
-                        "Last Query: " . $wpdb->last_query . "\n" .
-                        "File: " . __FILE__ . "\n" .
-                        "Line: " . __LINE__ . "\n" .
-                        "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                        "=========================================\n\n"
-                    );
+                    MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
                 }
 
                 $transaction_id = $wpdb->insert_id;
@@ -121,16 +110,7 @@ class PaymentProcessor {
             );
 
             if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-                MultiVendorX()->util->log(
-                    "========= MULTIVENDORX ERROR =========\n" .
-                    "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                    "Error: " . $wpdb->last_error . "\n" .
-                    "Last Query: " . $wpdb->last_query . "\n" .
-                    "File: " . __FILE__ . "\n" .
-                    "Line: " . __LINE__ . "\n" .
-                    "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                    "=========================================\n\n"
-                );
+                MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
             }
 
             return;
@@ -186,16 +166,7 @@ class PaymentProcessor {
         );
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log(
-                "========= MULTIVENDORX ERROR =========\n" .
-                "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                "Error: " . $wpdb->last_error . "\n" .
-                "Last Query: " . $wpdb->last_query . "\n" .
-                "File: " . __FILE__ . "\n" .
-                "Line: " . __LINE__ . "\n" .
-                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                "=========================================\n\n"
-            );
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
 
         if ( 'success' === $result && $status ) {
@@ -228,16 +199,7 @@ class PaymentProcessor {
             );
 
             if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-                MultiVendorX()->util->log(
-                    "========= MULTIVENDORX ERROR =========\n" .
-                    "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                    "Error: " . $wpdb->last_error . "\n" .
-                    "Last Query: " . $wpdb->last_query . "\n" .
-                    "File: " . __FILE__ . "\n" .
-                    "Line: " . __LINE__ . "\n" .
-                    "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                    "=========================================\n\n"
-                );
+                MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
             }
         }
     }
@@ -283,16 +245,6 @@ class PaymentProcessor {
 
 				$format = array( '%d', '%d', '%d', '%s', '%s', '%f', '%s', '%s', '%s', '%s' );
 
-				// check shipping
-				// if shipping == admin then do nothing
-				// if shipping == store {
-                // $wpdb->insert(
-                // $wpdb->prefix . Utill::TABLES['transaction'],
-                // $data,
-                // $format
-                // );
-				// }
-
 				// If shipping not found then else.
 				$payment = $order->get_meta( Utill::ORDER_META_SETTINGS['cod_order_payment'], true );
 				if ( 'admin' === $payment ) {
@@ -304,16 +256,7 @@ class PaymentProcessor {
                         $format
 					);
                     if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-                        MultiVendorX()->util->log(
-                            "========= MULTIVENDORX ERROR =========\n" .
-                            "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                            "Error: " . $wpdb->last_error . "\n" .
-                            "Last Query: " . $wpdb->last_query . "\n" .
-                            "File: " . __FILE__ . "\n" .
-                            "Line: " . __LINE__ . "\n" .
-                            "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                            "=========================================\n\n"
-                        );
+                        MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
                     }
 				} else {
 					$order->set_status( $old_status );

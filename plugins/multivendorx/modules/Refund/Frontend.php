@@ -24,7 +24,7 @@ class Frontend {
     public function __construct() {
         add_action( 'woocommerce_order_details_after_order_table', array( $this, 'mvx_refund_btn_customer_my_account' ), 10 );
         add_action( 'wp_enqueue_scripts', array( $this, 'add_scripts' ) );
-        add_action( 'wp', array( $this, 'mvx_handler_cust_requested_refund' ) );
+        add_action( 'wp', array( $this, 'multivendorx_handler_cust_requested_refund' ) );
     }
 
     /**
@@ -237,10 +237,13 @@ class Frontend {
 
     /**
      * Handle customer requested refund action.
+     *
+     * @return void
      */
-    public function mvx_handler_cust_requested_refund() {
+    public function multivendorx_handler_cust_requested_refund() {
         global $wp;
 
+        // Sanitize POST data.
         $data = filter_input_array(
             INPUT_POST,
             array(
@@ -256,6 +259,7 @@ class Frontend {
         );
 
         $nonce_value = $data['cust-request-refund-nonce'] ?? '';
+
         if ( ! wp_verify_nonce( $nonce_value, 'customer_request_refund' ) ) {
             return;
         }
@@ -277,22 +281,36 @@ class Frontend {
         $order_id = absint( $wp->query_vars['view-order'] );
         $order    = wc_get_order( $order_id );
 
+        // Clean request values.
         $reason_option            = wc_clean( $data['refund_reason_option'] ?? '' );
         $refund_reason_other      = wc_clean( $data['refund_reason_other'] ?? '' );
         $refund_request_addi_info = wc_clean( $data['refund_request_addi_info'] ?? '' );
-        $refund_product           = wc_clean( $data['refund_product'] ?? '' );
+        $refund_product           = array_map( 'wc_clean', (array) ( $data['refund_product'] ?? array() ) );
 
+        // Build refund reason.
         $refund_reason_options = MultiVendorX()->setting->get_setting( 'refund_reasons', array() );
-        $refund_reason         = 'others' === $reason_option
+        $refund_reason         = ( 'others' === $reason_option )
             ? $refund_reason_other
             : ( $refund_reason_options[ $reason_option ]['value'] ?? '' );
-        $uploaded_image_urls   = array();
-        $attach_ids            = array();
 
-        if ( isset( $_FILES['product_img'] ) && ! empty( $_FILES['product_img']['name'][0] ) ) {
-            if ( ! function_exists( 'wp_handle_upload' ) ) {
-                require_once ABSPATH . 'wp-admin/includes/file.php';
-            }
+        $uploaded_image_urls = array();
+        $attach_ids          = array();
+
+        /**
+         * Handle uploaded images safely.
+         *
+         * PHPCS: The $_FILES superglobal cannot be sanitized using filter_input().
+         * All indexes are validated, mime types checked, filenames sanitized.
+         */
+        /* phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized */
+        if ( isset( $_FILES['product_img'] ) ) {
+            $file_names  = isset( $_FILES['product_img']['name'] ) ? (array) $_FILES['product_img']['name'] : array();
+            $file_types  = isset( $_FILES['product_img']['type'] ) ? (array) $_FILES['product_img']['type'] : array();
+            $file_tmp    = isset( $_FILES['product_img']['tmp_name'] ) ? (array) $_FILES['product_img']['tmp_name'] : array();
+            $file_errors = isset( $_FILES['product_img']['error'] ) ? (array) $_FILES['product_img']['error'] : array();
+            $file_sizes  = isset( $_FILES['product_img']['size'] ) ? (array) $_FILES['product_img']['size'] : array();
+
+            require_once ABSPATH . 'wp-admin/includes/file.php';
             require_once ABSPATH . 'wp-admin/includes/image.php';
 
             $max_file_size = 10 * 1024 * 1024; // 10MB
@@ -303,26 +321,40 @@ class Frontend {
                 'webp'         => 'image/webp',
             );
 
-            foreach ( array_keys( $_FILES['product_img']['name'] ) as $index ) {
-                if ( UPLOAD_ERR_OK !== $_FILES['product_img']['error'][ $index ] ) {
+            foreach ( $file_names as $index => $name ) {
+                if (
+                    empty( $name ) ||
+                    ! isset(
+                        $file_errors[ $index ],
+                        $file_sizes[ $index ],
+                        $file_types[ $index ],
+                        $file_tmp[ $index ]
+                    )
+                ) {
                     continue;
                 }
 
-                if ( $_FILES['product_img']['size'][ $index ] > $max_file_size ) {
+                $sanitized_name = sanitize_file_name( $name );
+
+                if ( UPLOAD_ERR_OK !== (int) $file_errors[ $index ] ) {
                     continue;
                 }
 
-                $file_type = wp_check_filetype( $_FILES['product_img']['name'][ $index ], $allowed_mimes );
+                if ( (int) $file_sizes[ $index ] > $max_file_size ) {
+                    continue;
+                }
+
+                $file_type = wp_check_filetype( $sanitized_name, $allowed_mimes );
                 if ( empty( $file_type['type'] ) ) {
                     continue;
                 }
 
                 $file = array(
-                    'name'     => sanitize_file_name( $_FILES['product_img']['name'][ $index ] ),
-                    'type'     => $_FILES['product_img']['type'][ $index ],
-                    'tmp_name' => $_FILES['product_img']['tmp_name'][ $index ],
-                    'error'    => $_FILES['product_img']['error'][ $index ],
-                    'size'     => $_FILES['product_img']['size'][ $index ],
+                    'name'     => $sanitized_name,
+                    'type'     => sanitize_mime_type( $file_types[ $index ] ),
+                    'tmp_name' => $file_tmp[ $index ],
+                    'error'    => (int) $file_errors[ $index ],
+                    'size'     => (int) $file_sizes[ $index ],
                 );
 
                 $upload = wp_handle_upload( $file, array( 'test_form' => false ) );
@@ -333,7 +365,7 @@ class Frontend {
                     $attachment = array(
                         'guid'           => $upload['url'],
                         'post_mime_type' => $upload['type'],
-                        'post_title'     => pathinfo( $file['name'], PATHINFO_FILENAME ),
+                        'post_title'     => sanitize_text_field( pathinfo( $sanitized_name, PATHINFO_FILENAME ) ),
                         'post_content'   => '',
                         'post_status'    => 'inherit',
                     );
@@ -348,7 +380,9 @@ class Frontend {
                 }
             }
         }
+        /* phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized */
 
+        // Save order meta.
         $order->update_meta_data( Utill::ORDER_META_SETTINGS['customer_refund_order'], 'refund_request' );
         $order->update_meta_data( Utill::ORDER_META_SETTINGS['customer_refund_reason'], $refund_reason );
         $order->update_meta_data( Utill::ORDER_META_SETTINGS['customer_refund_product'], $refund_product );
@@ -358,30 +392,41 @@ class Frontend {
         $order->set_status( 'refund-requested' );
         $order->save();
 
-        $user_info  = get_userdata( get_current_user_id() );
-        $comment_id = $order->add_order_note( "Customer requested a refund {$order_id}." );
+        // Add order note with proper escaping.
+        $user_info = get_userdata( get_current_user_id() );
+
+        $comment_id = $order->add_order_note(
+            sprintf(
+                'Customer requested a refund for order %d.',
+                (int) $order_id
+            )
+        );
 
         wp_update_comment(
             array(
                 'comment_ID'           => $comment_id,
-                'comment_author'       => $user_info->user_login,
-                'comment_author_email' => $user_info->user_email,
+                'comment_author'       => sanitize_text_field( $user_info->user_login ),
+                'comment_author_email' => sanitize_email( $user_info->user_email ),
             )
         );
 
+        // Handle parent order.
         $parent_order_id = $order->get_parent_id();
         if ( $parent_order_id ) {
             $parent_order = wc_get_order( $parent_order_id );
 
-            $comment_id_parent = $parent_order->add_order_note(
-                "Customer requested a refund for {$order_id}."
+            $comment_parent = $parent_order->add_order_note(
+                sprintf(
+                    'Customer requested a refund for child order %d.',
+                    (int) $order_id
+                )
             );
 
             wp_update_comment(
                 array(
-                    'comment_ID'           => $comment_id_parent,
-                    'comment_author'       => $user_info->user_login,
-                    'comment_author_email' => $user_info->user_email,
+                    'comment_ID'           => $comment_parent,
+                    'comment_author'       => sanitize_text_field( $user_info->user_login ),
+                    'comment_author_email' => sanitize_email( $user_info->user_email ),
                 )
             );
         }

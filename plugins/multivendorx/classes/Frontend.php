@@ -21,7 +21,7 @@ class Frontend {
      * Frontend class construct function
      */
     public function __construct() {
-        add_filter( 'template_include', array( $this, 'vendor_dashboard_template' ) );
+        add_filter( 'template_include', array( $this, 'store_dashboard_template' ) );
         add_action('woocommerce_rest_insert_product_object', array( $this, 'generate_sku_data_in_product' ), 10, 3);
 
         add_action( 'woocommerce_after_shop_loop_item', array( $this, 'add_text_in_shop_and_single_product_page' ), 6 );
@@ -191,7 +191,6 @@ class Frontend {
                 echo '<a class="by-store-name-link" style="display:block;" target="_blank" href="'
                     . esc_url( MultiVendorX()->store->storeutil->get_store_url( $details['id'] ) ) . '">'
                     . esc_html( $sold_by_text ) . ' '
-                    // . $details['logo_html']
                     . esc_html( $details['name'] )
                     . '</a>';
             }
@@ -199,28 +198,32 @@ class Frontend {
     }
 
     /**
-     * Add store name in cart
+     * Add store name in cart.
      *
-     * @param array $array Array.
-     * @param array $cart_item Cart item.
-     * @return array
+     * @param array $item_data Existing item data array.
+     * @param array $cart_item Cart item data.
+     * @return array Modified item data.
      */
-    public function add_sold_by_text_cart( $array, $cart_item ) {
+    public function add_sold_by_text_cart( $item_data, $cart_item ) {
         if ( apply_filters( 'mvx_sold_by_text_in_cart_checkout', true, $cart_item['product_id'] ) ) {
             $product_id = $cart_item['product_id'];
-            $details    = $this->show_store_info( ( $product_id ) );
+            $details    = $this->show_store_info( $product_id );
 
             if ( ! empty( $details ) ) {
-                $sold_by_text = apply_filters( 'mvx_sold_by_text', __( 'Sold By', 'multivendorx' ), $product_id );
-                $array[]      = array(
+                $sold_by_text = apply_filters(
+                    'mvx_sold_by_text',
+                    __( 'Sold By', 'multivendorx' ),
+                    $product_id
+                );
+
+                $item_data[] = array(
                     'name'  => esc_html( $sold_by_text ),
                     'value' => esc_html( $details['name'] ),
-                    // 'display' => $details['logo_html'] . esc_html( $details['name'] ),
                 );
             }
         }
 
-        return $array;
+        return $item_data;
     }
 
     /**
@@ -252,14 +255,13 @@ class Frontend {
     }
 
     /**
-     * Show related products or not
+     * Show related products or not.
      *
-     * @param array  $query      Query args.
-     * @param int    $product_id Product ID.
-     * @param string $args       Args.
-     * @return array
+     * @param array $query      Query args.
+     * @param int   $product_id Product ID.
+     * @return array Filtered related products IDs.
      */
-    public function show_related_products( $query, $product_id, $args ) {
+    public function show_related_products( $query, $product_id ) {
         if ( $product_id ) {
             $store   = StoreUtil::get_products_store( $product_id ) ?? '';
             $related = MultiVendorX()->setting->get_setting( 'recommendation_source', '' );
@@ -276,7 +278,7 @@ class Frontend {
 						'exclude'     => $product_id,
 						'meta_query'  => array(
 							array(
-								'key'     => 'multivendorx_store_id',
+								'key'     => Utill::POST_META_SETTINGS['store_id'],
 								'value'   => $store->get_id(),
 								'compare' => '=',
 							),
@@ -381,11 +383,7 @@ class Frontend {
      *
      * @return string
      */
-    public function vendor_dashboard_template( $template ) {
-        $user = wp_get_current_user();
-
-        // Checking change later when all function ready.
-        // if ( is_user_logged_in() && Utill::is_store_dashboard() && in_array( 'store_owner', $user->roles, true ) ) {
+    public function store_dashboard_template( $template ) {
         if ( is_user_logged_in() && is_page() && has_shortcode( get_post()->post_content, 'multivendorx_store_dashboard' ) ) {
             return MultiVendorX()->plugin_path . 'templates/store/store-dashboard.php';
         }
@@ -408,7 +406,6 @@ class Frontend {
                     $product_sku = $product->get_id();
                     break;
 
-                // Use the original product SKU if we're not generating it.
                 default:
                     $product_sku = $product->get_sku();
             }
@@ -425,7 +422,6 @@ class Frontend {
         if ( $variation ) {
             $variation_sku = '';
             if ( 'slugs' === MultiVendorX()->setting->get_setting( 'sku_generator', '' ) ) {
-                // Replace spaces in attributes depending on settings.
                 switch ( MultiVendorX()->setting->get_setting( 'sku_generator_attribute_spaces', '' ) ) {
                     case 'underscore':
                         $variation['attributes'] = str_replace( ' ', '_', $variation['attributes'] );
@@ -456,22 +452,24 @@ class Frontend {
      * @return string
      */
     private function get_sku_separator() {
-        // Filters the separator used between parent / variation SKUs.
         return apply_filters( 'sku_generator_sku_separator', '-' );
     }
 
     /**
-     * Save Variation SKU
+     * Save Variation SKU.
      *
-     * @param int    $variation_id Variation ID.
-     * @param object $parent Parent product.
+     * @param int         $variation_id    Variation ID.
+     * @param WC_Product  $parent_product  Parent product.
+     * @param string|null $parent_sku      Optional parent SKU to use instead of the product's SKU.
      */
-    protected function mvx_save_variation_sku( $variation_id, $parent, $parent_sku = null ) {
+    protected function multivendorx_save_variation_sku( $variation_id, $parent_product, $parent_sku = null ) {
         $variation  = wc_get_product( $variation_id );
-        $parent_sku = $parent_sku ? $parent_sku : $parent->get_sku();
+        $parent_sku = $parent_sku ? $parent_sku : $parent_product->get_sku();
+
         if ( $variation ) {
-            if ( $variation instanceof WC_Product && $variation->is_type( 'variation' ) || ! empty( $parent_sku ) ) {
-                $variation_data = $parent->get_available_variation( $variation );
+            // Add parentheses to clarify operator precedence.
+            if ( ( $variation instanceof WC_Product && $variation->is_type( 'variation' ) ) || ! empty( $parent_sku ) ) {
+                $variation_data = $parent_product->get_available_variation( $variation );
                 if ( ! empty( $variation_data ) ) {
                     $variation_sku = $this->generate_variation_sku( $variation_data );
                     $sku           = $parent_sku . $this->get_sku_separator() . $variation_sku;
@@ -486,16 +484,6 @@ class Frontend {
             }
         }
     }
-
-    // public function add_sku_column_in_product_list( $products_table_headers ) {
-    // $products_table_headers['sku'] = __( 'SKU', 'multivendorx' );
-    // return $products_table_headers;
-    // }
-
-    // public function display_value_into_sku_column( $row, $product ) {
-    // $row['sku'] = '<td>' . $product->get_sku() . '</td>';
-    // return $row;
-    // }
 
     /**
      * Save generated SKU
@@ -512,7 +500,7 @@ class Frontend {
                 $variations = $product->get_children();
                 if ( $variations ) {
                     foreach ( $variations as $variation_id ) {
-                        $this->mvx_save_variation_sku( $variation_id, $product, $product_sku );
+                        $this->multivendorx_save_variation_sku( $variation_id, $product, $product_sku );
                     }
                 }
             }

@@ -225,12 +225,12 @@ final class MultiVendorX {
      * Magic getter function to get the reference of class.
      * Accept class name, If valid return reference, else Wp_Error.
      *
-     * @param  mixed $class all classes.
+     * @param  mixed $class_name all classes.
      */
-    public function __get( $class ) {
+    public function __get( $class_name ) {
      // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound
-        if ( array_key_exists( $class, $this->container ) ) {
-            return $this->container[ $class ];
+        if ( array_key_exists( $class_name, $this->container ) ) {
+            return $this->container[ $class_name ];
         }
 
         return new \WP_Error( sprintf( 'Call to unknown class %s.', $class ) );
@@ -240,12 +240,12 @@ final class MultiVendorX {
      * Magic setter function to store a reference of a class.
      * Accepts a class name as the key and stores the instance in the container.
      *
-     * @param string $class The class name or key to store the instance.
+     * @param string $class_name The class name or key to store the instance.
      * @param object $value The instance of the class to store.
      */
-    public function __set( $class, $value ) {
+    public function __set( $class_name, $value ) {
      // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound
-        $this->container[ $class ] = $value;
+        $this->container[ $class_name ] = $value;
     }
 
     /**
@@ -348,64 +348,9 @@ final class MultiVendorX {
             update_option( Utill::MULTIVENDORX_OTHER_SETTINGS['log_file'], $log_file_name );
         }
 
-        $this->container['log_file'] = MultivendorX()->multivendorx_logs_dir . '/' . $log_file_name;
+        $this->container['log_file']          = MultivendorX()->multivendorx_logs_dir . '/' . $log_file_name;
         $this->container['show_advanced_log'] = in_array( 'multivendorx_adv_log', MultivendorX()->setting->get_setting( 'multivendorx_adv_log', array() ), true );
     }
 }
 
-
-// add_action('admin_init', [$this, 'redirect_to_multivendorx_setup'], 5);
-
-
-// $this->admin_setup_wizard();
-
-/**
- * Init all multivendorx classess.
- * Access this classes using magic method.
- *
- * @return void
- */
-// public function init_classes() {
-// $this->container['utility']     = new Utility\Utility();
-// $this->container['order']       = new Order\OrderManager();
-// $this->container['commission']  = new Commission\CommissionManager();
-// $this->container['gateways']     = new Gateways\GatewaysManager();
-// }
-
-
-/**
- * Load admin setup wizard class.
- *
- * @return void
- */
-// private function admin_setup_wizard() {
-// $current_page = filter_input(INPUT_GET, 'page');
-// if ($current_page && $current_page == 'multivendorx-setup') {
-// $this->container['SetupWizard'] = new Admin\SetupWizard();
-// }
-// }
-
-/**
- * Redirect to multivendero setup page.
- * Delete WooCommerce activation redirect transient.
- *
- * @return void
- */
-// public function redirect_to_multivendorx_setup() {
-// if ( get_transient( '_wc_activation_redirect' ) ) {
-// delete_transient( '_wc_activation_redirect' );
-// return;
-// }
-// if ( get_transient( '_multivendorx_activation_redirect' ) ) {
-// delete_transient( '_multivendorx_activation_redirect' );
-// if ( filter_input(INPUT_GET, 'page') === 'multivendorx-setup'
-// || filter_input(INPUT_GET, 'activate-multi')
-// || apply_filters( 'multivendorx_prevent_automatic_wizard_redirect', false )
-// ) {
-// return;
-// }
-// wp_safe_redirect( admin_url( 'index.php?page=multivendorx-setup' ) );
-// exit;
-// }
-// }
 

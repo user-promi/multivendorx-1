@@ -7,8 +7,6 @@
 
 namespace MultiVendorX;
 
-use MultiVendorX\Utill;
-
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -41,7 +39,7 @@ class Status {
 
         $active_modules = MultiVendorX()->modules->get_active_modules() ?? array();
 
-        $mvx = array(
+        $multivendorx = array(
             'label'  => esc_html__( 'MultiVendorX', 'multivendorx' ),
             'fields' => array(
                 'version'        => array(
@@ -81,8 +79,8 @@ class Status {
             )
         );
 
-        // Prepend MVX data.
-        $core_data = array( 'mvx' => $mvx ) + $core_data;
+        // Prepend multivendorx data.
+        $core_data = array( 'multivendorx' => $multivendorx ) + $core_data;
 
         return apply_filters( 'mvx_system_info_response', $core_data );
     }

@@ -81,33 +81,30 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
     }
 
     /**
-     * Get a collection of items.
+     * Check if the current user can get a collection of items.
      *
-     * @param object $request Full details about the request.
+     * @return bool True if the user has permission, false otherwise.
      */
     public function get_items_permissions_check( $request ) {
-        // return current_user_can( 'read' );
-        return true;
+        return current_user_can( 'read' );
     }
 
     /**
-     * Create a single item.
+     * Check if the current user can create a single item.
      *
-     * @param object $request Full details about the request.
+     * @return bool True if the user has permission, false otherwise.
      */
     public function create_item_permissions_check( $request ) {
-        // return current_user_can( 'manage_options' );
-        return true;
+        return current_user_can( 'manage_options' );
     }
 
     /**
-     * Update a single item.
+     * Check if the current user can update a single item.
      *
-     * @param object $request Full details about the request.
+     * @return bool True if the user has permission, false otherwise.
      */
     public function update_item_permissions_check( $request ) {
-        // return current_user_can('manage_options');
-        return true;
+        return current_user_can( 'manage_options' );
     }
 
     /**
@@ -122,12 +119,7 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log(
-                    'MVX REST Error: ' .
-                    'Code=' . $error->get_error_code() . '; ' .
-                    'Message=' . $error->get_error_message() . '; ' .
-                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
-                );
+                MultiVendorX()->util->log( $error );
             }
 
             return $error;
@@ -182,12 +174,7 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
 
             return rest_ensure_response( $formatted_products );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log(
-                'MULTIVENDORX REST Exception: ' .
-                'Message=' . $e->getMessage() . '; ' .
-                'File=' . $e->getFile() . '; ' .
-                'Line=' . $e->getLine() . "\n\n"
-            );
+            MultiVendorX()->util->log( $e );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
@@ -205,12 +192,7 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log(
-                    'MVX REST Error: ' .
-                    'Code=' . $error->get_error_code() . '; ' .
-                    'Message=' . $error->get_error_message() . '; ' .
-                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
-                );
+                MultiVendorX()->util->log( $error );
             }
 
             return $error;
@@ -267,12 +249,7 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
                 )
             );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log(
-                'MULTIVENDORX REST Exception: ' .
-                'Message=' . $e->getMessage() . '; ' .
-                'File=' . $e->getFile() . '; ' .
-                'Line=' . $e->getLine() . "\n\n"
-            );
+            MultiVendorX()->util->log( $e );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
@@ -290,12 +267,7 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log(
-                    'MVX REST Error: ' .
-                    'Code=' . $error->get_error_code() . '; ' .
-                    'Message=' . $error->get_error_message() . '; ' .
-                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
-                );
+                MultiVendorX()->util->log( $error );
             }
 
             return $error;
@@ -338,12 +310,7 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
 
             return rest_ensure_response( $response );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log(
-                'MULTIVENDORX REST Exception: ' .
-                'Message=' . $e->getMessage() . '; ' .
-                'File=' . $e->getFile() . '; ' .
-                'Line=' . $e->getLine() . "\n\n"
-            );
+            MultiVendorX()->util->log( $e );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
@@ -361,12 +328,7 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log(
-                    'MVX REST Error: ' .
-                    'Code=' . $error->get_error_code() . '; ' .
-                    'Message=' . $error->get_error_message() . '; ' .
-                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
-                );
+                MultiVendorX()->util->log( $error );
             }
 
             return $error;
@@ -427,12 +389,7 @@ class MultiVendorX_REST_Payouts_Controller extends \WP_REST_Controller {
                 )
             );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log(
-                'MULTIVENDORX REST Exception: ' .
-                'Message=' . $e->getMessage() . '; ' .
-                'File=' . $e->getFile() . '; ' .
-                'Line=' . $e->getLine() . "\n\n"
-            );
+            MultiVendorX()->util->log( $e );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }

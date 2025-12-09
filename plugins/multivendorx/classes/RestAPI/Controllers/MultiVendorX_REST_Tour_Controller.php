@@ -81,7 +81,7 @@ class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
      * @param mixed $request Request data.
      */
     public function get_items_permissions_check( $request ) {
-        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
+        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
     /**
@@ -115,12 +115,7 @@ class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log(
-                    'MVX REST Error: ' .
-                    'Code=' . $error->get_error_code() . '; ' .
-                    'Message=' . $error->get_error_message() . '; ' .
-                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
-                );
+                MultiVendorX()->util->log( $error );
             }
 
             return $error;
@@ -136,12 +131,7 @@ class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
                 'active' => $status,
             );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log(
-                'MULTIVENDORX REST Exception: ' .
-                'Message=' . $e->getMessage() . '; ' .
-                'File=' . $e->getFile() . '; ' .
-                'Line=' . $e->getLine() . "\n\n"
-            );
+            MultiVendorX()->util->log( $e );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
@@ -159,12 +149,7 @@ class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log(
-                    'MVX REST Error: ' .
-                    'Code=' . $error->get_error_code() . '; ' .
-                    'Message=' . $error->get_error_message() . '; ' .
-                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
-                );
+                MultiVendorX()->util->log( $error );
             }
 
             return $error;
@@ -173,12 +158,7 @@ class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
             update_option( Utill::MULTIVENDORX_OTHER_SETTINGS['tour_active'], $request->get_param( 'active' ) );
             return array( 'success' => true );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log(
-                'MULTIVENDORX REST Exception: ' .
-                'Message=' . $e->getMessage() . '; ' .
-                'File=' . $e->getFile() . '; ' .
-                'Line=' . $e->getLine() . "\n\n"
-            );
+            MultiVendorX()->util->log( $e );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }

@@ -7,7 +7,6 @@
 
 namespace MultiVendorX\Payments;
 
-use Exception;
 use MultiVendorX\Store\Store;
 use MultiVendorX\Store\StoreUtil;
 use MultiVendorX\Utill;
@@ -205,10 +204,10 @@ class StripeConnect {
         $store = new Store( $store_id );
         $store->update_meta(
             'stripe_oauth_state',
-            serialize(
+            wp_json_encode(
                 array(
-					'state' => $state,
-					'time'  => time(),
+                    'state' => $state,
+                    'time'  => time(),
                 )
             )
         );
@@ -242,10 +241,18 @@ class StripeConnect {
             wp_safe_redirect( $this->get_redirect_url( 'error', 'stripe_oauth' ) );
             exit;
         }
-        // We don't know store_id yet → search it via active vendor store.
-        $store_id   = get_user_meta( get_current_user_id(), Utill::USER_SETTINGS_KEYS['active_store'], true );
-        $store      = new Store( $store_id );
-        $state_data = unserialize( $store->get_meta( Utill::STORE_SETTINGS_KEYS['stripe_oauth_state'] ) );
+        // We don't know store_id yet → search it via active store.
+        $store_id = get_user_meta( get_current_user_id(), Utill::USER_SETTINGS_KEYS['active_store'], true );
+        $store    = new Store( $store_id );
+
+        $raw_state = $store->get_meta( Utill::STORE_SETTINGS_KEYS['stripe_oauth_state'] );
+
+        $state_data = json_decode( $raw_state, true );
+
+        // Ensure valid array even if meta is empty or corrupted.
+        if ( ! is_array( $state_data ) ) {
+            $state_data = array();
+        }
         if (
             empty( $state_data['state'] ) ||
             $state_data['state'] !== $state ||
