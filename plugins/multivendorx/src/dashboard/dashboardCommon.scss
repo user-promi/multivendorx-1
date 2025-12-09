@@ -166,12 +166,6 @@ a:focus {
     gap: 2rem;
 }
 
-.card-wrapper {
-    display: flex;
-    gap: 2rem;
-    flex-direction: column;
-}
-
 // add product page
 .card-content {
     .right-form-wrapper {
@@ -581,6 +575,9 @@ a:focus {
 .total-summary {
     .row {
         justify-content: end;
+        display: flex;
+        gap: 1.5rem;
+        padding-bottom: 1rem;
     }
 }
 

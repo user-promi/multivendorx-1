@@ -261,19 +261,19 @@ a {
 
 // analytics-container start  remove this 
 .analytics-container {
-    display: flex;
-    justify-content: space-between;
-    padding-top: 0.5rem;
-    gap: 1rem;
+    // display: flex;
+    // justify-content: space-between;
+    // padding-top: 0.5rem;
+    // gap: 1rem;
 
     .analytics-item {
-        display: flex;
-        gap: 1rem;
+        // display: flex;
+        // gap: 1rem;
         justify-content: space-between;
-        width: 100%;
-        padding: 1.5rem;
-        border-radius: 0.5rem;
-        box-shadow: 0 0.5rem 1rem 0 rgba(213, 209, 223, 0.12);
+        // width: 100%;
+        // padding: 1.5rem;
+        // border-radius: 0.5rem;
+        // box-shadow: 0 0.5rem 1rem 0 rgba(213, 209, 223, 0.12);
 
         .analytics-icon {
             margin-top: 0.45rem;
@@ -312,10 +312,9 @@ a {
             }
 
             .number {
-                font-size: 1.813rem;
-                line-height: 1.813rem;
+                font-size: 1.813rem !important; // zyra style overwrite
+                line-height: 2 !important;
                 font-weight: 600;
-                padding: 1.25rem 0;
             }
 
             .report {
@@ -362,47 +361,7 @@ a {
 
 
     }
-
-    &.small-card {
-        flex-wrap: wrap;
-        // gap: 0;
-
-        .analytics-item {
-            padding: 0.625rem;
-            border-radius: 0.313rem;
-            justify-content: start;
-            align-items: center;
-
-            .number {
-                margin-bottom: 0.33rem;
-                padding: 0;
-            }
-
-            .text {
-                font-size: 0.95rem;
-            }
-        }
-    }
-
-    &.report {
-        flex-wrap: wrap;
-        padding: 0;
-
-        .analytics-item {
-            width: 24%;
-            box-sizing: border-box;
-            background: #fff;
-            padding: 1rem;
-        }
-    }
-
-    &.column-3 {
-        .analytics-item {
-            width: 24%;
-        }
-    }
 }
-
 // analytics-container end
 
 

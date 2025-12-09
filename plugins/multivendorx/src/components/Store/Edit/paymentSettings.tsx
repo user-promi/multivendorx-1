@@ -197,8 +197,8 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 
 			<div className="container-wrapper">
 				<div className="card-wrapper w-65">
-					<div className="row">
-						<div className="column">
+					<div className="card-wrapper">
+						<div className="card-content">
 							<div className="card-header">
 								<div className="left">
 									<div className="title">
@@ -289,56 +289,53 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 				</div>
 				{/* Commission Amount */}
 				<div className="card-wrapper w-35">
-					<div className="row">
-						<div className="column">
-							<div className="card-header">
-								<div className="left">
-									<div className="title">
-										{__('Store-specific commission', 'multivendorx')}
-									</div>
+					<div className="card-content">
+						<div className="card-header">
+							<div className="left">
+								<div className="title">
+									{__('Store-specific commission', 'multivendorx')}
 								</div>
 							</div>
+						</div>
 
-							<div className="card-body">
-								<BlockText
-									blockTextClass="settings-metabox-note"
-									value={sprintf(
-										/* translators: %s: link to global commission settings */
-										__('If no store-specific commission is set, the <a href="%s">global commission</a> will automatically apply.', 'multivendorx'),
-										`${appLocalizer.plugin_url}settings&subtab=store-commissions`
-									)}
-								/>
-								<div className="form-group-wrapper">
-									<div className="form-group">
-										<label htmlFor="product-name">{__('Fixed', 'multivendorx')}</label>
-										<BasicInput
-											preInsideText="$"
-											postText="+"
-											name="commission_fixed"
-											wrapperClass="setting-form-input"
-											descClass="settings-metabox-description"
-											value={formData.commission_fixed}
-											onChange={handleChange}
-										/>
-									</div>
+						<div className="card-body">
+							<BlockText
+								blockTextClass="settings-metabox-note"
+								value={sprintf(
+									/* translators: %s: link to global commission settings */
+									__('If no store-specific commission is set, the <a href="%s">global commission</a> will automatically apply.', 'multivendorx'),
+									`${appLocalizer.plugin_url}settings&subtab=store-commissions`
+								)}
+							/>
+							<div className="form-group-wrapper">
+								<div className="form-group">
+									<label htmlFor="product-name">{__('Fixed', 'multivendorx')}</label>
+									<BasicInput
+										preInsideText="$"
+										postText="+"
+										name="commission_fixed"
+										wrapperClass="setting-form-input"
+										descClass="settings-metabox-description"
+										value={formData.commission_fixed}
+										onChange={handleChange}
+									/>
+								</div>
 
-									<div className="form-group">
-										<label htmlFor="product-name">{__('Percentage', 'multivendorx')}</label>
-										<BasicInput
-											postInsideText="%"
-											name="commission_percentage"
-											wrapperClass="setting-form-input"
-											descClass="settings-metabox-description"
-											value={formData.commission_percentage}
-											onChange={handleChange}
-										/>
-									</div>
+								<div className="form-group">
+									<label htmlFor="product-name">{__('Percentage', 'multivendorx')}</label>
+									<BasicInput
+										postInsideText="%"
+										name="commission_percentage"
+										wrapperClass="setting-form-input"
+										descClass="settings-metabox-description"
+										value={formData.commission_percentage}
+										onChange={handleChange}
+									/>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-
 			</div>
 		</>
 	);

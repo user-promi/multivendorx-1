@@ -824,8 +824,8 @@ const AddProduct = () => {
                 </div>
             </div>
 
-            <div className="row">
-                <div className="column w-10">
+            <div className="card-wrapper">
+                <div className="card-content w-10">
                     <div className="checklist-wrapper">
                         <div className="checklist-title">
                             {__('Checklist', 'multivendorx')}
@@ -853,7 +853,7 @@ const AddProduct = () => {
                     </div>
                 </div>
 
-                <div className="column w-65">
+                <div className="card-content w-65">
                     {/* General information */}
                     <div className="card" id="card-general">
                         <div className="card-header">
@@ -2124,7 +2124,7 @@ const AddProduct = () => {
                 </div>
 
                 {/* right column */}
-                <div className="column w-35">
+                <div className="card-content w-35">
                     {/* ai assist */}
                     {applyFilters('product_ai_assist', null, product)}
 

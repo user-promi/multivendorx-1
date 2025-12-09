@@ -436,8 +436,8 @@ const ProductReport: React.FC = () => {
   return (
     <div className="dashboard-overview">
       {/* Keep entire top dashboard layout */}
-      <div className="row">
-        <div className="column transparent">
+      <div className="card-wrapper">
+        <div className="card-content transparent">
           <div className="analytics-container report">
             {overview.map((item, idx) => (
               <div key={idx} className="analytics-item">
@@ -451,7 +451,7 @@ const ProductReport: React.FC = () => {
           </div>
         </div>
 
-        <div className="column">
+        <div className="card-content">
           <div className="card-header">
             <div className="left">
               <div className="title">{__('Revenue & Sales Comparison', 'multivendorx')}</div>
@@ -479,9 +479,9 @@ const ProductReport: React.FC = () => {
       </div>
 
       {/* Categories and brands */}
-      <div className="row">
+      <div className="card-wrapper">
         {/* Top Reviewed Products Section */}
-        <div className="column">
+        <div className="card-content">
           <div className="card-header">
             <div className="left">
               <div className="title">{__('Top Reviewed Products', 'multivendorx')}</div>
@@ -490,7 +490,7 @@ const ProductReport: React.FC = () => {
 
           {toReviewedProduct.length > 0 ? (
             toReviewedProduct.map((product: any) => (
-              <div className="column" key={`review-${product.id}`}>
+              <div className="card-content" key={`review-${product.id}`}>
                 <div
                   className="card-header cursor-pointer"
                   onClick={() => toggleReviewedCard(product.id.toString())}
@@ -546,7 +546,7 @@ const ProductReport: React.FC = () => {
           )}
         </div>
 
-        <div className="column">
+        <div className="card-content">
           <div className="card-header">
             <div className="left">
               <div className="title">{__('Top Selling Products', 'multivendorx')}</div>

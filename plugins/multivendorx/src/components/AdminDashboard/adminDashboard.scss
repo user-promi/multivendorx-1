@@ -1,6 +1,9 @@
 @use '../config.scss' as *;
 
 .admin-dashboard {
+    .card-wrapper{
+        margin-bottom: 1rem;
+    }
     .tab-titles {
         margin: 0;
         padding: 0;
@@ -139,12 +142,8 @@
     }
 }
 
-.row {
-    .header {
-        width: 100%;
-    }
-}
 
+// admin dashboard card design start
 .header {
     padding: 1rem;
     background: #fff;
@@ -306,6 +305,7 @@
         }
     }
 }
+// admin dashboard card design end
 
 .activity-wrapper {
     .activity {
@@ -765,4 +765,8 @@
             }
         }
     }
+}
+
+.admin-pro-tag.module:has(.adminlib-spmv) {
+    text-transform: uppercase;
 }

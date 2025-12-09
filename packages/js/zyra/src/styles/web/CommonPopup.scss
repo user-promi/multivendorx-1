@@ -71,12 +71,10 @@
         .form-group-wrapper {
             display: flex;
             flex-direction: column;
-            // gap: 1rem;
 
             .form-group {
                 display: flex;
                 flex-direction: column;
-                // gap: 0.313rem;
 
                 label {
                     font-size: 0.9rem;
@@ -94,8 +92,6 @@
 
             .available-balance {
                 font-size: 1rem;
-                // padding: 0.625rem 0;
-                // background: $theme-background-color;
                 border-radius: 0.313rem;
                 color: #0000006e;
                 font-weight: 500;

@@ -407,8 +407,8 @@ const StoreReport: React.FC = () => {
 
   return (
     <>
-      <div className="row">
-        <div className="column transparent">
+      <div className="card-wrapper">
+        <div className="card-content transparent">
           <div className="analytics-container report">
             {overviewData.map((item, idx) => (
               <div key={idx} className="analytics-item">
@@ -424,7 +424,7 @@ const StoreReport: React.FC = () => {
           </div>
         </div>
 
-        <div className="column">
+        <div className="card-content">
           <div className="card-header">
             <div className="left">
               <div className="title">
