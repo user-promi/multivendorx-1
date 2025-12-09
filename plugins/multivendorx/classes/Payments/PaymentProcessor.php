@@ -9,7 +9,6 @@ namespace MultiVendorX\Payments;
 
 use MultiVendorX\Store\Store;
 use MultiVendorX\Commission\CommissionUtil;
-use MultiVendorX\MultiVendorX;
 use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
@@ -29,7 +28,6 @@ class PaymentProcessor {
      */
     public function __construct() {
         add_action( 'multivendorx_after_payment_complete', array( $this, 'after_payment_complete' ), 10, 7 );
-        // add_action('multivendorx_after_real_time_payment_complete', array( $this, 'after_real_time_payment_complete'), 10, 2);
 
         // COD payments.
         add_action( 'woocommerce_order_status_changed', array( $this, 'cod_order_process' ), 30, 4 );
@@ -246,16 +244,6 @@ class PaymentProcessor {
 				);
 
 				$format = array( '%d', '%d', '%d', '%s', '%s', '%f', '%s', '%s', '%s', '%s' );
-
-				// check shipping
-				// if shipping == admin then do nothing
-				// if shipping == store {
-                // $wpdb->insert(
-                // $wpdb->prefix . Utill::TABLES['transaction'],
-                // $data,
-                // $format
-                // );
-				// }
 
 				// If shipping not found then else.
 				$payment = $order->get_meta( Utill::ORDER_META_SETTINGS['cod_order_payment'], true );

@@ -61,11 +61,8 @@ class CommissionManager {
             $commission_type     = MultiVendorX()->setting->get_setting( 'commission_type' );
             $commission_amount   = 0;
             $shipping_amount     = 0;
-            $tax_amount          = 0;
-            $shipping_tax_amount = 0;
             $marketplace_payable = 0;
             $store_payable       = 0;
-            $coupon_amount       = 0;
             $commission_rates    = array();
             $rules_array         = array();
             if ( 'per_item' === $commission_type ) {
@@ -676,7 +673,7 @@ class CommissionManager {
                     'data'   => $data,
                     'format' => $format,
                 ),
-                $vendor,
+                $store,
                 ( $store_order->get_subtotal() - $store_order->get_discount_total() - $this->get_item_refunded_total( $store_order ) ),
                 $store_order,
                 true

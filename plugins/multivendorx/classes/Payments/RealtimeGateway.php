@@ -21,10 +21,6 @@ defined( 'ABSPATH' ) || exit;
  */
 class RealtimeGateway extends \WC_Payment_Gateway {
 
-    // public function __construct() {
-    // parent::__construct();
-    // }
-
     /**
      * Get all information about the order.
      *

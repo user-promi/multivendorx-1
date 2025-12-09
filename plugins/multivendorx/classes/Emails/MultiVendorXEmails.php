@@ -7,7 +7,6 @@
 
 namespace MultiVendorX\Emails;
 
-use MultiVendorX\Utill;
 /**
  * MultiVendorX MultiVendorXEmails
  *

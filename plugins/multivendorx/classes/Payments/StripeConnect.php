@@ -7,7 +7,6 @@
 
 namespace MultiVendorX\Payments;
 
-use Exception;
 use MultiVendorX\Store\Store;
 use MultiVendorX\Store\StoreUtil;
 use MultiVendorX\Utill;
@@ -242,7 +241,7 @@ class StripeConnect {
             wp_safe_redirect( $this->get_redirect_url( 'error', 'stripe_oauth' ) );
             exit;
         }
-        // We don't know store_id yet → search it via active vendor store.
+        // We don't know store_id yet → search it via active store.
         $store_id = get_user_meta( get_current_user_id(), Utill::USER_SETTINGS_KEYS['active_store'], true );
         $store    = new Store( $store_id );
 

@@ -7,7 +7,6 @@
 
 namespace MultiVendorX\Payments;
 
-use MultiVendorX\Commission\CommissionUtil;
 use MultiVendorX\Store\StoreUtil;
 use MultiVendorX\Utill;
 

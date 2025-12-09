@@ -191,6 +191,6 @@ class Admin {
      * @param  object $order Order object.
      */
     public function regenerate_suborders( $order ) {
-        MultiVendorX()->order->create_vendor_orders( $order );
+        MultiVendorX()->order->create_store_orders( $order );
     }
 }
