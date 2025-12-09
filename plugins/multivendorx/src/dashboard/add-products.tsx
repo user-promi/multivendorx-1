@@ -326,12 +326,6 @@ const AddProduct = () => {
         { label: 'Variable Product', value: 'variable' },
     ];
 
-    const paymentOptions = [
-        { label: 'Select stock status', value: '' },
-        { label: 'In stock', value: 'instock' },
-        { label: 'out of stock', value: '' },
-    ];
-
     const stockStatusOptions = [
         { value: '', label: 'Stock Status' },
         { value: 'instock', label: 'In Stock' },
