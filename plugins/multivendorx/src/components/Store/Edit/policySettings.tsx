@@ -62,18 +62,20 @@ const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
                                 </div>
                             </div>
                         </div>
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <TextArea
-                                    name="shipping_policy"
-                                    wrapperClass="setting-from-textarea"
-                                    inputClass="textarea-input"
-                                    descClass="settings-metabox-description"
-                                    value={formData.shipping_policy}
-                                    onChange={handleChange}
-                                    usePlainText={false}
-                                    tinymceApiKey={appLocalizer.settings_databases_value['marketplace']['tinymce_api_section'] ?? ''}
-                                />
+                        <div className="card-body">
+                            <div className="form-group-wrapper">
+                                <div className="form-group">
+                                    <TextArea
+                                        name="shipping_policy"
+                                        wrapperClass="setting-from-textarea"
+                                        inputClass="textarea-input"
+                                        descClass="settings-metabox-description"
+                                        value={formData.shipping_policy}
+                                        onChange={handleChange}
+                                        usePlainText={false}
+                                        tinymceApiKey={appLocalizer.settings_databases_value['marketplace']['tinymce_api_section'] ?? ''}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -86,18 +88,20 @@ const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
                                 </div>
                             </div>
                         </div>
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <TextArea
-                                    name="refund_policy"
-                                    wrapperClass="setting-from-textarea"
-                                    inputClass="textarea-input"
-                                    descClass="settings-metabox-description"
-                                    value={formData.refund_policy}
-                                    onChange={handleChange}
-                                    usePlainText={false}
-                                    tinymceApiKey={appLocalizer.settings_databases_value['marketplace']['tinymce_api_section'] ?? ''}
-                                />
+                        <div className="card-body">
+                            <div className="form-group-wrapper">
+                                <div className="form-group">
+                                    <TextArea
+                                        name="refund_policy"
+                                        wrapperClass="setting-from-textarea"
+                                        inputClass="textarea-input"
+                                        descClass="settings-metabox-description"
+                                        value={formData.refund_policy}
+                                        onChange={handleChange}
+                                        usePlainText={false}
+                                        tinymceApiKey={appLocalizer.settings_databases_value['marketplace']['tinymce_api_section'] ?? ''}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -110,18 +114,20 @@ const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
                                 </div>
                             </div>
                         </div>
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <TextArea
-                                    name="exchange_policy"
-                                    wrapperClass="setting-from-textarea"
-                                    inputClass="textarea-input"
-                                    descClass="settings-metabox-description"
-                                    value={formData.exchange_policy}
-                                    onChange={handleChange}
-                                    usePlainText={false}
-                                    tinymceApiKey={appLocalizer.settings_databases_value['marketplace']['tinymce_api_section'] ?? ''}
-                                />
+                        <div className="card-body">
+                            <div className="form-group-wrapper">
+                                <div className="form-group">
+                                    <TextArea
+                                        name="exchange_policy"
+                                        wrapperClass="setting-from-textarea"
+                                        inputClass="textarea-input"
+                                        descClass="settings-metabox-description"
+                                        value={formData.exchange_policy}
+                                        onChange={handleChange}
+                                        usePlainText={false}
+                                        tinymceApiKey={appLocalizer.settings_databases_value['marketplace']['tinymce_api_section'] ?? ''}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>

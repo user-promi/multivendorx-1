@@ -166,8 +166,8 @@ class Frontend {
                 /*Ensure map always visible even if inline CSS fails */
                 #mvx-user-locaton-map {
                     width: 100%;
-                    min-height: 300px;
-                    margin-bottom: 20px;
+                    min-height: 18.75rem;
+                    margin-bottom: 1.25rem;
                 }
             </style>
             <?php

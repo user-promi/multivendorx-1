@@ -1,6 +1,9 @@
 @use '../config.scss' as *;
 
 .admin-dashboard {
+    .card-wrapper{
+        margin-bottom: 1rem;
+    }
     .tab-titles {
         margin: 0;
         padding: 0;
@@ -139,12 +142,8 @@
     }
 }
 
-.row {
-    .header {
-        width: 100%;
-    }
-}
 
+// admin dashboard card design start
 .header {
     padding: 1rem;
     background: #fff;
@@ -306,6 +305,7 @@
         }
     }
 }
+// admin dashboard card design end
 
 .activity-wrapper {
     .activity {
@@ -446,65 +446,6 @@
 
 // support end
 
-// recent-activities start
-.recent-activities {
-    .activitie-wrapper {
-        display: flex;
-        justify-content: space-between;
-        padding: 0 0 1.5rem 1.5rem;
-        position: relative;
-        border-left: $border-theme-small;
-
-        .details {
-            width: 75%;
-
-            .heading {
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-                font-size: 1rem;
-                color: #000000f5;
-
-                .admin-badge {
-                    padding: 0.313rem 0.5rem;
-                    font-size: 0.8rem;
-                }
-            }
-
-            .text {
-                font-size: 0.9rem;
-                color: #2b2a2a9c;
-                padding-top: 0.313rem;
-            }
-        }
-
-        .right-section {
-            width: 25%;
-            display: flex;
-            justify-content: end;
-
-            .date {
-                color: #2b2a2a9c;
-            }
-        }
-
-        &::before {
-            position: absolute;
-            content: "";
-            width: 0.813rem;
-            height: 0.813rem;
-            border-radius: 50%;
-            background: $theme-color;
-            left: -0.7rem;
-            top: 0;
-            border: 0.313rem solid #f0e8fb;
-        }
-
-        &:last-child {
-            border: none;
-        }
-    }
-}
 
 .right-pro-banner {
     .title {
@@ -556,8 +497,6 @@
 
 //  free vs pro tabel start
 .free-vs-pro {
-    margin-top: 1.125rem;
-
     .buttons-wrapper {
         margin-top: 0.5rem;
     }
@@ -611,105 +550,48 @@
 // free vs pro tabel end
 
 // pricing section start
-.pricing-wrapper {
-    width: 40%;
-    padding: 1.313rem;
-    margin-top: 2rem;
-    background: #ece2f9f1;
+// .pricing-wrapper {
+//     width: 40%;
+//     padding: 1.313rem;
+//     margin-top: 2rem;
+//     background: #ece2f9f1;
 
-    .heading {
-        font-size: 1.5rem;
-        color: #000;
-        font-weight: 500;
-        line-height: 2rem;
-    }
+//     .heading {
+//         font-size: 1.5rem;
+//         color: #000;
+//         font-weight: 500;
+//         line-height: 2rem;
+//     }
 
-    .description {
-        font-size: 1rem;
-        padding: 0.5rem 0;
-    }
+//     .description {
+//         font-size: 1rem;
+//         padding: 0.5rem 0;
+//     }
 
-    .price {
-        font-size: 2.313rem;
-        line-height: 3rem;
-        padding: 0.813rem 0;
-        font-weight: 600;
-        color: $theme-color;
-    }
+//     .price {
+//         font-size: 2.313rem;
+//         line-height: 3rem;
+//         padding: 0.813rem 0;
+//         font-weight: 600;
+//         color: $theme-color;
+//     }
 
-    .select-wrapper {
-        font-size: 1.125rem;
-        margin-bottom: 1.5rem;
+//     .select-wrapper {
+//         font-size: 1.125rem;
+//         margin-bottom: 1.5rem;
 
-        select,
-        select:focus {
-            border: none;
-            background-image: #ece2f9f1 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'><path fill='%23fff' d='M5 7l5 5 5-5z'/></svg>");
-        }
-    }
+//         select,
+//         select:focus {
+//             border: none;
+//             background-image: #ece2f9f1 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'><path fill='%23fff' d='M5 7l5 5 5-5z'/></svg>");
+//         }
+//     }
 
-    .admin-btn {
-        background: #fff;
-    }
-}
+//     .admin-btn {
+//         background: #fff;
+//     }
+// }
 // pricing section end
-
-// review start
-.review-wrapper {
-    display: flex;
-    gap: 1.5rem;
-    margin-top: 1.5rem;
-
-    .review-box {
-        padding: 1rem;
-        border: $border-light-small;
-        border-radius: 0.313rem;
-
-        .start-wrapper {
-            color: #ffc800;
-            display: flex;
-            font-size: 1.063rem;
-            gap: 0.125rem;
-        }
-
-        .body {
-            .review {
-                padding-top: 1.5rem;
-                font-size: 1.063rem;
-                line-height: 1.5rem;
-            }
-        }
-
-        .footer {
-            border-top: $border-light-small;
-            margin-top: 2rem;
-            display: flex;
-            padding-top: 1rem;
-            align-items: center;
-            gap: 0.5rem;
-
-            img {
-                width: 2.5rem;
-                height: 2.5rem;
-            }
-
-            .details {
-                .name {
-                    font-size: 1.125rem;
-                    color: #000;
-                    margin-bottom: 0.313rem;
-                }
-
-                .role {
-                    color: #868585;
-                }
-            }
-
-        }
-    }
-}
-
-// review end
 
 // features section start
 .features-wrapper {
@@ -803,149 +685,6 @@
     }
 }
 
-// notification style start
-.notification-wrapper {
-    ul {
-        margin: 0;
-        padding: 0;
-
-        li {
-            display: flex;
-            padding: 0.625rem;
-            border: $border-light-small;
-            cursor: pointer;
-            border-radius: 0.313rem;
-            margin-bottom: 1rem;
-            gap: 0.5rem;
-
-            .icon-wrapper {
-                width: 10%;
-                padding-top: 0.313rem;
-
-                i {
-                    font-size: 1.125rem;
-                    padding: 0.313rem;
-                    border-radius: 0.313rem;
-
-                    &.blue {
-                        background: #0000ff3b;
-                        color: #00f;
-                    }
-
-                    &.orange {
-                        color: #ffa500;
-                        background: #ffa60056;
-                    }
-
-                    &.green {
-                        color: #138604e7;
-                        background: #00800059;
-                    }
-
-                    &.red {
-                        color: #e00505;
-                        background: #ff00005e;
-                    }
-                }
-            }
-
-            .details {
-                width: 90%;
-                position: relative;
-                flex-direction: column;
-                margin: 0;
-                align-items: start;
-
-                .notification-title {
-                    font-size: 0.9rem;
-                    color: #000000e1;
-                    padding-bottom: 0.313rem;
-                }
-
-                .des {
-                    font-size: 0.8rem;
-                    color: #0000008c;
-                }
-
-                span {
-                    position: absolute;
-                    right: 0;
-                    top: 0;
-                    color: #000000e1;
-                    font-weight: 500;
-                }
-            }
-
-            &:hover {
-                background-color: #dfdfdf79;
-            }
-        }
-    }
-}
-
-// notification style end
-
-// no data found start
-.no-data-found {
-    text-align: center;
-    width: 70%;
-    margin: auto;
-
-    .icon {
-        padding: 0.5rem;
-        font-size: 1.625rem;
-        border-radius: 0.313rem;
-    }
-
-    .title {
-        font-size: 1.313rem;
-        color: #000;
-        font-weight: 600;
-        line-height: 1.5rem;
-        margin-top: 1rem;
-    }
-
-    .des {
-        font-size: 1rem;
-        padding: 0.75rem;
-    }
-}
-
-// no data found end
-
-.table-content {
-    display: flex;
-    flex-direction: column;
-    gap: 0.313rem;
-
-    i {
-        font-size: 1rem;
-        padding-right: 0.125rem;
-        color: $theme-color;
-    }
-}
-
-.placeholder-400x400 {
-    position: relative;
-    height: 100%;
-    width: 100%;
-
-    &::after {
-        content: "80 x 80";
-        left: 0;
-        // position: absolute;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background: #dfdcdc;
-        color: #0000007d;
-        font-size: 0.7rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-}
-
 // video section start
 .video-section {
     display: flex;
@@ -1028,167 +767,6 @@
     }
 }
 
-// no permission section start
-.permission-wrapper {
-    height: 40vh;
-    width: 100%;
-    background: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-
-    i {
-        padding: 0.5rem;
-        font-size: 1.45rem;
-        border-radius: 0.313rem;
-    }
-
-    .title {
-        font-size: 1.625rem;
-        margin: 1rem;
-        margin-top: 1.5rem;
-    }
-
-    .des {
-        margin-bottom: 1rem;
-    }
-}
-
-// review-popup-wrapper
-.review-popup-wrapper {
-    .customer-wrapper {
-        display: flex;
-        gap: 0.5rem;
-
-        .avater {
-            i {
-                color: #fff;
-                font-size: 1.5rem;
-            }
-        }
-
-        .name {
-            font-size: 1.125rem;
-            font-weight: 500;
-            padding-bottom: 0.45rem;
-        }
-
-    }
-
-    .review {
-        padding-top: 0.95rem;
-        font-size: 0.95rem;
-        line-height: 1.45rem;
-        color: #000000c7;
-    }
-}
-
-// review-popup-wrapper end
-
-// payout page price section start
-.payout-wrapper {
-    .payout-header {
-        .admin-btn {
-            font-size: 1.313rem;
-            padding: .813rem 1.813rem;
-        }
-    }
-
-    .price-title {
-        font-size: 0.95rem;
-        line-height: 1rem;
-        padding-bottom: 0.625rem;
-        color: #00000071;
-    }
-
-    .price {
-        font-size: 3rem;
-        font-weight: 600;
-        line-height: 2.4rem;
-        margin-bottom: 0.813rem;
-        display: flex;
-        align-items: start;
-        gap: 0.5rem;
-    }
-
-    .des {
-        font-size: 0.9rem;
-        margin-bottom: 1rem;
-    }
-
-    .small-text {
-        line-height: 1.25rem;
-    }
-
-    .admin-btn {
-        margin-top: 1rem;
-    }
-
-    .right-section {
-        width: 50%;
-    }
-
-    .admin-badge {
-        display: inline-block;
-    }
-
-    .payout-card-wrapper {
-        display: flex;
-        gap: 1rem;
-        margin: 0.813rem 0;
-
-        .payout-card {
-            padding: 1rem;
-            border-radius: 0.313rem;
-            background: #e6e2e275;
-            width: 50%;
-
-            .card-title {
-                font-size: 1.125rem;
-            }
-
-            .card-price {
-                font-size: 1.813rem;
-                font-weight: 600;
-                line-height: 2rem;
-                margin: 0.5rem 0;
-            }
-
-            .card-des {
-                color: #0000009e;
-                font-size: 0.813rem;
-            }
-        }
-    }
-}
-
-.withdrawal-wrapper {
-    background: $theme-background-color;
-    padding: 0.313rem;
-    border-radius: 0.313rem;
-    margin: 1rem 0;
-    color: $theme-color;
-    border: $border-light-small;
-
-    i {
-        color: $theme-color;
-    }
-
-    .title {
-        font-size: 1.45rem;
-        font-weight: 600;
-        line-height: 2rem;
-        padding-bottom: 0.5rem;
-    }
-
-    .withdrawl-notice {
-        font-size: 1rem;
-        font-weight: 500;
-        line-height: 1.313rem;
-
-        i {
-            color: $theme-color;
-        }
-    }
+.admin-pro-tag.module:has(.adminlib-spmv) {
+    text-transform: uppercase;
 }

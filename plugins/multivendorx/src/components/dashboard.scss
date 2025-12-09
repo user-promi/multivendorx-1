@@ -1,681 +1,108 @@
 @use './config.scss' as *;
 
-.multivendorx-dashboard,
-#admin-main-wrapper {
-    .row {
+// payout page price section start
+.payout-wrapper {
+    .payout-header {
+        .admin-btn {
+            font-size: 1.313rem;
+            padding: .813rem 1.813rem;
+        }
+    }
+
+    .price-title {
+        font-size: 0.95rem;
+        line-height: 1rem;
+        padding-bottom: 0.625rem;
+        color: #00000071;
+    }
+
+    .price {
+        font-size: 3rem;
+        font-weight: 600;
+        line-height: 2.4rem;
+        margin-bottom: 0.813rem;
         display: flex;
-        gap: 1rem;
-        padding-bottom: 1rem;
-        width: 100%;
-        position: relative;
-    }
-
-    .row:has(.transaction) {
-        margin-bottom: 1rem;
-    }
-
-    .column {
-        border-radius: 0.313rem;
-        box-shadow: 0 0.125rem 0.5rem 0 #dfdee16e;
-        background: #fff;
-        width: 100%;
-        box-sizing: border-box;
-
-        .table-wrapper {
-            border: 0.063rem solid #f5f5f5;
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            padding-bottom: 1rem;
-            margin: 1.5rem;
-            margin-bottom: 0;
-            border-bottom: $border-light-small;
-            align-items: start;
-
-            .left {
-                .title {
-                    font-size: 1.125rem;
-                    font-weight: 500;
-                    display: flex;
-                    gap: 0.5rem;
-                    align-items: center;
-                }
-
-                .des {
-                    padding-top: 0.125rem;
-                    color: #00000094;
-                }
-            }
-
-            .right {
-                display: flex;
-                gap: 0.5rem;
-
-                span {
-                    font-size: 0.875rem;
-                    color: #0000009e;
-                }
-
-                i {
-                    font-size: 0.95rem;
-                    padding: 0.313rem;
-                    border-radius: 50%;
-                    transition: all 0.4s ease;
-                    cursor: pointer;
-                    margin-top: -0.313rem;
-
-                    &:hover {
-                        background: #5a59591a;
-                    }
-                }
-
-                .admin-btn {
-                    i {
-                        padding: 0;
-                        font-size: 1rem;
-                    }
-                }
-            }
-
-            &.p-top {
-                padding-top: 2rem;
-                margin-bottom: 1.5rem;
-            }
-        }
-
-        .card-body {
-            padding: 1.5rem;
-            transition: all 0.5s ease;
-
-            .settings-metabox-note{
-                padding: 0 0 1rem;
-            }
-        }
-
-        // .column {
-        //     width: 94%;
-        //     padding: 1rem;
-        //     margin-bottom: 0.813rem;
-
-        //     .product-name {
-        //         font-size: 1.063rem;
-        //     }
-
-        //     .items {
-        //         padding: 0.313rem;
-        //     }
-        // }
-
-        &.transparent {
-            background: transparent;
-            box-shadow: none;
-            padding: 0;
-        }
-
-        &.transaction {
-            margin-bottom: 1rem;
-        }
-    }
-
-    .col {
-        width: 100%;
-    }
-}
-
-.w-10 {
-    width: 10%;
-}
-
-.w-35 {
-    width: 35%;
-}
-
-.w-50 {
-    width: 50%;
-}
-
-.w-65 {
-    width: 65%;
-}
-
-.analytics-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 1rem;
-
-    .analytics-item {
-        display: flex;
-        gap: 1rem;
-        align-items: center;
-        background: #fff;
-        padding: 1rem;
-        width: 100%;
-        border-radius: 0.313rem;
-
-        .analytics-icon {
-            i {
-                padding: 0.5rem;
-                font-size: 1.625rem;
-                border-radius: 0.313rem;
-            }
-        }
-
-        .details {
-            .number {
-                font-size: 1.25rem;
-                line-height: 0.9rem;
-                padding-bottom: 0.313rem;
-                font-weight: 600;
-            }
-        }
-    }
-
-    // admin Wallet Transaction table(common)
-    &.wallet {
-        padding: 0 0 1rem 0;
-        margin-bottom: 1rem;
-        border-bottom: $border-light-small;
-    }
-
-    // Wallet Transaction table
-
-    // report
-    &.report {
-        flex-wrap: wrap;
-
-        .analytics-item {
-            width: 48%;
-            box-sizing: border-box;
-
-            i {
-                font-size: 2.5rem;
-                padding: 0.625rem;
-                line-height: 1.5;
-            }
-
-            .details {
-                .number {
-                    font-size: 2.063rem;
-                }
-            }
-        }
-    }
-
-    &.column-3 {
-        .analytics-item {
-            width: 24%;
-        }
-    }
-}
-
-.container-wrapper {
-    display: flex;
-    gap: 1rem;
-    background: #f0f0f1;
-}
-
-.card-wrapper {
-    display: flex;
-    flex-direction: column;
-
-    .table-wrapper {
-        border: 0.063rem solid #f5f5f5;
-    }
-}
-
-.card-content {
-    box-shadow: 0 0.063rem 0.25rem #364a630d;
-    background: #fff;
-    padding: 1.5rem;
-    border-radius: 0.313rem;
-    margin-bottom: 1rem;
-
-    .card-title {
-        font-size: 1.125rem;
-        margin-bottom: 1.313rem;
-    }
-
-    .form-details {
-        display: flex;
-        margin-bottom: 1rem;
-        align-items: center;
-
-        label {
-            font-size: 1rem;
-            width: 15%;
-        }
-
-        .value {
-            width: 85%;
-            font-size: 1rem;
-            color: $sub-text-color;
-        }
-    }
-
-    .name-list {
-        ul {
-            display: flex;
-            gap: 0.5rem;
-
-            li {
-                padding: 0.5rem 1rem;
-                border: 0.063rem solid #e0e4e9;
-                border-radius: 0.313rem;
-                color: $theme-color;
-                background: $theme-background-color;
-
-                i {
-                    color: #f06b4f;
-                    background: #fde8e4;
-                    padding: 0.125rem;
-                    border-radius: 50%;
-                    font-size: 0.85rem;
-                    margin-left: 0.5rem;
-                }
-            }
-        }
-    }
-
-    .settings-metabox-note {
-        padding: 0;
-        padding-bottom: 1rem;
-    }
-}
-
-.form-group-title-wrapper {
-    padding: 1rem 0 0.5rem;
-    border-bottom: $border-light-small;
-    margin-bottom: 1rem;
-
-    .title {
-        font-size: 1.125rem;
-        font-weight: 500;
+        align-items: start;
+        gap: 0.5rem;
     }
 
     .des {
-        font-size: 0.95rem;
-        color: $sub-text-color;
-    }
-}
-
-.form-group-wrapper {
-    display: flex;
-    gap: 1rem;
-
-    .form-group {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        margin-bottom: 1rem;
-
-        .button-wrapper {
-            display: flex;
-            justify-content: start;
-        }
-
-        label {
-            font-size: .875rem;
-            font-weight: 500;
-            color: #344357;
-            margin-bottom: .5rem;
-            display: flex;
-            gap: 0.625rem;
-        }
-
-        .toggle-setting-container label {
-            margin: 0;
-        }
-
-        i {
-            font-size: 1.125rem;
-            // color: #5007aa;
-
-            &.remove-btn {
-                color: rgb(238, 8, 8);
-                cursor: pointer;
-            }
-        }
-    }
-
-    .settings-metabox-note {
+        font-size: 0.9rem;
         margin-bottom: 1rem;
     }
 
-    .payment-method {
-        .method {
-            display: flex;
-            align-items: center;
-            width: fit-content;
-            padding: 0.5rem 0.75rem;
-            gap: 0.45rem;
-            background: $theme-background-color;
-            font-size: 0.95rem;
-            font-weight: 500;
-            border-radius: 0.313rem;
-            color: $theme-color;
-            border: 0.063rem solid $theme-color;
-        }
+    .small-text {
+        line-height: 1.25rem;
     }
-}
-// card styles start
 
-// tab action cart start
-.tab-action {
-    width: 13rem;
-    padding: 1rem 1.313rem;
-    background: #fff;
-    border-radius: 0.313rem;
-    border: 0.063rem solid transparent;
+    .admin-btn {
+        margin-top: 1rem;
+    }
 
-    .details-wrapper {
+    .right-section {
+        width: 50%;
+    }
+
+    .admin-badge {
+        display: inline-block;
+    }
+
+    .payout-card-wrapper {
         display: flex;
-        gap: 0.625rem;
-        color: #000000d2;
-        align-items: center;
+        gap: 1rem;
+        margin: 0.813rem 0;
 
-        i {
-            padding: 0.5rem;
-            font-size: 1.45rem;
+        .payout-card {
+            padding: 1rem;
             border-radius: 0.313rem;
-        }
+            background: #e6e2e275;
+            width: 50%;
 
-        .title {
-            font-size: 1.313rem;
-            font-weight: 500;
-        }
-    }
-
-    .description {
-        font-size: 1.125rem;
-        padding-top: 0.5rem;
-        line-height: 1.125;
-    }
-
-    &.active {
-        border: 0.063rem solid;
-
-        &:has(.red) {
-            border-color: #f06b4f;
-        }
-
-        &:has(.green) {
-            border-color: #06be9f;
-        }
-
-        &:has(.yellow) {
-            border-color: #ff9f43;
-        }
-
-        &:has(.blue) {
-            border-color: #003d66de;
-        }
-    }
-}
-// tab action cart end
-
-// location map box style start
-#location-map {
-    height: 18.75rem;
-    width: 100%;
-    border-radius: 0.25rem;
-    margin-top: 0.5rem;
-}
-
-// data card design start
-.data-card-wrapper {
-    display: flex;
-    gap: 1rem;
-    padding-bottom: 1rem;
-    justify-content: space-between;
-
-    .data-card {
-        width: 100%;
-        background: #fff;
-        padding: 1.5rem;
-        border-radius: 0.313rem;
-        box-sizing: border-box;
-
-        .number {
-            font-size: 2rem;
-            line-height: 2rem;
-            margin-top: 0.813rem;
-            // font-weight: 600;
-            display: flex;
-            justify-content: space-between;
-            align-items: end;
-
-            i {
-                padding: 0.313rem;
-                color: $theme-color;
+            .card-title {
+                font-size: 1.125rem;
             }
-        }
 
-        .title {
-            font-size: 0.95rem;
-            color: #00000094;
-        }
-    }
-}
-
-.settings-metabox-description.slug i {
-    font-size: 0.813rem;
-}
-
-.admin-pro-tag.module:has(.adminlib-spmv) {
-    text-transform: uppercase;
-}
-
-// settings shipping add country start
-// .shipping-country-wrapper {
-//     .shipping-country {
-//         padding: 1rem;
-//         background: #f7f6f69c;
-//         border-radius: 0.313rem;
-//         margin-bottom: 1rem;
-//         border: $border-light-small;
-
-//         .basic-input {
-//             width: 25%;
-//         }
-
-//         &.rule {
-//             width: fit-content;
-//         }
-//     }
-
-//     .item {
-//         display: flex;
-//         gap: 0.5rem;
-//         align-items: center;
-
-//         .location-icon {
-//             background: #d9f5f0;
-//             color: #06be9f;
-//             padding: 0.45rem;
-//             font-size: 1.313rem;
-//             border-radius: 0.313rem;
-//         }
-
-//         .delete-icon {
-//             font-size: 1.125rem;
-//             color: #f06b4f;
-//             cursor: pointer;
-//         }
-
-//         .basic-input {
-//             background: #fff !important;
-//             /*overwrite common style*/
-//         }
-
-//         &.state {
-//             margin-bottom: 0.625rem;
-//         }
-//     }
-
-//     .state-wrapper {
-//         padding: 0.813rem;
-//         background: #fff;
-//         margin-top: 0.813rem;
-
-//         .header {
-//             display: flex;
-//             justify-content: space-between;
-//             align-items: start;
-//             margin-bottom: 0.813rem;
-//             padding-bottom: 0.5rem;
-//             border-bottom: $border-light-small;
-
-//             .left {
-//                 width: 75%;
-//             }
-
-//             .title {
-//                 font-size: 1.125em;
-//                 font-weight: 500;
-//             }
-
-//             .des {
-//                 font-size: 0.813rem;
-//                 color: $sub-text-color;
-//             }
-//         }
-
-//     }
-
-//     .no-shipping-data {
-//         padding: 1rem;
-//         border-radius: 0.313rem;
-//         font-size: 1rem;
-//         background: #c9c9c954;
-//         margin: 1rem 0;
-//     }
-// }
-// settings shipping add country end
-
-
-// shipping-method-wrapper start  store shipping tab start (move table css)
-// .shipping-method-wrapper {
-//     display: flex;
-//     flex-direction: column;
-//     gap: 0.5rem;
-
-//     .shipping-method {
-//         display: flex;
-//         gap: 0.313rem;
-//         align-items: center;
-
-//         .icon-wrapper {
-//             i {
-//                 cursor: pointer;
-//             }
-//         }
-//     }
-// }
-
-// review style
-.reviews-wrapper {
-    display: flex;
-    gap: 0.313rem;
-    font-size: 1rem;
-    font-weight: 500;
-
-    .review {
-        color: rgb(231, 178, 5);
-    }
-
-    span {
-        padding-left: 0.313rem;
-        display: flex;
-    }
-}
-
-
-// info section start 
-.info-item {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.45rem;
-
-    &.owner {
-        flex-direction: column;
-    }
-
-    .details-wrapper {
-        display: flex;
-        gap: 0.75rem;
-
-        .avatar {
-            span {
-                color: #fff;
-                font-size: 1.25rem;
+            .card-price {
+                font-size: 1.813rem;
                 font-weight: 600;
+                line-height: 2rem;
+                margin: 0.5rem 0;
             }
 
-            img {
-                width: 3rem;
-                border-radius: 0.313rem;
-            }
-
-            i,
-            span {
-                padding: 0.5rem;
-                border-radius: 50%;
-                background: $theme-color;
-                width: 1.5rem;
-                height: 1.5rem;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: 1.625rem;
-                color: #fff;
+            .card-des {
+                color: #0000009e;
+                font-size: 0.813rem;
             }
         }
-
-        .details {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-
-            .name {
-                font-size: 1.063rem;
-                line-height: 1rem;
-                color: #000000ed;
-                font-weight: 500;
-                position: relative;
-                padding-right: 0.625rem;
-                display: flex;
-                align-items: end;
-                gap: 0.625rem;
-            }
-
-            .des {
-                color: #0000007c;
-            }
-
-            .small-text {
-                font-size: 0.875rem;
-                color: #00000060;
-            }
-        }
-    }
-
-    .right-details {
-        text-align: right;
-
-        .price {
-            font-size: 1.063rem;
-            font-weight: 600;
-            line-height: 1.5rem;
-            padding-bottom: 0.125rem;
-        }
-    }
-
-    .contact-details {
-        flex-direction: column;
-        gap: 0.5rem;
     }
 }
-// info section end
+
+.withdrawal-wrapper {
+    background: $theme-background-color;
+    padding: 0.313rem;
+    border-radius: 0.313rem;
+    margin: 1rem 0;
+    color: $theme-color;
+    border: $border-light-small;
+
+    i {
+        color: $theme-color;
+    }
+
+    .title {
+        font-size: 1.45rem;
+        font-weight: 600;
+        line-height: 2rem;
+        padding-bottom: 0.5rem;
+    }
+
+    .withdrawl-notice {
+        font-size: 1rem;
+        font-weight: 500;
+        line-height: 1.313rem;
+
+        i {
+            color: $theme-color;
+        }
+    }
+}

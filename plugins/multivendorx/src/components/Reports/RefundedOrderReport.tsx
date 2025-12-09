@@ -309,7 +309,6 @@ const RefundedOrderReport: React.FC = () => {
       render: (updateFilter, filterValue) => (
         <div className="search-action">
           <select
-            className="basic-select"
             value={filterValue || ''}
             onChange={(e) => updateFilter('searchAction', e.target.value || '')}
           >
@@ -329,7 +328,6 @@ const RefundedOrderReport: React.FC = () => {
             placeholder={__('Search', 'multivendorx')}
             onChange={(e) => updateFilter(e.target.name, e.target.value)}
             value={filterValue || ''}
-            className="basic-select"
           />
           <i className="adminlib-search"></i>
         </div>

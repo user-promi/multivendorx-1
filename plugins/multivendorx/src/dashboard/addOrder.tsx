@@ -366,132 +366,131 @@ const AddOrder = () => {
             <div className="container-wrapper">
                 <div className="card-wrapper w-65">
                     <div className="card-content">
-                        <div className="table-wrapper view-order-table">
-                            <table className="admin-table">
-                                <thead className="admin-table-header">
-                                    <tr className="header-row">
-                                        <td className="header-col">{__('Item', 'multivendorx')}</td>
-                                        <td className="header-col">{__('Price', 'multivendorx')}</td>
-                                        <td className="header-col">{__('Qty', 'multivendorx')}</td>
-                                        <td className="header-col">{__('Total', 'multivendorx')}</td>
-                                    </tr>
-                                </thead>
+                        <div className="card-body">
+                            <div className="table-wrapper view-order-table">
+                                <table className="admin-table">
+                                    <thead className="admin-table-header">
+                                        <tr className="header-row">
+                                            <td className="header-col">{__('Item', 'multivendorx')}</td>
+                                            <td className="header-col">{__('Price', 'multivendorx')}</td>
+                                            <td className="header-col">{__('Qty', 'multivendorx')}</td>
+                                            <td className="header-col">{__('Total', 'multivendorx')}</td>
+                                        </tr>
+                                    </thead>
 
-                                <tbody className="admin-table-body">
+                                    <tbody className="admin-table-body">
 
-                                    {addedProducts.length > 0 &&
-                                        addedProducts.map((item) => (
-                                            <tr key={`added-${item.id}`} className="admin-row simple">
+                                        {addedProducts.length > 0 &&
+                                            addedProducts.map((item) => (
+                                                <tr key={`added-${item.id}`} className="admin-row simple">
+                                                    <td className="admin-column">
+                                                        <div className="item-details">
+                                                            <div className="image">
+                                                                <img
+                                                                    src={item?.images?.[0]?.src}
+                                                                    width={40}
+                                                                    alt={item.name}
+                                                                />
+                                                            </div>
+
+                                                            <div className="detail">
+                                                                <div className="name">{item.name}</div>
+
+                                                                {item?.sku && (
+                                                                    <div className="sku">
+                                                                        {__('SKU:', 'multivendorx')} {item.sku}
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    </td>
+
+                                                    <td className="admin-column">${item.price}</td>
+
+                                                    <td className="admin-column">
+                                                        <input
+                                                            type="number"
+                                                            min="1"
+                                                            className="basic-input"
+                                                            value={item.qty || 1}
+                                                            onChange={(e) => {
+                                                                const qty = +e.target.value;
+                                                                setAddedProducts(prev =>
+                                                                    prev.map(p =>
+                                                                        p.id === item.id ? { ...p, qty } : p
+                                                                    )
+                                                                );
+                                                            }}
+                                                        />
+                                                    </td>
+
+                                                    <td className="admin-column">
+                                                        ${(item.price * (item.qty || 1)).toFixed(2)}
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        }
+
+                                        {shippingLines.map(ship => (
+                                            <tr key={`ship-${ship.id}`} className="admin-row shipping-row">
                                                 <td className="admin-column">
                                                     <div className="item-details">
-                                                        <div className="image">
-                                                            <img
-                                                                src={item?.images?.[0]?.src}
-                                                                width={40}
-                                                                alt={item.name}
-                                                            />
+                                                        <div className="icon">
+                                                            <i className="adminlib-cart green"></i>
                                                         </div>
 
                                                         <div className="detail">
-                                                            <div className="name">{item.name}</div>
+                                                            <div className="name">
+                                                                {__('Shipping', 'multivendorx')}
+                                                            </div>
 
-                                                            {item?.sku && (
-                                                                <div className="sku">
-                                                                    {__('SKU:', 'multivendorx')} {item.sku}
-                                                                </div>
-                                                            )}
+                                                            <SelectInput
+                                                                name="shipping_method"
+                                                                type="single-select"
+                                                                options={availableShippingMethods}
+                                                                value={availableShippingMethods.find(o => o.value === ship.method_id)}
+                                                                onChange={(selected) => {
+                                                                    const method_id = selected.value;
+                                                                    const method_title = selected.label;
+
+                                                                    setShippingLines(prev =>
+                                                                        prev.map(s =>
+                                                                            s.id === ship.id
+                                                                                ? { ...s, method_id, name: method_title }
+                                                                                : s
+                                                                        )
+                                                                    );
+                                                                }}
+                                                            />
                                                         </div>
                                                     </div>
                                                 </td>
 
-                                                <td className="admin-column">${item.price}</td>
+                                                <td className="admin-column"></td>
+                                                <td className="admin-column"></td>
 
                                                 <td className="admin-column">
                                                     <input
                                                         type="number"
-                                                        min="1"
+                                                        min="0"
                                                         className="basic-input"
-                                                        value={item.qty || 1}
-                                                        onChange={(e) => {
-                                                            const qty = +e.target.value;
-                                                            setAddedProducts(prev =>
-                                                                prev.map(p =>
-                                                                    p.id === item.id ? { ...p, qty } : p
+                                                        value={ship.cost}
+                                                        onChange={e => {
+                                                            const cost = parseFloat(e.target.value) || 0;
+                                                            setShippingLines(prev =>
+                                                                prev.map(s =>
+                                                                    s.id === ship.id ? { ...s, cost } : s
                                                                 )
                                                             );
                                                         }}
                                                     />
                                                 </td>
-
-                                                <td className="admin-column">
-                                                    ${(item.price * (item.qty || 1)).toFixed(2)}
-                                                </td>
                                             </tr>
-                                        ))
-                                    }
+                                        ))}
 
-                                    {shippingLines.map(ship => (
-                                        <tr key={`ship-${ship.id}`} className="admin-row shipping-row">
-                                            <td className="admin-column">
-                                                <div className="item-details">
-                                                    <div className="icon">
-                                                        <i className="adminlib-cart green"></i>
-                                                    </div>
+                                    </tbody>
+                                </table>
 
-                                                    <div className="detail">
-                                                        <div className="name">
-                                                            {__('Shipping', 'multivendorx')}
-                                                        </div>
-
-                                                        <SelectInput
-                                                            name="shipping_method"
-                                                            type="single-select"
-                                                            options={availableShippingMethods}
-                                                            value={availableShippingMethods.find(o => o.value === ship.method_id)}
-                                                            onChange={(selected) => {
-                                                                const method_id = selected.value;
-                                                                const method_title = selected.label;
-
-                                                                setShippingLines(prev =>
-                                                                    prev.map(s =>
-                                                                        s.id === ship.id
-                                                                            ? { ...s, method_id, name: method_title }
-                                                                            : s
-                                                                    )
-                                                                );
-                                                            }}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </td>
-
-                                            <td className="admin-column"></td>
-                                            <td className="admin-column"></td>
-
-                                            <td className="admin-column">
-                                                <input
-                                                    type="number"
-                                                    min="0"
-                                                    className="basic-input"
-                                                    value={ship.cost}
-                                                    onChange={e => {
-                                                        const cost = parseFloat(e.target.value) || 0;
-                                                        setShippingLines(prev =>
-                                                            prev.map(s =>
-                                                                s.id === ship.id ? { ...s, cost } : s
-                                                            )
-                                                        );
-                                                    }}
-                                                />
-                                            </td>
-                                        </tr>
-                                    ))}
-
-                                </tbody>
-                            </table>
-
-
-                            <div className="card-content">
                                 <div className="total-summary">
                                     <div className="row">
                                         <span>{__('Subtotal:', 'multivendorx')}</span>
@@ -514,12 +513,12 @@ const AddOrder = () => {
                                     </div>
                                 </div>
 
-                                <div className="buttons">
+                                <div className="buttons-wrapper left">
                                     <button
                                         className="admin-btn btn-purple-bg"
                                         onClick={() => setShowAddProduct(true)}
                                     >
-                                        <i className="adminlib-plus-circle-o"></i>
+                                        <i className="adminlib-plus-circle"></i>
                                         {__('Add Product', 'multivendorx')}
                                     </button>
 
@@ -532,7 +531,7 @@ const AddOrder = () => {
                                             ]);
                                         }}
                                     >
-                                        <i className="adminlib-plus-circle-o"></i>
+                                        <i className="adminlib-plus-circle"></i>
                                         {__('Add Shipping', 'multivendorx')}
                                     </button>
 
@@ -540,7 +539,7 @@ const AddOrder = () => {
                                         className="admin-btn btn-purple-bg"
                                         onClick={() => setShowAddTax(true)}
                                     >
-                                        <i className="adminlib-plus-circle-o"></i>
+                                        <i className="adminlib-plus-circle"></i>
                                         {__('Add Tax', 'multivendorx')}
                                     </button>
                                 </div>
@@ -619,34 +618,34 @@ const AddOrder = () => {
                                     </div>
                                 )}
                             </div>
-
                         </div>
                     </div>
                 </div>
-                <div className="card-wrapper w-35">
+                <div className="card-wrapper column w-35">
                     <div className="card-content">
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">{__("Payment Method", "multivendorx")}</div>
                             </div>
                         </div>
+                        <div className="card-body">
+                            <div className="form-group-wrapper">
+                                <div className="form-group">
+                                    <label htmlFor="payment-method">
+                                        {__("Select Payment Method", "multivendorx")}
+                                    </label>
 
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="payment-method">
-                                    {__("Select Payment Method", "multivendorx")}
-                                </label>
-
-                                <SelectInput
-                                    name="payment_method"
-                                    options={paymentOptions}
-                                    type="single-select"
-                                    value={selectedPayment?.value}
-                                    onChange={(value) => {
-                                        const method = paymentMethods.find(m => m.value === value.value);
-                                        setSelectedPayment(method || null);
-                                    }}
-                                />
+                                    <SelectInput
+                                        name="payment_method"
+                                        options={paymentOptions}
+                                        type="single-select"
+                                        value={selectedPayment?.value}
+                                        onChange={(value) => {
+                                            const method = paymentMethods.find(m => m.value === value.value);
+                                            setSelectedPayment(method || null);
+                                        }}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -659,83 +658,84 @@ const AddOrder = () => {
                                 </div>
                             </div>
                         </div>
+                        <div className="card-body">
+                            {!selectedCustomer && (
+                                <>
+                                    <div className="form-group-wrapper">
+                                        <div className="form-group">
+                                            <label htmlFor="product-name">
+                                                {__("Select Customer", "multivendorx")}
+                                            </label>
 
-                        {!selectedCustomer && (
-                            <>
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label htmlFor="product-name">
-                                            {__("Select Customer", "multivendorx")}
-                                        </label>
-
-                                        <SelectInput
-                                            name="new_owner"
-                                            options={customerOptions}
-                                            type="single-select"
-                                            onChange={(value) => {
-                                                const customer = customers.find(c => c.id == value.value);
-                                                setSelectedCustomer(customer);
-                                                if (customer) {
-                                                    setShippingAddress(customer.shipping);
-                                                    setBillingAddress(customer.billing);
-                                                    setShowCreateCustomer(false);
-                                                }
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-
-                                <div
-                                    className="admin-btn btn-purple-bg"
-                                    onClick={() => setShowCreateCustomer(!showCreateCustomer)}
-                                >
-                                    {__("Add New Customer", "multivendorx")}
-                                </div>
-                            </>
-                        )}
-
-                        {selectedCustomer && (
-                            <div className="store-owner-details">
-                                <div className="profile">
-                                    <div className="avater">
-                                        <span>{selectedCustomer ? selectedCustomer.first_name[0] : __("C", "multivendorx")}</span>
+                                            <SelectInput
+                                                name="new_owner"
+                                                options={customerOptions}
+                                                type="single-select"
+                                                onChange={(value) => {
+                                                    const customer = customers.find(c => c.id == value.value);
+                                                    setSelectedCustomer(customer);
+                                                    if (customer) {
+                                                        setShippingAddress(customer.shipping);
+                                                        setBillingAddress(customer.billing);
+                                                        setShowCreateCustomer(false);
+                                                    }
+                                                }}
+                                            />
+                                        </div>
                                     </div>
 
-                                    <div className="details">
-                                        <div className="name">
-                                            {selectedCustomer
-                                                ? `${selectedCustomer.first_name} ${selectedCustomer.last_name}`
-                                                : __("Guest Customer", "multivendorx")}
+                                    <div
+                                        className="admin-btn btn-purple-bg"
+                                        onClick={() => setShowCreateCustomer(!showCreateCustomer)}
+                                    >
+                                        {__("Add New Customer", "multivendorx")}
+                                    </div>
+                                </>
+                            )}
+
+                            {selectedCustomer && (
+                                <div className="store-owner-details">
+                                    <div className="profile">
+                                        <div className="avater">
+                                            <span>{selectedCustomer ? selectedCustomer.first_name[0] : __("C", "multivendorx")}</span>
                                         </div>
 
-                                        {selectedCustomer && (
-                                            <>
-                                                <div className="des">
-                                                    {__("Customer ID:", "multivendorx")} #{selectedCustomer.id}
-                                                </div>
+                                        <div className="details">
+                                            <div className="name">
+                                                {selectedCustomer
+                                                    ? `${selectedCustomer.first_name} ${selectedCustomer.last_name}`
+                                                    : __("Guest Customer", "multivendorx")}
+                                            </div>
 
-                                                <div className="des">
-                                                    <i className="adminlib-mail" />
-                                                    {selectedCustomer.email}
-                                                </div>
+                                            {selectedCustomer && (
+                                                <>
+                                                    <div className="des">
+                                                        {__("Customer ID:", "multivendorx")} #{selectedCustomer.id}
+                                                    </div>
 
-                                                <div className="des">
-                                                    <i className="adminlib-phone" />
-                                                    {selectedCustomer.billing.phone}
-                                                </div>
-                                            </>
-                                        )}
+                                                    <div className="des">
+                                                        <i className="adminlib-mail" />
+                                                        {selectedCustomer.email}
+                                                    </div>
+
+                                                    <div className="des">
+                                                        <i className="adminlib-phone" />
+                                                        {selectedCustomer.billing.phone}
+                                                    </div>
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        className="admin-badge blue"
+                                        onClick={() => setSelectedCustomer(false)}
+                                    >
+                                        <i className="adminlib-edit"></i>
                                     </div>
                                 </div>
-
-                                <div
-                                    className="admin-badge blue"
-                                    onClick={() => setSelectedCustomer(false)}
-                                >
-                                    <i className="adminlib-edit"></i>
-                                </div>
-                            </div>
-                        )}
+                            )}
+                        </div>
                     </div>
                     {showCreateCustomer && !selectedCustomer && (
                         <div className="card-content">
@@ -746,76 +746,77 @@ const AddOrder = () => {
                                     </div>
                                 </div>
                             </div>
+                            <div className="card-body">
+                                <div className="form-group-wrapper">
+                                    <div className="form-group">
+                                        <label htmlFor="product-name">
+                                            {__("First name", "multivendorx")}
+                                        </label>
 
-                            <div className="form-group-wrapper">
-                                <div className="form-group">
-                                    <label htmlFor="product-name">
-                                        {__("First name", "multivendorx")}
-                                    </label>
+                                        <BasicInput
+                                            name="first_name"
+                                            value={newCustomer.first_name}
+                                            onChange={(e) =>
+                                                setNewCustomer({ ...newCustomer, first_name: e.target.value })
+                                            }
+                                            wrapperClass="setting-form-input"
+                                        />
+                                    </div>
 
-                                    <BasicInput
-                                        name="first_name"
-                                        value={newCustomer.first_name}
-                                        onChange={(e) =>
-                                            setNewCustomer({ ...newCustomer, first_name: e.target.value })
-                                        }
-                                        wrapperClass="setting-form-input"
-                                    />
+                                    <div className="form-group">
+                                        <label htmlFor="product-name">
+                                            {__("Last name", "multivendorx")}
+                                        </label>
+
+                                        <BasicInput
+                                            name="last_name"
+                                            value={newCustomer.last_name}
+                                            onChange={(e) =>
+                                                setNewCustomer({ ...newCustomer, last_name: e.target.value })
+                                            }
+                                            wrapperClass="setting-form-input"
+                                        />
+                                    </div>
                                 </div>
 
-                                <div className="form-group">
-                                    <label htmlFor="product-name">
-                                        {__("Last name", "multivendorx")}
-                                    </label>
+                                <div className="form-group-wrapper">
+                                    <div className="form-group">
+                                        <label htmlFor="product-name">
+                                            {__("Email", "multivendorx")}
+                                        </label>
 
-                                    <BasicInput
-                                        name="last_name"
-                                        value={newCustomer.last_name}
-                                        onChange={(e) =>
-                                            setNewCustomer({ ...newCustomer, last_name: e.target.value })
-                                        }
-                                        wrapperClass="setting-form-input"
-                                    />
+                                        <BasicInput
+                                            name="email"
+                                            value={newCustomer.email}
+                                            onChange={(e) =>
+                                                setNewCustomer({ ...newCustomer, email: e.target.value })
+                                            }
+                                            wrapperClass="setting-form-input"
+                                        />
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className="form-group-wrapper">
-                                <div className="form-group">
-                                    <label htmlFor="product-name">
-                                        {__("Email", "multivendorx")}
-                                    </label>
+                                <div className="form-group-wrapper">
+                                    <div className="form-group">
+                                        <label htmlFor="product-name">
+                                            {__("Phone number", "multivendorx")}
+                                        </label>
 
-                                    <BasicInput
-                                        name="email"
-                                        value={newCustomer.email}
-                                        onChange={(e) =>
-                                            setNewCustomer({ ...newCustomer, email: e.target.value })
-                                        }
-                                        wrapperClass="setting-form-input"
-                                    />
+                                        <BasicInput
+                                            name="phone"
+                                            value={newCustomer.phone}
+                                            onChange={(e) =>
+                                                setNewCustomer({ ...newCustomer, phone: e.target.value })
+                                            }
+                                            wrapperClass="setting-form-input"
+                                        />
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className="form-group-wrapper">
-                                <div className="form-group">
-                                    <label htmlFor="product-name">
-                                        {__("Phone number", "multivendorx")}
-                                    </label>
-
-                                    <BasicInput
-                                        name="phone"
-                                        value={newCustomer.phone}
-                                        onChange={(e) =>
-                                            setNewCustomer({ ...newCustomer, phone: e.target.value })
-                                        }
-                                        wrapperClass="setting-form-input"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="buttons-wrapper">
-                                <div className="admin-btn btn-purple-bg" onClick={createCustomer}>
-                                    {__("Create", "multivendorx")}
+                                <div className="buttons-wrapper">
+                                    <div className="admin-btn btn-purple-bg" onClick={createCustomer}>
+                                        {__("Create", "multivendorx")}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -829,125 +830,126 @@ const AddOrder = () => {
                                 </div>
                             </div>
                         </div>
-
-                        {!hasCustomer && (
-                            <div className="address-wrapper">
-                                <div className="address">
-                                    <span>{__("Please Select a customer", "multivendorx")}</span>
-                                </div>
-                            </div>
-                        )}
-
-                        {hasCustomer && !showShippingAddressEdit && (
-                            <div className="address-wrapper">
-                                <div className="address">
-                                    <span>{shippingAddress.address_1}</span>
-                                    <span>{shippingAddress.city}</span>
-                                    <span>{shippingAddress.postcode}, {shippingAddress.state}</span>
-                                    <span>{shippingAddress.country}</span>
-                                </div>
-
-                                <div className="admin-badge blue" onClick={() => setShowShippingAddressEdit(true)}>
-                                    <i className="adminlib-edit"></i>
-                                </div>
-                            </div>
-                        )}
-
-                        {showShippingAddressEdit && (
-                            <div ref={shippingAddressEditRef}>
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label htmlFor="product-name">
-                                            {__("Address", "multivendorx")}
-                                        </label>
-                                        <BasicInput
-                                            name="address_1"
-                                            value={shippingAddress.address_1}
-                                            wrapperClass="setting-form-input"
-                                            onChange={(e) => setShippingAddress(prev => ({
-                                                ...prev,
-                                                address_1: e.target.value
-                                            }))}
-                                        />
+                        <div className="card-body">
+                            {!hasCustomer && (
+                                <div className="address-wrapper">
+                                    <div className="address">
+                                        <span>{__("Please Select a customer", "multivendorx")}</span>
                                     </div>
                                 </div>
+                            )}
 
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label htmlFor="product-name">
-                                            {__("City", "multivendorx")}
-                                        </label>
-                                        <BasicInput
-                                            name="city"
-                                            value={shippingAddress.city || ""}
-                                            onChange={(e) =>
-                                                setShippingAddress(prev => ({
+                            {hasCustomer && !showShippingAddressEdit && (
+                                <div className="address-wrapper">
+                                    <div className="address">
+                                        <span>{shippingAddress.address_1}</span>
+                                        <span>{shippingAddress.city}</span>
+                                        <span>{shippingAddress.postcode}, {shippingAddress.state}</span>
+                                        <span>{shippingAddress.country}</span>
+                                    </div>
+
+                                    <div className="admin-badge blue" onClick={() => setShowShippingAddressEdit(true)}>
+                                        <i className="adminlib-edit"></i>
+                                    </div>
+                                </div>
+                            )}
+
+                            {showShippingAddressEdit && (
+                                <div ref={shippingAddressEditRef}>
+                                    <div className="form-group-wrapper">
+                                        <div className="form-group">
+                                            <label htmlFor="product-name">
+                                                {__("Address", "multivendorx")}
+                                            </label>
+                                            <BasicInput
+                                                name="address_1"
+                                                value={shippingAddress.address_1}
+                                                wrapperClass="setting-form-input"
+                                                onChange={(e) => setShippingAddress(prev => ({
                                                     ...prev,
-                                                    city: e.target.value
-                                                }))
-                                            }
-                                            wrapperClass="setting-form-input"
-                                        />
+                                                    address_1: e.target.value
+                                                }))}
+                                            />
+                                        </div>
                                     </div>
 
-                                    <div className="form-group">
-                                        <label htmlFor="product-name">
-                                            {__("Postcode / ZIP", "multivendorx")}
-                                        </label>
-                                        <BasicInput
-                                            name="postcode"
-                                            value={shippingAddress.postcode || ""}
-                                            onChange={(e) =>
-                                                setShippingAddress(prev => ({
-                                                    ...prev,
-                                                    postcode: e.target.value
-                                                }))
-                                            }
-                                            wrapperClass="setting-form-input"
-                                        />
+                                    <div className="form-group-wrapper">
+                                        <div className="form-group">
+                                            <label htmlFor="product-name">
+                                                {__("City", "multivendorx")}
+                                            </label>
+                                            <BasicInput
+                                                name="city"
+                                                value={shippingAddress.city || ""}
+                                                onChange={(e) =>
+                                                    setShippingAddress(prev => ({
+                                                        ...prev,
+                                                        city: e.target.value
+                                                    }))
+                                                }
+                                                wrapperClass="setting-form-input"
+                                            />
+                                        </div>
+
+                                        <div className="form-group">
+                                            <label htmlFor="product-name">
+                                                {__("Postcode / ZIP", "multivendorx")}
+                                            </label>
+                                            <BasicInput
+                                                name="postcode"
+                                                value={shippingAddress.postcode || ""}
+                                                onChange={(e) =>
+                                                    setShippingAddress(prev => ({
+                                                        ...prev,
+                                                        postcode: e.target.value
+                                                    }))
+                                                }
+                                                wrapperClass="setting-form-input"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="form-group-wrapper">
+                                        <div className="form-group">
+                                            <label htmlFor="product-name">
+                                                {__("Country / Region", "multivendorx")}
+                                            </label>
+                                            <SelectInput
+                                                name="country"
+                                                value={shippingAddress.country}
+                                                options={appLocalizer.country_list || []}
+                                                type="single-select"
+                                                onChange={(selected) => {
+                                                    setShippingAddress(prev => ({
+                                                        ...prev,
+                                                        country: selected.value
+                                                    }))
+                                                    fetchStatesByCountry(selected.value)
+                                                }}
+                                            />
+                                        </div>
+
+                                        <div className="form-group">
+                                            <label htmlFor="product-name">
+                                                {__("State / County", "multivendorx")}
+                                            </label>
+                                            <SelectInput
+                                                name="state"
+                                                value={shippingAddress.state}
+                                                options={stateOptions}
+                                                type="single-select"
+                                                onChange={(selected) => {
+                                                    setShippingAddress(prev => ({
+                                                        ...prev,
+                                                        state: selected.value
+                                                    }))
+                                                }}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
-
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label htmlFor="product-name">
-                                            {__("Country / Region", "multivendorx")}
-                                        </label>
-                                        <SelectInput
-                                            name="country"
-                                            value={shippingAddress.country}
-                                            options={appLocalizer.country_list || []}
-                                            type="single-select"
-                                            onChange={(selected) => {
-                                                setShippingAddress(prev => ({
-                                                    ...prev,
-                                                    country: selected.value
-                                                }))
-                                                fetchStatesByCountry(selected.value)
-                                            }}
-                                        />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="product-name">
-                                            {__("State / County", "multivendorx")}
-                                        </label>
-                                        <SelectInput
-                                            name="state"
-                                            value={shippingAddress.state}
-                                            options={stateOptions}
-                                            type="single-select"
-                                            onChange={(selected) => {
-                                                setShippingAddress(prev => ({
-                                                    ...prev,
-                                                    state: selected.value
-                                                }))
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        )}
+                            )}
+                        </div>
                     </div>
 
                     <div className="card-content">
@@ -958,126 +960,127 @@ const AddOrder = () => {
                                 </div>
                             </div>
                         </div>
-
-                        {!hasCustomer && (
-                            <div className="address-wrapper">
-                                <div className="address">
-                                    <span>{__("No billing address found", "multivendorx")}</span>
-                                </div>
-                            </div>
-                        )}
-
-                        {hasCustomer && !showAddressEdit && (
-                            <div className="address-wrapper">
-                                <div className="address">
-                                    <span>{billingAddress.address_1}</span>
-                                    <span>{billingAddress.city}</span>
-                                    <span>{billingAddress.postcode}, {billingAddress.state}</span>
-                                    <span>{billingAddress.country}</span>
-                                </div>
-
-                                <div className="admin-badge blue" onClick={() => setShowAddressEdit(true)}>
-                                    <i className="adminlib-edit"></i>
-                                </div>
-                            </div>
-                        )}
-
-                        {showAddressEdit && (
-                            <div ref={addressEditRef}>
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label htmlFor="product-name">
-                                            {__("Address", "multivendorx")}
-                                        </label>
-
-                                        <BasicInput
-                                            name="address_1"
-                                            value={billingAddress.address_1}
-                                            wrapperClass="setting-form-input"
-                                            onChange={(e) => setBillingAddress(prev => ({
-                                                ...prev,
-                                                address_1: e.target.value
-                                            }))}
-                                        />
+                        <div className="card-body">
+                            {!hasCustomer && (
+                                <div className="address-wrapper">
+                                    <div className="address">
+                                        <span>{__("No billing address found", "multivendorx")}</span>
                                     </div>
                                 </div>
+                            )}
 
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label htmlFor="product-name">
-                                            {__("City", "multivendorx")}
-                                        </label>
-                                        <BasicInput
-                                            name="city"
-                                            value={billingAddress.city || ""}
-                                            onChange={(e) =>
-                                                setBillingAddress(prev => ({
+                            {hasCustomer && !showAddressEdit && (
+                                <div className="address-wrapper">
+                                    <div className="address">
+                                        <span>{billingAddress.address_1}</span>
+                                        <span>{billingAddress.city}</span>
+                                        <span>{billingAddress.postcode}, {billingAddress.state}</span>
+                                        <span>{billingAddress.country}</span>
+                                    </div>
+
+                                    <div className="admin-badge blue" onClick={() => setShowAddressEdit(true)}>
+                                        <i className="adminlib-edit"></i>
+                                    </div>
+                                </div>
+                            )}
+
+                            {showAddressEdit && (
+                                <div ref={addressEditRef}>
+                                    <div className="form-group-wrapper">
+                                        <div className="form-group">
+                                            <label htmlFor="product-name">
+                                                {__("Address", "multivendorx")}
+                                            </label>
+
+                                            <BasicInput
+                                                name="address_1"
+                                                value={billingAddress.address_1}
+                                                wrapperClass="setting-form-input"
+                                                onChange={(e) => setBillingAddress(prev => ({
                                                     ...prev,
-                                                    city: e.target.value
-                                                }))
-                                            }
-                                            wrapperClass="setting-form-input"
-                                        />
+                                                    address_1: e.target.value
+                                                }))}
+                                            />
+                                        </div>
                                     </div>
 
-                                    <div className="form-group">
-                                        <label htmlFor="product-name">
-                                            {__("Postcode / ZIP", "multivendorx")}
-                                        </label>
-                                        <BasicInput
-                                            name="postcode"
-                                            value={billingAddress.postcode || ""}
-                                            onChange={(e) =>
-                                                setBillingAddress(prev => ({
-                                                    ...prev,
-                                                    postcode: e.target.value
-                                                }))
-                                            }
-                                            wrapperClass="setting-form-input"
-                                        />
+                                    <div className="form-group-wrapper">
+                                        <div className="form-group">
+                                            <label htmlFor="product-name">
+                                                {__("City", "multivendorx")}
+                                            </label>
+                                            <BasicInput
+                                                name="city"
+                                                value={billingAddress.city || ""}
+                                                onChange={(e) =>
+                                                    setBillingAddress(prev => ({
+                                                        ...prev,
+                                                        city: e.target.value
+                                                    }))
+                                                }
+                                                wrapperClass="setting-form-input"
+                                            />
+                                        </div>
+
+                                        <div className="form-group">
+                                            <label htmlFor="product-name">
+                                                {__("Postcode / ZIP", "multivendorx")}
+                                            </label>
+                                            <BasicInput
+                                                name="postcode"
+                                                value={billingAddress.postcode || ""}
+                                                onChange={(e) =>
+                                                    setBillingAddress(prev => ({
+                                                        ...prev,
+                                                        postcode: e.target.value
+                                                    }))
+                                                }
+                                                wrapperClass="setting-form-input"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="form-group-wrapper">
+                                        <div className="form-group">
+                                            <label htmlFor="product-name">
+                                                {__("Country / Region", "multivendorx")}
+                                            </label>
+                                            <SelectInput
+                                                name="country"
+                                                value={billingAddress.country}
+                                                options={appLocalizer.country_list || []}
+                                                type="single-select"
+                                                onChange={(selected) => {
+                                                    setBillingAddress(prev => ({
+                                                        ...prev,
+                                                        country: selected.value
+                                                    }))
+                                                    fetchStatesByCountry(selected.value)
+                                                }}
+                                            />
+                                        </div>
+
+                                        <div className="form-group">
+                                            <label htmlFor="product-name">
+                                                {__("State / County", "multivendorx")}
+                                            </label>
+                                            <SelectInput
+                                                name="state"
+                                                value={billingAddress.state}
+                                                options={stateOptions}
+                                                type="single-select"
+                                                onChange={(selected) => {
+                                                    setBillingAddress(prev => ({
+                                                        ...prev,
+                                                        state: selected.value
+                                                    }))
+                                                }}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
-
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label htmlFor="product-name">
-                                            {__("Country / Region", "multivendorx")}
-                                        </label>
-                                        <SelectInput
-                                            name="country"
-                                            value={billingAddress.country}
-                                            options={appLocalizer.country_list || []}
-                                            type="single-select"
-                                            onChange={(selected) => {
-                                                setBillingAddress(prev => ({
-                                                    ...prev,
-                                                    country: selected.value
-                                                }))
-                                                fetchStatesByCountry(selected.value)
-                                            }}
-                                        />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="product-name">
-                                            {__("State / County", "multivendorx")}
-                                        </label>
-                                        <SelectInput
-                                            name="state"
-                                            value={billingAddress.state}
-                                            options={stateOptions}
-                                            type="single-select"
-                                            onChange={(selected) => {
-                                                setBillingAddress(prev => ({
-                                                    ...prev,
-                                                    state: selected.value
-                                                }))
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        )}
+                            )}
+                        </div>
                     </div>
 
                     <div className="card-content">
@@ -1088,16 +1091,17 @@ const AddOrder = () => {
                                 </div>
                             </div>
                         </div>
-
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <TextArea
-                                    name="shipping_policy"
-                                    wrapperClass="setting-from-textarea"
-                                    inputClass="textarea-input"
-                                    descClass="settings-metabox-description"
-                                    placeholder={__('Enter order note...', 'multivendorx')}
-                                />
+                        <div className="card-body">
+                            <div className="form-group-wrapper">
+                                <div className="form-group">
+                                    <TextArea
+                                        name="shipping_policy"
+                                        wrapperClass="setting-from-textarea"
+                                        inputClass="textarea-input"
+                                        descClass="settings-metabox-description"
+                                        placeholder={__('Enter order note...', 'multivendorx')}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>

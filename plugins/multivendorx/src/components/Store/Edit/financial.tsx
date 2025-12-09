@@ -14,55 +14,57 @@ const Financial = ({ id }: { id: string | null }) => {
                             </div>
                         </div>
 
-                        <div className="store-owner-details">
-                            <div className="profile">
-                                <div className="avater">
-                                    <span className="adminlib-calendar"></span>
+                        <div className="card-body">
+                            <div className="store-owner-details">
+                                <div className="profile">
+                                    <div className="avater">
+                                        <span className="adminlib-calendar"></span>
+                                    </div>
+                                    <div className="details">
+                                        <div className="name">$5,420</div>
+                                        <div className="des">Oct 15, 2024</div>
+                                    </div>
                                 </div>
-                                <div className="details">
-                                    <div className="name">$5,420</div>
-                                    <div className="des">Oct 15, 2024</div>
+                                <div className="right-details">
+                                    <div className="admin-badge green">{__('Completed', 'multivendorx')}</div>
                                 </div>
                             </div>
-                            <div className="right-details">
-                                <div className="admin-badge green">{__('Completed', 'multivendorx')}</div>
-                            </div>
-                        </div>
 
-                        <div className="store-owner-details">
-                            <div className="profile">
-                                <div className="avater">
-                                    <span className="adminlib-calendar"></span>
+                            <div className="store-owner-details">
+                                <div className="profile">
+                                    <div className="avater">
+                                        <span className="adminlib-calendar"></span>
+                                    </div>
+                                    <div className="details">
+                                        <div className="name">$5,420</div>
+                                        <div className="des">Oct 15, 2024</div>
+                                    </div>
                                 </div>
-                                <div className="details">
-                                    <div className="name">$5,420</div>
-                                    <div className="des">Oct 15, 2024</div>
+                                <div className="right-details">
+                                    <div className="admin-badge green">{__('Completed', 'multivendorx')}</div>
                                 </div>
                             </div>
-                            <div className="right-details">
-                                <div className="admin-badge green">{__('Completed', 'multivendorx')}</div>
-                            </div>
-                        </div>
 
-                        <div className="store-owner-details">
-                            <div className="profile">
-                                <div className="avater">
-                                    <span className="adminlib-calendar"></span>
+                            <div className="store-owner-details">
+                                <div className="profile">
+                                    <div className="avater">
+                                        <span className="adminlib-calendar"></span>
+                                    </div>
+                                    <div className="details">
+                                        <div className="name">$5,420</div>
+                                        <div className="des">Oct 15, 2024</div>
+                                    </div>
                                 </div>
-                                <div className="details">
-                                    <div className="name">$5,420</div>
-                                    <div className="des">Oct 15, 2024</div>
+                                <div className="right-details">
+                                    <div className="admin-badge green">{__('Completed', 'multivendorx')}</div>
                                 </div>
-                            </div>
-                            <div className="right-details">
-                                <div className="admin-badge green">{__('Completed', 'multivendorx')}</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div className="card-wrapper w-35">
-                </div> 
+                </div>
             </div>
         </>
     );

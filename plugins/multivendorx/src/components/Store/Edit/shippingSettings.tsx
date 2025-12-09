@@ -86,7 +86,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
                         </div>
                         {/* Only show ToggleSetting if shipping_methods has options */}
                         {appLocalizer.shipping_methods && appLocalizer.shipping_methods.length > 0 && (
-                            <>
+                            <div className="card-body">
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
                                         <ToggleSetting
@@ -361,7 +361,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
                                         </div>
                                     </>
                                 )}
-                            </>
+                            </div>
                         )}
                     </div>
                 </div>
