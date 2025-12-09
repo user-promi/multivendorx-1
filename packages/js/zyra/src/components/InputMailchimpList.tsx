@@ -9,7 +9,6 @@ import React, { useState } from 'react';
 import { getApiLink, getApiResponse } from '../utils/apiService';
 import BasicInput from './BasicInput';
 import SelectInput from './SelectInput';
-import '../styles/web/InputMailchimpList.scss';
 
 // Types
 interface SelectOption {

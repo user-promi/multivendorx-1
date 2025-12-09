@@ -137,29 +137,31 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                     ></i>
                                 </div>
                             </div>
-                            {recentDebits && recentDebits.length > 0 ? (
-                                recentDebits.map((txn) => (
-                                    <div key={txn.id} className="info-item">
-                                        <div className="details-wrapper">
-                                            <div className="details">
-                                                <div className="name">{__('Bank Transfer', 'multivendorx')}</div>
-                                                <div className="des">
-                                                    {new Date(txn.date).toLocaleDateString('en-US', {
-                                                        month: 'short',
-                                                        day: '2-digit',
-                                                        year: 'numeric',
-                                                    })}
+                            <div className="card-body">
+                                {recentDebits && recentDebits.length > 0 ? (
+                                    recentDebits.map((txn) => (
+                                        <div key={txn.id} className="info-item">
+                                            <div className="details-wrapper">
+                                                <div className="details">
+                                                    <div className="name">{__('Bank Transfer', 'multivendorx')}</div>
+                                                    <div className="des">
+                                                        {new Date(txn.date).toLocaleDateString('en-US', {
+                                                            month: 'short',
+                                                            day: '2-digit',
+                                                            year: 'numeric',
+                                                        })}
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <div className="right-details">
+                                                <div className="price">{formatCurrency(txn.amount)}</div>
+                                            </div>
                                         </div>
-                                        <div className="right-details">
-                                            <div className="price">{formatCurrency(txn.amount)}</div>
-                                        </div>
-                                    </div>
-                                ))
-                            ) : (
-                                <div className="no-products">{__('No recent payout', 'multivendorx')}</div>
-                            )}
+                                    ))
+                                ) : (
+                                    <div className="no-data">{__('No recent payout', 'multivendorx')}</div>
+                                )}
+                            </div>
                         </div>
 
                         <div className="column">
@@ -176,46 +178,48 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                     ></i>
                                 </div>
                             </div>
-                            {recentProducts.length > 0 ? (
-                                recentProducts.map((product) => {
-                                    const productImage =
-                                        product.images && product.images.length > 0
-                                            ? product.images[0].src
-                                            : null;
-                                    const editUrl = `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${product.id}&action=edit`;
+                            <div className="card-body">
+                                {recentProducts.length > 0 ? (
+                                    recentProducts.map((product) => {
+                                        const productImage =
+                                            product.images && product.images.length > 0
+                                                ? product.images[0].src
+                                                : null;
+                                        const editUrl = `${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${product.id}&action=edit`;
 
-                                    return (
-                                        <div key={product.id} className="info-item">
-                                            <div className="details-wrapper">
-                                                <div className="avatar">
-                                                    {productImage ? (
-                                                        <img src={productImage} alt={product.name} />
-                                                    ) : (
-                                                        <i className="item-icon adminlib-single-product"></i>
-                                                    )}
+                                        return (
+                                            <div key={product.id} className="info-item">
+                                                <div className="details-wrapper">
+                                                    <div className="avatar">
+                                                        {productImage ? (
+                                                            <img src={productImage} alt={product.name} />
+                                                        ) : (
+                                                            <i className="item-icon adminlib-single-product"></i>
+                                                        )}
+                                                    </div>
+
+                                                    <div className="details">
+                                                        <div className="name">
+                                                            <a href={editUrl} target="_blank" rel="noopener noreferrer">
+                                                                {product.name}
+                                                            </a>
+                                                        </div>
+                                                        <div className="des">
+                                                            {__('sku', 'multivendorx')}: {product.sku}
+                                                        </div>
+                                                    </div>
                                                 </div>
 
-                                                <div className="details">
-                                                    <div className="name">
-                                                        <a href={editUrl} target="_blank" rel="noopener noreferrer">
-                                                            {product.name}
-                                                        </a>
-                                                    </div>
-                                                    <div className="des">
-                                                        {__('sku', 'multivendorx')}: {product.sku}
-                                                    </div>
+                                                <div className="right-details">
+                                                    <div className="price">{formatCurrency(product.price ?? 0)}</div>
                                                 </div>
                                             </div>
-
-                                            <div className="right-details">
-                                                <div className="price">{formatCurrency(product.price ?? 0)}</div>
-                                            </div>
-                                        </div>
-                                    );
-                                })
-                            ) : (
-                                <p className="no-products">{__('No recent products found.', 'multivendorx')}</p>
-                            )}
+                                        );
+                                    })
+                                ) : (
+                                    <p className="no-data">{__('No recent products found.', 'multivendorx')}</p>
+                                )}
+                            </div>
                         </div>
                     </div>
 
@@ -235,7 +239,9 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                         ></i>
                                     </div>
                                 </div>
-                                <LatestReview store_id={id} />
+                                <div className="card-body">
+                                    <LatestReview store_id={id} />
+                                </div>
                             </div>
                         )}
                     </div>
@@ -265,134 +271,142 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                 </div>
                 <div className="card-wrapper w-35">
                     {appLocalizer.khali_dabba && (
-                        <div className="card-content">
-                            <div className="card-header">
-                                <div className="left">
-                                    <div className="title">
-                                        {__('Store hours', 'multivendorx')}
-                                    </div>
-                                    <div className="des">
-                                        {__('Manage your weekly schedule and special hours', 'multivendorx')}
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="store-time-wrapper">
-                                <div className="row">
-                                    <div className="time-wrapper">
-                                        <div className="des">{__('Current status', 'multivendorx')}</div>
-                                        <div className="time">
-                                            <span className="admin-badge green">{__('Open', 'multivendorx')}</span>
+                        <div className="row">
+                            <div className="column">
+                                <div className="card-header">
+                                    <div className="left">
+                                        <div className="title">
+                                            {__('Store hours', 'multivendorx')}
+                                        </div>
+                                        <div className="des">
+                                            {__('Manage your weekly schedule and special hours', 'multivendorx')}
                                         </div>
                                     </div>
-                                    <div className="time-wrapper">
-                                        <div className="des">{__('Next opening', 'multivendorx')}</div>
-                                        <div className="time">{__('Mon 9:00 AM', 'multivendorx')}</div>
+                                </div>
+                                <div className="card-body store-time-wrapper">
+                                    <div className="row">
+                                        <div className="time-wrapper">
+                                            <div className="des">{__('Current status', 'multivendorx')}</div>
+                                            <div className="time">
+                                                <span className="admin-badge green">{__('Open', 'multivendorx')}</span>
+                                            </div>
+                                        </div>
+                                        <div className="time-wrapper">
+                                            <div className="des">{__('Next opening', 'multivendorx')}</div>
+                                            <div className="time">{__('Mon 9:00 AM', 'multivendorx')}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     )}
-                    <div className="card-content">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    {__('Store information', 'multivendorx')}
+                    <div className="row">
+                        <div className="column">
+                            <div className="card-header">
+                                <div className="left">
+                                    <div className="title">
+                                        {__('Store information', 'multivendorx')}
+                                    </div>
+                                </div>
+                                <div className="right">
+                                    <i
+                                        className="adminlib-external"
+                                        onClick={() => {
+                                            navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=store`);
+                                        }}
+                                    ></i>
                                 </div>
                             </div>
-                            <div className="right">
-                                <i
-                                    className="adminlib-external"
-                                    onClick={() => {
-                                        navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=store`);
-                                    }}
-                                ></i>
-                            </div>
-                        </div>
 
-                        <div className="overview-wrapper">
-                            <div className="items">
-                                <div className="title">{__('Created on', 'multivendorx')}</div>
-                                <div className="details">
-                                    <div className="sku">
-                                        {storeData.create_time}
-                                        <a
-                                            className="sku"
-                                            onClick={() => {
-                                                navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=application-details`);
-                                            }}
-                                        >
-                                            {__('Application Data', 'multivendorx')}
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="items">
-                                <div className="title">{__('Lifetime earnings', 'multivendorx')}</div>
-                                <div className="details">
-                                    <div className="sku">{formatCurrency(storeData.commission?.commission_total ?? 0)}</div>
-                                </div>
-                            </div>
-                            {appLocalizer.khali_dabba && (
+                            <div className="card-body overview-wrapper">
                                 <div className="items">
-                                    <div className="title">{__('Vacation mode', 'multivendorx')}</div>
+                                    <div className="title">{__('Created on', 'multivendorx')}</div>
                                     <div className="details">
-                                        <span className="admin-badge red">{__('Inactive', 'multivendorx')}</span>
+                                        <div className="sku">
+                                            {storeData.create_time}
+                                            <a
+                                                className="sku"
+                                                onClick={() => {
+                                                    navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=application-details`);
+                                                }}
+                                            >
+                                                {__('Application Data', 'multivendorx')}
+                                            </a>
+                                        </div>
                                     </div>
+                                </div>
+                                <div className="items">
+                                    <div className="title">{__('Lifetime earnings', 'multivendorx')}</div>
+                                    <div className="details">
+                                        <div className="sku">{formatCurrency(storeData.commission?.commission_total ?? 0)}</div>
+                                    </div>
+                                </div>
+                                {appLocalizer.khali_dabba && (
+                                    <div className="items">
+                                        <div className="title">{__('Vacation mode', 'multivendorx')}</div>
+                                        <div className="details">
+                                            <span className="admin-badge red">{__('Inactive', 'multivendorx')}</span>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {appLocalizer.khali_dabba && (
+                                <div className="description-wrapper">
+                                    <div className="title">
+                                        <i className="adminlib-error"></i>
+                                        {__('Gold plan', 'multivendorx')}
+                                        <span className="admin-badge green">{__('Active', 'multivendorx')}</span>
+                                    </div>
+                                    <div className="des">{__('Renews on Dec 15, 2024', 'multivendorx')}</div>
                                 </div>
                             )}
                         </div>
-
-                        {appLocalizer.khali_dabba && (
-                            <div className="description-wrapper">
-                                <div className="title">
-                                    <i className="adminlib-error"></i>
-                                    {__('Gold plan', 'multivendorx')}
-                                    <span className="admin-badge green">{__('Active', 'multivendorx')}</span>
-                                </div>
-                                <div className="des">{__('Renews on Dec 15, 2024', 'multivendorx')}</div>
-                            </div>
-                        )}
                     </div>
-                    <div className="card-content">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">{__('Store staff', 'multivendorx')}</div>
-                            </div>
-                            <div className="right">
-                                <i
-                                    className="adminlib-external"
-                                    onClick={() => {
-                                        navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`);
-                                    }}
-                                ></i>
-                            </div>
-                        </div>
 
-                        <div className="info-item">
-                            <div className="details-wrapper">
-                                <div className="avatar">
-                                    <i className="item-icon adminlib-person"></i>
+                    <div className="row">
+                        <div className="column">
+                            <div className="card-header">
+                                <div className="left">
+                                    <div className="title">{__('Store staff', 'multivendorx')}</div>
                                 </div>
-                                <div className="details">
-                                    <div className="name">
-                                        {storeData.primary_owner_info?.data?.display_name ?? <Skeleton variant="text" width={150} />}
-                                        <div className="admin-badge green">{__('Primary Owner', 'multivendorx')}</div>
-                                        <span className="admin-badge blue">
-                                            <i
-                                                className="adminlib-edit"
-                                                onClick={() => {
-                                                    navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`, {
-                                                        state: { highlightTarget: 'primary-owner' },
-                                                    });
-                                                    setTimeout(() => {
-                                                        navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`, { replace: true });
-                                                    }, 500);
-                                                }}
-                                            ></i>
-                                        </span>
-                                    </div>
-                                    <div className="des">
-                                        {__('Email', 'multivendorx')}: {storeData.primary_owner_info?.data?.user_email ?? <Skeleton variant="text" width={150} />}
+                                <div className="right">
+                                    <i
+                                        className="adminlib-external"
+                                        onClick={() => {
+                                            navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`);
+                                        }}
+                                    ></i>
+                                </div>
+                            </div>
+                            <div className="card-body">
+                                <div className="info-item">
+                                    <div className="details-wrapper">
+                                        <div className="avatar">
+                                            <i className="item-icon adminlib-person"></i>
+                                        </div>
+                                        <div className="details">
+                                            <div className="name">
+                                                {storeData.primary_owner_info?.data?.display_name ?? <Skeleton variant="text" width={150} />}
+                                                <div className="admin-badge green">{__('Primary Owner', 'multivendorx')}</div>
+                                                <span className="admin-badge blue">
+                                                    <i
+                                                        className="adminlib-edit"
+                                                        onClick={() => {
+                                                            navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`, {
+                                                                state: { highlightTarget: 'primary-owner' },
+                                                            });
+                                                            setTimeout(() => {
+                                                                navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`, { replace: true });
+                                                            }, 500);
+                                                        }}
+                                                    ></i>
+                                                </span>
+                                            </div>
+                                            <div className="des">
+                                                {__('Email', 'multivendorx')}: {storeData.primary_owner_info?.data?.user_email ?? <Skeleton variant="text" width={150} />}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

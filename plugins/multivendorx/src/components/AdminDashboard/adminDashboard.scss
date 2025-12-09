@@ -1,8 +1,6 @@
 @use '../config.scss' as *;
 
 .admin-dashboard {
-    // margin-top: 2rem !important; //overwrite general wrapper style
-
     .tab-titles {
         margin: 0;
         padding: 0;
@@ -13,7 +11,6 @@
         }
     }
 }
-
 // admin tab
 
 .admin-tab {
@@ -79,64 +76,6 @@
 
 // pro banner end
 
-.header-search {
-    ul {
-        position: absolute;
-        top: 100%;
-        right: 0;
-        width: 19rem;
-        max-height: 22rem;
-        overflow-y: auto;
-        background: #fff;
-        border: $border-light-small;
-        border-radius: 0.313rem;
-        margin-top: 0.313rem;
-        padding: 0;
-        list-style: none;
-        z-index: 1000;
-
-        li {
-            padding: 0.5rem 0.75rem;
-            cursor: pointer;
-            font-size: 0.875rem;
-            color: #333;
-            border-bottom: $border-light-small;
-            display: flex;
-            align-items: start;
-            gap: 0.5rem;
-            margin: 0;
-            transition: all 0.5s ease;
-
-            &:hover {
-                background: #f3f3f3;
-            }
-
-            .icon-wrapper {
-                margin-top: 0.625rem;
-
-                i {
-                    padding: 0.5rem;
-                    font-size: 1.125rem;
-                    border-radius: 50%;
-                    background: $theme-background-color;
-                    color: $theme-color;
-                }
-            }
-
-            .title {
-                font-size: 1rem;
-            }
-
-            .desc {
-                font-size: 0.813rem;
-                line-height: 0.95rem;
-                padding-top: 0.313rem;
-                color: #00000094;
-            }
-        }
-    }
-}
-
 .tab-titles {
     display: flex;
     gap: 1.313rem;
@@ -145,7 +84,6 @@
     border-bottom: $border-light-small;
 
     .title {
-        padding-bottom: 0.313rem;
         cursor: pointer;
         text-align: center;
         display: flex;
@@ -154,9 +92,7 @@
         align-items: center;
         background: #fff;
         padding: 1rem 1rem 0.313rem 1rem;
-        // border-radius: 0.313rem;
         min-width: 10%;
-        // border-radius: 0.313rem;
 
 
         .icon {
@@ -311,7 +247,6 @@
 
     .cards {
         padding: 0.85rem;
-        // padding-top: 1.313rem;
         border-radius: 0.313rem;
         background: transparent;
         border: 0.063rem solid #e0e4e970;
@@ -321,11 +256,6 @@
             font-weight: 500;
             color: $theme-color;
         }
-
-        // i {
-        //     font-size: 1.313rem;
-        //     color: $theme-color;
-        // }
 
         h3 {
             font-size: 0.83rem;
@@ -436,7 +366,6 @@
     }
 }
 
-
 // top items start
 .top-items {
     .items {
@@ -483,9 +412,7 @@
         }
     }
 }
-
 // top items end
-
 
 // support start
 .support-wrapper {
@@ -518,7 +445,6 @@
 }
 
 // support end
-
 
 // recent-activities start
 .recent-activities {
@@ -611,7 +537,6 @@
 
         li {
             width: 48%;
-            // font-size: 0.9rem;
             color: #000;
             line-height: 1rem;
             margin-bottom: 0.625rem;
@@ -729,7 +654,6 @@
 }
 // pricing section end
 
-
 // review start
 .review-wrapper {
     display: flex;
@@ -786,7 +710,6 @@
 }
 
 // review end
-
 
 // features section start
 .features-wrapper {
@@ -880,7 +803,6 @@
     }
 }
 
-
 // notification style start
 .notification-wrapper {
     ul {
@@ -906,23 +828,23 @@
                     border-radius: 0.313rem;
 
                     &.blue {
-                        background: rgba(0, 0, 255, 0.233);
-                        color: blue;
+                        background: #0000ff3b;
+                        color: #00f;
                     }
 
                     &.orange {
-                        color: orange;
-                        background: rgba(255, 166, 0, 0.336);
+                        color: #ffa500;
+                        background: #ffa60056;
                     }
 
                     &.green {
-                        color: rgba(19, 134, 4, 0.904);
-                        background: rgba(0, 128, 0, 0.349);
+                        color: #138604e7;
+                        background: #00800059;
                     }
 
                     &.red {
-                        color: rgb(224, 5, 5);
-                        background: rgba(255, 0, 0, 0.37);
+                        color: #e00505;
+                        background: #ff00005e;
                     }
                 }
             }
@@ -962,7 +884,6 @@
 }
 
 // notification style end
-
 
 // no data found start
 .no-data-found {
@@ -1004,7 +925,6 @@
     }
 }
 
-
 .placeholder-400x400 {
     position: relative;
     height: 100%;
@@ -1025,7 +945,6 @@
         align-items: center;
     }
 }
-
 
 // video section start
 .video-section {
@@ -1167,87 +1086,109 @@
 
 // review-popup-wrapper end
 
-.info-item {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.45rem;
-
-    &.owner {
-        flex-direction: column;
+// payout page price section start
+.payout-wrapper {
+    .payout-header {
+        .admin-btn {
+            font-size: 1.313rem;
+            padding: .813rem 1.813rem;
+        }
     }
 
-    .details-wrapper {
+    .price-title {
+        font-size: 0.95rem;
+        line-height: 1rem;
+        padding-bottom: 0.625rem;
+        color: #00000071;
+    }
+
+    .price {
+        font-size: 3rem;
+        font-weight: 600;
+        line-height: 2.4rem;
+        margin-bottom: 0.813rem;
         display: flex;
-        gap: 0.75rem;
-
-        .avatar {
-            span {
-                color: #fff;
-                font-size: 1.25rem;
-                font-weight: 600;
-            }
-
-            img {
-                width: 3rem;
-                border-radius: 0.313rem;
-            }
-
-            i,
-            span {
-                padding: 0.5rem;
-                border-radius: 50%;
-                background: $theme-color;
-                width: 1.5rem;
-                height: 1.5rem;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: 1.625rem;
-                color: #fff;
-            }
-        }
-
-        .details {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-
-            .name {
-                font-size: 1.063rem;
-                line-height: 1rem;
-                color: #000000ed;
-                font-weight: 500;
-                position: relative;
-                padding-right: 0.625rem;
-                display: flex;
-                align-items: end;
-                gap: 0.625rem;
-            }
-
-            .des {
-                color: #0000007c;
-            }
-
-            .small-text {
-                font-size: 0.875rem;
-                color: #00000060;
-            }
-        }
-    }
-
-    .right-details {
-        text-align: right;
-
-        .price {
-            font-size: 1.063rem;
-            font-weight: 600;
-            line-height: 1.5rem;
-            padding-bottom: 0.125rem;
-        }
-    }
-
-    .contact-details {
-        flex-direction: column;
+        align-items: start;
         gap: 0.5rem;
+    }
+
+    .des {
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+
+    .small-text {
+        line-height: 1.25rem;
+    }
+
+    .admin-btn {
+        margin-top: 1rem;
+    }
+
+    .right-section {
+        width: 50%;
+    }
+
+    .admin-badge {
+        display: inline-block;
+    }
+
+    .payout-card-wrapper {
+        display: flex;
+        gap: 1rem;
+        margin: 0.813rem 0;
+
+        .payout-card {
+            padding: 1rem;
+            border-radius: 0.313rem;
+            background: #e6e2e275;
+            width: 50%;
+
+            .card-title {
+                font-size: 1.125rem;
+            }
+
+            .card-price {
+                font-size: 1.813rem;
+                font-weight: 600;
+                line-height: 2rem;
+                margin: 0.5rem 0;
+            }
+
+            .card-des {
+                color: #0000009e;
+                font-size: 0.813rem;
+            }
+        }
+    }
+}
+
+.withdrawal-wrapper {
+    background: $theme-background-color;
+    padding: 0.313rem;
+    border-radius: 0.313rem;
+    margin: 1rem 0;
+    color: $theme-color;
+    border: $border-light-small;
+
+    i {
+        color: $theme-color;
+    }
+
+    .title {
+        font-size: 1.45rem;
+        font-weight: 600;
+        line-height: 2rem;
+        padding-bottom: 0.5rem;
+    }
+
+    .withdrawl-notice {
+        font-size: 1rem;
+        font-weight: 500;
+        line-height: 1.313rem;
+
+        i {
+            color: $theme-color;
+        }
     }
 }
