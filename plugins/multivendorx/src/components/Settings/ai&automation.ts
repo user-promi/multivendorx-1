@@ -4,19 +4,18 @@ export default {
     id: 'ai-automation',
     priority: 10,
     name: 'AI & Automation',
-    // Updated description for AI
     desc: __('Enable and configure third-party AI services to assist with product detail generation and other automation tasks.', 'multivendorx'),
-    icon: 'adminlib-automation', // Keep a relevant icon
+    icon: 'adminlib-automation',
     submitUrl: 'settings',
     modal: [
         // --- AI Provider Choice ---
         {
             key: 'choose_ai_provider',
             type: 'setting-toggle',
-            defaulValue: 'gemini_api',
+            defaultValue: 'gemini_api',
             label: __('Default AI Provider', 'multivendorx'),
             settingDescription: __('Choose the primary AI service for product detail suggestions.', 'multivendorx'),
-            desc: __('<ul><li>Gemini API - Powerful model from Google for general and creative tasks.<li>OpenAI API - Widely used models like GPT-4, requires an OpenAI API key.<li>Custom AI API - Option to use another third-party generative AI service.</li></ul>', 'multivendorx'),
+            desc: __('<ul><li>Gemini API - Powerful model from Google for general and creative tasks.<li>OpenAI API - Widely used models like GPT-4, requires an OpenAI API key.<li>OpenRouter API - Option to use another third-party generative AI service.</li></ul>', 'multivendorx'),
             options: [
                 {
                     key: 'gemini_api',
@@ -34,7 +33,7 @@ export default {
                     key: 'openrouter_api',
                     label: __('OpenRouter (Free/Open Models)', 'multivendorx'),
                     value: __('openrouter_api', 'multivendorx'),
-                    icon: 'adminlib-cloud',   // choose any icon
+                    icon: 'adminlib-cloud',
                 }
             ],            
         },
@@ -111,6 +110,85 @@ export default {
                     value: 'google/gemini-2.0-flash-exp:free',
                 }
             ],
-        },      
+        },
+        // --- Image Enhancement Provider ---
+        {
+            key: 'image_enhancement_provider',
+            type: 'setting-toggle',
+            label: __('Image Enhancement Provider', 'multivendorx'),
+            desc: __('Choose which AI provider to use for image enhancement.', 'multivendorx'),
+            options: [
+                {
+                    key: 'gemini_api_image_enhancement',
+                    label: __('Gemini (Google)', 'multivendorx'),
+                    value: 'gemini_api',
+                },
+                {
+                    key: 'openrouter_api_image_enhancement',
+                    label: __('OpenRouter (Multiple Models)', 'multivendorx'),
+                    value: 'openrouter_api',
+                }
+            ],
+            defaultValue: 'gemini_api_image_enhancement'
+        },
+        // --- Gemini Image Enhancement Settings ---
+        {
+            key: 'gemini_api_image_enhancement_key',
+            type: 'text',
+            label: __('Gemini API Key for Image Enhancement', 'multivendorx'),
+            desc: __(
+                '<a href="https://ai.google.dev/gemini-api/docs/api-key" target="_blank">Click here to generate your Gemini API key.</a>',
+                'multivendorx'
+            ),
+            dependent: {
+                key: 'image_enhancement_provider',
+                set: true,
+                value: 'gemini_api',
+            },
+        },
+        // --- OpenRouter Image Enhancement Settings ---
+        {
+            key: 'openrouter_api_image_enhancement_key',
+            type: 'text',
+            label: __('OpenRouter API Key for Image Enhancement', 'multivendorx'),
+            desc: __(
+                '<a href="https://openrouter.ai/settings/keys" target="_blank">Generate an OpenRouter Key</a>',
+                'multivendorx'
+            ),
+            dependent: {
+                key: 'image_enhancement_provider',
+                set: true,
+                value: 'openrouter_api',
+            },
+        },
+        {
+            key: 'openrouter_api_image_model',
+            type: 'select',
+            label: __('OpenRouter Image Model', 'multivendorx'),
+            desc: __('Choose your preferred AI model for image enhancement from OpenRouter.', 'multivendorx'),
+            dependent: {
+                key: 'image_enhancement_provider',
+                set: true,
+                value: 'openrouter_api',
+            },
+            className: "select-class",
+            options: [
+                {
+                    key: 'google/gemini-2.5-flash-image-preview',
+                    label: 'Google Gemini 2.5 Flash Image Preview',
+                    value: 'google/gemini-2.5-flash-image-preview',
+                },
+                {
+                    key: 'google/gemini-2.5-flash-image',
+                    label: 'Google Gemini 2.5 Flash Image',
+                    value: 'google/gemini-2.5-flash-image',
+                },
+                {
+                    key: 'google/gemini-3-pro-image-preview',
+                    label: 'Google Gemini 3 Pro Image Preview',
+                    value: 'google/gemini-3-pro-image-preview',
+                }
+            ],
+        },
     ],
 };

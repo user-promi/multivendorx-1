@@ -3,20 +3,31 @@ import { addFilter } from '@wordpress/hooks';
 import { getApiLink } from 'zyra';
 import axios from 'axios';
 
-// Global variable to store suggestions (if needed globally)
-let globalAiSuggestions = {
-    productName: ["Enter a prompt and click send to generate names.", ""],
-    shortDescription: ["Enter a prompt and click send to generate descriptions.", ""],
-    productDescription: ["Enter a prompt and click send to generate full descriptions.", ""]
-};
-
 const AICard = () => {
-    // State for the suggestions
-    const [aiSuggestions, setAiSuggestions] = useState(globalAiSuggestions);
+    const [aiSuggestions, setAiSuggestions] = useState({
+        productName: [],
+        shortDescription: [],
+        productDescription: []
+    });
     const [userPrompt, setUserPrompt] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [isCardOpen, setIsCardOpen] = useState(true);
+    const [hasSuggestions, setHasSuggestions] = useState(false);
+
+    // Function to update product fields (will be passed from parent)
+    const updateProductField = (field, value) => {
+        // Map the field names to match what AddProduct expects
+        let fieldName = field;
+        if (field === 'productName') fieldName = 'name';
+        if (field === 'shortDescription') fieldName = 'short_description';
+        if (field === 'productDescription') fieldName = 'description';
+        
+        const event = new CustomEvent('ai-suggestion-selected', {
+            detail: { field: fieldName, value }
+        });
+        window.dispatchEvent(event);
+    };
 
     // Fetch suggestions from the API
     const fetchSuggestions = (promptText) => {
@@ -27,53 +38,54 @@ const AICard = () => {
 
         setIsLoading(true);
         setError('');
+        setHasSuggestions(false);
         
-        // Set loading state
+        // Clear suggestions while loading
         setAiSuggestions({
-            productName: ["Generating...", ""],
-            shortDescription: ["Generating...", ""],
-            productDescription: ["Generating...", ""]
+            productName: [],
+            shortDescription: [],
+            productDescription: []
         });
 
         axios({
             method: 'POST',
-            url: getApiLink(appLocalizer, 'ai-assistant/suggestions'),
+            url: getApiLink(appLocalizer, 'ai-assistant'),
             headers: { 
                 'X-WP-Nonce': appLocalizer.nonce,
                 'Content-Type': 'application/json'
             },
             data: {
+                endpoint: 'suggestions',
                 user_prompt: promptText
             }
         }).then((response) => {
             if (response.data && response.data.productName) {
-                // Update both local state and global variable
+                // Filter out empty suggestions
                 const newSuggestions = {
-                    productName: response.data.productName,
-                    shortDescription: response.data.shortDescription,
-                    productDescription: response.data.productDescription
+                    productName: response.data.productName.filter(s => s && s.trim()),
+                    shortDescription: response.data.shortDescription.filter(s => s && s.trim()),
+                    productDescription: response.data.productDescription.filter(s => s && s.trim())
                 };
                 
                 setAiSuggestions(newSuggestions);
-                globalAiSuggestions = newSuggestions;
+                
+                // Check if we have any actual suggestions
+                const hasAnySuggestions = 
+                    newSuggestions.productName.length > 0 ||
+                    newSuggestions.shortDescription.length > 0 ||
+                    newSuggestions.productDescription.length > 0;
+                
+                setHasSuggestions(hasAnySuggestions);
             } else {
                 const errorMsg = response.data?.message || "Failed to fetch suggestions. Check API keys.";
                 setError(errorMsg);
-                setAiSuggestions({
-                    productName: [`Error: ${errorMsg}`, ""],
-                    shortDescription: [`Error: ${errorMsg}`, ""],
-                    productDescription: [`Error: ${errorMsg}`, ""]
-                });
+                setHasSuggestions(false);
             }
             setIsLoading(false);
         }).catch((error) => {
             const errorMsg = error.response?.data?.message || "Network error or server failed.";
             setError(errorMsg);
-            setAiSuggestions({
-                productName: [`Error: ${errorMsg}`, ""],
-                shortDescription: [`Error: ${errorMsg}`, ""],
-                productDescription: [`Error: ${errorMsg}`, ""]
-            });
+            setHasSuggestions(false);
             setIsLoading(false);
         });
     };
@@ -82,9 +94,48 @@ const AICard = () => {
         fetchSuggestions(userPrompt);
     };
 
+    const handleSuggestionClick = (field, suggestion) => {
+        updateProductField(field, suggestion);
+        
+        // Remove the clicked suggestion from the list
+        setAiSuggestions(prev => {
+            // Ensure the field exists and is an array
+            if (!prev[field] || !Array.isArray(prev[field])) {
+                return prev;
+            }
+            return {
+                ...prev,
+                [field]: prev[field].filter(s => s !== suggestion)
+            };
+        });
+        
+        // Check if all suggestions are now empty
+        const remainingSuggestions = 
+            (aiSuggestions.productName.filter(s => s !== suggestion).length) +
+            (aiSuggestions.shortDescription.filter(s => s !== suggestion).length) +
+            (aiSuggestions.productDescription.filter(s => s !== suggestion).length);
+        
+        if (remainingSuggestions === 0) {
+            setHasSuggestions(false);
+        }
+    };
+
     const toggleCard = () => {
         setIsCardOpen(!isCardOpen);
     };
+
+    // Reset suggestions when prompt is cleared
+    useEffect(() => {
+        if (!userPrompt.trim()) {
+            setAiSuggestions({
+                productName: [],
+                shortDescription: [],
+                productDescription: []
+            });
+            setHasSuggestions(false);
+            setError('');
+        }
+    }, [userPrompt]);
 
     return (
         <div className="card" id="card-ai-assist">
@@ -109,48 +160,67 @@ const AICard = () => {
                             </div>
                         )}
 
-                        <div className="suggestions-wrapper">
-                            <div className="suggestions-title">
-                                Suggestions
-                            </div>
-                            
-                            {/* Product Name Suggestions */}
-                            <div className="suggestion-category">
-                                <h4>🏷️ Product Name Suggestions</h4>
-                                {aiSuggestions.productName.map((suggestion, index) => (
-                                    suggestion && (
-                                        <div className="box" key={`name-sugg-${index}`}>
-                                            <span>{suggestion}</span>
-                                        </div>
-                                    )
-                                ))}
-                            </div>
+                        {/* Only show suggestions section if we have actual suggestions */}
+                        {hasSuggestions && (
+                            <div className="suggestions-wrapper">
+                                <div className="suggestions-title">
+                                    Suggestions
+                                    <small className="click-hint">(Click any suggestion to apply it)</small>
+                                </div>
+                                
+                                {/* Product Name Suggestions */}
+                                {aiSuggestions.productName.length > 0 && (
+                                    <div className="suggestion-category">
+                                        <h4>Product Name Suggestions</h4>
+                                        {aiSuggestions.productName.map((suggestion, index) => (
+                                            <div 
+                                                className="box clickable-suggestion" 
+                                                key={`name-sugg-${index}`}
+                                                onClick={() => handleSuggestionClick('productName', suggestion)}
+                                            >
+                                                <span>{suggestion}</span>
+                                                <i className="adminlib-arrow-right" style={{marginLeft: '8px', fontSize: '12px'}}></i>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
 
-                            {/* Product Short Description Suggestions */}
-                            <div className="suggestion-category">
-                                <h4>📝 Product Short Description Suggestions</h4>
-                                {aiSuggestions.shortDescription.map((suggestion, index) => (
-                                    suggestion && (
-                                        <div className="box" key={`short-desc-sugg-${index}`}>
-                                            <span>{suggestion}</span>
-                                        </div>
-                                    )
-                                ))}
-                            </div>
+                                {/* Product Short Description Suggestions */}
+                                {aiSuggestions.shortDescription.length > 0 && (
+                                    <div className="suggestion-category">
+                                        <h4>Product Short Description Suggestions</h4>
+                                        {aiSuggestions.shortDescription.map((suggestion, index) => (
+                                            <div 
+                                                className="box clickable-suggestion" 
+                                                key={`short-desc-sugg-${index}`}
+                                                onClick={() => handleSuggestionClick('shortDescription', suggestion)}
+                                            >
+                                                <span>{suggestion}</span>
+                                                <i className="adminlib-arrow-right" style={{marginLeft: '8px', fontSize: '12px'}}></i>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
 
-                            {/* Product Description Suggestions */}
-                            <div className="suggestion-category">
-                                <h4>📖 Product Description Suggestions</h4>
-                                {aiSuggestions.productDescription.map((suggestion, index) => (
-                                    suggestion && (
-                                        <div className="box" key={`desc-sugg-${index}`}>
-                                            <span>{suggestion}</span>
-                                        </div>
-                                    )
-                                ))}
+                                {/* Product Description Suggestions */}
+                                {aiSuggestions.productDescription.length > 0 && (
+                                    <div className="suggestion-category">
+                                        <h4>Product Description Suggestions</h4>
+                                        {aiSuggestions.productDescription.map((suggestion, index) => (
+                                            <div 
+                                                className="box clickable-suggestion" 
+                                                key={`desc-sugg-${index}`}
+                                                onClick={() => handleSuggestionClick('productDescription', suggestion)}
+                                            >
+                                                <span>{suggestion}</span>
+                                                <i className="adminlib-arrow-right" style={{marginLeft: '8px', fontSize: '12px'}}></i>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
-                        </div>
-                        
+                        )}
+
                         {/* Prompt Input Section */}
                         <div className="sender-wrapper">
                             <input
@@ -174,6 +244,24 @@ const AICard = () => {
                                 ></i>
                             </div>
                         </div>
+
+                        {/* Show message when waiting for input */}
+                        {!hasSuggestions && !isLoading && !error && userPrompt.trim() === '' && (
+                            <div className="empty-state">
+                                <div className="empty-icon">
+                                    <i className="adminlib-lightbulb"></i>
+                                </div>
+                                <p>Enter a prompt above to generate AI suggestions for your product.</p>
+                            </div>
+                        )}
+
+                        {/* Show loading state */}
+                        {isLoading && (
+                            <div className="loading-state">
+                                <div className="loading-spinner"></div>
+                                <p>Generating suggestions...</p>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
@@ -189,7 +277,7 @@ addFilter(
         return (
             <>
                 {content}
-                <AICard />
+                <AICard product={product} />
             </>
         );
     },
