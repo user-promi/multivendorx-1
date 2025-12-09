@@ -340,51 +340,11 @@ const StoreReport: React.FC = () => {
       id: 'status',
       header: __('Status', 'multivendorx'),
       cell: ({ row }) => {
-        const status = row.original.status || '';
-        const rawDate = row.original.applied_on;
-        let formattedDate = '-';
-        if (rawDate) {
-          const dateObj = new Date(rawDate);
-          formattedDate = new Intl.DateTimeFormat('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
-          }).format(dateObj);
-        }
-
-        const getStatusBadge = (status: string) => {
-          switch (status) {
-            case 'active':
-              return <span className="admin-badge green">Active</span>;
-            case 'pending':
-              return <span className="admin-badge yellow">Pending</span>;
-            case 'rejected':
-              return <span className="admin-badge red">Rejected</span>;
-            case 'locked':
-              return <span className="admin-badge blue">Locked</span>;
-            case 'deactivated':
-              return <span className="admin-badge blue">Deactivated</span>;
-            default:
-              return <span className="admin-badge gray">{status}</span>;
-          }
-        };
-
-        return (
-          <TableCell title={`${status} - ${formattedDate}`}>
-            {getStatusBadge(status)}
-            <div className="des">Since {formattedDate}</div>
-          </TableCell>
-        );
-      },
-    },
-    {
-      id: 'status',
-      header: __('Status', 'multivendorx'),
-      cell: ({ row }) => {
         return (
           <TableCell
             type="status"
             status={row.original.status}
+            // <div className="des">Since {formattedDate}</div>
           />
         );
       },
@@ -447,8 +407,8 @@ const StoreReport: React.FC = () => {
 
   return (
     <>
-      <div className="row">
-        <div className="column transparent">
+      <div className="card-wrapper">
+        <div className="card-content transparent">
           <div className="analytics-container report">
             {overviewData.map((item, idx) => (
               <div key={idx} className="analytics-item">
@@ -464,7 +424,7 @@ const StoreReport: React.FC = () => {
           </div>
         </div>
 
-        <div className="column">
+        <div className="card-content">
           <div className="card-header">
             <div className="left">
               <div className="title">
@@ -511,7 +471,7 @@ const StoreReport: React.FC = () => {
           <div className="title">{__('Account Overview', 'multivendorx')}</div>
         </div>
         <div className="right">
-          <span>{__('Updated 1 month ago', 'multivendorx')}</span>
+          <span>{__('Updated 1 month ago (p)', 'multivendorx')}</span>
         </div>
       </div>
 

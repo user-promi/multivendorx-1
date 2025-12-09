@@ -67,7 +67,7 @@
                 width: 3.5rem;
                 padding: 0.5rem;
                 height: 3.5rem;
-                box-shadow: 0 0.125rem 0.5rem 0 rgb(66 62 78 / 12%);
+                box-shadow: 0 0.125rem 0.5rem 0 #423e4e1f;
                 margin-top: -4rem;
                 background: #fff;
                 border-radius: 0.313rem;
@@ -77,7 +77,7 @@
                 // edit logo section
                 .edit-section {
                     right: -0.5rem;
-                    bottom: 0;
+                    bottom: -0.5rem;
 
                     .dropdown {
                         left: 0;
@@ -267,5 +267,17 @@
             margin-right: 0.313rem;
             color: $theme-color
         }
+    }
+}
+
+.table-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.313rem;
+
+    i {
+        font-size: 1rem;
+        padding-right: 0.125rem;
+        color: $theme-color;
     }
 }

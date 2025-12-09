@@ -110,70 +110,66 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 			<SuccessNotice message={successMsg} />
 
 			<div className="container-wrapper">
-				<div className="card-wrapper w-65">
+				<div className="card-wrapper column w-65">
 					{(formData.core_data?.status == 'pending' || formData.core_data?.status == 'rejected') && (
 						<>
-							<div className="row">
-								<div className="column">
-									<div className="card-header">
-										<div className="left">
-											<div className="title">
-												{__('Store details', 'multivendorx')}
-											</div>
+							<div className="card-content">
+								<div className="card-header">
+									<div className="left">
+										<div className="title">
+											{__('Store details', 'multivendorx')}
 										</div>
 									</div>
-
-									{/* Core Data */}
-									<div className="card-body">
-										{formData.core_data &&
-											Object.entries(formData.core_data).map(([label, value]) => (
-												<div className="form-details" key={label}>
-													<label className="label">{label} :</label>
-													<div className="value">{value || __('[Not Provided]', 'multivendorx')}</div>
-												</div>
-											))}
-									</div>
-									{/* Registration Data (if needed) */}
 								</div>
+
+								{/* Core Data */}
+								<div className="card-body">
+									{formData.core_data &&
+										Object.entries(formData.core_data).map(([label, value]) => (
+											<div className="form-details" key={label}>
+												<label className="label">{label} :</label>
+												<div className="value">{value || __('[Not Provided]', 'multivendorx')}</div>
+											</div>
+										))}
+								</div>
+								{/* Registration Data (if needed) */}
 							</div>
 						</>
 					)}
-					<div className="row">
-						<div className="column">
-							<div className="card-header">
-								<div className="left">
-									<div className="title">
-										{formData.core_data?.status === 'pending' || formData.core_data?.status === 'rejected'
-											? __('Registration form details', 'multivendorx')
-											: __('Archive data', 'multivendorx')}
-									</div>
-								</div>
-								<div className="right">
-									{formData.registration_data && Object.keys(formData.registration_data).length > 0 && (
-										<div
-											onClick={() => handleDownloadPDF()}
-											className="admin-btn btn-purple"
-										>
-											<i className="adminlib-import"></i> {__('Download', 'multivendorx')}
-										</div>
-									)}
+					<div className="card-content">
+						<div className="card-header">
+							<div className="left">
+								<div className="title">
+									{formData.core_data?.status === 'pending' || formData.core_data?.status === 'rejected'
+										? __('Registration form details', 'multivendorx')
+										: __('Archive data', 'multivendorx')}
 								</div>
 							</div>
-							<div className="card-body">
-								{/* Registration Data */}
-								{formData.registration_data && Object.keys(formData.registration_data).length > 0 ? (
-									Object.entries(formData.registration_data).map(([label, value]) => (
-										<div className="form-details" key={label}>
-											<label className="label">{label} :</label>
-											<div className="value">{value || __('[Not Provided]', 'multivendorx')}</div>
-										</div>
-									))
-								) : (
-									<div className="no-data">
-										{__('Store submitted application without filling out registration form.', 'multivendorx')}
+							<div className="right">
+								{formData.registration_data && Object.keys(formData.registration_data).length > 0 && (
+									<div
+										onClick={() => handleDownloadPDF()}
+										className="admin-btn btn-purple"
+									>
+										<i className="adminlib-import"></i> {__('Download', 'multivendorx')}
 									</div>
 								)}
 							</div>
+						</div>
+						<div className="card-body">
+							{/* Registration Data */}
+							{formData.registration_data && Object.keys(formData.registration_data).length > 0 ? (
+								Object.entries(formData.registration_data).map(([label, value]) => (
+									<div className="form-details" key={label}>
+										<label className="label">{label} :</label>
+										<div className="value">{value || __('[Not Provided]', 'multivendorx')}</div>
+									</div>
+								))
+							) : (
+								<div className="no-data">
+									{__('Store submitted application without filling out registration form.', 'multivendorx')}
+								</div>
+							)}
 						</div>
 					</div>
 				</div>
@@ -183,7 +179,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 					formData.core_data?.status == 'rejected' ||
 					formData.core_data?.status == 'permanently_rejected'
 				) && (
-						<div className="card-wrapper w-35">
+						<div className="card-wrapper column w-35">
 							<div className="card-content">
 
 								<div className="card-header">
@@ -193,28 +189,27 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 										</div>
 									</div>
 								</div>
-
-								<div className="store-owner-details owner">
-									<div className="profile">
-										<div className="avater">
-											<span>JD</span>
-										</div>
-										<div className="details">
-											<div className="name">
-												{formData.primary_owner_info?.data?.display_name ?? <Skeleton variant="text" width={150} />}
+								<div className="card-body">
+									<div className="store-owner-details owner">
+										<div className="profile">
+											<div className="avater">
+												<span>JD</span>
+											</div>
+											<div className="details">
+												<div className="name">
+													{formData.primary_owner_info?.data?.display_name ?? <Skeleton variant="text" width={150} />}
+												</div>
 											</div>
 										</div>
+										<ul className="contact-details">
+											<li>
+												<i className="adminlib-mail"></i>
+												{formData.primary_owner_info?.data?.user_email ?? <Skeleton variant="text" width={150} />}
+											</li>
+										</ul>
 									</div>
-									<ul className="contact-details">
-										<li>
-											<i className="adminlib-mail"></i>
-											{formData.primary_owner_info?.data?.user_email ?? <Skeleton variant="text" width={150} />}
-										</li>
-									</ul>
 								</div>
 							</div>
-
-
 							<>
 								{previousNotes.length > 0 && (
 									<div className="card-content">
@@ -225,20 +220,21 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 												</div>
 											</div>
 										</div>
-										<div className="form-group-wrapper">
-											<div className="form-group">
-												<ul>
-													{previousNotes.map((item, idx) => (
-														<li key={idx}>
-															<strong>{item.date}:</strong> {item.note}
-														</li>
-													))}
-												</ul>
+										<div className="card-body">
+											<div className="form-group-wrapper">
+												<div className="form-group">
+													<ul>
+														{previousNotes.map((item, idx) => (
+															<li key={idx}>
+																<strong>{item.date}:</strong> {item.note}
+															</li>
+														))}
+													</ul>
+												</div>
 											</div>
 										</div>
 									</div>
 								)}
-
 
 								{formData.core_data?.status != 'permanently_rejected' && (
 									<div className="card-content">
@@ -249,52 +245,53 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 												</div>
 											</div>
 										</div>
-										<div className="form-group-wrapper">
-											<div className="form-group">
-												<TextArea
-													name="store_application_note"
-													wrapperClass="setting-from-textarea"
-													placeholder={__('Optional note for approval or rejection', 'multivendorx')}
-													inputClass="textarea-input"
-													descClass="settings-metabox-description"
-													value={formData.store_application_note || ''}
-													onChange={handleChange}
-												/>
-											</div>
-										</div>
-										<div className="form-group-wrapper">
-											<div className="form-group">
-												<label className="checkbox-label">
-													<input
-														type="checkbox"
-														name="store_permanent_reject"
-														checked={formData.store_permanent_reject}
+
+										<div className="card-body">
+											<div className="form-group-wrapper">
+												<div className="form-group">
+													<TextArea
+														name="store_application_note"
+														wrapperClass="setting-from-textarea"
+														placeholder={__('Optional note for approval or rejection', 'multivendorx')}
+														inputClass="textarea-input"
+														descClass="settings-metabox-description"
+														value={formData.store_application_note || ''}
 														onChange={handleChange}
 													/>
-													{__('Reject store permanently', 'multivendorx')}
-												</label>
+												</div>
 											</div>
-										</div>
+											<div className="form-group-wrapper">
+												<div className="form-group">
+													<label className="checkbox-label">
+														<input
+															type="checkbox"
+															name="store_permanent_reject"
+															checked={formData.store_permanent_reject}
+															onChange={handleChange}
+														/>
+														{__('Reject store permanently', 'multivendorx')}
+													</label>
+												</div>
+											</div>
+											<div className="buttons-wrapper">
+												<button
+													className="admin-btn btn-green"
+													onClick={() => handleSubmit('approve')}
+												>
+													{__('Approve', 'multivendorx')}
+												</button>
 
-										<div className="buttons-wrapper">
-											<button
-												className="admin-btn btn-green"
-												onClick={() => handleSubmit('approve')}
-											>
-												{__('Approve', 'multivendorx')}
-											</button>
-
-											<button
-												className="admin-btn btn-red"
-												onClick={() => handleSubmit('rejected')}
-											>
-												{__('Reject', 'multivendorx')}
-											</button>
+												<button
+													className="admin-btn btn-red"
+													onClick={() => handleSubmit('rejected')}
+												>
+													{__('Reject', 'multivendorx')}
+												</button>
+											</div>
 										</div>
 									</div>
 								)}
 							</>
-
 						</div>
 					)}
 			</div>

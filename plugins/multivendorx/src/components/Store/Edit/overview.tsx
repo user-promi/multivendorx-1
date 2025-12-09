@@ -107,7 +107,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
     return (
         <>
             <div className="container-wrapper ">
-                <div className="card-wrapper w-65">
+                <div className="card-wrapper column w-65">
                     <div className="analytics-container">
                         {overviewData.map((item, idx) => (
                             <div key={idx} className="analytics-item">
@@ -122,8 +122,8 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                         ))}
                     </div>
 
-                    <div className="row">
-                        <div className="column">
+                    <div className="card-wrapper">
+                        <div className="card-content">
                             <div className="card-header">
                                 <div className="left">
                                     <div className="title">{__('Recent payouts', 'multivendorx')}</div>
@@ -164,7 +164,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                             </div>
                         </div>
 
-                        <div className="column">
+                        <div className="card-content">
                             <div className="card-header">
                                 <div className="left">
                                     <div className="title">{__('Latest products', 'multivendorx')}</div>
@@ -223,9 +223,9 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                         </div>
                     </div>
 
-                    <div className="row">
+                    <div className="card-wrapper">
                         {modules.includes('store-review') && (
-                            <div className="column">
+                            <div className="card-content">
                                 <div className="card-header">
                                     <div className="left">
                                         <div className="title">{__('Latest reviews', 'multivendorx')}</div>
@@ -246,9 +246,9 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                         )}
                     </div>
 
-                    <div className="row">
+                    <div className="card-wrapper">
                         {modules.includes('marketplace-refund') && (
-                            <div className="column">
+                            <div className="card-content">
                                 <div className="card-header">
                                     <div className="left">
                                         <div className="title">{__('Latest refunds', 'multivendorx')}</div>
@@ -269,10 +269,10 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                         )}
                     </div>
                 </div>
-                <div className="card-wrapper w-35">
+                <div className="card-wrapper column w-35">
                     {appLocalizer.khali_dabba && (
-                        <div className="row">
-                            <div className="column">
+                        <div className="card-wrapper">
+                            <div className="card-content">
                                 <div className="card-header">
                                     <div className="left">
                                         <div className="title">
@@ -284,7 +284,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                     </div>
                                 </div>
                                 <div className="card-body store-time-wrapper">
-                                    <div className="row">
+                                    <div className="card-wrapper">
                                         <div className="time-wrapper">
                                             <div className="des">{__('Current status', 'multivendorx')}</div>
                                             <div className="time">
@@ -300,8 +300,8 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                             </div>
                         </div>
                     )}
-                    <div className="row">
-                        <div className="column">
+                    <div className="card-wrapper">
+                        <div className="card-content">
                             <div className="card-header">
                                 <div className="left">
                                     <div className="title">
@@ -364,8 +364,8 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                         </div>
                     </div>
 
-                    <div className="row">
-                        <div className="column">
+                    <div className="card-wrapper">
+                        <div className="card-content">
                             <div className="card-header">
                                 <div className="left">
                                     <div className="title">{__('Store staff', 'multivendorx')}</div>

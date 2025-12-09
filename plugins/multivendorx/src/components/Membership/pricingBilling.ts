@@ -15,19 +15,18 @@ export default {
             key: 'commission_type',
             type: 'setting-toggle',
             label: __('Plan Pricing Type', 'multivendorx'),
-            settingDescription: __("Decide how the system should calculate the marketplace commission.", 'multivendorx'),
             desc: __(
-                '',
+                'Decide how the system should calculate the marketplace commission.',
                 'multivendorx'
             ),
             options: [
                 {
-                    key: 'store_order',
+                    key: 'free',
                     label: __('Free', 'multivendorx'),
                     value: 'store_order',
                 },
                 {
-                    key: 'per_item',
+                    key: 'paid',
                     label: __('Paid', 'multivendorx'),
                     value: 'per_item',
                 },
@@ -37,28 +36,43 @@ export default {
             key: 'commission_type',
             type: 'setting-toggle',
             label: __('Billing Cycle', 'multivendorx'),
-            // settingDescription: __("Decide how the system should calculate the marketplace commission.", 'multivendorx'),
             desc: __(
                 '',
                 'multivendorx'
             ),
             options: [
                 {
-                    key: 'store_order',
+                    key: 'monthly',
                     label: __('Monthly', 'multivendorx'),
-                    value: 'store_order',
+                    value: 'monthly',
                 },
                 {
-                    key: 'per_item',
+                    key: 'yearly',
                     label: __('Yearly', 'multivendorx'),
-                    value: 'per_item',
+                    value: 'yearly',
                 },
                 {
-                    key: 'per_item',
+                    key: 'one_time',
                     label: __('One Time', 'multivendorx'),
-                    value: 'per_item',
+                    value: 'one_time',
                 },
             ],
+        },
+        {
+            key: 'plan-price',
+            type: 'number',
+            size: '10rem',
+            label: __('Plan Price', 'multivendorx'),
+        },
+        {
+            key: 'trial-period',
+            type: 'number',
+            label: __('Trial Period', 'multivendorx'),
+            size: '10rem',
+            desc: __(
+                'Number of days for free trial (optional)',
+                'multivendorx'
+            ),
         },
     ],
 };

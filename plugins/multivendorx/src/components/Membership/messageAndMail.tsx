@@ -94,7 +94,7 @@ const MessageAndMail = ({ id }: { id: string }) => {
 		<>
 			<SuccessNotice message={successMsg} />
 			<div className="container-wrapper">
-				<div className="card-wrapper w-65">
+				<div className="card-wrapper column w-65">
 					<div className="card-content">
 						<div className="card-title">
 							Store information

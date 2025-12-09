@@ -82,9 +82,9 @@ export const TableCell: React.FC<TableCellProps> = ({
     type = '',
     header = {},
     status = '',
-    onChange = () => {},
+    onChange = () => { },
     rowId,
-    onToggleRow = () => {},
+    onToggleRow = () => { },
     rowData = {},
 }) => {
     const [cellData, setCellData] = useState(fieldValue);
@@ -98,7 +98,7 @@ export const TableCell: React.FC<TableCellProps> = ({
         yellow: ['pending', 'on-hold', 'partially_refunded'],
         blue: ['under_review', 'private', 'Upcoming', 'draft'],
         red: ['rejected', 'unpaid', 'cancelled', 'Failed', 'Expired'],
-        teal: [''],
+        teal: ['suspended'],
         orange: ['refunded', 'Processed', 'processing'],
         purple: ['locked'],
         indigo: ['deactivated'],
@@ -311,8 +311,10 @@ export const TableCell: React.FC<TableCellProps> = ({
         case 'status':
             const displayStatus =
                 status
-                    ?.replace(/-/g, ' ')
-                    ?.replace(/\b\w/g, (c) => c.toUpperCase()) || '-';
+                    ?.replace(/_/g, ' ')              
+                    ?.replace(/-/g, ' ')               
+                    ?.replace(/\b\w/g, c => c.toUpperCase()) || '-';
+
             const color = getStatusColor(status);
 
             content = (
