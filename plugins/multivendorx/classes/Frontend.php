@@ -8,7 +8,6 @@
 namespace MultiVendorX;
 
 use MultiVendorX\Store\StoreUtil;
-use MultiVendorX\Store\Products;
 
 /**
  * MultiVendorX Frontend class
@@ -23,10 +22,7 @@ class Frontend {
      */
     public function __construct() {
         add_filter( 'template_include', array( $this, 'vendor_dashboard_template' ) );
-
-        // if ( current_user_can( 'edit_products' ) ) {
-        // add_action( 'mvx_process_product_object', array( $this, 'mvx_save_generated_sku') );
-        // }
+        add_action('woocommerce_rest_insert_product_object', array( $this, 'generate_sku_data_in_product' ), 10, 3);
 
         add_action( 'woocommerce_after_shop_loop_item', array( $this, 'add_text_in_shop_and_single_product_page' ), 6 );
         add_action( 'woocommerce_product_meta_start', array( $this, 'add_text_in_shop_and_single_product_page' ), 25 );
@@ -530,5 +526,11 @@ class Frontend {
                 }
             }
         }
+    }
+
+    public function generate_sku_data_in_product($product, $request, $creating) {
+        if (!$creating) return;
+
+        $this->mvx_save_generated_sku($product);
     }
 }
