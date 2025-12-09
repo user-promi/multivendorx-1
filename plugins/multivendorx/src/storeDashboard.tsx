@@ -62,7 +62,7 @@ const Dashboard = () => {
         });
     }, []);
 
-    const hasCapability = (capability:any) => {
+    const hasCapability = (capability: any) => {
         if (!capability) return true;
 
         const userCaps = appLocalizer.current_user?.allcaps || {};
@@ -247,6 +247,27 @@ const Dashboard = () => {
         return () => document.removeEventListener("click", handleClickOutside);
     }, []);
 
+
+    // dark mode
+    const [darkMode, setDarkMode] = useState(() => {
+        return localStorage.getItem("dark-mode") === "true";
+    });
+
+    useEffect(() => {
+        if (darkMode) {
+            document.body.classList.add("dark-mode");
+        } else {
+            document.body.classList.remove("dark-mode");
+        }
+
+        localStorage.setItem("dark-mode", darkMode.toString());
+    }, [darkMode]);
+
+    const toggleDarkMode = (e) => {
+        e.stopPropagation();
+        setDarkMode(prev => !prev);
+    };
+
     return (
         <div id="store-dashboard">
 
@@ -352,6 +373,10 @@ const Dashboard = () => {
                         </div>
                         <div className="navbar-rightside">
                             <ul className="navbar-right">
+                                <li id="darkModeToggle" onClick={toggleDarkMode}>
+                                    <div className="adminlib-icon adminlib-vendor-form-add"></div>
+                                </li>
+
                                 <li>
                                     <div className="adminlib-icon adminlib-vendor-form-add"></div>
                                 </li>
