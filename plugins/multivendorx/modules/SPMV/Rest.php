@@ -84,13 +84,16 @@ class Rest {
                 update_post_meta( $original_id, 'multivendorx_spmv_id', $insert_id );
             }
         } else {
-            $table = esc_sql( $wpdb->prefix . Utill::TABLES['products_map'] );
+            $table = $wpdb->prefix . Utill::TABLES['products_map'];
 
-            $sql = "SELECT * FROM `{$table}` WHERE ID = %d";
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            $sql = "SELECT * FROM {$table} WHERE ID = %d";
 
-            $sql = $wpdb->prepare( $sql, $existing_map_id );
-
-            $row = $wpdb->get_row( $sql );
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            $row = $wpdb->get_row(
+                // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+                $wpdb->prepare( $sql, $existing_map_id )
+            );
 
             if ( $row ) {
                 $map_array = json_decode( $row->product_map, true );
@@ -117,7 +120,7 @@ class Rest {
         }
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log('Database operation failed', 'ERROR');
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
     }
 }

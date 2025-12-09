@@ -91,7 +91,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log($error);
+                MultiVendorX()->util->log( $error );
             }
 
             return $error;
@@ -247,7 +247,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
 
             return rest_ensure_response( array_values( $refund_list ) );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log($e);
+            MultiVendorX()->util->log( $e );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
@@ -392,7 +392,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
         $store_item_id = $wpdb->get_var( $wpdb->prepare( "SELECT meta_value FROM {$wpdb->order_itemmeta} WHERE meta_key=%s AND order_item_id=%d", 'store_order_item_id', absint( $item_id ) ) );
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log('Database operation failed', 'ERROR');
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
 		}
 
         return $store_item_id;

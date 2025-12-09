@@ -91,7 +91,7 @@ class MultiVendorX_REST_Settings_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log($error);
+                MultiVendorX()->util->log( $error );
             }
 
             return $error;
@@ -151,7 +151,7 @@ class MultiVendorX_REST_Settings_Controller extends \WP_REST_Controller {
 
             return $all_details;
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log($e);
+            MultiVendorX()->util->log( $e );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
@@ -169,7 +169,7 @@ class MultiVendorX_REST_Settings_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log($error);
+                MultiVendorX()->util->log( $error );
             }
 
             return $error;
@@ -193,7 +193,7 @@ class MultiVendorX_REST_Settings_Controller extends \WP_REST_Controller {
                     break;
             }
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log($e);
+            MultiVendorX()->util->log( $e );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }

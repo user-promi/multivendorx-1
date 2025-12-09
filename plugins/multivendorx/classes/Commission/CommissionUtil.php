@@ -34,7 +34,7 @@ class CommissionUtil {
         );
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log('Database operation failed', 'ERROR');
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
 
         return $commission ?? new \stdClass();
@@ -62,7 +62,7 @@ class CommissionUtil {
             $wpdb->prepare( 'SELECT * FROM `' . $wpdb->prefix . Utill::TABLES['commission'] . '` WHERE store_id = %d AND order_id = %d', $store_id, $order_id )
         );
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log('Database operation failed', 'ERROR');
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
         return $commission ?? new \stdClass();
     }
@@ -153,7 +153,7 @@ class CommissionUtil {
         $commissions = $wpdb->get_results( $query );
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log('Database operation failed', 'ERROR');
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
 
         // Return object or raw array.
@@ -208,7 +208,7 @@ class CommissionUtil {
             $results = $wpdb->get_results( $query );
 
             if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-                MultiVendorX()->util->log('Database operation failed', 'ERROR');
+                MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
             }
 
             return array_map(
@@ -251,10 +251,11 @@ class CommissionUtil {
             $query .= $wpdb->prepare( ' WHERE store_id = %d', $store_id );
         }
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
         $result = $wpdb->get_row( $query );
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log('Database operation failed', 'ERROR');
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
 
         return array(

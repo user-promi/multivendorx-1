@@ -103,7 +103,7 @@ class Transaction {
 
         $commission = CommissionUtil::get_commission_db( $commission_id );
 
-        if ( $lock_period === 0 ) {
+        if ( 0 === $lock_period ) {
             $status = 'Completed';
         } elseif ( $lock_period > 0 ) {
             $status = 'Upcoming';
@@ -125,94 +125,22 @@ class Transaction {
 
         $format = array( '%d', '%d', '%d', '%s', '%s', '%f', '%s', '%s', '%s', '%s' );
 
-        $wpdb->insert(
-            $wpdb->prefix . Utill::TABLES['transaction'],
-            $data,
-            $format
-        );
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+        $wpdb->insert( $wpdb->prefix . Utill::TABLES['transaction'], $data, $format );
 
         $transaction_id = $wpdb->insert_id;
 
         if ( $transaction_id ) {
-            $wpdb->update(
-                $wpdb->prefix . Utill::TABLES['commission'],
-                array( 'status' => 'paid' ),
-                array( 'id' => $commission_id ),
-                array( '%s' ),
-                array( '%d' )
-            );
+            $wpdb->update( $wpdb->prefix . Utill::TABLES['commission'], array( 'status' => 'paid' ), array( 'id' => $commission_id ), array( '%s' ), array( '%d' ) );
         }
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log('Database operation failed', 'ERROR');
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
 
         do_action( 'multivendorx_after_create_transaction', $transaction_id, $commission );
         return $transaction_id;
     }
-
-    // public function create_transaction($order_id, $old_status, $new_status, $order) {
-    // global $wpdb;
-
-    // if ($order->get_parent_id() == 0) {
-    // return;
-    // }
-
-    // $payment_method = $order->get_payment_method();
-    // if (payment method is stripe or paypal marketplace and the check charges then this function return)
-    // $disbursement_status = MultiVendorX()->setting->get_setting( 'disbursement_order_status' );
-    // if( !empty($disbursement_status) && in_array($new_status, $disbursement_status)){
-    // $disbursement_method = MultiVendorX()->setting->get_setting( 'disbursement_method' );
-    // $commission_id = $order->get_meta( 'multivendorx_commission_id', true);
-    // $exists = $this->get_transaction_db($commission_id);
-    // if (!empty($exists)) {
-    // return;
-    // }
-
-    // $lock_period = (int) MultiVendorX()->setting->get_setting( 'commission_lock_period', 0 );
-    // $status = 'Pending';
-    // $time   = current_time( 'mysql' );
-
-    // $commission = CommissionUtil::get_commission_db($commission_id);
-
-    // if ($disbursement_method == 'instantly') {
-    // $status = 'Completed';
-
-    // } elseif ($disbursement_method == 'waiting' ) {
-    // if($lock_period == 0) {
-    // $status = 'Completed';
-
-    // } elseif ($lock_period > 0) {
-    // $status = 'Pending';
-    // $time   = date( 'Y-m-d H:i:s', current_time( 'mysql' ) + ( $lock_period * DAY_IN_SECONDS ) );;
-    // }
-    // }
-
-    // $data = [
-    // 'store_id'         => (int) $commission->store_id,
-    // 'order_id'         => (int) $commission->order_id,
-    // 'commission_id'    => (int) $commission_id,
-    // 'entry_type'       => 'Cr',
-    // 'transaction_type' => 'Commission',
-    // 'amount'           => (float) $commission->commission_total,
-    // 'currency'         => get_woocommerce_currency(),
-    // 'narration'        => "Commission received for order " . $order->get_id(),
-    // 'status'           => $status,
-    // 'available_at'     => $time
-    // ];
-
-    // $format = [ "%d", "%d", "%d", "%s", "%s", "%f", "%s", "%s", "%s", "%s" ];
-
-    // $wpdb->insert(
-    // $wpdb->prefix . Utill::TABLES['transaction'],
-    // $data,
-    // $format
-    // );
-
-    // $transaction_id = $wpdb->insert_id;
-    // return $transaction_id;
-    // }
-    // }
 
     /**
 	 * Get class object.
@@ -240,7 +168,7 @@ class Transaction {
         );
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log('Database operation failed', 'ERROR');
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
 
         return $transaction ?? array();
@@ -348,7 +276,7 @@ class Transaction {
         $result = $wpdb->get_results( $query, ARRAY_A ) ?? array();
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log('Database operation failed', 'ERROR');
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
 
         return $result;
@@ -390,7 +318,7 @@ class Transaction {
         $minimum_wallet_amount = MultiVendorX()->setting->get_setting( 'wallet_threshold_amount', 0 );
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log('Database operation failed', 'ERROR');
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
 
         return array(

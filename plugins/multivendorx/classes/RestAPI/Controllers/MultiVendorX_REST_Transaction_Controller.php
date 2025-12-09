@@ -110,7 +110,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log($error);
+                MultiVendorX()->util->log( $error );
             }
 
             return $error;
@@ -235,7 +235,7 @@ class MultiVendorX_REST_Transaction_Controller extends \WP_REST_Controller {
             );
             return rest_ensure_response( $response );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log($e);
+            MultiVendorX()->util->log( $e );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }

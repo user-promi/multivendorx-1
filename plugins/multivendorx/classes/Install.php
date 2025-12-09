@@ -291,7 +291,7 @@ class Install {
     public function create_database_triggers() {
         global $wpdb;
 
-        // Drop the trigger if it exists.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
         $wpdb->query( 'DROP TRIGGER IF EXISTS update_store_balance' );
 
         // Create the trigger.
@@ -359,11 +359,11 @@ class Install {
         END;
         ";
 
-        // Execute the trigger.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
         $wpdb->query( $sql );
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log('Database operation failed', 'ERROR');
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
     }
 
@@ -723,8 +723,6 @@ By signing and submitting, the Seller accepts all terms above.
             );
 
             $page_id = wp_insert_post( $page_data );
-
-            // update_option( $option_key, $page_id );
         }
     }
 }

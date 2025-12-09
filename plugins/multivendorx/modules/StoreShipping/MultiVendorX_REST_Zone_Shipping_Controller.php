@@ -125,7 +125,7 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log($error);
+                MultiVendorX()->util->log( $error );
             }
 
             return $error;
@@ -135,7 +135,7 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
             $zones    = Util::get_zones( $store_id );
             return rest_ensure_response( $zones );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log($e);
+            MultiVendorX()->util->log( $e );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
@@ -153,7 +153,7 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log($error);
+                MultiVendorX()->util->log( $error );
             }
 
             return $error;
@@ -223,7 +223,7 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
                 )
             );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log($e);
+            MultiVendorX()->util->log( $e );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
@@ -241,7 +241,7 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log($error);
+                MultiVendorX()->util->log( $error );
             }
 
             return $error;
@@ -265,7 +265,7 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
 
             return rest_ensure_response( $method );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log($e);
+            MultiVendorX()->util->log( $e );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
@@ -283,7 +283,7 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log($error);
+                MultiVendorX()->util->log( $error );
             }
 
             return $error;
@@ -340,7 +340,7 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
                 )
             );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log($e);
+            MultiVendorX()->util->log( $e );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
@@ -358,7 +358,7 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log($error);
+                MultiVendorX()->util->log( $error );
             }
 
             return $error;
@@ -395,7 +395,7 @@ class MultiVendorX_REST_Zone_Shipping_Controller extends \WP_REST_Controller {
                 )
             );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log($e);
+            MultiVendorX()->util->log( $e );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }

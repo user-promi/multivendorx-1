@@ -80,7 +80,7 @@ class MultiVendorX_REST_Logs_Controller extends \WP_REST_Controller {
      * @param mixed $request all requests params from api.
      */
     public function get_items_permissions_check( $request ) {
-        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
+        return current_user_can( 'read' );
     }
 
     /**

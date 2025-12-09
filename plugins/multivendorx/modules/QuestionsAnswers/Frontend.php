@@ -37,15 +37,6 @@ class Frontend {
         FrontendScripts::localize_scripts( 'multivendorx-qna-frontend-script' );
     }
 
-    // public function product_questions_answers_tab($tabs) {
-    // $tabs['product_qna'] = [
-    // 'title'    => __( 'Questions & Answers', 'multivendorx' ),
-    // 'priority' => 50,
-    // 'callback' => array($this, 'multivendorx_product_qna_tab_content'),
-    // ];
-    // return $tabs;
-    // }
-
     /**
      * Add Question and answer tab
      *

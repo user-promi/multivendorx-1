@@ -77,7 +77,7 @@ class PaymentProcessor {
                 );
 
                 if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-                    MultiVendorX()->util->log('Database operation failed', 'ERROR');
+                    MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
                 }
 
                 $transaction_id = $wpdb->insert_id;
@@ -112,7 +112,7 @@ class PaymentProcessor {
             );
 
             if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-                MultiVendorX()->util->log('Database operation failed', 'ERROR');
+                MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
             }
 
             return;
@@ -168,7 +168,7 @@ class PaymentProcessor {
         );
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log('Database operation failed', 'ERROR');
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
 
         if ( 'success' === $result && $status ) {
@@ -201,7 +201,7 @@ class PaymentProcessor {
             );
 
             if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-                MultiVendorX()->util->log('Database operation failed', 'ERROR');
+                MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
             }
         }
     }
@@ -268,7 +268,7 @@ class PaymentProcessor {
                         $format
 					);
                     if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-                        MultiVendorX()->util->log('Database operation failed', 'ERROR');
+                        MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
                     }
 				} else {
 					$order->set_status( $old_status );

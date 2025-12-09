@@ -72,7 +72,7 @@ class Disbursement {
             );
 
             if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-                MultiVendorX()->util->log('Database operation failed', 'ERROR');
+                MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
             }
         }
     }
@@ -95,7 +95,7 @@ class Disbursement {
         );
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log('Database operation failed', 'ERROR');
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
 
         foreach ( $results as $row ) {

@@ -23,9 +23,11 @@ class Shipping_Helper {
     /**
      * Split WooCommerce cart into packages per store/vendor.
      *
-     * @param array $packages
+     * @param array $packages Original WooCommerce shipping packages (unused).
+     *
+     * @return array Split packages grouped by store.
      */
-    public static function split_cart_by_store( $packages ) {
+    public static function split_cart_by_store( $packages ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
         $new_packages = array();
 
         // Get user location from session.
@@ -36,7 +38,7 @@ class Shipping_Helper {
             $product_id = $item['product_id'];
             $store_id   = get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true );
             if ( ! $store_id ) {
-				continue;
+                continue;
             }
 
             if ( ! isset( $new_packages[ $store_id ] ) ) {
@@ -44,7 +46,7 @@ class Shipping_Helper {
                     'contents'                       => array(),
                     'contents_cost'                  => 0,
                     'applied_coupons'                => WC()->cart->get_applied_coupons(),
-                    'store_id'                       => $store_id, // Store ID.
+                    'store_id'                       => $store_id,
                     'destination'                    => array(
                         'country'   => WC()->customer->get_shipping_country(),
                         'state'     => WC()->customer->get_shipping_state(),
@@ -61,6 +63,7 @@ class Shipping_Helper {
             $new_packages[ $store_id ]['contents'][ $item_key ] = $item;
             $new_packages[ $store_id ]['contents_cost']        += $item['line_total'];
         }
+
         return array_values( $new_packages );
     }
 }

@@ -41,11 +41,6 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
 					'callback'            => array( $this, 'get_items' ),
 					'permission_callback' => array( $this, 'get_items_permissions_check' ),
 				),
-            // [
-            // 'methods'             => \WP_REST_Server::CREATABLE,
-            // 'callback'            => [ $this, 'create_item' ],
-            // 'permission_callback' => [ $this, 'create_item_permissions_check' ],
-            // ],
 			)
         );
 
@@ -109,7 +104,7 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log($error);
+                MultiVendorX()->util->log( $error );
             }
 
             return $error;
@@ -241,7 +236,7 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
 
             return rest_ensure_response( $notifications );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log($e);
+            MultiVendorX()->util->log( $e );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
@@ -285,7 +280,7 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log($error);
+                MultiVendorX()->util->log( $error );
             }
 
             return $error;
@@ -306,13 +301,8 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
                     'system_message' => $form_data['system_message'],
                 );
 
-                $updated = $wpdb->update(
-                    "{$wpdb->prefix}" . Utill::TABLES['system_events'],
-                    $data,
-                    array( 'id' => $form_data['id'] ),
-                    array( '%s', '%s', '%s', '%s' ),
-                    array( '%d' )
-                );
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+                $updated = $wpdb->update( "{$wpdb->prefix}" . Utill::TABLES['system_events'], $data, array( 'id' => $form_data['id'] ), array( '%s', '%s', '%s', '%s' ), array( '%d' ) );
 
                 return rest_ensure_response(
                     array(
@@ -326,13 +316,8 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
                     'is_dismissed' => $is_dismissed,
                 );
 
-                $updated = $wpdb->update(
-                    "{$wpdb->prefix}" . Utill::TABLES['notifications'],
-                    $data,
-                    array( 'id' => $id ),
-                    null,
-                    array( '%s' )
-                );
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+                $updated = $wpdb->update( "{$wpdb->prefix}" . Utill::TABLES['notifications'], $data, array( 'id' => $id ), null, array( '%s' ) );
 
                 return rest_ensure_response(
                     array(
@@ -383,7 +368,7 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
                 );
 
                 $where = array( 'id' => $id );
-
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
                 $updated = $wpdb->update( "{$wpdb->prefix}" . Utill::TABLES['system_events'], $update_data, $where, null, array( '%d' ) );
             }
 
@@ -396,7 +381,7 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
                 );
             }
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log($e);
+            MultiVendorX()->util->log( $e );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
@@ -414,7 +399,7 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log($error);
+                MultiVendorX()->util->log( $error );
             }
 
             return $error;
@@ -426,7 +411,7 @@ class MultiVendorX_REST_Notifications_Controller extends \WP_REST_Controller {
 
             return rest_ensure_response( $results );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log($e);
+            MultiVendorX()->util->log( $e );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }

@@ -90,7 +90,7 @@ class Hooks {
             $wpdb->delete( $wpdb->prefix . 'wc_order_stats', array( 'order_id' => $order_id ) );
 
             if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-                MultiVendorX()->util->log('Database operation failed', 'ERROR');
+                MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
             }
 
             \WC_Cache_Helper::get_transient_version( 'woocommerce_reports', true );

@@ -46,7 +46,7 @@ class Util {
 		);
 
 		if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log('Database operation failed', 'ERROR');
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
 		}
 
 		// Return result AFTER logging
@@ -112,7 +112,7 @@ class Util {
 		: (array) $wpdb->get_results( $query, ARRAY_A );
 
 		if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log('Database operation failed', 'ERROR');
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
 		}
 		return $result;
 	}
@@ -140,7 +140,7 @@ class Util {
 		);
 
 		if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log('Database operation failed', 'ERROR');
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
 		}
 
 		// $wpdb->delete returns number of rows deleted, or false on error.

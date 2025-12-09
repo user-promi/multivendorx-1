@@ -115,7 +115,7 @@ class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log($error);
+                MultiVendorX()->util->log( $error );
             }
 
             return $error;
@@ -131,7 +131,7 @@ class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
                 'active' => $status,
             );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log($e);
+            MultiVendorX()->util->log( $e );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
@@ -149,7 +149,7 @@ class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log($error);
+                MultiVendorX()->util->log( $error );
             }
 
             return $error;
@@ -158,7 +158,7 @@ class MultiVendorX_REST_Tour_Controller extends \WP_REST_Controller {
             update_option( Utill::MULTIVENDORX_OTHER_SETTINGS['tour_active'], $request->get_param( 'active' ) );
             return array( 'success' => true );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log($e);
+            MultiVendorX()->util->log( $e );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
