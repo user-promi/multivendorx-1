@@ -90,17 +90,7 @@ class Hooks {
             $wpdb->delete( $wpdb->prefix . 'wc_order_stats', array( 'order_id' => $order_id ) );
 
             if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-                MultiVendorX()->util->log(
-                    "========= MULTIVENDORX ERROR =========\n" .
-                    'Timestamp: ' . current_time( 'mysql' ) . "\n" .
-                    'Error: ' . $wpdb->last_error . "\n" .
-                    'Last Query: ' . $wpdb->last_query . "\n" .
-                    'File: ' . __FILE__ . "\n" .
-                    'Line: ' . __LINE__ . "\n" .
-                    // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary
-                    'Stack Trace: ' . wp_debug_backtrace_summary() . "\n" .
-                    "=========================================\n\n"
-                );
+                MultiVendorX()->util->log('Database operation failed', 'ERROR');
             }
 
             \WC_Cache_Helper::get_transient_version( 'woocommerce_reports', true );

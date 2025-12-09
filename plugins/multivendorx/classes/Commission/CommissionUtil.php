@@ -34,17 +34,7 @@ class CommissionUtil {
         );
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log(
-                "========= MULTIVENDORX ERROR =========\n" .
-                'Timestamp: ' . current_time( 'mysql' ) . "\n" .
-                'Error: ' . $wpdb->last_error . "\n" .
-                'Last Query: ' . $wpdb->last_query . "\n" .
-                'File: ' . __FILE__ . "\n" .
-                'Line: ' . __LINE__ . "\n" .
-                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary
-                'Stack Trace: ' . wp_debug_backtrace_summary() . "\n" .
-                "=========================================\n\n"
-            );
+            MultiVendorX()->util->log('Database operation failed', 'ERROR');
         }
 
         return $commission ?? new \stdClass();
@@ -72,17 +62,7 @@ class CommissionUtil {
             $wpdb->prepare( 'SELECT * FROM `' . $wpdb->prefix . Utill::TABLES['commission'] . '` WHERE store_id = %d AND order_id = %d', $store_id, $order_id )
         );
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log(
-                "========= MULTIVENDORX ERROR =========\n" .
-                'Timestamp: ' . current_time( 'mysql' ) . "\n" .
-                'Error: ' . $wpdb->last_error . "\n" .
-                'Last Query: ' . $wpdb->last_query . "\n" .
-                'File: ' . __FILE__ . "\n" .
-                'Line: ' . __LINE__ . "\n" .
-                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary
-                'Stack Trace: ' . wp_debug_backtrace_summary() . "\n" .
-                "=========================================\n\n"
-            );
+            MultiVendorX()->util->log('Database operation failed', 'ERROR');
         }
         return $commission ?? new \stdClass();
     }
@@ -173,17 +153,7 @@ class CommissionUtil {
         $commissions = $wpdb->get_results( $query );
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log(
-                "========= MULTIVENDORX ERROR =========\n" .
-                'Timestamp: ' . current_time( 'mysql' ) . "\n" .
-                'Error: ' . $wpdb->last_error . "\n" .
-                'Last Query: ' . $wpdb->last_query . "\n" .
-                'File: ' . __FILE__ . "\n" .
-                'Line: ' . __LINE__ . "\n" .
-                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary
-                'Stack Trace: ' . wp_debug_backtrace_summary() . "\n" .
-                "=========================================\n\n"
-            );
+            MultiVendorX()->util->log('Database operation failed', 'ERROR');
         }
 
         // Return object or raw array.
@@ -238,17 +208,7 @@ class CommissionUtil {
             $results = $wpdb->get_results( $query );
 
             if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-                MultiVendorX()->util->log(
-                    "========= MULTIVENDORX ERROR =========\n" .
-                    'Timestamp: ' . current_time( 'mysql' ) . "\n" .
-                    'Error: ' . $wpdb->last_error . "\n" .
-                    'Last Query: ' . $wpdb->last_query . "\n" .
-                    'File: ' . __FILE__ . "\n" .
-                    'Line: ' . __LINE__ . "\n" .
-                    // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary
-                    'Stack Trace: ' . wp_debug_backtrace_summary() . "\n" .
-                    "=========================================\n\n"
-                );
+                MultiVendorX()->util->log('Database operation failed', 'ERROR');
             }
 
             return array_map(
@@ -294,17 +254,7 @@ class CommissionUtil {
         $result = $wpdb->get_row( $query );
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log(
-                "========= MULTIVENDORX ERROR =========\n" .
-                'Timestamp: ' . current_time( 'mysql' ) . "\n" .
-                'Error: ' . $wpdb->last_error . "\n" .
-                'Last Query: ' . $wpdb->last_query . "\n" .
-                'File: ' . __FILE__ . "\n" .
-                'Line: ' . __LINE__ . "\n" .
-                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary
-                'Stack Trace: ' . wp_debug_backtrace_summary() . "\n" .
-                "=========================================\n\n"
-            );
+            MultiVendorX()->util->log('Database operation failed', 'ERROR');
         }
 
         return array(

@@ -91,12 +91,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log(
-                    'MVX REST Error: ' .
-                    'Code=' . $error->get_error_code() . '; ' .
-                    'Message=' . $error->get_error_message() . '; ' .
-                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
-                );
+                MultiVendorX()->util->log($error);
             }
 
             return $error;
@@ -252,12 +247,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
 
             return rest_ensure_response( array_values( $refund_list ) );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log(
-                'MULTIVENDORX REST Exception: ' .
-                'Message=' . $e->getMessage() . '; ' .
-                'File=' . $e->getFile() . '; ' .
-                'Line=' . $e->getLine() . "\n\n"
-            );
+            MultiVendorX()->util->log($e);
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
@@ -402,17 +392,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
         $store_item_id = $wpdb->get_var( $wpdb->prepare( "SELECT meta_value FROM {$wpdb->order_itemmeta} WHERE meta_key=%s AND order_item_id=%d", 'store_order_item_id', absint( $item_id ) ) );
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-			MultiVendorX()->util->log(
-				"========= MULTIVENDORX ERROR =========\n" .
-				'Timestamp: ' . current_time( 'mysql' ) . "\n" .
-				'Error: ' . $wpdb->last_error . "\n" .
-				'Last Query: ' . $wpdb->last_query . "\n" .
-				'File: ' . __FILE__ . "\n" .
-				'Line: ' . __LINE__ . "\n" .
-                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_wp_debug_backtrace_summary
-				'Stack Trace: ' . wp_debug_backtrace_summary() . "\n" .
-				"=========================================\n\n"
-			);
+            MultiVendorX()->util->log('Database operation failed', 'ERROR');
 		}
 
         return $store_item_id;

@@ -125,12 +125,7 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log(
-                    'MVX REST Error: ' .
-                    'Code=' . $error->get_error_code() . '; ' .
-                    'Message=' . $error->get_error_message() . '; ' .
-                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
-                );
+                MultiVendorX()->util->log($error);
             }
 
             return $error;
@@ -288,12 +283,7 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
                 )
             );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log(
-                'MULTIVENDORX REST Exception: ' .
-                'Message=' . $e->getMessage() . '; ' .
-                'File=' . $e->getFile() . '; ' .
-                'Line=' . $e->getLine() . "\n\n"
-            );
+            MultiVendorX()->util->log($e);
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
@@ -381,92 +371,106 @@ class MultiVendorX_REST_Qna_Controller extends \WP_REST_Controller {
      * @param  object $request Full data about the request.
      */
     public function update_item( $request ) {
-        // Verify nonce.
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            return new \WP_Error(
+            $error = new \WP_Error(
                 'invalid_nonce',
                 __( 'Invalid nonce', 'multivendorx' ),
                 array( 'status' => 403 )
             );
+
+            if ( is_wp_error( $error ) ) {
+                MultiVendorX()->util->log($error);
+            }
+
+            return $error;
         }
-
-        // Get question ID.
-        $id = absint( $request->get_param( 'id' ) );
-        if ( ! $id ) {
-            return new \WP_Error(
-                'invalid_id',
-                __( 'Invalid question ID', 'multivendorx' ),
-                array( 'status' => 400 )
-            );
-        }
-
-        // Fetch the question.
-        $q = reset( Util::get_question_information( array( 'id' => $id ) ) );
-        if ( ! $q ) {
-            return new \WP_Error(
-                'not_found',
-                __( 'Question not found', 'multivendorx' ),
-                array( 'status' => 404 )
-            );
-        }
-
-        // Fields that can be updated.
-        $question_text = $request->get_param( 'question_text' );
-        $answer_text   = $request->get_param( 'answer_text' );
-        $visibility    = $request->get_param( 'question_visibility' );
-
-        $data_to_update = array();
-
-        if ( isset( $answer_text ) ) {
-            $data_to_update['question_text'] = sanitize_textarea_field( $question_text );
-        }
-
-        if ( isset( $answer_text ) ) {
-            $data_to_update['answer_text'] = sanitize_textarea_field( $answer_text );
-        }
-
-        if ( isset( $visibility ) ) {
-            $allowed = array( 'public', 'private', 'hidden' );
-            if ( in_array( $visibility, $allowed, true ) ) {
-                $data_to_update['question_visibility'] = sanitize_text_field( $visibility );
-            } else {
+        try{
+            // Get question ID.
+            $id = absint( $request->get_param( 'id' ) );
+            if ( ! $id ) {
                 return new \WP_Error(
-                    'invalid_visibility',
-                    __( 'Invalid visibility value', 'multivendorx' ),
+                    'invalid_id',
+                    __( 'Invalid question ID', 'multivendorx' ),
                     array( 'status' => 400 )
                 );
             }
-        }
 
-        if ( empty( $data_to_update ) ) {
+            // Fetch the question.
+            $q = reset( Util::get_question_information( array( 'id' => $id ) ) );
+            if ( ! $q ) {
+                return new \WP_Error(
+                    'not_found',
+                    __( 'Question not found', 'multivendorx' ),
+                    array( 'status' => 404 )
+                );
+            }
+
+            // Fields that can be updated.
+            $question_text = $request->get_param( 'question_text' );
+            $answer_text   = $request->get_param( 'answer_text' );
+            $visibility    = $request->get_param( 'question_visibility' );
+
+            $data_to_update = array();
+
+            if ( isset( $answer_text ) ) {
+                $data_to_update['question_text'] = sanitize_textarea_field( $question_text );
+            }
+
+            if ( isset( $answer_text ) ) {
+                $data_to_update['answer_text'] = sanitize_textarea_field( $answer_text );
+            }
+
+            if ( isset( $visibility ) ) {
+                $allowed = array( 'public', 'private', 'hidden' );
+                if ( in_array( $visibility, $allowed, true ) ) {
+                    $data_to_update['question_visibility'] = sanitize_text_field( $visibility );
+                } else {
+                    return new \WP_Error(
+                        'invalid_visibility',
+                        __( 'Invalid visibility value', 'multivendorx' ),
+                        array( 'status' => 400 )
+                    );
+                }
+            }
+
+            if ( empty( $data_to_update ) ) {
+                return new \WP_Error(
+                    'nothing_to_update',
+                    __( 'No valid fields to update', 'multivendorx' ),
+                    array( 'status' => 400 )
+                );
+            }
+
+            // Add answer_by (current user ID).
+            $current_user_id = get_current_user_id();
+            if ( $current_user_id ) {
+                $data_to_update['answer_by'] = $current_user_id;
+            }
+
+            // Save via Util helper.
+            $updated = Util::update_question( $id, $data_to_update );
+
+            if ( ! $updated ) {
+                return rest_ensure_response( array( 'success' => false ) );
+            }
+
+            return rest_ensure_response(
+                array(
+                    'success'    => true,
+                    'updated_by' => $current_user_id,
+                    'updated_at' => current_time( 'mysql' ),
+                )
+            );
+        } catch ( \Exception $e ) {
+            MultiVendorX()->util->log( $e );
+
             return new \WP_Error(
-                'nothing_to_update',
-                __( 'No valid fields to update', 'multivendorx' ),
-                array( 'status' => 400 )
+                'server_error',
+                __( 'Unexpected server error', 'multivendorx' ),
+                array( 'status' => 500 )
             );
         }
-
-        // Add answer_by (current user ID).
-        $current_user_id = get_current_user_id();
-        if ( $current_user_id ) {
-            $data_to_update['answer_by'] = $current_user_id;
-        }
-
-        // Save via Util helper.
-        $updated = Util::update_question( $id, $data_to_update );
-
-        if ( ! $updated ) {
-            return rest_ensure_response( array( 'success' => false ) );
-        }
-
-        return rest_ensure_response(
-            array(
-				'success'    => true,
-				'updated_by' => $current_user_id,
-				'updated_at' => current_time( 'mysql' ),
-            )
-        );
     }
 
     /**

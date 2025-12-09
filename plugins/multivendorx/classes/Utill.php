@@ -212,52 +212,82 @@ class Utill {
      * @param string $message message.
      * @return bool
      */
-	public static function log( $message ) {
-		global $wp_filesystem;
-
-		$message = var_export( $message, true ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export
-
-		// Init filesystem.
-		if ( empty( $wp_filesystem ) ) {
-			require_once ABSPATH . '/wp-admin/includes/file.php';
-			WP_Filesystem();
-		}
-
-		// log folder create.
-		if ( ! file_exists( MultiVendorX()->multivendorx_logs_dir . '/.htaccess' ) ) {
-			$result = wp_mkdir_p( MultiVendorX()->multivendorx_logs_dir );
-			if ( true === $result ) {
-				// Create infrastructure to prevent listing contents of the logs directory.
-				try {
-					$wp_filesystem->put_contents( MultiVendorX()->multivendorx_logs_dir . '/.htaccess', 'deny from all' );
-					$wp_filesystem->put_contents( MultiVendorX()->multivendorx_logs_dir . '/index.html', '' );
-				} catch ( Exception $exception ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
-					// Creation failed.
-				}
-			}
-			$message = "MultiVendorX Log file Created\n";
-		}
-
-		// Clear log file.
-		if ( filter_input( INPUT_POST, 'clearlog', FILTER_DEFAULT ) !== null ) {
-			$message = "MultiVendorX Log file Cleared\n";
-		}
-
-		// Write Log.
-		if ( '' !== $message ) {
-			$log_entry        = gmdate( 'd/m/Y H:i:s', time() ) . ': ' . $message;
-			$existing_content = $wp_filesystem->get_contents( MultiVendorX()->log_file );
-
-			// Append existing content.
-			if ( ! empty( $existing_content ) ) {
-				$log_entry = "\n" . $log_entry;
-			}
-
-			return $wp_filesystem->put_contents( MultiVendorX()->log_file, $existing_content . $log_entry );
-		}
-
-		return false;
-	}
+    public static function log( $message = '', $type = 'INFO', $extra = [] ) {
+        global $wp_filesystem, $wpdb;
+    
+        // Initialize Filesystem API
+        if ( empty( $wp_filesystem ) ) {
+            require_once ABSPATH . '/wp-admin/includes/file.php';
+            WP_Filesystem();
+        }
+    
+        // Create logs folder if not exists
+        if ( ! file_exists( MultiVendorX()->multivendorx_logs_dir . '/.htaccess' ) ) {
+            wp_mkdir_p( MultiVendorX()->multivendorx_logs_dir );
+            try {
+                $wp_filesystem->put_contents( MultiVendorX()->multivendorx_logs_dir . '/.htaccess', 'deny from all' );
+                $wp_filesystem->put_contents( MultiVendorX()->multivendorx_logs_dir . '/index.html', '' );
+            } catch ( Exception $e ) {}
+        }
+    
+        // Handle Exception
+        if ( $message instanceof \Exception ) {
+            $type = 'EXCEPTION';
+            $extra['Message'] = $message->getMessage();
+            $extra['Code']    = $message->getCode();
+            $extra['File']    = $message->getFile();
+            $extra['Line']    = $message->getLine();
+            $extra['Stack']   = $message->getTraceAsString();
+            $message = 'Exception occurred';
+        }
+    
+        // Handle WP_Error
+        if ( $message instanceof \WP_Error ) {
+            $type = 'WP_ERROR';
+            $extra['Code']    = $message->get_error_code();
+            $extra['Message'] = $message->get_error_message();
+            $extra['Data']    = $message->get_error_data();
+            $message = 'WP_Error occurred';
+        }
+    
+        // Handle DB error automatically if exists
+        if ( isset( $wpdb ) && ! empty( $wpdb->last_error ) ) {
+            $extra['DB Error']   = $wpdb->last_error;
+            $extra['Last Query'] = $wpdb->last_query;
+        }
+    
+        // Automatic metadata
+        $meta = array_merge([
+            'Type'      => $type,
+            'Timestamp' => current_time( 'mysql' ),
+            'File'      => debug_backtrace()[1]['file'] ?? '',
+            'Line'      => debug_backtrace()[1]['line'] ?? '',
+            'Stack'     => wp_debug_backtrace_summary(),
+        ], $extra);
+    
+        // Build SINGLE-LINE entries for React UI
+        $timestamp = $meta['Timestamp'];
+        $log_lines = [];
+    
+        foreach ( $meta as $key => $val ) {
+            $val = trim( print_r( $val, true ) );
+            $log_lines[] = "{$timestamp} : {$key}: {$val}";
+        }
+    
+        // Add final message line
+        $log_lines[] = "{$timestamp} : Message: " . trim( print_r( $message, true ) );
+    
+        // Combine log lines
+        $log_entry = implode( "\n", $log_lines ) . "\n";
+    
+        // Append to file
+        $existing = $wp_filesystem->get_contents( MultiVendorX()->log_file );
+        if ( ! empty( $existing ) ) {
+            $log_entry = "\n" . $log_entry; // spacing
+        }
+    
+        return $wp_filesystem->put_contents( MultiVendorX()->log_file, $existing . $log_entry );
+    }
 
     /**
      * Check pro plugin is active or not.

@@ -123,11 +123,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
             // Log the error
-            MultiVendorX()->util->log(
-                'MVX REST Error: Code=' . $error->get_error_code() .
-                '; Message=' . $error->get_error_message() .
-                '; Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
-            );
+            MultiVendorX()->util->log($error);
             return $error;
         }
 
@@ -236,11 +232,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
                 )
             );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log(
-                'MULTIVENDORX REST Exception: Message=' . $e->getMessage() .
-                '; File=' . $e->getFile() .
-                '; Line=' . $e->getLine() . "\n\n"
-            );
+            MultiVendorX()->util->log($e);
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
@@ -260,11 +252,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
             // Log the error
-            MultiVendorX()->util->log(
-                'MVX REST Error: Code=' . $error->get_error_code() .
-                '; Message=' . $error->get_error_message() .
-                '; Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
-            );
+            MultiVendorX()->util->log($error);
 
             return $error;
         }
@@ -308,11 +296,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
                 )
             );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log(
-                'MULTIVENDORX REST Exception: Message=' . $e->getMessage() .
-                '; File=' . $e->getFile() .
-                '; Line=' . $e->getLine() . "\n\n"
-            );
+            MultiVendorX()->util->log($e);
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
@@ -330,11 +314,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
-            MultiVendorX()->util->log(
-                'MVX REST Error: Code=' . $error->get_error_code() .
-                '; Message=' . $error->get_error_message() .
-                '; Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
-            );
+            MultiVendorX()->util->log($error);
 
             return $error;
         }
@@ -428,11 +408,7 @@ class MultiVendorX_REST_Knowledge_Controller extends \WP_REST_Controller {
                 )
             );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log(
-                'MULTIVENDORX REST Exception: Message=' . $e->getMessage() .
-                '; File=' . $e->getFile() .
-                '; Line=' . $e->getLine() . "\n\n"
-            );
+            MultiVendorX()->util->log($e);
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }

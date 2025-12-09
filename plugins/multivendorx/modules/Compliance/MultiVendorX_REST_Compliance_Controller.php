@@ -126,12 +126,7 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log(
-                    'MVX REST Error: ' .
-                    'Code=' . $error->get_error_code() . '; ' .
-                    'Message=' . $error->get_error_message() . '; ' .
-                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
-                );
+                MultiVendorX()->util->log($error);
             }
 
             return $error;
@@ -208,12 +203,7 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
 
             return rest_ensure_response( $formatted );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log(
-                'MULTIVENDORX REST Exception: ' .
-                'Message=' . $e->getMessage() . '; ' .
-                'File=' . $e->getFile() . '; ' .
-                'Line=' . $e->getLine() . "\n\n"
-            );
+            MultiVendorX()->util->log($e);
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
@@ -231,12 +221,7 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log(
-                    'MVX REST Error: ' .
-                    'Code=' . $error->get_error_code() . '; ' .
-                    'Message=' . $error->get_error_message() . '; ' .
-                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
-                );
+                MultiVendorX()->util->log($error);
             }
 
             return $error;
@@ -255,12 +240,7 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log(
-                    'MVX REST Error: ' .
-                    'Code=' . $error->get_error_code() . '; ' .
-                    'Message=' . $error->get_error_message() . '; ' .
-                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
-                );
+                MultiVendorX()->util->log($error);
             }
 
             return $error;
@@ -268,12 +248,7 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
         try {
             return rest_ensure_response( $data );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log(
-                'MULTIVENDORX REST Exception: ' .
-                'Message=' . $e->getMessage() . '; ' .
-                'File=' . $e->getFile() . '; ' .
-                'Line=' . $e->getLine() . "\n\n"
-            );
+            MultiVendorX()->util->log($e);
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
@@ -291,12 +266,7 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log(
-                    'MVX REST Error: ' .
-                    'Code=' . $error->get_error_code() . '; ' .
-                    'Message=' . $error->get_error_message() . '; ' .
-                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
-                );
+                MultiVendorX()->util->log($error);
             }
 
             return $error;
@@ -304,12 +274,7 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
         try {
             return rest_ensure_response( array( 'success' => true ) );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log(
-                'MULTIVENDORX REST Exception: ' .
-                'Message=' . $e->getMessage() . '; ' .
-                'File=' . $e->getFile() . '; ' .
-                'Line=' . $e->getLine() . "\n\n"
-            );
+            MultiVendorX()->util->log($e);
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
@@ -327,12 +292,7 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
 
             // Log the error.
             if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log(
-                    'MVX REST Error: ' .
-                    'Code=' . $error->get_error_code() . '; ' .
-                    'Message=' . $error->get_error_message() . '; ' .
-                    'Data=' . wp_json_encode( $error->get_error_data() ) . "\n\n"
-                );
+                MultiVendorX()->util->log($error);
             }
 
             return $error;
@@ -371,12 +331,7 @@ class MultiVendorX_REST_Compliance_Controller extends \WP_REST_Controller {
 
             return rest_ensure_response( array( 'success' => true ) );
         } catch ( \Exception $e ) {
-            MultiVendorX()->util->log(
-                'MULTIVENDORX REST Exception: ' .
-                'Message=' . $e->getMessage() . '; ' .
-                'File=' . $e->getFile() . '; ' .
-                'Line=' . $e->getLine() . "\n\n"
-            );
+            MultiVendorX()->util->log($e);
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
