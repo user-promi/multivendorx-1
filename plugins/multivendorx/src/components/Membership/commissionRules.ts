@@ -15,23 +15,49 @@ export default {
             key: 'commission_type',
             type: 'setting-toggle',
             label: __('Commission Mode', 'multivendorx'),
-            settingDescription: __("Choose whether to use global commission settings or custom plan-based commission", 'multivendorx'),
+            desc: __(
+                'Choose whether to use global commission settings or custom plan-based commission',
+                'multivendorx'
+            ),
+            options: [
+                {
+                    key: 'free',
+                    label: __('Global', 'multivendorx'),
+                    value: 'store_order',
+                },
+                {
+                    key: 'paid',
+                    label: __('Plan Based', 'multivendorx'),
+                    value: 'per_item',
+                },
+            ],
+        },
+        {
+            key: 'commission_type',
+            type: 'setting-toggle',
+            label: __('Billing Cycle', 'multivendorx'),
             desc: __(
                 '',
                 'multivendorx'
             ),
             options: [
                 {
-                    key: 'store_order',
-                    label: __('Global', 'multivendorx'),
-                    value: 'store_order',
+                    key: 'monthly',
+                    label: __('Percentage', 'multivendorx'),
+                    value: 'monthly',
                 },
                 {
-                    key: 'per_item',
-                    label: __('Plan Based', 'multivendorx'),
-                    value: 'per_item',
+                    key: 'yearly',
+                    label: __('Flat Fee', 'multivendorx'),
+                    value: 'yearly',
                 },
             ],
+        },
+        {
+            key: 'plan-price',
+            type: 'number',
+            size: '12rem',
+            label: __('Admin Commission Value', 'multivendorx'),
         },
     ],
 };
