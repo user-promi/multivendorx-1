@@ -1746,3 +1746,64 @@ body:has(.admin-main-wrapper) {
     align-items: center;
   }
 }
+
+
+// page title start (dashboard)
+.page-title-wrapper {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  align-items: center;
+
+  .date-picker-section-wrapper {
+    background: #fff;
+  }
+
+  .page-title {
+    display: flex;
+    flex-direction: column;
+
+    .title {
+      font-size: 1.625rem;
+      line-height: 2rem;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      font-weight: 600;
+    }
+
+    .view-des {
+      font-size: 1.125rem;
+      line-height: 1.5rem;
+    }
+
+    .des {
+      color: #00000094;
+
+      b {
+        color: #000;
+      }
+
+      &.up b {
+        color: #06be9f;
+      }
+    }
+  }
+
+  .breadcrumbs {
+    span {
+      a {
+        color: $theme-color;
+      }
+
+      &:last-child {
+        a {
+          color: #0000007a;
+        }
+      }
+    }
+  }
+}
+
+// page title end

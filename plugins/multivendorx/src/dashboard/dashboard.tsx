@@ -514,7 +514,6 @@ const Dashboard: React.FC = () => {
 
       <div className="row">
         <div className="column transparent">
-          <div className="card-body">
             <div className="analytics-container">
 
               {analyticsData.map((item, idx) => (
@@ -543,7 +542,6 @@ const Dashboard: React.FC = () => {
               ))}
 
             </div>
-          </div>
         </div>
       </div>
 
