@@ -46,16 +46,17 @@ class Rest {
      */
     public function __construct() {
         $this->init_classes();
-        add_action( 'rest_api_init', array( $this, 'register_rest_routes' ), 10 );
-        add_filter( 'woocommerce_rest_check_permissions', array( $this, 'give_permission' ), 10, 4 );
-        add_filter( 'woocommerce_rest_shop_order_object_query', array( $this, 'filter_orders_by_store_id' ), 10, 2 );
-        add_filter( 'woocommerce_rest_prepare_product_object', array( $this, 'add_store_data_to_product_response' ), 10, 3 );
-        add_filter( 'woocommerce_rest_product_object_query', array( $this, 'filter_products_by_meta_exists' ), 10, 2 );
-        add_filter( 'woocommerce_rest_shop_coupon_object_query', array( $this, 'filter_coupons_by_meta_exists' ), 10, 2 );
-        add_filter( 'woocommerce_analytics_products_query_args', array( $this, 'filter_low_stock_by_meta_exists' ), 10, 1 );
-        add_filter( 'woocommerce_rest_prepare_shop_order_object', array( $this, 'filter_orders_by_meta_exists' ), 10, 3 );
-        add_filter( 'woocommerce_rest_prepare_shop_coupon_object', array( $this, 'filter_coupons_by_meta_exists_response' ), 10, 3 );
-        add_filter( 'woocommerce_rest_pre_insert_shop_coupon_object', array( $this, 'fix_rest_coupon_status' ), 10, 3 );
+        add_action( 'rest_api_init', array( $this, 'register_rest_api_routes' ), 10 );
+        add_filter( 'woocommerce_rest_check_permissions', array( $this, 'grant_woocommerce_rest_permission' ), 10, 4 );
+        add_filter( 'woocommerce_rest_shop_order_object_query', array( $this, 'query_shop_order_modify' ), 10, 2 );
+        add_filter( 'woocommerce_rest_product_object_query', array( $this, 'query_product_modify' ), 10, 2 );
+        add_filter( 'woocommerce_rest_shop_coupon_object_query', array( $this, 'query_shop_coupon_filter_meta' ), 10, 2 );
+        add_filter( 'woocommerce_rest_prepare_product_object', array( $this, 'prepare_product_add_store_data' ), 10, 3 );
+        add_filter( 'woocommerce_rest_prepare_shop_order_object', array( $this, 'prepare_shop_order_filter_meta' ), 10, 3 );
+        add_filter( 'woocommerce_rest_prepare_shop_coupon_object', array( $this, 'prepare_shop_coupon_filter_meta' ), 10, 3 );
+        add_filter( 'woocommerce_rest_pre_insert_shop_coupon_object', array( $this, 'pre_insert_shop_coupon_fix_status' ), 10, 3 );
+        add_filter( 'woocommerce_analytics_products_query_args', array( $this, 'analytics_products_filter_low_stock_meta' ), 10, 1 );
+
     }
 
     /**
@@ -65,7 +66,7 @@ class Rest {
      * @param object $product  Product object.
      * @param object $request  REST API request object.
      */
-    public function add_store_data_to_product_response( $response, $product, $request ) {
+    public function prepare_product_add_store_data( $response, $product, $request ) {
         $product_id = $product->get_id();
 
         // Get store ID from product meta.
@@ -109,7 +110,7 @@ class Rest {
      *
      * @param array $args WP_Query arguments.
      */
-    public function filter_low_stock_by_meta_exists( $args ) {
+    public function analytics_products_filter_low_stock_meta( $args ) {
         if ( isset( $request['meta_key'] ) && Utill::POST_META_SETTINGS['store_id'] === $request['meta_key'] ) {
 
             // Build the meta query to check for the existence of the MultiVendorX key.
@@ -133,7 +134,7 @@ class Rest {
      * @param array  $args    WP_Query arguments.
      * @param object $request REST API request object.
      */
-    public function filter_orders_by_store_id( $args, $request ) {
+    public function query_shop_order_modify( $args, $request ) {
         $meta_key      = $request->get_param( 'meta_key' );
         $meta_value    = $request->get_param( 'value' );
         $refund_status = $request->get_param( 'refund_status' );
@@ -187,7 +188,7 @@ class Rest {
      * @param array $request REST API request object.
      * @return array Modified WP_Query arguments.
      */
-    public function filter_products_by_meta_exists( $args, $request ) {
+    public function query_product_modify( $args, $request ) {
         if ( isset( $request['meta_key'] ) && Utill::POST_META_SETTINGS['store_id'] === $request['meta_key'] ) {
 
             // Check if a value (store_id) was passed.
@@ -226,7 +227,7 @@ class Rest {
      * @param array $args    WP_Query arguments.
      * @param array $request REST API request object.
      */
-    public function filter_coupons_by_meta_exists( $args, $request ) {
+    public function query_shop_coupon_filter_meta( $args, $request ) {
 
         $meta_query = array();
 
@@ -276,7 +277,7 @@ class Rest {
      * @param int    $object_id Object ID.
      * @param string $post_type Post type.
      */
-    public function give_permission( $permission, $context, $object_id, $post_type ) {
+    public function grant_woocommerce_rest_permission( $permission, $context, $object_id, $post_type ) {
         $user_id = get_current_user_id();
 
         // Fetch custom user meta.
@@ -299,7 +300,7 @@ class Rest {
      * @param object $object   Order object.
      * @param object $request  REST API request object.
      */
-    public function filter_orders_by_meta_exists( $response, $object, $request ) {
+    public function prepare_shop_order_filter_meta( $response, $object, $request ) {
         $store_id = $object->get_meta( Utill::POST_META_SETTINGS['store_id'] );
 
         if ( $store_id ) {
@@ -385,7 +386,7 @@ class Rest {
      * @param array  $request  Request object.
      * @return array
      */
-    public function filter_coupons_by_meta_exists_response( $response, $object, $request ) {
+    public function prepare_shop_coupon_filter_meta( $response, $object, $request ) {
         $store_id = $object->get_meta( Utill::POST_META_SETTINGS['multivendorx_store_id'] );
         if ( $store_id ) {
             // Get store information.
@@ -409,7 +410,7 @@ class Rest {
      * @param array  $request  Request object.
      * @param bool   $creating  True when creating, false when updating.
      */
-    public function fix_rest_coupon_status( $coupon, $request, $creating ) {
+    public function pre_insert_shop_coupon_fix_status( $coupon, $request, $creating ) {
 
         if ( isset( $request['status'] ) ) {
             $status = sanitize_text_field( $request['status'] );
@@ -455,7 +456,7 @@ class Rest {
     /**
      * Register REST API routes.
      */
-    public function register_rest_routes() {
+    public function register_rest_api_routes() {
 
         register_meta(
             'comment',

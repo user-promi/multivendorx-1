@@ -10,7 +10,6 @@ namespace MultiVendorX\RestAPI\Controllers;
 use MultiVendorX\Store\StoreUtil;
 use MultiVendorX\Store\Store;
 use MultiVendorX\Utill;
-use MultiVendorX\Store\SocialVerification;
 use MultiVendorX\Commission\CommissionUtil;
 use MultiVendorX\StoreReview\Util;
 use MultiVendorX\Transaction\Transaction;
@@ -180,10 +179,6 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
      */
     function get_social_verification() {
         static $instance = null;
-
-        if ( is_null( $instance ) ) {
-            $instance = new SocialVerification();
-        }
 
         return $instance;
     }

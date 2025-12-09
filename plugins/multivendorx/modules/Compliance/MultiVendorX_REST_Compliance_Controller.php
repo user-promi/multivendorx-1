@@ -8,7 +8,6 @@
 namespace MultiVendorX\Compliance;
 
 use MultiVendorX\Compliance\Util;
-use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
 

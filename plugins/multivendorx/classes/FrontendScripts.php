@@ -352,9 +352,9 @@ class FrontendScripts {
 					return strpos( $page->post_content, $shortcode ) !== false;
 				}
             );
-            $vendor_dashboard_pages = array();
+            $store_dashboard_pages = array();
             foreach ( $matched_pages as $page ) {
-                $vendor_dashboard_pages[] = array(
+                $store_dashboard_pages[] = array(
                     'value' => $page->post_name,
                     'label' => $page->post_title,
                     'key'   => $page->ID,
@@ -440,7 +440,7 @@ class FrontendScripts {
 							'tab_name'                 => __( 'MultiVendorX', 'multivendorx' ),
 							'settings_databases_value' => $settings_databases_value,
 							'pages_list'               => $pages_array,
-							'vendor_dashboard_pages'   => $vendor_dashboard_pages,
+							'store_dashboard_pages'    => $store_dashboard_pages,
 							'pro_url'                  => esc_url( MULTIVENDORX_PRO_SHOP_URL ),
 							'open_uploader'            => 'Upload Image',
 							'module_page_url'          => admin_url( 'admin.php?page=multivendorx#&tab=modules' ),

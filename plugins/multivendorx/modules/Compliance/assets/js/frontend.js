@@ -70,7 +70,7 @@ jQuery(function($){
             url: reportAbuseFrontend.ajaxurl,
             type: 'POST',
             data: {
-                action: 'mvx_submit_report_abuse',
+                action: 'multivendorx_submit_report_abuse',
                 nonce: reportAbuseFrontend.nonce,
                 name: name,
                 email: email,

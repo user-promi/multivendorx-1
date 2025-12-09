@@ -7,7 +7,6 @@
 
 namespace MultiVendorX;
 
-use MultiVendorX\Store\StoreUtil;
 use MultiVendorX\Utill;
 
 /**
@@ -82,8 +81,6 @@ class Shortcode {
     public function display_store_dashboard() {
         ob_start();
         ?>
-        <!-- <div id="multivendorx-vendor-dashboard">
-        </div>  -->
         <?php
         $user = wp_get_current_user();
         if ( ! is_user_logged_in() ) {
@@ -109,8 +106,6 @@ class Shortcode {
             ?>
             <div id="multivendorx-registration-form" class="woocommerce">
                 <?php
-                // Here you can render the actual registration form if needed.
-                // Example: echo do_shortcode('[multivendorx_store_registration]');.
                 ?>
             </div>
             <?php

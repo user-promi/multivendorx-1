@@ -50,13 +50,13 @@ class Transaction {
 	 * Create transaction for backend order.
 	 *
 	 * @param integer $commission_id Commission Id.
-	 * @param object  $vendor_order  Vendor order object.
+	 * @param object  $store_order  Store order object.
 	 */
-    public function create_transaction_for_backend_order( $commission_id, $vendor_order ) {
+    public function create_transaction_for_backend_order( $commission_id, $store_order ) {
         if ( $commission_id > 0 ) {
             $disbursement_status = MultiVendorX()->setting->get_setting( 'disbursement_order_status' );
-            if ( ! empty( $disbursement_status ) && in_array( $vendor_order->get_status(), $disbursement_status, true ) ) {
-                $this->create_transaction( $commission_id, $vendor_order );
+            if ( ! empty( $disbursement_status ) && in_array( $store_order->get_status(), $disbursement_status, true ) ) {
+                $this->create_transaction( $commission_id, $store_order );
             }
         }
     }
@@ -74,7 +74,6 @@ class Transaction {
             return;
         }
 
-        $payment_method = $order->get_payment_method();
         // If (payment method is stripe or paypal marketplace and the check charges then this function return).
         $disbursement_status = MultiVendorX()->setting->get_setting( 'disbursement_order_status' );
         if ( ! empty( $disbursement_status ) && in_array( $new_status, $disbursement_status, true ) ) {

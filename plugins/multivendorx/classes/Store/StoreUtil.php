@@ -352,16 +352,16 @@ class StoreUtil {
      * @return object|false
      */
     public static function get_products_store( $product_id ) {
-        $vendor_data = false;
+        $store_data = false;
         if ( $product_id > 0 ) {
-            $vendor     = get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true );
-            $vendor_obj = Store::get_store_by_id( $vendor );
+            $store     = get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true );
+            $store_obj = Store::get_store_by_id( $store );
 
-            if ( $vendor_obj ) {
-                $vendor_data = $vendor_obj;
+            if ( $store_obj ) {
+                $store_data = $store_obj;
             }
         }
-        return $vendor_data;
+        return $store_data;
     }
 
     /**
@@ -551,12 +551,6 @@ class StoreUtil {
             // Insert.
             $wpdb->insert(
                 $table_name,
-                // [
-                // 'store_id'      => $store_id,
-                // 'user_id'       => $user_id,
-                // 'role_id'       => MultiVendorX()->setting->get_setting( 'approve_store' ) == 'automatically' ? 'store_owner' : null,
-                // 'primary_owner' => MultiVendorX()->setting->get_setting( 'approve_store' ) == 'automatically' ? $user_id : null,
-                // ],
                 array(
                     'store_id'      => $store_id,
                     'user_id'       => $user_id,

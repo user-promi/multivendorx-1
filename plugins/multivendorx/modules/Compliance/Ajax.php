@@ -22,8 +22,8 @@ class Ajax {
      * Constructor.
      */
     public function __construct() {
-        add_action( 'wp_ajax_mvx_submit_report_abuse', array( $this, 'handle_report_abuse' ) );
-        add_action( 'wp_ajax_nopriv_mvx_submit_report_abuse', array( $this, 'handle_report_abuse' ) );
+        add_action( 'wp_ajax_multivendorx_submit_report_abuse', array( $this, 'handle_report_abuse' ) );
+        add_action( 'wp_ajax_nopriv_multivendorx_submit_report_abuse', array( $this, 'handle_report_abuse' ) );
         add_action( 'wp_ajax_get_report_reasons', array( $this, 'get_report_reasons' ) );
         add_action( 'wp_ajax_nopriv_get_report_reasons', array( $this, 'get_report_reasons' ) );
     }

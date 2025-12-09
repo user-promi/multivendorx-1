@@ -8,7 +8,6 @@
 namespace MultiVendorX\RestAPI\Controllers;
 
 use MultiVendorX\Install;
-use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
 
