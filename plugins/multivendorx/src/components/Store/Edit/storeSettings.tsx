@@ -1047,7 +1047,7 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                             </div>
                             <div className="card-body">
                                 {['facebook', 'twitter', 'linkedin', 'youtube', 'instagram'].map((network) => {
-                                    const iconClass = `adminlib-${network === 'twitter' ? 'x' : network}${network === 'linkedin' ? '-border' : ''} ${network}`;
+                                    const iconClass = `adminlib-${network} ${network}`;
                                     const defaultUrl = `https://${network === 'twitter' ? 'twitter.com' : network}.com/`;
 
                                     return (

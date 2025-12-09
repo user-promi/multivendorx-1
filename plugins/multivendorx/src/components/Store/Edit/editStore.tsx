@@ -396,7 +396,7 @@ const EditStore = () => {
                                                         setLogoMenu((prev) => !prev);
                                                         setBannerMenu(false);
                                                     }}>
-                                                        <i className="adminlib-edit"></i> {__('Edit logo image', 'multivendorx')}
+                                                        <i className="adminlib-edit"></i>
                                                     </span>
                                                     {logoMenu && (
                                                         <div className="dropdown">

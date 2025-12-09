@@ -511,7 +511,7 @@ const StoreReport: React.FC = () => {
           <div className="title">{__('Account Overview', 'multivendorx')}</div>
         </div>
         <div className="right">
-          <span>{__('Updated 1 month ago', 'multivendorx')}</span>
+          <span>{__('Updated 1 month ago (p)', 'multivendorx')}</span>
         </div>
       </div>
 

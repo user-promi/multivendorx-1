@@ -1324,29 +1324,29 @@ a {
     }
 }
 
-.form-group-wrapper {
-    display: flex;
-    gap: 1rem;
+// .form-group-wrapper {
+//     display: flex;
+//     gap: 1rem;
 
-    .settings-metabox-description {
-        padding: 0;
-    }
+//     .settings-metabox-description {
+//         padding: 0;
+//     }
 
-    .form-group {
-        display: flex;
-        flex-direction: column;
-        gap: 0.313rem;
-        padding: 0.5rem 0;
-        width: 100%;
-        justify-content: end;
+//     .form-group {
+//         display: flex;
+//         flex-direction: column;
+//         gap: 0.313rem;
+//         padding: 0.5rem 0;
+//         width: 100%;
+//         justify-content: end;
 
-        label {
-            font-size: 0.9rem;
-            display: flex;
-            gap: 1rem;
-        }
-    }
-}
+//         label {
+//             font-size: 0.9rem;
+//             display: flex;
+//             gap: 1rem;
+//         }
+//     }
+// }
 
 // settings shipping add country end
 

@@ -508,39 +508,41 @@ const ProductReport: React.FC = () => {
                   </div>
                 </div>
 
-                {openReviewedCards[product.id] && (
-                  <div className="top-items">
-                    <div className="items">
-                      <div className="left-side flex items-center">
-                        <div className="avatar">
-                          {product.images?.length ? (
-                            <img src={product.images[0].src} alt={product.name} />
-                          ) : (
-                            <div>{product.name?.charAt(0) || '?'}</div>
-                          )}
-                        </div>
+                <div className="card-body">
+                  {openReviewedCards[product.id] && (
+                    <div className="top-items">
+                      <div className="items">
+                        <div className="left-side flex items-center">
+                          <div className="avatar">
+                            {product.images?.length ? (
+                              <img src={product.images[0].src} alt={product.name} />
+                            ) : (
+                              <div>{product.name?.charAt(0) || '?'}</div>
+                            )}
+                          </div>
 
-                        <div className="details text-sm leading-6">
-                          <div>
-                            <b>{__('Price:', 'multivendorx')}</b>{" "}
-                            <span dangerouslySetInnerHTML={{ __html: product.price_html || product.price || "—" }} />
-                          </div>
-                          <div>
-                            <b>{__('Total Sales:', 'multivendorx')}</b> {product.total_sales || 0}
-                          </div>
-                          <div>
-                            <b>{__('Category:', 'multivendorx')}</b>{" "}
-                            {product.categories?.map((c: any) => c.name).join(", ") || "-"}
+                          <div className="details text-sm leading-6">
+                            <div>
+                              <b>{__('Price:', 'multivendorx')}</b>{" "}
+                              <span dangerouslySetInnerHTML={{ __html: product.price_html || product.price || "—" }} />
+                            </div>
+                            <div>
+                              <b>{__('Total Sales:', 'multivendorx')}</b> {product.total_sales || 0}
+                            </div>
+                            <div>
+                              <b>{__('Category:', 'multivendorx')}</b>{" "}
+                              {product.categories?.map((c: any) => c.name).join(", ") || "-"}
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             ))
           ) : (
-            <p className="text-gray-500 p-2">{__('No reviewed products found.', 'multivendorx')}</p>
+            <p>{__('No reviewed products found.', 'multivendorx')}</p>
           )}
         </div>
 
@@ -550,31 +552,32 @@ const ProductReport: React.FC = () => {
               <div className="title">{__('Top Selling Products', 'multivendorx')}</div>
             </div>
           </div>
-
-          {toSellingProduct.length > 0 ? (
-            toSellingProduct.map((product: any) => (
-              <div className="info-item" key={`selling-${product.id}`}>
-                <div className="details-wrapper">
-                  <div className="avatar">
-                    {product.images?.length ? (
-                      <img src={product.images[0].src} alt={product.name} />
-                    ) : (
-                      <div>{product.name?.charAt(0) || '?'}</div>
-                    )}
+          <div className="card-body">
+            {toSellingProduct.length > 0 ? (
+              toSellingProduct.map((product: any) => (
+                <div className="info-item" key={`selling-${product.id}`}>
+                  <div className="details-wrapper">
+                    <div className="avatar">
+                      {product.images?.length ? (
+                        <img src={product.images[0].src} alt={product.name} />
+                      ) : (
+                        <span>{product.name?.charAt(0) || '?'}</span>
+                      )}
+                    </div>
+                    <div className="details">
+                      <div className="name">{product.name}</div>
+                      <div className="des">{__('Total Sales:', 'multivendorx')} {product.total_sales || 0}</div>
+                    </div>
                   </div>
-                  <div className="details">
-                    <div className="name">{product.name}</div>
-                    <div className="des">{__('Total Sales:', 'multivendorx')} {product.total_sales || 0}</div>
+                  <div className="right-details">
+                    <div className="price"></div>
                   </div>
                 </div>
-                <div className="right-details">
-                  <div className="price"></div>
-                </div>
-              </div>
-            ))
-          ) : (
-            <p>{__('No top selling products found.', 'multivendorx')}</p>
-          )}
+              ))
+            ) : (
+              <p>{__('No top selling products found.', 'multivendorx')}</p>
+            )}
+          </div>
         </div>
       </div>
 
