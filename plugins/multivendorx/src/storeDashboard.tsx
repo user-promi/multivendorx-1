@@ -14,7 +14,7 @@ const Dashboard = () => {
     const [showNotifications, setShowNotifications] = useState(false);
     const [noPermission, setNoPermission] = useState(false);
     const [showStoreList, setShowStoreList] = useState(false);
-
+    const [isDarkMode, setIsDarkMode] = useState(false);
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -247,30 +247,11 @@ const Dashboard = () => {
         return () => document.removeEventListener("click", handleClickOutside);
     }, []);
 
-
-    // dark mode
-    const [darkMode, setDarkMode] = useState(() => {
-        return localStorage.getItem("dark-mode") === "true";
-    });
-
-    useEffect(() => {
-        if (darkMode) {
-            document.body.classList.add("dark-mode");
-        } else {
-            document.body.classList.remove("dark-mode");
-        }
-
-        localStorage.setItem("dark-mode", darkMode.toString());
-    }, [darkMode]);
-
-    const toggleDarkMode = (e) => {
-        e.stopPropagation();
-        setDarkMode(prev => !prev);
-    };
-
     return (
-        <div id="store-dashboard">
-
+        <div
+            id="store-dashboard"
+            className={`${isDarkMode ? "dark" : "light"}`}
+        >
             <div className="dashboard-tabs-wrapper">
 
                 <div className="logo-wrapper">
@@ -373,8 +354,13 @@ const Dashboard = () => {
                         </div>
                         <div className="navbar-rightside">
                             <ul className="navbar-right">
-                                <li id="darkModeToggle" onClick={toggleDarkMode}>
-                                    <div className="adminlib-icon adminlib-vendor-form-add"></div>
+                                <li onClick={() => setIsDarkMode(prev => !prev)}>
+                                    <div
+                                        className={`adminlib-icon ${isDarkMode
+                                            ? "adminlib-recycle"
+                                            : "adminlib-resources"
+                                            }`}
+                                    ></div>
                                 </li>
 
                                 <li>

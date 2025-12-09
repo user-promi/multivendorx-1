@@ -22,11 +22,7 @@ $border-radius-medium: 0.438rem;
 $border-radius-large: 0.5rem;
 $border-radius-button: 8rem;
 
-body.dark-mode {
-    --colorPrimary: unset;
-    --colorSecondary: unset;
-    --colorAccent: unset;
-    --colorSupport: unset;
+#store-dashboard.dark {
     --backgroundColor: #121212;
 
     color: #ffffff;
