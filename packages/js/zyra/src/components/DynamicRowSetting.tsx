@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import Select from 'react-select';
+import '../styles/web/DynamicRowSetting.scss';
 
 /**
  * Internal dependencies
@@ -83,6 +84,7 @@ const DynamicRowSetting: React.FC<DynamicRowSettingProps> = ({
                     <input
                         type={field.type}
                         placeholder={field.placeholder}
+                        className="basic-input"
                         value={val}
                         onChange={(e) =>
                             handleChange(rowIndex, field.key, e.target.value)
@@ -94,6 +96,7 @@ const DynamicRowSetting: React.FC<DynamicRowSettingProps> = ({
                 return (
                     <input
                         type="file"
+                        className="basic-input"
                         onChange={(e: any) => {
                             const file = e.target.files?.[0] || null;
                             handleChange(rowIndex, field.key, file);
@@ -128,42 +131,34 @@ const DynamicRowSetting: React.FC<DynamicRowSettingProps> = ({
 
     return (
         <>
-            <div className={`dynamic-row-setting ${wrapperClass}`}>
-
-                <button type="button" className="mvx-add-btn" onClick={handleAdd}>
-                    + {addLabel}
-                </button>
-
+            <div className={`repeater-field-wrapper ${wrapperClass}`}>
                 {value.map((row, rowIndex) => (
-                    <div key={rowIndex} className="mvx-row">
+                    <>
+                        <div key={rowIndex} className="repeater-field">
+                            <div className="field">
+                                {template.fields.map((field) => (
+                                    <>
+                                        {renderField(row, field, rowIndex)}
+                                    </>
+                                ))}
 
-                        {template.fields.map((field) => (
-                            <div
-                                key={field.key}
-                                className="mvx-row-field"
-                                style={{ width: field.width || "auto" }}
-                            >
-                                {field.label && <label>{field.label}</label>}
-                                {renderField(row, field, rowIndex)}
+                                <span
+                                    className="delete-icon adminlib-delete"
+                                    onClick={() => handleDelete(rowIndex)}
+                                ></span>
                             </div>
-                        ))}
-
-                        <button
-                            type="button"
-                            className="mvx-delete-btn"
-                            onClick={() => handleDelete(rowIndex)}
-                        >
-                            Delete
-                        </button>
-
-                        {/* NEW: nested renderer inside each row */}
-                        {childrenRenderer && (
-                            <div className="mvx-nested-children">
-                                {childrenRenderer(row, rowIndex)}
-                            </div>
-                        )}
-                    </div>
+                            {childrenRenderer && (
+                                <div className="repeater-field-nested">
+                                    {childrenRenderer(row, rowIndex)}
+                                </div>
+                            )}
+                        </div>
+                    </>
                 ))}
+
+                <button type="button" className="admin-btn btn-purple" onClick={handleAdd}>
+                    <i className="adminlib-plus-circle"></i> {addLabel}
+                </button>
             </div>
 
             {description && (

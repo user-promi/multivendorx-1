@@ -511,7 +511,7 @@ const ProductReport: React.FC = () => {
                 {openReviewedCards[product.id] && (
                   <div className="top-items">
                     <div className="items">
-                      <div className="left-side flex items-center gap-3 p-2">
+                      <div className="left-side flex items-center">
                         <div className="avatar">
                           {product.images?.length ? (
                             <img src={product.images[0].src} alt={product.name} />

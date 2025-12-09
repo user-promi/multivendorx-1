@@ -161,26 +161,6 @@ a:focus {
 // no permission section end
 
 // card styles start
-.w-65 {
-    width: 65% !important;
-}
-
-.w-35 {
-    width: 35% !important;
-}
-
-.w-45 {
-    width: 45% !important;
-}
-
-.w-40 {
-    width: 40% !important;
-}
-
-.w-60 {
-    width: 60% !important;
-}
-
 .container-wrapper {
     display: flex;
     gap: 2rem;
@@ -657,36 +637,6 @@ a:focus {
 
 // documentation end
 
-
-// no data found start
-.no-data-found {
-    text-align: center;
-    width: 70%;
-    margin: auto;
-
-    .icon {
-        padding: 0.5rem;
-        font-size: 1.625rem;
-        border-radius: 0.313rem;
-    }
-
-    .title {
-        font-size: 1.313rem;
-        color: #000;
-        font-weight: 600;
-        line-height: 1.5rem;
-        margin-top: 1rem;
-    }
-
-    .des {
-        font-size: 1rem;
-        padding: 0.75rem;
-    }
-}
-
-// no data found end
-
-
 // add orderpage 
 
 .total-summary {
@@ -768,7 +718,7 @@ a:focus {
                 background: #b5b3b777;
                 border-radius: 50%;
                 position: relative;
-                font-family: adminlibrary;
+                font-family: adminlibrary, sans-serif;
                 padding: 0.063rem;
             }
 
@@ -802,7 +752,7 @@ a:focus {
         padding: 1rem;
         border: 0.063rem solid var(--colorPrimary);
         margin: 1rem 0;
-        background: color-mix(in srgb, var(--colorPrimary) 5%, white);
+        background: color-mix(in srgb, var(--colorPrimary) 5%, #fff);
         border-radius: 0.5rem;
 
         span {
@@ -959,7 +909,7 @@ a:focus {
         }
 
         .stock {
-            color: green;
+            color: rgba(0, 128, 0, 0.918);
         }
 
         .product {

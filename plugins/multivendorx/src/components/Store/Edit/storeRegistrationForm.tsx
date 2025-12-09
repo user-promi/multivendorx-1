@@ -113,65 +113,69 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 				<div className="card-wrapper w-65">
 					{(formData.core_data?.status == 'pending' || formData.core_data?.status == 'rejected') && (
 						<>
-							<div className="card-content">
-								<div className="card-header">
-									<div className="left">
-										<div className="title">
-											{__('Store details', 'multivendorx')}
+							<div className="row">
+								<div className="column">
+									<div className="card-header">
+										<div className="left">
+											<div className="title">
+												{__('Store details', 'multivendorx')}
+											</div>
 										</div>
 									</div>
-								</div>
 
-								{/* Core Data */}
-								{formData.core_data &&
-									Object.entries(formData.core_data).map(([label, value]) => (
+									{/* Core Data */}
+									<div className="card-body">
+										{formData.core_data &&
+											Object.entries(formData.core_data).map(([label, value]) => (
+												<div className="form-details" key={label}>
+													<label className="label">{label} :</label>
+													<div className="value">{value || __('[Not Provided]', 'multivendorx')}</div>
+												</div>
+											))}
+									</div>
+									{/* Registration Data (if needed) */}
+								</div>
+							</div>
+						</>
+					)}
+					<div className="row">
+						<div className="column">
+							<div className="card-header">
+								<div className="left">
+									<div className="title">
+										{formData.core_data?.status === 'pending' || formData.core_data?.status === 'rejected'
+											? __('Registration form details', 'multivendorx')
+											: __('Archive data', 'multivendorx')}
+									</div>
+								</div>
+								<div className="right">
+									{formData.registration_data && Object.keys(formData.registration_data).length > 0 && (
+										<div
+											onClick={() => handleDownloadPDF()}
+											className="admin-btn btn-purple"
+										>
+											<i className="adminlib-import"></i> {__('Download', 'multivendorx')}
+										</div>
+									)}
+								</div>
+							</div>
+							<div className="card-body">
+								{/* Registration Data */}
+								{formData.registration_data && Object.keys(formData.registration_data).length > 0 ? (
+									Object.entries(formData.registration_data).map(([label, value]) => (
 										<div className="form-details" key={label}>
 											<label className="label">{label} :</label>
 											<div className="value">{value || __('[Not Provided]', 'multivendorx')}</div>
 										</div>
-									))}
-
-								{/* Registration Data (if needed) */}
-							</div>
-
-						</>
-					)}
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{formData.core_data?.status === 'pending' || formData.core_data?.status === 'rejected'
-										? __('Registration form details', 'multivendorx')
-										: __('Archive data', 'multivendorx')}
-								</div>
-							</div>
-							<div className="right">
-								{formData.registration_data && Object.keys(formData.registration_data).length > 0 && (
-									<div
-										onClick={() => handleDownloadPDF()}
-										className="admin-btn btn-purple"
-									>
-										<i className="adminlib-import"></i> {__('Download', 'multivendorx')}
+									))
+								) : (
+									<div className="no-data">
+										{__('Store submitted application without filling out registration form.', 'multivendorx')}
 									</div>
 								)}
 							</div>
 						</div>
-
-						{/* Registration Data */}
-						{formData.registration_data && Object.keys(formData.registration_data).length > 0 ? (
-							Object.entries(formData.registration_data).map(([label, value]) => (
-								<div className="form-details" key={label}>
-									<label className="label">{label} :</label>
-									<div className="value">{value || __('[Not Provided]', 'multivendorx')}</div>
-								</div>
-							))
-						) : (
-							<div className="no-data">
-								{__('Store submitted application without filling out registration form.', 'multivendorx')}
-							</div>
-						)}
 					</div>
-
 				</div>
 
 

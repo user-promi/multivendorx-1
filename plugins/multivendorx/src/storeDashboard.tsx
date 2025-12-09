@@ -13,6 +13,8 @@ const Dashboard = () => {
     const [showUserDropdown, setShowUserDropdown] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
     const [noPermission, setNoPermission] = useState(false);
+    const [showStoreList, setShowStoreList] = useState(false);
+
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -44,10 +46,10 @@ const Dashboard = () => {
             url: getApiLink(appLocalizer, `store/${appLocalizer.store_id}`),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
         })
-        .then((res: any) => {
-            const data = res.data || {};
-            setStoreData(data)
-        })
+            .then((res: any) => {
+                const data = res.data || {};
+                setStoreData(data)
+            })
     }, [appLocalizer.store_id]);
 
     useEffect(() => {
@@ -73,26 +75,26 @@ const Dashboard = () => {
     };
 
     useEffect(() => {
-            if (!currentTab) return;
-    
-            let capability = null;
-    
-            for (const [key, item] of Object.entries(menu)) {
-                if (key === currentTab) {
-                    capability = item.capability;
-                    break;
-                }
-    
-                const sub = item.submenu?.find(s => s.key === currentTab);
-                if (sub) {
-                    capability = sub.capability;
-                    break;
-                }
+        if (!currentTab) return;
+
+        let capability = null;
+
+        for (const [key, item] of Object.entries(menu)) {
+            if (key === currentTab) {
+                capability = item.capability;
+                break;
             }
-    
-            setNoPermission(!hasCapability(capability));
-    
-        }, [currentTab, menu]);
+
+            const sub = item.submenu?.find(s => s.key === currentTab);
+            if (sub) {
+                capability = sub.capability;
+                break;
+            }
+        }
+
+        setNoPermission(!hasCapability(capability));
+
+    }, [currentTab, menu]);
 
     const endpoints = useMemo(() => {
         const list = [];
@@ -194,12 +196,15 @@ const Dashboard = () => {
             : true;
     });
 
+    const firstTwoStores = availableStores.slice(0, 2);
+
+
     const switchStore = (storeId) => {
         axios({
             method: 'GET',
             url: getApiLink(appLocalizer, `store/${storeId}`),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: {action: 'switch'}
+            params: { action: 'switch' }
         })
             .then((res: any) => {
                 window.location.assign(res.data.redirect);
@@ -228,7 +233,7 @@ const Dashboard = () => {
     const toggleNotifications = (e) => {
         e.stopPropagation();
         setShowNotifications(prev => !prev);
-        setShowUserDropdown(false); 
+        setShowUserDropdown(false);
     };
 
     // Close all dropdowns when clicking outside
@@ -244,9 +249,9 @@ const Dashboard = () => {
 
     return (
         <div id="store-dashboard">
-            
+
             <div className="dashboard-tabs-wrapper">
-                
+
                 <div className="logo-wrapper">
                     {store_dashboard_logo ? (
                         <img src={store_dashboard_logo} alt="Site Logo" />
@@ -274,8 +279,8 @@ const Dashboard = () => {
                                         <a
                                             className="tab"
                                             href={hasSubmenu ? '#' : appLocalizer.permalink_structure
-                                                                        ? `/${appLocalizer.dashboard_slug}/${key}`
-                                                                        : `/?page_id=${appLocalizer.dashboard_page_id}&segment=${key}`}
+                                                ? `/${appLocalizer.dashboard_slug}/${key}`
+                                                : `/?page_id=${appLocalizer.dashboard_page_id}&segment=${key}`}
                                             onClick={(e) => {
                                                 e.preventDefault();
 
@@ -291,20 +296,18 @@ const Dashboard = () => {
 
                                             {hasSubmenu && (
                                                 <i
-                                                    className={`admin-arrow adminlib-pagination-right-arrow ${
-                                                        isOpen ? 'rotate' : ''
-                                                    }`}
+                                                    className={`admin-arrow adminlib-pagination-right-arrow ${isOpen ? 'rotate' : ''
+                                                        }`}
                                                 ></i>
                                             )}
                                         </a>
 
                                         {hasSubmenu && (
                                             <ul
-                                                className={`subtabs ${
-                                                        isOpen ? 'open' : ''
+                                                className={`subtabs ${isOpen ? 'open' : ''
                                                     }`}
 
-                                                
+
                                             >
                                                 {item.submenu.map((sub) => {
                                                     const subActive = currentTab === sub.key;
@@ -379,7 +382,7 @@ const Dashboard = () => {
                                             <div className="dropdown-header">
                                                 <div className="user-card">
                                                     <div className="user-avatar">
-                                                        <img 
+                                                        <img
                                                             src={appLocalizer.current_user_image}
                                                             alt={appLocalizer.current_user?.data?.display_name}
                                                             width={48}
@@ -411,36 +414,64 @@ const Dashboard = () => {
                                                             Account Setting
                                                         </a>
                                                     </li>
+                                                    {availableStores.length > 0 && (
+                                                        <li className="switch-store-wrapper">
+                                                            <a
+                                                                href="#"
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    setShowStoreList((prev) => !prev);
+                                                                }}
+                                                            >
+                                                                <i className="adminlib-switch-store"></i>
+                                                                Switch stores
+
+                                                                {firstTwoStores.length > 0 && (
+                                                                    <span className="switch-store-preview">
+
+                                                                        {!showStoreList && (
+                                                                            <>
+                                                                                {firstTwoStores.map((store) => (
+                                                                                    <span className="store-icon" key={store.id}>
+                                                                                        {store.name.charAt(0).toUpperCase()}
+                                                                                    </span>
+                                                                                ))}
+
+                                                                                {availableStores.length > 2 && (
+                                                                                    <span className="store-icon number">
+                                                                                        +{availableStores.length - 2}
+                                                                                    </span>
+                                                                                )}
+                                                                            </>
+                                                                        )}
+                                                                        <span className="adminlib-keyboard-arrow-down arrow-icon"></span>
+                                                                    </span>
+                                                                )}
+                                                            </a>
+
+                                                            {showStoreList && (
+                                                                <div className="switch-store-list">
+                                                                    {availableStores.map((store) => (
+                                                                        <div className="store" key={store.id}>
+                                                                            <a
+                                                                                href="#"
+                                                                                className="switch-store"
+                                                                                onClick={(e) => {
+                                                                                    e.preventDefault();
+                                                                                    switchStore(store.id);
+                                                                                }}
+                                                                            >
+                                                                                <span className="store-icon">{store.name.charAt(0).toUpperCase()}</span>
+                                                                                {store.name}
+                                                                            </a>
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            )}
+                                                        </li>
+                                                    )}
                                                 </ul>
                                             </div>
-
-                                            {availableStores.length > 0 && (
-                                                <>
-                                                <div className="dropdown-header">
-                                                    <h3><i className="adminlib-switch-store"></i>Switch stores</h3>
-                                                </div>
-
-                                                <div className="store-wrapper">
-                                                    <ul>
-                                                        {availableStores.map((store) => (
-                                                            <li key={store.id}>
-                                                                <a
-                                                                    href="#"
-                                                                    className="switch-store"
-                                                                    onClick={(e) => {
-                                                                        e.preventDefault();
-                                                                        switchStore(store.id);
-                                                                    }}
-                                                                >
-                                                                    <i className="adminlib-storefront"></i>
-                                                                    {store?.name}
-                                                                </a>
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                </div>
-                                                </>
-                                            )}
 
                                             <div className="footer">
                                                 <a className="admin-btn btn-red" href={appLocalizer.user_logout_url}>
@@ -455,7 +486,7 @@ const Dashboard = () => {
                         </div>
                     </div>
                 </div>
-                
+
                 {/* <div className="content-wrapper">{loadComponent(currentTab)}</div> */}
                 <div className="content-wrapper">
                     {storeData.length > 0 && storeData.status !== "active" ? (
@@ -465,40 +496,40 @@ const Dashboard = () => {
                                 {storeData.status === "pending"
                                     ? appLocalizer.settings_databases_value['pending']?.pending_msg
                                     : storeData.status === "suspended"
-                                    ? appLocalizer.settings_databases_value['suspended']?.suspended_msg
-                                    : storeData.status === "under_review"
-                                    ? appLocalizer.settings_databases_value['under-review']?.under_review_msg
-                                    : storeData.status === "rejected"
-                                    ? 
-                                    <>
-                                        {appLocalizer.settings_databases_value['rejected']?.rejected_msg}
-                                        {" "}
-                                        <a 
-                                            href={appLocalizer.registration_page} 
-                                            className="reapply-link"
-                                            target='__blank'
-                                        >
-                                            Click here to reapply.
-                                        </a>
-                                    </>
-                                    : "No active store select for this user."
+                                        ? appLocalizer.settings_databases_value['suspended']?.suspended_msg
+                                        : storeData.status === "under_review"
+                                            ? appLocalizer.settings_databases_value['under-review']?.under_review_msg
+                                            : storeData.status === "rejected"
+                                                ?
+                                                <>
+                                                    {appLocalizer.settings_databases_value['rejected']?.rejected_msg}
+                                                    {" "}
+                                                    <a
+                                                        href={appLocalizer.registration_page}
+                                                        className="reapply-link"
+                                                        target='__blank'
+                                                    >
+                                                        Click here to reapply.
+                                                    </a>
+                                                </>
+                                                : "No active store select for this user."
                                 }
                             </div>
                             <div className="admin-btn btn-purple">Contact Admin</div>
                         </div>
 
-                    ) : 
+                    ) :
 
-                    noPermission ? (
-                        <div className="permission-wrapper">
-                            <i className="adminlib-info red"></i>
-                            <div className="title">You do not have permission to access this page.</div>
-                            <div className="admin-btn btn-purple">Contact Admin</div>
-                        </div>
+                        noPermission ? (
+                            <div className="permission-wrapper">
+                                <i className="adminlib-info red"></i>
+                                <div className="title">You do not have permission to access this page.</div>
+                                <div className="admin-btn btn-purple">Contact Admin</div>
+                            </div>
 
-                    ) : (
-                        loadComponent(currentTab)
-                    )}
+                        ) : (
+                            loadComponent(currentTab)
+                        )}
 
                 </div>
             </div>
