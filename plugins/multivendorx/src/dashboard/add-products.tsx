@@ -217,14 +217,13 @@ const AddProduct = () => {
     }, [treeData, product]);
 
     useEffect(() => {
-        axios
-            .get(
-                `${appLocalizer.apiUrl}/wc/v3/products/categories?per_page=100`,
-                {
-                    headers: { 'X-WP-Nonce': appLocalizer.nonce },
-                }
-            )
-            .then((res) => setCategories(res.data));
+        axios.get(`${appLocalizer.apiUrl}/wc/v3/products/categories`, {
+            headers: { "X-WP-Nonce": appLocalizer.nonce },
+            params: {
+                per_page: 100,
+            },
+        })
+        .then(res => setCategories(res.data))
     }, []);
 
     useEffect(() => {
@@ -364,7 +363,6 @@ const AddProduct = () => {
                 status: 'publish',
                 images: imagePayload,
                 categories: finalCategories,
-                // attributes: productAttributes,
                 meta_data: [
                     {
                         key: 'multivendorx_store_id',
