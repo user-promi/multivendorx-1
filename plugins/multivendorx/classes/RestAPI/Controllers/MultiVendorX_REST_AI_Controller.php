@@ -99,8 +99,7 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
                 );
             }
 
-            $settings = $this->get_ai_settings();
-            $provider = $settings['provider'];
+            $provider = MultiVendorX()->setting->get_setting('choose_ai_provider');
 
             $base_prompt =
                 "You are an expert product content generator. Based on the user's request: '{$user_prompt}', ".
@@ -113,15 +112,15 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
 
             switch ( $provider ) {
                 case 'gemini_api':
-                    $json_response = $this->call_gemini_api( $settings['gemini_key'], $base_prompt );
+                    $json_response = $this->call_gemini_api( MultiVendorX()->setting->get_setting('gemini_api_key'), $base_prompt );
                     break;
 
                 case 'openai_api':
-                    $json_response = $this->call_openai_api( $settings['openai_key'], $base_prompt );
+                    $json_response = $this->call_openai_api( MultiVendorX()->setting->get_setting('openai_api_key'), $base_prompt );
                     break;
 
                 case 'openrouter_api':
-                    $json_response = $this->call_openrouter_api( $settings['openrouter_key'], $base_prompt );
+                    $json_response = $this->call_openrouter_api( MultiVendorX()->setting->get_setting('openrouter_api_key'), $base_prompt );
                     break;
             }
 
@@ -174,13 +173,12 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
                 );
             }
 
-            $settings = $this->get_ai_settings();
-            $provider = $settings['image_enhancement_provider'];
+            $provider = MultiVendorX()->setting->get_setting('image_enhancement_provider');
 
             switch ( $provider ) {
                 case 'gemini_api':
                     $response = $this->call_gemini_image_generation_api(
-                        $settings['gemini_api_image_enhancement_key'],
+                        MultiVendorX()->setting->get_setting('gemini_api_image_enhancement_key'),
                         $user_prompt,
                         $image_url,
                         $image_data
@@ -189,8 +187,8 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
 
                 case 'openrouter_api':
                     $response = $this->call_openrouter_image_generation_api(
-                        $settings['openrouter_api_image_enhancement_key'],
-                        $settings['openrouter_api_image_model'],
+                        MultiVendorX()->setting->get_setting('openrouter_api_image_enhancement_key'),
+                        MultiVendorX()->setting->get_setting('openrouter_api_image_model'),
                         $user_prompt,
                         $image_url,
                         $image_data
@@ -223,23 +221,6 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log( $e );
         }
-    }
-
-    /**
-     * Read AI Settings
-     */
-    private function get_ai_settings() {
-        return array(
-            'provider' => MultiVendorX()->setting->get_setting('choose_ai_provider'),
-            'gemini_key' => MultiVendorX()->setting->get_setting('gemini_api_key'),
-            'openai_key' => MultiVendorX()->setting->get_setting('openai_api_key'),
-            'openrouter_key' => MultiVendorX()->setting->get_setting('openrouter_api_key'),
-            'openrouter_model' => MultiVendorX()->setting->get_setting('openrouter_api_model'),
-            'image_enhancement_provider' => MultiVendorX()->setting->get_setting('image_enhancement_provider') ?? 'gemini_api_image_enhancement',
-            'gemini_api_image_enhancement_key' => MultiVendorX()->setting->get_setting('gemini_api_image_enhancement_key') ?? MultiVendorX()->setting->get_setting('gemini_api_key'),
-            'openrouter_api_image_enhancement_key' => MultiVendorX()->setting->get_setting('openrouter_api_image_enhancement_key') ?? MultiVendorX()->setting->get_setting('openrouter_api_key'),
-            'openrouter_api_image_model' => MultiVendorX()->setting->get_setting('openrouter_api_image_model') ?? 'google/gemini-2.5-flash-image-preview',
-        );
     }
 
     /**
@@ -345,7 +326,7 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
     private function call_openrouter_api($key, $prompt) {
         $url = "https://openrouter.ai/api/v1/chat/completions";
 
-        $model = $this->get_ai_settings()['openrouter_api_model'];
+        $model = MultiVendorX()->setting->get_setting('openrouter_api_model');
         if (!$model) $model = "openai/gpt-4o-mini";
 
         $body = array(
