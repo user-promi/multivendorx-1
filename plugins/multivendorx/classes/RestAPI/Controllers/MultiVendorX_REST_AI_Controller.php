@@ -214,6 +214,14 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
 
             $response = array();
 
+            // Clean the image data if it's a data URL
+            if ( $image_data && strpos($image_data, 'data:image') === 0 ) {
+                // Extract base64 part from data URL
+                if ( preg_match('/data:image\/[^;]+;base64,([^\"]+)/', $image_data, $matches) ) {
+                    $image_data = $matches[1];
+                }
+            }
+
             // Choose provider based on settings
             switch ($image_provider) {
                 case 'gemini_api':
@@ -458,89 +466,85 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
      * @param string $image_url The image URL to use.
      * @param string $image_data The image data to use.
      */
-    private function call_gemini_image_generation_api( $key, $prompt, $image_url, $image_data = null ) {
-        // $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent";
-        // $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent";
-        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-image:generateContent";
+    private function call_gemini_image_generation_api($api_key, $prompt, $image_url, $image_data) {
 
-        // Prepare the content array
-        $contents = array();
-        
-        // Add text prompt
-        $parts = array(
-            array('text' => $prompt)
-        );
-        
-        // Add image if available
-        if ( $image_data ) {
-            // Handle base64 image data
-            $parts[] = array(
-                'inline_data' => array(
-                    'mime_type' => 'image/jpeg',
-                    'data' => $image_data
+        $request_body = array(
+            "contents" => array(
+                array(
+                    "parts" => array(
+                        array("text" => $prompt)
+                    )
                 )
-            );
-        } elseif ( $image_url ) {
-            // Handle image URL - download and convert to base64
-            $image_content = @file_get_contents($image_url);
-            if ($image_content === false) {
-                return array( 'error' => 'Could not download image from URL' );
-            }
-            
-            $parts[] = array(
-                'inline_data' => array(
-                    'mime_type' => $this->get_mime_type_from_url($image_url),
-                    'data' => base64_encode( $image_content )
-                )
-            );
-        }
-
-        $body = array(
-            'contents' => array(
-                array('parts' => $parts)
-            ),
-            'generationConfig' => array(
-                'temperature' => 0.7,
-                'topK' => 40,
-                'topP' => 0.95,
-                'maxOutputTokens' => 1024,
             )
         );
-
-        $response = wp_remote_post( $url . '?key=' . $key, array(
-            'headers' => array(
-                'Content-Type' => 'application/json',
-            ),
-            'body'    => wp_json_encode( $body ),
-            'timeout' => 60, // Longer timeout for image generation
-        ) );
-
-        if ( is_wp_error( $response ) ) {
-            return array( 'error' => $response->get_error_message() );
+    
+        // Add inline image if provided
+        if (!empty($image_data)) {
+            $request_body["contents"][0]["parts"][] = array(
+                "inline_data" => array(
+                    "mime_type" => "image/jpeg",
+                    "data" => $image_data
+                )
+            );
         }
-
-        $response_code = wp_remote_retrieve_response_code( $response );
-        $response_body = wp_remote_retrieve_body( $response );
-        
-        file_put_contents(plugin_dir_path(__FILE__) . "/error.log", 
-            date("d/m/Y H:i:s").": gemini_image_raw: ".var_export($response_body, true)."\n", 
+    
+        // Log full request for debugging
+        file_put_contents(plugin_dir_path(__FILE__) . "/error.log",
+            date("d/m/Y H:i:s") . ": gemini_request_body: " . json_encode($request_body, JSON_PRETTY_PRINT) . "\n",
             FILE_APPEND
         );
-        
-        if ( $response_code != 200 ) {
-            MultiVendorX()->util->log("Gemini Image API Error - Code: $response_code, Body: $response_body");
-            return array( 'error' => "API returned status code $response_code" );
+    
+        $response = wp_remote_post(
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=" . $api_key,
+            array(
+                'method'  => 'POST',
+                'headers' => array(
+                    'Content-Type' => 'application/json'
+                ),
+                'body'    => wp_json_encode($request_body),
+                'timeout' => 30
+            )
+        );
+    
+        if (is_wp_error($response)) {
+            return array("error" => $response->get_error_message());
         }
-
-        $data = json_decode( $response_body, true );
-
-        if ( isset( $data['error'] ) ) {
-            return array( 'error' => $data['error']['message'] );
+    
+        $body = json_decode(wp_remote_retrieve_body($response), true);
+    
+        // Log Gemini RAW response
+        file_put_contents(plugin_dir_path(__FILE__) . "/error.log",
+            date("d/m/Y H:i:s") . ": gemini_response_body: " . json_encode($body, JSON_PRETTY_PRINT) . "\n",
+            FILE_APPEND
+        );
+    
+        /** 🔥 Extract the returned image */
+        $candidate = $body['candidates'][0] ?? null;
+    
+        if (!$candidate) {
+            return array("error" => "No candidates returned.");
         }
-
-        // Extract image data from response
-        return $this->extract_image_from_response($data);
-    }
+    
+        $parts = $candidate['content']['parts'] ?? [];
+    
+        foreach ($parts as $p) {
+            if (isset($p['inlineData']['data'])) {
+    
+                return array(
+                    'image_data' => $p['inlineData']['data'], // BASE64 IMAGE
+                    'mime_type'  => $p['inlineData']['mimeType'],
+                    'text_response' => null
+                );
+            }
+        }
+    
+        // If no image, return text (fallback)
+        return array(
+            'image_data' => null,
+            'mime_type'  => null,
+            'text_response' => json_encode($body)
+        );
+    }    
 
     /**
      * OpenRouter API for image generation/editing

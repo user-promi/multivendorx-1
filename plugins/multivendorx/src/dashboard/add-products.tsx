@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import {
     BasicInput,
+    CommonPopup,
     FileInput,
     MultiCheckBox,
     RadioInput,
@@ -28,6 +29,14 @@ const AddProduct = () => {
 
     const [featuredImage, setFeaturedImage] = useState(null);
     const [galleryImages, setGalleryImages] = useState([]);
+
+    const [AddInhance, setAddInhance] = useState(false);
+    const [enhancementPrompt, setEnhancementPrompt] = useState('');
+    const [isEnhancing, setIsEnhancing] = useState(false);
+    const [enhancementResult, setEnhancementResult] = useState('');
+    const [enhancementError, setEnhancementError] = useState('');
+    const [selectedImageForEnhancement, setSelectedImageForEnhancement] = useState(null);
+    const [generatedImage, setGeneratedImage] = useState(null);
 
     useEffect(() => {
         if (!productId) return;
@@ -76,6 +85,35 @@ const AddProduct = () => {
         return () =>
             document.removeEventListener('mousedown', handleClickOutside);
     }, []);
+
+    // Add this useEffect in AddProduct to listen for suggestion clicks
+    useEffect(() => {
+        const handleAISuggestion = (event) => {
+            const { field, value } = event.detail;
+            
+            // Update the appropriate field based on suggestion type
+            switch (field) {
+                case 'name':
+                    setProduct(prev => ({ ...prev, name: value }));
+                    break;
+                case 'short_description':
+                    setProduct(prev => ({ ...prev, short_description: value }));
+                    break;
+                case 'description':
+                    setProduct(prev => ({ ...prev, description: value }));
+                    break;
+                default:
+                    break;
+            }
+        };
+
+        window.addEventListener('ai-suggestion-selected', handleAISuggestion);
+        
+        return () => {
+            window.removeEventListener('ai-suggestion-selected', handleAISuggestion);
+        };
+    }, []);
+
 
     const handleCategoryClick = (catId) => {
         if (!isPyramidEnabled) return;
@@ -482,257 +520,6 @@ const AddProduct = () => {
         });
 
         frame.open();
-    };
-
-    const [existingAttributes, setExistingAttributes] = useState([]);
-    const [existingAttributeTerms, setExistingAttributeTerms] = useState({});
-    const [selectedAttribute, setSelectedAttribute] = useState(null);
-
-    const [newAttributeName, setNewAttributeName] = useState('');
-
-    const [attributeValues, setAttributeValues] = useState([]);
-
-    // Add this useEffect in AddProduct to listen for suggestion clicks
-    useEffect(() => {
-        const handleAISuggestion = (event) => {
-            const { field, value } = event.detail;
-            
-            // Update the appropriate field based on suggestion type
-            switch (field) {
-                case 'name':
-                    setProduct(prev => ({ ...prev, name: value }));
-                    break;
-                case 'short_description':
-                    setProduct(prev => ({ ...prev, short_description: value }));
-                    break;
-                case 'description':
-                    setProduct(prev => ({ ...prev, description: value }));
-                    break;
-                default:
-                    break;
-            }
-        };
-
-        window.addEventListener('ai-suggestion-selected', handleAISuggestion);
-        
-        return () => {
-            window.removeEventListener('ai-suggestion-selected', handleAISuggestion);
-        };
-    }, []);
-
-    useEffect(() => {
-        axios
-            .get(`${appLocalizer.apiUrl}/wc/v3/products/attributes`, {
-                headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            })
-            .then((res) => {
-                setExistingAttributes(res.data);
-            });
-    }, []);
-
-    useEffect(() => {
-        if (!selectedAttribute || selectedAttribute.value === 0) return;
-
-        axios
-            .get(
-                `${appLocalizer.apiUrl}/wc/v3/products/attributes/${selectedAttribute?.value}/terms`,
-                { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
-            )
-            .then((res) =>
-                setExistingAttributeTerms((prev) => ({
-                    ...prev,
-                    [selectedAttribute.value]: res.data.map((t) => t.name),
-                }))
-            );
-    }, [selectedAttribute]);
-
-    /* Save new attribute to WooCommerce */
-    const saveNewAttribute = () => {
-        if (!newAttributeName.trim()) return;
-
-        axios
-            .post(
-                `${appLocalizer.apiUrl}/wc/v3/products/attributes`,
-                { name: newAttributeName },
-                { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
-            )
-            .then((res) => {
-                setExistingAttributes((prev) => [...prev, res.data]);
-                setSelectedAttribute({
-                    label: res.data.name,
-                    value: res.data.id,
-                });
-                setNewAttributeName('');
-                setShowAddNew(false);
-            });
-    };
-
-    const [productAttributes, setProductAttributes] = useState([]);
-
-    const saveAttributeToList = () => {
-        let newItem;
-
-        if (selectedAttribute && selectedAttribute.value !== 0) {
-            // existing taxonomy attribute
-            newItem = {
-                id: selectedAttribute.value,
-                name: selectedAttribute.label,
-                options: attributeValues,
-                variation: true,
-                visible: true,
-            };
-        } else {
-            // custom attribute
-            newItem = {
-                id: 0,
-                name: newAttributeName,
-                options: attributeValues,
-                variation: true,
-                visible: true,
-            };
-        }
-
-        if (editingIndex !== null) {
-            // UPDATE
-            setProductAttributes((prev) => {
-                const copy = [...prev];
-                copy[editingIndex] = newItem;
-                return copy;
-            });
-        } else {
-            // ADD NEW
-            setProductAttributes((prev) => [...prev, newItem]);
-        }
-
-        setAddAttribute(false);
-        setSelectedAttribute(null);
-        setAttributeValues([]);
-        setShowAddNew(false);
-        setEditingIndex(null); // not editing
-    };
-
-    useEffect(() => {
-        if (!product) return;
-
-        if (product.attributes && product.attributes.length > 0) {
-            setProductAttributes(product.attributes);
-        }
-    }, [product]);
-
-    // for edit mode
-    const [editingIndex, setEditingIndex] = useState(null);
-
-    const openEditPopup = (attr, index) => {
-        setEditingIndex(index);
-
-        // find attribute from existing attributes list
-        const match = existingAttributes.find((a) => a.name === attr.name);
-
-        if (match) {
-            setSelectedAttribute({ label: match.name, value: match.id });
-            setShowAddNew(false);
-        } else {
-            // Custom user attribute
-            setSelectedAttribute(null);
-            setShowAddNew(true);
-            setNewAttributeName(attr.name);
-        }
-
-        setAttributeValues(attr.options || []);
-        setAddAttribute(true);
-    };
-
-    const [variations, setVariations] = useState([]);
-
-    useEffect(() => {
-        if (!product) return;
-
-        axios
-            .get(
-                `${appLocalizer.apiUrl}/wc/v3/products/${product?.id}/variations`,
-                { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
-            )
-            .then((res) => {
-                setVariations(res.data);
-            });
-    }, [product]);
-
-    const getVariationAttributes = (variation) => {
-        return variation?.attributes?.map((att) => ({
-            name: att.name,
-            value: att.option,
-        }));
-    };
-
-    const [editingVariation, setEditingVariation] = useState(null); // for edit mode
-    const [variant, setVariant] = useState({});
-
-    const handleAddVariant = () => {
-        setEditingVariation(null);
-
-        setVariant({});
-
-        setAddvariant(true);
-    };
-
-    const handleEditVariation = (v) => {
-        setEditingVariation(v.id);
-
-        setVariant(v);
-
-        setAddvariant(true);
-    };
-
-    const handleSaveVariant = async () => {
-        if (!product?.id) return;
-
-        const payload = {
-            ...variant,
-
-            // Woo expects this format:
-            attributes: variant.attributes?.map((a) => ({
-                id: a.id,
-                option: a.option,
-            })),
-
-            metadata: variant.metadata || {},
-        };
-
-        try {
-            let res;
-
-            if (editingVariation) {
-                res = await axios.put(
-                    `${appLocalizer.apiUrl}/wc/v3/products/${product.id}/variations/${editingVariation}`,
-                    payload,
-                    { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
-                );
-            } else {
-                // CREATE NEW VARIATION
-                res = await axios.post(
-                    `${appLocalizer.apiUrl}/wc/v3/products/${product.id}/variations`,
-                    payload,
-                    { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
-                );
-            }
-
-            // Update local list
-            setVariations((prev) => {
-                if (editingVariation) {
-                    return prev.map((v) =>
-                        v.id === editingVariation ? res.data : v
-                    );
-                }
-                return [...prev, res.data];
-            });
-
-            // Close popup
-            setAddvariant(false);
-            setEditingVariation(null);
-            setVariant({});
-        } catch (err) {
-            console.error('Variation save error:', err);
-        }
     };
 
     // Function to convert image to base64
@@ -1333,425 +1120,35 @@ const AddProduct = () => {
                             handleChange
                         )}
 
-                    {/* Variants start */}
-                    <div className="card" id="card-variants">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">
-                                    {__('Variations', 'multivendrox')}
-                                </div>
-                            </div>
-                            <div className="right">
-                                <i
-                                    className="adminlib-pagination-right-arrow arrow-icon"
-                                    onClick={() => toggleCard('card-variants')}
-                                ></i>
-                            </div>
-                        </div>
+                    {product?.type == 'variable' && 
+                        applyFilters(
+                            'product_variable',
+                            null,
+                            product,
+                            setProduct
+                        )}
 
-                        <div className="card-body">
-                            <div className="card-title">
-                                <div className="title">
-                                    {__('Attributes', 'multivendrox')}
-                                </div>
-                                <div className="buttons">
-                                    <div
-                                        className="add-btn"
-                                        onClick={() => {
-                                            setAddAttribute(true);
-                                        }}
-                                    >
-                                        <div className="i adminlib-plus-circle-o"></div>
-                                        {__('Add attribute', 'multivendrox')}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="attribute-wrapper">
-                                {productAttributes &&
-                                    productAttributes?.map((attr, index) => (
-                                        <div
-                                            className="attribute-box"
-                                            key={index}
-                                        >
-                                            <div className="name-wrapper">
-                                                <div className="name">
-                                                    {attr.name}
-                                                </div>
-
-                                                <div className="icons">
-                                                    <i
-                                                        className="adminlib-edit"
-                                                        onClick={() =>
-                                                            openEditPopup(
-                                                                attr,
-                                                                index
-                                                            )
-                                                        }
-                                                    ></i>
-
-                                                    <i
-                                                        className="adminlib-delete"
-                                                        onClick={() => {
-                                                            setProductAttributes(
-                                                                (prev) =>
-                                                                    prev.filter(
-                                                                        (
-                                                                            _,
-                                                                            i
-                                                                        ) =>
-                                                                            i !==
-                                                                            index
-                                                                    )
-                                                            );
-                                                        }}
-                                                    ></i>
-                                                </div>
-                                            </div>
-
-                                            <div className="value-wrapper">
-                                                {attr.options.map((opt, i) => (
-                                                    <span
-                                                        key={i}
-                                                        className="admin-badge blue"
-                                                    >
-                                                        {opt}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    ))}
-                            </div>
-
-                            {/* variants */}
-                            <div className="card-title">
-                                <div className="title">Variants</div>
-                                <div className="buttons">
-                                    <div className="add-btn">
-                                        <div className="i adminlib-plus-circle-o"></div>
-                                        Generate variations
-                                    </div>
-                                    <div
-                                        className="add-btn"
-                                        onClick={handleAddVariant}
-                                    >
-                                        <div className="i adminlib-plus-circle-o"></div>
-                                        Add variant
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="variant-wrapper">
-                                {variations.length === 0 && (
-                                    <p>No variations found.</p>
-                                )}
-
-                                {variations.map((variation, index) => {
-                                    const attrs =
-                                        getVariationAttributes(variation);
-
-                                    return (
-                                        <div
-                                            className="variant-box"
-                                            key={variation.id}
-                                        >
-                                            <div className="variant-items">
-                                                {attrs?.map((att, i) => (
-                                                    <div
-                                                        className="variant"
-                                                        key={i}
-                                                    >
-                                                        <div className="value">
-                                                            {att.value}
-                                                        </div>
-                                                        <div className="name">
-                                                            {att.name}
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
-
-                                            <div className="product">
-                                                <div className="image-section">
-                                                    {variation?.image?.src ? (
-                                                        <img
-                                                            src={
-                                                                variation?.image
-                                                                    .src
-                                                            }
-                                                            width="50"
-                                                        />
-                                                    ) : (
-                                                        <i className="adminlib-multi-product"></i>
-                                                    )}
-                                                </div>
-
-                                                <div className="details">
-                                                    <div className="sku">
-                                                        <b>SKU:</b>{' '}
-                                                        {variation?.sku || '—'}
-                                                    </div>
-
-                                                    <div className="price">
-                                                        $
-                                                        {variation?.regular_price ||
-                                                            '0'}
-                                                        {variation?.sale_price && (
-                                                            <>
-                                                                {' '}
-                                                                - $
-                                                                {
-                                                                    variation?.sale_price
-                                                                }
-                                                            </>
-                                                        )}
-                                                    </div>
-
-                                                    <div className="stock">
-                                                        {variation?.stock_status ===
-                                                        'instock'
-                                                            ? `In stock`
-                                                            : 'Out of stock'}
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <i
-                                                className="admin-badge yellow adminlib-edit edit-icon"
-                                                onClick={() =>
-                                                    handleEditVariation(
-                                                        variation
-                                                    )
-                                                }
-                                            ></i>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                    </div>
-
-                    {AddAttribute && (
+                    {AddInhance && (
                         <CommonPopup
-                            open={AddAttribute}
-                            onClick={() => setAddAttribute(false)}
-                            width="31.25rem"
-                            height="70%"
-                            header={
-                                <>
-                                    <div className="title">
-                                        <i className="adminlib-coupon"></i>
-                                        {__('Add Attribute', 'multivendorx')}
-                                    </div>
-                                    <p>
-                                        {__(
-                                            'Lorem ipsum dolor sit amet consectetur adipisicing elit...',
-                                            'multivendorx'
-                                        )}
-                                    </p>
-                                    <i
-                                        className="icon adminlib-close"
-                                        onClick={() => setAddAttribute(false)}
-                                    ></i>
-                                </>
-                            }
-                        >
-                            <div className="content">
-                                {/* ATTRIBUTE NAME SECTION */}
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label>
-                                            {__(
-                                                'Attribute name',
-                                                'multivendorx'
-                                            )}
-                                        </label>
-
-                                        <div className="attribute-popup-wrapper">
-                                            <div className="field-wrapper">
-                                                {!showAddNew && (
-                                                    <>
-                                                        <SelectInput
-                                                            name="attribute_name"
-                                                            type="single-select"
-                                                            size="80%"
-                                                            value={
-                                                                selectedAttribute?.value
-                                                            }
-                                                            options={[
-                                                                ...existingAttributes.map(
-                                                                    (attr) => ({
-                                                                        label: attr.name,
-                                                                        value: attr.id,
-                                                                    })
-                                                                ),
-                                                            ]}
-                                                            onChange={(opt) => {
-                                                                setSelectedAttribute(
-                                                                    opt
-                                                                );
-                                                                setAttributeValues(
-                                                                    []
-                                                                );
-                                                            }}
-                                                        />
-
-                                                        <div
-                                                            className="add-btn"
-                                                            onClick={() =>
-                                                                setShowAddNew(
-                                                                    true
-                                                                )
-                                                            }
-                                                        >
-                                                            <i className="adminlib-plus-circle-o"></i>{' '}
-                                                            {__(
-                                                                'Add new',
-                                                                'multivendorx'
-                                                            )}
-                                                        </div>
-                                                    </>
-                                                )}
-                                            </div>
-
-                                            {/* ADD NEW ATTRIBUTE FIELD */}
-                                            {showAddNew && (
-                                                <div className="field-wrapper add-new-field">
-                                                    <BasicInput
-                                                        name="new_attribute"
-                                                        value={newAttributeName}
-                                                        onChange={(e) =>
-                                                            setNewAttributeName(
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                        wrapperClass="setting-form-input"
-                                                    />
-
-                                                    <div
-                                                        className="admin-btn btn-purple-bg"
-                                                        onClick={
-                                                            saveNewAttribute
-                                                        }
-                                                    >
-                                                        <i className="adminlib-form-checkboxes"></i>{' '}
-                                                        {__(
-                                                            'Save',
-                                                            'multivendorx'
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* ATTRIBUTE VALUE SECTION */}
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label>
-                                            {__(
-                                                'Attribute value',
-                                                'multivendorx'
-                                            )}
-                                        </label>
-
-                                        <div className="dropdown-field">
-                                            <InputWithSuggestions
-                                                suggestions={
-                                                    selectedAttribute &&
-                                                    selectedAttribute.value !==
-                                                        0
-                                                        ? existingAttributeTerms[
-                                                              selectedAttribute
-                                                                  .value
-                                                          ] || []
-                                                        : []
-                                                }
-                                                value={attributeValues}
-                                                placeholder={__(
-                                                    'Type or select value...',
-                                                    'multivendorx'
-                                                )}
-                                                addButtonLabel={__(
-                                                    'Add',
-                                                    'multivendorx'
-                                                )}
-                                                onChange={(list) =>
-                                                    setAttributeValues(list)
-                                                }
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* SELECT ALL / NONE ONLY FOR EXISTING ATTRIBUTES */}
-                                {selectedAttribute &&
-                                    selectedAttribute.value !== 0 && (
-                                        <div className="buttons-wrapper left">
-                                            <div
-                                                className="admin-btn btn-purple"
-                                                onClick={() =>
-                                                    setAttributeValues(
-                                                        existingAttributeTerms[
-                                                            selectedAttribute
-                                                                .value
-                                                        ] || []
-                                                    )
-                                                }
-                                            >
-                                                {__(
-                                                    'Select all',
-                                                    'multivendorx'
-                                                )}
-                                            </div>
-
-                                            <div
-                                                className="admin-btn btn-red"
-                                                onClick={() =>
-                                                    setAttributeValues([])
-                                                }
-                                            >
-                                                {__(
-                                                    'Select none',
-                                                    'multivendorx'
-                                                )}
-                                            </div>
-                                        </div>
-                                    )}
-                                <div
-                                    className="admin-btn btn-purple"
-                                    onClick={saveAttributeToList}
-                                >
-                                    {__('Add Attribute', 'multivendorx')}
-                                </div>
-                            </div>
-                        </CommonPopup>
-                    )}
-
-                    {Addvariant && (
-                        <CommonPopup
-                            open={Addvariant}
-                            onClick={() => setAddvariant(false)}
-                            width="40%"
+                            open={AddInhance}
+                            onClick={() => setAddInhance(false)}
+                            width="50%"
                             height="90%"
                             header={
                                 <>
                                     <div className="title">
-                                        <i className="adminlib-coupon"></i>
-                                        {editingVariation
-                                            ? __('Edit Variant', 'multivendorx')
-                                            : __('Add Variant', 'multivendorx')}
+                                        <i className="adminlib-magic"></i>
+                                        {__('AI Image Enhancer', 'multivendorx')}
                                     </div>
                                     <p>
                                         {__(
-                                            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum sint, minus voluptates esse officia enim dolorem, eaque neque error doloremque praesentium facere quidem mollitia deleniti?',
+                                            'Upload an image and describe enhancements. AI will generate a new enhanced image.',
                                             'multivendorx'
                                         )}
                                     </p>
                                     <i
                                         className="icon adminlib-close"
-                                        onClick={() => setAddvariant(false)}
+                                        onClick={() => setAddInhance(false)}
                                     ></i>
                                 </>
                             }
@@ -1760,623 +1157,128 @@ const AddProduct = () => {
                                     <div
                                         className="admin-btn btn-red"
                                         onClick={() => {
-                                            setAddvariant(false);
+                                            setAddInhance(false);
                                         }}
                                     >
                                         {__('Cancel', 'multivendorx')}
                                     </div>
                                     <div
-                                        className="admin-btn btn-purple-bg"
-                                        onClick={handleSaveVariant}
+                                        className={`admin-btn btn-purple-bg ${isEnhancing ? 'disabled' : ''}`}
+                                        onClick={!isEnhancing ? handleImageEnhancement : undefined}
                                     >
-                                        {__('Save', 'multivendorx')}
+                                        {isEnhancing ? __('Generating Image...', 'multivendorx') : __('Generate Enhanced Image', 'multivendorx')}
                                     </div>
                                 </>
                             }
                         >
-                            <div className="content add-variant">
-                                <div className="form-group-wrapper select-variations-wrapper">
-                                    <div className="form-group">
-                                        <label htmlFor="">
-                                            {__(
-                                                'Select variations',
-                                                'multivendorx'
-                                            )}
-                                        </label>
-
-                                        <div className="select-wrapper">
-                                            <p className="attr-label">
-                                                #{variant?.id}
+                            <div className="content">
+                                {/* Original Image Preview */}
+                                {selectedImageForEnhancement && (
+                                    <div className="image-preview-section">
+                                        <h4>
+                                            <i className="adminlib-image"></i> {__('Original Image:', 'multivendorx')}
+                                        </h4>
+                                        <div>
+                                            <img 
+                                                src={selectedImageForEnhancement} 
+                                                alt="Original Preview" 
+                                            />
+                                            <p>
+                                                {__('This is the original image that will be enhanced.', 'multivendorx')}
                                             </p>
-                                            {product.attributes?.length > 0 &&
-                                                product.attributes.map(
-                                                    (attr) => {
-                                                        console.log(
-                                                            'attr',
-                                                            attr
-                                                        );
-
-                                                        const options =
-                                                            attr.options.map(
-                                                                (opt) => ({
-                                                                    label: opt,
-                                                                    value: opt,
-                                                                })
-                                                            );
-
-                                                        // existing selected value
-                                                        const selectedValue =
-                                                            variant?.attributes?.find(
-                                                                (a) =>
-                                                                    a.id ===
-                                                                    attr.id
-                                                            )?.option || '';
-
-                                                        console.log(
-                                                            'selected',
-                                                            selectedValue
-                                                        );
-                                                        console.log(
-                                                            'options',
-                                                            options.find(
-                                                                (o) =>
-                                                                    o.value ===
-                                                                    selectedValue
-                                                            )
-                                                        );
-
-                                                        return (
-                                                            <div
-                                                                key={attr.id}
-                                                                className="variation-attr-row"
-                                                            >
-                                                                <SelectInput
-                                                                    name={`attribute_${attr.id}`}
-                                                                    options={
-                                                                        options
-                                                                    }
-                                                                    type="single-select"
-                                                                    wrapperClass="variation-select"
-                                                                    value={
-                                                                        selectedValue
-                                                                    }
-                                                                    onChange={(
-                                                                        selected
-                                                                    ) => {
-                                                                        const value =
-                                                                            selected?.value ||
-                                                                            ''; // selected is full object
-
-                                                                        setVariant(
-                                                                            (
-                                                                                prev
-                                                                            ) => {
-                                                                                const updated =
-                                                                                    [
-                                                                                        ...prev.attributes,
-                                                                                    ];
-                                                                                const index =
-                                                                                    updated.findIndex(
-                                                                                        (
-                                                                                            a
-                                                                                        ) =>
-                                                                                            a.id ===
-                                                                                            attr.id
-                                                                                    );
-
-                                                                                if (
-                                                                                    index !==
-                                                                                    -1
-                                                                                ) {
-                                                                                    // ✔ Merge existing object, only update option
-                                                                                    updated[
-                                                                                        index
-                                                                                    ] =
-                                                                                        {
-                                                                                            ...updated[
-                                                                                                index
-                                                                                            ],
-                                                                                            option: value,
-                                                                                        };
-                                                                                } else {
-                                                                                    // ✔ Add new attribute entry
-                                                                                    updated.push(
-                                                                                        {
-                                                                                            id: attr.id,
-                                                                                            name: attr.name,
-                                                                                            slug: attr.slug, // keep FULL structure
-                                                                                            option: value,
-                                                                                        }
-                                                                                    );
-                                                                                }
-
-                                                                                return {
-                                                                                    ...prev,
-                                                                                    attributes:
-                                                                                        updated,
-                                                                                };
-                                                                            }
-                                                                        );
-                                                                    }}
-                                                                />
-                                                            </div>
-                                                        );
-                                                    }
-                                                )}
                                         </div>
                                     </div>
+                                )}
+
+                                {/* Prompt Input */}
+                                <div className="form-group">
+                                    <label>
+                                        {__('Enhancement Instructions', 'multivendorx')}
+                                    </label>
+                                    <textarea
+                                        value={enhancementPrompt}
+                                        onChange={(e) => setEnhancementPrompt(e.target.value)}
+                                        placeholder={__("E.g., 'Make the colors more vibrant and appealing', 'Add professional lighting and background', 'Remove all shadows and make it studio quality', 'Make it look more premium and luxurious', etc.", 'multivendorx')}
+                                        disabled={isEnhancing}
+                                    />
+                                    <p>
+                                        {__('Describe exactly how you want the AI to enhance the image.', 'multivendorx')}
+                                    </p>
                                 </div>
 
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <FileInput
-                                            inputClass="form-input"
-                                            name="image"
-                                            type="hidden"
-                                            imageSrc={variant?.image?.src}
-                                            openUploader={__(
-                                                'Upload Image',
-                                                'multivendorx'
-                                            )}
-                                            buttonClass="admin-btn btn-purple"
-                                            descClass="settings-metabox-description"
-                                            onChange={(img) =>
-                                                setVariant((prev) => ({
-                                                    ...prev,
-                                                    image: img,
-                                                }))
-                                            }
-                                        />
+                                {/* Error Message */}
+                                {enhancementError && (
+                                    <div className="error-message">
+                                        <strong>{__('Error:', 'multivendorx')}</strong> {enhancementError}
                                     </div>
-                                </div>
+                                )}
 
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <div className="checkbox-wrapper">
-                                            <div className="item">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={
-                                                        variant.status ===
-                                                            'publish' ||
-                                                        variant.status === false
-                                                    }
-                                                    onChange={(e) =>
-                                                        setVariant((prev) => ({
-                                                            ...prev,
-                                                            status: e.target
-                                                                .checked
-                                                                ? 'publish'
-                                                                : 'private',
-                                                        }))
-                                                    }
-                                                />
-                                                {__('Enabled', 'multivendorx')}
+                                {/* Generated Image Result */}
+                                {generatedImage && (
+                                    <div className="result-section">
+                                        <h4>
+                                            <i className="adminlib-check"></i>
+                                            {__('Generated Enhanced Image:', 'multivendorx')}
+                                        </h4>
+                                        
+                                        {/* Image Comparison */}
+                                        <div className="image-comparison">
+                                            {/* Original Image */}
+                                            <div className="image-container">
+                                                <h5>{__('Original', 'multivendorx')}</h5>
+                                                <div className="image-preview">
+                                                    <img 
+                                                        src={selectedImageForEnhancement} 
+                                                        alt="Original"
+                                                    />
+                                                </div>
                                             </div>
-
-                                            <div className="item">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={
-                                                        variant.downloadable
-                                                    }
-                                                    onChange={(e) =>
-                                                        setVariant((prev) => ({
-                                                            ...prev,
-                                                            downloadable:
-                                                                e.target
-                                                                    .checked,
-                                                        }))
-                                                    }
-                                                />
-                                                {__(
-                                                    'Downloadable',
-                                                    'multivendorx'
-                                                )}
-                                            </div>
-
-                                            <div className="item">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={variant.virtual}
-                                                    onChange={(e) =>
-                                                        setVariant((prev) => ({
-                                                            ...prev,
-                                                            virtual:
-                                                                e.target
-                                                                    .checked,
-                                                        }))
-                                                    }
-                                                />
-                                                {__('Virtual', 'multivendorx')}
-                                            </div>
-
-                                            <div className="item">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={
-                                                        variant.manage_stock
-                                                    }
-                                                    onChange={(e) =>
-                                                        setVariant((prev) => ({
-                                                            ...prev,
-                                                            manage_stock:
-                                                                e.target
-                                                                    .checked,
-                                                        }))
-                                                    }
-                                                />
-                                                {__(
-                                                    'Manage stock?',
-                                                    'multivendorx'
-                                                )}
+                                            
+                                            {/* Generated Image */}
+                                            <div className="image-container">
+                                                <h5>{__('AI Enhanced', 'multivendorx')}</h5>
+                                                <div className="image-preview enhanced">
+                                                    <img 
+                                                        src={generatedImage.src} 
+                                                        alt="AI Enhanced" 
+                                                    />
+                                                    <div className="badge-new">NEW</div>
+                                                </div>
                                             </div>
                                         </div>
+
+                                        {/* Simplified action buttons */}
+                                        <div className="action-buttons">
+                                            <button
+                                                className="admin-btn btn-purple-bg"
+                                                onClick={() => useEnhancedImage()}
+                                            >
+                                                {__('Use This Image', 'multivendorx')}
+                                            </button>
+                                        </div>
+                                        {enhancementResult && (
+                                            <div className="result-message">
+                                                <strong>{__('Result:', 'multivendorx')}</strong> {enhancementResult}
+                                            </div>
+                                        )}
                                     </div>
-                                </div>
+                                )}
 
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label>
-                                            {__('SKU', 'multivendorx')}
-                                        </label>
-                                        <BasicInput
-                                            wrapperClass="setting-form-input"
-                                            value={variant.sku}
-                                            onChange={(e) =>
-                                                setVariant((prev) => ({
-                                                    ...prev,
-                                                    sku: e.target.value,
-                                                }))
-                                            }
-                                        />
+                                {/* Loading State */}
+                                {isEnhancing && (
+                                    <div>
+                                        <div></div>
+                                        <p>
+                                            {__('Generating enhanced image...', 'multivendorx')}
+                                        </p>
+                                        <p>
+                                            {__('This may take 20-40 seconds. Please wait.', 'multivendorx')}
+                                        </p>
                                     </div>
-                                </div>
-
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label>
-                                            {__(
-                                                'Regular price',
-                                                'multivendorx'
-                                            )}
-                                        </label>
-                                        <BasicInput
-                                            wrapperClass="setting-form-input"
-                                            value={variant.regular_price}
-                                            onChange={(e) =>
-                                                setVariant((prev) => ({
-                                                    ...prev,
-                                                    regular_price:
-                                                        e.target.value,
-                                                }))
-                                            }
-                                        />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label>
-                                            {__('Sale price', 'multivendorx')}
-                                        </label>
-                                        <BasicInput
-                                            wrapperClass="setting-form-input"
-                                            value={variant.sale_price}
-                                            onChange={(e) =>
-                                                setVariant((prev) => ({
-                                                    ...prev,
-                                                    sale_price: e.target.value,
-                                                }))
-                                            }
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label>
-                                            {__('Stock status', 'multivendorx')}
-                                        </label>
-                                        <SelectInput
-                                            type="single-select"
-                                            wrapperClass="variation-select"
-                                            options={stockStatusOptions}
-                                            value={variant.stock_status}
-                                            onChange={(value) =>
-                                                setVariant((prev) => ({
-                                                    ...prev,
-                                                    stock_status: value,
-                                                }))
-                                            }
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label>
-                                            {__('Weight (kg)', 'multivendorx')}
-                                        </label>
-                                        <BasicInput
-                                            wrapperClass="setting-form-input"
-                                            value={variant.weight}
-                                            onChange={(e) =>
-                                                setVariant((prev) => ({
-                                                    ...prev,
-                                                    weight: e.target.value,
-                                                }))
-                                            }
-                                        />
-                                    </div>
-
-                                    <div className="form-group dimension-group">
-                                        <label>
-                                            {__(
-                                                'Dimensions (L × W × H)',
-                                                'multivendorx'
-                                            )}
-                                        </label>
-
-                                        <BasicInput
-                                            placeholder="Length"
-                                            value={variant.length}
-                                            onChange={(e) =>
-                                                setVariant((prev) => ({
-                                                    ...prev,
-                                                    length: e.target.value,
-                                                }))
-                                            }
-                                        />
-
-                                        <BasicInput
-                                            placeholder="Width"
-                                            value={variant.width}
-                                            onChange={(e) =>
-                                                setVariant((prev) => ({
-                                                    ...prev,
-                                                    width: e.target.value,
-                                                }))
-                                            }
-                                        />
-
-                                        <BasicInput
-                                            placeholder="Height"
-                                            value={variant.height}
-                                            onChange={(e) =>
-                                                setVariant((prev) => ({
-                                                    ...prev,
-                                                    height: e.target.value,
-                                                }))
-                                            }
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label>
-                                            {__('Description', 'multivendorx')}
-                                        </label>
-                                        <TextArea
-                                            wrapperClass="setting-from-textarea"
-                                            inputClass="textarea-input"
-                                            value={variant.description}
-                                            onChange={(e) =>
-                                                setVariant((prev) => ({
-                                                    ...prev,
-                                                    description: e.target.value,
-                                                }))
-                                            }
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="form-group-wrapper">
-                                    <div className="form-group">
-                                        <label>
-                                            {__(
-                                                'Commission Fixed',
-                                                'multivendorx'
-                                            )}
-                                        </label>
-                                        <BasicInput
-                                            value={
-                                                variant?.metadata
-                                                    ?.multivendorx_variable_product_fixed_commission ||
-                                                ''
-                                            }
-                                            onChange={(e) =>
-                                                setVariant((prev) => ({
-                                                    ...prev,
-                                                    metadata: {
-                                                        ...prev.metadata,
-                                                        multivendorx_variable_product_fixed_commission:
-                                                            e.target.value,
-                                                    },
-                                                }))
-                                            }
-                                        />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label>
-                                            {__(
-                                                'Commission Percentage',
-                                                'multivendorx'
-                                            )}
-                                        </label>
-                                        <BasicInput
-                                            value={
-                                                variant?.metadata
-                                                    ?.multivendorx_variable_product_percentage_commission ||
-                                                ''
-                                            }
-                                            onChange={(e) =>
-                                                setVariant((prev) => ({
-                                                    ...prev,
-                                                    metadata: {
-                                                        ...prev.metadata,
-                                                        multivendorx_variable_product_percentage_commission:
-                                                            e.target.value,
-                                                    },
-                                                }))
-                                            }
-                                        />
-                                    </div>
-                                </div>
+                                )}
                             </div>
                         </CommonPopup>
                     )}
-                    {AddInhance && (
-                    <CommonPopup
-                        open={AddInhance}
-                        onClick={() => setAddInhance(false)}
-                        width="50%"
-                        height="90%"
-                        header={
-                            <>
-                                <div className="title">
-                                    <i className="adminlib-magic"></i>
-                                    {__('AI Image Enhancer', 'multivendorx')}
-                                </div>
-                                <p>
-                                    {__(
-                                        'Upload an image and describe enhancements. AI will generate a new enhanced image.',
-                                        'multivendorx'
-                                    )}
-                                </p>
-                                <i
-                                    className="icon adminlib-close"
-                                    onClick={() => setAddInhance(false)}
-                                ></i>
-                            </>
-                        }
-                        footer={
-                            <>
-                                <div
-                                    className="admin-btn btn-red"
-                                    onClick={() => {
-                                        setAddInhance(false);
-                                    }}
-                                >
-                                    {__('Cancel', 'multivendorx')}
-                                </div>
-                                <div
-                                    className={`admin-btn btn-purple-bg ${isEnhancing ? 'disabled' : ''}`}
-                                    onClick={!isEnhancing ? handleImageEnhancement : undefined}
-                                >
-                                    {isEnhancing ? __('Generating Image...', 'multivendorx') : __('Generate Enhanced Image', 'multivendorx')}
-                                </div>
-                            </>
-                        }
-                    >
-                        <div className="content">
-                            {/* Original Image Preview */}
-                            {selectedImageForEnhancement && (
-                                <div className="image-preview-section">
-                                    <h4>
-                                        <i className="adminlib-image"></i> {__('Original Image:', 'multivendorx')}
-                                    </h4>
-                                    <div>
-                                        <img 
-                                            src={selectedImageForEnhancement} 
-                                            alt="Original Preview" 
-                                        />
-                                        <p>
-                                            {__('This is the original image that will be enhanced.', 'multivendorx')}
-                                        </p>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Prompt Input */}
-                            <div className="form-group">
-                                <label>
-                                    {__('Enhancement Instructions', 'multivendorx')}
-                                </label>
-                                <textarea
-                                    value={enhancementPrompt}
-                                    onChange={(e) => setEnhancementPrompt(e.target.value)}
-                                    placeholder={__("E.g., 'Make the colors more vibrant and appealing', 'Add professional lighting and background', 'Remove all shadows and make it studio quality', 'Make it look more premium and luxurious', etc.", 'multivendorx')}
-                                    disabled={isEnhancing}
-                                />
-                                <p>
-                                    {__('Describe exactly how you want the AI to enhance the image.', 'multivendorx')}
-                                </p>
-                            </div>
-
-                            {/* Error Message */}
-                            {enhancementError && (
-                                <div className="error-message">
-                                    <strong>{__('Error:', 'multivendorx')}</strong> {enhancementError}
-                                </div>
-                            )}
-
-                            {/* Generated Image Result */}
-                            {generatedImage && (
-                                <div className="result-section">
-                                    <h4>
-                                        <i className="adminlib-check"></i>
-                                        {__('Generated Enhanced Image:', 'multivendorx')}
-                                    </h4>
-                                    
-                                    {/* Image Comparison */}
-                                    <div className="image-comparison">
-                                        {/* Original Image */}
-                                        <div className="image-container">
-                                            <h5>{__('Original', 'multivendorx')}</h5>
-                                            <div className="image-preview">
-                                                <img 
-                                                    src={selectedImageForEnhancement} 
-                                                    alt="Original"
-                                                />
-                                            </div>
-                                        </div>
-                                        
-                                        {/* Generated Image */}
-                                        <div className="image-container">
-                                            <h5>{__('AI Enhanced', 'multivendorx')}</h5>
-                                            <div className="image-preview enhanced">
-                                                <img 
-                                                    src={generatedImage.src} 
-                                                    alt="AI Enhanced" 
-                                                />
-                                                <div className="badge-new">NEW</div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Simplified action buttons */}
-                                    <div className="action-buttons">
-                                        <button
-                                            className="admin-btn btn-purple-bg"
-                                            onClick={() => useEnhancedImage()}
-                                        >
-                                            {__('Use This Image', 'multivendorx')}
-                                        </button>
-                                    </div>
-                                    {enhancementResult && (
-                                        <div className="result-message">
-                                            <strong>{__('Result:', 'multivendorx')}</strong> {enhancementResult}
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-
-                            {/* Loading State */}
-                            {isEnhancing && (
-                                <div>
-                                    <div></div>
-                                    <p>
-                                        {__('Generating enhanced image...', 'multivendorx')}
-                                    </p>
-                                    <p>
-                                        {__('This may take 20-40 seconds. Please wait.', 'multivendorx')}
-                                    </p>
-                                </div>
-                            )}
-                        </div>
-                    </CommonPopup>
-                )}
                 </div>
 
                 {/* right column */}
@@ -2563,6 +1465,15 @@ const AddProduct = () => {
                                                                     ? 'radio-select-active'
                                                                     : ''
                                                             }`}
+                                                            style={{
+                                                                display:
+                                                                    selectedCat ===
+                                                                        null ||
+                                                                    selectedCat ===
+                                                                        cat.id
+                                                                        ? 'block'
+                                                                        : 'none',
+                                                            }}
                                                             onClick={() =>
                                                                 handleCategoryClick(
                                                                     cat.id
@@ -2598,6 +1509,14 @@ const AddProduct = () => {
                                                                                             ? 'radio-select-active'
                                                                                             : ''
                                                                                     }`}
+                                                                                    style={{
+                                                                                        display:
+                                                                                            !selectedSub ||
+                                                                                            selectedSub ===
+                                                                                                sub.id
+                                                                                                ? 'block'
+                                                                                                : 'none',
+                                                                                    }}
                                                                                     onClick={() =>
                                                                                         handleSubClick(
                                                                                             sub.id
@@ -2633,6 +1552,14 @@ const AddProduct = () => {
                                                                                                                 ? 'radio-select-active'
                                                                                                                 : ''
                                                                                                         }`}
+                                                                                                        style={{
+                                                                                                            display:
+                                                                                                                !selectedChild ||
+                                                                                                                selectedChild ===
+                                                                                                                    child.id
+                                                                                                                    ? 'block'
+                                                                                                                    : 'none',
+                                                                                                        }}
                                                                                                         onClick={() =>
                                                                                                             handleChildClick(
                                                                                                                 child.id
@@ -2760,7 +1687,9 @@ const AddProduct = () => {
                             <div className="right">
                                 <i
                                     className="adminlib-pagination-right-arrow  arrow-icon"
-                                    onClick={() => toggleCard('card-image-upload')}
+                                    onClick={() =>
+                                        toggleCard('card-image-upload')
+                                    }
                                 ></i>
                             </div>
                         </div>
@@ -2791,7 +1720,6 @@ const AddProduct = () => {
                                     </div>
                                 </div>
                             </div>
-
                             <div className="form-group-wrapper">
                                 <div className="form-group">
                                     <label htmlFor="product-name">
@@ -2826,20 +1754,22 @@ const AddProduct = () => {
                                         ))}
                                         {/* Add more button */}
                                         <div>
-                                            <FileInput
-                                                type="hidden"
-                                                imageSrc={null}
-                                                openUploader="Add Gallery Image"
-                                                buttonClass="admin-btn btn-purple"
-                                                onButtonClick={openGalleryUploader}
-                                            />
-                                        </div>
+
+                                        {/* Add more button */}
+                                        <FileInput
+                                            type="hidden"
+                                            imageSrc={null}
+                                            openUploader="Add Gallery Image"
+                                            buttonClass="admin-btn btn-purple"
+                                            onButtonClick={openGalleryUploader}
+                                        />
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
             </div>
         </>
     );
