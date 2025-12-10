@@ -112,7 +112,7 @@ class Distance_Shipping extends \WC_Shipping_Method {
 				continue;
             }
 
-            $distance = self::mvx_get_latlng_distance( $multivendorx_user_location_lat, $multivendorx_user_location_lng, $store_lat, $store_lng, 'k' );
+            $distance = self::multivendorx_get_latlng_distance( $multivendorx_user_location_lat, $multivendorx_user_location_lng, $store_lat, $store_lng, 'k' );
             if ( ! $distance ) {
 				continue;
             }
@@ -187,7 +187,7 @@ class Distance_Shipping extends \WC_Shipping_Method {
      * @param string $unit Unit of distance (M for miles, K for kilometers, N for nautical miles).
      * @return float
      */
-    public static function mvx_get_latlng_distance( $lat1, $lon1, $lat2, $lon2, $unit = 'M' ) {
+    public static function multivendorx_get_latlng_distance( $lat1, $lon1, $lat2, $lon2, $unit = 'M' ) {
         $theta = $lon1 - $lon2;
         $dist  = sin( deg2rad( $lat1 ) ) * sin( deg2rad( $lat2 ) ) + cos( deg2rad( $lat1 ) ) * cos( deg2rad( $lat2 ) ) * cos( deg2rad( $theta ) );
         $dist  = acos( $dist );

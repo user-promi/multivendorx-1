@@ -7,10 +7,8 @@
 
 namespace MultiVendorX\StoreShipping;
 
-use MultiVendorX\Utill;
 use WC_Data_Store;
 use WC_Shipping_Zone;
-use WC_Shipping_Zones;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -53,31 +51,10 @@ class Util {
             $zones[ $overall_zone->get_id() ]                            = $overall_zone->get_data();
             $zones[ $overall_zone->get_id() ]['zone_id']                 = $overall_zone->get_id();
             $zones[ $overall_zone->get_id() ]['formatted_zone_location'] = $overall_zone->get_formatted_location();
-            $zones[ $overall_zone->get_id() ]['shipping_methods']        = self::get_shipping_methods( $overall_zone->get_id(), $vendor_id );
+            $zones[ $overall_zone->get_id() ]['shipping_methods']        = self::get_shipping_methods( $overall_zone->get_id(), $store_id );
         }
 
         return $zones;
-    }
-
-    /**
-     * Get Zone
-     *
-     * @param int $zone_id The ID of the shipping zone.
-     * @param int $store_id The ID of the store.
-     */
-    public static function get_zone( $zone_id, $store_id ) {
-        $zone            = array();
-        $zone_obj        = WC_Shipping_Zones::get_zone_by( 'zone_id', $zone_id );
-        $enabled_methods = $zone_obj->get_shipping_methods( true );
-        $methods_ids     = wp_list_pluck( $enabled_methods, 'id' );
-
-        if ( in_array( 'multivendorx_vendor_shipping', $methods_ids, true ) ) {
-            $zone['data']                    = $zone_obj->get_data();
-            $zone['formatted_zone_location'] = $zone_obj->get_formatted_location();
-            $zone['shipping_methods']        = self::get_shipping_methods( $zone_id, $store_id );
-            $zone['locations']               = self::get_locations( $zone_id );
-        }
-        return $zone;
     }
 
     /**
@@ -201,66 +178,4 @@ class Util {
         );
     }
 
-    /**
-     * Get Shipping Zone Locations
-     *
-     * @param int $zone_id The ID of the shipping zone whose locations you want to retrieve.
-     * @param int $store_id The ID of the store.
-     */
-    public static function get_locations( $zone_id, $store_id = 0 ) {
-        global $wpdb;
-        $table = $wpdb->prefix . Utill::TABLES['shipping_zone_locations'];
-
-        $results = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table WHERE zone_id=%s AND store_id=%d", $zone_id, $store_id ) );
-
-        $locations = array();
-
-        if ( $results ) {
-            foreach ( $results as $key => $result ) {
-                $locations[] = array(
-                    'code' => $result->location_code,
-                    'type' => $result->location_type,
-                );
-            }
-        }
-
-        return $locations;
-    }
-
-    /**
-     * Save Shipping Zone Locations
-     *
-     * @param array $location Array of locations to be saved. Each item should have a code and type.
-     * @param int   $zone_id  The ID of the shipping zone where these locations will be associated.
-     */
-    public static function save_location( $location, $zone_id, $vendor_id = 0 ) {
-        global $wpdb;
-
-        // Setup arrays for Actual Values, and Placeholders.
-        $values        = array();
-        $place_holders = array();
-        $vendor_id     = $vendor_id ? $vendor_id : apply_filters( 'mvx_current_vendor_id', get_current_user_id() );
-        $table_name    = "{$wpdb->prefix}mvx_shipping_zone_locations";
-
-        $query = "INSERT INTO {$table_name} (vendor_id, zone_id, location_code, location_type) VALUES ";
-
-        if ( ! empty( $location ) ) {
-            foreach ( $location as $key => $value ) {
-                array_push( $values, $vendor_id, $zone_id, $value['code'], $value['type'] );
-                $place_holders[] = "('%d', '%d', '%s', '%s')";
-            }
-
-            $query .= implode( ', ', $place_holders );
-
-            $wpdb->query( $wpdb->prepare( "DELETE FROM {$table_name} WHERE zone_id=%d AND vendor_id=%d", $zone_id, $vendor_id ) );
-
-            if ( $wpdb->query( $wpdb->prepare( wc_clean( $query ), $values ) ) ) {
-                return true;
-            }
-        } elseif ( $wpdb->query( $wpdb->prepare( "DELETE FROM {$table_name} WHERE zone_id=%d AND vendor_id=%d", $zone_id, $vendor_id ) ) ) {
-                return true;
-        }
-
-        return false;
-    }
 }

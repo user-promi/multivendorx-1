@@ -251,12 +251,12 @@ class Country_Shipping extends \WC_Shipping_Method {
                 // -------------------------
                 // Country/State rates logic
                 // -------------------------
-                $mvx_shipping_rates = isset( $meta[ Utill::STORE_SETTINGS_KEYS['shipping_rates'] ] ) ? json_decode( $meta[ Utill::STORE_SETTINGS_KEYS['shipping_rates'] ], true ) : array();
+                $multivendorx_shipping_rates = isset( $meta[ Utill::STORE_SETTINGS_KEYS['shipping_rates'] ] ) ? json_decode( $meta[ Utill::STORE_SETTINGS_KEYS['shipping_rates'] ], true ) : array();
                 $state_rate         = 0;
                 $country_rate       = null;
                 $everywhere_rate    = null;
 
-                foreach ( $mvx_shipping_rates as $rate ) {
+                foreach ( $multivendorx_shipping_rates as $rate ) {
                     if ( $rate['country'] === $destination_country ) {
                         $country_rate = $rate;
                         break;
@@ -307,7 +307,7 @@ class Country_Shipping extends \WC_Shipping_Method {
 
 
     /**
-     * Add Local Pickup rate per vendor if enabled.
+     * Add Local Pickup rate per store if enabled.
      *
      * @param array $products Products in the cart.
      * @param mixed $tax_rate Tax rate.

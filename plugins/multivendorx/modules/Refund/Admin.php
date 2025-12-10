@@ -7,8 +7,6 @@
 
 namespace MultiVendorX\Refund;
 
-use MultiVendorX\Utill;
-
 /**
  * MultiVendorX Refund Admin class
  *
@@ -25,8 +23,7 @@ class Admin {
         add_action( 'init', array( $this, 'register_status_for_refund' ) );
         add_filter( 'wc_order_statuses', array( $this, 'add_refund_requested_to_order_statuses' ) );
 
-        // add_action( 'add_meta_boxes', array( $this, 'mvx_refund_order_status_customer_meta' ), 10, 2 );
-        add_action( 'woocommerce_process_shop_order_meta', array( $this, 'mvx_refund_order_status_save' ) );
+        add_action( 'woocommerce_process_shop_order_meta', array( $this, 'multivendorx_refund_order_status_save' ) );
     }
 
     /**
@@ -70,75 +67,12 @@ class Admin {
     }
 
     /**
-     * Add the refund status meta box to the order page.
-     *
-     * @param string $page Current page.
-     * @param object $order Order object.
-     * @return void
-     */
-    public function mvx_refund_order_status_customer_meta( $page, $order ) {
-        if ( 'woocommerce_page_wc-orders' !== $page && $page ) {
-			return;
-        }
-        if ( $order->get_parent_id() === 0 ) {
-			return;
-        }
-        add_meta_box( 'refund_status_customer', __( 'Customer refund status', 'multivendorx' ), array( $this, 'mvx_order_customer_refund_dd' ), $page, 'side', 'core', $order );
-        // add_meta_box( 'refund_images_customer', __( 'Refund Request Images', 'multivendorx' ), array( $this, 'mvx_order_customer_refund_images' ), $page, 'side', 'core', $order );
-    }
-
-    /**
-     * Display the refund status dropdown for an order.
-     *
-     * @param object $order Order object.
-     * @return void
-     */
-    public function mvx_order_customer_refund_dd( $order ) {
-        $refund_status   = $order->get_meta( '_customer_refund_order', true ) ?? '';
-        $refund_statuses = array(
-            ''               => __( 'Refund Status', 'multivendorx' ),
-            'refund_request' => __( 'Refund Requested', 'multivendorx' ),
-            'refund_accept'  => __( 'Refund Accepted', 'multivendorx' ),
-            'refund_reject'  => __( 'Refund Rejected', 'multivendorx' ),
-        );
-        ?>
-        <select id="refund_order_customer" name="refund_order_customer" onchange='refund_admin_reason(this.value);'>
-            <?php foreach ( $refund_statuses as $key => $value ) { ?>
-                <option value="<?php echo esc_attr( $key ); ?>" <?php selected( $refund_status, $key ); ?>>
-                    <?php echo esc_html( $value ); ?>
-                </option>
-            <?php } ?>
-        </select>
-        <div class="reason_select_by_admin" id="reason_select_by_admin" style='display:none;'>
-        <label for="additional_massage"><?php esc_html_e( 'Please Provide Some Reason', 'multivendorx' ); ?></label>
-            <textarea class="woocommerce-Input input-text" name="refund_admin_reason_text" id="refund_admin_reason_text"></textarea>
-        </div>
-        <button type="submit"
-            class="button cust-refund-status button-default"
-            name="cust_refund_status"
-            value="<?php echo esc_attr__( 'Update status', 'multivendorx' ); ?>">
-            <?php echo esc_html__( 'Update status', 'multivendorx' ); ?>
-        </button>
-
-        <script>
-            function refund_admin_reason(val){
-                var element = document.getElementById('reason_select_by_admin');
-                if( val == 'refund_accept' || val == 'refund_reject' )
-                    element.style.display='block';
-                else  
-                    element.style.display='none';
-            }
-        </script>
-        <?php
-    }
-
-    /**
      * Save the refund status of an order.
      *
      * @param int $order_id Order ID.
      * @return void
      */
-    public function mvx_refund_order_status_save( $order_id ) {
+    public function multivendorx_refund_order_status_save( $order_id ) {
         $order = wc_get_order( $order_id );
         if ( empty( $order_id ) || ( $order_id && $order->get_type() !== 'shop_order' ) ) {
 			return;
