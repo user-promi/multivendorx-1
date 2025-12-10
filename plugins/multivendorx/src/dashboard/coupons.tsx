@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { __ } from '@wordpress/i18n';
-import { BasicInput, CalendarInput, CommonPopup, getApiLink, MultiCheckBox, SelectInput, Table, TableCell, TextArea, ToggleSetting } from 'zyra';
+import { BasicInput, CommonPopup, getApiLink, MultiCalendarInput, SelectInput, Table, TableCell, TextArea, ToggleSetting } from 'zyra';
 import {
     ColumnDef,
     RowSelectionState,
@@ -776,7 +776,7 @@ const AllCoupon: React.FC = () => {
             name: 'date',
             render: (updateFilter) => (
                 <div className="right">
-                    <CalendarInput
+                    <MultiCalendarInput
                         wrapperClass=""
                         inputClass=""
                         onChange={(range: any) => {

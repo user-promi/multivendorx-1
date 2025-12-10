@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { __ } from '@wordpress/i18n';
-import { BasicInput, CalendarInput, CommonPopup, getApiLink, useModules, Table, TableCell, TextArea } from 'zyra';
+import { BasicInput, useModules, Table, TableCell, MultiCalendarInput } from 'zyra';
 import {
     ColumnDef,
     RowSelectionState,
@@ -486,7 +486,7 @@ const AllProduct: React.FC = () => {
             name: 'date',
             render: (updateFilter) => (
                 <div className="right">
-                    <CalendarInput
+                    <MultiCalendarInput
                         wrapperClass=""
                         inputClass=""
                         onChange={(range: any) => {

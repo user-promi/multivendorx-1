@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { __ } from '@wordpress/i18n';
-import { CalendarInput, getApiLink, Table, TableCell } from 'zyra';
+import { getApiLink, MultiCalendarInput, Table, TableCell } from 'zyra';
 import axios from 'axios';
 import { formatCurrency } from '../../services/commonFunction';
 
@@ -360,7 +360,7 @@ const RefundedOrderReport: React.FC = () => {
       name: 'date',
       render: (updateFilter) => (
         <div className="right">
-          <CalendarInput
+          <MultiCalendarInput
             onChange={(range: any) => {
               updateFilter('date', {
                 start_date: range.startDate,

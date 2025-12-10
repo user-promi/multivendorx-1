@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { __ } from "@wordpress/i18n";
-import { CalendarInput, CommonPopup, getApiLink, Table, TableCell, useModules } from "zyra";
+import { getApiLink, MultiCalendarInput, Table, TableCell, useModules } from "zyra";
 import { ColumnDef, PaginationState, RowSelectionState } from "@tanstack/react-table";
 import ViewCommission from "./viewCommission";
 import { formatCurrency } from '../services/commonFunction';
@@ -390,7 +390,7 @@ const StoreCommission: React.FC = () => {
             name: 'date',
             render: (updateFilter) => (
                 <div className="right">
-                    <CalendarInput
+                    <MultiCalendarInput
                         wrapperClass=""
                         inputClass=""
                         onChange={(range: any) => {
