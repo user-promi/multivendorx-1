@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 const DependencyExtractionWebpackPlugin = require( '@wordpress/dependency-extraction-webpack-plugin' );
 const CopyWebpackPlugin = require( 'copy-webpack-plugin' );
 const fs = require( 'fs' );
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 // Dynamically get block folders inside src/block/
 // 1. Static copy pattern for fonts
@@ -176,6 +177,15 @@ module.exports = {
         new CopyWebpackPlugin( {
             patterns: [ ...staticPatterns, ...dynamicPatterns ],
         } ),
+        new BundleAnalyzerPlugin({
+            analyzerMode: 'server',
+            analyzerPort: 9999,
+            openAnalyzer: true,
+            reportFilename: 'bundle-report.html',
+            generateStatsFile: true,
+            statsFilename: 'bundle-stats.json',
+            defaultSizes: 'gzip',
+        })
     ],
 
     resolve: {
