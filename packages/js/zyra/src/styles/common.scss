@@ -18,6 +18,7 @@ a {
   color: $color-black;
 }
 
+.form-select-field-wrapper input,
 .form-select-field-wrapper input:focus {
   box-shadow: none !important;
   outline: none;
@@ -113,6 +114,23 @@ body:has(.admin-main-wrapper) {
 }
 
 // button style start
+.buttons-wrapper {
+  display: flex;
+  justify-content: end;
+  align-items: end;
+  gap: 0.625rem;
+  padding-top: 0.5rem;
+  flex-wrap: wrap;
+
+  &.center {
+    justify-content: center;
+  }
+
+  &.left {
+    justify-content: start;
+  }
+}
+
 .admin-btn {
   outline: none;
   cursor: pointer;
@@ -134,45 +152,6 @@ body:has(.admin-main-wrapper) {
   &.btn-preview {
     padding: 0;
   }
-}
-
-.btn-purple {
-  background: $theme-background-color;
-  color: $theme-color;
-}
-
-.btn-purple-bg {
-  background: $theme-color;
-  color: #fff;
-}
-
-.btn-yellow {
-  background: #d3a93a;
-  color: $color-white;
-}
-
-.btn-red {
-  background: #fde8e4;
-  color: #f06b4f;
-
-  &:hover {
-    background: #fde8e4;
-    color: #f06b4f;
-  }
-}
-
-.btn-light-blue {
-  background: #bfdeed;
-  color: #003d66;
-}
-
-.btn-light-green {
-  background: #b7b03c91;
-}
-
-.btn-green {
-  background: #d9f5f0;
-  color: #06be9f;
 }
 
 .admin-badge {
@@ -212,6 +191,31 @@ body:has(.admin-main-wrapper) {
   .#{$name} {
     background: map-get($style, light-color);
     color: map-get($style, color);
+  }
+}
+
+@each $name, $style in $btn-color-palette {
+
+  // light background color btn
+  .btn-#{$name} {
+    background: map-get($style, light-color);
+    color: map-get($style, color);
+
+    &:hover {
+      background: map-get($style, light-color);
+      color: map-get($style, color);
+    }
+  }
+
+  // dark background color btn
+  .btn-#{$name}-bg {
+    background: map-get($style, color);
+    color: $color-white;
+
+    &:hover {
+      background: map-get($style, color);
+      color: $color-white;
+    }
   }
 }
 
@@ -437,7 +441,6 @@ body:has(.admin-main-wrapper) {
   }
 }
 
-
 .checkbox-list-side-by-side {
   display: flex;
   flex-wrap: wrap;
@@ -542,7 +545,7 @@ body:has(.admin-main-wrapper) {
 
 // pro tag start
 .admin-pro-tag {
-  background: rgb(227 80 71 / 18%);
+  background: #e350472e;
   color: #e35047;
   font-size: .75rem;
   font-weight: 700;
@@ -567,23 +570,6 @@ body:has(.admin-main-wrapper) {
 }
 
 // pro tag end
-
-// page title start
-.admin-page-title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.75rem;
-  position: relative;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-
-  p {
-    font-size: 1.5rem;
-  }
-}
-
-// page title end
 
 // calender style start
 .settings-calender {
@@ -716,41 +702,40 @@ body:has(.admin-main-wrapper) {
 // merge components end
 
 // visibility control container
-.tabs {
-  display: flex;
-  position: relative;
-  background: $color-white;
-  margin: 0.5rem 0;
+// .tabs {
+//   display: flex;
+//   position: relative;
+//   background: $color-white;
+//   margin: 0.5rem 0;
 
 
-  .tab {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 1.563rem;
-    width: 3.125rem;
-    font-size: .8rem;
-    color: $color-black;
-    cursor: pointer;
-    transition: color 0.15s ease-in;
-    z-index: 2;
-  }
+//   .tab {
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     height: 1.563rem;
+//     width: 3.125rem;
+//     font-size: .8rem;
+//     color: $color-black;
+//     cursor: pointer;
+//     transition: color 0.15s ease-in;
+//     z-index: 2;
+//   }
 
-  input[type="radio"] {
-    display: none; // For hide radio box
-  }
+//   input[type="radio"] {
+//     display: none; // For hide radio box
+//   }
 
-  input[type="radio"]:checked+label {
-    color: $theme-color;
-  }
+//   input[type="radio"]:checked+label {
+//     color: $theme-color;
+//   }
 
-  input[type="radio"]:checked+label>.notification {
-    background-color: $theme-color;
-    color: $color-white;
-    margin: 0;
-  }
-}
-
+//   input[type="radio"]:checked+label>.notification {
+//     background-color: $theme-color;
+//     color: $color-white;
+//     margin: 0;
+//   }
+// }
 // visibility control container end
 
 // cross btn start
@@ -790,7 +775,7 @@ body:has(.admin-main-wrapper) {
 
   &.notice-error {
     i {
-      color: red;
+      color: $accent-color;
     }
   }
 
@@ -954,26 +939,6 @@ body:has(.admin-main-wrapper) {
   }
 }
 
-// footer button style start
-.buttons-wrapper {
-  display: flex;
-  justify-content: end;
-  align-items: end;
-  gap: 0.625rem;
-  padding-top: 0.5rem;
-  flex-wrap: wrap;
-
-  &.center {
-    justify-content: center;
-  }
-
-  &.left {
-    justify-content: start;
-  }
-}
-
-// footer button style end
-
 .settings-from-multi-select {
   > :first-child {
     margin: 0;
@@ -1027,11 +992,6 @@ body:has(.admin-main-wrapper) {
   }
 }
 
-.form-select-field-wrapper {
-  input {
-    box-shadow: none;
-  }
-}
 
 // pro image wrapper start
 .image-wrapper {
@@ -1130,7 +1090,6 @@ body:has(.admin-main-wrapper) {
     }
   }
 
-
   .adminlib-update-data {
     font-size: 1rem;
   }
@@ -1147,9 +1106,6 @@ body:has(.admin-main-wrapper) {
       display: flex;
     }
   }
-}
-
-.action-icons {
 
   &:hover,
   &:has(.action-dropdown:hover) {
@@ -1350,7 +1306,6 @@ body:has(.admin-main-wrapper) {
     margin: 0;
     min-width: 6rem;
     border: none !important;
-
     /* store dashboard */
     border-radius: 0.313rem;
     border-top-right-radius: 0;
@@ -1365,6 +1320,63 @@ body:has(.admin-main-wrapper) {
     &:focus {
       box-shadow: none;
       color: $theme-color;
+    }
+  }
+
+  // dropdown style 
+  ul {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 19rem;
+    max-height: 22rem;
+    overflow-y: auto;
+    background: #fff;
+    border: $border-light-small;
+    border-radius: 0.313rem;
+    margin-top: 0.313rem;
+    padding: 0;
+    list-style: none;
+    z-index: 1000;
+
+    li {
+      padding: 8px 0.75rem;
+      cursor: pointer;
+      font-size: 0.875rem;
+      color: #333;
+      border-bottom: $border-light-small;
+      display: flex;
+      align-items: start;
+      gap: 0.5rem;
+      margin: 0;
+      transition: all 0.5s ease;
+
+      &:hover {
+        background: #f3f3f3;
+      }
+
+      .icon-wrapper {
+        margin-top: 0.625rem;
+
+        i {
+          padding: 0.5rem;
+          font-size: 1.125rem;
+          border-radius: 50%;
+          background: $theme-background-color;
+          color: $theme-color;
+        }
+      }
+
+      .title {
+        font-size: 1rem;
+      }
+
+      .desc {
+        font-size: 0.813rem;
+        line-height: 0.95rem;
+        padding-top: 0.313rem;
+        color: #00000094;
+      }
     }
   }
 }
@@ -1382,35 +1394,6 @@ body:has(.admin-main-wrapper) {
     padding-left: 0;
     background: none;
   }
-}
-
-// date picker start
-.date-picker-section-wrapper {
-  position: relative;
-
-  .date {
-    width: 14rem;
-  }
-
-  .date-label {
-    font-size: 1rem;
-    padding-bottom: 0.313rem;
-  }
-}
-
-.date-picker {
-  position: absolute;
-  right: 0;
-  z-index: 100;
-  border: $border-light-small;
-}
-
-.date-picker.open-bottom {
-  top: calc(100% + 0.25rem);
-}
-
-.date-picker.open-top {
-  bottom: calc(100% + 0.25rem);
 }
 
 // tooltip style start
@@ -1469,7 +1452,7 @@ body:has(.admin-main-wrapper) {
 
 // input invalid error
 .invalid-massage {
-  color: red;
+  color: $accent-color;
   position: relative;
   padding-left: 1.125rem;
   font-weight: 500;
@@ -1488,7 +1471,7 @@ body:has(.admin-main-wrapper) {
 }
 
 .success-massage {
-  color: green;
+  color: #008000;
   position: relative;
   padding-left: 1.125rem;
   font-weight: 500;
@@ -1546,12 +1529,11 @@ body:has(.admin-main-wrapper) {
       }
 
       &.close {
-        color: red;
+        color: $accent-color;
       }
     }
   }
 }
-
 
 // highlight section start
 @keyframes animate {
@@ -1585,7 +1567,7 @@ body:has(.admin-main-wrapper) {
     right: -0.25rem;
     top: -0.45rem;
     padding: 0.125rem;
-    background: red;
+    background: $accent-color;
     border-radius: 50%;
     width: 0.75rem;
     height: 0.75rem;

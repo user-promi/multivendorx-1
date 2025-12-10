@@ -133,7 +133,7 @@
         display: flex;
         gap: 1rem;
         align-items: start;
-        background: #fff;
+        background: $background-white;
         padding: 1rem;
         width: 100%;
         border-radius: 0.313rem;
@@ -231,7 +231,7 @@
             margin-bottom: .5rem;
             display: flex;
             gap: 0.625rem;
-            line-height: 0.85;
+            line-height: 1;
         }
 
         .toggle-setting-container label {
@@ -242,7 +242,7 @@
             font-size: 1.125rem;
 
             &.remove-btn {
-                color: rgb(238, 8, 8);
+                color: #ee0808;
                 cursor: pointer;
             }
         }
@@ -450,7 +450,7 @@
     font-weight: 500;
 
     .review {
-        color: rgb(231, 178, 5);
+        color: #e7b205;
     }
 
     span {
