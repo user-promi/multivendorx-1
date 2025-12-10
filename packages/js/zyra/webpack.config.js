@@ -97,6 +97,5 @@ module.exports = {
     externals: {
         react: 'React',
         'react-dom': 'ReactDOM',
-        // 'mapbox-gl': 'mapbox-gl',
     },
 };
