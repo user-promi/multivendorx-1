@@ -1105,7 +1105,6 @@ const AddProduct = () => {
                                                 />
                                             </>
                                         )}
-
                                 </div>
                             </div>
 
