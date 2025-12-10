@@ -22,7 +22,7 @@ class Frontend {
      * Frontend class constructor function.
      */
     public function __construct() {
-        add_action( 'woocommerce_order_details_after_order_table', array( $this, 'mvx_refund_btn_customer_my_account' ), 10 );
+        add_action( 'woocommerce_order_details_after_order_table', array( $this, 'multivendorx_refund_btn_customer_my_account' ), 10 );
         add_action( 'wp_enqueue_scripts', array( $this, 'add_scripts' ) );
         add_action( 'wp', array( $this, 'multivendorx_handler_cust_requested_refund' ) );
     }
@@ -32,7 +32,7 @@ class Frontend {
      *
      * @param object $order Order object.
      */
-    public function mvx_refund_btn_customer_my_account( $order ) {
+    public function multivendorx_refund_btn_customer_my_account( $order ) {
         if ( ! is_wc_endpoint_url( 'view-order' ) ) {
             return;
         }
@@ -50,7 +50,7 @@ class Frontend {
         $refund_reason_options = MultiVendorX()->setting->get_setting( 'refund_reasons', array() );
         $refund_button_text    = apply_filters( 'mvx_customer_my_account_refund_request_button_text', __( 'Request a refund', 'multivendorx' ), $order );
         // Print refund messages, if any.
-        $msg_data = $this->mvx_get_customer_refund_order_msg( $order, $refund_settings );
+        $msg_data = $this->multivendorx_get_customer_refund_order_msg( $order, $refund_settings );
 
         if ( $msg_data ) {
             $type = isset( $msg_data['type'] ) ? sanitize_key( $msg_data['type'] ) : 'info';
@@ -190,7 +190,7 @@ class Frontend {
      * @param object $order Order object.
      * @param array  $settings Settings array.
      */
-    public function mvx_get_customer_refund_order_msg( $order, $settings = array() ) {
+    public function multivendorx_get_customer_refund_order_msg( $order, $settings = array() ) {
         if ( ! $order ) {
             return false;
         }

@@ -7,7 +7,6 @@
 
 namespace MultiVendorX\StoreShipping;
 
-use MultiVendorX\Utill;
 /**
  * MultiVendorX Store Shipping Admin Class
  *
@@ -39,17 +38,17 @@ class Admin {
             // Get shipping methods for this zone.
             $wc_zone                = new \WC_Shipping_Zone( $zone_id );
             $methods                = $wc_zone->get_shipping_methods();
-            $has_mvx_store_shipping = false;
+            $has_multivendorx_store_shipping = false;
 
             foreach ( $methods as $method ) {
                 if ( 'multivendorx_store_shipping' === $method->id ) {
-                    $has_mvx_store_shipping = true;
+                    $has_multivendorx_store_shipping = true;
                     break;
                 }
             }
 
             // Skip zones that do NOT have this method.
-            if ( ! $has_mvx_store_shipping ) {
+            if ( ! $has_multivendorx_store_shipping ) {
                 continue;
             }
 

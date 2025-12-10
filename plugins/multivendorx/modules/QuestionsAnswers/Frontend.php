@@ -8,7 +8,7 @@
 namespace MultiVendorX\QuestionsAnswers;
 
 use MultiVendorX\FrontendScripts;
-use MultiVendorX\Utill;
+
 
 /**
  * MultiVendorX Questions & Answers Frontend class
