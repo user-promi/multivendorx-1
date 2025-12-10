@@ -452,7 +452,7 @@ class Frontend {
      * @return string
      */
     private function get_sku_separator() {
-        return apply_filters( 'sku_generator_sku_separator', '-' );
+        return apply_filters( 'multivendorx_sku_separator', '-' );
     }
 
     /**
@@ -517,8 +517,7 @@ class Frontend {
     }
 
     public function generate_sku_data_in_product($product, $request, $creating) {
-        if (!$creating) return;
-
+        if ($creating) return;
         $this->mvx_save_generated_sku($product);
     }
 }
