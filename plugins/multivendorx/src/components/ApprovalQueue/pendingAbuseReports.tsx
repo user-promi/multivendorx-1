@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { Table, getApiLink, TableCell, CalendarInput } from 'zyra';
+import { Table, getApiLink, TableCell, MultiCalendarInput } from 'zyra';
 import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
 
 export interface RealtimeFilter {
@@ -302,7 +302,7 @@ const PendingReportAbuse: React.FC<Props> = ({ onUpdated }) => {
             name: 'date',
             render: (updateFilter, filterValue) => (
                 <div className="right">
-                    <CalendarInput
+                    <MultiCalendarInput
                         wrapperClass=""
                         inputClass=""
                         onChange={(range: any) => updateFilter('date', { start_date: range.startDate, end_date: range.endDate })}

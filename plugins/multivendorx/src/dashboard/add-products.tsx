@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import {
     BasicInput,
+    CalendarInput,
     FileInput,
     MultiCheckBox,
     RadioInput,
@@ -217,14 +218,13 @@ const AddProduct = () => {
     }, [treeData, product]);
 
     useEffect(() => {
-        axios
-            .get(
-                `${appLocalizer.apiUrl}/wc/v3/products/categories?per_page=100`,
-                {
-                    headers: { 'X-WP-Nonce': appLocalizer.nonce },
-                }
-            )
-            .then((res) => setCategories(res.data));
+        axios.get(`${appLocalizer.apiUrl}/wc/v3/products/categories`, {
+            headers: { "X-WP-Nonce": appLocalizer.nonce },
+            params: {
+                per_page: 100,
+            },
+        })
+        .then(res => setCategories(res.data))
     }, []);
 
     useEffect(() => {
@@ -341,7 +341,7 @@ const AddProduct = () => {
         }));
     };
 
-    const createProduct = () => {
+    const createProduct = (status) => {
         const imagePayload = [];
 
         if (featuredImage) {
@@ -361,10 +361,9 @@ const AddProduct = () => {
         try {
             const payload = {
                 ...product,
-                status: 'publish',
+                status: status,
                 images: imagePayload,
                 categories: finalCategories,
-                // attributes: productAttributes,
                 meta_data: [
                     {
                         key: 'multivendorx_store_id',
@@ -372,7 +371,6 @@ const AddProduct = () => {
                     },
                 ],
             };
-
             axios
                 .put(
                     `${appLocalizer.apiUrl}/wc/v3/products/${productId}`,
@@ -380,7 +378,6 @@ const AddProduct = () => {
                     { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
                 )
                 .then((res) => {
-                    console.log('Product created:', res.data);
                     window.location.reload();
                 });
         } catch (error) {
@@ -484,6 +481,29 @@ const AddProduct = () => {
         frame.open();
     };
 
+    const [checklist, setChecklist] = useState({
+        name: false,
+        image: false,
+        price: false,
+        stock: false
+    });
+
+    useEffect(() => {
+    const isSimple = product.type === "simple";
+    // const isVariable = product.type === "variable";
+
+    setChecklist({
+        name: !!product.name,
+        image: !!featuredImage,
+        price: isSimple ? !!product.regular_price : false,
+        stock: isSimple ? !!product.stock_status : true,
+    });
+
+}, [product, featuredImage]);
+
+const isPublishDisabled = !Object.values(checklist).every(Boolean);
+
+
     console.log('product', product);
     return (
         <>
@@ -501,12 +521,16 @@ const AddProduct = () => {
                     </div>
                 </div>
                 <div className="buttons-wrapper">
-                    <button className="admin-btn btn-blue">
+                    <button 
+                        className="admin-btn btn-blue"
+                        onClick={() => createProduct('draft')}>
+
                         {__('Draft', 'multivendorx')}
                     </button>
                     <button
                         className="admin-btn btn-purple-bg"
-                        onClick={createProduct}
+                        onClick={() => createProduct('publish')}
+                        disabled={isPublishDisabled}
                     >
                         {__('Publish', 'multivendorx')}
                     </button>
@@ -519,27 +543,33 @@ const AddProduct = () => {
                         <div className="checklist-title">
                             {__('Checklist', 'multivendorx')}
                         </div>
+
                         <ul>
-                            <li className="checked">
-                                <span></span> {__('Name', 'multivendorx')}
+                            <li className={checklist.name ? "checked" : ""}>
+                                <span></span> Name
                             </li>
-                            <li className="checked">
-                                <span></span> {__('Image', 'multivendorx')}
+
+                            <li className={checklist.image ? "checked" : ""}>
+                                <span></span> Image
                             </li>
-                            <li className="checked">
-                                <span></span> {__('Price', 'multivendorx')}
-                            </li>
-                            <li>
-                                <span></span> {__('Name', 'multivendorx')}
-                            </li>
-                            <li>
-                                <span></span> {__('Image', 'multivendorx')}
-                            </li>
-                            <li>
-                                <span></span> {__('Price', 'multivendorx')}
-                            </li>
+
+                            {/* SIMPLE PRODUCT FIELDS */}
+                            {product.type === "simple" && (
+                                <>
+                                    <li className={checklist.price ? "checked" : ""}>
+                                        <span></span> Price
+                                    </li>
+
+                                    <li className={checklist.stock ? "checked" : ""}>
+                                        <span></span> Stock
+                                    </li>
+                                </>
+                            )}
+
+                        
                         </ul>
                     </div>
+
                 </div>
 
                 <div className="card-content w-65">
@@ -919,7 +949,7 @@ const AddProduct = () => {
                             handleChange
                         )}
 
-                    {product?.type == 'variable' && 
+                    {product?.type == 'variable' &&
                         applyFilters(
                             'product_variable',
                             null,
@@ -1032,16 +1062,47 @@ const AddProduct = () => {
                                     <label htmlFor="product-name">
                                         Published on
                                     </label>
-                                    <DateTimePicker
-                                        currentDate={product.date_created}
-                                        onChange={(value) => {
-                                            setProduct((prev) => ({
-                                                ...prev,
-                                                date_created: value,
-                                            }));
-                                        }}
-                                        is12Hour={false}
-                                    />
+                                    {product.date_created &&
+                                        (
+                                            <>
+                                                <CalendarInput
+                                                    wrapperClass="calendar-wrapper"
+                                                    inputClass="calendar-input"
+                                                    value={product.date_created?.split("T")[0] || ""}
+                                                    onChange={(date: any) => {
+                                                        const dateStr = date?.toString();
+
+                                                        setProduct(prev => {
+                                                            const oldTime = prev.date_created?.split("T")[1] || "00:00:00";
+                                                            return {
+                                                                ...prev,
+                                                                date_created: `${dateStr}T${oldTime}`
+                                                            };
+                                                        });
+                                                    }}
+                                                    format="YYYY-MM-DD"
+                                                />
+                                                <BasicInput
+                                                    wrapperClass="form-group-wrapper"
+                                                    type="time"
+                                                    id="published-time"
+                                                    name="published_time"
+                                                    value={product.date_created?.split("T")[1]?.slice(0, 5) || ""}
+                                                    onChange={(e: any) => {
+                                                        const newTime = e.target.value; // "10:35"
+
+                                                        setProduct(prev => {
+                                                            const oldDate = prev.date_created?.split("T")[0] || "";
+                                                            return {
+                                                                ...prev,
+                                                                date_created: `${oldDate}T${newTime}:00`
+                                                            };
+                                                        });
+                                                    }}
+                                                />
+                                            </>
+                                        )}
+
                                 </div>
                             </div>
 
@@ -1086,13 +1147,13 @@ const AddProduct = () => {
                                         {(selectedCat ||
                                             selectedSub ||
                                             selectedChild) && (
-                                            <button
-                                                onClick={resetSelection}
-                                                className="admin-btn btn-red"
-                                            >
-                                                Reset
-                                            </button>
-                                        )}
+                                                <button
+                                                    onClick={resetSelection}
+                                                    className="admin-btn btn-red"
+                                                >
+                                                    Reset
+                                                </button>
+                                            )}
                                     </div>
                                     <div className="form-group-wrapper">
                                         <div
@@ -1106,17 +1167,16 @@ const AddProduct = () => {
                                                     >
                                                         {/* CATEGORY */}
                                                         <li
-                                                            className={`category ${
-                                                                selectedCat ===
+                                                            className={`category ${selectedCat ===
                                                                 cat.id
-                                                                    ? 'radio-select-active'
-                                                                    : ''
-                                                            }`}
+                                                                ? 'radio-select-active'
+                                                                : ''
+                                                                }`}
                                                             style={{
                                                                 display:
                                                                     selectedCat ===
                                                                         null ||
-                                                                    selectedCat ===
+                                                                        selectedCat ===
                                                                         cat.id
                                                                         ? 'block'
                                                                         : 'none',
@@ -1137,7 +1197,7 @@ const AddProduct = () => {
                                                             cat.id &&
                                                             cat.children
                                                                 ?.length >
-                                                                0 && (
+                                                            0 && (
                                                                 <ul className="settings-form-group-radio">
                                                                     {cat.children.map(
                                                                         (
@@ -1150,16 +1210,15 @@ const AddProduct = () => {
                                                                             >
                                                                                 {/* SUB CATEGORY */}
                                                                                 <li
-                                                                                    className={`sub-category ${
-                                                                                        selectedSub ===
+                                                                                    className={`sub-category ${selectedSub ===
                                                                                         sub.id
-                                                                                            ? 'radio-select-active'
-                                                                                            : ''
-                                                                                    }`}
+                                                                                        ? 'radio-select-active'
+                                                                                        : ''
+                                                                                        }`}
                                                                                     style={{
                                                                                         display:
                                                                                             !selectedSub ||
-                                                                                            selectedSub ===
+                                                                                                selectedSub ===
                                                                                                 sub.id
                                                                                                 ? 'block'
                                                                                                 : 'none',
@@ -1183,7 +1242,7 @@ const AddProduct = () => {
                                                                                     sub
                                                                                         .children
                                                                                         ?.length >
-                                                                                        0 && (
+                                                                                    0 && (
                                                                                         <ul className="settings-form-group-radio">
                                                                                             {sub.children.map(
                                                                                                 (
@@ -1193,16 +1252,15 @@ const AddProduct = () => {
                                                                                                         key={
                                                                                                             child.id
                                                                                                         }
-                                                                                                        className={`sub-category ${
-                                                                                                            selectedChild ===
+                                                                                                        className={`sub-category ${selectedChild ===
                                                                                                             child.id
-                                                                                                                ? 'radio-select-active'
-                                                                                                                : ''
-                                                                                                        }`}
+                                                                                                            ? 'radio-select-active'
+                                                                                                            : ''
+                                                                                                            }`}
                                                                                                         style={{
                                                                                                             display:
                                                                                                                 !selectedChild ||
-                                                                                                                selectedChild ===
+                                                                                                                    selectedChild ===
                                                                                                                     child.id
                                                                                                                     ? 'block'
                                                                                                                     : 'none',

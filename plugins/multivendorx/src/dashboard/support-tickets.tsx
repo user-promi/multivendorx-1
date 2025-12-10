@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { Table, TableCell, CommonPopup, getApiLink, ToggleSetting, CalendarInput } from 'zyra';
+import { Table, TableCell, CommonPopup, getApiLink, ToggleSetting, MultiCalendarInput } from 'zyra';
 import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
 
 type Review = {
@@ -228,7 +228,7 @@ const SupportTickets: React.FC = () => {
             name: 'date',
             render: (updateFilter) => (
                 <div className="right">
-                    <CalendarInput
+                    <MultiCalendarInput
                         wrapperclassName=""
                         inputclassName=""
                         onChange={(range: any) => updateFilter('date', { start_date: range.startDate, end_date: range.endDate })}

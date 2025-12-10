@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef, ReactNode } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { Table, getApiLink, TableCell, AdminBreadcrumbs, BasicInput, TextArea, CommonPopup, ToggleSetting, CalendarInput } from 'zyra';
+import { Table, getApiLink, TableCell, AdminBreadcrumbs, BasicInput, TextArea, CommonPopup, ToggleSetting, MultiCalendarInput } from 'zyra';
 import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
 import "../Announcements/announcements.scss";
 
@@ -275,7 +275,7 @@ export const KnowledgeBase: React.FC = () => {
             name: 'date',
             render: (updateFilter) => (
                 <div className="right">
-                    <CalendarInput
+                    <MultiCalendarInput
                         wrapperClass=""
                         inputClass=""
                         onChange={(range: any) => {

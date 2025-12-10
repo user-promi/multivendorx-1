@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { __ } from "@wordpress/i18n";
-import { CalendarInput, getApiLink, Table, TableCell } from "zyra";
+import {  getApiLink, MultiCalendarInput, Table, TableCell } from "zyra";
 import { ColumnDef, PaginationState } from "@tanstack/react-table";
 import TransactionDetailsModal from "./TransactionDetailsModal";
 import { formatCurrency } from '../services/commonFunction';
@@ -320,7 +320,7 @@ const Transactions: React.FC = () => {
             name: 'date',
             render: (updateFilter) => (
                 <div className="right">
-                    <CalendarInput
+                    <MultiCalendarInput
                         wrapperClass=""
                         inputClass=""
                         onChange={(range: any) => {

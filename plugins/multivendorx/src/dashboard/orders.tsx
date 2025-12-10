@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useLocation } from 'react-router-dom';
 import { __ } from "@wordpress/i18n";
-import { CalendarInput, Table, TableCell } from "zyra";
+import { MultiCalendarInput, Table, TableCell } from "zyra";
 import { ColumnDef, RowSelectionState, PaginationState } from "@tanstack/react-table";
 import OrderDetails from "./order-details";
 import AddOrder from "./addOrder";
@@ -489,7 +489,7 @@ const Orders: React.FC = () => {
             name: 'date',
             render: (updateFilter) => (
                 <div className="right">
-                    <CalendarInput
+                    <MultiCalendarInput
                         wrapperClass=""
                         inputClass=""
                         onChange={(range: any) => {

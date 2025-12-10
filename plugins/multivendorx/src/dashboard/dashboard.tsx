@@ -1,7 +1,6 @@
 import {
   BarChart,
   Bar,
-  LineChart,
   Line,
   XAxis,
   YAxis,
@@ -11,13 +10,11 @@ import {
   PieChart, Pie, Cell, Legend,
   PieLabelRenderProps
 } from 'recharts';
-import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import { scaleLinear } from "d3-scale";
-import world from "react-simple-maps/world-110m.json";
 import React, { useState, useEffect } from "react";
 import "../components/dashboard.scss";
 import '../dashboard/dashboard1.scss';
-import { CalendarInput, getApiLink, Table, TableCell, useModules } from 'zyra';
+import { getApiLink, MultiCalendarInput, TableCell, useModules } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { formatCurrency } from '@/services/commonFunction';
@@ -508,7 +505,7 @@ const Dashboard: React.FC = () => {
         </div>
 
         <div className="buttons-wrapper">
-          <CalendarInput wrapperClass="" inputClass="" />
+          <MultiCalendarInput wrapperClass="" inputClass="" />
         </div>
       </div>
 
