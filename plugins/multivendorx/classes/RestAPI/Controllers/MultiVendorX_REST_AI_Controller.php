@@ -53,10 +53,13 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
         $nonce = $request->get_header( 'X-WP-Nonce' );
 
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            $error = new \WP_Error(
-                'invalid_nonce',
-                __( 'Invalid nonce', 'multivendorx' ),
-                array( 'status' => 403 )
+            $error = new \WP_REST_Response(
+                array(
+                    'success' => false,
+                    'code'    => 'invalid_nonce',
+                    'message' => __( 'Invalid nonce.', 'multivendorx' ),
+                ),
+                401
             );
 
             // Log the error.
@@ -92,10 +95,14 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
             $user_prompt = sanitize_textarea_field( $request->get_param( 'user_prompt' ) );
 
             if ( empty( $user_prompt ) ) {
-                return new \WP_Error(
-                    'prompt_missing',
-                    __( 'Prompt is required.', 'multivendorx' ),
-                    array( 'status' => 400 )
+                // );
+                return new \WP_REST_Response(
+                    array(
+                        'success' => false,
+                        'code'    => 'prompt_missing',
+                        'message' => __( 'Prompt is required.', 'multivendorx' ),
+                    ),
+                    400
                 );
             }
 
@@ -129,10 +136,13 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
             $suggestions = json_decode( $json_response, true );
 
             if ( ! is_array( $suggestions ) ) {
-                return new \WP_Error(
-                    'invalid_response',
-                    __( 'Invalid response from AI provider.', 'multivendorx' ),
-                    array( 'status' => 500 )
+                return new \WP_REST_Response(
+                    array(
+                        'success' => false,
+                        'code'    => 'invalid_response',
+                        'message' => __( 'Invalid response from AI.', 'multivendorx' ),
+                    ),
+                    500
                 );
             }
 
@@ -158,18 +168,24 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
             $image_data  = $request->get_param( 'image_data' );
 
             if ( empty( $user_prompt ) ) {
-                return new \WP_Error(
-                    'prompt_missing',
-                    __( 'Prompt is required for image enhancement.', 'multivendorx' ),
-                    array( 'status' => 400 )
+                return new \WP_REST_Response(
+                    array(
+                        'success' => false,
+                        'code'    => 'prompt_missing',
+                        'message' => __( 'Prompt is required.', 'multivendorx' ),
+                    ),
+                    400
                 );
             }
 
             if ( empty( $image_url ) && empty( $image_data ) ) {
-                return new \WP_Error(
-                    'image_missing',
-                    __( 'Image is required.', 'multivendorx' ),
-                    array( 'status' => 400 )
+                return new \WP_REST_Response(
+                    array(
+                        'success' => false,
+                        'code'    => 'image_missing',
+                        'message' => __( 'Image is required.', 'multivendorx' ),
+                    ),
+                    400
                 );
             }
 
@@ -194,20 +210,16 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
                         $image_data
                     );
                     break;
-
-                default:
-                    return new \WP_Error(
-                        'provider_not_supported',
-                        __( 'Selected image enhancement provider not supported.', 'multivendorx' ),
-                        array( 'status' => 400 )
-                    );
             }
 
             if ( ! empty( $response['error'] ) ) {
-                return new \WP_Error(
-                    'ai_api_error',
-                    $response['error'],
-                    array( 'status' => 500 )
+                return new \WP_REST_Response(
+                    array(
+                        'success' => false,
+                        'code'    => 'image_enhancement_failed',
+                        'message' => $response['error'],
+                    ),
+                    500
                 );
             }
 
@@ -253,14 +265,10 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
         ));
 
         if (is_wp_error($response)) {
-            return json_encode(['error' => $response->get_error_message()]);
+            return ['error' => $response->get_error_message()];
         }
 
         $data = json_decode(wp_remote_retrieve_body($response), true);
-
-        if ( ! empty( $data['error'] ) ) {
-            return json_encode(['error' => $data['error']['message']]);
-        }
 
         $raw = $data['candidates'][0]['content']['parts'][0]['text'] ?? '';
 
@@ -270,7 +278,7 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
             return $match[0];
         }
 
-        return json_encode(['error' => 'No valid JSON found in Gemini response']);
+        return ['error' => 'No valid JSON found in Gemini response'];
     }
 
     /**
@@ -297,13 +305,13 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
         ));
 
         if (is_wp_error($response)) {
-            return json_encode(['error' => $response->get_error_message()]);
+            return ['error' => $response->get_error_message()];
         }
 
         $data = json_decode(wp_remote_retrieve_body($response), true);
 
         if ( ! empty( $data['error'] ) ) {
-            return json_encode(['error' => $data['error']['message']]);
+            return ['error' => $data['error']['message']];
         }
 
         $content = $data['output'][0]['content'][0]['text'] ?? '';
@@ -314,7 +322,7 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
             return $match[0];
         }
 
-        return json_encode(['error' => 'No valid JSON in OpenAI response']);
+        return ['error' => 'No valid JSON in OpenAI response'];
     }
 
     /**
@@ -350,16 +358,16 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
         ));
 
         if (is_wp_error($response)) {
-            return json_encode(['error' => $response->get_error_message()]);
+            return ['error' => $response->get_error_message()];
         }
 
         $data = json_decode(wp_remote_retrieve_body($response), true);
 
         if ( ! empty( $data['error'] ) ) {
-            return json_encode(['error' => $data['error']['message']]);
+            return ['error' => $data['error']['message']];
         }
 
-        return $data['choices'][0]['message']['content'] ?? json_encode(['error' => 'No content from OpenRouter']);
+        return $data['choices'][0]['message']['content'] ?? ['error' => 'No content from OpenRouter'];
     }
 
     /**
@@ -434,7 +442,7 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
         return array(
             'image_data' => null,
             'mime_type'  => null,
-            'text_response' => json_encode($body)
+            'text_response' => wp_json_encode($body)
         );
     }
 
