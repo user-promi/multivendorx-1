@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import {
     BasicInput,
+    CommonPopup,
     CalendarInput,
     FileInput,
     MultiCheckBox,
@@ -29,6 +30,14 @@ const AddProduct = () => {
 
     const [featuredImage, setFeaturedImage] = useState(null);
     const [galleryImages, setGalleryImages] = useState([]);
+
+    const [AddInhance, setAddInhance] = useState(false);
+    const [enhancementPrompt, setEnhancementPrompt] = useState('');
+    const [isEnhancing, setIsEnhancing] = useState(false);
+    const [enhancementResult, setEnhancementResult] = useState('');
+    const [enhancementError, setEnhancementError] = useState('');
+    const [selectedImageForEnhancement, setSelectedImageForEnhancement] = useState(null);
+    const [generatedImage, setGeneratedImage] = useState(null);
 
     useEffect(() => {
         if (!productId) return;
@@ -77,6 +86,35 @@ const AddProduct = () => {
         return () =>
             document.removeEventListener('mousedown', handleClickOutside);
     }, []);
+
+    // Add this useEffect in AddProduct to listen for suggestion clicks
+    useEffect(() => {
+        const handleAISuggestion = (event) => {
+            const { field, value } = event.detail;
+            
+            // Update the appropriate field based on suggestion type
+            switch (field) {
+                case 'name':
+                    setProduct(prev => ({ ...prev, name: value }));
+                    break;
+                case 'short_description':
+                    setProduct(prev => ({ ...prev, short_description: value }));
+                    break;
+                case 'description':
+                    setProduct(prev => ({ ...prev, description: value }));
+                    break;
+                default:
+                    break;
+            }
+        };
+
+        window.addEventListener('ai-suggestion-selected', handleAISuggestion);
+        
+        return () => {
+            window.removeEventListener('ai-suggestion-selected', handleAISuggestion);
+        };
+    }, []);
+
 
     const handleCategoryClick = (catId) => {
         if (!isPyramidEnabled) return;
@@ -481,6 +519,167 @@ const AddProduct = () => {
         frame.open();
     };
 
+    // Function to convert image to base64
+    const getImageBase64 = (imageSrc) => {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+                const base64 = canvas.toDataURL('image/jpeg').split(',')[1];
+                resolve(base64);
+            };
+            img.onerror = reject;
+            img.src = imageSrc;
+        });
+    };
+
+    // Function to handle image enhancement
+    const handleImageEnhancement = async () => {
+        if (!enhancementPrompt.trim()) {
+            setEnhancementError('Please enter a prompt for image enhancement');
+            return;
+        }
+
+        const imageToEnhance = selectedImageForEnhancement;
+        
+        if (!imageToEnhance) {
+            setEnhancementError('Please select an image first');
+            return;
+        }
+
+        setIsEnhancing(true);
+        setEnhancementError('');
+        setEnhancementResult('');
+        setGeneratedImage(null);
+
+        try {
+            // Convert image to base64
+            const imageData = await getImageBase64(imageToEnhance);
+            
+            // Call the API
+            const response = await axios({
+                method: 'POST',
+                url: `${appLocalizer.apiUrl}/multivendorx/v1/ai-assistant`,
+                headers: { 
+                    'X-WP-Nonce': appLocalizer.nonce,
+                    'Content-Type': 'application/json'
+                },
+                params: {
+                    endpoint: 'enhance_image',
+                    user_prompt: enhancementPrompt,
+                    image_data: imageData
+                }
+            });
+
+            if (response.data && response.data.success) {
+                if (response.data.image_data) {
+                    // We have an actual generated image
+                    const mimeType = response.data.image_mime_type || 'image/png';
+                    const imageSrc = `data:${mimeType};base64,${response.data.image_data}`;
+                    setGeneratedImage({
+                        src: imageSrc,
+                        mimeType: mimeType
+                    });
+                    
+                    // Also store any text response
+                    if (response.data.message) {
+                        setEnhancementResult(response.data.message);
+                    }
+                } else if (response.data.text_response) {
+                    // Fallback to text response
+                    setEnhancementResult(response.data.text_response);
+                }
+            } else {
+                setEnhancementError(response.data?.message || 'Failed to enhance image');
+            }
+        } catch (err) {
+            console.error('Image enhancement error:', err);
+            setEnhancementError(
+                err.response?.data?.message || 
+                err.response?.data?.error?.message || 
+                'Network error occurred. Please try again.'
+            );
+        } finally {
+            setIsEnhancing(false);
+        }
+    };
+
+    // Update the useEnhancedImage function
+    const useEnhancedImage = async () => {
+        if (!generatedImage) return;
+        
+        try {
+            // Convert base64 to blob
+            const response = await fetch(generatedImage.src);
+            const blob = await response.blob();
+            
+            // Create form data for WordPress media upload
+            const formData = new FormData();
+            formData.append('file', blob, `ai-enhanced-${Date.now()}.png`);
+            formData.append('title', 'AI Enhanced Product Image');
+            
+            // Upload to WordPress media library
+            const uploadResponse = await axios.post(
+                `${appLocalizer.apiUrl}/wp/v2/media`,
+                formData,
+                {
+                    headers: {
+                        'X-WP-Nonce': appLocalizer.nonce,
+                        'Content-Type': 'multipart/form-data',
+                    }
+                }
+            );
+            
+            if (uploadResponse.data && uploadResponse.data.id) {
+                const enhancedImage = {
+                    id: uploadResponse.data.id,
+                    src: uploadResponse.data.source_url,
+                    thumbnail: uploadResponse.data.media_details?.sizes?.thumbnail?.source_url || uploadResponse.data.source_url
+                };
+                
+                // Determine which image to replace
+                const originalImageSrc = selectedImageForEnhancement;
+                
+                // Check if it's the featured image
+                if (featuredImage && featuredImage.src === originalImageSrc) {
+                    // REPLACE featured image
+                    setFeaturedImage(enhancedImage);
+                    setEnhancementResult(__('Enhanced image has replaced the featured image.', 'multivendorx'));
+                    set
+                } 
+                // Check if it's a gallery image
+                else {
+                    // ADD to gallery (don't replace)
+                    setGalleryImages(prev => [...prev, enhancedImage]);
+                    setEnhancementResult(__('Enhanced image added to gallery.', 'multivendorx'));
+                }
+            }
+        } catch (error) {
+            setEnhancementError(__('Failed to use enhanced image. Please try again.', 'multivendorx'));
+        }
+    };
+
+    // Update the openImageEnhancer function
+    const openImageEnhancer = (imageSrc = null) => {
+        if (imageSrc) {
+            setSelectedImageForEnhancement(imageSrc);
+        } else {
+            // Use featured image or first gallery image
+            const imageToUse = featuredImage?.src || 
+                (galleryImages.length > 0 ? galleryImages[0].src : null);
+            setSelectedImageForEnhancement(imageToUse);
+        }
+        setEnhancementPrompt('');
+        setEnhancementResult('');
+        setEnhancementError('');
+        setGeneratedImage(null);
+        setAddInhance(true);
+    };
     const [checklist, setChecklist] = useState({
         name: false,
         image: false,
@@ -959,6 +1158,158 @@ const AddProduct = () => {
                             product,
                             setProduct
                         )}
+
+                    {AddInhance && (
+                        <CommonPopup
+                            open={AddInhance}
+                            onClick={() => setAddInhance(false)}
+                            width="50%"
+                            height="90%"
+                            header={
+                                <>
+                                    <div className="title">
+                                        <i className="adminlib-magic"></i>
+                                        {__('AI Image Enhancer', 'multivendorx')}
+                                    </div>
+                                    <p>
+                                        {__(
+                                            'Upload an image and describe enhancements. AI will generate a new enhanced image.',
+                                            'multivendorx'
+                                        )}
+                                    </p>
+                                    <i
+                                        className="icon adminlib-close"
+                                        onClick={() => setAddInhance(false)}
+                                    ></i>
+                                </>
+                            }
+                            footer={
+                                <>
+                                    <div
+                                        className="admin-btn btn-red"
+                                        onClick={() => {
+                                            setAddInhance(false);
+                                        }}
+                                    >
+                                        {__('Cancel', 'multivendorx')}
+                                    </div>
+                                    <div
+                                        className={`admin-btn btn-purple-bg ${isEnhancing ? 'disabled' : ''}`}
+                                        onClick={!isEnhancing ? handleImageEnhancement : undefined}
+                                    >
+                                        {isEnhancing ? __('Generating Image...', 'multivendorx') : __('Generate Enhanced Image', 'multivendorx')}
+                                    </div>
+                                </>
+                            }
+                        >
+                            <div className="content">
+                                {/* Original Image Preview */}
+                                {selectedImageForEnhancement && (
+                                    <div className="image-preview-section">
+                                        <h4>
+                                            <i className="adminlib-image"></i> {__('Original Image:', 'multivendorx')}
+                                        </h4>
+                                        <div>
+                                            <img 
+                                                src={selectedImageForEnhancement} 
+                                                alt="Original Preview" 
+                                            />
+                                            <p>
+                                                {__('This is the original image that will be enhanced.', 'multivendorx')}
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Prompt Input */}
+                                <div className="form-group">
+                                    <label>
+                                        {__('Enhancement Instructions', 'multivendorx')}
+                                    </label>
+                                    <textarea
+                                        value={enhancementPrompt}
+                                        onChange={(e) => setEnhancementPrompt(e.target.value)}
+                                        placeholder={__("E.g., 'Make the colors more vibrant and appealing', 'Add professional lighting and background', 'Remove all shadows and make it studio quality', 'Make it look more premium and luxurious', etc.", 'multivendorx')}
+                                        disabled={isEnhancing}
+                                    />
+                                    <p>
+                                        {__('Describe exactly how you want the AI to enhance the image.', 'multivendorx')}
+                                    </p>
+                                </div>
+
+                                {/* Error Message */}
+                                {enhancementError && (
+                                    <div className="error-message">
+                                        <strong>{__('Error:', 'multivendorx')}</strong> {enhancementError}
+                                    </div>
+                                )}
+
+                                {/* Generated Image Result */}
+                                {generatedImage && (
+                                    <div className="result-section">
+                                        <h4>
+                                            <i className="adminlib-check"></i>
+                                            {__('Generated Enhanced Image:', 'multivendorx')}
+                                        </h4>
+                                        
+                                        {/* Image Comparison */}
+                                        <div className="image-comparison">
+                                            {/* Original Image */}
+                                            <div className="image-container">
+                                                <h5>{__('Original', 'multivendorx')}</h5>
+                                                <div className="image-preview">
+                                                    <img 
+                                                        src={selectedImageForEnhancement} 
+                                                        alt="Original"
+                                                    />
+                                                </div>
+                                            </div>
+                                            
+                                            {/* Generated Image */}
+                                            <div className="image-container">
+                                                <h5>{__('AI Enhanced', 'multivendorx')}</h5>
+                                                <div className="image-preview enhanced">
+                                                    <img 
+                                                        src={generatedImage.src} 
+                                                        alt="AI Enhanced" 
+                                                    />
+                                                    <div className="badge-new">NEW</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Simplified action buttons */}
+                                        <div className="action-buttons">
+                                            <button
+                                                className="admin-btn btn-purple-bg"
+                                                onClick={() => useEnhancedImage()}
+                                            >
+                                                {__('Use This Image', 'multivendorx')}
+                                            </button>
+                                        </div>
+                                        {enhancementResult && (
+                                            <div className="result-message">
+                                                <strong>{__('Result:', 'multivendorx')}</strong> {enhancementResult}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+
+                                {/* Loading State */}
+                                {isEnhancing && (
+                                    <div>
+                                        <div></div>
+                                        <p>
+                                            {__('Generating enhanced image...', 'multivendorx')}
+                                        </p>
+                                        <p>
+                                            {__('This may take 20-40 seconds. Please wait.', 'multivendorx')}
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+                        </CommonPopup>
+                    )}
                 </div>
 
                 {/* right column */}
@@ -1406,15 +1757,25 @@ const AddProduct = () => {
                                     <label htmlFor="product-name">
                                         Features Image
                                     </label>
-                                    <FileInput
-                                        type="hidden"
-                                        imageSrc={featuredImage?.thumbnail}
-                                        openUploader="Select Featured Image"
-                                        buttonClass="admin-btn btn-purple"
-                                        onButtonClick={openFeaturedUploader}
-                                        onRemove={() => setFeaturedImage(null)}
-                                        onReplace={openFeaturedUploader}
-                                    />
+                                    <div>
+                                        <div>
+                                            <FileInput
+                                                type="hidden"
+                                                imageSrc={featuredImage?.thumbnail}
+                                                openUploader="Select Featured Image"
+                                                buttonClass="admin-btn btn-purple"
+                                                onButtonClick={openFeaturedUploader}
+                                                onRemove={() => setFeaturedImage(null)}
+                                                onReplace={openFeaturedUploader}
+                                            />
+                                        </div>
+                                        <button 
+                                            className="admin-btn btn-blue"
+                                            onClick={() => openImageEnhancer(featuredImage?.src)}
+                                        >
+                                            <i className="adminlib-magic"></i> {__('Enhance', 'multivendorx')}
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                             <div className="form-group-wrapper">
@@ -1424,25 +1785,33 @@ const AddProduct = () => {
                                     </label>
                                     <div className="gallery-wrapper">
                                         {galleryImages.map((img, index) => (
-                                            <FileInput
-                                                key={img.id}
-                                                type="hidden"
-                                                imageSrc={img.thumbnail}
-                                                openUploader="Replace Image"
-                                                buttonClass="admin-btn btn-purple"
-                                                onRemove={() => {
-                                                    setGalleryImages(
-                                                        galleryImages.filter(
-                                                            (i, idx) =>
-                                                                idx !== index
-                                                        )
-                                                    );
-                                                }}
-                                                onReplace={() =>
-                                                    openGalleryUploader()
-                                                }
-                                            />
+                                            <div key={img.id}>
+                                                <div>
+                                                    <FileInput
+                                                        type="hidden"
+                                                        imageSrc={img.thumbnail}
+                                                        openUploader="Replace Image"
+                                                        buttonClass="admin-btn btn-purple"
+                                                        onRemove={() => {
+                                                            setGalleryImages(
+                                                                galleryImages.filter(
+                                                                    (i, idx) => idx !== index
+                                                                )
+                                                            );
+                                                        }}
+                                                        onReplace={() => openGalleryUploader()}
+                                                    />
+                                                </div>
+                                                <button 
+                                                    className="admin-btn btn-blue"
+                                                    onClick={() => openImageEnhancer(img.src)}
+                                                >
+                                                    <i className="adminlib-magic"></i> {__('Enhance', 'multivendorx')}
+                                                </button>
+                                            </div>
                                         ))}
+                                        {/* Add more button */}
+                                        <div>
 
                                         {/* Add more button */}
                                         <FileInput
@@ -1458,6 +1827,7 @@ const AddProduct = () => {
                         </div>
                     </div>
                 </div>
+            </div>
             </div>
         </>
     );

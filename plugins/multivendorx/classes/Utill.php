@@ -77,6 +77,7 @@ class Utill {
         'permanently-rejected'          => 'multivendorx_permanently_rejected_settings',
         'under-review'                  => 'multivendorx_under_review_settings',
         'suspended'                     => 'multivendorx_suspended_settings',
+        'ai-automation'                 => 'multivendorx_ai_automation_settings',
         'log'                           => 'multivendorx_log_settings',
     );
 
