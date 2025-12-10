@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { __ } from '@wordpress/i18n';
-import { CalendarInput, getApiLink, Table, TableCell } from "zyra";
-import { Bar, BarChart, CartesianGrid, Cell, Legend, Line, LineChart, Pie, PieChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
+import { getApiLink, MultiCalendarInput, Table, TableCell } from "zyra";
+import { Legend, Pie, PieChart, ResponsiveContainer, } from 'recharts';
 import { Tooltip } from 'react-leaflet';
 import axios from 'axios';
 import { PaginationState, RowSelectionState } from '@tanstack/react-table';
@@ -229,7 +229,7 @@ const StoreReport: React.FC = () => {
       name: 'date',
       render: (updateFilter) => (
         <div className="right">
-          <CalendarInput
+          <MultiCalendarInput
             wrapperClass=""
             inputClass=""
             onChange={(range: any) => {

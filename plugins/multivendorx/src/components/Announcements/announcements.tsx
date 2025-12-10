@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef, ReactNode } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { Table, getApiLink, TableCell, AdminBreadcrumbs, BasicInput, TextArea, CommonPopup, SelectInput, CalendarInput, ToggleSetting } from 'zyra';
+import { Table, getApiLink, TableCell, AdminBreadcrumbs, BasicInput, TextArea, CommonPopup, SelectInput, ToggleSetting, MultiCalendarInput } from 'zyra';
 
 import {
     ColumnDef,
@@ -520,7 +520,7 @@ export const Announcements: React.FC = () => {
             name: 'date',
             render: (updateFilter) => (
                 <div className="right">
-                    <CalendarInput
+                    <MultiCalendarInput
                         wrapperClass=""
                         inputClass=""
                         onChange={(range: any) => {
