@@ -32,7 +32,7 @@ const ShippingCard = ({ product, handleChange }) => {
     };
 
     return (
-        <div className="card" id="card-shipping">
+        <div className="card-content" id="card-shipping">
             <div className="card-header">
                 <div className="left">
                     <div className="title">Shipping</div>
@@ -45,7 +45,6 @@ const ShippingCard = ({ product, handleChange }) => {
                     ></i>
                 </div>
             </div>
-
             <div className="card-body">
                 <div className="form-group-wrapper">
                     <div className="form-group">
