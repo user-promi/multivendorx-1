@@ -76,21 +76,9 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
 
                 case 'enhance_image':
                     return $this->enhance_image( $request );
-
-                default:
-                    return new \WP_Error(
-                        'invalid_endpoint',
-                        __( 'Invalid AI endpoint requested.', 'multivendorx' ),
-                        array( 'status' => 400 )
-                    );
             }
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log( $e );
-            return new \WP_Error(
-                'server_error',
-                __( 'Internal server error occurred.', 'multivendorx' ),
-                array( 'status' => 500 )
-            );
         }
     }
 
@@ -135,13 +123,6 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
                 case 'openrouter_api':
                     $json_response = $this->call_openrouter_api( $settings['openrouter_key'], $base_prompt );
                     break;
-
-                default:
-                    return new \WP_Error(
-                        'provider_missing',
-                        __( 'Invalid or missing AI provider.', 'multivendorx' ),
-                        array( 'status' => 400 )
-                    );
             }
 
             MultiVendorX()->util->log( "AI Raw Response: " . $json_response );
@@ -150,8 +131,8 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
 
             if ( ! is_array( $suggestions ) ) {
                 return new \WP_Error(
-                    'ai_parse_error',
-                    __( 'AI returned invalid JSON.', 'multivendorx' ),
+                    'invalid_response',
+                    __( 'Invalid response from AI provider.', 'multivendorx' ),
                     array( 'status' => 500 )
                 );
             }
@@ -164,11 +145,6 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
 
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log( $e );
-            return new \WP_Error(
-                'server_error',
-                __( 'Unexpected error during suggestion generation.', 'multivendorx' ),
-                array( 'status' => 500 )
-            );
         }
     }
 
@@ -246,11 +222,6 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
 
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log( $e );
-            return new \WP_Error(
-                'server_error',
-                __( 'Unexpected error during image enhancement.', 'multivendorx' ),
-                array( 'status' => 500 )
-            );
         }
     }
 
@@ -374,7 +345,7 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
     private function call_openrouter_api($key, $prompt) {
         $url = "https://openrouter.ai/api/v1/chat/completions";
 
-        $model = MultiVendorX()->setting->get_setting('openrouter_api_model');
+        $model = $this->get_ai_settings()['openrouter_api_model'];
         if (!$model) $model = "openai/gpt-4o-mini";
 
         $body = array(
