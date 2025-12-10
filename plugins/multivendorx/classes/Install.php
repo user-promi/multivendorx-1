@@ -24,13 +24,6 @@ class Install {
      */
     public function __construct() {
 
-        // if ( ! get_option( 'dc_product_vendor_plugin_db_version', false ) ) {
-        // $this->create_database_table();
-        // $this->set_default_settings();
-        // } else {
-        // $this->do_migration();
-        // }
-
         $this->create_database_table();
         $this->create_database_triggers();
         $this->plugin_create_pages();
@@ -298,7 +291,7 @@ class Install {
     public function create_database_triggers() {
         global $wpdb;
 
-        // Drop the trigger if it exists.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
         $wpdb->query( 'DROP TRIGGER IF EXISTS update_store_balance' );
 
         // Create the trigger.
@@ -366,20 +359,11 @@ class Install {
         END;
         ";
 
-        // Execute the trigger.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
         $wpdb->query( $sql );
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log(
-                "========= MULTIVENDORX ERROR =========\n" .
-                "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                "Error: " . $wpdb->last_error . "\n" .
-                "Last Query: " . $wpdb->last_query . "\n" .
-                "File: " . __FILE__ . "\n" .
-                "Line: " . __LINE__ . "\n" .
-                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                "=========================================\n\n"
-            );
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
     }
 
@@ -739,8 +723,6 @@ By signing and submitting, the Seller accepts all terms above.
             );
 
             $page_id = wp_insert_post( $page_data );
-
-            // update_option( $option_key, $page_id );
         }
     }
 }

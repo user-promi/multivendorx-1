@@ -118,7 +118,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
 
           <div className="version-tag">
             <span className="admin-badge blue">
-              <i className="adminlib-adminlib-info"></i> <b>Free:</b> {free}
+              <i className="adminlib-info"></i> <b>Free:</b> {free}
             </span>
             <span className="admin-badge red">
               <i className="adminlib-pro-tag"></i> Pro: {pro ? pro : "Not Installed"}

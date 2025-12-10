@@ -61,11 +61,8 @@ class CommissionManager {
             $commission_type     = MultiVendorX()->setting->get_setting( 'commission_type' );
             $commission_amount   = 0;
             $shipping_amount     = 0;
-            $tax_amount          = 0;
-            $shipping_tax_amount = 0;
             $marketplace_payable = 0;
             $store_payable       = 0;
-            $coupon_amount       = 0;
             $commission_rates    = array();
             $rules_array         = array();
             if ( 'per_item' === $commission_type ) {
@@ -163,16 +160,7 @@ class CommissionManager {
             }
 
             if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-                MultiVendorX()->util->log(
-                    "========= MULTIVENDORX ERROR =========\n" .
-                    "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                    "Error: " . $wpdb->last_error . "\n" .
-                    "Last Query: " . $wpdb->last_query . "\n" .
-                    "File: " . __FILE__ . "\n" .
-                    "Line: " . __LINE__ . "\n" .
-                    "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                    "=========================================\n\n"
-                );
+                MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
             }
 
             return $commission_id;
@@ -587,7 +575,7 @@ class CommissionManager {
         global $wpdb;
         $commission_id = $store_order->get_meta( Utill::ORDER_META_SETTINGS['commission_id'], true );
         $store_id      = $store_order->get_meta( Utill::POST_META_SETTINGS['store_id'], true );
-        $store        = Store::get_store_by_id( $store_id );
+        $store         = Store::get_store_by_id( $store_id );
 
         if ( $commission_id ) {
             $commission_amount   = 0;
@@ -685,7 +673,7 @@ class CommissionManager {
                     'data'   => $data,
                     'format' => $format,
                 ),
-                $vendor,
+                $store,
                 ( $store_order->get_subtotal() - $store_order->get_discount_total() - $this->get_item_refunded_total( $store_order ) ),
                 $store_order,
                 true
@@ -723,18 +711,9 @@ class CommissionManager {
             }
 
             if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-                MultiVendorX()->util->log(
-                    "========= MULTIVENDORX ERROR =========\n" .
-                    "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                    "Error: " . $wpdb->last_error . "\n" .
-                    "Last Query: " . $wpdb->last_query . "\n" .
-                    "File: " . __FILE__ . "\n" .
-                    "Line: " . __LINE__ . "\n" .
-                    "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                    "=========================================\n\n"
-                );
+                MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
             }
-            
+
             return $commission_id;
         }
     }

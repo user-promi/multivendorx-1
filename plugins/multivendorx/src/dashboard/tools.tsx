@@ -10,8 +10,8 @@ const Tools: React.FC = () => {
                 </div>
             </div>
 
-            <div className="row">
-                <div className="column">
+            <div className="card-wrapper">
+                <div className="card-content">
                     <div className="card-header">
                         <div className="left">
                             <div className="title">
@@ -22,8 +22,11 @@ const Tools: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="admin-btn btn-purple">
-                        {__("Clear Transients", "multivendorx")}
+
+                    <div className="card-body">
+                        <div className="admin-btn btn-purple">
+                            {__("Clear Transients", "multivendorx")}
+                        </div>
                     </div>
                 </div>
             </div>

@@ -630,8 +630,8 @@ const AllProduct: React.FC = () => {
     const createAutoDraftProduct = () => {
         try {
             const payload = {
-                title: "Auto Draft",
-                status: "auto-draft"
+                name: "Auto Draft",
+                status: "draft"  
             };
 
             axios.post(`${appLocalizer.apiUrl}/wc/v3/products/`, payload, {

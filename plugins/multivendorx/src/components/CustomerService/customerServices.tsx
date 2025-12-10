@@ -56,7 +56,7 @@ const CustomerServices = () => {
             case 'review':
                 return <StoreReviews />;
             case 'support-ticket':
-                return <div className="row"><div className="column"><h1>Upcoming Feature</h1></div></div>;
+                return <div className="card-wrapper"><div className="card-content"><h1>Upcoming Feature</h1></div></div>;
             default:
                 return <div></div>;
         }

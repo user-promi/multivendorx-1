@@ -7,7 +7,6 @@
 
 namespace MultiVendorX\Emails;
 
-use MultiVendorX\Utill;
 /**
  * MultiVendorX MultiVendorXEmails
  *
@@ -18,10 +17,11 @@ use MultiVendorX\Utill;
 class MultiVendorXEmails extends \WC_Email {
 
     /**
-	 * Constructor.
-	 */
-	public function __construct() {
-        // Call WC_Email constructor.
+     * Constructor.
+     *
+     * @phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
+     */
+    public function __construct() {
         parent::__construct();
     }
 }

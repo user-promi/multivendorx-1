@@ -7,8 +7,6 @@
 
 namespace MultiVendorX\Announcement;
 
-use MultiVendorX\Utill;
-
 /**
  * MultiVendorX Announcement module.
  *

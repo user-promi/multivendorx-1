@@ -15,9 +15,8 @@ export default {
             key: 'commission_type',
             type: 'setting-toggle',
             label: __('Plan Validity', 'multivendorx'),
-            settingDescription: __("Decide how the system should calculate the marketplace commission.", 'multivendorx'),
             desc: __(
-                '',
+                'Decide how the system should calculate the marketplace commission.',
                 'multivendorx'
             ),
             options: [
@@ -32,6 +31,13 @@ export default {
                     value: 'per_item',
                 },
             ],
+        },
+        {
+            key: 'plan-price',
+            type: 'number',
+            size: '10rem',
+            desc: 'Number of days the plan remains valid',
+            label: __('Validity Duration', 'multivendorx'),
         },
     ],
 };

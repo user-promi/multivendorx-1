@@ -79,15 +79,16 @@ class Store {
      */
     public function load( $store_id ) {
         global $wpdb;
-        $table = "{$wpdb->prefix}" . Utill::TABLES['store'];
 
-        $row = $wpdb->get_row(
-            $wpdb->prepare(
-                "SELECT * FROM $table WHERE ID = %d",
-                $store_id,
-            ),
-            ARRAY_A
+        $table = $wpdb->prefix . Utill::TABLES['store'];
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $sql = $wpdb->prepare(
+            'SELECT * FROM `' . esc_sql( $table ) . '` WHERE ID = %d',
+            $store_id
         );
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+        $row = $wpdb->get_row( $sql, ARRAY_A );
 
         if ( $row ) {
             $this->id        = $row['ID'];
@@ -96,16 +97,7 @@ class Store {
         }
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log(
-                "========= MULTIVENDORX ERROR =========\n" .
-                "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                "Error: " . $wpdb->last_error . "\n" .
-                "Last Query: " . $wpdb->last_query . "\n" .
-                "File: " . __FILE__ . "\n" .
-                "Line: " . __LINE__ . "\n" .
-                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                "=========================================\n\n"
-            );
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
     }
 
@@ -137,10 +129,13 @@ class Store {
 
     /**
      * Save store data to the database.
+     *
+     * @return int Store ID.
      */
     public function save() {
         global $wpdb;
-        $table = "{$wpdb->prefix}" . Utill::TABLES['store'];
+
+        $table = esc_sql( $wpdb->prefix . Utill::TABLES['store'] );
 
         $data = array(
             Utill::STORE_SETTINGS_KEYS['name']        => $this->data['name'] ?? '',
@@ -153,23 +148,16 @@ class Store {
         $formats = array( '%s', '%s', '%s', '%s', '%s' );
 
         if ( $this->id > 0 ) {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             $wpdb->update( $table, $data, array( 'ID' => $this->id ), $formats, array( '%d' ) );
         } else {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             $wpdb->insert( $table, $data, $formats );
             $this->id = $wpdb->insert_id;
         }
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log(
-                "========= MULTIVENDORX ERROR =========\n" .
-                "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                "Error: " . $wpdb->last_error . "\n" .
-                "Last Query: " . $wpdb->last_query . "\n" .
-                "File: " . __FILE__ . "\n" .
-                "Line: " . __LINE__ . "\n" .
-                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                "=========================================\n\n"
-            );
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
 
         return $this->id;
@@ -178,78 +166,71 @@ class Store {
     /**
      * Get store meta value.
      *
-     * @param string $key     Meta key to look up.
-     * @param bool   $single  Whether to return a single value or an array of values.
+     * @param string $key    Meta key to look up.
+     * @param bool   $single Whether to return a single value or an array of values.
+     *
+     * @return mixed Meta value(s) or null.
      */
     public function get_meta( $key, $single = true ) {
-
         global $wpdb;
-        $table = "{$wpdb->prefix}" . Utill::TABLES['store_meta'];
+
+        $table = esc_sql( $wpdb->prefix . Utill::TABLES['store_meta'] );
 
         if ( $single ) {
-            return ( $wpdb->get_var(
-                $wpdb->prepare(
-                    "SELECT meta_value FROM $table WHERE store_id = %d AND meta_key = %s LIMIT 1",
-                    $this->id,
-                    $key
-                )
-            ) );
-        } else {
-            $values = $wpdb->get_col(
-                $wpdb->prepare(
-                    "SELECT meta_value FROM $table WHERE store_id = %d AND meta_key = %s",
-                    $this->id,
-                    $key
-                )
+            $table = $wpdb->prefix . Utill::TABLES['store'];
+
+            $sql = $wpdb->prepare(
+                'SELECT meta_value FROM `' . esc_sql( $table ) . '` WHERE store_id = %d AND meta_key = %s LIMIT 1',
+                $this->id,
+                $key
             );
-            return $values;
+
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+            $value = $wpdb->get_var( $sql );
+        } else {
+            $table = $wpdb->prefix . Utill::TABLES['store'];
+
+            $sql = $wpdb->prepare(
+                'SELECT meta_value FROM `' . esc_sql( $table ) . '` WHERE store_id = %d AND meta_key = %s',
+                $this->id,
+                $key
+            );
+
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+            $value = $wpdb->get_col( $sql );
         }
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log(
-                "========= MULTIVENDORX ERROR =========\n" .
-                "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                "Error: " . $wpdb->last_error . "\n" .
-                "Last Query: " . $wpdb->last_query . "\n" .
-                "File: " . __FILE__ . "\n" .
-                "Line: " . __LINE__ . "\n" .
-                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                "=========================================\n\n"
-            );
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
+
+        return $value;
     }
 
     /**
      * Get all meta data for this store.
+     *
+     * @return array Key-value array of all store meta.
      */
     public function get_all_meta() {
         global $wpdb;
-        $table = "{$wpdb->prefix}" . Utill::TABLES['store_meta'];
 
-        $rows = $wpdb->get_results(
-            $wpdb->prepare(
-                "SELECT meta_key, meta_value FROM $table WHERE store_id = %d",
-                $this->id
-            ),
-            ARRAY_A
+        $table = esc_sql( $wpdb->prefix . Utill::TABLES['store_meta'] );
+
+        $sql = $wpdb->prepare(
+            'SELECT meta_key, meta_value FROM `' . $table . '` WHERE store_id = %d',
+            $this->id
         );
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $rows = $wpdb->get_results( $sql, ARRAY_A );
         $meta = array();
         foreach ( $rows as $row ) {
             $meta[ $row['meta_key'] ] = $row['meta_value'];
         }
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log(
-                "========= MULTIVENDORX ERROR =========\n" .
-                "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                "Error: " . $wpdb->last_error . "\n" .
-                "Last Query: " . $wpdb->last_query . "\n" .
-                "File: " . __FILE__ . "\n" .
-                "Line: " . __LINE__ . "\n" .
-                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                "=========================================\n\n"
-            );
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
 
         return $meta;
@@ -263,15 +244,17 @@ class Store {
      */
     public function update_meta( $key, $value ) {
         global $wpdb;
-        $table = "{$wpdb->prefix}" . Utill::TABLES['store_meta'];
+
+        $table = esc_sql( $wpdb->prefix . Utill::TABLES['store_meta'] );
 
         if ( is_array( $value ) || is_object( $value ) ) {
             $value = wp_json_encode( $value );
         }
 
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
         $exists = $wpdb->get_var(
             $wpdb->prepare(
-                "SELECT ID FROM $table WHERE store_id = %d AND meta_key = %s",
+                "SELECT ID FROM {$table} WHERE store_id = %d AND meta_key = %s",
                 $this->id,
                 $key
             )
@@ -298,16 +281,7 @@ class Store {
         }
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log(
-                "========= MULTIVENDORX ERROR =========\n" .
-                "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                "Error: " . $wpdb->last_error . "\n" .
-                "Last Query: " . $wpdb->last_query . "\n" .
-                "File: " . __FILE__ . "\n" .
-                "Line: " . __LINE__ . "\n" .
-                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                "=========================================\n\n"
-            );
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
     }
 
@@ -340,81 +314,62 @@ class Store {
      * Get store by slug.
      *
      * @param string $slug Slug to look up.
+     * @return self|null Store instance if found, null otherwise.
      */
     public static function get_store_by_slug( $slug ) {
         global $wpdb;
-        $table = "{$wpdb->prefix}" . Utill::TABLES['store'];
 
-        $id = $wpdb->get_var(
-            $wpdb->prepare(
-                "SELECT ID FROM $table WHERE slug = %s LIMIT 1",
-                $slug
-            )
+        $table = esc_sql( $wpdb->prefix . Utill::TABLES['store'] );
+
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        $query = $wpdb->prepare(
+            "SELECT ID FROM {$table} WHERE slug = %s LIMIT 1",
+            $slug
         );
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $id = $wpdb->get_var( $query );
+
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log(
-                "========= MULTIVENDORX ERROR =========\n" .
-                "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                "Error: " . $wpdb->last_error . "\n" .
-                "Last Query: " . $wpdb->last_query . "\n" .
-                "File: " . __FILE__ . "\n" .
-                "Line: " . __LINE__ . "\n" .
-                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                "=========================================\n\n"
-            );
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
 
-        return $id ? new self( $id ) : null;
+        return $id ? new self( (int) $id ) : null;
     }
 
-    // public static function store_slug_exists($slug) {
-    // global $wpdb;
-    // $table = "{$wpdb->prefix}"  . Utill::TABLES['store'];
-
-    // $exists = $wpdb->get_var(
-    // $wpdb->prepare("SELECT COUNT(*) FROM {$table} WHERE slug = %s", $slug)
-    // );
-    // return $exists;
-    // }
 
     /**
      * Check whether a store with given slug exists in the database.
      *
-     * @param string $slug Slug to check against.
+     * @param string $slug       Slug to check against.
      * @param int    $exclude_id Optional. ID of the store to exclude from search results. Default 0.
      * @return bool True if store exists, otherwise false.
      */
     public static function store_slug_exists( $slug, $exclude_id = 0 ) {
         global $wpdb;
-        $table = "{$wpdb->prefix}" . Utill::TABLES['store'];
+
+        $table = esc_sql( $wpdb->prefix . Utill::TABLES['store'] );
 
         if ( $exclude_id ) {
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
             $query = $wpdb->prepare(
-                "SELECT COUNT(*) FROM {$table} WHERE slug = %s AND id != %d",
+                "SELECT COUNT(*) FROM {$table} WHERE slug = %s AND ID != %d",
                 $slug,
                 $exclude_id
             );
         } else {
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
             $query = $wpdb->prepare(
                 "SELECT COUNT(*) FROM {$table} WHERE slug = %s",
                 $slug
             );
         }
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $exists = (int) $wpdb->get_var( $query );
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log(
-                "========= MULTIVENDORX ERROR =========\n" .
-                "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                "Error: " . $wpdb->last_error . "\n" .
-                "Last Query: " . $wpdb->last_query . "\n" .
-                "File: " . __FILE__ . "\n" .
-                "Line: " . __LINE__ . "\n" .
-                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                "=========================================\n\n"
-            );
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
 
         return $exists > 0;
@@ -424,16 +379,22 @@ class Store {
      * Get stores by name.
      *
      * @param string $name Name of the store. Can be partial or full.
+     *
+     * @return array Array of store objects.
      */
     public static function get_store_by_name( $name ) {
         global $wpdb;
+
         if ( empty( $name ) ) {
-			return false;
+            return false;
         }
 
-        $table   = "{$wpdb->prefix}" . Utill::TABLES['store'];
-        $like    = '%' . $wpdb->esc_like( $name ) . '%';
+        $table = esc_sql( $wpdb->prefix . Utill::TABLES['store'] );
+        $like  = '%' . $wpdb->esc_like( $name ) . '%';
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $results = $wpdb->get_results(
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
             $wpdb->prepare(
                 "SELECT * FROM {$table} WHERE name LIKE %s AND status = %s",
                 $like,
@@ -450,16 +411,7 @@ class Store {
         }
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log(
-                "========= MULTIVENDORX ERROR =========\n" .
-                "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                "Error: " . $wpdb->last_error . "\n" .
-                "Last Query: " . $wpdb->last_query . "\n" .
-                "File: " . __FILE__ . "\n" .
-                "Line: " . __LINE__ . "\n" .
-                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                "=========================================\n\n"
-            );
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
 
         return $stores;
@@ -472,28 +424,21 @@ class Store {
      */
     public function delete_meta( $key ) {
         global $wpdb;
-        $table = "{$wpdb->prefix}" . Utill::TABLES['store_meta'];
 
-        $wpdb->delete(
+        $table = esc_sql( $wpdb->prefix . Utill::TABLES['store_meta'] );
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+		$wpdb->delete(
             $table,
             array(
-                'store_id' => $this->id,
-                'meta_key' => $key,
+				'store_id' => (int) $this->id,
+				'meta_key' => $key,
             ),
             array( '%d', '%s' )
         );
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log(
-                "========= MULTIVENDORX ERROR =========\n" .
-                "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                "Error: " . $wpdb->last_error . "\n" .
-                "Last Query: " . $wpdb->last_query . "\n" .
-                "File: " . __FILE__ . "\n" .
-                "Line: " . __LINE__ . "\n" .
-                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                "=========================================\n\n"
-            );
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
     }
 
@@ -504,8 +449,10 @@ class Store {
      */
     public function delete_all_meta() {
         global $wpdb;
-        $table = "{$wpdb->prefix}" . Utill::TABLES['store_meta'];
 
+        $table = esc_sql( $wpdb->prefix . Utill::TABLES['store_meta'] );
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $deleted = $wpdb->delete(
             $table,
             array( 'store_id' => (int) $this->id ),
@@ -513,16 +460,7 @@ class Store {
         );
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log(
-                "========= MULTIVENDORX ERROR =========\n" .
-                "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                "Error: " . $wpdb->last_error . "\n" .
-                "Last Query: " . $wpdb->last_query . "\n" .
-                "File: " . __FILE__ . "\n" .
-                "Line: " . __LINE__ . "\n" .
-                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                "=========================================\n\n"
-            );
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
 
         return false !== $deleted;
@@ -545,24 +483,22 @@ class Store {
         $store_users_table = "{$wpdb->prefix}" . Utill::TABLES['store_users'];
         $store_meta_table  = "{$wpdb->prefix}" . Utill::TABLES['store_meta'];
 
-        // Run deletions.
+        // Delete meta.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $wpdb->delete( $store_meta_table, array( 'store_id' => $store_id ), array( '%d' ) );
+
+        // Delete users.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $wpdb->delete( $store_users_table, array( 'store_id' => $store_id ), array( '%d' ) );
+
+        // Delete store.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $wpdb->delete( $store_table, array( 'ID' => $store_id ), array( '%d' ) );
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log(
-                "========= MULTIVENDORX ERROR =========\n" .
-                "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                "Error: " . $wpdb->last_error . "\n" .
-                "Last Query: " . $wpdb->last_query . "\n" .
-                "File: " . __FILE__ . "\n" .
-                "Line: " . __LINE__ . "\n" .
-                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                "=========================================\n\n"
-            );
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
-        
+
         return true;
     }
 }

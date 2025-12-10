@@ -61,7 +61,7 @@ class OrderManager {
     /**
      * A special function that filter the query in time of getting all order.
      * By default it trim the vendeor order (parent id is not 0) if query not contain 'parent'.
-     * filter 'mvx_order_parent_filter' to filter based on parent.
+     * filter 'multivendorx_order_parent_filter' to filter based on parent.
      *
      * @param   mixed $query Query arguments.
      * @return  mixed
@@ -76,16 +76,23 @@ class OrderManager {
 
     /**
      * Get array of suborders if available.
-     * Return array of suborder as WC_order object.
-     * Or Array of suborder's id if $object is false.
+     * Return array of suborder as WC_Order object or IDs.
      *
-     * @param   int | \WC_Order $order Order id or object.
-     * @param   array           $args Arguments for query.
-     * @param   boolean         $object Return object or id.
-     * @return  object array of suborders.
+     * @param int|\WC_Order $order Order ID or object.
+     * @param array         $args  Arguments for query.
+     * @param bool          $return_objects Return objects or IDs.
+     * @return array
      */
-    public function get_suborders( $order, $args = array(), $object = true ) {
-        return wc_get_orders( array( 'parent' => is_numeric( $order ) ? $order : $order->get_id() ) );
+    public function get_suborders( $order, $args = array(), $return_objects = true ) {
+        $query_args = array_merge(
+            array(
+                'parent' => is_numeric( $order ) ? $order : $order->get_id(),
+                'return' => $return_objects ? 'objects' : 'ids',
+            ),
+            $args
+        );
+
+        return wc_get_orders( $query_args );
     }
 
     /**
@@ -106,16 +113,16 @@ class OrderManager {
     }
 
     /**
-     * Create vendor order from a order.
-     * It group item based on vendor then create suborder for each group.
+     * Create store order from a order.
+     * It group item based on store then create suborder for each group.
      *
      * @param   object $order Order object.
      * @return  void
      */
-    public function create_vendor_orders( $order ) {
+    public function create_store_orders( $order ) {
         $suborders = MultiVendorX()->order->get_suborders( $order->get_id() ) ?? array();
-        $item_info = self::group_item_vendor_based( $order );
-
+        $item_info = self::group_item_store_based( $order );
+    
         $existing_orders = array();
         foreach ( $suborders as $order ) {
             if ( $order instanceof WC_Order ) {
@@ -127,19 +134,19 @@ class OrderManager {
                 }
             }
         }
-
+    
         foreach ( $item_info as $store_id => $items ) {
             if ( in_array( $store_id, $existing_orders, true ) ) {
-                $suborder_id  = array_keys( $existing_orders, $store_id, true );
-                $vendor_order = self::create_sub_order( $order, $store_id, $items, $suborder_id, true );
+                $suborder_id = array_keys( $existing_orders, $store_id, true );
+                $store_order = self::create_sub_order( $order, $store_id, $items, $suborder_id, true );
                 // Regenerate commission.
-                $this->container['admin']->regenerate_order_commissions( $vendor_order );
+                $this->container['admin']->regenerate_order_commissions( $store_order );
             } else {
-                $vendor_order = self::create_sub_order( $order, $store_id, $items );
-                do_action( 'mvx_checkout_vendor_order_processed', $vendor_order, $order );
+                $store_order = self::create_sub_order( $order, $store_id, $items );
+                do_action( 'mvx_checkout_vendor_order_processed', $store_order, $order );
             }
-
-            $vendor_order->save();
+    
+            $store_order->save();
         }
     }
 
@@ -147,7 +154,7 @@ class OrderManager {
      * Create suborder of a main order.
      *
      * @param   object  $parent_order Parent order object.
-     * @param   int     $store_id Vendor store id.
+     * @param   int     $store_id Store store id.
      * @param   array   $items Grouped item.
      * @param   int     $suborder_id Suborder id.
      * @param   boolean $is_update Is it update.
@@ -235,27 +242,27 @@ class OrderManager {
 
             return $order;
         } catch ( \Exception $e ) {
-            return new \WP_Error( 'Faild to create vendor order', $e->getMessage() );
+            return new \WP_Error( 'Faild to create store order', $e->getMessage() );
         }
     }
 
     /**
      * Get the basic info of a order items.
-     * It group the item based on vendor.
+     * It group the item based on store.
      *
      * @param   object $order Order object.
      * @return  array
      */
-    public static function group_item_vendor_based( $order ) {
+    public static function group_item_store_based( $order ) {
         $items = $order->get_items();
 
         // Group each item.
         $grouped_items = array();
         foreach ( $items as $item_id => $item ) {
             if ( isset( $item['product_id'] ) && 0 !== $item['product_id'] ) {
-                $vendor = StoreUtil::get_products_store( $item['product_id'] );
-                if ( $vendor ) {
-                    $grouped_items[ $vendor->get_id() ][ $item_id ] = $item;
+                $store = StoreUtil::get_products_store( $item['product_id'] );
+                if ( $store ) {
+                    $grouped_items[ $store->get_id() ][ $item_id ] = $item;
                 }
             }
         }
@@ -274,7 +281,7 @@ class OrderManager {
     }
 
     /**
-     * Create new line items for vendor order
+     * Create new line items for store order
      *
      * @param   object $order Order object.
      * @param   array  $items Grouped item.
@@ -332,7 +339,7 @@ class OrderManager {
     }
 
     /**
-     * Create new shipping items for vendor order
+     * Create new shipping items for store order
      *
      * @param   object $order Order object.
      * @param   array  $items Grouped item.
@@ -345,8 +352,8 @@ class OrderManager {
         $shipping_items = $parent_order->get_items( 'shipping' );
 
         foreach ( $shipping_items as $item_id => $item ) {
-            $shipping_vendor_id = $item->get_meta( Utill::POST_META_SETTINGS['store_id'], true );
-            if ( $shipping_vendor_id === $store_id ) {
+            $shipping_store_id = $item->get_meta( Utill::POST_META_SETTINGS['store_id'], true );
+            if ( $shipping_store_id === $store_id ) {
                 $shipping = new \WC_Order_Item_Shipping();
                 $shipping->set_props(
                     array(
@@ -374,7 +381,7 @@ class OrderManager {
     }
 
     /**
-     * Create new coupon items for vendor order
+     * Create new coupon items for store order
      *
      * @param   object $order Order object.
      * @param   array  $items Grouped item.
@@ -411,9 +418,6 @@ class OrderManager {
                 $item = new \WC_Order_Item_Coupon();
                 $item->set_props(
                     array(
-                        // 'code'         => $coupon->get_code(),
-                        // 'discount'     => $coupon->get_discount_amount(),
-                        // 'discount_tax' => $coupon->get_discount_tax(),
                         'code'         => $coupon_item->get_code(),
                         'discount'     => $coupon_item->get_discount(),
                         'discount_tax' => $coupon_item->get_discount_tax(),

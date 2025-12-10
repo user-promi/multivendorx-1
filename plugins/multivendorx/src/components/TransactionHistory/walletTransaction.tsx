@@ -726,8 +726,8 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId, dateRang
     const fee = (amount * (percentage / 100)) + fixed;
     return (
         <>
-            <div className="row">
-                <div className="column">
+            <div className="card-wrapper">
+                <div className="card-content">
                     <div className="card-header">
                         <div className="left">
                             <div className="title">{__("Recent payouts", "multivendorx")}</div>
@@ -779,7 +779,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId, dateRang
                         )}
                     </div>
                 </div>
-                <div className="column">
+                <div className="card-content">
                     <div className="card-body">
                         <div className="payout-wrapper">
                             <div className="payout-header">

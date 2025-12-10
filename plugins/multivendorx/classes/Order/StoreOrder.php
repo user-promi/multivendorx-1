@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) || exit;
  * @package     MultiVendorX
  * @author      MultiVendorX
  */
-class VendorOrder {
+class StoreOrder {
 
     /**
      * Order ID.
@@ -29,11 +29,11 @@ class VendorOrder {
     private $id = 0;
 
     /**
-     * Vendor ID.
+     * Store ID.
      *
      * @var int
      */
-    private $vendor_id = 0;
+    private $store_id = 0;
 
     /**
      * Order object.
@@ -63,54 +63,35 @@ class VendorOrder {
             $this->order = wc_get_order( $this->id );
         }
 
-        $this->vendor_id = $this->order ? absint( $this->order->get_meta( 'multivendorx_store_id', true ) ) : 0;
+        $this->store_id = $this->order ? absint( $this->order->get_meta( 'multivendorx_store_id', true ) ) : 0;
     }
 
     /**
-     * Check the order is vendor order or not.
-     * If the order is vendor order return true else false.
+     * Check the order is store order or not.
+     * If the order is store order return true else false.
      *
-     * @param   bool $current_vendor Check the order is current vendor order or not.
+     * @param   bool $current_store Check the order is current store order or not.
      * @return  bool
      */
-    public function is_vendor_order( $current_vendor = false ) {
-        if ( ! $this->vendor_id ) {
+    public function is_store_order( $current_store = false ) {
+        if ( ! $this->store_id ) {
             return false;
         }
-        if ( $current_vendor ) {
-            return get_current_user_id() === $this->vendor_id;
+        if ( $current_store ) {
+            return get_current_user_id() === $this->store_id;
         }
         return true;
     }
 
     /**
-     * Get the props of vendor order.
-     * Retrives data from vendor meta.
+     * Get the props of store order.
+     * Retrives data from store meta.
      *
      * @param  string $prop Prop name.
      * @return mixed
      */
     public function get_prop( $prop ) {
         return $this->order->get_meta( $prop, true );
-    }
-
-    /**
-     * Get the vendeor id of vendor order.
-     *
-     * @return int
-     */
-    public function get_vendor_id() {
-        return $this->vendor_id;
-    }
-
-    /**
-     * Get vendor objet if the order is vendor order.
-     * Otherwise it return false.
-     *
-     * @return object | null
-     */
-    public function get_vendor() {
-        return get_mvx_vendor( $this->vendor_id );
     }
 
     /**
@@ -123,7 +104,7 @@ class VendorOrder {
     }
 
     /**
-     * Get the commisssion object from vendor order
+     * Get the commisssion object from store order
      *
      * @return Commission
      */

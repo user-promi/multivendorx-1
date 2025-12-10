@@ -94,14 +94,16 @@ class Product {
             return;
         }
 
+        // phpcs:disable WordPress.DB.SlowDBQuery.slow_db_query_meta_key
         $products = wc_get_products(
             array(
-				'limit'        => -1,
-				'return'       => 'ids',
-				'meta_key'     => 'multivendorx_store_id',
-				'meta_compare' => 'EXISTS',
+                'limit'        => -1,
+                'return'       => 'ids',
+                'meta_key'     => Utill::POST_META_SETTINGS['store_id'],
+                'meta_compare' => 'EXISTS',
             )
         );
+        // phpcs:enable WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 
         $store_ids = array();
         foreach ( $products as $product_id ) {

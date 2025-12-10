@@ -14,7 +14,7 @@ const Dashboard = () => {
     const [showNotifications, setShowNotifications] = useState(false);
     const [noPermission, setNoPermission] = useState(false);
     const [showStoreList, setShowStoreList] = useState(false);
-
+    const [isDarkMode, setIsDarkMode] = useState(false);
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -62,7 +62,7 @@ const Dashboard = () => {
         });
     }, []);
 
-    const hasCapability = (capability:any) => {
+    const hasCapability = (capability: any) => {
         if (!capability) return true;
 
         const userCaps = appLocalizer.current_user?.allcaps || {};
@@ -248,8 +248,10 @@ const Dashboard = () => {
     }, []);
 
     return (
-        <div id="store-dashboard">
-
+        <div
+            id="store-dashboard"
+            className={`${isDarkMode ? "dark" : "light"}`}
+        >
             <div className="dashboard-tabs-wrapper">
 
                 <div className="logo-wrapper">
@@ -352,6 +354,15 @@ const Dashboard = () => {
                         </div>
                         <div className="navbar-rightside">
                             <ul className="navbar-right">
+                                <li onClick={() => setIsDarkMode(prev => !prev)}>
+                                    <div
+                                        className={`adminlib-icon ${isDarkMode
+                                            ? "adminlib-recycle"
+                                            : "adminlib-resources"
+                                            }`}
+                                    ></div>
+                                </li>
+
                                 <li>
                                     <div className="adminlib-icon adminlib-vendor-form-add"></div>
                                 </li>

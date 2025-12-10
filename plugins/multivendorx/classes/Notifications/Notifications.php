@@ -1,4 +1,9 @@
 <?php
+/**
+ * MultiVendorX Notifications class
+ *
+ * @package MultiVendorX
+ */
 namespace MultiVendorX\Notifications;
 
 use MultiVendorX\Utill;
@@ -53,10 +58,6 @@ class Notifications {
      */
     public function insert_system_events() {
         global $wpdb;
-
-        // $all_events = [
-        // 'multivendorx_new_store_approval'   => ['admin', 'store']
-        // ];
 
         $this->events = array(
             // ========== STORE ACTIVITY ==========

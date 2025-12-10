@@ -8,7 +8,6 @@
 namespace MultiVendorX\Compliance;
 
 use MultiVendorX\FrontendScripts;
-use MultiVendorX\Utill;
 
 /**
  * MultiVendorX Follow Store Frontend class

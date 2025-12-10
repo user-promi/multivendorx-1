@@ -3,9 +3,7 @@ import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import {
     BasicInput,
-    CommonPopup,
     FileInput,
-    InputWithSuggestions,
     MultiCheckBox,
     RadioInput,
     SelectInput,
@@ -50,52 +48,6 @@ const AddProduct = () => {
             });
     }, [productId]);
 
-    // const [variants, setVariants] = useState([
-    //     {
-    //         id: 1,
-    //         name: 'Color',
-    //         values: [
-    //             'Red',
-    //             'Green',
-    //             'Blue',
-    //             'Red',
-    //             'Green',
-    //             'Blue',
-    //             'Red',
-    //             'Green',
-    //             'Blue',
-    //             'Red',
-    //             'Green',
-    //             'Blue',
-    //         ],
-    //         tempValue: '',
-    //         isEditing: false,
-    //     },
-    //     {
-    //         id: 2,
-    //         name: 'Size',
-    //         values: ['S', 'M', 'L', 'XL'],
-    //         tempValue: '',
-    //         isEditing: false,
-    //     },
-    //     {
-    //         id: 3,
-    //         name: 'Material',
-    //         values: ['Cotton', 'Silk'],
-    //         tempValue: '',
-    //         isEditing: false,
-    //     },
-    // ]);
-    const [AddAttribute, setAddAttribute] = useState(false);
-    const [AddInhance, setAddInhance] = useState(false);
-    const [enhancementPrompt, setEnhancementPrompt] = useState('');
-    const [isEnhancing, setIsEnhancing] = useState(false);
-    const [enhancementResult, setEnhancementResult] = useState('');
-    const [enhancementError, setEnhancementError] = useState('');
-    const [selectedImageForEnhancement, setSelectedImageForEnhancement] = useState(null);
-    const [generatedImage, setGeneratedImage] = useState(null);
-    const [Addvariant, setAddvariant] = useState(false);
-    const [showAddNew, setShowAddNew] = useState(false);
     const [categories, setCategories] = useState([]);
     const [selectedCats, setSelectedCats] = useState([]);
 
@@ -353,46 +305,6 @@ const AddProduct = () => {
         );
     };
 
-    // category end
-    // useEffect(() => {
-    //     function handleClick(e) {
-    //         if (!wrapperRef.current) return;
-
-    //         variants.forEach((v) => {
-    //             if (v.isEditing) {
-    //                 // If click is outside that variant -> save
-    //                 const el = document.getElementById(`variant-${v.id}`);
-    //                 if (el && !el.contains(e.target)) {
-    //                     finishEditing(v.id);
-    //                 }
-    //             }
-    //         });
-    //     }
-
-    //     document.addEventListener('click', handleClick);
-    //     return () => document.removeEventListener('click', handleClick);
-    // }, [variants]);
-
-    // const finishEditing = (id) => {
-    //     setVariants((prev) =>
-    //         prev.map((v) => {
-    //             if (v.id === id) {
-    //                 const cleanedValues = v.tempValue.trim()
-    //                     ? [...v.values, v.tempValue.trim()]
-    //                     : v.values;
-
-    //                 return {
-    //                     ...v,
-    //                     values: cleanedValues,
-    //                     tempValue: '',
-    //                     isEditing: false,
-    //                 };
-    //             }
-    //             return v;
-    //         })
-    //     );
-    // };
-
     const toggleCard = (cardId) => {
         const body = document.querySelector(`#${cardId} .card-body`);
         const arrow = document.querySelector(`#${cardId} .arrow-icon`);
@@ -407,12 +319,6 @@ const AddProduct = () => {
         { label: 'Select product type', value: '' },
         { label: 'Simple Product', value: 'simple' },
         { label: 'Variable Product', value: 'variable' },
-    ];
-
-    const paymentOptions = [
-        { label: 'Select stock status', value: '' },
-        { label: 'In stock', value: 'instock' },
-        { label: 'out of stock', value: '' },
     ];
 
     const stockStatusOptions = [
@@ -455,9 +361,10 @@ const AddProduct = () => {
         try {
             const payload = {
                 ...product,
+                status: 'publish',
                 images: imagePayload,
                 categories: finalCategories,
-                attributes: productAttributes,
+                // attributes: productAttributes,
                 meta_data: [
                     {
                         key: 'multivendorx_store_id',
@@ -992,8 +899,6 @@ const AddProduct = () => {
 
 
     console.log('product', product);
-    console.log('variations', variations);
-    console.log('Variant', variant);
     return (
         <>
             <div className="page-title-wrapper">
@@ -1022,8 +927,8 @@ const AddProduct = () => {
                 </div>
             </div>
 
-            <div className="row">
-                <div className="column w-10">
+            <div className="card-wrapper">
+                <div className="card-content w-10">
                     <div className="checklist-wrapper">
                         <div className="checklist-title">
                             {__('Checklist', 'multivendorx')}
@@ -1051,7 +956,7 @@ const AddProduct = () => {
                     </div>
                 </div>
 
-                <div className="column w-65">
+                <div className="card-content w-65">
                     {/* General information */}
                     <div className="card" id="card-general">
                         <div className="card-header">
@@ -1197,40 +1102,42 @@ const AddProduct = () => {
                             </div>
                         </div>
                         <div className="card-body">
-                            <div className="form-group-wrapper">
-                                <div className="form-group">
-                                    <label htmlFor="product-name">
-                                        {__('Regular price', 'multivendorx')}
-                                    </label>
-                                    <BasicInput
-                                        name="regular_price"
-                                        wrapperClass="setting-form-input"
-                                        value={product.regular_price}
-                                        onChange={(e) =>
-                                            handleChange(
-                                                'regular_price',
-                                                e.target.value
-                                            )
-                                        }
-                                    />
+                            {product?.type == 'simple' && (
+                                <div className="form-group-wrapper">
+                                    <div className="form-group">
+                                        <label htmlFor="product-name">
+                                            {__('Regular price', 'multivendorx')}
+                                        </label>
+                                        <BasicInput
+                                            name="regular_price"
+                                            wrapperClass="setting-form-input"
+                                            value={product.regular_price}
+                                            onChange={(e) =>
+                                                handleChange(
+                                                    'regular_price',
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="product-name">
+                                            {__('Sale price', 'multivendorx')}
+                                        </label>
+                                        <BasicInput
+                                            name="sale_price"
+                                            wrapperClass="setting-form-input"
+                                            value={product.sale_price}
+                                            onChange={(e) =>
+                                                handleChange(
+                                                    'sale_price',
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
+                                    </div>
                                 </div>
-                                <div className="form-group">
-                                    <label htmlFor="product-name">
-                                        {__('Sale price', 'multivendorx')}
-                                    </label>
-                                    <BasicInput
-                                        name="sale_price"
-                                        wrapperClass="setting-form-input"
-                                        value={product.sale_price}
-                                        onChange={(e) =>
-                                            handleChange(
-                                                'sale_price',
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-                                </div>
-                            </div>
+                            )}
 
                             <div className="form-group-wrapper">
                                 <div className="form-group">
@@ -2473,7 +2380,7 @@ const AddProduct = () => {
                 </div>
 
                 {/* right column */}
-                <div className="column w-35">
+                <div className="card-content w-35">
                     {/* ai assist */}
                     {applyFilters('product_ai_assist', null, product)}
 

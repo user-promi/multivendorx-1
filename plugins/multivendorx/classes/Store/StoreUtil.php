@@ -122,16 +122,7 @@ class StoreUtil {
         }
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log(
-                "========= MULTIVENDORX ERROR =========\n" .
-                "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                "Error: " . $wpdb->last_error . "\n" .
-                "Last Query: " . $wpdb->last_query . "\n" .
-                "File: " . __FILE__ . "\n" .
-                "Line: " . __LINE__ . "\n" .
-                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                "=========================================\n\n"
-            );
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
     }
 
@@ -147,19 +138,10 @@ class StoreUtil {
 
         $primary_owner_id = self::get_primary_owner( $store_id );
         $users            = $wpdb->get_results( $wpdb->prepare( "SELECT user_id FROM $table WHERE store_id = %d", $store_id ), ARRAY_A );
-        $user_ids = wp_parse_id_list( wp_list_pluck( $users, 'user_id' ) );
+        $user_ids         = wp_parse_id_list( wp_list_pluck( $users, 'user_id' ) );
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log(
-                "========= MULTIVENDORX ERROR =========\n" .
-                "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                "Error: " . $wpdb->last_error . "\n" .
-                "Last Query: " . $wpdb->last_query . "\n" .
-                "File: " . __FILE__ . "\n" .
-                "Line: " . __LINE__ . "\n" .
-                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                "=========================================\n\n"
-            );
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
 
         return array(
@@ -184,7 +166,7 @@ class StoreUtil {
         $placeholders      = implode( ', ', array_fill( 0, count( $excluded_statuses ), '%s' ) );
         $params            = array_merge( array( $user_id ), $excluded_statuses );
 
-        $sql = "
+        $sql    = "
             SELECT 
                 su.store_id AS id,
                 s.name AS name
@@ -196,16 +178,7 @@ class StoreUtil {
         $result = $wpdb->get_results( $wpdb->prepare( $sql, $params ), ARRAY_A );
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log(
-                "========= MULTIVENDORX ERROR =========\n" .
-                "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                "Error: " . $wpdb->last_error . "\n" .
-                "Last Query: " . $wpdb->last_query . "\n" .
-                "File: " . __FILE__ . "\n" .
-                "Line: " . __LINE__ . "\n" .
-                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                "=========================================\n\n"
-            );
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
 
         return $result;
@@ -223,16 +196,7 @@ class StoreUtil {
         $store = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table}" ), ARRAY_A );
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log(
-                "========= MULTIVENDORX ERROR =========\n" .
-                "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                "Error: " . $wpdb->last_error . "\n" .
-                "Last Query: " . $wpdb->last_query . "\n" .
-                "File: " . __FILE__ . "\n" .
-                "Line: " . __LINE__ . "\n" .
-                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                "=========================================\n\n"
-            );
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
 
         return $store ? $store : array();
@@ -251,16 +215,7 @@ class StoreUtil {
         $stores = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table WHERE who_created = %d AND status = %s", get_current_user_id(), $status ), ARRAY_A );
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log(
-                "========= MULTIVENDORX ERROR =========\n" .
-                "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                "Error: " . $wpdb->last_error . "\n" .
-                "Last Query: " . $wpdb->last_query . "\n" .
-                "File: " . __FILE__ . "\n" .
-                "Line: " . __LINE__ . "\n" .
-                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                "=========================================\n\n"
-            );
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
 
         return $stores ? $stores : array();
@@ -397,16 +352,16 @@ class StoreUtil {
      * @return object|false
      */
     public static function get_products_store( $product_id ) {
-        $vendor_data = false;
+        $store_data = false;
         if ( $product_id > 0 ) {
-            $vendor     = get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true );
-            $vendor_obj = Store::get_store_by_id( $vendor );
+            $store     = get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true );
+            $store_obj = Store::get_store_by_id( $store );
 
-            if ( $vendor_obj ) {
-                $vendor_data = $vendor_obj;
+            if ( $store_obj ) {
+                $store_data = $store_obj;
             }
         }
-        return $vendor_data;
+        return $store_data;
     }
 
     /**
@@ -532,16 +487,7 @@ class StoreUtil {
         );
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log(
-                "========= MULTIVENDORX ERROR =========\n" .
-                "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                "Error: " . $wpdb->last_error . "\n" .
-                "Last Query: " . $wpdb->last_query . "\n" .
-                "File: " . __FILE__ . "\n" .
-                "Line: " . __LINE__ . "\n" .
-                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                "=========================================\n\n"
-            );
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
 
         return $stores ? $stores : array();
@@ -565,16 +511,7 @@ class StoreUtil {
         );
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log(
-                "========= MULTIVENDORX ERROR =========\n" .
-                "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                "Error: " . $wpdb->last_error . "\n" .
-                "Last Query: " . $wpdb->last_query . "\n" .
-                "File: " . __FILE__ . "\n" .
-                "Line: " . __LINE__ . "\n" .
-                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                "=========================================\n\n"
-            );
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
 
         return $primary_owner;
@@ -614,12 +551,6 @@ class StoreUtil {
             // Insert.
             $wpdb->insert(
                 $table_name,
-                // [
-                // 'store_id'      => $store_id,
-                // 'user_id'       => $user_id,
-                // 'role_id'       => MultiVendorX()->setting->get_setting( 'approve_store' ) == 'automatically' ? 'store_owner' : null,
-                // 'primary_owner' => MultiVendorX()->setting->get_setting( 'approve_store' ) == 'automatically' ? $user_id : null,
-                // ],
                 array(
                     'store_id'      => $store_id,
                     'user_id'       => $user_id,
@@ -631,16 +562,7 @@ class StoreUtil {
         }
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log(
-                "========= MULTIVENDORX ERROR =========\n" .
-                "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                "Error: " . $wpdb->last_error . "\n" .
-                "Last Query: " . $wpdb->last_query . "\n" .
-                "File: " . __FILE__ . "\n" .
-                "Line: " . __LINE__ . "\n" .
-                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                "=========================================\n\n"
-            );
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
     }
 
@@ -869,22 +791,13 @@ class StoreUtil {
         } else {
             $results = $wpdb->get_results( $query, ARRAY_A );
         }
-        
+
         /** Centralized error logging (only once) */
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log(
-                "========= MULTIVENDORX ERROR =========\n" .
-                "Timestamp: " . current_time( 'mysql' ) . "\n" .
-                "Error: " . $wpdb->last_error . "\n" .
-                "Last Query: " . $wpdb->last_query . "\n" .
-                "File: " . __FILE__ . "\n" .
-                "Line: " . __LINE__ . "\n" .
-                "Stack Trace: " . wp_debug_backtrace_summary() . "\n" .
-                "=========================================\n\n"
-            );
+            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
-        
-        return $results ?? ( isset( $args['count'] ) ? 0 : array() );        
+
+        return $results ?? ( isset( $args['count'] ) ? 0 : array() );
     }
 
     /**

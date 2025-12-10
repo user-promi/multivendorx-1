@@ -8,15 +8,17 @@ const Membership = ({ id }: { id: string | null }) => {
             <div className="container-wrapper">
                 <div className="card-wrapper w-65">
                     <div className="card-content">
-                        <div className="form-group-wrapper">
-                            <div className="description-wrapper">
-                                <div className="title">
-                                    <i className="adminlib-error"></i>
-                                    {__('Gold Plan', 'multivendorx')}
-                                    <span className="admin-badge green">{__('Active', 'multivendorx')}</span>
-                                </div>
-                                <div className="des">
-                                    {__('Renews on Dec 15, 2024', 'multivendorx')}
+                        <div className="card-body">
+                            <div className="form-group-wrapper">
+                                <div className="description-wrapper">
+                                    <div className="title">
+                                        <i className="adminlib-error"></i>
+                                        {__('Gold Plan', 'multivendorx')}
+                                        <span className="admin-badge green">{__('Active', 'multivendorx')}</span>
+                                    </div>
+                                    <div className="des">
+                                        {__('Renews on Dec 15, 2024', 'multivendorx')}
+                                    </div>
                                 </div>
                             </div>
                         </div>
