@@ -11,10 +11,15 @@ defined( 'ABSPATH' ) || exit;
 
 class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
 
+    /**
+     * Route Base.
+     *
+     * @var string
+     */
     protected $rest_base = 'ai-assistant';
 
     /**
-     * Register routes.
+     * Register AI Assistant API routes
      */
     public function register_routes() {
         register_rest_route(
@@ -23,93 +28,91 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
             array(
                 array(
                     'methods'             => \WP_REST_Server::CREATABLE,
-                    'callback'            => array( $this, 'handle_ai_request' ),
-                    'permission_callback' => array( $this, 'generate_suggestions_permissions_check' ),
-                    'args' => array(
-                        'endpoint' => array(
-                            'required' => true,
-                            'type'     => 'string',
-                            'enum'     => array('suggestions', 'enhance_image'),
-                            'sanitize_callback' => 'sanitize_text_field',
-                        ),
-                        'user_prompt' => array(
-                            'required' => true,
-                            'type'     => 'string',
-                            'sanitize_callback' => 'sanitize_textarea_field',
-                            'validate_callback' => function($param) {
-                                return !empty(trim($param));
-                            }
-                        ),
-                        'image_url' => array(
-                            'required' => false,
-                            'type'     => 'string',
-                            'sanitize_callback' => 'esc_url_raw',
-                        ),
-                        'image_data' => array(
-                            'required' => false,
-                            'type'     => 'string',
-                        ),
-                    ),
+                    'callback'            => array( $this, 'get_items' ),
+                    'permission_callback' => array( $this, 'get_items_permissions_check' ),
                 ),
             )
         );
     }
 
-
     /**
-     * Handle AI requests - routes to appropriate endpoint
-     * 
-     * @param object $request The request object.
+     * Permission check for AI Operations
+     *
+     * @param mixed $request
      */
-    public function handle_ai_request( $request ) {
-        $endpoint = sanitize_text_field( $request->get_param( 'endpoint' ) );
-        
-        switch ($endpoint) {
-            case 'suggestions':
-                return $this->generate_suggestions( $request );
-            case 'enhance_image':
-                return $this->enhance_image( $request );
-            default:
-                return new \WP_Error(
-                    'invalid_endpoint',
-                    __( 'Invalid AI endpoint requested.', 'multivendorx' ),
-                    array( 'status' => 400 )
-                );
-        }
-    }
-
-     /**
-     * Permissions.
-     */
-    public function generate_suggestions_permissions_check() {
-        if ( current_user_can( 'edit_products' ) ) {
-            return true;
-        }
-        return new \WP_Error(
-            'rest_forbidden',
-            __( 'You do not have permission to access this resource.', 'multivendorx' ),
-            array( 'status' => rest_authorization_required_code() )
-        );
+    public function get_items_permissions_check( $request ) {
+        return current_user_can( 'edit_products' );
     }
 
     /**
-     * Generate suggestions using selected AI provider.
-     * 
-     * @param object $request The request object.
+     * Handle AI request (main entry point)
+     *
+     * @param mixed $request
      */
-    public function generate_suggestions( $request ) {
+    public function get_items( $request ) {
+        $nonce = $request->get_header( 'X-WP-Nonce' );
+
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            $error = new \WP_Error(
+                'invalid_nonce',
+                __( 'Invalid nonce', 'multivendorx' ),
+                array( 'status' => 403 )
+            );
+
+            // Log the error.
+            if ( is_wp_error( $error ) ) {
+                MultiVendorX()->util->log( $error );
+            }
+
+            return $error;
+        }
+
+        try {
+            $endpoint = sanitize_text_field( $request->get_param( 'endpoint' ) );
+
+            switch ( $endpoint ) {
+                case 'suggestions':
+                    return $this->generate_suggestions( $request );
+
+                case 'enhance_image':
+                    return $this->enhance_image( $request );
+
+                default:
+                    return new \WP_Error(
+                        'invalid_endpoint',
+                        __( 'Invalid AI endpoint requested.', 'multivendorx' ),
+                        array( 'status' => 400 )
+                    );
+            }
+        } catch ( \Exception $e ) {
+            MultiVendorX()->util->log( $e );
+            return new \WP_Error(
+                'server_error',
+                __( 'Internal server error occurred.', 'multivendorx' ),
+                array( 'status' => 500 )
+            );
+        }
+    }
+
+    /**
+     * Generate AI Suggestions
+     * 
+     * @param mixed $request
+     */
+    private function generate_suggestions( $request ) {
         try {
             $user_prompt = sanitize_textarea_field( $request->get_param( 'user_prompt' ) );
-            $settings    = $this->get_ai_settings();
-            $provider    = $settings['provider'];
 
-            if ( empty($user_prompt) ) {
+            if ( empty( $user_prompt ) ) {
                 return new \WP_Error(
                     'prompt_missing',
-                    __( 'Please provide a prompt.', 'multivendorx' ),
+                    __( 'Prompt is required.', 'multivendorx' ),
                     array( 'status' => 400 )
                 );
             }
+
+            $settings = $this->get_ai_settings();
+            $provider = $settings['provider'];
 
             $base_prompt =
                 "You are an expert product content generator. Based on the user's request: '{$user_prompt}', ".
@@ -120,153 +123,114 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
 
             $json_response = '';
 
-            /** Provider Switch */
-            switch ($provider) {
+            switch ( $provider ) {
                 case 'gemini_api':
-                    $json_response = $this->call_gemini_api($settings['gemini_key'], $base_prompt);
+                    $json_response = $this->call_gemini_api( $settings['gemini_key'], $base_prompt );
                     break;
 
                 case 'openai_api':
-                    $json_response = $this->call_openai_api($settings['openai_key'], $base_prompt);
+                    $json_response = $this->call_openai_api( $settings['openai_key'], $base_prompt );
                     break;
 
                 case 'openrouter_api':
-                    $json_response = $this->call_openrouter_api($settings['openrouter_key'], $base_prompt);
+                    $json_response = $this->call_openrouter_api( $settings['openrouter_key'], $base_prompt );
                     break;
 
                 default:
-                    return new \WP_Error('api_missing', 'No valid AI provider selected.', array('status' => 400));
+                    return new \WP_Error(
+                        'provider_missing',
+                        __( 'Invalid or missing AI provider.', 'multivendorx' ),
+                        array( 'status' => 400 )
+                    );
             }
 
-            /** Log raw response */
-            file_put_contents(
-                plugin_dir_path(__FILE__) . "/error.log",
-                date("d/m/Y H:i:s").": json_response: ".var_export($json_response, true)."\n",
-                FILE_APPEND
-            );
+            MultiVendorX()->util->log( "AI Raw Response: " . $json_response );
 
-            /** Parse JSON safely */
-            $suggestions = json_decode($json_response, true);
+            $suggestions = json_decode( $json_response, true );
 
-            if (
-                !is_array($suggestions) ||
-                !isset($suggestions['productName']) ||
-                !isset($suggestions['shortDescription']) ||
-                !isset($suggestions['productDescription'])
-            ) {
+            if ( ! is_array( $suggestions ) ) {
                 return new \WP_Error(
                     'ai_parse_error',
-                    __( 'AI response format invalid.', 'multivendorx' ),
+                    __( 'AI returned invalid JSON.', 'multivendorx' ),
                     array( 'status' => 500 )
                 );
             }
 
-            /** Normalize counts */
-            $productName        = array_slice((array)$suggestions['productName'], 0, 2);
-            $shortDescription   = array_slice((array)$suggestions['shortDescription'], 0, 2);
-            $productDescription = array_slice((array)$suggestions['productDescription'], 0, 2);
+            return rest_ensure_response( array(
+                'productName'        => array_slice( (array) $suggestions['productName'], 0, 2 ),
+                'shortDescription'   => array_slice( (array) $suggestions['shortDescription'], 0, 2 ),
+                'productDescription' => array_slice( (array) $suggestions['productDescription'], 0, 2 ),
+            ) );
 
-            while(count($productName) < 2)        $productName[] = '';
-            while(count($shortDescription) < 2)   $shortDescription[] = '';
-            while(count($productDescription) < 2) $productDescription[] = '';
-
-            return rest_ensure_response(array(
-                'productName'        => $productName,
-                'shortDescription'   => $shortDescription,
-                'productDescription' => $productDescription,
-            ));
-
-        } catch (\Exception $e) {
-            MultiVendorX()->util->log("MultiVendorX AI Error: " . $e->getMessage());
-            return new \WP_Error('server_error', __( 'Server error during AI call.', 'multivendorx' ), array( 'status' => 500 ));
+        } catch ( \Exception $e ) {
+            MultiVendorX()->util->log( $e );
+            return new \WP_Error(
+                'server_error',
+                __( 'Unexpected error during suggestion generation.', 'multivendorx' ),
+                array( 'status' => 500 )
+            );
         }
     }
 
     /**
-     * Enhance image using selected AI provider
+     * Enhance Image with AI
      * 
-     * @param object $request The request object.
+     * @param mixed $request
      */
-    public function enhance_image( $request ) {
+    private function enhance_image( $request ) {
         try {
             $user_prompt = sanitize_textarea_field( $request->get_param( 'user_prompt' ) );
-            $image_url = esc_url_raw( $request->get_param( 'image_url' ) );
-            $image_data = $request->get_param( 'image_data' );
-            
-            $settings = $this->get_ai_settings();
-            $image_provider = $settings['image_enhancement_provider'];
+            $image_url   = esc_url_raw( $request->get_param( 'image_url' ) );
+            $image_data  = $request->get_param( 'image_data' );
 
-            if ( empty($user_prompt) ) {
+            if ( empty( $user_prompt ) ) {
                 return new \WP_Error(
                     'prompt_missing',
-                    __( 'Please provide a prompt for image enhancement.', 'multivendorx' ),
+                    __( 'Prompt is required for image enhancement.', 'multivendorx' ),
                     array( 'status' => 400 )
                 );
             }
 
-            if ( empty($image_url) && empty($image_data) ) {
+            if ( empty( $image_url ) && empty( $image_data ) ) {
                 return new \WP_Error(
                     'image_missing',
-                    __( 'Please provide an image to enhance.', 'multivendorx' ),
+                    __( 'Image is required.', 'multivendorx' ),
                     array( 'status' => 400 )
                 );
             }
 
-            $response = array();
+            $settings = $this->get_ai_settings();
+            $provider = $settings['image_enhancement_provider'];
 
-            // Clean the image data if it's a data URL
-            if ( $image_data && strpos($image_data, 'data:image') === 0 ) {
-                // Extract base64 part from data URL
-                if ( preg_match('/data:image\/[^;]+;base64,([^\"]+)/', $image_data, $matches) ) {
-                    $image_data = $matches[1];
-                }
-            }
-
-            // Choose provider based on settings
-            switch ($image_provider) {
+            switch ( $provider ) {
                 case 'gemini_api':
-                    if ( empty($settings['gemini_api_image_enhancement_key']) ) {
-                        return new \WP_Error(
-                            'api_key_missing',
-                            __( 'Gemini API key for image enhancement is missing.', 'multivendorx' ),
-                            array( 'status' => 400 )
-                        );
-                    }
-                    $response = $this->call_gemini_image_generation_api( 
-                        $settings['gemini_api_image_enhancement_key'], 
-                        $user_prompt, 
-                        $image_url, 
-                        $image_data 
+                    $response = $this->call_gemini_image_generation_api(
+                        $settings['gemini_api_image_enhancement_key'],
+                        $user_prompt,
+                        $image_url,
+                        $image_data
                     );
                     break;
 
                 case 'openrouter_api':
-                    if ( empty($settings['openrouter_api_image_enhancement_key']) ) {
-                        return new \WP_Error(
-                            'api_key_missing',
-                            __( 'OpenRouter API key for image enhancement is missing.', 'multivendorx' ),
-                            array( 'status' => 400 )
-                        );
-                    }
-                    $response = $this->call_openrouter_image_generation_api( 
-                        $settings['openrouter_api_image_enhancement_key'], 
+                    $response = $this->call_openrouter_image_generation_api(
+                        $settings['openrouter_api_image_enhancement_key'],
                         $settings['openrouter_api_image_model'],
-                        $user_prompt, 
-                        $image_url, 
-                        $image_data 
+                        $user_prompt,
+                        $image_url,
+                        $image_data
                     );
                     break;
 
                 default:
                     return new \WP_Error(
                         'provider_not_supported',
-                        __( 'Selected image enhancement provider is not supported.', 'multivendorx' ),
+                        __( 'Selected image enhancement provider not supported.', 'multivendorx' ),
                         array( 'status' => 400 )
                     );
             }
 
-            // Parse and return the enhanced image
-            if ( isset($response['error']) ) {
+            if ( isset( $response['error'] ) ) {
                 return new \WP_Error(
                     'ai_api_error',
                     $response['error'],
@@ -274,30 +238,25 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
                 );
             }
 
-            // Check if we got image data back
-            if ( empty($response['image_data']) ) {
-                return new \WP_Error(
-                    'no_image_generated',
-                    __( 'No image was generated by the AI.', 'multivendorx' ),
-                    array( 'status' => 500 )
-                );
-            }
-
             return rest_ensure_response( array(
-                'success' => true,
-                'image_data' => $response['image_data'],
-                'image_mime_type' => $response['mime_type'],
-                'message' => __( 'Image enhanced and generated successfully', 'multivendorx' )
+                'success'        => true,
+                'image_data'     => $response['image_data'],
+                'image_mime_type'=> $response['mime_type'],
+                'message'        => __( 'Image enhancement successful.', 'multivendorx' ),
             ) );
 
-        } catch (\Exception $e) {
-            MultiVendorX()->util->log("MultiVendorX AI Image Generation Error: " . $e->getMessage());
-            return new \WP_Error('server_error', __( 'Server error during AI image generation.', 'multivendorx' ), array( 'status' => 500 ));
+        } catch ( \Exception $e ) {
+            MultiVendorX()->util->log( $e );
+            return new \WP_Error(
+                'server_error',
+                __( 'Unexpected error during image enhancement.', 'multivendorx' ),
+                array( 'status' => 500 )
+            );
         }
     }
 
     /**
-     * Fetch AI settings.
+     * Read AI Settings
      */
     private function get_ai_settings() {
         return array(
@@ -392,12 +351,6 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
 
         $data = json_decode(wp_remote_retrieve_body($response), true);
 
-        file_put_contents(
-            plugin_dir_path(__FILE__) . "/error.log",
-            date("d/m/Y H:i:s").": openai_raw: ".var_export($data, true)."\n",
-            FILE_APPEND
-        );
-
         if (isset($data['error'])) {
             return json_encode(['error' => $data['error']['message']]);
         }
@@ -478,7 +431,7 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
             )
         );
     
-        // Add inline image if provided
+        // Add inline image if provided.
         if (!empty($image_data)) {
             $request_body["contents"][0]["parts"][] = array(
                 "inline_data" => array(
@@ -487,12 +440,6 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
                 )
             );
         }
-    
-        // Log full request for debugging
-        file_put_contents(plugin_dir_path(__FILE__) . "/error.log",
-            date("d/m/Y H:i:s") . ": gemini_request_body: " . json_encode($request_body, JSON_PRETTY_PRINT) . "\n",
-            FILE_APPEND
-        );
     
         $response = wp_remote_post(
             "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=" . $api_key,
@@ -512,13 +459,7 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
     
         $body = json_decode(wp_remote_retrieve_body($response), true);
     
-        // Log Gemini RAW response
-        file_put_contents(plugin_dir_path(__FILE__) . "/error.log",
-            date("d/m/Y H:i:s") . ": gemini_response_body: " . json_encode($body, JSON_PRETTY_PRINT) . "\n",
-            FILE_APPEND
-        );
-    
-        /** 🔥 Extract the returned image */
+        /** Extract the returned image */
         $candidate = $body['candidates'][0] ?? null;
     
         if (!$candidate) {
@@ -538,7 +479,7 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
             }
         }
     
-        // If no image, return text (fallback)
+        // If no image, return text (fallback).
         return array(
             'image_data' => null,
             'mime_type'  => null,
@@ -613,11 +554,6 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
         $response_code = wp_remote_retrieve_response_code( $response );
         $response_body = wp_remote_retrieve_body( $response );
         
-        file_put_contents(plugin_dir_path(__FILE__) . "/error.log", 
-            date("d/m/Y H:i:s").": openrouter_image_raw: " . $response_body . "\n", 
-            FILE_APPEND
-        );
-        
         if ( $response_code != 200 ) {
             MultiVendorX()->util->log("OpenRouter Image API Error - Code: $response_code, Body: $response_body");
             return array( 'error' => "API returned status code $response_code" );
@@ -680,78 +616,5 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
             'image_data' => null,
             'mime_type' => null
         );
-    }
-
-    /**
-     * Helper function to extract image from Gemini response
-     * 
-     * @param array $data The response data from the API.
-     */
-    private function extract_image_from_response( $data ) {
-        $image_data = '';
-        $mime_type = 'image/png';
-        
-        if ( isset($data['candidates'][0]['content']['parts']) ) {
-            foreach ( $data['candidates'][0]['content']['parts'] as $part ) {
-                if ( isset($part['inline_data']) ) {
-                    $image_data = $part['inline_data']['data'];
-                    $mime_type = $part['inline_data']['mime_type'];
-                    break;
-                }
-            }
-        }
-
-        // If no inline data found, check for text response with image data
-        if ( empty($image_data) && isset($data['candidates'][0]['content']['parts'][0]['text']) ) {
-            $text_response = $data['candidates'][0]['content']['parts'][0]['text'];
-            
-            // Try to extract base64 image data from text response
-            if ( preg_match('/data:image\/(png|jpeg|jpg);base64,([^\"]+)/', $text_response, $matches) ) {
-                $image_data = $matches[2];
-                $mime_type = 'image/' . $matches[1];
-            }
-        }
-
-        if ( empty($image_data) ) {
-            // Fallback to text description if image not generated
-            $text_response = isset($data['candidates'][0]['content']['parts'][0]['text']) 
-                ? $data['candidates'][0]['content']['parts'][0]['text'] 
-                : 'Image generation completed but no image data returned.';
-            
-            return array(
-                'text_response' => $text_response,
-                'image_data' => null,
-                'mime_type' => null
-            );
-        }
-
-        return array(
-            'image_data' => $image_data,
-            'mime_type' => $mime_type,
-            'text_response' => isset($data['candidates'][0]['content']['parts'][0]['text']) 
-                ? $data['candidates'][0]['content']['parts'][0]['text'] 
-                : 'Image generated successfully.'
-        );
-    }
-
-    /**
-     * Helper function to get MIME type from URL
-     * 
-     * @param string $url The URL of the image.
-     */
-    private function get_mime_type_from_url( $url ) {
-        $extension = pathinfo( parse_url( $url, PHP_URL_PATH ), PATHINFO_EXTENSION );
-        
-        $mime_types = array(
-            'jpg'  => 'image/jpeg',
-            'jpeg' => 'image/jpeg',
-            'png'  => 'image/png',
-            'gif'  => 'image/gif',
-            'webp' => 'image/webp',
-            'bmp'  => 'image/bmp',
-        );
-        
-        $ext = strtolower( $extension );
-        return isset( $mime_types[$ext] ) ? $mime_types[$ext] : 'image/jpeg';
     }
 }

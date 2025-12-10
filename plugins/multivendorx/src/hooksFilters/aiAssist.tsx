@@ -54,7 +54,7 @@ const AICard = () => {
                 'X-WP-Nonce': appLocalizer.nonce,
                 'Content-Type': 'application/json'
             },
-            data: {
+            params: {
                 endpoint: 'suggestions',
                 user_prompt: promptText
             }

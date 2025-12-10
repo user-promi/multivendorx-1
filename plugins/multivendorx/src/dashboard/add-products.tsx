@@ -572,7 +572,7 @@ const AddProduct = () => {
                     'X-WP-Nonce': appLocalizer.nonce,
                     'Content-Type': 'application/json'
                 },
-                data: {
+                params: {
                     endpoint: 'enhance_image',
                     user_prompt: enhancementPrompt,
                     image_data: imageData
