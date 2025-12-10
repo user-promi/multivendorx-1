@@ -174,8 +174,7 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
 
     /**
      * Enhance Image with AI
-     * 
-     * @param mixed $request
+     * * @param mixed $request
      */
     private function enhance_image( $request ) {
         try {
@@ -230,7 +229,7 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
                     );
             }
 
-            if ( isset( $response['error'] ) ) {
+            if ( ! empty( $response['error'] ) ) {
                 return new \WP_Error(
                     'ai_api_error',
                     $response['error'],
@@ -307,7 +306,7 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
 
         $data = json_decode(wp_remote_retrieve_body($response), true);
 
-        if (isset($data['error'])) {
+        if ( ! empty( $data['error'] ) ) {
             return json_encode(['error' => $data['error']['message']]);
         }
 
@@ -351,7 +350,7 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
 
         $data = json_decode(wp_remote_retrieve_body($response), true);
 
-        if (isset($data['error'])) {
+        if ( ! empty( $data['error'] ) ) {
             return json_encode(['error' => $data['error']['message']]);
         }
 
@@ -404,7 +403,7 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
 
         $data = json_decode(wp_remote_retrieve_body($response), true);
 
-        if (isset($data['error'])) {
+        if ( ! empty( $data['error'] ) ) {
             return json_encode(['error' => $data['error']['message']]);
         }
 
@@ -469,7 +468,7 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
         $parts = $candidate['content']['parts'] ?? [];
     
         foreach ($parts as $p) {
-            if (isset($p['inlineData']['data'])) {
+            if ( ! empty( $p['inlineData']['data'] ) ) {
     
                 return array(
                     'image_data' => $p['inlineData']['data'], // BASE64 IMAGE
@@ -485,7 +484,7 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
             'mime_type'  => null,
             'text_response' => json_encode($body)
         );
-    }    
+    }
 
     /**
      * OpenRouter API for image generation/editing
@@ -561,17 +560,17 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
 
         $data = json_decode( $response_body, true );
 
-        if ( isset( $data['error'] ) ) {
+        if ( ! empty( $data['error'] ) ) {
             return array( 'error' => $data['error']['message'] );
         }
 
         // Check if response has images array
-        if ( isset( $data['choices'][0]['message']['images'] ) && 
+        if ( ! empty( $data['choices'][0]['message']['images'] ) && 
             is_array( $data['choices'][0]['message']['images'] ) ) {
             
             foreach ( $data['choices'][0]['message']['images'] as $image ) {
-                if ( isset( $image['type'] ) && $image['type'] === 'image_url' && 
-                    isset( $image['image_url']['url'] ) ) {
+                if ( ! empty( $image['type'] ) && $image['type'] === 'image_url' && 
+                    ! empty( $image['image_url']['url'] ) ) {
                     
                     $image_url = $image['image_url']['url'];
                     
@@ -580,8 +579,7 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
                         return array(
                             'image_data' => $matches[2],
                             'mime_type' => 'image/' . $matches[1],
-                            'text_response' => isset($data['choices'][0]['message']['content']) ? 
-                                $data['choices'][0]['message']['content'] : ''
+                            'text_response' => $data['choices'][0]['message']['content'] ?? ''
                         );
                     }
                 }
@@ -589,7 +587,7 @@ class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
         }
         
         // Fallback: Check if there's text content with base64 image
-        if ( isset( $data['choices'][0]['message']['content'] ) ) {
+        if ( ! empty( $data['choices'][0]['message']['content'] ) ) {
             $text_response = $data['choices'][0]['message']['content'];
             
             // Check if response contains base64 image data
