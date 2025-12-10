@@ -24,9 +24,8 @@ $border-radius-button: 8rem;
 
 #store-dashboard.dark {
     --backgroundColor: #121212;
-
     color: #ffffff;
-    background: var(--backgroundColor) ;
+    background: var(--backgroundColor);
 
     .dashboard-tabs-wrapper,
     .dashboard-content,
