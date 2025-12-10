@@ -10,6 +10,7 @@ import {
     RadioInput,
     SelectInput,
     TextArea,
+    getApiLink,
 } from 'zyra';
 import { applyFilters } from '@wordpress/hooks';
 import { DateTimePicker } from '@wordpress/components';
@@ -544,19 +545,19 @@ const AddProduct = () => {
             setEnhancementError('Please enter a prompt for image enhancement');
             return;
         }
-
+    
         const imageToEnhance = selectedImageForEnhancement;
 
         if (!imageToEnhance) {
             setEnhancementError('Please select an image first');
             return;
         }
-
+    
         setIsEnhancing(true);
         setEnhancementError('');
         setEnhancementResult('');
         setGeneratedImage(null);
-
+    
         try {
             // Convert image to base64
             const imageData = await getImageBase64(imageToEnhance);
@@ -564,18 +565,20 @@ const AddProduct = () => {
             // Call the API
             const response = await axios({
                 method: 'POST',
-                url: `${appLocalizer.apiUrl}/multivendorx/v1/ai-assistant`,
-                headers: {
+                url: getApiLink(appLocalizer, 'ai-assistant'),
+                headers: { 
                     'X-WP-Nonce': appLocalizer.nonce,
                     'Content-Type': 'application/json'
                 },
                 params: {
                     endpoint: 'enhance_image',
+                },
+                data: { 
                     user_prompt: enhancementPrompt,
-                    image_data: imageData
+                    image_data: imageData 
                 }
             });
-
+    
             if (response.data && response.data.success) {
                 if (response.data.image_data) {
                     // We have an actual generated image
