@@ -69,65 +69,60 @@ const GeneralSettings = () => {
 
     return (
         <>
-            <div className="card-wrapper">
-                <div className="card-content">
-                    <div className="form-group-wrapper">
-                        <div className="form-group">
-                            <label htmlFor="store-name">{__('Name', 'multivendorx')}</label>
-                            <BasicInput
-                                name="name"
-                                wrapperClass="setting-form-input"
-                                descClass="settings-metabox-description"
-                                value={formData.name || ''}
-                                onChange={handleChange}
-                                readOnly={settings.includes('store_name')}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="form-group-wrapper">
-                        <div className="form-group">
-                            <label htmlFor="store-slug">{__('Storefront link', 'multivendorx')}</label>
-                            <BasicInput
-                                name="slug"
-                                wrapperClass="setting-form-input"
-                                descClass="settings-metabox-description"
-                                value={formData.slug || ''}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="form-group-wrapper">
-                        <div className="form-group">
-                            <label htmlFor="store-description">{__('Description', 'multivendorx')}</label>
-                            <TextArea
-                                name="description"
-                                inputClass="textarea-input"
-                                value={formData.description || ''}
-                                onChange={handleChange}
-                                readOnly={settings.includes('store_description')}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="form-group-wrapper">
-                        <div className="form-group">
-                            <label htmlFor="message-to-buyer">{__('Buyer welcome message after purchase', 'multivendorx')}</label>
-                            <BasicInput
-                                name="messageToBuyer"
-                                wrapperClass="setting-form-input"
-                                descClass="settings-metabox-description"
-                                value={formData.messageToBuyer || ''}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </div>
-
-                    <SuccessNotice message={successMsg} />
+            <div className="form-group-wrapper">
+                <div className="form-group">
+                    <label htmlFor="store-name">{__('Name', 'multivendorx')}</label>
+                    <BasicInput
+                        name="name"
+                        wrapperClass="setting-form-input"
+                        descClass="settings-metabox-description"
+                        value={formData.name || ''}
+                        onChange={handleChange}
+                        readOnly={settings.includes('store_name')}
+                    />
                 </div>
             </div>
 
+            <div className="form-group-wrapper">
+                <div className="form-group">
+                    <label htmlFor="store-slug">{__('Storefront link', 'multivendorx')}</label>
+                    <BasicInput
+                        name="slug"
+                        wrapperClass="setting-form-input"
+                        descClass="settings-metabox-description"
+                        value={formData.slug || ''}
+                        onChange={handleChange}
+                    />
+                </div>
+            </div>
+
+            <div className="form-group-wrapper">
+                <div className="form-group">
+                    <label htmlFor="store-description">{__('Description', 'multivendorx')}</label>
+                    <TextArea
+                        name="description"
+                        inputClass="textarea-input"
+                        value={formData.description || ''}
+                        onChange={handleChange}
+                        readOnly={settings.includes('store_description')}
+                    />
+                </div>
+            </div>
+
+            <div className="form-group-wrapper">
+                <div className="form-group">
+                    <label htmlFor="message-to-buyer">{__('Buyer welcome message after purchase', 'multivendorx')}</label>
+                    <BasicInput
+                        name="messageToBuyer"
+                        wrapperClass="setting-form-input"
+                        descClass="settings-metabox-description"
+                        value={formData.messageToBuyer || ''}
+                        onChange={handleChange}
+                    />
+                </div>
+            </div>
+
+            <SuccessNotice message={successMsg} />
         </>
     );
 };

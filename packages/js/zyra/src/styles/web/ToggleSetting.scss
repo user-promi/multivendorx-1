@@ -273,6 +273,11 @@ div:has(.exclusion-modal) {
         position: relative;
         display: inline;
         margin-left: 0.75rem;
+        padding: 0.125rem 0;
+
+        i{
+            padding: 0 0.313rem;
+        }
     }
 }
 
@@ -295,7 +300,7 @@ div:has(.exclusion-modal) {
         height: 1.2rem;
         background: $theme-background-color;
         display: block;
-        border-radius: $border-radius-button;
+        border-radius: 8rem;
         position: relative;
         border: $border-theme-medium;
 

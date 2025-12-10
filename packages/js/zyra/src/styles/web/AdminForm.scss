@@ -178,7 +178,7 @@
   justify-content: center;
   flex-direction: column;
   width: 100%;
-  border: 0.125rem dashed #b4b6b9;
+  border: 0.125rem dashed #dbdbdb;
   padding: 1rem 0;
   background-size: contain;
   background-repeat: no-repeat;
@@ -268,7 +268,7 @@
       position: absolute;
       right: 0.125rem;
       top: 0.125rem;
-      background: #ff0404d6;
+      background: $accent-color;
       border-radius: 50%;
       padding: 0.2rem;
       font-size: 0.625rem;
@@ -389,7 +389,7 @@
 
         &.radio-select-active {
             input {
-                border-color: var(--colorPrimary);
+                border-color: $theme-color;
                 position: relative;
 
                 &::after {
@@ -398,7 +398,7 @@
                     border-radius: 50%;
                     width: 0.5rem;
                     height: 0.5rem;
-                    background: var(--colorPrimary);
+                    background: $theme-color;
                     left: 0.125rem;
                 }
             }
@@ -407,19 +407,3 @@
 }
 
 // radio input end
-
-@media screen and (width <=61.488rem) {
-  .dynamic-fields-wrapper {
-    .dynamic-form {
-      .form-group {
-        flex-direction: column;
-        gap: 1rem;
-
-        .settings-form-label,
-        .settings-input-content {
-          width: 100%;
-        }
-      }
-    }
-  }
-}

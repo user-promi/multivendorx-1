@@ -47,10 +47,10 @@
   }
 
   &.failed{
-    color: red;
+    color: $accent-color;
 
     &::after{
-      background: red;
+      background: $accent-color;
     }
   }
 
@@ -72,8 +72,8 @@
   align-items: center;
 
   &.failed {
-    color: red;
-    background: rgb(227 79 71 / 12.5%);
+    color: $accent-color;
+    background: #e34f4720;
   }
 
   &.success {
@@ -84,5 +84,5 @@
 
 .errorlog-link{
     font-weight: 600;
-    color: red;
+    color: $accent-color;
 }

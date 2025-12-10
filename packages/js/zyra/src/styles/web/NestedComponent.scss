@@ -37,13 +37,11 @@
         label {
             font-size: 0.95rem;
             display: inline-block;
-
-            // color: $text-color;
         }
 
-        .settings-input-content{
-            .toggle-setting-container{
-                padding-left: 0.5rem;
+        .settings-input-content:has(.toggle-setting-container){
+            label{
+                padding-right: 0.5rem;
             }
         }
 

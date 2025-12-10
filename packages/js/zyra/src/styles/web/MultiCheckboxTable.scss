@@ -88,7 +88,7 @@
                 .checkbox div {
                     width: 1.875rem;
                     height: 1.875rem;
-                    background-color: #522c81;
+                    background: #522c81;
                     top: -3.25rem;
                     left: -3.25rem;
                     position: absolute;
@@ -159,7 +159,7 @@
                         .selected-container {
                             align-items: center;
                             background-color: #fff;
-                            border: .115rem solid rgb(0 0 0 / 12.5%);
+                            border: .115rem solid #00000020;
                             border-radius: 0;
                             display: flex;
                             gap: .25rem;

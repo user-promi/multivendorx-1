@@ -23,14 +23,14 @@
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
-            background: #5007aa;
+            background: $theme-color;
 
             .heading {
                 font-size: 2.125rem;
                 font-weight: 600;
-                color: #fff;
+                color: $color-white;
                 text-align: center;
-                line-height: 2.625;
+                line-height: 1.25;
             }
 
             .description {
@@ -54,6 +54,7 @@
             .select-wrapper {
                 color: #fff;
                 font-size: 1.125rem;
+                justify-content: center;
             }
 
             select {

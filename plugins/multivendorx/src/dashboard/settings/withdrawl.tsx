@@ -143,14 +143,7 @@ const Withdrawl: React.FC = () => {
   };
 
   return (
-    <div className="card-wrapper">
-      <div className="card-content">
-        <div className="form-group-title-wrapper">
-          <div className="title">
-            {__('Payment information', 'multivendorx')}
-          </div>
-        </div>
-
+    <>
         {/* Payment Method Toggle */}
         <div className="form-group-wrapper">
           <div className="form-group">
@@ -272,9 +265,8 @@ const Withdrawl: React.FC = () => {
                 </div>
               </div>
             );
-          })}
-      </div>
-    </div>
+          })}      
+    </>
   );
 
 };

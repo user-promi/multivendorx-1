@@ -178,8 +178,6 @@
         }
 
         &.active {
-            // border-bottom: 0.125rem solid $theme-color;
-            // color: #000;
             background: $theme-background-color;
             color: $theme-color;
         }
@@ -620,7 +618,7 @@
 
         span i,
         .number-btn {
-            background: #e9e9e9;
+            background: $background-white;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -634,8 +632,8 @@
         .number-btn.active,
         .number-btn.active:hover,
         span i:hover {
-            background: $theme-background-color;
-            color: $theme-color;
+            background: $theme-color;
+            color: #fff;
         }
 
         .admin-font {
@@ -721,7 +719,7 @@
     border-radius: 0.438rem;
     background-image: linear-gradient(90deg,
             #f4f4f4 0,
-            rgb(229 229 229 / 80%) 2.5rem,
+            #e5e5e5cc 2.5rem,
             #f4f4f4 5.04rem);
     background-size: 37.5rem;
     animation: shine-lines 2s infinite ease-out;
@@ -804,7 +802,7 @@
             }
 
             &.icon-red {
-                color: red;
+                color: $accent-color;
             }
 
             &.icon-green {
