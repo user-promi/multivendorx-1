@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __, sprintf } from '@wordpress/i18n';
-import { Table, getApiLink, TableCell, CalendarInput, CommonPopup, BasicInput, ToggleSetting, TextArea } from 'zyra';
+import { Table, getApiLink, TableCell, CommonPopup, BasicInput, TextArea } from 'zyra';
 import {
     ColumnDef,
     RowSelectionState,

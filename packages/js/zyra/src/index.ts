@@ -9,6 +9,7 @@ export { default as BasicInput } from './components/BasicInput';
 export { default as BlockText } from './components/BlockText';
 export { default as ButtonCustomizer } from './components/ButtonCustomiser';
 export { default as CalendarInput } from './components/CalendarInput';
+export { default as MultiCalendarInput } from './components/MultiCalendarInput';
 export { default as CatalogCustomizer } from './components/CatalogCustomizer';
 export { default as Table, TableCell } from './components/Table';
 export { default as Datepicker } from './components/DatePicker';

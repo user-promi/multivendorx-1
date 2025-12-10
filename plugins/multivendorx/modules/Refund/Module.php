@@ -7,7 +7,6 @@
 
 namespace MultiVendorX\Refund;
 
-use MultiVendorX\Utill;
 
 /**
  * MultiVendorX Refund Module class

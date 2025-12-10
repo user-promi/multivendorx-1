@@ -27,7 +27,6 @@ import { getApiLink, sendApiResponse } from '../utils/apiService';
 import BasicInput from './BasicInput';
 import TextArea from './TextArea';
 import FileInput from './FileInput';
-import CalendarInput from './CalendarInput';
 import RadioInput from './RadioInput';
 import MultiCheckBox from './MultiCheckbox';
 import WpEditor from './WpEditor';
@@ -47,6 +46,8 @@ import MultiInput from './MultiInput';
 import { useModules } from '../contexts/ModuleContext';
 import TreeSelectInput from './TreeSelectInput';
 import axios from 'axios';
+import MultiCalendarInput from './MultiCalendarInput';
+import CalendarInput from './CalendarInput';
 
 // Types
 declare const wp: any;
@@ -138,6 +139,7 @@ interface InputField {
     | 'treeselect'
     | 'form-builder'
     | 'setting-time'
+    | 'multi-calender'
     | 'endpoint-editor';
     settingDescription?: string
     desc?: string;
@@ -165,6 +167,7 @@ interface InputField {
     copiedLabel?: string;
     width?: number;
     height?: number;
+    mapboxApi: string;
     multiple?: boolean;
     usePlainText?: boolean;
     range?: boolean;
@@ -934,6 +937,54 @@ const AdminForm: React.FC<AdminFormProps> = ({
                         />
                     );
                     break;
+                case 'multi-calender':
+                    input = (
+                        <MultiCalendarInput
+                            wrapperClass="settings-calender"
+                            inputClass="teal"
+                            multiple={inputField.multiple || false} //for single or mutiple input (true/false)
+                            range={inputField.range || false} // for range select (true/false)
+                            value={setting[inputField.key] || ''}
+                            proSetting={isProSetting(
+                                inputField.proSetting ?? false
+                            )}
+                            onChange={(e) => {
+                                if (
+                                    hasAccess(
+                                        inputField.proSetting ?? false,
+                                        String(
+                                            inputField.moduleEnabled ?? ''
+                                        ),
+                                        String(
+                                            inputField.dependentSetting ?? ''
+                                        ),
+                                        String(
+                                            inputField.dependentPlugin ?? ''
+                                        )
+                                    )
+                                ) {
+                                    handleChange(
+                                        e,
+                                        inputField.key,
+                                        'single',
+                                        [
+                                            'calender',
+                                            'select',
+                                            'multi-select',
+                                            'wpeditor',
+                                        ].includes(inputField.type ?? '')
+                                            ? (inputField.type as
+                                                | 'calender'
+                                                | 'select'
+                                                | 'multi-select'
+                                                | 'wpeditor')
+                                            : 'simple' // Default for unsupported types
+                                    );
+                                }
+                            }}
+                        />
+                    );
+                    break;
                 case 'calender':
                     input = (
                         <CalendarInput
@@ -990,6 +1041,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                 wrapperClass="settings-basic-input-class"
                                 descClass="settings-metabox-description"
                                 description={inputField.desc}// optional description displayed under the map input
+                                mapboxApi={inputField.mapboxApi}
                                 containerId="store-maps"
                                 containerClass="store-maps gmap"
                                 proSetting={isProSetting(
@@ -1034,19 +1086,19 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                         window.open(inputField.link, '_blank');
                                     }}
                                     {...(inputField.apilink
-                                    ? {
-                                        onclickCallback: () => {
-                                            axios({
-                                                url: getApiLink(appLocalizer, String(inputField.apilink)),
-                                                method: "GET",
-                                                headers: { "X-WP-Nonce": appLocalizer.nonce },
-                                                params: { key: inputField.key }
-                                            }).then((res) => {
-                                                console.log("res", res);
-                                            });
+                                        ? {
+                                            onclickCallback: () => {
+                                                axios({
+                                                    url: getApiLink(appLocalizer, String(inputField.apilink)),
+                                                    method: "GET",
+                                                    headers: { "X-WP-Nonce": appLocalizer.nonce },
+                                                    params: { key: inputField.key }
+                                                }).then((res) => {
+                                                    console.log("res", res);
+                                                });
+                                            }
                                         }
-                                    }
-                                    : {})}
+                                        : {})}
                                 />
                             </div>
                         </div>
@@ -1492,7 +1544,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             }
                             proSetting={isProSetting(inputField.proSetting ?? false)}
                             onChange={(data) => {
-                                console.log('inputset',inputField)
+                                console.log('inputset', inputField)
 
                                 if (
                                     hasAccess(
@@ -2004,10 +2056,10 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             buttonEnable={inputField.buttonEnable}//Flag to enable/disable action buttons in the UI.
                             value={value || {}}
                             onChange={(data) => {
-                                console.log('payment tab1',data);
-                                console.log('payment tab2pro',inputField.proSetting );
-                                console.log('payment tab3mod',inputField.moduleEnabled);
-                                console.log('input',inputField)
+                                console.log('payment tab1', data);
+                                console.log('payment tab2pro', inputField.proSetting);
+                                console.log('payment tab3mod', inputField.moduleEnabled);
+                                console.log('input', inputField)
                                 if (
                                     hasAccess(
                                         inputField.proSetting ?? false,

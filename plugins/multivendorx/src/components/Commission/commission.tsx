@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { Table, getApiLink, TableCell, AdminBreadcrumbs, useModules, CalendarInput } from 'zyra';
+import { Table, getApiLink, TableCell, AdminBreadcrumbs, useModules, MultiCalendarInput } from 'zyra';
 import {
     ColumnDef,
     RowSelectionState,
@@ -668,7 +668,7 @@ const Commission: React.FC = () => {
             name: 'date',
             render: (updateFilter) => (
                 <div className="right">
-                    <CalendarInput
+                    <MultiCalendarInput
                         wrapperClass=""
                         inputClass=""
                         onChange={(range: any) => {

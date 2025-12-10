@@ -8,7 +8,6 @@
 namespace MultiVendorX\StorePolicy;
 
 use MultiVendorX\Store\StoreUtil;
-use MultiVendorX\Utill;
 
 /**
  * MultiVendorX Store Policy Frontend class
@@ -91,15 +90,6 @@ class Frontend {
     public function get_store_policy_url( $store_id ) {
         return MultiVendorX()->store->storeutil->get_store_url( $store_id, 'policy' );
     }
-
-    // public function store_policy_template( $template ) {
-
-    // if ( get_query_var( 'store_policy' ) ) {
-    // return MultiVendorX()->util->get_template( 'store-policy.php', [] );
-    // }
-
-    // return $template;
-    // }
 
     /**
      * Add Polices tab in product page

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { CalendarInput, CommonPopup, getApiLink, Table, TableCell, TextArea } from 'zyra';
+import { CommonPopup, getApiLink, MultiCalendarInput, Table, TableCell, TextArea } from 'zyra';
 import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
 import { formatCurrency } from '../../services/commonFunction';
 
@@ -229,7 +229,7 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
       name: 'date',
       render: (updateFilter) => (
         <div className="right">
-          <CalendarInput
+          <MultiCalendarInput
             onChange={(range: any) => {
               updateFilter('date', {
                 start_date: range.startDate,

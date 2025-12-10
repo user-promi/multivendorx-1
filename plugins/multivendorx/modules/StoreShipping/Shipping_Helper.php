@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) || exit;
 class Shipping_Helper {
 
     /**
-     * Split WooCommerce cart into packages per store/vendor.
+     * Split WooCommerce cart into packages per store.
      *
      * @param array $packages Original WooCommerce shipping packages (unused).
      *

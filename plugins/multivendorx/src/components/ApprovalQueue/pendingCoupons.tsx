@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { getApiLink, Table, TableCell, CommonPopup, TextArea, CalendarInput } from 'zyra';
+import { getApiLink, Table, TableCell, CommonPopup, TextArea, MultiCalendarInput } from 'zyra';
 import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
 
 type CouponRow = {
@@ -185,7 +185,7 @@ const PendingCoupons: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => 
             name: 'date',
             render: (updateFilter, filterValue) => (
                 <div className="right">
-                    <CalendarInput
+                    <MultiCalendarInput
                         wrapperClass=""
                         inputClass=""
                         onChange={(range: any) => updateFilter('date', { start_date: range.startDate, end_date: range.endDate })}

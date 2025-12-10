@@ -7,8 +7,6 @@
 
 namespace MultiVendorX\StoreShipping;
 
-use MultiVendorX\Utill;
-
 /**
  * MultiVendorX Module class
  *
