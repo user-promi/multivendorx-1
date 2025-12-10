@@ -47,11 +47,6 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
 					'callback'            => array( $this, 'get_items' ),
 					'permission_callback' => array( $this, 'get_items_permissions_check' ),
 				),
-				// [
-				// 'methods'             => \WP_REST_Server::CREATABLE, // Add POST method
-				// 'callback'            => [ $this, 'update_item' ],
-				// 'permission_callback' => [ $this, 'update_item_permissions_check' ],
-				// ],
 				array(
 					'methods'             => \WP_REST_Server::EDITABLE,
 					'callback'            => array( $this, 'update_item' ),
@@ -263,7 +258,6 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
 
         $order_id      = $refund_info['orderId'] ? absint( $refund_info['orderId'] ) : 0;
         $refund_amount = wc_format_decimal( $refund_info['refundAmount'], wc_get_price_decimals() );
-        // $refunded_amount = wc_format_decimal(sanitize_text_field(wp_unslash($_POST['refunded_amount'])), wc_get_price_decimals());
         $items                  = $refund_info['items'] ?? array();
         $refund_reason          = sanitize_text_field( $refund_info['reason'] );
         $restock_refunded_items = 'true' === $refund_info['restock'];
@@ -277,16 +271,11 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
             $parent_order     = wc_get_order( $parent_order_id );
             $parent_items_ids = array_keys( $parent_order->get_items( array( 'line_item', 'fee', 'shipping' ) ) );
 
-            $order_items = $order->get_items();
             $max_refund  = wc_format_decimal( $order->get_total() - $order->get_total_refunded(), wc_get_price_decimals() );
 
             if ( ! $refund_amount || $max_refund < $refund_amount || $refund_amount < 0 ) {
                 return new \WP_Error( 'invalid_amount', __( 'Invalid refund amount.', 'multivendorx' ), array( 'status' => 400 ) );
             }
-
-            // if ($refunded_amount !== wc_format_decimal($order->get_total_refunded(), wc_get_price_decimals())) {
-            // throw new \Exception(__('Error processing refund. Please try again.', 'multivendorx'));
-            // }
 
             // Prepare line items which we are refunding.
             $line_items        = array();
@@ -300,7 +289,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
                     'refund_total' => 0,
                     'refund_tax'   => array(),
                 );
-                $parent_item_id         = $this->get_vendor_parent_order_item_id( $item_id );
+                $parent_item_id         = $this->get_store_parent_order_item_id( $item_id );
                 if ( $parent_item_id && in_array( $parent_item_id, $parent_items_ids, true ) ) {
                     $parent_line_items[ $parent_item_id ] = array(
                         'qty'          => 0,
@@ -319,7 +308,7 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
                 $line_items[ $item_id ]['refund_total'] = wc_format_decimal( $total );
                 $line_items[ $item_id ]['refund_tax']   = wc_format_decimal( $tax );
 
-                $parent_item_id = $this->get_vendor_parent_order_item_id( $item_id );
+                $parent_item_id = $this->get_store_parent_order_item_id( $item_id );
 
                 if ( $parent_item_id && in_array( $parent_item_id, $parent_items_ids, true ) ) {
                     $parent_line_items[ $parent_item_id ]['qty']          = $qty;
@@ -382,12 +371,12 @@ class MultiVendorX_REST_Refund_Controller extends \WP_REST_Controller {
     }
 
     /**
-     * Get parent order item id from vendor order item id
+     * Get parent order item id from store order item id
      *
-     * @param int $item_id Vendor order item id.
+     * @param int $item_id Store order item id.
      * @return int
      */
-    public function get_vendor_parent_order_item_id( $item_id ) {
+    public function get_store_parent_order_item_id( $item_id ) {
         global $wpdb;
         $store_item_id = $wpdb->get_var( $wpdb->prepare( "SELECT meta_value FROM {$wpdb->order_itemmeta} WHERE meta_key=%s AND order_item_id=%d", 'store_order_item_id', absint( $item_id ) ) );
 
