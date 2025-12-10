@@ -138,7 +138,7 @@ const AICard = () => {
     }, [userPrompt]);
 
     return (
-        <div className="card" id="card-ai-assist">
+        <div className="card-content" id="card-ai-assist">
             <div className="card-header">
                 <div className="left">
                     <div className="title">AI assist</div>

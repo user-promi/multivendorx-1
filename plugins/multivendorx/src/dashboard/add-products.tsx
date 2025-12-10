@@ -92,7 +92,7 @@ const AddProduct = () => {
     useEffect(() => {
         const handleAISuggestion = (event) => {
             const { field, value } = event.detail;
-            
+
             // Update the appropriate field based on suggestion type
             switch (field) {
                 case 'name':
@@ -110,7 +110,7 @@ const AddProduct = () => {
         };
 
         window.addEventListener('ai-suggestion-selected', handleAISuggestion);
-        
+
         return () => {
             window.removeEventListener('ai-suggestion-selected', handleAISuggestion);
         };
@@ -547,7 +547,7 @@ const AddProduct = () => {
         }
     
         const imageToEnhance = selectedImageForEnhancement;
-        
+
         if (!imageToEnhance) {
             setEnhancementError('Please select an image first');
             return;
@@ -561,7 +561,7 @@ const AddProduct = () => {
         try {
             // Convert image to base64
             const imageData = await getImageBase64(imageToEnhance);
-            
+
             // Call the API
             const response = await axios({
                 method: 'POST',
@@ -588,7 +588,7 @@ const AddProduct = () => {
                         src: imageSrc,
                         mimeType: mimeType
                     });
-                    
+
                     // Also store any text response
                     if (response.data.message) {
                         setEnhancementResult(response.data.message);
@@ -603,8 +603,8 @@ const AddProduct = () => {
         } catch (err) {
             console.error('Image enhancement error:', err);
             setEnhancementError(
-                err.response?.data?.message || 
-                err.response?.data?.error?.message || 
+                err.response?.data?.message ||
+                err.response?.data?.error?.message ||
                 'Network error occurred. Please try again.'
             );
         } finally {
@@ -615,17 +615,17 @@ const AddProduct = () => {
     // Update the useEnhancedImage function
     const useEnhancedImage = async () => {
         if (!generatedImage) return;
-        
+
         try {
             // Convert base64 to blob
             const response = await fetch(generatedImage.src);
             const blob = await response.blob();
-            
+
             // Create form data for WordPress media upload
             const formData = new FormData();
             formData.append('file', blob, `ai-enhanced-${Date.now()}.png`);
             formData.append('title', 'AI Enhanced Product Image');
-            
+
             // Upload to WordPress media library
             const uploadResponse = await axios.post(
                 `${appLocalizer.apiUrl}/wp/v2/media`,
@@ -637,24 +637,24 @@ const AddProduct = () => {
                     }
                 }
             );
-            
+
             if (uploadResponse.data && uploadResponse.data.id) {
                 const enhancedImage = {
                     id: uploadResponse.data.id,
                     src: uploadResponse.data.source_url,
                     thumbnail: uploadResponse.data.media_details?.sizes?.thumbnail?.source_url || uploadResponse.data.source_url
                 };
-                
+
                 // Determine which image to replace
                 const originalImageSrc = selectedImageForEnhancement;
-                
+
                 // Check if it's the featured image
                 if (featuredImage && featuredImage.src === originalImageSrc) {
                     // REPLACE featured image
                     setFeaturedImage(enhancedImage);
                     setEnhancementResult(__('Enhanced image has replaced the featured image.', 'multivendorx'));
                     set
-                } 
+                }
                 // Check if it's a gallery image
                 else {
                     // ADD to gallery (don't replace)
@@ -673,7 +673,7 @@ const AddProduct = () => {
             setSelectedImageForEnhancement(imageSrc);
         } else {
             // Use featured image or first gallery image
-            const imageToUse = featuredImage?.src || 
+            const imageToUse = featuredImage?.src ||
                 (galleryImages.length > 0 ? galleryImages[0].src : null);
             setSelectedImageForEnhancement(imageToUse);
         }
@@ -857,53 +857,6 @@ const AddProduct = () => {
                                     />
                                 </div>
                             </div>
-
-                            <div className="form-group-wrapper">
-                                <div className="form-group">
-                                    <label htmlFor="product-name">
-                                        {__('Product type', 'multivendorx')}
-                                    </label>
-                                    <SelectInput
-                                        name="type"
-                                        options={typeOptions}
-                                        value={product.type}
-                                        onChange={(selected) =>
-                                            handleChange('type', selected.value)
-                                        }
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <div className="checkbox-wrapper">
-                                        <div className="item">
-                                            <input
-                                                type="checkbox"
-                                                checked={product.virtual}
-                                                onChange={(e) =>
-                                                    handleChange(
-                                                        'virtual',
-                                                        e.target.checked
-                                                    )
-                                                }
-                                            />
-                                            {__('Virtual', 'multivendorx')}
-                                        </div>
-                                        <div className="item">
-                                            <input
-                                                type="checkbox"
-                                                checked={product.downloadable}
-                                                onChange={(e) =>
-                                                    handleChange(
-                                                        'downloadable',
-                                                        e.target.checked
-                                                    )
-                                                }
-                                            />
-                                            {__('Download', 'multivendorx')}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -974,57 +927,10 @@ const AddProduct = () => {
                                         }
                                     />
                                 </div>
-                                {!product.manage_stock && (
-                                    <div className="form-group">
-                                        <label htmlFor="product-name">
-                                            {__('Stock Status', 'multivendorx')}
-                                        </label>
-                                        <SelectInput
-                                            name="stock_status"
-                                            options={stockStatusOptions}
-                                            type="single-select"
-                                            value={product.stock_status}
-                                            onChange={(selected) =>
-                                                handleChange(
-                                                    'stock_status',
-                                                    selected.value
-                                                )
-                                            }
-                                        />
-                                    </div>
-                                )}
                                 <div className="form-group">
-                                    {__('Stock management', 'multivendorx')}
-                                    <MultiCheckBox
-                                        wrapperClass="toggle-btn"
-                                        inputWrapperClass="toggle-checkbox-header"
-                                        inputInnerWrapperClass="toggle-checkbox"
-                                        idPrefix="toggle-switch-manage-stock"
-                                        type="checkbox"
-                                        value={
-                                            product.manage_stock
-                                                ? ['manage_stock']
-                                                : []
-                                        }
-                                        onChange={(e) =>
-                                            handleChange(
-                                                'manage_stock',
-                                                (
-                                                    e as React.ChangeEvent<HTMLInputElement>
-                                                ).target.checked
-                                            )
-                                        }
-                                        options={[
-                                            {
-                                                key: 'manage_stock',
-                                                value: 'manage_stock',
-                                            },
-                                        ]}
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    {__('Sold individually', 'multivendorx')}
+                                    <label htmlFor="">
+                                        {__('Sold individually', 'multivendorx')}
+                                    </label>
                                     <MultiCheckBox
                                         wrapperClass="toggle-btn"
                                         inputWrapperClass="toggle-checkbox-header"
@@ -1053,7 +959,58 @@ const AddProduct = () => {
                                     />
                                 </div>
                             </div>
-
+                            <div className="form-group-wrapper">                              
+                                <div className="form-group">
+                                    <label htmlFor="">
+                                        {__('Stock management', 'multivendorx')}
+                                    </label>
+                                    <MultiCheckBox
+                                        wrapperClass="toggle-btn"
+                                        inputWrapperClass="toggle-checkbox-header"
+                                        inputInnerWrapperClass="toggle-checkbox"
+                                        idPrefix="toggle-switch-manage-stock"
+                                        type="checkbox"
+                                        value={
+                                            product.manage_stock
+                                                ? ['manage_stock']
+                                                : []
+                                        }
+                                        onChange={(e) =>
+                                            handleChange(
+                                                'manage_stock',
+                                                (
+                                                    e as React.ChangeEvent<HTMLInputElement>
+                                                ).target.checked
+                                            )
+                                        }
+                                        options={[
+                                            {
+                                                key: 'manage_stock',
+                                                value: 'manage_stock',
+                                            },
+                                        ]}
+                                    />
+                                </div>
+                                 {!product.manage_stock && (
+                                    <div className="form-group">
+                                        <label htmlFor="product-name">
+                                            {__('Stock Status', 'multivendorx')}
+                                        </label>
+                                        <SelectInput
+                                            name="stock_status"
+                                            options={stockStatusOptions}
+                                            type="single-select"
+                                            value={product.stock_status}
+                                            onChange={(selected) =>
+                                                handleChange(
+                                                    'stock_status',
+                                                    selected.value
+                                                )
+                                            }
+                                        />
+                                    </div>
+                                )}
+                            </div>
                             {product.manage_stock && (
                                 <div className="form-group-wrapper">
                                     <div className="form-group">
@@ -1114,7 +1071,7 @@ const AddProduct = () => {
                                 </div>
                             )}
 
-                            <div className="form-group-wrapper">
+                            {/* <div className="form-group-wrapper">
                                 <div className="form-group">
                                     <label htmlFor="product-name">
                                         {__('Product URL', 'multivendorx')}
@@ -1133,7 +1090,7 @@ const AddProduct = () => {
                                         wrapperClass="setting-form-input"
                                     />
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
 
@@ -1213,9 +1170,9 @@ const AddProduct = () => {
                                             <i className="adminlib-image"></i> {__('Original Image:', 'multivendorx')}
                                         </h4>
                                         <div>
-                                            <img 
-                                                src={selectedImageForEnhancement} 
-                                                alt="Original Preview" 
+                                            <img
+                                                src={selectedImageForEnhancement}
+                                                alt="Original Preview"
                                             />
                                             <p>
                                                 {__('This is the original image that will be enhanced.', 'multivendorx')}
@@ -1254,27 +1211,27 @@ const AddProduct = () => {
                                             <i className="adminlib-check"></i>
                                             {__('Generated Enhanced Image:', 'multivendorx')}
                                         </h4>
-                                        
+
                                         {/* Image Comparison */}
                                         <div className="image-comparison">
                                             {/* Original Image */}
                                             <div className="image-container">
                                                 <h5>{__('Original', 'multivendorx')}</h5>
                                                 <div className="image-preview">
-                                                    <img 
-                                                        src={selectedImageForEnhancement} 
+                                                    <img
+                                                        src={selectedImageForEnhancement}
                                                         alt="Original"
                                                     />
                                                 </div>
                                             </div>
-                                            
+
                                             {/* Generated Image */}
                                             <div className="image-container">
                                                 <h5>{__('AI Enhanced', 'multivendorx')}</h5>
                                                 <div className="image-preview enhanced">
-                                                    <img 
-                                                        src={generatedImage.src} 
-                                                        alt="AI Enhanced" 
+                                                    <img
+                                                        src={generatedImage.src}
+                                                        alt="AI Enhanced"
                                                     />
                                                     <div className="badge-new">NEW</div>
                                                 </div>
@@ -1317,6 +1274,66 @@ const AddProduct = () => {
 
                 {/* right column */}
                 <div className="card-wrapper column w-35">
+                    <div className="card-content">
+                        <div className="card-header">
+                            <div className="left">
+                                <div className="title">Visibility</div>
+                            </div>
+                            <div className="right">
+                                <i className="adminlib-pagination-right-arrow  arrow-icon"></i>
+                            </div>
+                        </div>
+                        <div className="card-body">
+                            <div className="form-group-wrapper">
+                                <div className="form-group">
+                                    <label htmlFor="product-name">
+                                        {__('Product type', 'multivendorx')}
+                                    </label>
+                                    <SelectInput
+                                        name="type"
+                                        options={typeOptions}
+                                        value={product.type}
+                                        onChange={(selected) =>
+                                            handleChange('type', selected.value)
+                                        }
+                                    />
+                                </div>
+                            </div>
+                            <div className="form-group-wrapper">
+                                <div className="form-group">
+                                    <div className="checkbox-wrapper">
+                                        <div className="item">
+                                            <input
+                                                type="checkbox"
+                                                checked={product.virtual}
+                                                onChange={(e) =>
+                                                    handleChange(
+                                                        'virtual',
+                                                        e.target.checked
+                                                    )
+                                                }
+                                            />
+                                            {__('Virtual', 'multivendorx')}
+                                        </div>
+                                        <div className="item">
+                                            <input
+                                                type="checkbox"
+                                                checked={product.downloadable}
+                                                onChange={(e) =>
+                                                    handleChange(
+                                                        'downloadable',
+                                                        e.target.checked
+                                                    )
+                                                }
+                                            />
+                                            {__('Download', 'multivendorx')}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     {/* ai assist */}
                     {applyFilters('product_ai_assist', null, product)}
 
@@ -1419,46 +1436,49 @@ const AddProduct = () => {
                                     <label htmlFor="product-name">
                                         Published on
                                     </label>
-                                    {product.date_created &&
-                                        (
-                                            <>
-                                                <CalendarInput
-                                                    wrapperClass="calendar-wrapper"
-                                                    inputClass="calendar-input"
-                                                    value={product.date_created?.split("T")[0] || ""}
-                                                    onChange={(date: any) => {
-                                                        const dateStr = date?.toString();
 
-                                                        setProduct(prev => {
-                                                            const oldTime = prev.date_created?.split("T")[1] || "00:00:00";
-                                                            return {
-                                                                ...prev,
-                                                                date_created: `${dateStr}T${oldTime}`
-                                                            };
-                                                        });
-                                                    }}
-                                                    format="YYYY-MM-DD"
-                                                />
-                                                <BasicInput
-                                                    wrapperClass="form-group-wrapper"
-                                                    type="time"
-                                                    id="published-time"
-                                                    name="published_time"
-                                                    value={product.date_created?.split("T")[1]?.slice(0, 5) || ""}
-                                                    onChange={(e: any) => {
-                                                        const newTime = e.target.value; // "10:35"
+                                    <div className="date-field-wrapper">
+                                        {product.date_created &&
+                                            (
+                                                <>
+                                                    <CalendarInput
+                                                        wrapperClass="calendar-wrapper"
+                                                        inputClass="calendar-input"
+                                                        value={product.date_created?.split("T")[0] || ""}
+                                                        onChange={(date: any) => {
+                                                            const dateStr = date?.toString();
 
-                                                        setProduct(prev => {
-                                                            const oldDate = prev.date_created?.split("T")[0] || "";
-                                                            return {
-                                                                ...prev,
-                                                                date_created: `${oldDate}T${newTime}:00`
-                                                            };
-                                                        });
-                                                    }}
-                                                />
-                                            </>
-                                        )}
+                                                            setProduct(prev => {
+                                                                const oldTime = prev.date_created?.split("T")[1] || "00:00:00";
+                                                                return {
+                                                                    ...prev,
+                                                                    date_created: `${dateStr}T${oldTime}`
+                                                                };
+                                                            });
+                                                        }}
+                                                        format="YYYY-MM-DD"
+                                                    />
+                                                    <BasicInput
+                                                        wrapperClass="form-group-wrapper"
+                                                        type="time"
+                                                        id="published-time"
+                                                        name="published_time"
+                                                        value={product.date_created?.split("T")[1]?.slice(0, 5) || ""}
+                                                        onChange={(e: any) => {
+                                                            const newTime = e.target.value; // "10:35"
+
+                                                            setProduct(prev => {
+                                                                const oldDate = prev.date_created?.split("T")[0] || "";
+                                                                return {
+                                                                    ...prev,
+                                                                    date_created: `${oldDate}T${newTime}:00`
+                                                                };
+                                                            });
+                                                        }}
+                                                    />
+                                                </>
+                                            )}
+                                    </div>
                                 </div>
                             </div>
 
@@ -1512,139 +1532,141 @@ const AddProduct = () => {
                                             )}
                                     </div>
                                     <div className="form-group-wrapper">
-                                        <div
-                                            className="category-wrapper template2"
-                                            ref={wrapperRef}
-                                        >
-                                            <ul className="settings-form-group-radio">
-                                                {treeData.map((cat) => (
-                                                    <React.Fragment
-                                                        key={cat.id}
-                                                    >
-                                                        {/* CATEGORY */}
-                                                        <li
-                                                            className={`category ${selectedCat ===
-                                                                cat.id
-                                                                ? 'radio-select-active'
-                                                                : ''
-                                                                }`}
-                                                            style={{
-                                                                display:
-                                                                    selectedCat ===
-                                                                        null ||
-                                                                        selectedCat ===
-                                                                        cat.id
-                                                                        ? 'block'
-                                                                        : 'none',
-                                                            }}
-                                                            onClick={() =>
-                                                                handleCategoryClick(
-                                                                    cat.id
-                                                                )
-                                                            }
+                                        <div className="form-group">
+                                            <div
+                                                className="category-wrapper template2"
+                                                ref={wrapperRef}
+                                            >
+                                                <ul className="settings-form-group-radio">
+                                                    {treeData.map((cat) => (
+                                                        <React.Fragment
+                                                            key={cat.id}
                                                         >
-                                                            <label>
-                                                                {cat.name}
-                                                            </label>
-                                                        </li>
+                                                            {/* CATEGORY */}
+                                                            <li
+                                                                className={`category ${selectedCat ===
+                                                                    cat.id
+                                                                    ? 'radio-select-active'
+                                                                    : ''
+                                                                    }`}
+                                                                style={{
+                                                                    display:
+                                                                        selectedCat ===
+                                                                            null ||
+                                                                            selectedCat ===
+                                                                            cat.id
+                                                                            ? 'block'
+                                                                            : 'none',
+                                                                }}
+                                                                onClick={() =>
+                                                                    handleCategoryClick(
+                                                                        cat.id
+                                                                    )
+                                                                }
+                                                            >
+                                                                <label>
+                                                                    {cat.name}
+                                                                </label>
+                                                            </li>
 
-                                                        {/* CATEGORY CHILDREN */}
-                                                        {selectedCat ===
-                                                            cat.id &&
-                                                            cat.children
-                                                                ?.length >
-                                                            0 && (
-                                                                <ul className="settings-form-group-radio">
-                                                                    {cat.children.map(
-                                                                        (
-                                                                            sub
-                                                                        ) => (
-                                                                            <React.Fragment
-                                                                                key={
-                                                                                    sub.id
-                                                                                }
-                                                                            >
-                                                                                {/* SUB CATEGORY */}
-                                                                                <li
-                                                                                    className={`sub-category ${selectedSub ===
+                                                            {/* CATEGORY CHILDREN */}
+                                                            {selectedCat ===
+                                                                cat.id &&
+                                                                cat.children
+                                                                    ?.length >
+                                                                0 && (
+                                                                    <ul className="settings-form-group-radio">
+                                                                        {cat.children.map(
+                                                                            (
+                                                                                sub
+                                                                            ) => (
+                                                                                <React.Fragment
+                                                                                    key={
                                                                                         sub.id
-                                                                                        ? 'radio-select-active'
-                                                                                        : ''
-                                                                                        }`}
-                                                                                    style={{
-                                                                                        display:
-                                                                                            !selectedSub ||
-                                                                                                selectedSub ===
-                                                                                                sub.id
-                                                                                                ? 'block'
-                                                                                                : 'none',
-                                                                                    }}
-                                                                                    onClick={() =>
-                                                                                        handleSubClick(
-                                                                                            sub.id
-                                                                                        )
                                                                                     }
                                                                                 >
-                                                                                    <label>
-                                                                                        {
-                                                                                            sub.name
+                                                                                    {/* SUB CATEGORY */}
+                                                                                    <li
+                                                                                        className={`sub-category ${selectedSub ===
+                                                                                            sub.id
+                                                                                            ? 'radio-select-active'
+                                                                                            : ''
+                                                                                            }`}
+                                                                                        style={{
+                                                                                            display:
+                                                                                                !selectedSub ||
+                                                                                                    selectedSub ===
+                                                                                                    sub.id
+                                                                                                    ? 'block'
+                                                                                                    : 'none',
+                                                                                        }}
+                                                                                        onClick={() =>
+                                                                                            handleSubClick(
+                                                                                                sub.id
+                                                                                            )
                                                                                         }
-                                                                                    </label>
-                                                                                </li>
+                                                                                    >
+                                                                                        <label>
+                                                                                            {
+                                                                                                sub.name
+                                                                                            }
+                                                                                        </label>
+                                                                                    </li>
 
-                                                                                {/* CHILDREN */}
-                                                                                {selectedSub ===
-                                                                                    sub.id &&
-                                                                                    sub
-                                                                                        .children
-                                                                                        ?.length >
-                                                                                    0 && (
-                                                                                        <ul className="settings-form-group-radio">
-                                                                                            {sub.children.map(
-                                                                                                (
-                                                                                                    child
-                                                                                                ) => (
-                                                                                                    <li
-                                                                                                        key={
-                                                                                                            child.id
-                                                                                                        }
-                                                                                                        className={`sub-category ${selectedChild ===
-                                                                                                            child.id
-                                                                                                            ? 'radio-select-active'
-                                                                                                            : ''
-                                                                                                            }`}
-                                                                                                        style={{
-                                                                                                            display:
-                                                                                                                !selectedChild ||
-                                                                                                                    selectedChild ===
-                                                                                                                    child.id
-                                                                                                                    ? 'block'
-                                                                                                                    : 'none',
-                                                                                                        }}
-                                                                                                        onClick={() =>
-                                                                                                            handleChildClick(
+                                                                                    {/* CHILDREN */}
+                                                                                    {selectedSub ===
+                                                                                        sub.id &&
+                                                                                        sub
+                                                                                            .children
+                                                                                            ?.length >
+                                                                                        0 && (
+                                                                                            <ul className="settings-form-group-radio">
+                                                                                                {sub.children.map(
+                                                                                                    (
+                                                                                                        child
+                                                                                                    ) => (
+                                                                                                        <li
+                                                                                                            key={
                                                                                                                 child.id
-                                                                                                            )
-                                                                                                        }
-                                                                                                    >
-                                                                                                        <label>
-                                                                                                            {
-                                                                                                                child.name
                                                                                                             }
-                                                                                                        </label>
-                                                                                                    </li>
-                                                                                                )
-                                                                                            )}
-                                                                                        </ul>
-                                                                                    )}
-                                                                            </React.Fragment>
-                                                                        )
-                                                                    )}
-                                                                </ul>
-                                                            )}
-                                                    </React.Fragment>
-                                                ))}
-                                            </ul>
+                                                                                                            className={`sub-category ${selectedChild ===
+                                                                                                                child.id
+                                                                                                                ? 'radio-select-active'
+                                                                                                                : ''
+                                                                                                                }`}
+                                                                                                            style={{
+                                                                                                                display:
+                                                                                                                    !selectedChild ||
+                                                                                                                        selectedChild ===
+                                                                                                                        child.id
+                                                                                                                        ? 'block'
+                                                                                                                        : 'none',
+                                                                                                            }}
+                                                                                                            onClick={() =>
+                                                                                                                handleChildClick(
+                                                                                                                    child.id
+                                                                                                                )
+                                                                                                            }
+                                                                                                        >
+                                                                                                            <label>
+                                                                                                                {
+                                                                                                                    child.name
+                                                                                                                }
+                                                                                                            </label>
+                                                                                                        </li>
+                                                                                                    )
+                                                                                                )}
+                                                                                            </ul>
+                                                                                        )}
+                                                                                </React.Fragment>
+                                                                            )
+                                                                        )}
+                                                                    </ul>
+                                                                )}
+                                                        </React.Fragment>
+                                                    ))}
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </>
@@ -1772,7 +1794,7 @@ const AddProduct = () => {
                                                 onReplace={openFeaturedUploader}
                                             />
                                         </div>
-                                        <button 
+                                        <button
                                             className="admin-btn btn-blue"
                                             onClick={() => openImageEnhancer(featuredImage?.src)}
                                         >
@@ -1805,7 +1827,7 @@ const AddProduct = () => {
                                                         onReplace={() => openGalleryUploader()}
                                                     />
                                                 </div>
-                                                <button 
+                                                <button
                                                     className="admin-btn btn-blue"
                                                     onClick={() => openImageEnhancer(img.src)}
                                                 >
@@ -1816,21 +1838,21 @@ const AddProduct = () => {
                                         {/* Add more button */}
                                         <div>
 
-                                        {/* Add more button */}
-                                        <FileInput
-                                            type="hidden"
-                                            imageSrc={null}
-                                            openUploader="Add Gallery Image"
-                                            buttonClass="admin-btn btn-purple"
-                                            onButtonClick={openGalleryUploader}
-                                        />
+                                            {/* Add more button */}
+                                            <FileInput
+                                                type="hidden"
+                                                imageSrc={null}
+                                                openUploader="Add Gallery Image"
+                                                buttonClass="admin-btn btn-purple"
+                                                onButtonClick={openGalleryUploader}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             </div>
         </>
     );
