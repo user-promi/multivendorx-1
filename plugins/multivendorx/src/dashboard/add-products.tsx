@@ -224,7 +224,7 @@ const AddProduct = () => {
                 per_page: 100,
             },
         })
-        .then(res => setCategories(res.data))
+            .then(res => setCategories(res.data))
     }, []);
 
     useEffect(() => {
@@ -489,19 +489,19 @@ const AddProduct = () => {
     });
 
     useEffect(() => {
-    const isSimple = product.type === "simple";
-    // const isVariable = product.type === "variable";
+        const isSimple = product.type === "simple";
+        // const isVariable = product.type === "variable";
 
-    setChecklist({
-        name: !!product.name,
-        image: !!featuredImage,
-        price: isSimple ? !!product.regular_price : false,
-        stock: isSimple ? !!product.stock_status : true,
-    });
+        setChecklist({
+            name: !!product.name,
+            image: !!featuredImage,
+            price: isSimple ? !!product.regular_price : false,
+            stock: isSimple ? !!product.stock_status : true,
+        });
 
-}, [product, featuredImage]);
+    }, [product, featuredImage]);
 
-const isPublishDisabled = !Object.values(checklist).every(Boolean);
+    const isPublishDisabled = !Object.values(checklist).every(Boolean);
 
 
     console.log('product', product);
@@ -521,7 +521,7 @@ const isPublishDisabled = !Object.values(checklist).every(Boolean);
                     </div>
                 </div>
                 <div className="buttons-wrapper">
-                    <button 
+                    <button
                         className="admin-btn btn-blue"
                         onClick={() => createProduct('draft')}>
 
@@ -537,44 +537,47 @@ const isPublishDisabled = !Object.values(checklist).every(Boolean);
                 </div>
             </div>
 
-            <div className="card-wrapper">
-                <div className="card-content w-10">
-                    <div className="checklist-wrapper">
-                        <div className="checklist-title">
-                            {__('Checklist', 'multivendorx')}
+            <div className="container-wrapper">
+                <div className="card-wrapper w-10">
+                    <div className="card-content">
+                        <div className="card-body">
+                            <div className="checklist-wrapper">
+                                <div className="checklist-title">
+                                    {__('Checklist', 'multivendorx')}
+                                </div>
+
+                                <ul>
+                                    <li className={checklist.name ? "checked" : ""}>
+                                        <span></span> Name
+                                    </li>
+
+                                    <li className={checklist.image ? "checked" : ""}>
+                                        <span></span> Image
+                                    </li>
+
+                                    {/* SIMPLE PRODUCT FIELDS */}
+                                    {product.type === "simple" && (
+                                        <>
+                                            <li className={checklist.price ? "checked" : ""}>
+                                                <span></span> Price
+                                            </li>
+
+                                            <li className={checklist.stock ? "checked" : ""}>
+                                                <span></span> Stock
+                                            </li>
+                                        </>
+                                    )}
+
+
+                                </ul>
+                            </div>
                         </div>
-
-                        <ul>
-                            <li className={checklist.name ? "checked" : ""}>
-                                <span></span> Name
-                            </li>
-
-                            <li className={checklist.image ? "checked" : ""}>
-                                <span></span> Image
-                            </li>
-
-                            {/* SIMPLE PRODUCT FIELDS */}
-                            {product.type === "simple" && (
-                                <>
-                                    <li className={checklist.price ? "checked" : ""}>
-                                        <span></span> Price
-                                    </li>
-
-                                    <li className={checklist.stock ? "checked" : ""}>
-                                        <span></span> Stock
-                                    </li>
-                                </>
-                            )}
-
-                        
-                        </ul>
                     </div>
-
                 </div>
 
-                <div className="card-content w-65">
+                <div className="card-wrapper column w-65">
                     {/* General information */}
-                    <div className="card" id="card-general">
+                    <div className="card-content" id="card-general">
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
@@ -703,7 +706,7 @@ const isPublishDisabled = !Object.values(checklist).every(Boolean);
                     </div>
 
                     {/* Price and stock */}
-                    <div className="card" id="card-price">
+                    <div className="card-content" id="card-price">
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">
@@ -959,11 +962,11 @@ const isPublishDisabled = !Object.values(checklist).every(Boolean);
                 </div>
 
                 {/* right column */}
-                <div className="card-content w-35">
+                <div className="card-wrapper column w-35">
                     {/* ai assist */}
                     {applyFilters('product_ai_assist', null, product)}
 
-                    <div className="card">
+                    <div className="card-content">
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">Visibility</div>
@@ -1037,7 +1040,7 @@ const isPublishDisabled = !Object.values(checklist).every(Boolean);
                                     <label>Status</label>
 
                                     <select
-                                        className="setting-form-input"
+                                        className="basic-select"
                                         value={product.status}
                                         onChange={(e) =>
                                             handleChange(
@@ -1126,7 +1129,7 @@ const isPublishDisabled = !Object.values(checklist).every(Boolean);
                         </div>
                     </div>
 
-                    <div className="card">
+                    <div className="card-content">
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">Category</div>
@@ -1384,7 +1387,7 @@ const isPublishDisabled = !Object.values(checklist).every(Boolean);
                         </div>
                     </div>
                     {/* image upload */}
-                    <div className="card" id="card-image-upload">
+                    <div className="card-content" id="card-image-upload">
                         <div className="card-header">
                             <div className="left">
                                 <div className="title">Upload image</div>
