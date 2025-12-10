@@ -37,13 +37,15 @@ $border-radius-button: 8rem;
         background-color: #181819 !important;
         color: #fff !important;
 
-        &.transparent{
+        &.transparent {
             background: transparent !important;
         }
     }
-    .card-content{
+
+    .card-content {
         box-shadow: 0 .125rem .5rem 0 #2828286e;
     }
+
     .tab-name a,
     .subtabs li a {
         color: #ffffff !important;
@@ -317,6 +319,10 @@ a:focus {
         li {
             font-size: 1.063rem;
             position: relative;
+        }
+
+        label {
+            margin: 0 !important;
         }
 
         .category,

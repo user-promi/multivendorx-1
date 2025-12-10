@@ -246,6 +246,10 @@
                 cursor: pointer;
             }
         }
+        .date-field-wrapper{
+            display: flex;
+            gap: 0.5rem;
+        }
     }
 
     .settings-metabox-note {

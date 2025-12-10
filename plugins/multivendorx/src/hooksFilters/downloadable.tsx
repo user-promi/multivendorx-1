@@ -67,7 +67,7 @@ const Downloadable = ({ product, setProduct, handleChange }) => {
     };
 
     return (
-        <div className="card" id="card-downloadable">
+        <div className="card-content" id="card-downloadable">
             <div className="card-header">
                 <div className="left">
                     <div className="title">Downloadable</div>
