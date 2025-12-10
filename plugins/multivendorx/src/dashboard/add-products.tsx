@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import {
     BasicInput,
+    CalendarInput,
     FileInput,
     MultiCheckBox,
     RadioInput,
@@ -372,7 +373,6 @@ const AddProduct = () => {
                     },
                 ],
             };
-
             axios
                 .put(
                     `${appLocalizer.apiUrl}/wc/v3/products/${productId}`,
@@ -380,7 +380,6 @@ const AddProduct = () => {
                     { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
                 )
                 .then((res) => {
-                    console.log('Product created:', res.data);
                     window.location.reload();
                 });
         } catch (error) {
@@ -484,7 +483,6 @@ const AddProduct = () => {
         frame.open();
     };
 
-    console.log('product', product);
     return (
         <>
             <div className="page-title-wrapper">
@@ -919,7 +917,7 @@ const AddProduct = () => {
                             handleChange
                         )}
 
-                    {product?.type == 'variable' && 
+                    {product?.type == 'variable' &&
                         applyFilters(
                             'product_variable',
                             null,
@@ -1032,16 +1030,47 @@ const AddProduct = () => {
                                     <label htmlFor="product-name">
                                         Published on
                                     </label>
-                                    <DateTimePicker
-                                        currentDate={product.date_created}
-                                        onChange={(value) => {
-                                            setProduct((prev) => ({
-                                                ...prev,
-                                                date_created: value,
-                                            }));
-                                        }}
-                                        is12Hour={false}
-                                    />
+                                    {product.date_created &&
+                                        (
+                                            <>
+                                                <CalendarInput
+                                                    wrapperClass="calendar-wrapper"
+                                                    inputClass="calendar-input"
+                                                    value={product.date_created?.split("T")[0] || ""}
+                                                    onChange={(date: any) => {
+                                                        const dateStr = date?.toString();
+
+                                                        setProduct(prev => {
+                                                            const oldTime = prev.date_created?.split("T")[1] || "00:00:00";
+                                                            return {
+                                                                ...prev,
+                                                                date_created: `${dateStr}T${oldTime}`
+                                                            };
+                                                        });
+                                                    }}
+                                                    format="YYYY-MM-DD"
+                                                />
+                                                <BasicInput
+                                                    wrapperClass="form-group-wrapper"
+                                                    type="time"
+                                                    id="published-time"
+                                                    name="published_time"
+                                                    value={product.date_created?.split("T")[1]?.slice(0, 5) || ""}
+                                                    onChange={(e: any) => {
+                                                        const newTime = e.target.value; // "10:35"
+
+                                                        setProduct(prev => {
+                                                            const oldDate = prev.date_created?.split("T")[0] || "";
+                                                            return {
+                                                                ...prev,
+                                                                date_created: `${oldDate}T${newTime}:00`
+                                                            };
+                                                        });
+                                                    }}
+                                                />
+                                            </>
+                                        )}
+
                                 </div>
                             </div>
 
@@ -1086,13 +1115,13 @@ const AddProduct = () => {
                                         {(selectedCat ||
                                             selectedSub ||
                                             selectedChild) && (
-                                            <button
-                                                onClick={resetSelection}
-                                                className="admin-btn btn-red"
-                                            >
-                                                Reset
-                                            </button>
-                                        )}
+                                                <button
+                                                    onClick={resetSelection}
+                                                    className="admin-btn btn-red"
+                                                >
+                                                    Reset
+                                                </button>
+                                            )}
                                     </div>
                                     <div className="form-group-wrapper">
                                         <div
@@ -1106,17 +1135,16 @@ const AddProduct = () => {
                                                     >
                                                         {/* CATEGORY */}
                                                         <li
-                                                            className={`category ${
-                                                                selectedCat ===
+                                                            className={`category ${selectedCat ===
                                                                 cat.id
-                                                                    ? 'radio-select-active'
-                                                                    : ''
-                                                            }`}
+                                                                ? 'radio-select-active'
+                                                                : ''
+                                                                }`}
                                                             style={{
                                                                 display:
                                                                     selectedCat ===
                                                                         null ||
-                                                                    selectedCat ===
+                                                                        selectedCat ===
                                                                         cat.id
                                                                         ? 'block'
                                                                         : 'none',
@@ -1137,7 +1165,7 @@ const AddProduct = () => {
                                                             cat.id &&
                                                             cat.children
                                                                 ?.length >
-                                                                0 && (
+                                                            0 && (
                                                                 <ul className="settings-form-group-radio">
                                                                     {cat.children.map(
                                                                         (
@@ -1150,16 +1178,15 @@ const AddProduct = () => {
                                                                             >
                                                                                 {/* SUB CATEGORY */}
                                                                                 <li
-                                                                                    className={`sub-category ${
-                                                                                        selectedSub ===
+                                                                                    className={`sub-category ${selectedSub ===
                                                                                         sub.id
-                                                                                            ? 'radio-select-active'
-                                                                                            : ''
-                                                                                    }`}
+                                                                                        ? 'radio-select-active'
+                                                                                        : ''
+                                                                                        }`}
                                                                                     style={{
                                                                                         display:
                                                                                             !selectedSub ||
-                                                                                            selectedSub ===
+                                                                                                selectedSub ===
                                                                                                 sub.id
                                                                                                 ? 'block'
                                                                                                 : 'none',
@@ -1183,7 +1210,7 @@ const AddProduct = () => {
                                                                                     sub
                                                                                         .children
                                                                                         ?.length >
-                                                                                        0 && (
+                                                                                    0 && (
                                                                                         <ul className="settings-form-group-radio">
                                                                                             {sub.children.map(
                                                                                                 (
@@ -1193,16 +1220,15 @@ const AddProduct = () => {
                                                                                                         key={
                                                                                                             child.id
                                                                                                         }
-                                                                                                        className={`sub-category ${
-                                                                                                            selectedChild ===
+                                                                                                        className={`sub-category ${selectedChild ===
                                                                                                             child.id
-                                                                                                                ? 'radio-select-active'
-                                                                                                                : ''
-                                                                                                        }`}
+                                                                                                            ? 'radio-select-active'
+                                                                                                            : ''
+                                                                                                            }`}
                                                                                                         style={{
                                                                                                             display:
                                                                                                                 !selectedChild ||
-                                                                                                                selectedChild ===
+                                                                                                                    selectedChild ===
                                                                                                                     child.id
                                                                                                                     ? 'block'
                                                                                                                     : 'none',
