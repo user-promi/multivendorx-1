@@ -50,92 +50,87 @@ const SocialMedia = () => {
 
     return (
         <>
-            <div className="card-wrapper">
-                <div className="card-content">
-
-                    {/* Facebook */}
-                    <div className="form-group-wrapper">
-                        <div className="form-group">
-                            <label htmlFor="facebook">
-                                <i className="adminlib-facebook-fill"></i> {__('Facebook', 'multivendorx')}
-                            </label>
-                            <BasicInput
-                                name="facebook"
-                                wrapperClass="setting-form-input"
-                                descClass="settings-metabox-description"
-                                value={formData.facebook}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </div>
-
-                    {/* X / Twitter */}
-                    <div className="form-group-wrapper">
-                        <div className="form-group">
-                            <label htmlFor="twitter">
-                                <i className="adminlib-twitter"></i> {__('X', 'multivendorx')}
-                            </label>
-                            <BasicInput
-                                name="twitter"
-                                wrapperClass="setting-form-input"
-                                descClass="settings-metabox-description"
-                                value={formData.twitter}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </div>
-
-                    {/* LinkedIn */}
-                    <div className="form-group-wrapper">
-                        <div className="form-group">
-                            <label htmlFor="linkedin">
-                                <i className="adminlib-linkedin-border"></i> {__('LinkedIn', 'multivendorx')}
-                            </label>
-                            <BasicInput
-                                name="linkedin"
-                                wrapperClass="setting-form-input"
-                                descClass="settings-metabox-description"
-                                value={formData.linkedin}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </div>
-
-                    {/* YouTube */}
-                    <div className="form-group-wrapper">
-                        <div className="form-group">
-                            <label htmlFor="youtube">
-                                <i className="adminlib-youtube"></i> {__('YouTube', 'multivendorx')}
-                            </label>
-                            <BasicInput
-                                name="youtube"
-                                wrapperClass="setting-form-input"
-                                descClass="settings-metabox-description"
-                                value={formData.youtube}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </div>
-
-                    {/* Instagram */}
-                    <div className="form-group-wrapper">
-                        <div className="form-group">
-                            <label htmlFor="instagram">
-                                <i className="adminlib-mail"></i> {__('Instagram', 'multivendorx')}
-                            </label>
-                            <BasicInput
-                                name="instagram"
-                                wrapperClass="setting-form-input"
-                                descClass="settings-metabox-description"
-                                value={formData.instagram}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </div>
+            {/* Facebook */}
+            <div className="form-group-wrapper">
+                <div className="form-group">
+                    <label htmlFor="facebook">
+                        <i className="adminlib-facebook-fill"></i> {__('Facebook', 'multivendorx')}
+                    </label>
+                    <BasicInput
+                        name="facebook"
+                        wrapperClass="setting-form-input"
+                        descClass="settings-metabox-description"
+                        value={formData.facebook}
+                        onChange={handleChange}
+                    />
                 </div>
-                <SuccessNotice message={successMsg} />
             </div>
 
+            {/* X / Twitter */}
+            <div className="form-group-wrapper">
+                <div className="form-group">
+                    <label htmlFor="twitter">
+                        <i className="adminlib-twitter"></i> {__('X', 'multivendorx')}
+                    </label>
+                    <BasicInput
+                        name="twitter"
+                        wrapperClass="setting-form-input"
+                        descClass="settings-metabox-description"
+                        value={formData.twitter}
+                        onChange={handleChange}
+                    />
+                </div>
+            </div>
+
+            {/* LinkedIn */}
+            <div className="form-group-wrapper">
+                <div className="form-group">
+                    <label htmlFor="linkedin">
+                        <i className="adminlib-linkedin-border"></i> {__('LinkedIn', 'multivendorx')}
+                    </label>
+                    <BasicInput
+                        name="linkedin"
+                        wrapperClass="setting-form-input"
+                        descClass="settings-metabox-description"
+                        value={formData.linkedin}
+                        onChange={handleChange}
+                    />
+                </div>
+            </div>
+
+            {/* YouTube */}
+            <div className="form-group-wrapper">
+                <div className="form-group">
+                    <label htmlFor="youtube">
+                        <i className="adminlib-youtube"></i> {__('YouTube', 'multivendorx')}
+                    </label>
+                    <BasicInput
+                        name="youtube"
+                        wrapperClass="setting-form-input"
+                        descClass="settings-metabox-description"
+                        value={formData.youtube}
+                        onChange={handleChange}
+                    />
+                </div>
+            </div>
+
+            {/* Instagram */}
+            <div className="form-group-wrapper">
+                <div className="form-group">
+                    <label htmlFor="instagram">
+                        <i className="adminlib-mail"></i> {__('Instagram', 'multivendorx')}
+                    </label>
+                    <BasicInput
+                        name="instagram"
+                        wrapperClass="setting-form-input"
+                        descClass="settings-metabox-description"
+                        value={formData.instagram}
+                        onChange={handleChange}
+                    />
+                </div>
+            </div>
+
+            <SuccessNotice message={successMsg} />
         </>
     );
 };
