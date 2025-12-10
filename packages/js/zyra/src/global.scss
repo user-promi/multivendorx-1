@@ -1,14 +1,12 @@
   $theme-color: #5007aa;
-  $accent-color: #e35047;
-  $light-accent-color: #e26f76;
   $color-white: #fff;
   $color-black: #181819;
   $color-light-black: #2d2d2d;
   $color-active: #5007aa;
   $text-color: #000000c7;
   $sub-text-color: #424242d0;
-  $menu-color: #f9f8fb;
   $background-color: #e6e2e2f3;
+  $background-white: #fff;
   $theme-background-color: #ece2f9f1;
   $border-light-small: 0.063rem solid #dbdbdb;
   $border-light-medium: 0.120rem solid #dbdbdb;
@@ -16,12 +14,9 @@
   $border-black-medium: 0.115rem solid #111418;
   $border-theme-small: 0.063rem solid #5007aa;
   $border-theme-medium: 0.115rem solid #5007aa;
-  $border-theme-large: 0.125rem solid #5007aa;
   $border-radius-small: 0.25rem;
-  $border-radius-medium: 0.438rem;
-  $border-radius-large: 0.5rem;
-  $border-radius-button: 8rem;
 
+  $accent-color: #e35047;
 
   $color-palette: (
     red: (light-color: #fff3f1,
@@ -43,7 +38,6 @@
     pink: (light-color: #ffe9f1,
       color: #d676a4),
 
-
     facebook:(color: #1877F2,
     ),
     twitter:(color: #000,
@@ -56,23 +50,16 @@
     )
   );
 
-
-  // $icon-color-palette: (
-  //   red: (
-  //     light-color: #fde8e4,
-  //     color: #f06b4f
-  //   ),
-  //   green: (
-  //     light-color: #d9f5f0,
-  //     color: #06be9f
-  //   ),
-  //   yellow: (
-  //     light-color: #fff0e1,
-  //     color: #ff9f43
-  //   ),
-  //   blue: (
-  //     light-color: #bfdeed6e,
-  //     color: #003d66de
-  //   ),
-
-  // );
+  $btn-color-palette: (
+    purple:(light-color: #ece2f9f1,
+      color: #5007aa,
+    ),
+    red: (light-color: #fde8e4,
+      color: #f06b4f),
+    green: (light-color: #d9f5f0,
+      color: #06be9f),
+    yellow: (light-color: #fff0e1,
+      color: #ff9f43),
+    blue: (light-color: #bfdeed6e,
+      color: #003d66de),
+    )

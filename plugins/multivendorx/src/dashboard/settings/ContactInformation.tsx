@@ -70,54 +70,47 @@ const ContactInformation = () => {
     return (
         <>
             <SuccessNotice message={successMsg} />
-            <div className="card-wrapper">
-                <div className="card-content">
-                    {/* <div className="card-title">{__('Contact & Communication', 'multivendorx')}</div> */}
-
-                    <div className="form-group-wrapper">
-                        <div className="form-group">
-                            <label htmlFor="phone">{__('Phone', 'multivendorx')}</label>
-                            <BasicInput
-                                name="phone"
-                                value={formData.phone}
-                                wrapperClass="setting-form-input"
-                                descClass="settings-metabox-description"
-                                onChange={handleChange}
-                                readOnly={settings.includes('store_contact')}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="form-group-wrapper">
-                        <div className="form-group">
-                            <label htmlFor="email">{__('Email / Additional Email', 'multivendorx')}</label>
-                            <BasicInput
-                                type="email"
-                                name="email"
-                                wrapperClass="setting-form-input"
-                                descClass="settings-metabox-description"
-                                value={formData.email}
-                                onChange={handleChange}
-                                readOnly={settings.includes('store_contact')}
-                            />
-                        </div>
-                    </div>
-
-                    {modules.includes('live-chat') && (
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="live_chat">{__('Live Chat (Enable, WhatsApp, etc.)', 'multivendorx')}</label>
-                                <BasicInput
-                                    name="live_chat"
-                                    wrapperClass="setting-form-input"
-                                    descClass="settings-metabox-description"
-                                />
-                            </div>
-                        </div>
-                    )}
+            <div className="form-group-wrapper">
+                <div className="form-group">
+                    <label htmlFor="phone">{__('Phone', 'multivendorx')}</label>
+                    <BasicInput
+                        name="phone"
+                        value={formData.phone}
+                        wrapperClass="setting-form-input"
+                        descClass="settings-metabox-description"
+                        onChange={handleChange}
+                        readOnly={settings.includes('store_contact')}
+                    />
                 </div>
             </div>
 
+            <div className="form-group-wrapper">
+                <div className="form-group">
+                    <label htmlFor="email">{__('Email / Additional Email', 'multivendorx')}</label>
+                    <BasicInput
+                        type="email"
+                        name="email"
+                        wrapperClass="setting-form-input"
+                        descClass="settings-metabox-description"
+                        value={formData.email}
+                        onChange={handleChange}
+                        readOnly={settings.includes('store_contact')}
+                    />
+                </div>
+            </div>
+
+            {modules.includes('live-chat') && (
+                <div className="form-group-wrapper">
+                    <div className="form-group">
+                        <label htmlFor="live_chat">{__('Live Chat (Enable, WhatsApp, etc.)', 'multivendorx')}</label>
+                        <BasicInput
+                            name="live_chat"
+                            wrapperClass="setting-form-input"
+                            descClass="settings-metabox-description"
+                        />
+                    </div>
+                </div>
+            )}
         </>
     );
 };

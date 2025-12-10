@@ -1,6 +1,7 @@
 @use '../../global.scss' as *;
 
 .payment-tabs-component {
+    margin: 0;
     .payment-method-card {
         margin-bottom: 1rem;
         cursor: pointer;
@@ -72,11 +73,11 @@
                         display: flex;
                         gap: 0.5rem;
                         justify-content: start;
+                        align-items: center;
                         padding: 0;
 
                         .title {
                             font-size: 1rem;
-                            line-height: 1rem;
                             display: flex;
                             gap: 1rem;
                         }
@@ -315,8 +316,10 @@
                 cursor: default;
             }
         }
+    }
 
-
+    .buttons-wrapper{
+        margin: 0;
     }
 }
 
@@ -415,7 +418,6 @@
         }
     }
 }
-
 
 // setup wizard start (clean unuse css)
 .welcome-wrapper {

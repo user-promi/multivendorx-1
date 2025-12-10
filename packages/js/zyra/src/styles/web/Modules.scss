@@ -39,7 +39,7 @@
       flex: 0 0 19rem;
       box-sizing: border-box;
       border: $border-light-small;
-      border-radius: $border-radius-large;
+      border-radius: 0.5rem;
       background: #fff;
       padding: 1.2rem;
       display: flex;
@@ -79,7 +79,7 @@
 
         .meta-name {
           font-size: 1.25rem;
-          line-height: 1.375;
+          line-height: 1;
           color: #000;
           margin-bottom: 0.625rem;
         }

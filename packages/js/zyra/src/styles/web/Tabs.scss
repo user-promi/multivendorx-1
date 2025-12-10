@@ -620,10 +620,17 @@
       font-weight: 500;
       line-height: 1rem;
     }
+    .desc{
+      color: $sub-text-color;
+
+      a{
+        color: $theme-color;
+      }
+    }
   }
 
   &.color-red {
-    color: red;
+    color: $accent-color;
     background: #ff00000d;
   }
 }
@@ -687,7 +694,8 @@
             color: #fff;
             border: none;
 
-            i,p{
+            i,
+            p {
               color: #fff;
             }
           }
