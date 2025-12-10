@@ -3,9 +3,9 @@
 Contributors: wcmp
 Tags: stock manager, back in stock notifier, waitlist, inventory management, out of stock notifictaion
 Requires at least: 6.4
-Tested up to: 6.8.2
+Tested up to: 6.9.0
 Requires PHP: 8.0
-Stable tag: 3.0.5
+Stable tag: 3.0.6
 Donate link: https://multivendorx.com/donate/
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -168,6 +168,11 @@ Manual installation method requires downloading the [Notifima] (https://wordpres
 6. Inventory manager
 
 == Changelog ==
+
+= 3.0.6 - 2025-12-11 =
+* Added     - Compatibility of WordPress 6.9.0.
+* Added     - Compatibility of WooCommerce 10.3.6.
+* Fixed     - Issue with the settings panel.
 
 = 3.0.5 - 2025-08-22 =
 * Added     - Compatibility of WooCommerce 10.1.1.

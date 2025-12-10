@@ -1,7 +1,7 @@
 {
     "name": "notifima",
     "displayName": "woocommerce-product-stock-alert",
-    "version": "3.0.5",
+    "version": "3.0.6",
     "description": "=== Notifima ===",
     "main": "index.js",
     "engines": {
