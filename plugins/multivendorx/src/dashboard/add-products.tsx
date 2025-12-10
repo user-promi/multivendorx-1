@@ -340,7 +340,7 @@ const AddProduct = () => {
         }));
     };
 
-    const createProduct = () => {
+    const createProduct = (status) => {
         const imagePayload = [];
 
         if (featuredImage) {
@@ -360,7 +360,7 @@ const AddProduct = () => {
         try {
             const payload = {
                 ...product,
-                status: 'publish',
+                status: status,
                 images: imagePayload,
                 categories: finalCategories,
                 meta_data: [
@@ -482,6 +482,29 @@ const AddProduct = () => {
         frame.open();
     };
 
+    const [checklist, setChecklist] = useState({
+        name: false,
+        image: false,
+        price: false,
+        stock: false
+    });
+
+    useEffect(() => {
+    const isSimple = product.type === "simple";
+    // const isVariable = product.type === "variable";
+
+    setChecklist({
+        name: !!product.name,
+        image: !!featuredImage,
+        price: isSimple ? !!product.regular_price : false,
+        stock: isSimple ? !!product.stock_status : true,
+    });
+
+}, [product, featuredImage]);
+
+const isPublishDisabled = !Object.values(checklist).every(Boolean);
+
+
     console.log('product', product);
     return (
         <>
@@ -499,12 +522,16 @@ const AddProduct = () => {
                     </div>
                 </div>
                 <div className="buttons-wrapper">
-                    <button className="admin-btn btn-blue">
+                    <button 
+                        className="admin-btn btn-blue"
+                        onClick={() => createProduct('draft')}>
+
                         {__('Draft', 'multivendorx')}
                     </button>
                     <button
                         className="admin-btn btn-purple-bg"
-                        onClick={createProduct}
+                        onClick={() => createProduct('publish')}
+                        disabled={isPublishDisabled}
                     >
                         {__('Publish', 'multivendorx')}
                     </button>
@@ -517,27 +544,33 @@ const AddProduct = () => {
                         <div className="checklist-title">
                             {__('Checklist', 'multivendorx')}
                         </div>
+
                         <ul>
-                            <li className="checked">
-                                <span></span> {__('Name', 'multivendorx')}
+                            <li className={checklist.name ? "checked" : ""}>
+                                <span></span> Name
                             </li>
-                            <li className="checked">
-                                <span></span> {__('Image', 'multivendorx')}
+
+                            <li className={checklist.image ? "checked" : ""}>
+                                <span></span> Image
                             </li>
-                            <li className="checked">
-                                <span></span> {__('Price', 'multivendorx')}
-                            </li>
-                            <li>
-                                <span></span> {__('Name', 'multivendorx')}
-                            </li>
-                            <li>
-                                <span></span> {__('Image', 'multivendorx')}
-                            </li>
-                            <li>
-                                <span></span> {__('Price', 'multivendorx')}
-                            </li>
+
+                            {/* SIMPLE PRODUCT FIELDS */}
+                            {product.type === "simple" && (
+                                <>
+                                    <li className={checklist.price ? "checked" : ""}>
+                                        <span></span> Price
+                                    </li>
+
+                                    <li className={checklist.stock ? "checked" : ""}>
+                                        <span></span> Stock
+                                    </li>
+                                </>
+                            )}
+
+                        
                         </ul>
                     </div>
+
                 </div>
 
                 <div className="card-content w-65">
