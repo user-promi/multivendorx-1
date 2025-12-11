@@ -124,34 +124,37 @@ const Downloadable = ({ product, setProduct, handleChange }) => {
                                 <div className="admin-btn btn-purple-bg" onClick={addDownloadableFile}>
                                     <i className="adminlib-plus-circle-o"></i> Add new
                                 </div> */}
+                <div className="form-group-wrapper">
+                    <div className="form-group">
+                        <DynamicRowSetting
+                            keyName="downloads"
+                            template={downloadTemplate}
+                            value={product.downloads}
+                            addLabel="Add new"
+                            onChange={(rows) =>
+                                setProduct((prev) => ({
+                                    ...prev,
+                                    downloads: rows,
+                                }))
+                            }
+                            childrenRenderer={(row) => (
+                                <>
+                                    <div
+                                        className="admin-btn btn-purple"
+                                        onClick={() => openMediaUploader(row.id)}
+                                    >
+                                        Upload file
+                                    </div>
 
-                <DynamicRowSetting
-                    keyName="downloads"
-                    template={downloadTemplate}
-                    value={product.downloads}
-                    addLabel="Add new"
-                    onChange={(rows) =>
-                        setProduct((prev) => ({
-                            ...prev,
-                            downloads: rows,
-                        }))
-                    }
-                    childrenRenderer={(row) => (
-                        <>
-                            <div
-                                className="admin-btn btn-purple"
-                                onClick={() => openMediaUploader(row.id)}
-                            >
-                                Upload file
-                            </div>
-
-                            <div
-                                className="delete-icon adminlib-delete"
-                                onClick={() => removeDownloadableFile(row.id)}
-                            />
-                        </>
-                    )}
-                />
+                                    <div
+                                        className="delete-icon adminlib-delete"
+                                        onClick={() => removeDownloadableFile(row.id)}
+                                    />
+                                </>
+                            )}
+                        />
+                    </div>
+                </div>
 
                 <div className="form-group-wrapper">
                     <div className="form-group">
