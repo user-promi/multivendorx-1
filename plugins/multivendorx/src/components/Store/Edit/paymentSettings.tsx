@@ -44,7 +44,8 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 	// The selectedProvider needs to check both 'fields' and 'formFields'
 	const selectedProvider = storePayment[formData.payment_method];
 	const providerFields = selectedProvider?.fields || selectedProvider?.formFields || [];
-
+    console.log('provider',providerFields);
+	console.log('app',appLocalizer.settings_databases_value)
 	useEffect(() => {
 		if (!id) return;
 

@@ -170,12 +170,13 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
                                     <div className="title">{__('Latest products', 'multivendorx')}</div>
                                 </div>
                                 <div className="right">
-                                    <i
-                                        className="adminlib-external"
-                                        onClick={() => {
-                                            navigate(`?page=multivendorx#&tab=transaction-history&store_id=${id}`);
-                                        }}
-                                    ></i>
+                                    <a
+                                        href={`${appLocalizer.admin_url}edit.php?post_type=product&multivendorx_store_id=${id}`}
+                                        className="item"
+                                    >
+                                        <i className="adminlib-external"></i>
+                                    </a>
+
                                 </div>
                             </div>
                             <div className="card-body">
