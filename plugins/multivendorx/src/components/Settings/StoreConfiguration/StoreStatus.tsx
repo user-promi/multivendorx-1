@@ -12,14 +12,14 @@ import {
 } from 'zyra';
 
 // Types
-type SettingItem = Record< string, any >;
+type SettingItem = Record<string, any>;
 
 const StoreStatus: React.FC = () => {
-	const location = new URLSearchParams( useLocation().hash.substring( 1 ) );
-	const initialTab = location.get( 'tabId' ) || 'pending';
+	const location = new URLSearchParams(useLocation().hash.substring(1));
+	const initialTab = location.get('tabId') || 'pending';
 
 	const settingsArray: SettingItem[] = getAvailableSettings(
-		getTemplateData( 'storeStatus' ),
+		getTemplateData('storeStatus'),
 		[]
 	);
 
@@ -104,39 +104,39 @@ const StoreStatus: React.FC = () => {
 		},
 	];
 
-	const GetForm = ( currentTab: string | null ): JSX.Element | null => {
+	const GetForm = (currentTab: string | null): JSX.Element | null => {
 		const { setting, settingName, setSetting, updateSetting } =
 			useSetting();
 		const { modules } = useModules();
-		const [ storeTabSetting, setStoreTabSetting ] = useState< any >( null );
+		const [storeTabSetting, setStoreTabSetting] = useState<any>(null);
 
-		if ( ! currentTab ) return null;
+		if (!currentTab) return null;
 
-		const settingModal = getSettingById( settingsArray as any, currentTab );
+		const settingModal = getSettingById(settingsArray as any, currentTab);
 
 		// Initialize settings for current tab
-		if ( settingName !== currentTab ) {
+		if (settingName !== currentTab) {
 			setSetting(
 				currentTab,
-				appLocalizer.settings_databases_value[ currentTab ] || {}
+				appLocalizer.settings_databases_value[currentTab] || {}
 			);
 		}
 
-		useEffect( () => {
-			if ( settingName === currentTab ) {
-				appLocalizer.settings_databases_value[ settingName ] = setting;
+		useEffect(() => {
+			if (settingName === currentTab) {
+				appLocalizer.settings_databases_value[settingName] = setting;
 			}
-		}, [ setting, settingName, currentTab ] );
+		}, [setting, settingName, currentTab]);
 
 		return settingName === currentTab ? (
 			<AdminForm
-				settings={ settingModal as any }
-				proSetting={ appLocalizer.pro_settings_list }
-				setting={ setting }
-				updateSetting={ updateSetting }
-				appLocalizer={ appLocalizer }
-				modules={ modules }
-				storeTabSetting={ storeTabSetting }
+				settings={settingModal as any}
+				proSetting={appLocalizer.pro_settings_list}
+				setting={setting}
+				updateSetting={updateSetting}
+				appLocalizer={appLocalizer}
+				modules={modules}
+				storeTabSetting={storeTabSetting}
 			/>
 		) : (
 			<>Loading...</>
@@ -147,18 +147,18 @@ const StoreStatus: React.FC = () => {
 		<SettingProvider>
 			<div className="horizontal-tabs">
 				<Tabs
-					tabData={ tabData as any }
-					currentTab={ initialTab }
-					getForm={ GetForm }
-					prepareUrl={ ( tabid: string ) =>
-						`?page=multivendorx#&tab=settings&subtab=store-status-control&tabId=${ tabid }`
+					tabData={tabData as any}
+					currentTab={initialTab}
+					getForm={GetForm}
+					prepareUrl={(tabid: string) =>
+						`?page=multivendorx#&tab=settings&subtab=store-status-control&tabId=${tabid}`
 					}
-					appLocalizer={ appLocalizer }
+					appLocalizer={appLocalizer}
 					settingName="Settings"
-					supprot={ [] }
-					Link={ Link }
-					submenuRender={ true }
-					menuIcon={ true }
+					supprot={[]}
+					Link={Link}
+					submenuRender={true}
+					menuIcon={true}
 				/>
 			</div>
 		</SettingProvider>

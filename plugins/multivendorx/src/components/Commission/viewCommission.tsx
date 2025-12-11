@@ -23,112 +23,112 @@ interface ViewCommissionProps {
 	commissionId?: number | null;
 }
 
-const ViewCommission: React.FC< ViewCommissionProps > = ( {
+const ViewCommission: React.FC<ViewCommissionProps> = ({
 	open,
 	onClose,
 	commissionId,
-} ) => {
-	const [ commissionData, setCommissionData ] = useState< any >( null );
-	const [ storeData, setStoreData ] = useState< any >( null );
-	const [ orderData, setOrderData ] = useState< any >( null );
-	const [ shippingItems, setShippingItems ] = useState< any[] >( [] );
-	const [ refundMap, setRefundMap ] = useState< Record< number, any > >( {} );
+}) => {
+	const [commissionData, setCommissionData] = useState<any>(null);
+	const [storeData, setStoreData] = useState<any>(null);
+	const [orderData, setOrderData] = useState<any>(null);
+	const [shippingItems, setShippingItems] = useState<any[]>([]);
+	const [refundMap, setRefundMap] = useState<Record<number, any>>({});
 
 	// Add new state
-	const [ orderItems, setOrderItems ] = useState< OrderItem[] >( [] );
+	const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
 
-	useEffect( () => {
-		if ( ! commissionId ) {
-			setCommissionData( null );
-			setStoreData( null );
-			setOrderData( null );
-			setOrderItems( [] ); // reset
+	useEffect(() => {
+		if (!commissionId) {
+			setCommissionData(null);
+			setStoreData(null);
+			setOrderData(null);
+			setOrderItems([]); // reset
 			return;
 		}
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, `commission/${ commissionId }` ),
+			url: getApiLink(appLocalizer, `commission/${commissionId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		} )
-			.then( ( res ) => {
+		})
+			.then((res) => {
 				const commission = res.data || {};
-				setCommissionData( commission );
+				setCommissionData(commission);
 
-				if ( commission.store_id ) {
-					axios( {
+				if (commission.store_id) {
+					axios({
 						method: 'GET',
 						url: getApiLink(
 							appLocalizer,
-							`store/${ commission.store_id }`
+							`store/${commission.store_id}`
 						),
 						headers: { 'X-WP-Nonce': appLocalizer.nonce },
-					} )
-						.then( ( storeRes ) => {
-							setStoreData( storeRes.data || {} );
-						} )
-						.catch( () => setStoreData( null ) );
+					})
+						.then((storeRes) => {
+							setStoreData(storeRes.data || {});
+						})
+						.catch(() => setStoreData(null));
 				}
 
-				if ( commission.order_id ) {
-					axios( {
+				if (commission.order_id) {
+					axios({
 						method: 'GET',
-						url: `${ appLocalizer.apiUrl }/wc/v3/orders/${ commission.order_id }/refunds`,
+						url: `${appLocalizer.apiUrl}/wc/v3/orders/${commission.order_id}/refunds`,
 						headers: { 'X-WP-Nonce': appLocalizer.nonce },
-					} )
-						.then( ( refundRes ) => {
+					})
+						.then((refundRes) => {
 							const refunds = refundRes.data || [];
 
 							// map refunds by product_id
-							let refundMap: Record< number, any > = {};
+							let refundMap: Record<number, any> = {};
 
-							refunds.forEach( ( refund: any ) => {
-								refund.line_items.forEach( ( item: any ) => {
+							refunds.forEach((refund: any) => {
+								refund.line_items.forEach((item: any) => {
 									const productId = item.product_id;
 
-									refundMap[ productId ] = {
+									refundMap[productId] = {
 										qty: item.quantity, // negative
 										total: item.total,
 										tax: item.total_tax,
 									};
-								} );
-							} );
+								});
+							});
 
 							// store refund map
-							setRefundMap( refundMap );
-						} )
-						.catch( () => {} );
+							setRefundMap(refundMap);
+						})
+						.catch(() => {});
 
-					axios( {
+					axios({
 						method: 'GET',
-						url: `${ appLocalizer.apiUrl }/wc/v3/orders/${ commission.order_id }`,
+						url: `${appLocalizer.apiUrl}/wc/v3/orders/${commission.order_id}`,
 						headers: { 'X-WP-Nonce': appLocalizer.nonce },
-					} )
-						.then( ( orderRes ) => {
+					})
+						.then((orderRes) => {
 							const order = orderRes.data || {};
 
-							setOrderData( order );
+							setOrderData(order);
 							// Map Shipping Lines into Table Format
-							if ( Array.isArray( order.shipping_lines ) ) {
+							if (Array.isArray(order.shipping_lines)) {
 								const mappedShipping = order.shipping_lines.map(
-									( ship ) => ( {
+									(ship) => ({
 										id: ship.id,
 										method: ship.method_title || '-',
 										methodId: ship.method_id || '-',
-										total: formatCurrency( ship.total ),
-										tax: formatCurrency( ship.total_tax ),
-									} )
+										total: formatCurrency(ship.total),
+										tax: formatCurrency(ship.total_tax),
+									})
 								);
 
-								setShippingItems( mappedShipping );
+								setShippingItems(mappedShipping);
 							} else {
-								setShippingItems( [] );
+								setShippingItems([]);
 							}
 
 							//Convert WooCommerce line_items → OrderItem[]
-							if ( Array.isArray( order.line_items ) ) {
+							if (Array.isArray(order.line_items)) {
 								const fetchProductImages = order.line_items.map(
-									async ( item ) => {
+									async (item) => {
 										const subtotal = parseFloat(
 											item.subtotal || '0'
 										);
@@ -136,36 +136,34 @@ const ViewCommission: React.FC< ViewCommissionProps > = ( {
 											item.total || '0'
 										);
 										const itemTax = item.total_tax
-											? parseFloat( item.total_tax )
+											? parseFloat(item.total_tax)
 											: 0;
 
 										const discount =
 											subtotal > total
-												? `-${ formatCurrency(
+												? `-${formatCurrency(
 														subtotal - total
-												  ) }`
+													)}`
 												: undefined;
 
 										let imageUrl = null;
 
 										//Fetch product image using product_id
-										if ( item.product_id ) {
+										if (item.product_id) {
 											try {
-												const productRes = await axios(
-													{
-														method: 'GET',
-														url: `${ appLocalizer.apiUrl }/wc/v3/products/${ item.product_id }`,
-														headers: {
-															'X-WP-Nonce':
-																appLocalizer.nonce,
-														},
-													}
-												);
+												const productRes = await axios({
+													method: 'GET',
+													url: `${appLocalizer.apiUrl}/wc/v3/products/${item.product_id}`,
+													headers: {
+														'X-WP-Nonce':
+															appLocalizer.nonce,
+													},
+												});
 												const product = productRes.data;
 												imageUrl =
-													product?.images?.[ 0 ]
-														?.src || null;
-											} catch ( err ) {
+													product?.images?.[0]?.src ||
+													null;
+											} catch (err) {
 												imageUrl = null;
 											}
 										}
@@ -174,80 +172,80 @@ const ViewCommission: React.FC< ViewCommissionProps > = ( {
 											id: item.product_id,
 											name: item.name,
 											sku: item.sku || '-',
-											cost: formatCurrency( item.price ),
+											cost: formatCurrency(item.price),
 											discount,
 											qty: item.quantity,
-											total: formatCurrency( item.total ),
-											tax: formatCurrency( itemTax ),
+											total: formatCurrency(item.total),
+											tax: formatCurrency(itemTax),
 											image: imageUrl, //add product image here
 										};
 									}
 								);
 
 								// Wait for all product image requests
-								Promise.all( fetchProductImages ).then(
-									( mapped ) => {
-										setOrderItems( mapped );
+								Promise.all(fetchProductImages).then(
+									(mapped) => {
+										setOrderItems(mapped);
 									}
 								);
 							} else {
-								setOrderItems( [] );
+								setOrderItems([]);
 							}
-						} )
-						.catch( () => {
-							setOrderData( null );
-							setOrderItems( [] );
-						} );
+						})
+						.catch(() => {
+							setOrderData(null);
+							setOrderItems([]);
+						});
 				}
-			} )
-			.catch( () => {
-				setCommissionData( null );
-				setStoreData( null );
-				setOrderData( null );
-				setOrderItems( [] );
-			} );
-	}, [ commissionId ] );
+			})
+			.catch(() => {
+				setCommissionData(null);
+				setStoreData(null);
+				setOrderData(null);
+				setOrderItems([]);
+			});
+	}, [commissionId]);
 
-	const popupColumns: ColumnDef< OrderItem >[] = [
+	const popupColumns: ColumnDef<OrderItem>[] = [
 		{
-			header: __( 'Product', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Product', 'multivendorx'),
+			cell: ({ row }) => {
 				const productId = row.original.id;
 				const productName = row.original.name ?? '-';
 				const productImage = row.original.image;
 
 				return (
-					<TableCell title={ productName }>
-						{ productId ? (
+					<TableCell title={productName}>
+						{productId ? (
 							<a
-								href={ `${ appLocalizer.site_url.replace(
+								href={`${appLocalizer.site_url.replace(
 									/\/$/,
 									''
-								) }/wp-admin/post.php?post=${ productId }&action=edit` }
+								)}/wp-admin/post.php?post=${productId}&action=edit`}
 								target="_blank"
 								rel="noopener noreferrer"
 								className="product-wrapper"
 							>
-								{ productImage ? (
+								{productImage ? (
 									<img
-										src={ productImage }
-										alt={ productName }
+										src={productImage}
+										alt={productName}
 										className="product-thumb"
 									/>
 								) : (
 									<i className="item-icon adminlib-multi-product"></i>
-								) }
+								)}
 
 								<div className="details">
-									{ productName }
+									{productName}
 									<div className="sub-text">
-										Sku: { row.original.sku ?? '-' }
+										Sku: {row.original.sku ?? '-'}
 									</div>
 								</div>
 							</a>
 						) : (
 							productName
-						) }
+						)}
 					</TableCell>
 				);
 			},
@@ -255,27 +253,27 @@ const ViewCommission: React.FC< ViewCommissionProps > = ( {
 
 		// COST (unchanged)
 		{
-			header: __( 'Cost', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.cost }>
-					{ row.original.cost ?? '-' }
+			header: __('Cost', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.cost}>
+					{row.original.cost ?? '-'}
 				</TableCell>
 			),
 		},
 
 		//QTY WITH REFUND
 		{
-			header: __( 'Qty', 'multivendorx' ),
-			cell: ( { row } ) => {
-				const refunded = refundMap[ row.original.id ]?.qty || 0;
+			header: __('Qty', 'multivendorx'),
+			cell: ({ row }) => {
+				const refunded = refundMap[row.original.id]?.qty || 0;
 				return (
-					<TableCell title={ row.original.qty }>
+					<TableCell title={row.original.qty}>
 						<div className="cell-wrapper">
-							<span>{ row.original.qty }</span>
+							<span>{row.original.qty}</span>
 
-							{ refunded < 0 && (
-								<span className="refunded">{ refunded }</span>
-							) }
+							{refunded < 0 && (
+								<span className="refunded">{refunded}</span>
+							)}
 						</div>
 					</TableCell>
 				);
@@ -284,19 +282,19 @@ const ViewCommission: React.FC< ViewCommissionProps > = ( {
 
 		//TOTAL WITH REFUND
 		{
-			header: __( 'Total', 'multivendorx' ),
-			cell: ( { row } ) => {
-				const refunded = refundMap[ row.original.id ]?.total || 0;
+			header: __('Total', 'multivendorx'),
+			cell: ({ row }) => {
+				const refunded = refundMap[row.original.id]?.total || 0;
 				return (
-					<TableCell title={ row.original.total }>
+					<TableCell title={row.original.total}>
 						<div className="cell-wrapper">
-							<span>{ row.original.total }</span>
+							<span>{row.original.total}</span>
 
-							{ refunded < 0 && (
+							{refunded < 0 && (
 								<span className="refunded">
-									{ formatCurrency( refunded ) }
+									{formatCurrency(refunded)}
 								</span>
-							) }
+							)}
 						</div>
 					</TableCell>
 				);
@@ -305,19 +303,19 @@ const ViewCommission: React.FC< ViewCommissionProps > = ( {
 
 		//TAX WITH REFUND
 		{
-			header: __( 'Tax', 'multivendorx' ),
-			cell: ( { row } ) => {
-				const refunded = refundMap[ row.original.id ]?.tax || 0;
+			header: __('Tax', 'multivendorx'),
+			cell: ({ row }) => {
+				const refunded = refundMap[row.original.id]?.tax || 0;
 				return (
-					<TableCell title={ row.original.tax }>
+					<TableCell title={row.original.tax}>
 						<div className="cell-wrapper">
-							<span>{ row.original.tax }</span>
+							<span>{row.original.tax}</span>
 
-							{ refunded < 0 && (
+							{refunded < 0 && (
 								<span className="refunded">
-									{ formatCurrency( refunded ) }
+									{formatCurrency(refunded)}
 								</span>
-							) }
+							)}
 						</div>
 					</TableCell>
 				);
@@ -325,119 +323,113 @@ const ViewCommission: React.FC< ViewCommissionProps > = ( {
 		},
 	];
 
-	const shippingColumns: ColumnDef< any >[] = [
+	const shippingColumns: ColumnDef<any>[] = [
 		{
-			header: __( 'Method', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.method }>
-					{ row.original.method }
+			header: __('Method', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.method}>
+					{row.original.method}
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'Amount', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.total }>
-					{ row.original.total }
+			header: __('Amount', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.total}>
+					{row.original.total}
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'Tax', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.tax }>
-					{ row.original.tax }
+			header: __('Tax', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.tax}>
+					{row.original.tax}
 				</TableCell>
 			),
 		},
 	];
 	return (
 		<CommonPopup
-			open={ open }
-			onClose={ onClose }
+			open={open}
+			onClose={onClose}
 			width="1000px"
 			height="100%"
 			header={
 				<>
 					<div className="title">
 						<i className="adminlib-commission"></i>
-						{ __( 'View Commission', 'multivendorx' ) }{ ' ' }
-						{ commissionId ? `#${ commissionId }` : '' }
+						{__('View Commission', 'multivendorx')}{' '}
+						{commissionId ? `#${commissionId}` : ''}
 					</div>
 					<p>
-						{ __(
+						{__(
 							'Details of this commission including stores, order breakdown, and notes.',
 							'multivendorx'
-						) }
+						)}
 					</p>
-					<i onClick={ onClose } className="icon adminlib-close"></i>
+					<i onClick={onClose} className="icon adminlib-close"></i>
 				</>
 			}
 		>
 			<div className="content multi">
-				{ /* your existing code untouched */ }
+				{/* your existing code untouched */}
 				<div className="section left">
 					<div className="vendor-details">
 						<div className="name">
-							{ storeData?.id ? (
+							{storeData?.id ? (
 								<a
-									href={ `${ appLocalizer.site_url.replace(
+									href={`${appLocalizer.site_url.replace(
 										/\/$/,
 										''
-									) }/wp-admin/admin.php?page=multivendorx#&tab=stores&view&id=${
+									)}/wp-admin/admin.php?page=multivendorx#&tab=stores&view&id=${
 										storeData.id
-									}` }
+									}`}
 									target="_blank"
 									rel="noopener noreferrer"
 									className="store-link"
 								>
-									{ storeData.name }
+									{storeData.name}
 								</a>
 							) : (
-								storeData?.name ?? '-'
-							) }
+								(storeData?.name ?? '-')
+							)}
 						</div>
 						<div className="details">
-							{ storeData?.email && (
+							{storeData?.email && (
 								<div className="email">
 									<i className="adminlib-mail"></i>
-									<b>
-										{ __( 'Email:', 'multivendorx' ) }
-									</b>{ ' ' }
-									{
-										storeData.email.split(
-											/\s*[\n,]\s*/
-										)[ 0 ]
-									}
+									<b>{__('Email:', 'multivendorx')}</b>{' '}
+									{storeData.email.split(/\s*[\n,]\s*/)[0]}
 								</div>
-							) }
+							)}
 						</div>
 					</div>
 
 					<div className="popup-divider"></div>
 
 					<div className="heading">
-						{ __( 'Order Details', 'multivendorx' ) }
+						{__('Order Details', 'multivendorx')}
 					</div>
 					<Table
-						data={ orderItems }
+						data={orderItems}
 						columns={
 							popupColumns as ColumnDef<
-								Record< string, any >,
+								Record<string, any>,
 								any
 							>[]
 						}
 					/>
 
 					<div className="heading">
-						{ __( 'Shipping', 'multivendorx' ) }
+						{__('Shipping', 'multivendorx')}
 					</div>
 
 					<Table
-						data={ shippingItems }
+						data={shippingItems}
 						columns={
 							shippingColumns as ColumnDef<
-								Record< string, any >,
+								Record<string, any>,
 								any
 							>[]
 						}
@@ -446,47 +438,47 @@ const ViewCommission: React.FC< ViewCommissionProps > = ( {
 
 				<div className="section right">
 					<div className="heading">
-						{ __( 'Order Overview', 'multivendorx' ) }
+						{__('Order Overview', 'multivendorx')}
 					</div>
 					<div className="commission-details">
 						<div className="items">
 							<div className="text">
-								{ __( 'Associated Order', 'multivendorx' ) }
+								{__('Associated Order', 'multivendorx')}
 							</div>
 							<div className="value">
-								{ commissionData?.order_id ? (
+								{commissionData?.order_id ? (
 									<a
-										href={ `${ appLocalizer.site_url.replace(
+										href={`${appLocalizer.site_url.replace(
 											/\/$/,
 											''
-										) }/wp-admin/post.php?post=${
+										)}/wp-admin/post.php?post=${
 											commissionData.order_id
-										}&action=edit` }
+										}&action=edit`}
 										target="_blank"
 										rel="noopener noreferrer"
 										className="link-item"
 									>
-										#{ commissionData.order_id }
+										#{commissionData.order_id}
 									</a>
 								) : (
 									'-'
-								) }
+								)}
 							</div>
 						</div>
 						<div className="items">
 							<div className="text">
-								{ __( 'Order Status', 'multivendorx' ) }
+								{__('Order Status', 'multivendorx')}
 							</div>
 							<div className="value">
 								<span className="admin-badge yellow">
-									{ orderData?.status
+									{orderData?.status
 										? orderData.status
-												.replace( /^wc-/, '' ) // remove 'wc-' prefix if exists
-												.replace( /_/g, ' ' ) // replace underscores with spaces
-												.replace( /\b\w/g, ( c ) =>
+												.replace(/^wc-/, '') // remove 'wc-' prefix if exists
+												.replace(/_/g, ' ') // replace underscores with spaces
+												.replace(/\b\w/g, (c) =>
 													c.toUpperCase()
 												) // capitalize first letter of each word
-										: '' }
+										: ''}
 								</span>
 							</div>
 						</div>
@@ -494,107 +486,104 @@ const ViewCommission: React.FC< ViewCommissionProps > = ( {
 					<div className="popup-divider"></div>
 
 					<div className="heading">
-						{ __( 'Commission Overview', 'multivendorx' ) }
+						{__('Commission Overview', 'multivendorx')}
 					</div>
 
 					<div className="commission-details">
 						<div className="items">
 							<div className="text">
-								{ __( 'Commission Status', 'multivendorx' ) }
+								{__('Commission Status', 'multivendorx')}
 							</div>
 							<div className="value">
 								<span
-									className={ `admin-badge ${
+									className={`admin-badge ${
 										commissionData?.status === 'paid'
 											? 'green'
 											: 'red'
-									}` }
+									}`}
 								>
-									{ commissionData?.status
+									{commissionData?.status
 										? commissionData.status
-												.replace( /^wc-/, '' ) // remove any prefix like 'wc-'
-												.replace( /_/g, ' ' ) // replace underscores with spaces
-												.replace( /\b\w/g, ( c ) =>
+												.replace(/^wc-/, '') // remove any prefix like 'wc-'
+												.replace(/_/g, ' ') // replace underscores with spaces
+												.replace(/\b\w/g, (c) =>
 													c.toUpperCase()
 												) // capitalize each word
-										: '' }
+										: ''}
 								</span>
 							</div>
 						</div>
 						<div className="items">
 							<div className="text">
-								{ __( 'Commission Amount', 'multivendorx' ) }
+								{__('Commission Amount', 'multivendorx')}
 							</div>
 							<div className="value">
-								{ formatCurrency(
-									parseFloat( commissionData?.amount ?? 0 ) +
+								{formatCurrency(
+									parseFloat(commissionData?.amount ?? 0) +
 										parseFloat(
 											commissionData?.commission_refunded ??
 												0
 										)
-								) }
+								)}
 							</div>
 						</div>
 						<div className="items">
 							<div className="text">
-								{ __( 'Shipping', 'multivendorx' ) }
+								{__('Shipping', 'multivendorx')}
 							</div>
 							<div className="value">
-								{ formatCurrency( commissionData?.shipping ) }
+								{formatCurrency(commissionData?.shipping)}
 							</div>
 						</div>
 						<div className="items">
 							<div className="text">
-								{ __( 'Tax', 'multivendorx' ) }
+								{__('Tax', 'multivendorx')}
 							</div>
 							<div className="value">
-								{ formatCurrency(
-									Number( commissionData?.tax || 0 ) +
+								{formatCurrency(
+									Number(commissionData?.tax || 0) +
 										Number(
 											commissionData?.shipping_tax_amount ||
 												0
 										)
-								) }
+								)}
 							</div>
 						</div>
-						{ commissionData?.commission_refunded > 0 && (
+						{commissionData?.commission_refunded > 0 && (
 							<div className="items">
 								<div className="text">
-									{ __(
-										'Commission refund',
-										'multivendorx'
-									) }
+									{__('Commission refund', 'multivendorx')}
 								</div>
 								<div className="value">
-									{ formatCurrency(
+									{formatCurrency(
 										commissionData.commission_refunded
-									) }
+									)}
 								</div>
 							</div>
-						) }
+						)}
 						<div className="items">
 							<div className="text">
-								{ __( 'Total', 'multivendorx' ) }
+								{__('Total', 'multivendorx')}
 							</div>
 							<div className="value">
-								{ formatCurrency( commissionData?.total ) }
+								{formatCurrency(commissionData?.total)}
 							</div>
 						</div>
 					</div>
 
 					<div className="popup-divider"></div>
 
-					{ commissionData?.note && (
+					{commissionData?.note && (
 						<>
 							<div className="heading">
-								{ __( 'Commission Notes', 'multivendorx' ) }
+								{__('Commission Notes', 'multivendorx')}
 							</div>
 							<div className="settings-metabox-note">
 								<i className="adminlib-info"></i>
-								<p>{ commissionData?.note }</p>
+								<p>{commissionData?.note}</p>
 							</div>
 						</>
-					) }
+					)}
 				</div>
 			</div>
 		</CommonPopup>

@@ -14,11 +14,11 @@ import { initializeModules } from 'zyra';
 //     document.getElementById( 'admin-main-wrapper' )
 // );
 
-initializeModules( appLocalizer, 'multivendorx', 'free', 'modules' );
+initializeModules(appLocalizer, 'multivendorx', 'free', 'modules');
 
 // 1. Try to mount admin panel if element is found
-const adminWrapper = document.getElementById( 'admin-main-wrapper' );
-if ( adminWrapper ) {
+const adminWrapper = document.getElementById('admin-main-wrapper');
+if (adminWrapper) {
 	render(
 		<BrowserRouter>
 			<App />
@@ -38,10 +38,8 @@ if ( adminWrapper ) {
 //     replaceDashboardDivs(vendorWrapper as HTMLElement);
 // }
 
-const vendorWrapper = document.getElementById(
-	'multivendorx-vendor-dashboard'
-);
-if ( vendorWrapper ) {
+const vendorWrapper = document.getElementById('multivendorx-vendor-dashboard');
+if (vendorWrapper) {
 	document.documentElement.style.setProperty(
 		'--colorPrimary',
 		appLocalizer.color.colors.colorPrimary

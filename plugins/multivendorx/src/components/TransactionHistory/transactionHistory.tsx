@@ -9,54 +9,50 @@ import DirectTransaction from './directTransaction';
 import WalletTransaction from './walletTransaction';
 
 export const TransactionHistory: React.FC = () => {
-	const [ allStores, setAllStores ] = useState< any[] >( [] );
-	const [ selectedStore, setSelectedStore ] = useState< any >( null );
-	const [ dateRange, setDateRange ] = useState< {
+	const [allStores, setAllStores] = useState<any[]>([]);
+	const [selectedStore, setSelectedStore] = useState<any>(null);
+	const [dateRange, setDateRange] = useState<{
 		startDate: Date | null;
 		endDate: Date | null;
-	} >( {
+	}>({
 		startDate: null,
 		endDate: null,
-	} );
+	});
 
 	// Fetch stores on mount
-	useEffect( () => {
-		axios( {
+	useEffect(() => {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'store' ),
+			url: getApiLink(appLocalizer, 'store'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: { options: true },
-		} )
-			.then( ( response ) => {
-				if ( response?.data?.length ) {
-					const mappedStores = response.data.map(
-						( store: any ) => ( {
-							value: store.id,
-							label: store.store_name,
-						} )
-					);
-					setAllStores( mappedStores );
-					setSelectedStore( mappedStores[ 0 ] );
+		})
+			.then((response) => {
+				if (response?.data?.length) {
+					const mappedStores = response.data.map((store: any) => ({
+						value: store.id,
+						label: store.store_name,
+					}));
+					setAllStores(mappedStores);
+					setSelectedStore(mappedStores[0]);
 				}
-			} )
-			.catch( ( error ) => {
+			})
+			.catch((error) => {
 				console.error(
-					__( 'Error fetching stores:', 'multivendorx' ),
+					__('Error fetching stores:', 'multivendorx'),
 					error
 				);
-			} );
-	}, [] );
+			});
+	}, []);
 
-	const locationUrl = new URLSearchParams(
-		useLocation().hash.substring( 1 )
-	);
+	const locationUrl = new URLSearchParams(useLocation().hash.substring(1));
 
 	const tabData = [
 		{
 			type: 'file',
 			content: {
 				id: 'wallet-transaction',
-				name: __( 'Wallet Transaction', 'multivendorx' ),
+				name: __('Wallet Transaction', 'multivendorx'),
 				icon: 'wallet-in',
 				hideTabHeader: true,
 			},
@@ -65,24 +61,24 @@ export const TransactionHistory: React.FC = () => {
 			type: 'file',
 			content: {
 				id: 'direct-transaction',
-				name: __( 'Direct Transaction', 'multivendorx' ),
+				name: __('Direct Transaction', 'multivendorx'),
 				icon: 'direct-transaction',
 				hideTabHeader: true,
 			},
 		},
 	];
 
-	const getForm = ( tabId: string ) => {
-		switch ( tabId ) {
+	const getForm = (tabId: string) => {
+		switch (tabId) {
 			case 'wallet-transaction':
 				return (
 					<WalletTransaction
-						storeId={ selectedStore?.value }
-						dateRange={ dateRange }
+						storeId={selectedStore?.value}
+						dateRange={dateRange}
 					/>
 				);
 			case 'direct-transaction':
-				return <DirectTransaction storeId={ selectedStore?.value } />;
+				return <DirectTransaction storeId={selectedStore?.value} />;
 			default:
 				return <div></div>;
 		}
@@ -95,36 +91,36 @@ export const TransactionHistory: React.FC = () => {
 				tabTitle={
 					selectedStore
 						? __(
-								`Storewise Transaction History - ${ selectedStore.label }`,
+								`Storewise Transaction History - ${selectedStore.label}`,
 								'multivendorx'
-						  )
-						: __( 'Storewise Transaction History', 'multivendorx' )
+							)
+						: __('Storewise Transaction History', 'multivendorx')
 				}
 				description={
 					selectedStore
 						? __(
-								`View and manage transactions for ${ selectedStore.label } store`,
+								`View and manage transactions for ${selectedStore.label} store`,
 								'multivendorx'
-						  )
+							)
 						: __(
 								'View and manage storewise transactions',
 								'multivendorx'
-						  )
+							)
 				}
 				customContent={
 					<>
 						<label>
 							<i className="adminlib-switch-store"></i>
-							{ __( 'Switch Store', 'multivendorx' ) }
+							{__('Switch Store', 'multivendorx')}
 						</label>
 
 						<SelectInput
 							name="store"
-							value={ selectedStore?.value || '' }
-							options={ allStores }
+							value={selectedStore?.value || ''}
+							options={allStores}
 							type="select"
-							onChange={ ( newValue: any ) =>
-								setSelectedStore( newValue )
+							onChange={(newValue: any) =>
+								setSelectedStore(newValue)
 							}
 							size="12rem"
 						/>
@@ -133,20 +129,20 @@ export const TransactionHistory: React.FC = () => {
 			/>
 
 			<Tabs
-				tabData={ tabData }
-				currentTab={ locationUrl.get( 'subtab' ) as string }
-				getForm={ getForm }
-				prepareUrl={ ( subTab: string ) =>
-					`?page=multivendorx#&tab=transaction-history&subtab=${ subTab }`
+				tabData={tabData}
+				currentTab={locationUrl.get('subtab') as string}
+				getForm={getForm}
+				prepareUrl={(subTab: string) =>
+					`?page=multivendorx#&tab=transaction-history&subtab=${subTab}`
 				}
-				appLocalizer={ appLocalizer }
-				supprot={ [] } // keeping your original key
-				Link={ Link }
-				hideTitle={ true }
-				hideBreadcrumb={ true }
-				template={ 'template-2' }
-				premium={ false }
-				menuIcon={ true }
+				appLocalizer={appLocalizer}
+				supprot={[]} // keeping your original key
+				Link={Link}
+				hideTitle={true}
+				hideBreadcrumb={true}
+				template={'template-2'}
+				premium={false}
+				menuIcon={true}
 			/>
 		</>
 	);

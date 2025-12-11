@@ -7,7 +7,7 @@ import { formatCurrency } from '../../services/commonFunction';
 export interface RealtimeFilter {
 	name: string;
 	render: (
-		updateFilter: ( key: string, value: any ) => void,
+		updateFilter: (key: string, value: any) => void,
 		filterValue: any
 	) => React.ReactNode;
 }
@@ -35,7 +35,7 @@ interface StoreRow {
 }
 
 interface RowSelectionState {
-	[ key: string ]: boolean;
+	[key: string]: boolean;
 }
 
 interface PaginationState {
@@ -44,72 +44,70 @@ interface PaginationState {
 }
 
 const RefundedOrderReport: React.FC = () => {
-	const [ data, setData ] = useState< StoreRow[] | null >( null );
-	const [ rowSelection, setRowSelection ] = useState< RowSelectionState >(
-		{}
-	);
-	const [ pagination, setPagination ] = useState< PaginationState >( {
+	const [data, setData] = useState<StoreRow[] | null>(null);
+	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
 		pageSize: 10,
-	} );
-	const [ pageCount, setPageCount ] = useState( 0 );
-	const [ totalRows, setTotalRows ] = useState< number >( 0 );
-	const [ store, setStore ] = useState< any[] | null >( null );
-	const [ error, setError ] = useState< string | null >( null );
+	});
+	const [pageCount, setPageCount] = useState(0);
+	const [totalRows, setTotalRows] = useState<number>(0);
+	const [store, setStore] = useState<any[] | null>(null);
+	const [error, setError] = useState<string | null>(null);
 
 	// Fetch store list and total refunds on mount
-	useEffect( () => {
-		axios( {
+	useEffect(() => {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'store' ),
+			url: getApiLink(appLocalizer, 'store'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		} )
-			.then( ( response ) => {
-				setStore( response.data.stores || [] );
-			} )
-			.catch( () => {
-				setError( __( 'Failed to load stores', 'multivendorx' ) );
-				setStore( [] );
-			} );
+		})
+			.then((response) => {
+				setStore(response.data.stores || []);
+			})
+			.catch(() => {
+				setError(__('Failed to load stores', 'multivendorx'));
+				setStore([]);
+			});
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'refund' ),
+			url: getApiLink(appLocalizer, 'refund'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: { count: true },
-		} )
-			.then( ( response ) => {
+		})
+			.then((response) => {
 				const total = response.data || 0;
-				setTotalRows( total );
-				setPageCount( Math.ceil( total / pagination.pageSize ) );
-			} )
-			.catch( () => {
-				setError( __( 'Failed to load total rows', 'multivendorx' ) );
-			} );
-	}, [] );
+				setTotalRows(total);
+				setPageCount(Math.ceil(total / pagination.pageSize));
+			})
+			.catch(() => {
+				setError(__('Failed to load total rows', 'multivendorx'));
+			});
+	}, []);
 
-	useEffect( () => {
+	useEffect(() => {
 		const currentPage = pagination.pageIndex + 1;
 		const rowsPerPage = pagination.pageSize;
-		requestData( rowsPerPage, currentPage );
-		setPageCount( Math.ceil( totalRows / rowsPerPage ) );
-	}, [] );
+		requestData(rowsPerPage, currentPage);
+		setPageCount(Math.ceil(totalRows / rowsPerPage));
+	}, []);
 
-	const columns: ColumnDef< RefundRow >[] = [
+	const columns: ColumnDef<RefundRow>[] = [
 		{
 			id: 'select',
-			header: ( { table }: any ) => (
+			header: ({ table }: any) => (
 				<input
 					type="checkbox"
-					checked={ table.getIsAllRowsSelected() }
-					onChange={ table.getToggleAllRowsSelectedHandler() }
+					checked={table.getIsAllRowsSelected()}
+					onChange={table.getToggleAllRowsSelectedHandler()}
 				/>
 			),
-			cell: ( { row }: any ) => (
+			cell: ({ row }: any) => (
 				<input
 					type="checkbox"
-					checked={ row.getIsSelected() }
-					onChange={ row.getToggleSelectedHandler() }
+					checked={row.getIsSelected()}
+					onChange={row.getToggleSelectedHandler()}
 				/>
 			),
 		},
@@ -117,116 +115,116 @@ const RefundedOrderReport: React.FC = () => {
 			id: 'order_id',
 			accessorKey: 'order_id',
 			enableSorting: true,
-			header: __( 'Order', 'multivendorx' ),
-			cell: ( { row }: any ) => {
+			header: __('Order', 'multivendorx'),
+			cell: ({ row }: any) => {
 				const orderId = row.original.order_id;
 				const url = orderId
-					? `${ appLocalizer.site_url.replace(
+					? `${appLocalizer.site_url.replace(
 							/\/$/,
 							''
-					  ) }/wp-admin/post.php?post=${ orderId }&action=edit`
+						)}/wp-admin/post.php?post=${orderId}&action=edit`
 					: '#';
 
 				return (
-					<TableCell title={ orderId ? `#${ orderId }` : '-' }>
-						{ orderId ? (
+					<TableCell title={orderId ? `#${orderId}` : '-'}>
+						{orderId ? (
 							<a
-								href={ url }
+								href={url}
 								target="_blank"
 								rel="noopener noreferrer"
 								className="link-item"
 							>
-								#{ orderId }
+								#{orderId}
 							</a>
 						) : (
 							'-'
-						) }
+						)}
 					</TableCell>
 				);
 			},
 		},
 		{
-			header: __( 'Customer', 'multivendorx' ),
-			cell: ( { row }: any ) => {
+			header: __('Customer', 'multivendorx'),
+			cell: ({ row }: any) => {
 				const name = row.original.customer_name?.trim();
 				const link = row.original.customer_edit_link;
 
 				return (
-					<TableCell title={ name || '-' }>
-						{ name ? (
+					<TableCell title={name || '-'}>
+						{name ? (
 							link ? (
 								<a
-									href={ link }
+									href={link}
 									target="_blank"
 									rel="noopener noreferrer"
 									className="text-blue-600 hover:underline"
 								>
-									{ name }
+									{name}
 								</a>
 							) : (
 								name
 							)
 						) : (
 							'-'
-						) }
+						)}
 					</TableCell>
 				);
 			},
 		},
 		{
-			header: __( 'Store', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Store', 'multivendorx'),
+			cell: ({ row }) => {
 				const { store_id, store_name } = row.original;
-				const baseUrl = `${ window.location.origin }/wp-admin/admin.php?page=multivendorx#&tab=stores`;
+				const baseUrl = `${window.location.origin}/wp-admin/admin.php?page=multivendorx#&tab=stores`;
 				const storeLink = store_id
-					? `${ baseUrl }&edit/${ store_id }/&subtab=store-overview`
+					? `${baseUrl}&edit/${store_id}/&subtab=store-overview`
 					: '#';
 
 				return (
-					<TableCell title={ store_name || '' }>
-						{ store_id ? (
+					<TableCell title={store_name || ''}>
+						{store_id ? (
 							<a
-								href={ storeLink }
+								href={storeLink}
 								target="_blank"
 								rel="noopener noreferrer"
 								className="text-purple-600 hover:underline"
 							>
-								{ store_name || '-' }
+								{store_name || '-'}
 							</a>
 						) : (
 							store_name || '-'
-						) }
+						)}
 					</TableCell>
 				);
 			},
 		},
 		{
-			header: __( 'Refund Amount', 'multivendorx' ),
-			cell: ( { row }: any ) => (
-				<TableCell title={ row.original.amount || '' }>
-					{ formatCurrency( row.original.amount ) }
+			header: __('Refund Amount', 'multivendorx'),
+			cell: ({ row }: any) => (
+				<TableCell title={row.original.amount || ''}>
+					{formatCurrency(row.original.amount)}
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'Refund Reason', 'multivendorx' ),
-			cell: ( { row }: any ) => (
-				<TableCell title={ row.original.customer_reason || '' }>
-					{ row.original.customer_reason || '-' }
+			header: __('Refund Reason', 'multivendorx'),
+			cell: ({ row }: any) => (
+				<TableCell title={row.original.customer_reason || ''}>
+					{row.original.customer_reason || '-'}
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'Status', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Status', 'multivendorx'),
+			cell: ({ row }) => {
 				const status = row.original.status || '';
 				const formattedStatus = status
-					?.replace( /[-_]/g, ' ' )
+					?.replace(/[-_]/g, ' ')
 					.toLowerCase()
-					.replace( /^\w/, ( c ) => c.toUpperCase() );
+					.replace(/^\w/, (c) => c.toUpperCase());
 
-				const getStatusBadge = ( status: string ) => {
-					switch ( status ) {
+				const getStatusBadge = (status: string) => {
+					switch (status) {
 						case 'completed':
 							return (
 								<span className="admin-badge green">
@@ -242,15 +240,15 @@ const RefundedOrderReport: React.FC = () => {
 						default:
 							return (
 								<span className="admin-badge gray">
-									{ formattedStatus }
+									{formattedStatus}
 								</span>
 							);
 					}
 				};
 
 				return (
-					<TableCell title={ `${ status }` }>
-						{ getStatusBadge( status ) }
+					<TableCell title={`${status}`}>
+						{getStatusBadge(status)}
 					</TableCell>
 				);
 			},
@@ -259,12 +257,12 @@ const RefundedOrderReport: React.FC = () => {
 			id: 'date',
 			accessorKey: 'date',
 			enableSorting: true,
-			header: __( 'Date', 'multivendorx' ),
-			cell: ( { row }: any ) => {
+			header: __('Date', 'multivendorx'),
+			cell: ({ row }: any) => {
 				const date = row.original.date;
-				if ( ! date ) return <TableCell>-</TableCell>;
+				if (!date) return <TableCell>-</TableCell>;
 
-				const formattedDate = new Date( date ).toLocaleDateString(
+				const formattedDate = new Date(date).toLocaleDateString(
 					'en-US',
 					{
 						year: 'numeric',
@@ -274,9 +272,7 @@ const RefundedOrderReport: React.FC = () => {
 				);
 
 				return (
-					<TableCell title={ formattedDate }>
-						{ formattedDate }
-					</TableCell>
+					<TableCell title={formattedDate}>{formattedDate}</TableCell>
 				);
 			},
 		},
@@ -291,13 +287,13 @@ const RefundedOrderReport: React.FC = () => {
 		store_id = '',
 		orderBy = '',
 		order = '',
-		startDate = new Date( 0 ),
+		startDate = new Date(0),
 		endDate = new Date()
 	) {
-		setData( null );
-		axios( {
+		setData(null);
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'refund' ),
+			url: getApiLink(appLocalizer, 'refund'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				page: currentPage,
@@ -310,14 +306,14 @@ const RefundedOrderReport: React.FC = () => {
 				startDate,
 				endDate,
 			},
-		} )
-			.then( ( response ) => {
-				setData( response.data || [] );
-			} )
-			.catch( () => {
-				setError( __( 'Failed to load refund data', 'multivendorx' ) );
-				setData( [] );
-			} );
+		})
+			.then((response) => {
+				setData(response.data || []);
+			})
+			.catch(() => {
+				setError(__('Failed to load refund data', 'multivendorx'));
+				setData([]);
+			});
 	}
 
 	// Handle pagination & filter
@@ -342,19 +338,19 @@ const RefundedOrderReport: React.FC = () => {
 	const searchFilter: RealtimeFilter[] = [
 		{
 			name: 'searchAction',
-			render: ( updateFilter, filterValue ) => (
+			render: (updateFilter, filterValue) => (
 				<div className="search-action">
 					<select
-						value={ filterValue || '' }
-						onChange={ ( e ) =>
-							updateFilter( 'searchAction', e.target.value || '' )
+						value={filterValue || ''}
+						onChange={(e) =>
+							updateFilter('searchAction', e.target.value || '')
 						}
 					>
 						<option value="order_id">
-							{ __( 'Order Id', 'multivendorx' ) }
+							{__('Order Id', 'multivendorx')}
 						</option>
 						<option value="customer">
-							{ __( 'Customer', 'multivendorx' ) }
+							{__('Customer', 'multivendorx')}
 						</option>
 					</select>
 				</div>
@@ -362,16 +358,16 @@ const RefundedOrderReport: React.FC = () => {
 		},
 		{
 			name: 'searchField',
-			render: ( updateFilter, filterValue ) => (
+			render: (updateFilter, filterValue) => (
 				<div className="search-section">
 					<input
 						name="searchField"
 						type="text"
-						placeholder={ __( 'Search', 'multivendorx' ) }
-						onChange={ ( e ) =>
-							updateFilter( e.target.name, e.target.value )
+						placeholder={__('Search', 'multivendorx')}
+						onChange={(e) =>
+							updateFilter(e.target.name, e.target.value)
 						}
-						value={ filterValue || '' }
+						value={filterValue || ''}
 					/>
 					<i className="adminlib-search"></i>
 				</div>
@@ -382,40 +378,40 @@ const RefundedOrderReport: React.FC = () => {
 	const realtimeFilter: RealtimeFilter[] = [
 		{
 			name: 'store_id',
-			render: ( updateFilter, filterValue ) => (
+			render: (updateFilter, filterValue) => (
 				<div className="group-field">
 					<select
 						name="store_id"
-						onChange={ ( e ) =>
-							updateFilter( e.target.name, e.target.value )
+						onChange={(e) =>
+							updateFilter(e.target.name, e.target.value)
 						}
-						value={ filterValue || '' }
+						value={filterValue || ''}
 						className="basic-select"
 					>
 						<option value="">
-							{ __( 'All Store', 'multivendorx' ) }
+							{__('All Store', 'multivendorx')}
 						</option>
-						{ store?.map( ( s: any ) => (
-							<option key={ s.id } value={ s.id }>
-								{ s.store_name.charAt( 0 ).toUpperCase() +
-									s.store_name.slice( 1 ) }
+						{store?.map((s: any) => (
+							<option key={s.id} value={s.id}>
+								{s.store_name.charAt(0).toUpperCase() +
+									s.store_name.slice(1)}
 							</option>
-						) ) }
+						))}
 					</select>
 				</div>
 			),
 		},
 		{
 			name: 'date',
-			render: ( updateFilter ) => (
+			render: (updateFilter) => (
 				<div className="right">
 					<MultiCalendarInput
-						onChange={ ( range: any ) => {
-							updateFilter( 'date', {
+						onChange={(range: any) => {
+							updateFilter('date', {
 								start_date: range.startDate,
 								end_date: range.endDate,
-							} );
-						} }
+							});
+						}}
 					/>
 				</div>
 			),
@@ -425,19 +421,19 @@ const RefundedOrderReport: React.FC = () => {
 	return (
 		<>
 			<Table
-				data={ data }
-				columns={ columns as any }
-				rowSelection={ rowSelection }
-				onRowSelectionChange={ setRowSelection }
-				defaultRowsPerPage={ 10 }
-				pageCount={ pageCount }
-				pagination={ pagination }
-				searchFilter={ searchFilter }
-				onPaginationChange={ setPagination }
-				realtimeFilter={ realtimeFilter }
-				handlePagination={ requestApiForData }
-				perPageOption={ [ 10, 25, 50 ] }
-				totalCounts={ totalRows }
+				data={data}
+				columns={columns as any}
+				rowSelection={rowSelection}
+				onRowSelectionChange={setRowSelection}
+				defaultRowsPerPage={10}
+				pageCount={pageCount}
+				pagination={pagination}
+				searchFilter={searchFilter}
+				onPaginationChange={setPagination}
+				realtimeFilter={realtimeFilter}
+				handlePagination={requestApiForData}
+				perPageOption={[10, 25, 50]}
+				totalCounts={totalRows}
 			/>
 		</>
 	);

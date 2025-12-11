@@ -31,132 +31,126 @@ const statusOptions = [
 ];
 
 const EditStore = () => {
-	const [ data, setData ] = useState< any >( {} );
-	const [ successMsg, setSuccessMsg ] = useState< string | null >( null );
-	const [ bannerMenu, setBannerMenu ] = useState( false );
-	const [ actionMenu, setActionMenu ] = useState( false );
-	const [ logoMenu, setLogoMenu ] = useState( false );
-	const [ deleteModal, setDeleteModal ] = useState( false );
-	const [ deleteOption, setDeleteOption ] = useState( '' );
-	const wrapperRef = useRef< HTMLDivElement >( null );
-	const [ editName, setEditName ] = useState( false );
-	const [ editDesc, setEditDesc ] = useState( false );
-	const [ selectedOwner, setSelectedOwner ] = useState< any >( null );
+	const [data, setData] = useState<any>({});
+	const [successMsg, setSuccessMsg] = useState<string | null>(null);
+	const [bannerMenu, setBannerMenu] = useState(false);
+	const [actionMenu, setActionMenu] = useState(false);
+	const [logoMenu, setLogoMenu] = useState(false);
+	const [deleteModal, setDeleteModal] = useState(false);
+	const [deleteOption, setDeleteOption] = useState('');
+	const wrapperRef = useRef<HTMLDivElement>(null);
+	const [editName, setEditName] = useState(false);
+	const [editDesc, setEditDesc] = useState(false);
+	const [selectedOwner, setSelectedOwner] = useState<any>(null);
 	const location = useLocation();
-	const [ prevName, setPrevName ] = useState( '' );
-	const [ prevDesc, setPrevDesc ] = useState( '' );
+	const [prevName, setPrevName] = useState('');
+	const [prevDesc, setPrevDesc] = useState('');
 
-	useEffect( () => {
-		if ( editName ) {
-			setPrevName( data?.name || '' );
+	useEffect(() => {
+		if (editName) {
+			setPrevName(data?.name || '');
 		}
-		if ( editDesc ) {
-			setPrevDesc( data?.description || '' );
+		if (editDesc) {
+			setPrevDesc(data?.description || '');
 		}
-	}, [ editName, editDesc ] );
+	}, [editName, editDesc]);
 
-	useEffect( () => {
-		const handleOutsideClick = ( e: MouseEvent ) => {
+	useEffect(() => {
+		const handleOutsideClick = (e: MouseEvent) => {
 			const target = e.target as HTMLElement;
 
 			// If clicked inside name or desc editing area, ignore
-			if ( target.closest( '.store-name' ) || target.closest( '.des' ) )
-				return;
+			if (target.closest('.store-name') || target.closest('.des')) return;
 
-			if ( editName || editDesc ) {
-				autoSave( { name: data.name, description: data.description } );
+			if (editName || editDesc) {
+				autoSave({ name: data.name, description: data.description });
 			}
 
-			setEditName( false );
-			setEditDesc( false );
+			setEditName(false);
+			setEditDesc(false);
 		};
 
-		document.addEventListener( 'click', handleOutsideClick );
-		return () =>
-			document.removeEventListener( 'click', handleOutsideClick );
-	}, [ data ] );
+		document.addEventListener('click', handleOutsideClick);
+		return () => document.removeEventListener('click', handleOutsideClick);
+	}, [data]);
 
 	// Close dropdown on click outside
-	useEffect( () => {
-		const handleClickOutside = ( event: MouseEvent ) => {
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
 			if (
-				( event.target as HTMLElement ).closest( '.edit-section' ) ||
-				( event.target as HTMLElement ).closest( '.edit-wrapper' )
+				(event.target as HTMLElement).closest('.edit-section') ||
+				(event.target as HTMLElement).closest('.edit-wrapper')
 			)
 				return;
-			setBannerMenu( false );
-			setActionMenu( false );
-			setLogoMenu( false );
+			setBannerMenu(false);
+			setActionMenu(false);
+			setLogoMenu(false);
 		};
 
-		document.addEventListener( 'mousedown', handleClickOutside );
+		document.addEventListener('mousedown', handleClickOutside);
 		return () => {
-			document.removeEventListener( 'mousedown', handleClickOutside );
+			document.removeEventListener('mousedown', handleClickOutside);
 		};
-	}, [] );
+	}, []);
 
-	const hash = location.hash.replace( /^#/, '' );
+	const hash = location.hash.replace(/^#/, '');
 
-	const editParts = hash.match( /edit\/(\d+)/ );
-	const editId = editParts ? editParts[ 1 ] : null;
+	const editParts = hash.match(/edit\/(\d+)/);
+	const editId = editParts ? editParts[1] : null;
 
-	const hashParams = new URLSearchParams( hash );
-	const currentTab = hashParams.get( 'subtab' );
-	const prepareUrl = ( tabId: string ) =>
-		`?page=multivendorx#&tab=stores&edit/${ editId }/&subtab=${ tabId }`;
+	const hashParams = new URLSearchParams(hash);
+	const currentTab = hashParams.get('subtab');
+	const prepareUrl = (tabId: string) =>
+		`?page=multivendorx#&tab=stores&edit/${editId}/&subtab=${tabId}`;
 	const navigate = useNavigate();
 	const { modules } = useModules();
 
-	const autoSave = ( updatedData: { [ key: string ]: string } ) => {
-		if ( ! editId ) return;
+	const autoSave = (updatedData: { [key: string]: string }) => {
+		if (!editId) return;
 
-		axios( {
+		axios({
 			method: 'PUT',
-			url: getApiLink( appLocalizer, `store/${ editId }` ),
+			url: getApiLink(appLocalizer, `store/${editId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: updatedData,
-		} ).then( ( res ) => {
-			if ( res.data.success ) {
-				setSuccessMsg( 'Store saved successfully!' );
+		}).then((res) => {
+			if (res.data.success) {
+				setSuccessMsg('Store saved successfully!');
 			}
-		} );
+		});
 	};
 
-	useEffect( () => {
-		if ( ! editId ) return;
+	useEffect(() => {
+		if (!editId) return;
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, `store/${ editId }` ),
+			url: getApiLink(appLocalizer, `store/${editId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		} ).then( ( res: any ) => {
+		}).then((res: any) => {
 			const data = res.data || {};
-			setData( data );
+			setData(data);
 			const currentTab =
 				data?.status === 'pending' || data?.status === 'rejected'
 					? 'application-details'
 					: 'store-overview';
-		} );
-	}, [ editId ] );
+		});
+	}, [editId]);
 
-	const runUploader = ( key: string ) => {
-		const frame = ( window as any ).wp.media( {
+	const runUploader = (key: string) => {
+		const frame = (window as any).wp.media({
 			title: 'Select or Upload Image',
 			button: { text: 'Use this image' },
 			multiple: false,
-		} );
+		});
 
-		frame.on( 'select', function () {
-			const attachment = frame
-				.state()
-				.get( 'selection' )
-				.first()
-				.toJSON();
+		frame.on('select', function () {
+			const attachment = frame.state().get('selection').first().toJSON();
 
-			const updated = { ...data, [ key ]: attachment.url };
-			setData( updated );
-			autoSave( updated );
-		} );
+			const updated = { ...data, [key]: attachment.url };
+			setData(updated);
+			autoSave(updated);
+		});
 
 		frame.open();
 	};
@@ -168,34 +162,34 @@ const EditStore = () => {
 			data?.status === 'suspended' ||
 			data?.status === 'deactivated'
 		) {
-			setDeleteModal( true );
+			setDeleteModal(true);
 		} else {
-			deleteStoreApiCall( 'direct' );
+			deleteStoreApiCall('direct');
 		}
 	};
 
-	const deleteStoreApiCall = ( option: any ) => {
+	const deleteStoreApiCall = (option: any) => {
 		const payload: any = {
 			delete: true,
 			deleteOption: option,
 		};
 
 		// If changing store owner, get selected value from ref
-		if ( option === 'set_store_owner' && selectedOwner ) {
+		if (option === 'set_store_owner' && selectedOwner) {
 			payload.new_owner_id = selectedOwner.value;
 		}
 
-		axios( {
+		axios({
 			method: 'PUT',
-			url: getApiLink( appLocalizer, `store/${ editId }` ),
+			url: getApiLink(appLocalizer, `store/${editId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: payload,
-		} ).then( ( res ) => {
-			if ( res.data.success ) {
-				setDeleteModal( false );
-				navigate( `?page=multivendorx#&tab=stores` );
+		}).then((res) => {
+			if (res.data.success) {
+				setDeleteModal(false);
+				navigate(`?page=multivendorx#&tab=stores`);
 			}
-		} );
+		});
 	};
 
 	const tabData = [
@@ -272,14 +266,14 @@ const EditStore = () => {
 				icon: 'adminlib-credit-card',
 			},
 		},
-	].filter( ( tab ) => ! tab.module || modules.includes( tab.module ) );
+	].filter((tab) => !tab.module || modules.includes(tab.module));
 
-	const handleUpdateData = useCallback( ( updatedFields: any ) => {
-		setData( ( prev ) => ( { ...prev, ...updatedFields } ) );
-	}, [] );
+	const handleUpdateData = useCallback((updatedFields: any) => {
+		setData((prev) => ({ ...prev, ...updatedFields }));
+	}, []);
 
-	const visibleTabs = useMemo( () => {
-		const updatedTabs = tabData.map( ( tab ) =>
+	const visibleTabs = useMemo(() => {
+		const updatedTabs = tabData.map((tab) =>
 			tab.content.id === 'application-details'
 				? {
 						...tab,
@@ -290,10 +284,10 @@ const EditStore = () => {
 								data?.status === 'rejected' ||
 								data?.status === 'permanently_rejected'
 									? // data?.status === 'active'
-									  'Application Details'
+										'Application Details'
 									: 'Archive Data',
 						},
-				  }
+					}
 				: tab
 		);
 
@@ -303,105 +297,105 @@ const EditStore = () => {
 			data?.status === 'permanently_rejected'
 		) {
 			return updatedTabs.filter(
-				( tab ) => tab.content.id === 'application-details'
+				(tab) => tab.content.id === 'application-details'
 			);
 		}
 
 		return updatedTabs;
-	}, [ tabData, data?.status ] );
+	}, [tabData, data?.status]);
 
-	const [ expanded, setExpanded ] = useState( false );
+	const [expanded, setExpanded] = useState(false);
 
-	const words = data?.description?.split( ' ' ) || [];
+	const words = data?.description?.split(' ') || [];
 	const shouldTruncate = words.length > 50;
 	const displayText = expanded
 		? data?.description
-		: words.slice( 0, 50 ).join( ' ' );
+		: words.slice(0, 50).join(' ');
 
 	const getForm = useCallback(
-		( tabId: string ) => {
-			switch ( tabId ) {
+		(tabId: string) => {
+			switch (tabId) {
 				case 'store-overview':
-					return <Overview id={ editId } storeData={ data } />;
+					return <Overview id={editId} storeData={data} />;
 				case 'store':
 					return (
 						<StoreSettings
-							id={ editId }
-							data={ data }
-							onUpdate={ handleUpdateData }
+							id={editId}
+							data={data}
+							onUpdate={handleUpdateData}
 						/>
 					);
 				case 'staff':
-					return <StoreSquad id={ editId } />;
+					return <StoreSquad id={editId} />;
 				case 'payment':
-					return <PaymentSettings id={ editId } data={ data } />;
+					return <PaymentSettings id={editId} data={data} />;
 				case 'shipping':
-					return <ShippingSettings id={ editId } data={ data } />;
+					return <ShippingSettings id={editId} data={data} />;
 				case 'store-policy':
-					return <PolicySettings id={ editId } data={ data } />;
+					return <PolicySettings id={editId} data={data} />;
 				case 'application-details':
-					return <StoreRegistration id={ editId } />;
+					return <StoreRegistration id={editId} />;
 				case 'store-facilitator':
-					return <Facilitator id={ editId } data={ data } />;
+					return <Facilitator id={editId} data={data} />;
 				default:
 					return <div></div>;
 			}
 		},
-		[ editId, data, handleUpdateData ]
+		[editId, data, handleUpdateData]
 	);
 	return (
 		<>
 			<Tabs
-				tabData={ visibleTabs }
-				currentTab={ currentTab }
-				getForm={ getForm }
-				prepareUrl={ prepareUrl }
-				appLocalizer={ appLocalizer }
-				premium={ false }
+				tabData={visibleTabs}
+				currentTab={currentTab}
+				getForm={getForm}
+				prepareUrl={prepareUrl}
+				appLocalizer={appLocalizer}
+				premium={false}
 				tabTitleSection={
 					<>
 						<div className="general-wrapper">
 							<div className="store-header">
 								<div
 									className="banner"
-									style={ {
+									style={{
 										background:
 											data?.banner &&
-											`url("${ data.banner }")`,
-									} }
+											`url("${data.banner}")`,
+									}}
 								>
-									{ Object.keys( data ).length === 0 ? (
+									{Object.keys(data).length === 0 ? (
 										<Skeleton
 											variant="rectangular"
 											width="100%"
-											height={ 200 }
+											height={200}
 										/>
-									) : ! data.banner ? (
+									) : !data.banner ? (
 										<div className="default-img-1500x900" />
-									) : null }
+									) : null}
 
 									<div className="edit-section">
 										<div className="icon-wrapper edit-wrapper">
 											<span
 												className="admin-btn btn-purple"
-												onClick={ ( e ) => {
+												onClick={(e) => {
 													e.stopPropagation();
-													setBannerMenu( true );
-													setLogoMenu( false );
-												} }
+													setBannerMenu(true);
+													setLogoMenu(false);
+												}}
 											>
 												<i className="adminlib-edit"></i>
-												{ __(
+												{__(
 													'Edit banner image',
 													'multivendorx'
-												) }
+												)}
 											</span>
-											{ bannerMenu && (
+											{bannerMenu && (
 												<div className="dropdown">
 													<div className="dropdown-body">
 														<ul>
 															<li
-																onClick={ (
+																onClick={(
 																	e
 																) => {
 																	e.stopPropagation();
@@ -411,19 +405,19 @@ const EditStore = () => {
 																	setBannerMenu(
 																		false
 																	);
-																} }
+																}}
 															>
 																<div className="item">
-																	<i className="adminlib-cloud-upload"></i>{ ' ' }
-																	{ __(
+																	<i className="adminlib-cloud-upload"></i>{' '}
+																	{__(
 																		'Upload',
 																		'multivendorx'
-																	) }
+																	)}
 																</div>
 															</li>
 															<li
 																className="delete"
-																onClick={ (
+																onClick={(
 																	e
 																) => {
 																	e.stopPropagation();
@@ -441,58 +435,54 @@ const EditStore = () => {
 																	setBannerMenu(
 																		false
 																	);
-																} }
+																}}
 															>
 																<div className="item">
-																	<i className="adminlib-delete"></i>{ ' ' }
-																	{ __(
+																	<i className="adminlib-delete"></i>{' '}
+																	{__(
 																		'Delete',
 																		'multivendorx'
-																	) }
+																	)}
 																</div>
 															</li>
 														</ul>
 													</div>
 												</div>
-											) }
+											)}
 										</div>
 									</div>
 								</div>
 								<div className="details-wrapper">
 									<div className="left-section">
 										<div className="store-logo">
-											{ data?.image ? (
-												<img
-													src={ data.image }
-													alt=""
-												/>
+											{data?.image ? (
+												<img src={data.image} alt="" />
 											) : (
 												<div className="placeholder-400x400" />
-											) }
+											)}
 
 											<div className="edit-section">
 												<div className="icon-wrapper edit-wrapper">
 													<span
 														className="admin-btn btn-purple"
-														onClick={ ( e ) => {
+														onClick={(e) => {
 															e.stopPropagation();
 															setLogoMenu(
-																( prev ) =>
-																	! prev
+																(prev) => !prev
 															);
 															setBannerMenu(
 																false
 															);
-														} }
+														}}
 													>
 														<i className="adminlib-edit"></i>
 													</span>
-													{ logoMenu && (
+													{logoMenu && (
 														<div className="dropdown">
 															<div className="dropdown-body">
 																<ul>
 																	<li
-																		onClick={ (
+																		onClick={(
 																			e
 																		) => {
 																			e.stopPropagation();
@@ -502,19 +492,19 @@ const EditStore = () => {
 																			setLogoMenu(
 																				false
 																			);
-																		} }
+																		}}
 																	>
 																		<div className="item">
-																			<i className="adminlib-cloud-upload"></i>{ ' ' }
-																			{ __(
+																			<i className="adminlib-cloud-upload"></i>{' '}
+																			{__(
 																				'Upload',
 																				'multivendorx'
-																			) }
+																			)}
 																		</div>
 																	</li>
 																	<li
 																		className="delete"
-																		onClick={ (
+																		onClick={(
 																			e
 																		) => {
 																			e.stopPropagation();
@@ -532,20 +522,20 @@ const EditStore = () => {
 																			setLogoMenu(
 																				false
 																			);
-																		} }
+																		}}
 																	>
 																		<div className="item">
-																			<i className="adminlib-delete"></i>{ ' ' }
-																			{ __(
+																			<i className="adminlib-delete"></i>{' '}
+																			{__(
 																				'Delete',
 																				'multivendorx'
-																			) }
+																			)}
 																		</div>
 																	</li>
 																</ul>
 															</div>
 														</div>
-													) }
+													)}
 												</div>
 											</div>
 										</div>
@@ -554,37 +544,37 @@ const EditStore = () => {
 											<div className="name">
 												<div
 													className="store-name"
-													onClick={ () =>
-														setEditName( true )
+													onClick={() =>
+														setEditName(true)
 													}
 												>
-													{ editName ? (
+													{editName ? (
 														<input
 															type="text"
 															value={
 																data?.name || ''
 															}
-															onChange={ ( e ) =>
-																setData( {
+															onChange={(e) =>
+																setData({
 																	...data,
 																	name: e
 																		.target
 																		.value,
-																} )
+																})
 															}
-															onBlur={ () => {
+															onBlur={() => {
 																if (
-																	! data?.name?.trim()
+																	!data?.name?.trim()
 																) {
-																	setData( {
+																	setData({
 																		...data,
 																		name: prevName,
-																	} );
+																	});
 																}
 																setEditName(
 																	false
 																);
-															} }
+															}}
 															className="basic-input"
 															autoFocus
 														/>
@@ -593,31 +583,31 @@ const EditStore = () => {
 													) : (
 														<Skeleton
 															variant="text"
-															width={ 150 }
+															width={150}
 														/>
-													) }
+													)}
 
 													<span
-														className={ `edit-icon  ${
+														className={`edit-icon  ${
 															editName
 																? ''
 																: 'admin-badge blue'
-														}` }
-														onClick={ ( e ) => {
+														}`}
+														onClick={(e) => {
 															e.stopPropagation();
 															if (
 																editName &&
-																! data?.name?.trim()
+																!data?.name?.trim()
 															) {
-																setData( {
+																setData({
 																	...data,
 																	name: prevName,
-																} );
+																});
 															}
 															setEditName(
-																! editName
+																!editName
 															);
-														} }
+														}}
 													>
 														<i
 															className={
@@ -629,69 +619,69 @@ const EditStore = () => {
 													</span>
 												</div>
 
-												{ data.status === 'active' ? (
+												{data.status === 'active' ? (
 													<span className="status admin-badge green">
-														{ __(
+														{__(
 															'Active',
 															'multivendorx'
-														) }
+														)}
 													</span>
 												) : data.status ===
 												  'pending' ? (
 													<span className="status admin-badge yellow">
-														{ __(
+														{__(
 															'Pending',
 															'multivendorx'
-														) }
+														)}
 													</span>
 												) : data.status ===
 												  'rejected' ? (
 													<span className="status admin-badge red">
-														{ __(
+														{__(
 															'Rejected',
 															'multivendorx'
-														) }
+														)}
 													</span>
 												) : data.status ===
 												  'suspended' ? (
 													<span className="status admin-badge blue">
-														{ __(
+														{__(
 															'Suspended',
 															'multivendorx'
-														) }
+														)}
 													</span>
 												) : data.status ===
 												  'permanently_rejected' ? (
 													<span className="status admin-badge red">
-														{ __(
+														{__(
 															'Permanently Rejected',
 															'multivendorx'
-														) }
+														)}
 													</span>
 												) : data.status ===
 												  'under_review' ? (
 													<span className="status admin-badge yellow">
-														{ __(
+														{__(
 															'Under Review',
 															'multivendorx'
-														) }
+														)}
 													</span>
 												) : data.status ===
 												  'deactivated' ? (
 													<span className="status admin-badge red">
-														{ __(
+														{__(
 															'Permanently Deactivated',
 															'multivendorx'
-														) }
+														)}
 													</span>
 												) : (
 													<Skeleton
 														variant="text"
-														width={ 100 }
+														width={100}
 													/>
-												) }
+												)}
 
-												{ modules.includes(
+												{modules.includes(
 													'marketplace-compliance'
 												) && (
 													<>
@@ -705,113 +695,109 @@ const EditStore = () => {
 															<i className="adminlib-staff-manager"></i>
 														</div>
 													</>
-												) }
+												)}
 											</div>
 
 											<div
 												className="des"
-												onClick={ () =>
-													setEditDesc( true )
+												onClick={() =>
+													setEditDesc(true)
 												}
 											>
-												{ editDesc ? (
+												{editDesc ? (
 													<textarea
 														value={
 															data.description ||
 															''
 														}
-														onChange={ ( e ) =>
-															setData( {
+														onChange={(e) =>
+															setData({
 																...data,
 																description:
 																	e.target
 																		.value,
-															} )
+															})
 														}
-														onBlur={ () => {
+														onBlur={() => {
 															if (
-																! data?.description?.trim()
+																!data?.description?.trim()
 															) {
-																setData( {
+																setData({
 																	...data,
 																	description:
 																		prevDesc,
-																} );
+																});
 															}
-															setEditDesc(
-																false
-															);
-														} }
+															setEditDesc(false);
+														}}
 														className="textarea-input"
 														autoFocus
 													/>
-												) : Object.keys( data )
-														.length === 0 ? (
+												) : Object.keys(data).length ===
+												  0 ? (
 													<Skeleton
 														variant="text"
-														width={ 150 }
+														width={150}
 													/>
 												) : data?.description ? (
 													<div>
 														<span>
-															{ displayText }
-															{ shouldTruncate &&
-															! expanded
+															{displayText}
+															{shouldTruncate &&
+															!expanded
 																? '...'
-																: '' }
+																: ''}
 														</span>
-														{ shouldTruncate && (
+														{shouldTruncate && (
 															<button
-																onClick={ () =>
+																onClick={() =>
 																	setExpanded(
-																		! expanded
+																		!expanded
 																	)
 																}
 																className="read-more-btn"
 															>
-																{ expanded
+																{expanded
 																	? __(
 																			'Read less',
 																			'multivendorx'
-																	  )
+																		)
 																	: __(
 																			'Read more',
 																			'multivendorx'
-																	  ) }
+																		)}
 															</button>
-														) }
+														)}
 													</div>
 												) : (
 													<span>
-														{ __(
+														{__(
 															'Enter your description',
 															'multivendorx'
-														) }
+														)}
 													</span>
-												) }
+												)}
 
 												<span
-													className={ `edit-icon ${
+													className={`edit-icon ${
 														editDesc
 															? ''
 															: 'admin-badge blue'
-													}` }
-													onClick={ ( e ) => {
+													}`}
+													onClick={(e) => {
 														e.stopPropagation();
 														if (
 															editDesc &&
-															! data?.description?.trim()
+															!data?.description?.trim()
 														) {
-															setData( {
+															setData({
 																...data,
 																description:
 																	prevDesc,
-															} );
+															});
 														}
-														setEditDesc(
-															! editDesc
-														);
-													} }
+														setEditDesc(!editDesc);
+													}}
 												>
 													<i
 														className={
@@ -824,62 +810,60 @@ const EditStore = () => {
 											</div>
 
 											<div className="reviews-wrapper">
-												{ [ ...Array( 5 ) ].map(
-													( _, i ) => (
-														<i
-															key={ i }
-															className={ `review adminlib-star${
-																data.total_reviews >
-																	0 &&
-																i <
-																	Math.round(
-																		data.overall_reviews
-																	)
-																	? ''
-																	: '-o'
-															}` }
-														></i>
-													)
-												) }
+												{[...Array(5)].map((_, i) => (
+													<i
+														key={i}
+														className={`review adminlib-star${
+															data.total_reviews >
+																0 &&
+															i <
+																Math.round(
+																	data.overall_reviews
+																)
+																? ''
+																: '-o'
+														}`}
+													></i>
+												))}
 
 												<span>
-													{ data.total_reviews > 0
+													{data.total_reviews > 0
 														? `${
 																data.overall_reviews
-														  } (${
+															} (${
 																data.total_reviews
-														  } ${
+															} ${
 																data.total_reviews ===
 																1
 																	? __(
 																			'Review',
 																			'multivendorx'
-																	  )
+																		)
 																	: __(
 																			'Reviews',
 																			'multivendorx'
-																	  )
-														  })`
-														: `(${ __(
+																		)
+															})`
+														: `(${__(
 																'0 Review',
 																'multivendorx'
-														  ) })` }
+															)})`}
 												</span>
 											</div>
 
 											<div className="des">
 												<b>
-													{ __(
+													{__(
 														'Storefront link:',
 														'multivendorx'
-													) }{ ' ' }
+													)}{' '}
 												</b>
-												{ appLocalizer.store_page_url +
-													'/' }
-												{ data?.slug ? (
+												{appLocalizer.store_page_url +
+													'/'}
+												{data?.slug ? (
 													<>
-														{ data.slug }{ ' ' }
-														{ data?.status !=
+														{data.slug}{' '}
+														{data?.status !=
 															'pending' &&
 															data?.status !=
 																'rejected' &&
@@ -887,9 +871,9 @@ const EditStore = () => {
 																'permanently_rejected' && (
 																<span
 																	className="edit-icon admin-badge blue"
-																	onClick={ () => {
+																	onClick={() => {
 																		navigate(
-																			`?page=multivendorx#&tab=stores&edit/${ data.id }/&subtab=store`,
+																			`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`,
 																			{
 																				state: {
 																					highlightTarget:
@@ -901,27 +885,26 @@ const EditStore = () => {
 																		setTimeout(
 																			() => {
 																				navigate(
-																					`?page=multivendorx#&tab=stores&edit/${ data.id }/&subtab=store`,
+																					`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`,
 																					{
-																						replace:
-																							true,
+																						replace: true,
 																					}
 																				);
 																			},
 																			500
 																		);
-																	} }
+																	}}
 																>
 																	<i className="adminlib-edit"></i>
 																</span>
-															) }
+															)}
 													</>
 												) : (
 													<Skeleton
 														variant="text"
-														width={ 100 }
+														width={100}
 													/>
-												) }
+												)}
 											</div>
 										</div>
 									</div>
@@ -933,50 +916,50 @@ const EditStore = () => {
 						</div>
 					</>
 				}
-				Link={ Link }
-				settingName={ 'Store' }
-				hideTitle={ true }
-				hideBreadcrumb={ true }
+				Link={Link}
+				settingName={'Store'}
+				hideTitle={true}
+				hideBreadcrumb={true}
 				action={
 					<>
 						<div
 							className="icon-wrapper edit-wrapper"
-							ref={ wrapperRef }
+							ref={wrapperRef}
 						>
 							<i
-								onClick={ ( e ) => {
+								onClick={(e) => {
 									e.stopPropagation();
-									setActionMenu( ( prev ) => ! prev );
-									setLogoMenu( false );
-									setBannerMenu( false );
-								} }
+									setActionMenu((prev) => !prev);
+									setLogoMenu(false);
+									setBannerMenu(false);
+								}}
 								className="admin-icon adminlib-more-vertical"
 							></i>
-							{ actionMenu && (
+							{actionMenu && (
 								<div className="dropdown">
 									<div className="dropdown-body">
 										<ul>
-											{ data.status == 'active' && (
+											{data.status == 'active' && (
 												<li>
 													<a
-														href={ `${ appLocalizer.store_page_url }/${ data.slug }` }
+														href={`${appLocalizer.store_page_url}/${data.slug}`}
 														target="_blank"
 														rel="noopener noreferrer"
 														className="item"
 													>
-														<i className="adminlib-storefront"></i>{ ' ' }
-														{ __(
+														<i className="adminlib-storefront"></i>{' '}
+														{__(
 															'View Storefront',
 															'multivendorx'
-														) }{ ' ' }
+														)}{' '}
 														<i className="external adminlib-external"></i>
 													</a>
 												</li>
-											) }
+											)}
 											<li
-												onClick={ () => {
+												onClick={() => {
 													navigate(
-														`?page=multivendorx#&tab=stores&edit/${ data.id }/&subtab=store`,
+														`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`,
 														{
 															state: {
 																highlightTarget:
@@ -985,91 +968,91 @@ const EditStore = () => {
 														}
 													);
 
-													setTimeout( () => {
+													setTimeout(() => {
 														navigate(
-															`?page=multivendorx#&tab=stores&edit/${ data.id }/&subtab=store`,
+															`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`,
 															{
 																replace: true,
 															}
 														);
-													}, 5000 );
-												} }
+													}, 5000);
+												}}
 											>
 												<span className="item">
-													{ ' ' }
-													<i className="adminlib-form-multi-select"></i>{ ' ' }
-													{ __(
+													{' '}
+													<i className="adminlib-form-multi-select"></i>{' '}
+													{__(
 														'Manage status',
 														'multivendorx'
-													) }{ ' ' }
+													)}{' '}
 												</span>
 											</li>
 											<li>
 												<a
-													href={ `${ appLocalizer.admin_url }edit.php?post_type=product&multivendorx_store_id=${ data.id }` }
+													href={`${appLocalizer.admin_url}edit.php?post_type=product&multivendorx_store_id=${data.id}`}
 													className="item"
 												>
-													<i className="adminlib-single-product"></i>{ ' ' }
-													{ __(
+													<i className="adminlib-single-product"></i>{' '}
+													{__(
 														'Products',
 														'multivendorx'
-													) }
+													)}
 												</a>
 											</li>
 
 											<li
-												onClick={ () => {
+												onClick={() => {
 													navigate(
 														`?page=multivendorx#&tab=reports`
 													);
-												} }
+												}}
 											>
 												<span className="item">
-													<i className="adminlib-order"></i>{ ' ' }
-													{ __(
+													<i className="adminlib-order"></i>{' '}
+													{__(
 														'Orders',
 														'multivendorx'
-													) }{ ' ' }
+													)}{' '}
 												</span>
 											</li>
-											<li onClick={ handleStoreDelete }>
+											<li onClick={handleStoreDelete}>
 												<span className="item">
-													{ ' ' }
-													<i className="adminlib-delete"></i>{ ' ' }
-													{ __(
+													{' '}
+													<i className="adminlib-delete"></i>{' '}
+													{__(
 														'Delete store',
 														'multivendorx'
-													) }{ ' ' }
+													)}{' '}
 												</span>
 											</li>
 										</ul>
 									</div>
 								</div>
-							) }
+							)}
 						</div>
 					</>
 				}
 			/>
 
 			<CommonPopup
-				open={ deleteModal }
-				onClose={ () => setDeleteModal( false ) }
+				open={deleteModal}
+				onClose={() => setDeleteModal(false)}
 				width="600px"
 				height="50%"
 				header={
 					<>
 						<div className="title">
 							<i className="adminlib-storefront"></i>
-							{ __( 'Manage store deletion', 'multivendorx' ) }
+							{__('Manage store deletion', 'multivendorx')}
 						</div>
 						<p>
-							{ __(
+							{__(
 								'Choose the appropriate action to take when deleting this store.',
 								'multivendorx'
-							) }
+							)}
 						</p>
 						<i
-							onClick={ () => setDeleteModal( false ) }
+							onClick={() => setDeleteModal(false)}
 							className="icon adminlib-close"
 						></i>
 					</>
@@ -1078,20 +1061,20 @@ const EditStore = () => {
 					<>
 						<button
 							type="button"
-							onClick={ () => setDeleteModal( false ) }
+							onClick={() => setDeleteModal(false)}
 							className="admin-btn btn-red"
 						>
-							{ __( 'Cancel', 'multivendorx' ) }
+							{__('Cancel', 'multivendorx')}
 						</button>
 						<button
-							onClick={ () => {
-								if ( deleteOption ) {
-									deleteStoreApiCall( deleteOption );
+							onClick={() => {
+								if (deleteOption) {
+									deleteStoreApiCall(deleteOption);
 								}
-							} }
+							}}
 							className="admin-btn btn-purple"
 						>
-							{ __( 'Delete', 'multivendorx' ) }
+							{__('Delete', 'multivendorx')}
 						</button>
 					</>
 				}
@@ -1100,12 +1083,12 @@ const EditStore = () => {
 					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label htmlFor="title">
-								{ __( 'Deletion method', 'multivendorx' ) }
+								{__('Deletion method', 'multivendorx')}
 							</label>
 							<ToggleSetting
 								wrapperClass="setting-form-input"
 								descClass="settings-metabox-description"
-								options={ [
+								options={[
 									{
 										value: 'set_store_owner',
 										key: 'set_store_owner',
@@ -1130,36 +1113,36 @@ const EditStore = () => {
 											'multivendorx'
 										),
 									},
-								] }
-								value={ deleteOption }
-								onChange={ ( value: any ) => {
-									setDeleteOption( value );
-									setSelectedOwner( null );
-								} }
+								]}
+								value={deleteOption}
+								onChange={(value: any) => {
+									setDeleteOption(value);
+									setSelectedOwner(null);
+								}}
 							/>
 						</div>
 						<div className="form-group">
-							{ deleteOption === 'set_store_owner' && (
+							{deleteOption === 'set_store_owner' && (
 								<>
 									<label htmlFor="title">
-										{ __(
+										{__(
 											'Assign new store owner',
 											'multivendorx'
-										) }
+										)}
 									</label>
 									<SelectInput
 										name="new_owner"
-										value={ selectedOwner?.value }
-										options={ appLocalizer.store_owners }
+										value={selectedOwner?.value}
+										options={appLocalizer.store_owners}
 										type="single-select"
-										onChange={ ( val: any ) => {
-											if ( val ) {
-												setSelectedOwner( val );
+										onChange={(val: any) => {
+											if (val) {
+												setSelectedOwner(val);
 											}
-										} }
+										}}
 									/>
 								</>
-							) }
+							)}
 						</div>
 					</div>
 				</div>

@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'product-compliance',
 	priority: 5,
-	name: __( 'Product Compliance', 'mvx-pro' ),
+	name: __('Product Compliance', 'mvx-pro'),
 	desc: __(
 		'All product listings must follow platform content guidelines and avoid prohibited categories. Branded or regulated products must include authenticity certificates. Optional safety certifications may be uploaded for regulated items.',
 		'mvx-pro'
@@ -14,11 +14,8 @@ export default {
 		{
 			key: 'prohibited_product_categories',
 			type: 'multi-string',
-			label: __( 'Prohibited product categories', 'multivendorx' ),
-			placeholder: __(
-				'Add prohibited product category',
-				'multivendorx'
-			),
+			label: __('Prohibited product categories', 'multivendorx'),
+			placeholder: __('Add prohibited product category', 'multivendorx'),
 			settingDescription: __(
 				'Define one or more product categories that are not allowed to be listed on your marketplace.',
 				'multivendorx'
@@ -60,7 +57,7 @@ export default {
 		{
 			key: 'required_store_uploads',
 			type: 'checkbox',
-			label: __( 'Required store uploads', 'mvx-pro' ),
+			label: __('Required store uploads', 'mvx-pro'),
 			desc: __(
 				'Select which documents or files stores must upload for compliance verification.',
 				'mvx-pro'
@@ -70,17 +67,17 @@ export default {
 			options: [
 				{
 					key: 'product_authenticity_certificates',
-					label: __( 'Product authenticity certificates', 'mvx-pro' ),
+					label: __('Product authenticity certificates', 'mvx-pro'),
 					value: 'product_authenticity_certificates',
 				},
 				{
 					key: 'product_images_descriptions',
-					label: __( 'Product images & descriptions', 'mvx-pro' ),
+					label: __('Product images & descriptions', 'mvx-pro'),
 					value: 'product_images_descriptions',
 				},
 				{
 					key: 'safety_certifications',
-					label: __( 'Safety certifications', 'mvx-pro' ),
+					label: __('Safety certifications', 'mvx-pro'),
 					value: 'safety_certifications',
 				},
 			],
@@ -94,12 +91,12 @@ export default {
 				'Set rules and options for product abuse reporting.',
 				'multivendorx'
 			),
-			hint: __( 'Product report abuse', 'multivendorx' ),
+			hint: __('Product report abuse', 'multivendorx'),
 		},
 		{
 			key: 'who_can_report',
 			type: 'setting-toggle',
-			label: __( 'Who can report', 'multivendorx' ),
+			label: __('Who can report', 'multivendorx'),
 			settingDescription: __(
 				'Decide if only logged-in customers can submit abuse reports, or if reporting is open to everyone.',
 				'multivendorx'
@@ -112,7 +109,7 @@ export default {
 			options: [
 				{
 					key: 'logged_in',
-					label: __( 'logged-in customers', 'multivendorx' ),
+					label: __('logged-in customers', 'multivendorx'),
 					value: 'logged_in',
 				},
 				// {
@@ -122,7 +119,7 @@ export default {
 				// },
 				{
 					key: 'anyone',
-					label: __( 'Anyone', 'multivendorx' ),
+					label: __('Anyone', 'multivendorx'),
 					value: 'anyone',
 				},
 			],
@@ -131,7 +128,7 @@ export default {
 		{
 			key: 'abuse_report_reasons',
 			type: 'multi-string',
-			label: __( 'Reasons for abuse report', 'multivendorx' ),
+			label: __('Reasons for abuse report', 'multivendorx'),
 			placeholder: __(
 				'Add a reason for reporting a product',
 				'multivendorx'

@@ -61,7 +61,7 @@ const sectionsData: Section[] = [
 	},
 ];
 
-const Intro: React.FC< IntroProps > = ( { onNext } ) => {
+const Intro: React.FC<IntroProps> = ({ onNext }) => {
 	// return (
 	// <section>
 	//     <h2>Welcome to the CatalogX family!</h2>
@@ -76,85 +76,85 @@ const Intro: React.FC< IntroProps > = ( { onNext } ) => {
 	// </section>
 
 	// );
-	const [ expanded, setExpanded ] = useState< number | null >( 0 );
+	const [expanded, setExpanded] = useState<number | null>(0);
 
-	const toggleSection = ( index: number ) => {
-		setExpanded( expanded === index ? null : index );
+	const toggleSection = (index: number) => {
+		setExpanded(expanded === index ? null : index);
 	};
 
 	return (
 		<div className="wizard-container">
-			{ sectionsData.map( ( section, idx ) => {
+			{sectionsData.map((section, idx) => {
 				const completedSteps = section.steps.filter(
-					( s ) => s.completed
+					(s) => s.completed
 				).length;
 				const totalSteps = section.steps.length;
 
 				return (
 					<div
-						key={ idx }
-						className={ `wizard-section ${
+						key={idx}
+						className={`wizard-section ${
 							expanded === idx ? 'expanded' : ''
-						}` }
+						}`}
 					>
 						<div
 							className="wizard-header"
-							onClick={ () => toggleSection( idx ) }
+							onClick={() => toggleSection(idx)}
 						>
 							<div className="wizard-title">
 								<span
-									className={ `chevron ${
+									className={`chevron ${
 										expanded === idx ? 'rotate' : ''
-									}` }
+									}`}
 								>
 									&gt;
 								</span>
-								{ section.title }
+								{section.title}
 							</div>
 							<div className="wizard-progress">
-								{ completedSteps }/{ totalSteps }
+								{completedSteps}/{totalSteps}
 							</div>
 						</div>
 
-						{ expanded === idx && (
+						{expanded === idx && (
 							<div className="wizard-steps">
-								{ section.steps.map( ( task, tidx ) => (
-									<div key={ tidx } className="wizard-step">
+								{section.steps.map((task, tidx) => (
+									<div key={tidx} className="wizard-step">
 										<div className="step-info">
 											<div
-												className={ `step-status ${
+												className={`step-status ${
 													task.completed
 														? 'completed'
 														: ''
-												}` }
+												}`}
 											>
-												{ task.completed && (
+												{task.completed && (
 													<span className="check">
 														&#10003;
 													</span>
-												) }
+												)}
 											</div>
 											<div className="step-text">
 												<span className="step-title">
-													{ task.title }
+													{task.title}
 												</span>
-												{ task.description && (
+												{task.description && (
 													<span className="step-desc">
-														{ task.description }
+														{task.description}
 													</span>
-												) }
+												)}
 											</div>
 										</div>
 										<button className="step-action">
-											{ task.actionText } &rarr;
+											{task.actionText} &rarr;
 										</button>
 									</div>
-								) ) }
+								))}
 							</div>
-						) }
+						)}
 					</div>
 				);
-			} ) }
+			})}
 		</div>
 	);
 };

@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'identity-verification',
 	priority: 3,
-	name: __( 'Store Identity', 'mvx-pro' ),
+	name: __('Store Identity', 'mvx-pro'),
 	desc: __(
 		'Seller verification confirms a store identity with address, contact, and social profiles-building trust and boosting buyer confidence.',
 		'mvx-pro'
@@ -15,7 +15,7 @@ export default {
 		{
 			key: 'badge_img',
 			type: 'setting-toggle',
-			label: __( 'Verified badge', 'multivendorx' ),
+			label: __('Verified badge', 'multivendorx'),
 			desc: __(
 				'Select a badge from the list above. Once a store is verified, the chosen badge will appear beside its name.',
 				'multivendorx'
@@ -25,22 +25,22 @@ export default {
 			options: [
 				{
 					key: 'icon1',
-					value: __( 'icon1', 'multivendorx' ),
+					value: __('icon1', 'multivendorx'),
 					icon: 'adminlib-verification1',
 				},
 				{
 					key: 'icon2',
-					value: __( 'icon2', 'multivendorx' ),
+					value: __('icon2', 'multivendorx'),
 					icon: 'adminlib-verification2',
 				},
 				{
 					key: 'icon3',
-					value: __( 'icon3', 'multivendorx' ),
+					value: __('icon3', 'multivendorx'),
 					icon: 'adminlib-verification3',
 				},
 				{
 					key: 'icon4',
-					value: __( 'icon4', 'multivendorx' ),
+					value: __('icon4', 'multivendorx'),
 					icon: 'adminlib-verification5',
 				},
 				// {
@@ -50,7 +50,7 @@ export default {
 				// },
 				{
 					key: 'icon6',
-					value: __( 'icon6', 'multivendorx' ),
+					value: __('icon6', 'multivendorx'),
 					icon: 'adminlib-verification7',
 				},
 				// {
@@ -60,7 +60,7 @@ export default {
 				// },
 				{
 					key: 'icon8',
-					value: __( 'icon8', 'multivendorx' ),
+					value: __('icon8', 'multivendorx'),
 					icon: 'adminlib-verification9',
 				},
 			],
@@ -68,7 +68,7 @@ export default {
 		{
 			key: 'separator_content',
 			type: 'section',
-			hint: __( 'Identity verification', 'multivendorx' ),
+			hint: __('Identity verification', 'multivendorx'),
 			desc: __(
 				'Verify store identity using government-issued documents or facial recognition. Ensures authenticity of users.'
 			),
@@ -76,7 +76,7 @@ export default {
 		{
 			key: 'verification_methods',
 			type: 'multi-string',
-			label: __( 'Verification methods', 'multivendorx' ),
+			label: __('Verification methods', 'multivendorx'),
 			moduleEnabled: 'identity-verification',
 			proSetting: true,
 			requiredEnable: true,
@@ -116,7 +116,7 @@ export default {
 		{
 			key: 'separator_content',
 			type: 'section',
-			hint: __( 'Social verification', 'multivendorx' ),
+			hint: __('Social verification', 'multivendorx'),
 			desc: __(
 				'Allow stores to verify their identity by connecting social media accounts.'
 			),

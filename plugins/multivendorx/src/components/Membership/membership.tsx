@@ -16,7 +16,7 @@ import {
 } from 'zyra';
 
 // Types
-type SettingItem = Record< string, any >;
+type SettingItem = Record<string, any>;
 
 interface SettingsProps {
 	id: string;
@@ -24,10 +24,10 @@ interface SettingsProps {
 
 const Memberships = () => {
 	const settingsArray: SettingItem[] = getAvailableSettings(
-		getTemplateData( 'membership' ),
+		getTemplateData('membership'),
 		[]
 	);
-	const location = new URLSearchParams( useLocation().hash.substring( 1 ) );
+	const location = new URLSearchParams(useLocation().hash.substring(1));
 	// const location = useLocation();
 	// const hash = location.hash.replace(/^#/, '');
 
@@ -90,40 +90,39 @@ const Memberships = () => {
 	//     }
 	// };
 
-	const GetForm = ( currentTab: string | null ): JSX.Element | null => {
+	const GetForm = (currentTab: string | null): JSX.Element | null => {
 		// get the setting context
 		const { setting, settingName, setSetting, updateSetting } =
 			useSetting();
 		const { modules } = useModules();
 
-		if ( ! currentTab ) return null;
-		const settingModal = getSettingById( settingsArray as any, currentTab );
-		const [ storeTabSetting, setStoreTabSetting ] =
-			React.useState< any >( null );
+		if (!currentTab) return null;
+		const settingModal = getSettingById(settingsArray as any, currentTab);
+		const [storeTabSetting, setStoreTabSetting] = React.useState<any>(null);
 
 		// Ensure settings context is initialized
-		if ( settingName !== currentTab ) {
+		if (settingName !== currentTab) {
 			setSetting(
 				currentTab,
-				appLocalizer.settings_databases_value[ currentTab ] || {}
+				appLocalizer.settings_databases_value[currentTab] || {}
 			);
 		}
 
-		useEffect( () => {
-			if ( settingName === currentTab ) {
-				appLocalizer.settings_databases_value[ settingName ] = setting;
+		useEffect(() => {
+			if (settingName === currentTab) {
+				appLocalizer.settings_databases_value[settingName] = setting;
 			}
-		}, [ setting, settingName, currentTab ] );
+		}, [setting, settingName, currentTab]);
 
 		return settingName === currentTab ? (
 			<AdminForm
-				settings={ settingModal as any }
-				proSetting={ appLocalizer.pro_settings_list }
-				setting={ setting }
-				updateSetting={ updateSetting }
-				appLocalizer={ appLocalizer }
-				modules={ modules }
-				storeTabSetting={ storeTabSetting }
+				settings={settingModal as any}
+				proSetting={appLocalizer.pro_settings_list}
+				setting={setting}
+				updateSetting={updateSetting}
+				appLocalizer={appLocalizer}
+				modules={modules}
+				storeTabSetting={storeTabSetting}
 			/>
 		) : (
 			<>Loading...</>
@@ -134,19 +133,19 @@ const Memberships = () => {
 		<>
 			<SettingProvider>
 				<Tabs
-					tabData={ settingsArray as any }
-					currentTab={ location.get( 'subtab' ) as string }
-					getForm={ GetForm }
-					prepareUrl={ ( subTab: string ) =>
-						`?page=multivendorx#&tab=memberships&subtab=${ subTab }`
+					tabData={settingsArray as any}
+					currentTab={location.get('subtab') as string}
+					getForm={GetForm}
+					prepareUrl={(subTab: string) =>
+						`?page=multivendorx#&tab=memberships&subtab=${subTab}`
 					}
-					appLocalizer={ appLocalizer }
-					supprot={ [] }
-					Link={ Link }
-					settingName={ 'Memberships' }
+					appLocalizer={appLocalizer}
+					supprot={[]}
+					Link={Link}
+					settingName={'Memberships'}
 				/>
 			</SettingProvider>
-			{ /* <Tabs
+			{/* <Tabs
                 tabData={tabData}
                 currentTab={currentTab}
                 getForm={getForm}
@@ -154,7 +153,7 @@ const Memberships = () => {
                 appLocalizer={appLocalizer}
                 Link={Link}
                 settingName={'Memberships'}
-            /> */ }
+            /> */}
 		</>
 	);
 };

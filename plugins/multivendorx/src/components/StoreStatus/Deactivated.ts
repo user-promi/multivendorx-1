@@ -3,14 +3,14 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'deactivated',
 	priority: 1,
-	name: __( 'Permanently deactivated', 'multivendorx' ),
+	name: __('Permanently deactivated', 'multivendorx'),
 	desc: '',
 	icon: 'adminlib-store-inventory',
 	submitUrl: 'settings',
 	modal: [
 		{
 			key: 'store_promotion_limit',
-			label: __( 'Account capabilities', 'multivendorx' ),
+			label: __('Account capabilities', 'multivendorx'),
 			type: 'nested',
 			single: true,
 			nestedFields: [

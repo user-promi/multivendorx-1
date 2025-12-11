@@ -44,22 +44,22 @@ type OverviewProps = {
 	COLORS?: string[];
 };
 
-const Overview: React.FC< OverviewProps > = ( {} ) => {
-	const [ commissionDetails, setCommissionDeatils ] = useState< any[] >( [] );
-	const [ earningSummary, setEarningSummary ] = useState< any[] >( [] );
-	const [ pieData, setPieData ] = useState< any >( [] );
-	const [ topCoupons, setTopCoupons ] = useState< any[] >( [] );
-	const [ topCustomers, setTopCustomers ] = useState< any[] >( [] );
-	const [ topStores, setTopStores ] = useState< any[] >( [] );
+const Overview: React.FC<OverviewProps> = ({}) => {
+	const [commissionDetails, setCommissionDeatils] = useState<any[]>([]);
+	const [earningSummary, setEarningSummary] = useState<any[]>([]);
+	const [pieData, setPieData] = useState<any>([]);
+	const [topCoupons, setTopCoupons] = useState<any[]>([]);
+	const [topCustomers, setTopCustomers] = useState<any[]>([]);
+	const [topStores, setTopStores] = useState<any[]>([]);
 
 	const fetchCommissionDetails = async () => {
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'commission' ),
+			url: getApiLink(appLocalizer, 'commission'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: { format: 'reports', store_id: appLocalizer.store_id },
-		} )
-			.then( ( response ) => {
+		})
+			.then((response) => {
 				const data = response.data;
 
 				// Basic calculations
@@ -72,49 +72,49 @@ const Overview: React.FC< OverviewProps > = ( {} ) => {
 					{
 						id: 'total_order_amount',
 						label: 'Total Order Amount',
-						count: formatCurrency( data.total_order_amount ),
+						count: formatCurrency(data.total_order_amount),
 						icon: 'adminlib-order theme-color1',
 					},
 					{
 						id: 'facilitator_fee',
 						label: 'Facilitator Fee',
-						count: formatCurrency( data.facilitator_fee ),
+						count: formatCurrency(data.facilitator_fee),
 						icon: 'adminlib-facilitator theme-color2',
 					},
 					{
 						id: 'gateway_fee',
 						label: 'Gateway Fee',
-						count: formatCurrency( data.gateway_fee ),
+						count: formatCurrency(data.gateway_fee),
 						icon: 'adminlib-credit-card theme-color3',
 					},
 					{
 						id: 'shipping_amount',
 						label: 'Shipping Amount',
-						count: formatCurrency( data.shipping_amount ),
+						count: formatCurrency(data.shipping_amount),
 						icon: 'adminlib-shipping theme-color4',
 					},
 					{
 						id: 'tax_amount',
 						label: 'Tax Amount',
-						count: formatCurrency( data.tax_amount ),
+						count: formatCurrency(data.tax_amount),
 						icon: 'adminlib-tax-compliance theme-color4',
 					},
 					{
 						id: 'shipping_tax_amount',
 						label: 'Shipping Tax Amount',
-						count: formatCurrency( data.shipping_tax_amount ),
+						count: formatCurrency(data.shipping_tax_amount),
 						icon: 'adminlib-per-product-shipping theme-color3',
 					},
 					{
 						id: 'commission_total',
 						label: 'Commission Total',
-						count: formatCurrency( data.commission_total ),
+						count: formatCurrency(data.commission_total),
 						icon: 'adminlib-commission theme-color2',
 					},
 					{
 						id: 'commission_refunded',
 						label: 'Commission Refunded',
-						count: formatCurrency( data.commission_refunded ),
+						count: formatCurrency(data.commission_refunded),
 						icon: 'adminlib-marketplace-refund theme-color1',
 					},
 				];
@@ -124,57 +124,57 @@ const Overview: React.FC< OverviewProps > = ( {} ) => {
 					{
 						id: 'total_order_amount',
 						title: 'Total Order Amount',
-						price: formatCurrency( data.total_order_amount ),
+						price: formatCurrency(data.total_order_amount),
 					},
 					{
 						id: 'admin_earning',
 						title: 'Admin Net Earning',
-						price: formatCurrency( adminEarning ),
+						price: formatCurrency(adminEarning),
 					},
 					{
 						id: 'store_earning',
 						title: 'Store Net Earning',
-						price: formatCurrency( storeEarning ),
+						price: formatCurrency(storeEarning),
 					},
 					{
 						id: 'facilitator_fee',
 						title: 'Facilitator Fee',
-						price: formatCurrency( data.facilitator_fee ),
+						price: formatCurrency(data.facilitator_fee),
 					},
 					{
 						id: 'gateway_fee',
 						title: 'Gateway Fee',
-						price: formatCurrency( data.gateway_fee ),
+						price: formatCurrency(data.gateway_fee),
 					},
 					{
 						id: 'shipping_amount',
 						title: 'Shipping Amount',
-						price: formatCurrency( data.shipping_amount ),
+						price: formatCurrency(data.shipping_amount),
 					},
 					{
 						id: 'tax_amount',
 						title: 'Tax Amount',
-						price: formatCurrency( data.tax_amount ),
+						price: formatCurrency(data.tax_amount),
 					},
 					{
 						id: 'shipping_tax_amount',
 						title: 'Shipping Tax Amount',
-						price: formatCurrency( data.shipping_tax_amount ),
+						price: formatCurrency(data.shipping_tax_amount),
 					},
 					{
 						id: 'commission_total',
 						title: 'Commission Total',
-						price: formatCurrency( data.commission_total ),
+						price: formatCurrency(data.commission_total),
 					},
 					{
 						id: 'commission_refunded',
 						title: 'Commission Refunded',
-						price: formatCurrency( data.commission_refunded ),
+						price: formatCurrency(data.commission_refunded),
 					},
 					{
 						id: 'grand_total',
 						title: 'Grand Total',
-						price: formatCurrency( adminEarning + storeEarning ),
+						price: formatCurrency(adminEarning + storeEarning),
 					},
 				];
 
@@ -187,33 +187,33 @@ const Overview: React.FC< OverviewProps > = ( {} ) => {
 					},
 				];
 
-				setCommissionDeatils( overviewData );
-				setEarningSummary( earningSummary );
-				setPieData( pieChartData );
-			} )
-			.catch( () => {
+				setCommissionDeatils(overviewData);
+				setEarningSummary(earningSummary);
+				setPieData(pieChartData);
+			})
+			.catch(() => {
 				// Handle error gracefully
-			} );
+			});
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'commission' ),
+			url: getApiLink(appLocalizer, 'commission'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: { format: 'reports', top_stores: 3 },
-		} )
-			.then( ( response ) => {
-				setTopStores( response.data );
-			} )
-			.catch( () => {
+		})
+			.then((response) => {
+				setTopStores(response.data);
+			})
+			.catch(() => {
 				// Handle error gracefully
-			} );
+			});
 	};
 
-	useEffect( () => {
+	useEffect(() => {
 		// Top selling coupons
-		axios( {
+		axios({
 			method: 'GET',
-			url: `${ appLocalizer.apiUrl }/wc/v3/coupons`,
+			url: `${appLocalizer.apiUrl}/wc/v3/coupons`,
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				meta_key: 'multivendorx_store_id',
@@ -221,58 +221,58 @@ const Overview: React.FC< OverviewProps > = ( {} ) => {
 				orderby: 'date', // valid param, required by API
 				order: 'desc',
 			},
-		} )
-			.then( ( response ) => {
+		})
+			.then((response) => {
 				// Sort coupons manually by usage_count (descending)
 				const sortedCoupons = response.data
-					.sort( ( a, b ) => b.usage_count - a.usage_count )
-					.slice( 0, 5 ); // take top 5 only
+					.sort((a, b) => b.usage_count - a.usage_count)
+					.slice(0, 5); // take top 5 only
 
-				console.log( 'Top 5 Coupons:', sortedCoupons );
-				setTopCoupons( sortedCoupons );
-			} )
-			.catch( ( error ) => {
-				console.error( 'Error fetching top coupons:', error );
-			} );
+				console.log('Top 5 Coupons:', sortedCoupons);
+				setTopCoupons(sortedCoupons);
+			})
+			.catch((error) => {
+				console.error('Error fetching top coupons:', error);
+			});
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: `${ appLocalizer.apiUrl }/wc-analytics/customers`,
+			url: `${appLocalizer.apiUrl}/wc-analytics/customers`,
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				per_page: 50, // fetch more customers so we can sort manually
 				orderby: 'total_spend',
 				order: 'desc',
 			},
-		} )
-			.then( ( response ) => {
+		})
+			.then((response) => {
 				// Sort by total_spend manually in case API doesn't enforce order
 				const sortedCustomers = response.data
-					.sort( ( a, b ) => b.total_spend - a.total_spend )
-					.slice( 0, 5 ); // Top 5 customers only
+					.sort((a, b) => b.total_spend - a.total_spend)
+					.slice(0, 5); // Top 5 customers only
 
-				console.log( 'Top 5 Customers:', sortedCustomers );
-				setTopCustomers( sortedCustomers );
-			} )
-			.catch( ( error ) => {
-				console.error( 'Error fetching top customers:', error );
-			} );
+				console.log('Top 5 Customers:', sortedCustomers);
+				setTopCustomers(sortedCustomers);
+			})
+			.catch((error) => {
+				console.error('Error fetching top customers:', error);
+			});
 
 		fetchCommissionDetails();
-	}, [] );
-	console.log( 'site_url', appLocalizer.site_url );
+	}, []);
+	console.log('site_url', appLocalizer.site_url);
 	return (
 		<>
 			<div className="page-title-wrapper">
 				<div className="page-title">
 					<div className="title">
-						{ __( 'Overview', 'multivendorx' ) }
+						{__('Overview', 'multivendorx')}
 					</div>
 					<div className="des">
-						{ __(
+						{__(
 							'Manage your store information and preferences',
 							'multivendorx'
-						) }
+						)}
 					</div>
 				</div>
 			</div>
@@ -281,21 +281,21 @@ const Overview: React.FC< OverviewProps > = ( {} ) => {
 				<div className="card-wrapper">
 					<div className="card-content transparent">
 						<div className="analytics-container small-card report">
-							{ commissionDetails.map( ( item, idx ) => (
-								<div key={ idx } className="analytics-item">
+							{commissionDetails.map((item, idx) => (
+								<div key={idx} className="analytics-item">
 									<div className="analytics-icon">
-										<i className={ item.icon }></i>
+										<i className={item.icon}></i>
 									</div>
 									<div className="details">
 										<div className="number">
-											{ item.count }
+											{item.count}
 										</div>
 										<div className="text">
-											{ __( item.label, 'multivendorx' ) }
+											{__(item.label, 'multivendorx')}
 										</div>
 									</div>
 								</div>
-							) ) }
+							))}
 						</div>
 					</div>
 				</div>
@@ -305,34 +305,31 @@ const Overview: React.FC< OverviewProps > = ( {} ) => {
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{ __(
-										'Revenue breakdown',
-										'multivendorx'
-									) }
+									{__('Revenue breakdown', 'multivendorx')}
 								</div>
 							</div>
 						</div>
 						<div className="card-body">
 							<div className="top-items">
-								{ earningSummary.map( ( product ) => (
-									<div className="items" key={ product.id }>
+								{earningSummary.map((product) => (
+									<div className="items" key={product.id}>
 										<div className="left-side">
 											<div className="details">
 												<div className="item-title">
-													{ __(
+													{__(
 														product.title,
 														'multivendorx'
-													) }
+													)}
 												</div>
 											</div>
 										</div>
 										<div className="right-side">
 											<div className="price">
-												{ product.price }
+												{product.price}
 											</div>
 										</div>
 									</div>
-								) ) }
+								))}
 							</div>
 						</div>
 					</div>
@@ -341,62 +338,56 @@ const Overview: React.FC< OverviewProps > = ( {} ) => {
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{ __(
-										'Revenue Breakdown',
-										'multivendorx'
-									) }
+									{__('Revenue Breakdown', 'multivendorx')}
 								</div>
 							</div>
 						</div>
 						<div className="card-body">
-							<div style={ { width: '100%', height: 400 } }>
+							<div style={{ width: '100%', height: 400 }}>
 								<ResponsiveContainer>
 									<PieChart>
 										<Pie
-											data={ pieData }
+											data={pieData}
 											dataKey="value"
 											nameKey="name"
 											cx="50%"
 											cy="50%"
-											outerRadius={ 140 }
-											innerRadius={ 80 }
-											label={ ( { name, percent } ) =>
-												`${ __(
-													name,
-													'multivendorx'
-												) } ${ (
+											outerRadius={140}
+											innerRadius={80}
+											label={({ name, percent }) =>
+												`${__(name, 'multivendorx')} ${(
 													percent * 100
-												).toFixed( 1 ) }%`
+												).toFixed(1)}%`
 											}
-											labelLine={ false }
-											isAnimationActive={ true }
+											labelLine={false}
+											isAnimationActive={true}
 										>
-											{ pieData.map( ( _, index ) => (
+											{pieData.map((_, index) => (
 												<Cell
-													key={ `cell-${ index }` }
+													key={`cell-${index}`}
 													fill={
 														[
 															'#0088FE',
 															'#00C49F',
 															'#FF8042',
-														][ index % 3 ]
+														][index % 3]
 													}
 												/>
-											) ) }
+											))}
 										</Pie>
 										<Tooltip
-											formatter={ ( value ) =>
-												formatCurrency( value )
+											formatter={(value) =>
+												formatCurrency(value)
 											}
-											contentStyle={ {
+											contentStyle={{
 												backgroundColor: '#fff',
 												borderRadius: '8px',
 												border: '1px solid #ddd',
-											} }
+											}}
 										/>
 										<Legend
 											verticalAlign="bottom"
-											height={ 36 }
+											height={36}
 										/>
 									</PieChart>
 								</ResponsiveContainer>

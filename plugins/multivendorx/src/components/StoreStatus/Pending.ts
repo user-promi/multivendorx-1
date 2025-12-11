@@ -3,14 +3,14 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'pending',
 	priority: 1,
-	name: __( 'Pending Approval', 'multivendorx' ),
+	name: __('Pending Approval', 'multivendorx'),
 	desc: '',
 	icon: 'adminlib-store-inventory',
 	submitUrl: 'settings',
 	modal: [
 		{
 			key: 'store_promotion_limit',
-			label: __( 'Account capabilities', 'multivendorx' ),
+			label: __('Account capabilities', 'multivendorx'),
 			type: 'nested',
 			single: true,
 			nestedFields: [
@@ -52,9 +52,9 @@ export default {
 		},
 		{
 			key: 'pending_msg',
-			label: __( 'Message shown to pending stores', 'multivendorx' ),
+			label: __('Message shown to pending stores', 'multivendorx'),
 			type: 'textarea',
-			des: __( 'What pending stores can do', 'multivendorx' ),
+			des: __('What pending stores can do', 'multivendorx'),
 		},
 	],
 };

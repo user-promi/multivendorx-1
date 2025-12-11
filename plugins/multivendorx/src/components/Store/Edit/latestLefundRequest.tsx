@@ -22,109 +22,109 @@ interface LatestRefundRequestProps {
 	store_id: number;
 }
 
-const LatestRefundRequest: React.FC< LatestRefundRequestProps > = ( {
+const LatestRefundRequest: React.FC<LatestRefundRequestProps> = ({
 	store_id,
-} ) => {
-	const [ data, setData ] = useState< RefundRow[] >( [] );
+}) => {
+	const [data, setData] = useState<RefundRow[]>([]);
 
-	useEffect( () => {
-		if ( store_id ) {
-			requestData( 3, 1, store_id );
+	useEffect(() => {
+		if (store_id) {
+			requestData(3, 1, store_id);
 		}
-	}, [ store_id ] );
+	}, [store_id]);
 
 	// Column definitions
-	const columns: ColumnDef< RefundRow >[] = [
+	const columns: ColumnDef<RefundRow>[] = [
 		{
 			id: 'order_id',
 			accessorKey: 'order_id',
 			enableSorting: true,
-			header: __( 'Order', 'multivendorx' ),
-			cell: ( { row }: any ) => {
+			header: __('Order', 'multivendorx'),
+			cell: ({ row }: any) => {
 				const orderId = row.original.order_id;
 				const url = orderId
-					? `${ appLocalizer.site_url.replace(
+					? `${appLocalizer.site_url.replace(
 							/\/$/,
 							''
-					  ) }/wp-admin/post.php?post=${ orderId }&action=edit`
+						)}/wp-admin/post.php?post=${orderId}&action=edit`
 					: '#';
 
 				return (
-					<TableCell title={ orderId ? `#${ orderId }` : '-' }>
-						{ orderId ? (
+					<TableCell title={orderId ? `#${orderId}` : '-'}>
+						{orderId ? (
 							<a
-								href={ url }
+								href={url}
 								target="_blank"
 								rel="noopener noreferrer"
 								className="link-item"
 							>
-								#{ orderId }
+								#{orderId}
 							</a>
 						) : (
 							'-'
-						) }
+						)}
 					</TableCell>
 				);
 			},
 		},
 		{
-			header: __( 'Customer', 'multivendorx' ),
-			cell: ( { row }: any ) => {
+			header: __('Customer', 'multivendorx'),
+			cell: ({ row }: any) => {
 				const name = row.original.customer_name?.trim();
 				const link = row.original.customer_edit_link;
 
 				return (
-					<TableCell title={ name || '-' }>
-						{ name ? (
+					<TableCell title={name || '-'}>
+						{name ? (
 							link ? (
 								<a
-									href={ link }
+									href={link}
 									target="_blank"
 									rel="noopener noreferrer"
 									className="text-blue-600 hover:underline"
 								>
-									{ name }
+									{name}
 								</a>
 							) : (
 								name
 							)
 						) : (
 							'-'
-						) }
+						)}
 					</TableCell>
 				);
 			},
 		},
 		{
-			header: __( 'Refund Amount', 'multivendorx' ),
-			cell: ( { row }: any ) => (
-				<TableCell title={ row.original.amount || '' }>
-					{ formatCurrency( row.original.amount ) }
+			header: __('Refund Amount', 'multivendorx'),
+			cell: ({ row }: any) => (
+				<TableCell title={row.original.amount || ''}>
+					{formatCurrency(row.original.amount)}
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'Refund Reason', 'multivendorx' ),
-			cell: ( { row }: any ) => (
-				<TableCell title={ row.original.reason || '' }>
-					{ row.original.reason || '-' }
+			header: __('Refund Reason', 'multivendorx'),
+			cell: ({ row }: any) => (
+				<TableCell title={row.original.reason || ''}>
+					{row.original.reason || '-'}
 				</TableCell>
 			),
 		},
 		{
 			id: 'status',
-			header: __( 'Status', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell type="status" status={ row.original.status } />
+			header: __('Status', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell type="status" status={row.original.status} />
 			),
 		},
 		{
-			header: __( 'Date', 'multivendorx' ),
-			cell: ( { row }: any ) => {
+			header: __('Date', 'multivendorx'),
+			cell: ({ row }: any) => {
 				const date = row.original.date;
-				if ( ! date ) return <TableCell>-</TableCell>;
+				if (!date) return <TableCell>-</TableCell>;
 
-				const formattedDate = new Date( date ).toLocaleDateString(
+				const formattedDate = new Date(date).toLocaleDateString(
 					'en-US',
 					{
 						year: 'numeric',
@@ -134,9 +134,7 @@ const LatestRefundRequest: React.FC< LatestRefundRequestProps > = ( {
 				);
 
 				return (
-					<TableCell title={ formattedDate }>
-						{ formattedDate }
-					</TableCell>
+					<TableCell title={formattedDate}>{formattedDate}</TableCell>
 				);
 			},
 		},
@@ -150,11 +148,11 @@ const LatestRefundRequest: React.FC< LatestRefundRequestProps > = ( {
 		orderBy = 'date',
 		order = 'desc'
 	) {
-		if ( ! store_id ) return;
+		if (!store_id) return;
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'refund' ),
+			url: getApiLink(appLocalizer, 'refund'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				page: currentPage,
@@ -163,16 +161,16 @@ const LatestRefundRequest: React.FC< LatestRefundRequestProps > = ( {
 				orderBy,
 				order,
 			},
-		} )
-			.then( ( response ) => {
-				setData( response.data || [] );
-			} )
-			.catch( () => {
-				setData( [] );
-			} );
+		})
+			.then((response) => {
+				setData(response.data || []);
+			})
+			.catch(() => {
+				setData([]);
+			});
 	}
 
-	return <Table data={ data } columns={ columns as any } />;
+	return <Table data={data} columns={columns as any} />;
 };
 
 export default LatestRefundRequest;

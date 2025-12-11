@@ -3,46 +3,44 @@ import axios from 'axios';
 import { SuccessNotice, SelectInput, getApiLink, useModules } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
-const StoreSquad = ( { id }: { id: string | null } ) => {
+const StoreSquad = ({ id }: { id: string | null }) => {
 	const { modules } = useModules();
-	const [ formData, setFormData ] = useState< { [ key: string ]: any } >(
-		{}
-	);
-	const [ successMsg, setSuccessMsg ] = useState< string | null >( null );
+	const [formData, setFormData] = useState<{ [key: string]: any }>({});
+	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
-	useEffect( () => {
-		if ( ! id ) return;
+	useEffect(() => {
+		if (!id) return;
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, `store/${ id }` ),
+			url: getApiLink(appLocalizer, `store/${id}`),
 			params: { fetch_user: true },
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		} ).then( ( res ) => {
+		}).then((res) => {
 			const data = res.data || {};
-			setFormData( ( prev ) => ( { ...prev, ...data } ) );
-		} );
-	}, [ id ] );
+			setFormData((prev) => ({ ...prev, ...data }));
+		});
+	}, [id]);
 
-	const autoSave = ( updatedData: { [ key: string ]: any } ) => {
-		axios( {
+	const autoSave = (updatedData: { [key: string]: any }) => {
+		axios({
 			method: 'PUT',
-			url: getApiLink( appLocalizer, `store/${ id }` ),
+			url: getApiLink(appLocalizer, `store/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: {
 				...updatedData,
 				user: 'true',
 			},
-		} ).then( ( res ) => {
-			if ( res.data.success ) {
-				setSuccessMsg( 'Store saved successfully!' );
+		}).then((res) => {
+			if (res.data.success) {
+				setSuccessMsg('Store saved successfully!');
 			}
-		} );
+		});
 	};
 
 	return (
 		<>
-			<SuccessNotice message={ successMsg } />
+			<SuccessNotice message={successMsg} />
 
 			<div className="container-wrapper">
 				<div className="card-wrapper w-65">
@@ -50,12 +48,12 @@ const StoreSquad = ( { id }: { id: string | null } ) => {
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{ __( 'Store owners', 'multivendorx' ) }
+									{__('Store owners', 'multivendorx')}
 								</div>
 							</div>
 						</div>
 						<div className="card-body">
-							{ /* Store owners multi-select */ }
+							{/* Store owners multi-select */}
 							<div className="form-group-wrapper">
 								<div className="form-group">
 									<SelectInput
@@ -64,40 +62,40 @@ const StoreSquad = ( { id }: { id: string | null } ) => {
 											appLocalizer.store_owners || []
 										}
 										type="multi-select"
-										value={ (
+										value={(
 											formData.store_owners || []
-										).map( ( id: any ) => {
+										).map((id: any) => {
 											const match = (
 												appLocalizer.store_owners || []
 											).find(
-												( opt: any ) =>
-													String( opt.value ) ===
-													String( id )
+												(opt: any) =>
+													String(opt.value) ===
+													String(id)
 											);
 											return match
 												? match.value
-												: String( id );
-										} ) }
-										onChange={ ( selected: any ) => {
+												: String(id);
+										})}
+										onChange={(selected: any) => {
 											const store_owners =
-												( selected as any[] )?.map(
-													( option ) => option.value
+												(selected as any[])?.map(
+													(option) => option.value
 												) || [];
 											const updated = {
 												...formData,
 												store_owners,
 												state: '',
 											};
-											setFormData( updated );
-											autoSave( updated );
-										} }
+											setFormData(updated);
+											autoSave(updated);
+										}}
 									/>
 								</div>
 							</div>
 
-							{ modules.includes( 'staff-manager' ) && (
+							{modules.includes('staff-manager') && (
 								<>
-									{ [
+									{[
 										{
 											label: __(
 												'Store managers',
@@ -134,67 +132,62 @@ const StoreSquad = ( { id }: { id: string | null } ) => {
 											options:
 												appLocalizer?.assistants_list,
 										},
-									].map( ( { label, name, options } ) => (
+									].map(({ label, name, options }) => (
 										<div
 											className="form-group-wrapper"
-											key={ name }
+											key={name}
 										>
 											<div className="form-group">
-												<label>{ label }</label>
+												<label>{label}</label>
 												<SelectInput
-													name={ name }
-													options={ options || [] }
+													name={name}
+													options={options || []}
 													type="multi-select"
-													value={ (
-														formData[ name ] || []
-													).map( ( id: any ) => {
+													value={(
+														formData[name] || []
+													).map((id: any) => {
 														const match = (
 															options || []
 														).find(
-															( opt: any ) =>
+															(opt: any) =>
 																String(
 																	opt.value
-																) ===
-																String( id )
+																) === String(id)
 														);
 														return match
 															? match.value
-															: String( id );
-													} ) }
-													onChange={ (
+															: String(id);
+													})}
+													onChange={(
 														selected: any
 													) => {
 														const updatedValues =
 															(
 																selected as any[]
-															 )?.map(
-																( option ) =>
+															)?.map(
+																(option) =>
 																	option.value
 															) || [];
 														const updated = {
 															...formData,
-															[ name ]:
-																updatedValues,
+															[name]: updatedValues,
 															state: '',
 														};
-														setFormData( updated );
-														autoSave( updated );
-													} }
+														setFormData(updated);
+														autoSave(updated);
+													}}
 												/>
 											</div>
 										</div>
-									) ) }
+									))}
 								</>
-							) }
+							)}
 
-							{ modules.includes( 'facilitator' ) && (
+							{modules.includes('facilitator') && (
 								<div className="form-group-wrapper">
 									<div className="form-group">
 										<label>
-											{ __(
-												'Facilitators',
-												'multivendorx'
-											) }
+											{__('Facilitators', 'multivendorx')}
 										</label>
 										<SelectInput
 											name="facilitators"
@@ -203,39 +196,38 @@ const StoreSquad = ( { id }: { id: string | null } ) => {
 												[]
 											}
 											type="multi-select"
-											value={ (
+											value={(
 												formData.facilitators || []
-											).map( ( id: any ) => {
+											).map((id: any) => {
 												const match = (
 													appLocalizer?.facilitators_list ||
 													[]
 												).find(
-													( opt: any ) =>
-														String( opt.value ) ===
-														String( id )
+													(opt: any) =>
+														String(opt.value) ===
+														String(id)
 												);
 												return match
 													? match.value
-													: String( id );
-											} ) }
-											onChange={ ( selected: any ) => {
+													: String(id);
+											})}
+											onChange={(selected: any) => {
 												const facilitators =
-													( selected as any[] )?.map(
-														( option ) =>
-															option.value
+													(selected as any[])?.map(
+														(option) => option.value
 													) || [];
 												const updated = {
 													...formData,
 													facilitators,
 													state: '',
 												};
-												setFormData( updated );
-												autoSave( updated );
-											} }
+												setFormData(updated);
+												autoSave(updated);
+											}}
 										/>
 									</div>
 								</div>
-							) }
+							)}
 						</div>
 					</div>
 				</div>
@@ -245,7 +237,7 @@ const StoreSquad = ( { id }: { id: string | null } ) => {
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{ __( 'Primary owner', 'multivendorx' ) }
+									{__('Primary owner', 'multivendorx')}
 								</div>
 							</div>
 						</div>
@@ -253,31 +245,31 @@ const StoreSquad = ( { id }: { id: string | null } ) => {
 							<div className="form-group-wrapper">
 								<div className="form-group">
 									<label>
-										{ __(
+										{__(
 											'Select primary owner',
 											'multivendorx'
-										) }
+										)}
 									</label>
 									<SelectInput
 										name="primary_owner"
 										options={
 											appLocalizer?.store_owners || []
 										}
-										value={ formData.primary_owner }
+										value={formData.primary_owner}
 										type="single-select"
-										onChange={ ( newValue: any ) => {
+										onChange={(newValue: any) => {
 											if (
-												! newValue ||
-												Array.isArray( newValue )
+												!newValue ||
+												Array.isArray(newValue)
 											)
 												return;
 											const updated = {
 												...formData,
 												primary_owner: newValue.value,
 											};
-											setFormData( updated );
-											autoSave( updated );
-										} }
+											setFormData(updated);
+											autoSave(updated);
+										}}
 									/>
 								</div>
 							</div>

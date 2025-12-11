@@ -1,8 +1,8 @@
-export const getTourSteps = ( appLocalizer: any ) => [
+export const getTourSteps = (appLocalizer: any) => [
 	{
 		selector: '[data-tour="appointment-showcase-tour"]',
 		placement: 'right',
-		content: ( { navigateTo, finishTour }: any ) => (
+		content: ({ navigateTo, finishTour }: any) => (
 			<div className="tour-box">
 				<h3>Store Commissions test from zyra</h3>
 				<h4>Manage your store commission settings here.</h4>
@@ -10,9 +10,9 @@ export const getTourSteps = ( appLocalizer: any ) => [
 				<div className="tour-footer">
 					<button
 						className="admin-btn btn-purple"
-						onClick={ () =>
+						onClick={() =>
 							navigateTo(
-								`${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
+								`${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
 								1
 							)
 						}
@@ -22,7 +22,7 @@ export const getTourSteps = ( appLocalizer: any ) => [
 
 					<button
 						className="admin-btn btn-purple"
-						onClick={ finishTour }
+						onClick={finishTour}
 					>
 						End Tour
 					</button>
@@ -34,7 +34,7 @@ export const getTourSteps = ( appLocalizer: any ) => [
 	{
 		selector: '.general-wrapper .menu-item.active-current-tab',
 		placement: 'auto',
-		content: ( { navigateTo, finishTour }: any ) => (
+		content: ({ navigateTo, finishTour }: any) => (
 			<div className="tour-box">
 				<h3>Disbursement</h3>
 				<h4>View and configure your disbursement settings here.</h4>
@@ -42,9 +42,9 @@ export const getTourSteps = ( appLocalizer: any ) => [
 				<div className="tour-footer">
 					<button
 						className="admin-btn btn-purple"
-						onClick={ () =>
+						onClick={() =>
 							navigateTo(
-								`${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=payment-integration`,
+								`${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=payment-integration`,
 								2
 							)
 						}
@@ -54,7 +54,7 @@ export const getTourSteps = ( appLocalizer: any ) => [
 
 					<button
 						className="admin-btn btn-purple"
-						onClick={ finishTour }
+						onClick={finishTour}
 					>
 						End Tour
 					</button>
@@ -66,7 +66,7 @@ export const getTourSteps = ( appLocalizer: any ) => [
 	{
 		selector: undefined,
 		placement: 'auto',
-		content: ( { navigateTo, finishTour }: any ) => (
+		content: ({ navigateTo, finishTour }: any) => (
 			<div className="tour-box">
 				<h3>Payment Integration</h3>
 				<h4>Set up your payment integration settings here.</h4>
@@ -74,9 +74,9 @@ export const getTourSteps = ( appLocalizer: any ) => [
 				<div className="tour-footer">
 					<button
 						className="admin-btn btn-purple"
-						onClick={ () =>
+						onClick={() =>
 							navigateTo(
-								`${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-registration-form`,
+								`${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-registration-form`,
 								3
 							)
 						}
@@ -86,7 +86,7 @@ export const getTourSteps = ( appLocalizer: any ) => [
 
 					<button
 						className="admin-btn btn-purple"
-						onClick={ finishTour }
+						onClick={finishTour}
 					>
 						End Tour
 					</button>
@@ -98,7 +98,7 @@ export const getTourSteps = ( appLocalizer: any ) => [
 	{
 		selector: undefined,
 		placement: 'auto',
-		content: ( { navigateTo, finishTour }: any ) => (
+		content: ({ navigateTo, finishTour }: any) => (
 			<div className="tour-box">
 				<h3>Store Registration Form</h3>
 				<h4>Manage the registration form for new stores.</h4>
@@ -106,9 +106,9 @@ export const getTourSteps = ( appLocalizer: any ) => [
 				<div className="tour-footer">
 					<button
 						className="admin-btn btn-purple"
-						onClick={ () =>
+						onClick={() =>
 							navigateTo(
-								`${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=modules`,
+								`${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=modules`,
 								4
 							)
 						}
@@ -118,7 +118,7 @@ export const getTourSteps = ( appLocalizer: any ) => [
 
 					<button
 						className="admin-btn btn-purple"
-						onClick={ finishTour }
+						onClick={finishTour}
 					>
 						End Tour
 					</button>
@@ -130,7 +130,7 @@ export const getTourSteps = ( appLocalizer: any ) => [
 	{
 		selector: undefined,
 		placement: 'auto',
-		content: ( { finishTour }: any ) => (
+		content: ({ finishTour }: any) => (
 			<div className="tour-box">
 				<h3>Modules</h3>
 				<h4>Here you can enable or disable marketplace modules.</h4>
@@ -138,7 +138,7 @@ export const getTourSteps = ( appLocalizer: any ) => [
 				<div className="tour-footer">
 					<button
 						className="admin-btn btn-purple"
-						onClick={ finishTour }
+						onClick={finishTour}
 					>
 						Finish Tour
 					</button>

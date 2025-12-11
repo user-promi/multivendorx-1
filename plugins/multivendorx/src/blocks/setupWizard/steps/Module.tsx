@@ -15,48 +15,46 @@ interface SelectedModules {
 	wholesale: boolean;
 }
 
-const Modules: React.FC< ModulesProps > = ( { onNext, onPrev } ) => {
-	const [ loading, setLoading ] = useState< boolean >( false );
-	const [ selectedModules, setSelectedModules ] = useState< SelectedModules >(
-		{
-			catalog: false,
-			enquiry: false,
-			quote: false,
-			wholesale: false,
-		}
-	);
+const Modules: React.FC<ModulesProps> = ({ onNext, onPrev }) => {
+	const [loading, setLoading] = useState<boolean>(false);
+	const [selectedModules, setSelectedModules] = useState<SelectedModules>({
+		catalog: false,
+		enquiry: false,
+		quote: false,
+		wholesale: false,
+	});
 
-	const handleCheckboxChange = ( event: ChangeEvent< HTMLInputElement > ) => {
+	const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const { name, checked } = event.target;
-		setSelectedModules( ( prevState ) => ( {
+		setSelectedModules((prevState) => ({
 			...prevState,
-			[ name ]: checked,
-		} ) );
+			[name]: checked,
+		}));
 	};
 
 	const moduleSave = () => {
-		setLoading( true );
-		const modulesToSave = Object.keys( selectedModules ).filter(
-			( key ) => selectedModules[ key as keyof SelectedModules ]
+		setLoading(true);
+		const modulesToSave = Object.keys(selectedModules).filter(
+			(key) => selectedModules[key as keyof SelectedModules]
 		);
 
 		axios
 			.post(
-				getApiLink( 'modules' ),
+				getApiLink('modules'),
 				{ modules: modulesToSave },
 				{
 					headers: {
-						'X-WP-Nonce': ( window as any ).appLocalizer?.nonce,
+						'X-WP-Nonce': (window as any).appLocalizer?.nonce,
 					},
 				}
 			)
-			.then( () => {
-				setLoading( false );
+			.then(() => {
+				setLoading(false);
 				onNext();
-			} )
-			.catch( () => {
-				setLoading( false );
-			} );
+			})
+			.catch(() => {
+				setLoading(false);
+			});
 	};
 
 	return (
@@ -77,8 +75,8 @@ const Modules: React.FC< ModulesProps > = ( { onNext, onPrev } ) => {
 							type="checkbox"
 							id="enquiry"
 							name="enquiry"
-							checked={ selectedModules.enquiry }
-							onChange={ handleCheckboxChange }
+							checked={selectedModules.enquiry}
+							onChange={handleCheckboxChange}
 						/>
 						<label htmlFor="enquiry"></label>
 					</div>
@@ -97,8 +95,8 @@ const Modules: React.FC< ModulesProps > = ( { onNext, onPrev } ) => {
 							type="checkbox"
 							id="quote"
 							name="quote"
-							checked={ selectedModules.quote }
-							onChange={ handleCheckboxChange }
+							checked={selectedModules.quote}
+							onChange={handleCheckboxChange}
 						/>
 						<label htmlFor="quote"></label>
 					</div>
@@ -107,19 +105,19 @@ const Modules: React.FC< ModulesProps > = ( { onNext, onPrev } ) => {
 
 			<footer className="setup-footer-btn-wrapper">
 				<div>
-					<button className="footer-btn pre-btn" onClick={ onPrev }>
+					<button className="footer-btn pre-btn" onClick={onPrev}>
 						Prev
 					</button>
-					<button className="footer-btn" onClick={ onNext }>
+					<button className="footer-btn" onClick={onNext}>
 						Skip
 					</button>
 				</div>
-				<button className="footer-btn next-btn" onClick={ moduleSave }>
+				<button className="footer-btn next-btn" onClick={moduleSave}>
 					Next
 				</button>
 			</footer>
 
-			{ loading && <Loading /> }
+			{loading && <Loading />}
 		</section>
 	);
 };

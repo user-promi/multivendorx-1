@@ -4,8 +4,8 @@ import NotificationTable from './NotificationTable';
 import ActivityTable from './ActivityTable';
 
 const Notifications = () => {
-	const location = new URLSearchParams( useLocation().hash.substring( 1 ) );
-	const initialTab = location.get( 'tab' ) || 'notifications';
+	const location = new URLSearchParams(useLocation().hash.substring(1));
+	const initialTab = location.get('tab') || 'notifications';
 
 	const tabData = [
 		{
@@ -30,8 +30,8 @@ const Notifications = () => {
 		},
 	];
 
-	const getForm = ( tabId: string ) => {
-		switch ( tabId ) {
+	const getForm = (tabId: string) => {
+		switch (tabId) {
 			case 'notifications':
 				return <NotificationTable />;
 			case 'activities':
@@ -43,17 +43,15 @@ const Notifications = () => {
 
 	return (
 		<Tabs
-			tabData={ tabData }
-			currentTab={ initialTab }
-			getForm={ getForm }
-			prepareUrl={ ( tabid: string ) =>
-				`?page=multivendorx#&tab=${ tabid }`
-			}
-			appLocalizer={ appLocalizer }
-			premium={ false }
-			Link={ Link }
-			hideTitle={ true }
-			hideBreadcrumb={ true }
+			tabData={tabData}
+			currentTab={initialTab}
+			getForm={getForm}
+			prepareUrl={(tabid: string) => `?page=multivendorx#&tab=${tabid}`}
+			appLocalizer={appLocalizer}
+			premium={false}
+			Link={Link}
+			hideTitle={true}
+			hideBreadcrumb={true}
 		/>
 	);
 };

@@ -8,43 +8,41 @@ interface QuoteProps {
 	onPrev: () => void;
 }
 
-const Quote: React.FC< QuoteProps > = ( { onFinish, onPrev } ) => {
-	const [ loading, setLoading ] = useState< boolean >( false );
-	const [ restrictUserQuote, setRestrictUserQuote ] = useState< string[] >(
-		[]
-	);
+const Quote: React.FC<QuoteProps> = ({ onFinish, onPrev }) => {
+	const [loading, setLoading] = useState<boolean>(false);
+	const [restrictUserQuote, setRestrictUserQuote] = useState<string[]>([]);
 
 	const handleRestrictUserQuoteChange = (
-		event: ChangeEvent< HTMLInputElement >
+		event: ChangeEvent<HTMLInputElement>
 	) => {
 		const { checked, name } = event.target;
-		setRestrictUserQuote( ( prevState ) =>
+		setRestrictUserQuote((prevState) =>
 			checked
-				? [ ...prevState, name ]
-				: prevState.filter( ( value ) => value !== name )
+				? [...prevState, name]
+				: prevState.filter((value) => value !== name)
 		);
 	};
 
 	const saveQuoteSettings = () => {
-		setLoading( true );
+		setLoading(true);
 		const data = {
 			action: 'quote',
 			restrictUserQuote: restrictUserQuote,
 		};
 
 		axios
-			.post( getApiLink( 'settings' ), data, {
+			.post(getApiLink('settings'), data, {
 				headers: {
-					'X-WP-Nonce': ( window as any ).appLocalizer?.nonce,
+					'X-WP-Nonce': (window as any).appLocalizer?.nonce,
 				},
-			} )
-			.then( () => {
-				setLoading( false );
+			})
+			.then(() => {
+				setLoading(false);
 				onFinish();
-			} )
-			.catch( () => {
-				setLoading( false );
-			} );
+			})
+			.catch(() => {
+				setLoading(false);
+			});
 	};
 
 	return (
@@ -64,10 +62,8 @@ const Quote: React.FC< QuoteProps > = ( { onFinish, onPrev } ) => {
 							type="checkbox"
 							id="logged_out"
 							name="logged_out"
-							checked={ restrictUserQuote.includes(
-								'logged_out'
-							) }
-							onChange={ handleRestrictUserQuoteChange }
+							checked={restrictUserQuote.includes('logged_out')}
+							onChange={handleRestrictUserQuoteChange}
 						/>
 						<label htmlFor="logged_out"></label>
 					</div>
@@ -76,22 +72,22 @@ const Quote: React.FC< QuoteProps > = ( { onFinish, onPrev } ) => {
 
 			<footer className="setup-footer-btn-wrapper">
 				<div>
-					<button className="footer-btn pre-btn" onClick={ onPrev }>
+					<button className="footer-btn pre-btn" onClick={onPrev}>
 						Prev
 					</button>
-					<button className="footer-btn" onClick={ onFinish }>
+					<button className="footer-btn" onClick={onFinish}>
 						Skip
 					</button>
 				</div>
 				<button
 					className="footer-btn next-btn"
-					onClick={ saveQuoteSettings }
+					onClick={saveQuoteSettings}
 				>
 					Finish
 				</button>
 			</footer>
 
-			{ loading && <Loading /> }
+			{loading && <Loading />}
 		</section>
 	);
 };

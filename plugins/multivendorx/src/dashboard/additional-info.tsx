@@ -4,95 +4,92 @@ import { TextArea, getApiLink, ToggleSetting, SuccessNotice } from 'zyra';
 
 const AdditionalInformation = () => {
 	const id = appLocalizer.store_id;
-	const [ formData, setFormData ] = useState< { [ key: string ]: any } >(
-		{}
-	);
-	const [ successMsg, setSuccessMsg ] = useState< string | null >( null );
-	const [ stateOptions, setStateOptions ] = useState<
+	const [formData, setFormData] = useState<{ [key: string]: any }>({});
+	const [successMsg, setSuccessMsg] = useState<string | null>(null);
+	const [stateOptions, setStateOptions] = useState<
 		{ label: string; value: string }[]
-	>( [] );
+	>([]);
 
 	// Fetch store data
-	useEffect( () => {
-		if ( ! id ) return;
-		axios( {
+	useEffect(() => {
+		if (!id) return;
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, `store/${ id }` ),
+			url: getApiLink(appLocalizer, `store/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		} ).then( ( res ) => {
+		}).then((res) => {
 			const data = res.data || {};
-			setFormData( ( prev ) => ( { ...prev, ...data } ) );
-		} );
-	}, [ id ] );
+			setFormData((prev) => ({ ...prev, ...data }));
+		});
+	}, [id]);
 
 	// Auto clear success message
-	useEffect( () => {
-		if ( successMsg ) {
-			const timer = setTimeout( () => setSuccessMsg( null ), 3000 );
-			return () => clearTimeout( timer );
+	useEffect(() => {
+		if (successMsg) {
+			const timer = setTimeout(() => setSuccessMsg(null), 3000);
+			return () => clearTimeout(timer);
 		}
-	}, [ successMsg ] );
+	}, [successMsg]);
 
 	// Fetch states when country changes
-	useEffect( () => {
-		if ( formData.country ) fetchStatesByCountry( formData.country );
-	}, [ formData.country ] );
+	useEffect(() => {
+		if (formData.country) fetchStatesByCountry(formData.country);
+	}, [formData.country]);
 
-	const fetchStatesByCountry = ( countryCode: string ) => {
-		axios( {
+	const fetchStatesByCountry = (countryCode: string) => {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, `states/${ countryCode }` ),
+			url: getApiLink(appLocalizer, `states/${countryCode}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		} ).then( ( res ) => {
-			setStateOptions( res.data || [] );
-		} );
+		}).then((res) => {
+			setStateOptions(res.data || []);
+		});
 	};
 
 	// Handle text input changes
 	const handleChange = (
-		e: React.ChangeEvent< HTMLInputElement | HTMLTextAreaElement >
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
 	) => {
 		const { name, value } = e.target;
-		setFormData( ( prev ) => {
-			const updated = { ...prev, [ name ]: value };
-			autoSave( updated );
+		setFormData((prev) => {
+			const updated = { ...prev, [name]: value };
+			autoSave(updated);
 			return updated;
-		} );
+		});
 	};
 
 	// Handle toggle changes (always save yes/no string)
-	const handleToggleChange = ( field: string, val: any ) => {
+	const handleToggleChange = (field: string, val: any) => {
 		const newValue = typeof val === 'string' ? val : val?.value || 'no';
-		setFormData( ( prev ) => {
-			const updated = { ...prev, [ field ]: newValue };
-			autoSave( updated );
+		setFormData((prev) => {
+			const updated = { ...prev, [field]: newValue };
+			autoSave(updated);
 			return updated;
-		} );
+		});
 	};
 
 	// Auto-save to backend
-	const autoSave = ( updatedData: { [ key: string ]: any } ) => {
-		axios( {
+	const autoSave = (updatedData: { [key: string]: any }) => {
+		axios({
 			method: 'PUT',
-			url: getApiLink( appLocalizer, `store/${ id }` ),
+			url: getApiLink(appLocalizer, `store/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: updatedData,
-		} ).then( ( res ) => {
-			if ( res.data.success )
-				setSuccessMsg( 'Store saved successfully!' );
-		} );
+		}).then((res) => {
+			if (res.data.success) setSuccessMsg('Store saved successfully!');
+		});
 	};
 
 	return (
 		<>
-			<SuccessNotice message={ successMsg } />
+			<SuccessNotice message={successMsg} />
 
 			<div className="container-wrapper">
 				<div className="card-wrapper w-65">
-					{ /* Message to Buyer */ }
+					{/* Message to Buyer */}
 					<div className="card-content">
 						<div className="card-title">
-							{ __( 'Message to Buyer', 'zcrm' ) }
+							{__('Message to Buyer', 'zcrm')}
 						</div>
 
 						<div className="form-group-wrapper">
@@ -102,39 +99,39 @@ const AdditionalInformation = () => {
 									wrapperClass="setting-from-textarea"
 									inputClass="textarea-input"
 									descClass="settings-metabox-description"
-									value={ formData.messageToBuyer || '' }
-									onChange={ handleChange }
+									value={formData.messageToBuyer || ''}
+									onChange={handleChange}
 								/>
 							</div>
 						</div>
 					</div>
 
-					{ /* Privacy Controls */ }
+					{/* Privacy Controls */}
 					<div className="card-content">
 						<div className="card-title">
-							{ __( 'Privacy Controls', 'zcrm' ) }
+							{__('Privacy Controls', 'zcrm')}
 						</div>
 
 						<div className="form-group-wrapper">
 							<div className="form-group">
-								<label>{ __( 'Hide Address', 'zcrm' ) }</label>
+								<label>{__('Hide Address', 'zcrm')}</label>
 								<ToggleSetting
 									wrapperClass="setting-form-input"
-									options={ [
+									options={[
 										{
 											key: 'yes',
 											value: 'yes',
-											label: __( 'Yes', 'zcrm' ),
+											label: __('Yes', 'zcrm'),
 										},
 										{
 											key: 'no',
 											value: 'no',
-											label: __( 'No', 'zcrm' ),
+											label: __('No', 'zcrm'),
 										},
-									] }
-									value={ formData.hideAddress || 'no' }
-									onChange={ ( val: any ) =>
-										handleToggleChange( 'hideAddress', val )
+									]}
+									value={formData.hideAddress || 'no'}
+									onChange={(val: any) =>
+										handleToggleChange('hideAddress', val)
 									}
 								/>
 							</div>
@@ -142,24 +139,24 @@ const AdditionalInformation = () => {
 
 						<div className="form-group-wrapper">
 							<div className="form-group">
-								<label>{ __( 'Hide Phone', 'zcrm' ) }</label>
+								<label>{__('Hide Phone', 'zcrm')}</label>
 								<ToggleSetting
 									wrapperClass="setting-form-input"
-									options={ [
+									options={[
 										{
 											key: 'yes',
 											value: 'yes',
-											label: __( 'Yes', 'zcrm' ),
+											label: __('Yes', 'zcrm'),
 										},
 										{
 											key: 'no',
 											value: 'no',
-											label: __( 'No', 'zcrm' ),
+											label: __('No', 'zcrm'),
 										},
-									] }
-									value={ formData.hidePhone || 'no' }
-									onChange={ ( val: any ) =>
-										handleToggleChange( 'hidePhone', val )
+									]}
+									value={formData.hidePhone || 'no'}
+									onChange={(val: any) =>
+										handleToggleChange('hidePhone', val)
 									}
 								/>
 							</div>
@@ -167,24 +164,24 @@ const AdditionalInformation = () => {
 
 						<div className="form-group-wrapper">
 							<div className="form-group">
-								<label>{ __( 'Hide Email', 'zcrm' ) }</label>
+								<label>{__('Hide Email', 'zcrm')}</label>
 								<ToggleSetting
 									wrapperClass="setting-form-input"
-									options={ [
+									options={[
 										{
 											key: 'yes',
 											value: 'yes',
-											label: __( 'Yes', 'zcrm' ),
+											label: __('Yes', 'zcrm'),
 										},
 										{
 											key: 'no',
 											value: 'no',
-											label: __( 'No', 'zcrm' ),
+											label: __('No', 'zcrm'),
 										},
-									] }
-									value={ formData.hideEmail || 'no' }
-									onChange={ ( val: any ) =>
-										handleToggleChange( 'hideEmail', val )
+									]}
+									value={formData.hideEmail || 'no'}
+									onChange={(val: any) =>
+										handleToggleChange('hideEmail', val)
 									}
 								/>
 							</div>

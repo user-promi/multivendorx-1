@@ -9,47 +9,44 @@ interface OrderDetailsProps {
 	onBack?: () => void; // optional back button
 }
 
-const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
-	const [ orderData, setOrderData ] = useState< any >( order || null );
-	const [ customerData, setCustomerData ] = useState< any >();
+const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
+	const [orderData, setOrderData] = useState<any>(order || null);
+	const [customerData, setCustomerData] = useState<any>();
 	const orderId = order?.id;
 
-	const [ statusSelect, setStatusSelect ] = useState( false );
-	const [ isRefund, setIsRefund ] = useState( false );
-	const [ refundItems, setRefundItems ] = useState( {} );
-	const [ refundDetails, setRefundDetails ] = useState( {
+	const [statusSelect, setStatusSelect] = useState(false);
+	const [isRefund, setIsRefund] = useState(false);
+	const [refundItems, setRefundItems] = useState({});
+	const [refundDetails, setRefundDetails] = useState({
 		refundAmount: 0,
 		restock: true,
 		reason: '',
-	} );
+	});
 
 	// When any item total changes, recalculate refundAmount
-	const handleItemChange = ( id, field, value ) => {
-		setRefundItems( ( prev ) => {
+	const handleItemChange = (id, field, value) => {
+		setRefundItems((prev) => {
 			const updated = {
 				...prev,
-				[ id ]: {
-					...prev[ id ],
-					[ field ]: value,
+				[id]: {
+					...prev[id],
+					[field]: value,
 				},
 			};
 
-			const refundAmount = Object.values( updated ).reduce(
-				( sum, item ) => {
-					const itemTotal = item.total ? Number( item.total ) : 0;
-					const itemTax = item.tax ? Number( item.tax ) : 0;
-					return sum + ( itemTotal + itemTax );
-				},
-				0
-			);
+			const refundAmount = Object.values(updated).reduce((sum, item) => {
+				const itemTotal = item.total ? Number(item.total) : 0;
+				const itemTax = item.tax ? Number(item.tax) : 0;
+				return sum + (itemTotal + itemTax);
+			}, 0);
 
-			setRefundDetails( ( prevDetails ) => ( {
+			setRefundDetails((prevDetails) => ({
 				...prevDetails,
 				refundAmount,
-			} ) );
+			}));
 
 			return updated;
-		} );
+		});
 	};
 
 	const handleRefundSubmit = () => {
@@ -60,108 +57,105 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 			restock: refundDetails.restock,
 			reason: refundDetails.reason,
 		};
-		console.log( 'Refund Data Sent:', payload );
-		axios( {
+		console.log('Refund Data Sent:', payload);
+		axios({
 			method: 'POST',
-			url: getApiLink( appLocalizer, 'refund' ),
+			url: getApiLink(appLocalizer, 'refund'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: { payload },
-		} ).then( ( response ) => {
-			if ( response.data.success ) {
+		}).then((response) => {
+			if (response.data.success) {
 				window.location.reload();
 			}
-		} );
+		});
 		// onRefund(payload); // send to your API here
 	};
 
-	const [ values, setValues ] = useState( {
+	const [values, setValues] = useState({
 		commission: 50,
 		discount: 5,
 		shipping: 0,
 		total: 95,
 		earned: 50,
-	} );
+	});
 
 	const fetchOrder = async () => {
 		try {
 			const res = await axios.get(
-				`${ appLocalizer.apiUrl }/wc/v3/orders/${ orderId }`,
+				`${appLocalizer.apiUrl}/wc/v3/orders/${orderId}`,
 				{
 					headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				}
 			);
-			setOrderData( res.data );
+			setOrderData(res.data);
 
 			const customerId = res.data.customer_id;
 
 			const customer = await axios.get(
-				`${ appLocalizer.apiUrl }/wc/v3/customers/${ customerId }`,
+				`${appLocalizer.apiUrl}/wc/v3/customers/${customerId}`,
 				{
 					headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				}
 			);
-			setCustomerData( customer.data );
-		} catch ( error ) {
-			console.error( 'Error fetching order:', error );
+			setCustomerData(customer.data);
+		} catch (error) {
+			console.error('Error fetching order:', error);
 		}
 	};
 
-	useEffect( () => {
-		if ( ! orderId ) return;
+	useEffect(() => {
+		if (!orderId) return;
 
 		fetchOrder();
-	}, [ orderId ] );
+	}, [orderId]);
 
-	const refundMap = useMemo( () => {
+	const refundMap = useMemo(() => {
 		const map = {};
-		if ( orderData?.refund_items ) {
-			orderData.refund_items.forEach( ( r ) => {
-				map[ r.item_id ] = r;
-			} );
+		if (orderData?.refund_items) {
+			orderData.refund_items.forEach((r) => {
+				map[r.item_id] = r;
+			});
 		}
 		return map;
-	}, [ orderData ] );
+	}, [orderData]);
 
-	const totalRefunded = ( orderData?.refunds ?? [] ).reduce(
-		( sum, item ) => {
-			const total = Math.abs( Number( item.total ?? 0 ) );
-			return sum + total;
-		},
-		0
-	);
+	const totalRefunded = (orderData?.refunds ?? []).reduce((sum, item) => {
+		const total = Math.abs(Number(item.total ?? 0));
+		return sum + total;
+	}, 0);
 
-	const handleStatusChange = async ( newStatus ) => {
+	const handleStatusChange = async (newStatus) => {
 		const response = await axios.put(
-			`${ appLocalizer.apiUrl }/wc/v3/orders/${ orderId }`,
+			`${appLocalizer.apiUrl}/wc/v3/orders/${orderId}`,
 			{ status: newStatus },
 			{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
 		);
 
-		if ( response ) {
-			setStatusSelect( false );
+		if (response) {
+			setStatusSelect(false);
 			fetchOrder();
 		}
 	};
 
-	const handleChange = ( field: keyof typeof values, val: number ) => {
-		const newVals = { ...values, [ field ]: val };
+	const handleChange = (field: keyof typeof values, val: number) => {
+		const newVals = { ...values, [field]: val };
 		const baseTotal = 100; // example base price
 		newVals.total = baseTotal - newVals.discount + newVals.shipping;
 		newVals.earned = newVals.commission;
-		setValues( newVals );
+		setValues(newVals);
 	};
-	const formatDateTime = ( iso?: string | null ) => {
-		if ( ! iso ) return '-';
+	const formatDateTime = (iso?: string | null) => {
+		if (!iso) return '-';
 		try {
-			const d = new Date( iso );
+			const d = new Date(iso);
 			return d.toLocaleString(); // adjust locale/options if you want specific format
 		} catch {
 			return iso;
 		}
 	};
 
-	const statusBadgeClass = ( status?: string ) => {
-		switch ( ( status || '' ).toLowerCase() ) {
+	const statusBadgeClass = (status?: string) => {
+		switch ((status || '').toLowerCase()) {
 			case 'completed':
 				return 'admin-badge green';
 			case 'on-hold':
@@ -177,36 +171,33 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 
 	return (
 		<>
-			{ ! appLocalizer.edit_order_capability ? (
+			{!appLocalizer.edit_order_capability ? (
 				<p>No access to view the order</p>
 			) : (
 				<>
 					<div className="page-title-wrapper">
 						<div className="page-title">
 							<div className="title">
-								Order #{ orderData?.number ?? orderId ?? '—' }
-								{ ! statusSelect &&
-									orderData?.status?.trim() && (
-										<div
-											className={ statusBadgeClass(
-												orderData?.status
-											) }
-											onClick={ () =>
-												setStatusSelect( true )
-											}
-										>
-											{ ( orderData?.status || '' )
-												.replace( /-/g, ' ' )
-												.replace( /\b\w/g, ( c ) =>
-													c.toUpperCase()
-												) }
-										</div>
-									) }
-								{ statusSelect && (
+								Order #{orderData?.number ?? orderId ?? '—'}
+								{!statusSelect && orderData?.status?.trim() && (
+									<div
+										className={statusBadgeClass(
+											orderData?.status
+										)}
+										onClick={() => setStatusSelect(true)}
+									>
+										{(orderData?.status || '')
+											.replace(/-/g, ' ')
+											.replace(/\b\w/g, (c) =>
+												c.toUpperCase()
+											)}
+									</div>
+								)}
+								{statusSelect && (
 									<div className="status-edit">
 										<SelectInput
 											name="status"
-											options={ [
+											options={[
 												{
 													label: 'Processing',
 													value: 'processing',
@@ -223,36 +214,36 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 													label: 'Cancelled',
 													value: 'cancelled',
 												},
-											] }
-											value={ orderData?.status }
+											]}
+											value={orderData?.status}
 											type="single-select"
-											onChange={ ( newValue: any ) => {
+											onChange={(newValue: any) => {
 												handleStatusChange(
 													newValue.value
 												);
-											} }
+											}}
 										/>
 									</div>
-								) }
+								)}
 							</div>
 
 							<div className="des">
-								{ formatDateTime( orderData?.date_created ) }
+								{formatDateTime(orderData?.date_created)}
 							</div>
 						</div>
 						<div className="buttons-wrapper">
-							{ onBack && (
+							{onBack && (
 								<button
 									className="tooltip-btn admin-badge blue"
-									onClick={ onBack }
+									onClick={onBack}
 								>
 									<i className="adminlib-arrow-right"></i>
 									<span className="tooltip">
-										{ ' ' }
-										Back to Orders{ ' ' }
+										{' '}
+										Back to Orders{' '}
 									</span>
 								</button>
-							) }
+							)}
 						</div>
 					</div>
 
@@ -282,12 +273,12 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 										</thead>
 
 										<tbody className="admin-table-body">
-											{ orderData?.line_items?.length >
+											{orderData?.line_items?.length >
 											0 ? (
 												orderData.line_items.map(
-													( item ) => (
+													(item) => (
 														<tr
-															key={ item.id }
+															key={item.id}
 															className="admin-row simple"
 														>
 															<td className="admin-column">
@@ -313,37 +304,35 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 																				item.name
 																			}
 																		</div>
-																		{ item?.sku && (
+																		{item?.sku && (
 																			<div className="sku">
-																				SKU:{ ' ' }
+																				SKU:{' '}
 																				{
 																					item.sku
 																				}
 																			</div>
-																		) }
+																		)}
 																	</div>
 																</div>
 															</td>
-															{ /* Cost (not editable) */ }
+															{/* Cost (not editable) */}
 															<td className="admin-column">
-																{ `$${ parseFloat(
+																{`$${parseFloat(
 																	item.price
-																).toFixed(
-																	2
-																) }` }
+																).toFixed(2)}`}
 															</td>
 
-															{ /* Qty (editable only in refund mode) */ }
+															{/* Qty (editable only in refund mode) */}
 															<td className="admin-column">
 																<div className="price">
-																	{ ' ' }
-																	x{ ' ' }
+																	{' '}
+																	x{' '}
 																	{
 																		item.quantity
-																	}{ ' ' }
+																	}{' '}
 																</div>
 
-																{ isRefund && (
+																{isRefund && (
 																	<input
 																		type="number"
 																		min="0"
@@ -356,7 +345,7 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 																				?.quantity ??
 																			0
 																		}
-																		onChange={ (
+																		onChange={(
 																			e
 																		) =>
 																			handleItemChange(
@@ -368,21 +357,21 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 																			)
 																		}
 																	/>
-																) }
+																)}
 															</td>
 
-															{ /* Total (editable only in refund mode) */ }
+															{/* Total (editable only in refund mode) */}
 															<td className="admin-column">
 																<div className="price">
-																	{ ' ' }
+																	{' '}
 																	$
-																	{ parseFloat(
+																	{parseFloat(
 																		item.subtotal
 																	).toFixed(
 																		2
-																	) }{ ' ' }
+																	)}{' '}
 																</div>
-																{ refundMap[
+																{refundMap[
 																	item.id
 																]
 																	?.refunded_line_total !==
@@ -396,8 +385,8 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 																				.refunded_line_total
 																		}
 																	</div>
-																) }
-																{ isRefund && (
+																)}
+																{isRefund && (
 																	<input
 																		type="number"
 																		min="0"
@@ -410,7 +399,7 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 																				?.total ??
 																			0
 																		}
-																		onChange={ (
+																		onChange={(
 																			e
 																		) =>
 																			handleItemChange(
@@ -422,19 +411,19 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 																			)
 																		}
 																	/>
-																) }
+																)}
 															</td>
 															<td className="admin-column">
 																<div className="price">
-																	{ ' ' }
+																	{' '}
 																	$
-																	{ parseFloat(
+																	{parseFloat(
 																		item.subtotal_tax
 																	).toFixed(
 																		2
-																	) }{ ' ' }
+																	)}{' '}
 																</div>
-																{ refundMap[
+																{refundMap[
 																	item.id
 																]
 																	?.refunded_tax !==
@@ -448,8 +437,8 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 																				.refunded_tax
 																		}
 																	</div>
-																) }
-																{ isRefund && (
+																)}
+																{isRefund && (
 																	<input
 																		type="number"
 																		min="0"
@@ -462,7 +451,7 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 																				?.tax ??
 																			0
 																		}
-																		onChange={ (
+																		onChange={(
 																			e
 																		) =>
 																			handleItemChange(
@@ -474,26 +463,26 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 																			)
 																		}
 																	/>
-																) }
+																)}
 															</td>
 														</tr>
 													)
 												)
 											) : (
 												<tr className="admin-row simple">
-													<td colSpan={ 4 }>
+													<td colSpan={4}>
 														No items found.
 													</td>
 												</tr>
-											) }
-											{ orderData?.shipping_lines
-												?.length > 0 &&
+											)}
+											{orderData?.shipping_lines?.length >
+												0 &&
 												orderData.shipping_lines.map(
-													( item ) => (
+													(item) => (
 														<tr className="admin-row simple">
 															<td
 																className="admin-column"
-																colSpan={ 3 }
+																colSpan={3}
 															>
 																<div className="item-details">
 																	<div className="icon">
@@ -505,19 +494,19 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 																				item.method_title
 																			}
 																		</div>
-																		{ /* {item?.meta_data?.map((data) => (
+																		{/* {item?.meta_data?.map((data) => (
                                                                         <div className="sub-text" key={data.id}>
                                                                             <span>{data.display_key || data.key}:</span> {data.display_value || data.value}
                                                                         </div>
-                                                                    ))} */ }
-																		{ /* <div className="sub-text"><span>_vendor_order_shipping_item_id:</span> 337</div> */ }
+                                                                    ))} */}
+																		{/* <div className="sub-text"><span>_vendor_order_shipping_item_id:</span> 337</div> */}
 																	</div>
 																</div>
 															</td>
 															<td className="admin-column"></td>
 															<td className="admin-column"></td>
 															<td className="admin-column">
-																{ isRefund ? (
+																{isRefund ? (
 																	<input
 																		type="number"
 																		min="0"
@@ -531,7 +520,7 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 																				?.total ??
 																			0
 																		}
-																		onChange={ (
+																		onChange={(
 																			e
 																		) =>
 																			handleItemChange(
@@ -545,8 +534,8 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 																	/>
 																) : (
 																	item.total
-																) }
-																{ refundMap[
+																)}
+																{refundMap[
 																	item.id
 																]
 																	?.refunded_shipping !==
@@ -560,10 +549,10 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 																				.refunded_shipping
 																		}
 																	</div>
-																) }
+																)}
 															</td>
 															<td className="admin-column">
-																{ isRefund ? (
+																{isRefund ? (
 																	<input
 																		type="number"
 																		min="0"
@@ -576,7 +565,7 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 																				?.tax ??
 																			0
 																		}
-																		onChange={ (
+																		onChange={(
 																			e
 																		) =>
 																			handleItemChange(
@@ -590,8 +579,8 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 																	/>
 																) : (
 																	item.total_tax
-																) }
-																{ refundMap[
+																)}
+																{refundMap[
 																	item.id
 																]
 																	?.refunded_shipping_tax !==
@@ -605,18 +594,18 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 																				.refunded_shipping_tax
 																		}
 																	</div>
-																) }
+																)}
 															</td>
 														</tr>
 													)
-												) }
-											{ orderData?.refunds?.length > 0 &&
+												)}
+											{orderData?.refunds?.length > 0 &&
 												orderData.refunds.map(
-													( item ) => (
+													(item) => (
 														<tr className="admin-row simple">
 															<td
 																className="admin-column"
-																colSpan={ 3 }
+																colSpan={3}
 															>
 																<div className="item-details">
 																	<div className="icon">
@@ -636,23 +625,23 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 															<td className="admin-column"></td>
 															<td className="admin-column"></td>
 															<td className="admin-column">
-																{ item.total }
+																{item.total}
 															</td>
 															<td className="admin-column"></td>
 														</tr>
 													)
-												) }
+												)}
 										</tbody>
 									</table>
 								</div>
 
 								<div className="coupons-calculation-wrapper">
 									<div className="left">
-										{ ! isRefund ? (
+										{!isRefund ? (
 											<button
 												className="admin-btn btn-purple"
-												onClick={ () =>
-													setIsRefund( true )
+												onClick={() =>
+													setIsRefund(true)
 												}
 											>
 												Refund
@@ -661,29 +650,27 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 											<div className="buttons-wrapper left">
 												<button
 													className="admin-btn btn-green"
-													onClick={
-														handleRefundSubmit
-													}
+													onClick={handleRefundSubmit}
 												>
 													Refund $
-													{ refundDetails.refundAmount.toFixed(
+													{refundDetails.refundAmount.toFixed(
 														2
-													) }{ ' ' }
+													)}{' '}
 													manually
 												</button>
 												<button
 													className="admin-btn btn-red"
-													onClick={ () =>
-														setIsRefund( false )
+													onClick={() =>
+														setIsRefund(false)
 													}
 												>
 													Cancel
 												</button>
 											</div>
-										) }
+										)}
 									</div>
 
-									{ isRefund && (
+									{isRefund && (
 										<div className="right">
 											<table className="refund-table">
 												<tbody>
@@ -698,9 +685,7 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 																checked={
 																	refundDetails.restock
 																}
-																onChange={ (
-																	e
-																) =>
+																onChange={(e) =>
 																	setRefundDetails(
 																		{
 																			...refundDetails,
@@ -720,10 +705,10 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 															refunded:
 														</td>
 														<td>
-															-{ ' ' }
-															{ formatCurrency(
+															-{' '}
+															{formatCurrency(
 																totalRefunded
-															) }
+															)}
 														</td>
 													</tr>
 													<tr>
@@ -732,10 +717,10 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 															refund:
 														</td>
 														<td>
-															{ formatCurrency(
+															{formatCurrency(
 																orderData.commission_total -
 																	totalRefunded
-															) }
+															)}
 														</td>
 													</tr>
 													<tr>
@@ -747,9 +732,7 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 																value={
 																	refundDetails.refundAmount
 																}
-																onChange={ (
-																	e
-																) =>
+																onChange={(e) =>
 																	setRefundDetails(
 																		{
 																			...refundDetails,
@@ -775,9 +758,7 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 																value={
 																	refundDetails.reason
 																}
-																onChange={ (
-																	e
-																) =>
+																onChange={(e) =>
 																	setRefundDetails(
 																		{
 																			...refundDetails,
@@ -793,42 +774,42 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 												</tbody>
 											</table>
 										</div>
-									) }
+									)}
 
-									{ ! isRefund ? (
+									{!isRefund ? (
 										<div className="right">
 											<table>
 												<tbody>
 													<tr>
 														<td>Commission:</td>
 														<td>
-															{ formatCurrency(
+															{formatCurrency(
 																orderData?.commission_amount
-															) }
+															)}
 														</td>
 													</tr>
 													<tr>
 														<td>Shipping:</td>
 														<td>
-															{ formatCurrency(
+															{formatCurrency(
 																orderData?.shipping_total
-															) }
+															)}
 														</td>
 													</tr>
 													<tr>
 														<td>Total:</td>
 														<td>
-															{ formatCurrency(
+															{formatCurrency(
 																orderData?.total
-															) }
+															)}
 														</td>
 													</tr>
 													<tr>
 														<td>Total Earned:</td>
 														<td>
-															{ formatCurrency(
+															{formatCurrency(
 																orderData?.commission_total
-															) }
+															)}
 														</td>
 													</tr>
 												</tbody>
@@ -854,7 +835,7 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 										//         <tr><td>Reason for refund (optional):</td><td>${values.total.toFixed(2)}</td></tr>
 										//     </tbody>
 										// </table>
-									) }
+									)}
 								</div>
 							</div>
 						</div>
@@ -864,10 +845,10 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 								<div className="card-header">
 									<div className="left">
 										<div className="title">
-											{ __(
+											{__(
 												'Customer details',
 												'multivendorx'
-											) }
+											)}
 										</div>
 									</div>
 								</div>
@@ -875,62 +856,62 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 									<div className="profile">
 										<div className="avater">
 											<img
-												src={ customerData?.avatar_url }
-												alt={ `${
+												src={customerData?.avatar_url}
+												alt={`${
 													orderData?.billing
 														?.first_name ||
 													__(
 														'Customer',
 														'multivendorx'
 													)
-												} avatar` }
+												} avatar`}
 											/>
 										</div>
 
 										<div className="details">
 											<div className="name">
-												{ orderData?.billing
+												{orderData?.billing
 													?.first_name ||
 												orderData?.billing?.last_name
 													? `${
 															orderData?.billing
 																?.first_name ??
 															''
-													  } ${
+														} ${
 															orderData?.billing
 																?.last_name ??
 															''
-													  }`
+														}`
 													: __(
 															'Guest Customer',
 															'multivendorx'
-													  ) }
+														)}
 											</div>
 											<div className="des">
-												{ __(
+												{__(
 													'Customer ID',
 													'multivendorx'
-												) }
+												)}
 												: #
-												{ orderData?.customer_id &&
+												{orderData?.customer_id &&
 												orderData.customer_id !== 0
 													? orderData.customer_id
-													: '—' }
+													: '—'}
 											</div>
 
-											{ orderData?.billing?.email && (
+											{orderData?.billing?.email && (
 												<div className="des">
-													<i className="adminlib-mail" />{ ' ' }
-													{ orderData.billing.email }
+													<i className="adminlib-mail" />{' '}
+													{orderData.billing.email}
 												</div>
-											) }
+											)}
 
-											{ orderData?.billing?.phone && (
+											{orderData?.billing?.phone && (
 												<div className="des">
-													<i className="adminlib-phone" />{ ' ' }
-													{ orderData.billing.phone }
+													<i className="adminlib-phone" />{' '}
+													{orderData.billing.phone}
 												</div>
-											) }
+											)}
 										</div>
 									</div>
 								</div>
@@ -940,10 +921,10 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 								<div className="card-header">
 									<div className="left">
 										<div className="title">
-											{ __(
+											{__(
 												'Billing address',
 												'multivendorx'
-											) }
+											)}
 										</div>
 									</div>
 								</div>
@@ -951,15 +932,15 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 								<div className="overview-wrapper">
 									<div className="items">
 										<div className="title">
-											{ __( 'Address', 'multivendorx' ) }
+											{__('Address', 'multivendorx')}
 										</div>
 										<div className="details">
-											{ orderData?.billing?.address_1 ||
+											{orderData?.billing?.address_1 ||
 											orderData?.billing?.city ||
 											orderData?.billing?.postcode ||
 											orderData?.billing?.country ? (
 												<div className="address">
-													{ orderData.billing
+													{orderData.billing
 														.first_name ||
 													orderData.billing
 														.last_name ? (
@@ -968,113 +949,112 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 																orderData
 																	.billing
 																	.first_name
-															}{ ' ' }
+															}{' '}
 															{
 																orderData
 																	.billing
 																	.last_name
 															}
 														</>
-													) : null }
-													{ orderData.billing
+													) : null}
+													{orderData.billing
 														.company && (
 														<>
-															{ ' ' }
-															,{ ' ' }
+															{' '}
+															,{' '}
 															{
 																orderData
 																	.billing
 																	.company
-															}{ ' ' }
+															}{' '}
 														</>
-													) }
-													{ orderData.billing
+													)}
+													{orderData.billing
 														.address_1 && (
 														<>
-															{ ' ' }
-															,{ ' ' }
+															{' '}
+															,{' '}
 															{
 																orderData
 																	.billing
 																	.address_1
-															}{ ' ' }
+															}{' '}
 														</>
-													) }
-													{ orderData.billing
+													)}
+													{orderData.billing
 														.address_2 && (
 														<>
-															{ ' ' }
-															,{ ' ' }
+															{' '}
+															,{' '}
 															{
 																orderData
 																	.billing
 																	.address_2
-															}{ ' ' }
+															}{' '}
 														</>
-													) }
-													{ orderData.billing
-														.city && (
+													)}
+													{orderData.billing.city && (
 														<>
 															{
 																orderData
 																	.billing
 																	.city
 															}
-															{ orderData.billing
+															{orderData.billing
 																.state
-																? `, ${ orderData.billing.state }`
-																: '' }
+																? `, ${orderData.billing.state}`
+																: ''}
 														</>
-													) }
-													{ orderData.billing
+													)}
+													{orderData.billing
 														.postcode && (
 														<>
-															,{ ' ' }
+															,{' '}
 															{
 																orderData
 																	.billing
 																	.postcode
-															}{ ' ' }
+															}{' '}
 														</>
-													) }
-													{ orderData.billing
+													)}
+													{orderData.billing
 														.country && (
 														<>
-															{ ' ' }
-															,{ ' ' }
+															{' '}
+															,{' '}
 															{
 																orderData
 																	.billing
 																	.country
 															}
 														</>
-													) }
+													)}
 												</div>
 											) : (
 												<div className="address">
-													{ __(
+													{__(
 														'No billing address provided',
 														'multivendorx'
-													) }
+													)}
 												</div>
-											) }
+											)}
 										</div>
 									</div>
 
 									<div className="items">
 										<div className="title">
-											{ __(
+											{__(
 												'Payment method',
 												'multivendorx'
-											) }
+											)}
 										</div>
 										<div className="details">
 											<div className="admin-badge blue">
-												{ orderData?.payment_method_title ||
+												{orderData?.payment_method_title ||
 													__(
 														'Not specified',
 														'multivendorx'
-													) }
+													)}
 											</div>
 										</div>
 									</div>
@@ -1085,36 +1065,36 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 								<div className="card-header">
 									<div className="left">
 										<div className="title">
-											{ __(
+											{__(
 												'Shipping address',
 												'multivendorx'
-											) }
+											)}
 										</div>
 									</div>
 								</div>
 
-								<div>{ orderData?.shipping.address_1 }</div>
-								{ orderData?.shipping.address_2 && (
-									<div>{ orderData?.shipping.address_2 }</div>
-								) }
+								<div>{orderData?.shipping.address_1}</div>
+								{orderData?.shipping.address_2 && (
+									<div>{orderData?.shipping.address_2}</div>
+								)}
 
 								<div>
-									{ orderData?.shipping.city },{ ' ' }
-									{ orderData?.shipping.state }{ ' ' }
-									{ orderData?.shipping.postcode }
+									{orderData?.shipping.city},{' '}
+									{orderData?.shipping.state}{' '}
+									{orderData?.shipping.postcode}
 								</div>
 
-								<div>{ orderData?.shipping.country }</div>
+								<div>{orderData?.shipping.country}</div>
 							</div>
 
 							<div className="card-content">
 								<div className="card-header">
 									<div className="left">
 										<div className="title">
-											{ __(
+											{__(
 												'Shipping Tracking (P)',
 												'multivendorx'
-											) }
+											)}
 										</div>
 									</div>
 								</div>
@@ -1122,14 +1102,14 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 								<div className="form-group-wrapper">
 									<div className="form-group">
 										<label htmlFor="product-name">
-											{ __(
+											{__(
 												'Create Shipping',
 												'multivendorx'
-											) }
+											)}
 										</label>
 										<SelectInput
 											name="country"
-											options={ [] }
+											options={[]}
 											type="single-select"
 										/>
 									</div>
@@ -1138,10 +1118,10 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 								<div className="form-group-wrapper">
 									<div className="form-group">
 										<label htmlFor="product-name">
-											{ __(
+											{__(
 												'Tracking Number',
 												'multivendorx'
-											) }
+											)}
 										</label>
 										<BasicInput
 											name="name"
@@ -1153,10 +1133,7 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 
 								<div className="buttons-wrapper">
 									<div className="admin-btn btn-purple">
-										{ __(
-											'Create Shipment',
-											'multivendorx'
-										) }
+										{__('Create Shipment', 'multivendorx')}
 									</div>
 								</div>
 							</div>
@@ -1165,24 +1142,18 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 								<div className="card-header">
 									<div className="left">
 										<div className="title">
-											{ __(
-												'Order notes',
-												'multivendorx'
-											) }
+											{__('Order notes', 'multivendorx')}
 										</div>
 									</div>
 								</div>
 
-								{ orderData?.order_notes &&
+								{orderData?.order_notes &&
 								orderData.order_notes.length > 0 ? (
 									<div className="notification-wrapper">
 										<ul>
-											{ orderData.order_notes.map(
-												(
-													note: any,
-													index: number
-												) => (
-													<li key={ index }>
+											{orderData.order_notes.map(
+												(note: any, index: number) => (
+													<li key={index}>
 														<div className="icon-wrapper">
 															<i
 																className={
@@ -1194,46 +1165,48 @@ const OrderDetails: React.FC< OrderDetailsProps > = ( { order, onBack } ) => {
 														</div>
 														<div className="details">
 															<div className="notification-title">
-																{ note.author ||
+																{note.author ||
 																	__(
 																		'System Note',
 																		'multivendorx'
-																	) }
+																	)}
 															</div>
 															<div
 																className="des"
-																dangerouslySetInnerHTML={ {
+																dangerouslySetInnerHTML={{
 																	__html:
 																		note.content ||
 																		'',
-																} }
+																}}
 															></div>
 															<span>
-																{ new Date(
-																	note.date_created.date
-																).toLocaleString() }
+																{new Date(
+																	note
+																		.date_created
+																		.date
+																).toLocaleString()}
 															</span>
 														</div>
 													</li>
 												)
-											) }
+											)}
 										</ul>
 									</div>
 								) : (
 									<div className="notification-wrapper">
 										<div className="empty">
-											{ __(
+											{__(
 												'No order notes found.',
 												'multivendorx'
-											) }
+											)}
 										</div>
 									</div>
-								) }
+								)}
 							</div>
 						</div>
 					</div>
 				</>
-			) }
+			)}
 		</>
 	);
 };

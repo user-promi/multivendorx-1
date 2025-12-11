@@ -32,47 +32,47 @@ type MarketplaceReportProps = {
 	COLORS?: string[];
 };
 
-const MarketplaceReport: React.FC< MarketplaceReportProps > = ( {} ) => {
-	const [ commissionDetails, setCommissionDeatils ] = useState< any[] >( [] );
-	const [ earningSummary, setEarningSummary ] = useState< any[] >( [] );
-	const [ pieData, setPieData ] = useState< any >( [] );
-	const [ topCoupons, setTopCoupons ] = useState< any[] >( [] );
-	const [ topCustomers, setTopCustomers ] = useState< any[] >( [] );
-	const [ topStores, setTopStores ] = useState< any[] >( [] );
+const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
+	const [commissionDetails, setCommissionDeatils] = useState<any[]>([]);
+	const [earningSummary, setEarningSummary] = useState<any[]>([]);
+	const [pieData, setPieData] = useState<any>([]);
+	const [topCoupons, setTopCoupons] = useState<any[]>([]);
+	const [topCustomers, setTopCustomers] = useState<any[]>([]);
+	const [topStores, setTopStores] = useState<any[]>([]);
 
-	const Counter = ( { value, duration = 1200, format } ) => {
-		const [ count, setCount ] = React.useState( 0 );
+	const Counter = ({ value, duration = 1200, format }) => {
+		const [count, setCount] = React.useState(0);
 
-		React.useEffect( () => {
+		React.useEffect(() => {
 			let start = 0;
-			const end = Number( value );
-			if ( isNaN( end ) ) return;
+			const end = Number(value);
+			if (isNaN(end)) return;
 
-			const step = end / ( duration / 16 );
+			const step = end / (duration / 16);
 
-			const timer = setInterval( () => {
+			const timer = setInterval(() => {
 				start += step;
-				if ( start >= end ) {
+				if (start >= end) {
 					start = end;
-					clearInterval( timer );
+					clearInterval(timer);
 				}
-				setCount( start );
-			}, 16 );
+				setCount(start);
+			}, 16);
 
-			return () => clearInterval( timer );
-		}, [ value ] );
+			return () => clearInterval(timer);
+		}, [value]);
 
-		return <>{ format ? format( count ) : Math.floor( count ) }</>;
+		return <>{format ? format(count) : Math.floor(count)}</>;
 	};
 
 	const fetchCommissionDetails = async () => {
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'commission' ),
+			url: getApiLink(appLocalizer, 'commission'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: { format: 'reports' },
-		} )
-			.then( ( response ) => {
+		})
+			.then((response) => {
 				const data = response.data;
 
 				// Basic calculations
@@ -85,57 +85,57 @@ const MarketplaceReport: React.FC< MarketplaceReportProps > = ( {} ) => {
 					{
 						id: 'total_order_amount',
 						label: 'Total Order Amount',
-						count: Number( data.total_order_amount ),
-						formatted: formatCurrency( data.total_order_amount ),
+						count: Number(data.total_order_amount),
+						formatted: formatCurrency(data.total_order_amount),
 						icon: 'adminlib-order green',
 					},
 					{
 						id: 'facilitator_fee',
 						label: 'Facilitator Fee',
-						count: Number( data.facilitator_fee ),
-						formatted: formatCurrency( data.facilitator_fee ),
+						count: Number(data.facilitator_fee),
+						formatted: formatCurrency(data.facilitator_fee),
 						icon: 'adminlib-facilitator blue',
 					},
 					{
 						id: 'gateway_fee',
 						label: 'Gateway Fee',
-						count: Number( data.gateway_fee ),
-						formatted: formatCurrency( data.gateway_fee ),
+						count: Number(data.gateway_fee),
+						formatted: formatCurrency(data.gateway_fee),
 						icon: 'adminlib-credit-card red',
 					},
 					{
 						id: 'shipping_amount',
 						label: 'Shipping Amount',
-						count: Number( data.shipping_amount ),
-						formatted: formatCurrency( data.shipping_amount ),
+						count: Number(data.shipping_amount),
+						formatted: formatCurrency(data.shipping_amount),
 						icon: 'adminlib-shipping green',
 					},
 					{
 						id: 'tax_amount',
 						label: 'Tax Amount',
-						count: Number( data.tax_amount ),
-						formatted: formatCurrency( data.tax_amount ),
+						count: Number(data.tax_amount),
+						formatted: formatCurrency(data.tax_amount),
 						icon: 'adminlib-tax-compliance blue',
 					},
 					{
 						id: 'shipping_tax_amount',
 						label: 'Shipping Tax Amount',
-						count: Number( data.shipping_tax_amount ),
-						formatted: formatCurrency( data.shipping_tax_amount ),
+						count: Number(data.shipping_tax_amount),
+						formatted: formatCurrency(data.shipping_tax_amount),
 						icon: 'adminlib-per-product-shipping purple',
 					},
 					{
 						id: 'commission_total',
 						label: 'Commission Total',
-						count: Number( data.commission_total ),
-						formatted: formatCurrency( data.commission_total ),
+						count: Number(data.commission_total),
+						formatted: formatCurrency(data.commission_total),
 						icon: 'adminlib-commission yellow',
 					},
 					{
 						id: 'commission_refunded',
 						label: 'Commission Refunded',
-						count: Number( data.commission_refunded ),
-						formatted: formatCurrency( data.commission_refunded ),
+						count: Number(data.commission_refunded),
+						formatted: formatCurrency(data.commission_refunded),
 						icon: 'adminlib-marketplace-refund red',
 					},
 				];
@@ -145,57 +145,57 @@ const MarketplaceReport: React.FC< MarketplaceReportProps > = ( {} ) => {
 					{
 						id: 'total_order_amount',
 						title: 'Total Order Amount',
-						price: formatCurrency( data.total_order_amount ),
+						price: formatCurrency(data.total_order_amount),
 					},
 					{
 						id: 'admin_earning',
 						title: 'Admin Net Earning',
-						price: formatCurrency( adminEarning ),
+						price: formatCurrency(adminEarning),
 					},
 					{
 						id: 'store_earning',
 						title: 'Store Net Earning',
-						price: formatCurrency( storeEarning ),
+						price: formatCurrency(storeEarning),
 					},
 					{
 						id: 'facilitator_fee',
 						title: 'Facilitator Fee',
-						price: formatCurrency( data.facilitator_fee ),
+						price: formatCurrency(data.facilitator_fee),
 					},
 					{
 						id: 'gateway_fee',
 						title: 'Gateway Fee',
-						price: formatCurrency( data.gateway_fee ),
+						price: formatCurrency(data.gateway_fee),
 					},
 					{
 						id: 'shipping_amount',
 						title: 'Shipping Amount',
-						price: formatCurrency( data.shipping_amount ),
+						price: formatCurrency(data.shipping_amount),
 					},
 					{
 						id: 'tax_amount',
 						title: 'Tax Amount',
-						price: formatCurrency( data.tax_amount ),
+						price: formatCurrency(data.tax_amount),
 					},
 					{
 						id: 'shipping_tax_amount',
 						title: 'Shipping Tax Amount',
-						price: formatCurrency( data.shipping_tax_amount ),
+						price: formatCurrency(data.shipping_tax_amount),
 					},
 					{
 						id: 'commission_total',
 						title: 'Commission Total',
-						price: formatCurrency( data.commission_total ),
+						price: formatCurrency(data.commission_total),
 					},
 					{
 						id: 'commission_refunded',
 						title: 'Commission Refunded',
-						price: formatCurrency( data.commission_refunded ),
+						price: formatCurrency(data.commission_refunded),
 					},
 					{
 						id: 'grand_total',
 						title: 'Grand Total',
-						price: formatCurrency( adminEarning + storeEarning ),
+						price: formatCurrency(adminEarning + storeEarning),
 					},
 				];
 
@@ -208,33 +208,33 @@ const MarketplaceReport: React.FC< MarketplaceReportProps > = ( {} ) => {
 					},
 				];
 
-				setCommissionDeatils( overviewData );
-				setEarningSummary( earningSummary );
-				setPieData( pieChartData );
-			} )
-			.catch( () => {
+				setCommissionDeatils(overviewData);
+				setEarningSummary(earningSummary);
+				setPieData(pieChartData);
+			})
+			.catch(() => {
 				// Handle error gracefully
-			} );
+			});
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'commission' ),
+			url: getApiLink(appLocalizer, 'commission'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: { format: 'reports', top_stores: 3 },
-		} )
-			.then( ( response ) => {
-				setTopStores( response.data );
-			} )
-			.catch( () => {
+		})
+			.then((response) => {
+				setTopStores(response.data);
+			})
+			.catch(() => {
 				// Handle error gracefully
-			} );
+			});
 	};
 
-	useEffect( () => {
+	useEffect(() => {
 		// Top selling coupons
-		axios( {
+		axios({
 			method: 'GET',
-			url: `${ appLocalizer.apiUrl }/wc/v3/coupons`,
+			url: `${appLocalizer.apiUrl}/wc/v3/coupons`,
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				meta_key: 'multivendorx_store_id',
@@ -242,43 +242,43 @@ const MarketplaceReport: React.FC< MarketplaceReportProps > = ( {} ) => {
 				orderby: 'date', // valid param, required by API
 				order: 'desc',
 			},
-		} )
-			.then( ( response ) => {
+		})
+			.then((response) => {
 				// Sort coupons manually by usage_count (descending)
 				const sortedCoupons = response.data
-					.sort( ( a, b ) => b.usage_count - a.usage_count )
-					.slice( 0, 5 ); // take top 5 only
+					.sort((a, b) => b.usage_count - a.usage_count)
+					.slice(0, 5); // take top 5 only
 
-				setTopCoupons( sortedCoupons );
-			} )
-			.catch( ( error ) => {
-				console.error( 'Error fetching top coupons:', error );
-			} );
+				setTopCoupons(sortedCoupons);
+			})
+			.catch((error) => {
+				console.error('Error fetching top coupons:', error);
+			});
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: `${ appLocalizer.apiUrl }/wc-analytics/customers`,
+			url: `${appLocalizer.apiUrl}/wc-analytics/customers`,
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				per_page: 50, // fetch more customers so we can sort manually
 				orderby: 'total_spend',
 				order: 'desc',
 			},
-		} )
-			.then( ( response ) => {
+		})
+			.then((response) => {
 				// Sort by total_spend manually in case API doesn't enforce order
 				const sortedCustomers = response.data
-					.sort( ( a, b ) => b.total_spend - a.total_spend )
-					.slice( 0, 5 ); // Top 5 customers only
+					.sort((a, b) => b.total_spend - a.total_spend)
+					.slice(0, 5); // Top 5 customers only
 
-				setTopCustomers( sortedCustomers );
-			} )
-			.catch( ( error ) => {
-				console.error( 'Error fetching top customers:', error );
-			} );
+				setTopCustomers(sortedCustomers);
+			})
+			.catch((error) => {
+				console.error('Error fetching top customers:', error);
+			});
 
 		fetchCommissionDetails();
-	}, [] );
+	}, []);
 
 	return (
 		<>
@@ -286,24 +286,24 @@ const MarketplaceReport: React.FC< MarketplaceReportProps > = ( {} ) => {
 				<div className="card-wrapper">
 					<div className="card-content transparent">
 						<div className="analytics-container report column-3">
-							{ commissionDetails.map( ( item, idx ) => (
-								<div key={ idx } className="analytics-item">
+							{commissionDetails.map((item, idx) => (
+								<div key={idx} className="analytics-item">
 									<div className="analytics-icon">
-										<i className={ item.icon }></i>
+										<i className={item.icon}></i>
 									</div>
 									<div className="details">
 										<div className="number">
 											<Counter
-												value={ item.count }
-												format={ formatCurrency }
+												value={item.count}
+												format={formatCurrency}
 											/>
 										</div>
 										<div className="text">
-											{ __( item.label, 'multivendorx' ) }
+											{__(item.label, 'multivendorx')}
 										</div>
 									</div>
 								</div>
-							) ) }
+							))}
 						</div>
 					</div>
 				</div>
@@ -313,31 +313,28 @@ const MarketplaceReport: React.FC< MarketplaceReportProps > = ( {} ) => {
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{ __(
-										'Revenue breakdown',
-										'multivendorx'
-									) }
+									{__('Revenue breakdown', 'multivendorx')}
 								</div>
 							</div>
 						</div>
 						<div className="card-body">
 							<div className="top-items">
-								{ earningSummary.map( ( product ) => (
-									<div className="items" key={ product.id }>
+								{earningSummary.map((product) => (
+									<div className="items" key={product.id}>
 										<div className="left-side">
 											<div className="details">
 												<div className="item-title">
-													{ product.title }
+													{product.title}
 												</div>
 											</div>
 										</div>
 										<div className="right-side">
 											<div className="price">
-												{ product.price }
+												{product.price}
 											</div>
 										</div>
 									</div>
-								) ) }
+								))}
 							</div>
 						</div>
 					</div>
@@ -346,59 +343,56 @@ const MarketplaceReport: React.FC< MarketplaceReportProps > = ( {} ) => {
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{ __(
-										'Revenue breakdown',
-										'multivendorx'
-									) }
+									{__('Revenue breakdown', 'multivendorx')}
 								</div>
 							</div>
 						</div>
 						<div className="card-body">
-							<div style={ { width: '100%', height: 400 } }>
+							<div style={{ width: '100%', height: 400 }}>
 								<ResponsiveContainer>
 									<PieChart>
 										<Pie
-											data={ pieData }
+											data={pieData}
 											dataKey="value"
 											nameKey="name"
 											cx="50%"
 											cy="50%"
-											outerRadius={ 140 }
-											innerRadius={ 80 }
-											label={ ( { name, percent } ) =>
-												`${ name } ${ (
+											outerRadius={140}
+											innerRadius={80}
+											label={({ name, percent }) =>
+												`${name} ${(
 													percent * 100
-												).toFixed( 1 ) }%`
+												).toFixed(1)}%`
 											}
-											labelLine={ false }
-											isAnimationActive={ true }
+											labelLine={false}
+											isAnimationActive={true}
 										>
-											{ pieData.map( ( _, index ) => (
+											{pieData.map((_, index) => (
 												<Cell
-													key={ `cell-${ index }` }
+													key={`cell-${index}`}
 													fill={
 														[
 															'#0088FE',
 															'#00C49F',
 															'#FF8042',
-														][ index % 3 ]
+														][index % 3]
 													}
 												/>
-											) ) }
+											))}
 										</Pie>
 										<Tooltip
-											formatter={ ( value ) =>
-												formatCurrency( value )
+											formatter={(value) =>
+												formatCurrency(value)
 											}
-											contentStyle={ {
+											contentStyle={{
 												backgroundColor: '#fff',
 												borderRadius: '8px',
 												border: '1px solid #ddd',
-											} }
+											}}
 										/>
 										<Legend
 											verticalAlign="bottom"
-											height={ 36 }
+											height={36}
 										/>
 									</PieChart>
 								</ResponsiveContainer>
@@ -406,30 +400,27 @@ const MarketplaceReport: React.FC< MarketplaceReportProps > = ( {} ) => {
 						</div>
 					</div>
 				</div>
-				{ /* Keep categories and brands */ }
+				{/* Keep categories and brands */}
 				<div className="card-wrapper">
 					<div className="card-content">
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{ __(
-										'Top Selling Coupons',
-										'multivendorx'
-									) }
+									{__('Top Selling Coupons', 'multivendorx')}
 								</div>
 							</div>
 						</div>
 						<div className="card-body">
-							{ topCoupons.length > 0 ? (
-								topCoupons.map( ( coupon: any ) => (
+							{topCoupons.length > 0 ? (
+								topCoupons.map((coupon: any) => (
 									<div
 										className="info-item"
-										key={ `coupon-${ coupon.id }` }
+										key={`coupon-${coupon.id}`}
 									>
 										<div className="details-wrapper">
 											<div className="avatar">
 												<a
-													href={ `${ appLocalizer.site_url }/wp-admin/post.php?post=${ coupon.id }&action=edit` }
+													href={`${appLocalizer.site_url}/wp-admin/post.php?post=${coupon.id}&action=edit`}
 													target="_blank"
 													rel="noopener noreferrer"
 												>
@@ -440,101 +431,97 @@ const MarketplaceReport: React.FC< MarketplaceReportProps > = ( {} ) => {
 											<div className="details">
 												<div className="name">
 													<a
-														href={ `${ appLocalizer.site_url }/wp-admin/post.php?post=${ coupon.id }&action=edit` }
+														href={`${appLocalizer.site_url}/wp-admin/post.php?post=${coupon.id}&action=edit`}
 														target="_blank"
 														rel="noopener noreferrer"
 													>
-														{ coupon.code }
+														{coupon.code}
 													</a>
 												</div>
 												<div className="des">
-													{ __(
-														'Used',
-														'multivendorx'
-													) }{ ' ' }
-													{ coupon.usage_count || 0 }{ ' ' }
-													{ __(
+													{__('Used', 'multivendorx')}{' '}
+													{coupon.usage_count || 0}{' '}
+													{__(
 														'times',
 														'multivendorx'
-													) }
+													)}
 												</div>
-												{ coupon.description && (
+												{coupon.description && (
 													<div className="des">
-														{ coupon.description }
+														{coupon.description}
 													</div>
-												) }
-												{ coupon.store_name && (
+												)}
+												{coupon.store_name && (
 													<div className="des">
 														<b>
-															{ __(
+															{__(
 																'Store:',
 																'multivendorx'
-															) }
-														</b>{ ' ' }
-														{ coupon.store_name }
+															)}
+														</b>{' '}
+														{coupon.store_name}
 													</div>
-												) }
+												)}
 											</div>
 										</div>
 
 										<div className="right-details">
 											<div className="price">
 												<span>
-													{ coupon.amount
+													{coupon.amount
 														? coupon.discount_type ===
-														  'percent'
-															? `${ coupon.amount }%`
+															'percent'
+															? `${coupon.amount}%`
 															: formatCurrency(
 																	coupon.amount
-															  )
-														: '—' }
+																)
+														: '—'}
 												</span>
 											</div>
 										</div>
 									</div>
-								) )
+								))
 							) : (
 								<p>
-									{ __(
+									{__(
 										'No top coupons found.',
 										'multivendorx'
-									) }
+									)}
 								</p>
-							) }
+							)}
 						</div>
 					</div>
 					<div className="card-content">
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{ __( 'Top Customers', 'multivendorx' ) }
+									{__('Top Customers', 'multivendorx')}
 								</div>
 							</div>
 						</div>
 						<div className="card-body">
-							{ topCustomers.length > 0 ? (
-								topCustomers.map( ( customer: any ) => (
+							{topCustomers.length > 0 ? (
+								topCustomers.map((customer: any) => (
 									<div
 										className="info-item"
-										key={ `customer-${ customer.user_id }` }
+										key={`customer-${customer.user_id}`}
 									>
 										<div className="details-wrapper">
 											<div className="avater">
 												<a
-													href={ `${ appLocalizer.site_url }/wp-admin/user-edit.php?user_id=${ customer.user_id }&wp_http_referer=%2Fwp-admin%2Fusers.php` }
+													href={`${appLocalizer.site_url}/wp-admin/user-edit.php?user_id=${customer.user_id}&wp_http_referer=%2Fwp-admin%2Fusers.php`}
 													target="_blank"
 													rel="noopener noreferrer"
 												>
 													<div className="avatar">
 														<span>
-															{ (
+															{(
 																(
 																	customer.name?.trim() ||
 																	customer.username
-																)?.charAt(
-																	0
-																) || ''
-															).toUpperCase() }
+																)?.charAt(0) ||
+																''
+															).toUpperCase()}
 														</span>
 													</div>
 												</a>
@@ -543,29 +530,28 @@ const MarketplaceReport: React.FC< MarketplaceReportProps > = ( {} ) => {
 											<div className="details">
 												<div className="name">
 													<a
-														href={ `${ appLocalizer.site_url }/wp-admin/user-edit.php?user_id=${ customer.user_id }&wp_http_referer=%2Fwp-admin%2Fusers.php` }
+														href={`${appLocalizer.site_url}/wp-admin/user-edit.php?user_id=${customer.user_id}&wp_http_referer=%2Fwp-admin%2Fusers.php`}
 														target="_blank"
 														rel="noopener noreferrer"
 													>
-														{ customer.name?.trim() ||
-															customer.username }
+														{customer.name?.trim() ||
+															customer.username}
 													</a>
 												</div>
 												<div className="des">
-													{ __(
+													{__(
 														'Orders',
 														'multivendorx'
-													) }
-													:{ ' ' }
-													{ customer.orders_count ||
-														0 }
+													)}
+													:{' '}
+													{customer.orders_count || 0}
 												</div>
 												<div className="des">
-													{ customer.email ||
+													{customer.email ||
 														__(
 															'No email',
 															'multivendorx'
-														) }
+														)}
 												</div>
 											</div>
 										</div>
@@ -573,57 +559,57 @@ const MarketplaceReport: React.FC< MarketplaceReportProps > = ( {} ) => {
 										<div className="right-details">
 											<div className="price">
 												<span>
-													{ formatCurrency(
+													{formatCurrency(
 														customer.total_spend ||
 															0
-													) }
+													)}
 												</span>
 											</div>
 										</div>
 									</div>
-								) )
+								))
 							) : (
 								<p>
-									{ __(
+									{__(
 										'No top customers found.',
 										'multivendorx'
-									) }
+									)}
 								</p>
-							) }
+							)}
 						</div>
 					</div>
 					<div className="card-content">
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{ __( 'Top Stores', 'multivendorx' ) }
+									{__('Top Stores', 'multivendorx')}
 								</div>
 							</div>
 						</div>
 						<div className="card-body">
-							{ topStores.length > 0 ? (
-								topStores.map( ( store: any ) => (
+							{topStores.length > 0 ? (
+								topStores.map((store: any) => (
 									<div
 										className="info-item"
-										key={ `store-${ store.store_id }` }
+										key={`store-${store.store_id}`}
 									>
 										<div className="details-wrapper">
 											<div className="avater">
 												<a
-													href={ `${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${ store.store_id }/&subtab=store-overview` }
+													href={`${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${store.store_id}/&subtab=store-overview`}
 													target="_blank"
 													rel="noopener noreferrer"
 												>
 													<div></div>
 													<div className="avatar">
 														<span>
-															{ (
+															{(
 																store.store_name
 																	?.trim()
 																	?.charAt(
 																		0
 																	) || ''
-															).toUpperCase() }
+															).toUpperCase()}
 														</span>
 													</div>
 												</a>
@@ -632,34 +618,34 @@ const MarketplaceReport: React.FC< MarketplaceReportProps > = ( {} ) => {
 											<div className="details">
 												<div className="name">
 													<a
-														href={ `${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${ store.store_id }/&subtab=store-overview` }
+														href={`${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${store.store_id}/&subtab=store-overview`}
 														target="_blank"
 														rel="noopener noreferrer"
 													>
-														{ store.store_name }
+														{store.store_name}
 													</a>
 												</div>
 												<div className="des">
-													{ __(
+													{__(
 														'Commission',
 														'multivendorx'
-													) }
-													:{ ' ' }
-													{ formatCurrency(
+													)}
+													:{' '}
+													{formatCurrency(
 														store.commission_total ||
 															0
-													) }
+													)}
 												</div>
 												<div className="des">
-													{ __(
+													{__(
 														'Refunded',
 														'multivendorx'
-													) }
-													:{ ' ' }
-													{ formatCurrency(
+													)}
+													:{' '}
+													{formatCurrency(
 														store.commission_refunded ||
 															0
-													) }
+													)}
 												</div>
 											</div>
 										</div>
@@ -667,23 +653,20 @@ const MarketplaceReport: React.FC< MarketplaceReportProps > = ( {} ) => {
 										<div className="right-details">
 											<div className="price">
 												<span>
-													{ formatCurrency(
+													{formatCurrency(
 														store.total_order_amount ||
 															0
-													) }
+													)}
 												</span>
 											</div>
 										</div>
 									</div>
-								) )
+								))
 							) : (
 								<p>
-									{ __(
-										'No top stores found.',
-										'multivendorx'
-									) }
+									{__('No top stores found.', 'multivendorx')}
 								</p>
-							) }
+							)}
 						</div>
 					</div>
 				</div>

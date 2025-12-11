@@ -3,14 +3,14 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'rejected',
 	priority: 1,
-	name: __( 'Rejected', 'multivendorx' ),
+	name: __('Rejected', 'multivendorx'),
 	desc: '',
 	icon: 'adminlib-store-inventory',
 	submitUrl: 'settings',
 	modal: [
 		{
 			key: 'store_promotion_limit',
-			label: __( 'Account capabilities', 'multivendorx' ),
+			label: __('Account capabilities', 'multivendorx'),
 			type: 'nested',
 			single: true,
 			nestedFields: [
@@ -19,21 +19,15 @@ export default {
 					type: 'checklist',
 					options: [
 						{
-							label: __( 'Log in to dashboard', 'multivendorx' ),
+							label: __('Log in to dashboard', 'multivendorx'),
 							check: true,
 						},
 						{
-							label: __(
-								'View rejection reason',
-								'multivendorx'
-							),
+							label: __('View rejection reason', 'multivendorx'),
 							check: true,
 						},
 						{
-							label: __(
-								'Submit new application',
-								'multivendorx'
-							),
+							label: __('Submit new application', 'multivendorx'),
 							check: true,
 						},
 						{
@@ -56,9 +50,9 @@ export default {
 		},
 		{
 			key: 'rejected_msg',
-			label: __( 'Message shown to rejected stores', 'multivendorx' ),
+			label: __('Message shown to rejected stores', 'multivendorx'),
 			type: 'textarea',
-			des: __( 'What rejected stores can do', 'multivendorx' ),
+			des: __('What rejected stores can do', 'multivendorx'),
 		},
 	],
 };

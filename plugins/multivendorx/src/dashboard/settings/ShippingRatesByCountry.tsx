@@ -342,26 +342,23 @@ interface ShippingCountryRate {
 }
 
 const ShippingRatesByCountry: React.FC = () => {
-	const [ rates, setRates ] = useState< ShippingCountryRate[] >( [] );
-	const [ loading, setLoading ] = useState( false );
-	const [ error, setError ] = useState< string | null >( null );
+	const [rates, setRates] = useState<ShippingCountryRate[]>([]);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState<string | null>(null);
 
 	const countries = appLocalizer?.country_list || {};
 	const statesByCountry = appLocalizer?.state_list || {};
 
-	useEffect( () => {
-		if ( ! appLocalizer?.store_id ) return;
+	useEffect(() => {
+		if (!appLocalizer?.store_id) return;
 
 		const fetchShippingRates = async () => {
-			setLoading( true );
-			setError( null );
+			setLoading(true);
+			setError(null);
 
 			try {
 				const response = await axios.get(
-					getApiLink(
-						appLocalizer,
-						`store/${ appLocalizer.store_id }`
-					),
+					getApiLink(appLocalizer, `store/${appLocalizer.store_id}`),
 					{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
 				);
 
@@ -372,36 +369,36 @@ const ShippingRatesByCountry: React.FC = () => {
 						'string'
 							? JSON.parse(
 									response.data.multivendorx_shipping_rates
-							  )
+								)
 							: response.data.multivendorx_shipping_rates || [];
 				} catch {
 					shippingRates = [];
 				}
 
 				setRates(
-					shippingRates.map( ( r: any ) => ( {
+					shippingRates.map((r: any) => ({
 						country: r.country || '',
 						cost: r.cost || '',
-						states: Array.isArray( r.states ) ? r.states : [],
-					} ) )
+						states: Array.isArray(r.states) ? r.states : [],
+					}))
 				);
 			} catch {
-				setError( 'Failed to load shipping rates' );
+				setError('Failed to load shipping rates');
 			} finally {
-				setLoading( false );
+				setLoading(false);
 			}
 		};
 
 		fetchShippingRates();
-	}, [] );
+	}, []);
 
-	const autoSave = async ( updatedRates: ShippingCountryRate[] ) => {
-		setRates( updatedRates );
+	const autoSave = async (updatedRates: ShippingCountryRate[]) => {
+		setRates(updatedRates);
 		try {
 			await axios.put(
-				getApiLink( appLocalizer, `store/${ appLocalizer.store_id }` ),
+				getApiLink(appLocalizer, `store/${appLocalizer.store_id}`),
 				{
-					multivendorx_shipping_rates: JSON.stringify( updatedRates ),
+					multivendorx_shipping_rates: JSON.stringify(updatedRates),
 				},
 				{
 					headers: {
@@ -411,20 +408,20 @@ const ShippingRatesByCountry: React.FC = () => {
 				}
 			);
 		} catch {
-			setError( 'Failed to save shipping rates.' );
+			setError('Failed to save shipping rates.');
 		}
 	};
 
 	/** FIX COUNTRY OPTIONS */
-	const countryOptions = Array.isArray( countries )
-		? countries.map( ( item: any ) => ( {
+	const countryOptions = Array.isArray(countries)
+		? countries.map((item: any) => ({
 				label: item.label?.label || item.label,
 				value: item.label?.value || item.value,
-		  } ) )
-		: Object.entries( countries ).map( ( [ value, label ] ) => ( {
+			}))
+		: Object.entries(countries).map(([value, label]) => ({
 				label,
 				value,
-		  } ) );
+			}));
 
 	const countryTemplate = {
 		fields: [
@@ -465,73 +462,72 @@ const ShippingRatesByCountry: React.FC = () => {
 		],
 	};
 
-	if ( loading )
-		return <div>{ __( 'Loading shipping rates...', 'multivendorx' ) }</div>;
+	if (loading)
+		return <div>{__('Loading shipping rates...', 'multivendorx')}</div>;
 	return (
 		<div className="shipping-country-wrapper">
-			{ error && <div className="mvx-error">{ error }</div> }
+			{error && <div className="mvx-error">{error}</div>}
 
 			<DynamicRowSetting
 				keyName="country-rates"
-				template={ countryTemplate }
-				value={ rates }
-				addLabel={ __( 'Add Country', 'multivendorx' ) }
-				onChange={ ( updatedCountries: any ) => {
-					const fixed = updatedCountries.map( ( r ) => ( {
+				template={countryTemplate}
+				value={rates}
+				addLabel={__('Add Country', 'multivendorx')}
+				onChange={(updatedCountries: any) => {
+					const fixed = updatedCountries.map((r) => ({
 						...r,
 						states: r.states || [],
-					} ) );
-					autoSave( fixed );
-				} }
+					}));
+					autoSave(fixed);
+				}}
 				/** Render nested states inside the country row */
-				childrenRenderer={ (
+				childrenRenderer={(
 					countryRow: { country: string; states: unknown },
 					countryIndex: string | number
 				) => {
 					const code = countryRow.country?.toUpperCase() || '';
-					const raw = statesByCountry[ code ];
+					const raw = statesByCountry[code];
 
 					const stateOptions = raw
-						? Object.entries( raw ).map( ( [ value, label ] ) => ( {
+						? Object.entries(raw).map(([value, label]) => ({
 								value,
 								label,
-						  } ) )
+							}))
 						: [];
 
-					if ( stateOptions.length === 0 ) return null;
+					if (stateOptions.length === 0) return null;
 
 					return (
 						<div className="state-inner-box">
 							<h4 className="state-title">
-								{ __( 'State / Region Rates', 'multivendorx' ) }
+								{__('State / Region Rates', 'multivendorx')}
 							</h4>
 
 							<DynamicRowSetting
-								keyName={ `state-rates-${ countryIndex }` }
-								template={ {
+								keyName={`state-rates-${countryIndex}`}
+								template={{
 									fields: [
 										{
-											...stateTemplate.fields[ 0 ],
+											...stateTemplate.fields[0],
 											options: stateOptions,
 										},
-										stateTemplate.fields[ 1 ],
+										stateTemplate.fields[1],
 									],
-								} }
-								value={ countryRow.states }
-								addLabel={ __(
+								}}
+								value={countryRow.states}
+								addLabel={__(
 									'Add State/Region',
 									'multivendorx'
-								) }
-								onChange={ ( updatedStates: any ) => {
-									const clone = [ ...rates ];
-									clone[ countryIndex ].states =
-										updatedStates;
-									autoSave( clone );
-								} }
+								)}
+								onChange={(updatedStates: any) => {
+									const clone = [...rates];
+									clone[countryIndex].states = updatedStates;
+									autoSave(clone);
+								}}
 							/>
 						</div>
 					);
-				} }
+				}}
 			/>
 		</div>
 	);

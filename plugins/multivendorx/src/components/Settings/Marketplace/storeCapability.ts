@@ -1,16 +1,16 @@
 import { __ } from '@wordpress/i18n';
 
 const capabilityOptions = appLocalizer?.capabilities
-	? Object.entries( appLocalizer.capabilities ).map( ( [ key, group ] ) => {
+	? Object.entries(appLocalizer.capabilities).map(([key, group]) => {
 			return {
 				key,
 				type: 'checkbox',
 				label: group.label,
 				desc: group.desc,
-				options: Object.entries( group.capability || {} ).map(
-					( [ capKey, capLabel ] ) => {
+				options: Object.entries(group.capability || {}).map(
+					([capKey, capLabel]) => {
 						const proData =
-							appLocalizer.capability_pro?.[ capKey ] || {};
+							appLocalizer.capability_pro?.[capKey] || {};
 						return {
 							key: capKey,
 							label: capLabel,
@@ -22,19 +22,19 @@ const capabilityOptions = appLocalizer?.capabilities
 				),
 				selectDeselect: true,
 			};
-	  } )
+		})
 	: [];
 
 const staticOptions = [
 	{
 		key: 'section',
 		type: 'section',
-		hint: __( 'What stores can change after approval', 'multivendorx' ),
+		hint: __('What stores can change after approval', 'multivendorx'),
 	},
 	{
 		key: 'edit_store_info_activation',
 		type: 'checkbox',
-		label: __( 'Post-activation edit controls', 'multivendorx' ),
+		label: __('Post-activation edit controls', 'multivendorx'),
 		desc: __(
 			'Control which store information fields can be modified after a store has been activated.',
 			'multivendorx'
@@ -42,27 +42,27 @@ const staticOptions = [
 		options: [
 			{
 				key: 'store_description',
-				label: __( 'Store description', 'multivendorx' ),
+				label: __('Store description', 'multivendorx'),
 				value: 'store_description',
 			},
 			{
 				key: 'store_images',
-				label: __( 'Logo and banner', 'multivendorx' ),
+				label: __('Logo and banner', 'multivendorx'),
 				value: 'store_images',
 			},
 			{
 				key: 'store_address',
-				label: __( 'Store address', 'multivendorx' ),
+				label: __('Store address', 'multivendorx'),
 				value: 'store_address',
 			},
 			{
 				key: 'store_contact',
-				label: __( 'Phone and email', 'multivendorx' ),
+				label: __('Phone and email', 'multivendorx'),
 				value: 'store_contact',
 			},
 			{
 				key: 'store_name',
-				label: __( 'Store name', 'multivendorx' ),
+				label: __('Store name', 'multivendorx'),
 				value: 'store_name',
 			},
 		],
@@ -70,12 +70,12 @@ const staticOptions = [
 	},
 ];
 
-const modalOptions = [ ...capabilityOptions, ...staticOptions ];
+const modalOptions = [...capabilityOptions, ...staticOptions];
 
 export default {
 	id: 'store-capability',
 	priority: 2,
-	name: __( 'Store Permissions', 'multivendorx' ),
+	name: __('Store Permissions', 'multivendorx'),
 	desc: __(
 		'Control which features and actions are available to each store role.',
 		'multivendorx'

@@ -9,7 +9,7 @@ import { __ } from '@wordpress/i18n';
 const CustomerServices = () => {
 	const { modules } = useModules();
 
-	const location = new URLSearchParams( useLocation().hash.substring( 1 ) );
+	const location = new URLSearchParams(useLocation().hash.substring(1));
 
 	const tabData = [
 		{
@@ -46,10 +46,10 @@ const CustomerServices = () => {
 				icon: 'vacation',
 			},
 		},
-	].filter( ( tab ) => ! tab.module || modules.includes( tab.module ) );
+	].filter((tab) => !tab.module || modules.includes(tab.module));
 
-	const getForm = ( tabId: string ) => {
-		switch ( tabId ) {
+	const getForm = (tabId: string) => {
+		switch (tabId) {
 			case 'questions':
 				return <Qna />;
 			case 'review':
@@ -71,48 +71,48 @@ const CustomerServices = () => {
 		<>
 			<AdminBreadcrumbs
 				activeTabIcon="adminlib-customer-service"
-				tabTitle={ __( 'Customer Service', 'multivendorx' ) }
-				description={ __(
+				tabTitle={__('Customer Service', 'multivendorx')}
+				description={__(
 					'Manage store reviews, support requests, financial transactions, and reported issues.',
 					'multivendorx'
-				) }
+				)}
 			/>
-			{ tabData.length > 0 ? (
+			{tabData.length > 0 ? (
 				<Tabs
-					tabData={ tabData }
-					currentTab={ location.get( 'subtab' ) as string }
-					getForm={ getForm }
-					prepareUrl={ ( subTab: string ) =>
-						`?page=multivendorx#&tab=customer-support&subtab=${ subTab }`
+					tabData={tabData}
+					currentTab={location.get('subtab') as string}
+					getForm={getForm}
+					prepareUrl={(subTab: string) =>
+						`?page=multivendorx#&tab=customer-support&subtab=${subTab}`
 					}
-					appLocalizer={ appLocalizer }
-					supprot={ [] }
-					Link={ Link }
-					hideTitle={ true }
-					hideBreadcrumb={ true }
-					template={ 'template-2' }
-					premium={ false }
-					menuIcon={ true }
+					appLocalizer={appLocalizer}
+					supprot={[]}
+					Link={Link}
+					hideTitle={true}
+					hideBreadcrumb={true}
+					template={'template-2'}
+					premium={false}
+					menuIcon={true}
 				/>
 			) : (
 				<div className="general-wrapper">
 					<div className="permission-wrapper">
 						<i className="adminlib-info red"></i>
 						<div className="title">
-							{ __(
+							{__(
 								'Looks like customer support isn’t set up yet! Turn on a support module to start assisting your customers.',
 								'multivendorx'
-							) }
+							)}
 						</div>
 						<a
-							href={ appLocalizer.module_page_url }
+							href={appLocalizer.module_page_url}
 							className="admin-btn btn-purple"
 						>
-							{ __( 'Enable Now', 'multivendorx' ) }
+							{__('Enable Now', 'multivendorx')}
 						</a>
 					</div>
 				</div>
-			) }
+			)}
 		</>
 	);
 };

@@ -10,20 +10,18 @@ import { __ } from '@wordpress/i18n';
 export interface RealtimeFilter {
 	name: string;
 	render: (
-		updateFilter: ( key: string, value: any ) => void,
+		updateFilter: (key: string, value: any) => void,
 		filterValue: any
 	) => ReactNode;
 }
 
 const Advertisement: React.FC = () => {
-	const [ rowSelection, setRowSelection ] = useState< RowSelectionState >(
-		{}
-	);
-	const [ pageCount, setPageCount ] = useState( 0 );
-	const [ pagination, setPagination ] = useState< PaginationState >( {
+	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+	const [pageCount, setPageCount] = useState(0);
+	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
 		pageSize: 10,
-	} );
+	});
 
 	// Type for an order line
 	interface OrderItem {
@@ -140,77 +138,77 @@ const Advertisement: React.FC = () => {
 		},
 	];
 
-	const columns: ColumnDef< OrderItem >[] = [
+	const columns: ColumnDef<OrderItem>[] = [
 		{
 			id: 'select',
-			header: ( { table } ) => (
+			header: ({ table }) => (
 				<input
 					type="checkbox"
-					checked={ table.getIsAllRowsSelected() }
-					onChange={ table.getToggleAllRowsSelectedHandler() }
+					checked={table.getIsAllRowsSelected()}
+					onChange={table.getToggleAllRowsSelectedHandler()}
 				/>
 			),
-			cell: ( { row } ) => (
+			cell: ({ row }) => (
 				<input
 					type="checkbox"
-					checked={ row.getIsSelected() }
-					onChange={ row.getToggleSelectedHandler() }
+					checked={row.getIsSelected()}
+					onChange={row.getToggleSelectedHandler()}
 				/>
 			),
 		},
 		{
-			header: __( 'Product Name', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.productName || '' }>
-					{ row.original.productName ?? '-' }
+			header: __('Product Name', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.productName || ''}>
+					{row.original.productName ?? '-'}
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'Store Name', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.storeName || '' }>
-					{ row.original.storeName ?? '-' }
+			header: __('Store Name', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.storeName || ''}>
+					{row.original.storeName ?? '-'}
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'Created By', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.createdBy || '' }>
-					{ row.original.createdBy ?? '-' }
+			header: __('Created By', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.createdBy || ''}>
+					{row.original.createdBy ?? '-'}
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'Order Id', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.orderId || '' }>
-					{ row.original.orderId ?? '-' }
+			header: __('Order Id', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.orderId || ''}>
+					{row.original.orderId ?? '-'}
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'Cost', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.cost || '' }>
-					{ row.original.cost ?? '-' }
+			header: __('Cost', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.cost || ''}>
+					{row.original.cost ?? '-'}
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'Expiry Date', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.expiryDate || '' }>
-					{ row.original.expiryDate ?? '-' }
+			header: __('Expiry Date', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.expiryDate || ''}>
+					{row.original.expiryDate ?? '-'}
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'Created At', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.createdAt || '' }>
-					{ row.original.createdAt ?? '-' }
+			header: __('Created At', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.createdAt || ''}>
+					{row.original.createdAt ?? '-'}
 				</TableCell>
 			),
 		},
@@ -228,17 +226,15 @@ const Advertisement: React.FC = () => {
 
 			<div className="admin-table-wrapper">
 				<Table
-					data={ demoData }
-					columns={
-						columns as ColumnDef< Record< string, any >, any >[]
-					}
-					rowSelection={ rowSelection }
-					onRowSelectionChange={ setRowSelection }
-					defaultRowsPerPage={ 10 }
-					pageCount={ pageCount }
-					pagination={ pagination }
-					onPaginationChange={ setPagination }
-					perPageOption={ [ 10, 25, 50 ] }
+					data={demoData}
+					columns={columns as ColumnDef<Record<string, any>, any>[]}
+					rowSelection={rowSelection}
+					onRowSelectionChange={setRowSelection}
+					defaultRowsPerPage={10}
+					pageCount={pageCount}
+					pagination={pagination}
+					onPaginationChange={setPagination}
+					perPageOption={[10, 25, 50]}
 				/>
 			</div>
 		</>
