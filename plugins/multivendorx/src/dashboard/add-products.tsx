@@ -691,15 +691,23 @@ const AddProduct = () => {
     });
 
     useEffect(() => {
-        const isSimple = product.type === "simple";
-        // const isVariable = product.type === "variable";
-
-        setChecklist({
+        let baseChecklist = {
             name: !!product.name,
             image: !!featuredImage,
-            price: isSimple ? !!product.regular_price : false,
-            stock: isSimple ? !!product.stock_status : true,
-        });
+        };
+
+        if (product.type === "simple") {
+            baseChecklist.price = !!product.regular_price;
+            baseChecklist.stock = !!product.stock_status;
+        }
+
+        const filteredChecklist = applyFilters(
+            "product_checklist_items",
+            baseChecklist,
+            product
+        );
+
+        setChecklist(filteredChecklist);
 
     }, [product, featuredImage]);
 
@@ -770,7 +778,12 @@ const AddProduct = () => {
                                         </>
                                     )}
 
-
+                                    {applyFilters(
+                                        "product_checklist_items_render",
+                                        null,
+                                        checklist,
+                                        product
+                                    )}
                                 </ul>
                             </div>
                         </div>
