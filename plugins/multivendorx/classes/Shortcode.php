@@ -46,8 +46,6 @@ class Shortcode {
         wp_enqueue_script( 'wp-element' );
         wp_enqueue_media();
 
-        FrontendScripts::enqueue_script( 'multivendorx-store-dashboard-script' );
-
         $custom_css = MultiVendorX()->setting->get_setting( 'custom_css_product_page', '' );
 
         if ( ! empty( $custom_css ) ) {

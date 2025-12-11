@@ -169,11 +169,6 @@ class FrontendScripts {
 					'deps'    => $component_asset['dependencies'],
 					'version' => $version,
 				),
-                'multivendorx-store-dashboard-script'      => array(
-					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/' . MULTIVENDORX_PLUGIN_SLUG . '-store-dashboard.min.js',
-					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'react-jsx-runtime' ),
-					'version' => $version,
-				),
                 'multivendorx-qna-frontend-script'         => array(
 					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/QuestionsAnswers/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
 					'deps'    => array( 'jquery' ),
@@ -502,12 +497,6 @@ class FrontendScripts {
 					'data'        => array(
 						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
 						'select_text' => __( 'Select an item...', 'multivendorx' ),
-					),
-				),
-                'multivendorx-store-dashboard-script'    => array(
-					'object_name' => 'dashboard',
-					'data'        => array(
-						'ajaxurl' => admin_url( 'admin-ajax.php' ),
 					),
 				),
                 'multivendorx-qna-frontend-script'       => array(
