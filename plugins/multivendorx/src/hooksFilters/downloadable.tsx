@@ -80,81 +80,77 @@ const Downloadable = ({ product, setProduct, handleChange }) => {
                 </div>
             </div>
             <div className="card-body">
-                {/* {product.downloads?.map((file, index) => (
-                                    <div key={file.id} className="shipping-country-wrapper">
-                                        <div className="shipping-country">
-                                            <div className="country item">
+                {product.downloads?.map((file, index) => (
+                    <div key={file.id} className="shipping-country-wrapper">
+                        <div className="shipping-country">
+                            <div className="country item">
 
-                                                <BasicInput
-                                                    name="file_name"
-                                                    wrapperClass="setting-form-input"
-                                                    value={file.name}
-                                                    placeholder="File name"
-                                                    onChange={(e) =>
-                                                        updateDownloadableFile(file.id, "name", e.target.value)
-                                                    }
-                                                />
+                                <BasicInput
+                                    name="file_name"
+                                    wrapperClass="setting-form-input"
+                                    value={file.name}
+                                    placeholder="File name"
+                                    onChange={(e) =>
+                                        updateDownloadableFile(file.id, "name", e.target.value)
+                                    }
+                                />
 
-                                                <BasicInput
-                                                    name="file_url"
-                                                    wrapperClass="setting-form-input"
-                                                    value={file.file}
-                                                    placeholder="File URL"
-                                                    onChange={(e) =>
-                                                        updateDownloadableFile(file.id, "file", e.target.value)
-                                                    }
-                                                />
+                                <BasicInput
+                                    name="file_url"
+                                    wrapperClass="setting-form-input"
+                                    value={file.file}
+                                    placeholder="File URL"
+                                    onChange={(e) =>
+                                        updateDownloadableFile(file.id, "file", e.target.value)
+                                    }
+                                />
 
-                                                <div
-                                                    className="admin-btn btn-purple"
-                                                    onClick={() => openMediaUploader(file.id)}
-                                                >
-                                                    Upload file
-                                                </div>
+                                <div
+                                    className="admin-btn btn-purple"
+                                    onClick={() => openMediaUploader(file.id)}
+                                >
+                                    Upload file
+                                </div>
 
-                                                <div
-                                                    className="delete-icon adminlib-delete"
-                                                    onClick={() => removeDownloadableFile(file.id)}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-
-                                <div className="admin-btn btn-purple-bg" onClick={addDownloadableFile}>
-                                    <i className="adminlib-plus-circle-o"></i> Add new
-                                </div> */}
-                <div className="form-group-wrapper">
-                    <div className="form-group">
-                        <DynamicRowSetting
-                            keyName="downloads"
-                            template={downloadTemplate}
-                            value={product.downloads}
-                            addLabel="Add new"
-                            onChange={(rows) =>
-                                setProduct((prev) => ({
-                                    ...prev,
-                                    downloads: rows,
-                                }))
-                            }
-                            childrenRenderer={(row) => (
-                                <>
-                                    <div
-                                        className="admin-btn btn-purple"
-                                        onClick={() => openMediaUploader(row.id)}
-                                    >
-                                        Upload file
-                                    </div>
-
-                                    <div
-                                        className="delete-icon adminlib-delete"
-                                        onClick={() => removeDownloadableFile(row.id)}
-                                    />
-                                </>
-                            )}
-                        />
+                                <div
+                                    className="delete-icon adminlib-delete"
+                                    onClick={() => removeDownloadableFile(file.id)}
+                                />
+                            </div>
+                        </div>
                     </div>
+                ))}
+
+                <div className="admin-btn btn-purple-bg" onClick={addDownloadableFile}>
+                    <i className="adminlib-plus-circle-o"></i> Add new
                 </div>
+                <DynamicRowSetting
+                    keyName="downloads"
+                    template={downloadTemplate}
+                    value={product.downloads}
+                    addLabel="Add new"
+                    onChange={(rows) =>
+                        setProduct((prev) => ({
+                            ...prev,
+                            downloads: rows,
+                        }))
+                    }
+                    childrenRenderer={(row) => (
+                        <>
+                            <div
+                                className="admin-btn btn-purple"
+                                onClick={() => openMediaUploader(row.id)}
+                            >
+                                Upload file
+                            </div>
+
+                            <div
+                                className="delete-icon adminlib-delete"
+                                onClick={() => removeDownloadableFile(row.id)}
+                            />
+                        </>
+                    )}
+                />
 
                 <div className="form-group-wrapper">
                     <div className="form-group">
