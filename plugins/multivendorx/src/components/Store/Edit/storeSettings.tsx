@@ -1,16 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import { BasicInput, TextArea, FileInput, getApiLink, SuccessNotice, SelectInput, useModules, EmailsInput } from 'zyra';
+import { BasicInput, TextArea, FileInput, getApiLink, SuccessNotice, SelectInput, useModules, EmailsInput, GoogleMap, Mapbox } from 'zyra';
 import { useLocation } from "react-router-dom";
 import { __ } from '@wordpress/i18n';
-
-declare global {
-    interface Window {
-        google: any;
-        mapboxgl: any;
-        MapboxGeocoder: any;
-    }
-}
 
 interface FormData {
     [key: string]: string;
@@ -173,7 +165,6 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
     useEffect(() => {
         if (!id || !appLocalizer) {
             console.error('Missing store ID or appLocalizer');
-            setLoading(false);
             return;
         }
 
@@ -300,210 +291,210 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
     }, [location.state]);
 
 
-    // Load map scripts based on provider
-    useEffect(() => {
-        if (mapProvider === 'google_map_set' && !googleLoaded) {
-            log('Loading Google Maps script...');
-            loadGoogleMapsScript();
-        } else if (mapProvider === 'mapbox_api_set' && !mapboxLoaded) {
-            log('Loading Mapbox script...');
-            loadMapboxScript();
-        }
-    }, [mapProvider, googleLoaded, mapboxLoaded]);
+    // // Load map scripts based on provider
+    // useEffect(() => {
+    //     if (mapProvider === 'google_map_set' && !googleLoaded) {
+    //         log('Loading Google Maps script...');
+    //         loadGoogleMapsScript();
+    //     } else if (mapProvider === 'mapbox_api_set' && !mapboxLoaded) {
+    //         log('Loading Mapbox script...');
+    //         loadMapboxScript();
+    //     }
+    // }, [mapProvider, googleLoaded, mapboxLoaded]);
 
-    // Initialize map when data and scripts are loaded
-    useEffect(() => {
-        if (!loading && mapProvider) {
-            if (mapProvider === 'google_map_set' && googleLoaded) {
-                initializeGoogleMap();
-            } else if (mapProvider === 'mapbox_api_set' && mapboxLoaded) {
-                initializeMapboxMap();
-            }
-        }
-    }, [loading, mapProvider, googleLoaded, mapboxLoaded, formData.country, formData.location_lat, formData.location_lng]);
+    // // Initialize map when data and scripts are loaded
+    // useEffect(() => {
+    //     if (!loading && mapProvider) {
+    //         if (mapProvider === 'google_map_set' && googleLoaded) {
+    //             initializeGoogleMap();
+    //         } else if (mapProvider === 'mapbox_api_set' && mapboxLoaded) {
+    //             initializeMapboxMap();
+    //         }
+    //     }
+    // }, [loading, mapProvider, googleLoaded, mapboxLoaded, formData.country, formData.location_lat, formData.location_lng]);
 
-    const loadMapboxScript = () => {
-        if ((window as any).mapboxgl) {
-            setMapboxLoaded(true);
-            return;
-        }
+    // const loadMapboxScript = () => {
+    //     if ((window as any).mapboxgl) {
+    //         setMapboxLoaded(true);
+    //         return;
+    //     }
 
-        const mapboxGlScript = document.createElement('script');
-        mapboxGlScript.src = 'https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js';
-        mapboxGlScript.async = true;
-        document.head.appendChild(mapboxGlScript);
+    //     const mapboxGlScript = document.createElement('script');
+    //     mapboxGlScript.src = 'https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js';
+    //     mapboxGlScript.async = true;
+    //     document.head.appendChild(mapboxGlScript);
 
-        const mapboxGlCss = document.createElement('link');
-        mapboxGlCss.href = 'https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css';
-        mapboxGlCss.rel = 'stylesheet';
-        document.head.appendChild(mapboxGlCss);
+    //     const mapboxGlCss = document.createElement('link');
+    //     mapboxGlCss.href = 'https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css';
+    //     mapboxGlCss.rel = 'stylesheet';
+    //     document.head.appendChild(mapboxGlCss);
 
-        const mapboxGeocoderScript = document.createElement('script');
-        mapboxGeocoderScript.src = 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js';
-        mapboxGeocoderScript.async = true;
-        document.head.appendChild(mapboxGeocoderScript);
+    //     const mapboxGeocoderScript = document.createElement('script');
+    //     mapboxGeocoderScript.src = 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js';
+    //     mapboxGeocoderScript.async = true;
+    //     document.head.appendChild(mapboxGeocoderScript);
 
-        const mapboxGeocoderCss = document.createElement('link');
-        mapboxGeocoderCss.href = 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css';
-        mapboxGeocoderCss.rel = 'stylesheet';
-        document.head.appendChild(mapboxGeocoderCss);
+    //     const mapboxGeocoderCss = document.createElement('link');
+    //     mapboxGeocoderCss.href = 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css';
+    //     mapboxGeocoderCss.rel = 'stylesheet';
+    //     document.head.appendChild(mapboxGeocoderCss);
 
-        mapboxGlScript.onload = () => {
-            log('Mapbox script loaded successfully');
-            setMapboxLoaded(true);
-        };
+    //     mapboxGlScript.onload = () => {
+    //         log('Mapbox script loaded successfully');
+    //         setMapboxLoaded(true);
+    //     };
 
-        mapboxGlScript.onerror = (error) => {
-            log('Error loading Mapbox script:', error);
-        };
-    };
+    //     mapboxGlScript.onerror = (error) => {
+    //         log('Error loading Mapbox script:', error);
+    //     };
+    // };
 
-    const loadGoogleMapsScript = () => {
-        if (window.google && window.google.maps) {
-            log('Google Maps already loaded');
-            setGoogleLoaded(true);
-            return;
-        }
+    // const loadGoogleMapsScript = () => {
+    //     if (window.google && window.google.maps) {
+    //         log('Google Maps already loaded');
+    //         setGoogleLoaded(true);
+    //         return;
+    //     }
 
-        const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&loading=async`;
-        script.async = true;
-        script.defer = true;
+    //     const script = document.createElement('script');
+    //     script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&loading=async`;
+    //     script.async = true;
+    //     script.defer = true;
 
-        script.onload = () => {
-            log('Google Maps script loaded successfully');
-            setGoogleLoaded(true);
-        };
+    //     script.onload = () => {
+    //         log('Google Maps script loaded successfully');
+    //         setGoogleLoaded(true);
+    //     };
 
-        script.onerror = (error) => {
-            log('Error loading Google Maps script:', error);
-        };
+    //     script.onerror = (error) => {
+    //         log('Error loading Google Maps script:', error);
+    //     };
 
-        document.head.appendChild(script);
-    };
+    //     document.head.appendChild(script);
+    // };
 
-    const initializeGoogleMap = () => {
-        log('Initializing Google Map...');
+    // const initializeGoogleMap = () => {
+    //     log('Initializing Google Map...');
 
-        // Add safety check for google.maps availability
-        if (!window.google || !window.google.maps || !window.google.maps.Map) {
-            log('Google Maps not fully loaded yet, retrying...');
-            setTimeout(() => initializeGoogleMap(), 100);
-            return;
-        }
+    //     // Add safety check for google.maps availability
+    //     if (!window.google || !window.google.maps || !window.google.maps.Map) {
+    //         log('Google Maps not fully loaded yet, retrying...');
+    //         setTimeout(() => initializeGoogleMap(), 100);
+    //         return;
+    //     }
 
-        if (!autocompleteInputRef.current) {
-            log('Autocomplete input ref not available');
-            return;
-        }
+    //     if (!autocompleteInputRef.current) {
+    //         log('Autocomplete input ref not available');
+    //         return;
+    //     }
 
-        const initialLat = parseFloat(formData.location_lat) || 40.7128;
-        const initialLng = parseFloat(formData.location_lng) || -74.0060;
+    //     const initialLat = parseFloat(formData.location_lat) || 40.7128;
+    //     const initialLng = parseFloat(formData.location_lng) || -74.0060;
 
-        try {
-            const mapInstance = new window.google.maps.Map(document.getElementById('location-map'), {
-                center: { lat: initialLat, lng: initialLng },
-                zoom: formData.location_lat ? 15 : 10,
-            });
+    //     try {
+    //         const mapInstance = new window.google.maps.Map(document.getElementById('location-map'), {
+    //             center: { lat: initialLat, lng: initialLng },
+    //             zoom: formData.location_lat ? 15 : 10,
+    //         });
 
-            const markerInstance = new window.google.maps.Marker({
-                map: mapInstance,
-                draggable: true,
-                position: { lat: initialLat, lng: initialLng },
-            });
+    //         const markerInstance = new window.google.maps.Marker({
+    //             map: mapInstance,
+    //             draggable: true,
+    //             position: { lat: initialLat, lng: initialLng },
+    //         });
 
-            markerInstance.addListener('dragend', () => {
-                const position = markerInstance.getPosition();
-                reverseGeocode('google', position.lat(), position.lng());
-            });
+    //         markerInstance.addListener('dragend', () => {
+    //             const position = markerInstance.getPosition();
+    //             reverseGeocode('google', position.lat(), position.lng());
+    //         });
 
-            mapInstance.addListener('click', (event: any) => {
-                reverseGeocode('google', event.latLng.lat(), event.latLng.lng());
-            });
+    //         mapInstance.addListener('click', (event: any) => {
+    //             reverseGeocode('google', event.latLng.lat(), event.latLng.lng());
+    //         });
 
-            const autocomplete = new window.google.maps.places.Autocomplete(autocompleteInputRef.current, {
-                types: ['establishment', 'geocode'],
-                fields: ['address_components', 'formatted_address', 'geometry', 'name'],
-            });
+    //         const autocomplete = new window.google.maps.places.Autocomplete(autocompleteInputRef.current, {
+    //             types: ['establishment', 'geocode'],
+    //             fields: ['address_components', 'formatted_address', 'geometry', 'name'],
+    //         });
 
-            autocomplete.addListener('place_changed', () => {
-                const place = autocomplete.getPlace();
-                if (place.geometry) {
-                    handlePlaceSelect(place, 'google');
-                }
-            });
+    //         autocomplete.addListener('place_changed', () => {
+    //             const place = autocomplete.getPlace();
+    //             if (place.geometry) {
+    //                 handlePlaceSelect(place, 'google');
+    //             }
+    //         });
 
-            setMap(mapInstance);
-            setMarker(markerInstance);
-            log('Google Map initialized successfully');
-        } catch (error) {
-            log('Error initializing Google Map:', error);
-        }
-    };
+    //         setMap(mapInstance);
+    //         setMarker(markerInstance);
+    //         log('Google Map initialized successfully');
+    //     } catch (error) {
+    //         log('Error initializing Google Map:', error);
+    //     }
+    // };
 
-    // Debug logger
-    const log = (...args: any[]) => {
-        if (process.env.NODE_ENV !== "production") {
-            console.log("%c[StoreSettings LOG]", "color: #4CAF50; font-weight: bold;", ...args);
-        }
-    };
+    // // Debug logger
+    // const log = (...args: any[]) => {
+    //     if (process.env.NODE_ENV !== "production") {
+    //         console.log("%c[StoreSettings LOG]", "color: #4CAF50; font-weight: bold;", ...args);
+    //     }
+    // };
 
-    const initializeMapboxMap = () => {
-        log('Initializing Mapbox Map...');
-        if (!(window as any).mapboxgl || !autocompleteInputRef.current) return;
+    // const initializeMapboxMap = () => {
+    //     log('Initializing Mapbox Map...');
+    //     if (!(window as any).mapboxgl || !autocompleteInputRef.current) return;
 
-        // Clear any existing geocoder first
-        const geocoderContainer = document.getElementById('store-location-autocomplete-container');
-        if (geocoderContainer) {
-            geocoderContainer.innerHTML = ''; // Clear previous geocoder
-        }
-        (window as any).mapboxgl.accessToken = apiKey;
+    //     // Clear any existing geocoder first
+    //     const geocoderContainer = document.getElementById('store-location-autocomplete-container');
+    //     if (geocoderContainer) {
+    //         geocoderContainer.innerHTML = ''; // Clear previous geocoder
+    //     }
+    //     (window as any).mapboxgl.accessToken = apiKey;
 
-        const initialLat = parseFloat(formData.location_lat) || 40.7128;
-        const initialLng = parseFloat(formData.location_lng) || -74.0060;
+    //     const initialLat = parseFloat(formData.location_lat) || 40.7128;
+    //     const initialLng = parseFloat(formData.location_lng) || -74.0060;
 
-        const mapInstance = new (window as any).mapboxgl.Map({
-            container: 'location-map',
-            style: 'mapbox://styles/mapbox/streets-v11',
-            center: [initialLng, initialLat],
-            zoom: formData.location_lat ? 15 : 10,
-        });
+    //     const mapInstance = new (window as any).mapboxgl.Map({
+    //         container: 'location-map',
+    //         style: 'mapbox://styles/mapbox/streets-v11',
+    //         center: [initialLng, initialLat],
+    //         zoom: formData.location_lat ? 15 : 10,
+    //     });
 
-        const markerInstance = new (window as any).mapboxgl.Marker({ draggable: true })
-            .setLngLat([initialLng, initialLat])
-            .addTo(mapInstance);
+    //     const markerInstance = new (window as any).mapboxgl.Marker({ draggable: true })
+    //         .setLngLat([initialLng, initialLat])
+    //         .addTo(mapInstance);
 
-        markerInstance.on('dragend', () => {
-            const lngLat = markerInstance.getLngLat();
-            reverseGeocode('mapbox', lngLat.lat, lngLat.lng);
-        });
+    //     markerInstance.on('dragend', () => {
+    //         const lngLat = markerInstance.getLngLat();
+    //         reverseGeocode('mapbox', lngLat.lat, lngLat.lng);
+    //     });
 
-        mapInstance.on('click', (event: any) => {
-            reverseGeocode('mapbox', event.lngLat.lat, event.lngLat.lng);
-        });
+    //     mapInstance.on('click', (event: any) => {
+    //         reverseGeocode('mapbox', event.lngLat.lat, event.lngLat.lng);
+    //     });
 
-        const geocoder = new (window as any).MapboxGeocoder({
-            accessToken: apiKey,
-            mapboxgl: (window as any).mapboxgl,
-            marker: false,
-        });
+    //     const geocoder = new (window as any).MapboxGeocoder({
+    //         accessToken: apiKey,
+    //         mapboxgl: (window as any).mapboxgl,
+    //         marker: false,
+    //     });
 
-        geocoder.on('result', (e: any) => {
-            handlePlaceSelect(e.result, 'mapbox');
-        });
+    //     geocoder.on('result', (e: any) => {
+    //         handlePlaceSelect(e.result, 'mapbox');
+    //     });
 
-        // Add the geocoder to the container
-        if (geocoderContainer) {
-            geocoderContainer.appendChild(geocoder.onAdd(mapInstance));
-            // Hide the original input
-            if (autocompleteInputRef.current) {
-                autocompleteInputRef.current.style.display = 'none';
-            }
-        }
+    //     // Add the geocoder to the container
+    //     if (geocoderContainer) {
+    //         geocoderContainer.appendChild(geocoder.onAdd(mapInstance));
+    //         // Hide the original input
+    //         if (autocompleteInputRef.current) {
+    //             autocompleteInputRef.current.style.display = 'none';
+    //         }
+    //     }
 
-        setMap(mapInstance);
-        setMarker(markerInstance);
-    };
+    //     setMap(mapInstance);
+    //     setMarker(markerInstance);
+    // };
 
     const handlePlaceSelect = (place: any, provider: 'google' | 'mapbox') => {
         let lat, lng, formatted_address, addressComponents;
@@ -672,6 +663,23 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
         autoSave(updatedFormData);
     };
 
+    const handleLocationUpdate = (locationData: any) => {
+        const newAddressData = {
+            ...addressData,
+            ...locationData
+        };
+
+        setAddressData(newAddressData);
+
+        const updatedFormData = {
+            ...formData,
+            ...locationData
+        };
+
+        setFormData(updatedFormData);
+        autoSave(updatedFormData);
+    };
+
     // Handle country select change (from old code)
     const handleCountryChange = (newValue: any) => {
         if (!newValue || Array.isArray(newValue)) return;
@@ -817,6 +825,31 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
     const isValidEmail = (email: string): boolean => {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
     };
+
+    const renderMapComponent = () => {
+        if (!modules.includes('geo-location') || !apiKey) return null;
+
+        const commonProps = {
+            apiKey,
+            locationAddress: addressData.location_address,
+            locationLat: addressData.location_lat,
+            locationLng: addressData.location_lng,
+            onLocationUpdate: handleLocationUpdate,
+            labelSearch: __('Search for a location'),
+            labelMap: __('Drag or click on the map to choose a location'),
+            instructionText: __('Enter a search term or drag/drop a pin on the map.'),
+            placeholderSearch: __('Search for a location...'),
+        };
+
+        if (mapProvider === 'google_map_set') {
+            return <GoogleMap {...commonProps} />;
+        } else if (mapProvider === 'mapbox_api_set') {
+            return <Mapbox {...commonProps} />;
+        }
+
+        return null;
+    };
+
     return (
         <>
             <SuccessNotice message={successMsg} />
@@ -934,39 +967,12 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
                                 </div>
                             </div>
                         </div>
-                        {modules.includes('geo-location') &&
-                            !!(appLocalizer?.settings_databases_value?.geolocation?.google_api_key?.trim() ||
-                                appLocalizer?.settings_databases_value?.geolocation?.mapbox_api_key?.trim()) && (
-                                <>
-                                    <div className="form-group-wrapper">
-                                        <div className="form-group">
-                                            <label htmlFor="store-location-autocomplete">{__('Search Location')}</label>
-                                            <div id="store-location-autocomplete-container">
-                                                <input
-                                                    ref={autocompleteInputRef}
-                                                    id="store-location-autocomplete"
-                                                    type="text"
-                                                    className="basic-input"
-                                                    placeholder={__('Search your store address...')}
-                                                    defaultValue={addressData.location_address}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="form-group-wrapper">
-                                        <div className="form-group">
-                                            <label>{__('Location Map *')}</label>
-                                            <div id="location-map"></div>
-                                            <span className="settings-metabox-description">
-                                                {__('Click on the map or drag the marker to set your exact location')}
-                                            </span>
-                                        </div>
-                                        {/* Hidden coordinates */}
-                                        <input type="hidden" name="location_lat" value={addressData.location_lat} />
-                                        <input type="hidden" name="location_lng" value={addressData.location_lng} />
-                                    </div>
-                                </>
-                            )}
+                        {/* Map Component */}
+                        {renderMapComponent()}
+                        
+                        {/* Hidden coordinates */}
+                        <input type="hidden" name="location_lat" value={addressData.location_lat} />
+                        <input type="hidden" name="location_lng" value={addressData.location_lng} />
                     </div>
                 </div>
                 <div className="card-wrapper column w-35">

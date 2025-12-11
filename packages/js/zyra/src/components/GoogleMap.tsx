@@ -1,221 +1,250 @@
-// Check in MVX
-/// <reference types="google.maps" />
-/**
- * External dependencies
- */
-import React, { useEffect, useState, useRef, useCallback } from 'react';
-import GoogleMapReact from 'google-map-react';
+import { useEffect, useRef, useState } from 'react';
 
-// Types
-interface AnyReactComponentProps {
-    text: string;
-}
-const AnyReactComponent: React.FC< AnyReactComponentProps > = ( { text } ) => (
-    <img src={ text } width="38" height="50" alt="marker" />
-);
-
-interface AutoCompleteProps {
-    map: google.maps.Map;
-    mapApi: typeof google.maps | null;
-    addPlace: ( place: google.maps.places.PlaceResult ) => void;
-    placeholder?: string;
+declare global {
+    interface Window {
+        google: any;
+    }
 }
 
-declare const appLocalizer: { google_api: string };
-const AutoComplete: React.FC< AutoCompleteProps > = ( {
-    map,
-    mapApi,
-    addPlace,
-    placeholder,
-} ) => {
-    const [ autoComplete, setAutoComplete ] =
-        useState< google.maps.places.Autocomplete | null >( null );
-    const inputRef = useRef< HTMLInputElement | null >( null );
-
-    const handleOnPlaceChanged = useCallback( () => {
-        if ( ! autoComplete ) return;
-        const place = autoComplete.getPlace();
-        if ( ! place.geometry ) return;
-        if ( place.geometry.viewport ) {
-            map.fitBounds( place.geometry.viewport );
-        } else {
-            map.setCenter( place.geometry.location! );
-            map.setZoom( 17 );
-        }
-        addPlace( place );
-        inputRef.current!.blur();
-    }, [ autoComplete, map, addPlace ] );
-
-    useEffect( () => {
-        if ( mapApi?.places && inputRef.current ) {
-            const options = { types: [ 'address' ] };
-            const autoCompleteInstance = new mapApi.places.Autocomplete(
-                inputRef.current,
-                options
-            );
-            autoCompleteInstance.addListener(
-                'place_changed',
-                handleOnPlaceChanged
-            );
-            autoCompleteInstance.bindTo( 'bounds', map );
-            setAutoComplete( autoCompleteInstance );
-        }
-    }, [ handleOnPlaceChanged, mapApi, map ] );
-
-    const clearSearchBox = () => {
-        if ( inputRef.current ) inputRef.current.value = '';
-    };
-
-    return (
-        <input
-            className="search-input"
-            ref={ inputRef }
-            type="text"
-            onFocus={ clearSearchBox }
-            placeholder={ placeholder }
-        />
-    );
-};
-
-interface GoogleMapProps {
-    center: { lat: number; lng: number };
-    wrapperClass?: string;
-    placeholder?: string;
+interface GoogleMapComponentProps {
+    apiKey: string;
+    locationAddress: string;
+    locationLat: string;
+    locationLng: string;
+    onLocationUpdate: (data: {
+        location_address: string;
+        location_lat: string;
+        location_lng: string;
+        address?: string;
+        city?: string;
+        state?: string;
+        country?: string;
+        zip?: string;
+    }) => void;
+    labelSearch: string;
+    labelMap: string;
+    instructionText: string;
+    placeholderSearch: string;
 }
 
-const GoogleMap: React.FC< GoogleMapProps > = ( props ) => {
-    const [ zoomLoc, setZoomLoc ] = useState< number >( 12 );
-    const [ centerLoc, setCenterLoc ] = useState< {
-        lat: number;
-        lng: number;
-    } >( props.center );
-    const [ draggable, setDraggable ] = useState< boolean >( true );
-    // const [ address, setAddress ] = useState< string | undefined >();
-    const [ position, setPosition ] = useState< {
-        lat: number | string;
-        lng: number | string;
-    } >( {
-        lat: '',
-        lng: '',
-    } );
+const GoogleMap = ({
+    apiKey,
+    locationAddress,
+    locationLat,
+    locationLng,
+    onLocationUpdate,
+    labelSearch,
+    labelMap,
+    instructionText,
+    placeholderSearch,
+}: GoogleMapComponentProps) => {
+    const [map, setMap] = useState<any>(null);
+    const [marker, setMarker] = useState<any>(null);
+    const [googleLoaded, setGoogleLoaded] = useState<boolean>(false);
+    const autocompleteInputRef = useRef<HTMLInputElement>(null);
+    const mapContainerRef = useRef<HTMLDivElement>(null);
 
-    const [ mapApi, setMapApi ] = useState< typeof google.maps | null >( null );
-    const [ mapApiLoaded, setMapApiLoaded ] = useState< boolean >( false );
-    const [ mapInstance, setMapInstance ] = useState< google.maps.Map | null >(
-        null
-    );
-
-    useEffect( () => {
-        if ( 'geolocation' in navigator ) {
-            navigator.geolocation.getCurrentPosition( ( pos ) => {
-                setCenterLoc( {
-                    lat: pos.coords.latitude,
-                    lng: pos.coords.longitude,
-                } );
-                setPosition( {
-                    lat: pos.coords.latitude,
-                    lng: pos.coords.longitude,
-                } );
-            } );
+    // Debug logger
+    const log = (...args: any[]) => {
+        if (process.env.NODE_ENV !== "production") {
+            console.log("%c[GoogleMapComponent LOG]", "color: #4285F4; font-weight: bold;", ...args);
         }
-    }, [] );
-
-    const handleOnChange = ( {
-        center,
-        zoom,
-    }: {
-        center: { lat: number; lng: number };
-        zoom: number;
-    } ) => {
-        setZoomLoc( zoom );
-        setCenterLoc( center );
     };
 
-    const handleOnClick = ( value: { lat: number; lng: number } ) => {
-        setPosition( { lat: value.lat, lng: value.lng } );
-    };
+    // Load Google Maps script
+    useEffect(() => {
+        log('Loading Google Maps script...');
+    
+        if (window.google && window.google.maps) {
+            log('Google Maps already loaded');
+            setGoogleLoaded(true);
+            return;
+        }
+    
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+        script.async = true;
+    
+        script.onload = () => {
+            log('Google Maps script loaded successfully');
+            setGoogleLoaded(true);
+        };
+    
+        script.onerror = (error) => {
+            console.error("Google Maps failed to load:", error);
+        };
+    
+        document.head.appendChild(script);
+    }, [googleLoaded]);    
 
-    const onMarkerInteraction = (
-        _: any,
-        __: any,
-        mouse: { lat: number; lng: number }
-    ) => {
-        setDraggable( false );
-        setPosition( { lat: mouse.lat, lng: mouse.lng } );
-    };
+    // Initialize map when Google Maps is loaded
+    useEffect(() => {
+        if (!googleLoaded || !autocompleteInputRef.current || !mapContainerRef.current) return;
 
-    const onMarkerInteractionMouseUp = () => {
-        setDraggable( true );
-        generateAddress();
-    };
+        if (!window.google || !window.google.maps) {
+            log("Google Maps NOT ready yet");
+            return;
+        }
 
-    const apiHasLoaded = ( map: google.maps.Map, maps: typeof google.maps ) => {
-        setMapApiLoaded( true );
-        setMapInstance( map );
-        setMapApi( maps );
-        generateAddress();
-    };
+        log('Initializing Google Map...');
 
-    const addPlace = ( place: google.maps.places.PlaceResult ) => {
-        if ( ! place.geometry ) return;
-        setPosition( {
-            lat: place.geometry.location!.lat(),
-            lng: place.geometry.location!.lng(),
-        } );
-        generateAddress();
-    };
+        const initialLat = parseFloat(locationLat) || 40.7128;
+        const initialLng = parseFloat(locationLng) || -74.0060;
 
-    const generateAddress = () => {
-        if ( ! mapApi || ! position.lat || ! position.lng ) return;
-        const geocoder = new mapApi.Geocoder();
+        try {
+            const mapInstance = new window.google.maps.Map(mapContainerRef.current, {
+                center: { lat: initialLat, lng: initialLng },
+                zoom: locationLat ? 15 : 10,
+                streetViewControl: false,
+                mapTypeControl: true,
+                fullscreenControl: true,
+                zoomControl: true,
+            });
 
-        geocoder.geocode(
-            { location: { lat: +position.lat, lng: +position.lng } },
-            ( results, status ) => {
-                if ( status === 'OK' && results?.[ 0 ] ) {
-                    setZoomLoc( 12 );
-                    // setAddress( results[ 0 ].formatted_address );
-                } else {
-                    // eslint-disable-next-line no-console
-                    console.log( 'Geocoder failed due to: ' + status );
+            const markerInstance = new window.google.maps.Marker({
+                map: mapInstance,
+                draggable: true,
+                position: { lat: initialLat, lng: initialLng },
+                title: 'Store Location'
+            });
+
+            markerInstance.addListener('dragend', () => {
+                const position = markerInstance.getPosition();
+                reverseGeocode(position.lat(), position.lng());
+            });
+
+            mapInstance.addListener('click', (event: any) => {
+                reverseGeocode(event.latLng.lat(), event.latLng.lng());
+            });
+
+            const autocomplete = new window.google.maps.places.Autocomplete(autocompleteInputRef.current, {
+                types: ['establishment', 'geocode'],
+                fields: ['address_components', 'formatted_address', 'geometry', 'name'],
+            });
+
+            autocomplete.addListener('place_changed', () => {
+                const place = autocomplete.getPlace();
+                if (place.geometry) {
+                    handlePlaceSelect(place);
                 }
+            });
+
+            setMap(mapInstance);
+            setMarker(markerInstance);
+            log('Google Map initialized successfully');
+        } catch (error) {
+            log('Error initializing Google Map:', error);
+        }
+    }, [googleLoaded, locationLat, locationLng]);
+
+    const handlePlaceSelect = (place: any) => {
+        const location = place.geometry.location;
+        const lat = location.lat();
+        const lng = location.lng();
+        const formatted_address = place.formatted_address;
+        const addressComponents = extractAddressComponents(place);
+
+        if (map && marker) {
+            map.setCenter({ lat, lng });
+            marker.setPosition({ lat, lng });
+            map.setZoom(17);
+        }
+
+        const newLocationData = {
+            location_address: formatted_address,
+            location_lat: lat.toString(),
+            location_lng: lng.toString(),
+            ...addressComponents,
+        };
+
+        if (!newLocationData.address && formatted_address) {
+            newLocationData.address = formatted_address;
+        }
+
+        onLocationUpdate(newLocationData);
+    };
+
+    const reverseGeocode = (lat: number, lng: number) => {
+        const geocoder = new window.google.maps.Geocoder();
+        geocoder.geocode({ location: { lat, lng } }, (results: any[], status: string) => {
+            if (status === 'OK' && results[0]) {
+                handlePlaceSelect(results[0]);
             }
-        );
+        });
+    };
+
+    const extractAddressComponents = (place: any) => {
+        const components: any = {};
+        let streetNumber = '';
+        let route = '';
+        let streetAddress = '';
+
+        if (place.address_components) {
+            place.address_components.forEach((component: any) => {
+                const types = component.types;
+
+                if (types.includes('street_number')) {
+                    streetNumber = component.long_name;
+                } else if (types.includes('route')) {
+                    route = component.long_name;
+                } else if (types.includes('locality')) {
+                    components.city = component.long_name;
+                } else if (types.includes('administrative_area_level_1')) {
+                    components.state = component.short_name || component.long_name;
+                } else if (types.includes('country')) {
+                    components.country = component.long_name;
+                } else if (types.includes('postal_code')) {
+                    components.zip = component.long_name;
+                }
+            });
+
+            if (streetNumber && route) {
+                streetAddress = `${streetNumber} ${route}`;
+            } else if (route) {
+                streetAddress = route;
+            } else if (streetNumber) {
+                streetAddress = streetNumber;
+            }
+
+            components.address = streetAddress.trim();
+        }
+
+        return components;
     };
 
     return (
-        <div className={ props.wrapperClass }>
-            { mapApiLoaded && mapInstance && (
-                <AutoComplete
-                    map={ mapInstance }
-                    mapApi={ mapApi }
-                    addPlace={ addPlace }
-                    placeholder={ props.placeholder }
-                />
-            ) }
-            <div style={ { height: '50vh', width: '50%' } }>
-                <GoogleMapReact
-                    zoom={ zoomLoc }
-                    center={ centerLoc }
-                    draggable={ draggable }
-                    onClick={ handleOnClick }
-                    onChange={ handleOnChange }
-                    onChildMouseMove={ onMarkerInteraction }
-                    onChildMouseDown={ onMarkerInteraction }
-                    onChildMouseUp={ onMarkerInteractionMouseUp }
-                    bootstrapURLKeys={ {
-                        key: appLocalizer.google_api, // Ensure `appLocalizer` is properly typed
-                        libraries: [ 'places', 'geometry' ],
-                    } }
-                    yesIWantToUseGoogleMapApiInternals
-                    onGoogleApiLoaded={ ( { map, maps } ) =>
-                        apiHasLoaded( map, maps )
-                    }
-                >
-                    <AnyReactComponent text="{appLocalizer.marker_icon}" />
-                </GoogleMapReact>
+        <>
+            <div className="form-group-wrapper">
+                <div className="form-group">
+                    <label htmlFor="store-location-autocomplete">{labelSearch}</label>
+                    <div id="store-location-autocomplete-container">
+                        <input
+                            ref={autocompleteInputRef}
+                            id="store-location-autocomplete"
+                            type="text"
+                            className="basic-input"
+                            placeholder={placeholderSearch}
+                            defaultValue={locationAddress}
+                        />
+                    </div>
+                </div>
             </div>
-        </div>
+            <div className="form-group-wrapper">
+                <div className="form-group">
+                    <label>{labelMap}</label>
+                    <div 
+                        ref={mapContainerRef}
+                        id="location-map"
+                        style={{ 
+                            height: '400px', 
+                            width: '100%',
+                            borderRadius: '8px',
+                            overflow: 'hidden'
+                        }}
+                    ></div>
+                </div>
+            </div>
+        </>
     );
 };
 

@@ -32,7 +32,7 @@ import MultiCheckBox from './MultiCheckbox';
 import WpEditor from './WpEditor';
 import Log from './Log';
 import InputMailchimpList from './InputMailchimpList';
-const LazyMapsInput = lazy(() => import('./MapsInput'));
+const LazyMapsInput = lazy(() => import('./Mapbox'));
 import GoogleMap from './GoogleMap';
 import Popup, { PopupProps } from './Popup';
 import '../styles/web/AdminForm.scss';
