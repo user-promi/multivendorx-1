@@ -434,7 +434,7 @@ const ProductReport: React.FC = () => {
     },
   ];
   return (
-    <div className="dashboard-overview">
+    <>
       {/* Keep entire top dashboard layout */}
       <div className="card-wrapper">
         <div className="card-content transparent">
@@ -602,7 +602,7 @@ const ProductReport: React.FC = () => {
         searchFilter={searchFilter}
         totalCounts={totalRows}
       />
-    </div>
+    </>
   );
 
 };
