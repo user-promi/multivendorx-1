@@ -13,7 +13,6 @@ import {
 	getApiLink,
 } from 'zyra';
 import { applyFilters } from '@wordpress/hooks';
-import { DateTimePicker } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 const AddProduct = () => {

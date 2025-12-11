@@ -60,7 +60,7 @@ class BankTransfer {
                         array(
                             'key'   => 'bank_name',
                             'label' => __( 'Bank name', 'multivendorx' ),
-                            'value' => 'bank_account_details',
+                            'value' => 'bank_name',
                             // 'edit'  => true,
                         ),
                         array(
@@ -94,9 +94,9 @@ class BankTransfer {
                             // 'edit'  => true,
                         ),
                         array(
-                            'key'   => 'IBAN',
+                            'key'   => 'iban',
                             'label' => __( 'IBAN', 'multivendorx' ),
-                            'value' => 'IBAN',
+                            'value' => 'iban',
                             // 'edit'  => true,
                         ),
                     ),
@@ -147,12 +147,17 @@ class BankTransfer {
                         'label' => 'Bank name',
                     ),
                     array(
+                        'key'   => 'account_number',
+                        'type'  => 'text',
+                        'label' => 'Account number',
+                    ),
+                    array(
                         'key'   => 'bank_address',
                         'type'  => 'text-area',
                         'label' => 'Bank address',
                     ),
                     array(
-                        'key'   => 'abr_routing_number',
+                        'key'   => 'routing_number',
                         'type'  => 'text',
                         'label' => 'ABA routing number',
                     ),
@@ -162,7 +167,7 @@ class BankTransfer {
                         'label' => 'IBAN',
                     ),
                     array(
-                        'key'   => 'destination currency',
+                        'key'   => 'destination_currency',
                         'type'  => 'text',
                         'label' => 'Destination currency',
                     ),
