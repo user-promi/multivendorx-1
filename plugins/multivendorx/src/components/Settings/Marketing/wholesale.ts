@@ -3,15 +3,15 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'wholesale',
 	priority: 3,
-	name: __( 'Wholesale', 'mvx-pro' ),
-	desc: __( 'Configure rules for wholesale buyers and pricing.', 'mvx-pro' ),
+	name: __('Wholesale', 'mvx-pro'),
+	desc: __('Configure rules for wholesale buyers and pricing.', 'mvx-pro'),
 	icon: 'adminlib-wholesale1',
 	submitUrl: 'settings',
 	modal: [
 		{
 			key: 'wholesale_buyer_verification',
 			type: 'setting-toggle',
-			label: __( 'Wholesale buyer verification', 'multivendorx' ),
+			label: __('Wholesale buyer verification', 'multivendorx'),
 			settingDescription: __(
 				'Decide how wholesale buyers are approved before they can access bulk pricing.',
 				'multivendorx'
@@ -23,12 +23,12 @@ export default {
 			options: [
 				{
 					key: 'automatic',
-					label: __( 'Automatic', 'multivendorx' ),
+					label: __('Automatic', 'multivendorx'),
 					value: 'automatic',
 				},
 				{
 					key: 'manual',
-					label: __( 'Manual', 'multivendorx' ),
+					label: __('Manual', 'multivendorx'),
 					value: 'manual',
 				},
 			],
@@ -38,7 +38,7 @@ export default {
 		{
 			key: 'wholesale_price_access',
 			type: 'setting-toggle',
-			label: __( 'Who can see wholesale prices', 'multivendorx' ),
+			label: __('Who can see wholesale prices', 'multivendorx'),
 			settingDescription: __(
 				'Choose which users can see wholesale pricing in store catalogs.',
 				'multivendorx'
@@ -50,15 +50,12 @@ export default {
 			options: [
 				{
 					key: 'registered',
-					label: __( 'All registered users', 'multivendorx' ),
+					label: __('All registered users', 'multivendorx'),
 					value: 'registered',
 				},
 				{
 					key: 'wholesale_only',
-					label: __(
-						'Approved wholesale buyers only',
-						'multivendorx'
-					),
+					label: __('Approved wholesale buyers only', 'multivendorx'),
 					value: 'wholesale_only',
 				},
 			],
@@ -68,7 +65,7 @@ export default {
 		{
 			key: 'wholesale_price_display',
 			type: 'setting-toggle',
-			label: __( 'Wholesale price display', 'multivendorx' ),
+			label: __('Wholesale price display', 'multivendorx'),
 			settingDescription: __(
 				'Control whether wholesale prices are shown alongside retail prices or separately.',
 				'multivendorx'
@@ -80,12 +77,12 @@ export default {
 			options: [
 				{
 					key: 'with_retail',
-					label: __( 'Along with retail prices', 'multivendorx' ),
+					label: __('Along with retail prices', 'multivendorx'),
 					value: 'with_retail',
 				},
 				{
 					key: 'wholesale_only',
-					label: __( 'Wholesale price only', 'multivendorx' ),
+					label: __('Wholesale price only', 'multivendorx'),
 					value: 'wholesale_only',
 				},
 			],

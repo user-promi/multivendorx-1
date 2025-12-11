@@ -44,54 +44,54 @@ const discountOptions = [
 	{ label: 'Fixed cart discount', value: 'fixed_cart' },
 	{ label: 'Fixed product discount', value: 'fixed_product' },
 ];
-const formatWooDate = ( dateString: string ) => {
-	if ( ! dateString ) return '-';
-	const date = new Date( dateString );
-	return date.toLocaleString( 'en-US', {
+const formatWooDate = (dateString: string) => {
+	if (!dateString) return '-';
+	const date = new Date(dateString);
+	return date.toLocaleString('en-US', {
 		year: 'numeric',
 		month: 'long',
 		day: 'numeric',
-	} );
+	});
 };
 
 export interface RealtimeFilter {
 	name: string;
 	render: (
-		updateFilter: ( key: string, value: any ) => void,
+		updateFilter: (key: string, value: any) => void,
 		filterValue: any
 	) => ReactNode;
 }
-const formatDateForInput = ( dateString?: string | null ) => {
-	if ( ! dateString ) return '';
-	const date = new Date( dateString );
+const formatDateForInput = (dateString?: string | null) => {
+	if (!dateString) return '';
+	const date = new Date(dateString);
 	const year = date.getFullYear();
-	const month = String( date.getMonth() + 1 ).padStart( 2, '0' );
-	const day = String( date.getDate() ).padStart( 2, '0' );
-	return `${ year }-${ month }-${ day }`;
+	const month = String(date.getMonth() + 1).padStart(2, '0');
+	const day = String(date.getDate()).padStart(2, '0');
+	return `${year}-${month}-${day}`;
 };
 
 const AllCoupon: React.FC = () => {
-	const [ id, setId ] = useState< string | null >( null );
-	const [ validationErrors, setValidationErrors ] = useState< {
-		[ key: string ]: string;
-	} >( {} );
+	const [id, setId] = useState<string | null>(null);
+	const [validationErrors, setValidationErrors] = useState<{
+		[key: string]: string;
+	}>({});
 
 	const validateForm = () => {
-		const errors: { [ key: string ]: string } = {};
+		const errors: { [key: string]: string } = {};
 
-		if ( ! formData.title.trim() ) {
-			errors.title = __( 'Coupon code is required', 'multivendorx' );
+		if (!formData.title.trim()) {
+			errors.title = __('Coupon code is required', 'multivendorx');
 		}
 
-		if ( ! formData.discount_type.trim() ) {
+		if (!formData.discount_type.trim()) {
 			errors.discount_type = __(
 				'Discount type is required',
 				'multivendorx'
 			);
 		}
 
-		setValidationErrors( errors );
-		return Object.keys( errors ).length === 0;
+		setValidationErrors(errors);
+		return Object.keys(errors).length === 0;
 	};
 
 	const defaultFormData = {
@@ -116,7 +116,7 @@ const AllCoupon: React.FC = () => {
 		id: undefined,
 	};
 
-	const [ formData, setFormData ] = useState< any >( {
+	const [formData, setFormData] = useState<any>({
 		title: '',
 		content: '',
 		discount_type: '',
@@ -135,41 +135,39 @@ const AllCoupon: React.FC = () => {
 		product_categories: [],
 		exclude_product_categories: [],
 		customer_email: '',
-	} );
+	});
 
-	useEffect( () => {
-		const searchParams = new URLSearchParams( window.location.search );
-		const dashboardId = searchParams.get( 'dashboard' );
-		setId( dashboardId );
-	}, [] );
+	useEffect(() => {
+		const searchParams = new URLSearchParams(window.location.search);
+		const dashboardId = searchParams.get('dashboard');
+		setId(dashboardId);
+	}, []);
 
-	const [ data, setData ] = useState< CouponRow[] >( [] );
-	const [ storeProducts, setStoreProducts ] = useState<
+	const [data, setData] = useState<CouponRow[]>([]);
+	const [storeProducts, setStoreProducts] = useState<
 		{ value: string; label: string }[]
-	>( [] );
-	const [ categories, setCategories ] = useState<
+	>([]);
+	const [categories, setCategories] = useState<
 		{ value: string; label: string }[]
-	>( [] );
-	const [ rowSelection, setRowSelection ] = useState< RowSelectionState >(
-		{}
-	);
-	const [ totalRows, setTotalRows ] = useState< number >( 0 );
-	const [ pagination, setPagination ] = useState< PaginationState >( {
+	>([]);
+	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+	const [totalRows, setTotalRows] = useState<number>(0);
+	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
 		pageSize: 10,
-	} );
-	const [ AddCoupon, setAddCoupon ] = useState( false );
+	});
+	const [AddCoupon, setAddCoupon] = useState(false);
 
-	const [ pageCount, setPageCount ] = useState( 0 );
-	const [ activeTab, setActiveTab ] = useState( 'general' );
+	const [pageCount, setPageCount] = useState(0);
+	const [activeTab, setActiveTab] = useState('general');
 
-	const [ couponTypeCounts, setCouponTypeCounts ] = useState<
+	const [couponTypeCounts, setCouponTypeCounts] = useState<
 		{ key: string; name: string; count: number }[]
-	>( [] );
-	const handleEditCoupon = async ( couponId: number ) => {
+	>([]);
+	const handleEditCoupon = async (couponId: number) => {
 		try {
 			const res = await axios.get(
-				`${ appLocalizer.apiUrl }/wc/v3/coupons/${ couponId }`,
+				`${appLocalizer.apiUrl}/wc/v3/coupons/${couponId}`,
 				{
 					headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				}
@@ -177,13 +175,13 @@ const AllCoupon: React.FC = () => {
 
 			const coupon = res.data;
 
-			setFormData( {
+			setFormData({
 				title: coupon.code,
 				content: coupon.description || '',
 				discount_type: coupon.discount_type,
 				coupon_amount: coupon.amount,
 				free_shipping: coupon.free_shipping ? 'yes' : 'no',
-				expiry_date: formatDateForInput( coupon.date_expires ), // <-- fix date
+				expiry_date: formatDateForInput(coupon.date_expires), // <-- fix date
 				usage_limit: coupon.usage_limit || '',
 				limit_usage_to_x_items: coupon.limit_usage_to_x_items || '',
 				usage_limit_per_user: coupon.usage_limit_per_user || '',
@@ -196,56 +194,55 @@ const AllCoupon: React.FC = () => {
 				product_categories: coupon.product_categories || [],
 				exclude_product_categories:
 					coupon.excluded_product_categories || [],
-				customer_email: ( coupon.email_restrictions || [] ).join( ',' ),
+				customer_email: (coupon.email_restrictions || []).join(','),
 				id: coupon.id,
-			} );
+			});
 
-			setAddCoupon( true ); // open popup
-			setActiveTab( 'general' ); // optional: start with general tab
-		} catch ( err ) {
-			console.error( 'Failed to fetch coupon details:', err );
-			alert( 'Failed to fetch coupon details. Please try again.' );
+			setAddCoupon(true); // open popup
+			setActiveTab('general'); // optional: start with general tab
+		} catch (err) {
+			console.error('Failed to fetch coupon details:', err);
+			alert('Failed to fetch coupon details. Please try again.');
 		}
 	};
 
 	const fetchCouponStatusCounts = async () => {
-		const statuses = [ 'all', 'publish', 'draft', 'pending' ];
+		const statuses = ['all', 'publish', 'draft', 'pending'];
 		const counts = await Promise.all(
-			statuses.map( async ( status ) => {
+			statuses.map(async (status) => {
 				const params: any = {
 					meta_key: 'multivendorx_store_id',
 					value: appLocalizer.store_id,
 				};
 
-				if ( status !== 'all' ) {
+				if (status !== 'all') {
 					params.status = status;
 				} else {
 					params.status = 'any';
 				}
 
 				const res = await axios.get(
-					`${ appLocalizer.apiUrl }/wc/v3/coupons`,
+					`${appLocalizer.apiUrl}/wc/v3/coupons`,
 					{
 						headers: { 'X-WP-Nonce': appLocalizer.nonce },
 						params,
 					}
 				);
 
-				const total = parseInt( res.headers[ 'x-wp-total' ] || '0' );
+				const total = parseInt(res.headers['x-wp-total'] || '0');
 
 				return {
 					key: status,
 					name:
 						status === 'all'
-							? __( 'All', 'multivendorx' )
-							: status.charAt( 0 ).toUpperCase() +
-							  status.slice( 1 ),
+							? __('All', 'multivendorx')
+							: status.charAt(0).toUpperCase() + status.slice(1),
 					count: total,
 				};
-			} )
+			})
 		);
 		setCouponTypeCounts(
-			counts.filter( ( c ) => c.key === 'all' || c.count > 0 )
+			counts.filter((c) => c.key === 'all' || c.count > 0)
 		);
 	};
 
@@ -260,7 +257,7 @@ const AllCoupon: React.FC = () => {
 		startDate = '',
 		endDate = ''
 	) {
-		setData( [] );
+		setData([]);
 
 		// Build the base parameters object
 		const params: any = {
@@ -271,34 +268,34 @@ const AllCoupon: React.FC = () => {
 			value: appLocalizer.store_id,
 		};
 
-		if ( startDate && endDate ) {
+		if (startDate && endDate) {
 			params.after = startDate;
 			params.before = endDate;
 		}
 
-		if ( stockStatus ) {
+		if (stockStatus) {
 			params.stock_status = stockStatus;
 		}
 
-		if ( searchField ) {
+		if (searchField) {
 			params.search = searchField;
 		}
-		if ( couponType ) {
+		if (couponType) {
 			params.discount_type = couponType;
 		}
-		axios( {
+		axios({
 			method: 'GET',
-			url: `${ appLocalizer.apiUrl }/wc/v3/coupons`,
+			url: `${appLocalizer.apiUrl}/wc/v3/coupons`,
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: params, // Use the dynamically built params object
-		} )
-			.then( ( response ) => {
-				const total = parseInt( response.headers[ 'x-wp-total' ] );
-				setTotalRows( total );
-				setPageCount( Math.ceil( total / rowsPerPage ) );
+		})
+			.then((response) => {
+				const total = parseInt(response.headers['x-wp-total']);
+				setTotalRows(total);
+				setPageCount(Math.ceil(total / rowsPerPage));
 
 				// Map WooCommerce coupon data to our table rows
-				const formatted = response.data.map( ( coupon: any ) => ( {
+				const formatted = response.data.map((coupon: any) => ({
 					id: coupon.id,
 					code: coupon.code,
 					discount_type: coupon.discount_type,
@@ -308,16 +305,16 @@ const AllCoupon: React.FC = () => {
 					date_expires: coupon.date_expires,
 					description: coupon.description,
 					status: coupon.status, // usually 'publish', 'draft', or 'trash'
-				} ) );
-				setData( formatted );
+				}));
+				setData(formatted);
 				fetchCouponStatusCounts();
-			} )
+			})
 
-			.catch( () => {
-				setData( [] );
-				setTotalRows( 0 );
-				setPageCount( 0 );
-			} );
+			.catch(() => {
+				setData([]);
+				setTotalRows(0);
+				setPageCount(0);
+			});
 	}
 
 	// Handle pagination and filter changes
@@ -326,7 +323,7 @@ const AllCoupon: React.FC = () => {
 		currentPage: number,
 		filterData: FilterData
 	) => {
-		setData( [] );
+		setData([]);
 		// Arguments must be passed in the exact order requestData expects them.
 		requestData(
 			rowsPerPage, // 1: rowsPerPage
@@ -340,30 +337,30 @@ const AllCoupon: React.FC = () => {
 		);
 	};
 
-	useEffect( () => {
+	useEffect(() => {
 		fetchCouponStatusCounts();
 		const currentPage = pagination.pageIndex + 1;
 		const rowsPerPage = pagination.pageSize;
-		requestData( rowsPerPage, currentPage );
-	}, [ pagination ] );
+		requestData(rowsPerPage, currentPage);
+	}, [pagination]);
 
-	useEffect( () => {
-		if ( ! id ) return;
+	useEffect(() => {
+		if (!id) return;
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, `store/${ id }` ),
+			url: getApiLink(appLocalizer, `store/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: { store: 'store' },
-		} ).then( ( res ) => {
+		}).then((res) => {
 			const data = res.data || {};
-			setStoreProducts( data.products );
-			setCategories( data.categories );
-		} );
-	}, [ id ] );
+			setStoreProducts(data.products);
+			setCategories(data.categories);
+		});
+	}, [id]);
 
-	const handleSave = async ( status: 'draft' | 'publish' ) => {
-		if ( ! validateForm() ) {
+	const handleSave = async (status: 'draft' | 'publish') => {
+		if (!validateForm()) {
 			return; // Stop submission if errors exist
 		}
 		try {
@@ -384,7 +381,7 @@ const AllCoupon: React.FC = () => {
 					formData.usage_limit_per_user || undefined,
 				date_expires: formData.expiry_date || undefined,
 				email_restrictions: formData.customer_email
-					? formData.customer_email.split( ',' )
+					? formData.customer_email.split(',')
 					: [],
 				product_ids: formData.product_ids || [],
 				excluded_product_ids: formData.exclude_product_ids || [],
@@ -400,25 +397,25 @@ const AllCoupon: React.FC = () => {
 				],
 			};
 
-			if ( formData.id ) {
+			if (formData.id) {
 				// Update existing coupon
 				await axios.put(
-					`${ appLocalizer.apiUrl }/wc/v3/coupons/${ formData.id }`,
+					`${appLocalizer.apiUrl}/wc/v3/coupons/${formData.id}`,
 					payload,
 					{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
 				);
 			} else {
 				// Create new coupon
 				await axios.post(
-					`${ appLocalizer.apiUrl }/wc/v3/coupons`,
+					`${appLocalizer.apiUrl}/wc/v3/coupons`,
 					payload,
 					{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
 				);
 			}
 
 			// Close popup & reset form
-			setAddCoupon( false );
-			setFormData( {
+			setAddCoupon(false);
+			setFormData({
 				title: '',
 				content: '',
 				discount_type: '',
@@ -438,60 +435,56 @@ const AllCoupon: React.FC = () => {
 				exclude_product_categories: [],
 				customer_email: '',
 				id: undefined,
-			} );
+			});
 
 			// Reload list
-			requestData( pagination.pageSize, pagination.pageIndex + 1 );
-		} catch ( err ) {
-			console.error( 'Error saving coupon:', err );
+			requestData(pagination.pageSize, pagination.pageIndex + 1);
+		} catch (err) {
+			console.error('Error saving coupon:', err);
 		}
 	};
 
 	const tabs = [
 		{
 			id: 'general',
-			label: __( 'General', 'multivendorx' ),
+			label: __('General', 'multivendorx'),
 			content: (
 				<>
 					<div className="form-group-wrapper">
 						<div className="form-group">
-							<label>
-								{ __( 'Discount type', 'multivendorx' ) }
-							</label>
+							<label>{__('Discount type', 'multivendorx')}</label>
 							<SelectInput
 								name="discount_type"
-								value={ formData.discount_type }
-								options={ discountOptions }
+								value={formData.discount_type}
+								options={discountOptions}
 								type="single-select"
-								onChange={ ( val: any ) =>
-									setFormData( {
+								onChange={(val: any) =>
+									setFormData({
 										...formData,
 										discount_type: val?.value || '',
-									} )
+									})
 								}
 							/>
-							{ validationErrors.discount_type && (
+							{validationErrors.discount_type && (
 								<div className="invalid-massage">
-									{ validationErrors.discount_type }
+									{validationErrors.discount_type}
 								</div>
-							) }
+							)}
 						</div>
 					</div>
 
 					<div className="form-group-wrapper">
 						<div className="form-group">
-							<label>
-								{ __( 'Coupon amount', 'multivendorx' ) }
-							</label>
+							<label>{__('Coupon amount', 'multivendorx')}</label>
 							<BasicInput
 								type="number"
 								name="coupon_amount"
-								value={ formData.coupon_amount }
-								onChange={ ( e: any ) =>
-									setFormData( {
+								value={formData.coupon_amount}
+								onChange={(e: any) =>
+									setFormData({
 										...formData,
 										coupon_amount: e.target.value,
-									} )
+									})
 								}
 							/>
 						</div>
@@ -500,28 +493,28 @@ const AllCoupon: React.FC = () => {
 					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label>
-								{ __( 'Allow free shipping', 'multivendorx' ) }
+								{__('Allow free shipping', 'multivendorx')}
 							</label>
 							<ToggleSetting
 								wrapperClass="setting-form-input"
-								options={ [
+								options={[
 									{
 										key: 'yes',
 										value: 'yes',
-										label: __( 'Yes', 'multivendorx' ),
+										label: __('Yes', 'multivendorx'),
 									},
 									{
 										key: 'no',
 										value: 'no',
-										label: __( 'No', 'multivendorx' ),
+										label: __('No', 'multivendorx'),
 									},
-								] }
-								value={ formData.free_shipping }
-								onChange={ ( val: any ) =>
-									setFormData( {
+								]}
+								value={formData.free_shipping}
+								onChange={(val: any) =>
+									setFormData({
 										...formData,
 										free_shipping: val,
-									} )
+									})
 								}
 							/>
 						</div>
@@ -530,17 +523,17 @@ const AllCoupon: React.FC = () => {
 					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label>
-								{ __( 'Coupon expiry date', 'multivendorx' ) }
+								{__('Coupon expiry date', 'multivendorx')}
 							</label>
 							<BasicInput
 								type="date"
 								name="expiry_date"
-								value={ formData.expiry_date }
-								onChange={ ( e: any ) =>
-									setFormData( {
+								value={formData.expiry_date}
+								onChange={(e: any) =>
+									setFormData({
 										...formData,
 										expiry_date: e.target.value,
-									} )
+									})
 								}
 							/>
 						</div>
@@ -550,26 +543,23 @@ const AllCoupon: React.FC = () => {
 		},
 		{
 			id: 'limits',
-			label: __( 'Usage Limits', 'multivendorx' ),
+			label: __('Usage Limits', 'multivendorx'),
 			content: (
 				<>
 					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label>
-								{ __(
-									'Usage limit per coupon',
-									'multivendorx'
-								) }
+								{__('Usage limit per coupon', 'multivendorx')}
 							</label>
 							<BasicInput
 								type="number"
 								name="usage_limit"
-								value={ formData.usage_limit }
-								onChange={ ( e: any ) =>
-									setFormData( {
+								value={formData.usage_limit}
+								onChange={(e: any) =>
+									setFormData({
 										...formData,
 										usage_limit: e.target.value,
-									} )
+									})
 								}
 							/>
 						</div>
@@ -578,20 +568,17 @@ const AllCoupon: React.FC = () => {
 					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label>
-								{ __(
-									'Limit usage to X items',
-									'multivendorx'
-								) }
+								{__('Limit usage to X items', 'multivendorx')}
 							</label>
 							<BasicInput
 								type="number"
 								name="limit_usage_to_x_items"
-								value={ formData.limit_usage_to_x_items }
-								onChange={ ( e: any ) =>
-									setFormData( {
+								value={formData.limit_usage_to_x_items}
+								onChange={(e: any) =>
+									setFormData({
 										...formData,
 										limit_usage_to_x_items: e.target.value,
-									} )
+									})
 								}
 							/>
 						</div>
@@ -600,17 +587,17 @@ const AllCoupon: React.FC = () => {
 					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label>
-								{ __( 'Usage limit per user', 'multivendorx' ) }
+								{__('Usage limit per user', 'multivendorx')}
 							</label>
 							<BasicInput
 								type="number"
 								name="usage_limit_per_user"
-								value={ formData.usage_limit_per_user }
-								onChange={ ( e: any ) =>
-									setFormData( {
+								value={formData.usage_limit_per_user}
+								onChange={(e: any) =>
+									setFormData({
 										...formData,
 										usage_limit_per_user: e.target.value,
-									} )
+									})
 								}
 							/>
 						</div>
@@ -620,23 +607,21 @@ const AllCoupon: React.FC = () => {
 		},
 		{
 			id: 'restriction',
-			label: __( 'Usage Restriction', 'multivendorx' ),
+			label: __('Usage Restriction', 'multivendorx'),
 			content: (
 				<>
 					<div className="form-group-wrapper">
 						<div className="form-group">
-							<label>
-								{ __( 'Minimum spend', 'multivendorx' ) }
-							</label>
+							<label>{__('Minimum spend', 'multivendorx')}</label>
 							<BasicInput
 								type="number"
 								name="minimum_amount"
-								value={ formData.minimum_amount }
-								onChange={ ( e: any ) =>
-									setFormData( {
+								value={formData.minimum_amount}
+								onChange={(e: any) =>
+									setFormData({
 										...formData,
 										minimum_amount: e.target.value,
-									} )
+									})
 								}
 							/>
 						</div>
@@ -644,18 +629,16 @@ const AllCoupon: React.FC = () => {
 
 					<div className="form-group-wrapper">
 						<div className="form-group">
-							<label>
-								{ __( 'Maximum spend', 'multivendorx' ) }
-							</label>
+							<label>{__('Maximum spend', 'multivendorx')}</label>
 							<BasicInput
 								type="number"
 								name="maximum_amount"
-								value={ formData.maximum_amount }
-								onChange={ ( e: any ) =>
-									setFormData( {
+								value={formData.maximum_amount}
+								onChange={(e: any) =>
+									setFormData({
 										...formData,
 										maximum_amount: e.target.value,
-									} )
+									})
 								}
 							/>
 						</div>
@@ -664,28 +647,28 @@ const AllCoupon: React.FC = () => {
 					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label>
-								{ __( 'Individual use only', 'multivendorx' ) }
+								{__('Individual use only', 'multivendorx')}
 							</label>
 							<ToggleSetting
 								wrapperClass="setting-form-input"
-								options={ [
+								options={[
 									{
 										key: 'yes',
 										value: 'yes',
-										label: __( 'Yes', 'multivendorx' ),
+										label: __('Yes', 'multivendorx'),
 									},
 									{
 										key: 'no',
 										value: 'no',
-										label: __( 'No', 'multivendorx' ),
+										label: __('No', 'multivendorx'),
 									},
-								] }
-								value={ formData.individual_use }
-								onChange={ ( val: any ) =>
-									setFormData( {
+								]}
+								value={formData.individual_use}
+								onChange={(val: any) =>
+									setFormData({
 										...formData,
 										individual_use: val,
-									} )
+									})
 								}
 							/>
 						</div>
@@ -694,28 +677,28 @@ const AllCoupon: React.FC = () => {
 					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label>
-								{ __( 'Exclude sale items', 'multivendorx' ) }
+								{__('Exclude sale items', 'multivendorx')}
 							</label>
 							<ToggleSetting
 								wrapperClass="setting-form-input"
-								options={ [
+								options={[
 									{
 										key: 'yes',
 										value: 'yes',
-										label: __( 'Yes', 'multivendorx' ),
+										label: __('Yes', 'multivendorx'),
 									},
 									{
 										key: 'no',
 										value: 'no',
-										label: __( 'No', 'multivendorx' ),
+										label: __('No', 'multivendorx'),
 									},
-								] }
-								value={ formData.exclude_sale_items }
-								onChange={ ( val: any ) =>
-									setFormData( {
+								]}
+								value={formData.exclude_sale_items}
+								onChange={(val: any) =>
+									setFormData({
 										...formData,
 										exclude_sale_items: val,
-									} )
+									})
 								}
 							/>
 						</div>
@@ -724,17 +707,17 @@ const AllCoupon: React.FC = () => {
 					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label>
-								{ __( 'Allowed emails', 'multivendorx' ) }
+								{__('Allowed emails', 'multivendorx')}
 							</label>
 							<BasicInput
 								type="text"
 								name="customer_email"
-								value={ formData.customer_email }
-								onChange={ ( e: any ) =>
-									setFormData( {
+								value={formData.customer_email}
+								onChange={(e: any) =>
+									setFormData({
 										...formData,
 										customer_email: e.target.value,
-									} )
+									})
 								}
 							/>
 						</div>
@@ -744,126 +727,122 @@ const AllCoupon: React.FC = () => {
 		},
 	];
 
-	const columns: ColumnDef< CouponRow >[] = [
+	const columns: ColumnDef<CouponRow>[] = [
 		{
 			id: 'select',
-			header: ( { table } ) => (
+			header: ({ table }) => (
 				<input
 					type="checkbox"
-					checked={ table.getIsAllRowsSelected() }
-					onChange={ table.getToggleAllRowsSelectedHandler() }
+					checked={table.getIsAllRowsSelected()}
+					onChange={table.getToggleAllRowsSelectedHandler()}
 				/>
 			),
-			cell: ( { row } ) => (
+			cell: ({ row }) => (
 				<input
 					type="checkbox"
-					checked={ row.getIsSelected() }
-					onChange={ row.getToggleSelectedHandler() }
+					checked={row.getIsSelected()}
+					onChange={row.getToggleSelectedHandler()}
 				/>
 			),
 		},
 		{
-			header: __( 'Coupon Code', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.code }>
-					{ row.original.code }
+			header: __('Coupon Code', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.code}>
+					{row.original.code}
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'Coupon Type', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.discount_type }>
-					{ row.original.discount_type === 'percent'
+			header: __('Coupon Type', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.discount_type}>
+					{row.original.discount_type === 'percent'
 						? 'Percentage discount'
 						: row.original.discount_type === 'fixed_cart'
-						? 'Fixed cart discount'
-						: row.original.discount_type === 'fixed_product'
-						? 'Fixed product discount'
-						: '-' }
+							? 'Fixed cart discount'
+							: row.original.discount_type === 'fixed_product'
+								? 'Fixed product discount'
+								: '-'}
 				</TableCell>
 			),
 		},
 		{
 			id: 'amount',
 			accessorKey: 'amount',
-			accessorFn: ( row ) => parseFloat( row.amount || '0' ),
+			accessorFn: (row) => parseFloat(row.amount || '0'),
 			enableSorting: true,
-			header: __( 'Amount', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.amount }>
-					{ formatCurrency( row.original.amount ) }
+			header: __('Amount', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.amount}>
+					{formatCurrency(row.original.amount)}
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'Description', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.description || '-' }>
-					{ row.original.description || '-' }
+			header: __('Description', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.description || '-'}>
+					{row.original.description || '-'}
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'Usage / Limit', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Usage / Limit', 'multivendorx'),
+			cell: ({ row }) => {
 				const usageCount = row.original.usage_count ?? 0;
 				const usageLimit =
 					row.original.usage_limit && row.original.usage_limit > 0
 						? row.original.usage_limit
 						: '∞';
-				return (
-					<TableCell>{ `${ usageCount } / ${ usageLimit }` }</TableCell>
-				);
+				return <TableCell>{`${usageCount} / ${usageLimit}`}</TableCell>;
 			},
 		},
 		{
 			id: 'date_expires',
 			accessorKey: 'date_expires',
 			enableSorting: true,
-			header: __( 'Expiry Date', 'multivendorx' ),
-			cell: ( { row } ) => (
+			header: __('Expiry Date', 'multivendorx'),
+			cell: ({ row }) => (
 				<TableCell>
-					{ formatWooDate( row.original.date_expires ) }
+					{formatWooDate(row.original.date_expires)}
 				</TableCell>
 			),
 		},
 		{
 			id: 'status',
-			header: __( 'Status', 'multivendorx' ),
-			cell: ( { row } ) => {
-				return (
-					<TableCell type="status" status={ row.original.status } />
-				);
+			header: __('Status', 'multivendorx'),
+			cell: ({ row }) => {
+				return <TableCell type="status" status={row.original.status} />;
 			},
 		},
 		{
 			id: 'action',
-			header: __( 'Action', 'multivendorx' ),
-			cell: ( { row } ) => (
+			header: __('Action', 'multivendorx'),
+			cell: ({ row }) => (
 				<TableCell
 					type="action-dropdown"
-					rowData={ row.original }
-					header={ {
+					rowData={row.original}
+					header={{
 						actions: [
 							{
-								label: __( 'Edit', 'multivendorx' ),
+								label: __('Edit', 'multivendorx'),
 								icon: 'adminlib-edit',
-								onClick: ( rowData: any ) => {
-									handleEditCoupon( rowData.id );
+								onClick: (rowData: any) => {
+									handleEditCoupon(rowData.id);
 								},
 							},
 							{
-								label: __( 'Delete', 'multivendorx' ),
+								label: __('Delete', 'multivendorx'),
 								icon: 'adminlib-vendor-form-delete',
-								onClick: async ( rowData: any ) => {
+								onClick: async (rowData: any) => {
 									if (
 										confirm(
-											`Are you sure you want to delete coupon "${ rowData.code }"?`
+											`Are you sure you want to delete coupon "${rowData.code}"?`
 										)
 									) {
 										await axios.delete(
-											`${ appLocalizer.apiUrl }/wc/v3/coupons/${ rowData.id }`,
+											`${appLocalizer.apiUrl}/wc/v3/coupons/${rowData.id}`,
 											{
 												headers: {
 													'X-WP-Nonce':
@@ -879,7 +858,7 @@ const AllCoupon: React.FC = () => {
 								},
 							},
 						],
-					} }
+					}}
 				/>
 			),
 		},
@@ -889,29 +868,29 @@ const AllCoupon: React.FC = () => {
 		{
 			name: 'couponType',
 			render: (
-				updateFilter: ( key: string, value: string ) => void,
+				updateFilter: (key: string, value: string) => void,
 				filterValue: string | undefined
 			) => (
 				<div className="   group-field">
 					<select
 						name="couponType"
-						onChange={ ( e ) =>
-							updateFilter( e.target.name, e.target.value )
+						onChange={(e) =>
+							updateFilter(e.target.name, e.target.value)
 						}
-						value={ filterValue || '' }
+						value={filterValue || ''}
 						className="basic-select"
 					>
 						<option value="">
-							{ __( 'All Types', 'multivendorx' ) }
+							{__('All Types', 'multivendorx')}
 						</option>
 						<option value="percent">
-							{ __( 'Percentage Discount', 'multivendorx' ) }
+							{__('Percentage Discount', 'multivendorx')}
 						</option>
 						<option value="fixed_cart">
-							{ __( 'Fixed Cart Discount', 'multivendorx' ) }
+							{__('Fixed Cart Discount', 'multivendorx')}
 						</option>
 						<option value="fixed_product">
-							{ __( 'Fixed Product Discount', 'multivendorx' ) }
+							{__('Fixed Product Discount', 'multivendorx')}
 						</option>
 					</select>
 				</div>
@@ -919,17 +898,17 @@ const AllCoupon: React.FC = () => {
 		},
 		{
 			name: 'date',
-			render: ( updateFilter ) => (
+			render: (updateFilter) => (
 				<div className="right">
 					<MultiCalendarInput
 						wrapperClass=""
 						inputClass=""
-						onChange={ ( range: any ) => {
-							updateFilter( 'date', {
+						onChange={(range: any) => {
+							updateFilter('date', {
 								start_date: range.startDate,
 								end_date: range.endDate,
-							} );
-						} }
+							});
+						}}
 					/>
 				</div>
 			),
@@ -939,15 +918,15 @@ const AllCoupon: React.FC = () => {
 	const searchFilter: RealtimeFilter[] = [
 		{
 			name: 'searchField',
-			render: ( updateFilter, filterValue ) => (
+			render: (updateFilter, filterValue) => (
 				<div className="search-section">
 					<input
 						type="text"
 						name="searchField"
-						placeholder={ __( 'Search', 'multivendorx' ) }
-						value={ filterValue || '' }
-						onChange={ ( e ) =>
-							updateFilter( e.target.name, e.target.value )
+						placeholder={__('Search', 'multivendorx')}
+						value={filterValue || ''}
+						onChange={(e) =>
+							updateFilter(e.target.name, e.target.value)
 						}
 						className="basic-select"
 					/>
@@ -961,53 +940,51 @@ const AllCoupon: React.FC = () => {
 		<>
 			<div className="page-title-wrapper">
 				<div className="page-title">
-					<div className="title">
-						{ __( 'Coupons', 'multivendorx' ) }
-					</div>
+					<div className="title">{__('Coupons', 'multivendorx')}</div>
 					<div className="des">
-						{ __(
+						{__(
 							'Manage your store information and preferences',
 							'multivendorx'
-						) }
+						)}
 					</div>
 				</div>
 
 				<div className="button-wrapper">
 					<div
 						className="admin-btn btn-purple-bg"
-						onClick={ () => {
-							setFormData( { ...defaultFormData } ); // reset form
-							setActiveTab( 'general' ); // start with General tab
-							setAddCoupon( true ); // open popup
-						} }
+						onClick={() => {
+							setFormData({ ...defaultFormData }); // reset form
+							setActiveTab('general'); // start with General tab
+							setAddCoupon(true); // open popup
+						}}
 					>
 						<i className="adminlib-plus-circle"></i>
-						{ __( 'Add New', 'multivendorx' ) }
+						{__('Add New', 'multivendorx')}
 					</div>
 				</div>
 			</div>
 
-			{ AddCoupon && (
+			{AddCoupon && (
 				<CommonPopup
-					open={ AddCoupon }
-					onClick={ () => setAddCoupon( false ) }
+					open={AddCoupon}
+					onClick={() => setAddCoupon(false)}
 					width="31.25rem"
 					height="100%"
 					header={
 						<>
 							<div className="title">
 								<i className="adminlib-coupon"></i>
-								{ __( 'Add Coupon', 'multivendorx' ) }
+								{__('Add Coupon', 'multivendorx')}
 							</div>
 							<p>
-								{ __(
+								{__(
 									'Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.',
 									'multivendorx'
-								) }
+								)}
 							</p>
 							<i
 								className="icon adminlib-close"
-								onClick={ () => setAddCoupon( false ) }
+								onClick={() => setAddCoupon(false)}
 							></i>
 						</>
 					}
@@ -1015,122 +992,117 @@ const AllCoupon: React.FC = () => {
 						<>
 							<div
 								className="admin-btn btn-red"
-								onClick={ () => handleSave( 'draft' ) }
+								onClick={() => handleSave('draft')}
 							>
-								{ __( 'Draft', 'multivendorx' ) }
+								{__('Draft', 'multivendorx')}
 							</div>
 
 							<div
 								className="admin-btn btn-purple-bg"
-								onClick={ () => handleSave( 'publish' ) }
+								onClick={() => handleSave('publish')}
 							>
-								{ __( 'Publish', 'multivendorx' ) }
+								{__('Publish', 'multivendorx')}
 							</div>
 						</>
 					}
 				>
 					<div className="content">
-						{ /* Coupon Code */ }
+						{/* Coupon Code */}
 						<div className="form-group-wrapper">
 							<div className="form-group">
 								<label htmlFor="title">
-									{ __( 'Coupon code', 'multivendorx' ) }
+									{__('Coupon code', 'multivendorx')}
 								</label>
 								<BasicInput
 									type="text"
 									name="title"
 									wrapperClass="setting-form-input"
-									value={ formData.title }
-									generate={ true }
-									onChange={ ( e: any ) =>
-										setFormData( {
+									value={formData.title}
+									generate={true}
+									onChange={(e: any) =>
+										setFormData({
 											...formData,
 											title: e.target.value,
-										} )
+										})
 									}
 								/>
-								{ validationErrors.title && (
+								{validationErrors.title && (
 									<div className="invalid-massage">
-										{ validationErrors.title }
+										{validationErrors.title}
 									</div>
-								) }
+								)}
 							</div>
 						</div>
 
-						{ /* Description */ }
+						{/* Description */}
 						<div className="form-group-wrapper">
 							<div className="form-group">
 								<label htmlFor="title">
-									{ __(
+									{__(
 										'Description (optional)',
 										'multivendorx'
-									) }
+									)}
 								</label>
 								<TextArea
 									name="content"
 									inputClass="textarea-input"
-									rowNumber={ 6 }
-									value={ formData.content }
-									onChange={ ( e: any ) =>
-										setFormData( {
+									rowNumber={6}
+									value={formData.content}
+									onChange={(e: any) =>
+										setFormData({
 											...formData,
 											content: e.target.value,
-										} )
+										})
 									}
 								/>
 							</div>
 						</div>
 
-						{ /* Tabs */ }
+						{/* Tabs */}
 						<div className="tab-titles">
-							{ tabs.map( ( tab ) => (
+							{tabs.map((tab) => (
 								<div
-									key={ tab.id }
-									className={ `title ${
+									key={tab.id}
+									className={`title ${
 										activeTab === tab.id ? 'active' : ''
-									}` }
-									onClick={ () => setActiveTab( tab.id ) }
+									}`}
+									onClick={() => setActiveTab(tab.id)}
 								>
-									<h2>{ __( tab.label, 'multivendorx' ) }</h2>
+									<h2>{__(tab.label, 'multivendorx')}</h2>
 								</div>
-							) ) }
+							))}
 						</div>
 
-						{ /* Tab Content */ }
+						{/* Tab Content */}
 						<div className="tab-content">
-							{ tabs.map(
-								( tab ) =>
+							{tabs.map(
+								(tab) =>
 									activeTab === tab.id && (
-										<div
-											key={ tab.id }
-											className="tab-panel"
-										>
-											{ tab.content }
+										<div key={tab.id} className="tab-panel">
+											{tab.content}
 										</div>
 									)
-							) }
+							)}
 						</div>
 					</div>
 				</CommonPopup>
-			) }
+			)}
 			<div className="admin-table-wrapper">
 				<Table
-					data={ data }
-					columns={
-						columns as ColumnDef< Record< string, any >, any >[]
-					}
-					rowSelection={ rowSelection }
-					onRowSelectionChange={ setRowSelection }
-					defaultRowsPerPage={ 10 }
-					pageCount={ pageCount }
-					pagination={ pagination }
-					onPaginationChange={ setPagination }
-					realtimeFilter={ realtimeFilter }
-					perPageOption={ [ 10, 25, 50 ] }
-					handlePagination={ requestApiForData }
-					totalCounts={ totalRows }
-					typeCounts={ couponTypeCounts }
-					searchFilter={ searchFilter }
+					data={data}
+					columns={columns as ColumnDef<Record<string, any>, any>[]}
+					rowSelection={rowSelection}
+					onRowSelectionChange={setRowSelection}
+					defaultRowsPerPage={10}
+					pageCount={pageCount}
+					pagination={pagination}
+					onPaginationChange={setPagination}
+					realtimeFilter={realtimeFilter}
+					perPageOption={[10, 25, 50]}
+					handlePagination={requestApiForData}
+					totalCounts={totalRows}
+					typeCounts={couponTypeCounts}
+					searchFilter={searchFilter}
 				/>
 			</div>
 		</>

@@ -1,26 +1,26 @@
 import { __ } from '@wordpress/i18n';
 
 const gatewayList = appLocalizer.gateway_list || [];
-const gatewayFields = gatewayList.flatMap( ( gateway ) => [
+const gatewayFields = gatewayList.flatMap((gateway) => [
 	{
-		key: `${ gateway.value }_fixed`,
+		key: `${gateway.value}_fixed`,
 		type: 'number',
-		preInsideText: __( '$', 'multivendorx' ),
+		preInsideText: __('$', 'multivendorx'),
 		size: '8rem',
 		preText: gateway.label,
 		postText: '+',
 	},
 	{
-		key: `${ gateway.value }_percentage`,
+		key: `${gateway.value}_percentage`,
 		type: 'number',
-		postInsideText: __( '%', 'multivendorx' ),
+		postInsideText: __('%', 'multivendorx'),
 		size: '8rem',
 	},
 	{
 		key: 'devider',
 		type: 'devider',
 	},
-] );
+]);
 
 const taxes_enabled = appLocalizer.taxes_enabled;
 
@@ -28,7 +28,7 @@ const nestedFields = [
 	{
 		key: 'default_fixed',
 		type: 'number',
-		preInsideText: __( '$', 'multivendorx' ),
+		preInsideText: __('$', 'multivendorx'),
 		size: '8rem',
 		preText: 'Default',
 		postText: '+',
@@ -36,7 +36,7 @@ const nestedFields = [
 	{
 		key: 'default_percentage',
 		type: 'number',
-		postInsideText: __( '%', 'multivendorx' ),
+		postInsideText: __('%', 'multivendorx'),
 		size: '8rem',
 	},
 	{
@@ -49,7 +49,7 @@ const nestedFields = [
 export default {
 	id: 'store-commissions',
 	priority: 1,
-	name: __( 'Commissions', 'multivendorx' ),
+	name: __('Commissions', 'multivendorx'),
 	tabTitle: 'Commission share from the seller’s product/service:',
 	desc: __(
 		'Decide how your marketplace takes commission from sales.',
@@ -61,7 +61,7 @@ export default {
 		{
 			key: 'store_rating_page',
 			type: 'blocktext',
-			label: __( 'no_label', 'multivendorx' ),
+			label: __('no_label', 'multivendorx'),
 			blocktext: __(
 				'You are currently using the older vendor-specific commission system from previous versions of MultiVendorX. Because of that, the <b>Marketplace commission</b> and <b>Commission value</b> fields shown below will continue to work as vendor-specific until you update or modify this settings page.<br><br>Once you make any change, your marketplace will automatically switch to the new <b>Marketplace commission</b> model. From that point onward, all commissions will be calculated using the updated system, and this notice will no longer appear.',
 				'multivendorx'
@@ -70,7 +70,7 @@ export default {
 		{
 			key: 'commission_type',
 			type: 'setting-toggle',
-			label: __( 'Marketplace commission', 'multivendorx' ),
+			label: __('Marketplace commission', 'multivendorx'),
 			settingDescription: __(
 				'Decide how the system should calculate the marketplace commission.',
 				'multivendorx'
@@ -82,12 +82,12 @@ export default {
 			options: [
 				{
 					key: 'store_order',
-					label: __( 'Store order based', 'multivendorx' ),
+					label: __('Store order based', 'multivendorx'),
 					value: 'store_order',
 				},
 				{
 					key: 'per_item',
-					label: __( 'Per item based', 'multivendorx' ),
+					label: __('Per item based', 'multivendorx'),
 					value: 'per_item',
 				},
 			],
@@ -183,7 +183,7 @@ export default {
 				{
 					key: 'commission_fixed',
 					type: 'text',
-					preInsideText: __( '$', 'multivendorx' ),
+					preInsideText: __('$', 'multivendorx'),
 					size: '8rem',
 					preText: 'fixed',
 					preTextFirstRow: 'Fixed',
@@ -193,7 +193,7 @@ export default {
 					key: 'commission_percentage',
 					type: 'number',
 					size: '8rem',
-					postInsideText: __( '%', 'multivendorx' ),
+					postInsideText: __('%', 'multivendorx'),
 					postText: 'commission will be charged.',
 					postTextFirstRow: '',
 				},
@@ -217,7 +217,7 @@ export default {
 				{
 					key: 'commission_fixed',
 					type: 'number',
-					preInsideText: __( '$', 'multivendorx' ),
+					preInsideText: __('$', 'multivendorx'),
 					size: '8rem',
 					preText: 'Fixed',
 					postText: '+',
@@ -225,7 +225,7 @@ export default {
 				{
 					key: 'commission_percentage',
 					type: 'number',
-					postInsideText: __( '%', 'multivendorx' ),
+					postInsideText: __('%', 'multivendorx'),
 					size: '8rem',
 				},
 			],
@@ -250,7 +250,7 @@ export default {
 		{
 			key: 'store_rating_page',
 			type: 'blocktext',
-			label: __( 'no_label', 'multivendorx' ),
+			label: __('no_label', 'multivendorx'),
 			blocktext: __(
 				'To allow each store to set up and manage its own shipping methods, zones, and rates, please enable the <a href="' +
 					appLocalizer.site_url +
@@ -260,12 +260,12 @@ export default {
 		},
 		{
 			key: 'taxable',
-			label: __( 'Tax on shipping', 'multivendorx' ),
+			label: __('Tax on shipping', 'multivendorx'),
 			settingDescription: __(
 				'Shipping charges will be treated as taxable items during checkout. Otherwise shipping costs will be tax-free.',
 				'multivendorx'
 			),
-			desc: __( '', 'multivendorx' ),
+			desc: __('', 'multivendorx'),
 			type: 'checkbox',
 			moduleEnabled: 'store-shipping',
 			options: [
@@ -279,7 +279,7 @@ export default {
 		{
 			key: 'give_tax',
 			type: 'setting-toggle',
-			label: __( 'Tax amount', 'multivendorx' ),
+			label: __('Tax amount', 'multivendorx'),
 			wooCheck: 'taxes_enabled',
 			wooLink:
 				'page=wc-settings&tab=general#taxes_and_coupons_options-description',
@@ -294,17 +294,17 @@ export default {
 			options: [
 				{
 					key: 'no_tax',
-					label: __( 'No tax', 'multivendorx' ),
+					label: __('No tax', 'multivendorx'),
 					value: 'no_tax',
 				},
 				{
 					key: 'full_tax',
-					label: __( 'Full tax', 'multivendorx' ),
+					label: __('Full tax', 'multivendorx'),
 					value: 'full_tax',
 				},
 				{
 					key: 'commision_based_tax',
-					label: __( 'Commission based tax', 'multivendorx' ),
+					label: __('Commission based tax', 'multivendorx'),
 					value: 'commision_based_tax',
 				},
 			],
@@ -312,7 +312,7 @@ export default {
 		{
 			key: 'separator_content',
 			type: 'section',
-			hint: __( 'Fees deducted from store earnings', 'multivendorx' ),
+			hint: __('Fees deducted from store earnings', 'multivendorx'),
 			desc: __(
 				'Determine which fees to deduct from the store earning.',
 				'multivendorx'
@@ -321,7 +321,7 @@ export default {
 		{
 			key: 'marketplace_fees',
 			type: 'nested',
-			label: __( 'Platform fees', 'multivendorx' ),
+			label: __('Platform fees', 'multivendorx'),
 			single: true,
 			proSetting: true,
 			settingDescription: __(
@@ -336,7 +336,7 @@ export default {
 				{
 					key: 'commission_fixed',
 					type: 'text',
-					preInsideText: __( '$', 'multivendorx' ),
+					preInsideText: __('$', 'multivendorx'),
 					size: '8rem',
 					preText: 'Charge a fixed',
 					postText: '+',
@@ -345,7 +345,7 @@ export default {
 					key: 'commission_percentage',
 					type: 'number',
 					size: '8rem',
-					postInsideText: __( '%', 'multivendorx' ),
+					postInsideText: __('%', 'multivendorx'),
 				},
 				{
 					key: 'rule',
@@ -389,7 +389,7 @@ export default {
 				{
 					key: 'facilitator_fixed',
 					type: 'number',
-					preInsideText: __( '$', 'multivendorx' ),
+					preInsideText: __('$', 'multivendorx'),
 					size: '8rem',
 					preText: 'Fixed',
 					postText: '+',
@@ -397,7 +397,7 @@ export default {
 				{
 					key: 'facilitator_percentage',
 					type: 'number',
-					postInsideText: __( '%', 'multivendorx' ),
+					postInsideText: __('%', 'multivendorx'),
 					size: '8rem',
 				},
 			],
@@ -406,7 +406,7 @@ export default {
 		{
 			key: 'gateway_fees',
 			type: 'nested',
-			label: __( 'Gateway fees', 'multivendorx' ),
+			label: __('Gateway fees', 'multivendorx'),
 			settingDescription: __(
 				'Set up gateway fees to recover the transaction costs charged by your payment provider. These fees are deducted from the store’s commission so your earnings remain unaffected.',
 				'multivendorx'

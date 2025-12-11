@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'active',
 	priority: 1,
-	name: __( 'Active', 'multivendorx' ),
+	name: __('Active', 'multivendorx'),
 	desc: '',
 	icon: 'adminlib-store-inventory',
 	submitUrl: 'settings',
@@ -17,12 +17,12 @@ export default {
 				{
 					key: 'paid_promotion_limit',
 					type: 'setup',
-					label: __( 'Configure store permissions', 'multivendorx' ),
+					label: __('Configure store permissions', 'multivendorx'),
 					desc: __(
 						'Control what dashboard sections and tools are available to active stores.',
 						'multivendorx'
 					),
-					link: `${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-capability`,
+					link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-capability`,
 				},
 			],
 		},

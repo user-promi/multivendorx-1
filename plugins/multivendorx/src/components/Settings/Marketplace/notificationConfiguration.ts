@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'notification-configuration',
 	priority: 5,
-	name: __( 'Notification Configuration', 'multivendorx' ),
+	name: __('Notification Configuration', 'multivendorx'),
 	desc: __(
 		'Define what each store role can access and manage within the marketplace. All notifications dispatched by the site can be tracked and reviewed from <b><a href="#&tab=settings&subtab=notifications">Notification Settings</a></b>',
 		'multivendorx'
@@ -14,7 +14,7 @@ export default {
 		{
 			key: 'registration page',
 			type: 'blocktext',
-			label: __( 'no_label', 'multivendorx' ),
+			label: __('no_label', 'multivendorx'),
 			blocktext: __(
 				'Only store owners can apply for store registration. Applicants must log in or create an account before proceeding. So, Make sure <a href="/wp-admin/admin.php?page=wc-settings&tab=account" target="_blank">WooCommerce’s Account & Privacy settings are configured to allow user registration.',
 				'multivendorx'
@@ -23,12 +23,12 @@ export default {
 		{
 			key: 'email_section',
 			type: 'section',
-			hint: __( 'Email provider', 'multivendorx' ),
+			hint: __('Email provider', 'multivendorx'),
 		},
 		{
 			key: 'email_provider',
 			type: 'setting-toggle',
-			label: __( 'Email provider', 'multivendorx' ),
+			label: __('Email provider', 'multivendorx'),
 			settingDescription: __(
 				'Choose which service will send your marketplace emails.',
 				'multivendorx'
@@ -36,22 +36,22 @@ export default {
 			options: [
 				{
 					key: 'wp_mail',
-					label: __( 'WordPress Default (wp_mail)', 'multivendorx' ),
+					label: __('WordPress Default (wp_mail)', 'multivendorx'),
 					value: 'wp_mail',
 				},
 				{
 					key: 'sendgrid',
-					label: __( 'SendGrid', 'multivendorx' ),
+					label: __('SendGrid', 'multivendorx'),
 					value: 'sendgrid',
 				},
 				{
 					key: 'mailgun',
-					label: __( 'Mailgun', 'multivendorx' ),
+					label: __('Mailgun', 'multivendorx'),
 					value: 'mailgun',
 				},
 				{
 					key: 'amazon_ses',
-					label: __( 'Amazon SES', 'multivendorx' ),
+					label: __('Amazon SES', 'multivendorx'),
 					value: 'amazon_ses',
 				},
 			],
@@ -60,8 +60,8 @@ export default {
 		{
 			key: 'sender_name',
 			type: 'text',
-			label: __( 'Sender name', 'multivendorx' ),
-			placeholder: __( 'Marketplace Team', 'multivendorx' ),
+			label: __('Sender name', 'multivendorx'),
+			placeholder: __('Marketplace Team', 'multivendorx'),
 			settingDescription: __(
 				'The name that will appear in the "From" field of outgoing emails.',
 				'multivendorx'
@@ -71,8 +71,8 @@ export default {
 		{
 			key: 'sender_email_address',
 			type: 'email',
-			label: __( 'Sender email address', 'multivendorx' ),
-			placeholder: __( 'noreply@yourstore.com', 'multivendorx' ),
+			label: __('Sender email address', 'multivendorx'),
+			placeholder: __('noreply@yourstore.com', 'multivendorx'),
 			settingDescription: __(
 				'The email address from which marketplace notifications will be sent.',
 				'multivendorx'
@@ -86,12 +86,12 @@ export default {
 		{
 			key: 'sms_section',
 			type: 'section',
-			hint: __( 'SMS configuration', 'multivendorx' ),
+			hint: __('SMS configuration', 'multivendorx'),
 		},
 		{
 			key: 'sms_gateway_selector',
 			type: 'setting-toggle',
-			label: __( 'Select SMS gateway', 'multivendorx' ),
+			label: __('Select SMS gateway', 'multivendorx'),
 			settingDescription: __(
 				'Pick the SMS service your marketplace will use to send text alerts.',
 				'multivendorx'
@@ -99,27 +99,27 @@ export default {
 			options: [
 				{
 					key: 'none',
-					label: __( 'None', 'multivendorx' ),
+					label: __('None', 'multivendorx'),
 					value: '',
 				},
 				{
 					key: 'twilio',
-					label: __( 'Twilio', 'multivendorx' ),
+					label: __('Twilio', 'multivendorx'),
 					value: 'twilio',
 				},
 				{
 					key: 'vonage',
-					label: __( 'Vonage', 'multivendorx' ),
+					label: __('Vonage', 'multivendorx'),
 					value: 'vonage',
 				},
 				{
 					key: 'clickatell',
-					label: __( 'Clickatell', 'multivendorx' ),
+					label: __('Clickatell', 'multivendorx'),
 					value: 'clickatell',
 				},
 				{
 					key: 'plivo',
-					label: __( 'Plivo', 'multivendorx' ),
+					label: __('Plivo', 'multivendorx'),
 					value: 'plivo',
 				},
 			],

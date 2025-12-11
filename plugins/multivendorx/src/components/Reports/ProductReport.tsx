@@ -38,138 +38,126 @@ type FilterData = {
 	date?: { start_date?: Date; end_date?: Date };
 };
 
-type ToggleState = { [ key: string ]: boolean };
+type ToggleState = { [key: string]: boolean };
 
 export interface RealtimeFilter {
 	name: string;
 	render: (
-		updateFilter: ( key: string, value: any ) => void,
+		updateFilter: (key: string, value: any) => void,
 		filterValue: any
 	) => React.ReactNode;
 }
 
 const ProductReport: React.FC = () => {
-	const [ data, setData ] = useState< ProductRow[] >( [] );
-	const [ pagination, setPagination ] = useState< PaginationState >( {
+	const [data, setData] = useState<ProductRow[]>([]);
+	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
 		pageSize: 10,
-	} );
-	const [ rowSelection, setRowSelection ] = useState< RowSelectionState >(
-		{}
-	);
-	const [ totalRows, setTotalRows ] = useState< number >( 0 );
-	const [ pageCount, setPageCount ] = useState< number >( 0 );
-	const [ store, setStore ] = useState< any[] >( [] );
-	const [ error, setError ] = useState< string | null >( null );
-	const [ toReviewedProduct, setToReviewedProduct ] = useState< any[] >( [] );
-	const [ toSellingProduct, setToSellingProduct ] = useState< any[] >( [] );
-	const [ openReviewedCards, setOpenReviewedCards ] = useState< ToggleState >(
-		{}
-	);
-	const [ chartData, setChartData ] = useState< any[] >( [] );
-	const [ inStockCount, setInStockCount ] = useState( 0 );
-	const [ outOfStockCount, setOutOfStockCount ] = useState( 0 );
-	const [ onBackorderCount, setOnBackorderCount ] = useState( 0 );
+	});
+	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+	const [totalRows, setTotalRows] = useState<number>(0);
+	const [pageCount, setPageCount] = useState<number>(0);
+	const [store, setStore] = useState<any[]>([]);
+	const [error, setError] = useState<string | null>(null);
+	const [toReviewedProduct, setToReviewedProduct] = useState<any[]>([]);
+	const [toSellingProduct, setToSellingProduct] = useState<any[]>([]);
+	const [openReviewedCards, setOpenReviewedCards] = useState<ToggleState>({});
+	const [chartData, setChartData] = useState<any[]>([]);
+	const [inStockCount, setInStockCount] = useState(0);
+	const [outOfStockCount, setOutOfStockCount] = useState(0);
+	const [onBackorderCount, setOnBackorderCount] = useState(0);
 
-	const toggleReviewedCard = ( key: string ) => {
-		setOpenReviewedCards( ( prev ) => ( {
+	const toggleReviewedCard = (key: string) => {
+		setOpenReviewedCards((prev) => ({
 			...prev,
-			[ key ]: ! prev[ key ],
-		} ) );
+			[key]: !prev[key],
+		}));
 	};
 
-	const Counter = ( { value, duration = 1200 } ) => {
-		const [ count, setCount ] = React.useState( 0 );
+	const Counter = ({ value, duration = 1200 }) => {
+		const [count, setCount] = React.useState(0);
 
-		React.useEffect( () => {
+		React.useEffect(() => {
 			let start = 0;
-			const end = parseInt( value );
-			if ( start === end ) return;
+			const end = parseInt(value);
+			if (start === end) return;
 
-			const increment = end / ( duration / 16 );
+			const increment = end / (duration / 16);
 
-			const timer = setInterval( () => {
+			const timer = setInterval(() => {
 				start += increment;
-				if ( start >= end ) {
+				if (start >= end) {
 					start = end;
-					clearInterval( timer );
+					clearInterval(timer);
 				}
-				setCount( Math.floor( start ) );
-			}, 16 );
+				setCount(Math.floor(start));
+			}, 16);
 
-			return () => clearInterval( timer );
-		}, [ value, duration ] );
+			return () => clearInterval(timer);
+		}, [value, duration]);
 
-		return <>{ count }</>;
+		return <>{count}</>;
 	};
 
-	useEffect( () => {
+	useEffect(() => {
 		const fetchData = async () => {
 			try {
 				// 1. Fetch store list
 				axios
-					.get( getApiLink( appLocalizer, 'store' ), {
+					.get(getApiLink(appLocalizer, 'store'), {
 						headers: { 'X-WP-Nonce': appLocalizer.nonce },
-					} )
-					.then( ( response ) =>
-						setStore( response.data.stores || [] )
-					)
-					.catch( () => {
-						setError(
-							__( 'Failed to load stores', 'multivendorx' )
-						);
-						setStore( [] );
-					} );
+					})
+					.then((response) => setStore(response.data.stores || []))
+					.catch(() => {
+						setError(__('Failed to load stores', 'multivendorx'));
+						setStore([]);
+					});
 
 				// 2. Total rows
-				axios( {
+				axios({
 					method: 'GET',
-					url: `${ appLocalizer.apiUrl }/wc/v3/products`,
+					url: `${appLocalizer.apiUrl}/wc/v3/products`,
 					headers: { 'X-WP-Nonce': appLocalizer.nonce },
 					params: { meta_key: 'multivendorx_store_id', per_page: 1 },
-				} )
-					.then( ( response ) => {
+				})
+					.then((response) => {
 						const total =
-							Number( response.headers[ 'x-wp-total' ] ) || 0;
-						setTotalRows( total );
-						setPageCount(
-							Math.ceil( total / pagination.pageSize )
-						);
-					} )
-					.catch( () =>
+							Number(response.headers['x-wp-total']) || 0;
+						setTotalRows(total);
+						setPageCount(Math.ceil(total / pagination.pageSize));
+					})
+					.catch(() =>
 						setError(
-							__( 'Failed to load total rows', 'multivendorx' )
+							__('Failed to load total rows', 'multivendorx')
 						)
 					);
 
 				// 3. Chart data
-				axios( {
+				axios({
 					method: 'GET',
-					url: `${ appLocalizer.apiUrl }/wc/v3/products`,
+					url: `${appLocalizer.apiUrl}/wc/v3/products`,
 					headers: { 'X-WP-Nonce': appLocalizer.nonce },
 					params: { meta_key: 'multivendorx_store_id', per_page: 20 },
-				} )
-					.then( ( response ) => {
+				})
+					.then((response) => {
 						const products = response.data || [];
 						const data = products
-							.filter( ( p: any ) => Number( p.total_sales ) > 0 )
-							.map( ( p: any ) => ( {
+							.filter((p: any) => Number(p.total_sales) > 0)
+							.map((p: any) => ({
 								name: p.name,
 								net_sales:
-									parseFloat( p.price || 0 ) *
-									parseInt( p.total_sales || 0 ),
-								items_sold: parseInt( p.total_sales || 0 ),
-							} ) );
-						setChartData( data );
-					} )
-					.catch( () =>
-						setError( 'Failed to load product sales data' )
-					);
+									parseFloat(p.price || 0) *
+									parseInt(p.total_sales || 0),
+								items_sold: parseInt(p.total_sales || 0),
+							}));
+						setChartData(data);
+					})
+					.catch(() => setError('Failed to load product sales data'));
 
 				// 4. Top reviewed products
-				axios( {
+				axios({
 					method: 'GET',
-					url: `${ appLocalizer.apiUrl }/wc/v3/products`,
+					url: `${appLocalizer.apiUrl}/wc/v3/products`,
 					headers: { 'X-WP-Nonce': appLocalizer.nonce },
 					params: {
 						per_page: 5,
@@ -177,16 +165,16 @@ const ProductReport: React.FC = () => {
 						orderby: 'rating',
 						order: 'desc',
 					},
-				} )
-					.then( ( response ) =>
+				})
+					.then((response) =>
 						setToReviewedProduct(
 							response.data.filter(
-								( product: any ) =>
-									parseFloat( product.average_rating ) > 0
+								(product: any) =>
+									parseFloat(product.average_rating) > 0
 							)
 						)
 					)
-					.catch( ( error ) =>
+					.catch((error) =>
 						console.error(
 							'Error fetching top reviewed products:',
 							error
@@ -194,9 +182,9 @@ const ProductReport: React.FC = () => {
 					);
 
 				// 5. Top selling products
-				axios( {
+				axios({
 					method: 'GET',
-					url: `${ appLocalizer.apiUrl }/wc/v3/products`,
+					url: `${appLocalizer.apiUrl}/wc/v3/products`,
 					headers: { 'X-WP-Nonce': appLocalizer.nonce },
 					params: {
 						per_page: 5,
@@ -204,16 +192,16 @@ const ProductReport: React.FC = () => {
 						orderby: 'popularity',
 						order: 'desc',
 					},
-				} )
-					.then( ( response ) =>
+				})
+					.then((response) =>
 						setToSellingProduct(
 							response.data.filter(
-								( product: any ) =>
-									Number( product.total_sales ) > 0
+								(product: any) =>
+									Number(product.total_sales) > 0
 							)
 						)
 					)
-					.catch( ( error ) =>
+					.catch((error) =>
 						console.error(
 							'Error fetching top selling products:',
 							error
@@ -221,49 +209,42 @@ const ProductReport: React.FC = () => {
 					);
 
 				// 6. Stock counts (each status separate)
-				const stockStatuses = [
-					'instock',
-					'outofstock',
-					'onbackorder',
-				];
-				stockStatuses.forEach( ( status ) => {
-					axios( {
+				const stockStatuses = ['instock', 'outofstock', 'onbackorder'];
+				stockStatuses.forEach((status) => {
+					axios({
 						method: 'GET',
-						url: `${ appLocalizer.apiUrl }/wc/v3/products`,
+						url: `${appLocalizer.apiUrl}/wc/v3/products`,
 						headers: { 'X-WP-Nonce': appLocalizer.nonce },
 						params: {
 							meta_key: 'multivendorx_store_id',
 							per_page: 1,
 							stock_status: status,
 						},
-					} )
-						.then( ( response ) => {
+					})
+						.then((response) => {
 							const count =
-								Number( response.headers[ 'x-wp-total' ] ) || 0;
-							if ( status === 'instock' )
-								setInStockCount( count );
-							else if ( status === 'outofstock' )
-								setOutOfStockCount( count );
-							else if ( status === 'onbackorder' )
-								setOnBackorderCount( count );
-						} )
-						.catch( ( error ) =>
+								Number(response.headers['x-wp-total']) || 0;
+							if (status === 'instock') setInStockCount(count);
+							else if (status === 'outofstock')
+								setOutOfStockCount(count);
+							else if (status === 'onbackorder')
+								setOnBackorderCount(count);
+						})
+						.catch((error) =>
 							console.error(
-								`Error fetching ${ status } count:`,
+								`Error fetching ${status} count:`,
 								error
 							)
 						);
-				} );
-			} catch ( err ) {
-				console.error( 'Dashboard fetch failed:', err );
-				setError(
-					__( 'Failed to load dashboard data', 'multivendorx' )
-				);
+				});
+			} catch (err) {
+				console.error('Dashboard fetch failed:', err);
+				setError(__('Failed to load dashboard data', 'multivendorx'));
 			}
 		};
 
 		fetchData();
-	}, [] );
+	}, []);
 
 	const overview = [
 		{
@@ -293,65 +274,55 @@ const ProductReport: React.FC = () => {
 	];
 
 	//Fixed table columns for WooCommerce products
-	const columns: ColumnDef< ProductRow >[] = [
+	const columns: ColumnDef<ProductRow>[] = [
 		{
-			header: __( 'Product', 'multivendorx' ),
-			cell: ( { row } ) => (
+			header: __('Product', 'multivendorx'),
+			cell: ({ row }) => (
 				<TableCell>
 					<a
-						href={ `${ appLocalizer.site_url }/wp-admin/post.php?post=${ row.original.id }&action=edit` }
+						href={`${appLocalizer.site_url}/wp-admin/post.php?post=${row.original.id}&action=edit`}
 						target="_blank"
 						className="product-wrapper"
 					>
-						{ row.original.image ? (
+						{row.original.image ? (
 							<img
-								src={ row.original.image }
-								alt={ row.original.store_name }
+								src={row.original.image}
+								alt={row.original.store_name}
 							/>
 						) : (
 							<i className="adminlib-store-inventory"></i>
-						) }
+						)}
 						<div className="details">
-							<span className="title">
-								{ row.original.title }
-							</span>
-							<div className="des">{ row.original.sku }</div>
+							<span className="title">{row.original.title}</span>
+							<div className="des">{row.original.sku}</div>
 						</div>
 					</a>
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'Store', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell>{ row.original.store_name }</TableCell>
-			),
+			header: __('Store', 'multivendorx'),
+			cell: ({ row }) => <TableCell>{row.original.store_name}</TableCell>,
 		},
 		{
-			header: __( 'Items sold', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell>{ row.original.itemsSold }</TableCell>
-			),
+			header: __('Items sold', 'multivendorx'),
+			cell: ({ row }) => <TableCell>{row.original.itemsSold}</TableCell>,
 		},
 		{
-			header: __( 'Net sales', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell>{ row.original.netSales }</TableCell>
-			),
+			header: __('Net sales', 'multivendorx'),
+			cell: ({ row }) => <TableCell>{row.original.netSales}</TableCell>,
 		},
 		{
-			header: __( 'Category', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell>{ row.original.category }</TableCell>
-			),
+			header: __('Category', 'multivendorx'),
+			cell: ({ row }) => <TableCell>{row.original.category}</TableCell>,
 		},
 		{
 			id: 'date',
 			accessorKey: 'date',
 			enableSorting: true,
-			header: __( 'Date Created', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell>{ row.original.dateCreated }</TableCell>
+			header: __('Date Created', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell>{row.original.dateCreated}</TableCell>
 			),
 		},
 	];
@@ -367,7 +338,7 @@ const ProductReport: React.FC = () => {
 		endDate?: Date
 	) => {
 		try {
-			setData( [] );
+			setData([]);
 
 			const params: any = {
 				page: currentPage,
@@ -378,11 +349,8 @@ const ProductReport: React.FC = () => {
 			};
 
 			//Add Date Filtering (only if both are valid Date objects)
-			if ( startDate instanceof Date && endDate instanceof Date ) {
-				if (
-					! isNaN( startDate.getTime() ) &&
-					! isNaN( endDate.getTime() )
-				) {
+			if (startDate instanceof Date && endDate instanceof Date) {
+				if (!isNaN(startDate.getTime()) && !isNaN(endDate.getTime())) {
 					// --- Date Construction and UTC Offset Logic ---
 
 					// 1. Create Start Date (Start of Day in BROWSER's local time)
@@ -405,7 +373,7 @@ const ProductReport: React.FC = () => {
 						0,
 						0
 					);
-					endLocal.setMilliseconds( endLocal.getMilliseconds() - 1 ); // Back to 23:59:59.999
+					endLocal.setMilliseconds(endLocal.getMilliseconds() - 1); // Back to 23:59:59.999
 
 					// 3. Apply UTC+05:30 offset adjustment (5 hours, 30 minutes)
 					// This is a common requirement when the server is in IST but the API only accepts UTC/Z-time.
@@ -414,14 +382,14 @@ const ProductReport: React.FC = () => {
 					// Calculate UTC equivalent of the server's 00:00:00 boundary.
 					const afterDate = new Date(
 						startLocal.getTime() -
-							( startLocal.getTimezoneOffset() + offsetMinutes ) *
+							(startLocal.getTimezoneOffset() + offsetMinutes) *
 								60000
 					);
 
 					// Calculate UTC equivalent of the server's 23:59:59 boundary.
 					const beforeDate = new Date(
 						endLocal.getTime() -
-							( endLocal.getTimezoneOffset() + offsetMinutes ) *
+							(endLocal.getTimezoneOffset() + offsetMinutes) *
 								60000
 					);
 
@@ -433,66 +401,66 @@ const ProductReport: React.FC = () => {
 			}
 
 			//Sorting
-			if ( orderBy ) {
+			if (orderBy) {
 				params.orderby = orderBy;
 				params.order = order || 'asc';
 			}
 
-			const response = await axios( {
+			const response = await axios({
 				method: 'GET',
-				url: `${ appLocalizer.apiUrl }/wc/v3/products`,
+				url: `${appLocalizer.apiUrl}/wc/v3/products`,
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params,
-			} );
+			});
 
 			// ... (rest of the code remains the same)
 			const formattedData: ProductRow[] = response.data.map(
-				( product: any ) => ( {
+				(product: any) => ({
 					id: product.id,
 					title: product.name,
 					sku: product.sku || '-',
-					image: product.images?.[ 0 ]?.src || '',
+					image: product.images?.[0]?.src || '',
 					store_name: product.store_name,
 					itemsSold: product.total_sales
-						? parseInt( product.total_sales )
+						? parseInt(product.total_sales)
 						: 0,
 					netSales: product.price
-						? formatCurrency( product.price )
+						? formatCurrency(product.price)
 						: '-',
 					category:
 						product.categories
-							?.map( ( c: any ) => c.name )
-							.join( ', ' ) || '-',
+							?.map((c: any) => c.name)
+							.join(', ') || '-',
 					dateCreated: product.date_created
-						? new Date( product.date_created ).toLocaleDateString(
+						? new Date(product.date_created).toLocaleDateString(
 								undefined,
 								{
 									year: 'numeric',
 									month: 'short',
 									day: '2-digit',
 								}
-						  )
+							)
 						: '-',
-				} )
+				})
 			);
 
-			setData( formattedData );
-		} catch ( error ) {
-			console.error( 'Product fetch failed:', error );
+			setData(formattedData);
+		} catch (error) {
+			console.error('Product fetch failed:', error);
 			const errorMessage =
-				( error as any ).response?.data?.message ||
-				__( 'Failed to load product data', 'multivendorx' );
-			setError( errorMessage );
-			setData( [] );
+				(error as any).response?.data?.message ||
+				__('Failed to load product data', 'multivendorx');
+			setError(errorMessage);
+			setData([]);
 		}
 	};
 
-	useEffect( () => {
+	useEffect(() => {
 		const currentPage = pagination.pageIndex + 1;
 		const rowsPerPage = pagination.pageSize;
-		requestData( rowsPerPage, currentPage );
-		setPageCount( Math.ceil( totalRows / rowsPerPage ) );
-	}, [] );
+		requestData(rowsPerPage, currentPage);
+		setPageCount(Math.ceil(totalRows / rowsPerPage));
+	}, []);
 
 	/**
 	 * Realtime filter logic
@@ -517,40 +485,40 @@ const ProductReport: React.FC = () => {
 	const realtimeFilter: RealtimeFilter[] = [
 		{
 			name: 'store_id',
-			render: ( updateFilter, filterValue ) => (
+			render: (updateFilter, filterValue) => (
 				<div className="group-field">
 					<select
 						name="store_id"
-						onChange={ ( e ) =>
-							updateFilter( e.target.name, e.target.value )
+						onChange={(e) =>
+							updateFilter(e.target.name, e.target.value)
 						}
-						value={ filterValue || '' }
+						value={filterValue || ''}
 						className="basic-select"
 					>
 						<option value="">
-							{ __( 'All Stores', 'multivendorx' ) }
+							{__('All Stores', 'multivendorx')}
 						</option>
-						{ store.map( ( s: any ) => (
-							<option key={ s.id } value={ s.id }>
-								{ s.store_name.charAt( 0 ).toUpperCase() +
-									s.store_name.slice( 1 ) }
+						{store.map((s: any) => (
+							<option key={s.id} value={s.id}>
+								{s.store_name.charAt(0).toUpperCase() +
+									s.store_name.slice(1)}
 							</option>
-						) ) }
+						))}
 					</select>
 				</div>
 			),
 		},
 		{
 			name: 'date',
-			render: ( updateFilter ) => (
+			render: (updateFilter) => (
 				<div className="right">
 					<MultiCalendarInput
-						onChange={ ( range: any ) => {
-							updateFilter( 'date', {
+						onChange={(range: any) => {
+							updateFilter('date', {
 								start_date: range.startDate,
 								end_date: range.endDate,
-							} );
-						} }
+							});
+						}}
 					/>
 				</div>
 			),
@@ -560,16 +528,16 @@ const ProductReport: React.FC = () => {
 	const searchFilter: RealtimeFilter[] = [
 		{
 			name: 'searchField',
-			render: ( updateFilter, filterValue ) => (
+			render: (updateFilter, filterValue) => (
 				<div className="search-section">
 					<input
 						name="searchField"
 						type="text"
-						placeholder={ __( 'Search', 'multivendorx' ) }
-						onChange={ ( e ) =>
-							updateFilter( e.target.name, e.target.value )
+						placeholder={__('Search', 'multivendorx')}
+						onChange={(e) =>
+							updateFilter(e.target.name, e.target.value)
 						}
-						value={ filterValue || '' }
+						value={filterValue || ''}
 						className="basic-select"
 					/>
 					<i className="adminlib-search"></i>
@@ -579,25 +547,25 @@ const ProductReport: React.FC = () => {
 	];
 	return (
 		<div className="dashboard-overview">
-			{ /* Keep entire top dashboard layout */ }
+			{/* Keep entire top dashboard layout */}
 			<div className="card-wrapper">
 				<div className="card-content transparent">
 					<div className="analytics-container report">
-						{ overview.map( ( item, idx ) => (
-							<div key={ idx } className="analytics-item">
+						{overview.map((item, idx) => (
+							<div key={idx} className="analytics-item">
 								<div className="analytics-icon">
-									<i className={ item.icon }></i>
+									<i className={item.icon}></i>
 								</div>
 								<div className="details">
 									<div className="number">
-										<Counter value={ item.count } />
+										<Counter value={item.count} />
 									</div>
 									<div className="text">
-										{ __( item.label, 'multivendorx' ) }
+										{__(item.label, 'multivendorx')}
 									</div>
 								</div>
 							</div>
-						) ) }
+						))}
 					</div>
 				</div>
 
@@ -605,19 +573,19 @@ const ProductReport: React.FC = () => {
 					<div className="card-header">
 						<div className="left">
 							<div className="title">
-								{ __(
+								{__(
 									'Revenue & Sales Comparison',
 									'multivendorx'
-								) }
+								)}
 							</div>
 						</div>
 					</div>
 
-					{ error ? (
-						<p className="text-red-500">{ error }</p>
+					{error ? (
+						<p className="text-red-500">{error}</p>
 					) : chartData.length > 0 ? (
-						<ResponsiveContainer width="100%" height={ 300 }>
-							<BarChart data={ chartData }>
+						<ResponsiveContainer width="100%" height={300}>
+							<BarChart data={chartData}>
 								<CartesianGrid strokeDasharray="3 3" />
 								<XAxis dataKey="name" />
 								<YAxis />
@@ -626,50 +594,44 @@ const ProductReport: React.FC = () => {
 								<Bar
 									dataKey="net_sales"
 									fill="#5007aa"
-									name={ __( 'Net Sales', 'multivendorx' ) }
+									name={__('Net Sales', 'multivendorx')}
 								/>
 								<Bar
 									dataKey="items_sold"
 									fill="#00c49f"
-									name={ __( 'Items Sold', 'multivendorx' ) }
+									name={__('Items Sold', 'multivendorx')}
 								/>
 							</BarChart>
 						</ResponsiveContainer>
 					) : (
 						<p className="text-gray-500 p-2">
-							{ __(
-								'No product sales data found.',
-								'multivendorx'
-							) }
+							{__('No product sales data found.', 'multivendorx')}
 						</p>
-					) }
+					)}
 				</div>
 			</div>
 
-			{ /* Categories and brands */ }
+			{/* Categories and brands */}
 			<div className="card-wrapper">
-				{ /* Top Reviewed Products Section */ }
+				{/* Top Reviewed Products Section */}
 				<div className="card-content">
 					<div className="card-header">
 						<div className="left">
 							<div className="title">
-								{ __(
-									'Top Reviewed Products',
-									'multivendorx'
-								) }
+								{__('Top Reviewed Products', 'multivendorx')}
 							</div>
 						</div>
 					</div>
 
-					{ toReviewedProduct.length > 0 ? (
-						toReviewedProduct.map( ( product: any ) => (
+					{toReviewedProduct.length > 0 ? (
+						toReviewedProduct.map((product: any) => (
 							<div
 								className="card-content"
-								key={ `review-${ product.id }` }
+								key={`review-${product.id}`}
 							>
 								<div
 									className="card-header cursor-pointer"
-									onClick={ () =>
+									onClick={() =>
 										toggleReviewedCard(
 											product.id.toString()
 										)
@@ -677,41 +639,38 @@ const ProductReport: React.FC = () => {
 								>
 									<div className="left">
 										<div className="product-name font-medium">
-											{ product.name }
+											{product.name}
 										</div>
 										<div className="price text-sm text-gray-600">
 											<b>
-												{ __(
-													'Rating:',
-													'multivendorx'
-												) }
-											</b>{ ' ' }
-											{ product.average_rating || '0' } ⭐
+												{__('Rating:', 'multivendorx')}
+											</b>{' '}
+											{product.average_rating || '0'} ⭐
 										</div>
 									</div>
 									<div className="right">
 										<i
-											className={ `adminlib-pagination-right-arrow ${
-												openReviewedCards[ product.id ]
+											className={`adminlib-pagination-right-arrow ${
+												openReviewedCards[product.id]
 													? 'rotate-90 transition-transform'
 													: ''
-											}` }
+											}`}
 										></i>
 									</div>
 								</div>
 
 								<div className="card-body">
-									{ openReviewedCards[ product.id ] && (
+									{openReviewedCards[product.id] && (
 										<div className="top-items">
 											<div className="items">
 												<div className="left-side flex items-center">
 													<div className="avatar">
-														{ product.images
+														{product.images
 															?.length ? (
 															<img
 																src={
 																	product
-																		.images[ 0 ]
+																		.images[0]
 																		.src
 																}
 																alt={
@@ -720,116 +679,109 @@ const ProductReport: React.FC = () => {
 															/>
 														) : (
 															<div>
-																{ product.name?.charAt(
+																{product.name?.charAt(
 																	0
-																) || '?' }
+																) || '?'}
 															</div>
-														) }
+														)}
 													</div>
 
 													<div className="details text-sm leading-6">
 														<div>
 															<b>
-																{ __(
+																{__(
 																	'Price:',
 																	'multivendorx'
-																) }
-															</b>{ ' ' }
+																)}
+															</b>{' '}
 															<span
-																dangerouslySetInnerHTML={ {
+																dangerouslySetInnerHTML={{
 																	__html:
 																		product.price_html ||
 																		product.price ||
 																		'—',
-																} }
+																}}
 															/>
 														</div>
 														<div>
 															<b>
-																{ __(
+																{__(
 																	'Total Sales:',
 																	'multivendorx'
-																) }
-															</b>{ ' ' }
-															{ product.total_sales ||
-																0 }
+																)}
+															</b>{' '}
+															{product.total_sales ||
+																0}
 														</div>
 														<div>
 															<b>
-																{ __(
+																{__(
 																	'Category:',
 																	'multivendorx'
-																) }
-															</b>{ ' ' }
-															{ product.categories
+																)}
+															</b>{' '}
+															{product.categories
 																?.map(
-																	(
-																		c: any
-																	) => c.name
+																	(c: any) =>
+																		c.name
 																)
-																.join( ', ' ) ||
-																'-' }
+																.join(', ') ||
+																'-'}
 														</div>
 													</div>
 												</div>
 											</div>
 										</div>
-									) }
+									)}
 								</div>
 							</div>
-						) )
+						))
 					) : (
 						<p>
-							{ __(
-								'No reviewed products found.',
-								'multivendorx'
-							) }
+							{__('No reviewed products found.', 'multivendorx')}
 						</p>
-					) }
+					)}
 				</div>
 
 				<div className="card-content">
 					<div className="card-header">
 						<div className="left">
 							<div className="title">
-								{ __( 'Top Selling Products', 'multivendorx' ) }
+								{__('Top Selling Products', 'multivendorx')}
 							</div>
 						</div>
 					</div>
 					<div className="card-body">
-						{ toSellingProduct.length > 0 ? (
-							toSellingProduct.map( ( product: any ) => (
+						{toSellingProduct.length > 0 ? (
+							toSellingProduct.map((product: any) => (
 								<div
 									className="info-item"
-									key={ `selling-${ product.id }` }
+									key={`selling-${product.id}`}
 								>
 									<div className="details-wrapper">
 										<div className="avatar">
-											{ product.images?.length ? (
+											{product.images?.length ? (
 												<img
-													src={
-														product.images[ 0 ].src
-													}
-													alt={ product.name }
+													src={product.images[0].src}
+													alt={product.name}
 												/>
 											) : (
 												<span>
-													{ product.name?.charAt(
-														0
-													) || '?' }
+													{product.name?.charAt(0) ||
+														'?'}
 												</span>
-											) }
+											)}
 										</div>
 										<div className="details">
 											<div className="name">
-												{ product.name }
+												{product.name}
 											</div>
 											<div className="des">
-												{ __(
+												{__(
 													'Total Sales:',
 													'multivendorx'
-												) }{ ' ' }
-												{ product.total_sales || 0 }
+												)}{' '}
+												{product.total_sales || 0}
 											</div>
 										</div>
 									</div>
@@ -837,41 +789,41 @@ const ProductReport: React.FC = () => {
 										<div className="price"></div>
 									</div>
 								</div>
-							) )
+							))
 						) : (
 							<p>
-								{ __(
+								{__(
 									'No top selling products found.',
 									'multivendorx'
-								) }
+								)}
 							</p>
-						) }
+						)}
 					</div>
 				</div>
 			</div>
 
-			{ /* Fixed Table Section */ }
+			{/* Fixed Table Section */}
 			<div className="card-header p-top">
 				<div className="left">
 					<div className="title">
-						{ __( 'Revenue Distribution', 'multivendorx' ) }
+						{__('Revenue Distribution', 'multivendorx')}
 					</div>
 				</div>
 			</div>
 			<Table
-				data={ data }
-				columns={ columns as ColumnDef< Record< string, any >, any >[] }
-				rowSelection={ rowSelection }
-				onRowSelectionChange={ setRowSelection }
-				defaultRowsPerPage={ pagination.pageSize }
-				pageCount={ pageCount }
-				pagination={ pagination }
-				onPaginationChange={ setPagination }
-				handlePagination={ requestApiForData }
-				perPageOption={ [ 10, 25, 50 ] }
-				realtimeFilter={ realtimeFilter }
-				searchFilter={ searchFilter }
-				totalCounts={ totalRows }
+				data={data}
+				columns={columns as ColumnDef<Record<string, any>, any>[]}
+				rowSelection={rowSelection}
+				onRowSelectionChange={setRowSelection}
+				defaultRowsPerPage={pagination.pageSize}
+				pageCount={pageCount}
+				pagination={pagination}
+				onPaginationChange={setPagination}
+				handlePagination={requestApiForData}
+				perPageOption={[10, 25, 50]}
+				realtimeFilter={realtimeFilter}
+				searchFilter={searchFilter}
+				totalCounts={totalRows}
 			/>
 		</div>
 	);

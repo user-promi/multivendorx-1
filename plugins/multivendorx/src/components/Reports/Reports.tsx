@@ -72,7 +72,7 @@ const Reports = () => {
 		{ name: 'Shipping', value: 200 },
 	];
 
-	const location = new URLSearchParams( useLocation().hash.substring( 1 ) );
+	const location = new URLSearchParams(useLocation().hash.substring(1));
 
 	const tabData = [
 		{
@@ -122,15 +122,15 @@ const Reports = () => {
 		},
 	];
 
-	const getForm = ( tabId: string ) => {
-		switch ( tabId ) {
+	const getForm = (tabId: string) => {
+		switch (tabId) {
 			case 'marketplace':
 				return (
 					<MarketplaceReport
-						overview={ overview }
-						data={ data }
-						overviewData={ overviewData }
-						pieData={ pieData }
+						overview={overview}
+						data={data}
+						overviewData={overviewData}
+						pieData={pieData}
 					/>
 				);
 			case 'products':
@@ -149,28 +149,28 @@ const Reports = () => {
 		<>
 			<AdminBreadcrumbs
 				activeTabIcon="adminlib-report"
-				tabTitle={ __( 'Reports', 'multivendorx' ) }
-				description={ __(
+				tabTitle={__('Reports', 'multivendorx')}
+				description={__(
 					'Track sales, earnings, and store performance with real-time marketplace insights.',
 					'multivendorx'
-				) }
+				)}
 			/>
 
 			<Tabs
-				tabData={ tabData }
-				currentTab={ location.get( 'subtab' ) as string }
-				getForm={ getForm }
-				prepareUrl={ ( subTab: string ) =>
-					`?page=multivendorx#&tab=reports&subtab=${ subTab }`
+				tabData={tabData}
+				currentTab={location.get('subtab') as string}
+				getForm={getForm}
+				prepareUrl={(subTab: string) =>
+					`?page=multivendorx#&tab=reports&subtab=${subTab}`
 				}
-				appLocalizer={ appLocalizer }
-				supprot={ [] }
-				Link={ Link }
-				hideTitle={ true }
-				hideBreadcrumb={ true }
-				template={ 'template-2' }
-				premium={ false }
-				menuIcon={ true }
+				appLocalizer={appLocalizer}
+				supprot={[]}
+				Link={Link}
+				hideTitle={true}
+				hideBreadcrumb={true}
+				template={'template-2'}
+				premium={false}
+				menuIcon={true}
 			/>
 		</>
 	);

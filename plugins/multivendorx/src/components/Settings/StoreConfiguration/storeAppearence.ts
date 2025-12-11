@@ -6,7 +6,7 @@ import template3 from '../../../assets/images/template/store/template3.jpg';
 export default {
 	id: 'store-appearance',
 	priority: 5,
-	name: __( 'Appearance', 'multivendorx' ),
+	name: __('Appearance', 'multivendorx'),
 	tabTitle: 'Marketplace branding',
 	desc: __(
 		'Set a marketplace logo to strengthen brand identity across all connected stores.',
@@ -18,7 +18,7 @@ export default {
 		{
 			key: 'store_dashboard_site_logo',
 			type: 'file',
-			label: __( 'Branding logo', 'multivendorx' ),
+			label: __('Branding logo', 'multivendorx'),
 			size: 'small',
 			settingDescription: __(
 				'Upload the logo that will be displayed in all store dashboards to highlight your marketplace’s branding. If not provided, the site name will be used.',
@@ -28,7 +28,7 @@ export default {
 		{
 			key: 'section',
 			type: 'section',
-			hint: __( 'Store customizer', 'multivendorx' ),
+			hint: __('Store customizer', 'multivendorx'),
 			desc: __(
 				'Control how your store looks and feels. Set the banner style, logo placement, and customize the dashboard color scheme to match your brand identity.',
 				'multivendorx'

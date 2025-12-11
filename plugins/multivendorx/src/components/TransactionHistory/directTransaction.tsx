@@ -21,112 +21,108 @@ interface DirectTransactionProps {
 	storeId: number | string; // or whatever type it should be
 }
 
-const DirectTransaction: React.FC< DirectTransactionProps > = ( {
-	storeId,
-} ) => {
-	const [ data, setData ] = useState< StoreRow[] | [] >( [] );
+const DirectTransaction: React.FC<DirectTransactionProps> = ({ storeId }) => {
+	const [data, setData] = useState<StoreRow[] | []>([]);
 
-	const [ rowSelection, setRowSelection ] = useState< RowSelectionState >(
-		{}
-	);
-	const [ totalRows, setTotalRows ] = useState< number >( 0 );
-	const [ pagination, setPagination ] = useState< PaginationState >( {
+	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+	const [totalRows, setTotalRows] = useState<number>(0);
+	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
 		pageSize: 10,
-	} );
-	const [ pageCount, setPageCount ] = useState( 0 );
+	});
+	const [pageCount, setPageCount] = useState(0);
 
-	useEffect( () => {
+	useEffect(() => {
 		const currentPage = pagination.pageIndex + 1;
 		const rowsPerPage = pagination.pageSize;
-		requestData( rowsPerPage, currentPage );
-		setPageCount( Math.ceil( totalRows / rowsPerPage ) );
-	}, [ pagination ] );
-	const [ showDropdown, setShowDropdown ] = useState( false );
+		requestData(rowsPerPage, currentPage);
+		setPageCount(Math.ceil(totalRows / rowsPerPage));
+	}, [pagination]);
+	const [showDropdown, setShowDropdown] = useState(false);
 
-	const toggleDropdown = ( id: any ) => {
-		if ( showDropdown === id ) {
-			setShowDropdown( false );
+	const toggleDropdown = (id: any) => {
+		if (showDropdown === id) {
+			setShowDropdown(false);
 			return;
 		}
-		setShowDropdown( id );
+		setShowDropdown(id);
 	};
 	// Fetch data from backend.
-	function requestData( rowsPerPage = 10, currentPage = 1 ) {
-		setData( [] );
-		axios( {
+	function requestData(rowsPerPage = 10, currentPage = 1) {
+		setData([]);
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'products' ),
+			url: getApiLink(appLocalizer, 'products'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				page: currentPage,
 				row: rowsPerPage,
 			},
-		} )
-			.then( ( response ) => {
-				setData( response.data || [] );
-			} )
-			.catch( () => {
-				setData( [] );
-			} );
+		})
+			.then((response) => {
+				setData(response.data || []);
+			})
+			.catch(() => {
+				setData([]);
+			});
 	}
 
 	// Handle pagination and filter changes
-	const requestApiForData = ( rowsPerPage: number, currentPage: number ) => {
-		setData( [] );
-		requestData( rowsPerPage, currentPage );
+	const requestApiForData = (rowsPerPage: number, currentPage: number) => {
+		setData([]);
+		requestData(rowsPerPage, currentPage);
 	};
 
 	// Column definitions
-	const columns: ColumnDef< StoreRow >[] = [
+	const columns: ColumnDef<StoreRow>[] = [
 		{
 			id: 'select',
-			header: ( { table } ) => (
+			header: ({ table }) => (
 				<input
 					type="checkbox"
-					checked={ table.getIsAllRowsSelected() }
-					onChange={ table.getToggleAllRowsSelectedHandler() }
+					checked={table.getIsAllRowsSelected()}
+					onChange={table.getToggleAllRowsSelectedHandler()}
 				/>
 			),
-			cell: ( { row } ) => (
+			cell: ({ row }) => (
 				<input
 					type="checkbox"
-					checked={ row.getIsSelected() }
-					onChange={ row.getToggleSelectedHandler() }
+					checked={row.getIsSelected()}
+					onChange={row.getToggleSelectedHandler()}
 				/>
 			),
 		},
 		{
-			header: __( 'Product Name', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.name || '' }>
-					{ row.original.name || '-' }
+			header: __('Product Name', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.name || ''}>
+					{row.original.name || '-'}
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'SKU', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.sku || '' }>
-					{ row.original.sku || '-' }
+			header: __('SKU', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.sku || ''}>
+					{row.original.sku || '-'}
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'Price', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.price || '' }>
-					{ row.original.price
-						? formatCurrency( row.original.price )
-						: '-' }
+			header: __('Price', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.price || ''}>
+					{row.original.price
+						? formatCurrency(row.original.price)
+						: '-'}
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'Status', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.status || '' }>
-					{ row.original.status || '-' }
+			header: __('Status', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.status || ''}>
+					{row.original.status || '-'}
 				</TableCell>
 			),
 		},
@@ -136,20 +132,18 @@ const DirectTransaction: React.FC< DirectTransactionProps > = ( {
 		<>
 			<div className="admin-table-wrapper">
 				<Table
-					data={ data }
-					columns={
-						columns as ColumnDef< Record< string, any >, any >[]
-					}
-					rowSelection={ rowSelection }
-					onRowSelectionChange={ setRowSelection }
-					defaultRowsPerPage={ 10 }
-					pageCount={ pageCount }
-					pagination={ pagination }
-					onPaginationChange={ setPagination }
-					handlePagination={ requestApiForData }
-					perPageOption={ [ 10, 25, 50 ] }
-					typeCounts={ [] }
-					totalCounts={ totalRows }
+					data={data}
+					columns={columns as ColumnDef<Record<string, any>, any>[]}
+					rowSelection={rowSelection}
+					onRowSelectionChange={setRowSelection}
+					defaultRowsPerPage={10}
+					pageCount={pageCount}
+					pagination={pagination}
+					onPaginationChange={setPagination}
+					handlePagination={requestApiForData}
+					perPageOption={[10, 25, 50]}
+					typeCounts={[]}
+					totalCounts={totalRows}
 				/>
 			</div>
 		</>

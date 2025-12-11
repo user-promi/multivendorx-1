@@ -18,15 +18,15 @@ interface RecipientBadgeProps {
 	onDelete?: () => void;
 }
 
-const RecipientBadge: React.FC< RecipientBadgeProps > = ( {
+const RecipientBadge: React.FC<RecipientBadgeProps> = ({
 	recipient,
 	onToggle,
 	onDelete,
-} ) => {
+}) => {
 	let iconClass = 'adminlib-mail';
 	let badgeClass = 'red';
 
-	switch ( recipient.label ) {
+	switch (recipient.label) {
 		case 'Store':
 			iconClass = 'adminlib-storefront';
 			badgeClass = 'blue';
@@ -45,20 +45,20 @@ const RecipientBadge: React.FC< RecipientBadgeProps > = ( {
 
 	return (
 		<>
-			{ recipient.enabled && (
+			{recipient.enabled && (
 				<div
-					className={ `admin-badge ${ badgeClass }` }
-					onClick={ ( e ) => {
+					className={`admin-badge ${badgeClass}`}
+					onClick={(e) => {
 						e.stopPropagation();
 						onToggle();
-					} }
+					}}
 					role="button"
-					tabIndex={ 0 }
+					tabIndex={0}
 				>
-					<i className={ iconClass }></i>
-					<span>{ recipient.label }</span>
+					<i className={iconClass}></i>
+					<span>{recipient.label}</span>
 				</div>
-			) }
+			)}
 		</>
 	);
 };
@@ -66,113 +66,104 @@ const RecipientBadge: React.FC< RecipientBadgeProps > = ( {
 // ------------------ Notification Component ------------------
 const Notification: React.FC = () => {
 	// Keep notifications as an array to avoid null checks everywhere
-	const [ notifications, setNotifications ] = useState< any[] >( [] );
-	const [ systemTags, setSystemTags ] = useState< string[] >( [] );
+	const [notifications, setNotifications] = useState<any[]>([]);
+	const [systemTags, setSystemTags] = useState<string[]>([]);
 	// openChannel holds 'mail' | 'sms' | 'system' | null
-	const [ openChannel, setOpenChannel ] = useState< string | null >( null );
+	const [openChannel, setOpenChannel] = useState<string | null>(null);
 
-	useEffect( () => {
-		axios( {
+	useEffect(() => {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'notifications' ),
+			url: getApiLink(appLocalizer, 'notifications'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				events: true,
 			},
-		} ).then( ( response ) => {
-			setNotifications( response.data || [] );
-		} );
-	}, [] );
+		}).then((response) => {
+			setNotifications(response.data || []);
+		});
+	}, []);
 
-	const [ addingRecipient, setAddingRecipient ] = useState< number | null >(
-		null
-	);
-	const [ newRecipientValue, setNewRecipientValue ] = useState( '' );
-	const [ viewMode, setViewMode ] = useState< 'list' | 'grid' >( 'list' );
-	const [ editingNotification, setEditingNotification ] = useState<
+	const [addingRecipient, setAddingRecipient] = useState<number | null>(null);
+	const [newRecipientValue, setNewRecipientValue] = useState('');
+	const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
+	const [editingNotification, setEditingNotification] = useState<
 		number | null
-	>( null );
-	const [ notificationId, setNotificationId ] = useState< number | null >(
-		null
-	);
-	const [ formData, setFormData ] = useState< Record< string, any > >( {} );
+	>(null);
+	const [notificationId, setNotificationId] = useState<number | null>(null);
+	const [formData, setFormData] = useState<Record<string, any>>({});
 
 	// NEW: activeTag state
-	const [ activeTag, setActiveTag ] = useState< string >( 'All' );
+	const [activeTag, setActiveTag] = useState<string>('All');
 
 	// ------------------ autosave effect (keeps almost same logic you had) ------------------
-	useEffect( () => {
-		if ( ! notifications || notificationId == null ) return;
+	useEffect(() => {
+		if (!notifications || notificationId == null) return;
 
 		const filtered = notifications.filter(
-			( item ) => item.id === notificationId
+			(item) => item.id === notificationId
 		);
 
-		axios( {
+		axios({
 			method: 'POST',
-			url: getApiLink(
-				appLocalizer,
-				`notifications/${ notificationId }`
-			),
+			url: getApiLink(appLocalizer, `notifications/${notificationId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: {
 				notifications: filtered,
 			},
-		} ).then( ( response ) => {
-			if ( response.data.success ) {
-				setEditingNotification( null );
+		}).then((response) => {
+			if (response.data.success) {
+				setEditingNotification(null);
 			}
-		} );
-	}, [ notifications, notificationId ] );
+		});
+	}, [notifications, notificationId]);
 
-	const toggleRecipient = ( notifId: number, recipientId: number ) => {
-		setNotifications( ( prev ) =>
-			prev.map( ( n ) =>
+	const toggleRecipient = (notifId: number, recipientId: number) => {
+		setNotifications((prev) =>
+			prev.map((n) =>
 				n.id === notifId
 					? {
 							...n,
-							recipients: n.recipients.map( ( r: any ) =>
+							recipients: n.recipients.map((r: any) =>
 								r.id === recipientId
-									? { ...r, enabled: ! r.enabled }
+									? { ...r, enabled: !r.enabled }
 									: r
 							),
-					  }
+						}
 					: n
 			)
 		);
 	};
 
-	const deleteRecipient = ( notifId: number, recipientId: number ) => {
-		setNotifications( ( prev ) =>
-			prev.map( ( n ) =>
+	const deleteRecipient = (notifId: number, recipientId: number) => {
+		setNotifications((prev) =>
+			prev.map((n) =>
 				n.id === notifId
 					? {
 							...n,
 							recipients: n.recipients.filter(
-								( r: any ) => r.id !== recipientId
+								(r: any) => r.id !== recipientId
 							),
-					  }
+						}
 					: n
 			)
 		);
 	};
 
-	const addRecipient = ( notifId: number | null ) => {
-		if ( ! newRecipientValue.trim() || notifId == null ) return;
-		setNotifications( ( prev ) =>
-			prev.map( ( n ) => {
-				if ( n.id === notifId ) {
+	const addRecipient = (notifId: number | null) => {
+		if (!newRecipientValue.trim() || notifId == null) return;
+		setNotifications((prev) =>
+			prev.map((n) => {
+				if (n.id === notifId) {
 					const maxId =
 						n.recipients && n.recipients.length
-							? Math.max(
-									...n.recipients.map( ( r: any ) => r.id )
-							  )
+							? Math.max(...n.recipients.map((r: any) => r.id))
 							: 0;
 					const newId = maxId + 1;
 					return {
 						...n,
 						recipients: [
-							...( n.recipients || [] ),
+							...(n.recipients || []),
 							{
 								id: newId,
 								type: 'extra',
@@ -184,138 +175,133 @@ const Notification: React.FC = () => {
 					};
 				}
 				return n;
-			} )
+			})
 		);
-		setNewRecipientValue( '' );
-		setAddingRecipient( null );
+		setNewRecipientValue('');
+		setAddingRecipient(null);
 	};
 
-	const toggleChannel = ( notifId: number, channel: string ) => {
-		setNotifications( ( prev ) =>
-			prev.map( ( n ) =>
+	const toggleChannel = (notifId: number, channel: string) => {
+		setNotifications((prev) =>
+			prev.map((n) =>
 				n.id === notifId
 					? {
 							...n,
 							channels: {
 								...n.channels,
-								[ channel ]: ! n.channels[ channel ],
+								[channel]: !n.channels[channel],
 							},
-					  }
+						}
 					: n
 			)
 		);
 	};
 
-	const openEditPannel = ( notifId: number, channel: string ) => {
-		axios( {
+	const openEditPannel = (notifId: number, channel: string) => {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, `notifications/${ notifId }` ),
+			url: getApiLink(appLocalizer, `notifications/${notifId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		} ).then( ( response ) => {
-			const notifData = Array.isArray( response.data )
-				? response.data[ 0 ]
+		}).then((response) => {
+			const notifData = Array.isArray(response.data)
+				? response.data[0]
 				: response.data;
-			setFormData( notifData || {} );
-		} );
+			setFormData(notifData || {});
+		});
 
-		setOpenChannel( channel );
+		setOpenChannel(channel);
 	};
 
-	useEffect( () => {
-		if ( formData.system_message ) {
+	useEffect(() => {
+		if (formData.system_message) {
 			const matches =
-				( formData.system_message as string ).match( /\[[^\]]+\]/g ) ||
-				[];
-			setSystemTags( matches );
+				(formData.system_message as string).match(/\[[^\]]+\]/g) || [];
+			setSystemTags(matches);
 		} else {
-			setSystemTags( [] );
+			setSystemTags([]);
 		}
-	}, [ formData.system_message ] );
+	}, [formData.system_message]);
 
-	const handleAutoSave = ( id: number | null ) => {
-		if ( id == null ) return;
-		axios( {
+	const handleAutoSave = (id: number | null) => {
+		if (id == null) return;
+		axios({
 			method: 'POST',
-			url: getApiLink( appLocalizer, `notifications/${ id }` ),
+			url: getApiLink(appLocalizer, `notifications/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: {
 				formData,
 			},
-		} ).then( () => {
-			setOpenChannel( null );
-		} );
+		}).then(() => {
+			setOpenChannel(null);
+		});
 	};
 
 	// -------------- TAGS: auto-generate unique tags from notifications --------------
-	const uniqueTags = useMemo( () => {
+	const uniqueTags = useMemo(() => {
 		const tags = Array.from(
-			new Set(
-				( notifications || [] ).map( ( n ) => n.tag ).filter( Boolean )
-			)
+			new Set((notifications || []).map((n) => n.tag).filter(Boolean))
 		);
-		return [ 'All', ...tags ];
-	}, [ notifications ] );
+		return ['All', ...tags];
+	}, [notifications]);
 
 	// -------------- FILTERED NOTIFICATIONS based on activeTag --------------
-	const filteredNotifications = useMemo( () => {
-		if ( ! notifications ) return [];
-		if ( activeTag === 'All' ) return notifications;
-		return notifications.filter( ( n ) => n.tag === activeTag );
-	}, [ notifications, activeTag ] );
+	const filteredNotifications = useMemo(() => {
+		if (!notifications) return [];
+		if (activeTag === 'All') return notifications;
+		return notifications.filter((n) => n.tag === activeTag);
+	}, [notifications, activeTag]);
 	// ------------------ Render ------------------
 	return (
 		<div className="notification-container tab-bg">
-			{ /* View Toggle */ }
+			{/* View Toggle */}
 			<div className="toggle-setting-wrapper view-toggle">
 				<div className="category-filter">
-					{ uniqueTags.map( ( tag ) => (
+					{uniqueTags.map((tag) => (
 						<div
-							key={ tag }
-							className={ `category-item ${
+							key={tag}
+							className={`category-item ${
 								activeTag === tag ? 'active' : ''
-							}` }
+							}`}
 							role="button"
-							tabIndex={ 0 }
-							onClick={ ( e ) => {
+							tabIndex={0}
+							onClick={(e) => {
 								e.stopPropagation();
-								setActiveTag( tag );
-							} }
-							onKeyDown={ ( e ) => {
-								if ( e.key === 'Enter' ) {
+								setActiveTag(tag);
+							}}
+							onKeyDown={(e) => {
+								if (e.key === 'Enter') {
 									e.stopPropagation();
-									setActiveTag( tag );
+									setActiveTag(tag);
 								}
-							} }
+							}}
 						>
-							{ tag }
+							{tag}
 						</div>
-					) ) }
+					))}
 				</div>
 
 				<div className="tabs-wrapper">
-					{ [ 'list', 'grid' ].map( ( mode ) => (
+					{['list', 'grid'].map((mode) => (
 						<div
-							key={ mode }
+							key={mode}
 							role="button"
-							tabIndex={ 0 }
-							onClick={ () =>
-								setViewMode( mode as 'list' | 'grid' )
-							}
-							onKeyDown={ ( e ) =>
+							tabIndex={0}
+							onClick={() => setViewMode(mode as 'list' | 'grid')}
+							onKeyDown={(e) =>
 								e.key === 'Enter' &&
-								setViewMode( mode as 'list' | 'grid' )
+								setViewMode(mode as 'list' | 'grid')
 							}
 						>
 							<input
 								className="toggle-setting-form-input"
 								type="radio"
-								id={ `${ mode }-view` }
+								id={`${mode}-view`}
 								name="view-mode"
-								value={ mode }
-								checked={ viewMode === mode }
+								value={mode}
+								checked={viewMode === mode}
 								readOnly
 							/>
-							<label htmlFor={ `${ mode }-view` }>
+							<label htmlFor={`${mode}-view`}>
 								<i
 									className={
 										mode === 'list'
@@ -325,12 +311,12 @@ const Notification: React.FC = () => {
 								></i>
 							</label>
 						</div>
-					) ) }
+					))}
 				</div>
 			</div>
 
-			{ /* List View */ }
-			{ viewMode === 'list' && (
+			{/* List View */}
+			{viewMode === 'list' && (
 				<div className="table-wrapper">
 					<table className="admin-table">
 						<thead className="admin-table-header">
@@ -344,40 +330,40 @@ const Notification: React.FC = () => {
 							</tr>
 						</thead>
 						<tbody className="admin-table-body">
-							{ filteredNotifications.map( ( notif: any ) => (
+							{filteredNotifications.map((notif: any) => (
 								<tr
 									className="admin-row"
-									key={ notif.id }
-									onClick={ () => {
-										setEditingNotification( notif.id );
-										setNotificationId( notif.id );
-									} }
+									key={notif.id}
+									onClick={() => {
+										setEditingNotification(notif.id);
+										setNotificationId(notif.id);
+									}}
 								>
 									<td className="admin-column notificaton">
 										<div className="table-row-custom">
 											<div className="product-wrapper notification">
 												<span
-													className={ `item-icon notification-icon adminlibrary adminicon-${ notif.id }` }
+													className={`item-icon notification-icon adminlibrary adminicon-${notif.id}`}
 												></span>
 												<div className="details">
 													<div className="title">
-														{ notif.event }
+														{notif.event}
 														<span
-															className={ `admin-badge yellow ${ notif.tag }` }
+															className={`admin-badge yellow ${notif.tag}`}
 														>
-															{ notif.tag }{ ' ' }
+															{notif.tag}{' '}
 														</span>
 														<span
-															className={ `admin-badge blue ${ notif.category }` }
+															className={`admin-badge blue ${notif.category}`}
 														>
-															{ ' ' }
+															{' '}
 															{
 																notif.category
-															}{ ' ' }
+															}{' '}
 														</span>
 													</div>
 													<div className="des">
-														{ notif.description }
+														{notif.description}
 													</div>
 												</div>
 											</div>
@@ -386,46 +372,46 @@ const Notification: React.FC = () => {
 									<td className="admin-column">
 										<div className="table-row-custom">
 											<div className="recipients-list">
-												{ (
-													notif.recipients || []
-												).map( ( r: any ) => (
-													<RecipientBadge
-														key={ r.id }
-														recipient={ r }
-														onToggle={ () =>
-															toggleRecipient(
-																notif.id,
-																r.id
-															)
-														}
-														onDelete={
-															r.canDelete
-																? () =>
-																		deleteRecipient(
-																			notif.id,
-																			r.id
-																		)
-																: undefined
-														}
-													/>
-												) ) }
+												{(notif.recipients || []).map(
+													(r: any) => (
+														<RecipientBadge
+															key={r.id}
+															recipient={r}
+															onToggle={() =>
+																toggleRecipient(
+																	notif.id,
+																	r.id
+																)
+															}
+															onDelete={
+																r.canDelete
+																	? () =>
+																			deleteRecipient(
+																				notif.id,
+																				r.id
+																			)
+																	: undefined
+															}
+														/>
+													)
+												)}
 											</div>
 										</div>
 									</td>
 									<td className="admin-column">
 										<div className="table-row-custom">
 											<div className="system-column">
-												{ Object.entries(
+												{Object.entries(
 													notif.channels || {}
 												).map(
-													( [
+													([
 														channel,
 														enabled,
-													]: any ) => {
+													]: any) => {
 														let iconClass = '';
 														let badgeClass =
 															'admin-badge ';
-														switch ( channel ) {
+														switch (channel) {
 															case 'mail':
 																iconClass =
 																	'adminlib-mail';
@@ -447,17 +433,17 @@ const Notification: React.FC = () => {
 														}
 														return (
 															<>
-																{ enabled && (
+																{enabled && (
 																	<i
 																		key={
 																			channel
 																		}
-																		className={ `${ iconClass } ${ badgeClass } ${
-																			! enabled
+																		className={`${iconClass} ${badgeClass} ${
+																			!enabled
 																				? 'disable'
 																				: ''
-																		}` }
-																		onClick={ (
+																		}`}
+																		onClick={(
 																			e
 																		) => {
 																			e.stopPropagation();
@@ -468,13 +454,13 @@ const Notification: React.FC = () => {
 																				notif.id,
 																				channel
 																			);
-																		} }
+																		}}
 																	></i>
-																) }
+																)}
 															</>
 														);
 													}
-												) }
+												)}
 											</div>
 										</div>
 									</td>
@@ -491,30 +477,30 @@ const Notification: React.FC = () => {
 										</div>
 									</td>
 								</tr>
-							) ) }
+							))}
 						</tbody>
 					</table>
 				</div>
-			) }
+			)}
 
-			{ openChannel && (
+			{openChannel && (
 				<CommonPopup
-					open={ !! openChannel }
-					onClose={ () => setOpenChannel( null ) }
+					open={!!openChannel}
+					onClose={() => setOpenChannel(null)}
 					width="31.25rem"
 					height="70%"
 					header={
 						<>
 							<div className="title">
 								<i className="adminlib-cart"></i>
-								{ openChannel === 'system' &&
-									'System Notification' }
-								{ openChannel === 'sms' && 'SMS Message' }
-								{ openChannel === 'mail' && 'Email Message' }
+								{openChannel === 'system' &&
+									'System Notification'}
+								{openChannel === 'sms' && 'SMS Message'}
+								{openChannel === 'mail' && 'Email Message'}
 							</div>
 							<i
 								className="icon adminlib-close"
-								onClick={ () => setOpenChannel( null ) }
+								onClick={() => setOpenChannel(null)}
 							></i>
 						</>
 					}
@@ -522,7 +508,7 @@ const Notification: React.FC = () => {
 						<div className="drawer-footer">
 							<button
 								className="admin-btn btn-red"
-								onClick={ () => setOpenChannel( null ) }
+								onClick={() => setOpenChannel(null)}
 							>
 								Cancel
 							</button>
@@ -531,7 +517,7 @@ const Notification: React.FC = () => {
 				>
 					<div className="content">
 						<div className="form-group-wrapper">
-							{ openChannel === 'system' && (
+							{openChannel === 'system' && (
 								<div className="form-group">
 									<>
 										<label>System Message</label>
@@ -541,71 +527,69 @@ const Notification: React.FC = () => {
 											value={
 												formData.system_message || ''
 											}
-											onChange={ ( e ) => {
-												setFormData( {
+											onChange={(e) => {
+												setFormData({
 													...formData,
 													system_message:
 														e.target.value,
-												} );
-											} }
-											onBlur={ () => {
-												handleAutoSave( formData.id );
-											} }
+												});
+											}}
+											onBlur={() => {
+												handleAutoSave(formData.id);
+											}}
 										/>
 									</>
 								</div>
-							) }
+							)}
 						</div>
 						<div className="form-group-wrapper">
-							{ openChannel === 'sms' && (
+							{openChannel === 'sms' && (
 								<div className="form-group">
 									<>
 										<label>SMS Content</label>
 										<TextArea
 											name="sms_content"
 											inputClass="textarea-input"
-											value={ formData.sms_content || '' }
-											onChange={ ( e ) => {
-												setFormData( {
+											value={formData.sms_content || ''}
+											onChange={(e) => {
+												setFormData({
 													...formData,
 													sms_content: e.target.value,
-												} );
-												handleAutoSave( formData.id );
-											} }
-											onBlur={ () => {
-												handleAutoSave( formData.id );
-											} }
+												});
+												handleAutoSave(formData.id);
+											}}
+											onBlur={() => {
+												handleAutoSave(formData.id);
+											}}
 										/>
 									</>
 								</div>
-							) }
+							)}
 						</div>
 						<div className="form-group-wrapper">
-							{ openChannel === 'mail' && (
+							{openChannel === 'mail' && (
 								<div className="form-group">
 									<>
 										<label>Email Subject</label>
 										<BasicInput
 											type="text"
 											name="title"
-											value={
-												formData.email_subject || ''
-											}
-											onChange={ ( e ) => {
-												setFormData( {
+											value={formData.email_subject || ''}
+											onChange={(e) => {
+												setFormData({
 													...formData,
 													email_subject:
 														e.target.value,
-												} );
-												handleAutoSave( formData.id );
-											} }
-											onBlur={ () => {
-												handleAutoSave( formData.id );
-											} }
+												});
+												handleAutoSave(formData.id);
+											}}
+											onBlur={() => {
+												handleAutoSave(formData.id);
+											}}
 										/>
 									</>
 								</div>
-							) }
+							)}
 						</div>
 						<div className="form-group-wrapper">
 							<div className="form-group">
@@ -613,49 +597,49 @@ const Notification: React.FC = () => {
 								<TextArea
 									name="sms_content"
 									inputClass="textarea-input"
-									value={ formData.email_body || '' }
-									onChange={ ( e ) => {
-										setFormData( {
+									value={formData.email_body || ''}
+									onChange={(e) => {
+										setFormData({
 											...formData,
 											email_body: e.target.value,
-										} );
-										handleAutoSave( formData.id );
-									} }
-									onBlur={ () => {
-										handleAutoSave( formData.id );
-									} }
+										});
+										handleAutoSave(formData.id);
+									}}
+									onBlur={() => {
+										handleAutoSave(formData.id);
+									}}
 								/>
 							</div>
 						</div>
 						<div className="form-group-wrapper">
-							{ systemTags?.length > 0 && (
+							{systemTags?.length > 0 && (
 								<div className="tag-list">
 									<p>You can use these tags:</p>
-									{ systemTags.map( ( tag, idx ) => (
+									{systemTags.map((tag, idx) => (
 										<span
-											key={ idx }
+											key={idx}
 											className="tag-item"
-											onClick={ () =>
+											onClick={() =>
 												navigator.clipboard.writeText(
 													tag
 												)
 											}
 										>
-											{ tag }
+											{tag}
 										</span>
-									) ) }
+									))}
 								</div>
-							) }
+							)}
 						</div>
 					</div>
 				</CommonPopup>
-			) }
+			)}
 
-			{ /* Edit Recipients Popup */ }
-			{ editingNotification && (
+			{/* Edit Recipients Popup */}
+			{editingNotification && (
 				<CommonPopup
-					open={ !! editingNotification }
-					onClose={ () => setEditingNotification( null ) }
+					open={!!editingNotification}
+					onClose={() => setEditingNotification(null)}
 					width="31.25rem"
 					height="70%"
 					header={
@@ -670,7 +654,7 @@ const Notification: React.FC = () => {
 							</p>
 							<i
 								className="icon adminlib-close"
-								onClick={ () => setEditingNotification( null ) }
+								onClick={() => setEditingNotification(null)}
 							></i>
 						</>
 					}
@@ -678,13 +662,13 @@ const Notification: React.FC = () => {
 					<div className="content">
 						<div className="title">Delivery method</div>
 						<div className="drawer-recipients">
-							{ Object.entries(
+							{Object.entries(
 								notifications.find(
-									( n ) => n.id === editingNotification
+									(n) => n.id === editingNotification
 								)?.channels || {}
-							).map( ( [ channel, enabled ]: any ) => {
+							).map(([channel, enabled]: any) => {
 								let label = '';
-								switch ( channel ) {
+								switch (channel) {
 									case 'mail':
 										label = 'Mail';
 										break;
@@ -698,10 +682,10 @@ const Notification: React.FC = () => {
 								return (
 									<>
 										<div
-											key={ channel }
-											className={ `recipient ${
-												! enabled ? 'disable' : ''
-											}` }
+											key={channel}
+											className={`recipient ${
+												!enabled ? 'disable' : ''
+											}`}
 										>
 											<span className="icon">
 												<i
@@ -709,18 +693,19 @@ const Notification: React.FC = () => {
 														label === 'Mail'
 															? 'adminlib-mail'
 															: label === 'SMS'
-															? 'adminlib-enquiry'
-															: label === 'System'
-															? 'adminlib-notification'
-															: 'adminlib-mail'
+																? 'adminlib-enquiry'
+																: label ===
+																	  'System'
+																	? 'adminlib-notification'
+																	: 'adminlib-mail'
 													}
 												></i>
 											</span>
 											<div className="details">
-												<span>{ label }</span>
+												<span>{label}</span>
 											</div>
 											<i
-												onClick={ () =>
+												onClick={() =>
 													toggleChannel(
 														editingNotification,
 														channel
@@ -735,20 +720,20 @@ const Notification: React.FC = () => {
 										</div>
 									</>
 								);
-							} ) }
+							})}
 						</div>
 
 						<div className="title">Recipients</div>
 
 						<div className="drawer-recipients">
-							{ notifications
-								.find( ( n ) => n.id === editingNotification )
-								?.recipients.map( ( r: any ) => (
+							{notifications
+								.find((n) => n.id === editingNotification)
+								?.recipients.map((r: any) => (
 									<div
-										key={ r.id }
-										className={ `recipient ${
+										key={r.id}
+										className={`recipient ${
 											r.enabled ? '' : 'disable'
-										}` }
+										}`}
 									>
 										<span className="icon">
 											<i
@@ -756,31 +741,32 @@ const Notification: React.FC = () => {
 													r.label === 'Store'
 														? 'adminlib-storefront'
 														: r.label === 'Admin'
-														? 'adminlib-person'
-														: r.label === 'Customer'
-														? 'adminlib-user-circle'
-														: 'adminlib-mail'
+															? 'adminlib-person'
+															: r.label ===
+																  'Customer'
+																? 'adminlib-user-circle'
+																: 'adminlib-mail'
 												}
 											></i>
 										</span>
 										<div className="details">
-											<span>{ r.label }</span>
-											{ /* <div className="description">Lorem, ipsum.</div> */ }
+											<span>{r.label}</span>
+											{/* <div className="description">Lorem, ipsum.</div> */}
 										</div>
-										{ r.canDelete && (
+										{r.canDelete && (
 											<i
 												className="delete-btn adminlib-delete"
-												onClick={ () =>
+												onClick={() =>
 													deleteRecipient(
 														editingNotification,
 														r.id
 													)
 												}
 											></i>
-										) }
-										{ ! r.canDelete && (
+										)}
+										{!r.canDelete && (
 											<i
-												onClick={ () =>
+												onClick={() =>
 													toggleRecipient(
 														editingNotification,
 														r.id
@@ -792,9 +778,9 @@ const Notification: React.FC = () => {
 														: 'adminlib-eye-blocked'
 												}
 											></i>
-										) }
+										)}
 									</div>
-								) ) }
+								))}
 						</div>
 
 						<div className="drawer-add-recipient">
@@ -802,19 +788,19 @@ const Notification: React.FC = () => {
 								type="text"
 								className="basic-input"
 								placeholder="Type the email address of the additional recipient you want to notify, then click ‘Add’. "
-								value={ newRecipientValue }
-								onChange={ ( e ) =>
-									setNewRecipientValue( e.target.value )
+								value={newRecipientValue}
+								onChange={(e) =>
+									setNewRecipientValue(e.target.value)
 								}
-								onKeyPress={ ( e ) =>
+								onKeyPress={(e) =>
 									e.key === 'Enter' &&
-									addRecipient( editingNotification )
+									addRecipient(editingNotification)
 								}
 							/>
 							<button
 								className="admin-btn btn-purple"
-								onClick={ () =>
-									addRecipient( editingNotification )
+								onClick={() =>
+									addRecipient(editingNotification)
 								}
 							>
 								<i className="adminlib-plus-circle"></i>
@@ -823,106 +809,104 @@ const Notification: React.FC = () => {
 						</div>
 					</div>
 				</CommonPopup>
-			) }
+			)}
 
-			{ /* Grid View */ }
-			{ viewMode === 'grid' && (
+			{/* Grid View */}
+			{viewMode === 'grid' && (
 				<div className="notification-grid">
-					{ filteredNotifications.map( ( notif: any ) => (
-						<div key={ notif.id } className="notification-card">
+					{filteredNotifications.map((notif: any) => (
+						<div key={notif.id} className="notification-card">
 							<div className="card-body">
 								<div className="title-wrapper">
 									<i
-										className={ `notification-icon adminlibrary ${ notif.icon }` }
+										className={`notification-icon adminlibrary ${notif.icon}`}
 									></i>
 									<div className="details">
 										<div className="title">
-											{ notif.event }
+											{notif.event}
 										</div>
 										<div className="description">
-											{ notif.description }
+											{notif.description}
 										</div>
 									</div>
 								</div>
 								<div className="recipients-list">
-									{ ( notif.recipients || [] ).map(
-										( r: any ) => (
-											<RecipientBadge
-												key={ r.id }
-												recipient={ r }
-												onToggle={ () =>
-													toggleRecipient(
-														notif.id,
-														r.id
-													)
-												}
-												onDelete={
-													r.canDelete
-														? () =>
-																deleteRecipient(
-																	notif.id,
-																	r.id
-																)
-														: undefined
-												}
-											/>
-										)
-									) }
+									{(notif.recipients || []).map((r: any) => (
+										<RecipientBadge
+											key={r.id}
+											recipient={r}
+											onToggle={() =>
+												toggleRecipient(notif.id, r.id)
+											}
+											onDelete={
+												r.canDelete
+													? () =>
+															deleteRecipient(
+																notif.id,
+																r.id
+															)
+													: undefined
+											}
+										/>
+									))}
 								</div>
 							</div>
 							<div className="card-footer">
 								<div className="system-column">
-									{ Object.entries(
-										notif.channels || {}
-									).map( ( [ channel, enabled ]: any ) => {
-										let iconClass = '';
-										let badgeClass = 'admin-badge ';
-										switch ( channel ) {
-											case 'mail':
-												iconClass = 'adminlib-mail';
-												badgeClass += 'yellow';
-												break;
-											case 'sms':
-												iconClass = 'adminlib-enquiry';
-												badgeClass += 'green';
-												break;
-											case 'system':
-												iconClass =
-													'adminlib-notification';
-												badgeClass += 'blue';
-												break;
+									{Object.entries(notif.channels || {}).map(
+										([channel, enabled]: any) => {
+											let iconClass = '';
+											let badgeClass = 'admin-badge ';
+											switch (channel) {
+												case 'mail':
+													iconClass = 'adminlib-mail';
+													badgeClass += 'yellow';
+													break;
+												case 'sms':
+													iconClass =
+														'adminlib-enquiry';
+													badgeClass += 'green';
+													break;
+												case 'system':
+													iconClass =
+														'adminlib-notification';
+													badgeClass += 'blue';
+													break;
+											}
+											return (
+												<i
+													key={channel}
+													className={`${iconClass} ${badgeClass} ${
+														!enabled
+															? 'disable'
+															: ''
+													}`}
+													onClick={(e) => {
+														e.stopPropagation();
+														toggleChannel(
+															notif.id,
+															channel
+														);
+													}}
+												></i>
+											);
 										}
-										return (
-											<i
-												key={ channel }
-												className={ `${ iconClass } ${ badgeClass } ${
-													! enabled ? 'disable' : ''
-												}` }
-												onClick={ ( e ) => {
-													e.stopPropagation();
-													toggleChannel(
-														notif.id,
-														channel
-													);
-												} }
-											></i>
-										);
-									} ) }
+									)}
 								</div>
 
 								<div
 									className="admin-btn btn-purple"
-									onClick={ () =>
-										setEditingNotification( notif.id )
+									onClick={() =>
+										setEditingNotification(notif.id)
 									}
 								>
 									Manage <i className="adminlib-edit"></i>
 								</div>
 							</div>
 						</div>
-					) ) }
+					))}
 				</div>
-			) }
+			)}
 		</div>
 	);
 };

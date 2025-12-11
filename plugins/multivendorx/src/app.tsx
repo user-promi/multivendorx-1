@@ -25,7 +25,7 @@ import Notifications from './components/Notifications/Notifications';
 import TransactionHistory from './components/TransactionHistory/transactionHistory';
 import { getTourSteps } from './components/Tour/tourSteps';
 
-localStorage.setItem( 'force_multivendorx_context_reload', 'true' );
+localStorage.setItem('force_multivendorx_context_reload', 'true');
 
 const profileItems = [
 	{
@@ -67,14 +67,14 @@ interface Products {
 
 const products: Products[] = [
 	{
-		title: __( 'Double Opt-In', 'notifima' ),
+		title: __('Double Opt-In', 'notifima'),
 		description: __(
 			'Experience the power of Double Opt-In for our Stock Alert Form!',
 			'notifima'
 		),
 	},
 	{
-		title: __( 'Your Subscription Hub', 'notifima' ),
+		title: __('Your Subscription Hub', 'notifima'),
 		description: __(
 			'Easily monitor and download lists of out-of-stock subscribers.',
 			'notifima'
@@ -83,114 +83,113 @@ const products: Products[] = [
 ];
 
 const Route = () => {
-	const currentTab = new URLSearchParams( useLocation().hash );
-	const tab = currentTab.get( 'tab' ) || 'dashboard';
+	const currentTab = new URLSearchParams(useLocation().hash);
+	const tab = currentTab.get('tab') || 'dashboard';
 
 	return (
 		<>
-			{ tab === 'settings' && <Settings id="settings" /> }
-			{ tab === 'memberships' && <Memberships /> }
-			{ tab === 'status-tools' && <StatusAndTools id="status-tools" /> }
-			{ tab === 'modules' && <Modules /> }
-			{ tab === 'stores' && <Store /> }
-			{ tab === 'commissions' && <Commission /> }
-			{ tab === 'customer-support' && <CustomerServices /> }
-			{ tab === 'approval-queue' && <ApprovalQueue /> }
-			{ tab === 'dashboard' && <AdminDashboard /> }
-			{ tab === 'announcement' && <Announcements /> }
-			{ tab === 'knowledgebase' && <Knowledgebase /> }
-			{ tab === 'transaction-history' && <TransactionHistory /> }
-			{ tab === 'reports' && <Analytics /> }
-			{ tab === 'advertisement' && <Advertisement /> }
-			{ tab === 'help-support' && <HelpSupport /> }
-			{ tab === 'notifications' && <Notifications /> }
+			{tab === 'settings' && <Settings id="settings" />}
+			{tab === 'memberships' && <Memberships />}
+			{tab === 'status-tools' && <StatusAndTools id="status-tools" />}
+			{tab === 'modules' && <Modules />}
+			{tab === 'stores' && <Store />}
+			{tab === 'commissions' && <Commission />}
+			{tab === 'customer-support' && <CustomerServices />}
+			{tab === 'approval-queue' && <ApprovalQueue />}
+			{tab === 'dashboard' && <AdminDashboard />}
+			{tab === 'announcement' && <Announcements />}
+			{tab === 'knowledgebase' && <Knowledgebase />}
+			{tab === 'transaction-history' && <TransactionHistory />}
+			{tab === 'reports' && <Analytics />}
+			{tab === 'advertisement' && <Advertisement />}
+			{tab === 'help-support' && <HelpSupport />}
+			{tab === 'notifications' && <Notifications />}
 		</>
 	);
 };
 
 const App = () => {
-	const currentTabParams = new URLSearchParams( useLocation().hash );
+	const currentTabParams = new URLSearchParams(useLocation().hash);
 
-	const [ query, setQuery ] = useState( '' );
-	const [ results, setResults ] = useState< SearchItem[] >( [] );
-	const [ selectValue, setSelectValue ] = useState( 'all' );
+	const [query, setQuery] = useState('');
+	const [results, setResults] = useState<SearchItem[]>([]);
+	const [selectValue, setSelectValue] = useState('all');
 
 	// Highlight active tab in sidebar
-	useEffect( () => {
+	useEffect(() => {
 		document
-			.querySelectorAll( '#toplevel_page_multivendorx>ul>li>a' )
-			.forEach( ( menuItem ) => {
+			.querySelectorAll('#toplevel_page_multivendorx>ul>li>a')
+			.forEach((menuItem) => {
 				const menuItemUrl = new URL(
-					( menuItem as HTMLAnchorElement ).href
+					(menuItem as HTMLAnchorElement).href
 				);
 				const menuItemHashParams = new URLSearchParams(
-					menuItemUrl.hash.substring( 1 )
+					menuItemUrl.hash.substring(1)
 				);
 
-				if ( menuItem.parentNode ) {
-					( menuItem.parentNode as HTMLElement ).classList.remove(
+				if (menuItem.parentNode) {
+					(menuItem.parentNode as HTMLElement).classList.remove(
 						'current'
 					);
 				}
 				if (
-					menuItemHashParams.get( 'tab' ) ===
-					currentTabParams.get( 'tab' )
+					menuItemHashParams.get('tab') ===
+					currentTabParams.get('tab')
 				) {
-					( menuItem.parentNode as HTMLElement ).classList.add(
+					(menuItem.parentNode as HTMLElement).classList.add(
 						'current'
 					);
 				}
-			} );
-	}, [ currentTabParams ] );
+			});
+	}, [currentTabParams]);
 
 	// 🔹 Search handlers
-	const handleSearchChange = ( value: string ) => {
-		setQuery( value );
+	const handleSearchChange = (value: string) => {
+		setQuery(value);
 
-		if ( ! value.trim() ) {
-			setResults( [] );
+		if (!value.trim()) {
+			setResults([]);
 			return;
 		}
 
 		const lowerValue = value.toLowerCase();
 
-		const filtered = searchIndex.filter( ( item ) => {
+		const filtered = searchIndex.filter((item) => {
 			// Filter by dropdown selection
-			if ( selectValue !== 'all' && item.tab !== selectValue )
-				return false;
+			if (selectValue !== 'all' && item.tab !== selectValue) return false;
 
 			// Case-insensitive search
 			const name = item.name?.toLowerCase() || '';
 			const desc = item.desc?.toLowerCase() || '';
-			return name.includes( lowerValue ) || desc.includes( lowerValue );
-		} );
+			return name.includes(lowerValue) || desc.includes(lowerValue);
+		});
 
-		setResults( filtered );
+		setResults(filtered);
 	};
 
-	const handleSelectChange = ( value: string ) => {
-		setSelectValue( value );
+	const handleSelectChange = (value: string) => {
+		setSelectValue(value);
 
 		// Re-run search for current query whenever dropdown changes
-		if ( query.trim() ) {
-			handleSearchChange( query );
+		if (query.trim()) {
+			handleSearchChange(query);
 		} else {
-			setResults( [] );
+			setResults([]);
 		}
 	};
 
-	const handleResultClick = ( item: SearchItem ) => {
+	const handleResultClick = (item: SearchItem) => {
 		window.location.hash = item.link;
-		setQuery( '' );
-		setResults( [] );
+		setQuery('');
+		setResults([]);
 	};
 
 	return (
 		<>
 			<Banner
-				products={ products }
-				isPro={ appLocalizer.khali_dabba }
-				proUrl={ appLocalizer.pro_url }
+				products={products}
+				isPro={appLocalizer.khali_dabba}
+				proUrl={appLocalizer.pro_url}
 				tag="Why Premium"
 				buttonText="View Pricing"
 				bgCode="#852aff"
@@ -199,28 +198,28 @@ const App = () => {
 				btnBgCode="#e35047"
 			/>
 			<AdminHeader
-				brandImg={ Brand }
-				query={ query }
-				results={ results }
-				onSearchChange={ handleSearchChange }
-				onResultClick={ handleResultClick }
-				onSelectChange={ handleSelectChange }
-				selectValue={ selectValue }
-				free={ appLocalizer.freeVersion }
-				pro={ appLocalizer.pro_data.version }
-				managePlanUrl={ appLocalizer.pro_data.manage_plan_url }
+				brandImg={Brand}
+				query={query}
+				results={results}
+				onSearchChange={handleSearchChange}
+				onResultClick={handleResultClick}
+				onSelectChange={handleSelectChange}
+				selectValue={selectValue}
+				free={appLocalizer.freeVersion}
+				pro={appLocalizer.pro_data.version}
+				managePlanUrl={appLocalizer.pro_data.manage_plan_url}
 				chatUrl=""
-				showProfile={ true }
-				profileItems={ profileItems } // <-- add this
-				showDropdown={ true }
-				dropdownOptions={ [
+				showProfile={true}
+				profileItems={profileItems} // <-- add this
+				showDropdown={true}
+				dropdownOptions={[
 					{ value: 'all', label: 'Modules & Settings' },
 					{ value: 'modules', label: 'Modules' },
 					{ value: 'settings', label: 'Settings' },
-				] }
-				notifications={ <HeaderNotification /> }
-				showNotifications={ true }
-				messages={ [
+				]}
+				notifications={<HeaderNotification />}
+				showNotifications={true}
+				messages={[
 					{
 						heading: 'Support Ticket #123',
 						message: 'Customer reported an issue',
@@ -229,13 +228,13 @@ const App = () => {
 						color: 'red',
 						link: '/tickets/123',
 					},
-				] }
+				]}
 				messagesLink="/messages"
 			/>
 
 			<TourSetup
-				appLocalizer={ appLocalizer }
-				steps={ getTourSteps( appLocalizer ) }
+				appLocalizer={appLocalizer}
+				steps={getTourSteps(appLocalizer)}
 			/>
 
 			<Route />

@@ -46,199 +46,197 @@ type FilterData = {
 export interface RealtimeFilter {
 	name: string;
 	render: (
-		updateFilter: ( key: string, value: any ) => void,
+		updateFilter: (key: string, value: any) => void,
 		filterValue: any
 	) => ReactNode;
 }
 
 export const KnowledgeBase: React.FC = () => {
-	const [ submitting, setSubmitting ] = useState( false );
-	const [ data, setData ] = useState< KBRow[] | null >( null );
-	const [ addEntry, setAddEntry ] = useState( false );
-	const [ rowSelection, setRowSelection ] = useState< RowSelectionState >(
-		{}
-	);
-	const [ pagination, setPagination ] = useState< PaginationState >( {
+	const [submitting, setSubmitting] = useState(false);
+	const [data, setData] = useState<KBRow[] | null>(null);
+	const [addEntry, setAddEntry] = useState(false);
+	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
 		pageSize: 10,
-	} );
-	const [ announcementStatus, setAnnouncementStatus ] = useState<
+	});
+	const [announcementStatus, setAnnouncementStatus] = useState<
 		AnnouncementStatus[] | null
-	>( null );
-	const [ pageCount, setPageCount ] = useState( 0 );
-	const [ editId, setEditId ] = useState< number | null >( null );
-	const [ error, setError ] = useState< string | null >( null );
-	const [ formData, setFormData ] = useState< KBForm >( {
+	>(null);
+	const [pageCount, setPageCount] = useState(0);
+	const [editId, setEditId] = useState<number | null>(null);
+	const [error, setError] = useState<string | null>(null);
+	const [formData, setFormData] = useState<KBForm>({
 		title: '',
 		content: '',
 		status: 'draft',
-	} );
-	const bulkSelectRef = useRef< HTMLSelectElement >( null );
-	const [ totalRows, setTotalRows ] = useState< number >( 0 );
-	const [ validationErrors, setValidationErrors ] = useState< {
-		[ key: string ]: string;
-	} >( {} );
+	});
+	const bulkSelectRef = useRef<HTMLSelectElement>(null);
+	const [totalRows, setTotalRows] = useState<number>(0);
+	const [validationErrors, setValidationErrors] = useState<{
+		[key: string]: string;
+	}>({});
 
 	const validateForm = () => {
-		const errors: { [ key: string ]: string } = {};
+		const errors: { [key: string]: string } = {};
 
-		if ( ! formData.title.trim() ) {
-			errors.title = __( 'Title is required', 'multivendorx' );
+		if (!formData.title.trim()) {
+			errors.title = __('Title is required', 'multivendorx');
 		}
 
-		if ( ! formData.content.trim() ) {
-			errors.content = __( 'Content is required', 'multivendorx' );
+		if (!formData.content.trim()) {
+			errors.content = __('Content is required', 'multivendorx');
 		}
 
-		setValidationErrors( errors );
-		return Object.keys( errors ).length === 0;
+		setValidationErrors(errors);
+		return Object.keys(errors).length === 0;
 	};
 
 	const handleCloseForm = () => {
-		setAddEntry( false );
-		setFormData( { title: '', content: '', status: 'pending' } ); // reset form
-		setEditId( null ); // reset edit mode
-		setError( null ); // clear any error
-		setValidationErrors( {} );
+		setAddEntry(false);
+		setFormData({ title: '', content: '', status: 'pending' }); // reset form
+		setEditId(null); // reset edit mode
+		setError(null); // clear any error
+		setValidationErrors({});
 	};
 	// Handle input changes
 	const handleChange = (
-		e: React.ChangeEvent< HTMLInputElement | HTMLTextAreaElement >
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
 	) => {
 		const { name, value } = e.target;
-		setFormData( ( prev ) => ( { ...prev, [ name ]: value } ) );
+		setFormData((prev) => ({ ...prev, [name]: value }));
 		// Clear field error when user types
-		if ( validationErrors[ name ] ) {
-			setValidationErrors( ( prev ) => {
+		if (validationErrors[name]) {
+			setValidationErrors((prev) => {
 				const updated = { ...prev };
-				delete updated[ name ];
+				delete updated[name];
 				return updated;
-			} );
+			});
 		}
 	};
 
 	const handleBulkAction = async () => {
 		const action = bulkSelectRef.current?.value;
-		const selectedIds = Object.keys( rowSelection )
-			.map( ( key ) => {
-				const index = Number( key );
-				return data && data[ index ] ? data[ index ].id : null;
-			} )
-			.filter( ( id ): id is number => id !== null );
+		const selectedIds = Object.keys(rowSelection)
+			.map((key) => {
+				const index = Number(key);
+				return data && data[index] ? data[index].id : null;
+			})
+			.filter((id): id is number => id !== null);
 
-		if ( ! selectedIds.length ) {
+		if (!selectedIds.length) {
 			return;
 		}
 
-		if ( ! action ) {
+		if (!action) {
 			return;
 		}
 
-		setData( null );
+		setData(null);
 
 		try {
-			await axios( {
+			await axios({
 				method: 'PUT',
-				url: getApiLink( appLocalizer, 'knowledge' ),
+				url: getApiLink(appLocalizer, 'knowledge'),
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				data: { bulk: true, action, ids: selectedIds },
-			} );
+			});
 			await fetchTotalRows();
-			requestData( pagination.pageSize, pagination.pageIndex + 1 );
-			setRowSelection( {} );
-		} catch ( err ) {
-			setError( __( 'Failed to perform bulk action', 'multivendorx' ) );
+			requestData(pagination.pageSize, pagination.pageIndex + 1);
+			setRowSelection({});
+		} catch (err) {
+			setError(__('Failed to perform bulk action', 'multivendorx'));
 		}
 	};
 
 	// Open edit modal
-	const handleEdit = async ( id: number ) => {
+	const handleEdit = async (id: number) => {
 		try {
 			const response = await axios.get(
-				getApiLink( appLocalizer, `knowledge/${ id }` ),
+				getApiLink(appLocalizer, `knowledge/${id}`),
 				{
 					headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				}
 			);
-			if ( response.data ) {
-				setFormData( {
+			if (response.data) {
+				setFormData({
 					title: response.data.title || '',
 					content: response.data.content || '',
 					status: response.data.status || 'draft',
-				} );
-				setEditId( id );
-				setAddEntry( true );
+				});
+				setEditId(id);
+				setAddEntry(true);
 			}
 		} catch {
-			setError( __( 'Failed to load entry', 'multivendorx' ) );
+			setError(__('Failed to load entry', 'multivendorx'));
 		}
 	};
 
 	// Submit form
-	const handleSubmit = async ( status: 'publish' | 'pending' | 'draft' ) => {
-		if ( submitting ) return;
-		if ( ! validateForm() ) {
+	const handleSubmit = async (status: 'publish' | 'pending' | 'draft') => {
+		if (submitting) return;
+		if (!validateForm()) {
 			return; // Stop submission if errors exist
 		}
-		setSubmitting( true );
+		setSubmitting(true);
 
 		try {
 			const endpoint = editId
-				? getApiLink( appLocalizer, `knowledge/${ editId }` )
-				: getApiLink( appLocalizer, 'knowledge' );
+				? getApiLink(appLocalizer, `knowledge/${editId}`)
+				: getApiLink(appLocalizer, 'knowledge');
 
 			const method = editId ? 'PUT' : 'POST';
 			const payload = { ...formData, status };
 
-			const response = await axios( {
+			const response = await axios({
 				method,
 				url: endpoint,
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				data: payload,
-			} );
+			});
 
-			if ( response.data.success ) {
+			if (response.data.success) {
 				handleCloseForm();
 				await fetchTotalRows();
-				requestData( pagination.pageSize, pagination.pageIndex + 1 );
+				requestData(pagination.pageSize, pagination.pageIndex + 1);
 			} else {
-				setError( __( 'Failed to save entry', 'multivendorx' ) );
+				setError(__('Failed to save entry', 'multivendorx'));
 			}
 		} catch {
-			setError( __( 'Failed to save entry', 'multivendorx' ) );
+			setError(__('Failed to save entry', 'multivendorx'));
 		} finally {
-			setSubmitting( false );
+			setSubmitting(false);
 		}
 	};
 
 	const fetchTotalRows = async () => {
 		try {
 			const response = await axios.get(
-				getApiLink( appLocalizer, 'knowledge' ),
+				getApiLink(appLocalizer, 'knowledge'),
 				{
 					headers: { 'X-WP-Nonce': appLocalizer.nonce },
 					params: { count: true },
 				}
 			);
 			const total = response.data || 0;
-			setTotalRows( total );
-			setPageCount( Math.ceil( total / pagination.pageSize ) );
+			setTotalRows(total);
+			setPageCount(Math.ceil(total / pagination.pageSize));
 		} catch {
-			setError( __( 'Failed to load total rows', 'multivendorx' ) );
+			setError(__('Failed to load total rows', 'multivendorx'));
 		}
 	};
 
 	// Fetch total rows on mount
-	useEffect( () => {
+	useEffect(() => {
 		fetchTotalRows();
-	}, [] );
+	}, []);
 
-	useEffect( () => {
+	useEffect(() => {
 		const currentPage = pagination.pageIndex + 1;
 		const rowsPerPage = pagination.pageSize;
-		requestData( rowsPerPage, currentPage );
-		setPageCount( Math.ceil( totalRows / rowsPerPage ) );
-	}, [ pagination ] );
+		requestData(rowsPerPage, currentPage);
+		setPageCount(Math.ceil(totalRows / rowsPerPage));
+	}, [pagination]);
 
 	// Fetch data from backend.
 	function requestData(
@@ -246,13 +244,13 @@ export const KnowledgeBase: React.FC = () => {
 		currentPage = 1,
 		typeCount = '',
 		searchField = '',
-		startDate = new Date( 0 ),
+		startDate = new Date(0),
 		endDate = new Date()
 	) {
-		setData( null );
-		axios( {
+		setData(null);
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'knowledge' ),
+			url: getApiLink(appLocalizer, 'knowledge'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				page: currentPage,
@@ -262,9 +260,9 @@ export const KnowledgeBase: React.FC = () => {
 				endDate,
 				searchField,
 			},
-		} )
-			.then( ( response ) => {
-				setData( response.data.items || [] );
+		})
+			.then((response) => {
+				setData(response.data.items || []);
 
 				const statuses = [
 					{ key: 'all', name: 'All', count: response.data.all || 0 },
@@ -286,14 +284,12 @@ export const KnowledgeBase: React.FC = () => {
 				];
 
 				// Only keep count > 0
-				setAnnouncementStatus(
-					statuses.filter( ( s ) => s.count > 0 )
-				);
-			} )
-			.catch( () => {
-				setError( __( 'Failed to load stores', 'multivendorx' ) );
-				setData( [] );
-			} );
+				setAnnouncementStatus(statuses.filter((s) => s.count > 0));
+			})
+			.catch(() => {
+				setError(__('Failed to load stores', 'multivendorx'));
+				setData([]);
+			});
 	}
 
 	// Handle pagination and filter changes
@@ -302,7 +298,7 @@ export const KnowledgeBase: React.FC = () => {
 		currentPage: number,
 		filterData: FilterData
 	) => {
-		setData( null );
+		setData(null);
 		requestData(
 			rowsPerPage,
 			currentPage,
@@ -316,63 +312,63 @@ export const KnowledgeBase: React.FC = () => {
 	const realtimeFilter: RealtimeFilter[] = [
 		{
 			name: 'date',
-			render: ( updateFilter ) => (
+			render: (updateFilter) => (
 				<div className="right">
 					<MultiCalendarInput
 						wrapperClass=""
 						inputClass=""
-						onChange={ ( range: any ) => {
-							updateFilter( 'date', {
+						onChange={(range: any) => {
+							updateFilter('date', {
 								start_date: range.startDate,
 								end_date: range.endDate,
-							} );
-						} }
+							});
+						}}
 					/>
 				</div>
 			),
 		},
 	];
 
-	const truncateText = ( text: string, maxLength: number ) => {
-		if ( ! text ) return '-';
+	const truncateText = (text: string, maxLength: number) => {
+		if (!text) return '-';
 		return text.length > maxLength
-			? text.slice( 0, maxLength ) + '...'
+			? text.slice(0, maxLength) + '...'
 			: text;
 	};
 	// Columns
-	const columns: ColumnDef< KBRow >[] = [
+	const columns: ColumnDef<KBRow>[] = [
 		{
 			id: 'select',
-			header: ( { table } ) => (
+			header: ({ table }) => (
 				<input
 					type="checkbox"
-					checked={ table.getIsAllRowsSelected() }
-					onChange={ table.getToggleAllRowsSelectedHandler() }
+					checked={table.getIsAllRowsSelected()}
+					onChange={table.getToggleAllRowsSelectedHandler()}
 				/>
 			),
-			cell: ( { row } ) => (
+			cell: ({ row }) => (
 				<input
 					type="checkbox"
-					checked={ row.getIsSelected() }
-					onChange={ row.getToggleSelectedHandler() }
+					checked={row.getIsSelected()}
+					onChange={row.getToggleSelectedHandler()}
 				/>
 			),
 		},
 		{
-			header: __( 'Name your article', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.title || '' }>
-					{ truncateText( row.original.title || '', 30 ) }{ ' ' }
-					{ /* truncate to 30 chars */ }
+			header: __('Name your article', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.title || ''}>
+					{truncateText(row.original.title || '', 30)}{' '}
+					{/* truncate to 30 chars */}
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'Write your explanation or tutorial', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.content || '' }>
-					{ truncateText( row.original.content || '', 50 ) }{ ' ' }
-					{ /* truncate to 50 chars */ }
+			header: __('Write your explanation or tutorial', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.content || ''}>
+					{truncateText(row.original.content || '', 50)}{' '}
+					{/* truncate to 50 chars */}
 				</TableCell>
 			),
 		},
@@ -380,57 +376,52 @@ export const KnowledgeBase: React.FC = () => {
 			id: 'date',
 			accessorKey: 'date',
 			enableSorting: true,
-			header: __( 'Date', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Date', 'multivendorx'),
+			cell: ({ row }) => {
 				const rawDate = row.original.date;
 				let formattedDate = '-';
-				if ( rawDate ) {
-					const dateObj = new Date( rawDate );
-					formattedDate = new Intl.DateTimeFormat( 'en-US', {
+				if (rawDate) {
+					const dateObj = new Date(rawDate);
+					formattedDate = new Intl.DateTimeFormat('en-US', {
 						month: 'short',
 						day: 'numeric',
 						year: 'numeric',
-					} ).format( dateObj );
+					}).format(dateObj);
 				}
 				return (
-					<TableCell title={ formattedDate }>
-						{ formattedDate }
-					</TableCell>
+					<TableCell title={formattedDate}>{formattedDate}</TableCell>
 				);
 			},
 		},
 		{
 			id: 'status',
-			header: __( 'Status', 'multivendorx' ),
-			cell: ( { row } ) => {
-				return (
-					<TableCell type="status" status={ row.original.status } />
-				);
+			header: __('Status', 'multivendorx'),
+			cell: ({ row }) => {
+				return <TableCell type="status" status={row.original.status} />;
 			},
 		},
 		{
 			id: 'action',
-			header: __( 'Action', 'multivendorx' ),
-			cell: ( { row } ) => (
+			header: __('Action', 'multivendorx'),
+			cell: ({ row }) => (
 				<TableCell
 					type="action-dropdown"
-					rowData={ row.original }
-					header={ {
+					rowData={row.original}
+					header={{
 						actions: [
 							{
-								label: __( 'Edit', 'multivendorx' ),
+								label: __('Edit', 'multivendorx'),
 								icon: 'adminlib-edit',
-								onClick: ( rowData ) =>
-									handleEdit( rowData.id ),
+								onClick: (rowData) => handleEdit(rowData.id),
 								hover: true,
 							},
 							{
-								label: __( 'Delete', 'multivendorx' ),
+								label: __('Delete', 'multivendorx'),
 								icon: 'adminlib-delete',
-								onClick: async ( rowData ) => {
-									if ( ! rowData.id ) return;
+								onClick: async (rowData) => {
+									if (!rowData.id) return;
 									if (
-										! confirm(
+										!confirm(
 											__(
 												'Are you sure you want to delete this entry?',
 												'multivendorx'
@@ -440,17 +431,17 @@ export const KnowledgeBase: React.FC = () => {
 										return;
 
 									try {
-										await axios( {
+										await axios({
 											method: 'DELETE',
 											url: getApiLink(
 												appLocalizer,
-												`knowledge/${ rowData.id }`
+												`knowledge/${rowData.id}`
 											),
 											headers: {
 												'X-WP-Nonce':
 													appLocalizer.nonce,
 											},
-										} );
+										});
 										await fetchTotalRows();
 										requestData(
 											pagination.pageSize,
@@ -468,7 +459,7 @@ export const KnowledgeBase: React.FC = () => {
 								hover: true,
 							},
 						],
-					} }
+					}}
 				/>
 			),
 		},
@@ -477,17 +468,17 @@ export const KnowledgeBase: React.FC = () => {
 	const searchFilter: RealtimeFilter[] = [
 		{
 			name: 'searchField',
-			render: ( updateFilter, filterValue ) => (
+			render: (updateFilter, filterValue) => (
 				<>
 					<div className="search-section">
 						<input
 							name="searchField"
 							type="text"
-							placeholder={ __( 'Search', 'multivendorx' ) }
-							onChange={ ( e ) => {
-								updateFilter( e.target.name, e.target.value );
-							} }
-							value={ filterValue || '' }
+							placeholder={__('Search', 'multivendorx')}
+							onChange={(e) => {
+								updateFilter(e.target.name, e.target.value);
+							}}
+							value={filterValue || ''}
 						/>
 						<i className="adminlib-search"></i>
 					</div>
@@ -501,19 +492,13 @@ export const KnowledgeBase: React.FC = () => {
 			<select
 				name="action"
 				className="basic-select"
-				ref={ bulkSelectRef }
-				onChange={ handleBulkAction }
+				ref={bulkSelectRef}
+				onChange={handleBulkAction}
 			>
-				<option value="">{ __( 'Bulk actions' ) }</option>
-				<option value="publish">
-					{ __( 'Publish', 'multivendorx' ) }
-				</option>
-				<option value="pending">
-					{ __( 'Pending', 'multivendorx' ) }
-				</option>
-				<option value="delete">
-					{ __( 'Delete', 'multivendorx' ) }
-				</option>
+				<option value="">{__('Bulk actions')}</option>
+				<option value="publish">{__('Publish', 'multivendorx')}</option>
+				<option value="pending">{__('Pending', 'multivendorx')}</option>
+				<option value="delete">{__('Delete', 'multivendorx')}</option>
 			</select>
 		</div>
 	);
@@ -522,50 +507,47 @@ export const KnowledgeBase: React.FC = () => {
 		<>
 			<AdminBreadcrumbs
 				activeTabIcon="adminlib-book"
-				tabTitle={ __( 'Knowledge Base', 'multivendorx' ) }
-				description={ __(
+				tabTitle={__('Knowledge Base', 'multivendorx')}
+				description={__(
 					'Build your knowledge base: add new guides or manage existing ones in one place.',
 					'multivendorx'
-				) }
-				buttons={ [
+				)}
+				buttons={[
 					<div
 						className="admin-btn btn-purple-bg"
-						onClick={ () => {
-							setValidationErrors( {} );
-							setAddEntry( true );
-						} }
+						onClick={() => {
+							setValidationErrors({});
+							setAddEntry(true);
+						}}
 					>
 						<i className="adminlib-plus-circle"></i>
-						{ __( 'Add New', 'multivendorx' ) }
+						{__('Add New', 'multivendorx')}
 					</div>,
-				] }
+				]}
 			/>
 
-			{ addEntry && (
+			{addEntry && (
 				<CommonPopup
-					open={ addEntry }
-					onClose={ handleCloseForm }
+					open={addEntry}
+					onClose={handleCloseForm}
 					width="31.25rem"
 					height="80%"
 					header={
 						<>
 							<div className="title">
 								<i className="adminlib-book"></i>
-								{ editId
-									? __( 'Edit Knowledgebase', 'multivendorx' )
-									: __(
-											'Add Knowledgebase',
-											'multivendorx'
-									  ) }
+								{editId
+									? __('Edit Knowledgebase', 'multivendorx')
+									: __('Add Knowledgebase', 'multivendorx')}
 							</div>
 							<p>
-								{ __(
+								{__(
 									'Write and publish a new knowledge base article to help stores navigate their dashboard.',
 									'multivendorx'
-								) }
+								)}
 							</p>
 							<i
-								onClick={ handleCloseForm }
+								onClick={handleCloseForm}
 								className="icon adminlib-close"
 							></i>
 						</>
@@ -573,22 +555,22 @@ export const KnowledgeBase: React.FC = () => {
 					footer={
 						<>
 							<div
-								onClick={ handleCloseForm }
+								onClick={handleCloseForm}
 								className="admin-btn btn-red"
 							>
-								{ __( 'Cancel', 'multivendorx' ) }
+								{__('Cancel', 'multivendorx')}
 							</div>
 							<button
 								type="button"
-								onClick={ () =>
-									handleSubmit( formData.status || 'draft' )
+								onClick={() =>
+									handleSubmit(formData.status || 'draft')
 								}
 								className="admin-btn btn-purple"
-								disabled={ submitting }
+								disabled={submitting}
 							>
-								{ submitting
-									? __( 'Saving...', 'multivendorx' )
-									: __( 'Save', 'multivendorx' ) }
+								{submitting
+									? __('Saving...', 'multivendorx')
+									: __('Save', 'multivendorx')}
 							</button>
 						</>
 					}
@@ -597,54 +579,51 @@ export const KnowledgeBase: React.FC = () => {
 						<div className="form-group-wrapper">
 							<div className="form-group">
 								<label htmlFor="title">
-									{ __( 'Title', 'multivendorx' ) }
+									{__('Title', 'multivendorx')}
 								</label>
 								<BasicInput
 									type="text"
 									name="title"
-									value={ formData.title }
-									onChange={ handleChange }
+									value={formData.title}
+									onChange={handleChange}
 								/>
-								{ validationErrors.title && (
+								{validationErrors.title && (
 									<p className="invalid-massage">
-										{ validationErrors.title }
+										{validationErrors.title}
 									</p>
-								) }
+								)}
 							</div>
 							<div className="form-group">
 								<label htmlFor="content">
-									{ __( 'Content', 'multivendorx' ) }
+									{__('Content', 'multivendorx')}
 								</label>
 								<TextArea
 									name="content"
 									inputClass="textarea-input"
-									value={ formData.content }
-									onChange={ handleChange }
-									usePlainText={ false }
+									value={formData.content}
+									onChange={handleChange}
+									usePlainText={false}
 									tinymceApiKey={
 										appLocalizer.settings_databases_value[
 											'marketplace'
-										][ 'tinymce_api_section' ] ?? ''
+										]['tinymce_api_section'] ?? ''
 									}
 								/>
-								{ validationErrors.content && (
+								{validationErrors.content && (
 									<p className="invalid-massage">
-										{ validationErrors.content }
+										{validationErrors.content}
 									</p>
-								) }
+								)}
 							</div>
 							<div className="form-group">
 								<label htmlFor="status">
-									{ __( 'Status', 'multivendorx' ) }
+									{__('Status', 'multivendorx')}
 								</label>
 								<ToggleSetting
-									value={ formData.status }
-									options={ [
+									value={formData.status}
+									options={[
 										{
-											label: __(
-												'Draft',
-												'multivendorx'
-											),
+											label: __('Draft', 'multivendorx'),
 											value: 'draft',
 										},
 										{
@@ -661,41 +640,39 @@ export const KnowledgeBase: React.FC = () => {
 											),
 											value: 'publish',
 										},
-									] }
-									onChange={ ( value ) =>
-										setFormData( ( prev ) => ( {
+									]}
+									onChange={(value) =>
+										setFormData((prev) => ({
 											...prev,
 											status: value,
-										} ) )
+										}))
 									}
 								/>
 							</div>
 						</div>
 					</div>
 				</CommonPopup>
-			) }
+			)}
 			<div className="general-wrapper">
 				<div className="admin-table-wrapper">
 					<Table
-						data={ data }
+						data={data}
 						columns={
-							columns as ColumnDef< Record< string, any >, any >[]
+							columns as ColumnDef<Record<string, any>, any>[]
 						}
-						rowSelection={ rowSelection }
-						onRowSelectionChange={ setRowSelection }
-						defaultRowsPerPage={ 10 }
-						pageCount={ pageCount }
-						pagination={ pagination }
-						onPaginationChange={ setPagination }
-						handlePagination={ requestApiForData }
-						perPageOption={ [ 10, 25, 50 ] }
-						typeCounts={
-							announcementStatus as AnnouncementStatus[]
-						}
-						bulkActionComp={ () => <BulkAction /> }
-						totalCounts={ totalRows }
-						realtimeFilter={ realtimeFilter }
-						searchFilter={ searchFilter }
+						rowSelection={rowSelection}
+						onRowSelectionChange={setRowSelection}
+						defaultRowsPerPage={10}
+						pageCount={pageCount}
+						pagination={pagination}
+						onPaginationChange={setPagination}
+						handlePagination={requestApiForData}
+						perPageOption={[10, 25, 50]}
+						typeCounts={announcementStatus as AnnouncementStatus[]}
+						bulkActionComp={() => <BulkAction />}
+						totalCounts={totalRows}
+						realtimeFilter={realtimeFilter}
+						searchFilter={searchFilter}
 					/>
 				</div>
 			</div>

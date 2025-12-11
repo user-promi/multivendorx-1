@@ -1,6 +1,6 @@
 import { __ } from '@wordpress/i18n';
 
-const Financial = ( { id }: { id: string | null } ) => {
+const Financial = ({ id }: { id: string | null }) => {
 	return (
 		<>
 			<div className="container-wrapper">
@@ -9,7 +9,7 @@ const Financial = ( { id }: { id: string | null } ) => {
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{ __( 'Recent Payouts', 'multivendorx' ) }
+									{__('Recent Payouts', 'multivendorx')}
 								</div>
 							</div>
 						</div>
@@ -27,7 +27,7 @@ const Financial = ( { id }: { id: string | null } ) => {
 								</div>
 								<div className="right-details">
 									<div className="admin-badge green">
-										{ __( 'Completed', 'multivendorx' ) }
+										{__('Completed', 'multivendorx')}
 									</div>
 								</div>
 							</div>
@@ -44,7 +44,7 @@ const Financial = ( { id }: { id: string | null } ) => {
 								</div>
 								<div className="right-details">
 									<div className="admin-badge green">
-										{ __( 'Completed', 'multivendorx' ) }
+										{__('Completed', 'multivendorx')}
 									</div>
 								</div>
 							</div>
@@ -61,7 +61,7 @@ const Financial = ( { id }: { id: string | null } ) => {
 								</div>
 								<div className="right-details">
 									<div className="admin-badge green">
-										{ __( 'Completed', 'multivendorx' ) }
+										{__('Completed', 'multivendorx')}
 									</div>
 								</div>
 							</div>

@@ -6,7 +6,7 @@ import template3 from '../../../assets/images/template/store/template3.jpg';
 export default {
 	id: 'store-invoice',
 	priority: 6,
-	name: __( 'Invoices', 'mvx-pro' ),
+	name: __('Invoices', 'mvx-pro'),
 	desc: __(
 		'Set up when and how invoices are generated in your marketplace.',
 		'mvx-pro'
@@ -18,7 +18,7 @@ export default {
 			key: 'mvx_tinymce_api_section',
 			type: 'number',
 			classes: 'vertical w-50',
-			label: __( 'Invoice number format', 'multivendorx' ),
+			label: __('Invoice number format', 'multivendorx'),
 			placeholder: 'Invoice number format',
 			moduleEnabled: 'invoice',
 			proSetting: true,
@@ -27,7 +27,7 @@ export default {
 			key: 'mvx_tinymce_api_section',
 			type: 'number',
 			classes: 'vertical w-50',
-			label: __( 'Starting invoice number', 'multivendorx' ),
+			label: __('Starting invoice number', 'multivendorx'),
 			placeholder: 'Starting invoice number',
 			moduleEnabled: 'invoice',
 			proSetting: true,
@@ -35,7 +35,7 @@ export default {
 		{
 			key: 'commission_type',
 			type: 'setting-toggle',
-			label: __( 'Invoice PDF page size', 'multivendorx' ),
+			label: __('Invoice PDF page size', 'multivendorx'),
 			classes: 'vertical w-50',
 			desc: __(
 				'Choose the page size for generated invoice PDFs',
@@ -45,17 +45,17 @@ export default {
 			options: [
 				{
 					key: 'per_transaction',
-					label: __( 'A4 (210 × 297 mm)', 'multivendorx' ),
+					label: __('A4 (210 × 297 mm)', 'multivendorx'),
 					value: 'per_transaction',
 				},
 				{
 					key: 'per_unit',
-					label: __( 'Letter (8.5 × 11 in)', 'multivendorx' ),
+					label: __('Letter (8.5 × 11 in)', 'multivendorx'),
 					value: 'per_unit',
 				},
 				{
 					key: 'per_store',
-					label: __( 'Legal (8.5 × 14 in)', 'multivendorx' ),
+					label: __('Legal (8.5 × 14 in)', 'multivendorx'),
 					value: 'per_store',
 				},
 			],
@@ -64,7 +64,7 @@ export default {
 		{
 			key: 'commission_type',
 			type: 'setting-toggle',
-			label: __( 'PDF layout orientation', 'multivendorx' ),
+			label: __('PDF layout orientation', 'multivendorx'),
 			classes: 'vertical w-50',
 			desc: __(
 				'Choose whether invoices are generated in portrait or landscape mode',
@@ -74,12 +74,12 @@ export default {
 			options: [
 				{
 					key: 'portrait',
-					label: __( 'Portrait', 'multivendorx' ),
+					label: __('Portrait', 'multivendorx'),
 					value: 'portrait',
 				},
 				{
 					key: 'landscape',
-					label: __( 'Landscape', 'multivendorx' ),
+					label: __('Landscape', 'multivendorx'),
 					value: 'landscape',
 				},
 			],
@@ -89,7 +89,7 @@ export default {
 			key: 'type_options',
 			type: 'checkbox',
 			classes: 'vertical',
-			label: __( 'Automatic email delivery', 'multivendorx' ),
+			label: __('Automatic email delivery', 'multivendorx'),
 			class: 'mvx-toggle-checkbox',
 			desc: __(
 				'Choose how invoices are automatically sent to customers and stores',
@@ -107,7 +107,7 @@ export default {
 				},
 				{
 					key: 'Send Separate Invoice Email',
-					label: __( 'Send separate invoice email', 'multivendorx' ),
+					label: __('Send separate invoice email', 'multivendorx'),
 					value: 'downloadable',
 				},
 				{
@@ -120,7 +120,7 @@ export default {
 				},
 				{
 					key: 'Generate Packing Slips',
-					label: __( 'Generate packing slips', 'multivendorx' ),
+					label: __('Generate packing slips', 'multivendorx'),
 					value: 'downloadable',
 				},
 			],
@@ -134,13 +134,13 @@ export default {
 				'Add legal details and tax information to invoices',
 				'multivendorx'
 			),
-			hint: __( 'Legal and tax information', 'multivendorx' ),
+			hint: __('Legal and tax information', 'multivendorx'),
 		},
 		{
 			key: 'mvx_tinymce_api_section',
 			type: 'number',
 			classes: 'vertical w-50',
-			label: __( 'GST number', 'multivendorx' ),
+			label: __('GST number', 'multivendorx'),
 			placeholder: 'Enter GST registration number',
 			moduleEnabled: 'invoice',
 			proSetting: true,
@@ -149,7 +149,7 @@ export default {
 			key: 'mvx_tinymce_api_section',
 			type: 'number',
 			classes: 'vertical w-50',
-			label: __( 'Tax ID number', 'multivendorx' ),
+			label: __('Tax ID number', 'multivendorx'),
 			placeholder: 'Enter tax ID number',
 			moduleEnabled: 'invoice',
 			proSetting: true,
@@ -161,14 +161,14 @@ export default {
 				'Customize invoice design with your branding and business details',
 				'multivendorx'
 			),
-			hint: __( 'Branding and information', 'multivendorx' ),
+			hint: __('Branding and information', 'multivendorx'),
 		},
 		{
 			key: 'company_logo',
 			classes: 'vertical',
 			type: 'file',
-			label: __( 'Company logo', 'mvx-pro' ),
-			desc: __( 'Upload your company logo for invoices', 'mvx-pro' ),
+			label: __('Company logo', 'mvx-pro'),
+			desc: __('Upload your company logo for invoices', 'mvx-pro'),
 			size: 'small',
 			proSetting: true,
 			moduleEnabled: 'invoice',

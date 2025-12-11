@@ -20,7 +20,7 @@ import {
 export interface RealtimeFilter {
 	name: string;
 	render: (
-		updateFilter: ( key: string, value: any ) => void,
+		updateFilter: (key: string, value: any) => void,
 		filterValue: any
 	) => React.ReactNode;
 }
@@ -71,64 +71,58 @@ type FilterData = {
 };
 
 const Qna: React.FC = () => {
-	const [ error, setError ] = useState< string >();
-	const [ selectedQna, setSelectedQna ] = useState< StoreQnaRow | null >(
-		null
-	);
-	const [ answer, setAnswer ] = useState( '' );
-	const [ qna, setQna ] = useState( '' );
-	const [ saving, setSaving ] = useState( false );
-	const [ data, setData ] = useState< QnaRow[] | null >( null );
-	const [ rowSelection, setRowSelection ] = useState< RowSelectionState >(
-		{}
-	);
-	const [ totalRows, setTotalRows ] = useState< number >( 0 );
-	const [ status, setStatus ] = useState< Status[] | null >( null );
-	const [ store, setStore ] = useState< any[] | null >( null );
+	const [error, setError] = useState<string>();
+	const [selectedQna, setSelectedQna] = useState<StoreQnaRow | null>(null);
+	const [answer, setAnswer] = useState('');
+	const [qna, setQna] = useState('');
+	const [saving, setSaving] = useState(false);
+	const [data, setData] = useState<QnaRow[] | null>(null);
+	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+	const [totalRows, setTotalRows] = useState<number>(0);
+	const [status, setStatus] = useState<Status[] | null>(null);
+	const [store, setStore] = useState<any[] | null>(null);
 
-	const [ pagination, setPagination ] = useState< PaginationState >( {
+	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
 		pageSize: 10,
-	} );
-	const [ pageCount, setPageCount ] = useState( 0 );
+	});
+	const [pageCount, setPageCount] = useState(0);
 
 	// Fetch total rows on mount
-	useEffect( () => {
-		axios( {
+	useEffect(() => {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'store' ),
+			url: getApiLink(appLocalizer, 'store'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		} )
-			.then( ( response ) => {
-				setStore( response.data.stores );
-			} )
-			.catch( () => {
-				setError( __( 'Failed to load stores', 'multivendorx' ) );
-				setStore( [] );
-			} );
-		axios( {
+		})
+			.then((response) => {
+				setStore(response.data.stores);
+			})
+			.catch(() => {
+				setError(__('Failed to load stores', 'multivendorx'));
+				setStore([]);
+			});
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'qna' ),
+			url: getApiLink(appLocalizer, 'qna'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: { count: true },
-		} )
-			.then( ( response ) => {
-				setTotalRows( response.data || 0 );
-				setPageCount(
-					Math.ceil( response.data / pagination.pageSize )
-				);
-			} )
-			.catch( () => {
-				setError( __( 'Failed to load total rows', 'multivendorx' ) );
-			} );
-	}, [] );
+		})
+			.then((response) => {
+				setTotalRows(response.data || 0);
+				setPageCount(Math.ceil(response.data / pagination.pageSize));
+			})
+			.catch(() => {
+				setError(__('Failed to load total rows', 'multivendorx'));
+			});
+	}, []);
 
-	useEffect( () => {
+	useEffect(() => {
 		const currentPage = pagination.pageIndex + 1;
 		const rowsPerPage = pagination.pageSize;
-		requestData( rowsPerPage, currentPage );
-		setPageCount( Math.ceil( totalRows / rowsPerPage ) );
-	}, [ pagination ] );
+		requestData(rowsPerPage, currentPage);
+		setPageCount(Math.ceil(totalRows / rowsPerPage));
+	}, [pagination]);
 
 	// Fetch data from backend.
 	function requestData(
@@ -139,13 +133,13 @@ const Qna: React.FC = () => {
 		searchField = '',
 		orderBy = '',
 		order = '',
-		startDate = new Date( 0 ),
+		startDate = new Date(0),
 		endDate = new Date()
 	) {
-		setData( null );
-		axios( {
+		setData(null);
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'qna' ),
+			url: getApiLink(appLocalizer, 'qna'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				page: currentPage,
@@ -158,9 +152,9 @@ const Qna: React.FC = () => {
 				startDate,
 				endDate,
 			},
-		} )
-			.then( ( response ) => {
-				setData( response.data.items || [] );
+		})
+			.then((response) => {
+				setData(response.data.items || []);
 				const statuses = [
 					{ key: 'all', name: 'All', count: response.data.all || 0 },
 					{
@@ -175,12 +169,12 @@ const Qna: React.FC = () => {
 					},
 				];
 
-				setStatus( statuses.filter( ( status ) => status.count > 0 ) );
-			} )
-			.catch( () => {
-				setError( __( 'Failed to load Q&A', 'multivendorx' ) );
-				setData( [] );
-			} );
+				setStatus(statuses.filter((status) => status.count > 0));
+			})
+			.catch(() => {
+				setError(__('Failed to load Q&A', 'multivendorx'));
+				setData([]);
+			});
 	}
 
 	// Handle pagination and filter changes
@@ -189,7 +183,7 @@ const Qna: React.FC = () => {
 		currentPage: number,
 		filterData: FilterData
 	) => {
-		setData( null );
+		setData(null);
 		requestData(
 			rowsPerPage,
 			currentPage,
@@ -205,11 +199,11 @@ const Qna: React.FC = () => {
 
 	// Save answer
 	const handleSaveAnswer = async () => {
-		if ( ! selectedQna ) return;
-		setSaving( true );
+		if (!selectedQna) return;
+		setSaving(true);
 		try {
 			await axios.put(
-				getApiLink( appLocalizer, `qna/${ selectedQna.id }` ),
+				getApiLink(appLocalizer, `qna/${selectedQna.id}`),
 				{
 					question_text: qna,
 					answer_text: answer,
@@ -220,94 +214,94 @@ const Qna: React.FC = () => {
 			);
 
 			// Update table data after save
-			setData( ( prev ) =>
-				prev.map( ( q ) =>
+			setData((prev) =>
+				prev.map((q) =>
 					q.id === selectedQna.id
 						? {
 								...q,
 								answer_text: answer,
 								question_visibility:
 									selectedQna.question_visibility || 'public',
-						  }
+							}
 						: q
 				)
 			);
-			requestData( pagination.pageSize, pagination.pageIndex + 1 );
-			setSelectedQna( null );
-			setAnswer( '' );
-		} catch ( err ) {
-			console.error( 'Failed to save answer:', err );
-			alert( 'Failed to save answer' );
+			requestData(pagination.pageSize, pagination.pageIndex + 1);
+			setSelectedQna(null);
+			setAnswer('');
+		} catch (err) {
+			console.error('Failed to save answer:', err);
+			alert('Failed to save answer');
 		} finally {
-			setSaving( false );
+			setSaving(false);
 		}
 	};
 
-	const columns: ColumnDef< QnaRow >[] = [
+	const columns: ColumnDef<QnaRow>[] = [
 		{
 			id: 'select',
-			header: ( { table } ) => (
+			header: ({ table }) => (
 				<input
 					type="checkbox"
-					checked={ table.getIsAllRowsSelected() }
-					onChange={ table.getToggleAllRowsSelectedHandler() }
+					checked={table.getIsAllRowsSelected()}
+					onChange={table.getToggleAllRowsSelectedHandler()}
 				/>
 			),
-			cell: ( { row } ) => (
+			cell: ({ row }) => (
 				<input
 					type="checkbox"
-					checked={ row.getIsSelected() }
-					onChange={ row.getToggleSelectedHandler() }
+					checked={row.getIsSelected()}
+					onChange={row.getToggleSelectedHandler()}
 				/>
 			),
 		},
 		{
 			id: 'product',
-			header: __( 'Product', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Product', 'multivendorx'),
+			cell: ({ row }) => {
 				const product = row.original;
 				const image = product.product_image;
 
 				const { store_id, store_name } = row.original;
-				const baseUrl = `${ window.location.origin }/wp-admin/admin.php?page=multivendorx#&tab=stores`;
+				const baseUrl = `${window.location.origin}/wp-admin/admin.php?page=multivendorx#&tab=stores`;
 				const storeLink = store_id
-					? `${ baseUrl }&edit/${ store_id }/&subtab=store-overview`
+					? `${baseUrl}&edit/${store_id}/&subtab=store-overview`
 					: '#';
 				return (
-					<TableCell title={ product.product_name || '' }>
+					<TableCell title={product.product_name || ''}>
 						<a
-							href={ product.product_link || '#' }
+							href={product.product_link || '#'}
 							target="_blank"
 							rel="noreferrer"
 							className="product-wrapper"
 						>
-							{ image ? (
+							{image ? (
 								<img
-									src={ image }
-									alt={ row.original.store_name }
+									src={image}
+									alt={row.original.store_name}
 								/>
 							) : (
 								<i className="item-icon adminlib-multi-product"></i>
-							) }
+							)}
 							<div className="details">
 								<span className="title">
-									{ product.product_name || '-' }
+									{product.product_name || '-'}
 								</span>
-								{ product.sku && (
+								{product.sku && (
 									<span>
-										<b>SKU:</b> { product.sku }
+										<b>SKU:</b> {product.sku}
 									</span>
-								) }
+								)}
 
-								{ store_id ? (
+								{store_id ? (
 									<>
 										<span className="des">
-											By { store_name || '-' }
+											By {store_name || '-'}
 										</span>
 									</>
 								) : (
 									store_name || '-'
-								) }
+								)}
 							</div>
 						</a>
 					</TableCell>
@@ -316,29 +310,27 @@ const Qna: React.FC = () => {
 		},
 
 		{
-			header: __( 'Question', 'multivendorx' ),
+			header: __('Question', 'multivendorx'),
 			id: 'question',
-			cell: ( { row } ) => {
+			cell: ({ row }) => {
 				const text = row.original.question_text ?? '-';
 				const displayText =
-					text.length > 50 ? text.slice( 0, 50 ) + '…' : text;
+					text.length > 50 ? text.slice(0, 50) + '…' : text;
 
 				const textAnswer = row.original.answer_text ?? '-';
 				const displayAnswer =
 					textAnswer.length > 50
-						? textAnswer.slice( 0, 50 ) + '…'
+						? textAnswer.slice(0, 50) + '…'
 						: textAnswer;
 				return (
-					<TableCell title={ text }>
+					<TableCell title={text}>
 						<div className="question-wrapper">
-							<div className="question">Q: { displayText }</div>
-							{ displayAnswer && (
-								<div className="answer">
-									A: { displayAnswer }
-								</div>
-							) }
+							<div className="question">Q: {displayText}</div>
+							{displayAnswer && (
+								<div className="answer">A: {displayAnswer}</div>
+							)}
 							<div className="des">
-								By: { row.original.author_name ?? '-' }
+								By: {row.original.author_name ?? '-'}
 							</div>
 						</div>
 					</TableCell>
@@ -347,67 +339,65 @@ const Qna: React.FC = () => {
 		},
 		{
 			id: 'question_date',
-			header: __( 'Date', 'multivendorx' ),
-			accessorFn: ( row ) =>
-				row.question_date ? new Date( row.question_date ).getTime() : 0, // numeric timestamp for sorting
+			header: __('Date', 'multivendorx'),
+			accessorFn: (row) =>
+				row.question_date ? new Date(row.question_date).getTime() : 0, // numeric timestamp for sorting
 			enableSorting: true,
-			cell: ( { row } ) => {
+			cell: ({ row }) => {
 				const rawDate = row.original.question_date;
 				const formattedDate = rawDate
-					? new Intl.DateTimeFormat( 'en-US', {
+					? new Intl.DateTimeFormat('en-US', {
 							month: 'short',
 							day: 'numeric',
 							year: 'numeric',
-					  } ).format( new Date( rawDate ) )
+						}).format(new Date(rawDate))
 					: '-';
 				return (
-					<TableCell title={ formattedDate }>
-						{ formattedDate }
-					</TableCell>
+					<TableCell title={formattedDate}>{formattedDate}</TableCell>
 				);
 			},
 		},
 		{
-			header: __( 'Votes', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ String( row.original.total_votes ) || '' }>
-					{ row.original.total_votes ?? 0 }
+			header: __('Votes', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={String(row.original.total_votes) || ''}>
+					{row.original.total_votes ?? 0}
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'Visibility', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Visibility', 'multivendorx'),
+			cell: ({ row }) => {
 				return (
 					<TableCell
 						type="status"
-						status={ row.original.question_visibility }
+						status={row.original.question_visibility}
 					/>
 				);
 			},
 		},
 		{
-			header: __( 'Action', 'multivendorx' ),
-			cell: ( { row } ) => (
+			header: __('Action', 'multivendorx'),
+			cell: ({ row }) => (
 				<TableCell
 					type="action-dropdown"
-					rowData={ row.original }
-					header={ {
+					rowData={row.original}
+					header={{
 						actions: [
 							{
-								label: __( 'Answer', 'multivendorx' ),
+								label: __('Answer', 'multivendorx'),
 								icon: 'adminlib-preview', // you can change the icon
-								onClick: ( rowData: any ) => {
-									setSelectedQna( rowData );
-									setQna( rowData.question_text );
-									setAnswer( rowData.answer_text || '' );
+								onClick: (rowData: any) => {
+									setSelectedQna(rowData);
+									setQna(rowData.question_text);
+									setAnswer(rowData.answer_text || '');
 								},
 								hover: true,
 							},
 							{
-								label: __( 'Delete', 'multivendorx' ),
+								label: __('Delete', 'multivendorx'),
 								icon: 'adminlib-delete',
-								onClick: ( rowData ) => {
+								onClick: (rowData) => {
 									if (
 										confirm(
 											__(
@@ -420,7 +410,7 @@ const Qna: React.FC = () => {
 											.delete(
 												getApiLink(
 													appLocalizer,
-													`qna/${ rowData.id }`
+													`qna/${rowData.id}`
 												),
 												{
 													headers: {
@@ -429,13 +419,13 @@ const Qna: React.FC = () => {
 													},
 												}
 											)
-											.then( () =>
+											.then(() =>
 												requestData(
 													pagination.pageSize,
 													pagination.pageIndex + 1
 												)
 											)
-											.catch( () =>
+											.catch(() =>
 												alert(
 													__(
 														'Failed to delete question',
@@ -448,7 +438,7 @@ const Qna: React.FC = () => {
 								hover: true,
 							},
 						],
-					} }
+					}}
 				/>
 			),
 		},
@@ -458,27 +448,27 @@ const Qna: React.FC = () => {
 		{
 			name: 'store',
 			render: (
-				updateFilter: ( key: string, value: string ) => void,
+				updateFilter: (key: string, value: string) => void,
 				filterValue: string | undefined
 			) => (
 				<div className="   group-field">
 					<select
 						name="store"
-						onChange={ ( e ) =>
-							updateFilter( e.target.name, e.target.value )
+						onChange={(e) =>
+							updateFilter(e.target.name, e.target.value)
 						}
-						value={ filterValue || '' }
+						value={filterValue || ''}
 						className="basic-select"
 					>
 						<option value="">
-							{ __( 'All Store', 'multivendorx' ) }
+							{__('All Store', 'multivendorx')}
 						</option>
-						{ store?.map( ( s: any ) => (
-							<option key={ s.id } value={ s.id }>
-								{ s.store_name.charAt( 0 ).toUpperCase() +
-									s.store_name.slice( 1 ) }
+						{store?.map((s: any) => (
+							<option key={s.id} value={s.id}>
+								{s.store_name.charAt(0).toUpperCase() +
+									s.store_name.slice(1)}
 							</option>
-						) ) }
+						))}
 					</select>
 				</div>
 			),
@@ -486,23 +476,23 @@ const Qna: React.FC = () => {
 		{
 			name: 'visibility',
 			render: (
-				updateFilter: ( key: string, value: string ) => void,
+				updateFilter: (key: string, value: string) => void,
 				filterValue: string | undefined
 			) => (
 				<div className="group-field">
 					<select
 						name="visibility"
-						onChange={ ( e ) =>
-							updateFilter( e.target.name, e.target.value )
+						onChange={(e) =>
+							updateFilter(e.target.name, e.target.value)
 						}
-						value={ filterValue || '' }
+						value={filterValue || ''}
 						className="basic-select"
 					>
 						<option value="public">
-							{ __( 'Public', 'multivendorx' ) }
+							{__('Public', 'multivendorx')}
 						</option>
 						<option value="private">
-							{ __( 'Private', 'multivendorx' ) }
+							{__('Private', 'multivendorx')}
 						</option>
 					</select>
 				</div>
@@ -510,16 +500,16 @@ const Qna: React.FC = () => {
 		},
 		{
 			name: 'date',
-			render: ( updateFilter ) => (
+			render: (updateFilter) => (
 				<div className="right">
 					<MultiCalendarInput
 						wrapperClass=""
 						inputClass=""
-						onChange={ ( range: any ) =>
-							updateFilter( 'date', {
+						onChange={(range: any) =>
+							updateFilter('date', {
 								start_date: range.startDate,
 								end_date: range.endDate,
-							} )
+							})
 						}
 					/>
 				</div>
@@ -530,16 +520,16 @@ const Qna: React.FC = () => {
 	const searchFilter: RealtimeFilter[] = [
 		{
 			name: 'searchField',
-			render: ( updateFilter, filterValue ) => (
+			render: (updateFilter, filterValue) => (
 				<div className="search-section">
 					<input
 						name="searchField"
 						type="text"
-						placeholder={ __( 'Search', 'multivendorx' ) }
-						onChange={ ( e ) => {
-							updateFilter( e.target.name, e.target.value );
-						} }
-						value={ filterValue || '' }
+						placeholder={__('Search', 'multivendorx')}
+						onChange={(e) => {
+							updateFilter(e.target.name, e.target.value);
+						}}
+						value={filterValue || ''}
 					/>
 					<i className="adminlib-search"></i>
 				</div>
@@ -550,42 +540,42 @@ const Qna: React.FC = () => {
 	return (
 		<>
 			<Table
-				data={ data }
-				columns={ columns as ColumnDef< Record< string, any >, any >[] }
-				rowSelection={ rowSelection }
-				onRowSelectionChange={ setRowSelection }
-				defaultRowsPerPage={ 10 }
-				pageCount={ pageCount }
-				pagination={ pagination }
-				onPaginationChange={ setPagination }
-				perPageOption={ [ 10, 25, 50 ] }
-				totalCounts={ totalRows }
-				realtimeFilter={ realtimeFilter }
-				handlePagination={ requestApiForData }
-				typeCounts={ status as Status[] }
-				searchFilter={ searchFilter }
+				data={data}
+				columns={columns as ColumnDef<Record<string, any>, any>[]}
+				rowSelection={rowSelection}
+				onRowSelectionChange={setRowSelection}
+				defaultRowsPerPage={10}
+				pageCount={pageCount}
+				pagination={pagination}
+				onPaginationChange={setPagination}
+				perPageOption={[10, 25, 50]}
+				totalCounts={totalRows}
+				realtimeFilter={realtimeFilter}
+				handlePagination={requestApiForData}
+				typeCounts={status as Status[]}
+				searchFilter={searchFilter}
 			/>
 
-			{ selectedQna && (
+			{selectedQna && (
 				<CommonPopup
-					open={ selectedQna }
-					onClose={ () => setSelectedQna( null ) }
+					open={selectedQna}
+					onClose={() => setSelectedQna(null)}
 					width="600px"
 					height="70%"
 					header={
 						<>
 							<div className="title">
 								<i className="adminlib-question"></i>
-								{ __( 'Answer Question', 'multivendorx' ) }
+								{__('Answer Question', 'multivendorx')}
 							</div>
 							<p>
-								{ __(
+								{__(
 									'Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.',
 									'multivendorx'
-								) }
+								)}
 							</p>
 							<i
-								onClick={ () => setSelectedQna( null ) }
+								onClick={() => setSelectedQna(null)}
 								className="icon adminlib-close"
 							></i>
 						</>
@@ -594,19 +584,19 @@ const Qna: React.FC = () => {
 						<>
 							<button
 								type="button"
-								onClick={ () => setSelectedQna( null ) }
+								onClick={() => setSelectedQna(null)}
 								className="admin-btn btn-red"
 							>
-								{ __( 'Cancel', 'multivendorx' ) }
+								{__('Cancel', 'multivendorx')}
 							</button>
 							<button
-								onClick={ handleSaveAnswer }
-								disabled={ saving }
+								onClick={handleSaveAnswer}
+								disabled={saving}
 								className="admin-btn btn-purple"
 							>
-								{ saving
-									? __( 'Saving...', 'multivendorx' )
-									: __( 'Save Answer', 'multivendorx' ) }
+								{saving
+									? __('Saving...', 'multivendorx')
+									: __('Save Answer', 'multivendorx')}
 							</button>
 						</>
 					}
@@ -615,16 +605,14 @@ const Qna: React.FC = () => {
 						<div className="form-group-wrapper">
 							<div className="form-group">
 								<label htmlFor="question">
-									{ __( 'Question', 'multivendorx' ) }
+									{__('Question', 'multivendorx')}
 								</label>
 								<BasicInput
 									name="phone"
-									value={ qna }
+									value={qna}
 									wrapperClass="setting-form-input"
 									descClass="settings-metabox-description"
-									onChange={ ( e ) =>
-										setQna( e.target.value )
-									}
+									onChange={(e) => setQna(e.target.value)}
 								/>
 							</div>
 						</div>
@@ -632,15 +620,13 @@ const Qna: React.FC = () => {
 						<div className="form-group-wrapper">
 							<div className="form-group">
 								<label htmlFor="ans">
-									{ __( 'Answer', 'multivendorx' ) }
+									{__('Answer', 'multivendorx')}
 								</label>
 								<TextArea
 									name="answer"
 									inputClass="textarea-input"
-									value={ answer }
-									onChange={ ( e ) =>
-										setAnswer( e.target.value )
-									}
+									value={answer}
+									onChange={(e) => setAnswer(e.target.value)}
 								/>
 							</div>
 						</div>
@@ -648,22 +634,19 @@ const Qna: React.FC = () => {
 						<div className="form-group-wrapper">
 							<div className="form-group">
 								<label htmlFor="visibility">
-									{ __(
+									{__(
 										'Decide whether this Q&A is visible to everyone or only to the store team.',
 										'multivendorx'
-									) }
+									)}
 								</label>
 								<ToggleSetting
 									wrapperClass="setting-form-input"
 									descClass="settings-metabox-description"
-									options={ [
+									options={[
 										{
 											key: 'public',
 											value: 'public',
-											label: __(
-												'Public',
-												'multivendorx'
-											),
+											label: __('Public', 'multivendorx'),
 										},
 										{
 											key: 'private',
@@ -673,19 +656,19 @@ const Qna: React.FC = () => {
 												'multivendorx'
 											),
 										},
-									] }
+									]}
 									value={
 										selectedQna.question_visibility ||
 										'public'
 									}
-									onChange={ ( value ) =>
-										setSelectedQna( ( prev ) =>
+									onChange={(value) =>
+										setSelectedQna((prev) =>
 											prev
 												? {
 														...prev,
 														question_visibility:
 															value,
-												  }
+													}
 												: prev
 										)
 									}
@@ -694,9 +677,9 @@ const Qna: React.FC = () => {
 						</div>
 					</div>
 
-					{ error && <p className="error-text">{ error }</p> }
+					{error && <p className="error-text">{error}</p>}
 				</CommonPopup>
-			) }
+			)}
 		</>
 	);
 };

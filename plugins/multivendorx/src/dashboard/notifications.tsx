@@ -4,53 +4,52 @@ import axios from 'axios';
 import { Skeleton } from '@mui/material';
 
 const Notifications = () => {
-	const [ notifications, setNotifications ] = useState< [] | null >( null );
+	const [notifications, setNotifications] = useState<[] | null>(null);
 
-	useEffect( () => {
-		axios( {
+	useEffect(() => {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'notifications' ),
+			url: getApiLink(appLocalizer, 'notifications'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				header: true,
 				store_id: appLocalizer.store_id,
 			},
-		} ).then( ( response ) => {
-			setNotifications( response.data || [] );
-		} );
-	}, [] );
+		}).then((response) => {
+			setNotifications(response.data || []);
+		});
+	}, []);
 
-	const dismissNotification = ( id: number ) => {
-		axios( {
+	const dismissNotification = (id: number) => {
+		axios({
 			method: 'POST',
-			url: getApiLink( appLocalizer, `notifications/${ id }` ),
+			url: getApiLink(appLocalizer, `notifications/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: { id, is_dismissed: true },
-		} ).then( () => {
-			setNotifications( ( prev ) => prev.filter( ( n ) => n.id !== id ) );
-		} );
+		}).then(() => {
+			setNotifications((prev) => prev.filter((n) => n.id !== id));
+		});
 	};
 
 	return (
 		<>
 			<div className="dropdown-menu notification">
 				<div className="title">
-					{ __( 'Notifications', 'multivendorx' ) }
-					{ notifications && notifications.length > 0 && (
+					{__('Notifications', 'multivendorx')}
+					{notifications && notifications.length > 0 && (
 						<span className="admin-badge green">
-							{ notifications.length }{ ' ' }
-							{ __( 'New', 'multivendorx' ) }
+							{notifications.length} {__('New', 'multivendorx')}
 						</span>
-					) }
+					)}
 				</div>
 				<div className="notification">
 					<ul>
-						{ notifications && notifications.length > 0 ? (
-							notifications.map( ( item, idx ) => (
-								<li key={ idx }>
+						{notifications && notifications.length > 0 ? (
+							notifications.map((item, idx) => (
+								<li key={idx}>
 									<div className="item">
 										<div
-											className={ `icon admin-badge green` }
+											className={`icon admin-badge green`}
 										>
 											<i
 												className={
@@ -61,13 +60,13 @@ const Notifications = () => {
 										</div>
 										<div className="details">
 											<span className="heading">
-												{ item.title }
+												{item.title}
 											</span>
 											<span className="message">
-												{ item.message }
+												{item.message}
 											</span>
 											<span className="time">
-												{ item.time }
+												{item.time}
 											</span>
 										</div>
 
@@ -80,52 +79,52 @@ const Notifications = () => {
 										</span>
 									</div>
 								</li>
-							) )
+							))
 						) : (
 							<li>
 								<div className="item">
 									<Skeleton
 										variant="text"
-										width={ 400 }
-										height={ 70 }
+										width={400}
+										height={70}
 									/>
 								</div>
 								<div className="item">
 									<Skeleton
 										variant="text"
-										width={ 400 }
-										height={ 70 }
+										width={400}
+										height={70}
 									/>
 								</div>
 								<div className="item">
 									<Skeleton
 										variant="text"
-										width={ 400 }
-										height={ 70 }
+										width={400}
+										height={70}
 									/>
 								</div>
 								<div className="item">
 									<Skeleton
 										variant="text"
-										width={ 400 }
-										height={ 70 }
+										width={400}
+										height={70}
 									/>
 								</div>
 							</li>
-						) }
+						)}
 					</ul>
 				</div>
 				<div className="footer">
 					<a
 						href={
 							appLocalizer.permalink_structure
-								? `/${ appLocalizer.dashboard_slug }/view-notifications`
-								: `/?page_id=${ appLocalizer.dashboard_page_id }&segment=view-notifications`
+								? `/${appLocalizer.dashboard_slug}/view-notifications`
+								: `/?page_id=${appLocalizer.dashboard_page_id}&segment=view-notifications`
 						}
 						className="admin-btn btn-purple"
 					>
-						<i className="adminlib-eye"></i>{ ' ' }
-						{ __( 'View all notifications', 'multivendorx' ) }
+						<i className="adminlib-eye"></i>{' '}
+						{__('View all notifications', 'multivendorx')}
 					</a>
 				</div>
 			</div>

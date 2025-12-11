@@ -27,33 +27,27 @@ interface PaymentProvider {
 }
 
 interface StorePaymentConfig {
-	[ key: string ]: PaymentProvider;
+	[key: string]: PaymentProvider;
 }
 
 const Withdrawl: React.FC = () => {
-	const [ formData, setFormData ] = useState< { [ key: string ]: string } >(
-		{}
-	);
-	const containerRef = useRef< HTMLDivElement >( null );
+	const [formData, setFormData] = useState<{ [key: string]: string }>({});
+	const containerRef = useRef<HTMLDivElement>(null);
 
 	const storePayment: StorePaymentConfig =
-		( appLocalizer.store_payment_settings as StorePaymentConfig ) || {};
+		(appLocalizer.store_payment_settings as StorePaymentConfig) || {};
 
 	const filteredStorePayment = Object.fromEntries(
-		Object.entries( storePayment ).filter(
-			( [ _, value ] ) => value !== null
-		)
+		Object.entries(storePayment).filter(([_, value]) => value !== null)
 	);
 
-	const paymentOptions = Object.values( filteredStorePayment ).map(
-		( p ) => ( {
-			key: p.id,
-			value: p.id,
-			label: p.label,
-		} )
-	);
+	const paymentOptions = Object.values(filteredStorePayment).map((p) => ({
+		key: p.id,
+		value: p.id,
+		label: p.label,
+	}));
 
-	const selectedProvider = storePayment[ formData.payment_method ];
+	const selectedProvider = storePayment[formData.payment_method];
 
 	// useEffect(() => {
 	// 	if (successMsg) {
@@ -62,106 +56,103 @@ const Withdrawl: React.FC = () => {
 	// 	}
 	// }, [successMsg]);
 
-	useEffect( () => {
-		if ( ! appLocalizer.store_id ) return;
+	useEffect(() => {
+		if (!appLocalizer.store_id) return;
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, `store/${ appLocalizer.store_id }` ),
+			url: getApiLink(appLocalizer, `store/${appLocalizer.store_id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		} ).then( ( res ) => {
+		}).then((res) => {
 			const data = res.data || {};
-			setFormData( ( prev ) => ( { ...prev, ...data } ) );
-		} );
-	}, [ appLocalizer.store_id ] );
+			setFormData((prev) => ({ ...prev, ...data }));
+		});
+	}, [appLocalizer.store_id]);
 
-	const [ stripeConnectInstance, setStripeConnectInstance ] =
-		useState< any >( null );
+	const [stripeConnectInstance, setStripeConnectInstance] =
+		useState<any>(null);
 
-	useEffect( () => {
-		if ( ! containerRef.current ) return;
+	useEffect(() => {
+		if (!containerRef.current) return;
 
 		const field = selectedProvider?.fields?.find(
-			( f ) => f.type === 'embedded'
+			(f) => f.type === 'embedded'
 		);
-		if ( ! field ) return;
+		if (!field) return;
 
 		const clientSecret = field.client_secret;
 		const publishableKey = field.publish;
 
-		if ( clientSecret && publishableKey ) {
-			( async () => {
-				const instance = await loadConnectAndInitialize( {
+		if (clientSecret && publishableKey) {
+			(async () => {
+				const instance = await loadConnectAndInitialize({
 					publishableKey,
 					fetchClientSecret: async () => clientSecret,
-				} );
-				setStripeConnectInstance( instance );
-			} )();
+				});
+				setStripeConnectInstance(instance);
+			})();
 		}
-	}, [ selectedProvider ] );
+	}, [selectedProvider]);
 
 	const handleChange = (
-		e: React.ChangeEvent< HTMLInputElement | HTMLTextAreaElement >
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
 	) => {
 		const { name, value } = e.target;
-		setFormData( ( prev ) => {
-			const updated = { ...( prev || {} ), [ name ]: value ?? '' };
-			autoSave( updated );
+		setFormData((prev) => {
+			const updated = { ...(prev || {}), [name]: value ?? '' };
+			autoSave(updated);
 			return updated;
-		} );
+		});
 	};
 
-	const handleToggleChange = ( value: string, name?: string ) => {
-		setFormData( ( prev ) => {
+	const handleToggleChange = (value: string, name?: string) => {
+		setFormData((prev) => {
 			const updated = {
-				...( prev || {} ),
-				[ name || 'payment_method' ]: value,
+				...(prev || {}),
+				[name || 'payment_method']: value,
 			};
-			autoSave( updated );
+			autoSave(updated);
 			return updated;
-		} );
+		});
 	};
 
-	const autoSave = ( updatedData: { [ key: string ]: string } ) => {
-		axios( {
+	const autoSave = (updatedData: { [key: string]: string }) => {
+		axios({
 			method: 'PUT',
-			url: getApiLink(
-				appLocalizer,
-				`store/${ appLocalizer?.store_id }`
-			),
+			url: getApiLink(appLocalizer, `store/${appLocalizer?.store_id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: updatedData,
-		} ).then( ( res ) => {
-			if ( res.data.success ) {
-				console.log( 'Store saved successfully!' );
+		}).then((res) => {
+			if (res.data.success) {
+				console.log('Store saved successfully!');
 			}
-		} );
+		});
 	};
 
-	const handleButtonClick = ( field, formData ) => {
-		console.log( 'button click' );
+	const handleButtonClick = (field, formData) => {
+		console.log('button click');
 		axios
 			.post(
 				appLocalizer.ajaxurl,
-				new URLSearchParams( {
+				new URLSearchParams({
 					action: field.action || 'create_stripe_account',
 					_ajax_nonce: appLocalizer.nonce,
 					...formData,
-				} )
+				})
 			)
-			.then( ( res ) => {
-				if ( res.data.success && res.data.data.onboarding_url ) {
-					window.location.replace( res.data.data.onboarding_url );
+			.then((res) => {
+				if (res.data.success && res.data.data.onboarding_url) {
+					window.location.replace(res.data.data.onboarding_url);
 				}
-			} );
+			});
 	};
 
 	return (
 		<>
-			{ /* Payment Method Toggle */ }
+			{/* Payment Method Toggle */}
 			<div className="form-group-wrapper">
 				<div className="form-group">
-					<label>{ __( 'Payment Method', 'multivendorx' ) }</label>
+					<label>{__('Payment Method', 'multivendorx')}</label>
 					<ToggleSetting
 						wrapperClass="setting-form-input"
 						descClass="settings-metabox-description"
@@ -170,55 +161,48 @@ const Withdrawl: React.FC = () => {
 								? __(
 										'You haven’t enabled any payment methods yet.',
 										'multivendorx'
-								  )
+									)
 								: ''
 						}
-						options={ paymentOptions }
-						value={ formData.payment_method || '' }
-						onChange={ ( value ) => handleToggleChange( value ) }
+						options={paymentOptions}
+						value={formData.payment_method || ''}
+						onChange={(value) => handleToggleChange(value)}
 					/>
 				</div>
 			</div>
 
-			{ /* Dynamic Fields */ }
-			{ Array.isArray( selectedProvider?.fields ) &&
-				selectedProvider.fields.map( ( field, index ) => {
-					if ( field.type === 'html' && field.html ) {
+			{/* Dynamic Fields */}
+			{Array.isArray(selectedProvider?.fields) &&
+				selectedProvider.fields.map((field, index) => {
+					if (field.type === 'html' && field.html) {
 						return (
 							<div
-								key={ `html-${ index }` }
+								key={`html-${index}`}
 								className="form-group-wrapper"
-								dangerouslySetInnerHTML={ {
+								dangerouslySetInnerHTML={{
 									__html: field.html,
-								} }
+								}}
 							/>
 						);
 					}
 
-					if ( field.type === 'embedded' ) {
+					if (field.type === 'embedded') {
 						return (
-							<div
-								ref={ containerRef }
-								key={ `embedded-${ index }` }
-							>
-								{ stripeConnectInstance && (
+							<div ref={containerRef} key={`embedded-${index}`}>
+								{stripeConnectInstance && (
 									<ConnectComponentsProvider
-										connectInstance={
-											stripeConnectInstance
-										}
+										connectInstance={stripeConnectInstance}
 									>
 										<ConnectAccountOnboarding
-											onExit={ () =>
-												console.log(
-													'Onboarding exited'
-												)
+											onExit={() =>
+												console.log('Onboarding exited')
 											}
-											onStepChange={ ( { step } ) => {
+											onStepChange={({ step }) => {
 												console.log(
 													'Current step:',
 													step
 												);
-												if ( step === 'complete' ) {
+												if (step === 'complete') {
 													axios
 														.post(
 															appLocalizer.ajaxurl,
@@ -232,7 +216,7 @@ const Withdrawl: React.FC = () => {
 																}
 															)
 														)
-														.then( ( res ) => {
+														.then((res) => {
 															if (
 																res.data.success
 															) {
@@ -252,84 +236,71 @@ const Withdrawl: React.FC = () => {
 																	res.data
 																);
 															}
-														} );
+														});
 												}
-											} }
-											collectionOptions={ {
+											}}
+											collectionOptions={{
 												fields: 'eventually_due',
 												futureRequirements: 'include',
-											} }
+											}}
 										/>
 									</ConnectComponentsProvider>
-								) }
+								)}
 							</div>
 						);
 					}
 
-					if ( field.type === 'button' ) {
+					if (field.type === 'button') {
 						return (
 							<div
 								className="form-group-wrapper"
-								key={ field.key || index }
+								key={field.key || index}
 							>
 								<button
 									type="button"
 									className="admin-btn btn-purple-bg"
-									onClick={ () =>
-										handleButtonClick( field, formData )
+									onClick={() =>
+										handleButtonClick(field, formData)
 									}
 								>
-									{ __( field.label, 'multivendorx' ) }
+									{__(field.label, 'multivendorx')}
 								</button>
 							</div>
 						);
 					}
 
-					if ( field.type === 'setting-toggle' ) {
+					if (field.type === 'setting-toggle') {
 						return (
 							<div
 								className="form-group-wrapper"
-								key={ field.key || index }
+								key={field.key || index}
 							>
 								<div className="form-group">
-									{ field.label && (
-										<label htmlFor={ field.key }>
-											{ __(
-												field.label,
-												'multivendorx'
-											) }
+									{field.label && (
+										<label htmlFor={field.key}>
+											{__(field.label, 'multivendorx')}
 										</label>
-									) }
+									)}
 									<ToggleSetting
-										key={ field.key }
+										key={field.key}
 										description={
 											field.desc
-												? __(
-														field.desc,
-														'multivendorx'
-												  )
+												? __(field.desc, 'multivendorx')
 												: ''
 										}
 										options={
-											Array.isArray( field.options )
-												? field.options.map(
-														( opt ) => ( {
-															...opt,
-															value: String(
-																opt.value
-															),
-														} )
-												  )
+											Array.isArray(field.options)
+												? field.options.map((opt) => ({
+														...opt,
+														value: String(
+															opt.value
+														),
+													}))
 												: []
 										}
-										value={
-											formData[ field.key || '' ] || ''
-										}
-										onChange={ ( value ) =>
-											handleToggleChange(
-												value,
-												field.key
-											)
+										value={formData[field.key || ''] || ''}
+										onChange={(value) =>
+											handleToggleChange(value, field.key)
 										}
 									/>
 								</div>
@@ -340,18 +311,18 @@ const Withdrawl: React.FC = () => {
 					return (
 						<div
 							className="form-group-wrapper"
-							key={ field.key || index }
+							key={field.key || index}
 						>
 							<div className="form-group">
-								{ field.label && (
-									<label htmlFor={ field.key }>
-										{ __( field.label, 'multivendorx' ) }
+								{field.label && (
+									<label htmlFor={field.key}>
+										{__(field.label, 'multivendorx')}
 									</label>
-								) }
+								)}
 								<BasicInput
-									key={ field.key || '' }
-									name={ field.key }
-									type={ field.type || 'text' }
+									key={field.key || ''}
+									name={field.key}
+									type={field.type || 'text'}
 									wrapperClass="setting-form-input"
 									descClass="settings-metabox-description"
 									placeholder={
@@ -359,16 +330,16 @@ const Withdrawl: React.FC = () => {
 											? __(
 													field.placeholder,
 													'multivendorx'
-											  )
+												)
 											: ''
 									}
-									value={ formData[ field.key ] || '' }
-									onChange={ handleChange }
+									value={formData[field.key] || ''}
+									onChange={handleChange}
 								/>
 							</div>
 						</div>
 					);
-				} ) }
+				})}
 		</>
 	);
 };

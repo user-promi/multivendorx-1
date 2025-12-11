@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'commission-rules',
 	priority: 4,
-	name: __( 'Commission Rules', 'multivendorx' ),
+	name: __('Commission Rules', 'multivendorx'),
 	desc: __(
 		'Site errors and events are logged for easy troubleshooting.',
 		'multivendorx'
@@ -14,7 +14,7 @@ export default {
 		{
 			key: 'commission_type',
 			type: 'setting-toggle',
-			label: __( 'Commission Mode', 'multivendorx' ),
+			label: __('Commission Mode', 'multivendorx'),
 			desc: __(
 				'Choose whether to use global commission settings or custom plan-based commission',
 				'multivendorx'
@@ -22,12 +22,12 @@ export default {
 			options: [
 				{
 					key: 'free',
-					label: __( 'Global', 'multivendorx' ),
+					label: __('Global', 'multivendorx'),
 					value: 'store_order',
 				},
 				{
 					key: 'paid',
-					label: __( 'Plan Based', 'multivendorx' ),
+					label: __('Plan Based', 'multivendorx'),
 					value: 'per_item',
 				},
 			],
@@ -35,17 +35,17 @@ export default {
 		{
 			key: 'commission_type',
 			type: 'setting-toggle',
-			label: __( 'Billing Cycle', 'multivendorx' ),
-			desc: __( '', 'multivendorx' ),
+			label: __('Billing Cycle', 'multivendorx'),
+			desc: __('', 'multivendorx'),
 			options: [
 				{
 					key: 'monthly',
-					label: __( 'Percentage', 'multivendorx' ),
+					label: __('Percentage', 'multivendorx'),
 					value: 'monthly',
 				},
 				{
 					key: 'yearly',
-					label: __( 'Flat Fee', 'multivendorx' ),
+					label: __('Flat Fee', 'multivendorx'),
 					value: 'yearly',
 				},
 			],
@@ -54,7 +54,7 @@ export default {
 			key: 'plan-price',
 			type: 'number',
 			size: '12rem',
-			label: __( 'Admin Commission Value', 'multivendorx' ),
+			label: __('Admin Commission Value', 'multivendorx'),
 		},
 	],
 };

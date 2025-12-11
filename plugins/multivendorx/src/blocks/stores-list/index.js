@@ -7,13 +7,13 @@ import StoresList from './StoresList';
 const EditBlock = () => {
 	const blockProps = useBlockProps();
 	return (
-		<div { ...blockProps } id="multivendorx-stores-list">
-			{ StoresList() }
+		<div {...blockProps} id="multivendorx-stores-list">
+			{StoresList()}
 		</div>
 	);
 };
 
-registerBlockType( 'multivendorx/stores-list', {
+registerBlockType('multivendorx/stores-list', {
 	apiVersion: 2,
 	title: 'Stores List',
 	icon: 'cart',
@@ -25,11 +25,11 @@ registerBlockType( 'multivendorx/stores-list', {
 	save() {
 		return <div id="multivendorx-stores-list"></div>;
 	},
-} );
+});
 
-document.addEventListener( 'DOMContentLoaded', () => {
-	const element = document.getElementById( 'multivendorx-stores-list' );
-	if ( element ) {
+document.addEventListener('DOMContentLoaded', () => {
+	const element = document.getElementById('multivendorx-stores-list');
+	if (element) {
 		render(
 			<BrowserRouter>
 				<StoresList />
@@ -37,4 +37,4 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			element
 		);
 	}
-} );
+});

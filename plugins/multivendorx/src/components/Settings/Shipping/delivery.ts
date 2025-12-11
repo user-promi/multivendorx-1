@@ -1,14 +1,12 @@
 import { __ } from '@wordpress/i18n';
 const methods = appLocalizer?.all_payments
-	? Object.entries( appLocalizer.all_payments ).map(
-			( [ _, value ] ) => value
-	  )
+	? Object.entries(appLocalizer.all_payments).map(([_, value]) => value)
 	: [];
 
 export default {
 	id: 'delivery',
 	priority: 2,
-	name: __( 'Delivery', 'multivendorx' ),
+	name: __('Delivery', 'multivendorx'),
 	desc: __(
 		'Define the steps orders follow from purchase to completion. Set what customers see in tracking and choose whether orders complete automatically or after customer confirmation.',
 		'multivendorx'
@@ -45,7 +43,7 @@ export default {
 		{
 			key: 'shipping_stage',
 			type: 'multi-string',
-			label: __( 'Delivery progress stages', 'multivendorx' ),
+			label: __('Delivery progress stages', 'multivendorx'),
 			//placeholder: __('Define the key milestones in a store’s delivery process. These stages help stores communicate order progress to customers', 'multivendorx'),
 			iconEnable: true,
 			descEnable: true,
@@ -98,7 +96,7 @@ export default {
 		{
 			key: 'order-completion-rules',
 			type: 'setting-toggle',
-			label: __( 'When orders are marked complete', 'multivendorx' ),
+			label: __('When orders are marked complete', 'multivendorx'),
 			settingDescription: __(
 				'Specifies how orders are finalized and transitioned from Delivered to Completed after the package has reached the customer',
 				'multivendorx'
@@ -110,12 +108,12 @@ export default {
 			options: [
 				{
 					key: 'north_america',
-					label: __( 'Auto complete on delivery', 'multivendorx' ),
+					label: __('Auto complete on delivery', 'multivendorx'),
 					value: 'zone_wise',
 				},
 				{
 					key: 'country_wise',
-					label: __( 'Customer confirm delivery', 'multivendorx' ),
+					label: __('Customer confirm delivery', 'multivendorx'),
 					value: 'country_wise',
 				},
 			],

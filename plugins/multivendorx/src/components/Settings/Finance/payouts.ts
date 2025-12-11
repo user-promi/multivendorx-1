@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'disbursement',
 	priority: 2,
-	name: __( 'Payouts', 'multivendorx' ),
+	name: __('Payouts', 'multivendorx'),
 	desc: __(
 		'Tailor your marketplace commission plan to fit your revenue sharing preferences.',
 		'multivendorx'
@@ -13,7 +13,7 @@ export default {
 		{
 			key: 'store_rating_page',
 			type: 'blocktext',
-			label: __( 'no_label', 'multivendorx' ),
+			label: __('no_label', 'multivendorx'),
 			blocktext: __(
 				'From MultiVendorX 5.0.0, Wallet Support has been introduced. <b> Workflow: Customer makes a purchase ➝ Commission is credited to the store wallet ➝ Payout is released from the wallet based on the configured payout frequency.</b>',
 				'multivendorx'
@@ -34,23 +34,23 @@ export default {
 			options: [
 				{
 					key: 'completed',
-					label: __( 'Completed', 'multivendorx' ),
+					label: __('Completed', 'multivendorx'),
 					value: 'completed',
 				},
 				{
 					key: 'delivered',
-					label: __( 'Delivered', 'multivendorx' ),
+					label: __('Delivered', 'multivendorx'),
 					value: 'delivered',
 					proSetting: true,
 				},
 				{
 					key: 'processing',
-					label: __( 'Processing', 'multivendorx' ),
+					label: __('Processing', 'multivendorx'),
 					value: 'processing',
 				},
 				{
 					key: 'shipped',
-					label: __( 'Shipped', 'multivendorx' ),
+					label: __('Shipped', 'multivendorx'),
 					value: 'shipped',
 					proSetting: true,
 				},
@@ -59,31 +59,31 @@ export default {
 		},
 		{
 			key: 'commission_lock_period',
-			label: __( 'Clearance period', 'multivendorx' ),
+			label: __('Clearance period', 'multivendorx'),
 			settingDescription: __(
 				'Set a clearance period to ensure transaction stability before releasing earnings. During this time, completed order payments remain in a pending balance to cover potential refunds, cancellations, or disputes. Once the clearance period ends, the pending funds automatically move to the store’s available wallet balance.',
 				'multivendorx'
 			),
 			type: 'number',
 			size: '8rem',
-			preText: __( 'Wait', 'multivendorx' ),
+			preText: __('Wait', 'multivendorx'),
 			postText: __(
 				'as the clearance period before pending earnings become available for payout.',
 				'multivendorx'
 			),
-			postInsideText: __( 'days', 'multivendorx' ),
+			postInsideText: __('days', 'multivendorx'),
 		},
 		{
 			key: 'payout_threshold_amount',
-			label: __( 'Minimum payout threshold', 'multivendorx' ),
+			label: __('Minimum payout threshold', 'multivendorx'),
 			settingDescription: __(
 				'Set the minimum balance a store must reach in their wallet before receiving payouts.',
 				'multivendorx'
 			),
 			type: 'number',
-			preText: __( 'Stores must accumulate at least', 'multivendorx' ),
-			preInsideText: __( '$', 'multivendorx' ),
-			postText: __( ' into wallet receive a payout.', 'multivendorx' ),
+			preText: __('Stores must accumulate at least', 'multivendorx'),
+			preInsideText: __('$', 'multivendorx'),
+			postText: __(' into wallet receive a payout.', 'multivendorx'),
 			size: '8rem',
 			options: [
 				{
@@ -95,14 +95,14 @@ export default {
 
 		{
 			key: 'wallet_threshold_amount',
-			label: __( 'Minimum wallet reserve', 'multivendorx' ),
+			label: __('Minimum wallet reserve', 'multivendorx'),
 			settingDescription: __(
 				'Always keep a fixed balance in the store’s wallet as a reserve. This amount cannot be withdrawn.',
 				'multivendorx'
 			),
 			type: 'number',
-			preText: __( 'Stores must always keep at least', 'multivendorx' ),
-			preInsideText: __( '$', 'multivendorx' ),
+			preText: __('Stores must always keep at least', 'multivendorx'),
+			preInsideText: __('$', 'multivendorx'),
 			postText: __(
 				' in their wallet as a safety reserve.',
 				'multivendorx'
@@ -118,7 +118,7 @@ export default {
 		{
 			key: 'payment_schedules',
 			type: 'setting-toggle',
-			label: __( 'Automatic payout frequency', 'multivendorx' ),
+			label: __('Automatic payout frequency', 'multivendorx'),
 			settingDescription: __(
 				'Define how and when store earnings are automatically released from their wallet.',
 				'multivendorx'
@@ -130,32 +130,32 @@ export default {
 			options: [
 				{
 					key: 'mannual',
-					label: __( 'Manual', 'multivendorx' ),
+					label: __('Manual', 'multivendorx'),
 					value: 'mannual',
 				},
 				{
 					key: 'hourly',
-					label: __( 'Hourly', 'multivendorx' ),
+					label: __('Hourly', 'multivendorx'),
 					value: 'hourly',
 				},
 				{
 					key: 'daily',
-					label: __( 'Daily', 'multivendorx' ),
+					label: __('Daily', 'multivendorx'),
 					value: 'daily',
 				},
 				{
 					key: 'weekly',
-					label: __( 'Weekly', 'multivendorx' ),
+					label: __('Weekly', 'multivendorx'),
 					value: 'weekly',
 				},
 				{
 					key: 'fortnightly',
-					label: __( 'Fortnightly', 'multivendorx' ),
+					label: __('Fortnightly', 'multivendorx'),
 					value: 'fortnightly',
 				},
 				{
 					key: 'monthly',
-					label: __( 'Monthly', 'multivendorx' ),
+					label: __('Monthly', 'multivendorx'),
 					value: 'monthly',
 				},
 			],
@@ -163,7 +163,7 @@ export default {
 		//Hourly
 		{
 			key: 'disbursement_hourly',
-			label: __( 'Hourly payouts', 'multivendorx' ),
+			label: __('Hourly payouts', 'multivendorx'),
 			type: 'number',
 			size: '8rem',
 			options: [
@@ -172,9 +172,9 @@ export default {
 					value: 'payouts_every_hour',
 				},
 			],
-			postText: __( 'minute of every hour.', 'multivendorx' ),
-			preText: __( 'At', 'multivendorx' ),
-			postInsideText: __( 'th', 'multivendorx' ),
+			postText: __('minute of every hour.', 'multivendorx'),
+			preText: __('At', 'multivendorx'),
+			postInsideText: __('th', 'multivendorx'),
 			dependent: {
 				key: 'payment_schedules',
 				set: true,
@@ -185,8 +185,8 @@ export default {
 		{
 			key: 'disbursement_fortnightly', // updated key
 			type: 'nested',
-			label: __( 'Fortnightly disbursement', 'multivendorx' ), // updated label
-			before: __( 'Of', 'multivendorx' ),
+			label: __('Fortnightly disbursement', 'multivendorx'), // updated label
+			before: __('Of', 'multivendorx'),
 			single: true,
 			desc: __(
 				'Commissions are automatically sent to stores every 14 days based on your selected schedule. For example, if you choose "1st week Friday", payouts will occur on the first Friday of each two-week cycle.',
@@ -196,17 +196,17 @@ export default {
 				{
 					key: 'payout_frequency',
 					type: 'select',
-					label: __( 'On', 'multivendorx' ),
+					label: __('On', 'multivendorx'),
 					// label: __('Payout frequency', 'multivendorx'),
 					options: [
 						{
 							key: 'first',
-							label: __( '1st', 'multivendorx' ),
+							label: __('1st', 'multivendorx'),
 							value: 'first',
 						},
 						{
 							key: 'second',
-							label: __( '2nd', 'multivendorx' ),
+							label: __('2nd', 'multivendorx'),
 							value: 'second',
 						},
 					],
@@ -220,44 +220,44 @@ export default {
 					options: [
 						{
 							key: 'monday',
-							label: __( 'Monday', 'multivendorx' ),
+							label: __('Monday', 'multivendorx'),
 							value: 'monday',
 						},
 						{
 							key: 'tuesday',
-							label: __( 'Tuesday', 'multivendorx' ),
+							label: __('Tuesday', 'multivendorx'),
 							value: 'tuesday',
 						},
 						{
 							key: 'wednesday',
-							label: __( 'Wednesday', 'multivendorx' ),
+							label: __('Wednesday', 'multivendorx'),
 							value: 'wednesday',
 						},
 						{
 							key: 'thursday',
-							label: __( 'Thursday', 'multivendorx' ),
+							label: __('Thursday', 'multivendorx'),
 							value: 'thursday',
 						},
 						{
 							key: 'friday',
-							label: __( 'Friday', 'multivendorx' ),
+							label: __('Friday', 'multivendorx'),
 							value: 'friday',
 						},
 						{
 							key: 'saturday',
-							label: __( 'Saturday', 'multivendorx' ),
+							label: __('Saturday', 'multivendorx'),
 							value: 'saturday',
 						},
 						{
 							key: 'sunday',
-							label: __( 'Sunday', 'multivendorx' ),
+							label: __('Sunday', 'multivendorx'),
 							value: 'sunday',
 						},
 					],
 				},
 				{
 					key: 'store_opening_time',
-					preText: __( 'at', 'multivendorx' ),
+					preText: __('at', 'multivendorx'),
 					type: 'time',
 					// label: __('Store Opening Time', 'multivendorx'),
 					// description: __('Select the time your store opens.', 'multivendorx'),
@@ -273,7 +273,7 @@ export default {
 		{
 			key: 'disbursement_monthly', // main key for monthly nested
 			type: 'nested',
-			label: __( 'Monthly disbursement', 'multivendorx' ), // main label
+			label: __('Monthly disbursement', 'multivendorx'), // main label
 			single: true,
 			desc: __(
 				'Date of the month: (defaults to last day if shorter month)<br>Once per month: Set the day of the month and time for store commissions payout.',
@@ -282,7 +282,7 @@ export default {
 			nestedFields: [
 				{
 					key: 'payouts_every_month', // day of month
-					preText: __( 'On', 'multivendorx' ),
+					preText: __('On', 'multivendorx'),
 					type: 'number',
 					size: '8rem',
 					options: [
@@ -291,12 +291,12 @@ export default {
 							value: 'payouts_every_month',
 						},
 					],
-					postInsideText: __( 'day', 'multivendorx' ),
+					postInsideText: __('day', 'multivendorx'),
 				},
 				{
 					key: 'monthly_payout_time', // time of day
 					type: 'time', // links to TimeSelect component
-					preText: __( 'at', 'multivendorx' ),
+					preText: __('at', 'multivendorx'),
 					description: __(
 						'Select the time of day your monthly payout should occur.',
 						'multivendorx'
@@ -314,12 +314,9 @@ export default {
 		{
 			key: 'daily_payout_time', // unique key for daily payout time
 			type: 'time', // links to TimeSelect component
-			label: __( 'Daily payout time', 'multivendorx' ),
-			preText: __( 'At', 'multivendorx' ),
-			description: __(
-				'Once per day<br/>Run payouts at:',
-				'multivendorx'
-			),
+			label: __('Daily payout time', 'multivendorx'),
+			preText: __('At', 'multivendorx'),
+			description: __('Once per day<br/>Run payouts at:', 'multivendorx'),
 			defaultValue: '09:00', // optional: default payout time
 			dependent: {
 				key: 'payment_schedules', // only show if payment schedule is daily
@@ -332,7 +329,7 @@ export default {
 		{
 			key: 'disbursement_weekly', // main key for weekly nested
 			type: 'nested',
-			label: __( 'Weekly disbursement', 'multivendorx' ), // main label
+			label: __('Weekly disbursement', 'multivendorx'), // main label
 			single: true,
 			desc: __(
 				'Once per week: Select the day and time of the week for store commissions payout.',
@@ -342,7 +339,7 @@ export default {
 				{
 					key: 'weekly_payout_day', // day of week toggle
 					type: 'dropdown',
-					preText: __( 'On', 'multivendorx' ),
+					preText: __('On', 'multivendorx'),
 					description: __(
 						'Select the day of the week for payouts:',
 						'multivendorx'
@@ -350,37 +347,37 @@ export default {
 					options: [
 						{
 							key: 'sunday',
-							label: __( 'Sunday', 'multivendorx' ),
+							label: __('Sunday', 'multivendorx'),
 							value: 'sunday',
 						},
 						{
 							key: 'monday',
-							label: __( 'Monday', 'multivendorx' ),
+							label: __('Monday', 'multivendorx'),
 							value: 'monday',
 						},
 						{
 							key: 'tuesday',
-							label: __( 'Tuesday', 'multivendorx' ),
+							label: __('Tuesday', 'multivendorx'),
 							value: 'tuesday',
 						},
 						{
 							key: 'wednesday',
-							label: __( 'Wednesday', 'multivendorx' ),
+							label: __('Wednesday', 'multivendorx'),
 							value: 'wednesday',
 						},
 						{
 							key: 'thursday',
-							label: __( 'Thursday', 'multivendorx' ),
+							label: __('Thursday', 'multivendorx'),
 							value: 'thursday',
 						},
 						{
 							key: 'friday',
-							label: __( 'Friday', 'multivendorx' ),
+							label: __('Friday', 'multivendorx'),
 							value: 'friday',
 						},
 						{
 							key: 'saturday',
-							label: __( 'Saturday', 'multivendorx' ),
+							label: __('Saturday', 'multivendorx'),
 							value: 'saturday',
 						},
 					],
@@ -388,7 +385,7 @@ export default {
 				{
 					key: 'weekly_payout_time', // time of day
 					type: 'time', // links to TimeSelect component
-					preText: __( 'at', 'multivendorx' ),
+					preText: __('at', 'multivendorx'),
 					description: __(
 						'Select the time of day for weekly payouts.',
 						'multivendorx'
@@ -405,12 +402,12 @@ export default {
 		{
 			key: 'section',
 			type: 'section',
-			hint: __( 'Withdrawal rules & limits', 'multivendorx' ),
+			hint: __('Withdrawal rules & limits', 'multivendorx'),
 		},
 		{
 			key: 'withdraw_type',
 			type: 'setting-toggle',
-			label: __( 'Withdrawal request approval', 'multivendorx' ),
+			label: __('Withdrawal request approval', 'multivendorx'),
 			settingDescription: __(
 				'Control how withdrawl requests are handled when stores initiate withdrawals manually.',
 				'multivendorx'
@@ -423,12 +420,12 @@ export default {
 			options: [
 				{
 					key: 'automatic',
-					label: __( 'Automatic', 'multivendorx' ),
+					label: __('Automatic', 'multivendorx'),
 					value: 'automatic',
 				},
 				{
 					key: 'manual',
-					label: __( 'Manual', 'multivendorx' ),
+					label: __('Manual', 'multivendorx'),
 					value: 'manual',
 				},
 			],
@@ -436,7 +433,7 @@ export default {
 		{
 			key: 'withdrawals_fees',
 			type: 'nested',
-			label: __( 'Free withdrawals and fees', 'multivendorx' ),
+			label: __('Free withdrawals and fees', 'multivendorx'),
 			single: true,
 			settingDescription: __(
 				'Define how many withdrawal requests a store can make without incurring additional fees. After the free limit is reached, a small service fee can be applied to each subsequent withdrawal to discourage frequent small payouts.',
@@ -457,7 +454,7 @@ export default {
 							value: 'free_withdrawals',
 						},
 					],
-					preText: __( 'Stores get', 'multivendorx' ),
+					preText: __('Stores get', 'multivendorx'),
 					postText: __(
 						'free withdrawals. After that, each withdrawal costs',
 						'multivendorx'
@@ -467,7 +464,7 @@ export default {
 					key: 'withdrawal_fixed', // updated key
 					type: 'number',
 					size: '5rem',
-					preInsideText: __( '$', 'multivendorx' ),
+					preInsideText: __('$', 'multivendorx'),
 					preText: 'fixed',
 					postText: '+',
 				},
@@ -475,8 +472,8 @@ export default {
 					key: 'withdrawal_percentage', // updated key
 					type: 'number',
 					size: '5rem',
-					postText: __( '.', 'multivendorx' ),
-					postInsideText: __( '%', 'multivendorx' ),
+					postText: __('.', 'multivendorx'),
+					postInsideText: __('%', 'multivendorx'),
 				},
 			],
 		},

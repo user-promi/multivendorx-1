@@ -32,61 +32,50 @@ type FilterData = {
 export interface RealtimeFilter {
 	name: string;
 	render: (
-		updateFilter: ( key: string, value: any ) => void,
+		updateFilter: (key: string, value: any) => void,
 		filterValue: any
 	) => React.ReactNode;
 }
 
-const PendingStores: React.FC< { onUpdated?: () => void } > = ( {
-	onUpdated,
-} ) => {
-	const [ data, setData ] = useState< StoreRow[] | null >( null );
-	const [ rowSelection, setRowSelection ] = useState< RowSelectionState >(
-		{}
-	);
-	const [ totalRows, setTotalRows ] = useState< number >( 0 );
-	const [ pagination, setPagination ] = useState< PaginationState >( {
+const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
+	const [data, setData] = useState<StoreRow[] | null>(null);
+	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+	const [totalRows, setTotalRows] = useState<number>(0);
+	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
 		pageSize: 10,
-	} );
-	const [ pageCount, setPageCount ] = useState( 0 );
+	});
+	const [pageCount, setPageCount] = useState(0);
 
 	// Reject popup state
-	const [ rejectPopupOpen, setRejectPopupOpen ] = useState( false );
-	const [ rejectReason, setRejectReason ] = useState( '' );
-	const [ rejectStoreId, setRejectStoreId ] = useState< number | null >(
-		null
-	);
-	const [ isSubmitting, setIsSubmitting ] = useState( false ); // prevent multiple submissions
+	const [rejectPopupOpen, setRejectPopupOpen] = useState(false);
+	const [rejectReason, setRejectReason] = useState('');
+	const [rejectStoreId, setRejectStoreId] = useState<number | null>(null);
+	const [isSubmitting, setIsSubmitting] = useState(false); // prevent multiple submissions
 
-	const formatDateToISO8601 = ( date: Date ) =>
-		date.toISOString().slice( 0, 19 );
+	const formatDateToISO8601 = (date: Date) => date.toISOString().slice(0, 19);
 
 	// Fetch total rows
-	useEffect( () => {
-		axios( {
+	useEffect(() => {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'store' ),
+			url: getApiLink(appLocalizer, 'store'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: { count: true, status: 'pending' },
-		} )
-			.then( ( response ) => {
-				setTotalRows( response.data || 0 );
-				setPageCount(
-					Math.ceil( response.data / pagination.pageSize )
-				);
-			} )
-			.catch( () =>
-				console.error(
-					__( 'Failed to load total rows', 'multivendorx' )
-				)
+		})
+			.then((response) => {
+				setTotalRows(response.data || 0);
+				setPageCount(Math.ceil(response.data / pagination.pageSize));
+			})
+			.catch(() =>
+				console.error(__('Failed to load total rows', 'multivendorx'))
 			);
-	}, [] );
+	}, []);
 
-	useEffect( () => {
+	useEffect(() => {
 		const currentPage = pagination.pageIndex + 1;
-		requestData( pagination.pageSize, currentPage );
-	}, [ pagination ] );
+		requestData(pagination.pageSize, currentPage);
+	}, [pagination]);
 
 	const requestData = (
 		rowsPerPage = 10,
@@ -94,25 +83,25 @@ const PendingStores: React.FC< { onUpdated?: () => void } > = ( {
 		startDate?: Date,
 		endDate?: Date
 	) => {
-		setData( null );
+		setData(null);
 		const params: any = {
 			page: currentPage,
 			row: rowsPerPage,
 			status: 'pending',
 		};
-		if ( startDate && endDate ) {
-			params.start_date = formatDateToISO8601( startDate );
-			params.end_date = formatDateToISO8601( endDate );
+		if (startDate && endDate) {
+			params.start_date = formatDateToISO8601(startDate);
+			params.end_date = formatDateToISO8601(endDate);
 		}
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'store' ),
+			url: getApiLink(appLocalizer, 'store'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params,
-		} )
-			.then( ( response ) => setData( response.data || [] ) )
-			.catch( () => setData( [] ) );
+		})
+			.then((response) => setData(response.data || []))
+			.catch(() => setData([]));
 	};
 
 	const requestApiForData = (
@@ -120,7 +109,7 @@ const PendingStores: React.FC< { onUpdated?: () => void } > = ( {
 		currentPage: number,
 		filterData?: FilterData
 	) => {
-		setData( null );
+		setData(null);
 		requestData(
 			rowsPerPage,
 			currentPage,
@@ -129,106 +118,106 @@ const PendingStores: React.FC< { onUpdated?: () => void } > = ( {
 		);
 	};
 
-	const handleSingleAction = ( action: string, storeId: number ) => {
-		if ( ! storeId ) return;
+	const handleSingleAction = (action: string, storeId: number) => {
+		if (!storeId) return;
 
-		if ( action === 'declined' ) {
-			setRejectStoreId( storeId );
-			setRejectPopupOpen( true );
+		if (action === 'declined') {
+			setRejectStoreId(storeId);
+			setRejectPopupOpen(true);
 			return;
 		}
 
 		const statusValue = action === 'active' ? 'active' : '';
-		if ( ! statusValue ) return;
+		if (!statusValue) return;
 
-		axios( {
+		axios({
 			method: 'PUT',
-			url: getApiLink( appLocalizer, `store/${ storeId }` ),
+			url: getApiLink(appLocalizer, `store/${storeId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: { status: statusValue },
-		} )
-			.then( () => {
-				requestData( pagination.pageSize, pagination.pageIndex + 1 );
+		})
+			.then(() => {
+				requestData(pagination.pageSize, pagination.pageIndex + 1);
 				onUpdated?.();
-			} )
-			.catch( console.error );
+			})
+			.catch(console.error);
 	};
 
 	const submitReject = () => {
-		if ( ! rejectStoreId || isSubmitting ) return;
+		if (!rejectStoreId || isSubmitting) return;
 
-		setIsSubmitting( true );
+		setIsSubmitting(true);
 
-		axios( {
+		axios({
 			method: 'PUT',
-			url: getApiLink( appLocalizer, `store/${ rejectStoreId }` ),
+			url: getApiLink(appLocalizer, `store/${rejectStoreId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: {
 				status: 'declined',
 				_reject_note: rejectReason || '', // allow empty reason
 			},
-		} )
-			.then( () => {
-				setRejectPopupOpen( false );
-				setRejectReason( '' );
-				setRejectStoreId( null );
-				requestData( pagination.pageSize, pagination.pageIndex + 1 );
+		})
+			.then(() => {
+				setRejectPopupOpen(false);
+				setRejectReason('');
+				setRejectStoreId(null);
+				requestData(pagination.pageSize, pagination.pageIndex + 1);
 				onUpdated?.();
-			} )
-			.catch( console.error )
-			.finally( () => setIsSubmitting( false ) );
+			})
+			.catch(console.error)
+			.finally(() => setIsSubmitting(false));
 	};
 
 	// Columns
-	const columns: ColumnDef< StoreRow >[] = [
+	const columns: ColumnDef<StoreRow>[] = [
 		{
 			id: 'select',
-			header: ( { table } ) => (
+			header: ({ table }) => (
 				<input
 					type="checkbox"
-					checked={ table.getIsAllRowsSelected() }
-					onChange={ table.getToggleAllRowsSelectedHandler() }
+					checked={table.getIsAllRowsSelected()}
+					onChange={table.getToggleAllRowsSelectedHandler()}
 				/>
 			),
-			cell: ( { row } ) => (
+			cell: ({ row }) => (
 				<input
 					type="checkbox"
-					checked={ row.getIsSelected() }
-					onChange={ row.getToggleSelectedHandler() }
+					checked={row.getIsSelected()}
+					onChange={row.getToggleSelectedHandler()}
 				/>
 			),
 		},
 		{
-			header: __( 'Store', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Store', 'multivendorx'),
+			cell: ({ row }) => {
 				const { id, store_name } = row.original;
-				const baseUrl = `${ window.location.origin }/wp-admin/admin.php?page=multivendorx#&tab=stores`;
+				const baseUrl = `${window.location.origin}/wp-admin/admin.php?page=multivendorx#&tab=stores`;
 				const storeLink = id
-					? `${ baseUrl }&edit/${ id }/&subtab=application-details`
+					? `${baseUrl}&edit/${id}/&subtab=application-details`
 					: '#';
 
 				return (
-					<TableCell title={ store_name || '' }>
-						{ id ? (
-							<a href={ storeLink } className="product-wrapper">
+					<TableCell title={store_name || ''}>
+						{id ? (
+							<a href={storeLink} className="product-wrapper">
 								<div className="details">
 									<span className="title">
-										{ store_name || '-' }
+										{store_name || '-'}
 									</span>
 								</div>
 							</a>
 						) : (
 							store_name || '-'
-						) }
+						)}
 					</TableCell>
 				);
 			},
 		},
 		{
-			header: __( 'Email', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.email || '' }>
-					{ row.original.email || '-' }
+			header: __('Email', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.email || ''}>
+					{row.original.email || '-'}
 				</TableCell>
 			),
 		},
@@ -236,34 +225,34 @@ const PendingStores: React.FC< { onUpdated?: () => void } > = ( {
 			id: 'applied_on',
 			accessorKey: 'applied_on',
 			enableSorting: true,
-			header: __( 'Applied On', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Applied On', 'multivendorx'),
+			cell: ({ row }) => {
 				const rawDate = row.original.applied_on;
 
 				return (
-					<TableCell title={ '' }>
-						{ formatWcShortDate( rawDate ) }
+					<TableCell title={''}>
+						{formatWcShortDate(rawDate)}
 					</TableCell>
 				);
 			},
 		},
 		{
-			header: __( 'Action', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.status || '' }>
+			header: __('Action', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.status || ''}>
 					<span
 						className="admin-btn btn-purple"
-						onClick={ () => {
-							handleSingleAction( 'active', row.original.id! );
-						} }
+						onClick={() => {
+							handleSingleAction('active', row.original.id!);
+						}}
 					>
 						<i className="adminlib-check"></i> Approve
 					</span>
 
 					<span
 						className="admin-btn btn-red"
-						onClick={ () =>
-							handleSingleAction( 'declined', row.original.id! )
+						onClick={() =>
+							handleSingleAction('declined', row.original.id!)
 						}
 					>
 						<i className="adminlib-close"></i> Reject
@@ -276,16 +265,16 @@ const PendingStores: React.FC< { onUpdated?: () => void } > = ( {
 	const realtimeFilter: RealtimeFilter[] = [
 		{
 			name: 'date',
-			render: ( updateFilter ) => (
+			render: (updateFilter) => (
 				<div className="right">
 					<MultiCalendarInput
 						wrapperClass=""
 						inputClass=""
-						onChange={ ( range: any ) =>
-							updateFilter( 'date', {
+						onChange={(range: any) =>
+							updateFilter('date', {
 								start_date: range.startDate,
 								end_date: range.endDate,
-							} )
+							})
 						}
 					/>
 				</div>
@@ -297,44 +286,42 @@ const PendingStores: React.FC< { onUpdated?: () => void } > = ( {
 		<>
 			<div className="admin-table-wrapper">
 				<Table
-					data={ data }
-					columns={
-						columns as ColumnDef< Record< string, any >, any >[]
-					}
-					rowSelection={ rowSelection }
-					onRowSelectionChange={ setRowSelection }
-					defaultRowsPerPage={ 10 }
-					pageCount={ pageCount }
-					pagination={ pagination }
-					onPaginationChange={ setPagination }
-					handlePagination={ requestApiForData }
-					perPageOption={ [ 10, 25, 50 ] }
-					typeCounts={ [] }
-					totalCounts={ totalRows }
-					realtimeFilter={ realtimeFilter }
+					data={data}
+					columns={columns as ColumnDef<Record<string, any>, any>[]}
+					rowSelection={rowSelection}
+					onRowSelectionChange={setRowSelection}
+					defaultRowsPerPage={10}
+					pageCount={pageCount}
+					pagination={pagination}
+					onPaginationChange={setPagination}
+					handlePagination={requestApiForData}
+					perPageOption={[10, 25, 50]}
+					typeCounts={[]}
+					totalCounts={totalRows}
+					realtimeFilter={realtimeFilter}
 				/>
 			</div>
 
-			{ /* Reject Popup */ }
-			{ rejectPopupOpen && (
+			{/* Reject Popup */}
+			{rejectPopupOpen && (
 				<CommonPopup
-					open={ rejectPopupOpen }
-					onClose={ () => {
-						setRejectPopupOpen( false );
-						setRejectReason( '' );
-					} }
+					open={rejectPopupOpen}
+					onClose={() => {
+						setRejectPopupOpen(false);
+						setRejectReason('');
+					}}
 					width="31.25rem"
 					header={
 						<>
 							<div className="title">
 								<i className="adminlib-cart"></i>
-								{ __( 'Reason', 'multivendorx' ) }
+								{__('Reason', 'multivendorx')}
 							</div>
 							<i
-								onClick={ () => {
-									setRejectPopupOpen( false );
-									setRejectReason( '' );
-								} }
+								onClick={() => {
+									setRejectPopupOpen(false);
+									setRejectReason('');
+								}}
 								className="icon adminlib-close"
 							></i>
 						</>
@@ -343,21 +330,21 @@ const PendingStores: React.FC< { onUpdated?: () => void } > = ( {
 						<>
 							<div
 								className="admin-btn btn-red"
-								onClick={ () => {
-									setRejectPopupOpen( false );
-									setRejectReason( '' );
-								} }
+								onClick={() => {
+									setRejectPopupOpen(false);
+									setRejectReason('');
+								}}
 							>
 								Cancel
 							</div>
 							<button
 								className="admin-btn btn-purple"
-								onClick={ submitReject }
-								disabled={ isSubmitting } // disable while submitting
+								onClick={submitReject}
+								disabled={isSubmitting} // disable while submitting
 							>
-								{ isSubmitting
-									? __( 'Submitting...', 'multivendorx' )
-									: __( 'Reject', 'multivendorx' ) }
+								{isSubmitting
+									? __('Submitting...', 'multivendorx')
+									: __('Reject', 'multivendorx')}
 							</button>
 						</>
 					}
@@ -369,20 +356,20 @@ const PendingStores: React.FC< { onUpdated?: () => void } > = ( {
 								wrapperClass="setting-from-textarea"
 								inputClass="textarea-input"
 								descClass="settings-metabox-description"
-								value={ rejectReason }
-								onChange={ (
-									e: React.ChangeEvent< HTMLTextAreaElement >
-								) => setRejectReason( e.target.value ) }
-								placeholder={ __(
+								value={rejectReason}
+								onChange={(
+									e: React.ChangeEvent<HTMLTextAreaElement>
+								) => setRejectReason(e.target.value)}
+								placeholder={__(
 									'Enter reason for rejecting this store...',
 									'multivendorx'
-								) }
-								rows={ 4 }
+								)}
+								rows={4}
 							/>
 						</div>
 					</div>
 				</CommonPopup>
-			) }
+			)}
 		</>
 	);
 };

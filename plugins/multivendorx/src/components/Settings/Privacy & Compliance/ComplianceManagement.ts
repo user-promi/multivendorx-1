@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'non-compliance',
 	priority: 2,
-	name: __( 'Compliance Management', 'mvx-pro' ),
+	name: __('Compliance Management', 'mvx-pro'),
 	desc: __(
 		'Control store access based on verification status. Ensure only compliant stores can operate fully on your marketplace.',
 		'mvx-pro'
@@ -33,29 +33,26 @@ export default {
 							type: 'setup',
 							title: 'Identity verification',
 							des: 'Store is verified through official business documents like trade license or permit.',
-							link: `${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=identity-verification`,
+							link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=identity-verification`,
 						},
 						{
 							key: 'display_advertised_product_on_top',
 							type: 'setup',
 							title: 'Social verification',
 							des: 'Store authenticity is validated using connected social media accounts.',
-							link: `${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=identity-verification`,
+							link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=identity-verification`,
 						},
 						{
 							key: 'out_of_stock_visibility',
 							type: 'setup',
 							title: 'Email verification',
 							des: 'The registered email address is verified to confirm the authenticity.',
-							link: `${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=identity-verification`,
+							link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=identity-verification`,
 						},
 						{
 							key: 'required_tasks',
 							type: 'multi-checkbox',
-							label: __(
-								'Non-Compliance action',
-								'multivendorx'
-							),
+							label: __('Non-Compliance action', 'multivendorx'),
 							class: 'mvx-toggle-checkbox',
 							options: [
 								{
@@ -113,36 +110,33 @@ export default {
 							type: 'setup',
 							title: 'Prohibited items check',
 							des: 'Block restricted or banned products to maintain marketplace compliance.',
-							link: `${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=product-compliance`,
+							link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=product-compliance`,
 						},
 						{
 							key: 'product_images_descriptions',
 							type: 'setup',
 							title: 'Product images & descriptions',
 							des: 'Approve product reviews before publishing to ensure quality and consistency.',
-							link: `${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=product-compliance`,
+							link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=product-compliance`,
 						},
 						{
 							key: 'product_authenticity_certificates',
 							type: 'setup',
 							title: 'Product authenticity certificates',
 							des: 'Enforce product image and description standards for authenticity and trust.',
-							link: `${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=product-compliance`,
+							link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=product-compliance`,
 						},
 						{
 							key: 'product_abuse_reporting',
 							type: 'setup',
 							title: 'Product abuse reporting',
 							des: 'Handle product violation or abuse reports effectively to ensure compliance.',
-							link: `${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=product-compliance`,
+							link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=product-compliance`,
 						},
 						{
 							key: 'non_compliance_action',
 							type: 'multi-checkbox',
-							label: __(
-								'Non-Compliance action',
-								'multivendorx'
-							),
+							label: __('Non-Compliance action', 'multivendorx'),
 							class: 'mvx-toggle-checkbox',
 							options: [
 								{
@@ -200,36 +194,33 @@ export default {
 							type: 'setup',
 							title: 'Terms & Conditions',
 							des: 'Require vendors to accept platform terms and conditions before proceeding.',
-							link: `${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=legal-compliance`,
+							link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=legal-compliance`,
 						},
 						{
 							key: 'privacy_policy_consent',
 							type: 'setup',
 							title: 'Privacy policy consent',
 							des: 'Ensure vendors acknowledge and agree to your platform’s data handling policies.',
-							link: `${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=legal-compliance`,
+							link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=legal-compliance`,
 						},
 						{
 							key: 'seller_agreement_upload',
 							type: 'setup',
 							title: 'Seller agreement upload',
 							des: 'Collect signed seller agreements as part of the onboarding process.',
-							link: `${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=legal-compliancen`,
+							link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=legal-compliancen`,
 						},
 						{
 							key: 'return_policy_compliance',
 							type: 'setup',
 							title: 'Return policy compliance',
 							des: 'Ensure vendors follow the marketplace’s standard refund and return guidelines.',
-							link: `${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=legal-compliance`,
+							link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=legal-compliance`,
 						},
 						{
 							key: 'non_compliance_action',
 							type: 'multi-checkbox',
-							label: __(
-								'Non-Compliance action',
-								'multivendorx'
-							),
+							label: __('Non-Compliance action', 'multivendorx'),
 							class: 'mvx-toggle-checkbox',
 							options: [
 								{
@@ -288,22 +279,19 @@ export default {
 							type: 'setup',
 							title: 'Tax information',
 							des: 'Require vendors to provide valid TIN, VAT, GST, EIN, or other tax identification.',
-							link: `${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=tax-compliance`,
+							link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=tax-compliance`,
 						},
 						{
 							key: 'bank_account_details',
 							type: 'setup',
 							title: 'Bank account details',
 							des: 'Collect verified bank details to ensure secure and accurate payouts.',
-							link: `${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=tax-compliance`,
+							link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=tax-compliance`,
 						},
 						{
 							key: 'non_compliance_action',
 							type: 'multi-checkbox',
-							label: __(
-								'Non-Compliance action',
-								'multivendorx'
-							),
+							label: __('Non-Compliance action', 'multivendorx'),
 							class: 'mvx-toggle-checkbox',
 							options: [
 								{

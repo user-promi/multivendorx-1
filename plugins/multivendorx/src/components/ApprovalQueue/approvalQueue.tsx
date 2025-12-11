@@ -11,82 +11,76 @@ import PendingWithdrawal from './pendingWithdrawalRequests';
 import PendingDeactivateRequests from './pendingDeactivateRequests';
 
 const ApprovalQueue = () => {
-	const [ storeCount, setStoreCount ] = useState< number >( 0 );
-	const [ productCount, setProductCount ] = useState< number >( 0 );
-	const [ couponCount, setCouponCount ] = useState< number >( 0 );
-	const [ refundCount, setRefundCount ] = useState< number >( 0 );
-	const [ reportAbuseCount, setReportAbuseCount ] = useState< number >( 0 );
-	const [ withdrawCount, setWithdrawCount ] = useState< number >( 0 );
-	const [ deactivateCount, setDeactivateCount ] = useState< number >( 0 );
+	const [storeCount, setStoreCount] = useState<number>(0);
+	const [productCount, setProductCount] = useState<number>(0);
+	const [couponCount, setCouponCount] = useState<number>(0);
+	const [refundCount, setRefundCount] = useState<number>(0);
+	const [reportAbuseCount, setReportAbuseCount] = useState<number>(0);
+	const [withdrawCount, setWithdrawCount] = useState<number>(0);
+	const [deactivateCount, setDeactivateCount] = useState<number>(0);
 
 	const { modules } = useModules();
-	const ranOnce = useRef( false );
+	const ranOnce = useRef(false);
 	const settings = appLocalizer.settings_databases_value || {};
 
 	const refreshCounts = async () => {
 		//Store Count (only if store approval is manual)
-		if ( settings?.general?.approve_store === 'manually' ) {
-			axios( {
+		if (settings?.general?.approve_store === 'manually') {
+			axios({
 				method: 'GET',
-				url: getApiLink( appLocalizer, 'store' ),
+				url: getApiLink(appLocalizer, 'store'),
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: { count: true, status: 'pending' },
-			} )
-				.then( ( res ) => setStoreCount( res.data || 0 ) )
-				.catch( () => {} );
+			})
+				.then((res) => setStoreCount(res.data || 0))
+				.catch(() => {});
 		}
 
 		// Product Count (only if can publish products)
 		if (
-			settings?.[ 'store-capability' ]?.products?.includes(
+			settings?.['store-capability']?.products?.includes(
 				'publish_products'
 			)
 		) {
 			axios
-				.get( `${ appLocalizer.apiUrl }/wc/v3/products`, {
+				.get(`${appLocalizer.apiUrl}/wc/v3/products`, {
 					headers: { 'X-WP-Nonce': appLocalizer.nonce },
 					params: {
 						per_page: 1,
 						meta_key: 'multivendorx_store_id',
 						status: 'pending',
 					},
-				} )
-				.then( ( res ) =>
-					setProductCount(
-						parseInt( res.headers[ 'x-wp-total' ] ) || 0
-					)
+				})
+				.then((res) =>
+					setProductCount(parseInt(res.headers['x-wp-total']) || 0)
 				)
-				.catch( () => {} );
+				.catch(() => {});
 		}
 
 		//Coupon Count (only if can publish coupons)
 		if (
-			settings?.[ 'store-capability' ]?.coupons?.includes(
-				'publish_coupons'
-			)
+			settings?.['store-capability']?.coupons?.includes('publish_coupons')
 		) {
 			axios
-				.get( `${ appLocalizer.apiUrl }/wc/v3/coupons`, {
+				.get(`${appLocalizer.apiUrl}/wc/v3/coupons`, {
 					headers: { 'X-WP-Nonce': appLocalizer.nonce },
 					params: {
 						per_page: 1,
 						meta_key: 'multivendorx_store_id',
 						status: 'pending',
 					},
-				} )
-				.then( ( res ) =>
-					setCouponCount(
-						parseInt( res.headers[ 'x-wp-total' ] ) || 0
-					)
+				})
+				.then((res) =>
+					setCouponCount(parseInt(res.headers['x-wp-total']) || 0)
 				)
-				.catch( () => {} );
+				.catch(() => {});
 		}
 
 		// Refund Count (only if refund module active)
-		if ( modules.includes( 'marketplace-refund' ) ) {
-			axios( {
+		if (modules.includes('marketplace-refund')) {
+			axios({
 				method: 'GET',
-				url: `${ appLocalizer.apiUrl }/wc/v3/orders`,
+				url: `${appLocalizer.apiUrl}/wc/v3/orders`,
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: {
 					meta_key: 'multivendorx_store_id',
@@ -94,59 +88,59 @@ const ApprovalQueue = () => {
 					page: 1,
 					per_page: 1,
 				},
-			} )
-				.then( ( res ) =>
-					setRefundCount( Number( res.headers[ 'x-wp-total' ] ) || 0 )
+			})
+				.then((res) =>
+					setRefundCount(Number(res.headers['x-wp-total']) || 0)
 				)
-				.catch( () => {} );
+				.catch(() => {});
 		}
 
 		// Report Abuse (only if module active)
-		if ( modules.includes( 'marketplace-compliance' ) ) {
+		if (modules.includes('marketplace-compliance')) {
 			axios
-				.get( getApiLink( appLocalizer, 'report-abuse' ), {
+				.get(getApiLink(appLocalizer, 'report-abuse'), {
 					headers: { 'X-WP-Nonce': appLocalizer.nonce },
 					params: { count: true },
-				} )
-				.then( ( res ) => setReportAbuseCount( res.data || 0 ) )
-				.catch( () => {} );
+				})
+				.then((res) => setReportAbuseCount(res.data || 0))
+				.catch(() => {});
 		}
 
 		// Withdraw Count (only if manual withdraw enabled)
-		if ( settings?.disbursement?.withdraw_type === 'manual' ) {
-			axios( {
+		if (settings?.disbursement?.withdraw_type === 'manual') {
+			axios({
 				method: 'GET',
-				url: getApiLink( appLocalizer, 'store' ),
+				url: getApiLink(appLocalizer, 'store'),
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: { count: true, pending_withdraw: true },
-			} )
-				.then( ( res ) => setWithdrawCount( res.data || 0 ) )
-				.catch( () => {} );
+			})
+				.then((res) => setWithdrawCount(res.data || 0))
+				.catch(() => {});
 		}
 
 		// Deactivate Store Request (always active)
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'store' ),
+			url: getApiLink(appLocalizer, 'store'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: { count: true, deactivate: true },
-		} )
-			.then( ( res ) => setDeactivateCount( res.data || 0 ) )
-			.catch( () => {} );
+		})
+			.then((res) => setDeactivateCount(res.data || 0))
+			.catch(() => {});
 	};
 
-	useEffect( () => {
+	useEffect(() => {
 		// Wait until modules load
-		if ( ! modules || modules.length === 0 ) return;
+		if (!modules || modules.length === 0) return;
 
 		// Prevent double run in Strict Mode
-		if ( ranOnce.current ) return;
+		if (ranOnce.current) return;
 		ranOnce.current = true;
 
 		refreshCounts();
-	}, [ modules ] );
+	}, [modules]);
 
-	const location = new URLSearchParams( useLocation().hash.substring( 1 ) );
+	const location = new URLSearchParams(useLocation().hash.substring(1));
 
 	const tabData = [
 		{
@@ -165,7 +159,7 @@ const ApprovalQueue = () => {
 		{
 			type: 'file',
 			condition:
-				settings?.[ 'store-capability' ]?.products?.includes(
+				settings?.['store-capability']?.products?.includes(
 					'publish_products'
 				),
 			content: {
@@ -181,7 +175,7 @@ const ApprovalQueue = () => {
 		{
 			type: 'file',
 			condition:
-				settings?.[ 'store-capability' ]?.coupons?.includes(
+				settings?.['store-capability']?.coupons?.includes(
 					'publish_coupons'
 				),
 			content: {
@@ -257,39 +251,37 @@ const ApprovalQueue = () => {
 			},
 		},
 	].filter(
-		( tab ) =>
+		(tab) =>
 			//Show if:
-			( ! tab.module || modules.includes( tab.module ) ) && // module active or not required
-			( tab.condition === undefined || tab.condition ) // condition true or not set
+			(!tab.module || modules.includes(tab.module)) && // module active or not required
+			(tab.condition === undefined || tab.condition) // condition true or not set
 	);
 
-	const getForm = ( tabId: string ) => {
-		switch ( tabId ) {
+	const getForm = (tabId: string) => {
+		switch (tabId) {
 			case 'stores':
-				return <PendingStores onUpdated={ refreshCounts } />;
+				return <PendingStores onUpdated={refreshCounts} />;
 
 			case 'products':
-				return <PendingProducts onUpdated={ refreshCounts } />;
+				return <PendingProducts onUpdated={refreshCounts} />;
 
 			case 'coupons':
-				return <PendingCoupons onUpdated={ refreshCounts } />;
+				return <PendingCoupons onUpdated={refreshCounts} />;
 
 			case 'wholesale-customer':
 				return <h1>Upcoming Feature</h1>;
 
 			case 'refund-requests':
-				return <PendingRefund onUpdated={ refreshCounts } />;
+				return <PendingRefund onUpdated={refreshCounts} />;
 
 			case 'report-abuse':
-				return <PendingReportAbuse onUpdated={ refreshCounts } />;
+				return <PendingReportAbuse onUpdated={refreshCounts} />;
 
 			case 'withdrawal':
-				return <PendingWithdrawal onUpdated={ refreshCounts } />;
+				return <PendingWithdrawal onUpdated={refreshCounts} />;
 
 			case 'deactivate-requests':
-				return (
-					<PendingDeactivateRequests onUpdated={ refreshCounts } />
-				);
+				return <PendingDeactivateRequests onUpdated={refreshCounts} />;
 
 			default:
 				return <div></div>;
@@ -306,21 +298,21 @@ const ApprovalQueue = () => {
 				}
 			/>
 			<Tabs
-				tabData={ tabData }
-				currentTab={ location.get( 'subtab' ) as string }
-				getForm={ getForm }
-				prepareUrl={ ( subTab: string ) =>
-					`?page=multivendorx#&tab=approval-queue&subtab=${ subTab }`
+				tabData={tabData}
+				currentTab={location.get('subtab') as string}
+				getForm={getForm}
+				prepareUrl={(subTab: string) =>
+					`?page=multivendorx#&tab=approval-queue&subtab=${subTab}`
 				}
-				appLocalizer={ appLocalizer }
-				supprot={ [] }
-				Link={ Link }
-				hideTitle={ true }
-				hideBreadcrumb={ true }
-				template={ 'template-3' }
-				premium={ false }
-				menuIcon={ true }
-				desc={ true }
+				appLocalizer={appLocalizer}
+				supprot={[]}
+				Link={Link}
+				hideTitle={true}
+				hideBreadcrumb={true}
+				template={'template-3'}
+				premium={false}
+				menuIcon={true}
+				desc={true}
 			/>
 		</>
 	);

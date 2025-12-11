@@ -20,7 +20,7 @@ import { formatCurrency } from '../services/commonFunction';
 export interface RealtimeFilter {
 	name: string;
 	render: (
-		updateFilter: ( key: string, value: any ) => void,
+		updateFilter: (key: string, value: any) => void,
 		filterValue: any
 	) => ReactNode;
 }
@@ -52,52 +52,46 @@ type FilterData = {
 	};
 };
 const StoreCommission: React.FC = () => {
-	const [ data, setData ] = useState< CommissionRow[] >( [] );
-	const [ pagination, setPagination ] = useState< PaginationState >( {
+	const [data, setData] = useState<CommissionRow[]>([]);
+	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
 		pageSize: 10,
-	} );
-	const [ modalCommission, setModalCommission ] =
-		useState< CommissionRow | null >( null );
-	const [ totalRows, setTotalRows ] = useState< number >( 0 );
-	const [ pageCount, setPageCount ] = useState( 0 );
+	});
+	const [modalCommission, setModalCommission] =
+		useState<CommissionRow | null>(null);
+	const [totalRows, setTotalRows] = useState<number>(0);
+	const [pageCount, setPageCount] = useState(0);
 	const { modules } = useModules();
-	const [ commissionStatus, setCommissionStatus ] = useState<
+	const [commissionStatus, setCommissionStatus] = useState<
 		CommissionStatus[] | null
-	>( null );
-	const [ expandedRows, setExpandedRows ] = useState< {
-		[ key: number ]: boolean;
-	} >( {} );
-	const [ rowSelection, setRowSelection ] = useState< RowSelectionState >(
-		{}
-	);
-	const [ currentFilterData, setCurrentFilterData ] = useState< FilterData >(
-		{}
-	);
+	>(null);
+	const [expandedRows, setExpandedRows] = useState<{
+		[key: number]: boolean;
+	}>({});
+	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+	const [currentFilterData, setCurrentFilterData] = useState<FilterData>({});
 
 	// Fetch total rows on mount
-	useEffect( () => {
-		axios( {
+	useEffect(() => {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'commission' ),
+			url: getApiLink(appLocalizer, 'commission'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: { count: true, store_id: appLocalizer.store_id },
-		} )
-			.then( ( response ) => {
-				setTotalRows( response.data || 0 );
-				setPageCount(
-					Math.ceil( response.data / pagination.pageSize )
-				);
-			} )
-			.catch( () => {} );
-	}, [] );
+		})
+			.then((response) => {
+				setTotalRows(response.data || 0);
+				setPageCount(Math.ceil(response.data / pagination.pageSize));
+			})
+			.catch(() => {});
+	}, []);
 
-	useEffect( () => {
+	useEffect(() => {
 		const currentPage = pagination.pageIndex + 1;
 		const rowsPerPage = pagination.pageSize;
-		requestData( rowsPerPage, currentPage );
-		setPageCount( Math.ceil( totalRows / rowsPerPage ) );
-	}, [ pagination ] );
+		requestData(rowsPerPage, currentPage);
+		setPageCount(Math.ceil(totalRows / rowsPerPage));
+	}, [pagination]);
 
 	// Fetch data from backend.
 	function requestData(
@@ -107,13 +101,13 @@ const StoreCommission: React.FC = () => {
 		store = '',
 		orderBy = '',
 		order = '',
-		startDate = new Date( 0 ),
+		startDate = new Date(0),
 		endDate = new Date()
 	) {
-		setData( [] );
-		axios( {
+		setData([]);
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'commission' ),
+			url: getApiLink(appLocalizer, 'commission'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				store_id: appLocalizer.store_id,
@@ -125,10 +119,10 @@ const StoreCommission: React.FC = () => {
 				startDate,
 				endDate,
 			},
-		} )
-			.then( ( response ) => {
-				setData( response.data.commissions || [] );
-				setCommissionStatus( [
+		})
+			.then((response) => {
+				setData(response.data.commissions || []);
+				setCommissionStatus([
 					{
 						key: 'all',
 						name: 'All',
@@ -154,11 +148,11 @@ const StoreCommission: React.FC = () => {
 						name: 'Cancelled',
 						count: response.data.cancelled || 0,
 					},
-				] );
-			} )
-			.catch( () => {
-				setData( [] );
-			} );
+				]);
+			})
+			.catch(() => {
+				setData([]);
+			});
 	}
 
 	// Handle pagination and filter changes
@@ -167,8 +161,8 @@ const StoreCommission: React.FC = () => {
 		currentPage: number,
 		filterData: FilterData
 	) => {
-		setCurrentFilterData( filterData );
-		setData( [] );
+		setCurrentFilterData(filterData);
+		setData([]);
 		requestData(
 			rowsPerPage,
 			currentPage,
@@ -181,48 +175,44 @@ const StoreCommission: React.FC = () => {
 		);
 	};
 
-	const columns: ColumnDef< CommissionRow >[] = [
+	const columns: ColumnDef<CommissionRow>[] = [
 		{
 			id: 'select',
-			header: ( { table } ) => (
+			header: ({ table }) => (
 				<input
 					type="checkbox"
-					checked={ table.getIsAllRowsSelected() }
-					onChange={ table.getToggleAllRowsSelectedHandler() }
+					checked={table.getIsAllRowsSelected()}
+					onChange={table.getToggleAllRowsSelectedHandler()}
 				/>
 			),
-			cell: ( { row } ) => (
+			cell: ({ row }) => (
 				<input
 					type="checkbox"
-					checked={ row.getIsSelected() }
-					onChange={ row.getToggleSelectedHandler() }
+					checked={row.getIsSelected()}
+					onChange={row.getToggleSelectedHandler()}
 				/>
 			),
 		},
 		{
 			id: 'id',
 			accessorKey: 'id',
-			accessorFn: ( row ) => parseFloat( row.id || '0' ),
+			accessorFn: (row) => parseFloat(row.id || '0'),
 			enableSorting: true,
-			header: __( 'ID', 'multivendorx' ),
-			cell: ( { row } ) => <TableCell>#{ row.original.id }</TableCell>,
+			header: __('ID', 'multivendorx'),
+			cell: ({ row }) => <TableCell>#{row.original.id}</TableCell>,
 		},
 		{
 			id: 'orderId',
 			accessorKey: 'orderId',
 			enableSorting: true,
-			header: __( 'Order ID', 'multivendorx' ),
-			cell: ( { row }: any ) => {
+			header: __('Order ID', 'multivendorx'),
+			cell: ({ row }: any) => {
 				const orderId = row.original.orderId;
-				const orderLink = `/dashboard/sales/orders/#view/${ orderId }`;
+				const orderLink = `/dashboard/sales/orders/#view/${orderId}`;
 
 				return (
-					<TableCell title={ orderId ? `#${ orderId }` : '-' }>
-						{ orderId ? (
-							<a href={ orderLink }>#{ orderId }</a>
-						) : (
-							'-'
-						) }
+					<TableCell title={orderId ? `#${orderId}` : '-'}>
+						{orderId ? <a href={orderLink}>#{orderId}</a> : '-'}
 					</TableCell>
 				);
 			},
@@ -230,157 +220,155 @@ const StoreCommission: React.FC = () => {
 		{
 			id: 'totalOrderAmount',
 			accessorKey: 'totalOrderAmount',
-			accessorFn: ( row ) => parseFloat( row.totalOrderAmount || '0' ),
+			accessorFn: (row) => parseFloat(row.totalOrderAmount || '0'),
 			enableSorting: true,
-			header: __( 'Order Amount', 'multivendorx' ),
-			cell: ( { row } ) => (
+			header: __('Order Amount', 'multivendorx'),
+			cell: ({ row }) => (
 				<TableCell
 					title={
 						row.original.totalOrderAmount
-							? `${ appLocalizer.currency_symbol }${ row.original.totalOrderAmount }`
+							? `${appLocalizer.currency_symbol}${row.original.totalOrderAmount}`
 							: '-'
 					}
 				>
-					{ row.original.totalOrderAmount
-						? formatCurrency( row.original.totalOrderAmount )
-						: '-' }
+					{row.original.totalOrderAmount
+						? formatCurrency(row.original.totalOrderAmount)
+						: '-'}
 				</TableCell>
 			),
 		},
 		{
 			id: 'commission-summary',
 			enableSorting: true,
-			header: __( 'Commission Summary', 'multivendorx' ),
-			cell: ( { row } ) => {
-				const isExpanded = expandedRows[ row.original.id! ];
+			header: __('Commission Summary', 'multivendorx'),
+			cell: ({ row }) => {
+				const isExpanded = expandedRows[row.original.id!];
 
 				return (
 					<TableCell>
 						<ul
-							className={ `details ${
+							className={`details ${
 								isExpanded ? '' : 'overflow'
-							}` }
+							}`}
 						>
-							{ row.original?.commissionAmount ? (
+							{row.original?.commissionAmount ? (
 								<li>
 									<div className="item">
 										<div className="des">
 											Commission Earned
 										</div>
 										<div className="title">
-											{ formatCurrency(
+											{formatCurrency(
 												row.original.commissionAmount
-											) }
+											)}
 										</div>
 									</div>
 								</li>
-							) : null }
-							{ ( row.original?.shippingAmount ||
-								row.original?.taxAmount ) && (
+							) : null}
+							{(row.original?.shippingAmount ||
+								row.original?.taxAmount) && (
 								<li>
-									{ row.original?.shippingAmount && (
+									{row.original?.shippingAmount && (
 										<div className="item">
 											<div className="des">Shipping</div>
 											<div className="title">
-												+{ ' ' }
-												{ formatCurrency(
+												+{' '}
+												{formatCurrency(
 													row.original.shippingAmount
-												) }
+												)}
 											</div>
 										</div>
-									) }
+									)}
 
-									{ row.original?.taxAmount && (
+									{row.original?.taxAmount && (
 										<div className="item">
 											<div className="des">Tax</div>
 											<div className="title">
-												+{ ' ' }
-												{ formatCurrency(
+												+{' '}
+												{formatCurrency(
 													row.original.taxAmount
-												) }
+												)}
 											</div>
 										</div>
-									) }
+									)}
 								</li>
-							) }
-							{ ( ( modules.includes( 'marketplace-gateway' ) &&
-								row.original?.gatewayFee ) ||
-								( modules.includes( 'facilitator' ) &&
-									row.original?.facilitatorFee ) ||
-								( modules.includes( 'marketplace-fee' ) &&
-									row.original?.platformFee ) ) && (
+							)}
+							{((modules.includes('marketplace-gateway') &&
+								row.original?.gatewayFee) ||
+								(modules.includes('facilitator') &&
+									row.original?.facilitatorFee) ||
+								(modules.includes('marketplace-fee') &&
+									row.original?.platformFee)) && (
 								<li>
-									{ modules.includes(
-										'marketplace-gateway'
-									) &&
+									{modules.includes('marketplace-gateway') &&
 										row.original?.gatewayFee && (
 											<div className="item">
 												<div className="des">
 													Gateway Fee
 												</div>
 												<div className="title">
-													-{ ' ' }
-													{ formatCurrency(
+													-{' '}
+													{formatCurrency(
 														row.original.gatewayFee
-													) }
+													)}
 												</div>
 											</div>
-										) }
+										)}
 
-									{ modules.includes( 'facilitator' ) &&
+									{modules.includes('facilitator') &&
 										row.original?.facilitatorFee && (
 											<div className="item">
 												<div className="des">
 													Facilitator Fee
 												</div>
 												<div className="title">
-													-{ ' ' }
-													{ formatCurrency(
+													-{' '}
+													{formatCurrency(
 														row.original
 															.facilitatorFee
-													) }
+													)}
 												</div>
 											</div>
-										) }
+										)}
 
-									{ modules.includes( 'marketplace-fee' ) &&
+									{modules.includes('marketplace-fee') &&
 										row.original?.platformFee && (
 											<div className="item">
 												<div className="des">
 													Marketplace Fee
 												</div>
 												<div className="title">
-													-{ ' ' }
-													{ formatCurrency(
+													-{' '}
+													{formatCurrency(
 														row.original.platformFee
-													) }
+													)}
 												</div>
 											</div>
-										) }
+										)}
 								</li>
-							) }
+							)}
 
 							<span
 								className="more-btn"
-								onClick={ () =>
-									setExpandedRows( ( prev ) => ( {
+								onClick={() =>
+									setExpandedRows((prev) => ({
 										...prev,
-										[ row.original.id! ]:
-											! prev[ row.original.id! ],
-									} ) )
+										[row.original.id!]:
+											!prev[row.original.id!],
+									}))
 								}
 							>
-								{ isExpanded ? (
+								{isExpanded ? (
 									<>
-										Less{ ' ' }
+										Less{' '}
 										<i className="adminlib-arrow-up"></i>
 									</>
 								) : (
 									<>
-										More{ ' ' }
+										More{' '}
 										<i className="adminlib-arrow-down"></i>
 									</>
-								) }
+								)}
 							</span>
 						</ul>
 					</TableCell>
@@ -390,20 +378,20 @@ const StoreCommission: React.FC = () => {
 		{
 			id: 'totalEarned',
 			accessorKey: 'totalEarned',
-			accessorFn: ( row ) => parseFloat( row.taxAmount || '0' ),
+			accessorFn: (row) => parseFloat(row.taxAmount || '0'),
 			enableSorting: true,
-			header: __( 'Total Earned ', 'multivendorx' ),
-			cell: ( { row } ) => (
+			header: __('Total Earned ', 'multivendorx'),
+			cell: ({ row }) => (
 				<TableCell
 					title={
 						row.original.taxAmount
-							? `${ appLocalizer.currency_symbol }${ row.original.taxAmount }`
+							? `${appLocalizer.currency_symbol}${row.original.taxAmount}`
 							: '-'
 					}
 				>
-					{ row.original.taxAmount
-						? formatCurrency( row.original.taxAmount )
-						: '-' }
+					{row.original.taxAmount
+						? formatCurrency(row.original.taxAmount)
+						: '-'}
 				</TableCell>
 			),
 		},
@@ -411,13 +399,13 @@ const StoreCommission: React.FC = () => {
 			id: 'created_at',
 			accessorKey: 'created_at',
 			enableSorting: true,
-			header: __( 'Date', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Date', 'multivendorx'),
+			cell: ({ row }) => {
 				const date = row.original.createdAt;
-				if ( ! date ) return <TableCell>-</TableCell>;
+				if (!date) return <TableCell>-</TableCell>;
 
 				// Format the date for display
-				const formattedDate = new Date( date ).toLocaleDateString(
+				const formattedDate = new Date(date).toLocaleDateString(
 					'en-US',
 					{
 						year: 'numeric',
@@ -427,37 +415,37 @@ const StoreCommission: React.FC = () => {
 				);
 
 				return (
-					<TableCell title={ `${ formattedDate }` }>
-						{ formattedDate }
+					<TableCell title={`${formattedDate}`}>
+						{formattedDate}
 					</TableCell>
 				);
 			},
 		},
 		{
-			header: __( 'Status', 'multivendorx' ),
-			cell: ( { row } ) => (
+			header: __('Status', 'multivendorx'),
+			cell: ({ row }) => (
 				<TableCell>
 					<span
-						className={ `admin-badge ${
+						className={`admin-badge ${
 							row.original.status === 'paid' ? 'green' : 'red'
-						}` }
+						}`}
 					>
-						{ row.original.status === 'paid' ? 'Paid' : 'Unpaid' }
+						{row.original.status === 'paid' ? 'Paid' : 'Unpaid'}
 					</span>
 				</TableCell>
 			),
 		},
 		{
 			id: 'action',
-			header: __( 'Action', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Action', 'multivendorx'),
+			cell: ({ row }) => {
 				const isPaid = row.original.status === 'paid';
 
 				return (
 					<TableCell
 						type="action-dropdown"
-						rowData={ row.original }
-						header={ {
+						rowData={row.original}
+						header={{
 							actions: isPaid
 								? [
 										{
@@ -466,14 +454,14 @@ const StoreCommission: React.FC = () => {
 												'multivendorx'
 											),
 											icon: 'adminlib-preview',
-											onClick: ( rowData ) => {
-												setModalCommission( rowData );
+											onClick: (rowData) => {
+												setModalCommission(rowData);
 											},
 											hover: true,
 										},
-								  ]
+									]
 								: [],
-						} }
+						}}
 					/>
 				);
 			},
@@ -483,17 +471,17 @@ const StoreCommission: React.FC = () => {
 	const realtimeFilter: RealtimeFilter[] = [
 		{
 			name: 'date',
-			render: ( updateFilter ) => (
+			render: (updateFilter) => (
 				<div className="right">
 					<MultiCalendarInput
 						wrapperClass=""
 						inputClass=""
-						onChange={ ( range: any ) => {
-							updateFilter( 'date', {
+						onChange={(range: any) => {
+							updateFilter('date', {
 								start_date: range.startDate,
 								end_date: range.endDate,
-							} );
-						} }
+							});
+						}}
 					/>
 				</div>
 			),
@@ -501,84 +489,80 @@ const StoreCommission: React.FC = () => {
 	];
 
 	// CSV Download Button Component
-	const DownloadCSVButton: React.FC< {
+	const DownloadCSVButton: React.FC<{
 		selectedRows: RowSelectionState;
 		data: CommissionRow[] | null;
 		filterData: FilterData;
 		isLoading?: boolean;
-	} > = ( { selectedRows, data, filterData, isLoading = false } ) => {
-		const [ isDownloading, setIsDownloading ] = useState( false );
+	}> = ({ selectedRows, data, filterData, isLoading = false }) => {
+		const [isDownloading, setIsDownloading] = useState(false);
 
 		const handleDownload = async () => {
-			setIsDownloading( true );
+			setIsDownloading(true);
 			try {
 				// Get selected row IDs
-				const selectedIds = Object.keys( selectedRows )
-					.filter( ( key ) => selectedRows[ key ] )
-					.map( ( key ) => {
-						const rowIndex = parseInt( key );
-						return data?.[ rowIndex ]?.id;
-					} )
-					.filter( ( id ) => id !== undefined );
+				const selectedIds = Object.keys(selectedRows)
+					.filter((key) => selectedRows[key])
+					.map((key) => {
+						const rowIndex = parseInt(key);
+						return data?.[rowIndex]?.id;
+					})
+					.filter((id) => id !== undefined);
 
 				// Prepare parameters for CSV download
 				const params: any = {
 					format: 'csv',
 					startDate: filterData?.date?.start_date
-						? filterData.date.start_date
-								.toISOString()
-								.split( 'T' )[ 0 ]
+						? filterData.date.start_date.toISOString().split('T')[0]
 						: '',
 					endDate: filterData?.date?.end_date
-						? filterData.date.end_date
-								.toISOString()
-								.split( 'T' )[ 0 ]
+						? filterData.date.end_date.toISOString().split('T')[0]
 						: '',
 				};
 
 				// Add filters if present
-				if ( filterData?.store ) {
+				if (filterData?.store) {
 					params.store_id = filterData.store;
 				}
-				if ( filterData?.typeCount && filterData.typeCount !== 'all' ) {
+				if (filterData?.typeCount && filterData.typeCount !== 'all') {
 					params.status = filterData.typeCount;
 				}
 
 				// If specific rows are selected, send their IDs
-				if ( selectedIds.length > 0 ) {
-					params.ids = selectedIds.join( ',' );
+				if (selectedIds.length > 0) {
+					params.ids = selectedIds.join(',');
 				}
 
 				// Make API request for CSV
-				const response = await axios( {
+				const response = await axios({
 					method: 'GET',
-					url: getApiLink( appLocalizer, 'commission' ),
+					url: getApiLink(appLocalizer, 'commission'),
 					headers: {
 						'X-WP-Nonce': appLocalizer.nonce,
 						Accept: 'text/csv',
 					},
 					params: params,
 					responseType: 'blob',
-				} );
+				});
 
 				// Create download link
 				const url = window.URL.createObjectURL(
-					new Blob( [ response.data ] )
+					new Blob([response.data])
 				);
-				const link = document.createElement( 'a' );
+				const link = document.createElement('a');
 				link.href = url;
 
 				// Generate filename with timestamp
-				const timestamp = new Date().toISOString().split( 'T' )[ 0 ];
-				const filename = `commissions_${ timestamp }.csv`;
-				link.setAttribute( 'download', filename );
+				const timestamp = new Date().toISOString().split('T')[0];
+				const filename = `commissions_${timestamp}.csv`;
+				link.setAttribute('download', filename);
 
-				document.body.appendChild( link );
+				document.body.appendChild(link);
 				link.click();
 				link.remove();
-				window.URL.revokeObjectURL( url );
-			} catch ( error ) {
-				console.error( 'Error downloading CSV:', error );
+				window.URL.revokeObjectURL(url);
+			} catch (error) {
+				console.error('Error downloading CSV:', error);
 				alert(
 					__(
 						'Failed to download CSV. Please try again.',
@@ -586,21 +570,19 @@ const StoreCommission: React.FC = () => {
 					)
 				);
 			} finally {
-				setIsDownloading( false );
+				setIsDownloading(false);
 			}
 		};
 
-		const hasSelectedRows = Object.keys( selectedRows ).some(
-			( key ) => selectedRows[ key ]
+		const hasSelectedRows = Object.keys(selectedRows).some(
+			(key) => selectedRows[key]
 		);
 
 		return (
 			<button
-				onClick={ handleDownload }
+				onClick={handleDownload}
 				disabled={
-					isDownloading ||
-					isLoading ||
-					( ! hasSelectedRows && ! data )
+					isDownloading || isLoading || (!hasSelectedRows && !data)
 				}
 				className="button"
 			>
@@ -610,20 +592,20 @@ const StoreCommission: React.FC = () => {
 	};
 
 	// Bulk Actions Component
-	const BulkActions: React.FC< {
+	const BulkActions: React.FC<{
 		selectedRows: RowSelectionState;
 		data: CommissionRow[] | null;
 		filterData: FilterData;
 		onActionComplete?: () => void;
-	} > = ( { selectedRows, data, filterData, onActionComplete } ) => {
+	}> = ({ selectedRows, data, filterData, onActionComplete }) => {
 		return (
 			<div>
 				<DownloadCSVButton
-					selectedRows={ selectedRows }
-					data={ data }
-					filterData={ filterData }
+					selectedRows={selectedRows}
+					data={data}
+					filterData={filterData}
 				/>
-				{ /* Add other bulk actions here if needed */ }
+				{/* Add other bulk actions here if needed */}
 			</div>
 		);
 	};
@@ -634,16 +616,16 @@ const StoreCommission: React.FC = () => {
 				startDate: currentFilterData?.date?.start_date
 					? currentFilterData.date.start_date
 							.toISOString()
-							.split( 'T' )[ 0 ]
+							.split('T')[0]
 					: '',
 				endDate: currentFilterData?.date?.end_date
 					? currentFilterData.date.end_date
 							.toISOString()
-							.split( 'T' )[ 0 ]
+							.split('T')[0]
 					: '',
 			};
 
-			if ( currentFilterData?.store ) {
+			if (currentFilterData?.store) {
 				params.store_id = currentFilterData.store;
 			}
 
@@ -654,34 +636,32 @@ const StoreCommission: React.FC = () => {
 				params.status = currentFilterData.typeCount;
 			}
 
-			const response = await axios( {
+			const response = await axios({
 				method: 'GET',
-				url: getApiLink( appLocalizer, 'commission' ),
+				url: getApiLink(appLocalizer, 'commission'),
 				headers: {
 					'X-WP-Nonce': appLocalizer.nonce,
 					Accept: 'text/csv',
 				},
 				params,
 				responseType: 'blob',
-			} );
+			});
 
-			const url = window.URL.createObjectURL(
-				new Blob( [ response.data ] )
-			);
-			const link = document.createElement( 'a' );
+			const url = window.URL.createObjectURL(new Blob([response.data]));
+			const link = document.createElement('a');
 			link.href = url;
 
-			const timestamp = new Date().toISOString().split( 'T' )[ 0 ];
-			link.setAttribute( 'download', `commissions_${ timestamp }.csv` );
+			const timestamp = new Date().toISOString().split('T')[0];
+			link.setAttribute('download', `commissions_${timestamp}.csv`);
 
-			document.body.appendChild( link );
+			document.body.appendChild(link);
 			link.click();
 			link.remove();
-			window.URL.revokeObjectURL( url );
-		} catch ( error ) {
-			console.error( 'Error exporting CSV:', error );
+			window.URL.revokeObjectURL(url);
+		} catch (error) {
+			console.error('Error exporting CSV:', error);
 			alert(
-				__( 'Failed to export CSV. Please try again.', 'multivendorx' )
+				__('Failed to export CSV. Please try again.', 'multivendorx')
 			);
 		}
 	};
@@ -691,56 +671,56 @@ const StoreCommission: React.FC = () => {
 			<div className="page-title-wrapper">
 				<div className="page-title">
 					<div className="title">
-						{ __( 'Commission', 'multivendorx' ) }
+						{__('Commission', 'multivendorx')}
 					</div>
 					<div className="des">
-						{ __(
+						{__(
 							'Details of commissions earned by your store for every order, including order amount, commission rate and payout status.',
 							'multivendorx'
-						) }
+						)}
 					</div>
 				</div>
 
 				<div className="buttons-wrapper">
 					<button
 						className="admin-btn btn-purple-bg"
-						onClick={ handleExportAll }
+						onClick={handleExportAll}
 					>
 						<i className="adminlib-export"></i>
-						{ __( 'Export', 'multivendorx' ) }
+						{__('Export', 'multivendorx')}
 					</button>
 				</div>
 			</div>
 			<Table
-				data={ data }
-				columns={ columns as ColumnDef< Record< string, any >, any >[] }
-				rowSelection={ rowSelection }
-				onRowSelectionChange={ setRowSelection }
-				pagination={ pagination }
-				onPaginationChange={ setPagination }
-				handlePagination={ requestApiForData }
-				defaultRowsPerPage={ 10 }
-				perPageOption={ [ 10, 25, 50 ] }
-				typeCounts={ commissionStatus as CommissionStatus }
-				totalCounts={ totalRows }
-				pageCount={ pageCount }
-				realtimeFilter={ realtimeFilter }
-				bulkActionComp={ () => (
+				data={data}
+				columns={columns as ColumnDef<Record<string, any>, any>[]}
+				rowSelection={rowSelection}
+				onRowSelectionChange={setRowSelection}
+				pagination={pagination}
+				onPaginationChange={setPagination}
+				handlePagination={requestApiForData}
+				defaultRowsPerPage={10}
+				perPageOption={[10, 25, 50]}
+				typeCounts={commissionStatus as CommissionStatus}
+				totalCounts={totalRows}
+				pageCount={pageCount}
+				realtimeFilter={realtimeFilter}
+				bulkActionComp={() => (
 					<BulkActions
-						selectedRows={ rowSelection }
-						data={ data }
-						filterData={ currentFilterData }
+						selectedRows={rowSelection}
+						data={data}
+						filterData={currentFilterData}
 					/>
-				) }
+				)}
 			/>
 
-			{ modalCommission && (
+			{modalCommission && (
 				<ViewCommission
-					open={ !! modalCommission }
-					onClose={ () => setModalCommission( null ) }
-					commissionId={ modalCommission.id }
+					open={!!modalCommission}
+					onClose={() => setModalCommission(null)}
+					commissionId={modalCommission.id}
 				/>
-			) }
+			)}
 		</>
 	);
 };

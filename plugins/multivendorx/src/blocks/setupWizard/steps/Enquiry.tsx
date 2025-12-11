@@ -8,28 +8,28 @@ interface EnquiryProps {
 	onPrev: () => void;
 }
 
-const Enquiry: React.FC< EnquiryProps > = ( { onNext, onPrev } ) => {
-	const [ loading, setLoading ] = useState< boolean >( false );
-	const [ displayOption, setDisplayOption ] = useState< 'popup' | 'inline' >(
+const Enquiry: React.FC<EnquiryProps> = ({ onNext, onPrev }) => {
+	const [loading, setLoading] = useState<boolean>(false);
+	const [displayOption, setDisplayOption] = useState<'popup' | 'inline'>(
 		'popup'
 	);
-	const [ restrictUserEnquiry, setRestrictUserEnquiry ] = useState<
-		string[]
-	>( [] );
+	const [restrictUserEnquiry, setRestrictUserEnquiry] = useState<string[]>(
+		[]
+	);
 
 	const handleRestrictUserEnquiryChange = (
-		event: ChangeEvent< HTMLInputElement >
+		event: ChangeEvent<HTMLInputElement>
 	) => {
 		const { checked, name } = event.target;
-		setRestrictUserEnquiry( ( prevState ) =>
+		setRestrictUserEnquiry((prevState) =>
 			checked
-				? [ ...prevState, name ]
-				: prevState.filter( ( value ) => value !== name )
+				? [...prevState, name]
+				: prevState.filter((value) => value !== name)
 		);
 	};
 
 	const saveEnquirySettings = () => {
-		setLoading( true );
+		setLoading(true);
 		const data = {
 			action: 'enquiry',
 			displayOption: displayOption,
@@ -37,18 +37,18 @@ const Enquiry: React.FC< EnquiryProps > = ( { onNext, onPrev } ) => {
 		};
 
 		axios
-			.post( getApiLink( 'settings' ), data, {
+			.post(getApiLink('settings'), data, {
 				headers: {
-					'X-WP-Nonce': ( window as any ).appLocalizer?.nonce,
+					'X-WP-Nonce': (window as any).appLocalizer?.nonce,
 				},
-			} )
-			.then( () => {
-				setLoading( false );
+			})
+			.then(() => {
+				setLoading(false);
 				onNext();
-			} )
-			.catch( () => {
-				setLoading( false );
-			} );
+			})
+			.catch(() => {
+				setLoading(false);
+			});
 	};
 
 	return (
@@ -71,8 +71,8 @@ const Enquiry: React.FC< EnquiryProps > = ( { onNext, onPrev } ) => {
 								id="popup"
 								name="approve_vendor"
 								value="popup"
-								checked={ displayOption === 'popup' }
-								onChange={ () => setDisplayOption( 'popup' ) }
+								checked={displayOption === 'popup'}
+								onChange={() => setDisplayOption('popup')}
 							/>
 							<label htmlFor="popup">Popup</label>
 						</li>
@@ -83,8 +83,8 @@ const Enquiry: React.FC< EnquiryProps > = ( { onNext, onPrev } ) => {
 								id="inline"
 								name="approve_vendor"
 								value="inline"
-								checked={ displayOption === 'inline' }
-								onChange={ () => setDisplayOption( 'inline' ) }
+								checked={displayOption === 'inline'}
+								onChange={() => setDisplayOption('inline')}
 							/>
 							<label htmlFor="inline">Inline In-page</label>
 						</li>
@@ -106,10 +106,10 @@ const Enquiry: React.FC< EnquiryProps > = ( { onNext, onPrev } ) => {
 							type="checkbox"
 							id="enquiry_logged_out"
 							name="enquiry_logged_out"
-							checked={ restrictUserEnquiry.includes(
+							checked={restrictUserEnquiry.includes(
 								'enquiry_logged_out'
-							) }
-							onChange={ handleRestrictUserEnquiryChange }
+							)}
+							onChange={handleRestrictUserEnquiryChange}
 						/>
 						<label htmlFor="enquiry_logged_out"></label>
 					</div>
@@ -118,21 +118,21 @@ const Enquiry: React.FC< EnquiryProps > = ( { onNext, onPrev } ) => {
 
 			<footer className="setup-footer-btn-wrapper">
 				<div>
-					<button className="footer-btn pre-btn" onClick={ onPrev }>
+					<button className="footer-btn pre-btn" onClick={onPrev}>
 						Prev
 					</button>
-					<button className="footer-btn" onClick={ onNext }>
+					<button className="footer-btn" onClick={onNext}>
 						Skip
 					</button>
 				</div>
 				<button
 					className="footer-btn next-btn"
-					onClick={ saveEnquirySettings }
+					onClick={saveEnquirySettings}
 				>
 					Next
 				</button>
 			</footer>
-			{ loading && <Loading /> }
+			{loading && <Loading />}
 		</section>
 	);
 };

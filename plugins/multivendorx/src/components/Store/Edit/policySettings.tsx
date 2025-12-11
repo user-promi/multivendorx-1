@@ -4,59 +4,55 @@ import axios from 'axios';
 import { TextArea, SuccessNotice, getApiLink } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
-const PolicySettings = ( { id, data }: { id: string | null; data: any } ) => {
-	const [ formData, setFormData ] = useState< { [ key: string ]: string } >(
-		{}
-	);
-	const [ successMsg, setSuccessMsg ] = useState< string | null >( null );
+const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
+	const [formData, setFormData] = useState<{ [key: string]: string }>({});
+	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
-	useEffect( () => {
-		if ( ! id ) return;
-		if ( data ) {
-			setFormData( data );
+	useEffect(() => {
+		if (!id) return;
+		if (data) {
+			setFormData(data);
 		}
-	}, [ id ] );
+	}, [id]);
 
-	useEffect( () => {
-		if ( successMsg ) {
-			const timer = setTimeout( () => setSuccessMsg( null ), 3000 );
-			return () => clearTimeout( timer );
+	useEffect(() => {
+		if (successMsg) {
+			const timer = setTimeout(() => setSuccessMsg(null), 3000);
+			return () => clearTimeout(timer);
 		}
-	}, [ successMsg ] );
+	}, [successMsg]);
 
 	const handleChange = (
-		e: React.ChangeEvent< HTMLInputElement | HTMLTextAreaElement >
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
 	) => {
 		const { name, value } = e?.target;
 
-		setFormData( ( prev ) => {
+		setFormData((prev) => {
 			const updated = {
-				...( prev || {} ),
-				[ name ]: value ?? '',
+				...(prev || {}),
+				[name]: value ?? '',
 			};
-			autoSave( updated );
+			autoSave(updated);
 			return updated;
-		} );
+		});
 	};
 
-	const autoSave = ( updatedData: { [ key: string ]: string } ) => {
-		axios( {
+	const autoSave = (updatedData: { [key: string]: string }) => {
+		axios({
 			method: 'PUT',
-			url: getApiLink( appLocalizer, `store/${ id }` ),
+			url: getApiLink(appLocalizer, `store/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: updatedData,
-		} ).then( ( res ) => {
-			if ( res.data.success ) {
-				setSuccessMsg(
-					__( 'Store saved successfully!', 'multivendorx' )
-				);
+		}).then((res) => {
+			if (res.data.success) {
+				setSuccessMsg(__('Store saved successfully!', 'multivendorx'));
 			}
-		} );
+		});
 	};
 
 	return (
 		<>
-			<SuccessNotice message={ successMsg } />
+			<SuccessNotice message={successMsg} />
 
 			<div className="container-wrapper">
 				<div className="card-wrapper w-65">
@@ -64,7 +60,7 @@ const PolicySettings = ( { id, data }: { id: string | null; data: any } ) => {
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{ __( 'Shipping policy', 'multivendorx' ) }
+									{__('Shipping policy', 'multivendorx')}
 								</div>
 							</div>
 						</div>
@@ -76,14 +72,14 @@ const PolicySettings = ( { id, data }: { id: string | null; data: any } ) => {
 										wrapperClass="setting-from-textarea"
 										inputClass="textarea-input"
 										descClass="settings-metabox-description"
-										value={ formData.shipping_policy }
-										onChange={ handleChange }
-										usePlainText={ false }
+										value={formData.shipping_policy}
+										onChange={handleChange}
+										usePlainText={false}
 										tinymceApiKey={
 											appLocalizer
 												.settings_databases_value[
 												'marketplace'
-											][ 'tinymce_api_section' ] ?? ''
+											]['tinymce_api_section'] ?? ''
 										}
 									/>
 								</div>
@@ -95,7 +91,7 @@ const PolicySettings = ( { id, data }: { id: string | null; data: any } ) => {
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{ __( 'Refund policy', 'multivendorx' ) }
+									{__('Refund policy', 'multivendorx')}
 								</div>
 							</div>
 						</div>
@@ -107,14 +103,14 @@ const PolicySettings = ( { id, data }: { id: string | null; data: any } ) => {
 										wrapperClass="setting-from-textarea"
 										inputClass="textarea-input"
 										descClass="settings-metabox-description"
-										value={ formData.refund_policy }
-										onChange={ handleChange }
-										usePlainText={ false }
+										value={formData.refund_policy}
+										onChange={handleChange}
+										usePlainText={false}
 										tinymceApiKey={
 											appLocalizer
 												.settings_databases_value[
 												'marketplace'
-											][ 'tinymce_api_section' ] ?? ''
+											]['tinymce_api_section'] ?? ''
 										}
 									/>
 								</div>
@@ -126,10 +122,10 @@ const PolicySettings = ( { id, data }: { id: string | null; data: any } ) => {
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{ __(
+									{__(
 										'Cancellation / Return / Exchange policy',
 										'multivendorx'
-									) }
+									)}
 								</div>
 							</div>
 						</div>
@@ -141,14 +137,14 @@ const PolicySettings = ( { id, data }: { id: string | null; data: any } ) => {
 										wrapperClass="setting-from-textarea"
 										inputClass="textarea-input"
 										descClass="settings-metabox-description"
-										value={ formData.exchange_policy }
-										onChange={ handleChange }
-										usePlainText={ false }
+										value={formData.exchange_policy}
+										onChange={handleChange}
+										usePlainText={false}
 										tinymceApiKey={
 											appLocalizer
 												.settings_databases_value[
 												'marketplace'
-											][ 'tinymce_api_section' ] ?? ''
+											]['tinymce_api_section'] ?? ''
 										}
 									/>
 								</div>

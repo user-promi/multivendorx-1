@@ -40,7 +40,7 @@ interface WalletTransactionProps {
 export interface RealtimeFilter {
 	name: string;
 	render: (
-		updateFilter: ( key: string, value: any ) => void,
+		updateFilter: (key: string, value: any) => void,
 		filterValue: any
 	) => ReactNode;
 }
@@ -67,31 +67,31 @@ type FilterData = {
 };
 
 // CSV Download Button Component for Transactions (Bulk Action)
-const DownloadTransactionCSVButton: React.FC< {
+const DownloadTransactionCSVButton: React.FC<{
 	selectedRows: RowSelectionState;
 	data: StoreRow[] | null;
 	filterData: FilterData;
 	storeId: number | null;
 	isLoading?: boolean;
-} > = ( { selectedRows, data, filterData, storeId, isLoading = false } ) => {
-	const [ isDownloading, setIsDownloading ] = useState( false );
+}> = ({ selectedRows, data, filterData, storeId, isLoading = false }) => {
+	const [isDownloading, setIsDownloading] = useState(false);
 
 	const handleDownload = async () => {
-		if ( ! storeId ) {
-			alert( __( 'Please select a store first.', 'multivendorx' ) );
+		if (!storeId) {
+			alert(__('Please select a store first.', 'multivendorx'));
 			return;
 		}
 
-		setIsDownloading( true );
+		setIsDownloading(true);
 		try {
 			// Get selected row IDs
-			const selectedIds = Object.keys( selectedRows )
-				.filter( ( key ) => selectedRows[ key ] )
-				.map( ( key ) => {
-					const rowIndex = parseInt( key );
-					return data?.[ rowIndex ]?.id;
-				} )
-				.filter( ( id ) => id !== undefined );
+			const selectedIds = Object.keys(selectedRows)
+				.filter((key) => selectedRows[key])
+				.map((key) => {
+					const rowIndex = parseInt(key);
+					return data?.[rowIndex]?.id;
+				})
+				.filter((id) => id !== undefined);
 
 			// Prepare parameters for CSV download
 			const params: any = {
@@ -100,35 +100,35 @@ const DownloadTransactionCSVButton: React.FC< {
 			};
 
 			// Add date filters if present
-			if ( filterData?.date?.start_date ) {
+			if (filterData?.date?.start_date) {
 				params.start_date = filterData.date.start_date
 					.toISOString()
-					.split( 'T' )[ 0 ];
+					.split('T')[0];
 			}
-			if ( filterData?.date?.end_date ) {
+			if (filterData?.date?.end_date) {
 				params.end_date = filterData.date.end_date
 					.toISOString()
-					.split( 'T' )[ 0 ];
+					.split('T')[0];
 			}
 
 			// Add transaction type filter
-			if ( filterData?.transactionType ) {
+			if (filterData?.transactionType) {
 				params.transaction_type = filterData.transactionType;
 			}
 
 			// Add transaction status filter
-			if ( filterData?.transactionStatus ) {
+			if (filterData?.transactionStatus) {
 				params.transaction_status = filterData.transactionStatus;
 			}
 
 			// Add status filter (Cr/Dr)
-			if ( filterData?.typeCount && filterData.typeCount !== 'all' ) {
+			if (filterData?.typeCount && filterData.typeCount !== 'all') {
 				params.filter_status = filterData.typeCount;
 			}
 
 			// If specific rows are selected, send their IDs
-			if ( selectedIds.length > 0 ) {
-				params.ids = selectedIds.join( ',' );
+			if (selectedIds.length > 0) {
+				params.ids = selectedIds.join(',');
 			} else {
 				// If no rows selected, export current page data
 				params.page = 1; // You might want to get current page from props
@@ -136,59 +136,54 @@ const DownloadTransactionCSVButton: React.FC< {
 			}
 
 			// Make API request for CSV
-			const response = await axios( {
+			const response = await axios({
 				method: 'GET',
-				url: getApiLink( appLocalizer, 'transaction' ),
+				url: getApiLink(appLocalizer, 'transaction'),
 				headers: {
 					'X-WP-Nonce': appLocalizer.nonce,
 					Accept: 'text/csv',
 				},
 				params: params,
 				responseType: 'blob',
-			} );
+			});
 
 			// Create download link
-			const url = window.URL.createObjectURL(
-				new Blob( [ response.data ] )
-			);
-			const link = document.createElement( 'a' );
+			const url = window.URL.createObjectURL(new Blob([response.data]));
+			const link = document.createElement('a');
 			link.href = url;
 
 			// Generate filename with timestamp and store ID
-			const timestamp = new Date().toISOString().split( 'T' )[ 0 ];
+			const timestamp = new Date().toISOString().split('T')[0];
 			const context = selectedIds.length > 0 ? 'selected' : 'page';
-			const filename = `transactions_${ context }_store_${ storeId }_${ timestamp }.csv`;
-			link.setAttribute( 'download', filename );
+			const filename = `transactions_${context}_store_${storeId}_${timestamp}.csv`;
+			link.setAttribute('download', filename);
 
-			document.body.appendChild( link );
+			document.body.appendChild(link);
 			link.click();
 			link.remove();
-			window.URL.revokeObjectURL( url );
-		} catch ( error ) {
-			console.error( 'Error downloading CSV:', error );
+			window.URL.revokeObjectURL(url);
+		} catch (error) {
+			console.error('Error downloading CSV:', error);
 			alert(
-				__(
-					'Failed to download CSV. Please try again.',
-					'multivendorx'
-				)
+				__('Failed to download CSV. Please try again.', 'multivendorx')
 			);
 		} finally {
-			setIsDownloading( false );
+			setIsDownloading(false);
 		}
 	};
 
-	const hasSelectedRows = Object.keys( selectedRows ).some(
-		( key ) => selectedRows[ key ]
+	const hasSelectedRows = Object.keys(selectedRows).some(
+		(key) => selectedRows[key]
 	);
 
 	return (
 		<button
-			onClick={ handleDownload }
+			onClick={handleDownload}
 			disabled={
 				isDownloading ||
 				isLoading ||
-				! storeId ||
-				( ! hasSelectedRows && ! data )
+				!storeId ||
+				(!hasSelectedRows && !data)
 			}
 			className="button button-secondary"
 		>
@@ -198,19 +193,19 @@ const DownloadTransactionCSVButton: React.FC< {
 };
 
 // Export All CSV Button Component for Transactions - Downloads ALL filtered data
-const ExportAllTransactionCSVButton: React.FC< {
+const ExportAllTransactionCSVButton: React.FC<{
 	filterData: FilterData;
 	storeId: number | null;
-} > = ( { filterData, storeId } ) => {
-	const [ isDownloading, setIsDownloading ] = useState( false );
+}> = ({ filterData, storeId }) => {
+	const [isDownloading, setIsDownloading] = useState(false);
 
 	const handleExportAll = async () => {
-		if ( ! storeId ) {
-			alert( __( 'Please select a store first.', 'multivendorx' ) );
+		if (!storeId) {
+			alert(__('Please select a store first.', 'multivendorx'));
 			return;
 		}
 
-		setIsDownloading( true );
+		setIsDownloading(true);
 		try {
 			// Prepare parameters for CSV download - NO pagination params
 			const params: any = {
@@ -219,77 +214,72 @@ const ExportAllTransactionCSVButton: React.FC< {
 			};
 
 			// Add date filters if present
-			if ( filterData?.date?.start_date ) {
+			if (filterData?.date?.start_date) {
 				params.start_date = filterData.date.start_date
 					.toISOString()
-					.split( 'T' )[ 0 ];
+					.split('T')[0];
 			}
-			if ( filterData?.date?.end_date ) {
+			if (filterData?.date?.end_date) {
 				params.end_date = filterData.date.end_date
 					.toISOString()
-					.split( 'T' )[ 0 ];
+					.split('T')[0];
 			}
 
 			// Add transaction type filter
-			if ( filterData?.transactionType ) {
+			if (filterData?.transactionType) {
 				params.transaction_type = filterData.transactionType;
 			}
 
 			// Add transaction status filter
-			if ( filterData?.transactionStatus ) {
+			if (filterData?.transactionStatus) {
 				params.transaction_status = filterData.transactionStatus;
 			}
 
 			// Add status filter (Cr/Dr)
-			if ( filterData?.typeCount && filterData.typeCount !== 'all' ) {
+			if (filterData?.typeCount && filterData.typeCount !== 'all') {
 				params.filter_status = filterData.typeCount;
 			}
 
 			// Make API request for CSV
-			const response = await axios( {
+			const response = await axios({
 				method: 'GET',
-				url: getApiLink( appLocalizer, 'transaction' ),
+				url: getApiLink(appLocalizer, 'transaction'),
 				headers: {
 					'X-WP-Nonce': appLocalizer.nonce,
 					Accept: 'text/csv',
 				},
 				params: params,
 				responseType: 'blob',
-			} );
+			});
 
 			// Create download link
-			const url = window.URL.createObjectURL(
-				new Blob( [ response.data ] )
-			);
-			const link = document.createElement( 'a' );
+			const url = window.URL.createObjectURL(new Blob([response.data]));
+			const link = document.createElement('a');
 			link.href = url;
 
 			// Generate filename with timestamp and store ID
-			const timestamp = new Date().toISOString().split( 'T' )[ 0 ];
-			const filename = `transactions_all_store_${ storeId }_${ timestamp }.csv`;
-			link.setAttribute( 'download', filename );
+			const timestamp = new Date().toISOString().split('T')[0];
+			const filename = `transactions_all_store_${storeId}_${timestamp}.csv`;
+			link.setAttribute('download', filename);
 
-			document.body.appendChild( link );
+			document.body.appendChild(link);
 			link.click();
 			link.remove();
-			window.URL.revokeObjectURL( url );
-		} catch ( error ) {
-			console.error( 'Error downloading CSV:', error );
+			window.URL.revokeObjectURL(url);
+		} catch (error) {
+			console.error('Error downloading CSV:', error);
 			alert(
-				__(
-					'Failed to download CSV. Please try again.',
-					'multivendorx'
-				)
+				__('Failed to download CSV. Please try again.', 'multivendorx')
 			);
 		} finally {
-			setIsDownloading( false );
+			setIsDownloading(false);
 		}
 	};
 
 	return (
 		<button
-			onClick={ handleExportAll }
-			disabled={ isDownloading || ! storeId }
+			onClick={handleExportAll}
+			disabled={isDownloading || !storeId}
 			className="admin-btn btn-purple-bg"
 		>
 			<span className="adminlib-import"></span>
@@ -299,63 +289,59 @@ const ExportAllTransactionCSVButton: React.FC< {
 };
 
 // Bulk Actions Component for Transactions
-const TransactionBulkActions: React.FC< {
+const TransactionBulkActions: React.FC<{
 	selectedRows: RowSelectionState;
 	data: StoreRow[] | null;
 	filterData: FilterData;
 	storeId: number | null;
 	onActionComplete?: () => void;
-} > = ( { selectedRows, data, filterData, storeId, onActionComplete } ) => {
+}> = ({ selectedRows, data, filterData, storeId, onActionComplete }) => {
 	return (
 		<div>
 			<DownloadTransactionCSVButton
-				selectedRows={ selectedRows }
-				data={ data }
-				filterData={ filterData }
-				storeId={ storeId }
+				selectedRows={selectedRows}
+				data={data}
+				filterData={filterData}
+				storeId={storeId}
 			/>
-			{ /* Add other bulk actions here if needed */ }
+			{/* Add other bulk actions here if needed */}
 		</div>
 	);
 };
 
-const WalletTransaction: React.FC< WalletTransactionProps > = ( {
+const WalletTransaction: React.FC<WalletTransactionProps> = ({
 	storeId,
 	dateRange,
-} ) => {
-	const [ data, setData ] = useState< StoreRow[] | null >( null );
-	const [ wallet, setWallet ] = useState< any[] >( [] );
-	const [ recentDebits, setRecentDebits ] = useState< any[] >( [] );
-	const [ storeData, setStoreData ] = useState< any >( null );
-	const [ requestWithdrawal, setRequestWithdrawal ] = useState( false );
-	const [ validationErrors, setValidationErrors ] = useState< {
+}) => {
+	const [data, setData] = useState<StoreRow[] | null>(null);
+	const [wallet, setWallet] = useState<any[]>([]);
+	const [recentDebits, setRecentDebits] = useState<any[]>([]);
+	const [storeData, setStoreData] = useState<any>(null);
+	const [requestWithdrawal, setRequestWithdrawal] = useState(false);
+	const [validationErrors, setValidationErrors] = useState<{
 		amount?: string;
 		paymentMethod?: string;
-	} >( {} );
-	const [ amount, setAmount ] = useState< number >( 0 );
-	const [ note, setNote ] = useState< any | '' >( '' );
-	const [ paymentMethod, setPaymentMethod ] = useState< any | '' >( '' );
+	}>({});
+	const [amount, setAmount] = useState<number>(0);
+	const [note, setNote] = useState<any | ''>('');
+	const [paymentMethod, setPaymentMethod] = useState<any | ''>('');
 
-	const [ rowSelection, setRowSelection ] = useState< RowSelectionState >(
-		{}
-	);
-	const [ totalRows, setTotalRows ] = useState< number >( 0 );
-	const [ pagination, setPagination ] = useState< PaginationState >( {
+	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+	const [totalRows, setTotalRows] = useState<number>(0);
+	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
 		pageSize: 10,
-	} );
-	const [ pageCount, setPageCount ] = useState( 0 );
-	const [ selectedStore, setSelectedStore ] = useState< any >( null );
-	const [ transactionStatus, setTransactionStatus ] = useState<
+	});
+	const [pageCount, setPageCount] = useState(0);
+	const [selectedStore, setSelectedStore] = useState<any>(null);
+	const [transactionStatus, setTransactionStatus] = useState<
 		TransactionStatus[] | null
-	>( null );
-	const [ currentFilterData, setCurrentFilterData ] = useState< FilterData >(
-		{}
-	);
-	const [ viewCommission, setViewCommission ] = useState( false );
-	const [ selectedCommissionId, setSelectedCommissionId ] = useState<
+	>(null);
+	const [currentFilterData, setCurrentFilterData] = useState<FilterData>({});
+	const [viewCommission, setViewCommission] = useState(false);
+	const [selectedCommissionId, setSelectedCommissionId] = useState<
 		number | null
-	>( null );
+	>(null);
 
 	// Add search filter with export button
 	const actionButton: RealtimeFilter[] = [
@@ -364,8 +350,8 @@ const WalletTransaction: React.FC< WalletTransactionProps > = ( {
 			render: () => (
 				<>
 					<ExportAllTransactionCSVButton
-						filterData={ currentFilterData }
-						storeId={ storeId }
+						filterData={currentFilterData}
+						storeId={storeId}
 					/>
 				</>
 			),
@@ -373,9 +359,9 @@ const WalletTransaction: React.FC< WalletTransactionProps > = ( {
 	];
 	// 🔹 Helper: get effective date range
 	const getEffectiveDateRange = () => {
-		if ( dateRange.startDate && dateRange.endDate ) return dateRange;
+		if (dateRange.startDate && dateRange.endDate) return dateRange;
 		const now = new Date();
-		const start = new Date( now.getFullYear(), now.getMonth(), 1 ); // first day of current month
+		const start = new Date(now.getFullYear(), now.getMonth(), 1); // first day of current month
 		const end = new Date(
 			now.getFullYear(),
 			now.getMonth() + 1,
@@ -388,30 +374,30 @@ const WalletTransaction: React.FC< WalletTransactionProps > = ( {
 	};
 
 	// 🔹 Fetch total rows on mount or date change
-	useEffect( () => {
-		if ( ! storeId ) return;
+	useEffect(() => {
+		if (!storeId) return;
 
 		const { startDate, endDate } = getEffectiveDateRange();
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'transaction' ),
+			url: getApiLink(appLocalizer, 'transaction'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				count: true,
 				store_id: storeId,
-				start_date: startDate.toISOString().split( 'T' )[ 0 ],
-				end_date: endDate.toISOString().split( 'T' )[ 0 ],
+				start_date: startDate.toISOString().split('T')[0],
+				end_date: endDate.toISOString().split('T')[0],
 			},
-		} )
-			.then( ( response ) => {
-				setTotalRows( response.data || 0 );
+		})
+			.then((response) => {
+				setTotalRows(response.data || 0);
 				setPageCount(
-					Math.ceil( ( response.data || 0 ) / pagination.pageSize )
+					Math.ceil((response.data || 0) / pagination.pageSize)
 				);
-			} )
-			.catch( () => setData( [] ) );
-	}, [ storeId, dateRange, pagination.pageSize ] );
+			})
+			.catch(() => setData([]));
+	}, [storeId, dateRange, pagination.pageSize]);
 
 	// 🔹 Fetch data from backend
 	function requestData(
@@ -423,31 +409,31 @@ const WalletTransaction: React.FC< WalletTransactionProps > = ( {
 		orderBy = '',
 		order = ''
 	) {
-		if ( ! storeId ) return;
+		if (!storeId) return;
 
-		setData( null );
+		setData(null);
 
 		const { startDate, endDate } = getEffectiveDateRange();
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'transaction' ),
+			url: getApiLink(appLocalizer, 'transaction'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				page: currentPage,
 				row: rowsPerPage,
 				store_id: storeId,
-				start_date: startDate.toISOString().split( 'T' )[ 0 ],
-				end_date: endDate.toISOString().split( 'T' )[ 0 ],
+				start_date: startDate.toISOString().split('T')[0],
+				end_date: endDate.toISOString().split('T')[0],
 				filter_status: typeCount == 'all' ? '' : typeCount,
 				transaction_status: transactionStatus,
 				transaction_type: transactionType,
 				orderBy,
 				order,
 			},
-		} )
-			.then( ( response ) => {
-				setData( response.data.transaction || [] );
+		})
+			.then((response) => {
+				setData(response.data.transaction || []);
 
 				const statuses = [
 					{ key: 'all', name: 'All', count: response.data.all || 0 },
@@ -475,27 +461,27 @@ const WalletTransaction: React.FC< WalletTransactionProps > = ( {
 
 				// keep only items whose count is NOT zero
 				const filteredStatuses = statuses.filter(
-					( item ) => item.count !== 0
+					(item) => item.count !== 0
 				);
 
-				setTransactionStatus( filteredStatuses );
-			} )
-			.catch( () => setData( [] ) );
+				setTransactionStatus(filteredStatuses);
+			})
+			.catch(() => setData([]));
 	}
 
 	// 🔹 Handle pagination & date changes
-	useEffect( () => {
+	useEffect(() => {
 		const currentPage = pagination.pageIndex + 1;
-		requestData( pagination.pageSize, currentPage );
-		setPageCount( Math.ceil( totalRows / pagination.pageSize ) );
-	}, [ storeId ] );
+		requestData(pagination.pageSize, currentPage);
+		setPageCount(Math.ceil(totalRows / pagination.pageSize));
+	}, [storeId]);
 
 	const requestApiForData = (
 		rowsPerPage: number,
 		currentPage: number,
 		filterData: FilterData
 	) => {
-		setCurrentFilterData( filterData );
+		setCurrentFilterData(filterData);
 		requestData(
 			rowsPerPage,
 			currentPage,
@@ -508,65 +494,62 @@ const WalletTransaction: React.FC< WalletTransactionProps > = ( {
 	};
 
 	// 🔹 Column definitions with Status sorting
-	const columns: ColumnDef< StoreRow >[] = [
+	const columns: ColumnDef<StoreRow>[] = [
 		{
 			id: 'select',
-			header: ( { table } ) => (
+			header: ({ table }) => (
 				<input
 					type="checkbox"
-					checked={ table.getIsAllRowsSelected() }
-					onChange={ table.getToggleAllRowsSelectedHandler() }
+					checked={table.getIsAllRowsSelected()}
+					onChange={table.getToggleAllRowsSelectedHandler()}
 				/>
 			),
-			cell: ( { row } ) => (
+			cell: ({ row }) => (
 				<input
 					type="checkbox"
-					checked={ row.getIsSelected() }
-					onChange={ row.getToggleSelectedHandler() }
+					checked={row.getIsSelected()}
+					onChange={row.getToggleSelectedHandler()}
 				/>
 			),
 		},
 		{
-			header: __( 'ID', 'multivendorx' ),
-			cell: ( { row } ) => <TableCell>#{ row.original.id }</TableCell>,
+			header: __('ID', 'multivendorx'),
+			cell: ({ row }) => <TableCell>#{row.original.id}</TableCell>,
 		},
 		{
 			id: 'status',
-			header: __( 'Status', 'multivendorx' ),
-			cell: ( { row } ) => {
-				return (
-					<TableCell type="status" status={ row.original.status } />
-				);
+			header: __('Status', 'multivendorx'),
+			cell: ({ row }) => {
+				return <TableCell type="status" status={row.original.status} />;
 			},
 		},
 		{
-			header: __( 'Transaction Type', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Transaction Type', 'multivendorx'),
+			cell: ({ row }) => {
 				const type = row.original.transaction_type?.toLowerCase();
 				const commissionId = row.original.commission_id;
 				const paymentMethod = row.original.payment_method;
 				const orderId = row.original.order_details;
-				const formatText = ( text: any ) =>
+				const formatText = (text: any) =>
 					text
-						?.replace( /-/g, ' ' )
-						?.replace( /\b\w/g, ( c: any ) => c.toUpperCase() ) ||
-					'-';
+						?.replace(/-/g, ' ')
+						?.replace(/\b\w/g, (c: any) => c.toUpperCase()) || '-';
 
 				let displayValue = '-';
 				let content: any = displayValue;
 
 				// Commission Transaction (clickable)
-				if ( type === 'commission' ) {
-					displayValue = `Commission #${ commissionId || '-' }`;
+				if (type === 'commission') {
+					displayValue = `Commission #${commissionId || '-'}`;
 					content = commissionId ? (
 						<span
 							className="link-item"
-							onClick={ () => {
-								setSelectedCommissionId( commissionId );
-								setViewCommission( true );
-							} }
+							onClick={() => {
+								setSelectedCommissionId(commissionId);
+								setViewCommission(true);
+							}}
 						>
-							{ displayValue }
+							{displayValue}
 						</span>
 					) : (
 						displayValue
@@ -574,93 +557,87 @@ const WalletTransaction: React.FC< WalletTransactionProps > = ( {
 				}
 
 				// Withdrawal
-				else if ( type === 'withdrawal' ) {
-					const formattedMethod = formatText( paymentMethod );
+				else if (type === 'withdrawal') {
+					const formattedMethod = formatText(paymentMethod);
 					const accNo = row.original.account_number;
 
 					let maskedAccount = '';
-					if ( paymentMethod === 'bank-transfer' && accNo ) {
-						const last2 = accNo.slice( -2 );
-						maskedAccount = ` (A/C...${ last2 })`;
+					if (paymentMethod === 'bank-transfer' && accNo) {
+						const last2 = accNo.slice(-2);
+						maskedAccount = ` (A/C...${last2})`;
 					}
 
-					displayValue = `Withdrawal via ${ formattedMethod }${ maskedAccount }`;
+					displayValue = `Withdrawal via ${formattedMethod}${maskedAccount}`;
 					content = displayValue;
-				} else if ( type === 'refund' ) {
-					displayValue = `Refund for Order #${ orderId || '-' }`;
+				} else if (type === 'refund') {
+					displayValue = `Refund for Order #${orderId || '-'}`;
 
-					const orderEditUrl = `${ appLocalizer.site_url }/wp-admin/admin.php?page=wc-orders&action=edit&id=${ orderId }`;
+					const orderEditUrl = `${appLocalizer.site_url}/wp-admin/admin.php?page=wc-orders&action=edit&id=${orderId}`;
 					content = orderId ? (
 						<a
-							href={ orderEditUrl }
+							href={orderEditUrl}
 							target="_blank"
 							rel="noopener noreferrer"
 							className="link-item"
 						>
-							{ displayValue }
+							{displayValue}
 						</a>
 					) : (
 						displayValue
 					);
-				} else if ( row.original.transaction_type ) {
-					displayValue = formatText( row.original.transaction_type );
+				} else if (row.original.transaction_type) {
+					displayValue = formatText(row.original.transaction_type);
 					content = displayValue;
 				}
 
-				return (
-					<TableCell title={ displayValue }>{ content }</TableCell>
-				);
+				return <TableCell title={displayValue}>{content}</TableCell>;
 			},
 		},
 		{
-			header: __( 'Date', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Date', 'multivendorx'),
+			cell: ({ row }) => {
 				const rawDate = row.original.date;
 				let formattedDate = '-';
-				if ( rawDate ) {
-					const dateObj = new Date( rawDate );
-					formattedDate = new Intl.DateTimeFormat( 'en-US', {
+				if (rawDate) {
+					const dateObj = new Date(rawDate);
+					formattedDate = new Intl.DateTimeFormat('en-US', {
 						month: 'short',
 						day: 'numeric',
 						year: 'numeric',
-					} ).format( dateObj );
+					}).format(dateObj);
 				}
 				return (
-					<TableCell title={ formattedDate }>
-						{ formattedDate }
-					</TableCell>
+					<TableCell title={formattedDate}>{formattedDate}</TableCell>
 				);
 			},
 		},
 		{
-			header: __( 'Credit', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Credit', 'multivendorx'),
+			cell: ({ row }) => {
 				const credit = row.original.credit;
 				return (
 					<TableCell>
-						{ credit ? formatCurrency( credit ) : '-' }
+						{credit ? formatCurrency(credit) : '-'}
 					</TableCell>
 				);
 			},
 		},
 		{
-			header: __( 'Debit', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Debit', 'multivendorx'),
+			cell: ({ row }) => {
 				const debit = row.original.debit;
 				return (
-					<TableCell>
-						{ debit ? formatCurrency( debit ) : '-' }
-					</TableCell>
+					<TableCell>{debit ? formatCurrency(debit) : '-'}</TableCell>
 				);
 			},
 		},
 		{
-			header: __( 'Balance', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Balance', 'multivendorx'),
+			cell: ({ row }) => {
 				const balance = row.original.balance;
 				return (
 					<TableCell>
-						{ balance ? formatCurrency( balance ) : '-' }
+						{balance ? formatCurrency(balance) : '-'}
 					</TableCell>
 				);
 			},
@@ -671,35 +648,35 @@ const WalletTransaction: React.FC< WalletTransactionProps > = ( {
 		{
 			name: 'transactionType',
 			render: (
-				updateFilter: ( key: string, value: string ) => void,
+				updateFilter: (key: string, value: string) => void,
 				filterValue: string | undefined
 			) => (
 				<div className="group-field">
 					<select
 						name="transactionType"
-						onChange={ ( e ) =>
-							updateFilter( e.target.name, e.target.value )
+						onChange={(e) =>
+							updateFilter(e.target.name, e.target.value)
 						}
-						value={ filterValue || '' }
+						value={filterValue || ''}
 						className="basic-select"
 					>
 						<option value="">
-							{ __( 'Transaction Type', 'multivendorx' ) }
+							{__('Transaction Type', 'multivendorx')}
 						</option>
 						<option value="Commission">
-							{ __( 'Commission', 'multivendorx' ) }
+							{__('Commission', 'multivendorx')}
 						</option>
 						<option value="Withdrawal">
-							{ __( 'Withdrawal', 'multivendorx' ) }
+							{__('Withdrawal', 'multivendorx')}
 						</option>
 						<option value="Refund">
-							{ __( 'Refund', 'multivendorx' ) }
+							{__('Refund', 'multivendorx')}
 						</option>
 						<option value="Reversed">
-							{ __( 'Reversed', 'multivendorx' ) }
+							{__('Reversed', 'multivendorx')}
 						</option>
 						<option value="COD received">
-							{ __( 'COD received', 'multivendorx' ) }
+							{__('COD received', 'multivendorx')}
 						</option>
 					</select>
 				</div>
@@ -708,26 +685,26 @@ const WalletTransaction: React.FC< WalletTransactionProps > = ( {
 		{
 			name: 'transactionStatus',
 			render: (
-				updateFilter: ( key: string, value: string ) => void,
+				updateFilter: (key: string, value: string) => void,
 				filterValue: string | undefined
 			) => (
 				<div className="group-field">
 					<select
 						name="transactionStatus"
-						onChange={ ( e ) =>
-							updateFilter( e.target.name, e.target.value )
+						onChange={(e) =>
+							updateFilter(e.target.name, e.target.value)
 						}
-						value={ filterValue || '' }
+						value={filterValue || ''}
 						className="basic-select"
 					>
 						<option value="">
-							{ __( 'Financial Transactions', 'multivendorx' ) }
+							{__('Financial Transactions', 'multivendorx')}
 						</option>
 						<option value="Cr">
-							{ __( 'Credit', 'multivendorx' ) }
+							{__('Credit', 'multivendorx')}
 						</option>
 						<option value="Dr">
-							{ __( 'Debit', 'multivendorx' ) }
+							{__('Debit', 'multivendorx')}
 						</option>
 					</select>
 				</div>
@@ -736,29 +713,29 @@ const WalletTransaction: React.FC< WalletTransactionProps > = ( {
 	];
 
 	// 🔹 Fetch wallet/transaction overview whenever store changes
-	useEffect( () => {
-		if ( ! storeId ) return;
+	useEffect(() => {
+		if (!storeId) return;
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, `transaction/${ storeId }` ),
+			url: getApiLink(appLocalizer, `transaction/${storeId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		} ).then( ( response ) => {
-			setWallet( response?.data || {} );
-			setAmount( response?.data.available_balance );
-		} );
+		}).then((response) => {
+			setWallet(response?.data || {});
+			setAmount(response?.data.available_balance);
+		});
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, `store/${ storeId }` ),
+			url: getApiLink(appLocalizer, `store/${storeId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		} ).then( ( response ) => {
-			setStoreData( response.data || {} );
-		} );
+		}).then((response) => {
+			setStoreData(response.data || {});
+		});
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'transaction' ),
+			url: getApiLink(appLocalizer, 'transaction'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				page: 1,
@@ -769,46 +746,46 @@ const WalletTransaction: React.FC< WalletTransactionProps > = ( {
 				orderBy: 'created_at',
 				order: 'DESC',
 			},
-		} )
-			.then( ( response ) => {
-				setRecentDebits( response.data.transaction || [] );
-			} )
-			.catch( ( error ) => {
-				setRecentDebits( [] );
-			} );
-	}, [ storeId ] );
+		})
+			.then((response) => {
+				setRecentDebits(response.data.transaction || []);
+			})
+			.catch((error) => {
+				setRecentDebits([]);
+			});
+	}, [storeId]);
 
 	const handleWithdrawal = () => {
 		// Clear all old errors first
-		setValidationErrors( {} );
+		setValidationErrors({});
 
 		const newErrors: { amount?: string; paymentMethod?: string } = {};
 		// Amount validations
-		if ( ! amount || amount <= 0 ) {
+		if (!amount || amount <= 0) {
 			newErrors.amount = 'Please enter a valid amount.';
-		} else if ( amount > ( wallet.available_balance ?? 0 ) ) {
-			newErrors.amount = `Amount cannot be greater than available balance (${ formatCurrency(
+		} else if (amount > (wallet.available_balance ?? 0)) {
+			newErrors.amount = `Amount cannot be greater than available balance (${formatCurrency(
 				wallet.available_balance
-			) })`;
+			)})`;
 		}
 
 		// Payment method validation
-		if ( ! storeData.payment_method ) {
+		if (!storeData.payment_method) {
 			newErrors.paymentMethod = 'Please select a payment processor.';
 		}
 
 		// If any validation errors exist, show them and stop
-		if ( Object.keys( newErrors ).length > 0 ) {
-			setValidationErrors( newErrors );
+		if (Object.keys(newErrors).length > 0) {
+			setValidationErrors(newErrors);
 			return;
 		}
 
 		// Submit request
-		axios( {
+		axios({
 			method: 'PUT',
 			url: getApiLink(
 				appLocalizer,
-				`transaction/${ selectedStore?.value }`
+				`transaction/${selectedStore?.value}`
 			),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: {
@@ -818,44 +795,44 @@ const WalletTransaction: React.FC< WalletTransactionProps > = ( {
 				method: paymentMethod,
 				note,
 			},
-		} )
-			.then( ( res ) => {
-				if ( res.data.success ) {
-					setRequestWithdrawal( false );
-					setTimeout( () => {
+		})
+			.then((res) => {
+				if (res.data.success) {
+					setRequestWithdrawal(false);
+					setTimeout(() => {
 						window.location.reload();
-					}, 200 );
-				} else if ( res.data?.message ) {
+					}, 200);
+				} else if (res.data?.message) {
 				}
-			} )
-			.catch( ( err ) => {
-				console.error( err );
-			} );
+			})
+			.catch((err) => {
+				console.error(err);
+			});
 	};
 
-	const AmountChange = ( value: number ) => {
-		setAmount( value );
+	const AmountChange = (value: number) => {
+		setAmount(value);
 	};
 
-	const formatMethod = ( method ) => {
-		if ( ! method ) return '';
+	const formatMethod = (method) => {
+		if (!method) return '';
 		return method
-			.replace( /-/g, ' ' ) // stripe-connect → stripe connect
-			.replace( /\b\w/g, ( c ) => c.toUpperCase() ); // Stripe connect → Stripe Connect
+			.replace(/-/g, ' ') // stripe-connect → stripe connect
+			.replace(/\b\w/g, (c) => c.toUpperCase()); // Stripe connect → Stripe Connect
 	};
 
 	const freeLeft =
-		wallet?.withdrawal_setting?.[ 0 ]?.free_withdrawals -
+		wallet?.withdrawal_setting?.[0]?.free_withdrawals -
 		wallet?.free_withdrawal;
 	const percentage = Number(
-		wallet?.withdrawal_setting?.[ 0 ]?.withdrawal_percentage || 0
+		wallet?.withdrawal_setting?.[0]?.withdrawal_percentage || 0
 	);
 	const fixed = Number(
-		wallet?.withdrawal_setting?.[ 0 ]?.withdrawal_fixed || 0
+		wallet?.withdrawal_setting?.[0]?.withdrawal_fixed || 0
 	);
 
 	// fee calculation
-	const fee = amount * ( percentage / 100 ) + fixed;
+	const fee = amount * (percentage / 100) + fixed;
 	return (
 		<>
 			<div className="card-wrapper">
@@ -863,40 +840,33 @@ const WalletTransaction: React.FC< WalletTransactionProps > = ( {
 					<div className="card-header">
 						<div className="left">
 							<div className="title">
-								{ __( 'Recent payouts', 'multivendorx' ) }
+								{__('Recent payouts', 'multivendorx')}
 							</div>
 						</div>
 					</div>
 					<div className="card-body">
-						{ recentDebits.length > 0 ? (
+						{recentDebits.length > 0 ? (
 							<>
-								{ recentDebits.map( ( txn ) => {
+								{recentDebits.map((txn) => {
 									// Format payment method nicely (e.g., "stripe-connect" -> "Stripe Connect")
 									const formattedPaymentMethod =
 										txn.payment_method
 											? txn.payment_method
-													.replace( /[-_]/g, ' ' ) // replace - and _ with spaces
-													.replace(
-														/\b\w/g,
-														( char ) =>
-															char.toUpperCase()
+													.replace(/[-_]/g, ' ') // replace - and _ with spaces
+													.replace(/\b\w/g, (char) =>
+														char.toUpperCase()
 													) // capitalize each word
-											: __( 'N/A', 'multivendorx' );
+											: __('N/A', 'multivendorx');
 
 									return (
-										<div
-											key={ txn.id }
-											className="info-item"
-										>
+										<div key={txn.id} className="info-item">
 											<div className="details-wrapper">
 												<div className="details">
 													<div className="name">
-														{
-															formattedPaymentMethod
-														}
+														{formattedPaymentMethod}
 													</div>
 													<div className="des">
-														{ new Date(
+														{new Date(
 															txn.date
 														).toLocaleDateString(
 															'en-US',
@@ -905,47 +875,44 @@ const WalletTransaction: React.FC< WalletTransactionProps > = ( {
 																day: '2-digit',
 																year: 'numeric',
 															}
-														) }
+														)}
 													</div>
 												</div>
 											</div>
 
 											<div
-												className={ `right-details ${
-													parseFloat( txn.debit ) < 0
+												className={`right-details ${
+													parseFloat(txn.debit) < 0
 														? 'negative'
 														: 'positive'
-												}` }
+												}`}
 											>
 												<div
-													className={ `price ${
-														parseFloat(
-															txn.debit
-														) < 0
+													className={`price ${
+														parseFloat(txn.debit) <
+														0
 															? 'negative'
 															: 'positive'
-													}` }
+													}`}
 												>
-													{ ' ' }
-													{ formatCurrency(
-														txn.debit
-													) }
+													{' '}
+													{formatCurrency(txn.debit)}
 												</div>
 											</div>
 										</div>
 									);
-								} ) }
+								})}
 							</>
 						) : (
 							<>
 								<div className="des">
-									{ __(
+									{__(
 										'No recent payouts transactions found.',
 										'multivendorx'
-									) }
+									)}
 								</div>
 							</>
-						) }
+						)}
 					</div>
 				</div>
 				<div className="card-content">
@@ -954,119 +921,108 @@ const WalletTransaction: React.FC< WalletTransactionProps > = ( {
 							<div className="payout-header">
 								<div className="price-wrapper">
 									<div className="price-title">
-										{ __(
+										{__(
 											'Available balance',
 											'multivendorx'
-										) }
+										)}
 									</div>
 									<div className="price">
-										{ formatCurrency(
+										{formatCurrency(
 											wallet.available_balance
-										) }{ ' ' }
+										)}{' '}
 										<div className="admin-badge green">
-											{ __(
+											{__(
 												'Ready to withdraw',
 												'multivendorx'
-											) }
+											)}
 										</div>
 									</div>
 								</div>
 							</div>
 
 							<div className="small-text">
-								<b>{ formatCurrency( wallet?.thresold ) } </b>{ ' ' }
-								{ __(
+								<b>{formatCurrency(wallet?.thresold)} </b>{' '}
+								{__(
 									'minimum required to withdraw',
 									'multivendorx'
-								) }
+								)}
 							</div>
 
 							<div className="payout-card-wrapper">
 								<div className="payout-card">
 									<div className="card-title">
-										{ __(
-											'Upcoming Balance',
-											'multivendorx'
-										) }
+										{__('Upcoming Balance', 'multivendorx')}
 									</div>
 									<div className="card-price">
-										{ formatCurrency(
-											wallet.locking_balance
-										) }
+										{formatCurrency(wallet.locking_balance)}
 									</div>
 									<div className="card-des">
-										{ __(
+										{__(
 											'Pending settlement. Released soon',
 											'multivendorx'
-										) }
+										)}
 									</div>
 								</div>
-								{ wallet?.withdrawal_setting?.length > 0 && (
+								{wallet?.withdrawal_setting?.length > 0 && (
 									<div className="payout-card">
 										<div className="card-title">
-											{ __(
+											{__(
 												'Free Withdrawals',
 												'multivendorx'
-											) }
+											)}
 										</div>
 
 										<div className="card-price">
-											{ wallet?.withdrawal_setting?.[ 0 ]
+											{wallet?.withdrawal_setting?.[0]
 												?.free_withdrawals -
-												wallet?.free_withdrawal }{ ' ' }
+												wallet?.free_withdrawal}{' '}
 											<span>
-												{ __( 'Left', 'multivendorx' ) }
+												{__('Left', 'multivendorx')}
 											</span>
 										</div>
 
 										<div className="card-des">
-											{ __( 'Then', 'multivendorx' ) }{ ' ' }
-											{ Number(
-												wallet
-													?.withdrawal_setting?.[ 0 ]
+											{__('Then', 'multivendorx')}{' '}
+											{Number(
+												wallet?.withdrawal_setting?.[0]
 													?.withdrawal_percentage
-											) || 0 }
+											) || 0}
 											% +
-											{ formatCurrency(
+											{formatCurrency(
 												Number(
 													wallet
-														?.withdrawal_setting?.[ 0 ]
+														?.withdrawal_setting?.[0]
 														?.withdrawal_fixed
 												) || 0
-											) }{ ' ' }
-											{ __( 'fee', 'multivendorx' ) }
+											)}{' '}
+											{__('fee', 'multivendorx')}
 										</div>
 									</div>
-								) }
+								)}
 							</div>
 							<div className="small-text">
-								{ __(
+								{__(
 									'Some funds locked during settlement',
 									'multivendorx'
-								) }
+								)}
 							</div>
-							{ wallet?.payment_schedules ? (
+							{wallet?.payment_schedules ? (
 								<div className="small-text">
-									{ __( 'Auto payouts run', 'multivendorx' ) }{ ' ' }
-									{ wallet.payment_schedules }
+									{__('Auto payouts run', 'multivendorx')}{' '}
+									{wallet.payment_schedules}
 								</div>
 							) : (
 								<div className="small-text">
-									{ __(
-										'Auto payouts not set',
-										'multivendorx'
-									) }
+									{__('Auto payouts not set', 'multivendorx')}
 								</div>
-							) }
+							)}
 
 							<div className="buttons-wrapper">
 								<div
 									className="admin-btn btn-purple-bg"
-									onClick={ () =>
-										setRequestWithdrawal( true )
-									}
+									onClick={() => setRequestWithdrawal(true)}
 								>
-									{ __( 'Disburse Payment', 'multivendorx' ) }
+									{__('Disburse Payment', 'multivendorx')}
 								</div>
 							</div>
 						</div>
@@ -1075,26 +1031,26 @@ const WalletTransaction: React.FC< WalletTransactionProps > = ( {
 			</div>
 
 			<CommonPopup
-				open={ requestWithdrawal }
+				open={requestWithdrawal}
 				width="450px"
 				height="75%"
 				header={
 					<>
 						<div className="title">
 							<i className="adminlib-wallet"></i>
-							{ __( 'Disburse payment', 'multivendorx' ) }
+							{__('Disburse payment', 'multivendorx')}
 						</div>
 						<i
 							className="icon adminlib-close"
-							onClick={ () => {
-								setRequestWithdrawal( false );
-							} }
+							onClick={() => {
+								setRequestWithdrawal(false);
+							}}
 						></i>
 						<div className="des">
-							{ __(
+							{__(
 								'Release earnings to your stores in a few simple steps - amount, payment processor, and an optional note.',
 								'multivendorx'
-							) }
+							)}
 						</div>
 					</>
 				}
@@ -1102,123 +1058,121 @@ const WalletTransaction: React.FC< WalletTransactionProps > = ( {
 					<>
 						<div
 							className="admin-btn btn-purple"
-							onClick={ () => handleWithdrawal() }
+							onClick={() => handleWithdrawal()}
 						>
-							{ __( 'Disburse', 'multivendorx' ) }
+							{__('Disburse', 'multivendorx')}
 						</div>
 					</>
 				}
 			>
 				<div className="content">
-					{ /* start left section */ }
+					{/* start left section */}
 					<div className="form-group-wrapper">
 						<div className="available-balance">
-							{ __( 'Withdrawable balance', 'multivendorx' ) }{ ' ' }
+							{__('Withdrawable balance', 'multivendorx')}{' '}
 							<div>
-								{ formatCurrency( wallet.available_balance ) }
+								{formatCurrency(wallet.available_balance)}
 							</div>
 						</div>
 						<div className="form-group">
 							<label htmlFor="payment_method">
-								{ __( 'Payment Processor', 'multivendorx' ) }
+								{__('Payment Processor', 'multivendorx')}
 							</label>
 
 							<div className="payment-method">
-								{ storeData?.payment_method ? (
+								{storeData?.payment_method ? (
 									<div className="method">
 										<i className="adminlib-bank"></i>
-										{ formatMethod(
-											storeData.payment_method
-										) }
+										{formatMethod(storeData.payment_method)}
 									</div>
 								) : (
 									<span>
-										{ __(
+										{__(
 											'No payment method saved',
 											'multivendorx'
-										) }
+										)}
 									</span>
-								) }
+								)}
 							</div>
 						</div>
 
 						<div className="form-group">
 							<label htmlFor="amount">
-								{ __( 'Amount', 'multivendorx' ) }
+								{__('Amount', 'multivendorx')}
 							</label>
 
 							<BasicInput
 								type="number"
 								name="amount"
-								value={ amount }
-								onChange={ ( e: any ) =>
-									AmountChange( Number( e.target.value ) )
+								value={amount}
+								onChange={(e: any) =>
+									AmountChange(Number(e.target.value))
 								}
 							/>
 
 							<div className="free-wrapper">
-								{ wallet?.withdrawal_setting?.length > 0 &&
-								wallet?.withdrawal_setting?.[ 0 ]
+								{wallet?.withdrawal_setting?.length > 0 &&
+								wallet?.withdrawal_setting?.[0]
 									?.free_withdrawals ? (
 									<>
-										{ freeLeft > 0 ? (
+										{freeLeft > 0 ? (
 											<span>
-												{ sprintf(
+												{sprintf(
 													__(
 														'Burning 1 out of %s free withdrawals',
 														'multivendorx'
 													),
 													freeLeft
-												) }
+												)}
 											</span>
 										) : (
 											<span>
-												{ __(
+												{__(
 													'Free withdrawal limit reached',
 													'multivendorx'
-												) }
+												)}
 											</span>
-										) }
+										)}
 										<span>
-											{ __( 'Total:', 'multivendorx' ) }{ ' ' }
-											{ formatCurrency( amount || 0 ) }
+											{__('Total:', 'multivendorx')}{' '}
+											{formatCurrency(amount || 0)}
 										</span>
 										<span>
-											{ __( 'Fee:', 'multivendorx' ) }{ ' ' }
-											{ formatCurrency( fee ) }
+											{__('Fee:', 'multivendorx')}{' '}
+											{formatCurrency(fee)}
 										</span>
 									</>
 								) : (
 									<span>
-										{ __(
+										{__(
 											'Actual withdrawal:',
 											'multivendorx'
-										) }{ ' ' }
-										{ formatCurrency( amount || 0 ) }
+										)}{' '}
+										{formatCurrency(amount || 0)}
 									</span>
-								) }
+								)}
 							</div>
 
-							{ validationErrors.amount && (
+							{validationErrors.amount && (
 								<div className="invalid-massage">
-									{ validationErrors.amount }
+									{validationErrors.amount}
 								</div>
-							) }
+							)}
 						</div>
 
 						<div className="form-group">
 							<label htmlFor="note">
-								{ __( 'Note', 'multivendorx' ) }
+								{__('Note', 'multivendorx')}
 							</label>
 							<TextArea
 								name="note"
 								wrapperClass="setting-from-textarea"
 								inputClass="textarea-input"
 								descClass="settings-metabox-description"
-								value={ note }
-								onChange={ (
-									e: React.ChangeEvent< HTMLTextAreaElement >
-								) => setNote( e.target.value ) }
+								value={note}
+								onChange={(
+									e: React.ChangeEvent<HTMLTextAreaElement>
+								) => setNote(e.target.value)}
 							/>
 						</div>
 					</div>
@@ -1227,39 +1181,37 @@ const WalletTransaction: React.FC< WalletTransactionProps > = ( {
 
 			<div className="admin-table-wrapper">
 				<Table
-					data={ data }
-					columns={
-						columns as ColumnDef< Record< string, any >, any >[]
-					}
-					rowSelection={ rowSelection }
-					onRowSelectionChange={ setRowSelection }
-					defaultRowsPerPage={ 10 }
-					pageCount={ pageCount }
-					pagination={ pagination }
-					onPaginationChange={ setPagination }
-					handlePagination={ requestApiForData }
-					perPageOption={ [ 10, 25, 50 ] }
-					typeCounts={ transactionStatus as TransactionStatus[] }
-					totalCounts={ totalRows }
-					realtimeFilter={ realtimeFilter }
-					actionButton={ actionButton }
-					bulkActionComp={ () => (
+					data={data}
+					columns={columns as ColumnDef<Record<string, any>, any>[]}
+					rowSelection={rowSelection}
+					onRowSelectionChange={setRowSelection}
+					defaultRowsPerPage={10}
+					pageCount={pageCount}
+					pagination={pagination}
+					onPaginationChange={setPagination}
+					handlePagination={requestApiForData}
+					perPageOption={[10, 25, 50]}
+					typeCounts={transactionStatus as TransactionStatus[]}
+					totalCounts={totalRows}
+					realtimeFilter={realtimeFilter}
+					actionButton={actionButton}
+					bulkActionComp={() => (
 						<TransactionBulkActions
-							selectedRows={ rowSelection }
-							data={ data }
-							filterData={ currentFilterData }
-							storeId={ storeId }
+							selectedRows={rowSelection}
+							data={data}
+							filterData={currentFilterData}
+							storeId={storeId}
 						/>
-					) }
+					)}
 				/>
 			</div>
-			{ viewCommission && selectedCommissionId !== null && (
+			{viewCommission && selectedCommissionId !== null && (
 				<ViewCommission
-					open={ viewCommission }
-					onClose={ () => setViewCommission( false ) }
-					commissionId={ selectedCommissionId }
+					open={viewCommission}
+					onClose={() => setViewCommission(false)}
+					commissionId={selectedCommissionId}
 				/>
-			) }
+			)}
 		</>
 	);
 };

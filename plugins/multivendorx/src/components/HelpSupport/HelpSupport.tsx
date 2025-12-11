@@ -36,10 +36,10 @@ const HelpSupport: React.FC = () => {
 							<div className="card-header">
 								<div className="left">
 									<div className="title">
-										{ __(
+										{__(
 											'Community & forums',
 											'multivendorx'
-										) }
+										)}
 									</div>
 								</div>
 							</div>
@@ -56,17 +56,17 @@ const HelpSupport: React.FC = () => {
 													target="_blank"
 													rel="noopener noreferrer"
 												>
-													{ __(
+													{__(
 														'Facebook community',
 														'multivendorx'
-													) }
+													)}
 												</a>
 											</div>
 											<div className="des">
-												{ __(
+												{__(
 													'Connect with other store owners, share tips, and get quick solutions.',
 													'multivendorx'
-												) }
+												)}
 											</div>
 										</div>
 									</div>
@@ -82,17 +82,17 @@ const HelpSupport: React.FC = () => {
 													target="_blank"
 													rel="noopener noreferrer"
 												>
-													{ __(
+													{__(
 														'WordPress support forum',
 														'multivendorx'
-													) }
+													)}
 												</a>
 											</div>
 											<div className="des">
-												{ __(
+												{__(
 													'Ask questions and get expert guidance from the WordPress community.',
 													'multivendorx'
-												) }
+												)}
 											</div>
 										</div>
 									</div>
@@ -108,17 +108,17 @@ const HelpSupport: React.FC = () => {
 													target="_blank"
 													rel="noopener noreferrer"
 												>
-													{ __(
+													{__(
 														'Our forum',
 														'multivendorx'
-													) }
+													)}
 												</a>
 											</div>
 											<div className="des">
-												{ __(
+												{__(
 													'Discuss MultiVendorX features, report issues, and collaborate with other users.',
 													'multivendorx'
-												) }
+												)}
 											</div>
 										</div>
 									</div>
@@ -134,17 +134,17 @@ const HelpSupport: React.FC = () => {
 													target="_blank"
 													rel="noopener noreferrer"
 												>
-													{ __(
+													{__(
 														'Live chat',
 														'multivendorx'
-													) }
+													)}
 												</a>
 											</div>
 											<div className="des">
-												{ __(
+												{__(
 													'Get real-time support from our team for setup, troubleshooting, and guidance.',
 													'multivendorx'
-												) }
+												)}
 											</div>
 										</div>
 									</div>
@@ -156,10 +156,10 @@ const HelpSupport: React.FC = () => {
 							<div className="card-header">
 								<div className="left">
 									<div className="title">
-										{ __(
+										{__(
 											'Documentation & Learning',
 											'multivendorx'
-										) }
+										)}
 									</div>
 								</div>
 							</div>
@@ -176,17 +176,17 @@ const HelpSupport: React.FC = () => {
 													target="_blank"
 													rel="noopener noreferrer"
 												>
-													{ __(
+													{__(
 														'Official documentation',
 														'multivendorx'
-													) }
+													)}
 												</a>
 											</div>
 											<div className="des">
-												{ __(
+												{__(
 													'Step-by-step guides for every MultiVendorX feature.',
 													'multivendorx'
-												) }
+												)}
 											</div>
 										</div>
 									</div>
@@ -202,17 +202,17 @@ const HelpSupport: React.FC = () => {
 													target="_blank"
 													rel="noopener noreferrer"
 												>
-													{ __(
+													{__(
 														'YouTube tutorials',
 														'multivendorx'
-													) }
+													)}
 												</a>
 											</div>
 											<div className="des">
-												{ __(
+												{__(
 													'Watch videos on marketplace setup, store management, payments, and more.',
 													'multivendorx'
-												) }
+												)}
 											</div>
 										</div>
 									</div>
@@ -228,17 +228,14 @@ const HelpSupport: React.FC = () => {
 													target="_blank"
 													rel="noopener noreferrer"
 												>
-													{ __(
-														'FAQs',
-														'multivendorx'
-													) }
+													{__('FAQs', 'multivendorx')}
 												</a>
 											</div>
 											<div className="des">
-												{ __(
+												{__(
 													'Quick answers to the most common questions about features and troubleshooting.',
 													'multivendorx'
-												) }
+												)}
 											</div>
 										</div>
 									</div>
@@ -254,17 +251,17 @@ const HelpSupport: React.FC = () => {
 													target="_blank"
 													rel="noopener noreferrer"
 												>
-													{ __(
+													{__(
 														'Coding support',
 														'multivendorx'
-													) }
+													)}
 												</a>
 											</div>
 											<div className="des">
-												{ __(
+												{__(
 													'Professional help for customizations, integrations, and technical issues.',
 													'multivendorx'
-												) }
+												)}
 											</div>
 										</div>
 									</div>
@@ -278,16 +275,16 @@ const HelpSupport: React.FC = () => {
 							<div className="video-section">
 								<div className="details-wrapper">
 									<div className="title">
-										{ __(
+										{__(
 											'Master MultiVendorX in minutes!',
 											'multivendorx'
-										) }
+										)}
 									</div>
 									<div className="des">
-										{ __(
+										{__(
 											'Watch our top tutorial videos and learn how to set up your marketplace, manage vendors, and enable subscriptions - all in just a few easy steps.',
 											'multivendorx'
-										) }
+										)}
 									</div>
 									<a
 										href="https://www.youtube.com/@MultiVendorX/videos"
@@ -295,46 +292,46 @@ const HelpSupport: React.FC = () => {
 										rel="noopener noreferrer"
 										className="admin-btn btn-purple"
 									>
-										{ __(
+										{__(
 											'Watch All Tutorials',
 											'multivendorx'
-										) }
+										)}
 									</a>
 								</div>
 
 								<div className="video-section">
-									{ videos.map( ( video, index ) => {
+									{videos.map((video, index) => {
 										const videoId = new URL(
 											video.link
-										).searchParams.get( 'v' );
+										).searchParams.get('v');
 										return (
 											<div
-												key={ index }
+												key={index}
 												className="video-wrapper"
 											>
 												<iframe
-													src={ `https://www.youtube.com/embed/${ videoId }` }
-													title={ video.title }
+													src={`https://www.youtube.com/embed/${videoId}`}
+													title={video.title}
 													frameBorder="0"
 													allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 													allowFullScreen
 												></iframe>
 
 												<div className="title">
-													{ __(
+													{__(
 														video.title,
 														'multivendorx'
-													) }
+													)}
 												</div>
 												<div className="des">
-													{ __(
+													{__(
 														video.des,
 														'multivendorx'
-													) }
+													)}
 												</div>
 											</div>
 										);
-									} ) }
+									})}
 								</div>
 							</div>
 						</div>

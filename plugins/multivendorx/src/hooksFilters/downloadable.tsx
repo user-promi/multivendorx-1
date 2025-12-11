@@ -1,7 +1,7 @@
 import { addFilter } from '@wordpress/hooks';
 import { BasicInput, DynamicRowSetting } from 'zyra';
 
-const Downloadable = ( { product, setProduct, handleChange } ) => {
+const Downloadable = ({ product, setProduct, handleChange }) => {
 	const downloadTemplate = {
 		fields: [
 			{
@@ -17,57 +17,53 @@ const Downloadable = ( { product, setProduct, handleChange } ) => {
 				placeholder: 'File URL',
 			},
 		],
-		create: () => ( {
+		create: () => ({
 			id: appLocalizer.random_string_generate,
 			name: '',
 			file: '',
-		} ),
+		}),
 	};
 
-	const updateDownloadableFile = ( id, key, value ) => {
-		setProduct( ( prev ) => ( {
+	const updateDownloadableFile = (id, key, value) => {
+		setProduct((prev) => ({
 			...prev,
-			downloads: prev.downloads.map( ( file ) =>
-				file.id === id ? { ...file, [ key ]: value } : file
+			downloads: prev.downloads.map((file) =>
+				file.id === id ? { ...file, [key]: value } : file
 			),
-		} ) );
+		}));
 	};
 
-	const removeDownloadableFile = ( uniqueId ) => {
-		setProduct( ( prev ) => ( {
+	const removeDownloadableFile = (uniqueId) => {
+		setProduct((prev) => ({
 			...prev,
-			downloads: prev.downloads.filter( ( f ) => f.id !== uniqueId ),
-		} ) );
+			downloads: prev.downloads.filter((f) => f.id !== uniqueId),
+		}));
 	};
 
-	const openMediaUploader = ( id ) => {
-		const frame = wp.media( {
+	const openMediaUploader = (id) => {
+		const frame = wp.media({
 			title: 'Select or Upload File',
 			button: { text: 'Use this file' },
 			multiple: false,
-		} );
+		});
 
-		frame.on( 'select', () => {
-			const attachment = frame
-				.state()
-				.get( 'selection' )
-				.first()
-				.toJSON();
-			updateDownloadableFile( id, 'file', attachment.url );
-			updateDownloadableFile( id, 'name', attachment.filename );
-		} );
+		frame.on('select', () => {
+			const attachment = frame.state().get('selection').first().toJSON();
+			updateDownloadableFile(id, 'file', attachment.url);
+			updateDownloadableFile(id, 'name', attachment.filename);
+		});
 
 		frame.open();
 	};
 
-	const toggleCard = ( cardId ) => {
-		const body = document.querySelector( `#${ cardId } .card-body` );
-		const arrow = document.querySelector( `#${ cardId } .arrow-icon` );
+	const toggleCard = (cardId) => {
+		const body = document.querySelector(`#${cardId} .card-body`);
+		const arrow = document.querySelector(`#${cardId} .arrow-icon`);
 
-		if ( ! body || ! arrow ) return;
+		if (!body || !arrow) return;
 
-		body.classList.toggle( 'hide-body' );
-		arrow.classList.toggle( 'rotate' );
+		body.classList.toggle('hide-body');
+		arrow.classList.toggle('rotate');
 	};
 
 	return (
@@ -79,12 +75,12 @@ const Downloadable = ( { product, setProduct, handleChange } ) => {
 				<div className="right">
 					<i
 						className="adminlib-pagination-right-arrow  arrow-icon"
-						onClick={ () => toggleCard( 'card-downloadable' ) }
+						onClick={() => toggleCard('card-downloadable')}
 					></i>
 				</div>
 			</div>
 			<div className="card-body">
-				{ /* {product.downloads?.map((file, index) => (
+				{/* {product.downloads?.map((file, index) => (
                                     <div key={file.id} className="shipping-country-wrapper">
                                         <div className="shipping-country">
                                             <div className="country item">
@@ -127,36 +123,34 @@ const Downloadable = ( { product, setProduct, handleChange } ) => {
 
                                 <div className="admin-btn btn-purple-bg" onClick={addDownloadableFile}>
                                     <i className="adminlib-plus-circle-o"></i> Add new
-                                </div> */ }
+                                </div> */}
 
 				<DynamicRowSetting
 					keyName="downloads"
-					template={ downloadTemplate }
-					value={ product.downloads }
+					template={downloadTemplate}
+					value={product.downloads}
 					addLabel="Add new"
-					onChange={ ( rows ) =>
-						setProduct( ( prev ) => ( {
+					onChange={(rows) =>
+						setProduct((prev) => ({
 							...prev,
 							downloads: rows,
-						} ) )
+						}))
 					}
-					childrenRenderer={ ( row ) => (
+					childrenRenderer={(row) => (
 						<>
 							<div
 								className="admin-btn btn-purple"
-								onClick={ () => openMediaUploader( row.id ) }
+								onClick={() => openMediaUploader(row.id)}
 							>
 								Upload file
 							</div>
 
 							<div
 								className="delete-icon adminlib-delete"
-								onClick={ () =>
-									removeDownloadableFile( row.id )
-								}
+								onClick={() => removeDownloadableFile(row.id)}
 							/>
 						</>
-					) }
+					)}
 				/>
 
 				<div className="form-group-wrapper">
@@ -166,9 +160,9 @@ const Downloadable = ( { product, setProduct, handleChange } ) => {
 							name="download_limit"
 							type="number"
 							wrapperClass="setting-form-input"
-							value={ product.download_limit }
-							onChange={ ( e ) =>
-								handleChange( 'download_limit', e.target.value )
+							value={product.download_limit}
+							onChange={(e) =>
+								handleChange('download_limit', e.target.value)
 							}
 						/>
 					</div>
@@ -179,12 +173,9 @@ const Downloadable = ( { product, setProduct, handleChange } ) => {
 							name="download_expiry"
 							type="number"
 							wrapperClass="setting-form-input"
-							value={ product.download_expiry }
-							onChange={ ( e ) =>
-								handleChange(
-									'download_expiry',
-									e.target.value
-								)
+							value={product.download_expiry}
+							onChange={(e) =>
+								handleChange('download_expiry', e.target.value)
 							}
 						/>
 					</div>
@@ -197,14 +188,14 @@ const Downloadable = ( { product, setProduct, handleChange } ) => {
 addFilter(
 	'product_downloadable',
 	'my-plugin/downloadable',
-	( content, product, setProduct, handleChange ) => {
+	(content, product, setProduct, handleChange) => {
 		return (
 			<>
-				{ content }
+				{content}
 				<Downloadable
-					product={ product }
-					setProduct={ setProduct }
-					handleChange={ handleChange }
+					product={product}
+					setProduct={setProduct}
+					handleChange={handleChange}
 				/>
 			</>
 		);

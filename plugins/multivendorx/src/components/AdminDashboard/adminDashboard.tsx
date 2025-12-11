@@ -29,136 +29,133 @@ import { __ } from '@wordpress/i18n';
 
 const AdminDashboard = () => {
 	const { modules, insertModule, removeModule } = useModules();
-	const [ installing, setInstalling ] = useState< string >( '' );
-	const [ pluginStatus, setPluginStatus ] = useState< {
-		[ key: string ]: boolean;
-	} >( {} );
-	const [ successMsg, setSuccessMsg ] = useState< string >( '' );
+	const [installing, setInstalling] = useState<string>('');
+	const [pluginStatus, setPluginStatus] = useState<{
+		[key: string]: boolean;
+	}>({});
+	const [successMsg, setSuccessMsg] = useState<string>('');
 
 	// Check plugin installation status on component mount
-	useEffect( () => {
-		checkPluginStatus( 'woocommerce-catalog-enquiry' );
-		checkPluginStatus( 'woocommerce-product-stock-alert' );
-	}, [] );
+	useEffect(() => {
+		checkPluginStatus('woocommerce-catalog-enquiry');
+		checkPluginStatus('woocommerce-product-stock-alert');
+	}, []);
 
 	// Function to check if plugin is installed and active
-	const checkPluginStatus = async ( slug: string ) => {
+	const checkPluginStatus = async (slug: string) => {
 		try {
-			const response = await axios( {
+			const response = await axios({
 				method: 'GET',
-				url: `${ appLocalizer.apiUrl }/wp/v2/plugins`,
+				url: `${appLocalizer.apiUrl}/wp/v2/plugins`,
 				headers: {
 					'X-WP-Nonce': appLocalizer.nonce,
 				},
-			} );
+			});
 
 			// Check if our plugin exists and is active
 			const plugins = response.data;
 			const pluginExists = plugins.some(
-				( plugin: any ) =>
-					plugin.plugin.includes( slug ) && plugin.status === 'active'
+				(plugin: any) =>
+					plugin.plugin.includes(slug) && plugin.status === 'active'
 			);
 
-			setPluginStatus( ( prev ) => ( {
+			setPluginStatus((prev) => ({
 				...prev,
-				[ slug ]: pluginExists,
-			} ) );
-		} catch ( error ) {
-			console.error(
-				`Failed to check plugin status "${ slug }":`,
-				error
-			);
-			setPluginStatus( ( prev ) => ( {
+				[slug]: pluginExists,
+			}));
+		} catch (error) {
+			console.error(`Failed to check plugin status "${slug}":`, error);
+			setPluginStatus((prev) => ({
 				...prev,
-				[ slug ]: false,
-			} ) );
+				[slug]: false,
+			}));
 		}
 	};
 
-	const installOrActivatePlugin = async ( slug: string ) => {
-		if ( ! slug || installing ) return; // prevent multiple clicks
-		setInstalling( slug );
+	const installOrActivatePlugin = async (slug: string) => {
+		if (!slug || installing) return; // prevent multiple clicks
+		setInstalling(slug);
 
 		try {
 			// Step 1: Get current plugins
 			const { data: plugins } = await axios.get(
-				`${ appLocalizer.apiUrl }/wp/v2/plugins`,
+				`${appLocalizer.apiUrl}/wp/v2/plugins`,
 				{
 					headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				}
 			);
 
 			// Step 2: Find if plugin exists
-			const existingPlugin = plugins.find( ( plugin: any ) =>
-				plugin.plugin.includes( slug )
+			const existingPlugin = plugins.find((plugin: any) =>
+				plugin.plugin.includes(slug)
 			);
 			const pluginFilePath =
-				existingPlugin?.plugin || `${ slug }/${ slug }.php`;
+				existingPlugin?.plugin || `${slug}/${slug}.php`;
 
 			// Step 3: Determine action
-			let apiUrl = `${ appLocalizer.apiUrl }/wp/v2/plugins`;
+			let apiUrl = `${appLocalizer.apiUrl}/wp/v2/plugins`;
 			let requestData: any = { status: 'active' }; // default request for activation
 
-			if ( ! existingPlugin ) {
+			if (!existingPlugin) {
 				// Plugin not installed → install & activate
 				requestData.slug = slug;
-			} else if ( existingPlugin.status === 'active' ) {
-				setSuccessMsg( `Plugin "${ slug }" is already active.` );
-				await checkPluginStatus( slug );
+			} else if (existingPlugin.status === 'active') {
+				setSuccessMsg(`Plugin "${slug}" is already active.`);
+				await checkPluginStatus(slug);
 				return;
 			} else {
 				// Plugin installed but inactive → just activate
-				const encodedFile = encodeURIComponent( pluginFilePath );
-				apiUrl += `/${ encodedFile }`;
+				const encodedFile = encodeURIComponent(pluginFilePath);
+				apiUrl += `/${encodedFile}`;
 			}
 
 			// Step 4: Call API
-			await axios.post( apiUrl, requestData, {
+			await axios.post(apiUrl, requestData, {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			} );
+			});
 
 			// Step 5: Refresh status
-			await checkPluginStatus( slug );
+			await checkPluginStatus(slug);
 
 			setSuccessMsg(
-				`Plugin "${ slug }" ${
+				`Plugin "${slug}" ${
 					existingPlugin ? 'activated' : 'installed & activated'
 				} successfully!`
 			);
-		} catch ( error ) {
-			console.error( error );
-			setSuccessMsg( `Failed to install/activate plugin "${ slug }".` );
+		} catch (error) {
+			console.error(error);
+			setSuccessMsg(`Failed to install/activate plugin "${slug}".`);
 		} finally {
-			setTimeout( () => setSuccessMsg( '' ), 3000 );
-			setInstalling( '' );
+			setTimeout(() => setSuccessMsg(''), 3000);
+			setInstalling('');
 		}
 	};
 
 	const handleOnChange = async (
-		event: React.ChangeEvent< HTMLInputElement >,
+		event: React.ChangeEvent<HTMLInputElement>,
 		moduleId: string
 	) => {
 		const action = event.target.checked ? 'activate' : 'deactivate';
 		try {
-			if ( action === 'activate' ) {
-				insertModule?.( moduleId );
+			if (action === 'activate') {
+				insertModule?.(moduleId);
 			} else {
-				removeModule?.( moduleId );
+				removeModule?.(moduleId);
 			}
-			localStorage.setItem( `force_multivendorx_context_reload`, 'true' );
+			localStorage.setItem(`force_multivendorx_context_reload`, 'true');
 			await sendApiResponse(
 				appLocalizer,
-				getApiLink( appLocalizer, 'modules' ),
+				getApiLink(appLocalizer, 'modules'),
 				{
 					id: moduleId,
 					action,
 				}
 			);
-			setSuccessMsg( `Module ${ action }d` );
-			setTimeout( () => setSuccessMsg( '' ), 2000 );
-		} catch ( error ) {
-			setSuccessMsg( `Error: Failed to ${ action } module` );
-			setTimeout( () => setSuccessMsg( '' ), 2000 );
+			setSuccessMsg(`Module ${action}d`);
+			setTimeout(() => setSuccessMsg(''), 2000);
+		} catch (error) {
+			setSuccessMsg(`Error: Failed to ${action} module`);
+			setTimeout(() => setSuccessMsg(''), 2000);
 		}
 	};
 
@@ -357,8 +354,8 @@ const AdminDashboard = () => {
 		},
 	];
 
-	const renderCell = ( value: string | boolean ) => {
-		if ( typeof value === 'boolean' ) {
+	const renderCell = (value: string | boolean) => {
+		if (typeof value === 'boolean') {
 			return value ? (
 				<i className="check-icon adminlib-check"></i>
 			) : (
@@ -443,18 +440,18 @@ const AdminDashboard = () => {
 		},
 	];
 
-	const [ activeTab, setActiveTab ] = useState( 'dashboard' );
-	const isPro = !! appLocalizer.khali_dabba;
-	const renderUpgradeButton = ( label = 'Upgrade Now' ) => {
-		if ( isPro ) return null;
+	const [activeTab, setActiveTab] = useState('dashboard');
+	const isPro = !!appLocalizer.khali_dabba;
+	const renderUpgradeButton = (label = 'Upgrade Now') => {
+		if (isPro) return null;
 		return (
 			<a
-				href={ appLocalizer.shop_url }
+				href={appLocalizer.shop_url}
 				target="_blank"
 				className="admin-btn btn-purple"
 			>
 				<i className="adminlib-pro-tag"></i>
-				{ label }
+				{label}
 				<i className="adminlib-arrow-right icon-pro-btn"></i>
 			</a>
 		);
@@ -463,7 +460,7 @@ const AdminDashboard = () => {
 	let tabs = [
 		{
 			id: 'dashboard',
-			label: __( 'Dashboard', 'multivendorx' ),
+			label: __('Dashboard', 'multivendorx'),
 			icon: 'adminlib-module',
 			content: (
 				<>
@@ -473,178 +470,176 @@ const AdminDashboard = () => {
 								<div className="pro-banner-wrapper">
 									<div className="content">
 										<div className="heading">
-											{ __(
+											{__(
 												'Welcome to MultiVendorX',
 												'multivendorx'
-											) }
+											)}
 										</div>
 										<div className="description">
-											{ __(
+											{__(
 												'Expand your WooCommerce store by creating a marketplace for multiple stores. Manage, grow, and scale seamlessly.',
 												'multivendorx'
-											) }
+											)}
 										</div>
 
 										<div className="button-wrapper">
-											{ renderUpgradeButton(
+											{renderUpgradeButton(
 												__(
 													'Upgrade Now',
 													'multivendorx'
 												)
-											) }
+											)}
 
 											<div
 												className="admin-btn"
-												onClick={ () =>
-													( window.location.href =
-														'?page=multivendorx#&tab=setup' )
+												onClick={() =>
+													(window.location.href =
+														'?page=multivendorx#&tab=setup')
 												}
 											>
-												{ __(
+												{__(
 													'Launch Setup Wizard',
 													'multivendorx'
-												) }
+												)}
 												<i className="adminlib-import"></i>
 											</div>
 										</div>
 									</div>
 
 									<div className="image">
-										<img src={ Mascot } alt="" />
+										<img src={Mascot} alt="" />
 									</div>
 								</div>
 							</div>
 						</div>
 
-						{ ! appLocalizer.khali_dabba && (
+						{!appLocalizer.khali_dabba && (
 							<div className="card-content">
 								<div className="card-header">
 									<div className="left">
 										<div className="title">
-											{ __(
+											{__(
 												'Build a professional marketplace',
 												'multivendorx'
-											) }
+											)}
 											<span className="admin-badge blue">
-												{ __(
+												{__(
 													'Starting at $299/year',
 													'multivendorx'
-												) }
+												)}
 											</span>
 										</div>
 										<div className="des">
-											{ __(
+											{__(
 												'Unlock advanced features and premium modules to create a marketplace that stands out.',
 												'multivendorx'
-											) }
+											)}
 										</div>
 									</div>
 								</div>
 								<div className="card-body">
 									<div className="features-wrapper">
-										{ featuresList.map( ( res, index ) => (
+										{featuresList.map((res, index) => (
 											<div
 												className="feature"
-												key={ index }
+												key={index}
 											>
 												<i
-													className={ res.iconClass }
+													className={res.iconClass}
 												></i>
 												<div className="content">
 													<h3>
-														{ __(
+														{__(
 															res.title,
 															'multivendorx'
-														) }
+														)}
 													</h3>
 													<p>
-														{ __(
+														{__(
 															res.desc,
 															'multivendorx'
-														) }
+														)}
 													</p>
 												</div>
 											</div>
-										) ) }
+										))}
 									</div>
 
 									<div className="pro-banner">
 										<div className="text">
-											{ __(
+											{__(
 												'Join 8,000+ successful marketplace owners',
 												'multivendorx'
-											) }
+											)}
 										</div>
 										<div className="des">
-											{ __(
+											{__(
 												'Create, manage, and grow your marketplace with confidence. Trusted by thousands of entrepreneurs worldwide.',
 												'multivendorx'
-											) }
+											)}
 										</div>
 
-										{ renderUpgradeButton(
-											__( 'Upgrade Now', 'multivendorx' )
-										) }
+										{renderUpgradeButton(
+											__('Upgrade Now', 'multivendorx')
+										)}
 
 										<div className="des">
-											{ __(
+											{__(
 												'15-day money-back guarantee',
 												'multivendorx'
-											) }
+											)}
 										</div>
 									</div>
 								</div>
 							</div>
-						) }
+						)}
 
 						<div className="card-wrapper">
 							<div className="card-content">
 								<div className="card-header">
 									<div className="left">
 										<div className="title">
-											{ __( 'Modules', 'multivendorx' ) }
+											{__('Modules', 'multivendorx')}
 										</div>
 									</div>
 									<div className="right">
 										<div
 											className="admin-btn btn-purple"
-											onClick={ () =>
-												( window.location.href = `?page=multivendorx#&tab=modules` )
+											onClick={() =>
+												(window.location.href = `?page=multivendorx#&tab=modules`)
 											}
 										>
 											<i className="adminlib-preview"></i>
-											{ __( 'View All', 'multivendorx' ) }
+											{__('View All', 'multivendorx')}
 										</div>
 									</div>
 								</div>
 								<div className="card-body">
 									<div className="mini-module">
-										{ Modules.map( ( module ) => (
+										{Modules.map((module) => (
 											<div
 												className="module-list-item"
-												key={ module.id }
+												key={module.id}
 											>
 												<div className="module-header">
 													<i
-														className={ `font ${ module.iconClass }` }
+														className={`font ${module.iconClass}`}
 													></i>
 
-													{ ! module.pro ||
+													{!module.pro ||
 													appLocalizer.khali_dabba ? (
 														<div
 															className="toggle-checkbox"
-															data-tour={ `id-showcase-tour` }
+															data-tour={`id-showcase-tour`}
 														>
 															<input
 																type="checkbox"
 																className="woo-toggle-checkbox"
-																id={ `toggle-switch-${ module.id }` }
-																checked={ modules.includes(
+																id={`toggle-switch-${module.id}`}
+																checked={modules.includes(
 																	module.id
-																) }
-																onChange={ (
-																	e
-																) =>
+																)}
+																onChange={(e) =>
 																	handleOnChange(
 																		e,
 																		module.id
@@ -652,113 +647,111 @@ const AdminDashboard = () => {
 																}
 															/>
 															<label
-																htmlFor={ `toggle-switch-${ module.id }` }
+																htmlFor={`toggle-switch-${module.id}`}
 																className="toggle-switch-is_hide_cart_checkout"
 															></label>
 														</div>
 													) : (
 														<span className="admin-pro-tag">
 															<i className="adminlib-pro-tag"></i>
-															{ __(
+															{__(
 																'Pro',
 																'multivendorx'
-															) }
+															)}
 														</span>
-													) }
+													)}
 												</div>
 
 												<div className="module-name">
-													{ __(
+													{__(
 														module.name,
 														'multivendorx'
-													) }
+													)}
 												</div>
 											</div>
-										) ) }
+										))}
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 
-					{ /* Right Side */ }
+					{/* Right Side */}
 					<div className="card-wrapper column w-35">
 						<div className="card-content">
 							<div className="card-header">
 								<div className="left">
 									<div className="title">
-										{ __(
+										{__(
 											'Extend your website',
 											'multivendorx'
-										) }
+										)}
 									</div>
 								</div>
 							</div>
 
 							<div className="card-body">
 								<div className="cards-wrapper plugin">
-									{ pluginStatus[
+									{pluginStatus[
 										'woocommerce-catalog-enquiry'
 									] ? (
 										<div className="cards">
 											<div className="header">
-												<img src={ catalogx } alt="" />
+												<img src={catalogx} alt="" />
 												<div className="tag">
 													<span className="admin-badge red">
-														<i className="adminlib-pro-tag"></i>{ ' ' }
-														{ __(
+														<i className="adminlib-pro-tag"></i>{' '}
+														{__(
 															'Pro',
 															'multivendorx'
-														) }
+														)}
 													</span>
 													<a
 														href="https://catalogx.com/pricing/"
 														target="_blank"
 													>
-														{ __(
+														{__(
 															'Get Pro',
 															'multivendorx'
-														) }
+														)}
 													</a>
 												</div>
 											</div>
 											<h3>
-												{ __(
+												{__(
 													'CatalogX Pro',
 													'multivendorx'
-												) }
+												)}
 											</h3>
 											<p>
-												{ __(
+												{__(
 													'Advanced product catalog with enhanced enquiry features and premium templates',
 													'multivendorx'
-												) }
+												)}
 											</p>
 										</div>
 									) : (
 										<div className="cards">
 											<div className="header">
-												<img src={ catalogx } alt="" />
+												<img src={catalogx} alt="" />
 												<div className="tag">
 													<span className="admin-badge green">
-														{ __(
+														{__(
 															'Free',
 															'multivendorx'
-														) }
+														)}
 													</span>
 													<a
 														href="#"
-														onClick={ ( e ) => {
+														onClick={(e) => {
 															e.preventDefault();
-															if (
-																! installing
-															) {
+															if (!installing) {
 																installOrActivatePlugin(
 																	'woocommerce-catalog-enquiry'
 																);
 															}
-														} }
-														style={ {
+														}}
+														style={{
 															pointerEvents:
 																installing
 																	? 'none'
@@ -768,98 +761,93 @@ const AdminDashboard = () => {
 																'woocommerce-catalog-enquiry'
 																	? 0.6
 																	: 1,
-														} }
+														}}
 													>
-														{ installing ===
+														{installing ===
 														'woocommerce-catalog-enquiry'
 															? __(
 																	'Installing...',
 																	'multivendorx'
-															  )
+																)
 															: __(
 																	'Install',
 																	'multivendorx'
-															  ) }
+																)}
 													</a>
 												</div>
 											</div>
 											<h3>
-												{ __(
-													'CatalogX',
-													'multivendorx'
-												) }
+												{__('CatalogX', 'multivendorx')}
 											</h3>
 											<p>
-												{ __(
+												{__(
 													'Turn your store into a product catalog with enquiry-based sales',
 													'multivendorx'
-												) }
+												)}
 											</p>
 										</div>
-									) }
+									)}
 
-									{ pluginStatus[
+									{pluginStatus[
 										'woocommerce-product-stock-alert'
 									] ? (
 										<div className="cards">
 											<div className="header">
-												<img src={ notifima } alt="" />
+												<img src={notifima} alt="" />
 												<div className="tag">
 													<span className="admin-badge red">
-														<i className="adminlib-pro-tag"></i>{ ' ' }
-														{ __(
+														<i className="adminlib-pro-tag"></i>{' '}
+														{__(
 															'Pro',
 															'multivendorx'
-														) }
+														)}
 													</span>
 													<a
 														href="https://notifima.com/pricing/"
 														target="_blank"
 													>
-														{ __(
+														{__(
 															'Get Pro',
 															'multivendorx'
-														) }
+														)}
 													</a>
 												</div>
 											</div>
 											<h3>
-												{ __(
+												{__(
 													'Notifima Pro',
 													'multivendorx'
-												) }
+												)}
 											</h3>
 											<p>
-												{ __(
+												{__(
 													'Advanced stock alerts, wishlist features, and premium notification system',
 													'multivendorx'
-												) }
+												)}
 											</p>
 										</div>
 									) : (
 										<div className="cards">
 											<div className="header">
-												<img src={ notifima } alt="" />
+												<img src={notifima} alt="" />
 												<div className="tag">
 													<span className="admin-badge green">
-														{ __(
+														{__(
 															'Free',
 															'multivendorx'
-														) }
+														)}
 													</span>
 													<a
 														href="#"
-														onClick={ ( e ) => {
+														onClick={(e) => {
 															e.preventDefault();
-															if (
-																! installing
-															) {
+															if (!installing) {
 																installOrActivatePlugin(
 																	'woocommerce-product-stock-alert'
 																);
 															}
-														} }
-														style={ {
+														}}
+														style={{
 															pointerEvents:
 																installing
 																	? 'none'
@@ -869,85 +857,76 @@ const AdminDashboard = () => {
 																'woocommerce-product-stock-alert'
 																	? 0.6
 																	: 1,
-														} }
+														}}
 													>
-														{ installing ===
+														{installing ===
 														'woocommerce-product-stock-alert'
 															? __(
 																	'Installing...',
 																	'multivendorx'
-															  )
+																)
 															: __(
 																	'Install',
 																	'multivendorx'
-															  ) }
+																)}
 													</a>
 												</div>
 											</div>
 											<h3>
-												{ __(
-													'Notifima',
-													'multivendorx'
-												) }
+												{__('Notifima', 'multivendorx')}
 											</h3>
 											<p>
-												{ __(
+												{__(
 													'Advanced stock alerts and wishlist features for WooCommerce',
 													'multivendorx'
-												) }
+												)}
 											</p>
 										</div>
-									) }
+									)}
 								</div>
 							</div>
 						</div>
 
-						{ /* Quick Links */ }
+						{/* Quick Links */}
 						<div className="card-content">
 							<div className="card-header">
 								<div className="left">
 									<div className="title">
-										{ __(
+										{__(
 											'Need help getting started?',
 											'multivendorx'
-										) }
+										)}
 									</div>
 								</div>
 							</div>
 
 							<div className="card-body">
 								<div className="cards-wrapper quick-link">
-									{ resources.map( ( res, index ) => (
-										<div className="cards" key={ index }>
+									{resources.map((res, index) => (
+										<div className="cards" key={index}>
 											<div className="header">
 												<i
-													className={ `icon ${ res.iconClass }` }
+													className={`icon ${res.iconClass}`}
 												></i>
 												<a
-													href={ res.href }
+													href={res.href}
 													target="blank"
 												>
-													{ __(
+													{__(
 														res.linkText,
 														'multivendorx'
-													) }
+													)}
 													<i className="adminlib-external"></i>
 												</a>
 											</div>
 											<h3>
-												{ __(
-													res.title,
-													'multivendorx'
-												) }
+												{__(res.title, 'multivendorx')}
 											</h3>
 											<p>
-												{ __(
-													res.desc,
-													'multivendorx'
-												) }
+												{__(res.desc, 'multivendorx')}
 											</p>
 										</div>
-									) ) }
+									))}
 								</div>
 							</div>
 						</div>
@@ -957,7 +936,7 @@ const AdminDashboard = () => {
 		},
 		{
 			id: 'free-vs-pro',
-			label: __( 'Free vs Pro', 'multivendorx' ),
+			label: __('Free vs Pro', 'multivendorx'),
 			icon: 'adminlib-pros-and-cons',
 			content: (
 				<>
@@ -966,16 +945,16 @@ const AdminDashboard = () => {
 							<div className="card-header">
 								<div className="left">
 									<div className="title">
-										{ __(
+										{__(
 											'Free vs Pro comparison',
 											'multivendorx'
-										) }
+										)}
 									</div>
 									<div className="des">
-										{ __(
+										{__(
 											'See what you get with MultiVendorX Pro',
 											'multivendorx'
-										) }
+										)}
 									</div>
 								</div>
 								<div className="right">
@@ -983,66 +962,66 @@ const AdminDashboard = () => {
 										href="https://multivendorx.com/pricing/"
 										className="admin-btn btn-purple"
 									>
-										{ __(
+										{__(
 											'Get Pro Access Today!',
 											'multivendorx'
-										) }
+										)}
 										<i className="adminlib-arrow-right icon-pro-btn"></i>
 									</a>
 								</div>
 							</div>
 							<div className="card-body">
 								<div id="free-vs-pro" className="free-vs-pro">
-									{ sections.map( ( section, idx ) => (
-										<table key={ idx }>
+									{sections.map((section, idx) => (
+										<table key={idx}>
 											<thead>
 												<tr>
 													<td>
-														{ __(
+														{__(
 															section.title,
 															'multivendorx'
-														) }
+														)}
 													</td>
 													<td>
-														{ __(
+														{__(
 															'Free',
 															'multivendorx'
-														) }
+														)}
 													</td>
 													<td>
-														{ __(
+														{__(
 															'Pro',
 															'multivendorx'
-														) }
+														)}
 													</td>
 												</tr>
 											</thead>
 											<tbody>
-												{ section.features.map(
-													( feature, i ) => (
-														<tr key={ i }>
+												{section.features.map(
+													(feature, i) => (
+														<tr key={i}>
 															<td>
-																{ __(
+																{__(
 																	feature.name,
 																	'multivendorx'
-																) }
+																)}
 															</td>
 															<td>
-																{ renderCell(
+																{renderCell(
 																	feature.free
-																) }
+																)}
 															</td>
 															<td>
-																{ renderCell(
+																{renderCell(
 																	feature.pro
-																) }
+																)}
 															</td>
 														</tr>
 													)
-												) }
+												)}
 											</tbody>
 										</table>
-									) ) }
+									))}
 								</div>
 							</div>
 						</div>
@@ -1053,58 +1032,58 @@ const AdminDashboard = () => {
 							<div className="card-body">
 								<div className="right-pro-banner">
 									<div className="image-wrapper">
-										<img src={ freePro } alt="" />
+										<img src={freePro} alt="" />
 									</div>
 
 									<div className="title">
-										{ __(
+										{__(
 											'Join 8,000+ successful marketplace owners',
 											'multivendorx'
-										) }
+										)}
 									</div>
 
 									<div className="des">
-										{ __(
+										{__(
 											'Build, manage, and expand your marketplace with confidence. Loved by entrepreneurs globally.',
 											'multivendorx'
-										) }
+										)}
 									</div>
 
 									<ul>
 										<li>
 											<i className="adminlib-check"></i>
-											{ __(
+											{__(
 												'Flexible selling models',
 												'multivendorx'
-											) }
+											)}
 										</li>
 										<li>
 											<i className="adminlib-check"></i>
-											{ __(
+											{__(
 												'Effortless inventory control',
 												'multivendorx'
-											) }
+											)}
 										</li>
 										<li>
 											<i className="adminlib-check"></i>
-											{ __(
+											{__(
 												'Intelligent alert system',
 												'multivendorx'
-											) }
+											)}
 										</li>
 										<li>
 											<i className="adminlib-check"></i>
-											{ __(
+											{__(
 												'Secure seller onboarding',
 												'multivendorx'
-											) }
+											)}
 										</li>
 										<li>
 											<i className="adminlib-check"></i>
-											{ __(
+											{__(
 												'Recurring revenue tools',
 												'multivendorx'
-											) }
+											)}
 										</li>
 									</ul>
 
@@ -1114,23 +1093,20 @@ const AdminDashboard = () => {
 											className="admin-btn btn-purple"
 										>
 											<i className="adminlib-pro-tag"></i>
-											{ __(
-												'Upgrade Now',
-												'multivendorx'
-											) }
+											{__('Upgrade Now', 'multivendorx')}
 											<i className="adminlib-arrow-right icon-pro-btn"></i>
 										</a>
 
 										<div
-											onClick={ () =>
-												( window.location.href = `?page=multivendorx#&tab=setup` )
+											onClick={() =>
+												(window.location.href = `?page=multivendorx#&tab=setup`)
 											}
 											className="admin-btn"
 										>
-											{ __(
+											{__(
 												'Launch Setup Wizard',
 												'multivendorx'
-											) }
+											)}
 											<i className="adminlib-import"></i>
 										</div>
 									</div>
@@ -1144,7 +1120,7 @@ const AdminDashboard = () => {
 	];
 
 	tabs = appLocalizer.khali_dabba
-		? tabs.filter( ( tab ) => tab.id !== 'free-vs-pro' )
+		? tabs.filter((tab) => tab.id !== 'free-vs-pro')
 		: tabs;
 
 	return (
@@ -1155,27 +1131,25 @@ const AdminDashboard = () => {
 						<div className="card-body">
 							<div className="admin-tab">
 								<div className="tab-titles">
-									{ tabs.map( ( tab ) => (
+									{tabs.map((tab) => (
 										<div
-											key={ tab.id }
-											className={ `title ${
+											key={tab.id}
+											className={`title ${
 												activeTab === tab.id
 													? 'active'
 													: ''
-											}` }
-											onClick={ () =>
-												setActiveTab( tab.id )
-											}
+											}`}
+											onClick={() => setActiveTab(tab.id)}
 										>
 											<p>
-												<i className={ tab.icon }></i>
-												{ tab.label }
+												<i className={tab.icon}></i>
+												{tab.label}
 											</p>
 										</div>
-									) ) }
+									))}
 								</div>
 								<div className="right">
-									{ renderUpgradeButton( 'Upgrade Now' ) }
+									{renderUpgradeButton('Upgrade Now')}
 								</div>
 							</div>
 						</div>
@@ -1183,9 +1157,9 @@ const AdminDashboard = () => {
 				</div>
 
 				<div className="container-wrapper">
-					{ tabs.map(
-						( tab ) => activeTab === tab.id && <>{ tab.content }</>
-					) }
+					{tabs.map(
+						(tab) => activeTab === tab.id && <>{tab.content}</>
+					)}
 				</div>
 			</div>
 		</>

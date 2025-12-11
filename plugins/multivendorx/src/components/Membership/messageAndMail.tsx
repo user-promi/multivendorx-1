@@ -9,110 +9,104 @@ import {
 	SuccessNotice,
 } from 'zyra';
 
-const MessageAndMail = ( { id }: { id: string } ) => {
-	const [ formData, setFormData ] = useState< { [ key: string ]: string } >(
-		{}
-	);
+const MessageAndMail = ({ id }: { id: string }) => {
+	const [formData, setFormData] = useState<{ [key: string]: string }>({});
 
-	const [ imagePreviews, setImagePreviews ] = useState< {
-		[ key: string ]: string;
-	} >( {} );
-	const [ stateOptions, setStateOptions ] = useState<
+	const [imagePreviews, setImagePreviews] = useState<{
+		[key: string]: string;
+	}>({});
+	const [stateOptions, setStateOptions] = useState<
 		{ label: string; value: string }[]
-	>( [] );
-	const [ successMsg, setSuccessMsg ] = useState< string | null >( null );
+	>([]);
+	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
-	useEffect( () => {
-		if ( ! id ) return;
+	useEffect(() => {
+		if (!id) return;
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, `store/${ id }` ),
+			url: getApiLink(appLocalizer, `store/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		} ).then( ( res ) => {
+		}).then((res) => {
 			const data = res.data || {};
-			setFormData( ( prev ) => ( { ...prev, ...data } ) );
-			setImagePreviews( {
+			setFormData((prev) => ({ ...prev, ...data }));
+			setImagePreviews({
 				image: data.image || '',
 				banner: data.banner || '',
-			} );
-		} );
-	}, [ id ] );
+			});
+		});
+	}, [id]);
 
-	useEffect( () => {
-		if ( successMsg ) {
-			const timer = setTimeout( () => setSuccessMsg( null ), 3000 );
-			return () => clearTimeout( timer );
+	useEffect(() => {
+		if (successMsg) {
+			const timer = setTimeout(() => setSuccessMsg(null), 3000);
+			return () => clearTimeout(timer);
 		}
-	}, [ successMsg ] );
+	}, [successMsg]);
 
-	useEffect( () => {
-		if ( formData.country ) {
-			fetchStatesByCountry( formData.country );
+	useEffect(() => {
+		if (formData.country) {
+			fetchStatesByCountry(formData.country);
 		}
-	}, [ formData.country ] );
+	}, [formData.country]);
 
-	const fetchStatesByCountry = ( countryCode: string ) => {
-		axios( {
+	const fetchStatesByCountry = (countryCode: string) => {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, `states/${ countryCode }` ),
+			url: getApiLink(appLocalizer, `states/${countryCode}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		} ).then( ( res ) => {
-			setStateOptions( res.data || [] );
-		} );
+		}).then((res) => {
+			setStateOptions(res.data || []);
+		});
 	};
 
 	const handleChange = (
-		e: React.ChangeEvent< HTMLInputElement | HTMLTextAreaElement >
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
 	) => {
 		const { name, value } = e.target;
-		const updated = { ...formData, [ name ]: value };
-		setFormData( updated );
-		autoSave( updated );
+		const updated = { ...formData, [name]: value };
+		setFormData(updated);
+		autoSave(updated);
 	};
 
-	const runUploader = ( key: string ) => {
-		const frame = ( window as any ).wp.media( {
+	const runUploader = (key: string) => {
+		const frame = (window as any).wp.media({
 			title: 'Select or Upload Image',
 			button: { text: 'Use this image' },
 			multiple: false,
-		} );
+		});
 
-		frame.on( 'select', function () {
-			const attachment = frame
-				.state()
-				.get( 'selection' )
-				.first()
-				.toJSON();
-			const updated = { ...formData, [ key ]: attachment.url };
+		frame.on('select', function () {
+			const attachment = frame.state().get('selection').first().toJSON();
+			const updated = { ...formData, [key]: attachment.url };
 
-			setFormData( updated );
-			setImagePreviews( ( prev ) => ( {
+			setFormData(updated);
+			setImagePreviews((prev) => ({
 				...prev,
-				[ key ]: attachment.url,
-			} ) );
-			autoSave( updated );
-		} );
+				[key]: attachment.url,
+			}));
+			autoSave(updated);
+		});
 
 		frame.open();
 	};
 
-	const autoSave = ( updatedData: { [ key: string ]: string } ) => {
-		axios( {
+	const autoSave = (updatedData: { [key: string]: string }) => {
+		axios({
 			method: 'PUT',
-			url: getApiLink( appLocalizer, `store/${ id }` ),
+			url: getApiLink(appLocalizer, `store/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: updatedData,
-		} ).then( ( res ) => {
-			if ( res.data.success ) {
-				setSuccessMsg( 'Store saved successfully!' );
+		}).then((res) => {
+			if (res.data.success) {
+				setSuccessMsg('Store saved successfully!');
 			}
-		} );
+		});
 	};
 
 	return (
 		<>
-			<SuccessNotice message={ successMsg } />
+			<SuccessNotice message={successMsg} />
 			<div className="container-wrapper">
 				<div className="card-wrapper column w-65">
 					<div className="card-content">
@@ -125,8 +119,8 @@ const MessageAndMail = ( { id }: { id: string } ) => {
 									name="name"
 									wrapperClass="setting-form-input"
 									descClass="settings-metabox-description"
-									value={ formData.name }
-									onChange={ handleChange }
+									value={formData.name}
+									onChange={handleChange}
 								/>
 							</div>
 						</div>
@@ -138,8 +132,8 @@ const MessageAndMail = ( { id }: { id: string } ) => {
 									name="slug"
 									wrapperClass="setting-form-input"
 									descClass="settings-metabox-description"
-									value={ formData.slug }
-									onChange={ handleChange }
+									value={formData.slug}
+									onChange={handleChange}
 								/>
 							</div>
 						</div>
@@ -155,8 +149,8 @@ const MessageAndMail = ( { id }: { id: string } ) => {
 									wrapperClass="setting-from-textarea"
 									inputClass="textarea-input"
 									descClass="settings-metabox-description"
-									value={ formData.description }
-									onChange={ handleChange }
+									value={formData.description}
+									onChange={handleChange}
 								/>
 							</div>
 						</div>
@@ -170,10 +164,10 @@ const MessageAndMail = ( { id }: { id: string } ) => {
 								<label htmlFor="product-name">Phone</label>
 								<BasicInput
 									name="phone"
-									value={ formData.phone }
+									value={formData.phone}
 									wrapperClass="setting-form-input"
 									descClass="settings-metabox-description"
-									onChange={ handleChange }
+									onChange={handleChange}
 								/>
 							</div>
 						</div>
@@ -183,20 +177,20 @@ const MessageAndMail = ( { id }: { id: string } ) => {
 								<label htmlFor="product-name">Address</label>
 								<BasicInput
 									name="address_1"
-									value={ formData.address_1 }
+									value={formData.address_1}
 									wrapperClass="setting-form-input"
 									descClass="settings-metabox-description"
-									onChange={ handleChange }
+									onChange={handleChange}
 								/>
 							</div>
 							<div className="form-group">
 								<label htmlFor="product-name"></label>
 								<BasicInput
 									name="address_2"
-									value={ formData.address_2 }
+									value={formData.address_2}
 									wrapperClass="setting-form-input"
 									descClass="settings-metabox-description"
-									onChange={ handleChange }
+									onChange={handleChange}
 								/>
 							</div>
 						</div>
@@ -205,13 +199,13 @@ const MessageAndMail = ( { id }: { id: string } ) => {
 								<label htmlFor="product-name">Country</label>
 								<SelectInput
 									name="country"
-									value={ formData.country }
-									options={ appLocalizer.country_list || [] }
+									value={formData.country}
+									options={appLocalizer.country_list || []}
 									type="single-select"
-									onChange={ ( newValue ) => {
+									onChange={(newValue) => {
 										if (
-											! newValue ||
-											Array.isArray( newValue )
+											!newValue ||
+											Array.isArray(newValue)
 										)
 											return;
 										const updated = {
@@ -219,32 +213,32 @@ const MessageAndMail = ( { id }: { id: string } ) => {
 											country: newValue.value,
 											state: '',
 										}; // reset state
-										setFormData( updated );
-										autoSave( updated );
-										fetchStatesByCountry( newValue.value );
-									} }
+										setFormData(updated);
+										autoSave(updated);
+										fetchStatesByCountry(newValue.value);
+									}}
 								/>
 							</div>
 							<div className="form-group">
 								<label htmlFor="product-name">State</label>
 								<SelectInput
 									name="state"
-									value={ formData.state }
-									options={ stateOptions }
+									value={formData.state}
+									options={stateOptions}
 									type="single-select"
-									onChange={ ( newValue ) => {
+									onChange={(newValue) => {
 										if (
-											! newValue ||
-											Array.isArray( newValue )
+											!newValue ||
+											Array.isArray(newValue)
 										)
 											return;
 										const updated = {
 											...formData,
 											state: newValue.value,
 										};
-										setFormData( updated );
-										autoSave( updated );
-									} }
+										setFormData(updated);
+										autoSave(updated);
+									}}
 								/>
 							</div>
 						</div>
@@ -261,17 +255,15 @@ const MessageAndMail = ( { id }: { id: string } ) => {
 									Profile Image
 								</label>
 								<FileInput
-									value={ formData.image }
+									value={formData.image}
 									inputClass="form-input"
 									name="image"
 									type="hidden"
-									onButtonClick={ () =>
-										runUploader( 'image' )
-									}
-									imageWidth={ 75 }
-									imageHeight={ 75 }
+									onButtonClick={() => runUploader('image')}
+									imageWidth={75}
+									imageHeight={75}
 									openUploader="Upload Image"
-									imageSrc={ imagePreviews.image }
+									imageSrc={imagePreviews.image}
 									buttonClass="admin-btn btn-purple"
 									descClass="settings-metabox-description"
 								/>
@@ -284,17 +276,15 @@ const MessageAndMail = ( { id }: { id: string } ) => {
 									Store Banner Image
 								</label>
 								<FileInput
-									value={ formData.banner }
+									value={formData.banner}
 									inputClass="form-input"
 									name="banner"
 									type="hidden"
-									onButtonClick={ () =>
-										runUploader( 'banner' )
-									}
-									imageWidth={ 75 }
-									imageHeight={ 75 }
+									onButtonClick={() => runUploader('banner')}
+									imageWidth={75}
+									imageHeight={75}
 									openUploader="Upload Image"
-									imageSrc={ imagePreviews.banner }
+									imageSrc={imagePreviews.banner}
 									buttonClass="admin-btn btn-purple"
 									descClass="settings-metabox-description"
 								/>

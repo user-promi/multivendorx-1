@@ -19,104 +19,104 @@ import { __ } from '@wordpress/i18n';
 const AddProduct = () => {
 	const location = useLocation();
 
-	const query = new URLSearchParams( location.search );
-	let productId = query.get( 'context_id' );
-	if ( ! productId ) {
-		const parts = location.pathname.split( '/' ).filter( Boolean );
-		if ( parts.length >= 4 ) {
-			productId = productId || parts[ 3 ];
+	const query = new URLSearchParams(location.search);
+	let productId = query.get('context_id');
+	if (!productId) {
+		const parts = location.pathname.split('/').filter(Boolean);
+		if (parts.length >= 4) {
+			productId = productId || parts[3];
 		}
 	}
-	const [ product, setProduct ] = useState( {} );
+	const [product, setProduct] = useState({});
 
-	const [ featuredImage, setFeaturedImage ] = useState( null );
-	const [ galleryImages, setGalleryImages ] = useState( [] );
+	const [featuredImage, setFeaturedImage] = useState(null);
+	const [galleryImages, setGalleryImages] = useState([]);
 
-	const [ AddInhance, setAddInhance ] = useState( false );
-	const [ enhancementPrompt, setEnhancementPrompt ] = useState( '' );
-	const [ isEnhancing, setIsEnhancing ] = useState( false );
-	const [ enhancementResult, setEnhancementResult ] = useState( '' );
-	const [ enhancementError, setEnhancementError ] = useState( '' );
-	const [ selectedImageForEnhancement, setSelectedImageForEnhancement ] =
-		useState( null );
-	const [ generatedImage, setGeneratedImage ] = useState( null );
+	const [AddInhance, setAddInhance] = useState(false);
+	const [enhancementPrompt, setEnhancementPrompt] = useState('');
+	const [isEnhancing, setIsEnhancing] = useState(false);
+	const [enhancementResult, setEnhancementResult] = useState('');
+	const [enhancementError, setEnhancementError] = useState('');
+	const [selectedImageForEnhancement, setSelectedImageForEnhancement] =
+		useState(null);
+	const [generatedImage, setGeneratedImage] = useState(null);
 
-	useEffect( () => {
-		if ( ! productId ) return;
+	useEffect(() => {
+		if (!productId) return;
 
 		axios
-			.get( `${ appLocalizer.apiUrl }/wc/v3/products/${ productId }`, {
+			.get(`${appLocalizer.apiUrl}/wc/v3/products/${productId}`, {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			} )
-			.then( function ( res ) {
+			})
+			.then(function (res) {
 				const images = res.data.images || [];
 
-				if ( images.length > 0 ) {
-					setFeaturedImage( images[ 0 ] );
+				if (images.length > 0) {
+					setFeaturedImage(images[0]);
 				}
 
-				setGalleryImages( images.slice( 1 ) );
-				setProduct( res.data );
-			} );
-	}, [ productId ] );
+				setGalleryImages(images.slice(1));
+				setProduct(res.data);
+			});
+	}, [productId]);
 
-	const [ categories, setCategories ] = useState( [] );
-	const [ selectedCats, setSelectedCats ] = useState( [] );
+	const [categories, setCategories] = useState([]);
+	const [selectedCats, setSelectedCats] = useState([]);
 
 	const isPyramidEnabled =
-		appLocalizer.settings_databases_value[ 'category-pyramid-guide' ]
+		appLocalizer.settings_databases_value['category-pyramid-guide']
 			?.category_pyramid_guide === 'yes';
 
-	const wrapperRef = useRef( null );
+	const wrapperRef = useRef(null);
 
-	const [ selectedCat, setSelectedCat ] = useState( null );
-	const [ selectedSub, setSelectedSub ] = useState( null );
-	const [ selectedChild, setSelectedChild ] = useState( null );
+	const [selectedCat, setSelectedCat] = useState(null);
+	const [selectedSub, setSelectedSub] = useState(null);
+	const [selectedChild, setSelectedChild] = useState(null);
 
 	// Close on click outside
-	useEffect( () => {
-		if ( ! isPyramidEnabled ) return;
-		const handleClickOutside = ( event ) => {
+	useEffect(() => {
+		if (!isPyramidEnabled) return;
+		const handleClickOutside = (event) => {
 			if (
 				wrapperRef.current &&
-				! wrapperRef.current.contains( event.target )
+				!wrapperRef.current.contains(event.target)
 			) {
 				resetSelection();
 			}
 		};
-		document.addEventListener( 'mousedown', handleClickOutside );
+		document.addEventListener('mousedown', handleClickOutside);
 		return () =>
-			document.removeEventListener( 'mousedown', handleClickOutside );
-	}, [] );
+			document.removeEventListener('mousedown', handleClickOutside);
+	}, []);
 
 	// Add this useEffect in AddProduct to listen for suggestion clicks
-	useEffect( () => {
-		const handleAISuggestion = ( event ) => {
+	useEffect(() => {
+		const handleAISuggestion = (event) => {
 			const { field, value } = event.detail;
 
 			// Update the appropriate field based on suggestion type
-			switch ( field ) {
+			switch (field) {
 				case 'name':
-					setProduct( ( prev ) => ( { ...prev, name: value } ) );
+					setProduct((prev) => ({ ...prev, name: value }));
 					break;
 				case 'short_description':
-					setProduct( ( prev ) => ( {
+					setProduct((prev) => ({
 						...prev,
 						short_description: value,
-					} ) );
+					}));
 					break;
 				case 'description':
-					setProduct( ( prev ) => ( {
+					setProduct((prev) => ({
 						...prev,
 						description: value,
-					} ) );
+					}));
 					break;
 				default:
 					break;
 			}
 		};
 
-		window.addEventListener( 'ai-suggestion-selected', handleAISuggestion );
+		window.addEventListener('ai-suggestion-selected', handleAISuggestion);
 
 		return () => {
 			window.removeEventListener(
@@ -124,116 +124,116 @@ const AddProduct = () => {
 				handleAISuggestion
 			);
 		};
-	}, [] );
+	}, []);
 
-	const handleCategoryClick = ( catId ) => {
-		if ( ! isPyramidEnabled ) return;
-		setSelectedCat( catId );
-		setSelectedSub( null );
-		setSelectedChild( null );
+	const handleCategoryClick = (catId) => {
+		if (!isPyramidEnabled) return;
+		setSelectedCat(catId);
+		setSelectedSub(null);
+		setSelectedChild(null);
 	};
 
-	const handleSubClick = ( subId ) => {
-		if ( ! isPyramidEnabled ) return;
-		setSelectedSub( subId );
-		setSelectedChild( null );
+	const handleSubClick = (subId) => {
+		if (!isPyramidEnabled) return;
+		setSelectedSub(subId);
+		setSelectedChild(null);
 	};
 
-	const handleChildClick = ( childId ) => {
-		if ( ! isPyramidEnabled ) return;
-		setSelectedChild( childId );
+	const handleChildClick = (childId) => {
+		if (!isPyramidEnabled) return;
+		setSelectedChild(childId);
 	};
 
 	// Breadcrumb path click resets below levels
-	const handlePathClick = ( level ) => {
-		if ( ! isPyramidEnabled ) return;
-		if ( level === 'category' ) {
-			setSelectedSub( null );
-			setSelectedChild( null );
+	const handlePathClick = (level) => {
+		if (!isPyramidEnabled) return;
+		if (level === 'category') {
+			setSelectedSub(null);
+			setSelectedChild(null);
 		}
-		if ( level === 'sub' ) {
-			setSelectedChild( null );
+		if (level === 'sub') {
+			setSelectedChild(null);
 		}
 	};
 
 	const printPath = () => {
-		if ( ! isPyramidEnabled ) return;
-		const cat = treeData.find( ( c ) => c.id === selectedCat );
+		if (!isPyramidEnabled) return;
+		const cat = treeData.find((c) => c.id === selectedCat);
 
-		const sub = cat?.children?.find( ( s ) => s.id === selectedSub );
+		const sub = cat?.children?.find((s) => s.id === selectedSub);
 
-		const child = sub?.children?.find( ( c ) => c.id === selectedChild );
+		const child = sub?.children?.find((c) => c.id === selectedChild);
 
 		return (
 			<>
-				{ cat && (
-					<span onClick={ () => handlePathClick( 'category' ) }>
-						{ cat.name }
+				{cat && (
+					<span onClick={() => handlePathClick('category')}>
+						{cat.name}
 					</span>
-				) }
+				)}
 
-				{ sub && (
+				{sub && (
 					<>
-						{ ' / ' }
-						<span onClick={ () => handlePathClick( 'sub' ) }>
-							{ sub.name }
+						{' / '}
+						<span onClick={() => handlePathClick('sub')}>
+							{sub.name}
 						</span>
 					</>
-				) }
+				)}
 
-				{ child && (
+				{child && (
 					<>
-						{ ' / ' }
-						<span>{ child.name }</span>
+						{' / '}
+						<span>{child.name}</span>
 					</>
-				) }
+				)}
 			</>
 		);
 	};
 
 	// Reset all
 	const resetSelection = () => {
-		setSelectedCat( null );
-		setSelectedSub( null );
-		setSelectedChild( null );
+		setSelectedCat(null);
+		setSelectedSub(null);
+		setSelectedChild(null);
 	};
 
-	const [ treeData, setTreeData ] = useState( [] );
+	const [treeData, setTreeData] = useState([]);
 
-	const buildTree = ( list, parent = 0 ) =>
+	const buildTree = (list, parent = 0) =>
 		list
-			.filter( ( item ) => item.parent === parent )
-			.map( ( item ) => ( {
+			.filter((item) => item.parent === parent)
+			.map((item) => ({
 				id: item.id,
 				name: item.name,
-				children: buildTree( list, item.id ),
-			} ) );
+				children: buildTree(list, item.id),
+			}));
 
-	useEffect( () => {
-		if ( categories.length ) {
-			setTreeData( buildTree( categories ) );
+	useEffect(() => {
+		if (categories.length) {
+			setTreeData(buildTree(categories));
 		}
-	}, [ categories ] );
+	}, [categories]);
 
-	const preselectCategory = ( savedId ) => {
-		for ( const cat of treeData ) {
-			if ( cat.id === savedId ) {
-				setSelectedCat( cat.id );
+	const preselectCategory = (savedId) => {
+		for (const cat of treeData) {
+			if (cat.id === savedId) {
+				setSelectedCat(cat.id);
 				return;
 			}
 
-			for ( const sub of cat.children ) {
-				if ( sub.id === savedId ) {
-					setSelectedCat( cat.id );
-					setSelectedSub( sub.id );
+			for (const sub of cat.children) {
+				if (sub.id === savedId) {
+					setSelectedCat(cat.id);
+					setSelectedSub(sub.id);
 					return;
 				}
 
-				for ( const child of sub.children ) {
-					if ( child.id === savedId ) {
-						setSelectedCat( cat.id );
-						setSelectedSub( sub.id );
-						setSelectedChild( child.id );
+				for (const child of sub.children) {
+					if (child.id === savedId) {
+						setSelectedCat(cat.id);
+						setSelectedSub(sub.id);
+						setSelectedChild(child.id);
 						return;
 					}
 				}
@@ -241,131 +241,127 @@ const AddProduct = () => {
 		}
 	};
 
-	useEffect( () => {
-		if ( ! isPyramidEnabled ) return;
+	useEffect(() => {
+		if (!isPyramidEnabled) return;
 		const id = selectedChild || selectedSub || selectedCat;
 
-		if ( id ) {
-			setProduct( ( prev ) => ( {
+		if (id) {
+			setProduct((prev) => ({
 				...prev,
-				categories: [ { id: Number( id ) } ],
-			} ) );
+				categories: [{ id: Number(id) }],
+			}));
 		}
-	}, [ selectedCat, selectedSub, selectedChild ] );
+	}, [selectedCat, selectedSub, selectedChild]);
 
-	const preselectedRef = useRef( false );
+	const preselectedRef = useRef(false);
 
-	useEffect( () => {
-		if ( preselectedRef.current ) return;
+	useEffect(() => {
+		if (preselectedRef.current) return;
 
-		if ( treeData.length && product?.categories?.length ) {
-			const savedId = product.categories[ 0 ].id;
-			preselectCategory( savedId );
+		if (treeData.length && product?.categories?.length) {
+			const savedId = product.categories[0].id;
+			preselectCategory(savedId);
 			preselectedRef.current = true;
 		}
-	}, [ treeData, product ] );
+	}, [treeData, product]);
 
-	useEffect( () => {
+	useEffect(() => {
 		axios
-			.get( `${ appLocalizer.apiUrl }/wc/v3/products/categories`, {
+			.get(`${appLocalizer.apiUrl}/wc/v3/products/categories`, {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: {
 					per_page: 100,
 				},
-			} )
-			.then( ( res ) => setCategories( res.data ) );
-	}, [] );
+			})
+			.then((res) => setCategories(res.data));
+	}, []);
 
-	useEffect( () => {
-		if ( product && product.categories ) {
-			setSelectedCats( product.categories.map( ( c ) => c.id ) );
+	useEffect(() => {
+		if (product && product.categories) {
+			setSelectedCats(product.categories.map((c) => c.id));
 		}
-	}, [ product ] );
+	}, [product]);
 
-	const toggleCategory = ( id ) => {
-		setSelectedCats( ( prev ) =>
-			prev.includes( id )
-				? prev.filter( ( item ) => item !== id )
-				: [ ...prev, id ]
+	const toggleCategory = (id) => {
+		setSelectedCats((prev) =>
+			prev.includes(id)
+				? prev.filter((item) => item !== id)
+				: [...prev, id]
 		);
 	};
 
-	const buildCategoryTree = ( categories ) => {
+	const buildCategoryTree = (categories) => {
 		const map = {};
 		const roots = [];
 
-		categories.forEach( ( cat ) => {
-			map[ cat.id ] = { ...cat, children: [] };
-		} );
+		categories.forEach((cat) => {
+			map[cat.id] = { ...cat, children: [] };
+		});
 
-		categories.forEach( ( cat ) => {
-			if ( cat.parent === 0 ) {
-				roots.push( map[ cat.id ] );
-			} else if ( map[ cat.parent ] ) {
-				map[ cat.parent ].children.push( map[ cat.id ] );
+		categories.forEach((cat) => {
+			if (cat.parent === 0) {
+				roots.push(map[cat.id]);
+			} else if (map[cat.parent]) {
+				map[cat.parent].children.push(map[cat.id]);
 			}
-		} );
+		});
 
 		return roots;
 	};
 
-	const CategoryItem = ( { category, selectedCats, toggleCategory } ) => {
+	const CategoryItem = ({ category, selectedCats, toggleCategory }) => {
 		return (
-			<li
-				className={
-					category.parent === 0 ? 'category' : 'sub-category'
-				}
-			>
+			<li className={category.parent === 0 ? 'category' : 'sub-category'}>
 				<input
 					type="checkbox"
-					checked={ selectedCats.includes( category.id ) }
-					onChange={ () => toggleCategory( category.id ) }
+					checked={selectedCats.includes(category.id)}
+					onChange={() => toggleCategory(category.id)}
 				/>
-				{ category.name }
+				{category.name}
 
-				{ category.children?.length > 0 && (
+				{category.children?.length > 0 && (
 					<ul>
-						{ category.children.map( ( child ) => (
+						{category.children.map((child) => (
 							<CategoryItem
-								key={ child.id }
-								category={ child }
-								selectedCats={ selectedCats }
-								toggleCategory={ toggleCategory }
+								key={child.id}
+								category={child}
+								selectedCats={selectedCats}
+								toggleCategory={toggleCategory}
 							/>
-						) ) }
+						))}
 					</ul>
-				) }
+				)}
 			</li>
 		);
 	};
 
-	const CategoryTree = ( { categories, selectedCats, toggleCategory } ) => {
-		const nestedCategories = buildCategoryTree( categories );
+	const CategoryTree = ({ categories, selectedCats, toggleCategory }) => {
+		const nestedCategories = buildCategoryTree(categories);
 
 		return (
 			<div className="category-wrapper">
 				<ul>
-					{ nestedCategories.map( ( cat ) => (
+					{nestedCategories.map((cat) => (
 						<CategoryItem
-							key={ cat.id }
-							category={ cat }
-							selectedCats={ selectedCats }
-							toggleCategory={ toggleCategory }
+							key={cat.id}
+							category={cat}
+							selectedCats={selectedCats}
+							toggleCategory={toggleCategory}
 						/>
-					) ) }
+					))}
 				</ul>
 			</div>
 		);
 	};
 
-	const toggleCard = ( cardId ) => {
-		const body = document.querySelector( `#${ cardId } .card-body` );
-		const arrow = document.querySelector( `#${ cardId } .arrow-icon` );
+	const toggleCard = (cardId) => {
+		const body = document.querySelector(`#${cardId} .card-body`);
+		const arrow = document.querySelector(`#${cardId} .arrow-icon`);
 
-		if ( ! body || ! arrow ) return;
+		if (!body || !arrow) return;
 
-		body.classList.toggle( 'hide-body' );
-		arrow.classList.toggle( 'rotate' );
+		body.classList.toggle('hide-body');
+		arrow.classList.toggle('rotate');
 	};
 
 	const typeOptions = [
@@ -387,26 +383,26 @@ const AddProduct = () => {
 		{ label: 'Allow', value: 'yes' },
 	];
 
-	const handleChange = ( field, value ) => {
-		setProduct( ( prev ) => ( {
+	const handleChange = (field, value) => {
+		setProduct((prev) => ({
 			...prev,
-			[ field ]: value,
-		} ) );
+			[field]: value,
+		}));
 	};
 
-	const createProduct = ( status ) => {
+	const createProduct = (status) => {
 		const imagePayload = [];
 
-		if ( featuredImage ) {
-			imagePayload.push( { id: featuredImage.id } );
+		if (featuredImage) {
+			imagePayload.push({ id: featuredImage.id });
 		}
 
-		galleryImages.forEach( ( img ) => {
-			imagePayload.push( { id: img.id } );
-		} );
+		galleryImages.forEach((img) => {
+			imagePayload.push({ id: img.id });
+		});
 
 		const finalCategories =
-			appLocalizer.settings_databases_value[ 'category-pyramid-guide' ]
+			appLocalizer.settings_databases_value['category-pyramid-guide']
 				?.category_pyramid_guide == 'yes'
 				? [
 						{
@@ -414,8 +410,8 @@ const AddProduct = () => {
 								selectedChild || selectedSub || selectedCat
 							),
 						},
-				  ]
-				: selectedCats.map( ( id ) => ( { id } ) );
+					]
+				: selectedCats.map((id) => ({ id }));
 
 		try {
 			const payload = {
@@ -432,82 +428,78 @@ const AddProduct = () => {
 			};
 			axios
 				.put(
-					`${ appLocalizer.apiUrl }/wc/v3/products/${ productId }`,
+					`${appLocalizer.apiUrl}/wc/v3/products/${productId}`,
 					payload,
 					{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
 				)
-				.then( ( res ) => {
+				.then((res) => {
 					window.location.reload();
-				} );
-		} catch ( error ) {
-			console.error( 'Error:', error.response );
+				});
+		} catch (error) {
+			console.error('Error:', error.response);
 		}
 	};
 
-	const [ tagInput, setTagInput ] = useState( '' );
-	const [ suggestions, setSuggestions ] = useState( [] );
-	const [ existingTags, setExistingTags ] = useState( [] );
+	const [tagInput, setTagInput] = useState('');
+	const [suggestions, setSuggestions] = useState([]);
+	const [existingTags, setExistingTags] = useState([]);
 
-	useEffect( () => {
+	useEffect(() => {
 		axios
-			.get( `${ appLocalizer.apiUrl }/wc/v3/products/tags`, {
+			.get(`${appLocalizer.apiUrl}/wc/v3/products/tags`, {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			} )
-			.then( ( res ) => {
-				setExistingTags( res.data );
-			} );
-	}, [] );
+			})
+			.then((res) => {
+				setExistingTags(res.data);
+			});
+	}, []);
 
-	const handleTagInput = ( value ) => {
-		setTagInput( value );
+	const handleTagInput = (value) => {
+		setTagInput(value);
 
-		if ( ! value.trim() ) {
-			setSuggestions( [] );
+		if (!value.trim()) {
+			setSuggestions([]);
 			return;
 		}
 
 		const filtered = existingTags.filter(
-			( tag ) =>
+			(tag) =>
 				tag &&
 				tag.name &&
-				tag.name.toLowerCase().includes( value.toLowerCase() )
+				tag.name.toLowerCase().includes(value.toLowerCase())
 		);
 
-		setSuggestions( filtered );
+		setSuggestions(filtered);
 	};
 
-	const addTag = ( tag ) => {
+	const addTag = (tag) => {
 		let newTag = tag;
 
-		if ( typeof tag === 'string' ) {
+		if (typeof tag === 'string') {
 			newTag = { name: tag };
 		}
 
-		if ( ! product.tags.find( ( t ) => t.name === newTag.name ) ) {
-			setProduct( {
+		if (!product.tags.find((t) => t.name === newTag.name)) {
+			setProduct({
 				...product,
-				tags: [ ...product.tags, newTag ],
-			} );
+				tags: [...product.tags, newTag],
+			});
 		}
 
-		setTagInput( '' );
-		setSuggestions( [] );
+		setTagInput('');
+		setSuggestions([]);
 	};
 
 	const openFeaturedUploader = () => {
-		const frame = wp.media( {
+		const frame = wp.media({
 			title: 'Select Featured Image',
 			button: { text: 'Use this image' },
 			multiple: false,
 			library: { type: 'image' },
-		} );
+		});
 
-		frame.on( 'select', () => {
-			const attachment = frame
-				.state()
-				.get( 'selection' )
-				.first()
-				.toJSON();
+		frame.on('select', () => {
+			const attachment = frame.state().get('selection').first().toJSON();
 
 			const img = {
 				id: attachment.id,
@@ -515,85 +507,81 @@ const AddProduct = () => {
 				thumbnail: attachment.sizes?.thumbnail?.url || attachment.url,
 			};
 
-			setFeaturedImage( img );
-		} );
+			setFeaturedImage(img);
+		});
 
 		frame.open();
 	};
 
 	const openGalleryUploader = () => {
-		const frame = wp.media( {
+		const frame = wp.media({
 			title: 'Select Gallery Images',
 			button: { text: 'Add to gallery' },
 			multiple: true,
 			library: { type: 'image' },
-		} );
+		});
 
-		frame.on( 'select', () => {
-			const selection = frame.state().get( 'selection' ).toJSON();
+		frame.on('select', () => {
+			const selection = frame.state().get('selection').toJSON();
 
-			const newImages = selection.map( ( img ) => ( {
+			const newImages = selection.map((img) => ({
 				id: img.id,
 				src: img.url,
 				thumbnail: img.sizes?.thumbnail?.url || img.url,
-			} ) );
+			}));
 
-			setGalleryImages( ( prev ) => [ ...prev, ...newImages ] );
-		} );
+			setGalleryImages((prev) => [...prev, ...newImages]);
+		});
 
 		frame.open();
 	};
 
 	// Function to convert image to base64
-	const getImageBase64 = ( imageSrc ) => {
-		return new Promise( ( resolve, reject ) => {
+	const getImageBase64 = (imageSrc) => {
+		return new Promise((resolve, reject) => {
 			const img = new Image();
 			img.crossOrigin = 'anonymous';
 			img.onload = () => {
-				const canvas = document.createElement( 'canvas' );
+				const canvas = document.createElement('canvas');
 				canvas.width = img.width;
 				canvas.height = img.height;
-				const ctx = canvas.getContext( '2d' );
-				ctx.drawImage( img, 0, 0 );
-				const base64 = canvas
-					.toDataURL( 'image/jpeg' )
-					.split( ',' )[ 1 ];
-				resolve( base64 );
+				const ctx = canvas.getContext('2d');
+				ctx.drawImage(img, 0, 0);
+				const base64 = canvas.toDataURL('image/jpeg').split(',')[1];
+				resolve(base64);
 			};
 			img.onerror = reject;
 			img.src = imageSrc;
-		} );
+		});
 	};
 
 	// Function to handle image enhancement
 	const handleImageEnhancement = async () => {
-		if ( ! enhancementPrompt.trim() ) {
-			setEnhancementError(
-				'Please enter a prompt for image enhancement'
-			);
+		if (!enhancementPrompt.trim()) {
+			setEnhancementError('Please enter a prompt for image enhancement');
 			return;
 		}
 
 		const imageToEnhance = selectedImageForEnhancement;
 
-		if ( ! imageToEnhance ) {
-			setEnhancementError( 'Please select an image first' );
+		if (!imageToEnhance) {
+			setEnhancementError('Please select an image first');
 			return;
 		}
 
-		setIsEnhancing( true );
-		setEnhancementError( '' );
-		setEnhancementResult( '' );
-		setGeneratedImage( null );
+		setIsEnhancing(true);
+		setEnhancementError('');
+		setEnhancementResult('');
+		setGeneratedImage(null);
 
 		try {
 			// Convert image to base64
-			const imageData = await getImageBase64( imageToEnhance );
+			const imageData = await getImageBase64(imageToEnhance);
 
 			// Call the API
-			const response = await axios( {
+			const response = await axios({
 				method: 'POST',
-				url: getApiLink( appLocalizer, 'ai-assistant' ),
+				url: getApiLink(appLocalizer, 'ai-assistant'),
 				headers: {
 					'X-WP-Nonce': appLocalizer.nonce,
 					'Content-Type': 'application/json',
@@ -605,61 +593,61 @@ const AddProduct = () => {
 					user_prompt: enhancementPrompt,
 					image_data: imageData,
 				},
-			} );
+			});
 
-			if ( response.data && response.data.success ) {
-				if ( response.data.image_data ) {
+			if (response.data && response.data.success) {
+				if (response.data.image_data) {
 					// We have an actual generated image
 					const mimeType =
 						response.data.image_mime_type || 'image/png';
-					const imageSrc = `data:${ mimeType };base64,${ response.data.image_data }`;
-					setGeneratedImage( {
+					const imageSrc = `data:${mimeType};base64,${response.data.image_data}`;
+					setGeneratedImage({
 						src: imageSrc,
 						mimeType: mimeType,
-					} );
+					});
 
 					// Also store any text response
-					if ( response.data.message ) {
-						setEnhancementResult( response.data.message );
+					if (response.data.message) {
+						setEnhancementResult(response.data.message);
 					}
-				} else if ( response.data.text_response ) {
+				} else if (response.data.text_response) {
 					// Fallback to text response
-					setEnhancementResult( response.data.text_response );
+					setEnhancementResult(response.data.text_response);
 				}
 			} else {
 				setEnhancementError(
 					response.data?.message || 'Failed to enhance image'
 				);
 			}
-		} catch ( err ) {
-			console.error( 'Image enhancement error:', err );
+		} catch (err) {
+			console.error('Image enhancement error:', err);
 			setEnhancementError(
 				err.response?.data?.message ||
 					err.response?.data?.error?.message ||
 					'Network error occurred. Please try again.'
 			);
 		} finally {
-			setIsEnhancing( false );
+			setIsEnhancing(false);
 		}
 	};
 
 	// Update the useEnhancedImage function
 	const useEnhancedImage = async () => {
-		if ( ! generatedImage ) return;
+		if (!generatedImage) return;
 
 		try {
 			// Convert base64 to blob
-			const response = await fetch( generatedImage.src );
+			const response = await fetch(generatedImage.src);
 			const blob = await response.blob();
 
 			// Create form data for WordPress media upload
 			const formData = new FormData();
-			formData.append( 'file', blob, `ai-enhanced-${ Date.now() }.png` );
-			formData.append( 'title', 'AI Enhanced Product Image' );
+			formData.append('file', blob, `ai-enhanced-${Date.now()}.png`);
+			formData.append('title', 'AI Enhanced Product Image');
 
 			// Upload to WordPress media library
 			const uploadResponse = await axios.post(
-				`${ appLocalizer.apiUrl }/wp/v2/media`,
+				`${appLocalizer.apiUrl}/wp/v2/media`,
 				formData,
 				{
 					headers: {
@@ -669,7 +657,7 @@ const AddProduct = () => {
 				}
 			);
 
-			if ( uploadResponse.data && uploadResponse.data.id ) {
+			if (uploadResponse.data && uploadResponse.data.id) {
 				const enhancedImage = {
 					id: uploadResponse.data.id,
 					src: uploadResponse.data.source_url,
@@ -682,9 +670,9 @@ const AddProduct = () => {
 				const originalImageSrc = selectedImageForEnhancement;
 
 				// Check if it's the featured image
-				if ( featuredImage && featuredImage.src === originalImageSrc ) {
+				if (featuredImage && featuredImage.src === originalImageSrc) {
 					// REPLACE featured image
-					setFeaturedImage( enhancedImage );
+					setFeaturedImage(enhancedImage);
 					setEnhancementResult(
 						__(
 							'Enhanced image has replaced the featured image.',
@@ -696,13 +684,13 @@ const AddProduct = () => {
 				// Check if it's a gallery image
 				else {
 					// ADD to gallery (don't replace)
-					setGalleryImages( ( prev ) => [ ...prev, enhancedImage ] );
+					setGalleryImages((prev) => [...prev, enhancedImage]);
 					setEnhancementResult(
-						__( 'Enhanced image added to gallery.', 'multivendorx' )
+						__('Enhanced image added to gallery.', 'multivendorx')
 					);
 				}
 			}
-		} catch ( error ) {
+		} catch (error) {
 			setEnhancementError(
 				__(
 					'Failed to use enhanced image. Please try again.',
@@ -713,38 +701,38 @@ const AddProduct = () => {
 	};
 
 	// Update the openImageEnhancer function
-	const openImageEnhancer = ( imageSrc = null ) => {
-		if ( imageSrc ) {
-			setSelectedImageForEnhancement( imageSrc );
+	const openImageEnhancer = (imageSrc = null) => {
+		if (imageSrc) {
+			setSelectedImageForEnhancement(imageSrc);
 		} else {
 			// Use featured image or first gallery image
 			const imageToUse =
 				featuredImage?.src ||
-				( galleryImages.length > 0 ? galleryImages[ 0 ].src : null );
-			setSelectedImageForEnhancement( imageToUse );
+				(galleryImages.length > 0 ? galleryImages[0].src : null);
+			setSelectedImageForEnhancement(imageToUse);
 		}
-		setEnhancementPrompt( '' );
-		setEnhancementResult( '' );
-		setEnhancementError( '' );
-		setGeneratedImage( null );
-		setAddInhance( true );
+		setEnhancementPrompt('');
+		setEnhancementResult('');
+		setEnhancementError('');
+		setGeneratedImage(null);
+		setAddInhance(true);
 	};
-	const [ checklist, setChecklist ] = useState( {
+	const [checklist, setChecklist] = useState({
 		name: false,
 		image: false,
 		price: false,
 		stock: false,
-	} );
+	});
 
-	useEffect( () => {
+	useEffect(() => {
 		let baseChecklist = {
-			name: !! product.name,
-			image: !! featuredImage,
+			name: !!product.name,
+			image: !!featuredImage,
 		};
 
-		if ( product.type === 'simple' ) {
-			baseChecklist.price = !! product.regular_price;
-			baseChecklist.stock = !! product.stock_status;
+		if (product.type === 'simple') {
+			baseChecklist.price = !!product.regular_price;
+			baseChecklist.stock = !!product.stock_status;
 		}
 
 		const filteredChecklist = applyFilters(
@@ -753,40 +741,40 @@ const AddProduct = () => {
 			product
 		);
 
-		setChecklist( filteredChecklist );
-	}, [ product, featuredImage ] );
+		setChecklist(filteredChecklist);
+	}, [product, featuredImage]);
 
-	const isPublishDisabled = ! Object.values( checklist ).every( Boolean );
+	const isPublishDisabled = !Object.values(checklist).every(Boolean);
 
-	console.log( 'product', product );
+	console.log('product', product);
 	return (
 		<>
 			<div className="page-title-wrapper">
 				<div className="page-title">
 					<div className="title">
-						{ __( 'Add Product', 'multivendorx' ) }
+						{__('Add Product', 'multivendorx')}
 					</div>
 
 					<div className="des">
-						{ __(
+						{__(
 							'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quas accusantium obcaecati labore nam quibusdam minus.',
 							'multivendorx'
-						) }
+						)}
 					</div>
 				</div>
 				<div className="buttons-wrapper">
 					<button
 						className="admin-btn btn-blue"
-						onClick={ () => createProduct( 'draft' ) }
+						onClick={() => createProduct('draft')}
 					>
-						{ __( 'Draft', 'multivendorx' ) }
+						{__('Draft', 'multivendorx')}
 					</button>
 					<button
 						className="admin-btn btn-purple-bg"
-						onClick={ () => createProduct( 'publish' ) }
-						disabled={ isPublishDisabled }
+						onClick={() => createProduct('publish')}
+						disabled={isPublishDisabled}
 					>
-						{ __( 'Publish', 'multivendorx' ) }
+						{__('Publish', 'multivendorx')}
 					</button>
 				</div>
 			</div>
@@ -797,7 +785,7 @@ const AddProduct = () => {
 						<div className="card-body">
 							<div className="checklist-wrapper">
 								<div className="checklist-title">
-									{ __( 'Checklist', 'multivendorx' ) }
+									{__('Checklist', 'multivendorx')}
 								</div>
 
 								<ul>
@@ -817,8 +805,8 @@ const AddProduct = () => {
 										<span></span> Image
 									</li>
 
-									{ /* SIMPLE PRODUCT FIELDS */ }
-									{ product.type === 'simple' && (
+									{/* SIMPLE PRODUCT FIELDS */}
+									{product.type === 'simple' && (
 										<>
 											<li
 												className={
@@ -840,14 +828,14 @@ const AddProduct = () => {
 												<span></span> Stock
 											</li>
 										</>
-									) }
+									)}
 
-									{ applyFilters(
+									{applyFilters(
 										'product_checklist_items_render',
 										null,
 										checklist,
 										product
-									) }
+									)}
 								</ul>
 							</div>
 						</div>
@@ -855,23 +843,18 @@ const AddProduct = () => {
 				</div>
 
 				<div className="card-wrapper column w-65">
-					{ /* General information */ }
+					{/* General information */}
 					<div className="card-content" id="card-general">
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{ __(
-										'General information',
-										'multivendorx'
-									) }
+									{__('General information', 'multivendorx')}
 								</div>
 							</div>
 							<div className="right">
 								<i
 									className="adminlib-pagination-right-arrow arrow-icon"
-									onClick={ () =>
-										toggleCard( 'card-general' )
-									}
+									onClick={() => toggleCard('card-general')}
 								></i>
 							</div>
 						</div>
@@ -879,17 +862,14 @@ const AddProduct = () => {
 							<div className="form-group-wrapper">
 								<div className="form-group">
 									<label htmlFor="product-name">
-										{ __( 'Product name', 'multivendorx' ) }
+										{__('Product name', 'multivendorx')}
 									</label>
 									<BasicInput
 										name="name"
 										wrapperClass="setting-form-input"
-										value={ product.name }
-										onChange={ ( e ) =>
-											handleChange(
-												'name',
-												e.target.value
-											)
+										value={product.name}
+										onChange={(e) =>
+											handleChange('name', e.target.value)
 										}
 									/>
 								</div>
@@ -898,18 +878,18 @@ const AddProduct = () => {
 							<div className="form-group-wrapper">
 								<div className="form-group">
 									<label htmlFor="product-name">
-										{ __(
+										{__(
 											'Product short description',
 											'multivendorx'
-										) }
+										)}
 									</label>
 									<TextArea
 										name="short_description"
 										wrapperClass="setting-from-textarea"
 										inputClass="textarea-input"
 										descClass="settings-metabox-description"
-										value={ product.short_description }
-										onChange={ ( e ) =>
+										value={product.short_description}
+										onChange={(e) =>
 											handleChange(
 												'short_description',
 												e.target.value
@@ -922,18 +902,18 @@ const AddProduct = () => {
 							<div className="form-group-wrapper">
 								<div className="form-group">
 									<label htmlFor="product-name">
-										{ __(
+										{__(
 											'Product description',
 											'multivendorx'
-										) }
+										)}
 									</label>
 									<TextArea
 										name="description"
 										wrapperClass="setting-from-textarea"
 										inputClass="textarea-input"
 										descClass="settings-metabox-description"
-										value={ product.description }
-										onChange={ ( e ) =>
+										value={product.description}
+										onChange={(e) =>
 											handleChange(
 												'description',
 												e.target.value
@@ -945,36 +925,36 @@ const AddProduct = () => {
 						</div>
 					</div>
 
-					{ /* Price and stock */ }
+					{/* Price and stock */}
 					<div className="card-content" id="card-price">
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{ __( 'Price and stock', 'multivendorx' ) }
+									{__('Price and stock', 'multivendorx')}
 								</div>
 							</div>
 							<div className="right">
 								<i
 									className="adminlib-pagination-right-arrow arrow-icon"
-									onClick={ () => toggleCard( 'card-price' ) }
+									onClick={() => toggleCard('card-price')}
 								></i>
 							</div>
 						</div>
 						<div className="card-body">
-							{ product?.type == 'simple' && (
+							{product?.type == 'simple' && (
 								<div className="form-group-wrapper">
 									<div className="form-group">
 										<label htmlFor="product-name">
-											{ __(
+											{__(
 												'Regular price',
 												'multivendorx'
-											) }
+											)}
 										</label>
 										<BasicInput
 											name="regular_price"
 											wrapperClass="setting-form-input"
-											value={ product.regular_price }
-											onChange={ ( e ) =>
+											value={product.regular_price}
+											onChange={(e) =>
 												handleChange(
 													'regular_price',
 													e.target.value
@@ -984,16 +964,13 @@ const AddProduct = () => {
 									</div>
 									<div className="form-group">
 										<label htmlFor="product-name">
-											{ __(
-												'Sale price',
-												'multivendorx'
-											) }
+											{__('Sale price', 'multivendorx')}
 										</label>
 										<BasicInput
 											name="sale_price"
 											wrapperClass="setting-form-input"
-											value={ product.sale_price }
-											onChange={ ( e ) =>
+											value={product.sale_price}
+											onChange={(e) =>
 												handleChange(
 													'sale_price',
 													e.target.value
@@ -1002,31 +979,28 @@ const AddProduct = () => {
 										/>
 									</div>
 								</div>
-							) }
+							)}
 
 							<div className="form-group-wrapper">
 								<div className="form-group">
 									<label htmlFor="product-name">
-										{ __( 'SKU', 'multivendorx' ) }
+										{__('SKU', 'multivendorx')}
 									</label>
 									<BasicInput
 										name="sku"
 										wrapperClass="setting-form-input"
-										value={ product.sku }
-										onChange={ ( e ) =>
-											handleChange(
-												'sku',
-												e.target.value
-											)
+										value={product.sku}
+										onChange={(e) =>
+											handleChange('sku', e.target.value)
 										}
 									/>
 								</div>
 								<div className="form-group">
 									<label htmlFor="">
-										{ __(
+										{__(
 											'Sold individually',
 											'multivendorx'
-										) }
+										)}
 									</label>
 									<MultiCheckBox
 										wrapperClass="toggle-btn"
@@ -1036,33 +1010,30 @@ const AddProduct = () => {
 										type="checkbox"
 										value={
 											product.sold_individually
-												? [ 'sold_individually' ]
+												? ['sold_individually']
 												: []
 										}
-										onChange={ ( e ) =>
+										onChange={(e) =>
 											handleChange(
 												'sold_individually',
 												(
-													e as React.ChangeEvent< HTMLInputElement >
-												 ).target.checked
+													e as React.ChangeEvent<HTMLInputElement>
+												).target.checked
 											)
 										}
-										options={ [
+										options={[
 											{
 												key: 'sold_individually',
 												value: 'sold_individually',
 											},
-										] }
+										]}
 									/>
 								</div>
 							</div>
 							<div className="form-group-wrapper">
 								<div className="form-group">
 									<label htmlFor="">
-										{ __(
-											'Stock management',
-											'multivendorx'
-										) }
+										{__('Stock management', 'multivendorx')}
 									</label>
 									<MultiCheckBox
 										wrapperClass="toggle-btn"
@@ -1072,39 +1043,36 @@ const AddProduct = () => {
 										type="checkbox"
 										value={
 											product.manage_stock
-												? [ 'manage_stock' ]
+												? ['manage_stock']
 												: []
 										}
-										onChange={ ( e ) =>
+										onChange={(e) =>
 											handleChange(
 												'manage_stock',
 												(
-													e as React.ChangeEvent< HTMLInputElement >
-												 ).target.checked
+													e as React.ChangeEvent<HTMLInputElement>
+												).target.checked
 											)
 										}
-										options={ [
+										options={[
 											{
 												key: 'manage_stock',
 												value: 'manage_stock',
 											},
-										] }
+										]}
 									/>
 								</div>
-								{ ! product.manage_stock && (
+								{!product.manage_stock && (
 									<div className="form-group">
 										<label htmlFor="product-name">
-											{ __(
-												'Stock Status',
-												'multivendorx'
-											) }
+											{__('Stock Status', 'multivendorx')}
 										</label>
 										<SelectInput
 											name="stock_status"
-											options={ stockStatusOptions }
+											options={stockStatusOptions}
 											type="single-select"
-											value={ product.stock_status }
-											onChange={ ( selected ) =>
+											value={product.stock_status}
+											onChange={(selected) =>
 												handleChange(
 													'stock_status',
 													selected.value
@@ -1112,19 +1080,19 @@ const AddProduct = () => {
 											}
 										/>
 									</div>
-								) }
+								)}
 							</div>
-							{ product.manage_stock && (
+							{product.manage_stock && (
 								<div className="form-group-wrapper">
 									<div className="form-group">
 										<label htmlFor="product-name">
-											{ __( 'Quantity', 'multivendorx' ) }
+											{__('Quantity', 'multivendorx')}
 										</label>
 										<BasicInput
 											name="stock"
 											wrapperClass="setting-form-input"
-											value={ product.stock }
-											onChange={ ( e ) =>
+											value={product.stock}
+											onChange={(e) =>
 												handleChange(
 													'stock',
 													e.target.value
@@ -1134,17 +1102,17 @@ const AddProduct = () => {
 									</div>
 									<div className="form-group">
 										<label htmlFor="product-name">
-											{ __(
+											{__(
 												'Allow backorders?',
 												'multivendorx'
-											) }
+											)}
 										</label>
 										<SelectInput
 											name="backorders"
-											options={ backorderOptions }
+											options={backorderOptions}
 											type="single-select"
-											value={ product.backorders }
-											onChange={ ( selected ) =>
+											value={product.backorders}
+											onChange={(selected) =>
 												handleChange(
 													'backorders',
 													selected.value
@@ -1154,16 +1122,16 @@ const AddProduct = () => {
 									</div>
 									<div className="form-group">
 										<label htmlFor="product-name">
-											{ __(
+											{__(
 												'Low stock threshold',
 												'multivendorx'
-											) }
+											)}
 										</label>
 										<BasicInput
 											name="low_stock_amount"
 											wrapperClass="setting-form-input"
-											value={ product.low_stock_amount }
-											onChange={ ( e ) =>
+											value={product.low_stock_amount}
+											onChange={(e) =>
 												handleChange(
 													'low_stock_amount',
 													e.target.value
@@ -1172,9 +1140,9 @@ const AddProduct = () => {
 										/>
 									</div>
 								</div>
-							) }
+							)}
 
-							{ /* <div className="form-group-wrapper">
+							{/* <div className="form-group-wrapper">
                                 <div className="form-group">
                                     <label htmlFor="product-name">
                                         {__('Product URL', 'multivendorx')}
@@ -1193,59 +1161,59 @@ const AddProduct = () => {
                                         wrapperClass="setting-form-input"
                                     />
                                 </div>
-                            </div> */ }
+                            </div> */}
 						</div>
 					</div>
 
-					{ ! product.virtual &&
+					{!product.virtual &&
 						applyFilters(
 							'product_shipping',
 							null,
 							product,
 							handleChange
-						) }
+						)}
 
-					{ product.downloadable &&
+					{product.downloadable &&
 						applyFilters(
 							'product_downloadable',
 							null,
 							product,
 							setProduct,
 							handleChange
-						) }
+						)}
 
-					{ product?.type == 'variable' &&
+					{product?.type == 'variable' &&
 						applyFilters(
 							'product_variable',
 							null,
 							product,
 							setProduct
-						) }
+						)}
 
-					{ AddInhance && (
+					{AddInhance && (
 						<CommonPopup
-							open={ AddInhance }
-							onClick={ () => setAddInhance( false ) }
+							open={AddInhance}
+							onClick={() => setAddInhance(false)}
 							width="50%"
 							height="90%"
 							header={
 								<>
 									<div className="title">
 										<i className="adminlib-magic"></i>
-										{ __(
+										{__(
 											'AI Image Enhancer',
 											'multivendorx'
-										) }
+										)}
 									</div>
 									<p>
-										{ __(
+										{__(
 											'Upload an image and describe enhancements. AI will generate a new enhanced image.',
 											'multivendorx'
-										) }
+										)}
 									</p>
 									<i
 										className="icon adminlib-close"
-										onClick={ () => setAddInhance( false ) }
+										onClick={() => setAddInhance(false)}
 									></i>
 								</>
 							}
@@ -1253,45 +1221,45 @@ const AddProduct = () => {
 								<>
 									<div
 										className="admin-btn btn-red"
-										onClick={ () => {
-											setAddInhance( false );
-										} }
+										onClick={() => {
+											setAddInhance(false);
+										}}
 									>
-										{ __( 'Cancel', 'multivendorx' ) }
+										{__('Cancel', 'multivendorx')}
 									</div>
 									<div
-										className={ `admin-btn btn-purple-bg ${
+										className={`admin-btn btn-purple-bg ${
 											isEnhancing ? 'disabled' : ''
-										}` }
+										}`}
 										onClick={
-											! isEnhancing
+											!isEnhancing
 												? handleImageEnhancement
 												: undefined
 										}
 									>
-										{ isEnhancing
+										{isEnhancing
 											? __(
 													'Generating Image...',
 													'multivendorx'
-											  )
+												)
 											: __(
 													'Generate Enhanced Image',
 													'multivendorx'
-											  ) }
+												)}
 									</div>
 								</>
 							}
 						>
 							<div className="content">
-								{ /* Original Image Preview */ }
-								{ selectedImageForEnhancement && (
+								{/* Original Image Preview */}
+								{selectedImageForEnhancement && (
 									<div className="image-preview-section">
 										<h4>
-											<i className="adminlib-image"></i>{ ' ' }
-											{ __(
+											<i className="adminlib-image"></i>{' '}
+											{__(
 												'Original Image:',
 												'multivendorx'
-											) }
+											)}
 										</h4>
 										<div>
 											<img
@@ -1301,74 +1269,72 @@ const AddProduct = () => {
 												alt="Original Preview"
 											/>
 											<p>
-												{ __(
+												{__(
 													'This is the original image that will be enhanced.',
 													'multivendorx'
-												) }
+												)}
 											</p>
 										</div>
 									</div>
-								) }
+								)}
 
-								{ /* Prompt Input */ }
+								{/* Prompt Input */}
 								<div className="form-group">
 									<label>
-										{ __(
+										{__(
 											'Enhancement Instructions',
 											'multivendorx'
-										) }
+										)}
 									</label>
 									<textarea
-										value={ enhancementPrompt }
-										onChange={ ( e ) =>
-											setEnhancementPrompt(
-												e.target.value
-											)
+										value={enhancementPrompt}
+										onChange={(e) =>
+											setEnhancementPrompt(e.target.value)
 										}
-										placeholder={ __(
+										placeholder={__(
 											"E.g., 'Make the colors more vibrant and appealing', 'Add professional lighting and background', 'Remove all shadows and make it studio quality', 'Make it look more premium and luxurious', etc.",
 											'multivendorx'
-										) }
-										disabled={ isEnhancing }
+										)}
+										disabled={isEnhancing}
 									/>
 									<p>
-										{ __(
+										{__(
 											'Describe exactly how you want the AI to enhance the image.',
 											'multivendorx'
-										) }
+										)}
 									</p>
 								</div>
 
-								{ /* Error Message */ }
-								{ enhancementError && (
+								{/* Error Message */}
+								{enhancementError && (
 									<div className="error-message">
 										<strong>
-											{ __( 'Error:', 'multivendorx' ) }
-										</strong>{ ' ' }
-										{ enhancementError }
+											{__('Error:', 'multivendorx')}
+										</strong>{' '}
+										{enhancementError}
 									</div>
-								) }
+								)}
 
-								{ /* Generated Image Result */ }
-								{ generatedImage && (
+								{/* Generated Image Result */}
+								{generatedImage && (
 									<div className="result-section">
 										<h4>
 											<i className="adminlib-check"></i>
-											{ __(
+											{__(
 												'Generated Enhanced Image:',
 												'multivendorx'
-											) }
+											)}
 										</h4>
 
-										{ /* Image Comparison */ }
+										{/* Image Comparison */}
 										<div className="image-comparison">
-											{ /* Original Image */ }
+											{/* Original Image */}
 											<div className="image-container">
 												<h5>
-													{ __(
+													{__(
 														'Original',
 														'multivendorx'
-													) }
+													)}
 												</h5>
 												<div className="image-preview">
 													<img
@@ -1380,19 +1346,17 @@ const AddProduct = () => {
 												</div>
 											</div>
 
-											{ /* Generated Image */ }
+											{/* Generated Image */}
 											<div className="image-container">
 												<h5>
-													{ __(
+													{__(
 														'AI Enhanced',
 														'multivendorx'
-													) }
+													)}
 												</h5>
 												<div className="image-preview enhanced">
 													<img
-														src={
-															generatedImage.src
-														}
+														src={generatedImage.src}
 														alt="AI Enhanced"
 													/>
 													<div className="badge-new">
@@ -1402,58 +1366,58 @@ const AddProduct = () => {
 											</div>
 										</div>
 
-										{ /* Simplified action buttons */ }
+										{/* Simplified action buttons */}
 										<div className="action-buttons">
 											<button
 												className="admin-btn btn-purple-bg"
-												onClick={ () =>
+												onClick={() =>
 													useEnhancedImage()
 												}
 											>
-												{ __(
+												{__(
 													'Use This Image',
 													'multivendorx'
-												) }
+												)}
 											</button>
 										</div>
-										{ enhancementResult && (
+										{enhancementResult && (
 											<div className="result-message">
 												<strong>
-													{ __(
+													{__(
 														'Result:',
 														'multivendorx'
-													) }
-												</strong>{ ' ' }
-												{ enhancementResult }
+													)}
+												</strong>{' '}
+												{enhancementResult}
 											</div>
-										) }
+										)}
 									</div>
-								) }
+								)}
 
-								{ /* Loading State */ }
-								{ isEnhancing && (
+								{/* Loading State */}
+								{isEnhancing && (
 									<div>
 										<div></div>
 										<p>
-											{ __(
+											{__(
 												'Generating enhanced image...',
 												'multivendorx'
-											) }
+											)}
 										</p>
 										<p>
-											{ __(
+											{__(
 												'This may take 20-40 seconds. Please wait.',
 												'multivendorx'
-											) }
+											)}
 										</p>
 									</div>
-								) }
+								)}
 							</div>
 						</CommonPopup>
-					) }
+					)}
 				</div>
 
-				{ /* right column */ }
+				{/* right column */}
 				<div className="card-wrapper column w-35">
 					<div className="card-content">
 						<div className="card-header">
@@ -1468,17 +1432,14 @@ const AddProduct = () => {
 							<div className="form-group-wrapper">
 								<div className="form-group">
 									<label htmlFor="product-name">
-										{ __( 'Product type', 'multivendorx' ) }
+										{__('Product type', 'multivendorx')}
 									</label>
 									<SelectInput
 										name="type"
-										options={ typeOptions }
-										value={ product.type }
-										onChange={ ( selected ) =>
-											handleChange(
-												'type',
-												selected.value
-											)
+										options={typeOptions}
+										value={product.type}
+										onChange={(selected) =>
+											handleChange('type', selected.value)
 										}
 									/>
 								</div>
@@ -1489,28 +1450,28 @@ const AddProduct = () => {
 										<div className="item">
 											<input
 												type="checkbox"
-												checked={ product.virtual }
-												onChange={ ( e ) =>
+												checked={product.virtual}
+												onChange={(e) =>
 													handleChange(
 														'virtual',
 														e.target.checked
 													)
 												}
 											/>
-											{ __( 'Virtual', 'multivendorx' ) }
+											{__('Virtual', 'multivendorx')}
 										</div>
 										<div className="item">
 											<input
 												type="checkbox"
-												checked={ product.downloadable }
-												onChange={ ( e ) =>
+												checked={product.downloadable}
+												onChange={(e) =>
 													handleChange(
 														'downloadable',
 														e.target.checked
 													)
 												}
 											/>
-											{ __( 'Download', 'multivendorx' ) }
+											{__('Download', 'multivendorx')}
 										</div>
 									</div>
 								</div>
@@ -1518,8 +1479,8 @@ const AddProduct = () => {
 						</div>
 					</div>
 
-					{ /* ai assist */ }
-					{ applyFilters( 'product_ai_assist', null, product ) }
+					{/* ai assist */}
+					{applyFilters('product_ai_assist', null, product)}
 
 					<div className="card-content">
 						<div className="card-header">
@@ -1547,7 +1508,7 @@ const AddProduct = () => {
 										descClass="settings-metabox-description"
 										activeClass="radio-select-active"
 										radiSelectLabelClass="radio-label"
-										options={ [
+										options={[
 											{
 												key: 'vs1',
 												value: 'visible',
@@ -1572,9 +1533,9 @@ const AddProduct = () => {
 												label: 'Hidden',
 												name: 'visibility',
 											},
-										] }
-										value={ product.catalog_visibility }
-										onChange={ ( e ) =>
+										]}
+										value={product.catalog_visibility}
+										onChange={(e) =>
 											handleChange(
 												'catalog_visibility',
 												e.target.value
@@ -1586,18 +1547,18 @@ const AddProduct = () => {
 
 							<div className="form-group-wrapper">
 								<div className="form-group">
-									{ /* <label htmlFor="product-name">Status</label>
+									{/* <label htmlFor="product-name">Status</label>
                                     <div className="admin-badge green">
                                         Publish
-                                    </div> */ }
+                                    </div> */}
 
-									{ /* <div className="form-group"> */ }
+									{/* <div className="form-group"> */}
 									<label>Status</label>
 
 									<select
 										className="basic-select"
-										value={ product.status }
-										onChange={ ( e ) =>
+										value={product.status}
+										onChange={(e) =>
 											handleChange(
 												'status',
 												e.target.value
@@ -1612,7 +1573,7 @@ const AddProduct = () => {
 											Pending Review
 										</option>
 									</select>
-									{ /* </div> */ }
+									{/* </div> */}
 								</div>
 							</div>
 							<div className="form-group-wrapper">
@@ -1622,7 +1583,7 @@ const AddProduct = () => {
 									</label>
 
 									<div className="date-field-wrapper">
-										{ product.date_created && (
+										{product.date_created && (
 											<>
 												<CalendarInput
 													wrapperClass="calendar-wrapper"
@@ -1630,28 +1591,24 @@ const AddProduct = () => {
 													value={
 														product.date_created?.split(
 															'T'
-														)[ 0 ] || ''
+														)[0] || ''
 													}
-													onChange={ (
-														date: any
-													) => {
+													onChange={(date: any) => {
 														const dateStr =
 															date?.toString();
 
-														setProduct(
-															( prev ) => {
-																const oldTime =
-																	prev.date_created?.split(
-																		'T'
-																	)[ 1 ] ||
-																	'00:00:00';
-																return {
-																	...prev,
-																	date_created: `${ dateStr }T${ oldTime }`,
-																};
-															}
-														);
-													} }
+														setProduct((prev) => {
+															const oldTime =
+																prev.date_created?.split(
+																	'T'
+																)[1] ||
+																'00:00:00';
+															return {
+																...prev,
+																date_created: `${dateStr}T${oldTime}`,
+															};
+														});
+													}}
 													format="YYYY-MM-DD"
 												/>
 												<BasicInput
@@ -1661,31 +1618,27 @@ const AddProduct = () => {
 													name="published_time"
 													value={
 														product.date_created
-															?.split( 'T' )[ 1 ]
-															?.slice( 0, 5 ) ||
-														''
+															?.split('T')[1]
+															?.slice(0, 5) || ''
 													}
-													onChange={ ( e: any ) => {
+													onChange={(e: any) => {
 														const newTime =
 															e.target.value; // "10:35"
 
-														setProduct(
-															( prev ) => {
-																const oldDate =
-																	prev.date_created?.split(
-																		'T'
-																	)[ 0 ] ||
-																	'';
-																return {
-																	...prev,
-																	date_created: `${ oldDate }T${ newTime }:00`,
-																};
-															}
-														);
-													} }
+														setProduct((prev) => {
+															const oldDate =
+																prev.date_created?.split(
+																	'T'
+																)[0] || '';
+															return {
+																...prev,
+																date_created: `${oldDate}T${newTime}:00`,
+															};
+														});
+													}}
 												/>
 											</>
-										) }
+										)}
 									</div>
 								</div>
 							</div>
@@ -1695,8 +1648,8 @@ const AddProduct = () => {
 									<label>
 										<input
 											type="checkbox"
-											checked={ product.featured }
-											onChange={ ( e ) =>
+											checked={product.featured}
+											onChange={(e) =>
 												handleChange(
 													'featured',
 													e.target.value
@@ -1720,45 +1673,45 @@ const AddProduct = () => {
 							</div>
 						</div>
 						<div className="card-body">
-							{ appLocalizer.settings_databases_value[
+							{appLocalizer.settings_databases_value[
 								'category-pyramid-guide'
 							]?.category_pyramid_guide == 'yes' ? (
 								<>
 									<div className="category-breadcrumb-wrapper">
 										<div className="category-breadcrumb">
-											{ printPath() }
+											{printPath()}
 										</div>
-										{ ( selectedCat ||
+										{(selectedCat ||
 											selectedSub ||
-											selectedChild ) && (
+											selectedChild) && (
 											<button
-												onClick={ resetSelection }
+												onClick={resetSelection}
 												className="admin-btn btn-red"
 											>
 												Reset
 											</button>
-										) }
+										)}
 									</div>
 									<div className="form-group-wrapper">
 										<div className="form-group">
 											<div
 												className="category-wrapper template2"
-												ref={ wrapperRef }
+												ref={wrapperRef}
 											>
 												<ul className="settings-form-group-radio">
-													{ treeData.map( ( cat ) => (
+													{treeData.map((cat) => (
 														<React.Fragment
-															key={ cat.id }
+															key={cat.id}
 														>
-															{ /* CATEGORY */ }
+															{/* CATEGORY */}
 															<li
-																className={ `category ${
+																className={`category ${
 																	selectedCat ===
 																	cat.id
 																		? 'radio-select-active'
 																		: ''
-																}` }
-																style={ {
+																}`}
+																style={{
 																	display:
 																		selectedCat ===
 																			null ||
@@ -1766,26 +1719,26 @@ const AddProduct = () => {
 																			cat.id
 																			? 'block'
 																			: 'none',
-																} }
-																onClick={ () =>
+																}}
+																onClick={() =>
 																	handleCategoryClick(
 																		cat.id
 																	)
 																}
 															>
 																<label>
-																	{ cat.name }
+																	{cat.name}
 																</label>
 															</li>
 
-															{ /* CATEGORY CHILDREN */ }
-															{ selectedCat ===
+															{/* CATEGORY CHILDREN */}
+															{selectedCat ===
 																cat.id &&
 																cat.children
 																	?.length >
 																	0 && (
 																	<ul className="settings-form-group-radio">
-																		{ cat.children.map(
+																		{cat.children.map(
 																			(
 																				sub
 																			) => (
@@ -1794,23 +1747,23 @@ const AddProduct = () => {
 																						sub.id
 																					}
 																				>
-																					{ /* SUB CATEGORY */ }
+																					{/* SUB CATEGORY */}
 																					<li
-																						className={ `sub-category ${
+																						className={`sub-category ${
 																							selectedSub ===
 																							sub.id
 																								? 'radio-select-active'
 																								: ''
-																						}` }
-																						style={ {
+																						}`}
+																						style={{
 																							display:
-																								! selectedSub ||
+																								!selectedSub ||
 																								selectedSub ===
 																									sub.id
 																									? 'block'
 																									: 'none',
-																						} }
-																						onClick={ () =>
+																						}}
+																						onClick={() =>
 																							handleSubClick(
 																								sub.id
 																							)
@@ -1823,15 +1776,15 @@ const AddProduct = () => {
 																						</label>
 																					</li>
 
-																					{ /* CHILDREN */ }
-																					{ selectedSub ===
+																					{/* CHILDREN */}
+																					{selectedSub ===
 																						sub.id &&
 																						sub
 																							.children
 																							?.length >
 																							0 && (
 																							<ul className="settings-form-group-radio">
-																								{ sub.children.map(
+																								{sub.children.map(
 																									(
 																										child
 																									) => (
@@ -1839,21 +1792,21 @@ const AddProduct = () => {
 																											key={
 																												child.id
 																											}
-																											className={ `sub-category ${
+																											className={`sub-category ${
 																												selectedChild ===
 																												child.id
 																													? 'radio-select-active'
 																													: ''
-																											}` }
-																											style={ {
+																											}`}
+																											style={{
 																												display:
-																													! selectedChild ||
+																													!selectedChild ||
 																													selectedChild ===
 																														child.id
 																														? 'block'
 																														: 'none',
-																											} }
-																											onClick={ () =>
+																											}}
+																											onClick={() =>
 																												handleChildClick(
 																													child.id
 																												)
@@ -1866,16 +1819,16 @@ const AddProduct = () => {
 																											</label>
 																										</li>
 																									)
-																								) }
+																								)}
 																							</ul>
-																						) }
+																						)}
 																				</React.Fragment>
 																			)
-																		) }
+																		)}
 																	</ul>
-																) }
+																)}
 														</React.Fragment>
-													) ) }
+													))}
 												</ul>
 											</div>
 										</div>
@@ -1885,55 +1838,53 @@ const AddProduct = () => {
 								<div className="form-group-wrapper">
 									<div className="form-group">
 										<CategoryTree
-											categories={ categories }
-											selectedCats={ selectedCats }
-											toggleCategory={ toggleCategory }
+											categories={categories}
+											selectedCats={selectedCats}
+											toggleCategory={toggleCategory}
 										/>
 									</div>
 								</div>
-							) }
+							)}
 
 							<div className="form-group-wrapper">
 								<div className="form-group">
 									<label>Product Tags</label>
 
 									<div className="tag-list">
-										{ product.tags?.map( ( tag ) => (
+										{product.tags?.map((tag) => (
 											<span
 												className="admin-badge blue"
-												key={ tag.id }
+												key={tag.id}
 											>
-												{ tag.name }
+												{tag.name}
 												<span
-													onClick={ () =>
-														setProduct(
-															( prev ) => ( {
-																...prev,
-																tags: prev.tags.filter(
-																	( t ) =>
-																		t.name !==
-																		tag.name
-																),
-															} )
-														)
+													onClick={() =>
+														setProduct((prev) => ({
+															...prev,
+															tags: prev.tags.filter(
+																(t) =>
+																	t.name !==
+																	tag.name
+															),
+														}))
 													}
 												>
 													<i className="delete-icon adminlib-cross"></i>
 												</span>
 											</span>
-										) ) }
+										))}
 									</div>
 
 									<div className="dropdown-field">
 										<input
 											type="text"
-											value={ tagInput }
-											onChange={ ( e ) =>
-												handleTagInput( e.target.value )
+											value={tagInput}
+											onChange={(e) =>
+												handleTagInput(e.target.value)
 											}
-											onKeyDown={ ( e ) =>
+											onKeyDown={(e) =>
 												e.key === 'Enter' &&
-												addTag( tagInput )
+												addTag(tagInput)
 											}
 											placeholder="Type tag…"
 											className="basic-input dropdown-input"
@@ -1941,44 +1892,40 @@ const AddProduct = () => {
 
 										<button
 											className="admin-btn btn-green"
-											onClick={ () => addTag( tagInput ) }
+											onClick={() => addTag(tagInput)}
 										>
 											Add
 										</button>
 
-										{ suggestions.length > 0 && (
+										{suggestions.length > 0 && (
 											<div className="input-dropdown">
 												<ul>
-													{ suggestions.map(
-														( tag ) => (
-															<li
-																key={
-																	tag.id ||
-																	tag.name
-																}
-																className="dropdown-item"
-																// onClick={() =>
-																//     addTag(tag)
-																// }
-																onMouseDown={ () =>
-																	addTag(
-																		tag
-																	)
-																}
-															>
-																{ tag.name }
-															</li>
-														)
-													) }
+													{suggestions.map((tag) => (
+														<li
+															key={
+																tag.id ||
+																tag.name
+															}
+															className="dropdown-item"
+															// onClick={() =>
+															//     addTag(tag)
+															// }
+															onMouseDown={() =>
+																addTag(tag)
+															}
+														>
+															{tag.name}
+														</li>
+													))}
 												</ul>
 											</div>
-										) }
+										)}
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					{ /* image upload */ }
+					{/* image upload */}
 					<div className="card-content" id="card-image-upload">
 						<div className="card-header">
 							<div className="left">
@@ -1987,8 +1934,8 @@ const AddProduct = () => {
 							<div className="right">
 								<i
 									className="adminlib-pagination-right-arrow  arrow-icon"
-									onClick={ () =>
-										toggleCard( 'card-image-upload' )
+									onClick={() =>
+										toggleCard('card-image-upload')
 									}
 								></i>
 							</div>
@@ -2011,24 +1958,22 @@ const AddProduct = () => {
 												onButtonClick={
 													openFeaturedUploader
 												}
-												onRemove={ () =>
-													setFeaturedImage( null )
+												onRemove={() =>
+													setFeaturedImage(null)
 												}
-												onReplace={
-													openFeaturedUploader
-												}
+												onReplace={openFeaturedUploader}
 											/>
 										</div>
 										<button
 											className="admin-btn btn-blue"
-											onClick={ () =>
+											onClick={() =>
 												openImageEnhancer(
 													featuredImage?.src
 												)
 											}
 										>
-											<i className="adminlib-magic"></i>{ ' ' }
-											{ __( 'Enhance', 'multivendorx' ) }
+											<i className="adminlib-magic"></i>{' '}
+											{__('Enhance', 'multivendorx')}
 										</button>
 									</div>
 								</div>
@@ -2039,55 +1984,50 @@ const AddProduct = () => {
 										Product gallery
 									</label>
 									<div className="gallery-wrapper">
-										{ galleryImages.map( ( img, index ) => (
-											<div key={ img.id }>
+										{galleryImages.map((img, index) => (
+											<div key={img.id}>
 												<div>
 													<FileInput
 														type="hidden"
-														imageSrc={
-															img.thumbnail
-														}
+														imageSrc={img.thumbnail}
 														openUploader="Replace Image"
 														buttonClass="admin-btn btn-purple"
-														onRemove={ () => {
+														onRemove={() => {
 															setGalleryImages(
 																galleryImages.filter(
-																	(
-																		i,
-																		idx
-																	) =>
+																	(i, idx) =>
 																		idx !==
 																		index
 																)
 															);
-														} }
-														onReplace={ () =>
+														}}
+														onReplace={() =>
 															openGalleryUploader()
 														}
 													/>
 												</div>
 												<button
 													className="admin-btn btn-blue"
-													onClick={ () =>
+													onClick={() =>
 														openImageEnhancer(
 															img.src
 														)
 													}
 												>
-													<i className="adminlib-magic"></i>{ ' ' }
-													{ __(
+													<i className="adminlib-magic"></i>{' '}
+													{__(
 														'Enhance',
 														'multivendorx'
-													) }
+													)}
 												</button>
 											</div>
-										) ) }
-										{ /* Add more button */ }
+										))}
+										{/* Add more button */}
 										<div>
-											{ /* Add more button */ }
+											{/* Add more button */}
 											<FileInput
 												type="hidden"
-												imageSrc={ null }
+												imageSrc={null}
 												openUploader="Add Gallery Image"
 												buttonClass="admin-btn btn-purple"
 												onButtonClick={

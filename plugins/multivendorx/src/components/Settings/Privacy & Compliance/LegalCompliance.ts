@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'legal-compliance',
 	priority: 4,
-	name: __( 'Legal Compliance', 'mvx-pro' ),
+	name: __('Legal Compliance', 'mvx-pro'),
 	desc: __(
 		'Stores must submit signed agreements, accept platform terms & conditions, consent to the privacy policy, and set up their refund & return policy. Anti-counterfeit or copyright declarations must be submitted for regulated products.',
 		'mvx-pro'
@@ -14,7 +14,7 @@ export default {
 		{
 			key: 'seller_agreement',
 			type: 'textarea',
-			label: __( 'Seller agreement', 'multivendorx' ),
+			label: __('Seller agreement', 'multivendorx'),
 			desc: __(
 				'Define the agreement outlining seller obligations and responsibilities on your marketplace.',
 				'multivendorx'
@@ -25,7 +25,7 @@ export default {
 		{
 			key: 'terms_conditions',
 			type: 'textarea',
-			label: __( 'Terms & conditions', 'multivendorx' ),
+			label: __('Terms & conditions', 'multivendorx'),
 			desc: __(
 				'Specify general terms and conditions that govern participation and transactions.',
 				'multivendorx'
@@ -50,7 +50,7 @@ export default {
 		{
 			key: 'legal_document_handling',
 			type: 'setting-toggle',
-			label: __( 'Legal document handling', 'multivendorx' ),
+			label: __('Legal document handling', 'multivendorx'),
 			settingDescription: __(
 				'Control how stores interact with legal document templates. Choose whether stores can only access the pre-defined templates or are allowed to upload their customized versions.',
 				'multivendorx'
@@ -65,12 +65,12 @@ export default {
 			options: [
 				{
 					key: 'allow_download_only',
-					label: __( 'Download only', 'multivendorx' ),
+					label: __('Download only', 'multivendorx'),
 					value: 'allow_download_only',
 				},
 				{
 					key: 'allow_download_upload',
-					label: __( 'Download and re-upload', 'multivendorx' ),
+					label: __('Download and re-upload', 'multivendorx'),
 					value: 'allow_download_upload',
 				},
 			],

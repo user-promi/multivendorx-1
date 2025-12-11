@@ -22,95 +22,92 @@ import LiveChat from './settings/LiveChat';
 
 const settings = () => {
 	const id = appLocalizer.store_id;
-	const [ formData, setFormData ] = useState< { [ key: string ]: string } >(
-		{}
-	);
-	const [ successMsg, setSuccessMsg ] = useState< string | null >( null );
-	const [ stateOptions, setStateOptions ] = useState<
+	const [formData, setFormData] = useState<{ [key: string]: string }>({});
+	const [successMsg, setSuccessMsg] = useState<string | null>(null);
+	const [stateOptions, setStateOptions] = useState<
 		{ label: string; value: string }[]
-	>( [] );
+	>([]);
 	const { modules } = useModules();
 
-	useEffect( () => {
-		if ( ! id ) return;
+	useEffect(() => {
+		if (!id) return;
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, `store/${ id }` ),
+			url: getApiLink(appLocalizer, `store/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		} ).then( ( res ) => {
+		}).then((res) => {
 			const data = res.data || {};
-			setFormData( ( prev ) => ( { ...prev, ...data } ) );
-		} );
-	}, [ id ] );
+			setFormData((prev) => ({ ...prev, ...data }));
+		});
+	}, [id]);
 
-	useEffect( () => {
-		if ( successMsg ) {
-			const timer = setTimeout( () => setSuccessMsg( null ), 3000 );
-			return () => clearTimeout( timer );
+	useEffect(() => {
+		if (successMsg) {
+			const timer = setTimeout(() => setSuccessMsg(null), 3000);
+			return () => clearTimeout(timer);
 		}
-	}, [ successMsg ] );
-	useEffect( () => {
-		if ( formData.country ) {
-			fetchStatesByCountry( formData.country );
+	}, [successMsg]);
+	useEffect(() => {
+		if (formData.country) {
+			fetchStatesByCountry(formData.country);
 		}
-	}, [ formData.country ] );
+	}, [formData.country]);
 
-	const fetchStatesByCountry = ( countryCode: string ) => {
-		axios( {
+	const fetchStatesByCountry = (countryCode: string) => {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, `states/${ countryCode }` ),
+			url: getApiLink(appLocalizer, `states/${countryCode}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		} ).then( ( res ) => {
-			setStateOptions( res.data || [] );
-		} );
+		}).then((res) => {
+			setStateOptions(res.data || []);
+		});
 	};
 
 	const handleChange = (
-		e: React.ChangeEvent< HTMLInputElement | HTMLTextAreaElement >
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
 	) => {
 		const { name, value } = e.target;
-		const updated = { ...formData, [ name ]: value };
-		setFormData( updated );
-		autoSave( updated );
+		const updated = { ...formData, [name]: value };
+		setFormData(updated);
+		autoSave(updated);
 	};
 
-	const autoSave = ( updatedData: { [ key: string ]: string } ) => {
-		axios( {
+	const autoSave = (updatedData: { [key: string]: string }) => {
+		axios({
 			method: 'PUT',
-			url: getApiLink( appLocalizer, `store/${ id }` ),
+			url: getApiLink(appLocalizer, `store/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: updatedData,
-		} ).then( ( res ) => {
-			if ( res.data.success ) {
-				setSuccessMsg( 'Store saved successfully!' );
+		}).then((res) => {
+			if (res.data.success) {
+				setSuccessMsg('Store saved successfully!');
 			}
-		} );
+		});
 	};
 
-	const SimpleLink = ( { to, children, onClick, className }: any ) => (
-		<a href={ to } onClick={ onClick } className={ className }>
-			{ children }
+	const SimpleLink = ({ to, children, onClick, className }: any) => (
+		<a href={to} onClick={onClick} className={className}>
+			{children}
 		</a>
 	);
 
 	const getCurrentTabFromUrl = () => {
-		const hash = window.location.hash.replace( /^#/, '' );
-		const hashParams = new URLSearchParams( hash );
-		return hashParams.get( 'subtab' ) || 'general';
+		const hash = window.location.hash.replace(/^#/, '');
+		const hashParams = new URLSearchParams(hash);
+		return hashParams.get('subtab') || 'general';
 	};
 
-	const [ currentTab, setCurrentTab ] = useState( getCurrentTabFromUrl() );
+	const [currentTab, setCurrentTab] = useState(getCurrentTabFromUrl());
 
-	useEffect( () => {
-		const handleHashChange = () => setCurrentTab( getCurrentTabFromUrl() );
-		window.addEventListener( 'hashchange', handleHashChange );
-		return () =>
-			window.removeEventListener( 'hashchange', handleHashChange );
-	}, [] );
+	useEffect(() => {
+		const handleHashChange = () => setCurrentTab(getCurrentTabFromUrl());
+		window.addEventListener('hashchange', handleHashChange);
+		return () => window.removeEventListener('hashchange', handleHashChange);
+	}, []);
 
 	// Build hash URL for a given tab
-	const prepareUrl = ( tabId: string ) => `#subtab=${ tabId }`;
+	const prepareUrl = (tabId: string) => `#subtab=${tabId}`;
 
 	const tabData = [
 		{
@@ -167,7 +164,7 @@ const settings = () => {
 				icon: 'wallet-open',
 			},
 		},
-		...( modules.includes( 'store-policy' )
+		...(modules.includes('store-policy')
 			? [
 					{
 						type: 'file',
@@ -179,9 +176,9 @@ const settings = () => {
 							icon: 'privacy',
 						},
 					},
-			  ]
-			: [] ),
-		...( modules.includes( 'store-shipping' )
+				]
+			: []),
+		...(modules.includes('store-shipping')
 			? [
 					{
 						type: 'file',
@@ -193,9 +190,9 @@ const settings = () => {
 							icon: 'shipping',
 						},
 					},
-			  ]
-			: [] ),
-		...( modules.includes( 'marketplace-compliance' )
+				]
+			: []),
+		...(modules.includes('marketplace-compliance')
 			? [
 					{
 						type: 'file',
@@ -207,9 +204,9 @@ const settings = () => {
 							icon: 'verification5',
 						},
 					},
-			  ]
-			: [] ),
-		...( modules.includes( 'live-chat' )
+				]
+			: []),
+		...(modules.includes('live-chat')
 			? [
 					{
 						type: 'file',
@@ -221,12 +218,12 @@ const settings = () => {
 							icon: 'live-chat',
 						},
 					},
-			  ]
-			: [] ),
+				]
+			: []),
 	];
 
-	const getForm = ( tabId: string ) => {
-		switch ( tabId ) {
+	const getForm = (tabId: string) => {
+		switch (tabId) {
 			case 'general':
 				return <GeneralSettings />;
 			case 'appearance':
@@ -255,16 +252,16 @@ const settings = () => {
 		<>
 			<div className="horizontal-tabs">
 				<Tabs
-					tabData={ tabData }
-					currentTab={ currentTab }
-					getForm={ getForm }
-					prepareUrl={ prepareUrl }
-					appLocalizer={ appLocalizer }
+					tabData={tabData}
+					currentTab={currentTab}
+					getForm={getForm}
+					prepareUrl={prepareUrl}
+					appLocalizer={appLocalizer}
 					settingName="Settings"
-					supprot={ [] }
-					Link={ SimpleLink }
-					submenuRender={ true }
-					menuIcon={ true }
+					supprot={[]}
+					Link={SimpleLink}
+					submenuRender={true}
+					menuIcon={true}
 				/>
 			</div>
 		</>

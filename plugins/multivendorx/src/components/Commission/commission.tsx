@@ -21,7 +21,7 @@ import { formatCurrency } from '../../services/commonFunction';
 export interface RealtimeFilter {
 	name: string;
 	render: (
-		updateFilter: ( key: string, value: any ) => void,
+		updateFilter: (key: string, value: any) => void,
 		filterValue: any
 	) => ReactNode;
 }
@@ -73,189 +73,176 @@ type FilterData = {
 };
 
 // CSV Download Button Component
-const DownloadCSVButton: React.FC< {
+const DownloadCSVButton: React.FC<{
 	selectedRows: RowSelectionState;
 	data: CommissionRow[] | null;
 	filterData: FilterData;
 	isLoading?: boolean;
-} > = ( { selectedRows, data, filterData, isLoading = false } ) => {
-	const [ isDownloading, setIsDownloading ] = useState( false );
+}> = ({ selectedRows, data, filterData, isLoading = false }) => {
+	const [isDownloading, setIsDownloading] = useState(false);
 
 	const handleDownload = async () => {
-		setIsDownloading( true );
+		setIsDownloading(true);
 		try {
 			// Get selected row IDs
-			const selectedIds = Object.keys( selectedRows )
-				.filter( ( key ) => selectedRows[ key ] )
-				.map( ( key ) => {
-					const rowIndex = parseInt( key );
-					return data?.[ rowIndex ]?.id;
-				} )
-				.filter( ( id ) => id !== undefined );
+			const selectedIds = Object.keys(selectedRows)
+				.filter((key) => selectedRows[key])
+				.map((key) => {
+					const rowIndex = parseInt(key);
+					return data?.[rowIndex]?.id;
+				})
+				.filter((id) => id !== undefined);
 
 			// Prepare parameters for CSV download
 			const params: any = {
 				format: 'csv',
 				startDate: filterData?.date?.start_date
-					? filterData.date.start_date.toISOString().split( 'T' )[ 0 ]
+					? filterData.date.start_date.toISOString().split('T')[0]
 					: '',
 				endDate: filterData?.date?.end_date
-					? filterData.date.end_date.toISOString().split( 'T' )[ 0 ]
+					? filterData.date.end_date.toISOString().split('T')[0]
 					: '',
 			};
 
 			// Add filters if present
-			if ( filterData?.store ) {
+			if (filterData?.store) {
 				params.store_id = filterData.store;
 			}
-			if ( filterData?.typeCount && filterData.typeCount !== 'all' ) {
+			if (filterData?.typeCount && filterData.typeCount !== 'all') {
 				params.status = filterData.typeCount;
 			}
 
 			// If specific rows are selected, send their IDs
-			if ( selectedIds.length > 0 ) {
-				params.ids = selectedIds.join( ',' );
+			if (selectedIds.length > 0) {
+				params.ids = selectedIds.join(',');
 			}
 
 			// Make API request for CSV
-			const response = await axios( {
+			const response = await axios({
 				method: 'GET',
-				url: getApiLink( appLocalizer, 'commission' ),
+				url: getApiLink(appLocalizer, 'commission'),
 				headers: {
 					'X-WP-Nonce': appLocalizer.nonce,
 					Accept: 'text/csv',
 				},
 				params: params,
 				responseType: 'blob',
-			} );
+			});
 
 			// Create download link
-			const url = window.URL.createObjectURL(
-				new Blob( [ response.data ] )
-			);
-			const link = document.createElement( 'a' );
+			const url = window.URL.createObjectURL(new Blob([response.data]));
+			const link = document.createElement('a');
 			link.href = url;
 
 			// Generate filename with timestamp
-			const timestamp = new Date().toISOString().split( 'T' )[ 0 ];
-			const filename = `commissions_${ timestamp }.csv`;
-			link.setAttribute( 'download', filename );
+			const timestamp = new Date().toISOString().split('T')[0];
+			const filename = `commissions_${timestamp}.csv`;
+			link.setAttribute('download', filename);
 
-			document.body.appendChild( link );
+			document.body.appendChild(link);
 			link.click();
 			link.remove();
-			window.URL.revokeObjectURL( url );
-		} catch ( error ) {
-			console.error( 'Error downloading CSV:', error );
+			window.URL.revokeObjectURL(url);
+		} catch (error) {
+			console.error('Error downloading CSV:', error);
 			alert(
-				__(
-					'Failed to download CSV. Please try again.',
-					'multivendorx'
-				)
+				__('Failed to download CSV. Please try again.', 'multivendorx')
 			);
 		} finally {
-			setIsDownloading( false );
+			setIsDownloading(false);
 		}
 	};
 
-	const hasSelectedRows = Object.keys( selectedRows ).some(
-		( key ) => selectedRows[ key ]
+	const hasSelectedRows = Object.keys(selectedRows).some(
+		(key) => selectedRows[key]
 	);
 
 	return (
 		<button
-			onClick={ handleDownload }
-			disabled={
-				isDownloading || isLoading || ( ! hasSelectedRows && ! data )
-			}
+			onClick={handleDownload}
+			disabled={isDownloading || isLoading || (!hasSelectedRows && !data)}
 			className="button"
 		>
-			{ __( 'Download CSV', 'multivendorx' ) }
+			{__('Download CSV', 'multivendorx')}
 		</button>
 	);
 };
 
 // Bulk Actions Component
-const BulkActions: React.FC< {
+const BulkActions: React.FC<{
 	selectedRows: RowSelectionState;
 	data: CommissionRow[] | null;
 	filterData: FilterData;
 	onActionComplete?: () => void;
-} > = ( { selectedRows, data, filterData, onActionComplete } ) => {
+}> = ({ selectedRows, data, filterData, onActionComplete }) => {
 	return (
 		<div>
 			<DownloadCSVButton
-				selectedRows={ selectedRows }
-				data={ data }
-				filterData={ filterData }
+				selectedRows={selectedRows}
+				data={data}
+				filterData={filterData}
 			/>
 		</div>
 	);
 };
 
 const Commission: React.FC = () => {
-	const [ data, setData ] = useState< CommissionRow[] | null >( null );
-	const [ store, setStore ] = useState< any[] | null >( null );
-	const [ rowSelection, setRowSelection ] = useState< RowSelectionState >(
-		{}
-	);
-	const [ totalRows, setTotalRows ] = useState< number >( 0 );
-	const [ viewCommission, setViewCommission ] = useState( false );
-	const [ selectedCommissionId, setSelectedCommissionId ] = useState<
+	const [data, setData] = useState<CommissionRow[] | null>(null);
+	const [store, setStore] = useState<any[] | null>(null);
+	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+	const [totalRows, setTotalRows] = useState<number>(0);
+	const [viewCommission, setViewCommission] = useState(false);
+	const [selectedCommissionId, setSelectedCommissionId] = useState<
 		number | null
-	>( null );
-	const [ currentFilterData, setCurrentFilterData ] = useState< FilterData >(
-		{}
-	);
-	const [ expandedRows, setExpandedRows ] = useState< {
-		[ key: number ]: boolean;
-	} >( {} );
+	>(null);
+	const [currentFilterData, setCurrentFilterData] = useState<FilterData>({});
+	const [expandedRows, setExpandedRows] = useState<{
+		[key: number]: boolean;
+	}>({});
 	const { modules } = useModules();
-	const [ pagination, setPagination ] = useState< PaginationState >( {
+	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
 		pageSize: 10,
-	} );
+	});
 
-	const [ commissionStatus, setCommissionStatus ] = useState<
+	const [commissionStatus, setCommissionStatus] = useState<
 		CommissionStatus[] | null
-	>( null );
-	const [ pageCount, setPageCount ] = useState( 0 );
+	>(null);
+	const [pageCount, setPageCount] = useState(0);
 
 	// Fetch total rows on mount
-	useEffect( () => {
-		axios( {
+	useEffect(() => {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'store' ),
+			url: getApiLink(appLocalizer, 'store'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		} )
-			.then( ( response ) => {
-				setStore( response.data.stores );
-			} )
-			.catch( () => {
-				setStore( [] );
-			} );
+		})
+			.then((response) => {
+				setStore(response.data.stores);
+			})
+			.catch(() => {
+				setStore([]);
+			});
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'commission' ),
+			url: getApiLink(appLocalizer, 'commission'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: { count: true },
-		} )
-			.then( ( response ) => {
-				setTotalRows( response.data || 0 );
-				setPageCount(
-					Math.ceil( response.data / pagination.pageSize )
-				);
-			} )
-			.catch( () => {} );
-	}, [] );
+		})
+			.then((response) => {
+				setTotalRows(response.data || 0);
+				setPageCount(Math.ceil(response.data / pagination.pageSize));
+			})
+			.catch(() => {});
+	}, []);
 
-	useEffect( () => {
+	useEffect(() => {
 		const currentPage = pagination.pageIndex + 1;
 		const rowsPerPage = pagination.pageSize;
-		requestData( rowsPerPage, currentPage );
-		setPageCount( Math.ceil( totalRows / rowsPerPage ) );
-	}, [ pagination ] );
+		requestData(rowsPerPage, currentPage);
+		setPageCount(Math.ceil(totalRows / rowsPerPage));
+	}, [pagination]);
 
 	// Fetch data from backend.
 	function requestData(
@@ -265,13 +252,13 @@ const Commission: React.FC = () => {
 		store = '',
 		orderBy = '',
 		order = '',
-		startDate = new Date( 0 ),
+		startDate = new Date(0),
 		endDate = new Date()
 	) {
-		setData( null );
-		axios( {
+		setData(null);
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'commission' ),
+			url: getApiLink(appLocalizer, 'commission'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				page: currentPage,
@@ -283,9 +270,9 @@ const Commission: React.FC = () => {
 				startDate,
 				endDate,
 			},
-		} )
-			.then( ( response ) => {
-				setData( response.data.commissions || [] );
+		})
+			.then((response) => {
+				setData(response.data.commissions || []);
 
 				const statuses = [
 					{ key: 'all', name: 'All', count: response.data.all || 0 },
@@ -318,12 +305,12 @@ const Commission: React.FC = () => {
 
 				// Remove items where count === 0
 				setCommissionStatus(
-					statuses.filter( ( status ) => status.count > 0 )
+					statuses.filter((status) => status.count > 0)
 				);
-			} )
-			.catch( () => {
-				setData( [] );
-			} );
+			})
+			.catch(() => {
+				setData([]);
+			});
 	}
 
 	const actionButton: RealtimeFilter[] = [
@@ -331,74 +318,70 @@ const Commission: React.FC = () => {
 			name: 'actionButton',
 			render: () => (
 				<>
-					<ExportAllCSVButton filterData={ currentFilterData } />
+					<ExportAllCSVButton filterData={currentFilterData} />
 				</>
 			),
 		},
 	];
 
 	// Export All CSV Button Component - Downloads ALL filtered data
-	const ExportAllCSVButton: React.FC< {
+	const ExportAllCSVButton: React.FC<{
 		filterData: FilterData;
-	} > = ( { filterData } ) => {
-		const [ isDownloading, setIsDownloading ] = useState( false );
+	}> = ({ filterData }) => {
+		const [isDownloading, setIsDownloading] = useState(false);
 
 		const handleExportAll = async () => {
-			setIsDownloading( true );
+			setIsDownloading(true);
 			try {
 				// Prepare parameters for CSV download - NO pagination params
 				const params: any = {
 					format: 'csv',
 					startDate: filterData?.date?.start_date
-						? filterData.date.start_date
-								.toISOString()
-								.split( 'T' )[ 0 ]
+						? filterData.date.start_date.toISOString().split('T')[0]
 						: '',
 					endDate: filterData?.date?.end_date
-						? filterData.date.end_date
-								.toISOString()
-								.split( 'T' )[ 0 ]
+						? filterData.date.end_date.toISOString().split('T')[0]
 						: '',
 				};
 
 				// Add filters if present
-				if ( filterData?.store ) {
+				if (filterData?.store) {
 					params.store_id = filterData.store;
 				}
-				if ( filterData?.typeCount && filterData.typeCount !== 'all' ) {
+				if (filterData?.typeCount && filterData.typeCount !== 'all') {
 					params.status = filterData.typeCount;
 				}
 
 				// Make API request for CSV
-				const response = await axios( {
+				const response = await axios({
 					method: 'GET',
-					url: getApiLink( appLocalizer, 'commission' ),
+					url: getApiLink(appLocalizer, 'commission'),
 					headers: {
 						'X-WP-Nonce': appLocalizer.nonce,
 						Accept: 'text/csv',
 					},
 					params: params,
 					responseType: 'blob',
-				} );
+				});
 
 				// Create download link
 				const url = window.URL.createObjectURL(
-					new Blob( [ response.data ] )
+					new Blob([response.data])
 				);
-				const link = document.createElement( 'a' );
+				const link = document.createElement('a');
 				link.href = url;
 
 				// Generate filename with timestamp
-				const timestamp = new Date().toISOString().split( 'T' )[ 0 ];
-				const filename = `commissions_all_${ timestamp }.csv`;
-				link.setAttribute( 'download', filename );
+				const timestamp = new Date().toISOString().split('T')[0];
+				const filename = `commissions_all_${timestamp}.csv`;
+				link.setAttribute('download', filename);
 
-				document.body.appendChild( link );
+				document.body.appendChild(link);
 				link.click();
 				link.remove();
-				window.URL.revokeObjectURL( url );
-			} catch ( error ) {
-				console.error( 'Error downloading CSV:', error );
+				window.URL.revokeObjectURL(url);
+			} catch (error) {
+				console.error('Error downloading CSV:', error);
 				alert(
 					__(
 						'Failed to download CSV. Please try again.',
@@ -406,18 +389,18 @@ const Commission: React.FC = () => {
 					)
 				);
 			} finally {
-				setIsDownloading( false );
+				setIsDownloading(false);
 			}
 		};
 
 		return (
 			<button
-				onClick={ handleExportAll }
-				disabled={ isDownloading }
+				onClick={handleExportAll}
+				disabled={isDownloading}
 				className="admin-btn btn-purple-bg"
 			>
 				<span className="adminlib-import"></span>
-				{ __( 'Export Commissions', 'multivendorx' ) }
+				{__('Export Commissions', 'multivendorx')}
 			</button>
 		);
 	};
@@ -428,8 +411,8 @@ const Commission: React.FC = () => {
 		currentPage: number,
 		filterData: FilterData
 	) => {
-		setCurrentFilterData( filterData );
-		setData( null );
+		setCurrentFilterData(filterData);
+		setData(null);
 		requestData(
 			rowsPerPage,
 			currentPage,
@@ -442,21 +425,21 @@ const Commission: React.FC = () => {
 		);
 	};
 	// Column definitions (your existing columns remain the same)
-	const columns: ColumnDef< CommissionRow >[] = [
+	const columns: ColumnDef<CommissionRow>[] = [
 		{
 			id: 'select',
-			header: ( { table } ) => (
+			header: ({ table }) => (
 				<input
 					type="checkbox"
-					checked={ table.getIsAllRowsSelected() }
-					onChange={ table.getToggleAllRowsSelectedHandler() }
+					checked={table.getIsAllRowsSelected()}
+					onChange={table.getToggleAllRowsSelectedHandler()}
 				/>
 			),
-			cell: ( { row } ) => (
+			cell: ({ row }) => (
 				<input
 					type="checkbox"
-					checked={ row.getIsSelected() }
-					onChange={ row.getToggleSelectedHandler() }
+					checked={row.getIsSelected()}
+					onChange={row.getToggleSelectedHandler()}
 				/>
 			),
 		},
@@ -464,17 +447,17 @@ const Commission: React.FC = () => {
 			id: 'id',
 			accessorKey: 'ID',
 			enableSorting: true,
-			header: __( 'ID', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ 'id' }>
+			header: __('ID', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={'id'}>
 					<span
 						className="link-item"
-						onClick={ () => {
-							setSelectedCommissionId( row.original.id ?? null );
-							setViewCommission( true );
-						} }
+						onClick={() => {
+							setSelectedCommissionId(row.original.id ?? null);
+							setViewCommission(true);
+						}}
 					>
-						#{ row.original.id }
+						#{row.original.id}
 					</span>
 				</TableCell>
 			),
@@ -483,30 +466,30 @@ const Commission: React.FC = () => {
 			id: 'order_id',
 			accessorKey: 'order_id',
 			enableSorting: true,
-			header: __( 'Order', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Order', 'multivendorx'),
+			cell: ({ row }) => {
 				const orderId = row.original.orderId;
 				const url = orderId
-					? `${ appLocalizer.site_url.replace(
+					? `${appLocalizer.site_url.replace(
 							/\/$/,
 							''
-					  ) }/wp-admin/post.php?post=${ orderId }&action=edit`
+						)}/wp-admin/post.php?post=${orderId}&action=edit`
 					: '#';
 
 				return (
-					<TableCell title={ orderId ? `#${ orderId }` : '-' }>
-						{ orderId ? (
+					<TableCell title={orderId ? `#${orderId}` : '-'}>
+						{orderId ? (
 							<a
-								href={ url }
+								href={url}
 								target="_blank"
 								rel="noopener noreferrer"
 								className="link-item"
 							>
-								#{ orderId } - { row.original.storeName || '-' }
+								#{orderId} - {row.original.storeName || '-'}
 							</a>
 						) : (
 							'-'
-						) }
+						)}
 					</TableCell>
 				);
 			},
@@ -515,175 +498,173 @@ const Commission: React.FC = () => {
 			id: 'total_order_amount',
 			accessorKey: 'total_order_amount',
 			enableSorting: true,
-			header: __( 'Order Amount', 'multivendorx' ),
-			cell: ( { row } ) => (
+			header: __('Order Amount', 'multivendorx'),
+			cell: ({ row }) => (
 				<TableCell
 					title={
 						row.original.totalOrderAmount
-							? `${ row.original.totalOrderAmount }`
+							? `${row.original.totalOrderAmount}`
 							: '-'
 					}
 				>
-					{ formatCurrency( row.original.totalOrderAmount ) }
+					{formatCurrency(row.original.totalOrderAmount)}
 				</TableCell>
 			),
 		},
 		{
 			id: 'commission-summary',
 			enableSorting: true,
-			header: __( 'Commission Summary', 'multivendorx' ),
-			cell: ( { row } ) => {
-				const isExpanded = expandedRows[ row.original.id! ];
+			header: __('Commission Summary', 'multivendorx'),
+			cell: ({ row }) => {
+				const isExpanded = expandedRows[row.original.id!];
 
 				return (
-					<TableCell title={ 'commission-summary' }>
+					<TableCell title={'commission-summary'}>
 						<ul
-							className={ `details ${
+							className={`details ${
 								isExpanded ? '' : 'overflow'
-							}` }
+							}`}
 						>
-							{ row.original?.storeEarning ? (
+							{row.original?.storeEarning ? (
 								<li>
 									<div className="item">
 										<div className="des">Store Earning</div>
 										<div className="title">
-											{ formatCurrency(
+											{formatCurrency(
 												row.original.storeEarning
-											) }
+											)}
 										</div>
 									</div>
 								</li>
-							) : null }
-							{ modules.includes( 'store-shipping' ) &&
+							) : null}
+							{modules.includes('store-shipping') &&
 								row.original?.shippingAmount && (
 									<li>
-										{ row.original?.shippingAmount && (
+										{row.original?.shippingAmount && (
 											<div className="item">
 												<div className="des">
 													Shipping
 												</div>
 												<div className="title">
-													+{ ' ' }
-													{ formatCurrency(
+													+{' '}
+													{formatCurrency(
 														row.original
 															.shippingAmount
-													) }
+													)}
 												</div>
 											</div>
-										) }
+										)}
 									</li>
-								) }
-							{ row.original?.taxAmount && (
+								)}
+							{row.original?.taxAmount && (
 								<li>
-									{ row.original?.taxAmount && (
+									{row.original?.taxAmount && (
 										<div className="item">
 											<div className="des">Tax</div>
 											<div className="title">
-												+{ ' ' }
-												{ formatCurrency(
+												+{' '}
+												{formatCurrency(
 													row.original.taxAmount
-												) }
+												)}
 											</div>
 										</div>
-									) }
+									)}
 								</li>
-							) }
-							{ row.original?.shippingTaxAmount && (
+							)}
+							{row.original?.shippingTaxAmount && (
 								<li>
-									{ row.original?.shippingTaxAmount && (
+									{row.original?.shippingTaxAmount && (
 										<div className="item">
 											<div className="des">
 												Shipping Tax
 											</div>
 											<div className="title">
-												+{ ' ' }
-												{ formatCurrency(
+												+{' '}
+												{formatCurrency(
 													row.original
 														.shippingTaxAmount
-												) }
+												)}
 											</div>
 										</div>
-									) }
+									)}
 								</li>
-							) }
-							{ ( ( modules.includes( 'marketplace-gateway' ) &&
-								row.original?.gatewayFee ) ||
-								( modules.includes( 'facilitator' ) &&
-									row.original?.facilitatorFee ) ||
-								( modules.includes( 'marketplace-fee' ) &&
-									row.original?.marketplaceFee ) ) && (
+							)}
+							{((modules.includes('marketplace-gateway') &&
+								row.original?.gatewayFee) ||
+								(modules.includes('facilitator') &&
+									row.original?.facilitatorFee) ||
+								(modules.includes('marketplace-fee') &&
+									row.original?.marketplaceFee)) && (
 								<li>
-									{ modules.includes(
-										'marketplace-gateway'
-									) &&
+									{modules.includes('marketplace-gateway') &&
 										row.original?.gatewayFee && (
 											<div className="item">
 												<div className="des">
 													Gateway Fee
 												</div>
 												<div className="title">
-													-{ ' ' }
-													{ formatCurrency(
+													-{' '}
+													{formatCurrency(
 														row.original.gatewayFee
-													) }
+													)}
 												</div>
 											</div>
-										) }
+										)}
 
-									{ modules.includes( 'facilitator' ) &&
+									{modules.includes('facilitator') &&
 										row.original?.facilitatorFee && (
 											<div className="item">
 												<div className="des">
 													Facilitator Fee
 												</div>
 												<div className="title">
-													-{ ' ' }
-													{ formatCurrency(
+													-{' '}
+													{formatCurrency(
 														row.original
 															.facilitatorFee
-													) }
+													)}
 												</div>
 											</div>
-										) }
+										)}
 
-									{ modules.includes( 'marketplace-fee' ) &&
+									{modules.includes('marketplace-fee') &&
 										row.original?.platformFee && (
 											<div className="item">
 												<div className="des">
 													Platform Fee
 												</div>
 												<div className="title">
-													-{ ' ' }
-													{ formatCurrency(
+													-{' '}
+													{formatCurrency(
 														row.original.platformFee
-													) }
+													)}
 												</div>
 											</div>
-										) }
+										)}
 								</li>
-							) }
+							)}
 
 							<span
 								className="more-btn"
-								onClick={ () =>
-									setExpandedRows( ( prev ) => ( {
+								onClick={() =>
+									setExpandedRows((prev) => ({
 										...prev,
-										[ row.original.id! ]:
-											! prev[ row.original.id! ],
-									} ) )
+										[row.original.id!]:
+											!prev[row.original.id!],
+									}))
 								}
 							>
-								{ isExpanded ? (
+								{isExpanded ? (
 									<>
-										{ __( 'Less', 'multivendorx' ) }
+										{__('Less', 'multivendorx')}
 										<i className="adminlib-arrow-up"></i>
 									</>
 								) : (
 									<>
-										{ __( 'More', 'multivendorx' ) }
+										{__('More', 'multivendorx')}
 										<i className="adminlib-arrow-down"></i>
 									</>
-								) }
+								)}
 							</span>
 						</ul>
 					</TableCell>
@@ -694,33 +675,31 @@ const Commission: React.FC = () => {
 			id: 'store_payable',
 			accessorKey: 'store_payable',
 			enableSorting: true,
-			header: __( 'Total Earned', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ '' }>
-					{ formatCurrency( row.original.storePayable ) }
+			header: __('Total Earned', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={''}>
+					{formatCurrency(row.original.storePayable)}
 				</TableCell>
 			),
 		},
 		{
 			id: 'status',
-			header: __( 'Status', 'multivendorx' ),
-			cell: ( { row } ) => {
-				return (
-					<TableCell type="status" status={ row.original.status } />
-				);
+			header: __('Status', 'multivendorx'),
+			cell: ({ row }) => {
+				return <TableCell type="status" status={row.original.status} />;
 			},
 		},
 		{
 			id: 'created_at',
 			accessorKey: 'created_at',
 			enableSorting: true,
-			header: __( 'Date', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Date', 'multivendorx'),
+			cell: ({ row }) => {
 				const date = row.original.createdAt;
-				if ( ! date ) return <TableCell>-</TableCell>;
+				if (!date) return <TableCell>-</TableCell>;
 
 				// Format the date for display
-				const formattedDate = new Date( date ).toLocaleDateString(
+				const formattedDate = new Date(date).toLocaleDateString(
 					'en-US',
 					{
 						year: 'numeric',
@@ -730,29 +709,27 @@ const Commission: React.FC = () => {
 				);
 
 				return (
-					<TableCell title={ `${ formattedDate }` }>
-						{ formattedDate }
+					<TableCell title={`${formattedDate}`}>
+						{formattedDate}
 					</TableCell>
 				);
 			},
 		},
 		{
 			id: 'action',
-			header: __( 'Action', 'multivendorx' ),
-			cell: ( { row } ) => (
+			header: __('Action', 'multivendorx'),
+			cell: ({ row }) => (
 				<TableCell
 					type="action-dropdown"
-					rowData={ row.original }
-					header={ {
+					rowData={row.original}
+					header={{
 						actions: [
 							{
-								label: __( 'View Commission', 'multivendorx' ),
+								label: __('View Commission', 'multivendorx'),
 								icon: 'adminlib-preview',
-								onClick: ( rowData: any ) => {
-									setSelectedCommissionId(
-										rowData.id ?? null
-									);
-									setViewCommission( true );
+								onClick: (rowData: any) => {
+									setSelectedCommissionId(rowData.id ?? null);
+									setViewCommission(true);
 								},
 								hover: true,
 							},
@@ -762,78 +739,78 @@ const Commission: React.FC = () => {
 									'multivendorx'
 								),
 								icon: 'adminlib-refresh',
-								onClick: ( rowData: any ) => {
-									handleSingleAction( 'regenerate', rowData );
+								onClick: (rowData: any) => {
+									handleSingleAction('regenerate', rowData);
 								},
 
 								hover: true,
 							},
 						],
-					} }
+					}}
 				/>
 			),
 		},
 	];
 
-	const handleSingleAction = ( action: string, row: any ) => {
+	const handleSingleAction = (action: string, row: any) => {
 		let commissionId = row.id;
 
-		if ( ! commissionId ) return;
+		if (!commissionId) return;
 
-		axios( {
+		axios({
 			method: 'PUT',
-			url: getApiLink( appLocalizer, `commission/${ commissionId }` ),
+			url: getApiLink(appLocalizer, `commission/${commissionId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: { action, orderId: row?.orderId },
-		} )
-			.then( () => {
-				requestData( pagination.pageSize, pagination.pageIndex + 1 );
-			} )
-			.catch( console.error );
+		})
+			.then(() => {
+				requestData(pagination.pageSize, pagination.pageIndex + 1);
+			})
+			.catch(console.error);
 	};
 
 	const realtimeFilter: RealtimeFilter[] = [
 		{
 			name: 'store',
 			render: (
-				updateFilter: ( key: string, value: string ) => void,
+				updateFilter: (key: string, value: string) => void,
 				filterValue: string | undefined
 			) => (
 				<div className="   group-field">
 					<select
 						name="store"
-						onChange={ ( e ) =>
-							updateFilter( e.target.name, e.target.value )
+						onChange={(e) =>
+							updateFilter(e.target.name, e.target.value)
 						}
-						value={ filterValue || '' }
+						value={filterValue || ''}
 						className="basic-select"
 					>
 						<option value="">
-							{ __( 'All Store', 'multivendorx' ) }
+							{__('All Store', 'multivendorx')}
 						</option>
-						{ store?.map( ( s: any ) => (
-							<option key={ s.id } value={ s.id }>
-								{ s.store_name.charAt( 0 ).toUpperCase() +
-									s.store_name.slice( 1 ) }
+						{store?.map((s: any) => (
+							<option key={s.id} value={s.id}>
+								{s.store_name.charAt(0).toUpperCase() +
+									s.store_name.slice(1)}
 							</option>
-						) ) }
+						))}
 					</select>
 				</div>
 			),
 		},
 		{
 			name: 'date',
-			render: ( updateFilter ) => (
+			render: (updateFilter) => (
 				<div className="right">
 					<MultiCalendarInput
 						wrapperClass=""
 						inputClass=""
-						onChange={ ( range: any ) => {
-							updateFilter( 'date', {
+						onChange={(range: any) => {
+							updateFilter('date', {
 								start_date: range.startDate,
 								end_date: range.endDate,
-							} );
-						} }
+							});
+						}}
 					/>
 				</div>
 			),
@@ -844,48 +821,48 @@ const Commission: React.FC = () => {
 		<>
 			<AdminBreadcrumbs
 				activeTabIcon="adminlib-commission"
-				tabTitle={ __( 'Commissions', 'multivendorx' ) }
-				description={ __(
+				tabTitle={__('Commissions', 'multivendorx')}
+				description={__(
 					'Details of commissions earned by each store for every order, including order amount, commission rate, and payout status.',
 					'multivendorx'
-				) }
+				)}
 			/>
 			<div className="general-wrapper">
 				<div className="admin-table-wrapper">
 					<Table
-						data={ data }
+						data={data}
 						columns={
-							columns as ColumnDef< Record< string, any >, any >[]
+							columns as ColumnDef<Record<string, any>, any>[]
 						}
-						rowSelection={ rowSelection }
-						onRowSelectionChange={ setRowSelection }
-						defaultRowsPerPage={ 10 }
-						realtimeFilter={ realtimeFilter }
-						pageCount={ pageCount }
-						pagination={ pagination }
-						onPaginationChange={ setPagination }
-						handlePagination={ requestApiForData }
-						perPageOption={ [ 10, 25, 50 ] }
-						typeCounts={ commissionStatus as CommissionStatus }
-						bulkActionComp={ () => (
+						rowSelection={rowSelection}
+						onRowSelectionChange={setRowSelection}
+						defaultRowsPerPage={10}
+						realtimeFilter={realtimeFilter}
+						pageCount={pageCount}
+						pagination={pagination}
+						onPaginationChange={setPagination}
+						handlePagination={requestApiForData}
+						perPageOption={[10, 25, 50]}
+						typeCounts={commissionStatus as CommissionStatus}
+						bulkActionComp={() => (
 							<BulkActions
-								selectedRows={ rowSelection }
-								data={ data }
-								filterData={ currentFilterData }
+								selectedRows={rowSelection}
+								data={data}
+								filterData={currentFilterData}
 							/>
-						) }
-						totalCounts={ totalRows }
-						actionButton={ actionButton }
+						)}
+						totalCounts={totalRows}
+						actionButton={actionButton}
 					/>
 				</div>
 			</div>
-			{ viewCommission && selectedCommissionId !== null && (
+			{viewCommission && selectedCommissionId !== null && (
 				<ViewCommission
-					open={ viewCommission }
-					onClose={ () => setViewCommission( false ) }
-					commissionId={ selectedCommissionId }
+					open={viewCommission}
+					onClose={() => setViewCommission(false)}
+					commissionId={selectedCommissionId}
 				/>
-			) }
+			)}
 		</>
 	);
 };

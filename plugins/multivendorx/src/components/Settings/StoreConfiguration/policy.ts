@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'policy',
 	priority: 9,
-	name: __( 'Policies', 'mvx-pro' ),
+	name: __('Policies', 'mvx-pro'),
 	desc: __(
 		'Define and publish the rules and guidelines that apply to your marketplace.',
 		'mvx-pro'
@@ -19,7 +19,7 @@ export default {
 				'multivendorx'
 			),
 			usePlainText: false,
-			label: __( 'Store policy', 'multivendorx' ),
+			label: __('Store policy', 'multivendorx'),
 			moduleEnabled: 'store-policy',
 		},
 		{
@@ -30,7 +30,7 @@ export default {
 				'multivendorx'
 			),
 			usePlainText: false,
-			label: __( 'Shipping policy', 'multivendorx' ),
+			label: __('Shipping policy', 'multivendorx'),
 			moduleEnabled: 'store-policy',
 		},
 		{
@@ -41,7 +41,7 @@ export default {
 				'multivendorx'
 			),
 			usePlainText: false,
-			label: __( 'Refund policy', 'multivendorx' ),
+			label: __('Refund policy', 'multivendorx'),
 			moduleEnabled: 'store-policy',
 		},
 		{

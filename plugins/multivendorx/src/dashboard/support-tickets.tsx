@@ -54,68 +54,62 @@ type FilterData = {
 export interface RealtimeFilter {
 	name: string;
 	render: (
-		updateFilter: ( key: string, value: any ) => void,
+		updateFilter: (key: string, value: any) => void,
 		filterValue: any
 	) => React.ReactNode;
 }
 
 const SupportTickets: React.FC = () => {
-	const [ data, setData ] = useState< Review[] >( [] );
-	const [ error, setError ] = useState< string >();
-	const [ rowSelection, setRowSelection ] = useState< RowSelectionState >(
-		{}
-	);
-	const [ totalRows, setTotalRows ] = useState< number >( 0 );
-	const [ pageCount, setPageCount ] = useState< number >( 0 );
-	const [ status, setStatus ] = useState< Status[] | null >( null );
-	const [ store, setStore ] = useState< any[] | null >( null );
-	const [ selectedReview, setSelectedReview ] = useState< Review | null >(
-		null
-	);
-	const [ replyText, setReplyText ] = useState< string >( '' );
+	const [data, setData] = useState<Review[]>([]);
+	const [error, setError] = useState<string>();
+	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+	const [totalRows, setTotalRows] = useState<number>(0);
+	const [pageCount, setPageCount] = useState<number>(0);
+	const [status, setStatus] = useState<Status[] | null>(null);
+	const [store, setStore] = useState<any[] | null>(null);
+	const [selectedReview, setSelectedReview] = useState<Review | null>(null);
+	const [replyText, setReplyText] = useState<string>('');
 
-	const [ pagination, setPagination ] = useState< PaginationState >( {
+	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
 		pageSize: 10,
-	} );
+	});
 
 	// Fetch total rows on mount
-	useEffect( () => {
-		axios( {
+	useEffect(() => {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'store' ),
+			url: getApiLink(appLocalizer, 'store'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		} )
-			.then( ( response ) => {
-				setStore( response.data.stores );
-			} )
-			.catch( () => {
-				setError( __( 'Failed to load stores', 'multivendorx' ) );
-				setStore( [] );
-			} );
-		axios( {
+		})
+			.then((response) => {
+				setStore(response.data.stores);
+			})
+			.catch(() => {
+				setError(__('Failed to load stores', 'multivendorx'));
+				setStore([]);
+			});
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'review' ),
+			url: getApiLink(appLocalizer, 'review'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: { count: true },
-		} )
-			.then( ( response ) => {
-				setTotalRows( response.data || 0 );
-				setPageCount(
-					Math.ceil( response.data / pagination.pageSize )
-				);
-			} )
-			.catch( () => {
-				setError( __( 'Failed to load total rows', 'multivendorx' ) );
-			} );
-	}, [] );
+		})
+			.then((response) => {
+				setTotalRows(response.data || 0);
+				setPageCount(Math.ceil(response.data / pagination.pageSize));
+			})
+			.catch(() => {
+				setError(__('Failed to load total rows', 'multivendorx'));
+			});
+	}, []);
 
-	useEffect( () => {
+	useEffect(() => {
 		const currentPage = pagination.pageIndex + 1;
 		const rowsPerPage = pagination.pageSize;
-		requestData( rowsPerPage, currentPage );
-		setPageCount( Math.ceil( totalRows / rowsPerPage ) );
-	}, [ pagination ] );
+		requestData(rowsPerPage, currentPage);
+		setPageCount(Math.ceil(totalRows / rowsPerPage));
+	}, [pagination]);
 
 	// Fetch data from backend.
 	function requestData(
@@ -127,13 +121,13 @@ const SupportTickets: React.FC = () => {
 		searchField = '',
 		orderBy = '',
 		order = '',
-		startDate = new Date( 0 ),
+		startDate = new Date(0),
 		endDate = new Date()
 	) {
-		setData( [] );
-		axios( {
+		setData([]);
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'review' ),
+			url: getApiLink(appLocalizer, 'review'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				page: currentPage,
@@ -147,10 +141,10 @@ const SupportTickets: React.FC = () => {
 				startDate,
 				endDate,
 			},
-		} )
-			.then( ( response ) => {
-				setData( response.data.items || [] );
-				setStatus( [
+		})
+			.then((response) => {
+				setData(response.data.items || []);
+				setStatus([
 					{
 						key: 'all',
 						name: 'All',
@@ -171,12 +165,12 @@ const SupportTickets: React.FC = () => {
 						name: 'Rejected',
 						count: response.data.rejected || 0,
 					},
-				] );
-			} )
-			.catch( () => {
-				setError( __( 'Failed to load Q&A', 'multivendorx' ) );
-				setData( [] );
-			} );
+				]);
+			})
+			.catch(() => {
+				setError(__('Failed to load Q&A', 'multivendorx'));
+				setData([]);
+			});
 	}
 
 	// Handle pagination and filter changes
@@ -185,7 +179,7 @@ const SupportTickets: React.FC = () => {
 		currentPage: number,
 		filterData: FilterData
 	) => {
-		setData( [] );
+		setData([]);
 		requestData(
 			rowsPerPage,
 			currentPage,
@@ -204,25 +198,25 @@ const SupportTickets: React.FC = () => {
 		{
 			name: 'store',
 			render: (
-				updateFilter: ( key: string, value: string ) => void,
+				updateFilter: (key: string, value: string) => void,
 				filterValue: string | undefined
 			) => (
 				<div className="   group-field">
 					<select
 						name="store"
-						onChange={ ( e ) =>
-							updateFilter( e.target.name, e.target.value )
+						onChange={(e) =>
+							updateFilter(e.target.name, e.target.value)
 						}
-						value={ filterValue || '' }
+						value={filterValue || ''}
 						className="basic-select"
 					>
 						<option value="">All Store</option>
-						{ store?.map( ( s: any ) => (
-							<option key={ s.id } value={ s.id }>
-								{ s.store_name.charAt( 0 ).toUpperCase() +
-									s.store_name.slice( 1 ) }
+						{store?.map((s: any) => (
+							<option key={s.id} value={s.id}>
+								{s.store_name.charAt(0).toUpperCase() +
+									s.store_name.slice(1)}
 							</option>
-						) ) }
+						))}
 					</select>
 				</div>
 			),
@@ -230,16 +224,16 @@ const SupportTickets: React.FC = () => {
 		{
 			name: 'rating',
 			render: (
-				updateFilter: ( key: string, value: string ) => void,
+				updateFilter: (key: string, value: string) => void,
 				filterValue: string | undefined
 			) => (
 				<div className="   group-field">
 					<select
 						name="rating"
-						onChange={ ( e ) =>
-							updateFilter( e.target.name, e.target.value )
+						onChange={(e) =>
+							updateFilter(e.target.name, e.target.value)
 						}
-						value={ filterValue || '' }
+						value={filterValue || ''}
 						className="basic-select"
 					>
 						<option value="">All ratings</option>
@@ -254,16 +248,16 @@ const SupportTickets: React.FC = () => {
 		},
 		{
 			name: 'date',
-			render: ( updateFilter ) => (
+			render: (updateFilter) => (
 				<div className="right">
 					<MultiCalendarInput
 						wrapperclassName=""
 						inputclassName=""
-						onChange={ ( range: any ) =>
-							updateFilter( 'date', {
+						onChange={(range: any) =>
+							updateFilter('date', {
 								start_date: range.startDate,
 								end_date: range.endDate,
-							} )
+							})
 						}
 					/>
 				</div>
@@ -274,16 +268,16 @@ const SupportTickets: React.FC = () => {
 	const searchFilter: RealtimeFilter[] = [
 		{
 			name: 'searchField',
-			render: ( updateFilter, filterValue ) => (
+			render: (updateFilter, filterValue) => (
 				<div className="search-section">
 					<input
 						name="searchField"
 						type="text"
-						placeholder={ __( 'Search', 'multivendorx' ) }
-						onChange={ ( e ) => {
-							updateFilter( e.target.name, e.target.value );
-						} }
-						value={ filterValue || '' }
+						placeholder={__('Search', 'multivendorx')}
+						onChange={(e) => {
+							updateFilter(e.target.name, e.target.value);
+						}}
+						value={filterValue || ''}
 					/>
 					<i className="adminlib-search"></i>
 				</div>
@@ -293,13 +287,13 @@ const SupportTickets: React.FC = () => {
 
 	// 🔹 Handle reply saving
 	const handleSaveReply = async () => {
-		if ( ! selectedReview ) return;
+		if (!selectedReview) return;
 		try {
 			await axios
 				.put(
 					getApiLink(
 						appLocalizer,
-						`review/${ selectedReview.review_id }`
+						`review/${selectedReview.review_id}`
 					),
 					{
 						reply: replyText,
@@ -307,152 +301,147 @@ const SupportTickets: React.FC = () => {
 					},
 					{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
 				)
-				.then( () => {
-					requestData(
-						pagination.pageSize,
-						pagination.pageIndex + 1
-					);
-				} );
+				.then(() => {
+					requestData(pagination.pageSize, pagination.pageIndex + 1);
+				});
 
-			setData( ( prev ) =>
-				prev.map( ( r ) =>
+			setData((prev) =>
+				prev.map((r) =>
 					r.review_id === selectedReview.review_id
 						? {
 								...r,
 								reply: replyText,
 								status: selectedReview.status,
-						  }
+							}
 						: r
 				)
 			);
 
-			setSelectedReview( null );
-			setReplyText( '' );
+			setSelectedReview(null);
+			setReplyText('');
 		} catch {
-			alert( __( 'Failed to save reply', 'multivendorx' ) );
+			alert(__('Failed to save reply', 'multivendorx'));
 		} finally {
 			// setSaving(false);
 		}
 	};
 
 	// 🔹 Table Columns
-	const columns: ColumnDef< Review >[] = [
+	const columns: ColumnDef<Review>[] = [
 		{
 			id: 'select',
-			header: ( { table } ) => (
+			header: ({ table }) => (
 				<input
 					type="checkbox"
-					checked={ table.getIsAllRowsSelected() }
-					onChange={ table.getToggleAllRowsSelectedHandler() }
+					checked={table.getIsAllRowsSelected()}
+					onChange={table.getToggleAllRowsSelectedHandler()}
 				/>
 			),
-			cell: ( { row } ) => (
+			cell: ({ row }) => (
 				<input
 					type="checkbox"
-					checked={ row.getIsSelected() }
-					onChange={ row.getToggleSelectedHandler() }
+					checked={row.getIsSelected()}
+					onChange={row.getToggleSelectedHandler()}
 				/>
 			),
 		},
 		{
 			id: 'customer',
-			header: __( 'Customer', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Customer', 'multivendorx'),
+			cell: ({ row }) => {
 				const { customer_id, customer_name } = row.original;
-				const editLink = `${ window.location.origin }/wp-admin/user-edit.php?user_id=${ customer_id }`;
+				const editLink = `${window.location.origin}/wp-admin/user-edit.php?user_id=${customer_id}`;
 
 				return (
-					<TableCell title={ customer_name }>
-						{ customer_id ? (
+					<TableCell title={customer_name}>
+						{customer_id ? (
 							<a
-								href={ editLink }
+								href={editLink}
 								target="_blank"
 								rel="noreferrer"
 								className="customer-link"
 							>
-								{ customer_name }
+								{customer_name}
 							</a>
 						) : (
 							'-'
-						) }
+						)}
 					</TableCell>
 				);
 			},
 		},
 		{
-			header: __( 'Store', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Store', 'multivendorx'),
+			cell: ({ row }) => {
 				const { store_id, store_name } = row.original;
-				const baseUrl = `${ window.location.origin }/wp-admin/admin.php?page=multivendorx#&tab=stores`;
+				const baseUrl = `${window.location.origin}/wp-admin/admin.php?page=multivendorx#&tab=stores`;
 				const storeLink = store_id
-					? `${ baseUrl }&edit/${ store_id }/&subtab=application-details`
+					? `${baseUrl}&edit/${store_id}/&subtab=application-details`
 					: '#';
 
 				return (
-					<TableCell title={ store_name || '' }>
-						{ store_id ? (
+					<TableCell title={store_name || ''}>
+						{store_id ? (
 							<a
-								href={ storeLink }
+								href={storeLink}
 								target="_blank"
 								rel="noopener noreferrer"
 							>
-								{ store_name || '-' }
+								{store_name || '-'}
 							</a>
 						) : (
 							store_name || '-'
-						) }
+						)}
 					</TableCell>
 				);
 			},
 		},
 		{
 			id: 'rating-details',
-			header: __( 'Details', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Details', 'multivendorx'),
+			cell: ({ row }) => {
 				const rating = row.original.overall_rating ?? 0;
 				const content = row.original.review_content || '';
 				const shortText =
 					content.length > 40
-						? content.substring( 0, 40 ) + '...'
+						? content.substring(0, 40) + '...'
 						: content;
 				return (
-					<TableCell title={ rating.toString() }>
+					<TableCell title={rating.toString()}>
 						<div className="rating-details-wrapper">
 							<div className="title-wrapper">
 								<div className="rating-wrapper">
-									{ rating > 0 ? (
+									{rating > 0 ? (
 										<>
-											{ [
+											{[...Array(Math.round(rating))].map(
+												(_, i) => (
+													<i
+														key={`filled-${i}`}
+														className="adminlib-star"
+													></i>
+												)
+											)}
+											{[
 												...Array(
-													Math.round( rating )
+													5 - Math.round(rating)
 												),
-											].map( ( _, i ) => (
+											].map((_, i) => (
 												<i
-													key={ `filled-${ i }` }
-													className="adminlib-star"
-												></i>
-											) ) }
-											{ [
-												...Array(
-													5 - Math.round( rating )
-												),
-											].map( ( _, i ) => (
-												<i
-													key={ `empty-${ i }` }
+													key={`empty-${i}`}
 													className="adminlib-star-o"
 												></i>
-											) ) }
+											))}
 										</>
 									) : (
 										'-'
-									) }
+									)}
 								</div>
 								<div className="title">
-									{ row.original.review_title || '-' }
+									{row.original.review_title || '-'}
 								</div>
 							</div>
 
-							<div className="review">{ shortText || '-' }</div>
+							<div className="review">{shortText || '-'}</div>
 						</div>
 					</TableCell>
 				);
@@ -460,55 +449,51 @@ const SupportTickets: React.FC = () => {
 		},
 		{
 			id: 'status',
-			header: __( 'Status', 'multivendorx' ),
-			cell: ( { row } ) => {
-				return (
-					<TableCell type="status" status={ row.original.status } />
-				);
+			header: __('Status', 'multivendorx'),
+			cell: ({ row }) => {
+				return <TableCell type="status" status={row.original.status} />;
 			},
 		},
 		{
 			id: 'date_created',
-			header: __( 'Date', 'multivendorx' ),
-			accessorFn: ( row ) =>
-				row.date_created ? new Date( row.date_created ).getTime() : 0, // numeric timestamp for sorting
+			header: __('Date', 'multivendorx'),
+			accessorFn: (row) =>
+				row.date_created ? new Date(row.date_created).getTime() : 0, // numeric timestamp for sorting
 			enableSorting: true,
-			cell: ( { row } ) => {
+			cell: ({ row }) => {
 				const rawDate = row.original.date_created;
 				const formattedDate = rawDate
-					? new Intl.DateTimeFormat( 'en-US', {
+					? new Intl.DateTimeFormat('en-US', {
 							month: 'short',
 							day: 'numeric',
 							year: 'numeric',
-					  } ).format( new Date( rawDate ) )
+						}).format(new Date(rawDate))
 					: '-';
 				return (
-					<TableCell title={ formattedDate }>
-						{ formattedDate }
-					</TableCell>
+					<TableCell title={formattedDate}>{formattedDate}</TableCell>
 				);
 			},
 		},
 		{
 			id: 'action',
-			header: __( 'Action', 'multivendorx' ),
-			cell: ( { row } ) => (
+			header: __('Action', 'multivendorx'),
+			cell: ({ row }) => (
 				<TableCell
 					type="action-dropdown"
-					rowData={ row.original }
-					header={ {
+					rowData={row.original}
+					header={{
 						actions: [
 							{
-								label: __( 'Reply / Edit', 'multivendorx' ),
+								label: __('Reply / Edit', 'multivendorx'),
 								icon: 'adminlib-edit',
 								onClick: () => {
-									setSelectedReview( row.original );
-									setReplyText( row.original.reply || '' );
+									setSelectedReview(row.original);
+									setReplyText(row.original.reply || '');
 								},
 								hover: true,
 							},
 							{
-								label: __( 'Delete', 'multivendorx' ),
+								label: __('Delete', 'multivendorx'),
 								icon: 'adminlib-delete',
 								onClick: async () => {
 									if (
@@ -523,7 +508,7 @@ const SupportTickets: React.FC = () => {
 											await axios.delete(
 												getApiLink(
 													appLocalizer,
-													`review/${ row.original.review_id }`
+													`review/${row.original.review_id}`
 												),
 												{
 													headers: {
@@ -538,7 +523,7 @@ const SupportTickets: React.FC = () => {
 												pagination.pageSize,
 												pagination.pageIndex + 1
 											);
-										} catch ( error ) {
+										} catch (error) {
 											alert(
 												__(
 													'Failed to delete review',
@@ -551,7 +536,7 @@ const SupportTickets: React.FC = () => {
 								hover: true,
 							},
 						],
-					} }
+					}}
 				/>
 			),
 		},
@@ -567,37 +552,35 @@ const SupportTickets: React.FC = () => {
 				</div>
 			</div>
 			<Table
-				data={ data || [] }
-				columns={ columns as ColumnDef< Record< string, any >, any >[] }
-				rowSelection={ rowSelection }
-				onRowSelectionChange={ setRowSelection }
-				defaultRowsPerPage={ 10 }
-				pageCount={ pageCount }
-				pagination={ pagination }
-				onPaginationChange={ setPagination }
-				handlePagination={ requestApiForData }
-				perPageOption={ [ 10, 25, 50 ] }
-				totalCounts={ totalRows }
-				typeCounts={ status as Status[] }
+				data={data || []}
+				columns={columns as ColumnDef<Record<string, any>, any>[]}
+				rowSelection={rowSelection}
+				onRowSelectionChange={setRowSelection}
+				defaultRowsPerPage={10}
+				pageCount={pageCount}
+				pagination={pagination}
+				onPaginationChange={setPagination}
+				handlePagination={requestApiForData}
+				perPageOption={[10, 25, 50]}
+				totalCounts={totalRows}
+				typeCounts={status as Status[]}
 				// searchFilter={searchFilter}
-				realtimeFilter={ realtimeFilter }
+				realtimeFilter={realtimeFilter}
 			/>
-			{ selectedReview && (
+			{selectedReview && (
 				<CommonPopup
-					open={ !! selectedReview }
-					onClose={ () => setSelectedReview( null ) }
+					open={!!selectedReview}
+					onClose={() => setSelectedReview(null)}
 					width="31.25rem"
 					header={
 						<>
 							<div className="title">
 								<i className="adminlib-store-review"></i>
-								{ __(
-									'Reply to Review',
-									'multivendorx'
-								) } - { selectedReview.store_name }
+								{__('Reply to Review', 'multivendorx')} -{' '}
+								{selectedReview.store_name}
 							</div>
 							<i
-								onClick={ () => setSelectedReview( null ) }
+								onClick={() => setSelectedReview(null)}
 								className="icon adminlib-close"
 							></i>
 						</>
@@ -606,13 +589,13 @@ const SupportTickets: React.FC = () => {
 						<>
 							<button
 								type="button"
-								onClick={ () => setSelectedReview( null ) }
+								onClick={() => setSelectedReview(null)}
 								className="admin-btn btn-red"
 							>
-								{ __( 'Cancel', 'multivendorx' ) }
+								{__('Cancel', 'multivendorx')}
 							</button>
 							<button
-								onClick={ handleSaveReply }
+								onClick={handleSaveReply}
 								className="admin-btn btn-purple"
 							>
 								Save
@@ -627,34 +610,32 @@ const SupportTickets: React.FC = () => {
 									<div className="avater">
 										<i className="item-icon adminlib-person"></i>
 									</div>
-									{ selectedReview && (
+									{selectedReview && (
 										<div className="name-wrapper">
 											<div
 												className="name"
-												dangerouslySetInnerHTML={ {
+												dangerouslySetInnerHTML={{
 													__html: selectedReview.review_title,
-												} }
+												}}
 											></div>
 
 											<div className="rating-wrapper">
-												{ [ ...Array( 5 ) ].map(
-													( _, i ) => (
-														<i
-															key={ i }
-															className={ `adminlib-star ${
-																i <
-																Math.round(
-																	selectedReview.overall_rating
-																)
-																	? 'filled'
-																	: ''
-															}` }
-														></i>
-													)
-												) }
+												{[...Array(5)].map((_, i) => (
+													<i
+														key={i}
+														className={`adminlib-star ${
+															i <
+															Math.round(
+																selectedReview.overall_rating
+															)
+																? 'filled'
+																: ''
+														}`}
+													></i>
+												))}
 
 												<div className="date">
-													{ new Date(
+													{new Date(
 														selectedReview.date_created
 													).toLocaleDateString(
 														'en-GB',
@@ -663,49 +644,46 @@ const SupportTickets: React.FC = () => {
 															month: 'short',
 															year: 'numeric',
 														}
-													) }
+													)}
 												</div>
 											</div>
 										</div>
-									) }
+									)}
 								</div>
 
 								<div className="review">
-									{ selectedReview.review_content }
+									{selectedReview.review_content}
 								</div>
 							</div>
 
 							<div className="form-group">
 								<label htmlFor="reply">
-									{ __(
-										'Respond to customer',
-										'multivendorx'
-									) }
+									{__('Respond to customer', 'multivendorx')}
 								</label>
 								<textarea
 									id="reply"
-									value={ replyText }
-									onChange={ ( e ) =>
-										setReplyText( e.target.value )
+									value={replyText}
+									onChange={(e) =>
+										setReplyText(e.target.value)
 									}
-									rows={ 5 }
+									rows={5}
 									className="textarea-input"
 								/>
 							</div>
 
-							{ /* Status Toggle */ }
+							{/* Status Toggle */}
 							<div className="form-group">
 								<label htmlFor="status">
-									{ __(
+									{__(
 										'Control if this review appears publicly, stays under moderation, or is excluded from the store page.',
 										'multivendorx'
-									) }
+									)}
 								</label>
 								<ToggleSetting
 									wrapperclassName="setting-form-input"
 									descclassName="settings-metabox-description"
 									//description={__('Change review status', 'multivendorx')}
-									options={ [
+									options={[
 										{
 											key: 'pending',
 											value: 'Pending',
@@ -730,21 +708,21 @@ const SupportTickets: React.FC = () => {
 												'multivendorx'
 											),
 										},
-									] }
-									value={ selectedReview.status }
-									onChange={ ( val ) => {
-										setSelectedReview( ( prev ) =>
+									]}
+									value={selectedReview.status}
+									onChange={(val) => {
+										setSelectedReview((prev) =>
 											prev
 												? { ...prev, status: val }
 												: prev
 										);
-									} }
+									}}
 								/>
 							</div>
 						</div>
 					</div>
 				</CommonPopup>
-			) }
+			)}
 		</>
 	);
 };
