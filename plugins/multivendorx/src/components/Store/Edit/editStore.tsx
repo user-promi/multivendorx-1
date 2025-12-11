@@ -60,8 +60,7 @@ const EditStore = () => {
 			const target = e.target as HTMLElement;
 
 			// If clicked inside name or desc editing area, ignore
-			if (target.closest('.store-name') || target.closest('.des'))
-				return;
+			if (target.closest('.store-name') || target.closest('.des')) return;
 
 			if (editName || editDesc) {
 				autoSave({ name: data.name, description: data.description });
@@ -72,8 +71,7 @@ const EditStore = () => {
 		};
 
 		document.addEventListener('click', handleOutsideClick);
-		return () =>
-			document.removeEventListener('click', handleOutsideClick);
+		return () => document.removeEventListener('click', handleOutsideClick);
 	}, [data]);
 
 	// Close dropdown on click outside
@@ -147,11 +145,7 @@ const EditStore = () => {
 		});
 
 		frame.on('select', function () {
-			const attachment = frame
-				.state()
-				.get('selection')
-				.first()
-				.toJSON();
+			const attachment = frame.state().get('selection').first().toJSON();
 
 			const updated = { ...data, [key]: attachment.url };
 			setData(updated);
@@ -282,18 +276,18 @@ const EditStore = () => {
 		const updatedTabs = tabData.map((tab) =>
 			tab.content.id === 'application-details'
 				? {
-					...tab,
-					content: {
-						...tab.content,
-						name:
-							data?.status === 'pending' ||
+						...tab,
+						content: {
+							...tab.content,
+							name:
+								data?.status === 'pending' ||
 								data?.status === 'rejected' ||
 								data?.status === 'permanently_rejected'
-								? // data?.status === 'active'
-								'Application Details'
-								: 'Archive Data',
-					},
-				}
+									? // data?.status === 'active'
+										'Application Details'
+									: 'Archive Data',
+						},
+					}
 				: tab
 		);
 
@@ -311,7 +305,7 @@ const EditStore = () => {
 	}, [tabData, data?.status]);
 
 	const [expanded, setExpanded] = useState(false);
-	console.log('app', appLocalizer.settings_databases_value?.['identity-verification']?.['badge_img']);
+
 	const words = data?.description?.split(' ') || [];
 	const shouldTruncate = words.length > 50;
 	const displayText = expanded
@@ -428,10 +422,10 @@ const EditStore = () => {
 																) => {
 																	e.stopPropagation();
 																	const updated =
-																	{
-																		...data,
-																		banner: '',
-																	};
+																		{
+																			...data,
+																			banner: '',
+																		};
 																	setData(
 																		updated
 																	);
@@ -462,10 +456,7 @@ const EditStore = () => {
 									<div className="left-section">
 										<div className="store-logo">
 											{data?.image ? (
-												<img
-													src={data.image}
-													alt=""
-												/>
+												<img src={data.image} alt="" />
 											) : (
 												<div className="placeholder-400x400" />
 											)}
@@ -477,8 +468,7 @@ const EditStore = () => {
 														onClick={(e) => {
 															e.stopPropagation();
 															setLogoMenu(
-																(prev) =>
-																	!prev
+																(prev) => !prev
 															);
 															setBannerMenu(
 																false
@@ -519,10 +509,10 @@ const EditStore = () => {
 																		) => {
 																			e.stopPropagation();
 																			const updated =
-																			{
-																				...data,
-																				image: '',
-																			};
+																				{
+																					...data,
+																					image: '',
+																				};
 																			setData(
 																				updated
 																			);
@@ -598,10 +588,11 @@ const EditStore = () => {
 													)}
 
 													<span
-														className={`edit-icon  ${editName
-															? ''
-															: 'admin-badge blue'
-															}`}
+														className={`edit-icon  ${
+															editName
+																? ''
+																: 'admin-badge blue'
+														}`}
 														onClick={(e) => {
 															e.stopPropagation();
 															if (
@@ -636,7 +627,7 @@ const EditStore = () => {
 														)}
 													</span>
 												) : data.status ===
-													'pending' ? (
+												  'pending' ? (
 													<span className="status admin-badge yellow">
 														{__(
 															'Pending',
@@ -644,7 +635,7 @@ const EditStore = () => {
 														)}
 													</span>
 												) : data.status ===
-													'rejected' ? (
+												  'rejected' ? (
 													<span className="status admin-badge red">
 														{__(
 															'Rejected',
@@ -652,7 +643,7 @@ const EditStore = () => {
 														)}
 													</span>
 												) : data.status ===
-													'suspended' ? (
+												  'suspended' ? (
 													<span className="status admin-badge blue">
 														{__(
 															'Suspended',
@@ -660,7 +651,7 @@ const EditStore = () => {
 														)}
 													</span>
 												) : data.status ===
-													'permanently_rejected' ? (
+												  'permanently_rejected' ? (
 													<span className="status admin-badge red">
 														{__(
 															'Permanently Rejected',
@@ -668,7 +659,7 @@ const EditStore = () => {
 														)}
 													</span>
 												) : data.status ===
-													'under_review' ? (
+												  'under_review' ? (
 													<span className="status admin-badge yellow">
 														{__(
 															'Under Review',
@@ -676,7 +667,7 @@ const EditStore = () => {
 														)}
 													</span>
 												) : data.status ===
-													'deactivated' ? (
+												  'deactivated' ? (
 													<span className="status admin-badge red">
 														{__(
 															'Permanently Deactivated',
@@ -693,24 +684,18 @@ const EditStore = () => {
 												{modules.includes(
 													'marketplace-compliance'
 												) && (
-														<>
-															{
-																modules.includes('memberships') && (
-																	<div className="admin-badge blue">
-																		<i className="adminlib-geo-my-wp"></i>
-																	</div>
-																)
-															}
-															{
-																modules.includes('marketplace-compliance') && (
-																	<div className="admin-badge yellow">
-																		<i className={appLocalizer.settings_databases_value?.['identity-verification']?.['badge_img']}></i>
-																	</div>
-																)
-															}
-
-														</>
-													)}
+													<>
+														<div className="admin-badge green">
+															<i className="adminlib-store-inventory"></i>
+														</div>
+														<div className="admin-badge blue">
+															<i className="adminlib-geo-my-wp"></i>
+														</div>
+														<div className="admin-badge yellow">
+															<i className="adminlib-staff-manager"></i>
+														</div>
+													</>
+												)}
 											</div>
 
 											<div
@@ -743,15 +728,13 @@ const EditStore = () => {
 																		prevDesc,
 																});
 															}
-															setEditDesc(
-																false
-															);
+															setEditDesc(false);
 														}}
 														className="textarea-input"
 														autoFocus
 													/>
-												) : Object.keys(data)
-													.length === 0 ? (
+												) : Object.keys(data).length ===
+												  0 ? (
 													<Skeleton
 														variant="text"
 														width={150}
@@ -761,7 +744,7 @@ const EditStore = () => {
 														<span>
 															{displayText}
 															{shouldTruncate &&
-																!expanded
+															!expanded
 																? '...'
 																: ''}
 														</span>
@@ -776,13 +759,13 @@ const EditStore = () => {
 															>
 																{expanded
 																	? __(
-																		'Read less',
-																		'multivendorx'
-																	)
+																			'Read less',
+																			'multivendorx'
+																		)
 																	: __(
-																		'Read more',
-																		'multivendorx'
-																	)}
+																			'Read more',
+																			'multivendorx'
+																		)}
 															</button>
 														)}
 													</div>
@@ -796,10 +779,11 @@ const EditStore = () => {
 												)}
 
 												<span
-													className={`edit-icon ${editDesc
-														? ''
-														: 'admin-badge blue'
-														}`}
+													className={`edit-icon ${
+														editDesc
+															? ''
+															: 'admin-badge blue'
+													}`}
 													onClick={(e) => {
 														e.stopPropagation();
 														if (
@@ -812,9 +796,7 @@ const EditStore = () => {
 																	prevDesc,
 															});
 														}
-														setEditDesc(
-															!editDesc
-														);
+														setEditDesc(!editDesc);
 													}}
 												>
 													<i
@@ -828,42 +810,44 @@ const EditStore = () => {
 											</div>
 
 											<div className="reviews-wrapper">
-												{[...Array(5)].map(
-													(_, i) => (
-														<i
-															key={i}
-															className={`review adminlib-star${data.total_reviews >
+												{[...Array(5)].map((_, i) => (
+													<i
+														key={i}
+														className={`review adminlib-star${
+															data.total_reviews >
 																0 &&
-																i <
+															i <
 																Math.round(
 																	data.overall_reviews
 																)
 																? ''
 																: '-o'
-																}`}
-														></i>
-													)
-												)}
+														}`}
+													></i>
+												))}
 
 												<span>
 													{data.total_reviews > 0
-														? `${data.overall_reviews
-														} (${data.total_reviews
-														} ${data.total_reviews ===
-															1
-															? __(
-																'Review',
-																'multivendorx'
-															)
-															: __(
-																'Reviews',
-																'multivendorx'
-															)
-														})`
+														? `${
+																data.overall_reviews
+															} (${
+																data.total_reviews
+															} ${
+																data.total_reviews ===
+																1
+																	? __(
+																			'Review',
+																			'multivendorx'
+																		)
+																	: __(
+																			'Reviews',
+																			'multivendorx'
+																		)
+															})`
 														: `(${__(
-															'0 Review',
-															'multivendorx'
-														)})`}
+																'0 Review',
+																'multivendorx'
+															)})`}
 												</span>
 											</div>
 
@@ -882,9 +866,9 @@ const EditStore = () => {
 														{data?.status !=
 															'pending' &&
 															data?.status !=
-															'rejected' &&
+																'rejected' &&
 															data?.status !=
-															'permanently_rejected' && (
+																'permanently_rejected' && (
 																<span
 																	className="edit-icon admin-badge blue"
 																	onClick={() => {
@@ -903,8 +887,7 @@ const EditStore = () => {
 																				navigate(
 																					`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`,
 																					{
-																						replace:
-																							true,
+																						replace: true,
 																					}
 																				);
 																			},
