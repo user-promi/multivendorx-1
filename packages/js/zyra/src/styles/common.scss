@@ -1,5 +1,5 @@
 @use '../global.scss' as *;
-@use './web/dashboard.scss';
+@use './web/dashboard';
 @import 'https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap';
 
 body:has(.admin-main-wrapper) {
@@ -194,7 +194,6 @@ body:has(.admin-main-wrapper) {
 }
 
 @each $name, $style in $btn-color-palette {
-
   // light background color btn
   .btn-#{$name} {
     background: map-get($style, light-color);
@@ -660,7 +659,6 @@ body:has(.admin-main-wrapper) {
     }
 
     @keyframes wobble1 {
-
       0%,
       100% {
         transform: translateY(0%) scale(1);
@@ -674,7 +672,6 @@ body:has(.admin-main-wrapper) {
     }
 
     @keyframes wobble2 {
-
       0%,
       100% {
         transform: translateY(0%) scale(1);
@@ -1305,6 +1302,7 @@ body:has(.admin-main-wrapper) {
     margin: 0;
     min-width: 6rem;
     border: none !important;
+
     /* store dashboard */
     border-radius: 0.313rem;
     border-top-right-radius: 0;

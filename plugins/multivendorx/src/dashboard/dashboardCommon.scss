@@ -24,7 +24,7 @@ $border-radius-button: 8rem;
 
 #store-dashboard.dark {
     --backgroundColor: #121212;
-    color: #ffffff;
+    color: #fff;
     background: var(--backgroundColor);
 
     .dashboard-tabs-wrapper,
@@ -48,7 +48,7 @@ $border-radius-button: 8rem;
 
     .tab-name a,
     .subtabs li a {
-        color: #ffffff !important;
+        color: #fff !important;
     }
 
     .subtabs {

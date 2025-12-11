@@ -19,10 +19,6 @@
         flex-direction: column;
     }
 
-    .card-wrapper:has(.transaction) {
-        margin-bottom: 1rem;
-    }
-
     .card-header {
         display: flex;
         justify-content: space-between;
@@ -55,24 +51,24 @@
                 color: #0000009e;
             }
 
-            i {
-                font-size: 0.95rem;
-                padding: 0.313rem;
-                border-radius: 50%;
-                transition: all 0.4s ease;
-                cursor: pointer;
-                margin-top: -0.313rem;
-
-                &:hover {
-                    background: #5a59591a;
-                }
-            }
-
             .admin-btn {
                 i {
                     padding: 0;
                     font-size: 1rem;
                 }
+            }
+        }
+
+        i {
+            font-size: 0.95rem;
+            padding: 0.313rem;
+            border-radius: 50%;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            margin-top: -0.313rem;
+
+            &:hover {
+                background: #5a59591a;
             }
         }
 
@@ -121,6 +117,10 @@
     .col {
         width: 100%;
     }
+
+    .card-wrapper:has(.transaction) {
+        margin-bottom: 1rem;
+    }
 }
 
 .analytics-container {
@@ -156,7 +156,7 @@
 
     // admin Wallet Transaction table(common)
     &.wallet {
-        padding: 0 0 1rem 0;
+        padding: 0 0 1rem;
         margin-bottom: 1rem;
         border-bottom: $border-light-small;
     }
@@ -208,7 +208,6 @@
             }
 
             .details {
-
                 .text {
                     font-size: 1.063rem;
                     font-weight: 500;
@@ -343,6 +342,7 @@
             font-size: 2rem;
             line-height: 2rem;
             margin-top: 0.813rem;
+
             // font-weight: 600;
             display: flex;
             justify-content: space-between;
@@ -384,113 +384,6 @@
 .admin-pt-2 {
     padding-top: 2rem;
 }
-
-// settings shipping add country start
-// .shipping-country-wrapper {
-//     .shipping-country {
-//         padding: 1rem;
-//         background: #f7f6f69c;
-//         border-radius: 0.313rem;
-//         margin-bottom: 1rem;
-//         border: $border-light-small;
-
-//         .basic-input {
-//             width: 25%;
-//         }
-
-//         &.rule {
-//             width: fit-content;
-//         }
-//     }
-
-//     .item {
-//         display: flex;
-//         gap: 0.5rem;
-//         align-items: center;
-
-//         .location-icon {
-//             background: #d9f5f0;
-//             color: #06be9f;
-//             padding: 0.45rem;
-//             font-size: 1.313rem;
-//             border-radius: 0.313rem;
-//         }
-
-//         .delete-icon {
-//             font-size: 1.125rem;
-//             color: #f06b4f;
-//             cursor: pointer;
-//         }
-
-//         .basic-input {
-//             background: #fff !important;
-//             /*overwrite common style*/
-//         }
-
-//         &.state {
-//             margin-bottom: 0.625rem;
-//         }
-//     }
-
-//     .state-wrapper {
-//         padding: 0.813rem;
-//         background: #fff;
-//         margin-top: 0.813rem;
-
-//         .header {
-//             display: flex;
-//             justify-content: space-between;
-//             align-items: start;
-//             margin-bottom: 0.813rem;
-//             padding-bottom: 0.5rem;
-//             border-bottom: $border-light-small;
-
-//             .left {
-//                 width: 75%;
-//             }
-
-//             .title {
-//                 font-size: 1.125em;
-//                 font-weight: 500;
-//             }
-
-//             .des {
-//                 font-size: 0.813rem;
-//                 color: $sub-text-color;
-//             }
-//         }
-
-//     }
-
-//     .no-shipping-data {
-//         padding: 1rem;
-//         border-radius: 0.313rem;
-//         font-size: 1rem;
-//         background: #c9c9c954;
-//         margin: 1rem 0;
-//     }
-// }
-// settings shipping add country end
-
-
-// shipping-method-wrapper start  store shipping tab start (move table css)
-// .shipping-method-wrapper {
-//     display: flex;
-//     flex-direction: column;
-//     gap: 0.5rem;
-
-//     .shipping-method {
-//         display: flex;
-//         gap: 0.313rem;
-//         align-items: center;
-
-//         .icon-wrapper {
-//             i {
-//                 cursor: pointer;
-//             }
-//         }
-//     }
-// }
 
 // review style
 .reviews-wrapper {
@@ -809,7 +702,7 @@
 
         .icon {
             font-size: 1.125rem;
-            background: color-mix(in srgb, var(--colorPrimary) 15%, transparent);
+            background: color-mix(in srgb,  $theme-color 15%, transparent);
             padding: 0.5rem;
             border-radius: 50%;
             display: flex;
@@ -819,7 +712,7 @@
             align-items: center;
 
             i {
-                color: var(--colorPrimary);
+                color:  $theme-color;
             }
         }
 
@@ -843,7 +736,7 @@
         }
 
         &:hover {
-            background: color-mix(in srgb, var(--colorPrimary) 3%, transparent);
+            background: color-mix(in srgb,  $theme-color 3%, transparent);
         }
 
         &.product {
@@ -853,11 +746,19 @@
 }
 
 .activity-log {
-    border-left: 0.063rem solid var(--colorPrimary);
+    border-left: 0.063rem solid  $theme-color;
 
     .activity {
         padding: 0 0 1.45rem 1.313rem;
         position: relative;
+
+        span {
+            position: absolute;
+            right: 0;
+            top: 0;
+            color: #00000078;
+            font-weight: 500;
+        }
 
         .title {
             font-size: 1.063rem;
@@ -876,18 +777,10 @@
             width: 0.813rem;
             height: 0.813rem;
             border-radius: 50%;
-            background: var(--colorPrimary);
+            background:  $theme-color;
             top: 0;
             left: -0.45rem;
             outline: 0.313rem solid #fff;
-        }
-
-        span {
-            position: absolute;
-            right: 0;
-            top: 0;
-            color: #00000078;
-            font-weight: 500;
         }
     }
 }
