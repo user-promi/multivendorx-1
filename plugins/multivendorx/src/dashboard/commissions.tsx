@@ -1,614 +1,748 @@
 /* global appLocalizer */
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { __ } from "@wordpress/i18n";
-import { getApiLink, MultiCalendarInput, Table, TableCell, useModules } from "zyra";
-import { ColumnDef, PaginationState, RowSelectionState } from "@tanstack/react-table";
-import ViewCommission from "./viewCommission";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { __ } from '@wordpress/i18n';
+import {
+	getApiLink,
+	MultiCalendarInput,
+	Table,
+	TableCell,
+	useModules,
+} from 'zyra';
+import {
+	ColumnDef,
+	PaginationState,
+	RowSelectionState,
+} from '@tanstack/react-table';
+import ViewCommission from './viewCommission';
 import { formatCurrency } from '../services/commonFunction';
 
 export interface RealtimeFilter {
-    name: string;
-    render: (updateFilter: (key: string, value: any) => void, filterValue: any) => ReactNode;
+	name: string;
+	render: (
+		updateFilter: ( key: string, value: any ) => void,
+		filterValue: any
+	) => ReactNode;
 }
 type CommissionRow = {
-    id: number;
-    orderId: number;
-    totalOrderAmount: string;
-    commissionAmount: string;
-    shippingAmount: string;
-    taxAmount: string;
-    commissionTotal: string;
-    status: "paid" | "unpaid" | string;
+	id: number;
+	orderId: number;
+	totalOrderAmount: string;
+	commissionAmount: string;
+	shippingAmount: string;
+	taxAmount: string;
+	commissionTotal: string;
+	status: 'paid' | 'unpaid' | string;
 };
 type CommissionStatus = {
-    key: string;
-    name: string;
-    count: number;
+	key: string;
+	name: string;
+	count: number;
 };
 type FilterData = {
-    searchAction?: string;
-    searchField?: string;
-    typeCount?: any;
-    store?: string;
-    order?: any;
-    orderBy?: any;
-    date?: {
-        start_date: Date;
-        end_date: Date;
-    };
+	searchAction?: string;
+	searchField?: string;
+	typeCount?: any;
+	store?: string;
+	order?: any;
+	orderBy?: any;
+	date?: {
+		start_date: Date;
+		end_date: Date;
+	};
 };
 const StoreCommission: React.FC = () => {
-    const [data, setData] = useState<CommissionRow[]>([]);
-    const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
-    const [modalCommission, setModalCommission] = useState<CommissionRow | null>(null);
-    const [totalRows, setTotalRows] = useState<number>(0);
-    const [pageCount, setPageCount] = useState(0);
-    const { modules } = useModules();
-    const [commissionStatus, setCommissionStatus] = useState<CommissionStatus[] | null>(null);
-    const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>({});
-    const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-    const [currentFilterData, setCurrentFilterData] = useState<FilterData>({});
+	const [ data, setData ] = useState< CommissionRow[] >( [] );
+	const [ pagination, setPagination ] = useState< PaginationState >( {
+		pageIndex: 0,
+		pageSize: 10,
+	} );
+	const [ modalCommission, setModalCommission ] =
+		useState< CommissionRow | null >( null );
+	const [ totalRows, setTotalRows ] = useState< number >( 0 );
+	const [ pageCount, setPageCount ] = useState( 0 );
+	const { modules } = useModules();
+	const [ commissionStatus, setCommissionStatus ] = useState<
+		CommissionStatus[] | null
+	>( null );
+	const [ expandedRows, setExpandedRows ] = useState< {
+		[ key: number ]: boolean;
+	} >( {} );
+	const [ rowSelection, setRowSelection ] = useState< RowSelectionState >(
+		{}
+	);
+	const [ currentFilterData, setCurrentFilterData ] = useState< FilterData >(
+		{}
+	);
 
-    // Fetch total rows on mount
-    useEffect(() => {
+	// Fetch total rows on mount
+	useEffect( () => {
+		axios( {
+			method: 'GET',
+			url: getApiLink( appLocalizer, 'commission' ),
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			params: { count: true, store_id: appLocalizer.store_id },
+		} )
+			.then( ( response ) => {
+				setTotalRows( response.data || 0 );
+				setPageCount(
+					Math.ceil( response.data / pagination.pageSize )
+				);
+			} )
+			.catch( () => {} );
+	}, [] );
 
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'commission'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { count: true, store_id: appLocalizer.store_id },
-        })
-            .then((response) => {
-                setTotalRows(response.data || 0);
-                setPageCount(Math.ceil(response.data / pagination.pageSize));
-            })
-            .catch(() => {
-            });
-    }, []);
+	useEffect( () => {
+		const currentPage = pagination.pageIndex + 1;
+		const rowsPerPage = pagination.pageSize;
+		requestData( rowsPerPage, currentPage );
+		setPageCount( Math.ceil( totalRows / rowsPerPage ) );
+	}, [ pagination ] );
 
-    useEffect(() => {
-        const currentPage = pagination.pageIndex + 1;
-        const rowsPerPage = pagination.pageSize;
-        requestData(rowsPerPage, currentPage);
-        setPageCount(Math.ceil(totalRows / rowsPerPage));
-    }, [pagination]);
+	// Fetch data from backend.
+	function requestData(
+		rowsPerPage = 10,
+		currentPage = 1,
+		typeCount = '',
+		store = '',
+		orderBy = '',
+		order = '',
+		startDate = new Date( 0 ),
+		endDate = new Date()
+	) {
+		setData( [] );
+		axios( {
+			method: 'GET',
+			url: getApiLink( appLocalizer, 'commission' ),
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			params: {
+				store_id: appLocalizer.store_id,
+				page: currentPage,
+				row: rowsPerPage,
+				status: typeCount === 'all' ? '' : typeCount,
+				orderBy,
+				order,
+				startDate,
+				endDate,
+			},
+		} )
+			.then( ( response ) => {
+				setData( response.data.commissions || [] );
+				setCommissionStatus( [
+					{
+						key: 'all',
+						name: 'All',
+						count: response.data.all || 0,
+					},
+					{
+						key: 'paid',
+						name: 'Paid',
+						count: response.data.paid || 0,
+					},
+					{
+						key: 'refunded',
+						name: 'Refunded',
+						count: response.data.refunded || 0,
+					},
+					{
+						key: 'partially_refunded',
+						name: 'Partially Refunded',
+						count: response.data.partially_refunded || 0,
+					},
+					{
+						key: 'cancelled',
+						name: 'Cancelled',
+						count: response.data.cancelled || 0,
+					},
+				] );
+			} )
+			.catch( () => {
+				setData( [] );
+			} );
+	}
 
-    // Fetch data from backend.
-    function requestData(
-        rowsPerPage = 10,
-        currentPage = 1,
-        typeCount = '',
-        store = '',
-        orderBy = '',
-        order = '',
-        startDate = new Date(0),
-        endDate = new Date(),
-    ) {
-        setData([]);
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'commission'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: {
-                store_id: appLocalizer.store_id,
-                page: currentPage,
-                row: rowsPerPage,
-                status: typeCount === 'all' ? '' : typeCount,
-                orderBy,
-                order,
-                startDate,
-                endDate
-            },
-        })
-            .then((response) => {
-                setData(response.data.commissions || []);
-                setCommissionStatus([
-                    {
-                        key: 'all',
-                        name: 'All',
-                        count: response.data.all || 0,
-                    },
-                    {
-                        key: 'paid',
-                        name: 'Paid',
-                        count: response.data.paid || 0,
-                    },
-                    {
-                        key: 'refunded',
-                        name: 'Refunded',
-                        count: response.data.refunded || 0,
-                    },
-                    {
-                        key: 'partially_refunded',
-                        name: 'Partially Refunded',
-                        count: response.data.partially_refunded || 0,
-                    },
-                    {
-                        key: 'cancelled',
-                        name: 'Cancelled',
-                        count: response.data.cancelled || 0,
-                    },
-                ]);
+	// Handle pagination and filter changes
+	const requestApiForData = (
+		rowsPerPage: number,
+		currentPage: number,
+		filterData: FilterData
+	) => {
+		setCurrentFilterData( filterData );
+		setData( [] );
+		requestData(
+			rowsPerPage,
+			currentPage,
+			filterData?.typeCount,
+			filterData?.store,
+			filterData?.orderBy,
+			filterData?.order,
+			filterData?.date?.start_date,
+			filterData?.date?.end_date
+		);
+	};
 
-            })
-            .catch(() => {
-                setData([]);
-            });
-    }
+	const columns: ColumnDef< CommissionRow >[] = [
+		{
+			id: 'select',
+			header: ( { table } ) => (
+				<input
+					type="checkbox"
+					checked={ table.getIsAllRowsSelected() }
+					onChange={ table.getToggleAllRowsSelectedHandler() }
+				/>
+			),
+			cell: ( { row } ) => (
+				<input
+					type="checkbox"
+					checked={ row.getIsSelected() }
+					onChange={ row.getToggleSelectedHandler() }
+				/>
+			),
+		},
+		{
+			id: 'id',
+			accessorKey: 'id',
+			accessorFn: ( row ) => parseFloat( row.id || '0' ),
+			enableSorting: true,
+			header: __( 'ID', 'multivendorx' ),
+			cell: ( { row } ) => <TableCell>#{ row.original.id }</TableCell>,
+		},
+		{
+			id: 'orderId',
+			accessorKey: 'orderId',
+			enableSorting: true,
+			header: __( 'Order ID', 'multivendorx' ),
+			cell: ( { row }: any ) => {
+				const orderId = row.original.orderId;
+				const orderLink = `/dashboard/sales/orders/#view/${ orderId }`;
 
-    // Handle pagination and filter changes
-    const requestApiForData = (
-        rowsPerPage: number,
-        currentPage: number,
-        filterData: FilterData
-    ) => {
-        setCurrentFilterData(filterData);
-        setData([]);
-        requestData(
-            rowsPerPage,
-            currentPage,
-            filterData?.typeCount,
-            filterData?.store,
-            filterData?.orderBy,
-            filterData?.order,
-            filterData?.date?.start_date,
-            filterData?.date?.end_date
-        );
-    };
+				return (
+					<TableCell title={ orderId ? `#${ orderId }` : '-' }>
+						{ orderId ? (
+							<a href={ orderLink }>#{ orderId }</a>
+						) : (
+							'-'
+						) }
+					</TableCell>
+				);
+			},
+		},
+		{
+			id: 'totalOrderAmount',
+			accessorKey: 'totalOrderAmount',
+			accessorFn: ( row ) => parseFloat( row.totalOrderAmount || '0' ),
+			enableSorting: true,
+			header: __( 'Order Amount', 'multivendorx' ),
+			cell: ( { row } ) => (
+				<TableCell
+					title={
+						row.original.totalOrderAmount
+							? `${ appLocalizer.currency_symbol }${ row.original.totalOrderAmount }`
+							: '-'
+					}
+				>
+					{ row.original.totalOrderAmount
+						? formatCurrency( row.original.totalOrderAmount )
+						: '-' }
+				</TableCell>
+			),
+		},
+		{
+			id: 'commission-summary',
+			enableSorting: true,
+			header: __( 'Commission Summary', 'multivendorx' ),
+			cell: ( { row } ) => {
+				const isExpanded = expandedRows[ row.original.id! ];
 
-    const columns: ColumnDef<CommissionRow>[] = [
-        {
-            id: 'select',
-            header: ({ table }) => (
-                <input
-                    type="checkbox"
-                    checked={table.getIsAllRowsSelected()}
-                    onChange={table.getToggleAllRowsSelectedHandler()}
-                />
-            ),
-            cell: ({ row }) => (
-                <input
-                    type="checkbox"
-                    checked={row.getIsSelected()}
-                    onChange={row.getToggleSelectedHandler()}
-                />
-            ),
-        },
-        {
-            id: 'id',
-            accessorKey: 'id',
-            accessorFn: row => parseFloat(row.id || '0'),
-            enableSorting: true,
-            header: __('ID', 'multivendorx'),
-            cell: ({ row }) => <TableCell >#{row.original.id}</TableCell>,
-        },
-        {
-            id: 'orderId',
-            accessorKey: 'orderId',
-            enableSorting: true,
-            header: __('Order ID', 'multivendorx'),
-            cell: ({ row }: any) => {
-                const orderId = row.original.orderId;
-                const orderLink = `/dashboard/sales/orders/#view/${orderId}`;
+				return (
+					<TableCell>
+						<ul
+							className={ `details ${
+								isExpanded ? '' : 'overflow'
+							}` }
+						>
+							{ row.original?.commissionAmount ? (
+								<li>
+									<div className="item">
+										<div className="des">
+											Commission Earned
+										</div>
+										<div className="title">
+											{ formatCurrency(
+												row.original.commissionAmount
+											) }
+										</div>
+									</div>
+								</li>
+							) : null }
+							{ ( row.original?.shippingAmount ||
+								row.original?.taxAmount ) && (
+								<li>
+									{ row.original?.shippingAmount && (
+										<div className="item">
+											<div className="des">Shipping</div>
+											<div className="title">
+												+{ ' ' }
+												{ formatCurrency(
+													row.original.shippingAmount
+												) }
+											</div>
+										</div>
+									) }
 
-                return (
-                    <TableCell title={orderId ? `#${orderId}` : '-'}>
-                        {orderId ? (
-                            <a
-                                href={orderLink}
-                            >
-                                #{orderId}
-                            </a>
-                        ) : (
-                            '-'
-                        )}
-                    </TableCell>
-                );
-            },
-        },
-        {
-            id: 'totalOrderAmount',
-            accessorKey: 'totalOrderAmount',
-            accessorFn: row => parseFloat(row.totalOrderAmount || '0'),
-            enableSorting: true,
-            header: __('Order Amount', 'multivendorx'),
-            cell: ({ row }) =>
-                <TableCell title={row.original.totalOrderAmount ? `${appLocalizer.currency_symbol}${row.original.totalOrderAmount}` : '-'}>
-                    {row.original.totalOrderAmount
-                        ? formatCurrency(row.original.totalOrderAmount)
-                        : '-'}
-                </TableCell>,
-        },
-        {
-            id: 'commission-summary',
-            enableSorting: true,
-            header: __('Commission Summary', 'multivendorx'),
-            cell: ({ row }) => {
-                const isExpanded = expandedRows[row.original.id!];
+									{ row.original?.taxAmount && (
+										<div className="item">
+											<div className="des">Tax</div>
+											<div className="title">
+												+{ ' ' }
+												{ formatCurrency(
+													row.original.taxAmount
+												) }
+											</div>
+										</div>
+									) }
+								</li>
+							) }
+							{ ( ( modules.includes( 'marketplace-gateway' ) &&
+								row.original?.gatewayFee ) ||
+								( modules.includes( 'facilitator' ) &&
+									row.original?.facilitatorFee ) ||
+								( modules.includes( 'marketplace-fee' ) &&
+									row.original?.platformFee ) ) && (
+								<li>
+									{ modules.includes(
+										'marketplace-gateway'
+									) &&
+										row.original?.gatewayFee && (
+											<div className="item">
+												<div className="des">
+													Gateway Fee
+												</div>
+												<div className="title">
+													-{ ' ' }
+													{ formatCurrency(
+														row.original.gatewayFee
+													) }
+												</div>
+											</div>
+										) }
 
-                return (
-                    <TableCell>
-                        <ul className={`details ${isExpanded ? '' : 'overflow'}`}>
-                            {row.original?.commissionAmount ? (
-                                <li>
-                                    <div className="item">
-                                        <div className="des">Commission Earned</div>
-                                        <div className="title">{formatCurrency(row.original.commissionAmount)}</div>
-                                    </div>
-                                </li>
-                            ) : null}
-                            {(row.original?.shippingAmount || row.original?.taxAmount) && (
-                                <li>
-                                    {row.original?.shippingAmount && (
-                                        <div className="item">
-                                            <div className="des">Shipping</div>
-                                            <div className="title">+ {formatCurrency(row.original.shippingAmount)}</div>
-                                        </div>
-                                    )}
+									{ modules.includes( 'facilitator' ) &&
+										row.original?.facilitatorFee && (
+											<div className="item">
+												<div className="des">
+													Facilitator Fee
+												</div>
+												<div className="title">
+													-{ ' ' }
+													{ formatCurrency(
+														row.original
+															.facilitatorFee
+													) }
+												</div>
+											</div>
+										) }
 
-                                    {row.original?.taxAmount && (
-                                        <div className="item">
-                                            <div className="des">Tax</div>
-                                            <div className="title">+ {formatCurrency(row.original.taxAmount)}</div>
-                                        </div>
-                                    )}
-                                </li>
-                            )}
-                            {(
-                                (modules.includes('marketplace-gateway') && row.original?.gatewayFee) ||
-                                (modules.includes('facilitator') && row.original?.facilitatorFee) ||
-                                (modules.includes('marketplace-fee') && row.original?.platformFee)
-                            ) && (
-                                    <li>
-                                        {modules.includes('marketplace-gateway') && row.original?.gatewayFee && (
-                                            <div className="item">
-                                                <div className="des">Gateway Fee</div>
-                                                <div className="title">- {formatCurrency(row.original.gatewayFee)}</div>
-                                            </div>
-                                        )}
+									{ modules.includes( 'marketplace-fee' ) &&
+										row.original?.platformFee && (
+											<div className="item">
+												<div className="des">
+													Marketplace Fee
+												</div>
+												<div className="title">
+													-{ ' ' }
+													{ formatCurrency(
+														row.original.platformFee
+													) }
+												</div>
+											</div>
+										) }
+								</li>
+							) }
 
-                                        {modules.includes('facilitator') && row.original?.facilitatorFee && (
-                                            <div className="item">
-                                                <div className="des">Facilitator Fee</div>
-                                                <div className="title">- {formatCurrency(row.original.facilitatorFee)}</div>
-                                            </div>
-                                        )}
+							<span
+								className="more-btn"
+								onClick={ () =>
+									setExpandedRows( ( prev ) => ( {
+										...prev,
+										[ row.original.id! ]:
+											! prev[ row.original.id! ],
+									} ) )
+								}
+							>
+								{ isExpanded ? (
+									<>
+										Less{ ' ' }
+										<i className="adminlib-arrow-up"></i>
+									</>
+								) : (
+									<>
+										More{ ' ' }
+										<i className="adminlib-arrow-down"></i>
+									</>
+								) }
+							</span>
+						</ul>
+					</TableCell>
+				);
+			},
+		},
+		{
+			id: 'totalEarned',
+			accessorKey: 'totalEarned',
+			accessorFn: ( row ) => parseFloat( row.taxAmount || '0' ),
+			enableSorting: true,
+			header: __( 'Total Earned ', 'multivendorx' ),
+			cell: ( { row } ) => (
+				<TableCell
+					title={
+						row.original.taxAmount
+							? `${ appLocalizer.currency_symbol }${ row.original.taxAmount }`
+							: '-'
+					}
+				>
+					{ row.original.taxAmount
+						? formatCurrency( row.original.taxAmount )
+						: '-' }
+				</TableCell>
+			),
+		},
+		{
+			id: 'created_at',
+			accessorKey: 'created_at',
+			enableSorting: true,
+			header: __( 'Date', 'multivendorx' ),
+			cell: ( { row } ) => {
+				const date = row.original.createdAt;
+				if ( ! date ) return <TableCell>-</TableCell>;
 
-                                        {modules.includes('marketplace-fee') && row.original?.platformFee && (
-                                            <div className="item">
-                                                <div className="des">Marketplace Fee</div>
-                                                <div className="title">- {formatCurrency(row.original.platformFee)}</div>
-                                            </div>
-                                        )}
-                                    </li>
-                                )}
+				// Format the date for display
+				const formattedDate = new Date( date ).toLocaleDateString(
+					'en-US',
+					{
+						year: 'numeric',
+						month: 'short',
+						day: 'numeric',
+					}
+				);
 
+				return (
+					<TableCell title={ `${ formattedDate }` }>
+						{ formattedDate }
+					</TableCell>
+				);
+			},
+		},
+		{
+			header: __( 'Status', 'multivendorx' ),
+			cell: ( { row } ) => (
+				<TableCell>
+					<span
+						className={ `admin-badge ${
+							row.original.status === 'paid' ? 'green' : 'red'
+						}` }
+					>
+						{ row.original.status === 'paid' ? 'Paid' : 'Unpaid' }
+					</span>
+				</TableCell>
+			),
+		},
+		{
+			id: 'action',
+			header: __( 'Action', 'multivendorx' ),
+			cell: ( { row } ) => {
+				const isPaid = row.original.status === 'paid';
 
+				return (
+					<TableCell
+						type="action-dropdown"
+						rowData={ row.original }
+						header={ {
+							actions: isPaid
+								? [
+										{
+											label: __(
+												'View Commission',
+												'multivendorx'
+											),
+											icon: 'adminlib-preview',
+											onClick: ( rowData ) => {
+												setModalCommission( rowData );
+											},
+											hover: true,
+										},
+								  ]
+								: [],
+						} }
+					/>
+				);
+			},
+		},
+	];
 
-                            <span
-                                className="more-btn"
-                                onClick={() =>
-                                    setExpandedRows(prev => ({
-                                        ...prev,
-                                        [row.original.id!]: !prev[row.original.id!]
-                                    }))
-                                }
-                            >
-                                {isExpanded ? (
-                                    <>Less <i className="adminlib-arrow-up"></i></>
-                                ) : (
-                                    <>More <i className="adminlib-arrow-down"></i></>
-                                )}
-                            </span>
-                        </ul>
-                    </TableCell>
-                );
-            },
-        },
-        {
-            id: 'totalEarned',
-            accessorKey: 'totalEarned',
-            accessorFn: row => parseFloat(row.taxAmount || '0'),
-            enableSorting: true,
-            header: __('Total Earned ', 'multivendorx'),
-            cell: ({ row }) =>
-                <TableCell title={row.original.taxAmount ? `${appLocalizer.currency_symbol}${row.original.taxAmount}` : '-'}>
-                    {row.original.taxAmount
-                        ? formatCurrency(row.original.taxAmount)
-                        : '-'}
-                </TableCell>,
-        },
-        {
-            id: 'created_at',
-            accessorKey: 'created_at',
-            enableSorting: true,
-            header: __('Date', 'multivendorx'),
-            cell: ({ row }) => {
-                const date = row.original.createdAt;
-                if (!date) return <TableCell>-</TableCell>;
+	const realtimeFilter: RealtimeFilter[] = [
+		{
+			name: 'date',
+			render: ( updateFilter ) => (
+				<div className="right">
+					<MultiCalendarInput
+						wrapperClass=""
+						inputClass=""
+						onChange={ ( range: any ) => {
+							updateFilter( 'date', {
+								start_date: range.startDate,
+								end_date: range.endDate,
+							} );
+						} }
+					/>
+				</div>
+			),
+		},
+	];
 
-                // Format the date for display
-                const formattedDate = new Date(date).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric'
-                });
+	// CSV Download Button Component
+	const DownloadCSVButton: React.FC< {
+		selectedRows: RowSelectionState;
+		data: CommissionRow[] | null;
+		filterData: FilterData;
+		isLoading?: boolean;
+	} > = ( { selectedRows, data, filterData, isLoading = false } ) => {
+		const [ isDownloading, setIsDownloading ] = useState( false );
 
-                return (
-                    <TableCell title={`${formattedDate}`}>
-                        {formattedDate}
+		const handleDownload = async () => {
+			setIsDownloading( true );
+			try {
+				// Get selected row IDs
+				const selectedIds = Object.keys( selectedRows )
+					.filter( ( key ) => selectedRows[ key ] )
+					.map( ( key ) => {
+						const rowIndex = parseInt( key );
+						return data?.[ rowIndex ]?.id;
+					} )
+					.filter( ( id ) => id !== undefined );
 
-                    </TableCell>
-                );
-            },
-        },
-        {
-            header: __("Status", "multivendorx"),
-            cell: ({ row }) => (
-                <TableCell>
-                    <span className={`admin-badge ${row.original.status === "paid" ? "green" : "red"}`}>
-                        {row.original.status === "paid" ? "Paid" : "Unpaid"}
-                    </span>
-                </TableCell>
-            ),
-        },
-        {
-            id: 'action',
-            header: __("Action", "multivendorx"),
-            cell: ({ row }) => {
-                const isPaid = row.original.status === "paid";
+				// Prepare parameters for CSV download
+				const params: any = {
+					format: 'csv',
+					startDate: filterData?.date?.start_date
+						? filterData.date.start_date
+								.toISOString()
+								.split( 'T' )[ 0 ]
+						: '',
+					endDate: filterData?.date?.end_date
+						? filterData.date.end_date
+								.toISOString()
+								.split( 'T' )[ 0 ]
+						: '',
+				};
 
-                return (
-                    <TableCell
-                        type="action-dropdown"
-                        rowData={row.original}
-                        header={{
-                            actions: isPaid
-                                ? [
-                                    {
-                                        label: __("View Commission", "multivendorx"),
-                                        icon: "adminlib-preview",
-                                        onClick: (rowData) => {
-                                            setModalCommission(rowData);
-                                        },
-                                        hover: true,
-                                    },
-                                ]
-                                : []
-                        }}
-                    />
-                );
-            },
-        }
+				// Add filters if present
+				if ( filterData?.store ) {
+					params.store_id = filterData.store;
+				}
+				if ( filterData?.typeCount && filterData.typeCount !== 'all' ) {
+					params.status = filterData.typeCount;
+				}
 
+				// If specific rows are selected, send their IDs
+				if ( selectedIds.length > 0 ) {
+					params.ids = selectedIds.join( ',' );
+				}
 
-    ];
+				// Make API request for CSV
+				const response = await axios( {
+					method: 'GET',
+					url: getApiLink( appLocalizer, 'commission' ),
+					headers: {
+						'X-WP-Nonce': appLocalizer.nonce,
+						Accept: 'text/csv',
+					},
+					params: params,
+					responseType: 'blob',
+				} );
 
-    const realtimeFilter: RealtimeFilter[] = [
-        {
-            name: 'date',
-            render: (updateFilter) => (
-                <div className="right">
-                    <MultiCalendarInput
-                        wrapperClass=""
-                        inputClass=""
-                        onChange={(range: any) => {
-                            updateFilter('date', {
-                                start_date: range.startDate,
-                                end_date: range.endDate,
-                            });
-                        }}
-                    />
-                </div>
-            ),
-        },
-    ];
+				// Create download link
+				const url = window.URL.createObjectURL(
+					new Blob( [ response.data ] )
+				);
+				const link = document.createElement( 'a' );
+				link.href = url;
 
-    // CSV Download Button Component
-    const DownloadCSVButton: React.FC<{
-        selectedRows: RowSelectionState;
-        data: CommissionRow[] | null;
-        filterData: FilterData;
-        isLoading?: boolean;
-    }> = ({ selectedRows, data, filterData, isLoading = false }) => {
-        const [isDownloading, setIsDownloading] = useState(false);
+				// Generate filename with timestamp
+				const timestamp = new Date().toISOString().split( 'T' )[ 0 ];
+				const filename = `commissions_${ timestamp }.csv`;
+				link.setAttribute( 'download', filename );
 
+				document.body.appendChild( link );
+				link.click();
+				link.remove();
+				window.URL.revokeObjectURL( url );
+			} catch ( error ) {
+				console.error( 'Error downloading CSV:', error );
+				alert(
+					__(
+						'Failed to download CSV. Please try again.',
+						'multivendorx'
+					)
+				);
+			} finally {
+				setIsDownloading( false );
+			}
+		};
 
-        const handleDownload = async () => {
-            setIsDownloading(true);
-            try {
-                // Get selected row IDs
-                const selectedIds = Object.keys(selectedRows)
-                    .filter(key => selectedRows[key])
-                    .map(key => {
-                        const rowIndex = parseInt(key);
-                        return data?.[rowIndex]?.id;
-                    })
-                    .filter(id => id !== undefined);
+		const hasSelectedRows = Object.keys( selectedRows ).some(
+			( key ) => selectedRows[ key ]
+		);
 
-                // Prepare parameters for CSV download
-                const params: any = {
-                    format: 'csv',
-                    startDate: filterData?.date?.start_date ? filterData.date.start_date.toISOString().split('T')[0] : '',
-                    endDate: filterData?.date?.end_date ? filterData.date.end_date.toISOString().split('T')[0] : '',
-                };
+		return (
+			<button
+				onClick={ handleDownload }
+				disabled={
+					isDownloading ||
+					isLoading ||
+					( ! hasSelectedRows && ! data )
+				}
+				className="button"
+			>
+				Download CSV
+			</button>
+		);
+	};
 
-                // Add filters if present
-                if (filterData?.store) {
-                    params.store_id = filterData.store;
-                }
-                if (filterData?.typeCount && filterData.typeCount !== 'all') {
-                    params.status = filterData.typeCount;
-                }
+	// Bulk Actions Component
+	const BulkActions: React.FC< {
+		selectedRows: RowSelectionState;
+		data: CommissionRow[] | null;
+		filterData: FilterData;
+		onActionComplete?: () => void;
+	} > = ( { selectedRows, data, filterData, onActionComplete } ) => {
+		return (
+			<div>
+				<DownloadCSVButton
+					selectedRows={ selectedRows }
+					data={ data }
+					filterData={ filterData }
+				/>
+				{ /* Add other bulk actions here if needed */ }
+			</div>
+		);
+	};
+	const handleExportAll = async () => {
+		try {
+			const params: any = {
+				format: 'csv',
+				startDate: currentFilterData?.date?.start_date
+					? currentFilterData.date.start_date
+							.toISOString()
+							.split( 'T' )[ 0 ]
+					: '',
+				endDate: currentFilterData?.date?.end_date
+					? currentFilterData.date.end_date
+							.toISOString()
+							.split( 'T' )[ 0 ]
+					: '',
+			};
 
-                // If specific rows are selected, send their IDs
-                if (selectedIds.length > 0) {
-                    params.ids = selectedIds.join(',');
-                }
+			if ( currentFilterData?.store ) {
+				params.store_id = currentFilterData.store;
+			}
 
-                // Make API request for CSV
-                const response = await axios({
-                    method: 'GET',
-                    url: getApiLink(appLocalizer, 'commission'),
-                    headers: {
-                        'X-WP-Nonce': appLocalizer.nonce,
-                        'Accept': 'text/csv'
-                    },
-                    params: params,
-                    responseType: 'blob'
-                });
+			if (
+				currentFilterData?.typeCount &&
+				currentFilterData.typeCount !== 'all'
+			) {
+				params.status = currentFilterData.typeCount;
+			}
 
-                // Create download link
-                const url = window.URL.createObjectURL(new Blob([response.data]));
-                const link = document.createElement('a');
-                link.href = url;
+			const response = await axios( {
+				method: 'GET',
+				url: getApiLink( appLocalizer, 'commission' ),
+				headers: {
+					'X-WP-Nonce': appLocalizer.nonce,
+					Accept: 'text/csv',
+				},
+				params,
+				responseType: 'blob',
+			} );
 
-                // Generate filename with timestamp
-                const timestamp = new Date().toISOString().split('T')[0];
-                const filename = `commissions_${timestamp}.csv`;
-                link.setAttribute('download', filename);
+			const url = window.URL.createObjectURL(
+				new Blob( [ response.data ] )
+			);
+			const link = document.createElement( 'a' );
+			link.href = url;
 
-                document.body.appendChild(link);
-                link.click();
-                link.remove();
-                window.URL.revokeObjectURL(url);
+			const timestamp = new Date().toISOString().split( 'T' )[ 0 ];
+			link.setAttribute( 'download', `commissions_${ timestamp }.csv` );
 
-            } catch (error) {
-                console.error('Error downloading CSV:', error);
-                alert(__('Failed to download CSV. Please try again.', 'multivendorx'));
-            } finally {
-                setIsDownloading(false);
-            }
-        };
+			document.body.appendChild( link );
+			link.click();
+			link.remove();
+			window.URL.revokeObjectURL( url );
+		} catch ( error ) {
+			console.error( 'Error exporting CSV:', error );
+			alert(
+				__( 'Failed to export CSV. Please try again.', 'multivendorx' )
+			);
+		}
+	};
 
-        const hasSelectedRows = Object.keys(selectedRows).some(key => selectedRows[key]);
+	return (
+		<>
+			<div className="page-title-wrapper">
+				<div className="page-title">
+					<div className="title">
+						{ __( 'Commission', 'multivendorx' ) }
+					</div>
+					<div className="des">
+						{ __(
+							'Details of commissions earned by your store for every order, including order amount, commission rate and payout status.',
+							'multivendorx'
+						) }
+					</div>
+				</div>
 
-        return (
-            <button
-                onClick={handleDownload}
-                disabled={isDownloading || isLoading || (!hasSelectedRows && !data)}
-                className="button"
-            >
-                Download CSV
-            </button>
-        );
-    };
+				<div className="buttons-wrapper">
+					<button
+						className="admin-btn btn-purple-bg"
+						onClick={ handleExportAll }
+					>
+						<i className="adminlib-export"></i>
+						{ __( 'Export', 'multivendorx' ) }
+					</button>
+				</div>
+			</div>
+			<Table
+				data={ data }
+				columns={ columns as ColumnDef< Record< string, any >, any >[] }
+				rowSelection={ rowSelection }
+				onRowSelectionChange={ setRowSelection }
+				pagination={ pagination }
+				onPaginationChange={ setPagination }
+				handlePagination={ requestApiForData }
+				defaultRowsPerPage={ 10 }
+				perPageOption={ [ 10, 25, 50 ] }
+				typeCounts={ commissionStatus as CommissionStatus }
+				totalCounts={ totalRows }
+				pageCount={ pageCount }
+				realtimeFilter={ realtimeFilter }
+				bulkActionComp={ () => (
+					<BulkActions
+						selectedRows={ rowSelection }
+						data={ data }
+						filterData={ currentFilterData }
+					/>
+				) }
+			/>
 
-    // Bulk Actions Component
-    const BulkActions: React.FC<{
-        selectedRows: RowSelectionState;
-        data: CommissionRow[] | null;
-        filterData: FilterData;
-        onActionComplete?: () => void;
-    }> = ({ selectedRows, data, filterData, onActionComplete }) => {
-        return (
-            <div>
-                <DownloadCSVButton
-                    selectedRows={selectedRows}
-                    data={data}
-                    filterData={filterData}
-                />
-                {/* Add other bulk actions here if needed */}
-            </div>
-        );
-    };
-    const handleExportAll = async () => {
-        try {
-            const params: any = {
-                format: 'csv',
-                startDate: currentFilterData?.date?.start_date
-                    ? currentFilterData.date.start_date.toISOString().split('T')[0]
-                    : '',
-                endDate: currentFilterData?.date?.end_date
-                    ? currentFilterData.date.end_date.toISOString().split('T')[0]
-                    : '',
-            };
-
-            if (currentFilterData?.store) {
-                params.store_id = currentFilterData.store;
-            }
-
-            if (currentFilterData?.typeCount && currentFilterData.typeCount !== 'all') {
-                params.status = currentFilterData.typeCount;
-            }
-
-            const response = await axios({
-                method: 'GET',
-                url: getApiLink(appLocalizer, 'commission'),
-                headers: { 'X-WP-Nonce': appLocalizer.nonce, Accept: 'text/csv' },
-                params,
-                responseType: 'blob',
-            });
-
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
-
-            const timestamp = new Date().toISOString().split('T')[0];
-            link.setAttribute('download', `commissions_${timestamp}.csv`);
-
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-            window.URL.revokeObjectURL(url);
-        } catch (error) {
-            console.error('Error exporting CSV:', error);
-            alert(__('Failed to export CSV. Please try again.', 'multivendorx'));
-        }
-    };
-
-    return (
-        <>
-            <div className="page-title-wrapper">
-                <div className="page-title">
-                    <div className="title">
-                        {__('Commission', 'multivendorx')}
-                    </div>
-                    <div className="des">
-                        {__('Details of commissions earned by your store for every order, including order amount, commission rate and payout status.', 'multivendorx')}
-                    </div>
-                </div>
-
-                <div className="buttons-wrapper">
-                    <button className="admin-btn btn-purple-bg" onClick={handleExportAll}>
-                        <i className="adminlib-export"></i>
-                        {__('Export', 'multivendorx')}
-                    </button>
-                </div>
-            </div>
-            <Table
-                data={data}
-                columns={columns as ColumnDef<Record<string, any>, any>[]}
-                rowSelection={rowSelection}
-                onRowSelectionChange={setRowSelection}
-                pagination={pagination}
-                onPaginationChange={setPagination}
-                handlePagination={requestApiForData}
-                defaultRowsPerPage={10}
-                perPageOption={[10, 25, 50]}
-                typeCounts={commissionStatus as CommissionStatus}
-                totalCounts={totalRows}
-                pageCount={pageCount}
-                realtimeFilter={realtimeFilter}
-                bulkActionComp={() => (
-                    <BulkActions
-                        selectedRows={rowSelection}
-                        data={data}
-                        filterData={currentFilterData}
-                    />
-                )}
-            />
-
-            {modalCommission && (
-                <ViewCommission
-                    open={!!modalCommission}
-                    onClose={() => setModalCommission(null)}
-                    commissionId={modalCommission.id}
-                />
-            )}
-        </>
-    );
+			{ modalCommission && (
+				<ViewCommission
+					open={ !! modalCommission }
+					onClose={ () => setModalCommission( null ) }
+					commissionId={ modalCommission.id }
+				/>
+			) }
+		</>
+	);
 };
 
 export default StoreCommission;
