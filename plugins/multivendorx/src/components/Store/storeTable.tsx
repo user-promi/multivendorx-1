@@ -290,6 +290,7 @@ const StoreTable: React.FC = () => {
                 );
             },
         },
+
         {
             id: 'action',
             header: __('Action', 'multivendorx'),
@@ -305,6 +306,9 @@ const StoreTable: React.FC = () => {
                                 onClick: () => {
                                     navigate(`?page=multivendorx#&tab=stores&edit/${row.original.id}`);
                                 },
+                                // onClick: () => {
+                                //     window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`;
+                                // },
                                 hover: true
                             },
                             ...(row.original.status === 'active'

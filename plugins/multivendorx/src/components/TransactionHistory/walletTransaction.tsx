@@ -937,7 +937,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId, dateRang
                 </div>
             </CommonPopup>
 
-            <div className="admin-table-wrapper admin-pt-2">
+            <div className="admin-table-wrapper">
                 <Table
                     data={data}
                     columns={columns as ColumnDef<Record<string, any>, any>[]}

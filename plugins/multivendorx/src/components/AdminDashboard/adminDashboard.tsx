@@ -181,42 +181,42 @@ const AdminDashboard = () => {
       desc: "Charge your sellers a monthly or yearly membership fee to sell on your marketplace - predictable revenue every month.",
       iconClass: "adminlib-commission",
       linkText: "Join Discord",
-
+      href: "#",
     },
     {
       title: "Verified stores only",
       desc: "Screen stores with document verification and approval - build a trusted marketplace from day one.",
       iconClass: "adminlib-verification3",
       linkText: "Join Discord",
-
+      href: "#",
     },
     {
       title: "Diversified marketplace",
       desc: "Enable bookings, subscriptions, and auctions to boost sales and engagement.",
       iconClass: "adminlib-marketplace",
       linkText: "Explore Docs",
-
+      href: "#",
     },
     {
       title: "Vacation mode for stores",
       desc: "Stores can pause their stores temporarily with automatic buyer notifications - no missed messages.",
       iconClass: "adminlib-vacation",
       linkText: "Explore Docs",
-
+      href: "#",
     },
     {
       title: "Never run out of stock",
       desc: "Real-time inventory tracking with automatic low-stock alerts keeps sellers prepared and buyers happy.",
       iconClass: "adminlib-global-community",
       linkText: "Book Consultation",
-
+      href: "#",
     },
     {
       title: "Autopilot notifications",
       desc: "Automatic emails and alerts for every order, refund, and payout - everyone stays in the loop.",
       iconClass: "adminlib-notification",
       linkText: "Join Discord",
-
+      href: "#",
     }
   ];
 

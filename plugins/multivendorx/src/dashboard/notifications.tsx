@@ -97,7 +97,7 @@ const Notifications = () => {
                         }
                         className="admin-btn btn-purple"
                     >
-                        <i className="adminlib-preview"></i> {__("View All Notifications", "multivendorx")}
+                        <i className="adminlib-eye"></i> {__("View all notifications", "multivendorx")}
                     </a>
                 </div>
             </div>
