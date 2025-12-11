@@ -53,7 +53,7 @@ const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
             <SuccessNotice message={successMsg} />
 
             <div className="container-wrapper">
-                <div className="card-wrapper w-65">
+                <div className="card-wrapper column w-65">
                     <div className="card-content">
                         <div className="card-header">
                             <div className="left">

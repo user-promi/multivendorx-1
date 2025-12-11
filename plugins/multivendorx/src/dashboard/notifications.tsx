@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { CommonPopup, getApiLink } from 'zyra';
 import axios from 'axios';
 import { Skeleton } from '@mui/material';
+import { __ } from '@wordpress/i18n';
 
 const Notifications = () => {
 
@@ -96,7 +97,7 @@ const Notifications = () => {
                         }
                         className="admin-btn btn-purple"
                     >
-                        <i className="adminlib-eye"></i> {__("View all notifications", "multivendorx")}
+                        <i className="adminlib-preview"></i> {__("View All Notifications", "multivendorx")}
                     </a>
                 </div>
             </div>

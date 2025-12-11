@@ -190,6 +190,47 @@
             width: 24%;
         }
     }
+
+    &.dashboard {
+        .analytics-item {
+            justify-content: space-between;
+
+            .analytics-icon {
+                margin-top: 0.45rem;
+
+                i {
+                    padding: 0.5rem;
+                    font-size: 1.5rem;
+                    border-radius: 0.313rem;
+                    color: #fff;
+                    margin-top: 0.625rem;
+                }
+            }
+
+            .details {
+
+                .text {
+                    font-size: 1.063rem;
+                    font-weight: 500;
+                }
+
+                .number {
+                    font-size: 1.813rem !important; // zyra style overwrite
+                    line-height: 2 !important;
+                    font-weight: 600;
+                }
+
+                .report {
+                    font-weight: 500;
+                    color: #00000061;
+
+                    div {
+                        line-height: 1.313rem;
+                    }
+                }
+            }
+        }
+    }
 }
 
 .form-group-title-wrapper {
@@ -231,6 +272,7 @@
             display: flex;
             gap: 0.625rem;
             line-height: 1;
+            align-items: end;
         }
 
         .toggle-setting-container label {
@@ -245,7 +287,8 @@
                 cursor: pointer;
             }
         }
-        .date-field-wrapper{
+
+        .date-field-wrapper {
             display: flex;
             gap: 0.5rem;
         }
@@ -337,9 +380,11 @@
 .w-65 {
     width: 65% !important;
 }
-.admin-pt-2{
+
+.admin-pt-2 {
     padding-top: 2rem;
 }
+
 // settings shipping add country start
 // .shipping-country-wrapper {
 //     .shipping-country {
@@ -833,7 +878,7 @@
             border-radius: 50%;
             background: var(--colorPrimary);
             top: 0;
-            left: -0.4rem;
+            left: -0.45rem;
             outline: 0.313rem solid #fff;
         }
 

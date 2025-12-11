@@ -270,7 +270,7 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
       <div className="container-wrapper column">
         <div className="card-wrapper">
           <div className="card-content transparent">
-            <div className="analytics-container small-card report">
+            <div className="analytics-container report column-3">
               {commissionDetails.map((item, idx) => (
                 <div key={idx} className="analytics-item">
                   <div className="analytics-icon">

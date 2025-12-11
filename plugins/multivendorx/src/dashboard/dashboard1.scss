@@ -261,33 +261,7 @@ a {
 
 // analytics-container start  remove this 
 .analytics-container {
-    // display: flex;
-    // justify-content: space-between;
-    // padding-top: 0.5rem;
-    // gap: 1rem;
-
     .analytics-item {
-        // display: flex;
-        // gap: 1rem;
-        justify-content: space-between;
-        // width: 100%;
-        // padding: 1.5rem;
-        // border-radius: 0.5rem;
-        // box-shadow: 0 0.5rem 1rem 0 rgba(213, 209, 223, 0.12);
-
-        .analytics-icon {
-            margin-top: 0.45rem;
-
-            i {
-                padding: 0.5rem;
-                font-size: 1.5rem;
-                border-radius: 0.313rem;
-                color: #fff;
-                margin-top: 0.625rem;
-            }
-
-        }
-
         .theme-color1 {
             background: var(--colorPrimary);
         }
@@ -302,29 +276,6 @@ a {
 
         .theme-color4 {
             background: var(--colorSupport);
-        }
-
-        .details {
-
-            .text {
-                font-size: 1.063rem;
-                font-weight: 500;
-            }
-
-            .number {
-                font-size: 1.813rem !important; // zyra style overwrite
-                line-height: 2 !important;
-                font-weight: 600;
-            }
-
-            .report {
-                font-weight: 500;
-                color: #00000061;
-
-                div {
-                    line-height: 1.313rem;
-                }
-            }
         }
 
         &:has(.theme-color1) {
@@ -358,8 +309,6 @@ a {
                 color: var(--colorSupport);
             }
         }
-
-
     }
 }
 // analytics-container end

@@ -111,8 +111,8 @@ const HeaderNotifications = () => {
                         href={`?page=multivendorx#&tab=notifications`}
                         className="admin-btn btn-purple"
                     >
-                        <i className="adminlib-preview"></i>{' '}
-                        {__('View all notifications', 'multivendorx')}
+                        <i className="adminlib-preview"></i>
+                        {__('View All Notifications', 'multivendorx')}
                     </a>
                 </div>
             </div>

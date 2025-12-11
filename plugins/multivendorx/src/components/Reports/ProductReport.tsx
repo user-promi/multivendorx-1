@@ -487,28 +487,26 @@ const ProductReport: React.FC = () => {
               <div className="title">{__('Top Reviewed Products', 'multivendorx')}</div>
             </div>
           </div>
-
-          {toReviewedProduct.length > 0 ? (
-            toReviewedProduct.map((product: any) => (
-              <div className="card-content" key={`review-${product.id}`}>
-                <div
-                  className="card-header cursor-pointer"
-                  onClick={() => toggleReviewedCard(product.id.toString())}
-                >
-                  <div className="left">
-                    <div className="product-name font-medium">{product.name}</div>
-                    <div className="price text-sm text-gray-600">
-                      <b>{__('Rating:', 'multivendorx')}</b> {product.average_rating || "0"} ⭐
+          <div className="card-body">
+            {toReviewedProduct.length > 0 ? (
+              toReviewedProduct.map((product: any) => (
+                <div className="card-content" key={`review-${product.id}`}>
+                  <div
+                    className="card-header"
+                    onClick={() => toggleReviewedCard(product.id.toString())}
+                  >
+                    <div className="left">
+                      <div className="product-name font-medium">{product.name}</div>
+                      <div className="price text-sm text-gray-600">
+                        <b>{__('Rating:', 'multivendorx')}</b> {product.average_rating || "0"} ⭐
+                      </div>
+                    </div>
+                    <div className="right">
+                      <i
+                        className={`adminlib-pagination-right-arrow ${openReviewedCards[product.id] ? "rotate-90 transition-transform" : ""}`}
+                      ></i>
                     </div>
                   </div>
-                  <div className="right">
-                    <i
-                      className={`adminlib-pagination-right-arrow ${openReviewedCards[product.id] ? "rotate-90 transition-transform" : ""}`}
-                    ></i>
-                  </div>
-                </div>
-
-                <div className="card-body">
                   {openReviewedCards[product.id] && (
                     <div className="top-items">
                       <div className="items">
@@ -539,11 +537,11 @@ const ProductReport: React.FC = () => {
                     </div>
                   )}
                 </div>
-              </div>
-            ))
-          ) : (
-            <p>{__('No reviewed products found.', 'multivendorx')}</p>
-          )}
+              ))
+            ) : (
+              <p>{__('No reviewed products found.', 'multivendorx')}</p>
+            )}
+          </div>
         </div>
 
         <div className="card-content">

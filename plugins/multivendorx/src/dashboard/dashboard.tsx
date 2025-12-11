@@ -512,7 +512,7 @@ const Dashboard: React.FC = () => {
       <div className="container-wrapper column">
         <div className="card-wrapper">
           <div className="card-content transparent">
-            <div className="analytics-container">
+            <div className="analytics-container dashboard">
 
               {analyticsData.map((item, idx) => (
                 <div key={idx} className="analytics-item">

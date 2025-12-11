@@ -498,7 +498,6 @@ const Dashboard = () => {
                     </div>
                 </div>
 
-                {/* <div className="content-wrapper">{loadComponent(currentTab)}</div> */}
                 <div className="content-wrapper">
                     {storeData.length > 0 && storeData.status !== "active" ? (
                         <div className="permission-wrapper">
@@ -530,7 +529,6 @@ const Dashboard = () => {
                         </div>
 
                     ) :
-
                         noPermission ? (
                             <div className="permission-wrapper">
                                 <i className="adminlib-info red"></i>

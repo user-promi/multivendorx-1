@@ -154,7 +154,7 @@
 }
 
 // admin table filter style
-.filter-wrapper {
+.filter-wrapper:has(.filter-item) {
     display: flex;
     align-items: center;
     font-size: 0.875rem;
