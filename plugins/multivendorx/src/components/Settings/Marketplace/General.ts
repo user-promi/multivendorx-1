@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'marketplace',
 	priority: 1,
-	name: __( 'Overview', 'multivendorx' ),
+	name: __('Overview', 'multivendorx'),
 	tabTitle: 'Marketplace pages configuration',
 	desc: __(
 		'Configure the essential system pages required for your marketplace - including store registration, store dashboard.',
@@ -23,7 +23,7 @@ export default {
 		{
 			key: 'store_registration_page',
 			type: 'select',
-			label: __( 'Store registration page', 'multivendorx' ),
+			label: __('Store registration page', 'multivendorx'),
 			desc: __(
 				'Choose the page with [store_registration] shortcode, this is where stores sign up.',
 				'multivendorx'
@@ -42,7 +42,7 @@ export default {
 		{
 			key: 'store_dashboard_page',
 			type: 'select',
-			label: __( 'Store dashboard page', 'multivendorx' ),
+			label: __('Store dashboard page', 'multivendorx'),
 			desc: __(
 				'The page with [mvx_store] shortcode will act as the store’s control center.',
 				'multivendorx'
@@ -52,7 +52,7 @@ export default {
 		{
 			key: 'store_url',
 			type: 'text',
-			label: __( 'Storefront base ', 'multivendorx' ),
+			label: __('Storefront base ', 'multivendorx'),
 			desc: __(
 				'Set a custom base for your store URL. For example, in the URL: https://yourdomain.com/store/sample-store/, the default word [store] can be replaced with any name you define here.',
 				'multivendorx'
@@ -64,15 +64,12 @@ export default {
 		{
 			key: 'section',
 			type: 'section',
-			hint: __(
-				'Enable content styling tools for stores',
-				'multivendorx'
-			),
+			hint: __('Enable content styling tools for stores', 'multivendorx'),
 		},
 		{
 			key: 'tinymce_api_section',
 			type: 'text',
-			label: __( 'Tinymce API', 'multivendorx' ),
+			label: __('Tinymce API', 'multivendorx'),
 			desc: __(
 				'Get your <a href="https://www.tiny.cloud/blog/how-to-get-tinymce-cloud-up-in-less-than-5-minutes/" target="_blank">TinyMCE API key</a> and paste it here, to unlock visual editing tools across the marketplace. Admin and stores can easily format text, add links, lists, and other styling to their store descriptions, announcements, knowledge base posts, and product details-no coding needed.',
 				'multivendorx'
@@ -81,14 +78,14 @@ export default {
 		{
 			key: 'section',
 			type: 'section',
-			hint: __( 'Shortcode library', 'multivendorx' ),
+			hint: __('Shortcode library', 'multivendorx'),
 		},
 		{
 			key: 'available_shortcodes',
 			type: 'shortcode-table',
-			label: __( 'Available shortcodes', 'multivendorx' ),
-			desc: __( '', 'multivendorx' ),
-			optionLabel: [ 'Shortcodes', 'Description', 'Arguments' ],
+			label: __('Available shortcodes', 'multivendorx'),
+			desc: __('', 'multivendorx'),
+			optionLabel: ['Shortcodes', 'Description', 'Arguments'],
 			icon: 'adminlib-general-tab',
 			options: [
 				{

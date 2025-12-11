@@ -3,51 +3,47 @@ import axios from 'axios';
 import { BasicInput, SelectInput, getApiLink, SuccessNotice } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
-const Facilitator = ( { id, data }: { id: string | null; data: any } ) => {
-	const [ formData, setFormData ] = useState< { [ key: string ]: any } >(
-		{}
-	);
-	const [ successMsg, setSuccessMsg ] = useState< string | null >( null );
+const Facilitator = ({ id, data }: { id: string | null; data: any }) => {
+	const [formData, setFormData] = useState<{ [key: string]: any }>({});
+	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
-	useEffect( () => {
-		if ( ! id ) return;
-		if ( data ) {
-			setFormData( data );
+	useEffect(() => {
+		if (!id) return;
+		if (data) {
+			setFormData(data);
 		}
-	}, [ id ] );
+	}, [id]);
 
 	const handleChange = (
-		e: React.ChangeEvent< HTMLInputElement | HTMLTextAreaElement >
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
 	) => {
 		const { name, value } = e.target;
-		setFormData( ( prev ) => {
+		setFormData((prev) => {
 			const updated = {
-				...( prev || {} ),
-				[ name ]: value ?? '',
+				...(prev || {}),
+				[name]: value ?? '',
 			};
-			autoSave( updated );
+			autoSave(updated);
 			return updated;
-		} );
+		});
 	};
 
-	const autoSave = ( updatedData: { [ key: string ]: any } ) => {
-		axios( {
+	const autoSave = (updatedData: { [key: string]: any }) => {
+		axios({
 			method: 'PUT',
-			url: getApiLink( appLocalizer, `store/${ id }` ),
+			url: getApiLink(appLocalizer, `store/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: updatedData,
-		} ).then( ( res ) => {
-			if ( res.data.success ) {
-				setSuccessMsg(
-					__( 'Store saved successfully!', 'multivendorx' )
-				);
+		}).then((res) => {
+			if (res.data.success) {
+				setSuccessMsg(__('Store saved successfully!', 'multivendorx'));
 			}
-		} );
+		});
 	};
 
 	return (
 		<>
-			<SuccessNotice message={ successMsg } />
+			<SuccessNotice message={successMsg} />
 
 			<div className="container-wrapper">
 				<div className="card-wrapper w-65">
@@ -55,19 +51,19 @@ const Facilitator = ( { id, data }: { id: string | null; data: any } ) => {
 						<div className="form-group-wrapper">
 							<div className="form-group">
 								<label>
-									{ __( 'Facilitator', 'multivendorx' ) }
+									{__('Facilitator', 'multivendorx')}
 								</label>
 								<SelectInput
 									name="facilitator"
 									options={
 										appLocalizer?.facilitators_list || []
 									}
-									value={ formData.facilitator }
+									value={formData.facilitator}
 									type="single-select"
-									onChange={ ( newValue: any ) => {
+									onChange={(newValue: any) => {
 										if (
-											! newValue ||
-											Array.isArray( newValue )
+											!newValue ||
+											Array.isArray(newValue)
 										)
 											return;
 
@@ -75,9 +71,9 @@ const Facilitator = ( { id, data }: { id: string | null; data: any } ) => {
 											...formData,
 											facilitator: newValue.value,
 										};
-										setFormData( updated );
-										autoSave( updated );
-									} }
+										setFormData(updated);
+										autoSave(updated);
+									}}
 								/>
 							</div>
 						</div>
@@ -89,40 +85,40 @@ const Facilitator = ( { id, data }: { id: string | null; data: any } ) => {
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{ __(
+									{__(
 										'Facilitator payout share',
 										'multivendorx'
-									) }
+									)}
 								</div>
 							</div>
 						</div>
 						<div className="form-group-wrapper">
 							<div className="form-group">
 								<label htmlFor="product-name">
-									{ __( 'Fixed', 'multivendorx' ) }
+									{__('Fixed', 'multivendorx')}
 								</label>
 								<BasicInput
-									preInsideText={ '$' }
-									postText={ '+' }
+									preInsideText={'$'}
+									postText={'+'}
 									name="facilitator_fixed"
 									wrapperClass="setting-form-input"
 									descClass="settings-metabox-description"
-									value={ formData.facilitator_fixed }
-									onChange={ handleChange }
+									value={formData.facilitator_fixed}
+									onChange={handleChange}
 								/>
 							</div>
 
 							<div className="form-group">
 								<label htmlFor="product-name">
-									{ __( 'Percentage', 'multivendorx' ) }
+									{__('Percentage', 'multivendorx')}
 								</label>
 								<BasicInput
-									postInsideText={ '%' }
+									postInsideText={'%'}
 									name="facilitator_percentage"
 									wrapperClass="setting-form-input"
 									descClass="settings-metabox-description"
-									value={ formData.facilitator_percentage }
-									onChange={ handleChange }
+									value={formData.facilitator_percentage}
+									onChange={handleChange}
 								/>
 							</div>
 						</div>

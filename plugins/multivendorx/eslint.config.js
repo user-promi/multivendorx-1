@@ -2,12 +2,24 @@ import { defineConfig } from 'eslint/config';
 import js from '@eslint/js';
 import wordpressPlugin from '@wordpress/eslint-plugin';
 import prettierPlugin from 'eslint-plugin-prettier';
-
 import globals from 'globals';
 
-export default defineConfig( [
+export default defineConfig([
 	{
-		files: [ '**/*.{js,jsx,ts,tsx,mjs}' ],
+		ignores: [
+			'assets/',
+			'.cache/',
+			'vendor/',
+			'templates/',
+			'classes/',
+			'node_modules/',
+			'*.config.js',
+			'webpack.config.js',
+		],
+	},
+
+	{
+		files: ['**/*.{js,jsx,ts,tsx,mjs}'],
 
 		languageOptions: {
 			...js.configs.recommended.languageOptions,
@@ -31,22 +43,8 @@ export default defineConfig( [
 		},
 
 		rules: {
-			// ESLint recommended
 			...js.configs.recommended.rules,
-
-			// WordPress rules (migrated from extends)
 			...wordpressPlugin.configs.recommended.rules,
 		},
-
-		ignores: [
-			'assets/',
-			'.cache/',
-			'vendor/',
-			'templates/',
-			'classes/',
-			'node_modules/',
-			'*.config.js',
-			'webpack.config.js',
-		],
 	},
-] );
+]);

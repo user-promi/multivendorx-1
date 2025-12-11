@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'review-management',
 	priority: 4,
-	name: __( 'Store Reviews', 'multivendorx' ),
+	name: __('Store Reviews', 'multivendorx'),
 	desc: __(
 		'Manage how customers rate and review stores on your marketplace.',
 		'multivendorx'
@@ -14,7 +14,7 @@ export default {
 		{
 			key: 'store_rating_page',
 			type: 'blocktext',
-			label: __( 'no_label', 'multivendorx' ),
+			label: __('no_label', 'multivendorx'),
 			blocktext: __(
 				'<b>Store reviews are managed separately from product reviews. You can configure product reviews directly from your <a href="/wp-admin/admin.php?page=wc-settings&tab=products" target="_blank">WooCommerce settings</a>.</b>',
 				'multivendorx'
@@ -23,7 +23,7 @@ export default {
 		{
 			key: 'is_storereview_varified',
 			type: 'checkbox',
-			label: __( 'Verified buyer reviews only', 'multivendorx' ),
+			label: __('Verified buyer reviews only', 'multivendorx'),
 			desc: __(
 				'Accept reviews only from verified buyers who purchased a product.',
 				'multivendorx'
@@ -40,7 +40,7 @@ export default {
 		{
 			key: 'ratings_parameters',
 			type: 'multi-string',
-			label: __( 'Rating parameters', 'multivendorx' ),
+			label: __('Rating parameters', 'multivendorx'),
 			iconEnable: false,
 			moduleEnabled: 'store-review',
 			settingDescription: __(

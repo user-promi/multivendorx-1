@@ -5,73 +5,71 @@ import { __ } from '@wordpress/i18n';
 
 const GeneralSettings = () => {
 	const id = appLocalizer.store_id;
-	const [ formData, setFormData ] = useState< { [ key: string ]: any } >(
-		{}
-	);
-	const [ successMsg, setSuccessMsg ] = useState< string | null >( null );
-	const [ stateOptions, setStateOptions ] = useState<
+	const [formData, setFormData] = useState<{ [key: string]: any }>({});
+	const [successMsg, setSuccessMsg] = useState<string | null>(null);
+	const [stateOptions, setStateOptions] = useState<
 		{ label: string; value: string }[]
-	>( [] );
+	>([]);
 	const settings =
-		appLocalizer.settings_databases_value[ 'store-capability' ]
+		appLocalizer.settings_databases_value['store-capability']
 			?.edit_store_info_activation || [];
-	useEffect( () => {
-		if ( ! id ) return;
+	useEffect(() => {
+		if (!id) return;
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, `store/${ id }` ),
+			url: getApiLink(appLocalizer, `store/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		} ).then( ( res ) => {
+		}).then((res) => {
 			const data = res.data || {};
-			setFormData( ( prev ) => ( { ...prev, ...data } ) );
-		} );
-	}, [ id ] );
+			setFormData((prev) => ({ ...prev, ...data }));
+		});
+	}, [id]);
 
-	useEffect( () => {
-		if ( successMsg ) {
-			const timer = setTimeout( () => setSuccessMsg( null ), 3000 );
-			return () => clearTimeout( timer );
+	useEffect(() => {
+		if (successMsg) {
+			const timer = setTimeout(() => setSuccessMsg(null), 3000);
+			return () => clearTimeout(timer);
 		}
-	}, [ successMsg ] );
+	}, [successMsg]);
 
-	useEffect( () => {
-		if ( formData.country ) {
-			fetchStatesByCountry( formData.country );
+	useEffect(() => {
+		if (formData.country) {
+			fetchStatesByCountry(formData.country);
 		}
-	}, [ formData.country ] );
+	}, [formData.country]);
 
-	const fetchStatesByCountry = ( countryCode: string ) => {
-		axios( {
+	const fetchStatesByCountry = (countryCode: string) => {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, `states/${ countryCode }` ),
+			url: getApiLink(appLocalizer, `states/${countryCode}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		} ).then( ( res ) => {
-			setStateOptions( res.data || [] );
-		} );
+		}).then((res) => {
+			setStateOptions(res.data || []);
+		});
 	};
 
 	//Fixed: Corrected name and dynamic binding
 	const handleChange = (
-		e: React.ChangeEvent< HTMLInputElement | HTMLTextAreaElement >
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
 	) => {
 		const { name, value } = e.target;
-		const updated = { ...formData, [ name ]: value };
-		setFormData( updated );
-		autoSave( updated );
+		const updated = { ...formData, [name]: value };
+		setFormData(updated);
+		autoSave(updated);
 	};
 
-	const autoSave = ( updatedData: { [ key: string ]: any } ) => {
-		axios( {
+	const autoSave = (updatedData: { [key: string]: any }) => {
+		axios({
 			method: 'PUT',
-			url: getApiLink( appLocalizer, `store/${ id }` ),
+			url: getApiLink(appLocalizer, `store/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: updatedData,
-		} ).then( ( res ) => {
-			if ( res.data?.success ) {
-				setSuccessMsg( 'Store saved successfully!' );
+		}).then((res) => {
+			if (res.data?.success) {
+				setSuccessMsg('Store saved successfully!');
 			}
-		} );
+		});
 	};
 
 	return (
@@ -79,15 +77,15 @@ const GeneralSettings = () => {
 			<div className="form-group-wrapper">
 				<div className="form-group">
 					<label htmlFor="store-name">
-						{ __( 'Name', 'multivendorx' ) }
+						{__('Name', 'multivendorx')}
 					</label>
 					<BasicInput
 						name="name"
 						wrapperClass="setting-form-input"
 						descClass="settings-metabox-description"
-						value={ formData.name || '' }
-						onChange={ handleChange }
-						readOnly={ settings.includes( 'store_name' ) }
+						value={formData.name || ''}
+						onChange={handleChange}
+						readOnly={settings.includes('store_name')}
 					/>
 				</div>
 			</div>
@@ -95,14 +93,14 @@ const GeneralSettings = () => {
 			<div className="form-group-wrapper">
 				<div className="form-group">
 					<label htmlFor="store-slug">
-						{ __( 'Storefront link', 'multivendorx' ) }
+						{__('Storefront link', 'multivendorx')}
 					</label>
 					<BasicInput
 						name="slug"
 						wrapperClass="setting-form-input"
 						descClass="settings-metabox-description"
-						value={ formData.slug || '' }
-						onChange={ handleChange }
+						value={formData.slug || ''}
+						onChange={handleChange}
 					/>
 				</div>
 			</div>
@@ -110,14 +108,14 @@ const GeneralSettings = () => {
 			<div className="form-group-wrapper">
 				<div className="form-group">
 					<label htmlFor="store-description">
-						{ __( 'Description', 'multivendorx' ) }
+						{__('Description', 'multivendorx')}
 					</label>
 					<TextArea
 						name="description"
 						inputClass="textarea-input"
-						value={ formData.description || '' }
-						onChange={ handleChange }
-						readOnly={ settings.includes( 'store_description' ) }
+						value={formData.description || ''}
+						onChange={handleChange}
+						readOnly={settings.includes('store_description')}
 					/>
 				</div>
 			</div>
@@ -125,22 +123,22 @@ const GeneralSettings = () => {
 			<div className="form-group-wrapper">
 				<div className="form-group">
 					<label htmlFor="message-to-buyer">
-						{ __(
+						{__(
 							'Buyer welcome message after purchase',
 							'multivendorx'
-						) }
+						)}
 					</label>
 					<BasicInput
 						name="messageToBuyer"
 						wrapperClass="setting-form-input"
 						descClass="settings-metabox-description"
-						value={ formData.messageToBuyer || '' }
-						onChange={ handleChange }
+						value={formData.messageToBuyer || ''}
+						onChange={handleChange}
 					/>
 				</div>
 			</div>
 
-			<SuccessNotice message={ successMsg } />
+			<SuccessNotice message={successMsg} />
 		</>
 	);
 };

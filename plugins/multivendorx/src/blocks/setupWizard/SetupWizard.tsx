@@ -37,19 +37,17 @@ const sectionsData: Section[] = [
 ];
 
 const SetupWizard: React.FC = () => {
-	const [ sections, setSections ] = useState< Section[] >( sectionsData );
-	const [ expandedSection, setExpandedSection ] = useState< number | null >(
-		0
-	);
+	const [sections, setSections] = useState<Section[]>(sectionsData);
+	const [expandedSection, setExpandedSection] = useState<number | null>(0);
 
 	// Required state for PaymentTabsComponent
-	const [ value, setValue ] = useState( {} );
-	const settingChanged = useRef( false );
+	const [value, setValue] = useState({});
+	const settingChanged = useRef(false);
 
 	// NEW: Wizard step control
-	const [ currentStep, setCurrentStep ] = useState( 0 );
+	const [currentStep, setCurrentStep] = useState(0);
 
-	const appLocalizer = ( window as any ).appLocalizer;
+	const appLocalizer = (window as any).appLocalizer;
 
 	const inputField = {
 		key: 'payment_gateway',
@@ -58,11 +56,11 @@ const SetupWizard: React.FC = () => {
 		moduleEnabled: 'yes',
 		dependentSetting: '',
 		dependentPlugin: '',
-		modal: [ 'paypal', 'stripe', 'razorpay' ],
+		modal: ['paypal', 'stripe', 'razorpay'],
 		buttonEnable: true,
 	};
 
-	const isProSetting = ( pro: boolean ) => pro === true;
+	const isProSetting = (pro: boolean) => pro === true;
 
 	const methods = [
 		{
@@ -122,12 +120,12 @@ const SetupWizard: React.FC = () => {
 					options: [
 						{
 							key: 'manually',
-							label: __( 'Manual', 'multivendorx' ),
+							label: __('Manual', 'multivendorx'),
 							value: 'manually',
 						},
 						{
 							key: 'automatically',
-							label: __( 'Automatic', 'multivendorx' ),
+							label: __('Automatic', 'multivendorx'),
 							value: 'automatically',
 						},
 					],
@@ -135,7 +133,7 @@ const SetupWizard: React.FC = () => {
 				{
 					key: 'commission_type',
 					type: 'setting-toggle',
-					label: __( 'Commission type', 'multivendorx' ),
+					label: __('Commission type', 'multivendorx'),
 					settingDescription: __(
 						'Choose how commissions should be calculated for your marketplace.',
 						'multivendorx'
@@ -147,12 +145,12 @@ const SetupWizard: React.FC = () => {
 					options: [
 						{
 							key: 'store_order',
-							label: __( 'Store order based', 'multivendorx' ),
+							label: __('Store order based', 'multivendorx'),
 							value: 'store_order',
 						},
 						{
 							key: 'per_item',
-							label: __( 'Per item based', 'multivendorx' ),
+							label: __('Per item based', 'multivendorx'),
 							value: 'per_item',
 						},
 					],
@@ -162,7 +160,7 @@ const SetupWizard: React.FC = () => {
 							type: 'setup',
 							label: 'Advanced commission rules',
 							desc: 'Set detailed commission rules by product, order, or store, including fees, taxes, and shipping.',
-							link: `${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
+							link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
 						},
 					],
 				},
@@ -171,7 +169,7 @@ const SetupWizard: React.FC = () => {
 					type: 'setup',
 					title: 'Advanced commission rules',
 					desc: 'Set detailed commission rules by product, order, or store, including fees, taxes, and shipping.',
-					link: `${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
+					link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
 				},
 				{
 					key: 'wizardButtons',
@@ -202,7 +200,7 @@ const SetupWizard: React.FC = () => {
 				{
 					key: 'products_fields',
 					type: 'multi-checkbox',
-					label: __( 'Edit product page blocks', 'multivendorx' ),
+					label: __('Edit product page blocks', 'multivendorx'),
 					settingDescription: __(
 						'Control which product data fields are available to stores when creating or editing products.',
 						'multivendorx'
@@ -211,32 +209,32 @@ const SetupWizard: React.FC = () => {
 					options: [
 						{
 							key: 'general',
-							label: __( 'Manage Products', 'multivendorx' ),
+							label: __('Manage Products', 'multivendorx'),
 							value: 'general',
 						},
 						{
 							key: 'view_products',
-							label: __( 'View Products', 'multivendorx' ),
+							label: __('View Products', 'multivendorx'),
 							value: 'general',
 						},
 						{
 							key: 'edit_products',
-							label: __( 'Edit Products', 'multivendorx' ),
+							label: __('Edit Products', 'multivendorx'),
 							value: 'general',
 						},
 						{
 							key: 'delete_products',
-							label: __( 'Delete Products', 'multivendorx' ),
+							label: __('Delete Products', 'multivendorx'),
 							value: 'general',
 						},
 						{
 							key: 'publish_products',
-							label: __( 'Publish Products', 'multivendorx' ),
+							label: __('Publish Products', 'multivendorx'),
 							value: 'general',
 						},
 						{
 							key: 'upload_files',
-							label: __( 'Upload Files', 'multivendorx' ),
+							label: __('Upload Files', 'multivendorx'),
 							value: 'general',
 						},
 					],
@@ -247,7 +245,7 @@ const SetupWizard: React.FC = () => {
 							type: 'setup',
 							label: 'Advanced store capabilities',
 							desc: 'Quickly manage additional store permissions and advanced features, including orders, coupons, analytics, and more.',
-							link: `${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-capability`,
+							link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-capability`,
 						},
 					],
 				},
@@ -256,7 +254,7 @@ const SetupWizard: React.FC = () => {
 					type: 'setup',
 					label: 'Advanced store capabilities',
 					desc: 'Quickly manage additional store permissions and advanced features, including orders, coupons, analytics, and more.',
-					link: `${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-capability`,
+					link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-capability`,
 				},
 				{
 					key: 'wizardButtons',
@@ -375,7 +373,7 @@ const SetupWizard: React.FC = () => {
 							label: 'Finish',
 							action: 'finish',
 							btnClass: 'admin-btn btn-purple',
-							redirect: `${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=dashboard`,
+							redirect: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=dashboard`,
 						},
 					],
 				},
@@ -383,12 +381,12 @@ const SetupWizard: React.FC = () => {
 		},
 	];
 
-	const proSettingChanged = ( pro: boolean ) => {
-		console.log( 'Pro setting change triggered', pro );
+	const proSettingChanged = (pro: boolean) => {
+		console.log('Pro setting change triggered', pro);
 	};
 
-	const updateSetting = ( key: string, data: any ) => {
-		setValue( data );
+	const updateSetting = (key: string, data: any) => {
+		setValue(data);
 	};
 
 	const hasAccess = () => true;
@@ -397,7 +395,7 @@ const SetupWizard: React.FC = () => {
 		<div className="wizard-container">
 			<div>
 				<div className="welcome-wrapper">
-					<img src={ img } alt="" />
+					<img src={img} alt="" />
 					<h4 className="wizard-title">
 						Welcome to the MultivendorX family!
 					</h4>
@@ -410,34 +408,32 @@ const SetupWizard: React.FC = () => {
 				</div>
 
 				<PaymentTabsComponent
-					key={ inputField.key }
-					name={ inputField.key }
-					proSetting={ isProSetting(
-						inputField.proSetting ?? false
-					) }
-					proSettingChanged={ () =>
-						proSettingChanged( inputField.proSetting ?? false )
+					key={inputField.key}
+					name={inputField.key}
+					proSetting={isProSetting(inputField.proSetting ?? false)}
+					proSettingChanged={() =>
+						proSettingChanged(inputField.proSetting ?? false)
 					}
-					apilink={ String( inputField.apiLink ) }
-					appLocalizer={ appLocalizer }
-					methods={ methods }
-					buttonEnable={ inputField.buttonEnable }
-					value={ value }
-					onChange={ ( data: any ) => {
-						if ( hasAccess() ) {
+					apilink={String(inputField.apiLink)}
+					appLocalizer={appLocalizer}
+					methods={methods}
+					buttonEnable={inputField.buttonEnable}
+					value={value}
+					onChange={(data: any) => {
+						if (hasAccess()) {
 							settingChanged.current = true;
-							updateSetting( inputField.key, data );
+							updateSetting(inputField.key, data);
 						}
-					} }
-					isWizardMode={ true }
-					wizardIndex={ currentStep }
-					setWizardIndex={ setCurrentStep }
+					}}
+					isWizardMode={true}
+					wizardIndex={currentStep}
+					setWizardIndex={setCurrentStep}
 				/>
 
-				{ /* <div className="welcome-wrapper">
+				{/* <div className="welcome-wrapper">
                     <div className="wizard-title">! Well Done</div>
                     <div className="des">Thank you for choosing MultiVendorX!</div>
-                </div> */ }
+                </div> */}
 			</div>
 		</div>
 	);

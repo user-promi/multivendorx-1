@@ -5,37 +5,37 @@ import { formatCurrency } from '@/services/commonFunction';
 import { __ } from '@wordpress/i18n';
 
 const AddOrder = () => {
-	const [ showAddProduct, setShowAddProduct ] = useState( false );
-	const [ allProducts, setAllProducts ] = useState( [] );
-	const [ customers, setCustomers ] = useState( [] );
-	const [ selectedCustomer, setSelectedCustomer ] = useState( null );
+	const [showAddProduct, setShowAddProduct] = useState(false);
+	const [allProducts, setAllProducts] = useState([]);
+	const [customers, setCustomers] = useState([]);
+	const [selectedCustomer, setSelectedCustomer] = useState(null);
 
-	const [ shippingAddress, setShippingAddress ] = useState( {} );
-	const [ billingAddress, setBillingAddress ] = useState( {} );
-	const [ paymentMethods, setPaymentMethods ] = useState( [] );
-	const [ selectedPayment, setSelectedPayment ] = useState( null );
+	const [shippingAddress, setShippingAddress] = useState({});
+	const [billingAddress, setBillingAddress] = useState({});
+	const [paymentMethods, setPaymentMethods] = useState([]);
+	const [selectedPayment, setSelectedPayment] = useState(null);
 
-	const [ addedProducts, setAddedProducts ] = useState( [] );
-	const [ showAddressEdit, setShowAddressEdit ] = useState( false );
-	const [ showShippingAddressEdit, setShowShippingAddressEdit ] =
-		useState( false );
+	const [addedProducts, setAddedProducts] = useState([]);
+	const [showAddressEdit, setShowAddressEdit] = useState(false);
+	const [showShippingAddressEdit, setShowShippingAddressEdit] =
+		useState(false);
 
-	const [ showCreateCustomer, setShowCreateCustomer ] = useState( false );
+	const [showCreateCustomer, setShowCreateCustomer] = useState(false);
 
-	const addressEditRef = useRef( null );
-	const shippingAddressEditRef = useRef( null );
-	const [ shippingLines, setShippingLines ] = useState( [] );
-	const [ availableShippingMethods, setAvailableShippingMethods ] = useState(
+	const addressEditRef = useRef(null);
+	const shippingAddressEditRef = useRef(null);
+	const [shippingLines, setShippingLines] = useState([]);
+	const [availableShippingMethods, setAvailableShippingMethods] = useState(
 		[]
 	);
 
-	useEffect( () => {
+	useEffect(() => {
 		// if (!showAddressEdit) return;
 
-		function handleClickOutside( e ) {
+		function handleClickOutside(e) {
 			if (
 				addressEditRef.current &&
-				! addressEditRef.current.contains( e.target )
+				!addressEditRef.current.contains(e.target)
 			) {
 				const payload = {
 					billing: {
@@ -51,21 +51,21 @@ const AddOrder = () => {
 				};
 				axios
 					.put(
-						`${ appLocalizer.apiUrl }/wc/v3/customers/${ selectedCustomer?.id }`,
+						`${appLocalizer.apiUrl}/wc/v3/customers/${selectedCustomer?.id}`,
 						payload,
 						{
 							headers: { 'X-WP-Nonce': appLocalizer.nonce },
 						}
 					)
-					.then( ( res ) => {
-						setBillingAddress( res.data.billing );
-					} );
+					.then((res) => {
+						setBillingAddress(res.data.billing);
+					});
 
-				setShowAddressEdit( false );
+				setShowAddressEdit(false);
 			}
 			if (
 				shippingAddressEditRef.current &&
-				! shippingAddressEditRef.current.contains( e.target )
+				!shippingAddressEditRef.current.contains(e.target)
 			) {
 				const payload = {
 					shipping: {
@@ -81,120 +81,120 @@ const AddOrder = () => {
 				};
 				axios
 					.put(
-						`${ appLocalizer.apiUrl }/wc/v3/customers/${ selectedCustomer?.id }`,
+						`${appLocalizer.apiUrl}/wc/v3/customers/${selectedCustomer?.id}`,
 						payload,
 						{
 							headers: { 'X-WP-Nonce': appLocalizer.nonce },
 						}
 					)
-					.then( ( res ) => {
-						setShippingAddress( res.data.shipping );
-					} );
+					.then((res) => {
+						setShippingAddress(res.data.shipping);
+					});
 
-				setShowShippingAddressEdit( false );
+				setShowShippingAddressEdit(false);
 			}
 		}
 
-		document.addEventListener( 'mousedown', handleClickOutside );
+		document.addEventListener('mousedown', handleClickOutside);
 
 		return () => {
-			document.removeEventListener( 'mousedown', handleClickOutside );
+			document.removeEventListener('mousedown', handleClickOutside);
 		};
 	}, [
 		showAddressEdit,
 		showShippingAddressEdit,
 		shippingAddress,
 		billingAddress,
-	] );
+	]);
 
-	useEffect( () => {
+	useEffect(() => {
 		axios
-			.get( `${ appLocalizer.apiUrl }/wc/v3/customers`, {
+			.get(`${appLocalizer.apiUrl}/wc/v3/customers`, {
 				headers: {
 					'X-WP-Nonce': appLocalizer.nonce,
 				},
 				params: {
 					per_page: 100,
 				},
-			} )
-			.then( ( response ) => {
-				setCustomers( response.data );
-			} );
-	}, [] );
+			})
+			.then((response) => {
+				setCustomers(response.data);
+			});
+	}, []);
 
 	const customerOptions = [
 		{ label: 'Choose customer...', value: '' },
-		...customers?.map( ( c ) => ( {
-			label: `${ c.first_name } ${ c.last_name }`.trim() || c.email,
+		...customers?.map((c) => ({
+			label: `${c.first_name} ${c.last_name}`.trim() || c.email,
 			value: c.id,
-		} ) ),
+		})),
 	];
 
-	useEffect( () => {
-		if ( ! showAddProduct ) return;
+	useEffect(() => {
+		if (!showAddProduct) return;
 
 		axios
-			.get( `${ appLocalizer.apiUrl }/wc/v3/products`, {
+			.get(`${appLocalizer.apiUrl}/wc/v3/products`, {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: {
 					per_page: 100,
 				},
-			} )
-			.then( ( res ) => {
+			})
+			.then((res) => {
 				const products = res.data;
 
-				const filtered = products.filter( ( p ) => {
+				const filtered = products.filter((p) => {
 					const storeId = p.meta_data?.find(
-						( m ) => m.key === 'multivendorx_store_id'
+						(m) => m.key === 'multivendorx_store_id'
 					)?.value;
-					return storeId === appLocalizer.store_id || ! storeId;
-				} );
+					return storeId === appLocalizer.store_id || !storeId;
+				});
 
-				setAllProducts( filtered );
-			} );
-	}, [ showAddProduct ] );
+				setAllProducts(filtered);
+			});
+	}, [showAddProduct]);
 
-	const subtotal = addedProducts.reduce( ( sum, item ) => {
-		return sum + item.price * ( item.qty || 1 );
-	}, 0 );
+	const subtotal = addedProducts.reduce((sum, item) => {
+		return sum + item.price * (item.qty || 1);
+	}, 0);
 
-	const hasCustomer = !! selectedCustomer;
+	const hasCustomer = !!selectedCustomer;
 
-	useEffect( () => {
+	useEffect(() => {
 		axios
-			.get( `${ appLocalizer.apiUrl }/wc/v3/payment_gateways`, {
+			.get(`${appLocalizer.apiUrl}/wc/v3/payment_gateways`, {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			} )
-			.then( ( res ) => {
-				const enabled = res.data.filter( ( m ) => m.enabled === true );
+			})
+			.then((res) => {
+				const enabled = res.data.filter((m) => m.enabled === true);
 
-				const formatted = enabled.map( ( m ) => ( {
+				const formatted = enabled.map((m) => ({
 					label: m.title,
 					value: m.id,
 					method_title: m.title,
-				} ) );
+				}));
 
-				setPaymentMethods( formatted );
-			} );
-	}, [] );
+				setPaymentMethods(formatted);
+			});
+	}, []);
 
-	useEffect( () => {
+	useEffect(() => {
 		axios
-			.get( `${ appLocalizer.apiUrl }/wc/v3/shipping_methods`, {
+			.get(`${appLocalizer.apiUrl}/wc/v3/shipping_methods`, {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			} )
-			.then( ( res ) => {
-				const formatted = res.data.map( ( method ) => ( {
+			})
+			.then((res) => {
+				const formatted = res.data.map((method) => ({
 					label: method.title,
 					value: method.id,
 					...method,
-				} ) );
-				setAvailableShippingMethods( formatted );
-			} );
-	}, [] );
+				}));
+				setAvailableShippingMethods(formatted);
+			});
+	}, []);
 
 	const totalShipping = shippingLines.reduce(
-		( sum, s ) => sum + Number( s.cost || 0 ),
+		(sum, s) => sum + Number(s.cost || 0),
 		0
 	);
 
@@ -203,31 +203,31 @@ const AddOrder = () => {
 		...paymentMethods,
 	];
 
-	const [ taxRates, setTaxRates ] = useState( [] );
+	const [taxRates, setTaxRates] = useState([]);
 
-	useEffect( () => {
+	useEffect(() => {
 		axios
-			.get( `${ appLocalizer.apiUrl }/wc/v3/taxes`, {
+			.get(`${appLocalizer.apiUrl}/wc/v3/taxes`, {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: { per_page: 100 },
-			} )
-			.then( ( res ) => setTaxRates( res.data ) );
-	}, [] );
+			})
+			.then((res) => setTaxRates(res.data));
+	}, []);
 
-	const [ showAddTax, setShowAddTax ] = useState( false );
-	const [ selectedTaxRate, setSelectedTaxRate ] = useState( null );
+	const [showAddTax, setShowAddTax] = useState(false);
+	const [selectedTaxRate, setSelectedTaxRate] = useState(null);
 
 	const applyTaxToOrder = () => {
-		if ( ! selectedTaxRate ) return;
+		if (!selectedTaxRate) return;
 
-		const rate = Number( selectedTaxRate.rate ) / 100;
+		const rate = Number(selectedTaxRate.rate) / 100;
 
-		setAddedProducts( ( prev ) =>
-			prev.map( ( item ) => ( {
+		setAddedProducts((prev) =>
+			prev.map((item) => ({
 				...item,
 				tax_rate_id: selectedTaxRate.id,
-				tax_amount: item.price * ( item.qty || 1 ) * rate,
-			} ) )
+				tax_amount: item.price * (item.qty || 1) * rate,
+			}))
 		);
 	};
 
@@ -238,7 +238,7 @@ const AddOrder = () => {
 			billing: billingAddress,
 			shipping: shippingAddress,
 
-			line_items: addedProducts.map( ( item ) => {
+			line_items: addedProducts.map((item) => {
 				const qty = item.qty || 1;
 				const subtotal = item.price * qty;
 				const tax = item.tax_amount || 0;
@@ -246,26 +246,26 @@ const AddOrder = () => {
 				return {
 					product_id: item.id,
 					quantity: qty,
-					subtotal: subtotal.toFixed( 2 ),
-					total: subtotal.toFixed( 2 ),
+					subtotal: subtotal.toFixed(2),
+					total: subtotal.toFixed(2),
 
 					// Tax
-					subtotal_tax: tax.toFixed( 2 ),
-					total_tax: tax.toFixed( 2 ),
+					subtotal_tax: tax.toFixed(2),
+					total_tax: tax.toFixed(2),
 
 					// Required for tax mapping
 					taxes: item.tax_rate_id
-						? [ { id: item.tax_rate_id, total: tax.toFixed( 2 ) } ]
+						? [{ id: item.tax_rate_id, total: tax.toFixed(2) }]
 						: [],
 				};
-			} ),
+			}),
 
 			// Shipping
-			shipping_lines: shippingLines.map( ( s ) => ( {
+			shipping_lines: shippingLines.map((s) => ({
 				method_id: s.method_id,
 				method_title: s.name,
-				total: Number( s.cost ).toFixed( 2 ),
-			} ) ),
+				total: Number(s.cost).toFixed(2),
+			})),
 
 			// Payment
 			payment_method: selectedPayment?.value || '',
@@ -274,22 +274,22 @@ const AddOrder = () => {
 		};
 
 		axios
-			.post( `${ appLocalizer.apiUrl }/wc/v3/orders`, orderData, {
+			.post(`${appLocalizer.apiUrl}/wc/v3/orders`, orderData, {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			} )
-			.then( ( res ) => {
-				console.log( 'Order created:', res.data );
-				window.location.assign( window.location.pathname );
-			} );
+			})
+			.then((res) => {
+				console.log('Order created:', res.data);
+				window.location.assign(window.location.pathname);
+			});
 	};
 
 	const orderSubtotal = addedProducts.reduce(
-		( sum, item ) => sum + item.price * ( item.qty || 1 ),
+		(sum, item) => sum + item.price * (item.qty || 1),
 		0
 	);
 
 	const orderTaxTotal = addedProducts.reduce(
-		( sum, item ) => sum + ( item.tax_amount || 0 ),
+		(sum, item) => sum + (item.tax_amount || 0),
 		0
 	);
 
@@ -297,12 +297,12 @@ const AddOrder = () => {
 
 	const grandTotal = orderSubtotal + orderTaxTotal + orderShippingTotal;
 
-	const [ newCustomer, setNewCustomer ] = useState( {
+	const [newCustomer, setNewCustomer] = useState({
 		first_name: '',
 		last_name: '',
 		email: '',
 		phone: '',
-	} );
+	});
 
 	const createCustomer = () => {
 		const payload = {
@@ -322,80 +322,80 @@ const AddOrder = () => {
 		};
 
 		axios
-			.post( `${ appLocalizer.apiUrl }/wc/v3/customers`, payload, {
+			.post(`${appLocalizer.apiUrl}/wc/v3/customers`, payload, {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			} )
-			.then( ( res ) => {
+			})
+			.then((res) => {
 				const customer = res.data;
 
 				// Add to dropdown immediately
-				setCustomers( ( prev ) => [ ...prev, customer ] );
+				setCustomers((prev) => [...prev, customer]);
 
 				// Select this customer automatically
-				setSelectedCustomer( customer );
-				setBillingAddress( customer.billing );
-				setShippingAddress( customer.shipping );
+				setSelectedCustomer(customer);
+				setBillingAddress(customer.billing);
+				setShippingAddress(customer.shipping);
 
 				// Close create form
-				setShowCreateCustomer( false );
+				setShowCreateCustomer(false);
 
 				// Clear form
-				setNewCustomer( {
+				setNewCustomer({
 					first_name: '',
 					last_name: '',
 					email: '',
 					phone: '',
-				} );
-			} );
+				});
+			});
 	};
-	const [ stateOptions, setStateOptions ] = useState<
+	const [stateOptions, setStateOptions] = useState<
 		{ label: string; value: string }[]
-	>( [] );
+	>([]);
 
-	const fetchStatesByCountry = ( countryCode: string ) => {
-		axios( {
+	const fetchStatesByCountry = (countryCode: string) => {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, `states/${ countryCode }` ),
+			url: getApiLink(appLocalizer, `states/${countryCode}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		} ).then( ( res ) => {
-			setStateOptions( res.data || [] );
-		} );
+		}).then((res) => {
+			setStateOptions(res.data || []);
+		});
 	};
 
-	useEffect( () => {
-		if ( hasCustomer && billingAddress?.address_1 == '' ) {
-			setShowAddressEdit( true );
+	useEffect(() => {
+		if (hasCustomer && billingAddress?.address_1 == '') {
+			setShowAddressEdit(true);
 		}
-	}, [ hasCustomer, billingAddress ] );
+	}, [hasCustomer, billingAddress]);
 
-	useEffect( () => {
-		if ( hasCustomer && shippingAddress?.address_1 == '' ) {
-			setShowShippingAddressEdit( true );
+	useEffect(() => {
+		if (hasCustomer && shippingAddress?.address_1 == '') {
+			setShowShippingAddressEdit(true);
 		}
-	}, [ hasCustomer, shippingAddress ] );
+	}, [hasCustomer, shippingAddress]);
 
 	return (
 		<>
 			<div className="page-title-wrapper">
 				<div className="page-title">
 					<div className="title">
-						{ __( 'Add Order', 'multivendorx' ) }
+						{__('Add Order', 'multivendorx')}
 					</div>
 
 					<div className="des">
-						{ __(
+						{__(
 							'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quas accusantium obcaecati labore nam quibusdam minus.',
 							'multivendorx'
-						) }
+						)}
 					</div>
 				</div>
 
 				<div className="buttons">
 					<button
 						className="admin-btn btn-purple-bg"
-						onClick={ createOrder }
+						onClick={createOrder}
 					>
-						{ __( 'Create Order', 'multivendorx' ) }
+						{__('Create Order', 'multivendorx')}
 					</button>
 				</div>
 			</div>
@@ -409,31 +409,25 @@ const AddOrder = () => {
 									<thead className="admin-table-header">
 										<tr className="header-row">
 											<td className="header-col">
-												{ __( 'Item', 'multivendorx' ) }
+												{__('Item', 'multivendorx')}
 											</td>
 											<td className="header-col">
-												{ __(
-													'Price',
-													'multivendorx'
-												) }
+												{__('Price', 'multivendorx')}
 											</td>
 											<td className="header-col">
-												{ __( 'Qty', 'multivendorx' ) }
+												{__('Qty', 'multivendorx')}
 											</td>
 											<td className="header-col">
-												{ __(
-													'Total',
-													'multivendorx'
-												) }
+												{__('Total', 'multivendorx')}
 											</td>
 										</tr>
 									</thead>
 
 									<tbody className="admin-table-body">
-										{ addedProducts.length > 0 &&
-											addedProducts.map( ( item ) => (
+										{addedProducts.length > 0 &&
+											addedProducts.map((item) => (
 												<tr
-													key={ `added-${ item.id }` }
+													key={`added-${item.id}`}
 													className="admin-row simple"
 												>
 													<td className="admin-column">
@@ -442,10 +436,10 @@ const AddOrder = () => {
 																<img
 																	src={
 																		item
-																			?.images?.[ 0 ]
+																			?.images?.[0]
 																			?.src
 																	}
-																	width={ 40 }
+																	width={40}
 																	alt={
 																		item.name
 																	}
@@ -454,28 +448,26 @@ const AddOrder = () => {
 
 															<div className="detail">
 																<div className="name">
-																	{
-																		item.name
-																	}
+																	{item.name}
 																</div>
 
-																{ item?.sku && (
+																{item?.sku && (
 																	<div className="sku">
-																		{ __(
+																		{__(
 																			'SKU:',
 																			'multivendorx'
-																		) }{ ' ' }
+																		)}{' '}
 																		{
 																			item.sku
 																		}
 																	</div>
-																) }
+																)}
 															</div>
 														</div>
 													</td>
 
 													<td className="admin-column">
-														${ item.price }
+														${item.price}
 													</td>
 
 													<td className="admin-column">
@@ -486,14 +478,12 @@ const AddOrder = () => {
 															value={
 																item.qty || 1
 															}
-															onChange={ (
-																e
-															) => {
+															onChange={(e) => {
 																const qty =
 																	+e.target
 																		.value;
 																setAddedProducts(
-																	( prev ) =>
+																	(prev) =>
 																		prev.map(
 																			(
 																				p
@@ -503,27 +493,27 @@ const AddOrder = () => {
 																					? {
 																							...p,
 																							qty,
-																					  }
+																						}
 																					: p
 																		)
 																);
-															} }
+															}}
 														/>
 													</td>
 
 													<td className="admin-column">
 														$
-														{ (
+														{(
 															item.price *
-															( item.qty || 1 )
-														).toFixed( 2 ) }
+															(item.qty || 1)
+														).toFixed(2)}
 													</td>
 												</tr>
-											) ) }
+											))}
 
-										{ shippingLines.map( ( ship ) => (
+										{shippingLines.map((ship) => (
 											<tr
-												key={ `ship-${ ship.id }` }
+												key={`ship-${ship.id}`}
 												className="admin-row shipping-row"
 											>
 												<td className="admin-column">
@@ -534,10 +524,10 @@ const AddOrder = () => {
 
 														<div className="detail">
 															<div className="name">
-																{ __(
+																{__(
 																	'Shipping',
 																	'multivendorx'
-																) }
+																)}
 															</div>
 
 															<SelectInput
@@ -546,12 +536,12 @@ const AddOrder = () => {
 																options={
 																	availableShippingMethods
 																}
-																value={ availableShippingMethods.find(
-																	( o ) =>
+																value={availableShippingMethods.find(
+																	(o) =>
 																		o.value ===
 																		ship.method_id
-																) }
-																onChange={ (
+																)}
+																onChange={(
 																	selected
 																) => {
 																	const method_id =
@@ -573,11 +563,11 @@ const AddOrder = () => {
 																								...s,
 																								method_id,
 																								name: method_title,
-																						  }
+																							}
 																						: s
 																			)
 																	);
-																} }
+																}}
 															/>
 														</div>
 													</div>
@@ -591,85 +581,74 @@ const AddOrder = () => {
 														type="number"
 														min="0"
 														className="basic-input"
-														value={ ship.cost }
-														onChange={ ( e ) => {
+														value={ship.cost}
+														onChange={(e) => {
 															const cost =
 																parseFloat(
 																	e.target
 																		.value
 																) || 0;
 															setShippingLines(
-																( prev ) =>
+																(prev) =>
 																	prev.map(
-																		(
-																			s
-																		) =>
+																		(s) =>
 																			s.id ===
 																			ship.id
 																				? {
 																						...s,
 																						cost,
-																				  }
+																					}
 																				: s
 																	)
 															);
-														} }
+														}}
 													/>
 												</td>
 											</tr>
-										) ) }
+										))}
 									</tbody>
 								</table>
 
 								<div className="total-summary">
 									<div className="row">
 										<span>
-											{ __(
-												'Subtotal:',
-												'multivendorx'
-											) }
+											{__('Subtotal:', 'multivendorx')}
 										</span>
-										<span>${ subtotal.toFixed( 2 ) }</span>
+										<span>${subtotal.toFixed(2)}</span>
 									</div>
 
 									<div className="row">
 										<span>
-											{ __( 'Tax:', 'multivendorx' ) }
+											{__('Tax:', 'multivendorx')}
 										</span>
 										<span>
 											$
-											{ addedProducts
+											{addedProducts
 												.reduce(
-													( sum, p ) =>
+													(sum, p) =>
 														sum +
-														( p.tax_amount || 0 ),
+														(p.tax_amount || 0),
 													0
 												)
-												.toFixed( 2 ) }
+												.toFixed(2)}
 										</span>
 									</div>
 
 									<div className="row">
 										<span>
-											{ __(
-												'Shipping:',
-												'multivendorx'
-											) }
+											{__('Shipping:', 'multivendorx')}
 										</span>
 										<span>
-											{ formatCurrency( totalShipping ) }
+											{formatCurrency(totalShipping)}
 										</span>
 									</div>
 
 									<div className="row total">
 										<strong>
-											{ __(
-												'Grand Total:',
-												'multivendorx'
-											) }
+											{__('Grand Total:', 'multivendorx')}
 										</strong>
 										<strong>
-											${ grandTotal.toFixed( 2 ) }
+											${grandTotal.toFixed(2)}
 										</strong>
 									</div>
 								</div>
@@ -677,18 +656,16 @@ const AddOrder = () => {
 								<div className="buttons-wrapper left">
 									<button
 										className="admin-btn btn-purple-bg"
-										onClick={ () =>
-											setShowAddProduct( true )
-										}
+										onClick={() => setShowAddProduct(true)}
 									>
 										<i className="adminlib-plus-circle"></i>
-										{ __( 'Add Product', 'multivendorx' ) }
+										{__('Add Product', 'multivendorx')}
 									</button>
 
 									<button
 										className="admin-btn btn-purple-bg"
-										onClick={ () => {
-											setShippingLines( ( prev ) => [
+										onClick={() => {
+											setShippingLines((prev) => [
 												...prev,
 												{
 													name: __(
@@ -697,35 +674,35 @@ const AddOrder = () => {
 													),
 													cost: 0,
 												},
-											] );
-										} }
+											]);
+										}}
 									>
 										<i className="adminlib-plus-circle"></i>
-										{ __( 'Add Shipping', 'multivendorx' ) }
+										{__('Add Shipping', 'multivendorx')}
 									</button>
 
 									<button
 										className="admin-btn btn-purple-bg"
-										onClick={ () => setShowAddTax( true ) }
+										onClick={() => setShowAddTax(true)}
 									>
 										<i className="adminlib-plus-circle"></i>
-										{ __( 'Add Tax', 'multivendorx' ) }
+										{__('Add Tax', 'multivendorx')}
 									</button>
 								</div>
 
-								{ showAddProduct && (
+								{showAddProduct && (
 									<div className="select-product-wrapper">
 										<label>
-											{ __(
+											{__(
 												'Select Product',
 												'multivendorx'
-											) }
+											)}
 										</label>
 
 										<SelectInput
 											name="product_select"
 											type="single-select"
-											options={ [
+											options={[
 												{
 													label: __(
 														'Select a product',
@@ -733,80 +710,76 @@ const AddOrder = () => {
 													),
 													value: '',
 												},
-												...allProducts.map( ( p ) => ( {
+												...allProducts.map((p) => ({
 													label: p.name,
 													value: p.id,
-												} ) ),
-											] }
-											onChange={ ( selected ) => {
-												if ( ! selected?.value ) return;
+												})),
+											]}
+											onChange={(selected) => {
+												if (!selected?.value) return;
 
 												const prod = allProducts.find(
-													( p ) =>
+													(p) =>
 														p.id == selected.value
 												);
-												if ( prod )
-													setAddedProducts(
-														( prev ) => [
-															...prev,
-															{ ...prod, qty: 1 },
-														]
-													);
+												if (prod)
+													setAddedProducts((prev) => [
+														...prev,
+														{ ...prod, qty: 1 },
+													]);
 
-												setShowAddProduct( false );
-											} }
+												setShowAddProduct(false);
+											}}
 										/>
 									</div>
-								) }
+								)}
 
-								{ showAddTax && (
+								{showAddTax && (
 									<div className="tax-modal">
-										<h2>
-											{ __( 'Add tax', 'multivendorx' ) }
-										</h2>
+										<h2>{__('Add tax', 'multivendorx')}</h2>
 
 										<table className="admin-table">
 											<thead>
 												<tr>
 													<td></td>
 													<td>
-														{ __(
+														{__(
 															'Rate name',
 															'multivendorx'
-														) }
+														)}
 													</td>
 													<td>
-														{ __(
+														{__(
 															'Tax class',
 															'multivendorx'
-														) }
+														)}
 													</td>
 													<td>
-														{ __(
+														{__(
 															'Rate code',
 															'multivendorx'
-														) }
+														)}
 													</td>
 													<td>
-														{ __(
+														{__(
 															'Rate %',
 															'multivendorx'
-														) }
+														)}
 													</td>
 												</tr>
 											</thead>
 
 											<tbody>
-												{ taxRates.map( ( rate ) => (
+												{taxRates.map((rate) => (
 													<tr
-														key={ rate.id }
+														key={rate.id}
 														className="admin-row"
 													>
 														<td className="admin-column">
 															<input
 																type="radio"
 																name="tax"
-																onChange={ () =>
+																onChange={() =>
 																	setSelectedTaxRate(
 																		rate
 																	)
@@ -819,35 +792,35 @@ const AddOrder = () => {
 														</td>
 
 														<td className="admin-column">
-															{ rate.name }
+															{rate.name}
 														</td>
 														<td className="admin-column">
-															{ rate.class ||
+															{rate.class ||
 																__(
 																	'Standard',
 																	'multivendorx'
-																) }
+																)}
 														</td>
-														<td className="admin-column">{ `${ rate.country }-${ rate.state }-${ rate.name }` }</td>
+														<td className="admin-column">{`${rate.country}-${rate.state}-${rate.name}`}</td>
 														<td className="admin-column">
-															{ rate.rate }%
+															{rate.rate}%
 														</td>
 													</tr>
-												) ) }
+												))}
 											</tbody>
 										</table>
 
 										<button
 											className="admin-btn btn-purple-bg"
-											onClick={ () => {
+											onClick={() => {
 												applyTaxToOrder();
-												setShowAddTax( false );
-											} }
+												setShowAddTax(false);
+											}}
 										>
-											{ __( 'Add', 'multivendorx' ) }
+											{__('Add', 'multivendorx')}
 										</button>
 									</div>
-								) }
+								)}
 							</div>
 						</div>
 					</div>
@@ -857,7 +830,7 @@ const AddOrder = () => {
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{ __( 'Payment Method', 'multivendorx' ) }
+									{__('Payment Method', 'multivendorx')}
 								</div>
 							</div>
 						</div>
@@ -865,25 +838,23 @@ const AddOrder = () => {
 							<div className="form-group-wrapper">
 								<div className="form-group">
 									<label htmlFor="payment-method">
-										{ __(
+										{__(
 											'Select Payment Method',
 											'multivendorx'
-										) }
+										)}
 									</label>
 
 									<SelectInput
 										name="payment_method"
-										options={ paymentOptions }
+										options={paymentOptions}
 										type="single-select"
-										value={ selectedPayment?.value }
-										onChange={ ( value ) => {
+										value={selectedPayment?.value}
+										onChange={(value) => {
 											const method = paymentMethods.find(
-												( m ) => m.value === value.value
+												(m) => m.value === value.value
 											);
-											setSelectedPayment(
-												method || null
-											);
-										} }
+											setSelectedPayment(method || null);
+										}}
 									/>
 								</div>
 							</div>
@@ -894,37 +865,37 @@ const AddOrder = () => {
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{ __( 'Customer details', 'multivendorx' ) }
+									{__('Customer details', 'multivendorx')}
 								</div>
 							</div>
 						</div>
 						<div className="card-body">
-							{ ! selectedCustomer && (
+							{!selectedCustomer && (
 								<>
 									<div className="form-group-wrapper">
 										<div className="form-group">
 											<label htmlFor="product-name">
-												{ __(
+												{__(
 													'Select Customer',
 													'multivendorx'
-												) }
+												)}
 											</label>
 
 											<SelectInput
 												name="new_owner"
-												options={ customerOptions }
+												options={customerOptions}
 												type="single-select"
-												onChange={ ( value ) => {
+												onChange={(value) => {
 													const customer =
 														customers.find(
-															( c ) =>
+															(c) =>
 																c.id ==
 																value.value
 														);
 													setSelectedCustomer(
 														customer
 													);
-													if ( customer ) {
+													if (customer) {
 														setShippingAddress(
 															customer.shipping
 														);
@@ -935,67 +906,59 @@ const AddOrder = () => {
 															false
 														);
 													}
-												} }
+												}}
 											/>
 										</div>
 									</div>
 
 									<div
 										className="admin-btn btn-purple-bg"
-										onClick={ () =>
+										onClick={() =>
 											setShowCreateCustomer(
-												! showCreateCustomer
+												!showCreateCustomer
 											)
 										}
 									>
-										{ __(
-											'Add New Customer',
-											'multivendorx'
-										) }
+										{__('Add New Customer', 'multivendorx')}
 									</div>
 								</>
-							) }
+							)}
 
-							{ selectedCustomer && (
+							{selectedCustomer && (
 								<div className="store-owner-details">
 									<div className="profile">
 										<div className="avater">
 											<span>
-												{ selectedCustomer
+												{selectedCustomer
 													? selectedCustomer
-															.first_name[ 0 ]
-													: __(
-															'C',
-															'multivendorx'
-													  ) }
+															.first_name[0]
+													: __('C', 'multivendorx')}
 											</span>
 										</div>
 
 										<div className="details">
 											<div className="name">
-												{ selectedCustomer
-													? `${ selectedCustomer.first_name } ${ selectedCustomer.last_name }`
+												{selectedCustomer
+													? `${selectedCustomer.first_name} ${selectedCustomer.last_name}`
 													: __(
 															'Guest Customer',
 															'multivendorx'
-													  ) }
+														)}
 											</div>
 
-											{ selectedCustomer && (
+											{selectedCustomer && (
 												<>
 													<div className="des">
-														{ __(
+														{__(
 															'Customer ID:',
 															'multivendorx'
-														) }{ ' ' }
-														#{ selectedCustomer.id }
+														)}{' '}
+														#{selectedCustomer.id}
 													</div>
 
 													<div className="des">
 														<i className="adminlib-mail" />
-														{
-															selectedCustomer.email
-														}
+														{selectedCustomer.email}
 													</div>
 
 													<div className="des">
@@ -1006,31 +969,28 @@ const AddOrder = () => {
 														}
 													</div>
 												</>
-											) }
+											)}
 										</div>
 									</div>
 
 									<div
 										className="admin-badge blue"
-										onClick={ () =>
-											setSelectedCustomer( false )
+										onClick={() =>
+											setSelectedCustomer(false)
 										}
 									>
 										<i className="adminlib-edit"></i>
 									</div>
 								</div>
-							) }
+							)}
 						</div>
 					</div>
-					{ showCreateCustomer && ! selectedCustomer && (
+					{showCreateCustomer && !selectedCustomer && (
 						<div className="card-content">
 							<div className="card-header">
 								<div className="left">
 									<div className="title">
-										{ __(
-											'Create customer',
-											'multivendorx'
-										) }
+										{__('Create customer', 'multivendorx')}
 									</div>
 								</div>
 							</div>
@@ -1038,20 +998,17 @@ const AddOrder = () => {
 								<div className="form-group-wrapper">
 									<div className="form-group">
 										<label htmlFor="product-name">
-											{ __(
-												'First name',
-												'multivendorx'
-											) }
+											{__('First name', 'multivendorx')}
 										</label>
 
 										<BasicInput
 											name="first_name"
-											value={ newCustomer.first_name }
-											onChange={ ( e ) =>
-												setNewCustomer( {
+											value={newCustomer.first_name}
+											onChange={(e) =>
+												setNewCustomer({
 													...newCustomer,
 													first_name: e.target.value,
-												} )
+												})
 											}
 											wrapperClass="setting-form-input"
 										/>
@@ -1059,20 +1016,17 @@ const AddOrder = () => {
 
 									<div className="form-group">
 										<label htmlFor="product-name">
-											{ __(
-												'Last name',
-												'multivendorx'
-											) }
+											{__('Last name', 'multivendorx')}
 										</label>
 
 										<BasicInput
 											name="last_name"
-											value={ newCustomer.last_name }
-											onChange={ ( e ) =>
-												setNewCustomer( {
+											value={newCustomer.last_name}
+											onChange={(e) =>
+												setNewCustomer({
 													...newCustomer,
 													last_name: e.target.value,
-												} )
+												})
 											}
 											wrapperClass="setting-form-input"
 										/>
@@ -1082,17 +1036,17 @@ const AddOrder = () => {
 								<div className="form-group-wrapper">
 									<div className="form-group">
 										<label htmlFor="product-name">
-											{ __( 'Email', 'multivendorx' ) }
+											{__('Email', 'multivendorx')}
 										</label>
 
 										<BasicInput
 											name="email"
-											value={ newCustomer.email }
-											onChange={ ( e ) =>
-												setNewCustomer( {
+											value={newCustomer.email}
+											onChange={(e) =>
+												setNewCustomer({
 													...newCustomer,
 													email: e.target.value,
-												} )
+												})
 											}
 											wrapperClass="setting-form-input"
 										/>
@@ -1102,20 +1056,17 @@ const AddOrder = () => {
 								<div className="form-group-wrapper">
 									<div className="form-group">
 										<label htmlFor="product-name">
-											{ __(
-												'Phone number',
-												'multivendorx'
-											) }
+											{__('Phone number', 'multivendorx')}
 										</label>
 
 										<BasicInput
 											name="phone"
-											value={ newCustomer.phone }
-											onChange={ ( e ) =>
-												setNewCustomer( {
+											value={newCustomer.phone}
+											onChange={(e) =>
+												setNewCustomer({
 													...newCustomer,
 													phone: e.target.value,
-												} )
+												})
 											}
 											wrapperClass="setting-form-input"
 										/>
@@ -1125,71 +1076,66 @@ const AddOrder = () => {
 								<div className="buttons-wrapper">
 									<div
 										className="admin-btn btn-purple-bg"
-										onClick={ createCustomer }
+										onClick={createCustomer}
 									>
-										{ __( 'Create', 'multivendorx' ) }
+										{__('Create', 'multivendorx')}
 									</div>
 								</div>
 							</div>
 						</div>
-					) }
+					)}
 
 					<div className="card-content">
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{ __( 'Shipping address', 'multivendorx' ) }
+									{__('Shipping address', 'multivendorx')}
 								</div>
 							</div>
 						</div>
 						<div className="card-body">
-							{ ! hasCustomer && (
+							{!hasCustomer && (
 								<div className="address-wrapper">
 									<div className="address">
 										<span>
-											{ __(
+											{__(
 												'Please Select a customer',
 												'multivendorx'
-											) }
+											)}
 										</span>
 									</div>
 								</div>
-							) }
+							)}
 
-							{ hasCustomer && ! showShippingAddressEdit && (
+							{hasCustomer && !showShippingAddressEdit && (
 								<div className="address-wrapper">
 									<div className="address">
+										<span>{shippingAddress.address_1}</span>
+										<span>{shippingAddress.city}</span>
 										<span>
-											{ shippingAddress.address_1 }
+											{shippingAddress.postcode},{' '}
+											{shippingAddress.state}
 										</span>
-										<span>{ shippingAddress.city }</span>
-										<span>
-											{ shippingAddress.postcode },{ ' ' }
-											{ shippingAddress.state }
-										</span>
-										<span>{ shippingAddress.country }</span>
+										<span>{shippingAddress.country}</span>
 									</div>
 
 									<div
 										className="admin-badge blue"
-										onClick={ () =>
-											setShowShippingAddressEdit( true )
+										onClick={() =>
+											setShowShippingAddressEdit(true)
 										}
 									>
 										<i className="adminlib-edit"></i>
 									</div>
 								</div>
-							) }
+							)}
 
-							{ showShippingAddressEdit && (
-								<div ref={ shippingAddressEditRef }>
+							{showShippingAddressEdit && (
+								<div ref={shippingAddressEditRef}>
 									<div className="form-group-wrapper">
 										<div className="form-group">
 											<label htmlFor="product-name">
-												{ __(
-													'Address',
-													'multivendorx'
-												) }
+												{__('Address', 'multivendorx')}
 											</label>
 											<BasicInput
 												name="address_1"
@@ -1197,13 +1143,13 @@ const AddOrder = () => {
 													shippingAddress.address_1
 												}
 												wrapperClass="setting-form-input"
-												onChange={ ( e ) =>
+												onChange={(e) =>
 													setShippingAddress(
-														( prev ) => ( {
+														(prev) => ({
 															...prev,
 															address_1:
 																e.target.value,
-														} )
+														})
 													)
 												}
 											/>
@@ -1213,20 +1159,20 @@ const AddOrder = () => {
 									<div className="form-group-wrapper">
 										<div className="form-group">
 											<label htmlFor="product-name">
-												{ __( 'City', 'multivendorx' ) }
+												{__('City', 'multivendorx')}
 											</label>
 											<BasicInput
 												name="city"
 												value={
 													shippingAddress.city || ''
 												}
-												onChange={ ( e ) =>
+												onChange={(e) =>
 													setShippingAddress(
-														( prev ) => ( {
+														(prev) => ({
 															...prev,
 															city: e.target
 																.value,
-														} )
+														})
 													)
 												}
 												wrapperClass="setting-form-input"
@@ -1235,10 +1181,10 @@ const AddOrder = () => {
 
 										<div className="form-group">
 											<label htmlFor="product-name">
-												{ __(
+												{__(
 													'Postcode / ZIP',
 													'multivendorx'
-												) }
+												)}
 											</label>
 											<BasicInput
 												name="postcode"
@@ -1246,13 +1192,13 @@ const AddOrder = () => {
 													shippingAddress.postcode ||
 													''
 												}
-												onChange={ ( e ) =>
+												onChange={(e) =>
 													setShippingAddress(
-														( prev ) => ( {
+														(prev) => ({
 															...prev,
 															postcode:
 																e.target.value,
-														} )
+														})
 													)
 												}
 												wrapperClass="setting-form-input"
@@ -1263,61 +1209,59 @@ const AddOrder = () => {
 									<div className="form-group-wrapper">
 										<div className="form-group">
 											<label htmlFor="product-name">
-												{ __(
+												{__(
 													'Country / Region',
 													'multivendorx'
-												) }
+												)}
 											</label>
 											<SelectInput
 												name="country"
-												value={
-													shippingAddress.country
-												}
+												value={shippingAddress.country}
 												options={
 													appLocalizer.country_list ||
 													[]
 												}
 												type="single-select"
-												onChange={ ( selected ) => {
+												onChange={(selected) => {
 													setShippingAddress(
-														( prev ) => ( {
+														(prev) => ({
 															...prev,
 															country:
 																selected.value,
-														} )
+														})
 													);
 													fetchStatesByCountry(
 														selected.value
 													);
-												} }
+												}}
 											/>
 										</div>
 
 										<div className="form-group">
 											<label htmlFor="product-name">
-												{ __(
+												{__(
 													'State / County',
 													'multivendorx'
-												) }
+												)}
 											</label>
 											<SelectInput
 												name="state"
-												value={ shippingAddress.state }
-												options={ stateOptions }
+												value={shippingAddress.state}
+												options={stateOptions}
 												type="single-select"
-												onChange={ ( selected ) => {
+												onChange={(selected) => {
 													setShippingAddress(
-														( prev ) => ( {
+														(prev) => ({
 															...prev,
 															state: selected.value,
-														} )
+														})
 													);
-												} }
+												}}
 											/>
 										</div>
 									</div>
 								</div>
-							) }
+							)}
 						</div>
 					</div>
 
@@ -1325,73 +1269,64 @@ const AddOrder = () => {
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{ __( 'Billing address', 'multivendorx' ) }
+									{__('Billing address', 'multivendorx')}
 								</div>
 							</div>
 						</div>
 						<div className="card-body">
-							{ ! hasCustomer && (
+							{!hasCustomer && (
 								<div className="address-wrapper">
 									<div className="address">
 										<span>
-											{ __(
+											{__(
 												'No billing address found',
 												'multivendorx'
-											) }
+											)}
 										</span>
 									</div>
 								</div>
-							) }
+							)}
 
-							{ hasCustomer && ! showAddressEdit && (
+							{hasCustomer && !showAddressEdit && (
 								<div className="address-wrapper">
 									<div className="address">
+										<span>{billingAddress.address_1}</span>
+										<span>{billingAddress.city}</span>
 										<span>
-											{ billingAddress.address_1 }
+											{billingAddress.postcode},{' '}
+											{billingAddress.state}
 										</span>
-										<span>{ billingAddress.city }</span>
-										<span>
-											{ billingAddress.postcode },{ ' ' }
-											{ billingAddress.state }
-										</span>
-										<span>{ billingAddress.country }</span>
+										<span>{billingAddress.country}</span>
 									</div>
 
 									<div
 										className="admin-badge blue"
-										onClick={ () =>
-											setShowAddressEdit( true )
-										}
+										onClick={() => setShowAddressEdit(true)}
 									>
 										<i className="adminlib-edit"></i>
 									</div>
 								</div>
-							) }
+							)}
 
-							{ showAddressEdit && (
-								<div ref={ addressEditRef }>
+							{showAddressEdit && (
+								<div ref={addressEditRef}>
 									<div className="form-group-wrapper">
 										<div className="form-group">
 											<label htmlFor="product-name">
-												{ __(
-													'Address',
-													'multivendorx'
-												) }
+												{__('Address', 'multivendorx')}
 											</label>
 
 											<BasicInput
 												name="address_1"
-												value={
-													billingAddress.address_1
-												}
+												value={billingAddress.address_1}
 												wrapperClass="setting-form-input"
-												onChange={ ( e ) =>
+												onChange={(e) =>
 													setBillingAddress(
-														( prev ) => ( {
+														(prev) => ({
 															...prev,
 															address_1:
 																e.target.value,
-														} )
+														})
 													)
 												}
 											/>
@@ -1401,20 +1336,20 @@ const AddOrder = () => {
 									<div className="form-group-wrapper">
 										<div className="form-group">
 											<label htmlFor="product-name">
-												{ __( 'City', 'multivendorx' ) }
+												{__('City', 'multivendorx')}
 											</label>
 											<BasicInput
 												name="city"
 												value={
 													billingAddress.city || ''
 												}
-												onChange={ ( e ) =>
+												onChange={(e) =>
 													setBillingAddress(
-														( prev ) => ( {
+														(prev) => ({
 															...prev,
 															city: e.target
 																.value,
-														} )
+														})
 													)
 												}
 												wrapperClass="setting-form-input"
@@ -1423,10 +1358,10 @@ const AddOrder = () => {
 
 										<div className="form-group">
 											<label htmlFor="product-name">
-												{ __(
+												{__(
 													'Postcode / ZIP',
 													'multivendorx'
-												) }
+												)}
 											</label>
 											<BasicInput
 												name="postcode"
@@ -1434,13 +1369,13 @@ const AddOrder = () => {
 													billingAddress.postcode ||
 													''
 												}
-												onChange={ ( e ) =>
+												onChange={(e) =>
 													setBillingAddress(
-														( prev ) => ( {
+														(prev) => ({
 															...prev,
 															postcode:
 																e.target.value,
-														} )
+														})
 													)
 												}
 												wrapperClass="setting-form-input"
@@ -1451,59 +1386,59 @@ const AddOrder = () => {
 									<div className="form-group-wrapper">
 										<div className="form-group">
 											<label htmlFor="product-name">
-												{ __(
+												{__(
 													'Country / Region',
 													'multivendorx'
-												) }
+												)}
 											</label>
 											<SelectInput
 												name="country"
-												value={ billingAddress.country }
+												value={billingAddress.country}
 												options={
 													appLocalizer.country_list ||
 													[]
 												}
 												type="single-select"
-												onChange={ ( selected ) => {
+												onChange={(selected) => {
 													setBillingAddress(
-														( prev ) => ( {
+														(prev) => ({
 															...prev,
 															country:
 																selected.value,
-														} )
+														})
 													);
 													fetchStatesByCountry(
 														selected.value
 													);
-												} }
+												}}
 											/>
 										</div>
 
 										<div className="form-group">
 											<label htmlFor="product-name">
-												{ __(
+												{__(
 													'State / County',
 													'multivendorx'
-												) }
+												)}
 											</label>
 											<SelectInput
 												name="state"
-												value={ billingAddress.state }
-												options={ stateOptions }
+												value={billingAddress.state}
+												options={stateOptions}
 												type="single-select"
-												onChange={ ( selected ) => {
+												onChange={(selected) => {
 													setBillingAddress(
-														( prev ) => ( {
+														(prev) => ({
 															...prev,
 															state: selected.value,
-														} )
+														})
 													);
-												} }
+												}}
 											/>
 										</div>
 									</div>
 								</div>
-							) }
+							)}
 						</div>
 					</div>
 
@@ -1511,7 +1446,7 @@ const AddOrder = () => {
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{ __( 'Order note', 'multivendorx' ) }
+									{__('Order note', 'multivendorx')}
 								</div>
 							</div>
 						</div>
@@ -1523,10 +1458,10 @@ const AddOrder = () => {
 										wrapperClass="setting-from-textarea"
 										inputClass="textarea-input"
 										descClass="settings-metabox-description"
-										placeholder={ __(
+										placeholder={__(
 											'Enter order note...',
 											'multivendorx'
-										) }
+										)}
 									/>
 								</div>
 							</div>

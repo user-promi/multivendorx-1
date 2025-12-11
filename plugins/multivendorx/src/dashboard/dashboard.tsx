@@ -32,22 +32,20 @@ const activities = [
 	{ icon: 'adminlib-cart', text: 'New product "Wireless Headset"' },
 ];
 
-const getCSSVar = ( name ) =>
-	getComputedStyle( document.documentElement )
-		.getPropertyValue( name )
-		.trim();
+const getCSSVar = (name) =>
+	getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
 const themeColors = [
-	getCSSVar( '--colorPrimary' ),
-	getCSSVar( '--colorSecondary' ),
-	getCSSVar( '--colorAccent' ),
-	getCSSVar( '--colorSupport' ),
+	getCSSVar('--colorPrimary'),
+	getCSSVar('--colorSecondary'),
+	getCSSVar('--colorAccent'),
+	getCSSVar('--colorSupport'),
 ];
 
 const BarChartData = [
-	{ name: 'Sales', dataKey: 'orders', color: themeColors[ 0 ] },
-	{ name: 'Earnings', dataKey: 'earnings', color: themeColors[ 1 ] },
-	{ name: 'Orders', dataKey: 'refunds', color: themeColors[ 2 ] },
+	{ name: 'Sales', dataKey: 'orders', color: themeColors[0] },
+	{ name: 'Earnings', dataKey: 'earnings', color: themeColors[1] },
+	{ name: 'Orders', dataKey: 'refunds', color: themeColors[2] },
 ];
 
 const customers = [
@@ -82,21 +80,16 @@ const customers = [
 ];
 
 const RADIAN = Math.PI / 180;
-const COLORS = [
-	themeColors[ 0 ],
-	themeColors[ 1 ],
-	themeColors[ 2 ],
-	themeColors[ 3 ],
-];
+const COLORS = [themeColors[0], themeColors[1], themeColors[2], themeColors[3]];
 
-const renderCustomizedLabel = ( {
+const renderCustomizedLabel = ({
 	cx,
 	cy,
 	midAngle,
 	innerRadius,
 	outerRadius,
 	percent,
-}: PieLabelRenderProps ) => {
+}: PieLabelRenderProps) => {
 	if (
 		cx == null ||
 		cy == null ||
@@ -106,40 +99,40 @@ const renderCustomizedLabel = ( {
 		return null;
 	}
 
-	const radius = innerRadius + ( outerRadius - innerRadius ) * 0.5;
-	const x = cx + radius * Math.cos( -midAngle! * RADIAN );
-	const y = cy + radius * Math.sin( -midAngle! * RADIAN );
+	const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+	const x = cx + radius * Math.cos(-midAngle! * RADIAN);
+	const y = cy + radius * Math.sin(-midAngle! * RADIAN);
 
 	return (
 		<text
-			x={ x }
-			y={ y }
+			x={x}
+			y={y}
 			fill="#fff"
-			textAnchor={ x > cx ? 'start' : 'end' }
+			textAnchor={x > cx ? 'start' : 'end'}
 			dominantBaseline="central"
-			fontSize={ 12 }
-			fontWeight={ 600 }
+			fontSize={12}
+			fontWeight={600}
 		>
-			{ `${ ( ( percent ?? 0 ) * 100 ).toFixed( 0 ) }%` }
+			{`${((percent ?? 0) * 100).toFixed(0)}%`}
 		</text>
 	);
 };
 const Dashboard: React.FC = () => {
-	const [ review, setReview ] = useState< any[] >( [] );
-	const [ pendingRefund, setPendingRefund ] = useState< any[] >( [] );
-	const [ announcement, setAnnouncement ] = useState< any[] >( [] );
-	const [ topProducts, setTopProducts ] = useState( [] );
-	const [ recentOrder, setRecentOrders ] = useState< any[] >( [] );
-	const [ transaction, setTransaction ] = useState< any[] >( [] );
-	const [ store, setStore ] = useState< any[] >( [] );
-	const [ totalOrder, setTotalOrder ] = useState< any >( [] );
-	const [ lastWithdraws, setLastWithdraws ] = useState< any >( [] );
+	const [review, setReview] = useState<any[]>([]);
+	const [pendingRefund, setPendingRefund] = useState<any[]>([]);
+	const [announcement, setAnnouncement] = useState<any[]>([]);
+	const [topProducts, setTopProducts] = useState([]);
+	const [recentOrder, setRecentOrders] = useState<any[]>([]);
+	const [transaction, setTransaction] = useState<any[]>([]);
+	const [store, setStore] = useState<any[]>([]);
+	const [totalOrder, setTotalOrder] = useState<any>([]);
+	const [lastWithdraws, setLastWithdraws] = useState<any>([]);
 	const { modules } = useModules();
 
-	useEffect( () => {
-		axios( {
+	useEffect(() => {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'review' ),
+			url: getApiLink(appLocalizer, 'review'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				page: 1,
@@ -148,18 +141,18 @@ const Dashboard: React.FC = () => {
 				orderBy: 'date_created',
 				order: 'desc',
 			},
-		} )
-			.then( ( response ) => {
+		})
+			.then((response) => {
 				const items = response.data.items || [];
-				setReview( items );
-			} )
-			.catch( () => {
-				setReview( [] );
-			} );
+				setReview(items);
+			})
+			.catch(() => {
+				setReview([]);
+			});
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: `${ appLocalizer.apiUrl }/wc/v3/orders`,
+			url: `${appLocalizer.apiUrl}/wc/v3/orders`,
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				meta_key: 'multivendorx_store_id',
@@ -171,14 +164,14 @@ const Dashboard: React.FC = () => {
 				orderby: 'date',
 				order: 'desc',
 			},
-		} )
-			.then( ( response ) => {
+		})
+			.then((response) => {
 				const items = response.data || [];
 
-				const formatData = items.map( ( order ) => {
+				const formatData = items.map((order) => {
 					// extract refund reason
 					const reasonMeta = order.meta_data.find(
-						( m ) => m.key === '_customer_refund_reason'
+						(m) => m.key === '_customer_refund_reason'
 					);
 					const refundReason = reasonMeta
 						? reasonMeta.value
@@ -186,37 +179,37 @@ const Dashboard: React.FC = () => {
 
 					return {
 						id: order.id,
-						name: `${ order.billing.first_name } ${ order.billing.last_name }`,
+						name: `${order.billing.first_name} ${order.billing.last_name}`,
 						reason: refundReason,
 						time: order.date_created, // or format with moment()
 						amount: order.total,
 					};
-				} );
+				});
 
-				setPendingRefund( formatData );
-			} )
-			.catch( () => {
-				setPendingRefund( [] );
-			} );
+				setPendingRefund(formatData);
+			})
+			.catch(() => {
+				setPendingRefund([]);
+			});
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'announcement' ),
+			url: getApiLink(appLocalizer, 'announcement'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				page: 1,
 				row: 4,
 				store_id: appLocalizer.store_id,
 			},
-		} )
-			.then( ( response ) => {
-				setAnnouncement( response.data.items || [] );
-			} )
-			.catch( () => {} );
+		})
+			.then((response) => {
+				setAnnouncement(response.data.items || []);
+			})
+			.catch(() => {});
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: `${ appLocalizer.apiUrl }/wc/v3/products`,
+			url: `${appLocalizer.apiUrl}/wc/v3/products`,
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				per_page: 5,
@@ -225,38 +218,36 @@ const Dashboard: React.FC = () => {
 				order: 'desc',
 				value: appLocalizer.store_id,
 			},
-		} )
-			.then( ( response ) => {
+		})
+			.then((response) => {
 				const products = response.data;
 
 				// Find max sales to calculate popularity %
 				const maxSales = Math.max(
-					...products.map( ( p ) => parseInt( p.total_sales ) || 0 )
+					...products.map((p) => parseInt(p.total_sales) || 0)
 				);
 
-				const processed = products.map( ( p ) => {
-					const sales = parseInt( p.total_sales ) || 0;
+				const processed = products.map((p) => {
+					const sales = parseInt(p.total_sales) || 0;
 					const popularity =
-						maxSales > 0
-							? Math.round( ( sales / maxSales ) * 100 )
-							: 0;
+						maxSales > 0 ? Math.round((sales / maxSales) * 100) : 0;
 					return {
 						id: p.id,
 						name: p.name,
 						sales,
 						popularity,
 					};
-				} );
-				console.log( 'pro', processed );
-				setTopProducts( processed );
-			} )
-			.catch( ( error ) => {
-				console.error( 'Error fetching top selling products:', error );
-			} );
+				});
+				console.log('pro', processed);
+				setTopProducts(processed);
+			})
+			.catch((error) => {
+				console.error('Error fetching top selling products:', error);
+			});
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: `${ appLocalizer.apiUrl }/wc/v3/orders`,
+			url: `${appLocalizer.apiUrl}/wc/v3/orders`,
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				per_page: 5,
@@ -265,29 +256,29 @@ const Dashboard: React.FC = () => {
 				meta_key: 'multivendorx_store_id',
 				value: appLocalizer.store_id, // THIS FIXES YOUR ISSUE
 			},
-		} )
-			.then( ( response ) => {
-				const orders = response.data.map( ( order ) => {
+		})
+			.then((response) => {
+				const orders = response.data.map((order) => {
 					return {
 						id: order.id,
 						store_name: order.store_name || '-',
-						amount: formatCurrency( order.total ),
+						amount: formatCurrency(order.total),
 						commission_amount: order.commission_amount
-							? formatCurrency( order.commission_amount )
+							? formatCurrency(order.commission_amount)
 							: '-',
-						date: formatWcShortDate( order.date_created ),
+						date: formatWcShortDate(order.date_created),
 						status: order.status,
 						currency_symbol: order.currency_symbol,
 					};
-				} );
+				});
 
-				setRecentOrders( orders );
-			} )
-			.catch( () => {} );
+				setRecentOrders(orders);
+			})
+			.catch(() => {});
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'transaction' ),
+			url: getApiLink(appLocalizer, 'transaction'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				page: 1,
@@ -296,43 +287,43 @@ const Dashboard: React.FC = () => {
 				orderBy: 'created_at',
 				order: 'DESC',
 			},
-		} )
-			.then( ( response ) => {
-				setTransaction( response.data.transaction || [] );
-			} )
-			.catch( ( error ) => {
-				setTransaction( [] );
-			} );
+		})
+			.then((response) => {
+				setTransaction(response.data.transaction || []);
+			})
+			.catch((error) => {
+				setTransaction([]);
+			});
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, `store/${ appLocalizer.store_id }` ),
+			url: getApiLink(appLocalizer, `store/${appLocalizer.store_id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		} ).then( ( res: any ) => {
+		}).then((res: any) => {
 			const data = res.data || {};
-			setStore( data );
-		} );
-		axios( {
+			setStore(data);
+		});
+		axios({
 			method: 'GET',
-			url: `${ appLocalizer.apiUrl }/wc/v3/orders`,
+			url: `${appLocalizer.apiUrl}/wc/v3/orders`,
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				per_page: 1,
 				meta_key: 'multivendorx_store_id',
 				value: appLocalizer.store_id,
 			},
-		} )
-			.then( ( response ) => {
+		})
+			.then((response) => {
 				// WooCommerce returns total order count in headers
 				const totalOrders =
-					parseInt( response.headers[ 'x-wp-total' ] ) || 0;
-				setTotalOrder( totalOrders );
-			} )
-			.catch( () => {} );
+					parseInt(response.headers['x-wp-total']) || 0;
+				setTotalOrder(totalOrders);
+			})
+			.catch(() => {});
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'transaction' ),
+			url: getApiLink(appLocalizer, 'transaction'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				page: 1,
@@ -343,12 +334,12 @@ const Dashboard: React.FC = () => {
 				orderBy: 'created_at',
 				order: 'DESC',
 			},
-		} )
-			.then( ( response ) => {
-				setLastWithdraws( response.data.transaction || [] );
-			} )
-			.catch( () => setLastWithdraws( [] ) );
-	}, [] );
+		})
+			.then((response) => {
+				setLastWithdraws(response.data.transaction || []);
+			})
+			.catch(() => setLastWithdraws([]));
+	}, []);
 
 	// const analyticsData = [
 	//   { icon: "adminlib-dollar theme-color1", number: formatCurrency(store?.commission?.total_order_amount || 0), text: "Total Revenue" },
@@ -360,9 +351,7 @@ const Dashboard: React.FC = () => {
 	const analyticsData = [
 		{
 			icon: 'adminlib-dollar theme-color1',
-			number: formatCurrency(
-				store?.commission?.total_order_amount || 0
-			),
+			number: formatCurrency(store?.commission?.total_order_amount || 0),
 			text: 'Total Revenue',
 		},
 		{
@@ -372,59 +361,59 @@ const Dashboard: React.FC = () => {
 		},
 		{
 			icon: 'adminlib-store-seo theme-color3',
-			number: formatCurrency( store?.commission?.commission_total || 0 ),
+			number: formatCurrency(store?.commission?.commission_total || 0),
 			text: 'Store Views',
 		},
 		{
 			icon: 'adminlib-commission theme-color4',
-			number: formatCurrency( store?.commission?.commission_total || 0 ),
+			number: formatCurrency(store?.commission?.commission_total || 0),
 			text: 'Commission Earned',
 		},
 	];
 
-	const columns: ColumnDef< StoreRow >[] = [
+	const columns: ColumnDef<StoreRow>[] = [
 		{
 			id: 'order_id',
-			header: __( 'Order', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Order', 'multivendorx'),
+			cell: ({ row }) => {
 				const id = row.original.id;
 
-				const orderUrl = `/dashboard/sales/orders/#view/${ id }`;
+				const orderUrl = `/dashboard/sales/orders/#view/${id}`;
 
 				return (
 					<TableCell>
 						<a
-							href={ orderUrl }
+							href={orderUrl}
 							target="_blank"
 							rel="noopener noreferrer"
 						>
-							#{ id }
+							#{id}
 						</a>
 					</TableCell>
 				);
 			},
 		},
 		{
-			header: __( 'Amount', 'multivendorx' ),
-			cell: ( { row } ) => <TableCell>{ row.original.amount }</TableCell>,
+			header: __('Amount', 'multivendorx'),
+			cell: ({ row }) => <TableCell>{row.original.amount}</TableCell>,
 		},
 		{
-			header: __( 'Commission', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell>{ row.original.commission_amount }</TableCell>
+			header: __('Commission', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell>{row.original.commission_amount}</TableCell>
 			),
 		},
 		{
-			header: __( 'Date', 'multivendorx' ),
-			cell: ( { row } ) => <TableCell>{ row.original.date }</TableCell>,
+			header: __('Date', 'multivendorx'),
+			cell: ({ row }) => <TableCell>{row.original.date}</TableCell>,
 		},
 		{
-			header: __( 'Status', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Status', 'multivendorx'),
+			cell: ({ row }) => {
 				const rawStatus = row.original.status || '';
 				const status = rawStatus.toLowerCase();
 
-				const statusColorMap: Record< string, string > = {
+				const statusColorMap: Record<string, string> = {
 					completed: 'green',
 					processing: 'blue',
 					refunded: 'red',
@@ -435,17 +424,17 @@ const Dashboard: React.FC = () => {
 					'refund-requested': 'purple',
 				};
 
-				const badgeClass = statusColorMap[ status ] || 'gray';
+				const badgeClass = statusColorMap[status] || 'gray';
 
 				const displayStatus =
 					status
-						?.replace( /-/g, ' ' )
-						?.replace( /\b\w/g, ( c ) => c.toUpperCase() ) || '-';
+						?.replace(/-/g, ' ')
+						?.replace(/\b\w/g, (c) => c.toUpperCase()) || '-';
 
 				return (
-					<TableCell title={ displayStatus }>
-						<span className={ `admin-badge ${ badgeClass }` }>
-							{ displayStatus }
+					<TableCell title={displayStatus}>
+						<span className={`admin-badge ${badgeClass}`}>
+							{displayStatus}
 						</span>
 					</TableCell>
 				);
@@ -453,33 +442,33 @@ const Dashboard: React.FC = () => {
 		},
 	];
 
-	const formatWcShortDate = ( dateString: any ) => {
-		const date = new Date( dateString );
-		return date.toLocaleDateString( 'en-GB', {
+	const formatWcShortDate = (dateString: any) => {
+		const date = new Date(dateString);
+		return date.toLocaleDateString('en-GB', {
 			day: '2-digit',
 			month: 'short',
 			year: 'numeric',
-		} );
+		});
 	};
 
-	function formatTimeAgo( dateString: any ) {
-		const date = new Date( dateString.replace( ' ', 'T' ) );
-		const diff = ( Date.now() - date.getTime() ) / 1000;
+	function formatTimeAgo(dateString: any) {
+		const date = new Date(dateString.replace(' ', 'T'));
+		const diff = (Date.now() - date.getTime()) / 1000;
 
-		if ( diff < 60 ) return 'just now';
-		if ( diff < 3600 ) return Math.floor( diff / 60 ) + 'm ago';
-		if ( diff < 86400 ) return Math.floor( diff / 3600 ) + 'h ago';
-		return Math.floor( diff / 86400 ) + 'd ago';
+		if (diff < 60) return 'just now';
+		if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+		if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+		return Math.floor(diff / 86400) + 'd ago';
 	}
 	// Helper function to get dynamic greeting
 	const getGreeting = () => {
 		const hour = new Date().getHours();
 
-		if ( hour >= 5 && hour < 12 ) {
+		if (hour >= 5 && hour < 12) {
 			return 'Good Morning';
-		} else if ( hour >= 12 && hour < 17 ) {
+		} else if (hour >= 12 && hour < 17) {
 			return 'Good Afternoon';
-		} else if ( hour >= 17 && hour < 21 ) {
+		} else if (hour >= 17 && hour < 21) {
 			return 'Good Evening';
 		} else {
 			return 'Good Night';
@@ -547,23 +536,23 @@ const Dashboard: React.FC = () => {
 	};
 
 	const colorScale = scaleLinear()
-		.domain( [ 0, 20 ] )
-		.range( [ '#E0ECF8', '#1565c0' ] );
+		.domain([0, 20])
+		.range(['#E0ECF8', '#1565c0']);
 	const chartData = [
 		{
 			name: 'Commission Earned',
-			value: Number( store?.commission?.commission_total || 0 ),
-			color: themeColors[ 0 ],
+			value: Number(store?.commission?.commission_total || 0),
+			color: themeColors[0],
 		},
 		{
 			name: 'Commission Refunded',
-			value: Number( store?.commission?.commission_refunded || 0 ),
-			color: themeColors[ 1 ],
+			value: Number(store?.commission?.commission_refunded || 0),
+			color: themeColors[1],
 		},
 		{
 			name: 'Total Revenue',
-			value: Number( store?.commission?.total_order_amount || 0 ),
-			color: themeColors[ 2 ],
+			value: Number(store?.commission?.total_order_amount || 0),
+			color: themeColors[2],
 		},
 	];
 
@@ -572,15 +561,15 @@ const Dashboard: React.FC = () => {
 			<div className="page-title-wrapper">
 				<div className="page-title">
 					<div className="title">
-						{ getGreeting() },{ ' ' }
-						{ store?.primary_owner_info?.data?.display_name }!
+						{getGreeting()},{' '}
+						{store?.primary_owner_info?.data?.display_name}!
 					</div>
 
 					<div className="view-des">
-						{ __( 'You’re viewing:', 'multivendorx' ) }{ ' ' }
+						{__('You’re viewing:', 'multivendorx')}{' '}
 						<b>
-							{ store?.primary_owner_info?.data?.display_name }’s{ ' ' }
-							{ store?.name || '-' }
+							{store?.primary_owner_info?.data?.display_name}’s{' '}
+							{store?.name || '-'}
 						</b>
 					</div>
 				</div>
@@ -594,40 +583,40 @@ const Dashboard: React.FC = () => {
 				<div className="card-wrapper">
 					<div className="card-content transparent">
 						<div className="analytics-container">
-							{ analyticsData.map( ( item, idx ) => (
-								<div key={ idx } className="analytics-item">
+							{analyticsData.map((item, idx) => (
+								<div key={idx} className="analytics-item">
 									<div className="details">
 										<div className="text">
-											{ __( item.text, 'multivendorx' ) }
+											{__(item.text, 'multivendorx')}
 										</div>
 										<div className="number">
-											{ item.number }
+											{item.number}
 										</div>
 
 										<div className="report">
 											<div>
-												{ __(
+												{__(
 													'Last 30 days:',
 													'multivendorx'
-												) }{ ' ' }
+												)}{' '}
 												<span>$189</span>
 											</div>
 
 											<div>
-												{ __(
+												{__(
 													'Previous 30 days:',
 													'multivendorx'
-												) }{ ' ' }
+												)}{' '}
 												<span>$690</span>
 											</div>
 										</div>
 									</div>
 
 									<div className="analytics-icon">
-										<i className={ item.icon }></i>
+										<i className={item.icon}></i>
 									</div>
 								</div>
-							) ) }
+							))}
 						</div>
 					</div>
 				</div>
@@ -637,10 +626,7 @@ const Dashboard: React.FC = () => {
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{ __(
-										'Sales Overview (P)',
-										'multivendorx'
-									) }
+									{__('Sales Overview (P)', 'multivendorx')}
 								</div>
 							</div>
 							<div className="right">
@@ -648,159 +634,156 @@ const Dashboard: React.FC = () => {
 							</div>
 						</div>
 						<div className="card-body">
-							<ResponsiveContainer width="100%" height={ 250 }>
+							<ResponsiveContainer width="100%" height={250}>
 								<BarChart
-									data={ revenueData }
-									barSize={ 12 }
+									data={revenueData}
+									barSize={12}
 									barCategoryGap="20%"
 								>
 									<CartesianGrid
 										stroke="#f0f0f0"
-										vertical={ false }
+										vertical={false}
 									/>
 									<XAxis
 										dataKey="month"
-										axisLine={ false }
-										tickLine={ false }
+										axisLine={false}
+										tickLine={false}
 									/>
-									<YAxis
-										axisLine={ false }
-										tickLine={ false }
-									/>
+									<YAxis axisLine={false} tickLine={false} />
 
 									<Tooltip
-										contentStyle={ {
+										contentStyle={{
 											background: '#fff',
 											border: 'none',
 											borderRadius: '3px',
 											boxShadow:
 												'0 2px 6px rgba(0,0,0,0.08)',
-										} }
+										}}
 									/>
 
 									<Legend />
 
-									{ BarChartData.map( ( entry ) => (
+									{BarChartData.map((entry) => (
 										<Bar
-											dataKey={ entry.dataKey }
-											fill={ entry.color }
-											radius={ [ 6, 6, 0, 0 ] }
-											name={ __(
+											dataKey={entry.dataKey}
+											fill={entry.color}
+											radius={[6, 6, 0, 0]}
+											name={__(
 												entry.name,
 												'multivendorx'
-											) }
+											)}
 										/>
-									) ) }
+									))}
 
 									<Line
 										type="monotone"
 										dataKey="conversion"
 										stroke="#ffa726"
-										strokeWidth={ 2 }
-										dot={ { r: 3 } }
-										name={ __(
+										strokeWidth={2}
+										dot={{ r: 3 }}
+										name={__(
 											'Conversion %',
 											'multivendorx'
-										) }
-										yAxisId={ 1 }
+										)}
+										yAxisId={1}
 									/>
 
 									<YAxis
-										yAxisId={ 1 }
+										yAxisId={1}
 										orientation="right"
-										axisLine={ false }
-										tickLine={ false }
-										tickFormatter={ ( v ) => `${ v }%` }
+										axisLine={false}
+										tickLine={false}
+										tickFormatter={(v) => `${v}%`}
 									/>
 								</BarChart>
 							</ResponsiveContainer>
 						</div>
 					</div>
 
-					{ /* Right Column */ }
+					{/* Right Column */}
 					<div className="card-content w-35">
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{ __( 'Last Withdrawal', 'multivendorx' ) }
+									{__('Last Withdrawal', 'multivendorx')}
 								</div>
 							</div>
 						</div>
 
 						<div className="top-customer-wrapper">
-							{ lastWithdraws && lastWithdraws.length > 0 ? (
-								lastWithdraws.map( ( item ) => (
-									<div key={ item.id } className="customer">
+							{lastWithdraws && lastWithdraws.length > 0 ? (
+								lastWithdraws.map((item) => (
+									<div key={item.id} className="customer">
 										<div className="left-section">
 											<div className="details">
 												<div className="name">
-													{ item.payment_method ===
+													{item.payment_method ===
 														'stripe-connect' &&
 														__(
 															'Stripe',
 															'multivendorx'
-														) }
-													{ item.payment_method ===
+														)}
+													{item.payment_method ===
 														'bank-transfer' &&
 														__(
 															'Direct to Local Bank (INR)',
 															'multivendorx'
-														) }
-													{ item.payment_method ===
+														)}
+													{item.payment_method ===
 														'paypal-payout' &&
 														__(
 															'PayPal',
 															'multivendorx'
-														) }
-													{ item.payment_method ===
+														)}
+													{item.payment_method ===
 													'bank-transfer'
 														? __(
 																'Bank Transfer',
 																'multivendorx'
-														  )
-														: '' }
+															)
+														: ''}
 												</div>
 
 												<div className="order-number">
-													{ formatWcShortDate(
+													{formatWcShortDate(
 														item.date
-													) }
+													)}
 												</div>
 											</div>
 										</div>
 
 										<div className="price-section">
-											{ formatCurrency( item.amount ) }
+											{formatCurrency(item.amount)}
 										</div>
 									</div>
-								) )
+								))
 							) : (
 								<div className="no-data">
-									{ __(
+									{__(
 										'No withdrawals found.',
 										'multivendorx'
-									) }
+									)}
 								</div>
-							) }
+							)}
 						</div>
 
-						{ lastWithdraws && lastWithdraws.length > 0 && (
+						{lastWithdraws && lastWithdraws.length > 0 && (
 							<div className="buttons-wrapper">
 								<div
 									className="admin-btn btn-purple"
-									onClick={ () => {
+									onClick={() => {
 										window.location.href =
 											'/dashboard/wallet/transactions/';
-									} }
+									}}
 								>
 									<i className="adminlib-preview"></i>
-									{ __(
+									{__(
 										'View transaction history',
 										'multivendorx'
-									) }
+									)}
 								</div>
 							</div>
-						) }
+						)}
 					</div>
 				</div>
 
@@ -810,10 +793,7 @@ const Dashboard: React.FC = () => {
 							<div className="card-header">
 								<div className="left">
 									<div className="title">
-										{ __(
-											'Recent Orders',
-											'multivendorx'
-										) }
+										{__('Recent Orders', 'multivendorx')}
 									</div>
 								</div>
 								<div className="right">
@@ -823,111 +803,97 @@ const Dashboard: React.FC = () => {
 
 							<div className="card-body">
 								<div className="table-wrapper">
-									{ recentOrder && recentOrder.length > 0 ? (
+									{recentOrder && recentOrder.length > 0 ? (
 										<table className="order-table">
 											<tr className="header">
 												<td>
-													{ __(
+													{__(
 														'Order Id',
 														'multivendorx'
-													) }
+													)}
 												</td>
 												<td>
-													{ __(
+													{__(
 														'Order Date',
 														'multivendorx'
-													) }
+													)}
 												</td>
 												<td>
-													{ __(
+													{__(
 														'Product Name(P)',
 														'multivendorx'
-													) }
+													)}
 												</td>
 												<td>
-													{ __(
+													{__(
 														'Total Amount',
 														'multivendorx'
-													) }
+													)}
 												</td>
 												<td>
-													{ __(
+													{__(
 														'Order Status',
 														'multivendorx'
-													) }
+													)}
 												</td>
 												<td>
-													{ __(
+													{__(
 														'Status (P)',
 														'multivendorx'
-													) }
+													)}
 												</td>
 											</tr>
 
-											{ recentOrder.map(
-												( item, index ) => {
-													const color = `theme-color${
-														( index % 4 ) + 1
-													}`;
-													const id = item.id;
-													const orderUrl = `/dashboard/sales/orders/#view/${ id }`;
-													return (
-														<tr key={ item.id }>
-															<td>
-																<a
-																	href={
-																		orderUrl
-																	}
-																	target="_blank"
-																	rel="noopener noreferrer"
-																>
-																	#{ id }{ ' ' }
-																	{ __(
-																		'Customer',
-																		'multivendorx'
-																	) }
-																</a>
-															</td>
-															<td>
-																{ item.date }
-															</td>
-															<td>
-																{ item.name }
-															</td>
-															<td>
-																{ item.amount }
-															</td>
-															<td>
-																<div
-																	className={ `admin-status ${ color }` }
-																>
-																	{
-																		item.status
-																	}
-																</div>
-															</td>
-															<td>
-																<div
-																	className={ `admin-badge ${ color }` }
-																>
-																	{
-																		item.status
-																	}
-																</div>
-															</td>
-														</tr>
-													);
-												}
-											) }
+											{recentOrder.map((item, index) => {
+												const color = `theme-color${
+													(index % 4) + 1
+												}`;
+												const id = item.id;
+												const orderUrl = `/dashboard/sales/orders/#view/${id}`;
+												return (
+													<tr key={item.id}>
+														<td>
+															<a
+																href={orderUrl}
+																target="_blank"
+																rel="noopener noreferrer"
+															>
+																#{id}{' '}
+																{__(
+																	'Customer',
+																	'multivendorx'
+																)}
+															</a>
+														</td>
+														<td>{item.date}</td>
+														<td>{item.name}</td>
+														<td>{item.amount}</td>
+														<td>
+															<div
+																className={`admin-status ${color}`}
+															>
+																{item.status}
+															</div>
+														</td>
+														<td>
+															<div
+																className={`admin-badge ${color}`}
+															>
+																{item.status}
+															</div>
+														</td>
+													</tr>
+												);
+											})}
 										</table>
 									) : (
 										<div className="no-data">
-											{ __(
+											{__(
 												'No products found.',
 												'multivendorx'
-											) }
+											)}
 										</div>
-									) }
+									)}
 								</div>
 							</div>
 						</div>
@@ -935,15 +901,15 @@ const Dashboard: React.FC = () => {
 				</div>
 
 				<div className="card-wrapper">
-					{ /* Best-Selling Products */ }
+					{/* Best-Selling Products */}
 					<div className="card-content">
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{ __(
+									{__(
 										'Best-Selling Products',
 										'multivendorx'
-									) }
+									)}
 								</div>
 							</div>
 							<div className="right">
@@ -953,139 +919,136 @@ const Dashboard: React.FC = () => {
 
 						<div className="card-body">
 							<div className="table-wrapper top-products">
-								{ topProducts && topProducts.length > 0 ? (
+								{topProducts && topProducts.length > 0 ? (
 									<table>
 										<tr className="header">
 											<td>#</td>
 											<td>
-												{ __( 'Name', 'multivendorx' ) }
+												{__('Name', 'multivendorx')}
 											</td>
 											<td>
-												{ __(
+												{__(
 													'Popularity',
 													'multivendorx'
-												) }
+												)}
 											</td>
 											<td>
-												{ __(
-													'Sales',
-													'multivendorx'
-												) }
+												{__('Sales', 'multivendorx')}
 											</td>
 										</tr>
 
-										{ topProducts.map( ( item, index ) => {
+										{topProducts.map((item, index) => {
 											const color = `theme-color${
-												( index % 4 ) + 1
+												(index % 4) + 1
 											}`;
 											return (
-												<tr key={ item.id }>
+												<tr key={item.id}>
 													<td>
-														{ String(
+														{String(
 															index + 1
-														).padStart( 2, '0' ) }
+														).padStart(2, '0')}
 													</td>
-													<td>{ item.name }</td>
+													<td>{item.name}</td>
 													<td
-														className={ `progress-bar ${ color }` }
+														className={`progress-bar ${color}`}
 													>
 														<div>
 															<span
-																style={ {
-																	width: `${ item.popularity }%`,
-																} }
+																style={{
+																	width: `${item.popularity}%`,
+																}}
 															></span>
 														</div>
 													</td>
 													<td>
 														<div
-															className={ `admin-badge ${ color }` }
+															className={`admin-badge ${color}`}
 														>
-															{ item.popularity }%
+															{item.popularity}%
 														</div>
 													</td>
 												</tr>
 											);
-										} ) }
+										})}
 									</table>
 								) : (
 									<div className="no-data">
-										{ __(
+										{__(
 											'No products found.',
 											'multivendorx'
-										) }
+										)}
 									</div>
-								) }
+								)}
 							</div>
 						</div>
 					</div>
 
-					{ /* Commission Overview */ }
+					{/* Commission Overview */}
 					<div className="card-content">
 						<div className="card">
 							<div className="card-header">
 								<div className="left">
 									<div className="title">
-										{ __(
+										{__(
 											'Commission Overview',
 											'multivendorx'
-										) }
+										)}
 									</div>
 								</div>
 								<div
 									className="right"
-									onClick={ () => {
+									onClick={() => {
 										window.location.href =
 											'/dashboard/reports/overview/';
-									} }
+									}}
 								>
 									<i className="adminlib-external"></i>
 								</div>
 							</div>
 
 							<div className="card-body">
-								<div style={ { width: '100%', height: 400 } }>
+								<div style={{ width: '100%', height: 400 }}>
 									<ResponsiveContainer>
 										<PieChart>
 											<Pie
-												data={ chartData }
+												data={chartData}
 												dataKey="value"
 												nameKey="name"
 												cx="50%"
 												cy="50%"
-												outerRadius={ 140 }
-												innerRadius={ 80 }
-												label={ ( { name, percent } ) =>
-													`${ name } ${ (
+												outerRadius={140}
+												innerRadius={80}
+												label={({ name, percent }) =>
+													`${name} ${(
 														percent * 100
-													).toFixed( 1 ) }%`
+													).toFixed(1)}%`
 												}
-												labelLine={ false }
-												isAnimationActive={ true }
+												labelLine={false}
+												isAnimationActive={true}
 											>
-												{ chartData.map(
-													( item, index ) => (
+												{chartData.map(
+													(item, index) => (
 														<Cell
-															key={ `cell-${ index }` }
-															fill={ item.color }
+															key={`cell-${index}`}
+															fill={item.color}
 														/>
 													)
-												) }
+												)}
 											</Pie>
 
 											<Tooltip
-												formatter={ ( value ) =>
-													formatCurrency( value )
+												formatter={(value) =>
+													formatCurrency(value)
 												}
-												contentStyle={ {
+												contentStyle={{
 													backgroundColor: '#fff',
 													borderRadius: '8px',
 													border: '1px solid #ddd',
-												} }
+												}}
 											/>
 											<Legend
 												verticalAlign="bottom"
-												height={ 36 }
+												height={36}
 											/>
 										</PieChart>
 									</ResponsiveContainer>
@@ -1096,17 +1059,17 @@ const Dashboard: React.FC = () => {
 				</div>
 
 				<div className="card-wrapper">
-					{ /* Admin Announcements */ }
-					{ modules.includes( 'announcement' ) && (
+					{/* Admin Announcements */}
+					{modules.includes('announcement') && (
 						<div className="card-content">
 							<div className="card">
 								<div className="card-header">
 									<div className="left">
 										<div className="title">
-											{ __(
+											{__(
 												'Admin Announcements',
 												'multivendorx'
-											) }
+											)}
 										</div>
 									</div>
 									<div className="right">
@@ -1116,69 +1079,63 @@ const Dashboard: React.FC = () => {
 
 								<div className="card-body">
 									<div className="notification-wrapper">
-										{ announcement &&
+										{announcement &&
 										announcement.length > 0 ? (
 											<ul>
-												{ announcement.map(
-													( item ) => (
-														<li key={ item.id }>
-															<div className="icon-wrapper">
-																<i className="adminlib-form-paypal-email admin-badge theme-color1"></i>
+												{announcement.map((item) => (
+													<li key={item.id}>
+														<div className="icon-wrapper">
+															<i className="adminlib-form-paypal-email admin-badge theme-color1"></i>
+														</div>
+														<div className="details">
+															<div className="notification-title">
+																{item.title}
 															</div>
-															<div className="details">
-																<div className="notification-title">
-																	{
-																		item.title
-																	}
-																</div>
-																<div className="des">
-																	{
-																		item.content
-																	}
-																</div>
-																<span>
-																	{ formatTimeAgo(
-																		item.date
-																	) }
-																</span>
+															<div className="des">
+																{item.content}
 															</div>
-														</li>
-													)
-												) }
+															<span>
+																{formatTimeAgo(
+																	item.date
+																)}
+															</span>
+														</div>
+													</li>
+												))}
 											</ul>
 										) : (
 											<div className="no-data">
-												{ __(
+												{__(
 													'No announcements found.',
 													'multivendorx'
-												) }
+												)}
 											</div>
-										) }
+										)}
 									</div>
 								</div>
 							</div>
 						</div>
-					) }
+					)}
 
-					{ modules.includes( 'marketplace-refund' ) && (
+					{modules.includes('marketplace-refund') && (
 						<div className="card-content">
 							<div className="card">
 								<div className="card-header">
 									<div className="left">
 										<div className="title">
-											{ __(
+											{__(
 												'Pending Refunds',
 												'multivendorx'
-											) }
+											)}
 										</div>
 									</div>
 									<div
 										className="right"
-										onClick={ () =>
-											( window.location.href =
-												'/dashboard/sales/orders/#refund-requested' )
+										onClick={() =>
+											(window.location.href =
+												'/dashboard/sales/orders/#refund-requested')
 										}
-										style={ { cursor: 'pointer' } }
+										style={{ cursor: 'pointer' }}
 									>
 										<i className="adminlib-external"></i>
 									</div>
@@ -1186,65 +1143,60 @@ const Dashboard: React.FC = () => {
 
 								<div className="card-body">
 									<div className="top-customer-wrapper">
-										{ pendingRefund &&
+										{pendingRefund &&
 										pendingRefund.length > 0 ? (
-											pendingRefund.map( ( customer ) => (
+											pendingRefund.map((customer) => (
 												<div
-													key={ customer.id }
+													key={customer.id}
 													className="customer"
 												>
 													<div className="left-section">
 														<div className="details">
 															<div className="name">
-																{
-																	customer.name
-																}
+																{customer.name}
 															</div>
 															<div className="order-number">
 																{
 																	customer.reason
-																}{ ' ' }
-																|{ ' ' }
-																{ formatWcShortDate(
+																}{' '}
+																|{' '}
+																{formatWcShortDate(
 																	customer.time
-																) }
+																)}
 															</div>
 														</div>
 													</div>
 												</div>
-											) )
+											))
 										) : (
 											<div className="no-data">
-												{ __(
+												{__(
 													'No pending refunds found.',
 													'multivendorx'
-												) }
+												)}
 											</div>
-										) }
+										)}
 									</div>
 								</div>
 							</div>
 						</div>
-					) }
+					)}
 
 					<div className="card-content">
 						<div className="card">
 							<div className="card-header">
 								<div className="left">
 									<div className="title">
-										{ __(
-											'Top customer (P)',
-											'multivendorx'
-										) }
+										{__('Top customer (P)', 'multivendorx')}
 									</div>
 								</div>
 							</div>
 
 							<div className="card-body">
 								<div className="top-customer-wrapper">
-									{ customers.map( ( customer ) => (
+									{customers.map((customer) => (
 										<div
-											key={ customer.id }
+											key={customer.id}
 											className="customer"
 										>
 											<div className="left-section">
@@ -1257,23 +1209,23 @@ const Dashboard: React.FC = () => {
 												</div>
 												<div className="details">
 													<div className="name">
-														{ customer.name }
+														{customer.name}
 													</div>
 													<div className="order-number">
-														{ customer.orders }{ ' ' }
-														{ __(
+														{customer.orders}{' '}
+														{__(
 															'orders',
 															'multivendorx'
-														) }
+														)}
 													</div>
 												</div>
 											</div>
 
 											<div className="price-section">
-												{ customer.total }
+												{customer.total}
 											</div>
 										</div>
-									) ) }
+									))}
 								</div>
 							</div>
 						</div>
@@ -1286,59 +1238,59 @@ const Dashboard: React.FC = () => {
 							<div className="card-header">
 								<div className="left">
 									<div className="title">
-										{ __(
+										{__(
 											'Store Activity (P)',
 											'multivendorx'
-										) }
+										)}
 									</div>
 								</div>
 							</div>
 
 							<div className="card-body">
 								<div className="activity-log">
-									{ activities.map( ( a, i ) => (
-										<div key={ i } className="activity">
+									{activities.map((a, i) => (
+										<div key={i} className="activity">
 											<div className="title">
-												{ a.text }
+												{a.text}
 											</div>
 											<div className="des">
-												{ __(
+												{__(
 													'Your order has been placed successfully',
 													'multivendorx'
-												) }
+												)}
 											</div>
 											<span>
-												{ __(
+												{__(
 													'2 minutes ago',
 													'multivendorx'
-												) }
+												)}
 											</span>
 										</div>
-									) ) }
+									))}
 								</div>
 							</div>
 						</div>
 					</div>
 
-					{ modules.includes( 'store-review' ) && (
+					{modules.includes('store-review') && (
 						<div className="card-content w-35">
 							<div className="card">
 								<div className="card-header">
 									<div className="left">
 										<div className="title">
-											{ __(
+											{__(
 												'Latest Reviews',
 												'multivendorx'
-											) }
+											)}
 										</div>
 									</div>
 
 									<div
 										className="right"
-										onClick={ () => {
+										onClick={() => {
 											window.location.href =
 												'/dashboard/store-support/store-review/';
-										} }
+										}}
 									>
 										<i className="adminlib-external"></i>
 									</div>
@@ -1346,11 +1298,11 @@ const Dashboard: React.FC = () => {
 
 								<div className="card-body">
 									<div className="review-wrapper">
-										{ review && review.length > 0 ? (
-											review.map( ( reviewItem ) => (
+										{review && review.length > 0 ? (
+											review.map((reviewItem) => (
 												<div
 													className="review"
-													key={ reviewItem.review_id }
+													key={reviewItem.review_id}
 												>
 													<div className="details">
 														<div className="title">
@@ -1363,32 +1315,27 @@ const Dashboard: React.FC = () => {
 														</div>
 
 														<div className="star-wrapper">
-															{ [
-																...Array( 5 ),
-															].map(
-																(
-																	_,
-																	index
-																) => (
+															{[...Array(5)].map(
+																(_, index) => (
 																	<i
 																		key={
 																			index
 																		}
-																		className={ `adminlib-star ${
+																		className={`adminlib-star ${
 																			index <
 																			Math.round(
 																				reviewItem.overall_rating
 																			)
 																				? 'active'
 																				: ''
-																		}` }
+																		}`}
 																	></i>
 																)
-															) }
+															)}
 															<span>
-																{ formatWcShortDate(
+																{formatWcShortDate(
 																	reviewItem.date_created
-																) }
+																)}
 															</span>
 														</div>
 
@@ -1399,20 +1346,20 @@ const Dashboard: React.FC = () => {
 														</div>
 													</div>
 												</div>
-											) )
+											))
 										) : (
 											<div className="no-data">
-												{ __(
+												{__(
 													'No reviews found.',
 													'multivendorx'
-												) }
+												)}
 											</div>
-										) }
+										)}
 									</div>
 								</div>
 							</div>
 						</div>
-					) }
+					)}
 				</div>
 			</div>
 		</>

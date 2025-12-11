@@ -36,7 +36,7 @@ type FilterData = {
 export interface RealtimeFilter {
 	name: string;
 	render: (
-		updateFilter: ( key: string, value: any ) => void,
+		updateFilter: (key: string, value: any) => void,
 		filterValue: any
 	) => React.ReactNode;
 }
@@ -45,20 +45,20 @@ interface LatestReviewProps {
 	store_id?: number;
 }
 
-const LatestReview: React.FC< LatestReviewProps > = ( { store_id } ) => {
-	const [ data, setData ] = useState< Review[] >( [] );
-	const [ totalRows, setTotalRows ] = useState< number >( 0 );
+const LatestReview: React.FC<LatestReviewProps> = ({ store_id }) => {
+	const [data, setData] = useState<Review[]>([]);
+	const [totalRows, setTotalRows] = useState<number>(0);
 
-	const [ pagination, setPagination ] = useState< PaginationState >( {
+	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
 		pageSize: 10,
-	} );
+	});
 
-	useEffect( () => {
+	useEffect(() => {
 		const currentPage = pagination.pageIndex + 1;
 		const rowsPerPage = pagination.pageSize;
-		requestData( rowsPerPage, currentPage );
-	}, [ pagination ] );
+		requestData(rowsPerPage, currentPage);
+	}, [pagination]);
 
 	// Fetch data from backend.
 	function requestData(
@@ -67,10 +67,10 @@ const LatestReview: React.FC< LatestReviewProps > = ( { store_id } ) => {
 		orderBy = 'date_created',
 		order = 'desc'
 	) {
-		setData( [] );
-		axios( {
+		setData([]);
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'review' ),
+			url: getApiLink(appLocalizer, 'review'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				page: currentPage,
@@ -79,96 +79,94 @@ const LatestReview: React.FC< LatestReviewProps > = ( { store_id } ) => {
 				orderBy,
 				order,
 			},
-		} )
-			.then( ( response ) => {
+		})
+			.then((response) => {
 				const items = response.data.items || [];
-				setData( items );
+				setData(items);
 				const total = items.length;
-				setTotalRows( total );
-			} )
-			.catch( () => {
-				setData( [] );
-				setTotalRows( 0 );
-			} );
+				setTotalRows(total);
+			})
+			.catch(() => {
+				setData([]);
+				setTotalRows(0);
+			});
 	}
 
 	// 🔹 Table Columns
-	const columns: ColumnDef< Review >[] = [
+	const columns: ColumnDef<Review>[] = [
 		{
 			id: 'customer',
-			header: __( 'Customer', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Customer', 'multivendorx'),
+			cell: ({ row }) => {
 				const { customer_id, customer_name } = row.original;
-				const editLink = `${ window.location.origin }/wp-admin/user-edit.php?user_id=${ customer_id }`;
+				const editLink = `${window.location.origin}/wp-admin/user-edit.php?user_id=${customer_id}`;
 
 				return (
-					<TableCell title={ customer_name || '-' }>
-						{ customer_id ? (
+					<TableCell title={customer_name || '-'}>
+						{customer_id ? (
 							<a
-								href={ editLink }
+								href={editLink}
 								target="_blank"
 								rel="noreferrer"
 								className="customer-link"
 							>
-								{ customer_name }
+								{customer_name}
 							</a>
 						) : (
-							__( '-', 'multivendorx' )
-						) }
+							__('-', 'multivendorx')
+						)}
 					</TableCell>
 				);
 			},
 		},
 		{
 			id: 'rating-details',
-			header: __( 'Details', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Details', 'multivendorx'),
+			cell: ({ row }) => {
 				const rating = row.original.overall_rating ?? 0;
 				const content = row.original.review_content || '';
 				const shortText =
 					content.length > 40
-						? content.substring( 0, 40 ) + '...'
+						? content.substring(0, 40) + '...'
 						: content;
 				return (
-					<TableCell title={ rating.toString() }>
+					<TableCell title={rating.toString()}>
 						<div className="rating-details-wrapper">
 							<div className="title-wrapper">
 								<div className="rating-wrapper">
-									{ rating > 0 ? (
+									{rating > 0 ? (
 										<>
-											{ [
+											{[...Array(Math.round(rating))].map(
+												(_, i) => (
+													<i
+														key={`filled-${i}`}
+														className="adminlib-star"
+													></i>
+												)
+											)}
+											{[
 												...Array(
-													Math.round( rating )
+													5 - Math.round(rating)
 												),
-											].map( ( _, i ) => (
+											].map((_, i) => (
 												<i
-													key={ `filled-${ i }` }
-													className="adminlib-star"
-												></i>
-											) ) }
-											{ [
-												...Array(
-													5 - Math.round( rating )
-												),
-											].map( ( _, i ) => (
-												<i
-													key={ `empty-${ i }` }
+													key={`empty-${i}`}
 													className="adminlib-star-o"
 												></i>
-											) ) }
+											))}
 										</>
 									) : (
-										__( '-', 'multivendorx' )
-									) }
+										__('-', 'multivendorx')
+									)}
 								</div>
 								<div className="title">
-									{ row.original.review_title ||
-										__( '-', 'multivendorx' ) }
+									{row.original.review_title ||
+										__('-', 'multivendorx')}
 								</div>
 							</div>
 
 							<div className="review">
-								{ shortText || __( '-', 'multivendorx' ) }
+								{shortText || __('-', 'multivendorx')}
 							</div>
 						</div>
 					</TableCell>
@@ -176,20 +174,18 @@ const LatestReview: React.FC< LatestReviewProps > = ( { store_id } ) => {
 			},
 		},
 		{
-			header: __( 'Date', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Date', 'multivendorx'),
+			cell: ({ row }) => {
 				const rawDate = row.original.date_created;
 				const formattedDate = rawDate
-					? new Intl.DateTimeFormat( 'en-US', {
+					? new Intl.DateTimeFormat('en-US', {
 							month: 'short',
 							day: 'numeric',
 							year: 'numeric',
-					  } ).format( new Date( rawDate ) )
-					: __( '-', 'multivendorx' );
+						}).format(new Date(rawDate))
+					: __('-', 'multivendorx');
 				return (
-					<TableCell title={ formattedDate }>
-						{ formattedDate }
-					</TableCell>
+					<TableCell title={formattedDate}>{formattedDate}</TableCell>
 				);
 			},
 		},
@@ -197,8 +193,8 @@ const LatestReview: React.FC< LatestReviewProps > = ( { store_id } ) => {
 
 	return (
 		<Table
-			data={ data || [] }
-			columns={ columns as ColumnDef< Record< string, any >, any >[] }
+			data={data || []}
+			columns={columns as ColumnDef<Record<string, any>, any>[]}
 		/>
 	);
 };

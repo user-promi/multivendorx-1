@@ -39,18 +39,18 @@ type FilterData = {
 export interface RealtimeFilter {
 	name: string;
 	render: (
-		updateFilter: ( key: string, value: any ) => void,
+		updateFilter: (key: string, value: any) => void,
 		filterValue: any
 	) => ReactNode;
 }
-const formatWooDate = ( dateString: string ) => {
-	if ( ! dateString ) return '-';
-	const date = new Date( dateString );
-	return date.toLocaleString( 'en-US', {
+const formatWooDate = (dateString: string) => {
+	if (!dateString) return '-';
+	const date = new Date(dateString);
+	return date.toLocaleString('en-US', {
 		year: 'numeric',
 		month: 'long',
 		day: 'numeric',
-	} );
+	});
 };
 // Add these status options inside AllProduct component
 const stockStatusOptions = [
@@ -67,33 +67,31 @@ const productTypeOptions = [
 	{ key: 'external', name: 'External/Affiliate Product' },
 ];
 const AllProduct: React.FC = () => {
-	const [ data, setData ] = useState< ProductRow[] >( [] );
-	const [ rowSelection, setRowSelection ] = useState< RowSelectionState >(
-		{}
-	);
-	const [ totalRows, setTotalRows ] = useState< number >( 0 );
-	const [ pagination, setPagination ] = useState< PaginationState >( {
+	const [data, setData] = useState<ProductRow[]>([]);
+	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+	const [totalRows, setTotalRows] = useState<number>(0);
+	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
 		pageSize: 10,
-	} );
-	const [ AddProduct, setAddProduct ] = useState( false );
-	const [ categoriesList, setCategoriesList ] = useState<
+	});
+	const [AddProduct, setAddProduct] = useState(false);
+	const [categoriesList, setCategoriesList] = useState<
 		{ id: number; name: string }[]
-	>( [] );
-	const [ pageCount, setPageCount ] = useState( 0 );
+	>([]);
+	const [pageCount, setPageCount] = useState(0);
 	const { modules } = useModules();
-	const [ newProductId, setNewProductId ] = useState( null );
+	const [newProductId, setNewProductId] = useState(null);
 
 	const location = useLocation();
 	const navigate = useNavigate();
 
-	const query = new URLSearchParams( location.search );
-	let element = query.get( 'element' );
+	const query = new URLSearchParams(location.search);
+	let element = query.get('element');
 
-	if ( ! element ) {
-		const parts = location.pathname.split( '/' ).filter( Boolean );
-		if ( parts.length >= 3 ) {
-			element = element || parts[ 2 ];
+	if (!element) {
+		const parts = location.pathname.split('/').filter(Boolean);
+		if (parts.length >= 3) {
+			element = element || parts[2];
 		}
 		// if (parts.length >= 4) {
 		//     element = element || parts[2];
@@ -106,23 +104,19 @@ const AllProduct: React.FC = () => {
 	const tabs = [
 		{
 			id: 'general',
-			label: __( 'General', 'multivendorx' ),
+			label: __('General', 'multivendorx'),
 			content: (
 				<>
 					<div className="form-group-wrapper">
 						<div className="form-group">
-							<label>
-								{ __( 'Discount type', 'multivendorx' ) }
-							</label>
+							<label>{__('Discount type', 'multivendorx')}</label>
 							<BasicInput type="text" name="discount_type" />
 						</div>
 					</div>
 
 					<div className="form-group-wrapper">
 						<div className="form-group">
-							<label>
-								{ __( 'Coupon amount', 'multivendorx' ) }
-							</label>
+							<label>{__('Coupon amount', 'multivendorx')}</label>
 							<BasicInput type="number" name="coupon_amount" />
 						</div>
 					</div>
@@ -130,7 +124,7 @@ const AllProduct: React.FC = () => {
 					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label>
-								{ __( 'Allow free shipping', 'multivendorx' ) }
+								{__('Allow free shipping', 'multivendorx')}
 							</label>
 							<BasicInput type="text" name="free_shipping" />
 						</div>
@@ -139,7 +133,7 @@ const AllProduct: React.FC = () => {
 					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label>
-								{ __( 'Coupon expiry date', 'multivendorx' ) }
+								{__('Coupon expiry date', 'multivendorx')}
 							</label>
 							<BasicInput type="date" name="expiry_date" />
 						</div>
@@ -149,16 +143,13 @@ const AllProduct: React.FC = () => {
 		},
 		{
 			id: 'limits',
-			label: __( 'Usage Limits', 'multivendorx' ),
+			label: __('Usage Limits', 'multivendorx'),
 			content: (
 				<>
 					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label>
-								{ __(
-									'Usage limit per coupon',
-									'multivendorx'
-								) }
+								{__('Usage limit per coupon', 'multivendorx')}
 							</label>
 							<BasicInput type="number" name="limit_per_coupon" />
 						</div>
@@ -167,10 +158,7 @@ const AllProduct: React.FC = () => {
 					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label>
-								{ __(
-									'Limit usage to X items',
-									'multivendorx'
-								) }
+								{__('Limit usage to X items', 'multivendorx')}
 							</label>
 							<BasicInput type="number" name="limit_per_items" />
 						</div>
@@ -179,7 +167,7 @@ const AllProduct: React.FC = () => {
 					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label>
-								{ __( 'Usage limit per user', 'multivendorx' ) }
+								{__('Usage limit per user', 'multivendorx')}
 							</label>
 							<BasicInput type="number" name="limit_per_user" />
 						</div>
@@ -189,23 +177,19 @@ const AllProduct: React.FC = () => {
 		},
 		{
 			id: 'restriction',
-			label: __( 'Usage Restriction', 'multivendorx' ),
+			label: __('Usage Restriction', 'multivendorx'),
 			content: (
 				<>
 					<div className="form-group-wrapper">
 						<div className="form-group">
-							<label>
-								{ __( 'Minimum spend', 'multivendorx' ) }
-							</label>
+							<label>{__('Minimum spend', 'multivendorx')}</label>
 							<BasicInput type="number" name="min_spend" />
 						</div>
 					</div>
 
 					<div className="form-group-wrapper">
 						<div className="form-group">
-							<label>
-								{ __( 'Maximum spend', 'multivendorx' ) }
-							</label>
+							<label>{__('Maximum spend', 'multivendorx')}</label>
 							<BasicInput type="number" name="max_spend" />
 						</div>
 					</div>
@@ -213,7 +197,7 @@ const AllProduct: React.FC = () => {
 					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label>
-								{ __( 'Individual use only', 'multivendorx' ) }
+								{__('Individual use only', 'multivendorx')}
 							</label>
 							<BasicInput type="checkbox" name="individual_use" />
 						</div>
@@ -222,7 +206,7 @@ const AllProduct: React.FC = () => {
 					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label>
-								{ __( 'Exclude sale items', 'multivendorx' ) }
+								{__('Exclude sale items', 'multivendorx')}
 							</label>
 							<BasicInput
 								type="checkbox"
@@ -233,7 +217,7 @@ const AllProduct: React.FC = () => {
 
 					<div className="form-group-wrapper">
 						<div className="form-group">
-							<label>{ __( 'Products', 'multivendorx' ) }</label>
+							<label>{__('Products', 'multivendorx')}</label>
 							<BasicInput type="text" name="products" />
 						</div>
 					</div>
@@ -241,7 +225,7 @@ const AllProduct: React.FC = () => {
 					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label>
-								{ __( 'Exclude products', 'multivendorx' ) }
+								{__('Exclude products', 'multivendorx')}
 							</label>
 							<BasicInput type="text" name="exclude_products" />
 						</div>
@@ -250,7 +234,7 @@ const AllProduct: React.FC = () => {
 					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label>
-								{ __( 'Product categories', 'multivendorx' ) }
+								{__('Product categories', 'multivendorx')}
 							</label>
 							<BasicInput type="text" name="product_categories" />
 						</div>
@@ -259,7 +243,7 @@ const AllProduct: React.FC = () => {
 					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label>
-								{ __( 'Exclude categories', 'multivendorx' ) }
+								{__('Exclude categories', 'multivendorx')}
 							</label>
 							<BasicInput type="text" name="exclude_categories" />
 						</div>
@@ -268,7 +252,7 @@ const AllProduct: React.FC = () => {
 					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label>
-								{ __( 'Allowed emails', 'multivendorx' ) }
+								{__('Allowed emails', 'multivendorx')}
 							</label>
 							<BasicInput type="text" name="allowed_emails" />
 						</div>
@@ -281,50 +265,50 @@ const AllProduct: React.FC = () => {
 	const fetchCategories = async () => {
 		try {
 			const response = await axios.get(
-				`${ appLocalizer.apiUrl }/wc/v3/products/categories`,
+				`${appLocalizer.apiUrl}/wc/v3/products/categories`,
 				{
 					headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				}
 			);
-			setCategoriesList( response.data );
-		} catch ( error ) {
-			console.error( 'Error fetching categories:', error );
+			setCategoriesList(response.data);
+		} catch (error) {
+			console.error('Error fetching categories:', error);
 		}
 	};
 
-	useEffect( () => {
+	useEffect(() => {
 		fetchCategories();
-	}, [] );
+	}, []);
 
-	const columns: ColumnDef< ProductRow >[] = [
+	const columns: ColumnDef<ProductRow>[] = [
 		{
 			id: 'select',
-			header: ( { table } ) => (
+			header: ({ table }) => (
 				<input
 					type="checkbox"
-					checked={ table.getIsAllRowsSelected() }
-					onChange={ table.getToggleAllRowsSelectedHandler() }
+					checked={table.getIsAllRowsSelected()}
+					onChange={table.getToggleAllRowsSelectedHandler()}
 				/>
 			),
-			cell: ( { row } ) => (
+			cell: ({ row }) => (
 				<input
 					type="checkbox"
-					checked={ row.getIsSelected() }
-					onChange={ row.getToggleSelectedHandler() }
+					checked={row.getIsSelected()}
+					onChange={row.getToggleSelectedHandler()}
 				/>
 			),
 		},
 		{
-			header: __( 'Product Name', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.name }>
+			header: __('Product Name', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.name}>
 					<a
-						href={ row.original.permalink }
+						href={row.original.permalink}
 						target="_blank"
 						rel="noopener noreferrer"
 						className=""
 					>
-						{ row.original.name }
+						{row.original.name}
 					</a>
 				</TableCell>
 			),
@@ -333,55 +317,51 @@ const AllProduct: React.FC = () => {
 			id: 'sku',
 			accessorKey: 'sku',
 			enableSorting: true,
-			header: __( 'SKU', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell>{ row.original.sku || '-' }</TableCell>
-			),
+			header: __('SKU', 'multivendorx'),
+			cell: ({ row }) => <TableCell>{row.original.sku || '-'}</TableCell>,
 		},
 		{
 			id: 'price',
 			accessorKey: 'price',
-			accessorFn: ( row ) => parseFloat( row.price || '0' ),
+			accessorFn: (row) => parseFloat(row.price || '0'),
 			enableSorting: true,
-			header: __( 'Price', 'multivendorx' ),
-			cell: ( { row } ) => (
+			header: __('Price', 'multivendorx'),
+			cell: ({ row }) => (
 				<TableCell>
-					{ row.original.price !== '-'
-						? formatCurrency( row.original.price )
-						: '-' }
+					{row.original.price !== '-'
+						? formatCurrency(row.original.price)
+						: '-'}
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'Stock', 'multivendorx' ),
-			cell: ( { row } ) => (
+			header: __('Stock', 'multivendorx'),
+			cell: ({ row }) => (
 				<TableCell>
-					{ row.original.stock_status === 'instock' && (
+					{row.original.stock_status === 'instock' && (
 						<span className="admin-badge in-stock">In Stock</span>
-					) }
-					{ row.original.stock_status === 'outofstock' && (
+					)}
+					{row.original.stock_status === 'outofstock' && (
 						<span className="admin-badge out-of-stock">
 							Out of Stock
 						</span>
-					) }
-					{ row.original.stock_status === 'onbackorder' && (
+					)}
+					{row.original.stock_status === 'onbackorder' && (
 						<span className="admin-badge onbackorder">
 							On Backorder
 						</span>
-					) }
-					{ ! row.original.stock_status && '-' }
+					)}
+					{!row.original.stock_status && '-'}
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'Categories', 'multivendorx' ),
-			cell: ( { row } ) => (
+			header: __('Categories', 'multivendorx'),
+			cell: ({ row }) => (
 				<TableCell>
-					{ row.original.categories?.length
-						? row.original.categories
-								.map( ( c ) => c.name )
-								.join( ', ' )
-						: '-' }
+					{row.original.categories?.length
+						? row.original.categories.map((c) => c.name).join(', ')
+						: '-'}
 				</TableCell>
 			),
 		},
@@ -389,64 +369,62 @@ const AllProduct: React.FC = () => {
 			id: 'date_created',
 			accessorKey: 'date_created',
 			enableSorting: true,
-			header: __( 'Date', 'multivendorx' ),
-			cell: ( { row } ) => (
+			header: __('Date', 'multivendorx'),
+			cell: ({ row }) => (
 				<TableCell>
-					{ formatWooDate( row.original.date_created ) }
+					{formatWooDate(row.original.date_created)}
 				</TableCell>
 			),
 		},
 		{
 			id: 'status',
-			header: __( 'Status', 'multivendorx' ),
-			cell: ( { row } ) => {
-				return (
-					<TableCell type="status" status={ row.original.status } />
-				);
+			header: __('Status', 'multivendorx'),
+			cell: ({ row }) => {
+				return <TableCell type="status" status={row.original.status} />;
 			},
 		},
 		{
 			id: 'action',
-			header: __( 'Action', 'multivendorx' ),
-			cell: ( { row } ) => (
+			header: __('Action', 'multivendorx'),
+			cell: ({ row }) => (
 				<TableCell
 					type="action-dropdown"
-					rowData={ row.original }
-					header={ {
+					rowData={row.original}
+					header={{
 						actions: [
 							{
-								label: __( 'Edit', 'multivendorx' ),
+								label: __('Edit', 'multivendorx'),
 								icon: 'adminlib-edit',
-								onClick: ( rowData ) => {
-									if ( appLocalizer.permalink_structure ) {
+								onClick: (rowData) => {
+									if (appLocalizer.permalink_structure) {
 										navigate(
-											`/${ appLocalizer.dashboard_slug }/products/edit/${ rowData.id }/`
+											`/${appLocalizer.dashboard_slug}/products/edit/${rowData.id}/`
 										);
 									} else {
 										navigate(
-											`?page_id=${ appLocalizer.dashboard_page_id }&segment=products&element=edit&context_id=${ rowData.id }`
+											`?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=edit&context_id=${rowData.id}`
 										);
 									}
 								},
 								hover: true,
 							},
 							{
-								label: __( 'View', 'multivendorx' ),
+								label: __('View', 'multivendorx'),
 								icon: 'adminlib-preview',
 								onClick: () => {
 									window.location.assign(
-										`${ row.original.permalink }`
+										`${row.original.permalink}`
 									);
 								},
 							},
 							{
-								label: __( 'Copy URL', 'multivendorx' ),
+								label: __('Copy URL', 'multivendorx'),
 								icon: 'adminlib-vendor-form-copy',
 								onClick: () => {
 									const url = row.original.permalink;
 									navigator.clipboard
-										.writeText( url )
-										.catch( () => {} );
+										.writeText(url)
+										.catch(() => {});
 								},
 							},
 							// {
@@ -457,15 +435,15 @@ const AllProduct: React.FC = () => {
 							//     // },
 							// },
 							{
-								label: __( 'Delete', 'multivendorx' ),
+								label: __('Delete', 'multivendorx'),
 								icon: 'adminlib-vendor-form-delete',
-								onClick: ( rowData ) => {
-									handleDelete( rowData.id );
+								onClick: (rowData) => {
+									handleDelete(rowData.id);
 								},
 								hover: true,
 							},
 						],
-					} }
+					}}
 				/>
 			),
 		},
@@ -475,24 +453,24 @@ const AllProduct: React.FC = () => {
 		{
 			name: 'category',
 			render: (
-				updateFilter: ( key: string, value: string ) => void,
+				updateFilter: (key: string, value: string) => void,
 				filterValue: string | undefined
 			) => (
 				<div className="   group-field">
 					<select
 						name="category"
-						onChange={ ( e ) =>
-							updateFilter( e.target.name, e.target.value )
+						onChange={(e) =>
+							updateFilter(e.target.name, e.target.value)
 						}
-						value={ filterValue || '' }
+						value={filterValue || ''}
 						className="basic-select"
 					>
 						<option value="">Category</option>
-						{ categoriesList?.map( ( s: any ) => (
-							<option key={ s.id } value={ s.id }>
-								{ s.name }
+						{categoriesList?.map((s: any) => (
+							<option key={s.id} value={s.id}>
+								{s.name}
 							</option>
-						) ) }
+						))}
 					</select>
 				</div>
 			),
@@ -500,23 +478,23 @@ const AllProduct: React.FC = () => {
 		{
 			name: 'productType',
 			render: (
-				updateFilter: ( key: string, value: string ) => void,
+				updateFilter: (key: string, value: string) => void,
 				filterValue: string | undefined
 			) => (
 				<div className="   group-field">
 					<select
 						name="productType"
-						onChange={ ( e ) =>
-							updateFilter( e.target.name, e.target.value )
+						onChange={(e) =>
+							updateFilter(e.target.name, e.target.value)
 						}
-						value={ filterValue || '' }
+						value={filterValue || ''}
 						className="basic-select"
 					>
-						{ productTypeOptions?.map( ( s: any ) => (
-							<option key={ s.key } value={ s.key }>
-								{ s.name }
+						{productTypeOptions?.map((s: any) => (
+							<option key={s.key} value={s.key}>
+								{s.name}
 							</option>
-						) ) }
+						))}
 					</select>
 				</div>
 			),
@@ -524,23 +502,23 @@ const AllProduct: React.FC = () => {
 		{
 			name: 'stock_status',
 			render: (
-				updateFilter: ( key: string, value: string ) => void,
+				updateFilter: (key: string, value: string) => void,
 				filterValue: string | undefined
 			) => (
 				<div className="group-field">
 					<select
 						name="stock_status"
-						onChange={ ( e ) =>
-							updateFilter( e.target.name, e.target.value )
+						onChange={(e) =>
+							updateFilter(e.target.name, e.target.value)
 						}
-						value={ filterValue || '' }
+						value={filterValue || ''}
 						className="basic-select"
 					>
-						{ stockStatusOptions?.map( ( s: any ) => (
-							<option key={ s.key } value={ s.key }>
-								{ s.name }
+						{stockStatusOptions?.map((s: any) => (
+							<option key={s.key} value={s.key}>
+								{s.name}
 							</option>
-						) ) }
+						))}
 					</select>
 				</div>
 			),
@@ -568,17 +546,17 @@ const AllProduct: React.FC = () => {
 		// },
 		{
 			name: 'date',
-			render: ( updateFilter ) => (
+			render: (updateFilter) => (
 				<div className="right">
 					<MultiCalendarInput
 						wrapperClass=""
 						inputClass=""
-						onChange={ ( range: any ) => {
-							updateFilter( 'date', {
+						onChange={(range: any) => {
+							updateFilter('date', {
 								start_date: range.startDate,
 								end_date: range.endDate,
-							} );
-						} }
+							});
+						}}
 					/>
 				</div>
 			),
@@ -588,18 +566,18 @@ const AllProduct: React.FC = () => {
 	const searchFilter: RealtimeFilter[] = [
 		{
 			name: 'searchField',
-			render: ( updateFilter, filterValue ) => (
+			render: (updateFilter, filterValue) => (
 				<>
 					<div className="search-section">
 						<input
 							name="searchField"
 							type="text"
-							placeholder={ __( 'Search', 'multivendorx' ) }
-							onChange={ ( e ) => {
-								updateFilter( e.target.name, e.target.value );
-							} }
+							placeholder={__('Search', 'multivendorx')}
+							onChange={(e) => {
+								updateFilter(e.target.name, e.target.value);
+							}}
 							className="basic-select"
-							value={ filterValue || '' }
+							value={filterValue || ''}
 						/>
 						<i className="adminlib-search"></i>
 					</div>
@@ -608,11 +586,11 @@ const AllProduct: React.FC = () => {
 		},
 	];
 
-	useEffect( () => {
+	useEffect(() => {
 		const currentPage = pagination.pageIndex + 1;
 		const rowsPerPage = pagination.pageSize;
-		requestData( rowsPerPage, currentPage );
-	}, [ pagination ] );
+		requestData(rowsPerPage, currentPage);
+	}, [pagination]);
 
 	// Fetch data from backend.
 	function requestData(
@@ -622,10 +600,10 @@ const AllProduct: React.FC = () => {
 		stockStatus = '', // <-- Positional Argument 4
 		searchField = '', // <-- Positional Argument 5
 		productType = '', // <-- Positional Argument 6
-		startDate = new Date( 0 ),
+		startDate = new Date(0),
 		endDate = new Date()
 	) {
-		setData( [] );
+		setData([]);
 
 		// Build the base parameters object
 		const params: any = {
@@ -638,47 +616,47 @@ const AllProduct: React.FC = () => {
 			value: appLocalizer.store_id,
 		};
 
-		if ( stockStatus ) {
+		if (stockStatus) {
 			params.stock_status = stockStatus;
 		}
 
-		if ( searchField ) {
+		if (searchField) {
 			params.search = searchField;
 		}
-		if ( productType ) {
+		if (productType) {
 			params.type = productType;
 		}
-		axios( {
+		axios({
 			method: 'GET',
-			url: `${ appLocalizer.apiUrl }/wc/v3/products`,
+			url: `${appLocalizer.apiUrl}/wc/v3/products`,
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: params, // Use the dynamically built params object
-		} )
-			.then( ( response ) => {
-				const formattedProducts = response.data.map( ( p: any ) => ( {
+		})
+			.then((response) => {
+				const formattedProducts = response.data.map((p: any) => ({
 					id: p.id,
 					name: p.name,
 					sku: p.sku || '-',
-					price: p.price ? `${ p.price }` : '-',
+					price: p.price ? `${p.price}` : '-',
 					stock_status: p.stock_status,
 					categories: p.categories,
 					date_created: p.date_created,
 					status: p.status,
 					permalink: p.permalink,
-				} ) );
-				setData( formattedProducts );
+				}));
+				setData(formattedProducts);
 
-				const total = parseInt( response.headers[ 'x-wp-total' ] );
-				setTotalRows( total );
+				const total = parseInt(response.headers['x-wp-total']);
+				setTotalRows(total);
 
 				// Calculate pageCount AFTER totalRows is available
-				setPageCount( Math.ceil( total / rowsPerPage ) );
-			} )
-			.catch( () => {
-				setData( [] );
-				setTotalRows( 0 );
-				setPageCount( 0 );
-			} );
+				setPageCount(Math.ceil(total / rowsPerPage));
+			})
+			.catch(() => {
+				setData([]);
+				setTotalRows(0);
+				setPageCount(0);
+			});
 	}
 
 	// Handle pagination and filter changes
@@ -687,7 +665,7 @@ const AllProduct: React.FC = () => {
 		currentPage: number,
 		filterData: FilterData
 	) => {
-		setData( [] );
+		setData([]);
 		// Arguments must be passed in the exact order requestData expects them.
 		requestData(
 			rowsPerPage, // 1: rowsPerPage
@@ -701,9 +679,9 @@ const AllProduct: React.FC = () => {
 		);
 	};
 
-	const handleDelete = async ( productId ) => {
+	const handleDelete = async (productId) => {
 		const res = await axios.delete(
-			`${ appLocalizer.apiUrl }/wc/v3/products/${ productId }`,
+			`${appLocalizer.apiUrl}/wc/v3/products/${productId}`,
 			{
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			}
@@ -720,14 +698,14 @@ const AllProduct: React.FC = () => {
 			};
 
 			axios
-				.post( `${ appLocalizer.apiUrl }/wc/v3/products/`, payload, {
+				.post(`${appLocalizer.apiUrl}/wc/v3/products/`, payload, {
 					headers: { 'X-WP-Nonce': appLocalizer.nonce },
-				} )
-				.then( ( res ) => {
-					console.log( 'Auto-draft created:', res.data );
-					setNewProductId( res.data.id );
-				} );
-		} catch ( err ) {
+				})
+				.then((res) => {
+					console.log('Auto-draft created:', res.data);
+					setNewProductId(res.data.id);
+				});
+		} catch (err) {
 			console.error(
 				'Error creating auto-draft:',
 				err.response?.data || err
@@ -735,23 +713,23 @@ const AllProduct: React.FC = () => {
 		}
 	};
 
-	useEffect( () => {
-		if ( ! newProductId ) return;
+	useEffect(() => {
+		if (!newProductId) return;
 
-		if ( appLocalizer.permalink_structure ) {
+		if (appLocalizer.permalink_structure) {
 			navigate(
-				`/${ appLocalizer.dashboard_slug }/products/edit/${ newProductId }`
+				`/${appLocalizer.dashboard_slug}/products/edit/${newProductId}`
 			);
 		} else {
 			navigate(
-				`?page_id=${ appLocalizer.dashboard_page_id }&segment=products&element=edit&context_id=${ newProductId }`
+				`?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=edit&context_id=${newProductId}`
 			);
 		}
-	}, [ newProductId ] );
+	}, [newProductId]);
 
 	return (
 		<>
-			{ ! isAddProduct && ! isSpmvOn && (
+			{!isAddProduct && !isSpmvOn && (
 				<>
 					<div className="page-title-wrapper">
 						<div className="page-title">
@@ -761,43 +739,41 @@ const AllProduct: React.FC = () => {
 							</div>
 						</div>
 						<div className="buttons-wrapper">
-							{ modules.includes( 'import-export' ) && (
+							{modules.includes('import-export') && (
 								<>
 									<div
 										className="admin-btn btn-purple-bg"
-										onClick={ () => setAddProduct( true ) }
+										onClick={() => setAddProduct(true)}
 									>
 										<i className="adminlib-import"></i>
 										import
 									</div>
 									<div
 										className="admin-btn btn-purple-bg"
-										onClick={ () => setAddProduct( true ) }
+										onClick={() => setAddProduct(true)}
 									>
 										<i className="adminlib-export"></i>
 										Export
 									</div>
 								</>
-							) }
+							)}
 							<div
 								className="admin-btn btn-purple-bg"
-								onClick={ () => {
-									if ( modules.includes( 'spmv' ) ) {
-										if (
-											appLocalizer.permalink_structure
-										) {
+								onClick={() => {
+									if (modules.includes('spmv')) {
+										if (appLocalizer.permalink_structure) {
 											navigate(
-												`/${ appLocalizer.dashboard_slug }/products/add/`
+												`/${appLocalizer.dashboard_slug}/products/add/`
 											);
 										} else {
 											navigate(
-												`?page_id=${ appLocalizer.dashboard_page_id }&segment=products&element=add`
+												`?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=add`
 											);
 										}
 									} else {
 										createAutoDraftProduct();
 									}
-								} }
+								}}
 							>
 								<i className="adminlib-plus-circle"></i> Add New
 							</div>
@@ -805,32 +781,29 @@ const AllProduct: React.FC = () => {
 					</div>
 					<div className="admin-table-wrapper">
 						<Table
-							data={ data }
+							data={data}
 							columns={
-								columns as ColumnDef<
-									Record< string, any >,
-									any
-								>[]
+								columns as ColumnDef<Record<string, any>, any>[]
 							}
-							rowSelection={ rowSelection }
-							onRowSelectionChange={ setRowSelection }
-							defaultRowsPerPage={ 10 }
-							pageCount={ pageCount }
-							pagination={ pagination }
-							onPaginationChange={ setPagination }
-							perPageOption={ [ 10, 25, 50 ] }
-							typeCounts={ [] }
-							realtimeFilter={ realtimeFilter }
-							handlePagination={ requestApiForData }
-							totalCounts={ totalRows }
-							searchFilter={ searchFilter }
+							rowSelection={rowSelection}
+							onRowSelectionChange={setRowSelection}
+							defaultRowsPerPage={10}
+							pageCount={pageCount}
+							pagination={pagination}
+							onPaginationChange={setPagination}
+							perPageOption={[10, 25, 50]}
+							typeCounts={[]}
+							realtimeFilter={realtimeFilter}
+							handlePagination={requestApiForData}
+							totalCounts={totalRows}
+							searchFilter={searchFilter}
 						/>
 					</div>
 				</>
-			) }
+			)}
 
-			{ isAddProduct && <AddProductCom /> }
-			{ isSpmvOn && <SpmvProducts /> }
+			{isAddProduct && <AddProductCom />}
+			{isSpmvOn && <SpmvProducts />}
 		</>
 	);
 };

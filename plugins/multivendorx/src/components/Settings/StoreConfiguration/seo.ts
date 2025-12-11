@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'seo',
 	priority: 7,
-	name: __( 'SEO', 'mvx-pro' ),
+	name: __('SEO', 'mvx-pro'),
 	desc: __(
 		'Enable stores to enhance their product visibility using advanced third-party SEO plugins.',
 		'mvx-pro'
@@ -14,7 +14,7 @@ export default {
 		{
 			key: 'store_seo_options',
 			type: 'setting-toggle',
-			label: __( 'Third-party SEO tools', 'mvx-pro' ),
+			label: __('Third-party SEO tools', 'mvx-pro'),
 			settingDescription: __(
 				'Let stores manage SEO and boost their visibility using advanced plugins.',
 				'multivendorx'
@@ -26,12 +26,12 @@ export default {
 			options: [
 				{
 					key: 'yoast',
-					label: __( 'Yoast', 'mvx-pro' ),
+					label: __('Yoast', 'mvx-pro'),
 					value: 'yoast',
 				},
 				{
 					key: 'rank_math',
-					label: __( 'Rank Math', 'mvx-pro' ),
+					label: __('Rank Math', 'mvx-pro'),
 					value: 'rank_math',
 				},
 			],

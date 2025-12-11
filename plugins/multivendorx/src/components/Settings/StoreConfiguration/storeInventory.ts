@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'store-inventory',
 	priority: 6,
-	name: __( 'Inventory', 'multivendorx' ),
+	name: __('Inventory', 'multivendorx'),
 	tabTitle: 'Store inventory notifications',
 	desc: __(
 		'Manage inventory alerts and stock monitoring settings for stores in your marketplace.',
@@ -15,7 +15,7 @@ export default {
 		{
 			key: 'store_rating_page',
 			type: 'blocktext',
-			label: __( 'no_label', 'multivendorx' ),
+			label: __('no_label', 'multivendorx'),
 			blocktext: __(
 				'<b>Note: </b>You can configure or customize the notification templates for these alerts from the <b><a href="#&tab=settings&subtab=notifications">Notification Settings</a> </b> section.',
 				'multivendorx'
@@ -24,7 +24,7 @@ export default {
 		{
 			key: 'low_stock_notifications', // changed key
 			type: 'nested',
-			label: __( 'Low stock alerts', 'multivendorx' ),
+			label: __('Low stock alerts', 'multivendorx'),
 			single: true,
 			proSetting: true,
 			moduleEnabled: 'store-inventory',
@@ -49,7 +49,7 @@ export default {
 						'Notify stores when inventory falls below',
 						'multivendorx'
 					),
-					postText: __( 'units.', 'multivendorx' ),
+					postText: __('units.', 'multivendorx'),
 					size: '8rem',
 					dependent: {
 						key: 'low_stock_alert', // field it depends on
@@ -62,7 +62,7 @@ export default {
 		{
 			key: 'out_of_stock_notifications', // main key for this nested setting
 			type: 'nested',
-			label: __( 'Out of stock alerts', 'multivendorx' ),
+			label: __('Out of stock alerts', 'multivendorx'),
 			single: true,
 			moduleEnabled: 'store-inventory',
 			proSetting: true,
@@ -87,7 +87,7 @@ export default {
 						'Notify stores when inventory reaches below',
 						'multivendorx'
 					),
-					postText: __( 'units.', 'multivendorx' ),
+					postText: __('units.', 'multivendorx'),
 					size: '8rem',
 					dependent: {
 						key: 'out_of_stock_alert', // depends on checkbox

@@ -16,7 +16,7 @@ export default {
 			key: 'choose_ai_provider',
 			type: 'setting-toggle',
 			defaultValue: 'gemini_api',
-			label: __( 'Default AI Provider', 'multivendorx' ),
+			label: __('Default AI Provider', 'multivendorx'),
 			settingDescription: __(
 				'Choose the primary AI service for product detail suggestions.',
 				'multivendorx'
@@ -28,23 +28,20 @@ export default {
 			options: [
 				{
 					key: 'gemini_api',
-					label: __( 'Gemini (Google)', 'multivendorx' ),
-					value: __( 'gemini_api', 'multivendorx' ),
+					label: __('Gemini (Google)', 'multivendorx'),
+					value: __('gemini_api', 'multivendorx'),
 					icon: 'adminlib-google',
 				},
 				{
 					key: 'openai_api',
-					label: __( 'OpenAI (ChatGPT)', 'multivendorx' ),
-					value: __( 'openai_api', 'multivendorx' ),
+					label: __('OpenAI (ChatGPT)', 'multivendorx'),
+					value: __('openai_api', 'multivendorx'),
 					icon: 'adminlib-openai',
 				},
 				{
 					key: 'openrouter_api',
-					label: __(
-						'OpenRouter (Free/Open Models)',
-						'multivendorx'
-					),
-					value: __( 'openrouter_api', 'multivendorx' ),
+					label: __('OpenRouter (Free/Open Models)', 'multivendorx'),
+					value: __('openrouter_api', 'multivendorx'),
 					icon: 'adminlib-cloud',
 				},
 			],
@@ -53,7 +50,7 @@ export default {
 		{
 			key: 'gemini_api_key',
 			type: 'text',
-			label: __( 'Gemini API Key', 'multivendorx' ),
+			label: __('Gemini API Key', 'multivendorx'),
 			desc: __(
 				'<a href="https://ai.google.dev/gemini-api/docs/api-key" target="_blank">Click here to generate your Gemini API key.</a>',
 				'multivendorx'
@@ -68,7 +65,7 @@ export default {
 		{
 			key: 'openai_api_key',
 			type: 'text',
-			label: __( 'OpenAI API Key (for ChatGPT)', 'multivendorx' ),
+			label: __('OpenAI API Key (for ChatGPT)', 'multivendorx'),
 			desc: __(
 				'<a href="https://platform.openai.com/api-keys" target="_blank">Click here to generate your OpenAI API key.</a>',
 				'multivendorx'
@@ -83,7 +80,7 @@ export default {
 		{
 			key: 'openrouter_api_key',
 			type: 'text',
-			label: __( 'OpenRouter API Key', 'multivendorx' ),
+			label: __('OpenRouter API Key', 'multivendorx'),
 			desc: __(
 				'<a href="https://openrouter.ai/settings/keys" target="_blank">Generate an OpenRouter Key</a>',
 				'multivendorx'
@@ -97,7 +94,7 @@ export default {
 		{
 			key: 'openrouter_api_model',
 			type: 'select',
-			label: __( 'OpenRouter Model', 'multivendorx' ),
+			label: __('OpenRouter Model', 'multivendorx'),
 			desc: __(
 				'Choose your preferred AI model from OpenRouter.',
 				'multivendorx'
@@ -130,7 +127,7 @@ export default {
 		{
 			key: 'image_enhancement_provider',
 			type: 'setting-toggle',
-			label: __( 'Image Enhancement Provider', 'multivendorx' ),
+			label: __('Image Enhancement Provider', 'multivendorx'),
 			desc: __(
 				'Choose which AI provider to use for image enhancement.',
 				'multivendorx'
@@ -138,12 +135,12 @@ export default {
 			options: [
 				{
 					key: 'gemini_api_image_enhancement',
-					label: __( 'Gemini (Google)', 'multivendorx' ),
+					label: __('Gemini (Google)', 'multivendorx'),
 					value: 'gemini_api',
 				},
 				{
 					key: 'openrouter_api_image_enhancement',
-					label: __( 'OpenRouter (Multiple Models)', 'multivendorx' ),
+					label: __('OpenRouter (Multiple Models)', 'multivendorx'),
 					value: 'openrouter_api',
 				},
 			],
@@ -153,7 +150,7 @@ export default {
 		{
 			key: 'gemini_api_image_enhancement_key',
 			type: 'text',
-			label: __( 'Gemini API Key for Image Enhancement', 'multivendorx' ),
+			label: __('Gemini API Key for Image Enhancement', 'multivendorx'),
 			desc: __(
 				'<a href="https://ai.google.dev/gemini-api/docs/api-key" target="_blank">Click here to generate your Gemini API key.</a>',
 				'multivendorx'
@@ -185,7 +182,7 @@ export default {
 		{
 			key: 'openrouter_api_image_model',
 			type: 'select',
-			label: __( 'OpenRouter Image Model', 'multivendorx' ),
+			label: __('OpenRouter Image Model', 'multivendorx'),
 			desc: __(
 				'Choose your preferred AI model for image enhancement from OpenRouter.',
 				'multivendorx'

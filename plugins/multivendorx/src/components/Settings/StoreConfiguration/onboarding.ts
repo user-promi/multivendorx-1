@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'general',
 	priority: 1,
-	name: __( 'Onboarding', 'multivendorx' ),
+	name: __('Onboarding', 'multivendorx'),
 	tabTitle: 'Approval process for new stores',
 	desc: __(
 		'Choose how new stores enter your marketplace, review them manually or allow instant access.',
@@ -15,7 +15,7 @@ export default {
 		{
 			key: 'approve_store',
 			type: 'setting-toggle',
-			label: __( 'New store registration approval', 'multivendorx' ),
+			label: __('New store registration approval', 'multivendorx'),
 			desc: __(
 				'Decide how you want to approve new stores for your marketplace:<ul><li>Manual approval - Admin reviews each store request and decides whether to approve or reject it before granting access to the marketplace.</li><li>Automatic approval - Stores are instantly approved, gaining dashboard access right away to upload and sell products.</li></ul>',
 				'multivendorx'
@@ -23,12 +23,12 @@ export default {
 			options: [
 				{
 					key: 'manually',
-					label: __( 'Manual', 'multivendorx' ),
+					label: __('Manual', 'multivendorx'),
 					value: 'manually',
 				},
 				{
 					key: 'automatically',
-					label: __( 'Automatic', 'multivendorx' ),
+					label: __('Automatic', 'multivendorx'),
 					value: 'automatically',
 				},
 			],
@@ -36,12 +36,12 @@ export default {
 		{
 			key: 'section',
 			type: 'section',
-			hint: __( 'Setup wizard for stores', 'multivendorx' ),
+			hint: __('Setup wizard for stores', 'multivendorx'),
 		},
 		{
 			key: 'disable_setup_wizard',
 			type: 'setting-toggle',
-			label: __( 'Guided setup wizard', 'multivendorx' ),
+			label: __('Guided setup wizard', 'multivendorx'),
 			desc: __(
 				'Help stores set up their store quickly with a guided, step-by-step process after registration. If disabled, the setup wizard will not appear.',
 				'multivendorx'
@@ -49,12 +49,12 @@ export default {
 			options: [
 				{
 					key: 'enable_guided_setup',
-					label: __( 'Enabled', 'multivendorx' ),
+					label: __('Enabled', 'multivendorx'),
 					value: 'enable_guided_setup',
 				},
 				{
 					key: 'skip_to_dashboard',
-					label: __( 'Disabled', 'multivendorx' ),
+					label: __('Disabled', 'multivendorx'),
 					value: 'skip_to_dashboard',
 				},
 			],
@@ -62,12 +62,12 @@ export default {
 		{
 			key: 'onboarding_steps_configuration',
 			type: 'checkbox',
-			label: __( 'Onboarding steps', 'multivendorx' ),
+			label: __('Onboarding steps', 'multivendorx'),
 			class: 'mvx-toggle-checkbox',
 			options: [
 				{
 					key: 'store_profile_setup',
-					label: __( 'Store profile', 'multivendorx' ),
+					label: __('Store profile', 'multivendorx'),
 					desc: __(
 						'Store owners must provide: store name, business description, logo upload, basic branding information.',
 						'multivendorx'
@@ -76,7 +76,7 @@ export default {
 				},
 				{
 					key: 'payment_information',
-					label: __( 'Payment information', 'multivendorx' ),
+					label: __('Payment information', 'multivendorx'),
 					desc: __(
 						'Requires stores to set up, payout methods (Bank account/ PayPal / Stripe etc).',
 						'multivendorx'
@@ -85,7 +85,7 @@ export default {
 				},
 				{
 					key: 'shipping_configuration',
-					label: __( 'Shipping setup', 'multivendorx' ),
+					label: __('Shipping setup', 'multivendorx'),
 					desc: __(
 						'Forces stores to complete: Geographic shipping zones, delivery rates and pricing. ',
 						'multivendorx'
@@ -94,7 +94,7 @@ export default {
 				},
 				{
 					key: 'first_product_upload',
-					label: __( 'First product', 'multivendorx' ),
+					label: __('First product', 'multivendorx'),
 					desc: __(
 						'Mandates that store to upload at least one product listing, complete product details before going live, ensures the store is not empty when launched.',
 						'multivendorx'
@@ -103,7 +103,7 @@ export default {
 				},
 				{
 					key: 'identity_verification',
-					label: __( 'Identity verification', 'multivendorx' ),
+					label: __('Identity verification', 'multivendorx'),
 					desc: __(
 						'Requires stores to submit government-issued documents, business address verification, Know Your Customer (KYC) compliance.',
 						'multivendorx'
@@ -114,7 +114,7 @@ export default {
 				},
 				{
 					key: 'store_policies',
-					label: __( 'Store policies', 'multivendorx' ),
+					label: __('Store policies', 'multivendorx'),
 					desc: __(
 						'Merchants can override refund rules, shipping terms, and general conditions.',
 						'multivendorx'
@@ -133,9 +133,9 @@ export default {
 		{
 			key: 'setup_wizard_introduction',
 			type: 'textarea',
-			label: __( 'Getting started message', 'multivendorx' ),
+			label: __('Getting started message', 'multivendorx'),
 			value: __(
-				`Welcome aboard, [Store Name]!\nWe’ll guide you through the essential steps to launch your store on [${ appLocalizer.marketplace_site }].`,
+				`Welcome aboard, [Store Name]!\nWe’ll guide you through the essential steps to launch your store on [${appLocalizer.marketplace_site}].`,
 				'multivendorx'
 			),
 			desc: __(

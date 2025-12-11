@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'live-chat',
 	priority: 5,
-	name: __( 'Live Chat', 'multivendorx' ),
+	name: __('Live Chat', 'multivendorx'),
 	desc: __(
 		'Set up and manage live chat options for customer interaction.',
 		'multivendorx'
@@ -14,7 +14,7 @@ export default {
 		{
 			key: 'product_page_chat',
 			type: 'setting-toggle',
-			label: __( 'Chat button position', 'multivendorx' ),
+			label: __('Chat button position', 'multivendorx'),
 			desc: __(
 				'Choose where the chat button will appear on product pages.',
 				'multivendorx'
@@ -23,17 +23,17 @@ export default {
 			options: [
 				{
 					key: 'add_to_cart_button',
-					label: __( 'Next to Add to Cart button', 'multivendorx' ),
+					label: __('Next to Add to Cart button', 'multivendorx'),
 					value: 'add_to_cart_button',
 				},
 				{
 					key: 'store_info',
-					label: __( 'Inside Store details tab', 'multivendorx' ),
+					label: __('Inside Store details tab', 'multivendorx'),
 					value: 'store_info',
 				},
 				{
 					key: 'none',
-					label: __( 'Both', 'multivendorx' ),
+					label: __('Both', 'multivendorx'),
 					value: 'none',
 				},
 			],
@@ -42,7 +42,7 @@ export default {
 		{
 			key: 'chat_provider',
 			type: 'setting-toggle',
-			label: __( 'Chat platform integration', 'multivendorx' ),
+			label: __('Chat platform integration', 'multivendorx'),
 			desc: __(
 				'Select the chat provider you want to connect with your store.',
 				'multivendorx'
@@ -51,17 +51,17 @@ export default {
 			options: [
 				{
 					key: 'facebook',
-					label: __( 'Facebook Messenger', 'multivendorx' ),
+					label: __('Facebook Messenger', 'multivendorx'),
 					value: 'facebook',
 				},
 				{
 					key: 'talkjs',
-					label: __( 'TalkJS', 'multivendorx' ),
+					label: __('TalkJS', 'multivendorx'),
 					value: 'talkjs',
 				},
 				{
 					key: 'whatsapp',
-					label: __( 'WhatsApp', 'multivendorx' ),
+					label: __('WhatsApp', 'multivendorx'),
 					value: 'whatsapp',
 				},
 			],
@@ -70,7 +70,7 @@ export default {
 		{
 			key: 'messenger_color',
 			type: 'color',
-			label: __( 'Messenger theme color', 'multivendorx' ),
+			label: __('Messenger theme color', 'multivendorx'),
 			desc: __(
 				'Pick a theme color for your Facebook Messenger chat window.',
 				'multivendorx'
@@ -87,7 +87,7 @@ export default {
 		{
 			key: 'whatsapp_opening_pattern',
 			type: 'setting-toggle',
-			label: __( 'WhatsApp opening pattern', 'multivendorx' ),
+			label: __('WhatsApp opening pattern', 'multivendorx'),
 			desc: __(
 				'Choose whether WhatsApp chats open in browser or app.',
 				'multivendorx'
@@ -95,12 +95,12 @@ export default {
 			options: [
 				{
 					key: 'browser',
-					label: __( 'Open in browser', 'multivendorx' ),
+					label: __('Open in browser', 'multivendorx'),
 					value: 'browser',
 				},
 				{
 					key: 'app',
-					label: __( 'Open in WhatsApp app', 'multivendorx' ),
+					label: __('Open in WhatsApp app', 'multivendorx'),
 					value: 'app',
 				},
 			],
@@ -115,7 +115,7 @@ export default {
 		{
 			key: 'whatsapp_pre_filled',
 			type: 'textarea',
-			label: __( 'Pre-filled WhatsApp message', 'multivendorx' ),
+			label: __('Pre-filled WhatsApp message', 'multivendorx'),
 			desc: __(
 				'Define default text for the WhatsApp chat window. You can use variables {store_name} and {store_url}.',
 				'multivendorx'
@@ -131,7 +131,7 @@ export default {
 		{
 			key: 'app_id',
 			type: 'text',
-			label: __( 'TalkJS App ID', 'multivendorx' ),
+			label: __('TalkJS App ID', 'multivendorx'),
 			desc: __(
 				'Enter the App ID provided in your TalkJS dashboard.',
 				'multivendorx'
@@ -147,7 +147,7 @@ export default {
 		{
 			key: 'app_secret',
 			type: 'text',
-			label: __( 'TalkJS App Secret', 'multivendorx' ),
+			label: __('TalkJS App Secret', 'multivendorx'),
 			desc: __(
 				'Enter the App Secret from your TalkJS dashboard. You can retrieve both the App ID and Secret from your TalkJS account settings.',
 				'multivendorx'

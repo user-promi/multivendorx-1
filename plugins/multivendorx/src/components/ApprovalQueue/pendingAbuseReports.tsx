@@ -12,7 +12,7 @@ import {
 export interface RealtimeFilter {
 	name: string;
 	render: (
-		updateFilter: ( key: string, value: any ) => void,
+		updateFilter: (key: string, value: any) => void,
 		filterValue: any
 	) => React.ReactNode;
 }
@@ -49,115 +49,113 @@ type FilterData = {
 	transactionType?: string;
 	transactionStatus?: string;
 };
-const PendingReportAbuse: React.FC< Props > = ( { onUpdated } ) => {
-	const [ data, setData ] = useState< ReportRow[] | null >( null );
-	const [ rowSelection, setRowSelection ] = useState< RowSelectionState >(
-		{}
-	);
-	const [ totalRows, setTotalRows ] = useState< number >( 0 );
+const PendingReportAbuse: React.FC<Props> = ({ onUpdated }) => {
+	const [data, setData] = useState<ReportRow[] | null>(null);
+	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+	const [totalRows, setTotalRows] = useState<number>(0);
 
-	const [ pagination, setPagination ] = useState< PaginationState >( {
+	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
 		pageSize: 10,
-	} );
-	const [ pageCount, setPageCount ] = useState( 0 );
-	const [ store, setStore ] = useState< any[] | null >( null );
+	});
+	const [pageCount, setPageCount] = useState(0);
+	const [store, setStore] = useState<any[] | null>(null);
 
-	useEffect( () => {
-		axios( {
+	useEffect(() => {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'store' ),
+			url: getApiLink(appLocalizer, 'store'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		} )
-			.then( ( response ) => {
-				setStore( response.data.stores );
-			} )
-			.catch( () => {
-				setStore( [] );
-			} );
-	}, [] );
+		})
+			.then((response) => {
+				setStore(response.data.stores);
+			})
+			.catch(() => {
+				setStore([]);
+			});
+	}, []);
 
 	// Fetch total count on mount
-	useEffect( () => {
+	useEffect(() => {
 		axios
-			.get( getApiLink( appLocalizer, 'report-abuse' ), {
+			.get(getApiLink(appLocalizer, 'report-abuse'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: { count: true },
-			} )
-			.then( ( res ) => {
+			})
+			.then((res) => {
 				const total = res.data || 0;
-				setTotalRows( total );
-				setPageCount( Math.ceil( total / pagination.pageSize ) );
-			} )
-			.catch( () => {
-				console.error( 'Failed to load total rows' );
-			} );
-	}, [] );
+				setTotalRows(total);
+				setPageCount(Math.ceil(total / pagination.pageSize));
+			})
+			.catch(() => {
+				console.error('Failed to load total rows');
+			});
+	}, []);
 
-	const columns: ColumnDef< ReportRow >[] = [
+	const columns: ColumnDef<ReportRow>[] = [
 		{
 			id: 'select',
-			header: ( { table } ) => (
+			header: ({ table }) => (
 				<input
 					type="checkbox"
-					checked={ table.getIsAllRowsSelected() }
-					onChange={ table.getToggleAllRowsSelectedHandler() }
+					checked={table.getIsAllRowsSelected()}
+					onChange={table.getToggleAllRowsSelectedHandler()}
 				/>
 			),
-			cell: ( { row } ) => (
+			cell: ({ row }) => (
 				<input
 					type="checkbox"
-					checked={ row.getIsSelected() }
-					onChange={ row.getToggleSelectedHandler() }
+					checked={row.getIsSelected()}
+					onChange={row.getToggleSelectedHandler()}
 				/>
 			),
 		},
 		{
 			id: 'product',
-			header: __( 'Product', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Product', 'multivendorx'),
+			cell: ({ row }) => {
 				const product = row.original;
 				const image = product.product_image; // fallback to default
 				const productName = product.product_name || '-';
 				const productId = product.product_id; // use ID for admin edit link
-				const productLink = `${ window.location.origin }/wp-admin/post.php?post=${ productId }&action=edit`;
+				const productLink = `${window.location.origin}/wp-admin/post.php?post=${productId}&action=edit`;
 				const sku = product.product_sku || '';
 				const storeName = product.store_name;
-				const storeLink = `${ window.location.origin }/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${ product.store_id }`;
+				const storeLink = `${window.location.origin}/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${product.store_id}`;
 
 				return (
-					<TableCell title={ `${ productName } - ${ storeName }` }>
+					<TableCell title={`${productName} - ${storeName}`}>
 						<a
-							href={ productLink }
+							href={productLink}
 							target="_blank"
 							rel="noreferrer"
 							className="product-wrapper"
 						>
-							{ image ? (
-								<img src={ image } alt={ productName } />
+							{image ? (
+								<img src={image} alt={productName} />
 							) : (
 								<i className="item-icon adminlib-multi-product"></i>
-							) }
+							)}
 							<div className="details">
-								<span className="title">{ productName }</span>
-								{ sku && (
+								<span className="title">{productName}</span>
+								{sku && (
 									<span className="des">
-										SKU: { sku }
-										{ storeName !== '' && (
+										SKU: {sku}
+										{storeName !== '' && (
 											<>
 												| By:
 												<a
-													href={ storeLink }
+													href={storeLink}
 													target="_blank"
 													rel="noreferrer"
 													className="link-item"
 												>
-													{ storeName }
+													{storeName}
 												</a>
 											</>
-										) }
+										)}
 									</span>
-								) }
+								)}
 							</div>
 						</a>
 					</TableCell>
@@ -166,22 +164,22 @@ const PendingReportAbuse: React.FC< Props > = ( { onUpdated } ) => {
 		},
 
 		{
-			header: __( 'Reported By', 'multivendorx' ),
-			cell: ( { row } ) => (
+			header: __('Reported By', 'multivendorx'),
+			cell: ({ row }) => (
 				<TableCell
-					title={ `Reported By: ${ row.original.name } (${ row.original.email })` }
+					title={`Reported By: ${row.original.name} (${row.original.email})`}
 				>
-					{ row.original.name
-						? `${ row.original.name } (${ row.original.email })`
-						: '-' }
+					{row.original.name
+						? `${row.original.name} (${row.original.email})`
+						: '-'}
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'Reason', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.reason || '-' }>
-					{ row.original.reason ?? '-' }
+			header: __('Reason', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.reason || '-'}>
+					{row.original.reason ?? '-'}
 				</TableCell>
 			),
 		},
@@ -189,36 +187,34 @@ const PendingReportAbuse: React.FC< Props > = ( { onUpdated } ) => {
 			id: 'created_at',
 			accessorKey: 'created_at',
 			enableSorting: true,
-			header: __( 'Date created', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Date created', 'multivendorx'),
+			cell: ({ row }) => {
 				const rawDate = row.original.created_at;
 				const formattedDate = rawDate
-					? new Intl.DateTimeFormat( 'en-US', {
+					? new Intl.DateTimeFormat('en-US', {
 							month: 'short',
 							day: 'numeric',
 							year: 'numeric',
-					  } ).format( new Date( rawDate ) )
+						}).format(new Date(rawDate))
 					: '-';
 				return (
-					<TableCell title={ formattedDate }>
-						{ formattedDate }
-					</TableCell>
+					<TableCell title={formattedDate}>{formattedDate}</TableCell>
 				);
 			},
 		},
 		{
 			id: 'action',
-			header: __( 'Action', 'multivendorx' ),
-			cell: ( { row } ) => (
+			header: __('Action', 'multivendorx'),
+			cell: ({ row }) => (
 				<TableCell
 					type="action-dropdown"
-					rowData={ row.original }
-					header={ {
+					rowData={row.original}
+					header={{
 						actions: [
 							{
-								label: __( 'Delete', 'multivendorx' ),
+								label: __('Delete', 'multivendorx'),
 								icon: 'adminlib-delete',
-								onClick: ( rowData: ReportRow ) => {
+								onClick: (rowData: ReportRow) => {
 									if (
 										confirm(
 											__(
@@ -231,7 +227,7 @@ const PendingReportAbuse: React.FC< Props > = ( { onUpdated } ) => {
 											.delete(
 												getApiLink(
 													appLocalizer,
-													`report-abuse/${ rowData.ID }`
+													`report-abuse/${rowData.ID}`
 												),
 												{
 													headers: {
@@ -240,27 +236,27 @@ const PendingReportAbuse: React.FC< Props > = ( { onUpdated } ) => {
 													},
 												}
 											)
-											.then( () => {
+											.then(() => {
 												requestData(
 													pagination.pageSize,
 													pagination.pageIndex + 1
 												);
 												onUpdated?.();
-											} )
-											.catch( () => {
+											})
+											.catch(() => {
 												alert(
 													__(
 														'Failed to delete report',
 														'multivendorx'
 													)
 												);
-											} );
+											});
 									}
 								},
 								hover: true,
 							},
 						],
-					} }
+					}}
 				/>
 			),
 		},
@@ -276,11 +272,11 @@ const PendingReportAbuse: React.FC< Props > = ( { onUpdated } ) => {
 		startDate?: Date,
 		endDate?: Date
 	) {
-		setData( null );
+		setData(null);
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'report-abuse' ),
+			url: getApiLink(appLocalizer, 'report-abuse'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				page: currentPage,
@@ -291,19 +287,19 @@ const PendingReportAbuse: React.FC< Props > = ( { onUpdated } ) => {
 				orderBy,
 				order,
 			},
-		} )
-			.then( ( response ) => {
-				setData( response.data || [] );
-			} )
-			.catch( () => setData( [] ) );
+		})
+			.then((response) => {
+				setData(response.data || []);
+			})
+			.catch(() => setData([]));
 	}
 
 	// 🔹 Handle pagination & date changes
-	useEffect( () => {
+	useEffect(() => {
 		const currentPage = pagination.pageIndex + 1;
-		requestData( pagination.pageSize, currentPage );
-		setPageCount( Math.ceil( totalRows / pagination.pageSize ) );
-	}, [] );
+		requestData(pagination.pageSize, currentPage);
+		setPageCount(Math.ceil(totalRows / pagination.pageSize));
+	}, []);
 
 	const requestApiForData = (
 		rowsPerPage: number,
@@ -325,44 +321,44 @@ const PendingReportAbuse: React.FC< Props > = ( { onUpdated } ) => {
 		{
 			name: 'store',
 			render: (
-				updateFilter: ( key: string, value: string ) => void,
+				updateFilter: (key: string, value: string) => void,
 				filterValue: string | undefined
 			) => (
 				<div className="   group-field">
 					<select
 						name="store"
-						onChange={ ( e ) =>
-							updateFilter( e.target.name, e.target.value )
+						onChange={(e) =>
+							updateFilter(e.target.name, e.target.value)
 						}
-						value={ filterValue || '' }
+						value={filterValue || ''}
 						className="basic-select"
 					>
 						<option value="">All Store</option>
 						<option value="0">Admin</option>
-						{ store?.map( ( s: any ) => (
-							<option key={ s.id } value={ s.id }>
-								{ s.store_name.charAt( 0 ).toUpperCase() +
-									s.store_name.slice( 1 ) }
+						{store?.map((s: any) => (
+							<option key={s.id} value={s.id}>
+								{s.store_name.charAt(0).toUpperCase() +
+									s.store_name.slice(1)}
 							</option>
-						) ) }
+						))}
 					</select>
 				</div>
 			),
 		},
 		{
 			name: 'date',
-			render: ( updateFilter, filterValue ) => (
+			render: (updateFilter, filterValue) => (
 				<div className="right">
 					<MultiCalendarInput
 						wrapperClass=""
 						inputClass=""
-						onChange={ ( range: any ) =>
-							updateFilter( 'date', {
+						onChange={(range: any) =>
+							updateFilter('date', {
 								start_date: range.startDate,
 								end_date: range.endDate,
-							} )
+							})
 						}
-						value={ filterValue }
+						value={filterValue}
 					/>
 				</div>
 			),
@@ -373,20 +369,18 @@ const PendingReportAbuse: React.FC< Props > = ( { onUpdated } ) => {
 		<>
 			<div className="admin-table-wrapper">
 				<Table
-					data={ data }
-					columns={
-						columns as ColumnDef< Record< string, any >, any >[]
-					}
-					rowSelection={ rowSelection }
-					onRowSelectionChange={ setRowSelection }
-					defaultRowsPerPage={ 10 }
-					pageCount={ pageCount }
-					pagination={ pagination }
-					onPaginationChange={ setPagination }
-					handlePagination={ requestApiForData }
-					perPageOption={ [ 10, 25, 50 ] }
-					totalCounts={ totalRows }
-					realtimeFilter={ realtimeFilter }
+					data={data}
+					columns={columns as ColumnDef<Record<string, any>, any>[]}
+					rowSelection={rowSelection}
+					onRowSelectionChange={setRowSelection}
+					defaultRowsPerPage={10}
+					pageCount={pageCount}
+					pagination={pagination}
+					onPaginationChange={setPagination}
+					handlePagination={requestApiForData}
+					perPageOption={[10, 25, 50]}
+					totalCounts={totalRows}
+					realtimeFilter={realtimeFilter}
 				/>
 			</div>
 		</>

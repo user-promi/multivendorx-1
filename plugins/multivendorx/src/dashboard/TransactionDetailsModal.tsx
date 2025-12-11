@@ -19,122 +19,113 @@ type Props = {
 	onClose: () => void;
 };
 
-const TransactionDetailsModal: React.FC< Props > = ( {
-	transaction,
-	onClose,
-} ) => {
+const TransactionDetailsModal: React.FC<Props> = ({ transaction, onClose }) => {
 	return (
 		<>
 			<CommonPopup
-				open={ open }
-				onClose={ onClose }
+				open={open}
+				onClose={onClose}
 				width="31.25rem"
 				height="70%"
 				header={
 					<>
 						<div className="title">
 							<i className="adminlib-cart"></i>
-							{ __( 'Transaction Details', 'multivendorx' ) }
+							{__('Transaction Details', 'multivendorx')}
 						</div>
 						<p>
-							{ __(
+							{__(
 								'Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.',
 								'multivendorx'
-							) }
+							)}
 						</p>
 						<i
 							className="icon adminlib-close"
-							onClick={ onClose }
+							onClick={onClose}
 						></i>
 					</>
 				}
 			>
 				<>
 					<div className="heading">
-						{ __( 'Order Overview', 'multivendorx' ) }
+						{__('Order Overview', 'multivendorx')}
 					</div>
 
 					<div className="commission-details">
 						<div className="items">
 							<div className="text">
-								{ __( 'Date', 'multivendorx' ) }
+								{__('Date', 'multivendorx')}
 							</div>
-							<div className="value">{ transaction.date }</div>
+							<div className="value">{transaction.date}</div>
 						</div>
 						<div className="items">
 							<div className="text">
-								{ __( 'Order Details', 'multivendorx' ) }
+								{__('Order Details', 'multivendorx')}
 							</div>
 							<div className="value">
-								{ transaction.order_details }
+								{transaction.order_details}
 							</div>
 						</div>
 						<div className="items">
 							<div className="text">
-								{ __( 'Transaction Type', 'multivendorx' ) }
+								{__('Transaction Type', 'multivendorx')}
 							</div>
 							<div className="value">
-								{ transaction.transaction_type }
+								{transaction.transaction_type}
 							</div>
 						</div>
 						<div className="items">
 							<div className="text">
-								{ __( 'Payment Mode', 'multivendorx' ) }
+								{__('Payment Mode', 'multivendorx')}
 							</div>
 							<div className="value">
-								{ transaction.payment_mode }
+								{transaction.payment_mode}
 							</div>
 						</div>
 						<div className="items">
 							<div className="text">
-								{ __( 'Credit', 'multivendorx' ) }
+								{__('Credit', 'multivendorx')}
 							</div>
 							<div className="value">
-								{ Number( transaction.credit || 0 ).toFixed(
-									2
-								) }
+								{Number(transaction.credit || 0).toFixed(2)}
 							</div>
 						</div>
 						<div className="items">
 							<div className="text">
-								{ __( 'Debit', 'multivendorx' ) }
+								{__('Debit', 'multivendorx')}
 							</div>
 							<div className="value">
-								{ Number( transaction.debit || 0 ).toFixed(
-									2
-								) }
+								{Number(transaction.debit || 0).toFixed(2)}
 							</div>
 						</div>
 						<div className="items">
 							<div className="text">
-								{ __( 'Balance', 'multivendorx' ) }
+								{__('Balance', 'multivendorx')}
 							</div>
 							<div className="value">
-								{ Number( transaction.balance || 0 ).toFixed(
-									2
-								) }
+								{Number(transaction.balance || 0).toFixed(2)}
 							</div>
 						</div>
 						<div className="items">
 							<div className="text">
-								{ __( 'Status', 'multivendorx' ) }
+								{__('Status', 'multivendorx')}
 							</div>
 							<div className="value">
 								<span
-									className={ `admin-badge ${
+									className={`admin-badge ${
 										transaction.status === 'paid'
 											? 'green'
 											: 'red'
-									}` }
+									}`}
 								>
-									{ transaction.status
+									{transaction.status
 										? transaction.status
-												.replace( /^wc-/, '' ) // remove prefix
-												.replace( /_/g, ' ' ) // underscores → spaces
-												.replace( /\b\w/g, ( c ) =>
+												.replace(/^wc-/, '') // remove prefix
+												.replace(/_/g, ' ') // underscores → spaces
+												.replace(/\b\w/g, (c) =>
 													c.toUpperCase()
 												) // capitalize
-										: '' }
+										: ''}
 								</span>
 							</div>
 						</div>

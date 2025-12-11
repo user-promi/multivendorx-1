@@ -11,87 +11,83 @@ import { __ } from '@wordpress/i18n';
 
 const Privacy = () => {
 	const id = appLocalizer.store_id;
-	const [ formData, setFormData ] = useState< { [ key: string ]: string } >(
-		{}
-	);
-	const [ updateData, setUpdateData ] = useState< { [ key: string ]: any } >(
-		{}
-	);
-	const [ successMsg, setSuccessMsg ] = useState< string | null >( null );
+	const [formData, setFormData] = useState<{ [key: string]: string }>({});
+	const [updateData, setUpdateData] = useState<{ [key: string]: any }>({});
+	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
 	// Fetch store data
-	useEffect( () => {
-		if ( ! id ) return;
+	useEffect(() => {
+		if (!id) return;
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, `store/${ id }` ),
+			url: getApiLink(appLocalizer, `store/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		} ).then( ( res ) => {
+		}).then((res) => {
 			const data = res.data || {};
-			setFormData( ( prev ) => ( { ...prev, ...data } ) );
+			setFormData((prev) => ({ ...prev, ...data }));
 			// setFormData({
 			//     shipping_policy: data.shipping_policy || '',
 			//     refund_policy: data.refund_policy || '',
 			//     exchange_policy: data.exchange_policy || '',
 			// });
-		} );
-	}, [ id ] );
+		});
+	}, [id]);
 
 	// Auto-hide success message after 3 seconds
-	useEffect( () => {
-		if ( successMsg ) {
-			const timer = setTimeout( () => setSuccessMsg( null ), 3000 );
-			return () => clearTimeout( timer );
+	useEffect(() => {
+		if (successMsg) {
+			const timer = setTimeout(() => setSuccessMsg(null), 3000);
+			return () => clearTimeout(timer);
 		}
-	}, [ successMsg ] );
+	}, [successMsg]);
 
 	// Handle field changes
-	const handleChange = ( e: React.ChangeEvent< HTMLTextAreaElement > ) => {
+	const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 		const { name, value } = e.target;
-		const updated = { ...formData, [ name ]: value };
+		const updated = { ...formData, [name]: value };
 
-		if ( name == 'deactivation_reason' ) {
-			setUpdateData( updated );
+		if (name == 'deactivation_reason') {
+			setUpdateData(updated);
 		} else {
-			setFormData( updated );
-			autoSave( updated );
+			setFormData(updated);
+			autoSave(updated);
 		}
 	};
 
 	// Auto-save to API
-	const autoSave = ( updatedData: { [ key: string ]: string } ) => {
-		axios( {
+	const autoSave = (updatedData: { [key: string]: string }) => {
+		axios({
 			method: 'PUT',
-			url: getApiLink( appLocalizer, `store/${ id }` ),
+			url: getApiLink(appLocalizer, `store/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: updatedData,
-		} ).then( ( res ) => {
-			if ( res.data?.success ) {
-				setSuccessMsg( 'Privacy settings saved successfully!' );
-				setFormData( ( prev ) => ( {
+		}).then((res) => {
+			if (res.data?.success) {
+				setSuccessMsg('Privacy settings saved successfully!');
+				setFormData((prev) => ({
 					...prev,
 					deactivation_reason: updateData.deactivation_reason,
-				} ) );
+				}));
 			}
-		} );
+		});
 	};
 	return (
 		<>
-			<SuccessNotice message={ successMsg } />
+			<SuccessNotice message={successMsg} />
 
 			<div className="card-wrapper">
 				<div className="card-content">
 					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label htmlFor="shipping_policy">
-								{ __( 'Shipping Policy', 'multivendorx' ) }
+								{__('Shipping Policy', 'multivendorx')}
 							</label>
 							<TextArea
 								name="shipping_policy"
 								inputClass="textarea-input"
-								value={ formData.shipping_policy || '' }
-								onChange={ handleChange }
+								value={formData.shipping_policy || ''}
+								onChange={handleChange}
 							/>
 						</div>
 					</div>
@@ -99,13 +95,13 @@ const Privacy = () => {
 					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label htmlFor="refund_policy">
-								{ __( 'Refund Policy', 'multivendorx' ) }
+								{__('Refund Policy', 'multivendorx')}
 							</label>
 							<TextArea
 								name="refund_policy"
 								inputClass="textarea-input"
-								value={ formData.refund_policy || '' }
-								onChange={ handleChange }
+								value={formData.refund_policy || ''}
+								onChange={handleChange}
 							/>
 						</div>
 					</div>
@@ -113,16 +109,16 @@ const Privacy = () => {
 					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label htmlFor="exchange_policy">
-								{ __(
+								{__(
 									'Cancellation/Return/Exchange Policy',
 									'multivendorx'
-								) }
+								)}
 							</label>
 							<TextArea
 								name="exchange_policy"
 								inputClass="textarea-input"
-								value={ formData.exchange_policy || '' }
-								onChange={ handleChange }
+								value={formData.exchange_policy || ''}
+								onChange={handleChange}
 							/>
 						</div>
 					</div>
@@ -134,21 +130,21 @@ const Privacy = () => {
 			<div className="card-wrapper">
 				<div className="card-content">
 					<div className="form-group-wrapper">
-						{ formData.deactivation_reason ? (
+						{formData.deactivation_reason ? (
 							<div>
-								{ __(
+								{__(
 									"When you delete a channel, all messages from this channel will be removed from Slack immediately. This can't be undone. Keep in mind: Any files uploaded to this channel won't be removed. You can archive a channel instead without removing its messages.",
 									'multivendorx'
-								) }
+								)}
 							</div>
 						) : (
 							<>
 								<div className="form-group">
 									<label htmlFor="store-description">
-										{ __(
+										{__(
 											'Enable Deactivation',
 											'multivendorx'
-										) }
+										)}
 									</label>
 									<MultiCheckBox
 										wrapperClass="toggle-btn"
@@ -158,38 +154,38 @@ const Privacy = () => {
 										inputInnerWrapperClass="toggle-checkbox"
 										idPrefix="toggle-switch"
 										key="enable_deactivation"
-										options={ [
+										options={[
 											{
 												key: 'enable_deactivation',
 												value: 'enable_deactivation',
 											},
-										] }
+										]}
 										value={
 											formData.enable_deactivation || []
 										}
-										onChange={ ( selected ) => {
-											setFormData( ( prev ) => ( {
+										onChange={(selected) => {
+											setFormData((prev) => ({
 												...prev,
 												enable_deactivation:
 													selected.target.value,
-											} ) );
-											autoSave( {
+											}));
+											autoSave({
 												...formData,
 												enable_deactivation:
 													selected.target.value,
-											} );
-										} }
+											});
+										}}
 									/>
 								</div>
 
-								{ formData.enable_deactivation && (
+								{formData.enable_deactivation && (
 									<>
 										<div className="form-group">
 											<label htmlFor="store-description">
-												{ __(
+												{__(
 													'Deactivation Reason',
 													'multivendorx'
-												) }
+												)}
 											</label>
 											<TextArea
 												name="deactivation_reason"
@@ -198,22 +194,19 @@ const Privacy = () => {
 													updateData.deactivation_reason ||
 													''
 												}
-												onChange={ handleChange }
+												onChange={handleChange}
 											/>
 										</div>
 
 										<div className="form-group">
 											<button>
-												{ __(
-													'Submit',
-													'multivendorx'
-												) }
+												{__('Submit', 'multivendorx')}
 											</button>
 										</div>
 									</>
-								) }
+								)}
 							</>
-						) }
+						)}
 					</div>
 				</div>
 			</div>

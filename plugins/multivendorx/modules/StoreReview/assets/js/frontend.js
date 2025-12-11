@@ -1,5 +1,5 @@
-jQuery( document ).ready( function ( $ ) {
-	const store_id = $( '#store_for_rating' ).val();
+jQuery(document).ready(function ($) {
+	const store_id = $('#store_for_rating').val();
 
 	// Load Average Ratings
 	function loadAverageRatings() {
@@ -10,47 +10,45 @@ jQuery( document ).ready( function ( $ ) {
 				store_id: store_id,
 				nonce: review.nonce,
 			},
-			function ( res ) {
-				if ( res.success ) {
+			function (res) {
+				if (res.success) {
 					const data = res.data;
 					const total = data.total_reviews || 0;
-					const overall = Math.round( data.overall * 10 ) / 10;
+					const overall = Math.round(data.overall * 10) / 10;
 					const breakdown = data.breakdown || {};
 
 					//Build HTML
 					let html = `<div class="avg-rating-summary">
                                 <div class="overall-wrapper"> 
                                     <div class="overall-rating">
-                                        <div class="total">${ overall }</div> 
+                                        <div class="total">${overall}</div> 
                                         <div class="stars">`;
 
 					// Render stars dynamically
-					for ( let i = 1; i <= 5; i++ ) {
+					for (let i = 1; i <= 5; i++) {
 						html +=
-							i <= Math.round( overall )
+							i <= Math.round(overall)
 								? `<i class="adminlib-star"></i>`
 								: `<i class="adminlib-star-o"></i>`;
 					}
 
 					html += `</div>
-                         <div class="total-number">${ total } Rating${
+                         <div class="total-number">${total} Rating${
 								total !== 1 ? 's' : ''
 							}</div>
                          </div>
                          <div class="rating-breakdown">`;
 
 					//Add breakdown dynamically
-					for ( let i = 5; i >= 1; i-- ) {
-						const count = breakdown[ i ] || 0;
+					for (let i = 5; i >= 1; i--) {
+						const count = breakdown[i] || 0;
 						const percent =
-							total > 0
-								? Math.round( ( count / total ) * 100 )
-								: 0;
+							total > 0 ? Math.round((count / total) * 100) : 0;
 						html += `
                         <div class="rating">
-                            ${ i } <i class="adminlib-star"></i> 
-                            <div class="bar"><span style="width:${ percent }%;"></span></div> 
-                            <span>${ count } Review${
+                            ${i} <i class="adminlib-star"></i> 
+                            <div class="bar"><span style="width:${percent}%;"></span></div> 
+                            <span>${count} Review${
 								count !== 1 ? 's' : ''
 							}</span>
                         </div>`;
@@ -58,17 +56,17 @@ jQuery( document ).ready( function ( $ ) {
 
 					html += `</div></div><ul>`;
 
-					for ( let p in data.averages ) {
+					for (let p in data.averages) {
 						html += `<li><span>${
-							Math.round( data.averages[ p ] * 10 ) / 10
-						}</span> ${ p }</li>`;
+							Math.round(data.averages[p] * 10) / 10
+						}</span> ${p}</li>`;
 					}
 
 					html += `</ul></div>`;
 
-					$( '#avg-rating' ).html( html );
+					$('#avg-rating').html(html);
 				} else {
-					$( '#avg-rating' ).html( '<p>No ratings yet.</p>' );
+					$('#avg-rating').html('<p>No ratings yet.</p>');
 				}
 			}
 		);
@@ -83,11 +81,9 @@ jQuery( document ).ready( function ( $ ) {
 				store_id: store_id,
 				nonce: review.nonce,
 			},
-			function ( res ) {
-				if ( res.success ) {
-					$( '#multivendorx-vendor-reviews-list' ).html(
-						res.data.html
-					);
+			function (res) {
+				if (res.success) {
+					$('#multivendorx-vendor-reviews-list').html(res.data.html);
 				}
 			}
 		);
@@ -133,73 +129,73 @@ jQuery( document ).ready( function ( $ ) {
 	//     });
 	// });
 	// Submit Review
-	$( '#review_submit' ).on( 'click', function ( e ) {
+	$('#review_submit').on('click', function (e) {
 		e.preventDefault();
 
 		// Clear previous messages
-		$( '.review-message' ).remove();
+		$('.review-message').remove();
 
-		const title = $( '#review_title' ).val().trim();
-		const content = $( '#review_content' ).val().trim();
+		const title = $('#review_title').val().trim();
+		const content = $('#review_content').val().trim();
 
 		// Inline validation
-		if ( ! title || ! content ) {
-			$( '#commentform' ).prepend( `
+		if (!title || !content) {
+			$('#commentform').prepend(`
             <div class="woocommerce-error review-message">
                 ${
-					! title && ! content
+					!title && !content
 						? 'Please enter both the Review Title and Review Content.'
-						: ! title
-						? 'Please enter a Review Title.'
-						: 'Please enter your Review Content.'
+						: !title
+							? 'Please enter a Review Title.'
+							: 'Please enter your Review Content.'
 				}
             </div>
-        ` );
+        `);
 			return;
 		}
 
 		const formData = new FormData();
-		formData.append( 'action', 'multivendorx_store_review_submit' );
-		formData.append( 'nonce', review.nonce );
-		formData.append( 'store_id', store_id );
-		formData.append( 'review_title', title );
-		formData.append( 'review_content', content );
+		formData.append('action', 'multivendorx_store_review_submit');
+		formData.append('nonce', review.nonce);
+		formData.append('store_id', store_id);
+		formData.append('review_title', title);
+		formData.append('review_content', content);
 
 		// Ratings
-		$( '.multivendorx-rating-select' ).each( function () {
-			const key = $( this ).attr( 'name' );
-			formData.append( key, $( this ).val() );
-		} );
+		$('.multivendorx-rating-select').each(function () {
+			const key = $(this).attr('name');
+			formData.append(key, $(this).val());
+		});
 
 		// Images
-		const files = $( '#review_images' )[ 0 ].files;
-		for ( let i = 0; i < files.length; i++ ) {
-			formData.append( 'review_images[]', files[ i ] );
+		const files = $('#review_images')[0].files;
+		for (let i = 0; i < files.length; i++) {
+			formData.append('review_images[]', files[i]);
 		}
 
-		$.ajax( {
+		$.ajax({
 			url: review.ajaxurl,
 			type: 'POST',
 			data: formData,
 			processData: false,
 			contentType: false,
 			beforeSend: function () {
-				$( '#review_submit' )
-					.prop( 'disabled', true )
-					.text( 'Submitting...' );
+				$('#review_submit')
+					.prop('disabled', true)
+					.text('Submitting...');
 			},
-			success: function ( res ) {
-				$( '#review_submit' )
-					.prop( 'disabled', false )
-					.text( 'Submit Review' );
-				$( '.review-message' ).remove();
+			success: function (res) {
+				$('#review_submit')
+					.prop('disabled', false)
+					.text('Submit Review');
+				$('.review-message').remove();
 
-				if ( res.success ) {
-					$( '#review-form-wrapper' ).html( `
+				if (res.success) {
+					$('#review-form-wrapper').html(`
                     <div class="woocommerce-message review-message">
                         Thank you for your review!
                     </div>
-                ` );
+                `);
 					loadAverageRatings();
 					loadReviews();
 				} else {
@@ -207,93 +203,93 @@ jQuery( document ).ready( function ( $ ) {
 						res.data && res.data.message
 							? res.data.message
 							: 'Something went wrong. Please try again.';
-					$( '#commentform' ).prepend( `
-                    <div class="woocommerce-error review-message">${ message }</div>
-                ` );
+					$('#commentform').prepend(`
+                    <div class="woocommerce-error review-message">${message}</div>
+                `);
 				}
 			},
 			error: function () {
-				$( '#review_submit' )
-					.prop( 'disabled', false )
-					.text( 'Submit Review' );
-				$( '#commentform' ).prepend( `
+				$('#review_submit')
+					.prop('disabled', false)
+					.text('Submit Review');
+				$('#commentform').prepend(`
                 <div class="woocommerce-error review-message">
                     Unable to submit review. Please try again later.
                 </div>
-            ` );
+            `);
 			},
-		} );
-	} );
+		});
+	});
 
 	// hover star
-	$( '.rating i' ).on( 'mouseenter', function () {
-		var value = $( this ).data( 'value' );
-		var $rating = $( this ).closest( '.rating' );
+	$('.rating i').on('mouseenter', function () {
+		var value = $(this).data('value');
+		var $rating = $(this).closest('.rating');
 
-		$rating.find( 'i' ).each( function () {
+		$rating.find('i').each(function () {
 			// Change to 'adminlib-star' on hover for the stars up to the hovered value, else 'adminlib-star-o'
-			$( this ).toggleClass(
+			$(this).toggleClass(
 				'adminlib-star',
-				$( this ).data( 'value' ) <= value
+				$(this).data('value') <= value
 			);
-			$( this ).toggleClass(
+			$(this).toggleClass(
 				'adminlib-star-o',
-				$( this ).data( 'value' ) > value
+				$(this).data('value') > value
 			);
-		} );
-	} );
+		});
+	});
 
-	$( '.rating' ).on( 'mouseleave', function () {
-		var $rating = $( this );
-		$rating.find( 'i' ).each( function () {
+	$('.rating').on('mouseleave', function () {
+		var $rating = $(this);
+		$rating.find('i').each(function () {
 			// Reset back to 'adminlib-star-o' after mouse leaves
-			if ( $( this ).data( 'value' ) > $rating.attr( 'data-selected' ) ) {
-				$( this )
-					.removeClass( 'adminlib-star' )
-					.addClass( 'adminlib-star-o' );
+			if ($(this).data('value') > $rating.attr('data-selected')) {
+				$(this)
+					.removeClass('adminlib-star')
+					.addClass('adminlib-star-o');
 			} else {
-				$( this )
-					.addClass( 'adminlib-star' )
-					.removeClass( 'adminlib-star-o' );
+				$(this)
+					.addClass('adminlib-star')
+					.removeClass('adminlib-star-o');
 			}
-		} );
-	} );
+		});
+	});
 
-	$( '.rating i' ).on( 'click', function () {
-		var value = $( this ).data( 'value' );
-		var $rating = $( this ).closest( '.rating' );
+	$('.rating i').on('click', function () {
+		var value = $(this).data('value');
+		var $rating = $(this).closest('.rating');
 
 		// Set the selected rating value on click
-		$rating.attr( 'data-selected', value );
+		$rating.attr('data-selected', value);
 
 		// Apply the 'adminlib-star' class for the selected stars
-		$rating.find( 'i' ).each( function () {
-			if ( $( this ).data( 'value' ) <= value ) {
-				$( this )
-					.addClass( 'adminlib-star' )
-					.removeClass( 'adminlib-star-o' );
+		$rating.find('i').each(function () {
+			if ($(this).data('value') <= value) {
+				$(this)
+					.addClass('adminlib-star')
+					.removeClass('adminlib-star-o');
 			} else {
-				$( this )
-					.addClass( 'adminlib-star-o' )
-					.removeClass( 'adminlib-star' );
+				$(this)
+					.addClass('adminlib-star-o')
+					.removeClass('adminlib-star');
 			}
-		} );
+		});
 
 		// Update hidden input value to match the selected rating
-		$rating.find( 'input[type="hidden"]' ).val( value );
-	} );
+		$rating.find('input[type="hidden"]').val(value);
+	});
 
-	$( document ).on( 'click', '#write-review-btn', function () {
-		const $form = $( '#commentform' );
-		$form.slideToggle( 300, () => {
-			const formVisible = $form.is( ':visible' );
-			$( '#write-review-btn' ).text(
+	$(document).on('click', '#write-review-btn', function () {
+		const $form = $('#commentform');
+		$form.slideToggle(300, () => {
+			const formVisible = $form.is(':visible');
+			$('#write-review-btn').text(
 				formVisible ? 'Cancel Review' : 'Write a Review'
 			);
-		} );
-	} );
+		});
+	});
 
 	// Initial Load
 	loadAverageRatings();
 	loadReviews();
-} );
+});

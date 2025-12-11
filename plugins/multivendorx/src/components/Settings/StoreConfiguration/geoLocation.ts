@@ -14,7 +14,7 @@ export default {
 		{
 			key: 'radius_search_unit',
 			type: 'setting-toggle',
-			label: __( 'Show map on', 'multivendorx' ),
+			label: __('Show map on', 'multivendorx'),
 			settingDescription: __(
 				'Decide where the store map should appear.',
 				'multivendorx'
@@ -26,17 +26,17 @@ export default {
 			options: [
 				{
 					key: 'store_lisiting',
-					label: __( 'Store lisiting', 'multivendorx' ),
+					label: __('Store lisiting', 'multivendorx'),
 					value: 'store_lisiting',
 				},
 				{
 					key: 'shop_page',
-					label: __( 'Shop page', 'multivendorx' ),
+					label: __('Shop page', 'multivendorx'),
 					value: 'shop_page',
 				},
 				{
 					key: 'both',
-					label: __( 'Both', 'multivendorx' ),
+					label: __('Both', 'multivendorx'),
 					value: 'both',
 				},
 			],
@@ -46,7 +46,7 @@ export default {
 			key: 'choose_map_api',
 			type: 'setting-toggle',
 			defaulValue: 'google_map_set',
-			label: __( 'Map provider', 'multivendorx' ),
+			label: __('Map provider', 'multivendorx'),
 			settingDescription: __(
 				'Choose the service that powers your maps and location search.',
 				'multivendorx'
@@ -58,14 +58,14 @@ export default {
 			options: [
 				{
 					key: 'google_map_set',
-					label: __( 'Google', 'multivendorx' ),
-					value: __( 'google_map_set', 'multivendorx' ),
+					label: __('Google', 'multivendorx'),
+					value: __('google_map_set', 'multivendorx'),
 					icon: 'adminlib-google',
 				},
 				{
 					key: 'mapbox_api_set',
-					label: __( 'Mapbox', 'multivendorx' ),
-					value: __( 'mapbox_api_set', 'multivendorx' ),
+					label: __('Mapbox', 'multivendorx'),
+					value: __('mapbox_api_set', 'multivendorx'),
 					icon: 'adminlib-mapbox',
 				},
 			],
@@ -74,7 +74,7 @@ export default {
 		{
 			key: 'google_api_key',
 			type: 'text',
-			label: __( 'Google map API key', 'multivendorx' ),
+			label: __('Google map API key', 'multivendorx'),
 			desc: __(
 				'<a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Click here to generate key.</a>',
 				'multivendorx'
@@ -89,7 +89,7 @@ export default {
 		{
 			key: 'mapbox_api_key',
 			type: 'text',
-			label: __( 'Mapbox access token', 'multivendorx' ),
+			label: __('Mapbox access token', 'multivendorx'),
 			desc: __(
 				'<a href="https://docs.mapbox.com/help/getting-started/access-tokens/" target="_blank">Click here to generate access token.</a>',
 				'multivendorx'
@@ -118,12 +118,12 @@ export default {
 			nestedFields: [
 				{
 					key: 'radius_search_min_distance',
-					preInsideText: __( 'Min', 'multivendorx' ),
+					preInsideText: __('Min', 'multivendorx'),
 					type: 'number',
 				},
 				{
 					key: 'radius_search_max_distance',
-					preInsideText: __( 'Max', 'multivendorx' ),
+					preInsideText: __('Max', 'multivendorx'),
 					type: 'number',
 				},
 
@@ -133,12 +133,12 @@ export default {
 					options: [
 						{
 							key: 'kilometers',
-							label: __( 'Kilometers', 'multivendorx' ),
+							label: __('Kilometers', 'multivendorx'),
 							value: 'kilometers',
 						},
 						{
 							key: 'miles',
-							label: __( 'Miles', 'multivendorx' ),
+							label: __('Miles', 'multivendorx'),
 							value: 'miles',
 						},
 					],

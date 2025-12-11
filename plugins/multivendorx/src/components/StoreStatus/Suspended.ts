@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'suspended',
 	priority: 1,
-	name: __( 'Suspended', 'multivendorx' ),
+	name: __('Suspended', 'multivendorx'),
 	desc: '',
 	icon: 'adminlib-store-inventory',
 	submitUrl: 'settings',
@@ -11,7 +11,7 @@ export default {
 		{
 			key: 'restriction_for_suspended',
 			type: 'checkbox',
-			label: __( 'Account capabilities', 'multivendorx' ),
+			label: __('Account capabilities', 'multivendorx'),
 			class: 'mvx-toggle-checkbox',
 			options: [
 				{
@@ -28,7 +28,7 @@ export default {
 				},
 				{
 					key: 'disable_payouts',
-					label: __( 'Disable payouts', 'multivendorx' ),
+					label: __('Disable payouts', 'multivendorx'),
 					value: 'DisablePayouts',
 					desc: __(
 						'Suspends payout processing. Earnings will be released once the store successfully clears the review.',
@@ -40,9 +40,9 @@ export default {
 		},
 		{
 			key: 'suspended_msg',
-			label: __( 'Message shown to suspended stores', 'multivendorx' ),
+			label: __('Message shown to suspended stores', 'multivendorx'),
 			type: 'textarea',
-			des: __( 'What suspended stores can do', 'multivendorx' ),
+			des: __('What suspended stores can do', 'multivendorx'),
 		},
 	],
 };

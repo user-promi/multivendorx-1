@@ -42,50 +42,45 @@ type FilterData = {
 export interface RealtimeFilter {
 	name: string;
 	render: (
-		updateFilter: ( key: string, value: any ) => void,
+		updateFilter: (key: string, value: any) => void,
 		filterValue: any
 	) => React.ReactNode;
 }
 
-const PendingProducts: React.FC< { onUpdated?: () => void } > = ( {
+const PendingProducts: React.FC<{ onUpdated?: () => void }> = ({
 	onUpdated,
-} ) => {
-	const [ data, setData ] = useState< StoreRow[] | null >( null );
-	const [ rowSelection, setRowSelection ] = useState< RowSelectionState >(
-		{}
-	);
-	const [ totalRows, setTotalRows ] = useState< number >( 0 );
-	const [ pagination, setPagination ] = useState< PaginationState >( {
+}) => {
+	const [data, setData] = useState<StoreRow[] | null>(null);
+	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+	const [totalRows, setTotalRows] = useState<number>(0);
+	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
 		pageSize: 10,
-	} );
-	const [ pageCount, setPageCount ] = useState( 0 );
+	});
+	const [pageCount, setPageCount] = useState(0);
 
 	// Reject popup state
-	const [ rejectPopupOpen, setRejectPopupOpen ] = useState( false );
-	const [ rejectReason, setRejectReason ] = useState( '' );
-	const [ rejectProductId, setRejectProductId ] = useState< number | null >(
-		null
-	);
-	const [ isSubmitting, setIsSubmitting ] = useState( false ); // prevent multiple clicks
-	const [ store, setStore ] = useState< any[] | null >( null );
+	const [rejectPopupOpen, setRejectPopupOpen] = useState(false);
+	const [rejectReason, setRejectReason] = useState('');
+	const [rejectProductId, setRejectProductId] = useState<number | null>(null);
+	const [isSubmitting, setIsSubmitting] = useState(false); // prevent multiple clicks
+	const [store, setStore] = useState<any[] | null>(null);
 
-	useEffect( () => {
-		axios( {
+	useEffect(() => {
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, 'store' ),
+			url: getApiLink(appLocalizer, 'store'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		} )
-			.then( ( response ) => {
-				setStore( response.data.stores );
-			} )
-			.catch( () => {
-				setStore( [] );
-			} );
-	}, [] );
+		})
+			.then((response) => {
+				setStore(response.data.stores);
+			})
+			.catch(() => {
+				setStore([]);
+			});
+	}, []);
 
-	const formatDateToISO8601 = ( date: Date ) =>
-		date.toISOString().slice( 0, 19 );
+	const formatDateToISO8601 = (date: Date) => date.toISOString().slice(0, 19);
 
 	const requestData = (
 		rowsPerPage = 10,
@@ -99,11 +94,11 @@ const PendingProducts: React.FC< { onUpdated?: () => void } > = ( {
 		const now = new Date();
 		const formattedStartDate = formatDateToISO8601(
 			startDate ||
-				new Date( now.getFullYear(), now.getMonth() - 1, now.getDate() )
+				new Date(now.getFullYear(), now.getMonth() - 1, now.getDate())
 		);
-		const formattedEndDate = formatDateToISO8601( endDate || now );
+		const formattedEndDate = formatDateToISO8601(endDate || now);
 
-		setData( null );
+		setData(null);
 
 		const params: any = {
 			page: currentPage,
@@ -117,68 +112,68 @@ const PendingProducts: React.FC< { onUpdated?: () => void } > = ( {
 		};
 
 		//Add `store` only if not empty
-		if ( store ) {
+		if (store) {
 			params.value = store;
 		}
-		if ( orderBy ) {
+		if (orderBy) {
 			params.orderby = orderBy; // e.g. 'date', 'title', 'price'
 		}
-		if ( order ) {
+		if (order) {
 			params.order = order; // 'asc' or 'desc'
 		}
 		axios
-			.get( `${ appLocalizer.apiUrl }/wc/v3/products`, {
+			.get(`${appLocalizer.apiUrl}/wc/v3/products`, {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params,
-			} )
-			.then( ( response ) => {
+			})
+			.then((response) => {
 				const totalCount =
-					parseInt( response.headers[ 'x-wp-total' ], 10 ) || 0;
-				setTotalRows( totalCount );
-				setPageCount( Math.ceil( totalCount / pagination.pageSize ) );
-				setData( response.data || [] );
-			} )
-			.catch( () => setData( [] ) );
+					parseInt(response.headers['x-wp-total'], 10) || 0;
+				setTotalRows(totalCount);
+				setPageCount(Math.ceil(totalCount / pagination.pageSize));
+				setData(response.data || []);
+			})
+			.catch(() => setData([]));
 	};
 
-	useEffect( () => {
+	useEffect(() => {
 		const currentPage = pagination.pageIndex + 1;
-		requestData( pagination.pageSize, currentPage );
-	}, [ pagination ] );
+		requestData(pagination.pageSize, currentPage);
+	}, [pagination]);
 
-	const handleSingleAction = ( action: string, productId: number ) => {
-		if ( ! productId ) return;
+	const handleSingleAction = (action: string, productId: number) => {
+		if (!productId) return;
 
-		if ( action === 'reject_product' ) {
-			setRejectProductId( productId );
-			setRejectPopupOpen( true );
+		if (action === 'reject_product') {
+			setRejectProductId(productId);
+			setRejectPopupOpen(true);
 			return;
 		}
 
 		const statusUpdate = action === 'approve_product' ? 'publish' : null;
-		if ( ! statusUpdate ) return;
+		if (!statusUpdate) return;
 
 		axios
 			.post(
-				`${ appLocalizer.apiUrl }/wc/v3/products/${ productId }`,
+				`${appLocalizer.apiUrl}/wc/v3/products/${productId}`,
 				{ status: statusUpdate },
 				{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
 			)
-			.then( () => {
+			.then(() => {
 				onUpdated?.();
-				requestData( pagination.pageSize, pagination.pageIndex + 1 );
-			} )
-			.catch( console.error );
+				requestData(pagination.pageSize, pagination.pageIndex + 1);
+			})
+			.catch(console.error);
 	};
 
 	const submitReject = () => {
-		if ( ! rejectProductId || isSubmitting ) return;
+		if (!rejectProductId || isSubmitting) return;
 
-		setIsSubmitting( true );
+		setIsSubmitting(true);
 
 		axios
 			.post(
-				`${ appLocalizer.apiUrl }/wc/v3/products/${ rejectProductId }`,
+				`${appLocalizer.apiUrl}/wc/v3/products/${rejectProductId}`,
 				{
 					status: 'draft',
 					meta_data: [
@@ -187,15 +182,15 @@ const PendingProducts: React.FC< { onUpdated?: () => void } > = ( {
 				},
 				{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
 			)
-			.then( () => {
-				setRejectPopupOpen( false );
-				setRejectReason( '' );
-				setRejectProductId( null );
-				requestData( pagination.pageSize, pagination.pageIndex + 1 );
+			.then(() => {
+				setRejectPopupOpen(false);
+				setRejectReason('');
+				setRejectProductId(null);
+				requestData(pagination.pageSize, pagination.pageIndex + 1);
 				onUpdated?.();
-			} )
-			.catch( console.error )
-			.finally( () => setIsSubmitting( false ) ); // enable button again
+			})
+			.catch(console.error)
+			.finally(() => setIsSubmitting(false)); // enable button again
 	};
 
 	const requestApiForData = (
@@ -203,7 +198,7 @@ const PendingProducts: React.FC< { onUpdated?: () => void } > = ( {
 		currentPage: number,
 		filterData: FilterData
 	) => {
-		setData( null );
+		setData(null);
 		requestData(
 			rowsPerPage,
 			currentPage,
@@ -216,54 +211,54 @@ const PendingProducts: React.FC< { onUpdated?: () => void } > = ( {
 	};
 
 	// Columns
-	const columns: ColumnDef< StoreRow >[] = [
+	const columns: ColumnDef<StoreRow>[] = [
 		{
 			id: 'select',
-			header: ( { table } ) => (
+			header: ({ table }) => (
 				<input
 					type="checkbox"
-					checked={ table.getIsAllRowsSelected() }
-					onChange={ table.getToggleAllRowsSelectedHandler() }
+					checked={table.getIsAllRowsSelected()}
+					onChange={table.getToggleAllRowsSelectedHandler()}
 				/>
 			),
-			cell: ( { row } ) => (
+			cell: ({ row }) => (
 				<input
 					type="checkbox"
-					checked={ row.getIsSelected() }
-					onChange={ row.getToggleSelectedHandler() }
+					checked={row.getIsSelected()}
+					onChange={row.getToggleSelectedHandler()}
 				/>
 			),
 		},
 		{
 			id: 'product',
-			header: __( 'Product', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Product', 'multivendorx'),
+			cell: ({ row }) => {
 				const product = row.original;
-				const image = product.images?.[ 0 ]?.src;
+				const image = product.images?.[0]?.src;
 				const storeName = row.original.store_name || [];
 				return (
-					<TableCell title={ product.name || '' }>
+					<TableCell title={product.name || ''}>
 						<a
-							href={ `${ appLocalizer.site_url }/wp-admin/post.php?post=${ product.id }&action=edit` }
+							href={`${appLocalizer.site_url}/wp-admin/post.php?post=${product.id}&action=edit`}
 							target="_blank"
 							rel="noreferrer"
 							className="product-wrapper"
 						>
-							{ image ? (
-								<img src={ image } alt={ product.name } />
+							{image ? (
+								<img src={image} alt={product.name} />
 							) : (
 								<i className="item-icon adminlib-multi-product"></i>
-							) }
+							)}
 							<div className="details">
 								<span className="title">
-									{ product.name || '-' }
+									{product.name || '-'}
 								</span>
-								{ product.sku && (
+								{product.sku && (
 									<span className="des">
-										SKU: { product.sku }{ ' ' }
+										SKU: {product.sku}{' '}
 									</span>
-								) }
-								<div className="des">By: { storeName }</div>
+								)}
+								<div className="des">By: {storeName}</div>
 							</div>
 						</a>
 					</TableCell>
@@ -271,31 +266,29 @@ const PendingProducts: React.FC< { onUpdated?: () => void } > = ( {
 			},
 		},
 		{
-			header: __( 'Category', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Category', 'multivendorx'),
+			cell: ({ row }) => {
 				const categories = row.original.categories || [];
 				const categoryNames =
-					categories.map( ( c ) => c.name ).join( ', ' ) || '-';
+					categories.map((c) => c.name).join(', ') || '-';
 				return (
-					<TableCell title={ categoryNames }>
-						{ categoryNames }
-					</TableCell>
+					<TableCell title={categoryNames}>{categoryNames}</TableCell>
 				);
 			},
 		},
 		{
-			header: __( 'Price', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.price || '' }>
-					{ row.original.price_html ? (
+			header: __('Price', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.price || ''}>
+					{row.original.price_html ? (
 						<span
-							dangerouslySetInnerHTML={ {
+							dangerouslySetInnerHTML={{
 								__html: row.original.price_html,
-							} }
+							}}
 						/>
 					) : (
 						'-'
-					) }
+					)}
 				</TableCell>
 			),
 		},
@@ -303,40 +296,40 @@ const PendingProducts: React.FC< { onUpdated?: () => void } > = ( {
 			id: 'date',
 			accessorKey: 'date',
 			enableSorting: true,
-			header: __( 'Date Created', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Date Created', 'multivendorx'),
+			cell: ({ row }) => {
 				const rawDate = row.original?.date_created;
-				if ( ! rawDate ) return <TableCell>-</TableCell>;
+				if (!rawDate) return <TableCell>-</TableCell>;
 
-				const date = new Date( rawDate );
-				const formatted = date.toLocaleDateString( 'en-US', {
+				const date = new Date(rawDate);
+				const formatted = date.toLocaleDateString('en-US', {
 					year: 'numeric',
 					month: 'short',
 					day: 'numeric',
-				} );
+				});
 
-				return <TableCell title={ formatted }>{ formatted }</TableCell>;
+				return <TableCell title={formatted}>{formatted}</TableCell>;
 			},
 		},
 		{
-			header: __( 'Action', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.status || '' }>
+			header: __('Action', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.status || ''}>
 					<span
 						className="admin-btn btn-purple"
-						onClick={ () => {
+						onClick={() => {
 							handleSingleAction(
 								'approve_product',
 								row.original.id!
 							);
-						} }
+						}}
 					>
 						<i className="adminlib-check"></i> Approve
 					</span>
 
 					<span
 						className="admin-btn btn-red"
-						onClick={ () =>
+						onClick={() =>
 							handleSingleAction(
 								'reject_product',
 								row.original.id!
@@ -354,41 +347,41 @@ const PendingProducts: React.FC< { onUpdated?: () => void } > = ( {
 		{
 			name: 'store',
 			render: (
-				updateFilter: ( key: string, value: string ) => void,
+				updateFilter: (key: string, value: string) => void,
 				filterValue: string | undefined
 			) => (
 				<div className="   group-field">
 					<select
 						name="store"
-						onChange={ ( e ) =>
-							updateFilter( e.target.name, e.target.value )
+						onChange={(e) =>
+							updateFilter(e.target.name, e.target.value)
 						}
-						value={ filterValue || '' }
+						value={filterValue || ''}
 						className="basic-select"
 					>
 						<option value="">All Store</option>
-						{ store?.map( ( s: any ) => (
-							<option key={ s.id } value={ s.id }>
-								{ s.store_name.charAt( 0 ).toUpperCase() +
-									s.store_name.slice( 1 ) }
+						{store?.map((s: any) => (
+							<option key={s.id} value={s.id}>
+								{s.store_name.charAt(0).toUpperCase() +
+									s.store_name.slice(1)}
 							</option>
-						) ) }
+						))}
 					</select>
 				</div>
 			),
 		},
 		{
 			name: 'date',
-			render: ( updateFilter ) => (
+			render: (updateFilter) => (
 				<div className="right">
 					<MultiCalendarInput
 						wrapperClass=""
 						inputClass=""
-						onChange={ ( range: any ) =>
-							updateFilter( 'date', {
+						onChange={(range: any) =>
+							updateFilter('date', {
 								start_date: range.startDate,
 								end_date: range.endDate,
-							} )
+							})
 						}
 					/>
 				</div>
@@ -399,42 +392,42 @@ const PendingProducts: React.FC< { onUpdated?: () => void } > = ( {
 	return (
 		<>
 			<Table
-				data={ data }
-				columns={ columns as ColumnDef< Record< string, any >, any >[] }
-				rowSelection={ rowSelection }
-				onRowSelectionChange={ setRowSelection }
-				defaultRowsPerPage={ 10 }
-				pageCount={ pageCount }
-				pagination={ pagination }
-				onPaginationChange={ setPagination }
-				handlePagination={ requestApiForData }
-				perPageOption={ [ 10, 25, 50 ] }
-				typeCounts={ [] }
-				totalCounts={ totalRows }
-				realtimeFilter={ realtimeFilter }
+				data={data}
+				columns={columns as ColumnDef<Record<string, any>, any>[]}
+				rowSelection={rowSelection}
+				onRowSelectionChange={setRowSelection}
+				defaultRowsPerPage={10}
+				pageCount={pageCount}
+				pagination={pagination}
+				onPaginationChange={setPagination}
+				handlePagination={requestApiForData}
+				perPageOption={[10, 25, 50]}
+				typeCounts={[]}
+				totalCounts={totalRows}
+				realtimeFilter={realtimeFilter}
 			/>
-			{ /* Reject Product Popup */ }
-			{ rejectPopupOpen && (
+			{/* Reject Product Popup */}
+			{rejectPopupOpen && (
 				<CommonPopup
-					open={ rejectPopupOpen }
-					onClose={ () => {
-						setRejectPopupOpen( false );
-						setRejectReason( '' );
-						setIsSubmitting( false );
-					} }
+					open={rejectPopupOpen}
+					onClose={() => {
+						setRejectPopupOpen(false);
+						setRejectReason('');
+						setIsSubmitting(false);
+					}}
 					width="31.25rem"
 					header={
 						<>
 							<div className="title">
 								<i className="adminlib-cart"></i>
-								{ __( 'Reason', 'multivendorx' ) }
+								{__('Reason', 'multivendorx')}
 							</div>
 							<i
-								onClick={ () => {
-									setRejectPopupOpen( false );
-									setRejectReason( '' );
-									setIsSubmitting( false );
-								} }
+								onClick={() => {
+									setRejectPopupOpen(false);
+									setRejectReason('');
+									setIsSubmitting(false);
+								}}
 								className="icon adminlib-close"
 							></i>
 						</>
@@ -443,22 +436,22 @@ const PendingProducts: React.FC< { onUpdated?: () => void } > = ( {
 						<>
 							<div
 								className="admin-btn btn-red"
-								onClick={ () => {
-									setRejectPopupOpen( false );
-									setRejectReason( '' );
-									setIsSubmitting( false );
-								} }
+								onClick={() => {
+									setRejectPopupOpen(false);
+									setRejectReason('');
+									setIsSubmitting(false);
+								}}
 							>
 								Cancel
 							</div>
 							<button
 								className="admin-btn btn-purple"
-								onClick={ submitReject }
-								disabled={ isSubmitting } // prevent multiple clicks
+								onClick={submitReject}
+								disabled={isSubmitting} // prevent multiple clicks
 							>
-								{ isSubmitting
-									? __( 'Submitting...', 'multivendorx' )
-									: __( 'Reject', 'multivendorx' ) }
+								{isSubmitting
+									? __('Submitting...', 'multivendorx')
+									: __('Reject', 'multivendorx')}
 							</button>
 						</>
 					}
@@ -470,17 +463,17 @@ const PendingProducts: React.FC< { onUpdated?: () => void } > = ( {
 								wrapperClass="setting-from-textarea"
 								inputClass="textarea-input"
 								descClass="settings-metabox-description"
-								value={ rejectReason }
-								onChange={ (
-									e: React.ChangeEvent< HTMLTextAreaElement >
-								) => setRejectReason( e.target.value ) }
+								value={rejectReason}
+								onChange={(
+									e: React.ChangeEvent<HTMLTextAreaElement>
+								) => setRejectReason(e.target.value)}
 								placeholder="Enter reason for rejecting this product..."
-								rows={ 4 }
+								rows={4}
 							/>
 						</div>
 					</div>
 				</CommonPopup>
-			) }
+			)}
 		</>
 	);
 };

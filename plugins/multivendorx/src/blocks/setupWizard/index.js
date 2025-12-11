@@ -7,5 +7,5 @@ render(
 	<BrowserRouter>
 		<SetupWizard />
 	</BrowserRouter>,
-	document.getElementById( 'multivendorx-setup-wizard' )
+	document.getElementById('multivendorx-setup-wizard')
 );

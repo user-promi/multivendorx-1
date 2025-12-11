@@ -30,7 +30,7 @@ interface StoreRow {
 export interface RealtimeFilter {
 	name: string;
 	render: (
-		updateFilter: ( key: string, value: any ) => void,
+		updateFilter: (key: string, value: any) => void,
 		filterValue: any
 	) => React.ReactNode;
 }
@@ -48,45 +48,41 @@ interface Props {
 	onUpdated?: () => void;
 }
 
-const PendingRefund: React.FC< Props > = ( { onUpdated } ) => {
-	const [ data, setData ] = useState< StoreRow[] >( [] );
-	const [ rowSelection, setRowSelection ] = useState< RowSelectionState >(
-		{}
-	);
-	const [ pagination, setPagination ] = useState< PaginationState >( {
+const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
+	const [data, setData] = useState<StoreRow[]>([]);
+	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
 		pageSize: 10,
-	} );
-	const [ totalRows, setTotalRows ] = useState< number >( 0 );
-	const [ pageCount, setPageCount ] = useState< number >( 0 );
-	const [ store, setStore ] = useState< any[] >( [] );
-	const [ error, setError ] = useState< string | null >( null );
-	const [ popupOpen, setPopupOpen ] = useState( false );
-	const [ rejectOrderId, setRejectOrderId ] = useState< number | null >(
-		null
-	);
-	const [ formData, setFormData ] = useState( { content: '' } );
-	const [ submitting, setSubmitting ] = useState( false );
+	});
+	const [totalRows, setTotalRows] = useState<number>(0);
+	const [pageCount, setPageCount] = useState<number>(0);
+	const [store, setStore] = useState<any[]>([]);
+	const [error, setError] = useState<string | null>(null);
+	const [popupOpen, setPopupOpen] = useState(false);
+	const [rejectOrderId, setRejectOrderId] = useState<number | null>(null);
+	const [formData, setFormData] = useState({ content: '' });
+	const [submitting, setSubmitting] = useState(false);
 
 	/**
 	 * Fetch store list on mount
 	 */
-	useEffect( () => {
+	useEffect(() => {
 		// Fetch store list
 		axios
-			.get( getApiLink( appLocalizer, 'store' ), {
+			.get(getApiLink(appLocalizer, 'store'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			} )
-			.then( ( response ) => setStore( response.data.stores || [] ) )
-			.catch( () => {
-				setError( __( 'Failed to load stores', 'multivendorx' ) );
-				setStore( [] );
-			} );
+			})
+			.then((response) => setStore(response.data.stores || []))
+			.catch(() => {
+				setError(__('Failed to load stores', 'multivendorx'));
+				setStore([]);
+			});
 
 		// Fetch total orders count
-		axios( {
+		axios({
 			method: 'GET',
-			url: `${ appLocalizer.apiUrl }/wc/v3/orders`,
+			url: `${appLocalizer.apiUrl}/wc/v3/orders`,
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				meta_key: 'multivendorx_store_id',
@@ -94,23 +90,23 @@ const PendingRefund: React.FC< Props > = ( { onUpdated } ) => {
 				page: 1,
 				per_page: 1,
 			},
-		} )
-			.then( ( response ) => {
-				const total = Number( response.headers[ 'x-wp-total' ] ) || 0;
-				setTotalRows( total );
-				setPageCount( Math.ceil( total / pagination.pageSize ) );
-			} )
-			.catch( () => {
-				setError( __( 'Failed to load total rows', 'multivendorx' ) );
-			} );
-	}, [] );
+		})
+			.then((response) => {
+				const total = Number(response.headers['x-wp-total']) || 0;
+				setTotalRows(total);
+				setPageCount(Math.ceil(total / pagination.pageSize));
+			})
+			.catch(() => {
+				setError(__('Failed to load total rows', 'multivendorx'));
+			});
+	}, []);
 
-	useEffect( () => {
+	useEffect(() => {
 		const currentPage = pagination.pageIndex + 1;
 		const rowsPerPage = pagination.pageSize;
-		requestData( rowsPerPage, currentPage );
-		setPageCount( Math.ceil( totalRows / rowsPerPage ) );
-	}, [] );
+		requestData(rowsPerPage, currentPage);
+		setPageCount(Math.ceil(totalRows / rowsPerPage));
+	}, []);
 
 	/**
 	 * Fetch data from backend (WooCommerce Orders)
@@ -122,10 +118,10 @@ const PendingRefund: React.FC< Props > = ( { onUpdated } ) => {
 		store_id = '',
 		orderBy = '',
 		order = '',
-		startDate = new Date( 0 ),
+		startDate = new Date(0),
 		endDate = new Date()
 	) => {
-		setData( [] );
+		setData([]);
 
 		//Base WooCommerce query params
 		const params: any = {
@@ -138,73 +134,68 @@ const PendingRefund: React.FC< Props > = ( { onUpdated } ) => {
 		};
 
 		//Add Date Filtering — only if both are valid Date objects
-		if ( startDate && endDate ) {
+		if (startDate && endDate) {
 			// Convert to UTC ISO8601 format (WooCommerce expects this)
 			params.after = startDate.toISOString();
 			params.before = endDate.toISOString();
 		}
 
 		//Add Sorting
-		if ( orderBy ) {
+		if (orderBy) {
 			params.orderby = orderBy;
 			params.order = order || 'asc';
 		}
 
-		axios( {
+		axios({
 			method: 'GET',
-			url: `${ appLocalizer.apiUrl }/wc/v3/orders`,
+			url: `${appLocalizer.apiUrl}/wc/v3/orders`,
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params,
-		} )
-			.then( ( response ) => {
-				const orders: StoreRow[] = response.data.map(
-					( order: any ) => {
-						const metaData = order.meta_data || [];
+		})
+			.then((response) => {
+				const orders: StoreRow[] = response.data.map((order: any) => {
+					const metaData = order.meta_data || [];
 
-						//Extract store ID
-						const storeMeta = metaData.find(
-							( meta: any ) =>
-								meta.key === 'multivendorx_store_id'
-						);
-						const store_id = storeMeta ? storeMeta.value : null;
+					//Extract store ID
+					const storeMeta = metaData.find(
+						(meta: any) => meta.key === 'multivendorx_store_id'
+					);
+					const store_id = storeMeta ? storeMeta.value : null;
 
-						//Extract refund reason
-						const reasonMeta = metaData.find(
-							( meta: any ) =>
-								meta.key === '_customer_refund_reason'
-						);
-						const refundReason = reasonMeta
-							? reasonMeta.value
-							: '-';
+					//Extract refund reason
+					const reasonMeta = metaData.find(
+						(meta: any) => meta.key === '_customer_refund_reason'
+					);
+					const refundReason = reasonMeta ? reasonMeta.value : '-';
 
-						return {
-							id: order.id,
-							store_id, // ✅ added
-							store_name: order.store_name || '-', // fallback
-							amount: formatCurrency( order.total ),
-							commission_amount: order.commission_amount
-								? formatCurrency( order.commission_amount )
-								: '-',
-							date: new Date(
-								order.date_created
-							).toLocaleDateString( undefined, {
+					return {
+						id: order.id,
+						store_id, // ✅ added
+						store_name: order.store_name || '-', // fallback
+						amount: formatCurrency(order.total),
+						commission_amount: order.commission_amount
+							? formatCurrency(order.commission_amount)
+							: '-',
+						date: new Date(order.date_created).toLocaleDateString(
+							undefined,
+							{
 								year: 'numeric',
 								month: 'short',
 								day: '2-digit',
-							} ),
-							status: order.status,
-							currency_symbol: order.currency_symbol,
-							reason: refundReason,
-						};
-					}
-				);
+							}
+						),
+						status: order.status,
+						currency_symbol: order.currency_symbol,
+						reason: refundReason,
+					};
+				});
 
-				setData( orders );
-			} )
-			.catch( ( error ) => {
-				setError( __( 'Failed to load order data', 'multivendorx' ) );
-				setData( [] );
-			} );
+				setData(orders);
+			})
+			.catch((error) => {
+				setError(__('Failed to load order data', 'multivendorx'));
+				setData([]);
+			});
 	};
 
 	/**
@@ -233,40 +224,40 @@ const PendingRefund: React.FC< Props > = ( { onUpdated } ) => {
 	const realtimeFilter: RealtimeFilter[] = [
 		{
 			name: 'store_id',
-			render: ( updateFilter, filterValue ) => (
+			render: (updateFilter, filterValue) => (
 				<div className="group-field">
 					<select
 						name="store_id"
-						onChange={ ( e ) =>
-							updateFilter( e.target.name, e.target.value )
+						onChange={(e) =>
+							updateFilter(e.target.name, e.target.value)
 						}
-						value={ filterValue || '' }
+						value={filterValue || ''}
 						className="basic-select"
 					>
 						<option value="">
-							{ __( 'All Stores', 'multivendorx' ) }
+							{__('All Stores', 'multivendorx')}
 						</option>
-						{ store.map( ( s: any ) => (
-							<option key={ s.id } value={ s.id }>
-								{ s.store_name.charAt( 0 ).toUpperCase() +
-									s.store_name.slice( 1 ) }
+						{store.map((s: any) => (
+							<option key={s.id} value={s.id}>
+								{s.store_name.charAt(0).toUpperCase() +
+									s.store_name.slice(1)}
 							</option>
-						) ) }
+						))}
 					</select>
 				</div>
 			),
 		},
 		{
 			name: 'date',
-			render: ( updateFilter ) => (
+			render: (updateFilter) => (
 				<div className="right">
 					<MultiCalendarInput
-						onChange={ ( range: any ) => {
-							updateFilter( 'date', {
+						onChange={(range: any) => {
+							updateFilter('date', {
 								start_date: range.startDate,
 								end_date: range.endDate,
-							} );
-						} }
+							});
+						}}
 					/>
 				</div>
 			),
@@ -276,16 +267,16 @@ const PendingRefund: React.FC< Props > = ( { onUpdated } ) => {
 	const searchFilter: RealtimeFilter[] = [
 		{
 			name: 'searchField',
-			render: ( updateFilter, filterValue ) => (
+			render: (updateFilter, filterValue) => (
 				<div className="search-section">
 					<input
 						name="searchField"
 						type="text"
-						placeholder={ __( 'Search', 'multivendorx' ) }
-						onChange={ ( e ) =>
-							updateFilter( e.target.name, e.target.value )
+						placeholder={__('Search', 'multivendorx')}
+						onChange={(e) =>
+							updateFilter(e.target.name, e.target.value)
 						}
-						value={ filterValue || '' }
+						value={filterValue || ''}
 						className="basic-select"
 					/>
 					<i className="adminlib-search"></i>
@@ -293,42 +284,42 @@ const PendingRefund: React.FC< Props > = ( { onUpdated } ) => {
 			),
 		},
 	];
-	const handleRejectClick = ( orderId: number ) => {
-		setRejectOrderId( orderId );
-		setPopupOpen( true );
+	const handleRejectClick = (orderId: number) => {
+		setRejectOrderId(orderId);
+		setPopupOpen(true);
 	};
 
 	const handleCloseForm = () => {
-		setPopupOpen( false );
-		setRejectOrderId( null );
-		setFormData( { content: '' } );
+		setPopupOpen(false);
+		setRejectOrderId(null);
+		setFormData({ content: '' });
 	};
 
-	const handleChange = ( e: any ) => {
-		setFormData( { ...formData, [ e.target.name ]: e.target.value } );
+	const handleChange = (e: any) => {
+		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
 	const handleSubmit = async () => {
-		if ( ! rejectOrderId ) return;
+		if (!rejectOrderId) return;
 
-		setSubmitting( true );
+		setSubmitting(true);
 
 		try {
 			//Add order note
-			await axios( {
+			await axios({
 				method: 'POST',
-				url: `${ appLocalizer.apiUrl }/wc/v3/orders/${ rejectOrderId }/notes`,
+				url: `${appLocalizer.apiUrl}/wc/v3/orders/${rejectOrderId}/notes`,
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				data: {
 					note: formData.content,
 					customer_note: false,
 				},
-			} );
+			});
 
 			//Update order status + meta
-			await axios( {
+			await axios({
 				method: 'PUT',
-				url: `${ appLocalizer.apiUrl }/wc/v3/orders/${ rejectOrderId }`,
+				url: `${appLocalizer.apiUrl}/wc/v3/orders/${rejectOrderId}`,
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				data: {
 					status: 'processing',
@@ -339,92 +330,86 @@ const PendingRefund: React.FC< Props > = ( { onUpdated } ) => {
 						},
 					],
 				},
-			} );
+			});
 
 			handleCloseForm();
-			requestData( pagination.pageSize, pagination.pageIndex + 1 );
+			requestData(pagination.pageSize, pagination.pageIndex + 1);
 			onUpdated?.();
-		} catch ( err ) {
-			setError( __( 'Failed to reject order', 'multivendorx' ) );
+		} catch (err) {
+			setError(__('Failed to reject order', 'multivendorx'));
 		}
 
-		setSubmitting( false );
+		setSubmitting(false);
 	};
 
 	/**
 	 * Table Columns
 	 */
-	const columns: ColumnDef< StoreRow >[] = [
+	const columns: ColumnDef<StoreRow>[] = [
 		{
 			id: 'order_id',
-			header: __( 'Order', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Order', 'multivendorx'),
+			cell: ({ row }) => {
 				const id = row.original.id;
-				const url = `${ appLocalizer.site_url.replace(
+				const url = `${appLocalizer.site_url.replace(
 					/\/$/,
 					''
-				) }/wp-admin/post.php?post=${ id }&action=edit`;
+				)}/wp-admin/post.php?post=${id}&action=edit`;
 				return (
-					<TableCell title={ '' }>
-						<a
-							href={ url }
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							#{ id }
+					<TableCell title={''}>
+						<a href={url} target="_blank" rel="noopener noreferrer">
+							#{id}
 						</a>
 					</TableCell>
 				);
 			},
 		},
 		{
-			header: __( 'Store', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Store', 'multivendorx'),
+			cell: ({ row }) => {
 				const { store_id, store_name } = row.original;
-				const baseUrl = `${ window.location.origin }/wp-admin/admin.php?page=multivendorx#&tab=stores`;
+				const baseUrl = `${window.location.origin}/wp-admin/admin.php?page=multivendorx#&tab=stores`;
 				const storeLink = store_id
-					? `${ baseUrl }&edit/${ store_id }/&subtab=store-overview`
+					? `${baseUrl}&edit/${store_id}/&subtab=store-overview`
 					: '#';
 
 				return (
-					<TableCell title={ store_name || '' }>
-						{ store_id ? (
+					<TableCell title={store_name || ''}>
+						{store_id ? (
 							<a
-								href={ storeLink }
+								href={storeLink}
 								target="_blank"
 								rel="noopener noreferrer"
 								className="text-purple-600 hover:underline"
 							>
-								{ store_name || '-' }
+								{store_name || '-'}
 							</a>
 						) : (
 							store_name || '-'
-						) }
+						)}
 					</TableCell>
 				);
 			},
 		},
 		{
-			header: __( 'Amount', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ 'amount' }>
-					{ row.original.amount }
+			header: __('Amount', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={'amount'}>{row.original.amount}</TableCell>
+			),
+		},
+		{
+			header: __('Commission', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={'commission'}>
+					{row.original.commission_amount}
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'Commission', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ 'commission' }>
-					{ row.original.commission_amount }
-				</TableCell>
-			),
-		},
-		{
-			header: __( 'Refund Reason', 'multivendorx' ),
-			cell: ( { row }: any ) => (
-				<TableCell title={ row.original.reason || '' }>
-					{ row.original.reason || '-' }
+			header: __('Refund Reason', 'multivendorx'),
+			cell: ({ row }: any) => (
+				<TableCell title={row.original.reason || ''}>
+					{row.original.reason || '-'}
 				</TableCell>
 			),
 		},
@@ -432,29 +417,29 @@ const PendingRefund: React.FC< Props > = ( { onUpdated } ) => {
 			id: 'date',
 			accessorKey: 'date',
 			enableSorting: true,
-			header: __( 'Date', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ 'title' }>{ row.original.date }</TableCell>
+			header: __('Date', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={'title'}>{row.original.date}</TableCell>
 			),
 		},
 		{
-			header: __( 'Action', 'multivendorx' ),
-			cell: ( { row } ) => {
+			header: __('Action', 'multivendorx'),
+			cell: ({ row }) => {
 				const orderId = row.original.id;
-				const orderUrl = `${ appLocalizer.site_url.replace(
+				const orderUrl = `${appLocalizer.site_url.replace(
 					/\/$/,
 					''
-				) }/wp-admin/post.php?post=${ orderId }&action=edit`;
+				)}/wp-admin/post.php?post=${orderId}&action=edit`;
 
 				return (
 					<TableCell
-						title={ 'action' }
+						title={'action'}
 						type="action-dropdown"
-						rowData={ row.original }
-						header={ {
+						rowData={row.original}
+						header={{
 							actions: [
 								{
-									label: __( 'View Order', 'multivendorx' ),
+									label: __('View Order', 'multivendorx'),
 									icon: 'adminlib-preview',
 									onClick: () => {
 										window.open(
@@ -466,13 +451,13 @@ const PendingRefund: React.FC< Props > = ( { onUpdated } ) => {
 									hover: true,
 								},
 								{
-									label: __( 'Reject', 'multivendorx' ),
+									label: __('Reject', 'multivendorx'),
 									icon: 'adminlib-close',
-									onClick: () => handleRejectClick( orderId ),
+									onClick: () => handleRejectClick(orderId),
 									hover: true,
 								},
 							],
-						} }
+						}}
 					/>
 				);
 			},
@@ -483,41 +468,39 @@ const PendingRefund: React.FC< Props > = ( { onUpdated } ) => {
 		<>
 			<div className="admin-table-wrapper">
 				<Table
-					data={ data }
-					columns={
-						columns as ColumnDef< Record< string, any >, any >[]
-					}
-					rowSelection={ rowSelection }
-					onRowSelectionChange={ setRowSelection }
-					defaultRowsPerPage={ pagination.pageSize }
-					pageCount={ pageCount }
-					pagination={ pagination }
-					onPaginationChange={ setPagination }
-					handlePagination={ requestApiForData }
-					perPageOption={ [ 10, 25, 50 ] }
-					realtimeFilter={ realtimeFilter }
-					searchFilter={ searchFilter }
-					totalCounts={ totalRows }
+					data={data}
+					columns={columns as ColumnDef<Record<string, any>, any>[]}
+					rowSelection={rowSelection}
+					onRowSelectionChange={setRowSelection}
+					defaultRowsPerPage={pagination.pageSize}
+					pageCount={pageCount}
+					pagination={pagination}
+					onPaginationChange={setPagination}
+					handlePagination={requestApiForData}
+					perPageOption={[10, 25, 50]}
+					realtimeFilter={realtimeFilter}
+					searchFilter={searchFilter}
+					totalCounts={totalRows}
 				/>
-				{ error && <div className="error-message">{ error }</div> }
+				{error && <div className="error-message">{error}</div>}
 				<CommonPopup
-					open={ popupOpen }
-					onClose={ handleCloseForm }
+					open={popupOpen}
+					onClose={handleCloseForm}
 					width="31.25rem"
 					header={
 						<>
 							<div className="title">
 								<i className="adminlib-announcement"></i>
-								{ __( 'Reject Order', 'multivendorx' ) }
+								{__('Reject Order', 'multivendorx')}
 							</div>
 							<p>
-								{ __(
+								{__(
 									'Provide a rejection message for this order.',
 									'multivendorx'
-								) }
+								)}
 							</p>
 							<i
-								onClick={ handleCloseForm }
+								onClick={handleCloseForm}
 								className="icon adminlib-close"
 							></i>
 						</>
@@ -525,18 +508,18 @@ const PendingRefund: React.FC< Props > = ( { onUpdated } ) => {
 					footer={
 						<>
 							<div
-								onClick={ handleCloseForm }
+								onClick={handleCloseForm}
 								className="admin-btn btn-red"
 							>
 								Cancel
 							</div>
 							<button
 								type="button"
-								onClick={ handleSubmit }
+								onClick={handleSubmit}
 								className="admin-btn btn-purple"
-								disabled={ submitting }
+								disabled={submitting}
 							>
-								{ submitting ? 'Saving...' : 'Submit' }
+								{submitting ? 'Saving...' : 'Submit'}
 							</button>
 						</>
 					}
@@ -548,13 +531,13 @@ const PendingRefund: React.FC< Props > = ( { onUpdated } ) => {
 								<TextArea
 									name="content"
 									inputClass="textarea-input"
-									value={ formData.content }
-									onChange={ handleChange }
-									usePlainText={ false }
+									value={formData.content}
+									onChange={handleChange}
+									usePlainText={false}
 									tinymceApiKey={
 										appLocalizer.settings_databases_value[
 											'marketplace'
-										][ 'tinymce_api_section' ] ?? ''
+										]['tinymce_api_section'] ?? ''
 									}
 								/>
 							</div>

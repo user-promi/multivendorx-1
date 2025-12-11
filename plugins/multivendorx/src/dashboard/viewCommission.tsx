@@ -23,162 +23,158 @@ type CommissionDetails = {
 	createTime: string;
 };
 
-const ViewCommission: React.FC< ViewCommissionProps > = ( {
+const ViewCommission: React.FC<ViewCommissionProps> = ({
 	open,
 	onClose,
 	commissionId,
-} ) => {
-	const [ details, setDetails ] = useState< CommissionDetails | null >(
-		null
-	);
-	const [ loading, setLoading ] = useState( false );
-	useEffect( () => {
-		if ( ! commissionId ) return;
+}) => {
+	const [details, setDetails] = useState<CommissionDetails | null>(null);
+	const [loading, setLoading] = useState(false);
+	useEffect(() => {
+		if (!commissionId) return;
 
-		setLoading( true );
-		axios( {
+		setLoading(true);
+		axios({
 			method: 'GET',
-			url: getApiLink( appLocalizer, `commission/${ commissionId }` ),
+			url: getApiLink(appLocalizer, `commission/${commissionId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		} )
-			.then( ( res ) => {
-				setDetails( res.data );
-			} )
-			.catch( () => {
-				setDetails( null );
-			} )
-			.finally( () => setLoading( false ) );
-	}, [ commissionId ] );
+		})
+			.then((res) => {
+				setDetails(res.data);
+			})
+			.catch(() => {
+				setDetails(null);
+			})
+			.finally(() => setLoading(false));
+	}, [commissionId]);
 
-	if ( ! open ) return null;
+	if (!open) return null;
 
 	return (
 		<CommonPopup
-			open={ open }
-			onClose={ onClose }
+			open={open}
+			onClose={onClose}
 			width="31.25rem"
 			height="100%"
 			header={
 				<>
 					<div className="title">
 						<i className="adminlib-commission"></i>
-						{ __( 'Commission Details', 'multivendorx' ) }
+						{__('Commission Details', 'multivendorx')}
 					</div>
 					<p>
-						{ __(
+						{__(
 							'Details of this commission, including the order breakdown and notes.',
 							'multivendorx'
-						) }
+						)}
 					</p>
-					<i className="icon adminlib-close" onClick={ onClose }></i>
+					<i className="icon adminlib-close" onClick={onClose}></i>
 				</>
 			}
 		>
-			{ loading && <p>{ __( 'Loading...', 'multivendorx' ) }</p> }
+			{loading && <p>{__('Loading...', 'multivendorx')}</p>}
 
-			{ ! loading && details && (
+			{!loading && details && (
 				<>
 					<div className="heading">
-						{ __( 'Order Overview', 'multivendorx' ) }
+						{__('Order Overview', 'multivendorx')}
 					</div>
 
 					<div className="commission-details">
 						<div className="items">
 							<div className="text">
-								{ __( 'Store', 'multivendorx' ) }
+								{__('Store', 'multivendorx')}
 							</div>
-							<div className="value">#{ details.orderId }</div>
+							<div className="value">#{details.orderId}</div>
 						</div>
 						<div className="items">
 							<div className="text">
-								{ __( 'Order ID', 'multivendorx' ) }
+								{__('Order ID', 'multivendorx')}
 							</div>
 							<div className="value">#52</div>
 						</div>
 						<div className="items">
 							<div className="text">
-								{ __( 'Status', 'multivendorx' ) }
+								{__('Status', 'multivendorx')}
 							</div>
 							<div className="value">
 								<span
-									className={ `admin-badge ${
+									className={`admin-badge ${
 										details.status === 'paid'
 											? 'green'
 											: 'red'
-									}` }
+									}`}
 								>
-									{ details.status
+									{details.status
 										? details.status
-												.replace( /^wc-/, '' ) // remove prefix like 'wc-'
-												.replace( /_/g, ' ' ) // replace underscores with spaces
-												.replace( /\b\w/g, ( c ) =>
+												.replace(/^wc-/, '') // remove prefix like 'wc-'
+												.replace(/_/g, ' ') // replace underscores with spaces
+												.replace(/\b\w/g, (c) =>
 													c.toUpperCase()
 												) // capitalize words
-										: '' }
+										: ''}
 								</span>
 							</div>
 						</div>
 						<div className="items">
 							<div className="text">
-								{ __( 'Created', 'multivendorx' ) }
+								{__('Created', 'multivendorx')}
 							</div>
 							<div className="value">
-								{ new Date(
-									details.createTime
-								).toLocaleString() }
+								{new Date(details.createTime).toLocaleString()}
 							</div>
 						</div>
 					</div>
 
 					<div className="popup-divider"></div>
 					<div className="heading">
-						{ __( 'Commission Overview', 'multivendorx' ) }
+						{__('Commission Overview', 'multivendorx')}
 					</div>
 
 					<div className="commission-details">
 						<div className="items">
 							<div className="text">
-								{ __( 'Commission Earned', 'multivendorx' ) }
+								{__('Commission Earned', 'multivendorx')}
 							</div>
 							<div className="value">
-								{ details.commissionAmount }
+								{details.commissionAmount}
 							</div>
 						</div>
 						<div className="items">
 							<div className="text">
-								{ __( 'Commission Total', 'multivendorx' ) }
+								{__('Commission Total', 'multivendorx')}
 							</div>
 							<div className="value">
-								{ details.commissionTotal }
+								{details.commissionTotal}
 							</div>
 						</div>
 						<div className="items">
 							<div className="text">
-								{ __( 'Shipping', 'multivendorx' ) }
+								{__('Shipping', 'multivendorx')}
 							</div>
 							<div className="value">
-								{ details.shippingAmount || '-' }
+								{details.shippingAmount || '-'}
 							</div>
 						</div>
 						<div className="items">
 							<div className="text">
-								{ __( 'Tax', 'multivendorx' ) }
+								{__('Tax', 'multivendorx')}
 							</div>
 							<div className="value">
-								{ details.taxAmount || '-' }
+								{details.taxAmount || '-'}
 							</div>
 						</div>
 						<div className="items">
 							<div className="text">
-								{ __( 'Discount', 'multivendorx' ) }
+								{__('Discount', 'multivendorx')}
 							</div>
 							<div className="value">
-								{ details.discountAmount || '-' }
+								{details.discountAmount || '-'}
 							</div>
 						</div>
 					</div>
 				</>
-			) }
+			)}
 		</CommonPopup>
 	);
 };

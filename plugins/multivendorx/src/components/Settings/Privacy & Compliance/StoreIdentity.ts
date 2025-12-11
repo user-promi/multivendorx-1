@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'identity-verification',
 	priority: 3,
-	name: __( 'Store Identity', 'mvx-pro' ),
+	name: __('Store Identity', 'mvx-pro'),
 	desc: __(
 		'Seller verification confirms a store identity with address, contact, and social profiles-building trust and boosting buyer confidence.',
 		'mvx-pro'
@@ -15,7 +15,7 @@ export default {
 		{
 			key: 'badge_img',
 			type: 'setting-toggle',
-			label: __( 'Verified badge', 'multivendorx' ),
+			label: __('Verified badge', 'multivendorx'),
 			desc: __(
 				'Select a badge from the list above. Once a store is verified, the chosen badge will appear beside its name.',
 				'multivendorx'
@@ -58,7 +58,7 @@ export default {
 		{
 			key: 'separator_content',
 			type: 'section',
-			hint: __( 'Identity verification', 'multivendorx' ),
+			hint: __('Identity verification', 'multivendorx'),
 			desc: __(
 				'Verify store identity using government-issued documents or facial recognition. Ensures authenticity of users.'
 			),
@@ -105,7 +105,7 @@ export default {
 		{
 			key: 'separator_content',
 			type: 'section',
-			hint: __( 'Social verification', 'multivendorx' ),
+			hint: __('Social verification', 'multivendorx'),
 			desc: __(
 				'Allow stores to verify their identity by connecting social media accounts.'
 			),

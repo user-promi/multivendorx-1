@@ -19,7 +19,7 @@
 		"watch:build:project:minify": "wireit",
 		"lint": "pnpm --if-present \"/^lint:lang:.*$/\"",
 		"lint:fix": "pnpm --if-present \"/^lint:fix:.*$/\"",
-		"lint:lang:js": "eslint . --ext .js,.jsx,.ts,.tsx",
+		"lint:lang:js": "eslint . --ext .js,.jsx,.ts,.tsx,.mjs",
 		"lint:lang:php": "composer run-script phpcs",
 		"lint:lang:css": "wp-scripts lint-style",
 		"lint:fix:css": "stylelint '**/*.{css,scss}' --fix",

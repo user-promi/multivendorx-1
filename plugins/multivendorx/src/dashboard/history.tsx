@@ -19,30 +19,28 @@ type History = {
 };
 
 const History: React.FC = () => {
-	const [ data, setData ] = useState< CommissionRow[] >( [] );
+	const [data, setData] = useState<CommissionRow[]>([]);
 
-	const [ rowSelection, setRowSelection ] = useState< RowSelectionState >(
-		{}
-	);
-	const [ totalRows, setTotalRows ] = useState< number >( 0 );
-	const [ pagination, setPagination ] = useState< PaginationState >( {
+	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+	const [totalRows, setTotalRows] = useState<number>(0);
+	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
 		pageSize: 10,
-	} );
+	});
 
-	const [ showDropdown, setShowDropdown ] = useState( false );
+	const [showDropdown, setShowDropdown] = useState(false);
 
-	const toggleDropdown = ( id: any ) => {
-		if ( showDropdown === id ) {
-			setShowDropdown( false );
+	const toggleDropdown = (id: any) => {
+		if (showDropdown === id) {
+			setShowDropdown(false);
 			return;
 		}
-		setShowDropdown( id );
+		setShowDropdown(id);
 	};
-	const [ pageCount, setPageCount ] = useState( 0 );
+	const [pageCount, setPageCount] = useState(0);
 
 	// 🔹 Add demo data on mount
-	useEffect( () => {
+	useEffect(() => {
 		const demoData: CommissionRow[] = [
 			{
 				id: 25831,
@@ -72,119 +70,117 @@ const History: React.FC = () => {
 				status: 'Expired',
 			},
 		];
-		setData( demoData );
-		setTotalRows( demoData.length );
-	}, [] );
+		setData(demoData);
+		setTotalRows(demoData.length);
+	}, []);
 
 	// 🔹 Update page count when pagination or totalRows changes
-	useEffect( () => {
+	useEffect(() => {
 		const rowsPerPage = pagination.pageSize;
-		setPageCount( Math.ceil( totalRows / rowsPerPage ) );
-	}, [ pagination, totalRows ] );
+		setPageCount(Math.ceil(totalRows / rowsPerPage));
+	}, [pagination, totalRows]);
 
 	// Column definitions
-	const columns: ColumnDef< CommissionRow >[] = [
+	const columns: ColumnDef<CommissionRow>[] = [
 		{
 			id: 'select',
-			header: ( { table } ) => (
+			header: ({ table }) => (
 				<input
 					type="checkbox"
-					checked={ table.getIsAllRowsSelected() }
-					onChange={ table.getToggleAllRowsSelectedHandler() }
+					checked={table.getIsAllRowsSelected()}
+					onChange={table.getToggleAllRowsSelectedHandler()}
 				/>
 			),
-			cell: ( { row } ) => (
+			cell: ({ row }) => (
 				<input
 					type="checkbox"
-					checked={ row.getIsSelected() }
-					onChange={ row.getToggleSelectedHandler() }
+					checked={row.getIsSelected()}
+					onChange={row.getToggleSelectedHandler()}
 				/>
 			),
 		},
 		{
-			header: __( 'Commission', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.store_name || '' }>
-					{ row.original.store_name || '-' }
+			header: __('Commission', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.store_name || ''}>
+					{row.original.store_name || '-'}
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'Commission type', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.type || '' }>
-					{ row.original.type || '-' }
+			header: __('Commission type', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.type || ''}>
+					{row.original.type || '-'}
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'Commission Amount', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.amount || '' }>
-					{ row.original.amount || '-' }
+			header: __('Commission Amount', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.amount || ''}>
+					{row.original.amount || '-'}
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'Usage / Limit', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.usage || '' }>
-					{ row.original.usage || '-' }
+			header: __('Usage / Limit', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.usage || ''}>
+					{row.original.usage || '-'}
 				</TableCell>
 			),
 		},
 		{
-			header: __( 'Expiry Date', 'multivendorx' ),
-			cell: ( { row } ) => (
-				<TableCell title={ row.original.expiry || '' }>
-					{ row.original.expiry || '-' }
+			header: __('Expiry Date', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.expiry || ''}>
+					{row.original.expiry || '-'}
 				</TableCell>
 			),
 		},
 		{
 			id: 'status',
-			header: __( 'Status', 'multivendorx' ),
-			cell: ( { row } ) => {
-				return (
-					<TableCell type="status" status={ row.original.status } />
-				);
+			header: __('Status', 'multivendorx'),
+			cell: ({ row }) => {
+				return <TableCell type="status" status={row.original.status} />;
 			},
 		},
 		{
-			header: __( 'Action', 'multivendorx' ),
-			cell: ( { row } ) => (
+			header: __('Action', 'multivendorx'),
+			cell: ({ row }) => (
 				<TableCell title="Action">
 					<div className="action-section">
 						<div className="action-icons">
 							<i
 								className="adminlib-more-vertical"
-								onClick={ () =>
-									toggleDropdown( row.original.order_id )
+								onClick={() =>
+									toggleDropdown(row.original.order_id)
 								}
 							></i>
 							<div
-								className={ `action-dropdown ${
+								className={`action-dropdown ${
 									showDropdown === row.original.order_id
 										? 'show'
 										: ''
-								}` }
+								}`}
 							>
 								<ul>
 									<li
-										onClick={ () =>
-											( window.location.href = `?page=multivendorx#&tab=stores&view&id=${ row.original.id }` )
+										onClick={() =>
+											(window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
 										}
 									>
 										<i className="adminlib-preview"></i>
-										{ __( 'View Store', 'multivendorx' ) }
+										{__('View Store', 'multivendorx')}
 									</li>
 									<li
-										onClick={ () =>
-											( window.location.href = `?page=multivendorx#&tab=stores&edit/${ row.original.id }` )
+										onClick={() =>
+											(window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
 										}
 									>
 										<i className="adminlib-edit"></i>
-										{ __( 'Edit Store', 'multivendorx' ) }
+										{__('Edit Store', 'multivendorx')}
 									</li>
 								</ul>
 							</div>
@@ -199,18 +195,16 @@ const History: React.FC = () => {
 		<>
 			<div className="admin-table-wrapper">
 				<Table
-					data={ data }
-					columns={
-						columns as ColumnDef< Record< string, any >, any >[]
-					}
-					rowSelection={ rowSelection }
-					onRowSelectionChange={ setRowSelection }
-					defaultRowsPerPage={ 10 }
-					pageCount={ pageCount }
-					pagination={ pagination }
-					onPaginationChange={ setPagination }
-					perPageOption={ [ 10, 25, 50 ] }
-					typeCounts={ [] }
+					data={data}
+					columns={columns as ColumnDef<Record<string, any>, any>[]}
+					rowSelection={rowSelection}
+					onRowSelectionChange={setRowSelection}
+					defaultRowsPerPage={10}
+					pageCount={pageCount}
+					pagination={pagination}
+					onPaginationChange={setPagination}
+					perPageOption={[10, 25, 50]}
+					typeCounts={[]}
 					// realtimeFilter={[]}
 				/>
 			</div>
