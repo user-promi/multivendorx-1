@@ -77,7 +77,7 @@ const Memberships = () => {
     ];
 
     // const getForm = (tabId: string) => {
-    //     switch (tabId) {
+    //     switch (tabId) {z
     //         case 'payment-membership-message':
     //             return <MessageAndMail id=''/>;
     //         case 'payment-membership-design':
