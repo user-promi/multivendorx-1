@@ -1,3 +1,3 @@
 export default {
-    priority:9
-}
+	priority: 9,
+};

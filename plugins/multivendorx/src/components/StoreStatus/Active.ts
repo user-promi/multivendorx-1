@@ -1,30 +1,30 @@
 import { __ } from '@wordpress/i18n';
 
 export default {
-    id: 'active',
-    priority: 1,
-    name: __('Active', 'multivendorx'),
-    desc: '',
-    icon: 'adminlib-store-inventory',
-    submitUrl: 'settings',
-    modal: [
-        {
-            key: 'store_promotion_limit',
-            // label: __('Account capabilities', 'multivendorx'),
-            type: 'nested',
-            single: true,
-            nestedFields: [
-                {
-                    key: 'paid_promotion_limit',
-                    type: 'setup',
-                    label: __('Configure store permissions', 'multivendorx'),
-                    desc: __(
-                        'Control what dashboard sections and tools are available to active stores.',
-                        'multivendorx'
-                    ),
-                    link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-capability`,
-                },
-            ],
-        },
-    ],
+	id: 'active',
+	priority: 1,
+	name: __('Active', 'multivendorx'),
+	desc: '',
+	icon: 'adminlib-store-inventory',
+	submitUrl: 'settings',
+	modal: [
+		{
+			key: 'store_promotion_limit',
+			// label: __('Account capabilities', 'multivendorx'),
+			type: 'nested',
+			single: true,
+			nestedFields: [
+				{
+					key: 'paid_promotion_limit',
+					type: 'setup',
+					label: __('Configure store permissions', 'multivendorx'),
+					desc: __(
+						'Control what dashboard sections and tools are available to active stores.',
+						'multivendorx'
+					),
+					link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-capability`,
+				},
+			],
+		},
+	],
 };

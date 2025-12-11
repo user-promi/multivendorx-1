@@ -4,57 +4,56 @@ import NotificationTable from './NotificationTable';
 import ActivityTable from './ActivityTable';
 
 const Notifications = () => {
-    const location = new URLSearchParams(useLocation().hash.substring(1));
-    const initialTab = location.get('tab') || 'notifications';
+	const location = new URLSearchParams(useLocation().hash.substring(1));
+	const initialTab = location.get('tab') || 'notifications';
 
-    const tabData = [
-        {
-            type: 'file',
-            content: {
-                id: 'notifications',
-                name: 'Notifications',
-                desc: 'Store Info',
-                hideTabHeader: true,
-                icon: 'adminlib-credit-card',
-            },
-        },
-        {
-            type: 'file',
-            content: {
-                id: 'activities',
-                name: 'Activities',
-                desc: 'Store Info',
-                hideTabHeader: true,
-                icon: 'adminlib-credit-card',
-            },
-        }
-    ];
+	const tabData = [
+		{
+			type: 'file',
+			content: {
+				id: 'notifications',
+				name: 'Notifications',
+				desc: 'Store Info',
+				hideTabHeader: true,
+				icon: 'adminlib-credit-card',
+			},
+		},
+		{
+			type: 'file',
+			content: {
+				id: 'activities',
+				name: 'Activities',
+				desc: 'Store Info',
+				hideTabHeader: true,
+				icon: 'adminlib-credit-card',
+			},
+		},
+	];
 
-    const getForm = (tabId: string) => {
-        switch (tabId) {
-            case 'notifications':
-                return <NotificationTable />;
-            case 'activities':
-                return <ActivityTable />;
-            default:
-                return <div></div>;
-        }
-    };
+	const getForm = (tabId: string) => {
+		switch (tabId) {
+			case 'notifications':
+				return <NotificationTable />;
+			case 'activities':
+				return <ActivityTable />;
+			default:
+				return <div></div>;
+		}
+	};
 
-    return (
-        <Tabs
-            tabData={tabData}
-            currentTab={initialTab}
-            getForm={getForm}
-            prepareUrl={ ( tabid: string ) =>
-                        `?page=multivendorx#&tab=${ tabid }`}
-            appLocalizer={appLocalizer}
-            premium={false}
-            Link={Link}
-            hideTitle={true}
-            hideBreadcrumb={true}
-        />
-    );
-}
+	return (
+		<Tabs
+			tabData={tabData}
+			currentTab={initialTab}
+			getForm={getForm}
+			prepareUrl={(tabid: string) => `?page=multivendorx#&tab=${tabid}`}
+			appLocalizer={appLocalizer}
+			premium={false}
+			Link={Link}
+			hideTitle={true}
+			hideBreadcrumb={true}
+		/>
+	);
+};
 
 export default Notifications;

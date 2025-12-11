@@ -4,256 +4,261 @@ import { FormViewer, getApiLink, ToggleSetting } from 'zyra';
 import axios from 'axios';
 
 const RegistrationForm = () => {
-    const [loading, setLoading] = useState(false);
-    const [toast, setToast] = useState(false);
-    const [responseMessage, setResponseMessage] = useState('');
-    const [responseData, setResponseData] = useState<any[]>([]);
-    const [stores, setStores] = useState<any[]>([]);
-    const [selectedStore, setSelectedStore] = useState<any>(null);
-    const [inputs, setInputs] = useState<Record<string, any>>({});
-    const [allStoreData, setAllStoreData] = useState<any[]>([]);
-    const [storeData, setStoreData] = useState<any>(null);
-    const formData = registrationForm;
-    // useEffect(() => {
+	const [loading, setLoading] = useState(false);
+	const [toast, setToast] = useState(false);
+	const [responseMessage, setResponseMessage] = useState('');
+	const [responseData, setResponseData] = useState<any[]>([]);
+	const [stores, setStores] = useState<any[]>([]);
+	const [selectedStore, setSelectedStore] = useState<any>(null);
+	const [inputs, setInputs] = useState<Record<string, any>>({});
+	const [allStoreData, setAllStoreData] = useState<any[]>([]);
+	const [storeData, setStoreData] = useState<any>(null);
+	const formData = registrationForm;
+	// useEffect(() => {
 
-    //     axios({
-    //         method: 'GET',
-    //         url: getApiLink(appLocalizer, `store`),
-    //         headers: { 'X-WP-Nonce': appLocalizer.nonce },
-    //         params: { "store_registration": true },
+	//     axios({
+	//         method: 'GET',
+	//         url: getApiLink(appLocalizer, `store`),
+	//         headers: { 'X-WP-Nonce': appLocalizer.nonce },
+	//         params: { "store_registration": true },
 
-    //     }).then((res) => {
-    //         const data = res.data || {};
-    //         const storeList = data.all_stores || [];
-    //         const regData = data.response || [];
-    //         setStores(storeList);
-    //         setResponseData(regData);
+	//     }).then((res) => {
+	//         const data = res.data || {};
+	//         const storeList = data.all_stores || [];
+	//         const regData = data.response || [];
+	//         setStores(storeList);
+	//         setResponseData(regData);
 
-    //         if (storeList.length > 0 && regData.length > 0) {
-    //             // const firstStore = storeList[0];
-    //             // setSelectedStore(firstStore);
-    //             // const match = regData.find(
-    //             //     (item) => String(item.id) === String(firstStore.value)
-    //             //     );
-    //             // if (match) setInputs(match);
+	//         if (storeList.length > 0 && regData.length > 0) {
+	//             // const firstStore = storeList[0];
+	//             // setSelectedStore(firstStore);
+	//             // const match = regData.find(
+	//             //     (item) => String(item.id) === String(firstStore.value)
+	//             //     );
+	//             // if (match) setInputs(match);
 
-    //             const match = storeList.find((store) =>
-    //                 regData.some((item) => String(item.id) === String(store.value))
-    //             );
+	//             const match = storeList.find((store) =>
+	//                 regData.some((item) => String(item.id) === String(store.value))
+	//             );
 
-    //             if (match) {
-    //                 setSelectedStore(match);
+	//             if (match) {
+	//                 setSelectedStore(match);
 
-    //                 // Find the corresponding registration data
-    //                 const matchData = regData.find(
-    //                     (item) => String(item.id) === String(match.value)
-    //                 );
+	//                 // Find the corresponding registration data
+	//                 const matchData = regData.find(
+	//                     (item) => String(item.id) === String(match.value)
+	//                 );
 
-    //                 if (matchData) setInputs(matchData);
-    //             }
-    //         }
-    //     });
-    // }, []);
+	//                 if (matchData) setInputs(matchData);
+	//             }
+	//         }
+	//     });
+	// }, []);
 
-    useEffect(() => {
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, `store`),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: { store_registration: true },
-        }).then((res) => {
-            const data = res.data || {};
-            const storeList = data.all_stores || [];
-            const regData = data.response || [];
-            const returnedStoreData = data.store_data || [];
+	useEffect(() => {
+		axios({
+			method: 'GET',
+			url: getApiLink(appLocalizer, `store`),
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			params: { store_registration: true },
+		}).then((res) => {
+			const data = res.data || {};
+			const storeList = data.all_stores || [];
+			const regData = data.response || [];
+			const returnedStoreData = data.store_data || [];
 
-            setAllStoreData(returnedStoreData);
-            //Prevent unnecessary re-renders
-            setStores((prev) => {
-                if (JSON.stringify(prev) !== JSON.stringify(storeList)) {
-                    return storeList;
-                }
-                return prev;
-            });
+			setAllStoreData(returnedStoreData);
+			//Prevent unnecessary re-renders
+			setStores((prev) => {
+				if (JSON.stringify(prev) !== JSON.stringify(storeList)) {
+					return storeList;
+				}
+				return prev;
+			});
 
-            setResponseData((prev) => {
-                if (JSON.stringify(prev) !== JSON.stringify(regData)) {
-                    return regData;
-                }
-                return prev;
-            });
+			setResponseData((prev) => {
+				if (JSON.stringify(prev) !== JSON.stringify(regData)) {
+					return regData;
+				}
+				return prev;
+			});
 
-            if (storeList.length > 0 && regData.length > 0) {
-                const match = storeList.find((store: any) =>
-                    regData.some((item: any) => String(item.id) === String(store.value))
-                );
+			if (storeList.length > 0 && regData.length > 0) {
+				const match = storeList.find((store: any) =>
+					regData.some(
+						(item: any) => String(item.id) === String(store.value)
+					)
+				);
 
-                if (match) {
-                    setSelectedStore(match);
+				if (match) {
+					setSelectedStore(match);
 
-                    const matchData = regData.find(
-                        (item) => String(item.id) === String(match.value)
-                    );
+					const matchData = regData.find(
+						(item) => String(item.id) === String(match.value)
+					);
 
-                    if (matchData) setInputs(matchData);
+					if (matchData) setInputs(matchData);
 
+					const dataMatch = returnedStoreData.find(
+						(item: any) => String(item.id) === String(match.value)
+					);
+					if (dataMatch) setStoreData(dataMatch);
+				}
+			}
+		});
+	}, []);
 
-                    const dataMatch = returnedStoreData.find(
-                        (item: any) => String(item.id) === String(match.value)
-                    );
-                    if (dataMatch) setStoreData(dataMatch);
-            
-                }
-            }
-        });
-    }, []);
+	const handleStoreChange = (val: string) => {
+		const store = stores.find((s) => s.value === val);
+		setSelectedStore(store);
 
-    const handleStoreChange = (val: string) => {
-        const store = stores.find((s) => s.value === val);
-        setSelectedStore(store);
+		const match = responseData.find(
+			(item) => String(item.id) === String(val)
+		);
+		setInputs(match || {});
 
-        const match = responseData.find(
-            (item) => String(item.id) === String(val)
-        );
-        setInputs(match || {});
+		const dataMatch = allStoreData.find(
+			(item: any) => String(item.id) === String(val)
+		);
+		setStoreData(dataMatch || {});
+	};
 
-        const dataMatch = allStoreData.find(
-            (item: any) => String(item.id) === String(val)
-          );
-        setStoreData(dataMatch || {});
-    };
+	// const onSubmit = (submittedFormData: Record<string, any>) => {
+	//     setLoading(true);
 
-    // const onSubmit = (submittedFormData: Record<string, any>) => {
-    //     setLoading(true);
+	//     // Map form field keys to backend expected keys
+	//     const mappedData: Record<string, any> = {};
 
-    //     // Map form field keys to backend expected keys
-    //     const mappedData: Record<string, any> = {};
+	//     // Core fields
+	//     if (submittedFormData['name']) mappedData['name'] = submittedFormData['name'];
+	//     if (submittedFormData['description'] || submittedFormData['description'])
+	//         mappedData['description'] = submittedFormData['description'] || submittedFormData['description'];
 
-    //     // Core fields
-    //     if (submittedFormData['name']) mappedData['name'] = submittedFormData['name'];
-    //     if (submittedFormData['description'] || submittedFormData['description'])
-    //         mappedData['description'] = submittedFormData['description'] || submittedFormData['description'];
+	//     // Optional: slug, who_created (if coming from form)
+	//     if (submittedFormData['slug']) mappedData['slug'] = submittedFormData['slug'];
 
-    //     // Optional: slug, who_created (if coming from form)
-    //     if (submittedFormData['slug']) mappedData['slug'] = submittedFormData['slug'];
+	//     // Other fields as meta
+	//     Object.keys(submittedFormData).forEach((key) => {
+	//         if (!['name', 'description', 'slug'].includes(key)) {
+	//             mappedData[key] = submittedFormData[key];
+	//         }
+	//     });
 
-    //     // Other fields as meta
-    //     Object.keys(submittedFormData).forEach((key) => {
-    //         if (!['name', 'description', 'slug'].includes(key)) {
-    //             mappedData[key] = submittedFormData[key];
-    //         }
-    //     });
+	//     // Send to API
+	//     axios({
+	//         method: 'POST',
+	//         url: getApiLink(registrationForm, 'store'),
+	//         headers: { 'X-WP-Nonce': registrationForm.nonce, "registrations": 'registrations' },
+	//         data: {
+	//             formData: mappedData,
+	//         },
+	//     })
+	//         .then((response) => {
+	//             console.log('Store created:', response.data);
+	//             if (response.data.redirect !== '') {
+	//                 window.location.href = response.data.redirect;
+	//             }
+	//             setLoading(false);
+	//         })
+	//         .catch((error) => {
+	//             console.error('Error creating store:', error);
+	//             setLoading(false);
+	//         });
+	// };
+	const onSubmit = useCallback((submittedFormData: Record<string, any>) => {
+		setLoading(true);
 
-    //     // Send to API
-    //     axios({
-    //         method: 'POST',
-    //         url: getApiLink(registrationForm, 'store'),
-    //         headers: { 'X-WP-Nonce': registrationForm.nonce, "registrations": 'registrations' },
-    //         data: {
-    //             formData: mappedData,
-    //         },
-    //     })
-    //         .then((response) => {
-    //             console.log('Store created:', response.data);
-    //             if (response.data.redirect !== '') {
-    //                 window.location.href = response.data.redirect;
-    //             }
-    //             setLoading(false);
-    //         })
-    //         .catch((error) => {
-    //             console.error('Error creating store:', error);
-    //             setLoading(false);
-    //         });
-    // };
-    const onSubmit = useCallback((submittedFormData: Record<string, any>) => {
-        setLoading(true);
+		const mappedData: Record<string, any> = {};
 
-        const mappedData: Record<string, any> = {};
+		if (submittedFormData['name'])
+			mappedData['name'] = submittedFormData['name'];
+		if (submittedFormData['description'])
+			mappedData['description'] = submittedFormData['description'];
+		if (submittedFormData['slug'])
+			mappedData['slug'] = submittedFormData['slug'];
 
-        if (submittedFormData['name']) mappedData['name'] = submittedFormData['name'];
-        if (submittedFormData['description']) mappedData['description'] = submittedFormData['description'];
-        if (submittedFormData['slug']) mappedData['slug'] = submittedFormData['slug'];
+		Object.keys(submittedFormData).forEach((key) => {
+			if (!['name', 'description', 'slug'].includes(key)) {
+				mappedData[key] = submittedFormData[key];
+			}
+		});
 
-        Object.keys(submittedFormData).forEach((key) => {
-            if (!['name', 'description', 'slug'].includes(key)) {
-                mappedData[key] = submittedFormData[key];
-            }
-        });
+		axios({
+			method: 'POST',
+			url: getApiLink(registrationForm, 'store'),
+			headers: {
+				'X-WP-Nonce': registrationForm.nonce,
+				registrations: 'registrations',
+			},
+			data: { formData: mappedData },
+		})
+			.then((response) => {
+				console.log('Store created:', response.data);
+				if (response.data.redirect !== '') {
+					window.location.href = response.data.redirect;
+				}
+				setLoading(false);
+			})
+			.catch((error) => {
+				console.error('Error creating store:', error);
+				setLoading(false);
+			});
+	}, []); //empty dependencies = stable function
 
-        axios({
-            method: 'POST',
-            url: getApiLink(registrationForm, 'store'),
-            headers: { 'X-WP-Nonce': registrationForm.nonce, "registrations": 'registrations' },
-            data: { formData: mappedData },
-        })
-            .then((response) => {
-                console.log('Store created:', response.data);
-                if (response.data.redirect !== '') {
-                    window.location.href = response.data.redirect;
-                }
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error('Error creating store:', error);
-                setLoading(false);
-            });
-    }, []); //empty dependencies = stable function
+	const memoizedCountryList = useMemo(() => appLocalizer.country_list, []);
+	const memoizedStateList = useMemo(() => appLocalizer.state_list, []);
 
-    const memoizedCountryList = useMemo(() => appLocalizer.country_list, []);
-    const memoizedStateList = useMemo(() => appLocalizer.state_list, []);
+	return (
+		<>
+			{loading && (
+				<section className="loader-wrapper">
+					<div className="loader-item">
+						<div className="three-body-dot"></div>
+						<div className="three-body-dot"></div>
+						<div className="three-body-dot"></div>
+					</div>
+				</section>
+			)}
+			{stores.length > 0 && (
+				<>
+					<div className="store-selector">
+						<ToggleSetting
+							wrapperClass="setting-form-input"
+							options={stores}
+							value={selectedStore?.value || ''}
+							onChange={(val: any) => handleStoreChange(val)}
+						/>
+					</div>
 
-    return (
-        <>
-            {loading && (
-                <section className="loader-wrapper">
-                    <div className="loader-item">
-                        <div className="three-body-dot"></div>
-                        <div className="three-body-dot"></div>
-                        <div className="three-body-dot"></div>
-                    </div>
-                </section>
-            )}
-            {stores.length > 0 && (
-                <>
-                    <div className="store-selector">
-                        <ToggleSetting
-                            wrapperClass="setting-form-input"
-                            options={stores}
-                            value={selectedStore?.value || ""}
-                            onChange={(val: any) => handleStoreChange(val)}
-                        />
-                    </div>
+					{storeData?.note?.[0]?.note && (
+						<div>
+							<h4>Store Note</h4>
+							<div className="store-note">
+								<strong>Note:</strong> {storeData.note[0].note}
+							</div>
+						</div>
+					)}
+				</>
+			)}
 
-                    {storeData?.note?.[0]?.note && (
-                        <div>
-                            <h4>Store Note</h4>
-                            <div className="store-note">
-                                <strong>Note:</strong> {storeData.note[0].note}
-                            </div>
-                        </div>
-                    )}
+			<div>{registrationForm.content_before_form}</div>
 
-                </>
-            )}
-
-            <div>{registrationForm.content_before_form}</div>
-
-            <FormViewer
-                formFields={formData.settings}
-                response={inputs}
-                onSubmit={onSubmit}
-                countryList={memoizedCountryList}
-                stateList={memoizedStateList}
-            />
-            <div>{registrationForm.content_after_form}</div>
-            {toast && (
-                <div className="admin-notice-display-title">
-                    <i className="admin-font adminlib-icon-yes"></i>
-                    {responseMessage}
-                </div>
-            )}
-        </>
-    );
+			<FormViewer
+				formFields={formData.settings}
+				response={inputs}
+				onSubmit={onSubmit}
+				countryList={memoizedCountryList}
+				stateList={memoizedStateList}
+			/>
+			<div>{registrationForm.content_after_form}</div>
+			{toast && (
+				<div className="admin-notice-display-title">
+					<i className="admin-font adminlib-icon-yes"></i>
+					{responseMessage}
+				</div>
+			)}
+		</>
+	);
 };
 
 export default RegistrationForm;

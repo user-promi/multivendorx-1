@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { BasicInput, ToggleSetting, getApiLink, SuccessNotice, BlockText } from 'zyra';
+import {
+	BasicInput,
+	ToggleSetting,
+	getApiLink,
+	SuccessNotice,
+	BlockText,
+} from 'zyra';
 import { __, sprintf } from '@wordpress/i18n';
 
 interface PaymentField {
@@ -10,7 +16,7 @@ interface PaymentField {
 	type?: string;
 	label: string;
 	placeholder?: string;
-	options?: Array<{ key: string; label: string; value: string; }>; // Added for clarity
+	options?: Array<{ key: string; label: string; value: string }>; // Added for clarity
 }
 
 interface PaymentProvider {
@@ -43,7 +49,8 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 
 	// The selectedProvider needs to check both 'fields' and 'formFields'
 	const selectedProvider = storePayment[formData.payment_method];
-	const providerFields = selectedProvider?.fields || selectedProvider?.formFields || [];
+	const providerFields =
+		selectedProvider?.fields || selectedProvider?.formFields || [];
 
 	useEffect(() => {
 		if (!id) return;
@@ -107,7 +114,9 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 		}
 	}, [formData.dashboard_access, formData.payment_method]);
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+	const handleChange = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => {
 		const { name, value } = e.target;
 
 		setFormData((prev) => {
@@ -130,8 +139,6 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 			return updated;
 		});
 	};
-
-
 
 	const autoSave = (updatedData: { [key: string]: string }) => {
 		axios({
@@ -161,7 +168,11 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 	// ✨ --- NEW: Helper functions to get disabled options --- ✨
 	const getDynamicOptions = (fieldKey: string) => {
 		const field = providerFields.find((f) => f.key === fieldKey);
-		if (!field || !field.options || formData.payment_method !== 'mvx_stripe_marketplace') {
+		if (
+			!field ||
+			!field.options ||
+			formData.payment_method !== 'mvx_stripe_marketplace'
+		) {
 			return field?.options || [];
 		}
 
@@ -170,21 +181,42 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 		switch (fieldKey) {
 			case 'onboarding_flow':
 				if (dashboardAccess === 'full') {
-					return field.options.map(opt => ({ ...opt, disabled: opt.value !== 'hosted' }));
+					return field.options.map((opt) => ({
+						...opt,
+						disabled: opt.value !== 'hosted',
+					}));
 				}
 				if (dashboardAccess === 'none') {
-					return field.options.map(opt => ({ ...opt, disabled: opt.value !== 'embedded' }));
+					return field.options.map((opt) => ({
+						...opt,
+						disabled: opt.value !== 'embedded',
+					}));
 				}
-				return field.options.map(opt => ({ ...opt, disabled: false })); // Express supports both
+				return field.options.map((opt) => ({
+					...opt,
+					disabled: false,
+				})); // Express supports both
 
 			case 'charge_type':
 				if (dashboardAccess === 'full') {
-					return field.options.map(opt => ({ ...opt, disabled: opt.value !== 'direct' }));
+					return field.options.map((opt) => ({
+						...opt,
+						disabled: opt.value !== 'direct',
+					}));
 				}
-				if (dashboardAccess === 'express' || dashboardAccess === 'none') {
-					return field.options.map(opt => ({ ...opt, disabled: opt.value === 'direct' }));
+				if (
+					dashboardAccess === 'express' ||
+					dashboardAccess === 'none'
+				) {
+					return field.options.map((opt) => ({
+						...opt,
+						disabled: opt.value === 'direct',
+					}));
 				}
-				return field.options.map(opt => ({ ...opt, disabled: false }));
+				return field.options.map((opt) => ({
+					...opt,
+					disabled: false,
+				}));
 
 			default:
 				return field.options;
@@ -202,7 +234,10 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 							<div className="card-header">
 								<div className="left">
 									<div className="title">
-										{__('Withdrawal methods', 'multivendorx')}
+										{__(
+											'Withdrawal methods',
+											'multivendorx'
+										)}
 									</div>
 								</div>
 							</div>
@@ -213,29 +248,42 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 											wrapperClass="setting-form-input"
 											descClass="settings-metabox-description"
 											description={
-												paymentOptions && paymentOptions.length === 0
+												paymentOptions &&
+												paymentOptions.length === 0
 													? sprintf(
-														/* translators: %s: link to payment integration settings */
-														__('You haven’t enabled any payment methods yet. Configure payout options <a href="%s">from here</a> to allow stores to receive their earnings.', 'multivendorx'),
-														'?page=multivendorx#&tab=settings&subtab=payment-integration'
-													)
+															/* translators: %s: link to payment integration settings */
+															__(
+																'You haven’t enabled any payment methods yet. Configure payout options <a href="%s">from here</a> to allow stores to receive their earnings.',
+																'multivendorx'
+															),
+															'?page=multivendorx#&tab=settings&subtab=payment-integration'
+														)
 													: ''
 											}
 											options={paymentOptions}
-											value={formData.payment_method || ""}
-											onChange={(value) => handleToggleChange(value, 'payment_method')}
+											value={
+												formData.payment_method || ''
+											}
+											onChange={(value) =>
+												handleToggleChange(
+													value,
+													'payment_method'
+												)
+											}
 										/>
 									</div>
 								</div>
 
 								{providerFields.map((field, index) => {
 									// Render HTML (e.g., connect button)
-									if (field.type === "html" && field.html) {
+									if (field.type === 'html' && field.html) {
 										return (
 											<div
 												key={`html-${index}`}
 												className="form-group-wrapper"
-												dangerouslySetInnerHTML={{ __html: field.html }}
+												dangerouslySetInnerHTML={{
+													__html: field.html,
+												}}
 											/>
 										);
 									}
@@ -243,22 +291,50 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 									// Render Toggle Settings
 									if (field.type === 'setting-toggle') {
 										return (
-											<div className="form-group-wrapper" key={field.key}>
+											<div
+												className="form-group-wrapper"
+												key={field.key}
+											>
 												<div className="form-group">
-													<label htmlFor={field.key}>{__(field.label, 'multivendorx')}</label>
+													<label htmlFor={field.key}>
+														{__(
+															field.label,
+															'multivendorx'
+														)}
+													</label>
 													<ToggleSetting
 														key={field.key}
-														description={__(field.desc || '', 'multivendorx')}
+														description={__(
+															field.desc || '',
+															'multivendorx'
+														)}
 														options={
-															Array.isArray(field.options)
-																? field.options.map((opt) => ({
-																	...opt,
-																	value: String(opt.value),
-																}))
+															Array.isArray(
+																field.options
+															)
+																? field.options.map(
+																		(
+																			opt
+																		) => ({
+																			...opt,
+																			value: String(
+																				opt.value
+																			),
+																		})
+																	)
 																: []
 														}
-														value={formData[field.key || ""] || ""}
-														onChange={(value) => handleToggleChange(value, field.key)}
+														value={
+															formData[
+																field.key || ''
+															] || ''
+														}
+														onChange={(value) =>
+															handleToggleChange(
+																value,
+																field.key
+															)
+														}
 													/>
 												</div>
 											</div>
@@ -267,15 +343,30 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 
 									// Default input field rendering
 									return (
-										<div className="form-group-wrapper" key={field.key}>
+										<div
+											className="form-group-wrapper"
+											key={field.key}
+										>
 											<div className="form-group">
-												<label htmlFor={field.key}>{__(field.label, 'multivendorx')}</label>
+												<label htmlFor={field.key}>
+													{__(
+														field.label,
+														'multivendorx'
+													)}
+												</label>
 												<BasicInput
-													name={field.key || ""}
-													type={field.type || "text"}
+													name={field.key || ''}
+													type={field.type || 'text'}
 													wrapperClass="setting-form-input"
 													descClass="settings-metabox-description"
-													placeholder={field.placeholder ? __(field.placeholder, 'multivendorx') : ""}
+													placeholder={
+														field.placeholder
+															? __(
+																	field.placeholder,
+																	'multivendorx'
+																)
+															: ''
+													}
 													value={formData[field.key]}
 													onChange={handleChange}
 												/>
@@ -293,7 +384,10 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{__('Store-specific commission', 'multivendorx')}
+									{__(
+										'Store-specific commission',
+										'multivendorx'
+									)}
 								</div>
 							</div>
 						</div>
@@ -303,13 +397,18 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 								blockTextClass="settings-metabox-note"
 								value={sprintf(
 									/* translators: %s: link to global commission settings */
-									__('If no store-specific commission is set, the <a href="%s">global commission</a> will automatically apply.', 'multivendorx'),
+									__(
+										'If no store-specific commission is set, the <a href="%s">global commission</a> will automatically apply.',
+										'multivendorx'
+									),
 									`${appLocalizer.plugin_url}settings&subtab=store-commissions`
 								)}
 							/>
 							<div className="form-group-wrapper">
 								<div className="form-group">
-									<label htmlFor="product-name">{__('Fixed', 'multivendorx')}</label>
+									<label htmlFor="product-name">
+										{__('Fixed', 'multivendorx')}
+									</label>
 									<BasicInput
 										preInsideText="$"
 										postText="+"
@@ -322,7 +421,9 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 								</div>
 
 								<div className="form-group">
-									<label htmlFor="product-name">{__('Percentage', 'multivendorx')}</label>
+									<label htmlFor="product-name">
+										{__('Percentage', 'multivendorx')}
+									</label>
 									<BasicInput
 										postInsideText="%"
 										name="commission_percentage"
