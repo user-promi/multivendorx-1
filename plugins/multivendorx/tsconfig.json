@@ -22,6 +22,9 @@
 			"./node_modules/@types/wordpress_data"
 		]
 	},
-	"include": [ "./src/**/*", "../../../plugins/multivendorx-pro/src/Transaction/directTransaction.tsx" ],
-	"exclude": [ "tests/**" ]
+	"include": [
+		"./src/**/*",
+		"../../../plugins/multivendorx-pro/src/Transaction/directTransaction.tsx"
+	],
+	"exclude": ["tests/**"]
 }

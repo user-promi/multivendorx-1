@@ -31,35 +31,30 @@ interface StorePaymentConfig {
 }
 
 const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
-	const [formData, setFormData] = useState<{ [key: string]: any }>(
-		{}
-	); // Use 'any' for simplicity here
+	const [formData, setFormData] = useState<{ [key: string]: any }>({}); // Use 'any' for simplicity here
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
 	const storePayment: StorePaymentConfig =
 		(appLocalizer.all_store_settings as StorePaymentConfig) || {};
 
 	const filteredStorePayment = Object.fromEntries(
-		Object.entries(storePayment).filter(
-			([_, value]) => value !== null
-		)
+		Object.entries(storePayment).filter(([_, value]) => value !== null)
 	);
 
-	const paymentOptions = Object.values(filteredStorePayment).map(
-		(p) => ({
-			key: p.id,
-			value: p.id,
-			label: p.label,
-		})
-	);
+	const paymentOptions = Object.values(filteredStorePayment).map((p) => ({
+		key: p.id,
+		value: p.id,
+		label: p.label,
+	}));
 
 	// The selectedProvider needs to check both 'fields' and 'formFields'
 	const selectedProvider = storePayment[formData.payment_method];
-	const providerFields = selectedProvider?.fields || selectedProvider?.formFields || [];
+	const providerFields =
+		selectedProvider?.fields || selectedProvider?.formFields || [];
 
-	const bankDetails = appLocalizer.settings_databases_value['payment-integration']
-		?.payment_methods?.['bank-transfer']?.['bank_details'];
-
+	const bankDetails =
+		appLocalizer.settings_databases_value['payment-integration']
+			?.payment_methods?.['bank-transfer']?.['bank_details'];
 
 	useEffect(() => {
 		if (!id) return;
@@ -258,15 +253,15 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 											descClass="settings-metabox-description"
 											description={
 												paymentOptions &&
-													paymentOptions.length === 0
+												paymentOptions.length === 0
 													? sprintf(
-														/* translators: %s: link to payment integration settings */
-														__(
-															'You haven’t enabled any payment methods yet. Configure payout options <a href="%s">from here</a> to allow stores to receive their earnings.',
-															'multivendorx'
-														),
-														'?page=multivendorx#&tab=settings&subtab=payment-integration'
-													)
+															/* translators: %s: link to payment integration settings */
+															__(
+																'You haven’t enabled any payment methods yet. Configure payout options <a href="%s">from here</a> to allow stores to receive their earnings.',
+																'multivendorx'
+															),
+															'?page=multivendorx#&tab=settings&subtab=payment-integration'
+														)
 													: ''
 											}
 											options={paymentOptions}
@@ -283,125 +278,131 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 									</div>
 								</div>
 
-								{bankDetails && providerFields.map((field, index) => {
-									const shouldRender =
-										field.key === "account_type" ||
-										bankDetails.includes(field.key);
+								{bankDetails &&
+									providerFields.map((field, index) => {
+										const shouldRender =
+											field.key === 'account_type' ||
+											bankDetails.includes(field.key);
 
-									if (!shouldRender) {
-										return null; // skip rendering
-									}
+										if (!shouldRender) {
+											return null; // skip rendering
+										}
 
-									// Render HTML (e.g., connect button)
-									if (field.type === 'html' && field.html) {
-										return (
-											<div
-												key={`html-${index}`}
-												className="form-group-wrapper"
-												dangerouslySetInnerHTML={{
-													__html: field.html,
-												}}
-											/>
-										);
-									}
+										// Render HTML (e.g., connect button)
+										if (
+											field.type === 'html' &&
+											field.html
+										) {
+											return (
+												<div
+													key={`html-${index}`}
+													className="form-group-wrapper"
+													dangerouslySetInnerHTML={{
+														__html: field.html,
+													}}
+												/>
+											);
+										}
 
-									// Render Toggle Settings
-									if (field.type === 'setting-toggle') {
+										// Render Toggle Settings
+										if (field.type === 'setting-toggle') {
+											return (
+												<div
+													className="form-group-wrapper"
+													key={field.key}
+												>
+													<div className="form-group">
+														<label
+															htmlFor={field.key}
+														>
+															{__(
+																field.label,
+																'multivendorx'
+															)}
+														</label>
+														<ToggleSetting
+															key={field.key}
+															description={__(
+																field.desc ||
+																	'',
+																'multivendorx'
+															)}
+															options={
+																Array.isArray(
+																	field.options
+																)
+																	? field.options.map(
+																			(
+																				opt
+																			) => ({
+																				...opt,
+																				value: String(
+																					opt.value
+																				),
+																			})
+																		)
+																	: []
+															}
+															value={
+																formData[
+																	field.key ||
+																		''
+																] || ''
+															}
+															onChange={(value) =>
+																handleToggleChange(
+																	value,
+																	field.key
+																)
+															}
+														/>
+													</div>
+												</div>
+											);
+										}
+
+										// Default input field rendering
 										return (
 											<div
 												className="form-group-wrapper"
 												key={field.key}
 											>
 												<div className="form-group">
-													<label
-														htmlFor={field.key}
-													>
+													<label htmlFor={field.key}>
 														{__(
 															field.label,
 															'multivendorx'
 														)}
 													</label>
-													<ToggleSetting
-														key={field.key}
-														description={__(
-															field.desc || '',
-															'multivendorx'
-														)}
-														options={
-															Array.isArray(
-																field.options
-															)
-																? field.options.map(
-																	(
-																		opt
-																	) => ({
-																		...opt,
-																		value: String(
-																			opt.value
-																		),
-																	})
-																)
-																: []
+													<BasicInput
+														name={field.key || ''}
+														type={
+															field.type || 'text'
+														}
+														wrapperClass="setting-form-input"
+														descClass="settings-metabox-description"
+														placeholder={
+															field.placeholder
+																? __(
+																		field.placeholder,
+																		'multivendorx'
+																	)
+																: ''
 														}
 														value={
-															formData[
-															field.key || ''
-															] || ''
+															formData[field.key]
 														}
-														onChange={(value) =>
-															handleToggleChange(
-																value,
-																field.key
-															)
-														}
+														onChange={handleChange}
 													/>
 												</div>
 											</div>
 										);
-									}
-
-									// Default input field rendering
-									return (
-										<div
-											className="form-group-wrapper"
-											key={field.key}
-										>
-											<div className="form-group">
-												<label htmlFor={field.key}>
-													{__(
-														field.label,
-														'multivendorx'
-													)}
-												</label>
-												<BasicInput
-													name={field.key || ''}
-													type={
-														field.type || 'text'
-													}
-													wrapperClass="setting-form-input"
-													descClass="settings-metabox-description"
-													placeholder={
-														field.placeholder
-															? __(
-																field.placeholder,
-																'multivendorx'
-															)
-															: ''
-													}
-													value={
-														formData[field.key]
-													}
-													onChange={handleChange}
-												/>
-											</div>
-										</div>
-									);
-								})}
+									})}
 							</div>
 						</div>
 					</div>
 				</div>
-				{ /* Commission Amount */}
+				{/* Commission Amount */}
 				<div className="card-wrapper w-35">
 					<div className="card-content">
 						<div className="card-header">

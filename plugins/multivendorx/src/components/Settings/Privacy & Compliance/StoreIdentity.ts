@@ -25,32 +25,32 @@ export default {
 			options: [
 				{
 					key: 'adminlib-verification1',
-					value: __( 'adminlib-verification1', 'multivendorx' ),
+					value: __('adminlib-verification1', 'multivendorx'),
 					icon: 'adminlib-verification1',
 				},
 				{
 					key: 'adminlib-verification2',
-					value: __( 'adminlib-verification2', 'multivendorx' ),
+					value: __('adminlib-verification2', 'multivendorx'),
 					icon: 'adminlib-verification2',
 				},
 				{
 					key: 'adminlib-verification3',
-					value: __( 'adminlib-verification3', 'multivendorx' ),
+					value: __('adminlib-verification3', 'multivendorx'),
 					icon: 'adminlib-verification3',
 				},
 				{
 					key: 'adminlib-verification5',
-					value: __( 'adminlib-verification5', 'multivendorx' ),
+					value: __('adminlib-verification5', 'multivendorx'),
 					icon: 'adminlib-verification5',
 				},
 				{
 					key: 'adminlib-verification7',
-					value: __( 'adminlib-verification7', 'multivendorx' ),
+					value: __('adminlib-verification7', 'multivendorx'),
 					icon: 'adminlib-verification7',
 				},
 				{
 					key: 'adminlib-verification9',
-					value: __( 'adminlib-verification9', 'multivendorx' ),
+					value: __('adminlib-verification9', 'multivendorx'),
 					icon: 'adminlib-verification9',
 				},
 			],
@@ -66,7 +66,7 @@ export default {
 		{
 			key: 'verification_methods',
 			type: 'multi-string',
-			label: __( 'Verification methods', 'multivendorx' ),
+			label: __('Verification methods', 'multivendorx'),
 			moduleEnabled: 'marketplace-compliance',
 			proSetting: true,
 			requiredEnable: true,
