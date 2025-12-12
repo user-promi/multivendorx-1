@@ -21,10 +21,11 @@ import {
 	PaginationState,
 } from '@tanstack/react-table';
 import './announcements.scss';
+import { truncateText } from '@/services/commonFunction';
 
-type StoreRow = {
+type AnnouncementRow = {
 	stores: any;
-	date: any;
+	date: string;
 	title: string;
 	content: string;
 	id?: number;
@@ -40,7 +41,7 @@ type AnnouncementStatus = {
 
 type FilterData = {
 	searchField: string;
-	typeCount?: any;
+	typeCount?: string;
 	date?: any;
 };
 
@@ -48,7 +49,7 @@ type AnnouncementForm = {
 	title: string;
 	url: string;
 	content: string;
-	stores: number[]; // This should be number[] to match your API
+	stores: number[];
 	status: 'draft' | 'pending' | 'publish';
 };
 
@@ -62,7 +63,7 @@ export interface RealtimeFilter {
 
 export const Announcements: React.FC = () => {
 	const [submitting, setSubmitting] = useState(false);
-	const [data, setData] = useState<StoreRow[] | null>(null);
+	const [data, setData] = useState<AnnouncementRow[] | null>(null);
 	const [addAnnouncements, setAddAnnouncements] = useState(false);
 	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 	const [totalRows, setTotalRows] = useState<number>(0);
@@ -82,7 +83,7 @@ export const Announcements: React.FC = () => {
 		title: '',
 		url: '',
 		content: '',
-		stores: [], // Initialize as empty array
+		stores: [],
 		status: 'draft',
 	});
 
@@ -414,16 +415,9 @@ export const Announcements: React.FC = () => {
 			),
 		},
 	];
-	const truncateText = (text: string, maxLength: number) => {
-		if (!text) {
-			return '-';
-		}
-		return text.length > maxLength
-			? text.slice(0, maxLength) + '...'
-			: text;
-	};
+
 	// Columns
-	const columns: ColumnDef<StoreRow>[] = [
+	const columns: ColumnDef<AnnouncementRow>[] = [
 		{
 			id: 'select',
 			header: ({ table }) => (
@@ -446,7 +440,6 @@ export const Announcements: React.FC = () => {
 			cell: ({ row }) => (
 				<TableCell title={row.original.title || ''}>
 					{truncateText(row.original.title || '', 30)}{' '}
-					{/* truncate to 30 chars */}
 				</TableCell>
 			),
 		},
@@ -855,7 +848,9 @@ export const Announcements: React.FC = () => {
 						onPaginationChange={setPagination}
 						handlePagination={requestApiForData}
 						perPageOption={[10, 25, 50]}
-						typeCounts={announcementStatus as AnnouncementStatus[]}
+						categoryFilter={
+							announcementStatus as AnnouncementStatus[]
+						}
 						bulkActionComp={() => <BulkAction />}
 						totalCounts={totalRows}
 						realtimeFilter={realtimeFilter}

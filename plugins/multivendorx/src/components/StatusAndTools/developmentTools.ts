@@ -68,26 +68,14 @@ export default {
 		{
 			key: 'separator_content',
 			type: 'section',
-			hint: __(
-				'version control',
-				'multivendorx'
-			),
-			desc: __(
-				'',
-				'multivendorx'
-			),
+			hint: __('version control', 'multivendorx'),
+			desc: __('', 'multivendorx'),
 		},
 		{
 			key: 'separator_content',
 			type: 'section',
-			hint: __(
-				'Advance log',
-				'multivendorx'
-			),
-			desc: __(
-				'',
-				'multivendorx'
-			),
+			hint: __('Advance log', 'multivendorx'),
+			desc: __('', 'multivendorx'),
 		},
 		{
 			key: 'multivendorx_adv_log',
@@ -104,14 +92,8 @@ export default {
 		{
 			key: 'separator_content',
 			type: 'section',
-			hint: __(
-				'Custom CSS',
-				'multivendorx'
-			),
-			desc: __(
-				'',
-				'multivendorx'
-			),
+			hint: __('Custom CSS', 'multivendorx'),
+			desc: __('', 'multivendorx'),
 		},
 		{
 			key: 'custom_css_product_page',

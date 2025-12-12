@@ -1,24 +1,4 @@
 
-/opt/dockerfolder/multivendorx-pro/multivendorx/plugins/multivendorx/modules/Compliance/assets/js/frontend.js
-   1:1   error  'jQuery' is not defined               no-undef
-  13:10  error  'reportAbuseFrontend' is not defined  no-undef
-  92:9   error  'reportAbuseFrontend' is not defined  no-undef
-  96:12  error  'reportAbuseFrontend' is not defined  no-undef
-
-/opt/dockerfolder/multivendorx-pro/multivendorx/plugins/multivendorx/modules/FollowStore/assets/js/frontend.js
-   1:1   error  'jQuery' is not defined               no-undef
-   8:4   error  'followStoreFrontend' is not defined  no-undef
-  12:12  error  'followStoreFrontend' is not defined  no-undef
-  49:4   error  'followStoreFrontend' is not defined  no-undef
-  54:12  error  'followStoreFrontend' is not defined  no-undef
-  62:7   error  'followStoreFrontend' is not defined  no-undef
-  66:15  error  'followStoreFrontend' is not defined  no-undef
-
-/opt/dockerfolder/multivendorx-pro/multivendorx/plugins/multivendorx/modules/QuestionsAnswers/assets/js/frontend.js
-   2:1   error  'jQuery' is not defined                       no-undef
-   6:11  error  'updatePostButton' is defined but never used  @typescript-eslint/no-unused-vars
-  38:10  error  'q' is assigned a value but never used        @typescript-eslint/no-unused-vars
-
 /opt/dockerfolder/multivendorx-pro/multivendorx/plugins/multivendorx/modules/StoreReview/assets/js/frontend.js
     1:1   error  'jQuery' is not defined  no-undef
     7:4   error  'review' is not defined  no-undef
@@ -109,27 +89,6 @@
   88:20  error  'appLocalizer' is not defined             no-undef
   89:29  error  'appLocalizer' is not defined             no-undef
 
-/opt/dockerfolder/multivendorx-pro/multivendorx/plugins/multivendorx/src/components/AdminDashboard/adminDashboard.tsx
-    36:9   error  'successMsg' is assigned a value but never used  @typescript-eslint/no-unused-vars
-    49:13  error  'appLocalizer' is not defined                    no-undef
-    51:20  error  'appLocalizer' is not defined                    no-undef
-    58:14  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
-    84:8   error  'appLocalizer' is not defined                    no-undef
-    86:31  error  'appLocalizer' is not defined                    no-undef
-    91:49  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
-    98:20  error  'appLocalizer' is not defined                    no-undef
-    99:21  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
-   116:30  error  'appLocalizer' is not defined                    no-undef
-   137:10  error  'React' is not defined                           no-undef
-   149:5   error  'appLocalizer' is not defined                    no-undef
-   150:16  error  'appLocalizer' is not defined                    no-undef
-   158:12  error  'error' is defined but never used                @typescript-eslint/no-unused-vars
-   446:18  error  'appLocalizer' is not defined                    no-undef
-   453:11  error  'appLocalizer' is not defined                    no-undef
-   520:9   error  'appLocalizer' is not defined                    no-undef
-   634:14  error  'appLocalizer' is not defined                    no-undef
-  1126:9   error  'appLocalizer' is not defined                    no-undef
-
 /opt/dockerfolder/multivendorx-pro/multivendorx/plugins/multivendorx/src/components/Advertisement/Advertisement.tsx
    13:38  error  Unexpected any. Specify a different type           @typescript-eslint/no-explicit-any
    14:16  error  Unexpected any. Specify a different type           @typescript-eslint/no-explicit-any
@@ -140,25 +99,23 @@
   230:57  error  Unexpected any. Specify a different type           @typescript-eslint/no-explicit-any
 
 /opt/dockerfolder/multivendorx-pro/multivendorx/plugins/multivendorx/src/components/Announcements/announcements.tsx
-   26:10  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-   27:8   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-   43:14  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-   44:9   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-   58:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-   59:16  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  101:27  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  211:12  error  'err' is defined but never used           @typescript-eslint/no-unused-vars
-  233:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  240:12  error  'err' is defined but never used           @typescript-eslint/no-unused-vars
-  288:12  error  'err' is defined but never used           @typescript-eslint/no-unused-vars
-  539:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  547:34  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  583:19  error  'err' is defined but never used           @typescript-eslint/no-unused-vars
-  626:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  767:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  771:32  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  847:44  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  847:50  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   27:10  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   45:9   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   59:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   60:16  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  102:27  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  212:12  error  'err' is defined but never used           @typescript-eslint/no-unused-vars
+  234:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  241:12  error  'err' is defined but never used           @typescript-eslint/no-unused-vars
+  289:12  error  'err' is defined but never used           @typescript-eslint/no-unused-vars
+  532:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  540:34  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  576:19  error  'err' is defined but never used           @typescript-eslint/no-unused-vars
+  619:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  760:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  764:32  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  840:44  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  840:50  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
 
 /opt/dockerfolder/multivendorx-pro/multivendorx/plugins/multivendorx/src/components/ApprovalQueue/approvalQueue.tsx
    24:19  error  'appLocalizer' is not defined  no-undef
@@ -1865,9 +1822,9 @@
   56:32  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
 
 /opt/dockerfolder/multivendorx-pro/multivendorx/plugins/multivendorx/src/services/commonFunction.ts
-  38:6   error  'appLocalizer' is not defined             no-undef
-  68:47  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  77:43  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  19:6   error  'appLocalizer' is not defined             no-undef
+  49:47  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  58:43  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
 
 /opt/dockerfolder/multivendorx-pro/multivendorx/plugins/multivendorx/src/services/templateService.ts
     4:32  error  '__WebpackModuleApi' is not defined       no-undef
@@ -1920,5 +1877,5 @@
   619:12  error  'appLocalizer' is not defined             no-undef
   626:13  error  'appLocalizer' is not defined             no-undef
 
-✖ 1657 problems (1657 errors, 0 warnings)
+✖ 1622 problems (1622 errors, 0 warnings)
 

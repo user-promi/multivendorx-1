@@ -1,16 +1,5 @@
-/* global qnaFrontend */
+/* global jQuery qnaFrontend */
 jQuery(document).ready(function ($) {
-	const $cta = $('.qna-cta'); // wrapper of "Post your Question"
-	const $list = $('#qna-list'); // the list of questions
-
-	function updatePostButton() {
-		const count = $list.find('.qna-item').length;
-		if (count === 0) {
-			$cta.show(); // no results → show button
-		} else {
-			$cta.hide(); // has results → hide button
-		}
-	}
 	// Show hidden form when clicking "Post your Question"
 	$(document).on('click', '#qna-show-form', function () {
 		$('#qna-form').slideDown();
@@ -35,7 +24,6 @@ jQuery(document).ready(function ($) {
 			},
 			function (res) {
 				if (res.success) {
-					let q = res.data;
 					$('#qna-question').val('');
 					$('#qna-form').slideUp();
 					$('#qna-show-form').show();
