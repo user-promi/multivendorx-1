@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'category-pyramid-guide',
 	priority: 4,
-	name: __('Category Pyramid Guide (CPG)', 'multivendorx'),
+	name: __('Category Specific Product', 'multivendorx'),
 	desc: __(
 		'Choose whether stores follow a step-by-step guided process through the category hierarchy or freely select multiple categories & subcategories without restrictions.',
 		'multivendorx'
