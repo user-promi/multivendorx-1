@@ -124,6 +124,41 @@ export default {
 			selectDeselect: true,
 		},
 		{
+			key: 'separator_category_specific',
+			type: 'section',
+			desc: __(
+				'Control how stores select categories while adding products.',
+				'multivendorx'
+			),
+			hint: __('Category selection method', 'multivendorx'),
+		},
+		{
+			key: 'category_selection_method',
+			type: 'setting-toggle',
+			label: __('Category specific product', 'multivendorx'),
+			settingDescription: __(
+				'Choose whether stores follow a guided category selection flow or freely choose multiple categories.',
+				'multivendorx'
+			),
+			desc: __(
+				'<li>Guided selection – Stores must first choose a primary category, then select from its subcategories.</li><li>Free selection – Stores can choose any number of categories and subcategories without restrictions.</li>',
+				'multivendorx'
+			),
+			options: [
+				{
+					key: 'guided',
+					label: __('Guided selection', 'multivendorx'),
+					value: 'guided',
+				},
+				{
+					key: 'free',
+					label: __('Free selection', 'multivendorx'),
+					value: 'free',
+				},
+			],
+		},
+
+		{
 			key: 'separator_content',
 			type: 'section',
 			desc: __(
