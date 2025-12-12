@@ -87,7 +87,7 @@ const SystemInfo: React.FC<SystemInfoProps> = ({
         });
     };
 
-    if (loading) return <p>Loading</p>;
+    // if (loading) return <p>Loading</p>;
     if (!data) return null;
 
     return (
@@ -99,7 +99,7 @@ const SystemInfo: React.FC<SystemInfoProps> = ({
                     {!copied && <span className="copy-success">{copyButtonLabel}</span>}
                     {copied && <span className="copy-success">{copiedLabel}</span>}
                 </div>
-            </div>
+            </div>      
 
             {Object.entries(data).map(([key, section]) => (
                 <div key={key} className="system-item">

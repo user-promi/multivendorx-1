@@ -2,6 +2,7 @@
 
 .notification-container {
     position: relative;
+    width: 100%;
 
     .admin-badge.disable {
         filter: grayscale(1);
@@ -19,93 +20,123 @@
             &.icon-1::before {
                 content: "\ef5f";
             }
+
             &.icon-2::before {
                 content: "\e936";
             }
+
             &.icon-3::before {
                 content: "\ef45";
             }
+
             &.icon-4::before {
                 content: "\e937";
             }
+
             &.icon-5::before {
                 content: "\e93c";
             }
+
             &.icon-6::before {
                 content: "\efff";
             }
+
             &.icon-7::before {
                 content: "\e92f";
             }
+
             &.icon-8::before {
                 content: "\e939";
             }
+
             &.icon-9::before {
                 content: "\e93a";
             }
+
             &.icon-10::before {
                 content: "\e905";
             }
+
             &.icon-11::before {
                 content: "\e938";
             }
+
             &.icon-12::before {
                 content: "\ef39";
             }
+
             &.icon-13::before {
                 content: "\ef80";
             }
+
             &.icon-14::before {
                 content: "\e908";
             }
+
             &.icon-15::before {
                 content: "\e932";
             }
+
             &.icon-16::before {
                 content: "\ef4f";
             }
+
             &.icon-17::before {
                 content: "\e932";
             }
+
             &.icon-18::before {
                 content: "\e908";
             }
+
             &.icon-19::before {
                 content: "\ef54";
             }
+
             &.icon-20::before {
                 content: "\e932";
             }
+
             &.icon-21::before {
                 content: "\ef8a";
             }
+
             &.icon-22::before {
                 content: "\e908";
             }
+
             &.icon-23::before {
                 content: "\ef8e";
             }
+
             &.icon-24::before {
                 content: "\e932";
             }
+
             &.icon-25::before {
                 content: "\f009";
             }
+
             &.icon-26::before {
                 content: "\e906";
             }
+
             &.icon-27::before {
                 content: "\e91f";
             }
+
             &.icon-28::before {
                 content: "\ef81";
             }
+
             &.icon-29::before {
                 content: "\ef58";
             }
+
             &.icon-26::before {
                 content: "\e906";
             }
+
             &.icon-26::before {
                 content: "\e906";
             }
@@ -125,11 +156,16 @@
             border-radius: 0.313rem;
             font-size: 1.25rem;
             position: relative;
+            width: 2rem;
+            height: 2rem;
+            justify-content: center;
+            display: flex;
+            align-items: center;
 
-            &::before {
-                position: absolute;
-                content: "\e930";
-            }
+            // &::before {
+            //     position: absolute;
+            //     content: "\e930";
+            // }
         }
 
         .details {
@@ -285,9 +321,32 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+
+            .price {
+                font-size: 1.5rem;
+
+                span {
+                    font-size: 0.95rem;
+                    color: $sub-text-color;
+                }
+            }
         }
 
         .card-body {
+            .checklist-title {
+                font-size: 1.125rem;
+                padding: 0.5rem 0;
+            }
+
+            .checklist {
+                padding-bottom: 0.5rem;
+
+                li {
+                    width: 100%;
+                    font-size: 0.813rem;
+                }
+            }
+
             .recipients-list {
                 padding: 1rem 0;
             }

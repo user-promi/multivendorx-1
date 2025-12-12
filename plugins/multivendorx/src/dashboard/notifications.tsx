@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { CommonPopup, getApiLink } from 'zyra';
 import axios from 'axios';
 import { Skeleton } from '@mui/material';
+import { __ } from '@wordpress/i18n';
 
 const Notifications = () => {
 	const [notifications, setNotifications] = useState<[] | null>(null);

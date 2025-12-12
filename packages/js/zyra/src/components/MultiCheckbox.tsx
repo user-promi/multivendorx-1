@@ -224,7 +224,7 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
 
                                 ) : (
                                     <>
-                                        <label htmlFor={`${props.idPrefix}-${option.key}`}>
+                                        <label className="checkbox-label" htmlFor={`${props.idPrefix}-${option.key}`}>
                                             {option.label}
                                             { (option.proSetting && !props.khali_dabba) && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span> }
                                             {(

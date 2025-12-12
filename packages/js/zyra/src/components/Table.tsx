@@ -311,8 +311,8 @@ export const TableCell: React.FC<TableCellProps> = ({
         case 'status':
             const displayStatus =
                 status
-                    ?.replace(/_/g, ' ')              
-                    ?.replace(/-/g, ' ')               
+                    ?.replace(/_/g, ' ')
+                    ?.replace(/-/g, ' ')
                     ?.replace(/\b\w/g, c => c.toUpperCase()) || '-';
 
             const color = getStatusColor(status);
@@ -549,40 +549,41 @@ const Table: React.FC<TableProps> = ({
 
             {(typeCounts?.length > 0 || searchFilter) && (
                 <div className="admin-top-filter">
-                    {typeCounts?.length > 0 &&
-                        <div className="filter-wrapper">
-                            {typeCounts ? (
-                                typeCounts.length > 0 ? (
-                                    <>
-                                        {typeCounts.map((countInfo, index) => (
-                                            <div
-                                                key={index}
-                                                role="button"
-                                                tabIndex={0}
-                                                onClick={() => setFilterData({ typeCount: countInfo.key })}
-                                                className={
-                                                    countInfo.key === typeCountActive
-                                                        ? "filter-item active"
-                                                        : "filter-item"
-                                                }
-                                            >
-                                                {`${countInfo.name} (${countInfo.count})`}
-                                            </div>
-                                        ))}
-                                    </>
+                    <div className="filter-wrapper">
+                        {typeCounts?.length > 0 &&
+                            <>
+                                {typeCounts ? (
+                                    typeCounts.length > 0 ? (
+                                        <>
+                                            {typeCounts.map((countInfo, index) => (
+                                                <div
+                                                    key={index}
+                                                    role="button"
+                                                    tabIndex={0}
+                                                    onClick={() => setFilterData({ typeCount: countInfo.key })}
+                                                    className={
+                                                        countInfo.key === typeCountActive
+                                                            ? "filter-item active"
+                                                            : "filter-item"
+                                                    }
+                                                >
+                                                    {`${countInfo.name} (${countInfo.count})`}
+                                                </div>
+                                            ))}
+                                        </>
+                                    ) : (
+                                        <span>No types found</span>
+                                    )
                                 ) : (
-                                    <span>No types found</span>
-                                )
-                            ) : (
-                                <>
-                                    <Skeleton variant="text" width={100} />
-                                    <Skeleton variant="text" width={120} />
-                                    <Skeleton variant="text" width={90} />
-                                </>
-                            )}
-
-                        </div>
-                    }
+                                    <>
+                                        <Skeleton variant="text" width={100} />
+                                        <Skeleton variant="text" width={120} />
+                                        <Skeleton variant="text" width={90} />
+                                    </>
+                                )}
+                            </>
+                        }
+                    </div>
                     {searchFilter &&
                         <div className="table-action-wrapper">
                             {searchFilter && (
