@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'single-product-multiple-store',
 	priority: 3,
-	name: __('Me Too Listing', 'multivendorx'),
+	name: __('Shared Product Listing', 'multivendorx'),
 	desc: __(
 		'Manage how multiple vendors (stores) can list and sell the same product in your marketplace.',
 		'multivendorx'
@@ -14,7 +14,7 @@ export default {
 		{
 			key: 'singleproductmultistore_show_order',
 			type: 'setting-toggle',
-			label: __('Me too listing  product priority', 'multivendorx'),
+			label: __('Shared product listing  product priority', 'multivendorx'),
 			desc: __(
 				'Choose which version of Me too product will be shown as the main listing on the shop page (e.g., top-rated store, min / max priced product).',
 				'multivendorx'

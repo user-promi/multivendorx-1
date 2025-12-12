@@ -202,7 +202,7 @@ export default {
 		},
 		{
 			id: 'spmv',
-			name: __('Me too listing', 'multivendorx'),
+			name: __('Shared product listing', 'multivendorx'),
 			desc: 'Allows more than one store to sell the same product with their own price and stock.',
 			icon: 'adminlib-spmv',
 			doc_link:
