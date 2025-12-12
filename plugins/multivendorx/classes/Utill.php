@@ -79,6 +79,7 @@ class Utill {
         'suspended'                     => 'multivendorx_suspended_settings',
         'ai-automation'                 => 'multivendorx_ai_automation_settings',
         'log'                           => 'multivendorx_log_settings',
+        'min-max'                       => 'multivendorx_min_max_settings',
     );
 
     const MULTIVENDORX_OTHER_SETTINGS = array(

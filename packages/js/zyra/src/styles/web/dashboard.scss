@@ -1,7 +1,19 @@
 @use '../../global.scss' as *;
 
-.multivendorx-dashboard,
-#admin-main-wrapper {
+.title {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: $text-color;
+}
+
+.desc,
+.des {
+    font-size: 0.9rem;
+    color: $sub-text-color;
+    padding: 0;
+}
+
+.multivendorx-main-wrapper {
     .container-wrapper {
         display: flex;
         gap: 1rem;
@@ -46,8 +58,6 @@
 
         .left {
             .title {
-                font-size: 1.125rem;
-                font-weight: 500;
                 display: flex;
                 gap: 0.5rem;
                 align-items: center;
@@ -79,7 +89,7 @@
     .card-content {
         border-radius: 0.313rem;
         box-shadow: 0 0.125rem 0.5rem 0 #dfdee16e;
-        background: #fff;
+        background: $background-white;
         width: 100%;
         box-sizing: border-box;
 
@@ -208,8 +218,8 @@
                 }
 
                 .number {
-                    font-size: 1.813rem !important; // zyra style overwrite
-                    line-height: 2 !important;
+                    font-size: 1.813rem !important; /* zyra style overwrite */
+                    line-height: 2 !important; /* zyra style overwrite */
                     font-weight: 600;
                 }
 
@@ -230,11 +240,6 @@
     padding: 1rem 0 0.5rem;
     border-bottom: $border-light-small;
     margin-bottom: 1rem;
-
-    .title {
-        font-size: 1.125rem;
-        font-weight: 500;
-    }
 }
 
 .form-group-wrapper {
@@ -345,7 +350,6 @@
 
         .title {
             font-size: 0.95rem;
-            color: #00000094;
         }
     }
 }
@@ -354,21 +358,10 @@
     font-size: 0.813rem;
 }
 
-.w-10 {
-    width: 10% !important;
-}
-
-.w-35 {
-    width: 35% !important;
-}
-
-.w-50 {
-    width: 50% !important;
-}
-
-.w-65 {
-    width: 65% !important;
-}
+:where(.w-10)   { width: 10%; }
+:where(.w-35)   { width: 35%; }
+:where(.w-50)   { width: 50%; }
+:where(.w-65)   { width: 65%; }
 
 .admin-pt-2 {
     padding-top: 2rem;
@@ -574,14 +567,10 @@
 
     .title {
         font-size: 1.313rem;
-        color: #000;
         font-weight: 600;
         line-height: 1.5rem;
         margin-top: 1rem;
-    }
-
-    .des {
-        padding: 0.75rem;
+        padding-bottom: 0.75rem;
     }
 }
 
@@ -665,64 +654,6 @@
 // notification style end
 
 // actively log start
-.activity-wrapper {
-    .activity {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        padding: 0.5rem 0;
-        transition: all 0.5s ease;
-
-        .product-name {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .icon {
-            font-size: 1.125rem;
-            background: color-mix(in srgb, $theme-color 15%, transparent);
-            padding: 0.5rem;
-            border-radius: 50%;
-            display: flex;
-            width: 1.8rem;
-            height: 1.8rem;
-            justify-content: center;
-            align-items: center;
-
-            i {
-                color: $theme-color;
-            }
-        }
-
-        .details {
-            color: #000;
-            display: flex;
-            font-size: 1rem;
-            flex-direction: column;
-            position: relative;
-
-            span {
-                font-size: 0.8rem;
-                color: $text-color
-            }
-
-            .date {
-                position: absolute;
-                right: -46%;
-                top: -0.313rem;
-            }
-        }
-
-        &:hover {
-            background: color-mix(in srgb, $theme-color 3%, transparent);
-        }
-
-        &.product {
-            justify-content: space-between;
-        }
-    }
-}
-
 .activity-log {
     border-left: 0.063rem solid $theme-color;
 
@@ -740,7 +671,6 @@
 
         .title {
             font-size: 1.063rem;
-            font-weight: 500;
             line-height: 1rem;
         }
 

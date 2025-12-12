@@ -226,7 +226,7 @@
         .icon {
             padding: 0.625rem;
             font-size: 1.8rem;
-            color: #5007aa;
+            color: $theme-color;
             background: #5007aa26;
             border-radius: 0.313rem;
         }
@@ -445,7 +445,6 @@
 }
 
 // support end
-
 
 .right-pro-banner {
     .title {

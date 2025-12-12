@@ -469,17 +469,12 @@
 
   &.template-2 {
     .menu-item:not(.pro-btn) {
-      padding-bottom: 0.313rem;
       cursor: pointer;
       display: flex;
       justify-content: center;
       background: #fff;
       padding: 1rem 1rem 0.313rem;
-
-      // border-radius: 0.313rem;
       min-width: 11rem;
-
-      // border-radius: 0.313rem;
 
       .menu-name {
         display: flex;
@@ -564,6 +559,7 @@
           font-size: 1.125rem;
           padding-top: 0.5rem;
           line-height: 1.125;
+          color: $sub-text-color;
         }
 
         &:hover {
@@ -616,6 +612,14 @@
       font-weight: 500;
       line-height: 1rem;
     }
+
+    .desc{
+      color: $sub-text-color;
+
+      a{
+        color: $theme-color;
+      }
+    }
   }
 
   &.color-red {
@@ -657,7 +661,6 @@
           padding: 0.813rem;
           transition: all 0.3s ease;
           border-radius: 0.313rem;
-          margin-bottom: 0.313rem;
           cursor: pointer;
           margin: 0;
 
