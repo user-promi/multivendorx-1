@@ -107,7 +107,7 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
         props.onChange?.(props.value ?? []);
     };
 
-    
+
     return (
         <>
             <div className={props.wrapperClass}>
@@ -119,7 +119,13 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                                 checked={allSelected}
                                 onChange={(e) => {
                                     // If locked, show popup and stop
-                                    if ((props.proSetting && !props.khali_dabba) || !props.moduleEnabled) {
+                                    const shouldBlockForPro =
+                                        props.proSetting !== undefined && props.proSetting && !props.khali_dabba;
+
+                                    const shouldBlockForModule =
+                                        props.moduleEnabled !== undefined && !props.moduleEnabled;
+
+                                    if (shouldBlockForPro || shouldBlockForModule) {
                                         e.preventDefault();
                                         props.proChanged?.();
                                         return;
@@ -226,7 +232,7 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                                     <>
                                         <label className="checkbox-label" htmlFor={`${props.idPrefix}-${option.key}`}>
                                             {option.label}
-                                            { (option.proSetting && !props.khali_dabba) && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span> }
+                                            {(option.proSetting && !props.khali_dabba) && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>}
                                             {(
                                                 ((option.proSetting && props?.khali_dabba) || (!option.proSetting)) &&
                                                 option.moduleEnabled &&
@@ -251,7 +257,7 @@ const MultiCheckBox: React.FC<MultiCheckBoxProps> = (props) => {
                                                     setEditValue(option.label || option.value);
                                                 }}
                                                 className="edit-icon ">
-                                                    <span className="admin-badge yellow adminlib-edit"></span>
+                                                <span className="admin-badge yellow adminlib-edit"></span>
                                             </span>
                                         )}
 

@@ -425,7 +425,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 				store_id: storeId,
 				start_date: startDate.toISOString().split('T')[0],
 				end_date: endDate.toISOString().split('T')[0],
-				filter_status: typeCount == 'all' ? '' : typeCount,
+				status: typeCount == 'all' ? '' : typeCount,
 				transaction_status: transactionStatus,
 				transaction_type: transactionType,
 				orderBy,
@@ -438,22 +438,22 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 				const statuses = [
 					{ key: 'all', name: 'All', count: response.data.all || 0 },
 					{
-						key: 'completed',
+						key: 'Completed',
 						name: 'Completed',
 						count: response.data.completed || 0,
 					},
 					{
-						key: 'processed',
+						key: 'Processed',
 						name: 'Processed',
 						count: response.data.processed || 0,
 					},
 					{
-						key: 'upcoming',
+						key: 'Upcoming',
 						name: 'Upcoming',
 						count: response.data.upcoming || 0,
 					},
 					{
-						key: 'failed',
+						key: 'Failed',
 						name: 'Failed',
 						count: response.data.failed || 0,
 					},

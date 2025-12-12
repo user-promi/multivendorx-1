@@ -20,47 +20,37 @@ export default {
 				'Select a badge from the list above. Once a store is verified, the chosen badge will appear beside its name.',
 				'multivendorx'
 			),
-			moduleEnabled: 'identity-verification',
+			moduleEnabled: 'marketplace-compliance',
 			proSetting: true,
 			options: [
 				{
-					key: 'icon1',
-					value: __('icon1', 'multivendorx'),
+					key: 'adminlib-verification1',
+					value: __('adminlib-verification1', 'multivendorx'),
 					icon: 'adminlib-verification1',
 				},
 				{
-					key: 'icon2',
-					value: __('icon2', 'multivendorx'),
+					key: 'adminlib-verification2',
+					value: __('adminlib-verification2', 'multivendorx'),
 					icon: 'adminlib-verification2',
 				},
 				{
-					key: 'icon3',
-					value: __('icon3', 'multivendorx'),
+					key: 'adminlib-verification3',
+					value: __('adminlib-verification3', 'multivendorx'),
 					icon: 'adminlib-verification3',
 				},
 				{
-					key: 'icon4',
-					value: __('icon4', 'multivendorx'),
+					key: 'adminlib-verification5',
+					value: __('adminlib-verification5', 'multivendorx'),
 					icon: 'adminlib-verification5',
 				},
-				// {
-				//     key: 'icon5',
-				//     value: __('icon5', 'multivendorx'),
-				//     icon: 'adminlib-verification6',
-				// },
 				{
-					key: 'icon6',
-					value: __('icon6', 'multivendorx'),
+					key: 'adminlib-verification7',
+					value: __('adminlib-verification7', 'multivendorx'),
 					icon: 'adminlib-verification7',
 				},
-				// {
-				//     key: 'icon7',
-				//     value: __('icon7', 'multivendorx'),
-				//     icon: 'adminlib-verification8',
-				// },
 				{
-					key: 'icon8',
-					value: __('icon8', 'multivendorx'),
+					key: 'adminlib-verification9',
+					value: __('adminlib-verification9', 'multivendorx'),
 					icon: 'adminlib-verification9',
 				},
 			],
@@ -77,10 +67,9 @@ export default {
 			key: 'verification_methods',
 			type: 'multi-string',
 			label: __('Verification methods', 'multivendorx'),
-			moduleEnabled: 'identity-verification',
+			moduleEnabled: 'marketplace-compliance',
 			proSetting: true,
 			requiredEnable: true,
-			// name: 'abuse_report_reasons',
 			defaultValues: [
 				{
 					value: 'Business registration certificate',
@@ -109,7 +98,7 @@ export default {
 				'adminlib-clock',
 				'adminlib-cart',
 				'adminlib-store',
-			], // dropdown options
+			],
 			maxItems: 10,
 			allowDuplicates: false,
 		},
@@ -125,9 +114,8 @@ export default {
 			key: 'all_verification_methods',
 			type: 'payment-tabs',
 			label: 'Social verification',
-			moduleEnabled: 'identity-verification',
+			moduleEnabled: 'marketplace-compliance',
 			proSetting: true,
-			// settingDescription: __('Allow stores to verify their identity by connecting social media accounts.', 'multivendorx'),
 			modal: [
 				{
 					id: 'google-connect',
