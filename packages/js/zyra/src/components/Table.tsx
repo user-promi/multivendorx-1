@@ -368,7 +368,7 @@ interface TableProps {
     pageCount: number;
     pagination: PaginationState;
     onPaginationChange: OnChangeFn<PaginationState>;
-    typeCounts: Status[];
+    categoryFilter: Status[];
     defaultCounts?: string;
     autoLoading?: boolean;
     handlePagination?: (
@@ -397,7 +397,7 @@ const Table: React.FC<TableProps> = ({
     pageCount,
     pagination,
     onPaginationChange,
-    typeCounts,
+    categoryFilter,
     autoLoading,
     handlePagination,
     perPageOption,
@@ -547,15 +547,15 @@ const Table: React.FC<TableProps> = ({
     return (
         <>
 
-            {(typeCounts?.length > 0 || searchFilter) && (
+            {(categoryFilter?.length > 0 || searchFilter) && (
                 <div className="admin-top-filter">
                     <div className="filter-wrapper">
-                        {typeCounts?.length > 0 &&
+                        {categoryFilter?.length > 0 &&
                             <>
-                                {typeCounts ? (
-                                    typeCounts.length > 0 ? (
+                                {categoryFilter ? (
+                                    categoryFilter.length > 0 ? (
                                         <>
-                                            {typeCounts.map((countInfo, index) => (
+                                            {categoryFilter.map((countInfo, index) => (
                                                 <div
                                                     key={index}
                                                     role="button"
