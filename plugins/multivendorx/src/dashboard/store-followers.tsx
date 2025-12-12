@@ -93,7 +93,9 @@ const StoreFollower: React.FC = () => {
 			enableSorting: true,
 			header: __('Followed On', 'multivendorx'),
 			cell: ({ row }) => {
-				if (!row.original.date) return <TableCell>—</TableCell>;
+				if (!row.original.date) {
+					return <TableCell>—</TableCell>;
+				}
 
 				const followed = new Date(row.original.date);
 

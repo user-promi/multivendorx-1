@@ -53,7 +53,9 @@ const EditQna: React.FC<EditQnaProps> = ({
 
 	// Save Answer + Visibility
 	const handleSave = () => {
-		if (!qna) return;
+		if (!qna) {
+			return;
+		}
 		setSaving(true);
 
 		axios({
@@ -68,7 +70,9 @@ const EditQna: React.FC<EditQnaProps> = ({
 			.then(() => {
 				setSaving(false);
 				onClose();
-				if (onUpdated) onUpdated();
+				if (onUpdated) {
+					onUpdated();
+				}
 			})
 			.catch(() => setSaving(false));
 	};

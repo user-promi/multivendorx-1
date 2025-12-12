@@ -131,10 +131,14 @@ const ApprovalQueue = () => {
 
 	useEffect(() => {
 		// Wait until modules load
-		if (!modules || modules.length === 0) return;
+		if (!modules || modules.length === 0) {
+			return;
+		}
 
 		// Prevent double run in Strict Mode
-		if (ranOnce.current) return;
+		if (ranOnce.current) {
+			return;
+		}
 		ranOnce.current = true;
 
 		refreshCounts();

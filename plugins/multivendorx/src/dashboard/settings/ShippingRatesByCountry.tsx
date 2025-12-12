@@ -350,7 +350,9 @@ const ShippingRatesByCountry: React.FC = () => {
 	const statesByCountry = appLocalizer?.state_list || {};
 
 	useEffect(() => {
-		if (!appLocalizer?.store_id) return;
+		if (!appLocalizer?.store_id) {
+			return;
+		}
 
 		const fetchShippingRates = async () => {
 			setLoading(true);
@@ -462,8 +464,9 @@ const ShippingRatesByCountry: React.FC = () => {
 		],
 	};
 
-	if (loading)
+	if (loading) {
 		return <div>{__('Loading shipping rates...', 'multivendorx')}</div>;
+	}
 	return (
 		<div className="shipping-country-wrapper">
 			{error && <div className="mvx-error">{error}</div>}
@@ -495,7 +498,9 @@ const ShippingRatesByCountry: React.FC = () => {
 							}))
 						: [];
 
-					if (stateOptions.length === 0) return null;
+					if (stateOptions.length === 0) {
+						return null;
+					}
 
 					return (
 						<div className="state-inner-box">

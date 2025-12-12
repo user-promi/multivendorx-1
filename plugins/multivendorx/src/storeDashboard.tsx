@@ -63,7 +63,9 @@ const Dashboard = () => {
 	}, []);
 
 	const hasCapability = (capability: any) => {
-		if (!capability) return true;
+		if (!capability) {
+			return true;
+		}
 
 		const userCaps = appLocalizer.current_user?.allcaps || {};
 
@@ -75,7 +77,9 @@ const Dashboard = () => {
 	};
 
 	useEffect(() => {
-		if (!currentTab) return;
+		if (!currentTab) {
+			return;
+		}
 
 		let capability = null;
 
@@ -159,7 +163,9 @@ const Dashboard = () => {
 		const open = {};
 
 		Object.entries(menu).forEach(([key, item]) => {
-			if (!item.submenu?.length) return;
+			if (!item.submenu?.length) {
+				return;
+			}
 
 			const isParentActive = currentTab === key;
 			const isChildActive = item.submenu.some(
@@ -264,7 +270,9 @@ const Dashboard = () => {
 					<div className="dashboard-tabs">
 						<ul>
 							{Object.entries(menu).map(([key, item]) => {
-								if (!item.name) return null;
+								if (!item.name) {
+									return null;
+								}
 
 								const hasSubmenu = item.submenu?.length > 0;
 

@@ -2,6 +2,8 @@
 const requireHook = require.context('.', false, /\.tsx$/);
 
 requireHook.keys().forEach((fileName: string) => {
-	if (fileName === './index.ts') return;
+	if (fileName === './index.ts') {
+		return;
+	}
 	requireHook(fileName);
 });

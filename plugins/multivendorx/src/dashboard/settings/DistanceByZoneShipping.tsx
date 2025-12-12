@@ -105,7 +105,9 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 		setSelectedZone(zoneWithMethod || null);
 		setAddShipping(true);
 
-		if (!zoneWithMethod) return;
+		if (!zoneWithMethod) {
+			return;
+		}
 
 		try {
 			const response = await axios({
@@ -160,8 +162,9 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 	};
 
 	const handleDelete = async (method: any, zone: Zone) => {
-		if (!confirm(`Are you sure you want to delete "${method.title}"?`))
+		if (!confirm(`Are you sure you want to delete "${method.title}"?`)) {
 			return;
+		}
 
 		try {
 			const response = await axios({
@@ -191,7 +194,9 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 	};
 
 	const handleSave = async () => {
-		if (!selectedZone) return;
+		if (!selectedZone) {
+			return;
+		}
 
 		try {
 			const shippingData: any = { settings: {} };
@@ -441,8 +446,9 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 									wrapperClass="setting-form-input"
 									value={formData.shippingMethod}
 									onChange={(val: string) => {
-										if (!isEditing)
+										if (!isEditing) {
 											handleChange('shippingMethod', val);
+										}
 									}}
 									options={
 										isEditing

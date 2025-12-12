@@ -9,7 +9,9 @@ const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
 	useEffect(() => {
-		if (!id) return;
+		if (!id) {
+			return;
+		}
 		if (data) {
 			setFormData(data);
 		}

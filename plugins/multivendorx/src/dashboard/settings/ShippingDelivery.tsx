@@ -16,7 +16,9 @@ const ShippingDelivery = () => {
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
 	useEffect(() => {
-		if (!appLocalizer.store_id) return;
+		if (!appLocalizer.store_id) {
+			return;
+		}
 
 		axios
 			.get(getApiLink(appLocalizer, `store/${appLocalizer.store_id}`), {

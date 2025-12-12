@@ -86,10 +86,12 @@ const Store = () => {
 
 	// run slug check only after user finishes typing (onBlur)
 	const handleNameBlur = async () => {
-		if (!formData.slug) return;
+		if (!formData.slug) {
+			return;
+		}
 		const exists = await checkSlugExists(formData.slug);
-		if (exists)
-			// setError(`Slug "${formData.slug}" already exists.`);
+		if (exists) // setError(`Slug "${formData.slug}" already exists.`);
+		{
 			setError((prev) => ({
 				...prev,
 				slug: {
@@ -97,7 +99,7 @@ const Store = () => {
 					message: `Slug "${formData.slug}" already exists.`,
 				},
 			}));
-		else
+		} else {
 			setError((prev) => ({
 				...prev,
 				slug: {
@@ -105,6 +107,7 @@ const Store = () => {
 					message: 'Available',
 				},
 			}));
+		}
 	};
 
 	const handleSubmit = async () => {
@@ -404,8 +407,9 @@ const Store = () => {
 												if (
 													!newValue ||
 													Array.isArray(newValue)
-												)
+												) {
 													return;
+												}
 												const updated = {
 													...formData,
 													store_owners:

@@ -243,7 +243,9 @@ export const Announcements: React.FC = () => {
 	};
 
 	const handleSubmit = async () => {
-		if (submitting) return;
+		if (submitting) {
+			return;
+		}
 
 		if (!validateForm()) {
 			return; // Stop submission if errors exist
@@ -413,7 +415,9 @@ export const Announcements: React.FC = () => {
 		},
 	];
 	const truncateText = (text: string, maxLength: number) => {
-		if (!text) return '-';
+		if (!text) {
+			return '-';
+		}
 		return text.length > maxLength
 			? text.slice(0, maxLength) + '...'
 			: text;
@@ -541,7 +545,9 @@ export const Announcements: React.FC = () => {
 								label: __('Delete', 'multivendorx'),
 								icon: 'adminlib-delete',
 								onClick: async (rowData: any) => {
-									if (!rowData.id) return;
+									if (!rowData.id) {
+										return;
+									}
 									if (
 										!confirm(
 											__(
@@ -549,8 +555,9 @@ export const Announcements: React.FC = () => {
 												'multivendorx'
 											)
 										)
-									)
+									) {
 										return;
+									}
 
 									try {
 										await axios({

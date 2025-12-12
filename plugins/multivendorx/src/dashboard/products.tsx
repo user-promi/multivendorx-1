@@ -44,7 +44,9 @@ export interface RealtimeFilter {
 	) => ReactNode;
 }
 const formatWooDate = (dateString: string) => {
-	if (!dateString) return '-';
+	if (!dateString) {
+		return '-';
+	}
 	const date = new Date(dateString);
 	return date.toLocaleString('en-US', {
 		year: 'numeric',
@@ -714,7 +716,9 @@ const AllProduct: React.FC = () => {
 	};
 
 	useEffect(() => {
-		if (!newProductId) return;
+		if (!newProductId) {
+			return;
+		}
 
 		if (appLocalizer.permalink_structure) {
 			navigate(

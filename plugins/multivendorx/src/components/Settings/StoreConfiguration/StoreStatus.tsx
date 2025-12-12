@@ -110,7 +110,9 @@ const StoreStatus: React.FC = () => {
 		const { modules } = useModules();
 		const [storeTabSetting, setStoreTabSetting] = useState<any>(null);
 
-		if (!currentTab) return null;
+		if (!currentTab) {
+			return null;
+		}
 
 		const settingModal = getSettingById(settingsArray as any, currentTab);
 

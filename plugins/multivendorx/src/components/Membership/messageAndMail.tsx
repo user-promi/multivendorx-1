@@ -21,7 +21,9 @@ const MessageAndMail = ({ id }: { id: string }) => {
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
 	useEffect(() => {
-		if (!id) return;
+		if (!id) {
+			return;
+		}
 
 		axios({
 			method: 'GET',
@@ -206,8 +208,9 @@ const MessageAndMail = ({ id }: { id: string }) => {
 										if (
 											!newValue ||
 											Array.isArray(newValue)
-										)
+										) {
 											return;
+										}
 										const updated = {
 											...formData,
 											country: newValue.value,
@@ -230,8 +233,9 @@ const MessageAndMail = ({ id }: { id: string }) => {
 										if (
 											!newValue ||
 											Array.isArray(newValue)
-										)
+										) {
 											return;
+										}
 										const updated = {
 											...formData,
 											state: newValue.value,

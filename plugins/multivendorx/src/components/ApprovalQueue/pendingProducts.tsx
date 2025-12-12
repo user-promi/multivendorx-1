@@ -142,7 +142,9 @@ const PendingProducts: React.FC<{ onUpdated?: () => void }> = ({
 	}, [pagination]);
 
 	const handleSingleAction = (action: string, productId: number) => {
-		if (!productId) return;
+		if (!productId) {
+			return;
+		}
 
 		if (action === 'reject_product') {
 			setRejectProductId(productId);
@@ -151,7 +153,9 @@ const PendingProducts: React.FC<{ onUpdated?: () => void }> = ({
 		}
 
 		const statusUpdate = action === 'approve_product' ? 'publish' : null;
-		if (!statusUpdate) return;
+		if (!statusUpdate) {
+			return;
+		}
 
 		axios
 			.post(
@@ -167,7 +171,9 @@ const PendingProducts: React.FC<{ onUpdated?: () => void }> = ({
 	};
 
 	const submitReject = () => {
-		if (!rejectProductId || isSubmitting) return;
+		if (!rejectProductId || isSubmitting) {
+			return;
+		}
 
 		setIsSubmitting(true);
 
@@ -299,7 +305,9 @@ const PendingProducts: React.FC<{ onUpdated?: () => void }> = ({
 			header: __('Date Created', 'multivendorx'),
 			cell: ({ row }) => {
 				const rawDate = row.original?.date_created;
-				if (!rawDate) return <TableCell>-</TableCell>;
+				if (!rawDate) {
+					return <TableCell>-</TableCell>;
+				}
 
 				const date = new Date(rawDate);
 				const formatted = date.toLocaleDateString('en-US', {

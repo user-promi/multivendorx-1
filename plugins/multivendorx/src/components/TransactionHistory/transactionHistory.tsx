@@ -83,7 +83,7 @@ export const TransactionHistory: React.FC = () => {
 				const output = applyFilters(
 					'direct_transaction_output',
 					null,
-					selectedStore,
+					selectedStore
 				);
 
 				return output;

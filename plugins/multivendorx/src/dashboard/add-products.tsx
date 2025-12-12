@@ -41,7 +41,9 @@ const AddProduct = () => {
 	const [generatedImage, setGeneratedImage] = useState(null);
 
 	useEffect(() => {
-		if (!productId) return;
+		if (!productId) {
+			return;
+		}
 
 		axios
 			.get(`${appLocalizer.apiUrl}/wc/v3/products/${productId}`, {
@@ -74,7 +76,9 @@ const AddProduct = () => {
 
 	// Close on click outside
 	useEffect(() => {
-		if (!isPyramidEnabled) return;
+		if (!isPyramidEnabled) {
+			return;
+		}
 		const handleClickOutside = (event) => {
 			if (
 				wrapperRef.current &&
@@ -126,26 +130,34 @@ const AddProduct = () => {
 	}, []);
 
 	const handleCategoryClick = (catId) => {
-		if (!isPyramidEnabled) return;
+		if (!isPyramidEnabled) {
+			return;
+		}
 		setSelectedCat(catId);
 		setSelectedSub(null);
 		setSelectedChild(null);
 	};
 
 	const handleSubClick = (subId) => {
-		if (!isPyramidEnabled) return;
+		if (!isPyramidEnabled) {
+			return;
+		}
 		setSelectedSub(subId);
 		setSelectedChild(null);
 	};
 
 	const handleChildClick = (childId) => {
-		if (!isPyramidEnabled) return;
+		if (!isPyramidEnabled) {
+			return;
+		}
 		setSelectedChild(childId);
 	};
 
 	// Breadcrumb path click resets below levels
 	const handlePathClick = (level) => {
-		if (!isPyramidEnabled) return;
+		if (!isPyramidEnabled) {
+			return;
+		}
 		if (level === 'category') {
 			setSelectedSub(null);
 			setSelectedChild(null);
@@ -156,7 +168,9 @@ const AddProduct = () => {
 	};
 
 	const printPath = () => {
-		if (!isPyramidEnabled) return;
+		if (!isPyramidEnabled) {
+			return;
+		}
 		const cat = treeData.find((c) => c.id === selectedCat);
 
 		const sub = cat?.children?.find((s) => s.id === selectedSub);
@@ -241,7 +255,9 @@ const AddProduct = () => {
 	};
 
 	useEffect(() => {
-		if (!isPyramidEnabled) return;
+		if (!isPyramidEnabled) {
+			return;
+		}
 		const id = selectedChild || selectedSub || selectedCat;
 
 		if (id) {
@@ -255,7 +271,9 @@ const AddProduct = () => {
 	const preselectedRef = useRef(false);
 
 	useEffect(() => {
-		if (preselectedRef.current) return;
+		if (preselectedRef.current) {
+			return;
+		}
 
 		if (treeData.length && product?.categories?.length) {
 			const savedId = product.categories[0].id;
@@ -357,7 +375,9 @@ const AddProduct = () => {
 		const body = document.querySelector(`#${cardId} .card-body`);
 		const arrow = document.querySelector(`#${cardId} .arrow-icon`);
 
-		if (!body || !arrow) return;
+		if (!body || !arrow) {
+			return;
+		}
 
 		body.classList.toggle('hide-body');
 		arrow.classList.toggle('rotate');
@@ -632,7 +652,9 @@ const AddProduct = () => {
 
 	// Update the useEnhancedImage function
 	const useEnhancedImage = async () => {
-		if (!generatedImage) return;
+		if (!generatedImage) {
+			return;
+		}
 
 		try {
 			// Convert base64 to blob

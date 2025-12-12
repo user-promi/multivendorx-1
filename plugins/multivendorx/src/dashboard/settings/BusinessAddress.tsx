@@ -155,7 +155,9 @@ const BusinessAddress = () => {
 
 	// Handle country select change (from old code)
 	const handleCountryChange = (newValue: any) => {
-		if (!newValue || Array.isArray(newValue)) return;
+		if (!newValue || Array.isArray(newValue)) {
+			return;
+		}
 
 		const updatedAddressData = {
 			...addressData,
@@ -177,7 +179,9 @@ const BusinessAddress = () => {
 
 	// Handle state select change (from old code)
 	const handleStateChange = (newValue: any) => {
-		if (!newValue || Array.isArray(newValue)) return;
+		if (!newValue || Array.isArray(newValue)) {
+			return;
+		}
 
 		const updatedAddressData = {
 			...addressData,
@@ -265,7 +269,9 @@ const BusinessAddress = () => {
 	}, [loading, mapProvider, googleLoaded, mapboxLoaded, addressData]);
 
 	const initializeGoogleMap = () => {
-		if (!window.google || !autocompleteInputRef.current) return;
+		if (!window.google || !autocompleteInputRef.current) {
+			return;
+		}
 
 		const initialLat = parseFloat(addressData.location_lat) || 40.7128;
 		const initialLng = parseFloat(addressData.location_lng) || -74.006;
@@ -318,7 +324,9 @@ const BusinessAddress = () => {
 	};
 
 	const initializeMapboxMap = () => {
-		if (!(window as any).mapboxgl || !autocompleteInputRef.current) return;
+		if (!(window as any).mapboxgl || !autocompleteInputRef.current) {
+			return;
+		}
 
 		const geocoderContainer = document.getElementById(
 			'location-autocomplete-container'
@@ -543,7 +551,9 @@ const BusinessAddress = () => {
 
 	// Update your autoSave function:
 	const autoSave = (updatedData: any) => {
-		if (settings.includes('store_address')) return;
+		if (settings.includes('store_address')) {
+			return;
+		}
 		const saveData = {
 			...updatedData,
 			location_address:

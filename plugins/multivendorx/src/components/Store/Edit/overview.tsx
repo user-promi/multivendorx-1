@@ -21,7 +21,9 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 	const [recentProducts, setRecentProducts] = useState<any[]>([]);
 
 	useEffect(() => {
-		if (!id) return;
+		if (!id) {
+			return;
+		}
 
 		axios({
 			method: 'GET',

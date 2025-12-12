@@ -31,7 +31,9 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 	const [details, setDetails] = useState<CommissionDetails | null>(null);
 	const [loading, setLoading] = useState(false);
 	useEffect(() => {
-		if (!commissionId) return;
+		if (!commissionId) {
+			return;
+		}
 
 		setLoading(true);
 		axios({
@@ -48,7 +50,9 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 			.finally(() => setLoading(false));
 	}, [commissionId]);
 
-	if (!open) return null;
+	if (!open) {
+		return null;
+	}
 
 	return (
 		<CommonPopup

@@ -131,7 +131,9 @@ const AddOrder = () => {
 	];
 
 	useEffect(() => {
-		if (!showAddProduct) return;
+		if (!showAddProduct) {
+			return;
+		}
 
 		axios
 			.get(`${appLocalizer.apiUrl}/wc/v3/products`, {
@@ -218,7 +220,9 @@ const AddOrder = () => {
 	const [selectedTaxRate, setSelectedTaxRate] = useState(null);
 
 	const applyTaxToOrder = () => {
-		if (!selectedTaxRate) return;
+		if (!selectedTaxRate) {
+			return;
+		}
 
 		const rate = Number(selectedTaxRate.rate) / 100;
 
@@ -716,17 +720,20 @@ const AddOrder = () => {
 												})),
 											]}
 											onChange={(selected) => {
-												if (!selected?.value) return;
+												if (!selected?.value) {
+													return;
+												}
 
 												const prod = allProducts.find(
 													(p) =>
 														p.id == selected.value
 												);
-												if (prod)
+												if (prod) {
 													setAddedProducts((prev) => [
 														...prev,
 														{ ...prod, qty: 1 },
 													]);
+												}
 
 												setShowAddProduct(false);
 											}}

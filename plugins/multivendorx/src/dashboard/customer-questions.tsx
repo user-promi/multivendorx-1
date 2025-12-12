@@ -200,7 +200,9 @@ const CustomerQuestions: React.FC = () => {
 
 	// Save answer
 	const handleSaveAnswer = async () => {
-		if (!selectedQna) return;
+		if (!selectedQna) {
+			return;
+		}
 		setSaving(true);
 		try {
 			await axios.put(

@@ -17,7 +17,9 @@ const Privacy = () => {
 
 	// Fetch store data
 	useEffect(() => {
-		if (!id) return;
+		if (!id) {
+			return;
+		}
 
 		axios({
 			method: 'GET',

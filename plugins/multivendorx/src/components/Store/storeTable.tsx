@@ -357,8 +357,9 @@ const StoreTable: React.FC = () => {
 											),
 											icon: 'adminlib-storefront',
 											onClick: () => {
-												if (!row.original.store_slug)
+												if (!row.original.store_slug) {
 													return;
+												}
 												window.open(
 													`${appLocalizer.site_url}/store/${row.original.store_slug}/`,
 													'_blank'

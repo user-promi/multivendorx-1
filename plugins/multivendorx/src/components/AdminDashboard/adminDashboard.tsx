@@ -73,7 +73,9 @@ const AdminDashboard = () => {
 	};
 
 	const installOrActivatePlugin = async (slug: string) => {
-		if (!slug || installing) return; // prevent multiple clicks
+		if (!slug || installing) {
+			return;
+		} // prevent multiple clicks
 		setInstalling(slug);
 
 		try {
@@ -443,7 +445,9 @@ const AdminDashboard = () => {
 	const [activeTab, setActiveTab] = useState('dashboard');
 	const isPro = !!appLocalizer.khali_dabba;
 	const renderUpgradeButton = (label = 'Upgrade Now') => {
-		if (isPro) return null;
+		if (isPro) {
+			return null;
+		}
 		return (
 			<a
 				href={appLocalizer.shop_url}

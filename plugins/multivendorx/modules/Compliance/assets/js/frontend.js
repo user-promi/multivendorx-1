@@ -50,7 +50,9 @@ jQuery(function ($) {
 	$(document).on('click', '.submit-report-abuse', function (e) {
 		e.preventDefault();
 		var $btn = $(this);
-		if ($btn.prop('disabled')) return;
+		if ($btn.prop('disabled')) {
+			return;
+		}
 
 		var $form = $btn.closest('.report-abuse-form');
 		var name = $form.find('.report_abuse_name').val().trim();
