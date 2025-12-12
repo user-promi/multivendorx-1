@@ -41,10 +41,6 @@ export default defineConfig([
 				wp: 'readonly',
 				wpApiSettings: 'readonly',
 				wcSettings: 'readonly',
-				appLocalizer: 'readonly',
-				jQuery: 'readonly',
-				reportAbuseFrontend: 'readonly',
-				followStoreFrontend: 'readonly'
 			},
 		},
 
