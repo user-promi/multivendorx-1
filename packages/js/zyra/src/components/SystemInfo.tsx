@@ -114,7 +114,7 @@ const SystemInfo: React.FC<SystemInfoProps> = ({
                     {openKeys.includes(key) && (
                         <div className="content">
                             {section.description && (
-                                <p className="desc">{section.description}</p>
+                                <p className="des">{section.description}</p>
                             )}
                             <table>
                                 <tbody>
