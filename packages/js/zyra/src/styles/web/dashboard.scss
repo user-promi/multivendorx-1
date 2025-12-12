@@ -218,8 +218,10 @@
                 }
 
                 .number {
-                    font-size: 1.813rem !important; /* zyra style overwrite */
-                    line-height: 2 !important; /* zyra style overwrite */
+                    font-size: 1.813rem !important;
+                    /* zyra style overwrite */
+                    line-height: 2 !important;
+                    /* zyra style overwrite */
                     font-weight: 600;
                 }
 
@@ -358,10 +360,22 @@
     font-size: 0.813rem;
 }
 
-:where(.w-10)   { width: 10%; }
-:where(.w-35)   { width: 35%; }
-:where(.w-50)   { width: 50%; }
-:where(.w-65)   { width: 65%; }
+.w-10 {
+    width: 10% !important;
+}
+
+.w-35 {
+    width: 35% !important;
+}
+
+.w-50 {
+    width: 50% !important;
+}
+
+.w-65 {
+    width: 65% !important;
+}
+
 
 .admin-pt-2 {
     padding-top: 2rem;
