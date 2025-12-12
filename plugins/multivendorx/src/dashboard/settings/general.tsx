@@ -14,7 +14,9 @@ const GeneralSettings = () => {
 		appLocalizer.settings_databases_value['store-capability']
 			?.edit_store_info_activation || [];
 	useEffect(() => {
-		if (!id) return;
+		if (!id) {
+			return;
+		}
 
 		axios({
 			method: 'GET',

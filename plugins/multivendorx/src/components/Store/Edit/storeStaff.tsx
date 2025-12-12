@@ -9,7 +9,9 @@ const StoreSquad = ({ id }: { id: string | null }) => {
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
 	useEffect(() => {
-		if (!id) return;
+		if (!id) {
+			return;
+		}
 
 		axios({
 			method: 'GET',
@@ -261,8 +263,9 @@ const StoreSquad = ({ id }: { id: string | null }) => {
 											if (
 												!newValue ||
 												Array.isArray(newValue)
-											)
+											) {
 												return;
+											}
 											const updated = {
 												...formData,
 												primary_owner: newValue.value,

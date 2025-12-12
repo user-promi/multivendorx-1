@@ -19,9 +19,15 @@ const AICard = () => {
 	const updateProductField = (field, value) => {
 		// Map the field names to match what AddProduct expects
 		let fieldName = field;
-		if (field === 'productName') fieldName = 'name';
-		if (field === 'shortDescription') fieldName = 'short_description';
-		if (field === 'productDescription') fieldName = 'description';
+		if (field === 'productName') {
+			fieldName = 'name';
+		}
+		if (field === 'shortDescription') {
+			fieldName = 'short_description';
+		}
+		if (field === 'productDescription') {
+			fieldName = 'description';
+		}
 
 		const event = new CustomEvent('ai-suggestion-selected', {
 			detail: { field: fieldName, value },

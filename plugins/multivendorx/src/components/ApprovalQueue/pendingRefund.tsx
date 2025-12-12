@@ -300,7 +300,9 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 	};
 
 	const handleSubmit = async () => {
-		if (!rejectOrderId) return;
+		if (!rejectOrderId) {
+			return;
+		}
 
 		setSubmitting(true);
 

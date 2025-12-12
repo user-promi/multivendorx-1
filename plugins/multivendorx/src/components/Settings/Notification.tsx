@@ -98,7 +98,9 @@ const Notification: React.FC = () => {
 
 	// ------------------ autosave effect (keeps almost same logic you had) ------------------
 	useEffect(() => {
-		if (!notifications || notificationId == null) return;
+		if (!notifications || notificationId == null) {
+			return;
+		}
 
 		const filtered = notifications.filter(
 			(item) => item.id === notificationId
@@ -151,7 +153,9 @@ const Notification: React.FC = () => {
 	};
 
 	const addRecipient = (notifId: number | null) => {
-		if (!newRecipientValue.trim() || notifId == null) return;
+		if (!newRecipientValue.trim() || notifId == null) {
+			return;
+		}
 		setNotifications((prev) =>
 			prev.map((n) => {
 				if (n.id === notifId) {
@@ -223,7 +227,9 @@ const Notification: React.FC = () => {
 	}, [formData.system_message]);
 
 	const handleAutoSave = (id: number | null) => {
-		if (id == null) return;
+		if (id == null) {
+			return;
+		}
 		axios({
 			method: 'POST',
 			url: getApiLink(appLocalizer, `notifications/${id}`),
@@ -246,8 +252,12 @@ const Notification: React.FC = () => {
 
 	// -------------- FILTERED NOTIFICATIONS based on activeTag --------------
 	const filteredNotifications = useMemo(() => {
-		if (!notifications) return [];
-		if (activeTag === 'All') return notifications;
+		if (!notifications) {
+			return [];
+		}
+		if (activeTag === 'All') {
+			return notifications;
+		}
 		return notifications.filter((n) => n.tag === activeTag);
 	}, [notifications, activeTag]);
 	// ------------------ Render ------------------

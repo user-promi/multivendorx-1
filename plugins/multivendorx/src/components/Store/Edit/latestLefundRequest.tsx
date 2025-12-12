@@ -122,7 +122,9 @@ const LatestRefundRequest: React.FC<LatestRefundRequestProps> = ({
 			header: __('Date', 'multivendorx'),
 			cell: ({ row }: any) => {
 				const date = row.original.date;
-				if (!date) return <TableCell>-</TableCell>;
+				if (!date) {
+					return <TableCell>-</TableCell>;
+				}
 
 				const formattedDate = new Date(date).toLocaleDateString(
 					'en-US',
@@ -148,7 +150,9 @@ const LatestRefundRequest: React.FC<LatestRefundRequestProps> = ({
 		orderBy = 'date',
 		order = 'desc'
 	) {
-		if (!store_id) return;
+		if (!store_id) {
+			return;
+		}
 
 		axios({
 			method: 'GET',

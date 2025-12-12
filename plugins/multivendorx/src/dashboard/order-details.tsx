@@ -104,7 +104,9 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 	};
 
 	useEffect(() => {
-		if (!orderId) return;
+		if (!orderId) {
+			return;
+		}
 
 		fetchOrder();
 	}, [orderId]);
@@ -145,7 +147,9 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 		setValues(newVals);
 	};
 	const formatDateTime = (iso?: string | null) => {
-		if (!iso) return '-';
+		if (!iso) {
+			return '-';
+		}
 		try {
 			const d = new Date(iso);
 			return d.toLocaleString(); // adjust locale/options if you want specific format

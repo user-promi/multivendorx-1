@@ -158,7 +158,9 @@ const App = () => {
 
 		const filtered = searchIndex.filter((item) => {
 			// Filter by dropdown selection
-			if (selectValue !== 'all' && item.tab !== selectValue) return false;
+			if (selectValue !== 'all' && item.tab !== selectValue) {
+				return false;
+			}
 
 			// Case-insensitive search
 			const name = item.name?.toLowerCase() || '';

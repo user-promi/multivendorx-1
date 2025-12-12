@@ -260,7 +260,9 @@ const RefundedOrderReport: React.FC = () => {
 			header: __('Date', 'multivendorx'),
 			cell: ({ row }: any) => {
 				const date = row.original.date;
-				if (!date) return <TableCell>-</TableCell>;
+				if (!date) {
+					return <TableCell>-</TableCell>;
+				}
 
 				const formattedDate = new Date(date).toLocaleDateString(
 					'en-US',

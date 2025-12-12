@@ -57,7 +57,9 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 			?.payment_methods?.['bank-transfer']?.['bank_details'];
 
 	useEffect(() => {
-		if (!id) return;
+		if (!id) {
+			return;
+		}
 
 		if (data) {
 			setFormData(data);

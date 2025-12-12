@@ -21,7 +21,9 @@ jQuery(document).ready(function ($) {
 	$(document).on('click', '#qna-submit', function () {
 		let question = $('#qna-question').val();
 		let productId = $('#product-qna').data('product');
-		if (!question.trim()) return;
+		if (!question.trim()) {
+			return;
+		}
 
 		$.post(
 			qnaFrontend.ajaxurl,

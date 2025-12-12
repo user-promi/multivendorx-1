@@ -111,7 +111,9 @@ const Orders: React.FC = () => {
 						meta_key: 'multivendorx_store_id',
 						value: appLocalizer.store_id,
 					};
-					if (status !== 'all') params.status = status;
+					if (status !== 'all') {
+						params.status = status;
+					}
 
 					const res = await axios.get(
 						`${appLocalizer.apiUrl}/wc/v3/orders`,
@@ -212,8 +214,11 @@ const Orders: React.FC = () => {
 		// Search field
 		if (filterData.searchField) {
 			const searchValue = filterData.searchField.trim();
-			if (filterData.searchAction) params.search = searchValue;
-			else params.search = searchValue;
+			if (filterData.searchAction) {
+				params.search = searchValue;
+			} else {
+				params.search = searchValue;
+			}
 		}
 
 		// Add typeCount filter
@@ -248,13 +253,17 @@ const Orders: React.FC = () => {
 		} catch (err) {
 			console.error(err);
 		} finally {
-			if (bulkSelectRef.current) bulkSelectRef.current.value = '';
+			if (bulkSelectRef.current) {
+				bulkSelectRef.current.value = '';
+			}
 		}
 	};
 
 	const BulkAction: React.FC = () => {
 		const handleBulkActionChange = async (action: string) => {
-			if (!action || selectedOrderIds.length === 0) return;
+			if (!action || selectedOrderIds.length === 0) {
+				return;
+			}
 
 			// Change order status
 			try {
@@ -274,7 +283,9 @@ const Orders: React.FC = () => {
 			} catch (err) {
 				console.error(err);
 			} finally {
-				if (bulkSelectRef.current) bulkSelectRef.current.value = '';
+				if (bulkSelectRef.current) {
+					bulkSelectRef.current.value = '';
+				}
 			}
 		};
 
@@ -439,20 +450,21 @@ const Orders: React.FC = () => {
 				const years = Math.floor(days / 365);
 
 				let timeAgo = '';
-				if (years > 0)
+				if (years > 0) {
 					timeAgo = `${years} year${years > 1 ? 's' : ''} ago`;
-				else if (months > 0)
+				} else if (months > 0) {
 					timeAgo = `${months} month${months > 1 ? 's' : ''} ago`;
-				else if (days > 0)
+				} else if (days > 0) {
 					timeAgo = `${days} day${days > 1 ? 's' : ''} ago`;
-				else if (hours > 0)
+				} else if (hours > 0) {
 					timeAgo = `${hours} hour${hours > 1 ? 's' : ''} ago`;
-				else if (minutes > 0)
+				} else if (minutes > 0) {
 					timeAgo = `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
-				else
+				} else {
 					timeAgo = `${seconds} second${
 						seconds !== 1 ? 's' : ''
 					} ago`;
+				}
 
 				return <TableCell>{timeAgo}</TableCell>;
 			},
@@ -650,7 +662,9 @@ const Orders: React.FC = () => {
 				const totalPages = parseInt(
 					res.headers['x-wp-totalpages'] || '1'
 				);
-				if (page >= totalPages) break;
+				if (page >= totalPages) {
+					break;
+				}
 				page++;
 			}
 

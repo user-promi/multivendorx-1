@@ -97,12 +97,16 @@ const RegistrationForm = () => {
 						(item) => String(item.id) === String(match.value)
 					);
 
-					if (matchData) setInputs(matchData);
+					if (matchData) {
+						setInputs(matchData);
+					}
 
 					const dataMatch = returnedStoreData.find(
 						(item: any) => String(item.id) === String(match.value)
 					);
-					if (dataMatch) setStoreData(dataMatch);
+					if (dataMatch) {
+						setStoreData(dataMatch);
+					}
 				}
 			}
 		});
@@ -170,12 +174,15 @@ const RegistrationForm = () => {
 
 		const mappedData: Record<string, any> = {};
 
-		if (submittedFormData['name'])
+		if (submittedFormData['name']) {
 			mappedData['name'] = submittedFormData['name'];
-		if (submittedFormData['description'])
+		}
+		if (submittedFormData['description']) {
 			mappedData['description'] = submittedFormData['description'];
-		if (submittedFormData['slug'])
+		}
+		if (submittedFormData['slug']) {
 			mappedData['slug'] = submittedFormData['slug'];
+		}
 
 		Object.keys(submittedFormData).forEach((key) => {
 			if (!['name', 'description', 'slug'].includes(key)) {

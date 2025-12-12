@@ -41,7 +41,9 @@ jQuery(document).ready(function ($) {
 		var store_id = btn.data('store-id');
 		var user_id = btn.data('user-id');
 
-		if (!user_id || btn.text().trim() === 'Login to Follow') return;
+		if (!user_id || btn.text().trim() === 'Login to Follow') {
+			return;
+		}
 
 		$.post(
 			followStoreFrontend.ajaxurl,

@@ -102,8 +102,9 @@ const Verification = () => {
 	const disconnectSocialProfile = async (provider: string) => {
 		if (
 			!confirm('Are you sure you want to disconnect this social profile?')
-		)
+		) {
 			return;
+		}
 
 		try {
 			const response = await axios({
@@ -212,7 +213,9 @@ const Verification = () => {
 
 		return socialConfigs
 			.map((social) => {
-				if (!social.enabled) return null;
+				if (!social.enabled) {
+					return null;
+				}
 
 				const buttonConfig = getButtonConfig(social.provider);
 

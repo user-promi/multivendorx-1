@@ -124,7 +124,9 @@ const StoreSettings = ({
 
 	// === TOGGLE PRIMARY EMAIL ===
 	const togglePrimary = (email: string) => {
-		if (email === primaryEmail) return;
+		if (email === primaryEmail) {
+			return;
+		}
 		setPrimaryEmail(email);
 		saveEmails(emails, email);
 	};
@@ -228,7 +230,9 @@ const StoreSettings = ({
 
 	// Add email function
 	const addEmail = () => {
-		if (!newEmailValue.trim()) return;
+		if (!newEmailValue.trim()) {
+			return;
+		}
 
 		const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
 			newEmailValue.trim()
@@ -513,7 +517,9 @@ const StoreSettings = ({
 
 	const initializeMapboxMap = () => {
 		log('Initializing Mapbox Map...');
-		if (!(window as any).mapboxgl || !autocompleteInputRef.current) return;
+		if (!(window as any).mapboxgl || !autocompleteInputRef.current) {
+			return;
+		}
 
 		// Clear any existing geocoder first
 		const geocoderContainer = document.getElementById(
@@ -760,7 +766,9 @@ const StoreSettings = ({
 
 	// Handle country select change (from old code)
 	const handleCountryChange = (newValue: any) => {
-		if (!newValue || Array.isArray(newValue)) return;
+		if (!newValue || Array.isArray(newValue)) {
+			return;
+		}
 
 		const updated = {
 			...formData,
@@ -777,7 +785,9 @@ const StoreSettings = ({
 
 	// Handle state select change (from old code)
 	const handleStateChange = (newValue: any) => {
-		if (!newValue || Array.isArray(newValue)) return;
+		if (!newValue || Array.isArray(newValue)) {
+			return;
+		}
 
 		const updated = {
 			...formData,
@@ -884,7 +894,9 @@ const StoreSettings = ({
 
 	// Then update your autoSave function:
 	const autoSave = (updatedData: any) => {
-		if (!id) return;
+		if (!id) {
+			return;
+		}
 		// Format email data for backend
 		const formattedData = { ...updatedData };
 
@@ -1135,8 +1147,9 @@ const StoreSettings = ({
 										if (
 											!newValue ||
 											Array.isArray(newValue)
-										)
+										) {
 											return;
+										}
 										const updated = {
 											...formData,
 											status: newValue.value,

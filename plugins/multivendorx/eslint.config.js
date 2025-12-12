@@ -9,9 +9,9 @@ import tsPlugin from '@typescript-eslint/eslint-plugin';
 export default defineConfig([
 	{
 		ignores: [
-			'bin/',
+			// 'bin/',
 			'release/',
-			'assets/',
+			// 'assets/',
 			'.cache/',
 			'.wireit/',
 			'vendor/',
