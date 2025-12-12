@@ -13,96 +13,97 @@ export default {
 	submitUrl: 'settings',
 	modal: [
 		{
-			key: 'enable_franchise',
-			label: __('Store order creation', 'multivendorx'),
-			desc: __(
-				'Franchise stores can manually place orders for products they manage. Here global marketplace commission rules apply.',
-				'multivendorx'
-			),
+			key: 'singleproductmultistore_show_order',
+			type: 'setting-toggle',
+			label: __('Location Restriction', 'multivendorx'),
+			options: [
+				{
+					key: 'min-price',
+					label: __('City', 'multivendorx'),
+					value: __('city', 'multivendorx'),
+				},
+				{
+					key: 'max-price',
+					label: __('State', 'multivendorx'),
+					value: __('max-price', 'multivendorx'),
+				},
+				{
+					key: 'top-rated-store',
+					label: __('Postal Code', 'multivendorx'),
+					value: __('top-rated-store', 'multivendorx'),
+				},
+			],
+		},
+		{
+			key: 'section',
+			type: 'section',
+			hint: __('Order Fulfillment', 'multivendorx'),
+			desc: __('Decide how customer orders should be routed to franchise stores', 'multivendorx'),
+		},
+		{
+			key: 'automatic_store_assignment',
+			type: 'setting-toggle',
+			label: __('Automatic Store Assignment', 'multivendorx'),
+			options: [
+				{
+					key: 'min-price',
+					label: __('Nearest Store', 'multivendorx'),
+					value: __('min-price', 'multivendorx'),
+				},
+				{
+					key: 'max-price',
+					label: __('Manual Assignment', 'multivendorx'),
+					value: __('max-price', 'multivendorx'),
+				},
+			],
+		},
+		{
+			key: 'section',
+			type: 'section',
+			hint: __('Order Creation', 'multivendorx'),
+			desc: __('Control how franchise stores create and manage their own orders', 'multivendorx'),
+		},
+		{
+			key: 'taxable',
+			label: __('Store Order Creation', 'multivendorx'),
+			desc: __('Allow franchise stores to manually create orders for the products they manage. Useful for in-store purchases, phone orders, or wholesale requests.', 'multivendorx'),
 			type: 'checkbox',
 			options: [
 				{
-					key: 'enable_franchise',
-					value: 'enable_franchise',
+					key: 'taxable',
+					value: 'taxable',
 				},
 			],
 			look: 'toggle',
 		},
 		{
-			key: 'allow_store_create_orders',
-			label: __('Admin product ordering', 'multivendorx'),
-			settingDescription: __(
-				'Permit franchise stores to create order from the admin products.',
-				'multivendorx'
-			),
+			key: 'taxable',
+			label: __('Admin Product Ordering', 'multivendorx'),
+			desc: __('Allow franchise stores to place orders for products from the admin catalog. This lets stores restock or sell admin-owned products directly.', 'multivendorx'),
 			type: 'checkbox',
 			options: [
 				{
-					key: 'allow_store_create_orders',
-					value: 'allow_store_create_orders',
+					key: 'taxable',
+					value: 'taxable',
 				},
 			],
-			look: 'toggle',
-		},
-		{
-			key: 'allow_store_orders_admin',
-			label: __('Store price override', 'multivendorx'),
-			settingDescription: __(
-				'Let franchise stores adjust the selling price of admin-owned products based on requirements.',
-				'multivendorx'
-			),
-			type: 'checkbox',
-			options: [
-				{
-					key: 'allow_store_orders_admin',
-					value: 'allow_store_orders_admin',
-				},
-			],
-			dependent: {
-				key: 'allow_store_create_orders',
-				set: true,
-				value: 'allow_store_create_orders',
-			},
 			look: 'toggle',
 		},
 		{
 			key: 'section',
 			type: 'section',
-			hint: __('Order fulfillment and assignment', 'multivendorx'),
+			hint: __('Admin Product Pricing', 'multivendorx'),
+			desc: __('Configure how store pricing works when selling admin-owned products', 'multivendorx'),
 		},
 		{
-			key: 'enable_automatic_assignment',
-			label: __('Automatic store assignment', 'multivendorx'),
-			settingDescription: __(
-				'Automatically assign customer orders to the nearest eligible franchise store based on location.',
-				'multivendorx'
-			),
+			key: 'taxable',
+			label: __('Store Price Override', 'multivendorx'),
+			desc: __('Let franchise stores adjust the selling price of admin products based on local demand or regional pricing requirements.', 'multivendorx'),
 			type: 'checkbox',
 			options: [
 				{
-					key: 'enable_automatic_assignment',
-					value: 'enable_automatic_assignment',
-				},
-			],
-			look: 'toggle',
-		},
-		{
-			key: 'section',
-			type: 'section',
-			hint: __('Franchise service area controls', 'multivendorx'),
-		},
-		{
-			key: 'restrict_location',
-			label: __('Location restriction', 'multivendorx'),
-			settingDescription: __(
-				'Limit franchise store operations to defined geographic areas such as city, state, or postal code.',
-				'multivendorx'
-			),
-			type: 'checkbox',
-			options: [
-				{
-					key: 'restrict_location',
-					value: 'restrict_location',
+					key: 'taxable',
+					value: 'taxable',
 				},
 			],
 			look: 'toggle',

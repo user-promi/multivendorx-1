@@ -1,42 +1,31 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import {
-	BasicInput,
-	TextArea,
-	FileInput,
-	SelectInput,
-	getApiLink,
-	SuccessNotice,
-} from 'zyra';
+import { BasicInput, TextArea, FileInput, SelectInput, getApiLink, SuccessNotice, MultiCheckBox, ToggleSetting } from 'zyra';
+import { __ } from '@wordpress/i18n';
 
 const MessageAndMail = ({ id }: { id: string }) => {
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
 
-	const [imagePreviews, setImagePreviews] = useState<{
-		[key: string]: string;
-	}>({});
-	const [stateOptions, setStateOptions] = useState<
-		{ label: string; value: string }[]
-	>([]);
+	const [imagePreviews, setImagePreviews] = useState<{ [key: string]: string }>({});
+	const [stateOptions, setStateOptions] = useState<{ label: string; value: string }[]>([]);
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
 	useEffect(() => {
-		if (!id) {
-			return;
-		}
+		if (!id) return;
 
 		axios({
 			method: 'GET',
 			url: getApiLink(appLocalizer, `store/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		}).then((res) => {
-			const data = res.data || {};
-			setFormData((prev) => ({ ...prev, ...data }));
-			setImagePreviews({
-				image: data.image || '',
-				banner: data.banner || '',
-			});
-		});
+		})
+			.then((res) => {
+				const data = res.data || {};
+				setFormData((prev) => ({ ...prev, ...data }));
+				setImagePreviews({
+					image: data.image || '',
+					banner: data.banner || '',
+				});
+			})
 	}, [id]);
 
 	useEffect(() => {
@@ -52,6 +41,7 @@ const MessageAndMail = ({ id }: { id: string }) => {
 		}
 	}, [formData.country]);
 
+
 	const fetchStatesByCountry = (countryCode: string) => {
 		axios({
 			method: 'GET',
@@ -59,12 +49,10 @@ const MessageAndMail = ({ id }: { id: string }) => {
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 		}).then((res) => {
 			setStateOptions(res.data || []);
-		});
+		})
 	};
 
-	const handleChange = (
-		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-	) => {
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		const { name, value } = e.target;
 		const updated = { ...formData, [name]: value };
 		setFormData(updated);
@@ -83,10 +71,7 @@ const MessageAndMail = ({ id }: { id: string }) => {
 			const updated = { ...formData, [key]: attachment.url };
 
 			setFormData(updated);
-			setImagePreviews((prev) => ({
-				...prev,
-				[key]: attachment.url,
-			}));
+			setImagePreviews((prev) => ({ ...prev, [key]: attachment.url }));
 			autoSave(updated);
 		});
 
@@ -103,7 +88,7 @@ const MessageAndMail = ({ id }: { id: string }) => {
 			if (res.data.success) {
 				setSuccessMsg('Store saved successfully!');
 			}
-		});
+		})
 	};
 
 	return (
@@ -112,186 +97,330 @@ const MessageAndMail = ({ id }: { id: string }) => {
 			<div className="container-wrapper">
 				<div className="card-wrapper column w-65">
 					<div className="card-content">
-						<div className="card-title">Store information</div>
-
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="product-name">Name</label>
-								<BasicInput
-									name="name"
-									wrapperClass="setting-form-input"
-									descClass="settings-metabox-description"
-									value={formData.name}
-									onChange={handleChange}
-								/>
+						<div className="card-header">
+							<div className="left">
+								<div className="title">Basic Plan Details</div>
 							</div>
 						</div>
+						<div className="card-body">
+							<div className="form-group-wrapper">
+								<div className="form-group">
+									<label htmlFor="product-name">Plan Name</label>
+									<BasicInput name="name" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.name} onChange={handleChange} />
+								</div>
+							</div>
 
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="product-name">Slug</label>
-								<BasicInput
-									name="slug"
-									wrapperClass="setting-form-input"
-									descClass="settings-metabox-description"
-									value={formData.slug}
-									onChange={handleChange}
-								/>
+							<div className="form-group-wrapper">
+								<div className="form-group">
+									<label htmlFor="product-name">Plan Description</label>
+									<BasicInput name="slug" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.slug} onChange={handleChange} />
+								</div>
+							</div>
+
+							<div className="form-group-wrapper">
+								<div className="form-group">
+									<label htmlFor="product-name">Plan Status</label>
+									<MultiCheckBox
+										wrapperClass="toggle-btn"
+										inputWrapperClass="toggle-checkbox-header"
+										inputInnerWrapperClass="toggle-checkbox"
+										idPrefix="toggle-switch-sold-individually"
+										type="checkbox"
+										// value={
+										// 	product.sold_individually
+										// 		? ['sold_individually']
+										// 		: []
+										// }
+										// onChange={(e) =>
+										// 	handleChange(
+										// 		'sold_individually',
+										// 		(
+										// 			e as React.ChangeEvent<HTMLInputElement>
+										// 		).target.checked
+										// 	)
+										// }
+										options={[
+											{
+												key: 'sold_individually',
+												value: 'sold_individually',
+											},
+										]}
+									/>
+								</div>
+								<div className="form-group">
+									<label htmlFor="product-name">Mark as Recommended</label>
+									<MultiCheckBox
+										wrapperClass="toggle-btn"
+										inputWrapperClass="toggle-checkbox-header"
+										inputInnerWrapperClass="toggle-checkbox"
+										idPrefix="toggle-switch-sold-individually"
+										type="checkbox"
+										// value={
+										// 	product.sold_individually
+										// 		? ['sold_individually']
+										// 		: []
+										// }
+										// onChange={(e) =>
+										// 	handleChange(
+										// 		'sold_individually',
+										// 		(
+										// 			e as React.ChangeEvent<HTMLInputElement>
+										// 		).target.checked
+										// 	)
+										// }
+										options={[
+											{
+												key: 'sold_individually',
+												value: 'sold_individually',
+											},
+										]}
+									/>
+								</div>
 							</div>
 						</div>
 					</div>
 
 					<div className="card-content">
-						<div className="card-title">Description</div>
+						<div className="card-header">
+							<div className="left">
+								<div className="title">Pricing &Billing</div>
+							</div>
+						</div>
+						<div className="card-body">
 
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<TextArea
-									name="description"
-									wrapperClass="setting-from-textarea"
-									inputClass="textarea-input"
-									descClass="settings-metabox-description"
-									value={formData.description}
-									onChange={handleChange}
-								/>
+							<div className="form-group-wrapper">
+								<div className="form-group">
+									<label htmlFor="product-name">Plan Status</label>
+									<ToggleSetting
+										wrapperClass="setting-form-input"
+										descClass="settings-metabox-description"
+										description={__(
+											'Select the status of the announcement.',
+											'multivendorx'
+										)}
+										options={[
+											{
+												key: 'draft',
+												value: 'Free',
+												label: __('Draft', 'multivendorx'),
+											},
+											{
+												key: 'pending',
+												value: 'Paid',
+												label: __('Pending', 'multivendorx'),
+											},
+										]}
+									// value={formData.status}
+									// onChange={handleToggleChange}
+									/>
+								</div>
+								<div className="form-group">
+									<label htmlFor="product-name">Plan Status</label>
+									<ToggleSetting
+										wrapperClass="setting-form-input"
+										descClass="settings-metabox-description"
+										description={__(
+											'Select the status of the announcement.',
+											'multivendorx'
+										)}
+										options={[
+											{
+												key: 'draft',
+												value: 'Monthly',
+												label: __('Draft', 'multivendorx'),
+											},
+											{
+												key: 'pending',
+												value: 'Yearly',
+												label: __('Pending', 'multivendorx'),
+											},
+											{
+												key: 'pending',
+												value: 'One Time',
+												label: __('Pending', 'multivendorx'),
+											},
+										]}
+									// value={formData.status}
+									// onChange={handleToggleChange}
+									/>
+								</div>
+							</div>
+							<div className="form-group-wrapper">
+								<div className="form-group">
+									<label htmlFor="product-name">Plan Price</label>
+									<BasicInput name="name" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.name} onChange={handleChange} />
+								</div>
+								<div className="form-group">
+									<label htmlFor="product-name">Trial Period</label>
+									<BasicInput name="slug" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.slug} onChange={handleChange} />
+								</div>
 							</div>
 						</div>
 					</div>
-
 					<div className="card-content">
-						<div className="card-title">Basic information</div>
-
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="product-name">Phone</label>
-								<BasicInput
-									name="phone"
-									value={formData.phone}
-									wrapperClass="setting-form-input"
-									descClass="settings-metabox-description"
-									onChange={handleChange}
-								/>
+						<div className="card-header">
+							<div className="left">
+								<div className="title">Product Limits</div>
 							</div>
 						</div>
+						<div className="card-body">
+							<div className="form-group-wrapper">
+								<div className="form-group">
+									<label htmlFor="product-name">Total Product Limit</label>
+									<BasicInput name="name" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.name} onChange={handleChange} />
+								</div>
+								<div className="form-group">
+									<label htmlFor="product-name">Gallery Images per Product</label>
+									<BasicInput name="slug" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.slug} onChange={handleChange} />
+								</div>
+							</div>
 
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="product-name">Address</label>
-								<BasicInput
-									name="address_1"
-									value={formData.address_1}
-									wrapperClass="setting-form-input"
-									descClass="settings-metabox-description"
-									onChange={handleChange}
-								/>
-							</div>
-							<div className="form-group">
-								<label htmlFor="product-name"></label>
-								<BasicInput
-									name="address_2"
-									value={formData.address_2}
-									wrapperClass="setting-form-input"
-									descClass="settings-metabox-description"
-									onChange={handleChange}
-								/>
-							</div>
-						</div>
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="product-name">Country</label>
-								<SelectInput
-									name="country"
-									value={formData.country}
-									options={appLocalizer.country_list || []}
-									type="single-select"
-									onChange={(newValue) => {
-										if (
-											!newValue ||
-											Array.isArray(newValue)
-										) {
-											return;
-										}
-										const updated = {
-											...formData,
-											country: newValue.value,
-											state: '',
-										}; // reset state
-										setFormData(updated);
-										autoSave(updated);
-										fetchStatesByCountry(newValue.value);
-									}}
-								/>
-							</div>
-							<div className="form-group">
-								<label htmlFor="product-name">State</label>
-								<SelectInput
-									name="state"
-									value={formData.state}
-									options={stateOptions}
-									type="single-select"
-									onChange={(newValue) => {
-										if (
-											!newValue ||
-											Array.isArray(newValue)
-										) {
-											return;
-										}
-										const updated = {
-											...formData,
-											state: newValue.value,
-										};
-										setFormData(updated);
-										autoSave(updated);
-									}}
-								/>
+							<div className="form-group-wrapper">
+								<div className="form-group">
+									<label htmlFor="product-name">Featured Product Access</label>
+									<MultiCheckBox
+										wrapperClass="toggle-btn"
+										inputWrapperClass="toggle-checkbox-header"
+										inputInnerWrapperClass="toggle-checkbox"
+										idPrefix="toggle-switch-sold-individually"
+										type="checkbox"
+										// value={
+										// 	product.sold_individually
+										// 		? ['sold_individually']
+										// 		: []
+										// }
+										// onChange={(e) =>
+										// 	handleChange(
+										// 		'sold_individually',
+										// 		(
+										// 			e as React.ChangeEvent<HTMLInputElement>
+										// 		).target.checked
+										// 	)
+										// }
+										options={[
+											{
+												key: 'sold_individually',
+												value: 'sold_individually',
+											},
+										]}
+									/>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 
-				<div className="card-wrapper w-35">
+				<div className="card-wrapper column w-35">
 					<div className="card-content">
-						<div className="card-title"></div>
-
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="product-name">
-									Profile Image
-								</label>
-								<FileInput
-									value={formData.image}
-									inputClass="form-input"
-									name="image"
-									type="hidden"
-									onButtonClick={() => runUploader('image')}
-									imageWidth={75}
-									imageHeight={75}
-									openUploader="Upload Image"
-									imageSrc={imagePreviews.image}
-									buttonClass="admin-btn btn-purple"
-									descClass="settings-metabox-description"
-								/>
+						<div className="card-header">
+							<div className="left">
+								<div className="title">Pricing &Billing</div>
 							</div>
 						</div>
+						<div className="card-body">
 
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="product-name">
-									Store Banner Image
-								</label>
-								<FileInput
-									value={formData.banner}
-									inputClass="form-input"
-									name="banner"
-									type="hidden"
-									onButtonClick={() => runUploader('banner')}
-									imageWidth={75}
-									imageHeight={75}
-									openUploader="Upload Image"
-									imageSrc={imagePreviews.banner}
-									buttonClass="admin-btn btn-purple"
-									descClass="settings-metabox-description"
-								/>
+							<div className="form-group-wrapper">
+								<div className="form-group">
+									<label htmlFor="product-name">Plan Validity</label>
+									<ToggleSetting
+										wrapperClass="setting-form-input"
+										descClass="settings-metabox-description"
+										description={__(
+											'Select the status of the announcement.',
+											'multivendorx'
+										)}
+										options={[
+											{
+												key: 'draft',
+												value: 'Unlimited',
+												label: __('Draft', 'multivendorx'),
+											},
+											{
+												key: 'pending',
+												value: 'Fixed Days',
+												label: __('Pending', 'multivendorx'),
+											},
+										]}
+									// value={formData.status}
+									// onChange={handleToggleChange}
+									/>
+								</div>
+							</div>
+							<div className="form-group-wrapper">
+								<div className="form-group">
+									<label htmlFor="product-name">Validity Duration</label>
+									<BasicInput name="name" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.name} onChange={handleChange} />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div className="card-content">
+						<div className="card-header">
+							<div className="left">
+								<div className="title">Commission Rules</div>
+							</div>
+						</div>
+						<div className="card-body">
+
+							<div className="form-group-wrapper">
+								<div className="form-group">
+									<label htmlFor="product-name">Commission Mode</label>
+									<ToggleSetting
+										wrapperClass="setting-form-input"
+										descClass="settings-metabox-description"
+										description={__(
+											'Select the status of the announcement.',
+											'multivendorx'
+										)}
+										options={[
+											{
+												key: 'draft',
+												value: 'Global',
+												label: __('Draft', 'multivendorx'),
+											},
+											{
+												key: 'pending',
+												value: 'Plan Based',
+												label: __('Pending', 'multivendorx'),
+											},
+										]}
+									// value={formData.status}
+									// onChange={handleToggleChange}
+									/>
+								</div>
+							</div>
+							<div className="form-group-wrapper">
+								<div className="form-group">
+									<label htmlFor="product-name">Billing Cycle</label>
+									<ToggleSetting
+										wrapperClass="setting-form-input"
+										descClass="settings-metabox-description"
+										description={__(
+											'Select the status of the announcement.',
+											'multivendorx'
+										)}
+										options={[
+											{
+												key: 'draft',
+												value: 'Flat Fee',
+												label: __('Draft', 'multivendorx'),
+											},
+											{
+												key: 'pending',
+												value: 'Percentage',
+												label: __('Pending', 'multivendorx'),
+											},
+										]}
+									// value={formData.status}
+									// onChange={handleToggleChange}
+									/>
+								</div>
+							</div>
+							<div className="form-group-wrapper">
+								<div className="form-group">
+									<label htmlFor="product-name">Admin Commission Value</label>
+									<BasicInput name="name" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.name} onChange={handleChange} />
+								</div>
 							</div>
 						</div>
 					</div>
