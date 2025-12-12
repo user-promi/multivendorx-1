@@ -24,15 +24,15 @@ const Memberships = () => {
 
             },
         },
-        // {
-        //     type: 'file',
-        //     content: {
-        //         id: 'payment-membership-design',
-        //         name: 'Design Template',
-        //         desc: 'PayPal Payout makes it easy for you to pay multiple sellers at the sametime.',
-        //         icon: 'adminlib-credit-card',
-        //     },
-        // },
+        {
+            type: 'file',
+            content: {
+                id: 'payment-membership-design',
+                name: 'MultivendorX Pro Features',
+                desc: 'PayPal Payout makes it easy for you to pay multiple sellers at the sametime.',
+                icon: 'adminlib-credit-card',
+            },
+        },
         // {
         //     type: 'file',
         //     content: {
@@ -57,8 +57,8 @@ const Memberships = () => {
         switch (tabId) {
             case 'payment-membership-message':
                 return <MessageAndMail id=''/>;
-            // case 'payment-membership-design':
-            //     return <h1>design</h1>;
+            case 'payment-membership-design':
+                return <h1>design</h1>;
             // case 'payment-membership-subscribers':
             //     return <h1>Subscriber</h1>;
             // case 'payment-membership-plans':
