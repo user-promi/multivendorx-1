@@ -20,7 +20,7 @@ class Admin {
      */
     public function __construct() {
         add_action( 'woocommerce_product_options_general_product_data', array( $this, 'add_meta_fields' ) );
-        add_action( 'save_post_product', array( $this, 'save_min_max_data' ) );
+        add_action( 'woocommerce_process_product_meta', array( $this, 'save_min_max_data' ) );
 
     }
 
