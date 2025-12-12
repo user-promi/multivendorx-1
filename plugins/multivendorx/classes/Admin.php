@@ -214,7 +214,7 @@ class Admin {
      * @return void
      */
     public function create_setting_page() {
-        echo '<div id="admin-main-wrapper" class="light"></div>';
+        echo '<div id="admin-main-wrapper" class="multivendorx-main-wrapper"></div>';
     }
 
     /**

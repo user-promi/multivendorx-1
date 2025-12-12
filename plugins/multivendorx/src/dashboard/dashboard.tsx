@@ -341,13 +341,6 @@ const Dashboard: React.FC = () => {
 			.catch(() => setLastWithdraws([]));
 	}, []);
 
-	// const analyticsData = [
-	//   { icon: "adminlib-dollar theme-color1", number: formatCurrency(store?.commission?.total_order_amount || 0), text: "Total Revenue" },
-	//   { icon: "adminlib-order theme-color2", number: totalOrder, text: "Total Orders" },
-	//   { icon: "adminlib-paid theme-color3", number: formatCurrency(store?.commission?.commission_total || 0), text: "Total Commission" },
-	//   { icon: "adminlib-user-circle theme-color4", number: formatCurrency(store?.commission?.commission_refunded || 0), text: "Total Commission Refund" },
-	// ];
-
 	const analyticsData = [
 		{
 			icon: 'adminlib-dollar theme-color1',
@@ -582,7 +575,7 @@ const Dashboard: React.FC = () => {
 			<div className="container-wrapper column">
 				<div className="card-wrapper">
 					<div className="card-content transparent">
-						<div className="analytics-container">
+						<div className="analytics-container dashboard">
 							{analyticsData.map((item, idx) => (
 								<div key={idx} className="analytics-item">
 									<div className="details">
