@@ -1,5 +1,5 @@
 @use '../global.scss' as *;
-@use './web/dashboard.scss';
+@use './web/dashboard';
 @import 'https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap';
 
 body:has(.admin-main-wrapper) {
@@ -87,7 +87,6 @@ body:has(.admin-main-wrapper) {
     width: 1rem !important;
     height: 1rem !important;
     margin: -0.063rem .3rem 0 0 !important;
-    line-height: 1rem;
     border-radius: 0.25rem;
     font-size: 0.95rem;
   }
@@ -157,7 +156,7 @@ body:has(.admin-main-wrapper) {
 .admin-badge {
   font-size: 0.813rem;
   font-weight: 600;
-  line-height: 0.7rem;
+  line-height: 0.95;
   padding: 0.313rem;
   border-radius: $border-radius-small;
   display: flex;
@@ -195,7 +194,6 @@ body:has(.admin-main-wrapper) {
 }
 
 @each $name, $style in $btn-color-palette {
-
   // light background color btn
   .btn-#{$name} {
     background: map-get($style, light-color);
@@ -495,7 +493,7 @@ body:has(.admin-main-wrapper) {
         font-weight: 500;
 
         .label-des {
-          line-height: 1rem;
+          line-height: 1.313;
           color: #00000078;
           font-size: 0.813rem;
           padding-top: 0.063rem;
@@ -661,7 +659,6 @@ body:has(.admin-main-wrapper) {
     }
 
     @keyframes wobble1 {
-
       0%,
       100% {
         transform: translateY(0%) scale(1);
@@ -675,7 +672,6 @@ body:has(.admin-main-wrapper) {
     }
 
     @keyframes wobble2 {
-
       0%,
       100% {
         transform: translateY(0%) scale(1);
@@ -768,7 +764,7 @@ body:has(.admin-main-wrapper) {
   position: fixed;
   z-index: 99999;
   background: #fff;
-  box-shadow: 0 1rem 3rem rgb(136 135 135 / 18%);
+  box-shadow: 0 1rem 3rem #8887872e;
   right: 1.85rem;
   top: 7rem;
   animation: noticeSlide 7s ease-in-out forwards;
@@ -782,11 +778,11 @@ body:has(.admin-main-wrapper) {
   .title {
     font-size: 1rem;
     font-weight: 500;
-    line-height: 1rem;
+    line-height: 1.313;
   }
 
   i {
-    color: green;
+    color: #008000;
     font-size: 1.4rem;
   }
 
@@ -910,7 +906,7 @@ body:has(.admin-main-wrapper) {
     border-radius: 4rem;
     border: $border-light-medium;
     font-weight: 500;
-    line-height: 1rem;
+    line-height: 1.125;
     font-size: 0.9rem;
     color: #9fa1a4;
     padding: 0.65rem 1.125rem;
@@ -1306,6 +1302,7 @@ body:has(.admin-main-wrapper) {
     margin: 0;
     min-width: 6rem;
     border: none !important;
+
     /* store dashboard */
     border-radius: 0.313rem;
     border-top-right-radius: 0;
@@ -1373,7 +1370,7 @@ body:has(.admin-main-wrapper) {
 
       .desc {
         font-size: 0.813rem;
-        line-height: 0.95rem;
+        line-height: 1.25;
         padding-top: 0.313rem;
         color: #00000094;
       }
@@ -1606,7 +1603,7 @@ body:has(.admin-main-wrapper) {
           align-items: end;
           color: #526484;
           font-size: 0.95rem;
-          line-height: 0.8rem;
+          line-height: 1.25;
           font-weight: 500;
           padding: .813rem 1.313rem;
           position: relative;
@@ -1749,7 +1746,7 @@ body:has(.admin-main-wrapper) {
 
     .title {
       font-size: 1.625rem;
-      line-height: 2rem;
+      line-height: 1.25;
       display: flex;
       gap: 1rem;
       align-items: center;
@@ -1758,7 +1755,7 @@ body:has(.admin-main-wrapper) {
 
     .view-des {
       font-size: 1.125rem;
-      line-height: 1.5rem;
+      line-height: 1.25;
     }
 
     .des {

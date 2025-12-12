@@ -38,7 +38,8 @@
 
         .basic-input {
             background: #fff !important;
-            /*overwrite common style*/
+
+            /* overwrite common style */
         }
 
         &.state {
@@ -51,29 +52,16 @@
         background: #fff;
         margin-top: 0.813rem;
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 0.813rem;
-            padding-bottom: 0.5rem;
-            border-bottom: $border-light-small;
-
-            .left {
-                width: 75%;
-            }
-
-            .title {
-                font-size: 1.125em;
-                font-weight: 500;
-            }
-
-            .des {
-                font-size: 0.813rem;
-                color: $sub-text-color;
-            }
+        .state-title {
+            font-size: 1.125rem;
+            padding-bottom: 0.625rem;
         }
 
+        .repeater-field {
+            padding: 0;
+            border: none;
+            background: transparent;
+        }
     }
 
     .no-shipping-data {
