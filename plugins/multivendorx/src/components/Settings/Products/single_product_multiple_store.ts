@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'single-product-multiple-store',
 	priority: 3,
-	name: __('Single Product Multiple Vendors (SPMV)', 'multivendorx'),
+	name: __('Me Too Listing', 'multivendorx'),
 	desc: __(
 		'Manage how multiple vendors (stores) can list and sell the same product in your marketplace.',
 		'multivendorx'
@@ -14,9 +14,9 @@ export default {
 		{
 			key: 'singleproductmultistore_show_order',
 			type: 'setting-toggle',
-			label: __('SPMV product listing priority', 'multivendorx'),
+			label: __('Me too listing  product priority', 'multivendorx'),
 			desc: __(
-				'Choose which version of SPMV product will be shown as the main listing on the shop page (e.g., top-rated store, min / max priced product).',
+				'Choose which version of Me too product will be shown as the main listing on the shop page (e.g., top-rated store, min / max priced product).',
 				'multivendorx'
 			),
 			moduleEnabled: 'spmv',
@@ -48,7 +48,7 @@ export default {
 			type: 'setting-toggle',
 			label: __('More offers display position', 'multivendorx'),
 			desc: __(
-				'Decide where additional SPMV offers should be displayed on the single product page to make them visible to customers.',
+				'Decide where additional offers by other stores should be displayed on the single product page to make them visible to customers.',
 				'multivendorx'
 			),
 			moduleEnabled: 'spmv',
