@@ -58,7 +58,9 @@ const StoreReport: React.FC = () => {
 		React.useEffect(() => {
 			let start = 0;
 			const end = parseInt(value);
-			if (start === end) return;
+			if (start === end) {
+				return;
+			}
 
 			const increment = end / (duration / 16);
 

@@ -60,10 +60,15 @@ jQuery(document).ready(function ($) {
 			infowindow.close();
 			marker.setVisible(false);
 			var place = autocomplete.getPlace();
-			if (!place.geometry) return;
+			if (!place.geometry) {
+				return;
+			}
 
-			if (place.geometry.viewport) map.fitBounds(place.geometry.viewport);
-			else map.setCenter(place.geometry.location);
+			if (place.geometry.viewport) {
+				map.fitBounds(place.geometry.viewport);
+			} else {
+				map.setCenter(place.geometry.location);
+			}
 
 			marker.setPosition(place.geometry.location);
 			marker.setVisible(true);

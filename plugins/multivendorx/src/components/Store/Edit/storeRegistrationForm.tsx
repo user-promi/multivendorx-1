@@ -56,7 +56,9 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 	};
 
 	useEffect(() => {
-		if (id) fetchStoreData();
+		if (id) {
+			fetchStoreData();
+		}
 	}, [id]);
 
 	useEffect(() => {

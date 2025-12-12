@@ -83,7 +83,9 @@ const PendingCoupons: React.FC<{ onUpdated?: () => void }> = ({
 	}, [pagination]);
 
 	const handleSingleAction = (action: string, couponId: number) => {
-		if (!couponId) return;
+		if (!couponId) {
+			return;
+		}
 
 		if (action === 'reject_coupon') {
 			setRejectCouponId(couponId);
@@ -92,7 +94,9 @@ const PendingCoupons: React.FC<{ onUpdated?: () => void }> = ({
 		}
 
 		const statusUpdate = action === 'approve_coupon' ? 'publish' : null;
-		if (!statusUpdate) return;
+		if (!statusUpdate) {
+			return;
+		}
 
 		axios
 			.put(
@@ -108,7 +112,9 @@ const PendingCoupons: React.FC<{ onUpdated?: () => void }> = ({
 	};
 
 	const submitReject = () => {
-		if (!rejectCouponId || isSubmitting) return;
+		if (!rejectCouponId || isSubmitting) {
+			return;
+		}
 
 		setIsSubmitting(true);
 

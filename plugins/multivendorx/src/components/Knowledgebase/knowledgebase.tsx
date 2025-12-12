@@ -174,7 +174,9 @@ export const KnowledgeBase: React.FC = () => {
 
 	// Submit form
 	const handleSubmit = async (status: 'publish' | 'pending' | 'draft') => {
-		if (submitting) return;
+		if (submitting) {
+			return;
+		}
 		if (!validateForm()) {
 			return; // Stop submission if errors exist
 		}
@@ -330,7 +332,9 @@ export const KnowledgeBase: React.FC = () => {
 	];
 
 	const truncateText = (text: string, maxLength: number) => {
-		if (!text) return '-';
+		if (!text) {
+			return '-';
+		}
 		return text.length > maxLength
 			? text.slice(0, maxLength) + '...'
 			: text;
@@ -419,7 +423,9 @@ export const KnowledgeBase: React.FC = () => {
 								label: __('Delete', 'multivendorx'),
 								icon: 'adminlib-delete',
 								onClick: async (rowData) => {
-									if (!rowData.id) return;
+									if (!rowData.id) {
+										return;
+									}
 									if (
 										!confirm(
 											__(
@@ -427,8 +433,9 @@ export const KnowledgeBase: React.FC = () => {
 												'multivendorx'
 											)
 										)
-									)
+									) {
 										return;
+									}
 
 									try {
 										await axios({

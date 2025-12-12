@@ -163,7 +163,9 @@ const StatusAndTools: React.FC<SettingsProps> = () => {
 			useSetting();
 		const { modules } = useModules();
 
-		if (!currentTab) return null;
+		if (!currentTab) {
+			return null;
+		}
 		const settingModal = getSettingById(settingsArray as any, currentTab);
 		const [storeTabSetting, setStoreTabSetting] = React.useState<any>(null);
 

@@ -402,7 +402,9 @@ const StoreCommission: React.FC = () => {
 			header: __('Date', 'multivendorx'),
 			cell: ({ row }) => {
 				const date = row.original.createdAt;
-				if (!date) return <TableCell>-</TableCell>;
+				if (!date) {
+					return <TableCell>-</TableCell>;
+				}
 
 				// Format the date for display
 				const formattedDate = new Date(date).toLocaleDateString(

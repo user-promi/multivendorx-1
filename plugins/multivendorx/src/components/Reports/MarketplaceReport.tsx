@@ -46,7 +46,9 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
 		React.useEffect(() => {
 			let start = 0;
 			const end = Number(value);
-			if (isNaN(end)) return;
+			if (isNaN(end)) {
+				return;
+			}
 
 			const step = end / (duration / 16);
 

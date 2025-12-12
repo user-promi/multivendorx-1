@@ -57,7 +57,9 @@ const Appearance = () => {
 	}, [appLocalizer.store_id]);
 
 	const runUploader = (key: string) => {
-		if (settings.includes('store_images')) return;
+		if (settings.includes('store_images')) {
+			return;
+		}
 		const frame = (window as any).wp.media({
 			title: 'Select or Upload Image',
 			button: { text: 'Use this image' },
@@ -100,7 +102,9 @@ const Appearance = () => {
 	// Helper to convert stored banner_type string to SelectInput value shape
 	const bannerTypeValue = () => {
 		const v = formData.banner_type || formData.stores || ''; // support legacy `stores` if present
-		if (!v) return [];
+		if (!v) {
+			return [];
+		}
 		const found = storeOptions.find((o) => o.value === v);
 		return found ? [found] : [];
 	};
@@ -127,7 +131,9 @@ const Appearance = () => {
 						buttonClass="admin-btn btn-purple"
 						descClass="settings-metabox-description"
 						onRemove={() => {
-							if (settings.includes('store_images')) return;
+							if (settings.includes('store_images')) {
+								return;
+							}
 							const updated = { ...formData, image: '' };
 							setFormData(updated);
 							setImagePreviews((prev) => ({
@@ -154,7 +160,9 @@ const Appearance = () => {
 						options={storeOptions}
 						value={formData.banner_type || ''}
 						onChange={(newValue: any) => {
-							if (settings.includes('store_images')) return;
+							if (settings.includes('store_images')) {
+								return;
+							}
 							const selectedValue = newValue?.value || '';
 							const updated = {
 								...formData,
@@ -185,7 +193,9 @@ const Appearance = () => {
 							buttonClass="admin-btn btn-purple"
 							descClass="settings-metabox-description"
 							onRemove={() => {
-								if (settings.includes('store_images')) return;
+								if (settings.includes('store_images')) {
+									return;
+								}
 								const updated = { ...formData, banner: '' };
 								setFormData(updated);
 								setImagePreviews((prev) => ({

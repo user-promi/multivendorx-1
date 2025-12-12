@@ -83,7 +83,9 @@ const PendingWithdrawal: React.FC<Props> = ({ onUpdated }) => {
 	};
 	const handleSingleAction = (action: string, row: any) => {
 		let storeId = row.id;
-		if (!storeId) return;
+		if (!storeId) {
+			return;
+		}
 
 		axios({
 			method: 'PUT',

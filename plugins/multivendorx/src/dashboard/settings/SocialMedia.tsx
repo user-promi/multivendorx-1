@@ -8,7 +8,9 @@ const SocialMedia = () => {
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
 	useEffect(() => {
-		if (!id) return;
+		if (!id) {
+			return;
+		}
 
 		axios({
 			method: 'GET',

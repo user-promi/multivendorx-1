@@ -45,7 +45,9 @@ const discountOptions = [
 	{ label: 'Fixed product discount', value: 'fixed_product' },
 ];
 const formatWooDate = (dateString: string) => {
-	if (!dateString) return '-';
+	if (!dateString) {
+		return '-';
+	}
 	const date = new Date(dateString);
 	return date.toLocaleString('en-US', {
 		year: 'numeric',
@@ -62,7 +64,9 @@ export interface RealtimeFilter {
 	) => ReactNode;
 }
 const formatDateForInput = (dateString?: string | null) => {
-	if (!dateString) return '';
+	if (!dateString) {
+		return '';
+	}
 	const date = new Date(dateString);
 	const year = date.getFullYear();
 	const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -345,7 +349,9 @@ const AllCoupon: React.FC = () => {
 	}, [pagination]);
 
 	useEffect(() => {
-		if (!id) return;
+		if (!id) {
+			return;
+		}
 
 		axios({
 			method: 'GET',

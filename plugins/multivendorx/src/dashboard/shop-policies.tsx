@@ -12,7 +12,9 @@ const ShopPolicies = () => {
 	>([]);
 
 	useEffect(() => {
-		if (!id) return;
+		if (!id) {
+			return;
+		}
 
 		axios({
 			method: 'GET',

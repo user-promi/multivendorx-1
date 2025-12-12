@@ -12,7 +12,9 @@ const AdditionalInformation = () => {
 
 	// Fetch store data
 	useEffect(() => {
-		if (!id) return;
+		if (!id) {
+			return;
+		}
 		axios({
 			method: 'GET',
 			url: getApiLink(appLocalizer, `store/${id}`),
@@ -33,7 +35,9 @@ const AdditionalInformation = () => {
 
 	// Fetch states when country changes
 	useEffect(() => {
-		if (formData.country) fetchStatesByCountry(formData.country);
+		if (formData.country) {
+			fetchStatesByCountry(formData.country);
+		}
 	}, [formData.country]);
 
 	const fetchStatesByCountry = (countryCode: string) => {
@@ -76,7 +80,9 @@ const AdditionalInformation = () => {
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: updatedData,
 		}).then((res) => {
-			if (res.data.success) setSuccessMsg('Store saved successfully!');
+			if (res.data.success) {
+				setSuccessMsg('Store saved successfully!');
+			}
 		});
 	};
 

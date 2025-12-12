@@ -153,7 +153,9 @@ const PendingDeactivateRequests: React.FC<Props> = ({ onUpdated }) => {
 	const handleSingleAction = (action: string, row: any) => {
 		let storeId = row.original.id;
 
-		if (!storeId) return;
+		if (!storeId) {
+			return;
+		}
 
 		axios({
 			method: 'PUT',

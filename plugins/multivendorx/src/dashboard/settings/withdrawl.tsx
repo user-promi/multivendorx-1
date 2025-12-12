@@ -57,7 +57,9 @@ const Withdrawl: React.FC = () => {
 	// }, [successMsg]);
 
 	useEffect(() => {
-		if (!appLocalizer.store_id) return;
+		if (!appLocalizer.store_id) {
+			return;
+		}
 
 		axios({
 			method: 'GET',
@@ -73,12 +75,16 @@ const Withdrawl: React.FC = () => {
 		useState<any>(null);
 
 	useEffect(() => {
-		if (!containerRef.current) return;
+		if (!containerRef.current) {
+			return;
+		}
 
 		const field = selectedProvider?.fields?.find(
 			(f) => f.type === 'embedded'
 		);
-		if (!field) return;
+		if (!field) {
+			return;
+		}
 
 		const clientSecret = field.client_secret;
 		const publishableKey = field.publish;

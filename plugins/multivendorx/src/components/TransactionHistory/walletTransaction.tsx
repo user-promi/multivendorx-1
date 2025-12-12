@@ -359,7 +359,9 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 	];
 	// 🔹 Helper: get effective date range
 	const getEffectiveDateRange = () => {
-		if (dateRange.startDate && dateRange.endDate) return dateRange;
+		if (dateRange.startDate && dateRange.endDate) {
+			return dateRange;
+		}
 		const now = new Date();
 		const start = new Date(now.getFullYear(), now.getMonth(), 1); // first day of current month
 		const end = new Date(
@@ -375,7 +377,9 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 
 	// 🔹 Fetch total rows on mount or date change
 	useEffect(() => {
-		if (!storeId) return;
+		if (!storeId) {
+			return;
+		}
 
 		const { startDate, endDate } = getEffectiveDateRange();
 
@@ -409,7 +413,9 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 		orderBy = '',
 		order = ''
 	) {
-		if (!storeId) return;
+		if (!storeId) {
+			return;
+		}
 
 		setData(null);
 
@@ -714,7 +720,9 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 
 	// 🔹 Fetch wallet/transaction overview whenever store changes
 	useEffect(() => {
-		if (!storeId) return;
+		if (!storeId) {
+			return;
+		}
 
 		axios({
 			method: 'GET',
@@ -815,7 +823,9 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 	};
 
 	const formatMethod = (method) => {
-		if (!method) return '';
+		if (!method) {
+			return '';
+		}
 		return method
 			.replace(/-/g, ' ') // stripe-connect → stripe connect
 			.replace(/\b\w/g, (c) => c.toUpperCase()); // Stripe connect → Stripe Connect

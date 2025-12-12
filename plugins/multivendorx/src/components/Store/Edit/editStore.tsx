@@ -60,7 +60,9 @@ const EditStore = () => {
 			const target = e.target as HTMLElement;
 
 			// If clicked inside name or desc editing area, ignore
-			if (target.closest('.store-name') || target.closest('.des')) return;
+			if (target.closest('.store-name') || target.closest('.des')) {
+				return;
+			}
 
 			if (editName || editDesc) {
 				autoSave({ name: data.name, description: data.description });
@@ -80,8 +82,9 @@ const EditStore = () => {
 			if (
 				(event.target as HTMLElement).closest('.edit-section') ||
 				(event.target as HTMLElement).closest('.edit-wrapper')
-			)
+			) {
 				return;
+			}
 			setBannerMenu(false);
 			setActionMenu(false);
 			setLogoMenu(false);
@@ -106,7 +109,9 @@ const EditStore = () => {
 	const { modules } = useModules();
 
 	const autoSave = (updatedData: { [key: string]: string }) => {
-		if (!editId) return;
+		if (!editId) {
+			return;
+		}
 
 		axios({
 			method: 'PUT',
@@ -121,7 +126,9 @@ const EditStore = () => {
 	};
 
 	useEffect(() => {
-		if (!editId) return;
+		if (!editId) {
+			return;
+		}
 
 		axios({
 			method: 'GET',

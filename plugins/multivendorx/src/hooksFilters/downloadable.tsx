@@ -60,7 +60,9 @@ const Downloadable = ({ product, setProduct, handleChange }) => {
 		const body = document.querySelector(`#${cardId} .card-body`);
 		const arrow = document.querySelector(`#${cardId} .arrow-icon`);
 
-		if (!body || !arrow) return;
+		if (!body || !arrow) {
+			return;
+		}
 
 		body.classList.toggle('hide-body');
 		arrow.classList.toggle('rotate');

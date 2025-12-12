@@ -80,7 +80,9 @@ const ProductReport: React.FC = () => {
 		React.useEffect(() => {
 			let start = 0;
 			const end = parseInt(value);
-			if (start === end) return;
+			if (start === end) {
+				return;
+			}
 
 			const increment = end / (duration / 16);
 
@@ -224,11 +226,13 @@ const ProductReport: React.FC = () => {
 						.then((response) => {
 							const count =
 								Number(response.headers['x-wp-total']) || 0;
-							if (status === 'instock') setInStockCount(count);
-							else if (status === 'outofstock')
+							if (status === 'instock') {
+								setInStockCount(count);
+							} else if (status === 'outofstock') {
 								setOutOfStockCount(count);
-							else if (status === 'onbackorder')
+							} else if (status === 'onbackorder') {
 								setOnBackorderCount(count);
+							}
 						})
 						.catch((error) =>
 							console.error(
@@ -382,15 +386,15 @@ const ProductReport: React.FC = () => {
 					// Calculate UTC equivalent of the server's 00:00:00 boundary.
 					const afterDate = new Date(
 						startLocal.getTime() -
-						(startLocal.getTimezoneOffset() + offsetMinutes) *
-						60000
+							(startLocal.getTimezoneOffset() + offsetMinutes) *
+								60000
 					);
 
 					// Calculate UTC equivalent of the server's 23:59:59 boundary.
 					const beforeDate = new Date(
 						endLocal.getTime() -
-						(endLocal.getTimezoneOffset() + offsetMinutes) *
-						60000
+							(endLocal.getTimezoneOffset() + offsetMinutes) *
+								60000
 					);
 
 					// 4. Convert to ISO String (UTC/Z-time)
@@ -433,13 +437,13 @@ const ProductReport: React.FC = () => {
 							.join(', ') || '-',
 					dateCreated: product.date_created
 						? new Date(product.date_created).toLocaleDateString(
-							undefined,
-							{
-								year: 'numeric',
-								month: 'short',
-								day: '2-digit',
-							}
-						)
+								undefined,
+								{
+									year: 'numeric',
+									month: 'short',
+									day: '2-digit',
+								}
+							)
 						: '-',
 				})
 			);
@@ -595,18 +599,27 @@ const ProductReport: React.FC = () => {
 										<Bar
 											dataKey="net_sales"
 											fill="#5007aa"
-											name={__('Net Sales', 'multivendorx')}
+											name={__(
+												'Net Sales',
+												'multivendorx'
+											)}
 										/>
 										<Bar
 											dataKey="items_sold"
 											fill="#00c49f"
-											name={__('Items Sold', 'multivendorx')}
+											name={__(
+												'Items Sold',
+												'multivendorx'
+											)}
 										/>
 									</BarChart>
 								</ResponsiveContainer>
 							) : (
 								<p>
-									{__('No product sales data found.', 'multivendorx')}
+									{__(
+										'No product sales data found.',
+										'multivendorx'
+									)}
 								</p>
 							)}
 						</div>
@@ -620,7 +633,10 @@ const ProductReport: React.FC = () => {
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{__('Top Reviewed Products', 'multivendorx')}
+									{__(
+										'Top Reviewed Products',
+										'multivendorx'
+									)}
 								</div>
 							</div>
 						</div>
@@ -645,17 +661,25 @@ const ProductReport: React.FC = () => {
 												</div>
 												<div className="price text-sm text-gray-600">
 													<b>
-														{__('Rating:', 'multivendorx')}
+														{__(
+															'Rating:',
+															'multivendorx'
+														)}
 													</b>{' '}
-													{product.average_rating || '0'} ⭐
+													{product.average_rating ||
+														'0'}{' '}
+													⭐
 												</div>
 											</div>
 											<div className="right">
 												<i
-													className={`adminlib-pagination-right-arrow ${openReviewedCards[product.id]
-														? 'rotate-90 transition-transform'
-														: ''
-														}`}
+													className={`adminlib-pagination-right-arrow ${
+														openReviewedCards[
+															product.id
+														]
+															? 'rotate-90 transition-transform'
+															: ''
+													}`}
 												></i>
 											</div>
 										</div>
@@ -722,11 +746,14 @@ const ProductReport: React.FC = () => {
 																</b>{' '}
 																{product.categories
 																	?.map(
-																		(c: any) =>
+																		(
+																			c: any
+																		) =>
 																			c.name
 																	)
-																	.join(', ') ||
-																	'-'}
+																	.join(
+																		', '
+																	) || '-'}
 															</div>
 														</div>
 													</div>
@@ -737,7 +764,10 @@ const ProductReport: React.FC = () => {
 								))
 							) : (
 								<p>
-									{__('No reviewed products found.', 'multivendorx')}
+									{__(
+										'No reviewed products found.',
+										'multivendorx'
+									)}
 								</p>
 							)}
 						</div>
@@ -762,13 +792,17 @@ const ProductReport: React.FC = () => {
 											<div className="avatar">
 												{product.images?.length ? (
 													<img
-														src={product.images[0].src}
+														src={
+															product.images[0]
+																.src
+														}
 														alt={product.name}
 													/>
 												) : (
 													<span>
-														{product.name?.charAt(0) ||
-															'?'}
+														{product.name?.charAt(
+															0
+														) || '?'}
 													</span>
 												)}
 											</div>

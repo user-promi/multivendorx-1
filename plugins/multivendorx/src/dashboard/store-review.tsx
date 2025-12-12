@@ -261,7 +261,9 @@ const StoreReview: React.FC = () => {
 
 	// 🔹 Handle reply saving
 	const handleSaveReply = async () => {
-		if (!selectedReview) return;
+		if (!selectedReview) {
+			return;
+		}
 		try {
 			await axios
 				.put(

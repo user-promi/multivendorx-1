@@ -8,7 +8,9 @@ const Facilitator = ({ id, data }: { id: string | null; data: any }) => {
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
 	useEffect(() => {
-		if (!id) return;
+		if (!id) {
+			return;
+		}
 		if (data) {
 			setFormData(data);
 		}
@@ -64,8 +66,9 @@ const Facilitator = ({ id, data }: { id: string | null; data: any }) => {
 										if (
 											!newValue ||
 											Array.isArray(newValue)
-										)
+										) {
 											return;
+										}
 
 										const updated = {
 											...formData,

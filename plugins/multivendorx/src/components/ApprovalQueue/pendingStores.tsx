@@ -119,7 +119,9 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 	};
 
 	const handleSingleAction = (action: string, storeId: number) => {
-		if (!storeId) return;
+		if (!storeId) {
+			return;
+		}
 
 		if (action === 'declined') {
 			setRejectStoreId(storeId);
@@ -128,7 +130,9 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 		}
 
 		const statusValue = action === 'active' ? 'active' : '';
-		if (!statusValue) return;
+		if (!statusValue) {
+			return;
+		}
 
 		axios({
 			method: 'PUT',
@@ -144,7 +148,9 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 	};
 
 	const submitReject = () => {
-		if (!rejectStoreId || isSubmitting) return;
+		if (!rejectStoreId || isSubmitting) {
+			return;
+		}
 
 		setIsSubmitting(true);
 
