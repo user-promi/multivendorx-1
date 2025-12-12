@@ -1,3 +1,4 @@
+/* global appLocalizer React */
 import notifima from '../../assets/images/brand-icon.png';
 import catalogx from '../../assets/images/catalogx.png';
 import Mascot from '../../assets/images/multivendorx-mascot-scale.png';
@@ -20,10 +21,15 @@ interface Feature {
 	pro: boolean | string;
 }
 
+interface WPPlugin {
+	plugin?: string;
+	status?: string;
+}
+
 import './adminDashboard.scss';
 import '../dashboard.scss';
 import { useEffect, useState } from 'react';
-import { getApiLink, sendApiResponse, useModules } from 'zyra';
+import { getApiLink, sendApiResponse, SuccessNotice, useModules } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 
@@ -55,7 +61,7 @@ const AdminDashboard = () => {
 			// Check if our plugin exists and is active
 			const plugins = response.data;
 			const pluginExists = plugins.some(
-				(plugin: any) =>
+				(plugin: WPPlugin) =>
 					plugin.plugin.includes(slug) && plugin.status === 'active'
 			);
 
@@ -88,7 +94,7 @@ const AdminDashboard = () => {
 			);
 
 			// Step 2: Find if plugin exists
-			const existingPlugin = plugins.find((plugin: any) =>
+			const existingPlugin = plugins.find((plugin: WPPlugin) =>
 				plugin.plugin.includes(slug)
 			);
 			const pluginFilePath =
@@ -96,7 +102,7 @@ const AdminDashboard = () => {
 
 			// Step 3: Determine action
 			let apiUrl = `${appLocalizer.apiUrl}/wp/v2/plugins`;
-			let requestData: any = { status: 'active' }; // default request for activation
+			let requestData: WPPlugin = { status: 'active' }; // default request for activation
 
 			if (!existingPlugin) {
 				// Plugin not installed → install & activate
@@ -156,7 +162,7 @@ const AdminDashboard = () => {
 			setSuccessMsg(`Module ${action}d`);
 			setTimeout(() => setSuccessMsg(''), 2000);
 		} catch (error) {
-			setSuccessMsg(`Error: Failed to ${action} module`);
+			setSuccessMsg(`Error: Failed to ${error} module`);
 			setTimeout(() => setSuccessMsg(''), 2000);
 		}
 	};
@@ -1129,6 +1135,7 @@ const AdminDashboard = () => {
 
 	return (
 		<>
+			<SuccessNotice message={successMsg} />
 			<div className="general-wrapper admin-dashboard">
 				<div className="card-wrapper">
 					<div className="card-content">

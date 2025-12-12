@@ -1,3 +1,4 @@
+/*global jQuery reportAbuseFrontend */
 jQuery(function ($) {
 	// Fetch reasons dynamically on form open
 	$(document).on('click', '.open-report-abuse', function (e) {

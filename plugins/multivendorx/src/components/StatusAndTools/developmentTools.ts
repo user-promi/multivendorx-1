@@ -1,9 +1,9 @@
 import { __ } from '@wordpress/i18n';
 
 export default {
-	id: 'database-tools',
-	priority: 4,
-	name: __('Database tools', 'multivendorx'),
+	id: 'development-tools',
+	priority: 3,
+	name: __('Development tools', 'multivendorx'),
 	desc: __(
 		'Site errors and events are logged for easy troubleshooting.',
 		'multivendorx'
@@ -41,7 +41,6 @@ export default {
 				'multivendorx'
 			),
 		},
-
 		{
 			key: 'default_pages',
 			type: 'button',
@@ -53,7 +52,6 @@ export default {
 			),
 			apilink: 'status',
 		},
-
 		{
 			key: 'separator_content',
 			type: 'section',
@@ -61,12 +59,50 @@ export default {
 			hint: __('Danger zone', 'multivendorx'),
 			desc: __('', 'multivendorx'),
 		},
-
 		{
 			key: 'clear_notifications',
 			type: 'number',
 			wrapperClass: 'red-text',
 			label: __('Clear notifications', 'multivendorx'),
+		},
+		{
+			key: 'separator_content',
+			type: 'section',
+			hint: __('version control', 'multivendorx'),
+			desc: __('', 'multivendorx'),
+		},
+		{
+			key: 'separator_content',
+			type: 'section',
+			hint: __('Advance log', 'multivendorx'),
+			desc: __('', 'multivendorx'),
+		},
+		{
+			key: 'multivendorx_adv_log',
+			type: 'checkbox',
+			label: __('Advance log', 'moowoodle'),
+			options: [
+				{
+					key: 'multivendorx_adv_log',
+					value: 'multivendorx_adv_log',
+				},
+			],
+			look: 'toggle',
+		},
+		{
+			key: 'separator_content',
+			type: 'section',
+			hint: __('Custom CSS', 'multivendorx'),
+			desc: __('', 'multivendorx'),
+		},
+		{
+			key: 'custom_css_product_page',
+			type: 'textarea',
+			desc: __(
+				'Add your own CSS here to modify and style the dashboard to match your preferences.',
+				'multivendorx'
+			),
+			label: __('Addional CSS', 'multivendorx'),
 		},
 	],
 };

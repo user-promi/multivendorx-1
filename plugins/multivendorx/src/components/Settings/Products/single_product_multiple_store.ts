@@ -14,7 +14,10 @@ export default {
 		{
 			key: 'singleproductmultistore_show_order',
 			type: 'setting-toggle',
-			label: __('Shared product listing  product priority', 'multivendorx'),
+			label: __(
+				'Shared product listing  product priority',
+				'multivendorx'
+			),
 			desc: __(
 				'Choose which version of Me too product will be shown as the main listing on the shop page (e.g., top-rated store, min / max priced product).',
 				'multivendorx'

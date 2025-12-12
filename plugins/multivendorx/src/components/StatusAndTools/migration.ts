@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 
 export default {
 	id: 'migration',
-	priority: 6,
+	priority: 5,
 	name: __('Migration', 'multivendorx'),
 	desc: __(
 		'Follow the step-by-step wizard to import products, vendors, and settings effortlessly from other multivendor solutions.',
