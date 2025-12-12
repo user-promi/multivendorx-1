@@ -651,56 +651,6 @@ a {
 // dropdown style common end
 
 
-// dashboard welcome section start
-
-.dashboard-view-section {
-    position: relative;
-
-    .title {
-        font-size: 2rem;
-        font-weight: 500;
-        line-height: 2rem;
-    }
-
-    .des {
-        font-size: 1rem;
-        padding: 0.5rem 0;
-        padding-bottom: 1.25rem;
-        line-height: 1.25rem;
-    }
-
-    .price-wrapper {
-        .price {
-            font-size: 2.8rem;
-            line-height: 3rem;
-            font-weight: 500;
-        }
-
-        .details {
-            padding: 0.5rem 0;
-            font-size: 0.95rem;
-            padding-bottom: 1rem;
-        }
-    }
-
-    .admin-btn {
-        background: #fff;
-    }
-
-    .image {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-
-        img {
-            width: 10rem;
-            margin-bottom: -1.813rem;
-        }
-    }
-}
-
-// dashboard welcome section end
-
 // top product start
 .top-products {
     tr {

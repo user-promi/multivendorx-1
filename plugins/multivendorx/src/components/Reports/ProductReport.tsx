@@ -382,15 +382,15 @@ const ProductReport: React.FC = () => {
 					// Calculate UTC equivalent of the server's 00:00:00 boundary.
 					const afterDate = new Date(
 						startLocal.getTime() -
-							(startLocal.getTimezoneOffset() + offsetMinutes) *
-								60000
+						(startLocal.getTimezoneOffset() + offsetMinutes) *
+						60000
 					);
 
 					// Calculate UTC equivalent of the server's 23:59:59 boundary.
 					const beforeDate = new Date(
 						endLocal.getTime() -
-							(endLocal.getTimezoneOffset() + offsetMinutes) *
-								60000
+						(endLocal.getTimezoneOffset() + offsetMinutes) *
+						60000
 					);
 
 					// 4. Convert to ISO String (UTC/Z-time)
@@ -433,13 +433,13 @@ const ProductReport: React.FC = () => {
 							.join(', ') || '-',
 					dateCreated: product.date_created
 						? new Date(product.date_created).toLocaleDateString(
-								undefined,
-								{
-									year: 'numeric',
-									month: 'short',
-									day: '2-digit',
-								}
-							)
+							undefined,
+							{
+								year: 'numeric',
+								month: 'short',
+								day: '2-digit',
+							}
+						)
 						: '-',
 				})
 			);
@@ -546,264 +546,264 @@ const ProductReport: React.FC = () => {
 		},
 	];
 	return (
-		<div className="dashboard-overview">
-			{/* Keep entire top dashboard layout */}
-			<div className="card-wrapper">
-				<div className="card-content transparent">
-					<div className="analytics-container report">
-						{overview.map((item, idx) => (
-							<div key={idx} className="analytics-item">
-								<div className="analytics-icon">
-									<i className={item.icon}></i>
-								</div>
-								<div className="details">
-									<div className="number">
-										<Counter value={item.count} />
+		<>
+			<div className="container-wrapper column">
+				{/* Keep entire top dashboard layout */}
+				<div className="card-wrapper">
+					<div className="card-content transparent">
+						<div className="analytics-container report">
+							{overview.map((item, idx) => (
+								<div key={idx} className="analytics-item">
+									<div className="analytics-icon">
+										<i className={item.icon}></i>
 									</div>
-									<div className="text">
-										{__(item.label, 'multivendorx')}
+									<div className="details">
+										<div className="number">
+											<Counter value={item.count} />
+										</div>
+										<div className="text">
+											{__(item.label, 'multivendorx')}
+										</div>
 									</div>
 								</div>
-							</div>
-						))}
-					</div>
-				</div>
-
-				<div className="card-content">
-					<div className="card-header">
-						<div className="left">
-							<div className="title">
-								{__(
-									'Revenue & Sales Comparison',
-									'multivendorx'
-								)}
-							</div>
+							))}
 						</div>
 					</div>
 
-					{error ? (
-						<p className="text-red-500">{error}</p>
-					) : chartData.length > 0 ? (
-						<ResponsiveContainer width="100%" height={300}>
-							<BarChart data={chartData}>
-								<CartesianGrid strokeDasharray="3 3" />
-								<XAxis dataKey="name" />
-								<YAxis />
-								<Tooltip />
-								<Legend />
-								<Bar
-									dataKey="net_sales"
-									fill="#5007aa"
-									name={__('Net Sales', 'multivendorx')}
-								/>
-								<Bar
-									dataKey="items_sold"
-									fill="#00c49f"
-									name={__('Items Sold', 'multivendorx')}
-								/>
-							</BarChart>
-						</ResponsiveContainer>
-					) : (
-						<p className="text-gray-500 p-2">
-							{__('No product sales data found.', 'multivendorx')}
-						</p>
-					)}
-				</div>
-			</div>
-
-			{/* Categories and brands */}
-			<div className="card-wrapper">
-				{/* Top Reviewed Products Section */}
-				<div className="card-content">
-					<div className="card-header">
-						<div className="left">
-							<div className="title">
-								{__('Top Reviewed Products', 'multivendorx')}
+					<div className="card-content">
+						<div className="card-header">
+							<div className="left">
+								<div className="title">
+									{__(
+										'Revenue & Sales Comparison',
+										'multivendorx'
+									)}
+								</div>
 							</div>
 						</div>
+						<div className="card-body">
+							{error ? (
+								<p>{error}</p>
+							) : chartData.length > 0 ? (
+								<ResponsiveContainer width="100%" height={300}>
+									<BarChart data={chartData}>
+										<CartesianGrid strokeDasharray="3 3" />
+										<XAxis dataKey="name" />
+										<YAxis />
+										<Tooltip />
+										<Legend />
+										<Bar
+											dataKey="net_sales"
+											fill="#5007aa"
+											name={__('Net Sales', 'multivendorx')}
+										/>
+										<Bar
+											dataKey="items_sold"
+											fill="#00c49f"
+											name={__('Items Sold', 'multivendorx')}
+										/>
+									</BarChart>
+								</ResponsiveContainer>
+							) : (
+								<p>
+									{__('No product sales data found.', 'multivendorx')}
+								</p>
+							)}
+						</div>
 					</div>
+				</div>
 
-					{toReviewedProduct.length > 0 ? (
-						toReviewedProduct.map((product: any) => (
-							<div
-								className="card-content"
-								key={`review-${product.id}`}
-							>
-								<div
-									className="card-header cursor-pointer"
-									onClick={() =>
-										toggleReviewedCard(
-											product.id.toString()
-										)
-									}
-								>
-									<div className="left">
-										<div className="product-name font-medium">
-											{product.name}
-										</div>
-										<div className="price text-sm text-gray-600">
-											<b>
-												{__('Rating:', 'multivendorx')}
-											</b>{' '}
-											{product.average_rating || '0'} ⭐
-										</div>
-									</div>
-									<div className="right">
-										<i
-											className={`adminlib-pagination-right-arrow ${
-												openReviewedCards[product.id]
-													? 'rotate-90 transition-transform'
-													: ''
-											}`}
-										></i>
-									</div>
+				{/* Categories and brands */}
+				<div className="card-wrapper">
+					{/* Top Reviewed Products Section */}
+					<div className="card-content">
+						<div className="card-header">
+							<div className="left">
+								<div className="title">
+									{__('Top Reviewed Products', 'multivendorx')}
 								</div>
+							</div>
+						</div>
+						<div className="card-body">
+							{toReviewedProduct.length > 0 ? (
+								toReviewedProduct.map((product: any) => (
+									<div
+										className="card-content"
+										key={`review-${product.id}`}
+									>
+										<div
+											className="card-header"
+											onClick={() =>
+												toggleReviewedCard(
+													product.id.toString()
+												)
+											}
+										>
+											<div className="left">
+												<div className="product-name font-medium">
+													{product.name}
+												</div>
+												<div className="price text-sm text-gray-600">
+													<b>
+														{__('Rating:', 'multivendorx')}
+													</b>{' '}
+													{product.average_rating || '0'} ⭐
+												</div>
+											</div>
+											<div className="right">
+												<i
+													className={`adminlib-pagination-right-arrow ${openReviewedCards[product.id]
+														? 'rotate-90 transition-transform'
+														: ''
+														}`}
+												></i>
+											</div>
+										</div>
 
-								<div className="card-body">
-									{openReviewedCards[product.id] && (
-										<div className="top-items">
-											<div className="items">
-												<div className="left-side flex items-center">
-													<div className="avatar">
-														{product.images
-															?.length ? (
-															<img
-																src={
-																	product
-																		.images[0]
-																		.src
-																}
-																alt={
-																	product.name
-																}
-															/>
-														) : (
+										{openReviewedCards[product.id] && (
+											<div className="top-items">
+												<div className="items">
+													<div className="left-side flex items-center">
+														<div className="avatar">
+															{product.images
+																?.length ? (
+																<img
+																	src={
+																		product
+																			.images[0]
+																			.src
+																	}
+																	alt={
+																		product.name
+																	}
+																/>
+															) : (
+																<div>
+																	{product.name?.charAt(
+																		0
+																	) || '?'}
+																</div>
+															)}
+														</div>
+
+														<div className="details text-sm leading-6">
 															<div>
-																{product.name?.charAt(
-																	0
-																) || '?'}
+																<b>
+																	{__(
+																		'Price:',
+																		'multivendorx'
+																	)}
+																</b>{' '}
+																<span
+																	dangerouslySetInnerHTML={{
+																		__html:
+																			product.price_html ||
+																			product.price ||
+																			'—',
+																	}}
+																/>
 															</div>
-														)}
-													</div>
-
-													<div className="details text-sm leading-6">
-														<div>
-															<b>
-																{__(
-																	'Price:',
-																	'multivendorx'
-																)}
-															</b>{' '}
-															<span
-																dangerouslySetInnerHTML={{
-																	__html:
-																		product.price_html ||
-																		product.price ||
-																		'—',
-																}}
-															/>
-														</div>
-														<div>
-															<b>
-																{__(
-																	'Total Sales:',
-																	'multivendorx'
-																)}
-															</b>{' '}
-															{product.total_sales ||
-																0}
-														</div>
-														<div>
-															<b>
-																{__(
-																	'Category:',
-																	'multivendorx'
-																)}
-															</b>{' '}
-															{product.categories
-																?.map(
-																	(c: any) =>
-																		c.name
-																)
-																.join(', ') ||
-																'-'}
+															<div>
+																<b>
+																	{__(
+																		'Total Sales:',
+																		'multivendorx'
+																	)}
+																</b>{' '}
+																{product.total_sales ||
+																	0}
+															</div>
+															<div>
+																<b>
+																	{__(
+																		'Category:',
+																		'multivendorx'
+																	)}
+																</b>{' '}
+																{product.categories
+																	?.map(
+																		(c: any) =>
+																			c.name
+																	)
+																	.join(', ') ||
+																	'-'}
+															</div>
 														</div>
 													</div>
 												</div>
 											</div>
-										</div>
-									)}
-								</div>
-							</div>
-						))
-					) : (
-						<p>
-							{__('No reviewed products found.', 'multivendorx')}
-						</p>
-					)}
-				</div>
-
-				<div className="card-content">
-					<div className="card-header">
-						<div className="left">
-							<div className="title">
-								{__('Top Selling Products', 'multivendorx')}
-							</div>
+										)}
+									</div>
+								))
+							) : (
+								<p>
+									{__('No reviewed products found.', 'multivendorx')}
+								</p>
+							)}
 						</div>
 					</div>
-					<div className="card-body">
-						{toSellingProduct.length > 0 ? (
-							toSellingProduct.map((product: any) => (
-								<div
-									className="info-item"
-									key={`selling-${product.id}`}
-								>
-									<div className="details-wrapper">
-										<div className="avatar">
-											{product.images?.length ? (
-												<img
-													src={product.images[0].src}
-													alt={product.name}
-												/>
-											) : (
-												<span>
-													{product.name?.charAt(0) ||
-														'?'}
-												</span>
-											)}
-										</div>
-										<div className="details">
-											<div className="name">
-												{product.name}
-											</div>
-											<div className="des">
-												{__(
-													'Total Sales:',
-													'multivendorx'
-												)}{' '}
-												{product.total_sales || 0}
-											</div>
-										</div>
-									</div>
-									<div className="right-details">
-										<div className="price"></div>
-									</div>
+
+					<div className="card-content">
+						<div className="card-header">
+							<div className="left">
+								<div className="title">
+									{__('Top Selling Products', 'multivendorx')}
 								</div>
-							))
-						) : (
-							<p>
-								{__(
-									'No top selling products found.',
-									'multivendorx'
-								)}
-							</p>
-						)}
+							</div>
+						</div>
+						<div className="card-body">
+							{toSellingProduct.length > 0 ? (
+								toSellingProduct.map((product: any) => (
+									<div
+										className="info-item"
+										key={`selling-${product.id}`}
+									>
+										<div className="details-wrapper">
+											<div className="avatar">
+												{product.images?.length ? (
+													<img
+														src={product.images[0].src}
+														alt={product.name}
+													/>
+												) : (
+													<span>
+														{product.name?.charAt(0) ||
+															'?'}
+													</span>
+												)}
+											</div>
+											<div className="details">
+												<div className="name">
+													{product.name}
+												</div>
+												<div className="des">
+													{__(
+														'Total Sales:',
+														'multivendorx'
+													)}{' '}
+													{product.total_sales || 0}
+												</div>
+											</div>
+										</div>
+										<div className="right-details">
+											<div className="price"></div>
+										</div>
+									</div>
+								))
+							) : (
+								<p>
+									{__(
+										'No top selling products found.',
+										'multivendorx'
+									)}
+								</p>
+							)}
+						</div>
 					</div>
 				</div>
 			</div>
 
-			{/* Fixed Table Section */}
-			<div className="card-header p-top">
+			<div className="card-header admin-pt-2">
 				<div className="left">
 					<div className="title">
 						{__('Revenue Distribution', 'multivendorx')}
@@ -825,7 +825,7 @@ const ProductReport: React.FC = () => {
 				searchFilter={searchFilter}
 				totalCounts={totalRows}
 			/>
-		</div>
+		</>
 	);
 };
 

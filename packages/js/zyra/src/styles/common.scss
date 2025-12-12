@@ -109,7 +109,6 @@ body:has(.admin-main-wrapper) {
   input[type="checkbox"]:focus {
     box-shadow: none;
   }
-
 }
 
 // button style start
@@ -234,6 +233,14 @@ body:has(.admin-main-wrapper) {
 .text-red {
   color: #f06548;
 }
+
+// text style start
+.desc,.des{
+  font-size: 0.9rem;
+  color: $sub-text-color;
+}
+
+// text style end
 
 // copy btn start
 .copy-btn {
@@ -697,43 +704,6 @@ body:has(.admin-main-wrapper) {
 
 // merge components end
 
-// visibility control container
-// .tabs {
-//   display: flex;
-//   position: relative;
-//   background: $color-white;
-//   margin: 0.5rem 0;
-
-
-//   .tab {
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-//     height: 1.563rem;
-//     width: 3.125rem;
-//     font-size: .8rem;
-//     color: $color-black;
-//     cursor: pointer;
-//     transition: color 0.15s ease-in;
-//     z-index: 2;
-//   }
-
-//   input[type="radio"] {
-//     display: none; // For hide radio box
-//   }
-
-//   input[type="radio"]:checked+label {
-//     color: $theme-color;
-//   }
-
-//   input[type="radio"]:checked+label>.notification {
-//     background-color: $theme-color;
-//     color: $color-white;
-//     margin: 0;
-//   }
-// }
-// visibility control container end
-
 // cross btn start
 .wrapper-close {
   color: $color-active;
@@ -785,11 +755,6 @@ body:has(.admin-main-wrapper) {
     color: #008000;
     font-size: 1.4rem;
   }
-
-  .desc {
-    font-size: 0.85rem;
-    color: #8d8d91;
-  }
 }
 
 @keyframes noticeSlide {
@@ -812,7 +777,6 @@ body:has(.admin-main-wrapper) {
 
 // admin save notice popup end
 .settings-input-content {
-  // position: relative;
   width: 72%;
 
   .after {
@@ -1370,9 +1334,7 @@ body:has(.admin-main-wrapper) {
 
       .desc {
         font-size: 0.813rem;
-        line-height: 1.25;
         padding-top: 0.313rem;
-        color: #00000094;
       }
     }
   }
@@ -1759,8 +1721,6 @@ body:has(.admin-main-wrapper) {
     }
 
     .des {
-      color: #00000094;
-
       b {
         color: #000;
       }

@@ -540,7 +540,7 @@ const StoreReport: React.FC = () => {
 				</div>
 			</div>
 
-			<div className="card-header p-top">
+			<div className="card-header admin-pt-2">
 				<div className="left">
 					<div className="title">
 						{__('Account Overview', 'multivendorx')}

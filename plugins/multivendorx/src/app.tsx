@@ -24,6 +24,7 @@ import HeaderNotification from './components/Notifications/HeaderNotifications';
 import Notifications from './components/Notifications/Notifications';
 import TransactionHistory from './components/TransactionHistory/transactionHistory';
 import { getTourSteps } from './components/Tour/tourSteps';
+import AddMemberships from './components/Membership/add-membership';
 
 localStorage.setItem('force_multivendorx_context_reload', 'true');
 
@@ -90,6 +91,7 @@ const Route = () => {
 		<>
 			{tab === 'settings' && <Settings id="settings" />}
 			{tab === 'memberships' && <Memberships />}
+			{tab === 'add-memberships' && <AddMemberships />}
 			{tab === 'status-tools' && <StatusAndTools id="status-tools" />}
 			{tab === 'modules' && <Modules />}
 			{tab === 'stores' && <Store />}

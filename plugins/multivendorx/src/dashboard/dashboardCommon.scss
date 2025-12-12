@@ -178,35 +178,6 @@ a:focus {
 
 // zyra color overwrite end
 
-// no permission section start
-.permission-wrapper {
-    height: 40vh;
-    width: 100%;
-    background: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-
-    i {
-        padding: 0.5rem;
-        font-size: 1.45rem;
-        border-radius: 0.313rem;
-    }
-
-    .title {
-        font-size: 1.625rem;
-        margin: 1rem;
-        margin-top: 1.5rem;
-    }
-
-    .des {
-        margin-bottom: 1rem;
-    }
-}
-
-// no permission section end
-
 // card styles start
 .container-wrapper {
     display: flex;
