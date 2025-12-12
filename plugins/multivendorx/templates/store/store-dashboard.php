@@ -18,7 +18,7 @@
 </head>
 <body <?php body_class(); ?>>
 
-    <div id="multivendorx-vendor-dashboard" class="multivendorx-dashboard"></div>
+    <div id="multivendorx-vendor-dashboard" class="multivendorx-main-wrapper"></div>
 
     <?php wp_footer(); ?>
 </body>

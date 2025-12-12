@@ -10,7 +10,7 @@
 }
 
 [class^="adminlib-"], [class*=" adminlib-"], input::before, .adminlibrary {
-  font-family: adminlibrary !important;
+  font-family: adminlibrary , sans-serif !important;
   speak: never;
   font-style: normal;
   font-weight: normal;
