@@ -11,13 +11,14 @@ import {
 	SelectInput,
 	TextArea,
 	getApiLink,
+	useModules
 } from 'zyra';
 import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 
 const AddProduct = () => {
 	const location = useLocation();
-
+	const { modules } = useModules();
 	const query = new URLSearchParams(location.search);
 	let productId = query.get('context_id');
 	if (!productId) {
@@ -411,6 +412,7 @@ const AddProduct = () => {
 						},
 					]
 				: selectedCats.map((id) => ({ id }));
+	console.log('product', product);
 
 		try {
 			const payload = {
@@ -419,12 +421,16 @@ const AddProduct = () => {
 				images: imagePayload,
 				categories: finalCategories,
 				meta_data: [
+					...(product.meta_data),
 					{
 						key: 'multivendorx_store_id',
 						value: appLocalizer.store_id,
 					},
 				],
 			};
+
+	console.log('payload', payload);
+
 			axios
 				.put(
 					`${appLocalizer.apiUrl}/wc/v3/products/${productId}`,
@@ -745,7 +751,6 @@ const AddProduct = () => {
 
 	const isPublishDisabled = !Object.values(checklist).every(Boolean);
 
-	console.log('product', product);
 	return (
 		<>
 			<div className="page-title-wrapper">
@@ -1163,6 +1168,15 @@ const AddProduct = () => {
                             </div> */}
 						</div>
 					</div>
+
+					{modules.includes('min-max') &&
+						applyFilters(
+							'product_min_max',
+							null,
+							product,
+							setProduct,
+							handleChange
+						)}
 
 					{!product.virtual &&
 						applyFilters(
