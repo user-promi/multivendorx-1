@@ -545,13 +545,22 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
 
             // Build store details.
             $store_data = array();
-            foreach ( $stores as $store_id ) {
-                $store_obj = MultivendorX()->store->get_store_by_id( $store_id );
-                if ( $store_obj ) {
-                    $store_data[] = array(
-                        'id'   => $store_id,
-                        'name' => $store_obj->get( 'name' ),
-                    );
+
+            if ( in_array( 0, $stores, true ) ) {
+                $store_data[] = array(
+                    'id'   => 0,
+                    'name' => __( 'All Stores', 'multivendorx' ),
+                );
+            } else {
+                foreach ( $stores as $store_id ) {
+                    $store_obj = MultivendorX()->store->get_store_by_id( $store_id );
+
+                    if ( $store_obj ) {
+                        $store_data[] = array(
+                            'id'   => (int) $store_id,
+                            'name' => $store_obj->get( 'name' ),
+                        );
+                    }
                 }
             }
 

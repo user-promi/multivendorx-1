@@ -38,7 +38,10 @@ export default {
 			key: 'section',
 			type: 'section',
 			hint: __('Order Fulfillment', 'multivendorx'),
-			desc: __('Decide how customer orders should be routed to franchise stores', 'multivendorx'),
+			desc: __(
+				'Decide how customer orders should be routed to franchise stores',
+				'multivendorx'
+			),
 		},
 		{
 			key: 'automatic_store_assignment',
@@ -61,12 +64,18 @@ export default {
 			key: 'section',
 			type: 'section',
 			hint: __('Order Creation', 'multivendorx'),
-			desc: __('Control how franchise stores create and manage their own orders', 'multivendorx'),
+			desc: __(
+				'Control how franchise stores create and manage their own orders',
+				'multivendorx'
+			),
 		},
 		{
 			key: 'taxable',
 			label: __('Store Order Creation', 'multivendorx'),
-			desc: __('Allow franchise stores to manually create orders for the products they manage. Useful for in-store purchases, phone orders, or wholesale requests.', 'multivendorx'),
+			desc: __(
+				'Allow franchise stores to manually create orders for the products they manage. Useful for in-store purchases, phone orders, or wholesale requests.',
+				'multivendorx'
+			),
 			type: 'checkbox',
 			options: [
 				{
@@ -79,7 +88,10 @@ export default {
 		{
 			key: 'taxable',
 			label: __('Admin Product Ordering', 'multivendorx'),
-			desc: __('Allow franchise stores to place orders for products from the admin catalog. This lets stores restock or sell admin-owned products directly.', 'multivendorx'),
+			desc: __(
+				'Allow franchise stores to place orders for products from the admin catalog. This lets stores restock or sell admin-owned products directly.',
+				'multivendorx'
+			),
 			type: 'checkbox',
 			options: [
 				{
@@ -93,12 +105,18 @@ export default {
 			key: 'section',
 			type: 'section',
 			hint: __('Admin Product Pricing', 'multivendorx'),
-			desc: __('Configure how store pricing works when selling admin-owned products', 'multivendorx'),
+			desc: __(
+				'Configure how store pricing works when selling admin-owned products',
+				'multivendorx'
+			),
 		},
 		{
 			key: 'taxable',
 			label: __('Store Price Override', 'multivendorx'),
-			desc: __('Let franchise stores adjust the selling price of admin products based on local demand or regional pricing requirements.', 'multivendorx'),
+			desc: __(
+				'Let franchise stores adjust the selling price of admin products based on local demand or regional pricing requirements.',
+				'multivendorx'
+			),
 			type: 'checkbox',
 			options: [
 				{

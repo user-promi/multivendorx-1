@@ -1,31 +1,45 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { BasicInput, TextArea, FileInput, SelectInput, getApiLink, SuccessNotice, MultiCheckBox, ToggleSetting } from 'zyra';
+import {
+	BasicInput,
+	TextArea,
+	FileInput,
+	SelectInput,
+	getApiLink,
+	SuccessNotice,
+	MultiCheckBox,
+	ToggleSetting,
+} from 'zyra';
 import { __ } from '@wordpress/i18n';
 
 const MessageAndMail = ({ id }: { id: string }) => {
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
 
-	const [imagePreviews, setImagePreviews] = useState<{ [key: string]: string }>({});
-	const [stateOptions, setStateOptions] = useState<{ label: string; value: string }[]>([]);
+	const [imagePreviews, setImagePreviews] = useState<{
+		[key: string]: string;
+	}>({});
+	const [stateOptions, setStateOptions] = useState<
+		{ label: string; value: string }[]
+	>([]);
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
 	useEffect(() => {
-		if (!id) return;
+		if (!id) {
+			return;
+		}
 
 		axios({
 			method: 'GET',
 			url: getApiLink(appLocalizer, `store/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		})
-			.then((res) => {
-				const data = res.data || {};
-				setFormData((prev) => ({ ...prev, ...data }));
-				setImagePreviews({
-					image: data.image || '',
-					banner: data.banner || '',
-				});
-			})
+		}).then((res) => {
+			const data = res.data || {};
+			setFormData((prev) => ({ ...prev, ...data }));
+			setImagePreviews({
+				image: data.image || '',
+				banner: data.banner || '',
+			});
+		});
 	}, [id]);
 
 	useEffect(() => {
@@ -41,7 +55,6 @@ const MessageAndMail = ({ id }: { id: string }) => {
 		}
 	}, [formData.country]);
 
-
 	const fetchStatesByCountry = (countryCode: string) => {
 		axios({
 			method: 'GET',
@@ -49,10 +62,12 @@ const MessageAndMail = ({ id }: { id: string }) => {
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 		}).then((res) => {
 			setStateOptions(res.data || []);
-		})
+		});
 	};
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+	const handleChange = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => {
 		const { name, value } = e.target;
 		const updated = { ...formData, [name]: value };
 		setFormData(updated);
@@ -88,7 +103,7 @@ const MessageAndMail = ({ id }: { id: string }) => {
 			if (res.data.success) {
 				setSuccessMsg('Store saved successfully!');
 			}
-		})
+		});
 	};
 
 	return (
@@ -105,21 +120,39 @@ const MessageAndMail = ({ id }: { id: string }) => {
 						<div className="card-body">
 							<div className="form-group-wrapper">
 								<div className="form-group">
-									<label htmlFor="product-name">Plan Name</label>
-									<BasicInput name="name" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.name} onChange={handleChange} />
+									<label htmlFor="product-name">
+										Plan Name
+									</label>
+									<BasicInput
+										name="name"
+										wrapperClass="setting-form-input"
+										descClass="settings-metabox-description"
+										value={formData.name}
+										onChange={handleChange}
+									/>
 								</div>
 							</div>
 
 							<div className="form-group-wrapper">
 								<div className="form-group">
-									<label htmlFor="product-name">Plan Description</label>
-									<BasicInput name="slug" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.slug} onChange={handleChange} />
+									<label htmlFor="product-name">
+										Plan Description
+									</label>
+									<BasicInput
+										name="slug"
+										wrapperClass="setting-form-input"
+										descClass="settings-metabox-description"
+										value={formData.slug}
+										onChange={handleChange}
+									/>
 								</div>
 							</div>
 
 							<div className="form-group-wrapper">
 								<div className="form-group">
-									<label htmlFor="product-name">Plan Status</label>
+									<label htmlFor="product-name">
+										Plan Status
+									</label>
 									<MultiCheckBox
 										wrapperClass="toggle-btn"
 										inputWrapperClass="toggle-checkbox-header"
@@ -148,7 +181,9 @@ const MessageAndMail = ({ id }: { id: string }) => {
 									/>
 								</div>
 								<div className="form-group">
-									<label htmlFor="product-name">Mark as Recommended</label>
+									<label htmlFor="product-name">
+										Mark as Recommended
+									</label>
 									<MultiCheckBox
 										wrapperClass="toggle-btn"
 										inputWrapperClass="toggle-checkbox-header"
@@ -187,10 +222,11 @@ const MessageAndMail = ({ id }: { id: string }) => {
 							</div>
 						</div>
 						<div className="card-body">
-
 							<div className="form-group-wrapper">
 								<div className="form-group">
-									<label htmlFor="product-name">Plan Status</label>
+									<label htmlFor="product-name">
+										Plan Status
+									</label>
 									<ToggleSetting
 										wrapperClass="setting-form-input"
 										descClass="settings-metabox-description"
@@ -202,20 +238,28 @@ const MessageAndMail = ({ id }: { id: string }) => {
 											{
 												key: 'draft',
 												value: 'Free',
-												label: __('Draft', 'multivendorx'),
+												label: __(
+													'Draft',
+													'multivendorx'
+												),
 											},
 											{
 												key: 'pending',
 												value: 'Paid',
-												label: __('Pending', 'multivendorx'),
+												label: __(
+													'Pending',
+													'multivendorx'
+												),
 											},
 										]}
-									// value={formData.status}
-									// onChange={handleToggleChange}
+										// value={formData.status}
+										// onChange={handleToggleChange}
 									/>
 								</div>
 								<div className="form-group">
-									<label htmlFor="product-name">Plan Status</label>
+									<label htmlFor="product-name">
+										Plan Status
+									</label>
 									<ToggleSetting
 										wrapperClass="setting-form-input"
 										descClass="settings-metabox-description"
@@ -227,32 +271,57 @@ const MessageAndMail = ({ id }: { id: string }) => {
 											{
 												key: 'draft',
 												value: 'Monthly',
-												label: __('Draft', 'multivendorx'),
+												label: __(
+													'Draft',
+													'multivendorx'
+												),
 											},
 											{
 												key: 'pending',
 												value: 'Yearly',
-												label: __('Pending', 'multivendorx'),
+												label: __(
+													'Pending',
+													'multivendorx'
+												),
 											},
 											{
 												key: 'pending',
 												value: 'One Time',
-												label: __('Pending', 'multivendorx'),
+												label: __(
+													'Pending',
+													'multivendorx'
+												),
 											},
 										]}
-									// value={formData.status}
-									// onChange={handleToggleChange}
+										// value={formData.status}
+										// onChange={handleToggleChange}
 									/>
 								</div>
 							</div>
 							<div className="form-group-wrapper">
 								<div className="form-group">
-									<label htmlFor="product-name">Plan Price</label>
-									<BasicInput name="name" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.name} onChange={handleChange} />
+									<label htmlFor="product-name">
+										Plan Price
+									</label>
+									<BasicInput
+										name="name"
+										wrapperClass="setting-form-input"
+										descClass="settings-metabox-description"
+										value={formData.name}
+										onChange={handleChange}
+									/>
 								</div>
 								<div className="form-group">
-									<label htmlFor="product-name">Trial Period</label>
-									<BasicInput name="slug" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.slug} onChange={handleChange} />
+									<label htmlFor="product-name">
+										Trial Period
+									</label>
+									<BasicInput
+										name="slug"
+										wrapperClass="setting-form-input"
+										descClass="settings-metabox-description"
+										value={formData.slug}
+										onChange={handleChange}
+									/>
 								</div>
 							</div>
 						</div>
@@ -266,18 +335,36 @@ const MessageAndMail = ({ id }: { id: string }) => {
 						<div className="card-body">
 							<div className="form-group-wrapper">
 								<div className="form-group">
-									<label htmlFor="product-name">Total Product Limit</label>
-									<BasicInput name="name" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.name} onChange={handleChange} />
+									<label htmlFor="product-name">
+										Total Product Limit
+									</label>
+									<BasicInput
+										name="name"
+										wrapperClass="setting-form-input"
+										descClass="settings-metabox-description"
+										value={formData.name}
+										onChange={handleChange}
+									/>
 								</div>
 								<div className="form-group">
-									<label htmlFor="product-name">Gallery Images per Product</label>
-									<BasicInput name="slug" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.slug} onChange={handleChange} />
+									<label htmlFor="product-name">
+										Gallery Images per Product
+									</label>
+									<BasicInput
+										name="slug"
+										wrapperClass="setting-form-input"
+										descClass="settings-metabox-description"
+										value={formData.slug}
+										onChange={handleChange}
+									/>
 								</div>
 							</div>
 
 							<div className="form-group-wrapper">
 								<div className="form-group">
-									<label htmlFor="product-name">Featured Product Access</label>
+									<label htmlFor="product-name">
+										Featured Product Access
+									</label>
 									<MultiCheckBox
 										wrapperClass="toggle-btn"
 										inputWrapperClass="toggle-checkbox-header"
@@ -318,10 +405,11 @@ const MessageAndMail = ({ id }: { id: string }) => {
 							</div>
 						</div>
 						<div className="card-body">
-
 							<div className="form-group-wrapper">
 								<div className="form-group">
-									<label htmlFor="product-name">Plan Validity</label>
+									<label htmlFor="product-name">
+										Plan Validity
+									</label>
 									<ToggleSetting
 										wrapperClass="setting-form-input"
 										descClass="settings-metabox-description"
@@ -333,23 +421,37 @@ const MessageAndMail = ({ id }: { id: string }) => {
 											{
 												key: 'draft',
 												value: 'Unlimited',
-												label: __('Draft', 'multivendorx'),
+												label: __(
+													'Draft',
+													'multivendorx'
+												),
 											},
 											{
 												key: 'pending',
 												value: 'Fixed Days',
-												label: __('Pending', 'multivendorx'),
+												label: __(
+													'Pending',
+													'multivendorx'
+												),
 											},
 										]}
-									// value={formData.status}
-									// onChange={handleToggleChange}
+										// value={formData.status}
+										// onChange={handleToggleChange}
 									/>
 								</div>
 							</div>
 							<div className="form-group-wrapper">
 								<div className="form-group">
-									<label htmlFor="product-name">Validity Duration</label>
-									<BasicInput name="name" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.name} onChange={handleChange} />
+									<label htmlFor="product-name">
+										Validity Duration
+									</label>
+									<BasicInput
+										name="name"
+										wrapperClass="setting-form-input"
+										descClass="settings-metabox-description"
+										value={formData.name}
+										onChange={handleChange}
+									/>
 								</div>
 							</div>
 						</div>
@@ -361,10 +463,11 @@ const MessageAndMail = ({ id }: { id: string }) => {
 							</div>
 						</div>
 						<div className="card-body">
-
 							<div className="form-group-wrapper">
 								<div className="form-group">
-									<label htmlFor="product-name">Commission Mode</label>
+									<label htmlFor="product-name">
+										Commission Mode
+									</label>
 									<ToggleSetting
 										wrapperClass="setting-form-input"
 										descClass="settings-metabox-description"
@@ -376,22 +479,30 @@ const MessageAndMail = ({ id }: { id: string }) => {
 											{
 												key: 'draft',
 												value: 'Global',
-												label: __('Draft', 'multivendorx'),
+												label: __(
+													'Draft',
+													'multivendorx'
+												),
 											},
 											{
 												key: 'pending',
 												value: 'Plan Based',
-												label: __('Pending', 'multivendorx'),
+												label: __(
+													'Pending',
+													'multivendorx'
+												),
 											},
 										]}
-									// value={formData.status}
-									// onChange={handleToggleChange}
+										// value={formData.status}
+										// onChange={handleToggleChange}
 									/>
 								</div>
 							</div>
 							<div className="form-group-wrapper">
 								<div className="form-group">
-									<label htmlFor="product-name">Billing Cycle</label>
+									<label htmlFor="product-name">
+										Billing Cycle
+									</label>
 									<ToggleSetting
 										wrapperClass="setting-form-input"
 										descClass="settings-metabox-description"
@@ -403,23 +514,37 @@ const MessageAndMail = ({ id }: { id: string }) => {
 											{
 												key: 'draft',
 												value: 'Flat Fee',
-												label: __('Draft', 'multivendorx'),
+												label: __(
+													'Draft',
+													'multivendorx'
+												),
 											},
 											{
 												key: 'pending',
 												value: 'Percentage',
-												label: __('Pending', 'multivendorx'),
+												label: __(
+													'Pending',
+													'multivendorx'
+												),
 											},
 										]}
-									// value={formData.status}
-									// onChange={handleToggleChange}
+										// value={formData.status}
+										// onChange={handleToggleChange}
 									/>
 								</div>
 							</div>
 							<div className="form-group-wrapper">
 								<div className="form-group">
-									<label htmlFor="product-name">Admin Commission Value</label>
-									<BasicInput name="name" wrapperClass="setting-form-input" descClass="settings-metabox-description" value={formData.name} onChange={handleChange} />
+									<label htmlFor="product-name">
+										Admin Commission Value
+									</label>
+									<BasicInput
+										name="name"
+										wrapperClass="setting-form-input"
+										descClass="settings-metabox-description"
+										value={formData.name}
+										onChange={handleChange}
+									/>
 								</div>
 							</div>
 						</div>
