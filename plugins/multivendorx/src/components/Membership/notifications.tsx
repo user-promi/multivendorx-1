@@ -16,42 +16,27 @@ const Notifications = ({ id }: { id: string }) => {
                             <div className="form-group-wrapper">
                                 <div className="form-group">
                                     <label htmlFor="product-name">Reminder Days Before Expiration</label>
-                                    <BasicInput name="name" size="10rem" postText="days before expiration" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                                    <BasicInput name="name" postText="days before expiration" size="12rem" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
                                 </div>
                             </div>
                             <div className="form-group-wrapper">
                                 <div className="form-group">
-                                    <div className="notice-wrapper green">
-                                        <div className="notice-name">
-                                            <i className="adminlib-cart green"></i>
-                                            Payment Due
-                                        </div>
-                                        <div className="des">Sent when payment is overdue</div>
-                                    </div>
-
-                                    <div className="notice-wrapper yellow">
-                                        <div className="notice-name">
-                                            <i className="adminlib-cart yellow"></i>
-                                            Renewal Reminder
-                                        </div>
-                                        <div className="des">Sent when payment is overdue</div>
-                                    </div>
-
-                                    <div className="notice-wrapper blue">
-                                        <div className="notice-name">
-                                            <i className="adminlib-cart blue"></i>
-                                           Grace Period
-                                        </div>
-                                        <div className="des">Sent when payment is overdue</div>
-                                    </div>
-
-                                    <div className="notice-wrapper red">
-                                        <div className="notice-name">
-                                            <i className="adminlib-cart red"></i>
-                                            Expiration Notice
-                                        </div>
-                                        <div className="des">Sent when payment is overdue</div>
-                                    </div>
+                                    <label htmlFor="product-name">Payment Due</label>
+                                    <BasicInput name="name" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="product-name">Renewal Reminder</label>
+                                    <BasicInput name="name" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                                </div>
+                            </div>
+                            <div className="form-group-wrapper">
+                                <div className="form-group">
+                                    <label htmlFor="product-name">Grace Period</label>
+                                    <BasicInput name="name" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="product-name">Expiration Notice</label>
+                                    <BasicInput name="name" wrapperClass="setting-form-input" descClass="settings-metabox-description" />
                                 </div>
                             </div>
                         </div>

@@ -105,25 +105,3 @@
         }
     }
 }
-
-
-// notice style (zyra)
-.notice-wrapper{
-    padding: 0.75rem;
-    border: 0.063rem solid;
-    border-radius: 0.313rem;
-    margin: 0.313rem 0;
-
-    .notice-name{
-        font-size: 1.125rem;
-        margin-bottom: 0.313rem;
-        color: $text-color;
-        font-weight: 500;
-        i{
-            padding-right: 0.45rem;
-        }
-    }
-    .des{
-        font-size: 0.813rem;
-    }
-}
