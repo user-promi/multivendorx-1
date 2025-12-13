@@ -116,10 +116,10 @@ export const Announcements: React.FC = () => {
 				}
 			);
 			const stores = response.data?.stores || [];
-			const options = [
-				{ value: '0', label: __('All Stores', 'multivendorx') },
+			const options: StoreOption[] = [
+				{ value: 0, label: __('All Stores', 'multivendorx') },
 				...stores.map((store: Store) => ({
-					value: store.id.toString(),
+					value: store.id,
 					label: store.store_name,
 				})),
 			];
@@ -249,11 +249,7 @@ export const Announcements: React.FC = () => {
 					title: response.data.title || '',
 					url: response.data.url || '',
 					content: response.data.content || '',
-					stores: Array.isArray(response.data.stores)
-						? response.data.stores.map(
-								(store: { id: number }) => store.id
-							)
-						: [],
+					stores: response.data.stores ??  [],
 					status: response.data.status || 'draft',
 				});
 
@@ -649,7 +645,6 @@ export const Announcements: React.FC = () => {
 			),
 		},
 	];
-
 	return (
 		<>
 			<AdminBreadcrumbs
@@ -755,7 +750,7 @@ export const Announcements: React.FC = () => {
 								usePlainText={false}
 								tinymceApiKey={
 									appLocalizer.settings_databases_value[
-										'marketplace'
+									'marketplace'
 									]['tinymce_api_section'] ?? ''
 								}
 							/>
@@ -777,7 +772,7 @@ export const Announcements: React.FC = () => {
 								type="multi-select"
 								options={storeOptions}
 								value={formData.stores.map((id) =>
-									id.toString()
+									id
 								)}
 								onChange={(newValue: StoreOption[]) => {
 									if (!Array.isArray(newValue)) {

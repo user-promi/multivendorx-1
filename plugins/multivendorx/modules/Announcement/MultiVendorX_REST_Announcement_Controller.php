@@ -543,27 +543,6 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
             $stores = get_post_meta( $id, Utill::POST_META_SETTINGS['announcement_stores'], true );
             $stores = is_array( $stores ) ? $stores : array();
 
-            // Build store details.
-            $store_data = array();
-
-            if ( in_array( 0, $stores, true ) ) {
-                $store_data[] = array(
-                    'id'   => 0,
-                    'name' => __( 'All Stores', 'multivendorx' ),
-                );
-            } else {
-                foreach ( $stores as $store_id ) {
-                    $store_obj = MultivendorX()->store->get_store_by_id( $store_id );
-
-                    if ( $store_obj ) {
-                        $store_data[] = array(
-                            'id'   => (int) $store_id,
-                            'name' => $store_obj->get( 'name' ),
-                        );
-                    }
-                }
-            }
-
             // Prepare response.
             $response = array(
                 'id'      => $id,
@@ -571,7 +550,7 @@ class MultiVendorX_REST_Announcement_Controller extends \WP_REST_Controller {
                 'content' => $post->post_content,
                 'status'  => $post->post_status,
                 'url'     => get_post_meta( $id, Utill::POST_META_SETTINGS['announcement_url'], true ),
-                'stores'  => $store_data,
+                'stores'  => $stores,
                 'date'    => get_post_time( 'Y-m-d H:i:s', true, $post ),
             );
 
