@@ -33,24 +33,6 @@ const Memberships = () => {
                 icon: 'adminlib-credit-card',
             },
         },
-        // {
-        //     type: 'file',
-        //     content: {
-        //         id: 'payment-membership-subscribers',
-        //         name: 'Subscribers',
-        //         desc: 'Connect to vendors stripe account and make hassle-free transfers as scheduled.',
-        //         icon: 'adminlib-credit-card',
-        //     },
-        // },
-        // {
-        //     type: 'file',
-        //     content: {
-        //         id: 'payment-membership-plans',
-        //         name: 'Plans',
-        //         desc: 'Connect to vendors stripe account and make hassle-free transfers as scheduled',
-        //         icon: 'adminlib-credit-card',
-        //     },
-        // },
     ];
 
     const getForm = (tabId: string) => {
@@ -59,10 +41,6 @@ const Memberships = () => {
                 return <MessageAndMail id=''/>;
             case 'payment-membership-design':
                 return <h1>design</h1>;
-            // case 'payment-membership-subscribers':
-            //     return <h1>Subscriber</h1>;
-            // case 'payment-membership-plans':
-            //     return <h1>Plans</h1>;
             default:
                 return <div></div>;
         }
