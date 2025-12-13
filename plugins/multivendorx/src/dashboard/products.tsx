@@ -429,13 +429,6 @@ const AllProduct: React.FC = () => {
 										.catch(() => {});
 								},
 							},
-							// {
-							//     label: __('Clone', 'multivendorx'),
-							//     icon: 'adminlib-vendor-form-copy',
-							//     // onClick: (rowData) => {
-							//     //     window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
-							//     // },
-							// },
 							{
 								label: __('Delete', 'multivendorx'),
 								icon: 'adminlib-vendor-form-delete',
@@ -525,27 +518,6 @@ const AllProduct: React.FC = () => {
 				</div>
 			),
 		},
-		// {
-		//     name: 'brand',
-		//     render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
-		//         <div className="   group-field">
-		//             <select
-		//                 name="product-type"
-		//                 onChange={(e) => updateFilter(e.target.name, e.target.value)}
-		//                 value={filterValue || ''}
-		//                 className="basic-select"
-		//             >
-		//                 <option value="">Brand</option>
-		//                 {/* { Object.entries( groups ).map( ( [ groupId, groupName ] ) => (
-		//                         <option key={ groupId } value={ groupId }>
-		//                             { ' ' }
-		//                             { groupName }{ ' ' }
-		//                         </option>
-		//                     ) ) } */}
-		//             </select>
-		//         </div>
-		//     ),
-		// },
 		{
 			name: 'date',
 			render: (updateFilter) => (
@@ -564,7 +536,6 @@ const AllProduct: React.FC = () => {
 			),
 		},
 	];
-
 	const searchFilter: RealtimeFilter[] = [
 		{
 			name: 'searchField',
