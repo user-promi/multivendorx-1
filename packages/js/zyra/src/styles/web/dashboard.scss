@@ -154,6 +154,7 @@
                 font-size: 1.25rem;
                 line-height: 0.9;
                 font-weight: 600;
+                color: $text-color;
             }
         }
     }
@@ -215,6 +216,7 @@
                 .text {
                     font-size: 1.063rem;
                     font-weight: 500;
+                    color: $sub-text-color;
                 }
 
                 .number {
@@ -227,7 +229,7 @@
 
                 .report {
                     font-weight: 500;
-                    color: #00000061;
+                    color: $sub-text-color;
 
                     div {
                         line-height: 1.313rem;
@@ -262,7 +264,7 @@
         label {
             font-size: .875rem;
             font-weight: 500;
-            color: #344357;
+            color: $text-color;
             margin-bottom: .5rem;
             display: flex;
             gap: 0.625rem;
@@ -278,7 +280,7 @@
             font-size: 1.125rem;
 
             &.remove-btn {
-                color: #ee0808;
+                color: $accent-color;
                 cursor: pointer;
             }
         }
@@ -612,26 +614,6 @@
                     font-size: 1.125rem;
                     padding: 0.313rem;
                     border-radius: 0.313rem;
-
-                    &.blue {
-                        background: #0000ff3b;
-                        color: #00f;
-                    }
-
-                    &.orange {
-                        color: #ffa500;
-                        background: #ffa60056;
-                    }
-
-                    &.green {
-                        color: #138604e7;
-                        background: #00800059;
-                    }
-
-                    &.red {
-                        color: #e00505;
-                        background: #ff00005e;
-                    }
                 }
             }
 
@@ -678,7 +660,7 @@
             position: absolute;
             right: 0;
             top: 0;
-            color: #00000078;
+            color: $sub-text-color;
             font-weight: 500;
         }
 
@@ -700,7 +682,7 @@
             background: $theme-color;
             top: 0;
             left: -0.45rem;
-            outline: 0.313rem solid #fff;
+            outline: 0.313rem solid $background-white;
         }
     }
 }

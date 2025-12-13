@@ -169,7 +169,7 @@ a {
         position: fixed;
         z-index: 999;
         width: 100%;
-        background: #fff;
+        background: $background-white;
         border-bottom: $border-light-small;
         right: 0;
 
@@ -463,7 +463,7 @@ a {
     max-width: 16rem;
     min-width: 16rem;
     right: 0;
-    background: #fff;
+    background: $background-white;
     border-radius: 0.313rem;
     transition: all 0.3s ease;
     z-index: 9999;
@@ -484,7 +484,7 @@ a {
                 justify-content: center;
                 align-items: center;
                 color: #fff;
-                background: var(--colorPrimary);
+                background: $theme-color;
                 font-size: 0.875rem;
                 font-weight: 700;
                 letter-spacing: .06em;

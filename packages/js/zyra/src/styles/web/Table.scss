@@ -306,7 +306,7 @@
                 align-items: center;
                 width: 100%;
                 box-sizing: border-box;
-                background: #fff;
+                background: $background-white;
                 margin: 0.725rem 0;
                 border: 0.063rem solid transparent;
 
@@ -325,13 +325,14 @@
                         gap: 0.5rem;
                         align-items: center;
                         font-size: 1rem;
+                        color: $text-color;
 
                         .name {
                             font-weight: 500;
                         }
 
                         .sub-text {
-                            color: #0000007a;
+                            color: $sub-text-color;
                             padding-top: 0.313rem;
                         }
 
@@ -783,6 +784,7 @@
     padding: 3rem;
     background: $background-white;
     text-align: center;
+    color: $sub-text-color;
 }
 
 .table-action-column {

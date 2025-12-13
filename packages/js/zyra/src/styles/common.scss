@@ -289,7 +289,7 @@ body:has(.admin-main-wrapper) {
 .textarea-input,
 .rmdp-input {
   width: 100%;
-  border: 0.063rem solid #dbdfea !important; // for overwrite wordpress style
+  border: $border-light-small !important; // for overwrite wordpress style
   border-radius: 0.25rem;
   padding: 0.313rem 0.5rem;
   background: transparent !important; // for overwrite theme style
@@ -1221,10 +1221,10 @@ body:has(.admin-main-wrapper) {
 // search section
 .search-field {
   display: flex;
-  border: 0.063rem solid #5007aa;
+  border: 0.063rem solid $theme-color;
   border-radius: 0.313rem;
   margin-left: auto;
-  background: #fff;
+  background: $background-white;
   position: relative;
 
   .search-section {
