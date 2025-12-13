@@ -21,7 +21,7 @@ const Memberships = () => {
                 name: 'Basic Plan Details',
                 desc: 'Site errors and events are logged for easy troubleshooting.',
                 icon: 'adminlib-credit-card',
-
+                hideHeader: true,
             },
         },
         {
