@@ -44,19 +44,10 @@ const GoogleMap = ({
     const autocompleteInputRef = useRef<HTMLInputElement>(null);
     const mapContainerRef = useRef<HTMLDivElement>(null);
 
-    // Debug logger
-    const log = (...args: any[]) => {
-        if (process.env.NODE_ENV !== "production") {
-            console.log("%c[GoogleMapComponent LOG]", "color: #4285F4; font-weight: bold;", ...args);
-        }
-    };
-
     // Load Google Maps script
     useEffect(() => {
-        log('Loading Google Maps script...');
     
         if (window.google && window.google.maps) {
-            log('Google Maps already loaded');
             setGoogleLoaded(true);
             return;
         }
@@ -66,7 +57,6 @@ const GoogleMap = ({
         script.async = true;
     
         script.onload = () => {
-            log('Google Maps script loaded successfully');
             setGoogleLoaded(true);
         };
     
@@ -82,11 +72,8 @@ const GoogleMap = ({
         if (!googleLoaded || !autocompleteInputRef.current || !mapContainerRef.current) return;
 
         if (!window.google || !window.google.maps) {
-            log("Google Maps NOT ready yet");
             return;
         }
-
-        log('Initializing Google Map...');
 
         const initialLat = parseFloat(locationLat) || 40.7128;
         const initialLng = parseFloat(locationLng) || -74.0060;
@@ -131,9 +118,7 @@ const GoogleMap = ({
 
             setMap(mapInstance);
             setMarker(markerInstance);
-            log('Google Map initialized successfully');
         } catch (error) {
-            log('Error initializing Google Map:', error);
         }
     }, [googleLoaded, locationLat, locationLng]);
 
@@ -178,7 +163,6 @@ const GoogleMap = ({
         let streetNumber = '';
         let route = '';
         let streetAddress = '';
-
         if (place.address_components) {
             place.address_components.forEach((component: any) => {
                 const types = component.types;
@@ -190,9 +174,9 @@ const GoogleMap = ({
                 } else if (types.includes('locality')) {
                     components.city = component.long_name;
                 } else if (types.includes('administrative_area_level_1')) {
-                    components.state = component.short_name || component.long_name;
+                    components.state = component.short_name;
                 } else if (types.includes('country')) {
-                    components.country = component.long_name;
+                    components.country = component.short_name;
                 } else if (types.includes('postal_code')) {
                     components.zip = component.long_name;
                 }

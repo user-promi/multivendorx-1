@@ -45,13 +45,6 @@ const Mapbox = ({
     const mapContainerRef = useRef<HTMLDivElement>(null);
     const geocoderContainerRef = useRef<HTMLDivElement>(null);
 
-    // Debug logger
-    const log = (...args: any[]) => {
-        if (process.env.NODE_ENV !== "production") {
-            console.log("%c[MapboxComponent LOG]", "color: #4264FB; font-weight: bold;", ...args);
-        }
-    };
-
     // Load Mapbox script
     useEffect(() => {
         if ((window as any).mapboxgl) {
@@ -78,7 +71,6 @@ const Mapbox = ({
         mapboxGeocoderCss.rel = 'stylesheet';
 
         mapboxGlScript.onload = () => {
-            log('Mapbox script loaded successfully');
             // Load geocoder after mapbox is loaded
             document.head.appendChild(mapboxGeocoderScript);
             document.head.appendChild(mapboxGeocoderCss);
@@ -106,8 +98,6 @@ const Mapbox = ({
     // Initialize map when Mapbox is loaded
     useEffect(() => {
         if (!mapboxLoaded || !mapContainerRef.current || !geocoderContainerRef.current) return;
-
-        log('Initializing Mapbox Map...');
         
         window.mapboxgl.accessToken = apiKey;
 
@@ -227,9 +217,9 @@ const Mapbox = ({
                 } else if (type === 'place') {
                     components.city = component.text;
                 } else if (type === 'region') {
-                    components.state = component.text;
+                    components.state = (component.text).split(' ')[0];
                 } else if (type === 'country') {
-                    components.country = component.text;
+                    components.country = (component.short_code).toUpperCase();
                 }
             });
         }

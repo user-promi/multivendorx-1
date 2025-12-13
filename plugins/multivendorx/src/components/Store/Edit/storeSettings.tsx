@@ -31,13 +31,6 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
     const [errorMsg, setErrorMsg] = useState<{ [key: string]: string }>({})
 
     // Map states
-    const [map, setMap] = useState<any>(null);
-    const [marker, setMarker] = useState<any>(null);
-    const [googleLoaded, setGoogleLoaded] = useState<boolean>(false);
-    const [mapboxLoaded, setMapboxLoaded] = useState<boolean>(false);
-    const [loading, setLoading] = useState<boolean>(true);
-    const autocompleteInputRef = useRef<HTMLInputElement>(null);
-    const emailInputRef = useRef<HTMLInputElement>(null);
     const [mapProvider, setMapProvider] = useState('');
     const [apiKey, setApiKey] = useState('');
     const appLocalizer = (window as any).appLocalizer;
@@ -46,7 +39,6 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
     const [emails, setEmails] = useState<string[]>([]);           // All emails
     const [primaryEmail, setPrimaryEmail] = useState<string>('');  // Which one is starred
     const [inputValue, setInputValue] = useState('');
-    const inputRef = useRef<HTMLDivElement>(null);
 
     // === LOAD EMAILS FROM BACKEND ===
     useEffect(() => {
@@ -188,7 +180,6 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
             image: data.image || '',
             banner: data.banner || '',
         });
-        setLoading(false);
     }, [data]);
 
     // Add email function
@@ -290,153 +281,6 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
         }
     }, [location.state]);
 
-    const handlePlaceSelect = (place: any, provider: 'google' | 'mapbox') => {
-        let lat, lng, formatted_address, addressComponents;
-
-        if (provider === 'google') {
-            const location = place.geometry.location;
-            lat = location.lat();
-            lng = location.lng();
-            formatted_address = place.formatted_address;
-            addressComponents = extractAddressComponents(place, 'google');
-        } else {
-            lng = place.center[0];
-            lat = place.center[1];
-            formatted_address = place.place_name;
-            addressComponents = extractAddressComponents(place, 'mapbox');
-        }
-
-        if (map && marker) {
-            if (provider === 'google') {
-                map.setCenter({ lat, lng });
-                marker.setPosition({ lat, lng });
-            } else {
-                map.setCenter([lng, lat]);
-                marker.setLngLat([lng, lat]);
-            }
-            map.setZoom(17);
-        }
-
-        // Update both address data and form data
-        const newAddressData = {
-            location_address: formatted_address,
-            location_lat: lat.toString(),
-            location_lng: lng.toString(),
-            ...addressComponents,
-        };
-
-        // Ensure both address fields are populated
-        if (!newAddressData.address && formatted_address) {
-            newAddressData.address = formatted_address;
-        }
-        console.log('newAddressData', newAddressData);
-        setAddressData(newAddressData);
-
-        const foundCountry = (appLocalizer.country_list || []).find(
-            (item) => item.label === newAddressData.country || item.value === newAddressData.country
-        );
-
-        const foundState = stateOptions.find(
-            (item) => item.label === newAddressData.state || item.value === newAddressData.state
-        );
-
-        // Merge with existing form data
-        const updatedFormData = {
-            ...formData,
-            ...newAddressData,
-            country: foundCountry ? foundCountry.value : newAddressData.country,
-            state: foundState ? foundState.value : newAddressData.state,
-        };
-
-        setFormData(updatedFormData);
-        setAddressData(newAddressData);
-        autoSave(updatedFormData);
-    };
-
-    const reverseGeocode = (provider: 'google' | 'mapbox', lat: number, lng: number) => {
-        if (provider === 'google') {
-            const geocoder = new window.google.maps.Geocoder();
-            geocoder.geocode({ location: { lat, lng } }, (results: any[], status: string) => {
-                if (status === 'OK' && results[0]) {
-                    handlePlaceSelect(results[0], 'google');
-                }
-            });
-        } else {
-            fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${apiKey}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.features && data.features.length > 0) {
-                        handlePlaceSelect(data.features[0], 'mapbox');
-                    }
-                })
-        }
-    };
-
-    const extractAddressComponents = (place: any, provider: 'google' | 'mapbox') => {
-        const components: any = {};
-
-        if (provider === 'google') {
-            if (place.address_components) {
-                let streetNumber = '';
-                let route = '';
-                let streetAddress = '';
-
-                place.address_components.forEach((component: any) => {
-                    const types = component.types;
-
-                    if (types.includes('street_number')) {
-                        streetNumber = component.long_name;
-                    } else if (types.includes('route')) {
-                        route = component.long_name;
-                    } else if (types.includes('locality')) {
-                        components.city = component.long_name;
-                    } else if (types.includes('administrative_area_level_1')) {
-                        components.state = component.short_name || component.long_name;
-                    } else if (types.includes('country')) {
-                        components.country = component.long_name;
-                    } else if (types.includes('postal_code')) {
-                        components.zip = component.long_name;
-                    }
-                });
-
-                // Build street address
-                if (streetNumber && route) {
-                    streetAddress = `${streetNumber} ${route}`;
-                } else if (route) {
-                    streetAddress = route;
-                } else if (streetNumber) {
-                    streetAddress = streetNumber;
-                }
-
-                components.address = streetAddress.trim();
-            }
-        } else {
-            // Mapbox address extraction
-            if (place.properties) {
-                components.address = place.properties.address || '';
-            }
-
-            if (place.context) {
-                place.context.forEach((component: any) => {
-                    const idParts = component.id.split('.');
-                    const type = idParts[0];
-
-                    if (type === 'postcode') {
-                        components.zip = component.text;
-                    } else if (type === 'place') {
-                        components.city = component.text;
-                    } else if (type === 'region') {
-                        components.state = component.text;
-                    } else if (type === 'country') {
-                        components.country = component.text;
-                    }
-                });
-            }
-        }
-
-        return components;
-    };
-
     const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
 
@@ -463,6 +307,14 @@ const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; o
             ...locationData
         };
 
+        if (mapProvider === 'mapbox_api_set') {
+            const foundState = stateOptions.find(
+                (item) => item.label === newAddressData.state || item.value === newAddressData.state
+            );
+            if (foundState) {
+                newAddressData.state = foundState.value;
+            }
+        }
         setAddressData(newAddressData);
 
         const updatedFormData = {
