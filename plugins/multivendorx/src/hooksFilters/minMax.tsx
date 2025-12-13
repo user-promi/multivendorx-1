@@ -33,42 +33,37 @@ const MinMax = ({ product, setProduct }) => {
     }, [product]);
 
     const handleQuantityChange = (key, value) => {
-        setMinMaxMeta((prev) => ({
-            ...prev,
+        const newValue = {
+            ...minMaxMeta,
             [key]: value,
-        }));
+        };
 
-        saveMinMaxMeta({ [key]: value });
-    };
+        setMinMaxMeta(newValue);
 
-    const saveMinMaxMeta = (data) => {
-        setProduct((prev) => {
-            const KEY = "multivendorx_min_max_meta";
+        const KEY = "multivendorx_min_max_meta";
+
+        setProduct(prev => {
+            if (!prev) return prev;
+
             const updatedMeta = [...(prev.meta_data || [])];
 
-            const index = updatedMeta.findIndex((m) => m.key === KEY);
-
-            const existingValue =
-                index !== -1
-                    ? { ...updatedMeta[index].value }
-                    : {
-                        min_quantity: null,
-                        max_quantity: null,
-                        min_amount: null,
-                        max_amount: null,
-                    };
-
-            const newValue = { ...existingValue };
-
-            Object.keys(data).forEach((key) => {
-                let val = data[key];
-                newValue[key] = parseInt(val);
-            });
+            const index = updatedMeta.findIndex(m => m.key === KEY);
 
             if (index !== -1) {
-                updatedMeta[index].value = newValue;
+                updatedMeta[index].value = {
+                    ...updatedMeta[index].value,
+                    ...newValue,
+                };
             } else {
-                updatedMeta.push({ key: KEY, value: newValue });
+                updatedMeta.push({
+                    key: KEY,
+                    value: {
+                        min_quantity: newValue.min_quantity || 0,
+                        max_quantity: newValue.max_quantity || 0,
+                        min_amount: newValue.min_amount || 0,
+                        max_amount: newValue.max_amount || 0,
+                    }
+                });
             }
 
             return {

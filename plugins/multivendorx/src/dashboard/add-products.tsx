@@ -432,7 +432,6 @@ const AddProduct = () => {
 						},
 					]
 				: selectedCats.map((id) => ({ id }));
-	console.log('product', product);
 
 		try {
 			const payload = {
@@ -448,8 +447,6 @@ const AddProduct = () => {
 					},
 				],
 			};
-
-	console.log('payload', payload);
 
 			axios
 				.put(
