@@ -108,17 +108,17 @@ export default {
 			options: [
 				{
 					key: 'openai/gpt-4o-mini',
-					label: 'OpenAI GPT-4o Mini (Fast + Cheap)',
+					label: 'OpenAI GPT-4o Mini — Performance: Quick Output • Price: Budget-Friendly',
 					value: 'openai/gpt-4o-mini',
 				},
 				{
 					key: 'openai/gpt-5-mini',
-					label: 'OpenAI GPT-5 Mini',
+					label: 'OpenAI GPT-5 Mini — Performance: Best-in-Class • Price: Premium',
 					value: 'openai/gpt-5-mini',
 				},
 				{
 					key: 'google/gemini-2.0-flash-exp:free',
-					label: 'Google Gemini 2.0 Flash (Fast + Cheap)',
+					label: 'Google Gemini 2.0 Flash — Performance: Lightning Speed • Price: Low-Cost',
 					value: 'google/gemini-2.0-flash-exp:free',
 				},
 			],
