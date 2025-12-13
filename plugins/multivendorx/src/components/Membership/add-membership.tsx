@@ -5,6 +5,7 @@ import MessageAndMail from './messageAndMail';
 import Plans from './plans';
 import Settings from './settings';
 import Subscribers from './subscribers';
+import Notifications from './notifications';
 
 
 const Memberships = () => {
@@ -45,6 +46,15 @@ const Memberships = () => {
 				icon: 'adminlib-credit-card',
 			},
 		},
+		{
+			type: 'file',
+			content: {
+				id: 'notifications',
+				name: 'Notifications',
+				desc: 'PayPal Payout makes it easy for you to pay multiple sellers at the sametime.',
+				icon: 'adminlib-credit-card',
+			},
+		},
 	];
 
 	const getForm = (tabId: string) => {
@@ -53,8 +63,10 @@ const Memberships = () => {
 				return <Settings />;
 			case 'payment-membership-design':
 				return <Subscribers />;
-				case 'payment-membership-plans':
+			case 'payment-membership-plans':
 				return <Plans />;
+			case 'notifications':
+				return <Notifications />;
 			default:
 				return <div></div>;
 		}
