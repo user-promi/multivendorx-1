@@ -15,13 +15,13 @@ export default {
 			key: 'store_selling_mode',
 			type: 'setting-toggle',
 			label: __('Store selling mode', 'multivendorx'),
-			desc: __('Choose how stores or franchise stores can sell products on the marketplace.', 'multivendorx'),
-			options: [
+			desc: __('Decide how stores are allowed to sell products in your marketplace:<ul><li><strong>Single product multiple vendors</strong> - Vendors can copy existing products and sell them alongside new products they create.</li><li><strong>Franchise</strong> - Franchise stores can sell only their own products and products created by the admin.</li><li><strong>Default</strong> - Stores can sell only their own products, following standard marketplace rules.</li></ul>','multivendorx'),
+options: [
 				{
 					key: 'single_product_multiple_vendor',
-					label: __('Single Product, Multiple Vendors', 'multivendorx'),
+					label: __('Shared product listing', 'multivendorx'),
 					value: 'single_product_multiple_vendor',
-					desc: __('Vendors can copy existing products and sell them alongside new products they create.', 'multivendorx'),
+					desc: __('Stores can copy existing products and sell them alongside new products they create.', 'multivendorx'),
 				},
 				{
 					key: 'franchise',
@@ -37,7 +37,6 @@ export default {
 				},
 			],
 		},
-
 		{
 			key: 'section',
 			type: 'section',
@@ -60,7 +59,7 @@ export default {
 				'multivendorx'
 			),
 			desc: __(
-				'Choose which version of Me too product will be shown as the main listing on the shop page (e.g., top-rated store, min / max priced product).',
+				'Choose which version of shared product will be shown as the main listing on the shop page (e.g., top-rated store, min / max priced product).',
 				'multivendorx'
 			),
 			moduleEnabled: 'spmv',
@@ -149,7 +148,7 @@ export default {
 			type: 'setting-toggle',
 			label: __('Store assignment method', 'multivendorx'),
 			desc: __(
-				'Choose how customer orders should be assigned to franchise stores.',
+				'Select whether franchise stores can sell only their own products or also include admin-created products.',
 				'multivendorx'
 			),
 			options: [
@@ -183,7 +182,7 @@ export default {
 			type: 'setting-toggle',
 			label: __('Location restriction', 'multivendorx'),
 			desc: __(
-				'Define how store service areas are used when assigning orders to the nearest store.',
+				'Choose which part of the customer’s address is matched with store locations when automatically assigning an order to the nearest store.',
 				'multivendorx'
 			),
 			dependent: {
@@ -216,7 +215,12 @@ export default {
 			desc: __(
 				'Specifies order creation and management rules for franchise stores.',
 				'multivendorx'
-			),
+			),			
+			dependent: {
+				key: 'store_selling_mode',
+				set: true,
+				value: 'franchise',
+			},
 		},
 		{
 			key: 'products_available_for_franchise_orders',
