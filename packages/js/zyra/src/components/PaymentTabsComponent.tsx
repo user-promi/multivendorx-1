@@ -115,7 +115,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
     return !proSetting && moduleEnabled;
   };
 
-  const handleCopy = (text:any) => {
+  const handleCopy = (text: any) => {
     navigator.clipboard.writeText(text).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
@@ -138,13 +138,6 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
 
     onChange(updated);
 
-    // onChange({
-    //   ...value,
-    //   [methodKey]: {
-    //     ...value[methodKey],
-    //     [fieldKey]: fieldValue,
-    //   },
-    // });
   };
 
   const toggleEnable = (methodId: string, enable: boolean, icon?: string) => {
@@ -176,10 +169,30 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
   }, []);
 
   const isProSetting = (val: boolean) => val;
-  const hasAccess = () => true;
-  const handlMultiSelectDeselectChange = (key: string, opts: any[]) => {
-    console.log("Multi select/deselect triggered:", key, opts);
+
+  const handleMultiSelectDeselect = (
+    methodId: string,
+    field: PaymentFormField
+  ) => {
+    const allValues = Array.isArray(field.options)
+      ? field.options.map((opt) => String(opt.value))
+      : [];
+
+    const current = value?.[methodId]?.[field.key] || [];
+
+    const currentArray = Array.isArray(current)
+      ? current
+      : typeof current === "string" && current.trim() !== ""
+        ? [current]
+        : [];
+
+    const isAllSelected = currentArray.length === allValues.length;
+
+    const result = isAllSelected ? [] : allValues;
+
+    handleInputChange(methodId, field.key, result);
   };
+
   const renderWizardButtons = () => {
     const step = methods[wizardIndex];
     const buttonField = step?.formFields?.find(f => f.type === "buttons");
@@ -192,18 +205,6 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
     const fieldValue = value[methodId]?.[field.key];
 
     switch (field.type) {
-      // case "payment-tabs":
-      //   return (
-      //     <PaymentTabsComponent
-      //       name={field.key}
-      //       methods={field.modal || []}
-      //       value={fieldValue || {}}
-      //       onChange={(val) => {
-      //         handleInputChange(methodId, field.key, val)
-      //       }
-      //       }
-      //     />
-      //   );
 
       case "setting-toggle":
         return (
@@ -265,7 +266,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                 className="admin-btn btn-purple"
                 onClick={(e) => {
                   if (field.button.url) {
-                     e.preventDefault();
+                    e.preventDefault();
                     window.open(field.button.url, '_blank');
                   }
                 }}
@@ -325,9 +326,6 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
               field.look === "toggle" ? "toggle-checkbox" : "default-checkbox"
             }
             inputClass={field.class}
-            tour={undefined}
-            hintOuterClass="settings-metabox-description"
-            hintInnerClass="hover-tooltip"
             idPrefix="toggle-switch"
             selectDeselect={field.selectDeselect}
             selectDeselectValue="Select / Deselect All"
@@ -340,19 +338,54 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                 }))
                 : []
             }
+
+            /* THIS IS THE FIX */
             value={normalizedValue}
+            onChange={(e: any) => {
+              // Case 1: MultiCheckBox gives an array of selected values (preferred)
+              if (Array.isArray(e)) {
+                handleInputChange(methodId, field.key, e);
+                return;
+              }
+
+              // Case 2: It's a native/react change event — extract value/checked and build array
+              if (e && e.target && typeof e.target.value !== 'undefined') {
+                const val = String(e.target.value);
+                const checked = !!e.target.checked;
+
+                // Current stored value for this field
+                let current = value?.[methodId]?.[field.key];
+
+                // Normalize to array
+                if (!Array.isArray(current)) {
+                  if (typeof current === 'string' && current.trim() !== '') {
+                    current = [current];
+                  } else {
+                    current = [];
+                  }
+                } else {
+                  // clone to avoid mutating props/state directly
+                  current = [...current];
+                }
+
+                if (checked) {
+                  if (!current.includes(val)) current.push(val);
+                } else {
+                  current = current.filter((v: string) => v !== val);
+                }
+
+                handleInputChange(methodId, field.key, current);
+                return;
+              }
+
+              // Fallback: pass simple values only
+              handleInputChange(methodId, field.key, e);
+            }}
             proSetting={isProSetting(field.proSetting ?? false)}
-            onMultiSelectDeselectChange={() =>
-              handlMultiSelectDeselectChange(
-                field.key,
-                Array.isArray(field.options)
-                  ? field.options.map((opt) => ({
-                    ...opt,
-                    value: String(opt.value),
-                  }))
-                  : []
-              )
-            }
+            onMultiSelectDeselectChange={(e:any) => {
+              console.log('trigger')
+              handleMultiSelectDeselect(methodId, field);
+            }}
             proChanged={() => setModelOpen(true)}
           />
         );
@@ -570,21 +603,22 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                       className={`adminlib-${isEnabled && isActive ? "keyboard-arrow-down" : "pagination-right-arrow"
                         }`}
                       onClick={() => {
-                          if (method.proSetting && !appLocalizer?.khali_dabba) {
-                            proChanged?.();
-                            return;
-                          } else if (
-                              method.moduleEnabled &&
-                              !modules.includes(
-                                  method.moduleEnabled
-                              )
-                          ) {
-                              moduleChange?.(method.moduleEnabled);
-                              return;
-                          } else {  
-                            toggleActiveTab(method.id)
-                          }}
+                        if (method.proSetting && !appLocalizer?.khali_dabba) {
+                          proChanged?.();
+                          return;
+                        } else if (
+                          method.moduleEnabled &&
+                          !modules.includes(
+                            method.moduleEnabled
+                          )
+                        ) {
+                          moduleChange?.(method.moduleEnabled);
+                          return;
+                        } else {
+                          toggleActiveTab(method.id)
                         }
+                      }
+                      }
                     />
                   )}
                 </div>
@@ -597,16 +631,17 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                       proChanged?.();
                       return;
                     } else if (
-                        method.moduleEnabled &&
-                        !modules.includes(
-                            method.moduleEnabled
-                        )
+                      method.moduleEnabled &&
+                      !modules.includes(
+                        method.moduleEnabled
+                      )
                     ) {
-                        moduleChange?.(method.moduleEnabled);
-                        return;
-                    } else {  
+                      moduleChange?.(method.moduleEnabled);
+                      return;
+                    } else {
                       toggleActiveTab(method.id)
-                    }}
+                    }
+                  }
                   }
                 >
                   <div className="details-wrapper">
@@ -647,22 +682,23 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                       {isEnabled ? (
                         <>
                           {method.formFields && method.formFields.length > 0 && (
-                            <li 
+                            <li
                               onClick={() => {
                                 if (method.proSetting && !appLocalizer?.khali_dabba) {
                                   proChanged?.();
                                   return;
                                 } else if (
-                                    method.moduleEnabled &&
-                                    !modules.includes(
-                                        method.moduleEnabled
-                                    )
+                                  method.moduleEnabled &&
+                                  !modules.includes(
+                                    method.moduleEnabled
+                                  )
                                 ) {
-                                    moduleChange?.(method.moduleEnabled);
-                                    return;
-                                } else {  
+                                  moduleChange?.(method.moduleEnabled);
+                                  return;
+                                } else {
                                   toggleActiveTab(method.id)
-                                }}
+                                }
+                              }
                               }>
                               <i className="settings-icon adminlib-setting"></i>
                               <span>Settings</span>
@@ -671,17 +707,17 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                           <li
                             onClick={() => {
                               if (method.proSetting && !appLocalizer?.khali_dabba) {
-                                  proChanged?.();
-                                  return;
+                                proChanged?.();
+                                return;
                               } else if (
-                                  method.moduleEnabled &&
-                                  !modules.includes(
-                                      method.moduleEnabled
-                                  )
+                                method.moduleEnabled &&
+                                !modules.includes(
+                                  method.moduleEnabled
+                                )
                               ) {
-                                  moduleChange?.(method.moduleEnabled);
-                                  return;
-                              } else {                              
+                                moduleChange?.(method.moduleEnabled);
+                                return;
+                              } else {
                                 toggleEnable(method.id, false, method.icon);
                               }
                             }}
@@ -693,21 +729,21 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                       ) : (
                         <li
                           onClick={() => {
-                              if (method.proSetting && !appLocalizer?.khali_dabba) {
-                                  proChanged?.();
-                                  return;
-                              } else if (
-                                  method.moduleEnabled &&
-                                  !modules.includes(
-                                      method.moduleEnabled
-                                  )
-                              ) {
-                                  moduleChange?.(method.moduleEnabled);
-                                  return;
-                              } else {                              
-                                toggleEnable(method.id, true, method.icon);
-                              }
-                            }}
+                            if (method.proSetting && !appLocalizer?.khali_dabba) {
+                              proChanged?.();
+                              return;
+                            } else if (
+                              method.moduleEnabled &&
+                              !modules.includes(
+                                method.moduleEnabled
+                              )
+                            ) {
+                              moduleChange?.(method.moduleEnabled);
+                              return;
+                            } else {
+                              toggleEnable(method.id, true, method.icon);
+                            }
+                          }}
                         >
                           <i className="eye-icon adminlib-eye"></i>
                           <span>Enable</span>

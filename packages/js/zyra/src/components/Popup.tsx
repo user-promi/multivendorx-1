@@ -54,7 +54,7 @@ const ProPopup: React.FC<PopupProps> = (props) => {
     console.log(props);
 
     return (
-        <DialogContent className={`${props.messages ? "pro-popup-content" : "module-popup-content"}`}>
+        <DialogContent className={`popup-container ${props.messages ? "pro-popup-content" : "module-popup-content"}`}>
             <DialogContentText sx={{ fontFamily: "Figtree, sans-serif" }}>
                 <div className="popup-wrapper">
                     {props.messages && (

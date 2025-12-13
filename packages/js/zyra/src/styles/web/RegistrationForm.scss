@@ -19,7 +19,7 @@
                 right: 0.313rem;
                 font-size: 1.063rem;
                 cursor: pointer;
-                color: rgb(5 5 226);
+                color: #0505e2;
             }
 
             &.disable {
@@ -50,7 +50,7 @@
             border: none;
 
             p {
-                color: $color-black;
+                color: $text-color;
             }
 
             i {
@@ -104,7 +104,7 @@
             left: 50%;
             transform: translateX(-50%);
             background-color:#f9f8fb;
-            color: $color-black;
+            color: $text-color;
             width: 3.125rem;
             height: 1.375rem;
             display: flex;
@@ -262,7 +262,7 @@
                 font-size: 1.313rem;
                 padding: 0.313rem;
                 background: #ece2f9f1;
-                color: #5007aa;
+                color: $theme-color;
                 border-radius: 0.313rem;
             }
         }

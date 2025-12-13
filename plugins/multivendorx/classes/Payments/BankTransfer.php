@@ -51,7 +51,7 @@ class BankTransfer {
             'desc'         => 'Transfer payouts directly to store’s bank accounts.',
             'formFields'   => array(
                 array(
-                    'key'            => 'bank_name',
+                    'key'            => 'bank_details',
                     'type'           => 'multi-checkbox',
                     'selectDeselect' => true,
 
@@ -60,44 +60,44 @@ class BankTransfer {
                         array(
                             'key'   => 'bank_name',
                             'label' => __( 'Bank name', 'multivendorx' ),
-                            'value' => 'bank_account_details',
-                            'edit'  => true,
-                        ),
-                        array(
-                            'key'   => 'routing_number',
-                            'label' => __( 'ABA routing number)', 'multivendorx' ),
-                            'value' => 'routing_number',
-                            'edit'  => true,
-                        ),
-                        array(
-                            'key'   => 'destination_currency',
-                            'label' => __( 'Destination currency', 'multivendorx' ),
-                            'value' => 'destination_currency',
-                            'edit'  => true,
-                        ),
-                        array(
-                            'key'   => 'bank_address',
-                            'label' => __( 'Bank address', 'multivendorx' ),
-                            'value' => 'bank_address',
-                            'edit'  => true,
-                        ),
-                        array(
-                            'key'   => 'IBAN',
-                            'label' => __( 'IBAN', 'multivendorx' ),
-                            'value' => 'IBAN',
-                            'edit'  => true,
+                            'value' => 'bank_name',
+                            // 'edit'  => true,
                         ),
                         array(
                             'key'   => 'account_holder_name',
                             'label' => __( 'Account holder Name', 'multivendorx' ),
                             'value' => 'account_holder_name',
-                            'edit'  => true,
+                            // 'edit'  => true,
                         ),
                         array(
                             'key'   => 'account_number',
                             'label' => __( 'Account number', 'multivendorx' ),
                             'value' => 'account_number',
-                            'edit'  => true,
+                            // 'edit'  => true,
+                        ),
+                        array(
+                            'key'   => 'routing_number',
+                            'label' => __( 'ABA routing number', 'multivendorx' ),
+                            'value' => 'routing_number',
+                            // 'edit'  => true,
+                        ),
+                        array(
+                            'key'   => 'destination_currency',
+                            'label' => __( 'Destination currency', 'multivendorx' ),
+                            'value' => 'destination_currency',
+                            // 'edit'  => true,
+                        ),
+                        array(
+                            'key'   => 'bank_address',
+                            'label' => __( 'Bank address', 'multivendorx' ),
+                            'value' => 'bank_address',
+                            // 'edit'  => true,
+                        ),
+                        array(
+                            'key'   => 'iban',
+                            'label' => __( 'IBAN', 'multivendorx' ),
+                            'value' => 'iban',
+                            // 'edit'  => true,
                         ),
                     ),
                 ),
@@ -147,12 +147,17 @@ class BankTransfer {
                         'label' => 'Bank name',
                     ),
                     array(
+                        'key'   => 'account_number',
+                        'type'  => 'text',
+                        'label' => 'Account number',
+                    ),
+                    array(
                         'key'   => 'bank_address',
                         'type'  => 'text-area',
                         'label' => 'Bank address',
                     ),
                     array(
-                        'key'   => 'abr_routing_number',
+                        'key'   => 'routing_number',
                         'type'  => 'text',
                         'label' => 'ABA routing number',
                     ),
@@ -162,7 +167,7 @@ class BankTransfer {
                         'label' => 'IBAN',
                     ),
                     array(
-                        'key'   => 'destination currency',
+                        'key'   => 'destination_currency',
                         'type'  => 'text',
                         'label' => 'Destination currency',
                     ),

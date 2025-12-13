@@ -2,977 +2,1228 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __, sprintf } from '@wordpress/i18n';
-import { Table, getApiLink, TableCell, CommonPopup, BasicInput, TextArea } from 'zyra';
 import {
-    ColumnDef,
-    RowSelectionState,
-    PaginationState,
+	Table,
+	getApiLink,
+	TableCell,
+	CommonPopup,
+	BasicInput,
+	TextArea,
+} from 'zyra';
+import {
+	ColumnDef,
+	RowSelectionState,
+	PaginationState,
 } from '@tanstack/react-table';
 import { formatCurrency } from '../../services/commonFunction';
 import ViewCommission from '../Commission/viewCommission';
 
 type StoreRow = {
-    id?: number;
-    store_name?: string;
-    store_slug?: string;
-    status?: string;
-    date?: string;
-    order_details?: string;
-    transaction_type?: string;
-    credit?: string;
-    debit?: string;
-    balance?: string;
-    payment_method?: string;
+	id?: number;
+	store_name?: string;
+	store_slug?: string;
+	status?: string;
+	date?: string;
+	order_details?: string;
+	transaction_type?: string;
+	credit?: string;
+	debit?: string;
+	balance?: string;
+	payment_method?: string;
 };
 
 interface WalletTransactionProps {
-    storeId: number | null;
-    dateRange: { startDate: Date | null; endDate: Date | null };
+	storeId: number | null;
+	dateRange: { startDate: Date | null; endDate: Date | null };
 }
 
 export interface RealtimeFilter {
-    name: string;
-    render: (updateFilter: (key: string, value: any) => void, filterValue: any) => ReactNode;
+	name: string;
+	render: (
+		updateFilter: (key: string, value: any) => void,
+		filterValue: any
+	) => ReactNode;
 }
 
 type TransactionStatus = {
-    key: string;
-    name: string;
-    count: number;
+	key: string;
+	name: string;
+	count: number;
 };
 
 type FilterData = {
-    searchAction?: string;
-    searchField?: string;
-    typeCount?: any;
-    store?: string;
-    order?: any;
-    orderBy?: any;
-    date?: {
-        start_date: Date;
-        end_date: Date;
-    };
-    transactionType?: string;
-    transactionStatus?: string;
+	searchAction?: string;
+	searchField?: string;
+	typeCount?: any;
+	store?: string;
+	order?: any;
+	orderBy?: any;
+	date?: {
+		start_date: Date;
+		end_date: Date;
+	};
+	transactionType?: string;
+	transactionStatus?: string;
 };
 
 // CSV Download Button Component for Transactions (Bulk Action)
 const DownloadTransactionCSVButton: React.FC<{
-    selectedRows: RowSelectionState;
-    data: StoreRow[] | null;
-    filterData: FilterData;
-    storeId: number | null;
-    isLoading?: boolean;
+	selectedRows: RowSelectionState;
+	data: StoreRow[] | null;
+	filterData: FilterData;
+	storeId: number | null;
+	isLoading?: boolean;
 }> = ({ selectedRows, data, filterData, storeId, isLoading = false }) => {
-    const [isDownloading, setIsDownloading] = useState(false);
+	const [isDownloading, setIsDownloading] = useState(false);
 
-    const handleDownload = async () => {
-        if (!storeId) {
-            alert(__('Please select a store first.', 'multivendorx'));
-            return;
-        }
+	const handleDownload = async () => {
+		if (!storeId) {
+			alert(__('Please select a store first.', 'multivendorx'));
+			return;
+		}
 
-        setIsDownloading(true);
-        try {
-            // Get selected row IDs
-            const selectedIds = Object.keys(selectedRows)
-                .filter(key => selectedRows[key])
-                .map(key => {
-                    const rowIndex = parseInt(key);
-                    return data?.[rowIndex]?.id;
-                })
-                .filter(id => id !== undefined);
+		setIsDownloading(true);
+		try {
+			// Get selected row IDs
+			const selectedIds = Object.keys(selectedRows)
+				.filter((key) => selectedRows[key])
+				.map((key) => {
+					const rowIndex = parseInt(key);
+					return data?.[rowIndex]?.id;
+				})
+				.filter((id) => id !== undefined);
 
-            // Prepare parameters for CSV download
-            const params: any = {
-                format: 'csv',
-                store_id: storeId,
-            };
+			// Prepare parameters for CSV download
+			const params: any = {
+				format: 'csv',
+				store_id: storeId,
+			};
 
-            // Add date filters if present
-            if (filterData?.date?.start_date) {
-                params.start_date = filterData.date.start_date.toISOString().split('T')[0];
-            }
-            if (filterData?.date?.end_date) {
-                params.end_date = filterData.date.end_date.toISOString().split('T')[0];
-            }
+			// Add date filters if present
+			if (filterData?.date?.start_date) {
+				params.start_date = filterData.date.start_date
+					.toISOString()
+					.split('T')[0];
+			}
+			if (filterData?.date?.end_date) {
+				params.end_date = filterData.date.end_date
+					.toISOString()
+					.split('T')[0];
+			}
 
-            // Add transaction type filter
-            if (filterData?.transactionType) {
-                params.transaction_type = filterData.transactionType;
-            }
+			// Add transaction type filter
+			if (filterData?.transactionType) {
+				params.transaction_type = filterData.transactionType;
+			}
 
-            // Add transaction status filter
-            if (filterData?.transactionStatus) {
-                params.transaction_status = filterData.transactionStatus;
-            }
+			// Add transaction status filter
+			if (filterData?.transactionStatus) {
+				params.transaction_status = filterData.transactionStatus;
+			}
 
-            // Add status filter (Cr/Dr)
-            if (filterData?.typeCount && filterData.typeCount !== 'all') {
-                params.filter_status = filterData.typeCount;
-            }
+			// Add status filter (Cr/Dr)
+			if (filterData?.typeCount && filterData.typeCount !== 'all') {
+				params.filter_status = filterData.typeCount;
+			}
 
-            // If specific rows are selected, send their IDs
-            if (selectedIds.length > 0) {
-                params.ids = selectedIds.join(',');
-            } else {
-                // If no rows selected, export current page data
-                params.page = 1; // You might want to get current page from props
-                params.row = 10; // You might want to get current page size from props
-            }
+			// If specific rows are selected, send their IDs
+			if (selectedIds.length > 0) {
+				params.ids = selectedIds.join(',');
+			} else {
+				// If no rows selected, export current page data
+				params.page = 1; // You might want to get current page from props
+				params.row = 10; // You might want to get current page size from props
+			}
 
-            // Make API request for CSV
-            const response = await axios({
-                method: 'GET',
-                url: getApiLink(appLocalizer, 'transaction'),
-                headers: {
-                    'X-WP-Nonce': appLocalizer.nonce,
-                    'Accept': 'text/csv'
-                },
-                params: params,
-                responseType: 'blob'
-            });
+			// Make API request for CSV
+			const response = await axios({
+				method: 'GET',
+				url: getApiLink(appLocalizer, 'transaction'),
+				headers: {
+					'X-WP-Nonce': appLocalizer.nonce,
+					Accept: 'text/csv',
+				},
+				params: params,
+				responseType: 'blob',
+			});
 
-            // Create download link
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
+			// Create download link
+			const url = window.URL.createObjectURL(new Blob([response.data]));
+			const link = document.createElement('a');
+			link.href = url;
 
-            // Generate filename with timestamp and store ID
-            const timestamp = new Date().toISOString().split('T')[0];
-            const context = selectedIds.length > 0 ? 'selected' : 'page';
-            const filename = `transactions_${context}_store_${storeId}_${timestamp}.csv`;
-            link.setAttribute('download', filename);
+			// Generate filename with timestamp and store ID
+			const timestamp = new Date().toISOString().split('T')[0];
+			const context = selectedIds.length > 0 ? 'selected' : 'page';
+			const filename = `transactions_${context}_store_${storeId}_${timestamp}.csv`;
+			link.setAttribute('download', filename);
 
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-            window.URL.revokeObjectURL(url);
+			document.body.appendChild(link);
+			link.click();
+			link.remove();
+			window.URL.revokeObjectURL(url);
+		} catch (error) {
+			console.error('Error downloading CSV:', error);
+			alert(
+				__('Failed to download CSV. Please try again.', 'multivendorx')
+			);
+		} finally {
+			setIsDownloading(false);
+		}
+	};
 
-        } catch (error) {
-            console.error('Error downloading CSV:', error);
-            alert(__('Failed to download CSV. Please try again.', 'multivendorx'));
-        } finally {
-            setIsDownloading(false);
-        }
-    };
+	const hasSelectedRows = Object.keys(selectedRows).some(
+		(key) => selectedRows[key]
+	);
 
-    const hasSelectedRows = Object.keys(selectedRows).some(key => selectedRows[key]);
-
-    return (
-        <button
-            onClick={handleDownload}
-            disabled={isDownloading || isLoading || !storeId || (!hasSelectedRows && !data)}
-            className="button button-secondary"
-        >
-            Download CSV
-        </button>
-    );
+	return (
+		<button
+			onClick={handleDownload}
+			disabled={
+				isDownloading ||
+				isLoading ||
+				!storeId ||
+				(!hasSelectedRows && !data)
+			}
+			className="button button-secondary"
+		>
+			Download CSV
+		</button>
+	);
 };
 
 // Export All CSV Button Component for Transactions - Downloads ALL filtered data
 const ExportAllTransactionCSVButton: React.FC<{
-    filterData: FilterData;
-    storeId: number | null;
+	filterData: FilterData;
+	storeId: number | null;
 }> = ({ filterData, storeId }) => {
-    const [isDownloading, setIsDownloading] = useState(false);
+	const [isDownloading, setIsDownloading] = useState(false);
 
-    const handleExportAll = async () => {
-        if (!storeId) {
-            alert(__('Please select a store first.', 'multivendorx'));
-            return;
-        }
+	const handleExportAll = async () => {
+		if (!storeId) {
+			alert(__('Please select a store first.', 'multivendorx'));
+			return;
+		}
 
-        setIsDownloading(true);
-        try {
-            // Prepare parameters for CSV download - NO pagination params
-            const params: any = {
-                format: 'csv',
-                store_id: storeId,
-            };
+		setIsDownloading(true);
+		try {
+			// Prepare parameters for CSV download - NO pagination params
+			const params: any = {
+				format: 'csv',
+				store_id: storeId,
+			};
 
-            // Add date filters if present
-            if (filterData?.date?.start_date) {
-                params.start_date = filterData.date.start_date.toISOString().split('T')[0];
-            }
-            if (filterData?.date?.end_date) {
-                params.end_date = filterData.date.end_date.toISOString().split('T')[0];
-            }
+			// Add date filters if present
+			if (filterData?.date?.start_date) {
+				params.start_date = filterData.date.start_date
+					.toISOString()
+					.split('T')[0];
+			}
+			if (filterData?.date?.end_date) {
+				params.end_date = filterData.date.end_date
+					.toISOString()
+					.split('T')[0];
+			}
 
-            // Add transaction type filter
-            if (filterData?.transactionType) {
-                params.transaction_type = filterData.transactionType;
-            }
+			// Add transaction type filter
+			if (filterData?.transactionType) {
+				params.transaction_type = filterData.transactionType;
+			}
 
-            // Add transaction status filter
-            if (filterData?.transactionStatus) {
-                params.transaction_status = filterData.transactionStatus;
-            }
+			// Add transaction status filter
+			if (filterData?.transactionStatus) {
+				params.transaction_status = filterData.transactionStatus;
+			}
 
-            // Add status filter (Cr/Dr)
-            if (filterData?.typeCount && filterData.typeCount !== 'all') {
-                params.filter_status = filterData.typeCount;
-            }
+			// Add status filter (Cr/Dr)
+			if (filterData?.typeCount && filterData.typeCount !== 'all') {
+				params.filter_status = filterData.typeCount;
+			}
 
-            // Make API request for CSV
-            const response = await axios({
-                method: 'GET',
-                url: getApiLink(appLocalizer, 'transaction'),
-                headers: {
-                    'X-WP-Nonce': appLocalizer.nonce,
-                    'Accept': 'text/csv'
-                },
-                params: params,
-                responseType: 'blob'
-            });
+			// Make API request for CSV
+			const response = await axios({
+				method: 'GET',
+				url: getApiLink(appLocalizer, 'transaction'),
+				headers: {
+					'X-WP-Nonce': appLocalizer.nonce,
+					Accept: 'text/csv',
+				},
+				params: params,
+				responseType: 'blob',
+			});
 
-            // Create download link
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
+			// Create download link
+			const url = window.URL.createObjectURL(new Blob([response.data]));
+			const link = document.createElement('a');
+			link.href = url;
 
-            // Generate filename with timestamp and store ID
-            const timestamp = new Date().toISOString().split('T')[0];
-            const filename = `transactions_all_store_${storeId}_${timestamp}.csv`;
-            link.setAttribute('download', filename);
+			// Generate filename with timestamp and store ID
+			const timestamp = new Date().toISOString().split('T')[0];
+			const filename = `transactions_all_store_${storeId}_${timestamp}.csv`;
+			link.setAttribute('download', filename);
 
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-            window.URL.revokeObjectURL(url);
+			document.body.appendChild(link);
+			link.click();
+			link.remove();
+			window.URL.revokeObjectURL(url);
+		} catch (error) {
+			console.error('Error downloading CSV:', error);
+			alert(
+				__('Failed to download CSV. Please try again.', 'multivendorx')
+			);
+		} finally {
+			setIsDownloading(false);
+		}
+	};
 
-        } catch (error) {
-            console.error('Error downloading CSV:', error);
-            alert(__('Failed to download CSV. Please try again.', 'multivendorx'));
-        } finally {
-            setIsDownloading(false);
-        }
-    };
-
-    return (
-        <button
-            onClick={handleExportAll}
-            disabled={isDownloading || !storeId}
-            className="admin-btn btn-purple-bg"
-        >
-            <span className="adminlib-import"></span>
-            Export All CSV
-        </button>
-    );
+	return (
+		<button
+			onClick={handleExportAll}
+			disabled={isDownloading || !storeId}
+			className="admin-btn btn-purple-bg"
+		>
+			<span className="adminlib-import"></span>
+			Export All CSV
+		</button>
+	);
 };
 
 // Bulk Actions Component for Transactions
 const TransactionBulkActions: React.FC<{
-    selectedRows: RowSelectionState;
-    data: StoreRow[] | null;
-    filterData: FilterData;
-    storeId: number | null;
-    onActionComplete?: () => void;
+	selectedRows: RowSelectionState;
+	data: StoreRow[] | null;
+	filterData: FilterData;
+	storeId: number | null;
+	onActionComplete?: () => void;
 }> = ({ selectedRows, data, filterData, storeId, onActionComplete }) => {
-    return (
-        <div>
-            <DownloadTransactionCSVButton
-                selectedRows={selectedRows}
-                data={data}
-                filterData={filterData}
-                storeId={storeId}
-            />
-            {/* Add other bulk actions here if needed */}
-        </div>
-    );
+	return (
+		<div>
+			<DownloadTransactionCSVButton
+				selectedRows={selectedRows}
+				data={data}
+				filterData={filterData}
+				storeId={storeId}
+			/>
+			{/* Add other bulk actions here if needed */}
+		</div>
+	);
 };
 
+const WalletTransaction: React.FC<WalletTransactionProps> = ({
+	storeId,
+	dateRange,
+}) => {
+	const [data, setData] = useState<StoreRow[] | null>(null);
+	const [wallet, setWallet] = useState<any[]>([]);
+	const [recentDebits, setRecentDebits] = useState<any[]>([]);
+	const [storeData, setStoreData] = useState<any>(null);
+	const [requestWithdrawal, setRequestWithdrawal] = useState(false);
+	const [validationErrors, setValidationErrors] = useState<{
+		amount?: string;
+		paymentMethod?: string;
+	}>({});
+	const [amount, setAmount] = useState<number>(0);
+	const [note, setNote] = useState<any | ''>('');
+	const [paymentMethod, setPaymentMethod] = useState<any | ''>('');
 
+	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+	const [totalRows, setTotalRows] = useState<number>(0);
+	const [pagination, setPagination] = useState<PaginationState>({
+		pageIndex: 0,
+		pageSize: 10,
+	});
+	const [pageCount, setPageCount] = useState(0);
+	const [selectedStore, setSelectedStore] = useState<any>(null);
+	const [transactionStatus, setTransactionStatus] = useState<
+		TransactionStatus[] | null
+	>(null);
+	const [currentFilterData, setCurrentFilterData] = useState<FilterData>({});
+	const [viewCommission, setViewCommission] = useState(false);
+	const [selectedCommissionId, setSelectedCommissionId] = useState<
+		number | null
+	>(null);
 
-const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId, dateRange }) => {
-    const [data, setData] = useState<StoreRow[] | null>(null);
-    const [wallet, setWallet] = useState<any[]>([]);
-    const [recentDebits, setRecentDebits] = useState<any[]>([]);
-    const [storeData, setStoreData] = useState<any>(null);
-    const [requestWithdrawal, setRequestWithdrawal] = useState(false);
-    const [validationErrors, setValidationErrors] = useState<{ amount?: string; paymentMethod?: string }>({});
-    const [amount, setAmount] = useState<number>(0);
-    const [note, setNote] = useState<any | "">("");
-    const [paymentMethod, setPaymentMethod] = useState<any | "">("");
+	// Add search filter with export button
+	const actionButton: RealtimeFilter[] = [
+		{
+			name: 'actionButton',
+			render: () => (
+				<>
+					<ExportAllTransactionCSVButton
+						filterData={currentFilterData}
+						storeId={storeId}
+					/>
+				</>
+			),
+		},
+	];
+	// 🔹 Helper: get effective date range
+	const getEffectiveDateRange = () => {
+		if (dateRange.startDate && dateRange.endDate) {
+			return dateRange;
+		}
+		const now = new Date();
+		const start = new Date(now.getFullYear(), now.getMonth(), 1); // first day of current month
+		const end = new Date(
+			now.getFullYear(),
+			now.getMonth() + 1,
+			0,
+			23,
+			59,
+			59
+		); // last day of current month
+		return { startDate: start, endDate: end };
+	};
 
-    const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-    const [totalRows, setTotalRows] = useState<number>(0);
-    const [pagination, setPagination] = useState<PaginationState>({
-        pageIndex: 0,
-        pageSize: 10,
-    });
-    const [pageCount, setPageCount] = useState(0);
-    const [selectedStore, setSelectedStore] = useState<any>(null);
-    const [transactionStatus, setTransactionStatus] = useState<TransactionStatus[] | null>(null);
-    const [currentFilterData, setCurrentFilterData] = useState<FilterData>({});
-    const [viewCommission, setViewCommission] = useState(false);
-    const [selectedCommissionId, setSelectedCommissionId] = useState<number | null>(null);
+	// 🔹 Fetch total rows on mount or date change
+	useEffect(() => {
+		if (!storeId) {
+			return;
+		}
 
-    // Add search filter with export button
-    const actionButton: RealtimeFilter[] = [
-        {
-            name: 'actionButton',
-            render: () => (
-                <>
-                    <ExportAllTransactionCSVButton
-                        filterData={currentFilterData}
-                        storeId={storeId}
-                    />
-                </>
-            ),
-        },
-    ];
-    // 🔹 Helper: get effective date range
-    const getEffectiveDateRange = () => {
-        if (dateRange.startDate && dateRange.endDate) return dateRange;
-        const now = new Date();
-        const start = new Date(now.getFullYear(), now.getMonth(), 1); // first day of current month
-        const end = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59); // last day of current month
-        return { startDate: start, endDate: end };
-    };
+		const { startDate, endDate } = getEffectiveDateRange();
 
-    // 🔹 Fetch total rows on mount or date change
-    useEffect(() => {
-        if (!storeId) return;
+		axios({
+			method: 'GET',
+			url: getApiLink(appLocalizer, 'transaction'),
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			params: {
+				count: true,
+				store_id: storeId,
+				start_date: startDate.toISOString().split('T')[0],
+				end_date: endDate.toISOString().split('T')[0],
+			},
+		})
+			.then((response) => {
+				setTotalRows(response.data || 0);
+				setPageCount(
+					Math.ceil((response.data || 0) / pagination.pageSize)
+				);
+			})
+			.catch(() => setData([]));
+	}, [storeId, dateRange, pagination.pageSize]);
 
-        const { startDate, endDate } = getEffectiveDateRange();
+	// 🔹 Fetch data from backend
+	function requestData(
+		rowsPerPage = 10,
+		currentPage = 1,
+		typeCount = '',
+		transactionType = '',
+		transactionStatus = '',
+		orderBy = '',
+		order = ''
+	) {
+		if (!storeId) {
+			return;
+		}
 
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'transaction'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: {
-                count: true,
-                store_id: storeId,
-                start_date: startDate.toISOString().split('T')[0],
-                end_date: endDate.toISOString().split('T')[0],
-            },
-        })
-            .then((response) => {
-                setTotalRows(response.data || 0);
-                setPageCount(Math.ceil((response.data || 0) / pagination.pageSize));
-            })
-            .catch(() => setData([]));
-    }, [storeId, dateRange, pagination.pageSize]);
+		setData(null);
 
-    // 🔹 Fetch data from backend
-    function requestData(
-        rowsPerPage = 10,
-        currentPage = 1,
-        typeCount = '',
-        transactionType = '',
-        transactionStatus = '',
-        orderBy = '',
-        order = '',
-    ) {
-        if (!storeId) return;
+		const { startDate, endDate } = getEffectiveDateRange();
 
-        setData(null);
+		axios({
+			method: 'GET',
+			url: getApiLink(appLocalizer, 'transaction'),
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			params: {
+				page: currentPage,
+				row: rowsPerPage,
+				store_id: storeId,
+				start_date: startDate.toISOString().split('T')[0],
+				end_date: endDate.toISOString().split('T')[0],
+				status: typeCount == 'all' ? '' : typeCount,
+				transaction_status: transactionStatus,
+				transaction_type: transactionType,
+				orderBy,
+				order,
+			},
+		})
+			.then((response) => {
+				setData(response.data.transaction || []);
 
-        const { startDate, endDate } = getEffectiveDateRange();
+				const statuses = [
+					{ key: 'all', name: 'All', count: response.data.all || 0 },
+					{
+						key: 'Completed',
+						name: 'Completed',
+						count: response.data.completed || 0,
+					},
+					{
+						key: 'Processed',
+						name: 'Processed',
+						count: response.data.processed || 0,
+					},
+					{
+						key: 'Upcoming',
+						name: 'Upcoming',
+						count: response.data.upcoming || 0,
+					},
+					{
+						key: 'Failed',
+						name: 'Failed',
+						count: response.data.failed || 0,
+					},
+				];
 
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'transaction'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: {
-                page: currentPage,
-                row: rowsPerPage,
-                store_id: storeId,
-                start_date: startDate.toISOString().split('T')[0],
-                end_date: endDate.toISOString().split('T')[0],
-                filter_status: typeCount == 'all' ? '' : typeCount,
-                transaction_status: transactionStatus,
-                transaction_type: transactionType,
-                orderBy,
-                order,
-            },
-        }).then((response) => {
-            setData(response.data.transaction || []);
+				// keep only items whose count is NOT zero
+				const filteredStatuses = statuses.filter(
+					(item) => item.count !== 0
+				);
 
-            const statuses = [
-                { key: 'all', name: 'All', count: response.data.all || 0 },
-                { key: 'completed', name: 'Completed', count: response.data.completed || 0 },
-                { key: 'processed', name: 'Processed', count: response.data.processed || 0 },
-                { key: 'upcoming', name: 'Upcoming', count: response.data.upcoming || 0 },
-                { key: 'failed', name: 'Failed', count: response.data.failed || 0 },
-            ];
+				setTransactionStatus(filteredStatuses);
+			})
+			.catch(() => setData([]));
+	}
 
-            // keep only items whose count is NOT zero
-            const filteredStatuses = statuses.filter(item => item.count !== 0);
+	// 🔹 Handle pagination & date changes
+	useEffect(() => {
+		const currentPage = pagination.pageIndex + 1;
+		requestData(pagination.pageSize, currentPage);
+		setPageCount(Math.ceil(totalRows / pagination.pageSize));
+	}, [storeId]);
 
-            setTransactionStatus(filteredStatuses);
-        })
-            .catch(() => setData([]));
-    }
+	const requestApiForData = (
+		rowsPerPage: number,
+		currentPage: number,
+		filterData: FilterData
+	) => {
+		setCurrentFilterData(filterData);
+		requestData(
+			rowsPerPage,
+			currentPage,
+			filterData?.typeCount,
+			filterData?.transactionType,
+			filterData?.transactionStatus,
+			filterData?.orderBy,
+			filterData?.order
+		);
+	};
 
-    // 🔹 Handle pagination & date changes
-    useEffect(() => {
-        const currentPage = pagination.pageIndex + 1;
-        requestData(pagination.pageSize, currentPage);
-        setPageCount(Math.ceil(totalRows / pagination.pageSize));
-    }, [storeId]);
+	// 🔹 Column definitions with Status sorting
+	const columns: ColumnDef<StoreRow>[] = [
+		{
+			id: 'select',
+			header: ({ table }) => (
+				<input
+					type="checkbox"
+					checked={table.getIsAllRowsSelected()}
+					onChange={table.getToggleAllRowsSelectedHandler()}
+				/>
+			),
+			cell: ({ row }) => (
+				<input
+					type="checkbox"
+					checked={row.getIsSelected()}
+					onChange={row.getToggleSelectedHandler()}
+				/>
+			),
+		},
+		{
+			header: __('ID', 'multivendorx'),
+			cell: ({ row }) => <TableCell>#{row.original.id}</TableCell>,
+		},
+		{
+			id: 'status',
+			header: __('Status', 'multivendorx'),
+			cell: ({ row }) => {
+				return <TableCell type="status" status={row.original.status} />;
+			},
+		},
+		{
+			header: __('Transaction Type', 'multivendorx'),
+			cell: ({ row }) => {
+				const type = row.original.transaction_type?.toLowerCase();
+				const commissionId = row.original.commission_id;
+				const paymentMethod = row.original.payment_method;
+				const orderId = row.original.order_details;
+				const formatText = (text: any) =>
+					text
+						?.replace(/-/g, ' ')
+						?.replace(/\b\w/g, (c: any) => c.toUpperCase()) || '-';
 
-    const requestApiForData = (rowsPerPage: number, currentPage: number, filterData: FilterData) => {
-        setCurrentFilterData(filterData);
-        requestData(
-            rowsPerPage,
-            currentPage,
-            filterData?.typeCount,
-            filterData?.transactionType,
-            filterData?.transactionStatus,
-            filterData?.orderBy,
-            filterData?.order,
-        );
-    };
+				let displayValue = '-';
+				let content: any = displayValue;
 
-    // 🔹 Column definitions with Status sorting
-    const columns: ColumnDef<StoreRow>[] = [
-        {
-            id: 'select',
-            header: ({ table }) => (
-                <input
-                    type="checkbox"
-                    checked={table.getIsAllRowsSelected()}
-                    onChange={table.getToggleAllRowsSelectedHandler()}
-                />
-            ),
-            cell: ({ row }) => (
-                <input
-                    type="checkbox"
-                    checked={row.getIsSelected()}
-                    onChange={row.getToggleSelectedHandler()}
-                />
-            ),
-        },
-        {
-            header: __("ID", "multivendorx"),
-            cell: ({ row }) => <TableCell>#{row.original.id}</TableCell>,
-        },
-        {
-            id: 'status',
-            header: __('Status', 'multivendorx'),
-            cell: ({ row }) => {
-                return (
-                    <TableCell
-                        type="status"
-                        status={row.original.status}
-                    />
-                );
-            },
-        },
-        {
-            header: __('Transaction Type', 'multivendorx'),
-            cell: ({ row }) => {
-                const type = row.original.transaction_type?.toLowerCase();
-                const commissionId = row.original.commission_id;
-                const paymentMethod = row.original.payment_method;
-                const orderId = row.original.order_details;
-                const formatText = (text: any) =>
-                    text
-                        ?.replace(/-/g, ' ')
-                        ?.replace(/\b\w/g, (c: any) => c.toUpperCase())
-                    || '-';
+				// Commission Transaction (clickable)
+				if (type === 'commission') {
+					displayValue = `Commission #${commissionId || '-'}`;
+					content = commissionId ? (
+						<span
+							className="link-item"
+							onClick={() => {
+								setSelectedCommissionId(commissionId);
+								setViewCommission(true);
+							}}
+						>
+							{displayValue}
+						</span>
+					) : (
+						displayValue
+					);
+				}
 
-                let displayValue = '-';
-                let content: any = displayValue;
+				// Withdrawal
+				else if (type === 'withdrawal') {
+					const formattedMethod = formatText(paymentMethod);
+					const accNo = row.original.account_number;
 
-                // Commission Transaction (clickable)
-                if (type === 'commission') {
-                    displayValue = `Commission #${commissionId || '-'}`;
-                    content = commissionId ? (
-                        <span
-                            className="link-item"
-                            onClick={() => {
-                                setSelectedCommissionId(commissionId);
-                                setViewCommission(true);
-                            }}
-                        >
-                            {displayValue}
-                        </span>
-                    ) : displayValue;
-                }
+					let maskedAccount = '';
+					if (paymentMethod === 'bank-transfer' && accNo) {
+						const last2 = accNo.slice(-2);
+						maskedAccount = ` (A/C...${last2})`;
+					}
 
-                // Withdrawal
-                else if (type === 'withdrawal') {
-                    const formattedMethod = formatText(paymentMethod);
-                    const accNo = row.original.account_number;
+					displayValue = `Withdrawal via ${formattedMethod}${maskedAccount}`;
+					content = displayValue;
+				} else if (type === 'refund') {
+					displayValue = `Refund for Order #${orderId || '-'}`;
 
-                    let maskedAccount = "";
-                    if (paymentMethod === "bank-transfer" && accNo) {
-                        const last2 = accNo.slice(-2);
-                        maskedAccount = ` (A/C...${last2})`;
-                    }
+					const orderEditUrl = `${appLocalizer.site_url}/wp-admin/admin.php?page=wc-orders&action=edit&id=${orderId}`;
+					content = orderId ? (
+						<a
+							href={orderEditUrl}
+							target="_blank"
+							rel="noopener noreferrer"
+							className="link-item"
+						>
+							{displayValue}
+						</a>
+					) : (
+						displayValue
+					);
+				} else if (row.original.transaction_type) {
+					displayValue = formatText(row.original.transaction_type);
+					content = displayValue;
+				}
 
-                    displayValue = `Withdrawal via ${formattedMethod}${maskedAccount}`;
-                    content = displayValue;
-                }
-                else if (type === 'refund') {
-                    displayValue = `Refund for Order #${orderId || '-'}`;
+				return <TableCell title={displayValue}>{content}</TableCell>;
+			},
+		},
+		{
+			header: __('Date', 'multivendorx'),
+			cell: ({ row }) => {
+				const rawDate = row.original.date;
+				let formattedDate = '-';
+				if (rawDate) {
+					const dateObj = new Date(rawDate);
+					formattedDate = new Intl.DateTimeFormat('en-US', {
+						month: 'short',
+						day: 'numeric',
+						year: 'numeric',
+					}).format(dateObj);
+				}
+				return (
+					<TableCell title={formattedDate}>{formattedDate}</TableCell>
+				);
+			},
+		},
+		{
+			header: __('Credit', 'multivendorx'),
+			cell: ({ row }) => {
+				const credit = row.original.credit;
+				return (
+					<TableCell>
+						{credit ? formatCurrency(credit) : '-'}
+					</TableCell>
+				);
+			},
+		},
+		{
+			header: __('Debit', 'multivendorx'),
+			cell: ({ row }) => {
+				const debit = row.original.debit;
+				return (
+					<TableCell>{debit ? formatCurrency(debit) : '-'}</TableCell>
+				);
+			},
+		},
+		{
+			header: __('Balance', 'multivendorx'),
+			cell: ({ row }) => {
+				const balance = row.original.balance;
+				return (
+					<TableCell>
+						{balance ? formatCurrency(balance) : '-'}
+					</TableCell>
+				);
+			},
+		},
+	];
 
-                    const orderEditUrl = `${appLocalizer.site_url}/wp-admin/admin.php?page=wc-orders&action=edit&id=${orderId}`;
-                    content = orderId ? (
-                        <a
-                            href={orderEditUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="link-item"
-                        >
-                            {displayValue}
-                        </a>
-                    ) : (
-                        displayValue
-                    );
-                }
+	const realtimeFilter: RealtimeFilter[] = [
+		{
+			name: 'transactionType',
+			render: (
+				updateFilter: (key: string, value: string) => void,
+				filterValue: string | undefined
+			) => (
+				<div className="group-field">
+					<select
+						name="transactionType"
+						onChange={(e) =>
+							updateFilter(e.target.name, e.target.value)
+						}
+						value={filterValue || ''}
+						className="basic-select"
+					>
+						<option value="">
+							{__('Transaction Type', 'multivendorx')}
+						</option>
+						<option value="Commission">
+							{__('Commission', 'multivendorx')}
+						</option>
+						<option value="Withdrawal">
+							{__('Withdrawal', 'multivendorx')}
+						</option>
+						<option value="Refund">
+							{__('Refund', 'multivendorx')}
+						</option>
+						<option value="Reversed">
+							{__('Reversed', 'multivendorx')}
+						</option>
+						<option value="COD received">
+							{__('COD received', 'multivendorx')}
+						</option>
+					</select>
+				</div>
+			),
+		},
+		{
+			name: 'transactionStatus',
+			render: (
+				updateFilter: (key: string, value: string) => void,
+				filterValue: string | undefined
+			) => (
+				<div className="group-field">
+					<select
+						name="transactionStatus"
+						onChange={(e) =>
+							updateFilter(e.target.name, e.target.value)
+						}
+						value={filterValue || ''}
+						className="basic-select"
+					>
+						<option value="">
+							{__('Financial Transactions', 'multivendorx')}
+						</option>
+						<option value="Cr">
+							{__('Credit', 'multivendorx')}
+						</option>
+						<option value="Dr">
+							{__('Debit', 'multivendorx')}
+						</option>
+					</select>
+				</div>
+			),
+		},
+	];
 
-                else if (row.original.transaction_type) {
-                    displayValue = formatText(row.original.transaction_type);
-                    content = displayValue;
-                }
+	// 🔹 Fetch wallet/transaction overview whenever store changes
+	useEffect(() => {
+		if (!storeId) {
+			return;
+		}
 
-                return <TableCell title={displayValue}>{content}</TableCell>;
-            },
-        },
-        {
-            header: __('Date', 'multivendorx'),
-            cell: ({ row }) => {
-                const rawDate = row.original.date;
-                let formattedDate = '-';
-                if (rawDate) {
-                    const dateObj = new Date(rawDate);
-                    formattedDate = new Intl.DateTimeFormat('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                    }).format(dateObj);
-                }
-                return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
-            },
-        },
-        {
-            header: __('Credit', 'multivendorx'),
-            cell: ({ row }) => {
-                const credit = row.original.credit;
-                return <TableCell>{credit ? formatCurrency(credit) : '-'}</TableCell>;
-            },
-        },
-        {
-            header: __('Debit', 'multivendorx'),
-            cell: ({ row }) => {
-                const debit = row.original.debit;
-                return <TableCell>{debit ? formatCurrency(debit) : '-'}</TableCell>;
-            },
-        },
-        {
-            header: __('Balance', 'multivendorx'),
-            cell: ({ row }) => {
-                const balance = row.original.balance;
-                return <TableCell>{balance ? formatCurrency(balance) : '-'}</TableCell>;
-            },
-        },
-    ];
+		axios({
+			method: 'GET',
+			url: getApiLink(appLocalizer, `transaction/${storeId}`),
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+		}).then((response) => {
+			setWallet(response?.data || {});
+			setAmount(response?.data.available_balance);
+		});
 
-    const realtimeFilter: RealtimeFilter[] = [
-        {
-            name: 'transactionType',
-            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
-                <div className="group-field">
-                    <select
-                        name="transactionType"
-                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
-                        value={filterValue || ''}
-                        className="basic-select"
-                    >
-                        <option value="">{__('Transaction Type', 'multivendorx')}</option>
-                        <option value="Commission">{__('Commission', 'multivendorx')}</option>
-                        <option value="Withdrawal">{__('Withdrawal', 'multivendorx')}</option>
-                        <option value="Refund">{__('Refund', 'multivendorx')}</option>
-                        <option value="Reversed">{__('Reversed', 'multivendorx')}</option>
-                        <option value="COD received">{__('COD received', 'multivendorx')}</option>
-                    </select>
-                </div>
-            ),
-        },
-        {
-            name: 'transactionStatus',
-            render: (updateFilter: (key: string, value: string) => void, filterValue: string | undefined) => (
-                <div className="group-field">
-                    <select
-                        name="transactionStatus"
-                        onChange={(e) => updateFilter(e.target.name, e.target.value)}
-                        value={filterValue || ''}
-                        className="basic-select"
-                    >
-                        <option value="">{__('Financial Transactions', 'multivendorx')}</option>
-                        <option value="Cr">{__('Credit', 'multivendorx')}</option>
-                        <option value="Dr">{__('Debit', 'multivendorx')}</option>
-                    </select>
-                </div>
-            ),
-        },
-    ];
+		axios({
+			method: 'GET',
+			url: getApiLink(appLocalizer, `store/${storeId}`),
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+		}).then((response) => {
+			setStoreData(response.data || {});
+		});
 
-    // 🔹 Fetch wallet/transaction overview whenever store changes
-    useEffect(() => {
-        if (!storeId) return;
+		axios({
+			method: 'GET',
+			url: getApiLink(appLocalizer, 'transaction'),
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			params: {
+				page: 1,
+				row: 3,
+				store_id: storeId,
+				filter_status: 'Dr',
+				transaction_type: 'Withdrawal',
+				orderBy: 'created_at',
+				order: 'DESC',
+			},
+		})
+			.then((response) => {
+				setRecentDebits(response.data.transaction || []);
+			})
+			.catch((error) => {
+				setRecentDebits([]);
+			});
+	}, [storeId]);
 
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, `transaction/${storeId}`),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        })
-            .then((response) => {
-                setWallet(response?.data || {});
-                setAmount(response?.data.available_balance);
-            })
+	const handleWithdrawal = () => {
+		// Clear all old errors first
+		setValidationErrors({});
 
-        axios({
-            method: "GET",
-            url: getApiLink(appLocalizer, `store/${storeId}`),
-            headers: { "X-WP-Nonce": appLocalizer.nonce },
-        })
-            .then((response) => {
-                setStoreData(response.data || {});
-            })
+		const newErrors: { amount?: string; paymentMethod?: string } = {};
+		// Amount validations
+		if (!amount || amount <= 0) {
+			newErrors.amount = 'Please enter a valid amount.';
+		} else if (amount > (wallet.available_balance ?? 0)) {
+			newErrors.amount = `Amount cannot be greater than available balance (${formatCurrency(
+				wallet.available_balance
+			)})`;
+		}
 
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'transaction'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: {
-                page: 1,
-                row: 3,
-                store_id: storeId,
-                filter_status: 'Dr',
-                transaction_type: 'Withdrawal',
-                orderBy: 'created_at',
-                order: 'DESC',
-            },
-        })
-            .then((response) => {
-                setRecentDebits(response.data.transaction || []);
-            })
-            .catch((error) => {
-                setRecentDebits([]);
-            });
-    }, [storeId]);
+		// Payment method validation
+		if (!storeData.payment_method) {
+			newErrors.paymentMethod = 'Please select a payment processor.';
+		}
 
-    const handleWithdrawal = () => {
-        // Clear all old errors first
-        setValidationErrors({});
+		// If any validation errors exist, show them and stop
+		if (Object.keys(newErrors).length > 0) {
+			setValidationErrors(newErrors);
+			return;
+		}
 
-        const newErrors: { amount?: string; paymentMethod?: string } = {};
-        // Amount validations
-        if (!amount || amount <= 0) {
-            newErrors.amount = "Please enter a valid amount.";
-        } else if (amount > (wallet.available_balance ?? 0)) {
-            newErrors.amount = `Amount cannot be greater than available balance (${formatCurrency(wallet.available_balance)})`;
-        }
+		// Submit request
+		axios({
+			method: 'PUT',
+			url: getApiLink(
+				appLocalizer,
+				`transaction/${selectedStore?.value}`
+			),
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			data: {
+				disbursement: true,
+				amount,
+				store_id: selectedStore?.value,
+				method: paymentMethod,
+				note,
+			},
+		})
+			.then((res) => {
+				if (res.data.success) {
+					setRequestWithdrawal(false);
+					setTimeout(() => {
+						window.location.reload();
+					}, 200);
+				} else if (res.data?.message) {
+				}
+			})
+			.catch((err) => {
+				console.error(err);
+			});
+	};
 
-        // Payment method validation
-        if (!storeData.payment_method) {
-            newErrors.paymentMethod = "Please select a payment processor.";
-        }
+	const AmountChange = (value: number) => {
+		setAmount(value);
+	};
 
-        // If any validation errors exist, show them and stop
-        if (Object.keys(newErrors).length > 0) {
-            setValidationErrors(newErrors);
-            return;
-        }
+	const formatMethod = (method) => {
+		if (!method) {
+			return '';
+		}
+		return method
+			.replace(/-/g, ' ') // stripe-connect → stripe connect
+			.replace(/\b\w/g, (c) => c.toUpperCase()); // Stripe connect → Stripe Connect
+	};
 
-        // Submit request
-        axios({
-            method: 'PUT',
-            url: getApiLink(appLocalizer, `transaction/${selectedStore?.value}`),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            data: {
-                disbursement: true,
-                amount,
-                store_id: selectedStore?.value,
-                method: paymentMethod,
-                note,
-            },
-        })
-            .then((res) => {
-                if (res.data.success) {
-                    setRequestWithdrawal(false);
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 200);
-                } else if (res.data?.message) {
-                }
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-    };
+	const freeLeft =
+		wallet?.withdrawal_setting?.[0]?.free_withdrawals -
+		wallet?.free_withdrawal;
+	const percentage = Number(
+		wallet?.withdrawal_setting?.[0]?.withdrawal_percentage || 0
+	);
+	const fixed = Number(
+		wallet?.withdrawal_setting?.[0]?.withdrawal_fixed || 0
+	);
 
-    const AmountChange = (value: number) => {
-        setAmount(value);
-    };
+	// fee calculation
+	const fee = amount * (percentage / 100) + fixed;
+	return (
+		<>
+			<div className="card-wrapper">
+				<div className="card-content">
+					<div className="card-header">
+						<div className="left">
+							<div className="title">
+								{__('Recent payouts', 'multivendorx')}
+							</div>
+						</div>
+					</div>
+					<div className="card-body">
+						{recentDebits.length > 0 ? (
+							<>
+								{recentDebits.map((txn) => {
+									// Format payment method nicely (e.g., "stripe-connect" -> "Stripe Connect")
+									const formattedPaymentMethod =
+										txn.payment_method
+											? txn.payment_method
+													.replace(/[-_]/g, ' ') // replace - and _ with spaces
+													.replace(/\b\w/g, (char) =>
+														char.toUpperCase()
+													) // capitalize each word
+											: __('N/A', 'multivendorx');
 
-    const formatMethod = (method) => {
-        if (!method) return "";
-        return method
-            .replace(/-/g, " ")       // stripe-connect → stripe connect
-            .replace(/\b\w/g, c => c.toUpperCase());  // Stripe connect → Stripe Connect
-    };
+									return (
+										<div key={txn.id} className="info-item">
+											<div className="details-wrapper">
+												<div className="details">
+													<div className="name">
+														{formattedPaymentMethod}
+													</div>
+													<div className="des">
+														{new Date(
+															txn.date
+														).toLocaleDateString(
+															'en-US',
+															{
+																month: 'short',
+																day: '2-digit',
+																year: 'numeric',
+															}
+														)}
+													</div>
+												</div>
+											</div>
 
-    const freeLeft = wallet?.withdrawal_setting?.[0]?.free_withdrawals - wallet?.free_withdrawal;
-    const percentage = Number(wallet?.withdrawal_setting?.[0]?.withdrawal_percentage || 0);
-    const fixed = Number(wallet?.withdrawal_setting?.[0]?.withdrawal_fixed || 0);
+											<div
+												className={`right-details ${
+													parseFloat(txn.debit) < 0
+														? 'negative'
+														: 'positive'
+												}`}
+											>
+												<div
+													className={`price ${
+														parseFloat(txn.debit) <
+														0
+															? 'negative'
+															: 'positive'
+													}`}
+												>
+													{' '}
+													{formatCurrency(txn.debit)}
+												</div>
+											</div>
+										</div>
+									);
+								})}
+							</>
+						) : (
+							<>
+								<div className="des">
+									{__(
+										'No recent payouts transactions found.',
+										'multivendorx'
+									)}
+								</div>
+							</>
+						)}
+					</div>
+				</div>
+				<div className="card-content">
+					<div className="card-body">
+						<div className="payout-wrapper">
+							<div className="payout-header">
+								<div className="price-wrapper">
+									<div className="price-title">
+										{__(
+											'Available balance',
+											'multivendorx'
+										)}
+									</div>
+									<div className="price">
+										{formatCurrency(
+											wallet.available_balance
+										)}{' '}
+										<div className="admin-badge green">
+											{__(
+												'Ready to withdraw',
+												'multivendorx'
+											)}
+										</div>
+									</div>
+								</div>
+							</div>
 
-    // fee calculation
-    const fee = (amount * (percentage / 100)) + fixed;
-    return (
-        <>
-            <div className="card-wrapper">
-                <div className="card-content">
-                    <div className="card-header">
-                        <div className="left">
-                            <div className="title">{__("Recent payouts", "multivendorx")}</div>
-                        </div>
-                    </div>
-                    <div className="card-body">
-                        {recentDebits.length > 0 ? (
-                            <>
-                                {recentDebits.map((txn) => {
-                                    // Format payment method nicely (e.g., "stripe-connect" -> "Stripe Connect")
-                                    const formattedPaymentMethod = txn.payment_method
-                                        ? txn.payment_method
-                                            .replace(/[-_]/g, ' ')                // replace - and _ with spaces
-                                            .replace(/\b\w/g, char => char.toUpperCase()) // capitalize each word
-                                        : __("N/A", "multivendorx");
+							<div className="small-text">
+								<b>{formatCurrency(wallet?.thresold)} </b>{' '}
+								{__(
+									'minimum required to withdraw',
+									'multivendorx'
+								)}
+							</div>
 
-                                    return (
-                                        <div key={txn.id} className="info-item">
-                                            <div className="details-wrapper">
-                                                <div className="details">
-                                                    <div className="name">{formattedPaymentMethod}</div>
-                                                    <div className="des">
-                                                        {new Date(txn.date).toLocaleDateString("en-US", {
-                                                            month: "short",
-                                                            day: "2-digit",
-                                                            year: "numeric",
-                                                        })}
-                                                    </div>
-                                                </div>
-                                            </div>
+							<div className="payout-card-wrapper">
+								<div className="payout-card">
+									<div className="card-title">
+										{__('Upcoming Balance', 'multivendorx')}
+									</div>
+									<div className="card-price">
+										{formatCurrency(wallet.locking_balance)}
+									</div>
+									<div className="card-des">
+										{__(
+											'Pending settlement. Released soon',
+											'multivendorx'
+										)}
+									</div>
+								</div>
+								{wallet?.withdrawal_setting?.length > 0 && (
+									<div className="payout-card">
+										<div className="card-title">
+											{__(
+												'Free Withdrawals',
+												'multivendorx'
+											)}
+										</div>
 
-                                            <div
-                                                className={`right-details ${parseFloat(txn.debit) < 0 ? 'negative' : 'positive'
-                                                    }`}
-                                            >
-                                                <div className={`price ${parseFloat(txn.debit) < 0 ? 'negative' : 'positive'
-                                                    }`}>   {formatCurrency(txn.debit)}</div>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </>
-                        ) : (
-                            <>
-                                <div className="des">
-                                    {__("No recent payouts transactions found.", "multivendorx")}
-                                </div>
-                            </>
-                        )}
-                    </div>
-                </div>
-                <div className="card-content">
-                    <div className="card-body">
-                        <div className="payout-wrapper">
-                            <div className="payout-header">
-                                <div className="price-wrapper">
-                                    <div className="price-title">{__("Available balance", "multivendorx")}</div>
-                                    <div className="price">{formatCurrency(wallet.available_balance)} <div className="admin-badge green">{__("Ready to withdraw", "multivendorx")}</div></div>
-                                </div>
-                            </div>
+										<div className="card-price">
+											{wallet?.withdrawal_setting?.[0]
+												?.free_withdrawals -
+												wallet?.free_withdrawal}{' '}
+											<span>
+												{__('Left', 'multivendorx')}
+											</span>
+										</div>
 
-                            <div className="small-text"><b>{formatCurrency(wallet?.thresold)} </b> {__("minimum required to withdraw", "multivendorx")}</div>
+										<div className="card-des">
+											{__('Then', 'multivendorx')}{' '}
+											{Number(
+												wallet?.withdrawal_setting?.[0]
+													?.withdrawal_percentage
+											) || 0}
+											% +
+											{formatCurrency(
+												Number(
+													wallet
+														?.withdrawal_setting?.[0]
+														?.withdrawal_fixed
+												) || 0
+											)}{' '}
+											{__('fee', 'multivendorx')}
+										</div>
+									</div>
+								)}
+							</div>
+							<div className="small-text">
+								{__(
+									'Some funds locked during settlement',
+									'multivendorx'
+								)}
+							</div>
+							{wallet?.payment_schedules ? (
+								<div className="small-text">
+									{__('Auto payouts run', 'multivendorx')}{' '}
+									{wallet.payment_schedules}
+								</div>
+							) : (
+								<div className="small-text">
+									{__('Auto payouts not set', 'multivendorx')}
+								</div>
+							)}
 
-                            <div className="payout-card-wrapper">
-                                <div className="payout-card">
-                                    <div className="card-title">{__("Upcoming Balance", "multivendorx")}</div>
-                                    <div className="card-price">{formatCurrency(wallet.locking_balance)}</div>
-                                    <div className="card-des">{__("Pending settlement. Released soon", "multivendorx")}</div>
-                                </div>
-                                {wallet?.withdrawal_setting?.length > 0 && (
+							<div className="buttons-wrapper">
+								<div
+									className="admin-btn btn-purple-bg"
+									onClick={() => setRequestWithdrawal(true)}
+								>
+									{__('Disburse Payment', 'multivendorx')}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 
-                                    <div className="payout-card">
-                                        <div className="card-title">{__("Free Withdrawals", "multivendorx")}</div>
+			<CommonPopup
+				open={requestWithdrawal}
+				width="450px"
+				height="75%"
+				header={
+					<>
+						<div className="title">
+							<i className="adminlib-wallet"></i>
+							{__('Disburse payment', 'multivendorx')}
+						</div>
+						<i
+							className="icon adminlib-close"
+							onClick={() => {
+								setRequestWithdrawal(false);
+							}}
+						></i>
+						<div className="des">
+							{__(
+								'Release earnings to your stores in a few simple steps - amount, payment processor, and an optional note.',
+								'multivendorx'
+							)}
+						</div>
+					</>
+				}
+				footer={
+					<>
+						<div
+							className="admin-btn btn-purple"
+							onClick={() => handleWithdrawal()}
+						>
+							{__('Disburse', 'multivendorx')}
+						</div>
+					</>
+				}
+			>
+				<div className="content">
+					{/* start left section */}
+					<div className="form-group-wrapper">
+						<div className="available-balance">
+							{__('Withdrawable balance', 'multivendorx')}{' '}
+							<div>
+								{formatCurrency(wallet.available_balance)}
+							</div>
+						</div>
+						<div className="form-group">
+							<label htmlFor="payment_method">
+								{__('Payment Processor', 'multivendorx')}
+							</label>
 
-                                        <div className="card-price">
-                                            {wallet?.withdrawal_setting?.[0]?.free_withdrawals - wallet?.free_withdrawal} <span>
-                                                {__("Left", "multivendorx")}
-                                            </span>
-                                        </div>
+							<div className="payment-method">
+								{storeData?.payment_method ? (
+									<div className="method">
+										<i className="adminlib-bank"></i>
+										{formatMethod(storeData.payment_method)}
+									</div>
+								) : (
+									<span>
+										{__(
+											'No payment method saved',
+											'multivendorx'
+										)}
+									</span>
+								)}
+							</div>
+						</div>
 
-                                        <div className="card-des">
-                                            {__("Then", "multivendorx")} {(Number(wallet?.withdrawal_setting?.[0]?.withdrawal_percentage) || 0)}% +
-                                            {formatCurrency(Number(wallet?.withdrawal_setting?.[0]?.withdrawal_fixed) || 0)} {__("fee", "multivendorx")}
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                            <div className="small-text">{__("Some funds locked during settlement", "multivendorx")}</div>
-                            {wallet?.payment_schedules ? (
-                                <div className="small-text">{__("Auto payouts run", "multivendorx")} {wallet.payment_schedules}</div>
-                            ) : (
-                                <div className="small-text">{__("Auto payouts not set", "multivendorx")}</div>
-                            )}
+						<div className="form-group">
+							<label htmlFor="amount">
+								{__('Amount', 'multivendorx')}
+							</label>
 
-                            <div className="buttons-wrapper">
-                                <div className="admin-btn btn-purple-bg" onClick={() => setRequestWithdrawal(true)}>
-                                    {__("Disburse Payment", "multivendorx")}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+							<BasicInput
+								type="number"
+								name="amount"
+								value={amount}
+								onChange={(e: any) =>
+									AmountChange(Number(e.target.value))
+								}
+							/>
 
-            <CommonPopup
-                open={requestWithdrawal}
-                width="450px"
-                height="75%"
-                header={
-                    <>
-                        <div className="title">
-                            <i className="adminlib-wallet"></i>
-                            {__("Disburse payment", "multivendorx")}
-                        </div>
-                        <i
-                            className="icon adminlib-close"
-                            onClick={() => {
-                                setRequestWithdrawal(false);
-                            }}
-                        ></i>
-                        <div className="des">
-                            {__(
-                                "Release earnings to your stores in a few simple steps - amount, payment processor, and an optional note.",
-                                "multivendorx"
-                            )}
-                        </div>
-                    </>
-                }
-                footer={
-                    <>
-                        <div
-                            className="admin-btn btn-purple"
-                            onClick={() => handleWithdrawal()}
-                        >
-                            {__("Disburse", "multivendorx")}
-                        </div>
-                    </>
-                }
-            >
-                <div className="content">
-                    {/* start left section */}
-                    <div className="form-group-wrapper">
-                        <div className="available-balance">
-                            {__("Withdrawable balance", "multivendorx")} <div>{formatCurrency(wallet.available_balance)}</div>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="payment_method">{__("Payment Processor", "multivendorx")}</label>
+							<div className="free-wrapper">
+								{wallet?.withdrawal_setting?.length > 0 &&
+								wallet?.withdrawal_setting?.[0]
+									?.free_withdrawals ? (
+									<>
+										{freeLeft > 0 ? (
+											<span>
+												{sprintf(
+													__(
+														'Burning 1 out of %s free withdrawals',
+														'multivendorx'
+													),
+													freeLeft
+												)}
+											</span>
+										) : (
+											<span>
+												{__(
+													'Free withdrawal limit reached',
+													'multivendorx'
+												)}
+											</span>
+										)}
+										<span>
+											{__('Total:', 'multivendorx')}{' '}
+											{formatCurrency(amount || 0)}
+										</span>
+										<span>
+											{__('Fee:', 'multivendorx')}{' '}
+											{formatCurrency(fee)}
+										</span>
+									</>
+								) : (
+									<span>
+										{__(
+											'Actual withdrawal:',
+											'multivendorx'
+										)}{' '}
+										{formatCurrency(amount || 0)}
+									</span>
+								)}
+							</div>
 
-                            <div className="payment-method">
-                                {storeData?.payment_method ? (
-                                    <div className="method">
-                                        <i className="adminlib-bank"></i>
-                                        {formatMethod(storeData.payment_method)}
-                                    </div>
-                                ) : (
-                                    <span>
-                                        {__("No payment method saved", "multivendorx")}
-                                    </span>
-                                )}
-                            </div>
-                        </div>
+							{validationErrors.amount && (
+								<div className="invalid-massage">
+									{validationErrors.amount}
+								</div>
+							)}
+						</div>
 
-                        <div className="form-group">
-                            <label htmlFor="amount">{__("Amount", "multivendorx")}</label>
+						<div className="form-group">
+							<label htmlFor="note">
+								{__('Note', 'multivendorx')}
+							</label>
+							<TextArea
+								name="note"
+								wrapperClass="setting-from-textarea"
+								inputClass="textarea-input"
+								descClass="settings-metabox-description"
+								value={note}
+								onChange={(
+									e: React.ChangeEvent<HTMLTextAreaElement>
+								) => setNote(e.target.value)}
+							/>
+						</div>
+					</div>
+				</div>
+			</CommonPopup>
 
-                            <BasicInput
-                                type="number"
-                                name="amount"
-                                value={amount}
-                                onChange={(e: any) => AmountChange(Number(e.target.value))}
-                            />
-
-                            <div className="free-wrapper">
-                                {wallet?.withdrawal_setting?.length > 0 && wallet?.withdrawal_setting?.[0]?.free_withdrawals ? (
-                                    <>
-                                        {freeLeft > 0 ? (
-                                            <span>{sprintf(__("Burning 1 out of %s free withdrawals", "multivendorx"), freeLeft)}</span>
-                                        ) : (
-                                            <span>{__("Free withdrawal limit reached", "multivendorx")}</span>
-                                        )}
-                                        <span>{__("Total:", "multivendorx")} {formatCurrency(amount || 0)}</span>
-                                        <span>{__("Fee:", "multivendorx")} {formatCurrency(fee)}</span>
-                                    </>
-                                ) : (
-                                    <span>{__("Actual withdrawal:", "multivendorx")} {formatCurrency(amount || 0)}</span>
-                                )}
-                            </div>
-
-
-                            {validationErrors.amount && (
-                                <div className="invalid-massage">{validationErrors.amount}</div>
-                            )}
-                        </div>
-
-                        <div className="form-group">
-                            <label htmlFor="note">{__("Note", "multivendorx")}</label>
-                            <TextArea
-                                name="note"
-                                wrapperClass="setting-from-textarea"
-                                inputClass="textarea-input"
-                                descClass="settings-metabox-description"
-                                value={note}
-                                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNote(e.target.value)}
-                            />
-                        </div>
-                    </div>
-                </div>
-            </CommonPopup>
-
-            <div className="admin-table-wrapper">
-                <Table
-                    data={data}
-                    columns={columns as ColumnDef<Record<string, any>, any>[]}
-                    rowSelection={rowSelection}
-                    onRowSelectionChange={setRowSelection}
-                    defaultRowsPerPage={10}
-                    pageCount={pageCount}
-                    pagination={pagination}
-                    onPaginationChange={setPagination}
-                    handlePagination={requestApiForData}
-                    perPageOption={[10, 25, 50]}
-                    typeCounts={transactionStatus as TransactionStatus[]}
-                    totalCounts={totalRows}
-                    realtimeFilter={realtimeFilter}
-                    actionButton={actionButton}
-                    bulkActionComp={() => (
-                        <TransactionBulkActions
-                            selectedRows={rowSelection}
-                            data={data}
-                            filterData={currentFilterData}
-                            storeId={storeId}
-                        />
-                    )}
-                />
-            </div>
-            {viewCommission && selectedCommissionId !== null && (
-                <ViewCommission
-                    open={viewCommission}
-                    onClose={() => setViewCommission(false)}
-                    commissionId={selectedCommissionId}
-                />
-            )}
-
-        </>
-    );
+			<div className="admin-table-wrapper admin-pt-2">
+				<Table
+					data={data}
+					columns={columns as ColumnDef<Record<string, any>, any>[]}
+					rowSelection={rowSelection}
+					onRowSelectionChange={setRowSelection}
+					defaultRowsPerPage={10}
+					pageCount={pageCount}
+					pagination={pagination}
+					onPaginationChange={setPagination}
+					handlePagination={requestApiForData}
+					perPageOption={[10, 25, 50]}
+					typeCounts={transactionStatus as TransactionStatus[]}
+					totalCounts={totalRows}
+					realtimeFilter={realtimeFilter}
+					actionButton={actionButton}
+					bulkActionComp={() => (
+						<TransactionBulkActions
+							selectedRows={rowSelection}
+							data={data}
+							filterData={currentFilterData}
+							storeId={storeId}
+						/>
+					)}
+				/>
+			</div>
+			{viewCommission && selectedCommissionId !== null && (
+				<ViewCommission
+					open={viewCommission}
+					onClose={() => setViewCommission(false)}
+					commissionId={selectedCommissionId}
+				/>
+			)}
+		</>
+	);
 };
 
 export default WalletTransaction;

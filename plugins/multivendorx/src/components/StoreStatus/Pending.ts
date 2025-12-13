@@ -1,48 +1,60 @@
 import { __ } from '@wordpress/i18n';
 
 export default {
-    id: 'pending',
-    priority: 1,
-    name: __('Pending Approval', 'multivendorx'),
-    desc: '',
-    icon: 'adminlib-store-inventory',
-    submitUrl: 'settings',
-    modal: [
-        {
-            key: 'store_promotion_limit',
-            label: __('Account capabilities', 'multivendorx'),
-            type: 'nested',
-            single: true,
-            nestedFields: [
-                {
-                    key: 'paid_promotion_limit',
-                    type: 'checklist',
-                    options: [
-                        {
-                            label: __('Can log in to dashboard', 'multivendorx'),
-                            check: true,
-                        },
-                        {
-                            label: __('Cannot modify store settings', 'multivendorx'),
-                            check: false,
-                        },
-                        {
-                            label: __('Denied from adding or editing products', 'multivendorx'),
-                            check: false,
-                        },
-                        {
-                            label: __('Cannot process or fulfill orders', 'multivendorx'),
-                            check: false,
-                        },
-                    ],
-                },
-            ],
-        },
-        {
-            key: 'pending_msg',
-            label: __('Message shown to pending stores', 'multivendorx'),
-            type: 'textarea',
-            des: __('What pending stores can do', 'multivendorx'),
-        },
-    ],
+	id: 'pending',
+	priority: 1,
+	name: __('Pending Approval', 'multivendorx'),
+	desc: '',
+	icon: 'adminlib-store-inventory',
+	submitUrl: 'settings',
+	modal: [
+		{
+			key: 'store_promotion_limit',
+			label: __('Account capabilities', 'multivendorx'),
+			type: 'nested',
+			single: true,
+			nestedFields: [
+				{
+					key: 'paid_promotion_limit',
+					type: 'checklist',
+					options: [
+						{
+							label: __(
+								'Can log in to dashboard',
+								'multivendorx'
+							),
+							check: true,
+						},
+						{
+							label: __(
+								'Cannot modify store settings',
+								'multivendorx'
+							),
+							check: false,
+						},
+						{
+							label: __(
+								'Denied from adding or editing products',
+								'multivendorx'
+							),
+							check: false,
+						},
+						{
+							label: __(
+								'Cannot process or fulfill orders',
+								'multivendorx'
+							),
+							check: false,
+						},
+					],
+				},
+			],
+		},
+		{
+			key: 'pending_msg',
+			label: __('Message shown to pending stores', 'multivendorx'),
+			type: 'textarea',
+			des: __('What pending stores can do', 'multivendorx'),
+		},
+	],
 };

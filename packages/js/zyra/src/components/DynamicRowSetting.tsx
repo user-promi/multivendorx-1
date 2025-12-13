@@ -106,22 +106,25 @@ const DynamicRowSetting: React.FC<DynamicRowSettingProps> = ({
 
             case "select":
                 return (
-                    <Select
-                        placeholder={field.placeholder}
-                        value={field.options?.find((opt) => opt.value === val) || null}
-                        options={field.options || []}
-                        onChange={(selected: any) => {
-                            handleChange(rowIndex, field.key, selected?.value || "");
+                    <div className="select-wrapper">
+                        <Select
+                            placeholder={field.placeholder}
+                            className={`react-select`}
+                            value={field.options?.find((opt) => opt.value === val) || null}
+                            options={field.options || []}
+                            onChange={(selected: any) => {
+                                handleChange(rowIndex, field.key, selected?.value || "");
 
-                            if (selected?.children) {
-                                handleChange(
-                                    rowIndex,
-                                    field.key + "_children",
-                                    selected.children
-                                );
-                            }
-                        }}
-                    />
+                                if (selected?.children) {
+                                    handleChange(
+                                        rowIndex,
+                                        field.key + "_children",
+                                        selected.children
+                                    );
+                                }
+                            }}
+                        />
+                    </div>
                 );
 
             default:
@@ -147,16 +150,19 @@ const DynamicRowSetting: React.FC<DynamicRowSettingProps> = ({
                                     onClick={() => handleDelete(rowIndex)}
                                 ></span>
                             </div>
-                            {childrenRenderer && (
-                                <div className="repeater-field-nested">
-                                    {childrenRenderer(row, rowIndex)}
-                                </div>
-                            )}
+                            {(() => {
+                                const nestedChildren = childrenRenderer?.(row, rowIndex);
+                                return nestedChildren ? (
+                                    <div className="repeater-field-nested">
+                                        {nestedChildren}
+                                    </div>
+                                ) : null;
+                            })()}
                         </div>
                     </>
                 ))}
 
-                <button type="button" className="admin-btn btn-purple" onClick={handleAdd}>
+                <button type="button" className="admin-btn btn-purple-bg" onClick={handleAdd}>
                     <i className="adminlib-plus-circle"></i> {addLabel}
                 </button>
             </div>

@@ -1,7 +1,19 @@
 @use '../../global.scss' as *;
 
-.multivendorx-dashboard,
-#admin-main-wrapper {
+.title {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: $text-color;
+}
+
+.desc,
+.des {
+    font-size: 0.9rem;
+    color: $sub-text-color;
+    padding: 0;
+}
+
+.multivendorx-main-wrapper {
     .container-wrapper {
         display: flex;
         gap: 1rem;
@@ -11,17 +23,16 @@
     .card-wrapper {
         display: flex;
         gap: 1rem;
-        // padding-bottom: 1rem;
         width: 100%;
         position: relative;
     }
 
-    .column {
-        flex-direction: column;
-    }
-
     .card-wrapper:has(.transaction) {
         margin-bottom: 1rem;
+    }
+
+    .column {
+        flex-direction: column;
     }
 
     .card-header {
@@ -32,10 +43,21 @@
         border-bottom: $border-light-small;
         align-items: start;
 
+        i {
+            font-size: 0.95rem;
+            padding: 0.313rem;
+            border-radius: 50%;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            margin-top: -0.313rem;
+
+            &:hover {
+                background: #5a59591a;
+            }
+        }
+
         .left {
             .title {
-                font-size: 1.125rem;
-                font-weight: 500;
                 display: flex;
                 gap: 0.5rem;
                 align-items: center;
@@ -43,7 +65,6 @@
 
             .des {
                 padding-top: 0.125rem;
-                color: #00000094;
             }
         }
 
@@ -56,19 +77,6 @@
                 color: #0000009e;
             }
 
-            i {
-                font-size: 0.95rem;
-                padding: 0.313rem;
-                border-radius: 50%;
-                transition: all 0.4s ease;
-                cursor: pointer;
-                margin-top: -0.313rem;
-
-                &:hover {
-                    background: #5a59591a;
-                }
-            }
-
             .admin-btn {
                 i {
                     padding: 0;
@@ -76,17 +84,12 @@
                 }
             }
         }
-
-        &.p-top {
-            padding-top: 2rem;
-            margin-bottom: 1.5rem;
-        }
     }
 
     .card-content {
         border-radius: 0.313rem;
         box-shadow: 0 0.125rem 0.5rem 0 #dfdee16e;
-        background: #fff;
+        background: $background-white;
         width: 100%;
         box-sizing: border-box;
 
@@ -157,7 +160,7 @@
 
     // admin Wallet Transaction table(common)
     &.wallet {
-        padding: 0 0 1rem 0;
+        padding: 0 0 1rem;
         margin-bottom: 1rem;
         border-bottom: $border-light-small;
     }
@@ -191,22 +194,54 @@
             width: 24%;
         }
     }
+
+    &.dashboard {
+        .analytics-item {
+            justify-content: space-between;
+
+            .analytics-icon {
+                margin-top: 0.45rem;
+
+                i {
+                    padding: 0.5rem;
+                    font-size: 1.5rem;
+                    border-radius: 0.313rem;
+                    color: #fff;
+                    margin-top: 0.625rem;
+                }
+            }
+
+            .details {
+                .text {
+                    font-size: 1.063rem;
+                    font-weight: 500;
+                }
+
+                .number {
+                    font-size: 1.813rem !important;
+                    /* zyra style overwrite */
+                    line-height: 2 !important;
+                    /* zyra style overwrite */
+                    font-weight: 600;
+                }
+
+                .report {
+                    font-weight: 500;
+                    color: #00000061;
+
+                    div {
+                        line-height: 1.313rem;
+                    }
+                }
+            }
+        }
+    }
 }
 
 .form-group-title-wrapper {
     padding: 1rem 0 0.5rem;
     border-bottom: $border-light-small;
     margin-bottom: 1rem;
-
-    .title {
-        font-size: 1.125rem;
-        font-weight: 500;
-    }
-
-    .des {
-        font-size: 0.95rem;
-        color: $sub-text-color;
-    }
 }
 
 .form-group-wrapper {
@@ -232,6 +267,7 @@
             display: flex;
             gap: 0.625rem;
             line-height: 1;
+            align-items: end;
         }
 
         .toggle-setting-container label {
@@ -246,7 +282,8 @@
                 cursor: pointer;
             }
         }
-        .date-field-wrapper{
+
+        .date-field-wrapper {
             display: flex;
             gap: 0.5rem;
         }
@@ -301,6 +338,7 @@
             font-size: 2rem;
             line-height: 2rem;
             margin-top: 0.813rem;
+
             // font-weight: 600;
             display: flex;
             justify-content: space-between;
@@ -314,7 +352,6 @@
 
         .title {
             font-size: 0.95rem;
-            color: #00000094;
         }
     }
 }
@@ -339,112 +376,10 @@
     width: 65% !important;
 }
 
-// settings shipping add country start
-// .shipping-country-wrapper {
-//     .shipping-country {
-//         padding: 1rem;
-//         background: #f7f6f69c;
-//         border-radius: 0.313rem;
-//         margin-bottom: 1rem;
-//         border: $border-light-small;
 
-//         .basic-input {
-//             width: 25%;
-//         }
-
-//         &.rule {
-//             width: fit-content;
-//         }
-//     }
-
-//     .item {
-//         display: flex;
-//         gap: 0.5rem;
-//         align-items: center;
-
-//         .location-icon {
-//             background: #d9f5f0;
-//             color: #06be9f;
-//             padding: 0.45rem;
-//             font-size: 1.313rem;
-//             border-radius: 0.313rem;
-//         }
-
-//         .delete-icon {
-//             font-size: 1.125rem;
-//             color: #f06b4f;
-//             cursor: pointer;
-//         }
-
-//         .basic-input {
-//             background: #fff !important;
-//             /*overwrite common style*/
-//         }
-
-//         &.state {
-//             margin-bottom: 0.625rem;
-//         }
-//     }
-
-//     .state-wrapper {
-//         padding: 0.813rem;
-//         background: #fff;
-//         margin-top: 0.813rem;
-
-//         .header {
-//             display: flex;
-//             justify-content: space-between;
-//             align-items: start;
-//             margin-bottom: 0.813rem;
-//             padding-bottom: 0.5rem;
-//             border-bottom: $border-light-small;
-
-//             .left {
-//                 width: 75%;
-//             }
-
-//             .title {
-//                 font-size: 1.125em;
-//                 font-weight: 500;
-//             }
-
-//             .des {
-//                 font-size: 0.813rem;
-//                 color: $sub-text-color;
-//             }
-//         }
-
-//     }
-
-//     .no-shipping-data {
-//         padding: 1rem;
-//         border-radius: 0.313rem;
-//         font-size: 1rem;
-//         background: #c9c9c954;
-//         margin: 1rem 0;
-//     }
-// }
-// settings shipping add country end
-
-
-// shipping-method-wrapper start  store shipping tab start (move table css)
-// .shipping-method-wrapper {
-//     display: flex;
-//     flex-direction: column;
-//     gap: 0.5rem;
-
-//     .shipping-method {
-//         display: flex;
-//         gap: 0.313rem;
-//         align-items: center;
-
-//         .icon-wrapper {
-//             i {
-//                 cursor: pointer;
-//             }
-//         }
-//     }
-// }
+.admin-pt-2 {
+    padding-top: 2rem;
+}
 
 // review style
 .reviews-wrapper {
@@ -520,10 +455,6 @@
                 display: flex;
                 align-items: end;
                 gap: 0.625rem;
-            }
-
-            .des {
-                color: #0000007c;
             }
 
             .small-text {
@@ -603,7 +534,6 @@
                     color: #868585;
                 }
             }
-
         }
     }
 }
@@ -651,15 +581,10 @@
 
     .title {
         font-size: 1.313rem;
-        color: #000;
         font-weight: 600;
         line-height: 1.5rem;
         margin-top: 1rem;
-    }
-
-    .des {
-        font-size: 1rem;
-        padding: 0.75rem;
+        padding-bottom: 0.75rem;
     }
 }
 
@@ -724,11 +649,6 @@
                     padding-bottom: 0.313rem;
                 }
 
-                .des {
-                    font-size: 0.8rem;
-                    color: #0000008c;
-                }
-
                 span {
                     position: absolute;
                     right: 0;
@@ -748,79 +668,27 @@
 // notification style end
 
 // actively log start
-.activity-wrapper {
-    .activity {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        padding: 0.5rem 0;
-        transition: all 0.5s ease;
-
-        .product-name {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .icon {
-            font-size: 1.125rem;
-            background: color-mix(in srgb, var(--colorPrimary) 15%, transparent);
-            padding: 0.5rem;
-            border-radius: 50%;
-            display: flex;
-            width: 1.8rem;
-            height: 1.8rem;
-            justify-content: center;
-            align-items: center;
-
-            i {
-                color: var(--colorPrimary);
-            }
-        }
-
-        .details {
-            color: #000;
-            display: flex;
-            font-size: 1rem;
-            flex-direction: column;
-            position: relative;
-
-            span {
-                font-size: 0.8rem;
-                color: $text-color
-            }
-
-            .date {
-                position: absolute;
-                right: -46%;
-                top: -0.313rem;
-            }
-        }
-
-        &:hover {
-            background: color-mix(in srgb, var(--colorPrimary) 3%, transparent);
-        }
-
-        &.product {
-            justify-content: space-between;
-        }
-    }
-}
-
 .activity-log {
-    border-left: 0.063rem solid var(--colorPrimary);
+    border-left: 0.063rem solid $theme-color;
 
     .activity {
         padding: 0 0 1.45rem 1.313rem;
         position: relative;
 
+        span {
+            position: absolute;
+            right: 0;
+            top: 0;
+            color: #00000078;
+            font-weight: 500;
+        }
+
         .title {
             font-size: 1.063rem;
-            font-weight: 500;
             line-height: 1rem;
         }
 
         .des {
-            color: #0000006e;
             padding-top: 0.5rem;
         }
 
@@ -830,18 +698,10 @@
             width: 0.813rem;
             height: 0.813rem;
             border-radius: 50%;
-            background: var(--colorPrimary);
+            background: $theme-color;
             top: 0;
-            left: -0.4rem;
+            left: -0.45rem;
             outline: 0.313rem solid #fff;
-        }
-
-        span {
-            position: absolute;
-            right: 0;
-            top: 0;
-            color: #00000078;
-            font-weight: 500;
         }
     }
 }

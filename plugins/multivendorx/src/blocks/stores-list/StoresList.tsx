@@ -1,219 +1,205 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getApiLink } from 'zyra';
 
 interface StoreRow {
-  id: number;
-  name: string;
-  topProducts?: string[];
+	id: number;
+	name: string;
+	topProducts?: string[];
 }
 
 type Category = {
-    id: number;
-    name: string;
-    slug: string;
-    count: number;
-    description: string;
-    display: string;
-    image: any;
-    menu_order: number;
-    parent: number;
-    _links: any;
+	id: number;
+	name: string;
+	slug: string;
+	count: number;
+	description: string;
+	display: string;
+	image: any;
+	menu_order: number;
+	parent: number;
+	_links: any;
 };
 
 const StoresList: React.FC = () => {
+	const [data, setData] = useState<StoreRow[] | []>([]);
+	const [category, setCategory] = useState<Category[]>([]);
+	const [product, setProduct] = useState<[]>([]);
 
-    
-    const [data, setData] = useState<StoreRow[] | []>([]);
-    const [ category, setCategory ] = useState< Category[] >( [] );
-    const [ product, setProduct ] = useState< [] >( [] );
+	// useEffect(() => {
+	//     axios({
+	//         method: 'GET',
+	//         url: getApiLink(appLocalizer, 'store'),
+	//         headers: { 'X-WP-Nonce': appLocalizer.nonce },
+	//     })
+	//     .then((response) => {
+	//         setData(response.data.stores || []);
+	//     })
+	// }, []);
 
+	const [filters, setFilters] = useState({
+		address: '',
+		distance: '',
+		miles: '',
+		sort: 'name',
+		category: '',
+		product: '',
+	});
 
-    // useEffect(() => {
-    //     axios({
-    //         method: 'GET',
-    //         url: getApiLink(appLocalizer, 'store'),
-    //         headers: { 'X-WP-Nonce': appLocalizer.nonce },
-    //     })
-    //     .then((response) => {
-    //         setData(response.data.stores || []);
-    //     })
-    // }, []);
+	useEffect(() => {
+		axios
+			.get(`${storesList.apiUrl}/wc/v3/products/categories`, {
+				headers: { 'X-WP-Nonce': storesList.nonce },
+			})
+			.then((response) => {
+				setCategory(response.data);
+			});
+	}, []);
 
-    const [filters, setFilters] = useState({
-        address: "",
-        distance: "",
-        miles: "",
-        sort: "name",
-        category: "",
-        product: "",
-    });
+	useEffect(() => {
+		axios
+			.get(`${storesList.apiUrl}/wc/v3/products`, {
+				headers: { 'X-WP-Nonce': storesList.nonce },
+				params: {
+					per_page: 100,
+					meta_key: 'multivendorx_store_id',
+				},
+			})
+			.then((response) => {
+				setProduct(response.data);
+			});
+	}, []);
 
-    useEffect( () => {
-        axios
-            .get(
-                `${ storesList.apiUrl }/wc/v3/products/categories`,
-                {
-                    headers: { 'X-WP-Nonce': storesList.nonce },
-                }
-            )
-            .then( ( response ) => {
-                setCategory( response.data );
-            } );
-    }, [] );
+	console.log(product);
+	useEffect(() => {
+		handleSubmit();
+	}, [filters]);
 
-    useEffect( () => {
-        axios
-            .get(
-                `${ storesList.apiUrl }/wc/v3/products`,
-                {
-                    headers: { 'X-WP-Nonce': storesList.nonce },
-                    params: { 
-                        per_page: 100,
-                        meta_key: 'multivendorx_store_id',
-                    }
-                }
-            )
-            .then( ( response ) => {
-                setProduct( response.data );
-            } );
-    }, [] );
+	const handleInputChange = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+	) => {
+		const { name, value } = e.target;
+		setFilters((prev) => ({ ...prev, [name]: value }));
+	};
 
-console.log(product)
-    useEffect(() => {
-        handleSubmit();
-    }, [filters]);
+	const handleSubmit = () => {
+		axios({
+			method: 'GET',
+			url: getApiLink(appLocalizer, 'store'),
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			params: {
+				filters: { ...filters },
+			},
+		})
+			.then((response) => {
+				setData(response.data.stores || []);
+			})
+			.catch((error) =>
+				console.error('Error fetching filtered stores:', error)
+			);
+	};
 
-    const handleInputChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-    ) => {
-        const { name, value } = e.target;
-        setFilters((prev) => ({ ...prev, [name]: value }));
-    };
+	return (
+		<div className="">
+			{/* Filter Bar */}
+			<input
+				type="text"
+				name="address"
+				value={filters.address}
+				onChange={handleInputChange}
+				placeholder="Enter Address"
+				className=""
+			/>
+			<select
+				name="distance"
+				value={filters.distance}
+				onChange={handleInputChange}
+				className=""
+			>
+				<option value="">Within</option>
+				<option value="5">5</option>
+				<option value="10">10</option>
+				<option value="25">25</option>
+			</select>
+			<select
+				name="miles"
+				value={filters.miles}
+				onChange={handleInputChange}
+				className=""
+			>
+				<option value="miles">Miles</option>
+				<option value="km">Kilometers</option>
+				<option value="nm">Nautical miles</option>
+			</select>
 
-    const handleSubmit = () => {
-        axios({
-        method: 'GET',
-        url: getApiLink(appLocalizer, 'store'),
-        headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        params: {
-            filters: {...filters}, 
-        },
-        })
-        .then((response) => {
-        setData(response.data.stores || []);
-        })
-        .catch((error) => console.error("Error fetching filtered stores:", error));
-    };
+			<select
+				name="sort"
+				value={filters.sort}
+				onChange={handleInputChange}
+				className=""
+			>
+				<option value="name">Select</option>
+				<option value="category">By Category</option>
+				<option value="shipping">By Shipping</option>
+			</select>
 
+			{filters.sort == 'category' && (
+				<select
+					name="category"
+					value={filters.category || ''}
+					onChange={handleInputChange}
+					className=""
+				>
+					<option value="">Select Category</option>
+					{category.map((cat) => (
+						<option key={cat.id} value={cat.id}>
+							{cat.name}
+						</option>
+					))}
+				</select>
+			)}
 
-  return (
-    <div className="">
-      {/* Filter Bar */}
-        <input
-          type="text"
-          name="address"
-          value={filters.address}
-          onChange={handleInputChange}
-          placeholder="Enter Address"
-          className=""
-        />
-        <select
-          name="distance"
-          value={filters.distance}
-          onChange={handleInputChange}
-          className=""
-        >
-          <option value="">Within</option>
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="25">25</option>
-        </select>
-        <select
-          name="miles"
-          value={filters.miles}
-          onChange={handleInputChange}
-          className=""
-        >
-          <option value="miles">Miles</option>
-          <option value="km">Kilometers</option>
-          <option value="nm">Nautical miles</option>
-        </select>
+			<select
+				name="product"
+				value={filters.product || ''}
+				onChange={handleInputChange}
+				className=""
+			>
+				<option value="">Select Products</option>
+				{product.map((pro) => (
+					<option key={pro.id} value={pro.id}>
+						{pro.name}
+					</option>
+				))}
+			</select>
 
-        <select
-          name="sort"
-          value={filters.sort}
-          onChange={handleInputChange}
-          className=""
-        >
-          <option value="name">Select</option>
-          <option value="category">By Category</option>
-          <option value="shipping">By Shipping</option>
-        </select>
+			<div className="">Viewing all {data.length} stores</div>
 
-        {filters.sort == 'category' && 
-            <select
-                name="category"
-                value={filters.category || ""}
-                onChange={handleInputChange}
-                className=""
-            >
-                <option value="">Select Category</option>
-                {category.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                    {cat.name}
-                </option>
-                ))}
-            </select>
-        }
+			{/* Store Cards */}
+			<div className="">
+				{data &&
+					data.map((store) => (
+						<div key={store.id} className="">
+							<div className="">
+								<div className="">
+									<img src={store.image} />
+								</div>
 
-        <select
-            name="product"
-            value={filters.product || ""}
-            onChange={handleInputChange}
-            className=""
-        >
-            <option value="">Select Products</option>
-            {product.map((pro) => (
-            <option key={pro.id} value={pro.id}>
-                {pro.name}
-            </option>
-            ))}
-        </select>
+								<div className="flex gap-2">
+									<button className="">
+										📞{store.phone}
+									</button>
+									<button className="">
+										📍{store.address_1}
+									</button>
+								</div>
+							</div>
 
-        <div className="">
-          Viewing all {data.length} stores
-        </div>
+							<h2 className="">{store.store_name}</h2>
 
-      {/* Store Cards */}
-      <div className="">
-        {data && data.map((store) => (
-          <div
-            key={store.id}
-            className=""
-          >
-            <div className="">
-              <div className="">
-                <img src = {store.image}/>
-              </div>
-
-              <div className="flex gap-2">
-                <button className="">
-                  📞{store.phone}
-                </button>
-                <button className="">
-                  📍{store.address_1}
-                </button>
-              </div>
-            </div>
-
-            <h2 className="">
-              {store.store_name}
-            </h2>
-
-            <div className="">
-              <p className="">Top Products</p>
-              {/* <div className="">
+							<div className="">
+								<p className="">Top Products</p>
+								{/* <div className="">
                 {vendor.topProducts && vendor.topProducts.length > 0 ? (
                   vendor.topProducts.map((img, idx) => (
                     <img
@@ -227,12 +213,12 @@ console.log(product)
                   <p className="">No products</p>
                 )}
               </div> */}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+							</div>
+						</div>
+					))}
+			</div>
+		</div>
+	);
 };
 
 export default StoresList;

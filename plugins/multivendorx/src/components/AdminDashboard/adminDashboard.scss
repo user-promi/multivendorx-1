@@ -1,9 +1,10 @@
 @use '../config.scss' as *;
 
 .admin-dashboard {
-    .card-wrapper{
+    .card-wrapper {
         margin-bottom: 1rem;
     }
+
     .tab-titles {
         margin: 0;
         padding: 0;
@@ -14,6 +15,7 @@
         }
     }
 }
+
 // admin tab
 
 .admin-tab {
@@ -224,7 +226,7 @@
         .icon {
             padding: 0.625rem;
             font-size: 1.8rem;
-            color: #5007aa;
+            color: $theme-color;
             background: #5007aa26;
             border-radius: 0.313rem;
         }
@@ -305,6 +307,7 @@
         }
     }
 }
+
 // admin dashboard card design end
 
 .activity-wrapper {
@@ -412,6 +415,7 @@
         }
     }
 }
+
 // top items end
 
 // support start
@@ -436,16 +440,11 @@
                 color: #000;
                 padding-bottom: 0.313rem;
             }
-
-            .des {
-                color: #acaaaa;
-            }
         }
     }
 }
 
 // support end
-
 
 .right-pro-banner {
     .title {
@@ -733,7 +732,6 @@
         }
 
         .des {
-            color: #616060ee;
             padding: 0 1rem;
         }
     }
@@ -769,4 +767,30 @@
 
 .admin-pro-tag.module:has(.adminlib-spmv) {
     text-transform: uppercase;
+}
+
+// membership plan start
+.plan-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .icon i {
+        border-radius: .313rem;
+        font-size: 2rem;
+        padding: .313rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 2.313rem;
+        width: 2.313rem;
+    }
+
+    .title{
+        font-size: 1.125rem;
+    }
+
+    .des{
+        font-size: 0.95rem;
+    }
 }

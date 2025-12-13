@@ -127,13 +127,11 @@
                 }
 
                 .des {
-                    padding: 0.313rem 0;
-                    font-size: 1rem;
+                    padding: 0.313rem 0 0.75rem;
                     position: relative;
                     display: flex;
                     gap: 0.313rem;
                     align-items: end;
-
 
                     .edit-icon {
                         top: 0.2rem;
@@ -240,7 +238,6 @@
 
         .des {
             font-size: 1.063rem;
-            color: #000;
         }
 
         .time {

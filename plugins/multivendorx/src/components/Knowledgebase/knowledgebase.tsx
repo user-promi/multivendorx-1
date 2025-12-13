@@ -2,573 +2,689 @@
 import React, { useState, useEffect, useRef, ReactNode } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { Table, getApiLink, TableCell, AdminBreadcrumbs, BasicInput, TextArea, CommonPopup, ToggleSetting, MultiCalendarInput } from 'zyra';
-import { ColumnDef, RowSelectionState, PaginationState } from '@tanstack/react-table';
-import "../Announcements/announcements.scss";
+import {
+	Table,
+	getApiLink,
+	TableCell,
+	AdminBreadcrumbs,
+	BasicInput,
+	TextArea,
+	CommonPopup,
+	ToggleSetting,
+	MultiCalendarInput,
+} from 'zyra';
+import {
+	ColumnDef,
+	RowSelectionState,
+	PaginationState,
+} from '@tanstack/react-table';
+import '../Announcements/announcements.scss';
 
 type KBRow = {
-    date: any;
-    id?: number;
-    title?: string;
-    content?: string;
-    status?: 'publish' | 'pending' | string;
+	date: any;
+	id?: number;
+	title?: string;
+	content?: string;
+	status?: 'publish' | 'pending' | string;
 };
 
 type KBForm = {
-    title: string;
-    content: string;
-    status?: 'publish' | 'pending' | 'draft';
+	title: string;
+	content: string;
+	status?: 'publish' | 'pending' | 'draft';
 };
 
 type AnnouncementStatus = {
-    key: string;
-    name: string;
-    count: number;
+	key: string;
+	name: string;
+	count: number;
 };
 type FilterData = {
-    typeCount?: any;
-    searchField?: any;
+	typeCount?: any;
+	searchField?: any;
 };
 export interface RealtimeFilter {
-    name: string;
-    render: (updateFilter: (key: string, value: any) => void, filterValue: any) => ReactNode;
+	name: string;
+	render: (
+		updateFilter: (key: string, value: any) => void,
+		filterValue: any
+	) => ReactNode;
 }
 
 export const KnowledgeBase: React.FC = () => {
-    const [submitting, setSubmitting] = useState(false);
-    const [data, setData] = useState<KBRow[] | null>(null);
-    const [addEntry, setAddEntry] = useState(false);
-    const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-    const [pagination, setPagination] = useState<PaginationState>({
-        pageIndex: 0,
-        pageSize: 10,
-    });
-    const [announcementStatus, setAnnouncementStatus] = useState<AnnouncementStatus[] | null>(null);
-    const [pageCount, setPageCount] = useState(0);
-    const [editId, setEditId] = useState<number | null>(null);
-    const [error, setError] = useState<string | null>(null);
-    const [formData, setFormData] = useState<KBForm>({
-        title: '',
-        content: '',
-        status: 'draft',
-    });
-    const bulkSelectRef = useRef<HTMLSelectElement>(null);
-    const [totalRows, setTotalRows] = useState<number>(0);
-    const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
+	const [submitting, setSubmitting] = useState(false);
+	const [data, setData] = useState<KBRow[] | null>(null);
+	const [addEntry, setAddEntry] = useState(false);
+	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+	const [pagination, setPagination] = useState<PaginationState>({
+		pageIndex: 0,
+		pageSize: 10,
+	});
+	const [announcementStatus, setAnnouncementStatus] = useState<
+		AnnouncementStatus[] | null
+	>(null);
+	const [pageCount, setPageCount] = useState(0);
+	const [editId, setEditId] = useState<number | null>(null);
+	const [error, setError] = useState<string | null>(null);
+	const [formData, setFormData] = useState<KBForm>({
+		title: '',
+		content: '',
+		status: 'draft',
+	});
+	const bulkSelectRef = useRef<HTMLSelectElement>(null);
+	const [totalRows, setTotalRows] = useState<number>(0);
+	const [validationErrors, setValidationErrors] = useState<{
+		[key: string]: string;
+	}>({});
 
-    const validateForm = () => {
-        const errors: { [key: string]: string } = {};
+	const validateForm = () => {
+		const errors: { [key: string]: string } = {};
 
-        if (!formData.title.trim()) {
-            errors.title = __('Title is required', 'multivendorx');
-        }
+		if (!formData.title.trim()) {
+			errors.title = __('Title is required', 'multivendorx');
+		}
 
-        if (!formData.content.trim()) {
-            errors.content = __('Content is required', 'multivendorx');
-        }
+		if (!formData.content.trim()) {
+			errors.content = __('Content is required', 'multivendorx');
+		}
 
-        setValidationErrors(errors);
-        return Object.keys(errors).length === 0;
-    };
+		setValidationErrors(errors);
+		return Object.keys(errors).length === 0;
+	};
 
+	const handleCloseForm = () => {
+		setAddEntry(false);
+		setFormData({ title: '', content: '', status: 'pending' }); // reset form
+		setEditId(null); // reset edit mode
+		setError(null); // clear any error
+		setValidationErrors({});
+	};
+	// Handle input changes
+	const handleChange = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => {
+		const { name, value } = e.target;
+		setFormData((prev) => ({ ...prev, [name]: value }));
+		// Clear field error when user types
+		if (validationErrors[name]) {
+			setValidationErrors((prev) => {
+				const updated = { ...prev };
+				delete updated[name];
+				return updated;
+			});
+		}
+	};
 
-    const handleCloseForm = () => {
-        setAddEntry(false);
-        setFormData({ title: '', content: '', status: 'pending' }); // reset form
-        setEditId(null); // reset edit mode
-        setError(null); // clear any error
-        setValidationErrors({});
-    };
-    // Handle input changes
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-        // Clear field error when user types
-        if (validationErrors[name]) {
-            setValidationErrors((prev) => {
-                const updated = { ...prev };
-                delete updated[name];
-                return updated;
-            });
-        }
-    };
+	const handleBulkAction = async () => {
+		const action = bulkSelectRef.current?.value;
+		const selectedIds = Object.keys(rowSelection)
+			.map((key) => {
+				const index = Number(key);
+				return data && data[index] ? data[index].id : null;
+			})
+			.filter((id): id is number => id !== null);
 
-    const handleBulkAction = async () => {
-        const action = bulkSelectRef.current?.value;
-        const selectedIds = Object.keys(rowSelection).map((key) => {
-            const index = Number(key);
-            return data && data[index] ? data[index].id : null;
-        }).filter((id): id is number => id !== null);
+		if (!selectedIds.length) {
+			return;
+		}
 
-        if (!selectedIds.length) {
-            return;
-        }
+		if (!action) {
+			return;
+		}
 
-        if (!action) {
-            return;
-        }
+		setData(null);
 
-        setData(null);
+		try {
+			await axios({
+				method: 'PUT',
+				url: getApiLink(appLocalizer, 'knowledge'),
+				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				data: { bulk: true, action, ids: selectedIds },
+			});
+			await fetchTotalRows();
+			requestData(pagination.pageSize, pagination.pageIndex + 1);
+			setRowSelection({});
+		} catch (err) {
+			setError(__('Failed to perform bulk action', 'multivendorx'));
+		}
+	};
 
-        try {
-            await axios({
-                method: 'PUT',
-                url: getApiLink(appLocalizer, 'knowledge'),
-                headers: { 'X-WP-Nonce': appLocalizer.nonce },
-                data: { bulk: true, action, ids: selectedIds },
-            });
-            await fetchTotalRows();
-            requestData(pagination.pageSize, pagination.pageIndex + 1);
-            setRowSelection({});
-        } catch (err) {
-            setError(__('Failed to perform bulk action', 'multivendorx'));
-        }
-    };
+	// Open edit modal
+	const handleEdit = async (id: number) => {
+		try {
+			const response = await axios.get(
+				getApiLink(appLocalizer, `knowledge/${id}`),
+				{
+					headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				}
+			);
+			if (response.data) {
+				setFormData({
+					title: response.data.title || '',
+					content: response.data.content || '',
+					status: response.data.status || 'draft',
+				});
+				setEditId(id);
+				setAddEntry(true);
+			}
+		} catch {
+			setError(__('Failed to load entry', 'multivendorx'));
+		}
+	};
 
-    // Open edit modal
-    const handleEdit = async (id: number) => {
-        try {
-            const response = await axios.get(getApiLink(appLocalizer, `knowledge/${id}`), {
-                headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            });
-            if (response.data) {
-                setFormData({
-                    title: response.data.title || '',
-                    content: response.data.content || '',
-                    status: response.data.status || 'draft',
-                });
-                setEditId(id);
-                setAddEntry(true);
-            }
-        } catch {
-            setError(__('Failed to load entry', 'multivendorx'));
-        }
-    };
+	// Submit form
+	const handleSubmit = async (status: 'publish' | 'pending' | 'draft') => {
+		if (submitting) {
+			return;
+		}
+		if (!validateForm()) {
+			return; // Stop submission if errors exist
+		}
+		setSubmitting(true);
 
-    // Submit form
-    const handleSubmit = async (status: 'publish' | 'pending' | 'draft') => {
-        if (submitting) return;
-        if (!validateForm()) {
-            return; // Stop submission if errors exist
-        }
-        setSubmitting(true);
+		try {
+			const endpoint = editId
+				? getApiLink(appLocalizer, `knowledge/${editId}`)
+				: getApiLink(appLocalizer, 'knowledge');
 
-        try {
-            const endpoint = editId
-                ? getApiLink(appLocalizer, `knowledge/${editId}`)
-                : getApiLink(appLocalizer, 'knowledge');
+			const method = editId ? 'PUT' : 'POST';
+			const payload = { ...formData, status };
 
-            const method = editId ? 'PUT' : 'POST';
-            const payload = { ...formData, status };
+			const response = await axios({
+				method,
+				url: endpoint,
+				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				data: payload,
+			});
 
-            const response = await axios({
-                method,
-                url: endpoint,
-                headers: { 'X-WP-Nonce': appLocalizer.nonce },
-                data: payload,
-            });
+			if (response.data.success) {
+				handleCloseForm();
+				await fetchTotalRows();
+				requestData(pagination.pageSize, pagination.pageIndex + 1);
+			} else {
+				setError(__('Failed to save entry', 'multivendorx'));
+			}
+		} catch {
+			setError(__('Failed to save entry', 'multivendorx'));
+		} finally {
+			setSubmitting(false);
+		}
+	};
 
-            if (response.data.success) {
-                handleCloseForm();
-                await fetchTotalRows();
-                requestData(pagination.pageSize, pagination.pageIndex + 1);
-            } else {
-                setError(__('Failed to save entry', 'multivendorx'));
-            }
-        } catch {
-            setError(__('Failed to save entry', 'multivendorx'));
-        } finally {
-            setSubmitting(false);
-        }
-    };
+	const fetchTotalRows = async () => {
+		try {
+			const response = await axios.get(
+				getApiLink(appLocalizer, 'knowledge'),
+				{
+					headers: { 'X-WP-Nonce': appLocalizer.nonce },
+					params: { count: true },
+				}
+			);
+			const total = response.data || 0;
+			setTotalRows(total);
+			setPageCount(Math.ceil(total / pagination.pageSize));
+		} catch {
+			setError(__('Failed to load total rows', 'multivendorx'));
+		}
+	};
 
+	// Fetch total rows on mount
+	useEffect(() => {
+		fetchTotalRows();
+	}, []);
 
-    const fetchTotalRows = async () => {
-        try {
-            const response = await axios.get(getApiLink(appLocalizer, 'knowledge'), {
-                headers: { 'X-WP-Nonce': appLocalizer.nonce },
-                params: { count: true },
-            });
-            const total = response.data || 0;
-            setTotalRows(total);
-            setPageCount(Math.ceil(total / pagination.pageSize));
-        } catch {
-            setError(__('Failed to load total rows', 'multivendorx'));
-        }
-    };
+	useEffect(() => {
+		const currentPage = pagination.pageIndex + 1;
+		const rowsPerPage = pagination.pageSize;
+		requestData(rowsPerPage, currentPage);
+		setPageCount(Math.ceil(totalRows / rowsPerPage));
+	}, [pagination]);
 
-    // Fetch total rows on mount
-    useEffect(() => {
-        fetchTotalRows();
-    }, []);
+	// Fetch data from backend.
+	function requestData(
+		rowsPerPage = 10,
+		currentPage = 1,
+		typeCount = '',
+		searchField = '',
+		startDate = new Date(0),
+		endDate = new Date()
+	) {
+		setData(null);
+		axios({
+			method: 'GET',
+			url: getApiLink(appLocalizer, 'knowledge'),
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			params: {
+				page: currentPage,
+				row: rowsPerPage,
+				status: typeCount === 'all' ? '' : typeCount,
+				startDate,
+				endDate,
+				searchField,
+			},
+		})
+			.then((response) => {
+				setData(response.data.items || []);
 
+				const statuses = [
+					{ key: 'all', name: 'All', count: response.data.all || 0 },
+					{
+						key: 'publish',
+						name: 'Published',
+						count: response.data.publish || 0,
+					},
+					{
+						key: 'pending',
+						name: 'Pending',
+						count: response.data.pending || 0,
+					},
+					{
+						key: 'draft',
+						name: 'Draft',
+						count: response.data.draft || 0,
+					},
+				];
 
-    useEffect(() => {
-        const currentPage = pagination.pageIndex + 1;
-        const rowsPerPage = pagination.pageSize;
-        requestData(rowsPerPage, currentPage);
-        setPageCount(Math.ceil(totalRows / rowsPerPage));
-    }, [pagination]);
+				// Only keep count > 0
+				setAnnouncementStatus(statuses.filter((s) => s.count > 0));
+			})
+			.catch(() => {
+				setError(__('Failed to load stores', 'multivendorx'));
+				setData([]);
+			});
+	}
 
-    // Fetch data from backend.
-    function requestData(
-        rowsPerPage = 10,
-        currentPage = 1,
-        typeCount = '',
-        searchField = '',
-        startDate = new Date(0),
-        endDate = new Date(),
-    ) {
-        setData(null);
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, 'knowledge'),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: {
-                page: currentPage,
-                row: rowsPerPage,
-                status: typeCount === 'all' ? '' : typeCount,
-                startDate,
-                endDate,
-                searchField
-            },
-        })
-            .then((response) => {
-                setData(response.data.items || []);
+	// Handle pagination and filter changes
+	const requestApiForData = (
+		rowsPerPage: number,
+		currentPage: number,
+		filterData: FilterData
+	) => {
+		setData(null);
+		requestData(
+			rowsPerPage,
+			currentPage,
+			filterData?.typeCount,
+			filterData?.searchField,
+			filterData?.date?.start_date,
+			filterData?.date?.end_date
+		);
+	};
 
-                const statuses = [
-                    { key: 'all',     name: 'All',       count: response.data.all || 0 },
-                    { key: 'publish', name: 'Published', count: response.data.publish || 0 },
-                    { key: 'pending', name: 'Pending',   count: response.data.pending || 0 },
-                    { key: 'draft',   name: 'Draft',     count: response.data.draft || 0 },
-                ];
-                
-                // Only keep count > 0
-                setAnnouncementStatus(statuses.filter(s => s.count > 0));
-            })
-            .catch(() => {
-                setError(__('Failed to load stores', 'multivendorx'));
-                setData([]);
-            });
-    }
+	const realtimeFilter: RealtimeFilter[] = [
+		{
+			name: 'date',
+			render: (updateFilter) => (
+				<div className="right">
+					<MultiCalendarInput
+						wrapperClass=""
+						inputClass=""
+						onChange={(range: any) => {
+							updateFilter('date', {
+								start_date: range.startDate,
+								end_date: range.endDate,
+							});
+						}}
+					/>
+				</div>
+			),
+		},
+	];
 
-    // Handle pagination and filter changes
-    const requestApiForData = (
-        rowsPerPage: number,
-        currentPage: number,
-        filterData: FilterData
-    ) => {
-        setData(null);
-        requestData(
-            rowsPerPage,
-            currentPage,
-            filterData?.typeCount,
-            filterData?.searchField,
-            filterData?.date?.start_date,
-            filterData?.date?.end_date,
+	const truncateText = (text: string, maxLength: number) => {
+		if (!text) {
+			return '-';
+		}
+		return text.length > maxLength
+			? text.slice(0, maxLength) + '...'
+			: text;
+	};
+	// Columns
+	const columns: ColumnDef<KBRow>[] = [
+		{
+			id: 'select',
+			header: ({ table }) => (
+				<input
+					type="checkbox"
+					checked={table.getIsAllRowsSelected()}
+					onChange={table.getToggleAllRowsSelectedHandler()}
+				/>
+			),
+			cell: ({ row }) => (
+				<input
+					type="checkbox"
+					checked={row.getIsSelected()}
+					onChange={row.getToggleSelectedHandler()}
+				/>
+			),
+		},
+		{
+			header: __('Name your article', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.title || ''}>
+					{truncateText(row.original.title || '', 30)}{' '}
+					{/* truncate to 30 chars */}
+				</TableCell>
+			),
+		},
+		{
+			header: __('Write your explanation or tutorial', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={row.original.content || ''}>
+					{truncateText(row.original.content || '', 50)}{' '}
+					{/* truncate to 50 chars */}
+				</TableCell>
+			),
+		},
+		{
+			id: 'date',
+			accessorKey: 'date',
+			enableSorting: true,
+			header: __('Date', 'multivendorx'),
+			cell: ({ row }) => {
+				const rawDate = row.original.date;
+				let formattedDate = '-';
+				if (rawDate) {
+					const dateObj = new Date(rawDate);
+					formattedDate = new Intl.DateTimeFormat('en-US', {
+						month: 'short',
+						day: 'numeric',
+						year: 'numeric',
+					}).format(dateObj);
+				}
+				return (
+					<TableCell title={formattedDate}>{formattedDate}</TableCell>
+				);
+			},
+		},
+		{
+			id: 'status',
+			header: __('Status', 'multivendorx'),
+			cell: ({ row }) => {
+				return <TableCell type="status" status={row.original.status} />;
+			},
+		},
+		{
+			id: 'action',
+			header: __('Action', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell
+					type="action-dropdown"
+					rowData={row.original}
+					header={{
+						actions: [
+							{
+								label: __('Edit', 'multivendorx'),
+								icon: 'adminlib-edit',
+								onClick: (rowData) => handleEdit(rowData.id),
+								hover: true,
+							},
+							{
+								label: __('Delete', 'multivendorx'),
+								icon: 'adminlib-delete',
+								onClick: async (rowData) => {
+									if (!rowData.id) {
+										return;
+									}
+									if (
+										!confirm(
+											__(
+												'Are you sure you want to delete this entry?',
+												'multivendorx'
+											)
+										)
+									) {
+										return;
+									}
 
-        );
-    };
+									try {
+										await axios({
+											method: 'DELETE',
+											url: getApiLink(
+												appLocalizer,
+												`knowledge/${rowData.id}`
+											),
+											headers: {
+												'X-WP-Nonce':
+													appLocalizer.nonce,
+											},
+										});
+										await fetchTotalRows();
+										requestData(
+											pagination.pageSize,
+											pagination.pageIndex + 1
+										);
+									} catch {
+										setError(
+											__(
+												'Failed to delete entry',
+												'multivendorx'
+											)
+										);
+									}
+								},
+								hover: true,
+							},
+						],
+					}}
+				/>
+			),
+		},
+	];
 
-    const realtimeFilter: RealtimeFilter[] = [
-        {
-            name: 'date',
-            render: (updateFilter) => (
-                <div className="right">
-                    <MultiCalendarInput
-                        wrapperClass=""
-                        inputClass=""
-                        onChange={(range: any) => {
-                            updateFilter('date', {
-                                start_date: range.startDate,
-                                end_date: range.endDate,
-                            });
-                        }}
-                    />
-                </div>
-            ),
-        },
-    ];
+	const searchFilter: RealtimeFilter[] = [
+		{
+			name: 'searchField',
+			render: (updateFilter, filterValue) => (
+				<>
+					<div className="search-section">
+						<input
+							name="searchField"
+							type="text"
+							placeholder={__('Search', 'multivendorx')}
+							onChange={(e) => {
+								updateFilter(e.target.name, e.target.value);
+							}}
+							value={filterValue || ''}
+						/>
+						<i className="adminlib-search"></i>
+					</div>
+				</>
+			),
+		},
+	];
 
-    const truncateText = (text: string, maxLength: number) => {
-        if (!text) return '-';
-        return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
-    };
-    // Columns
-    const columns: ColumnDef<KBRow>[] = [
-        {
-            id: 'select',
-            header: ({ table }) => (
-                <input
-                    type="checkbox"
-                    checked={table.getIsAllRowsSelected()}
-                    onChange={table.getToggleAllRowsSelectedHandler()}
-                />
-            ),
-            cell: ({ row }) => (
-                <input
-                    type="checkbox"
-                    checked={row.getIsSelected()}
-                    onChange={row.getToggleSelectedHandler()}
-                />
-            ),
-        },
-        {
-            header: __('Name your article', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.title || ''}>
-                    {truncateText(row.original.title || '', 30)} {/* truncate to 30 chars */}
-                </TableCell>
-            ),
-        },
-        {
-            header: __('Write your explanation or tutorial', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell title={row.original.content || ''}>
-                    {truncateText(row.original.content || '', 50)} {/* truncate to 50 chars */}
-                </TableCell>
-            ),
-        },
-        {
-            id: 'date',
-            accessorKey: 'date',
-            enableSorting: true,
-            header: __('Date', 'multivendorx'),
-            cell: ({ row }) => {
-                const rawDate = row.original.date;
-                let formattedDate = '-';
-                if (rawDate) {
-                    const dateObj = new Date(rawDate);
-                    formattedDate = new Intl.DateTimeFormat('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                    }).format(dateObj);
-                }
-                return <TableCell title={formattedDate}>{formattedDate}</TableCell>;
-            },
-        },
-        {
-            id: 'status',
-            header: __('Status', 'multivendorx'),
-            cell: ({ row }) => {
-                return (
-                    <TableCell
-                        type="status"
-                        status={row.original.status}
-                    />
-                );
-            },
-        },
-        {
-            id: 'action',
-            header: __('Action', 'multivendorx'),
-            cell: ({ row }) => (
-                <TableCell
-                    type="action-dropdown"
-                    rowData={row.original}
-                    header={{
-                        actions: [
-                            {
-                                label: __('Edit', 'multivendorx'),
-                                icon: 'adminlib-edit',
-                                onClick: (rowData) => handleEdit(rowData.id),
-                                hover: true,
-                            },
-                            {
-                                label: __('Delete', 'multivendorx'),
-                                icon: 'adminlib-delete',
-                                onClick: async (rowData) => {
-                                    if (!rowData.id) return;
-                                    if (!confirm(__('Are you sure you want to delete this entry?', 'multivendorx'))) return;
+	const BulkAction: React.FC = () => (
+		<div className=" bulk-action">
+			<select
+				name="action"
+				className="basic-select"
+				ref={bulkSelectRef}
+				onChange={handleBulkAction}
+			>
+				<option value="">{__('Bulk actions')}</option>
+				<option value="publish">{__('Publish', 'multivendorx')}</option>
+				<option value="pending">{__('Pending', 'multivendorx')}</option>
+				<option value="delete">{__('Delete', 'multivendorx')}</option>
+			</select>
+		</div>
+	);
 
-                                    try {
-                                        await axios({
-                                            method: 'DELETE',
-                                            url: getApiLink(appLocalizer, `knowledge/${rowData.id}`),
-                                            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-                                        });
-                                        await fetchTotalRows();
-                                        requestData(pagination.pageSize, pagination.pageIndex + 1);
-                                    } catch {
-                                        setError(__('Failed to delete entry', 'multivendorx'));
-                                    }
-                                },
-                                hover: true,
-                            },
-                        ],
-                    }}
-                />
-            ),
-        },
-    ];
+	return (
+		<>
+			<AdminBreadcrumbs
+				activeTabIcon="adminlib-book"
+				tabTitle={__('Knowledge Base', 'multivendorx')}
+				description={__(
+					'Build your knowledge base: add new guides or manage existing ones in one place.',
+					'multivendorx'
+				)}
+				buttons={[
+					<div
+						className="admin-btn btn-purple-bg"
+						onClick={() => {
+							setValidationErrors({});
+							setAddEntry(true);
+						}}
+					>
+						<i className="adminlib-plus-circle"></i>
+						{__('Add New', 'multivendorx')}
+					</div>,
+				]}
+			/>
 
-    const searchFilter: RealtimeFilter[] = [
-        {
-            name: 'searchField',
-            render: (updateFilter, filterValue) => (
-                <>
-                    <div className="search-section">
-                        <input
-                            name="searchField"
-                            type="text"
-                            placeholder={__('Search', 'multivendorx')}
-                            onChange={(e) => {
-                                updateFilter(e.target.name, e.target.value);
-                            }}
-                            value={filterValue || ''}
-                        />
-                        <i className="adminlib-search"></i>
-                    </div>
-                </>
-            ),
-        },
-    ];
-
-    const BulkAction: React.FC = () => (
-        <div className=" bulk-action">
-            <select name="action" className="basic-select" ref={bulkSelectRef} onChange={handleBulkAction}>
-                <option value="">{__('Bulk actions')}</option>
-                <option value="publish">{__('Publish', 'multivendorx')}</option>
-                <option value="pending">{__('Pending', 'multivendorx')}</option>
-                <option value="delete">{__('Delete', 'multivendorx')}</option>
-            </select>
-        </div>
-    );
-
-    return (
-        <>
-            <AdminBreadcrumbs
-                activeTabIcon="adminlib-book"
-                tabTitle={__('Knowledge Base', 'multivendorx')}
-                description={__('Build your knowledge base: add new guides or manage existing ones in one place.', 'multivendorx')}
-                buttons={[
-                    <div
-                        className="admin-btn btn-purple-bg"
-                        onClick={() => {
-                            setValidationErrors({});
-                            setAddEntry(true);
-                        }}
-                    >
-                        <i className="adminlib-plus-circle"></i>
-                        {__('Add New', 'multivendorx')}
-                    </div>,
-                ]}
-            />
-
-            {addEntry && (
-                <CommonPopup
-                    open={addEntry}
-                    onClose={handleCloseForm}
-                    width="31.25rem"
-                    height="80%"
-                    header={
-                        <>
-                            <div className="title">
-                                <i className="adminlib-book"></i>
-                                {editId
-                                    ? __('Edit Knowledgebase', 'multivendorx')
-                                    : __('Add Knowledgebase', 'multivendorx')}
-                            </div>
-                            <p>
-                                {__('Write and publish a new knowledge base article to help stores navigate their dashboard.', 'multivendorx')}
-                            </p>
-                            <i
-                                onClick={handleCloseForm}
-                                className="icon adminlib-close"
-                            ></i>
-                        </>
-                    }
-                    footer={
-                        <>
-                            <div
-                                onClick={handleCloseForm}
-                                className="admin-btn btn-red"
-                            >
-                                {__('Cancel', 'multivendorx')}
-                            </div>
-                            <button
-                                type="button"
-                                onClick={() => handleSubmit(formData.status || 'draft')}
-                                className="admin-btn btn-purple"
-                                disabled={submitting}
-                            >
-                                {submitting ? __('Saving...', 'multivendorx') : __('Save', 'multivendorx')}
-                            </button>
-                        </>
-                    }
-                >
-                    <div className="content">
-                        <div className="form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="title">{__('Title', 'multivendorx')}</label>
-                                <BasicInput
-                                    type="text"
-                                    name="title"
-                                    value={formData.title}
-                                    onChange={handleChange}
-                                />
-                                {validationErrors.title && (
-                                    <p className="invalid-massage">{validationErrors.title}</p>
-                                )}
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="content">{__('Content', 'multivendorx')}</label>
-                                <TextArea
-                                    name="content"
-                                    inputClass="textarea-input"
-                                    value={formData.content}
-                                    onChange={handleChange}
-                                    usePlainText={false}
-                                    tinymceApiKey={
-                                        appLocalizer.settings_databases_value['marketplace']['tinymce_api_section'] ?? ''
-                                    }
-                                />
-                                {validationErrors.content && (
-                                    <p className="invalid-massage">{validationErrors.content}</p>
-                                )}
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="status">{__('Status', 'multivendorx')}</label>
-                                <ToggleSetting
-                                    value={formData.status}
-                                    options={[
-                                        { label: __('Draft', 'multivendorx'), value: 'draft' },
-                                        { label: __('Pending', 'multivendorx'), value: 'pending' },
-                                        { label: __('Publish', 'multivendorx'), value: 'publish' },
-                                    ]}
-                                    onChange={(value) =>
-                                        setFormData((prev) => ({ ...prev, status: value }))
-                                    }
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </CommonPopup>
-            )}
-            <div className="general-wrapper">
-                <div className="admin-table-wrapper">
-                    <Table
-                        data={data}
-                        columns={columns as ColumnDef<Record<string, any>, any>[]}
-                        rowSelection={rowSelection}
-                        onRowSelectionChange={setRowSelection}
-                        defaultRowsPerPage={10}
-                        pageCount={pageCount}
-                        pagination={pagination}
-                        onPaginationChange={setPagination}
-                        handlePagination={requestApiForData}
-                        perPageOption={[10, 25, 50]}
-                        typeCounts={announcementStatus as AnnouncementStatus[]}
-                        bulkActionComp={() => <BulkAction />}
-                        totalCounts={totalRows}
-                        realtimeFilter={realtimeFilter}
-                        searchFilter={searchFilter}
-                    />
-                </div>
-            </div>
-        </>
-    );
+			{addEntry && (
+				<CommonPopup
+					open={addEntry}
+					onClose={handleCloseForm}
+					width="31.25rem"
+					height="80%"
+					header={
+						<>
+							<div className="title">
+								<i className="adminlib-book"></i>
+								{editId
+									? __('Edit Knowledgebase', 'multivendorx')
+									: __('Add Knowledgebase', 'multivendorx')}
+							</div>
+							<p>
+								{__(
+									'Write and publish a new knowledge base article to help stores navigate their dashboard.',
+									'multivendorx'
+								)}
+							</p>
+							<i
+								onClick={handleCloseForm}
+								className="icon adminlib-close"
+							></i>
+						</>
+					}
+					footer={
+						<>
+							<div
+								onClick={handleCloseForm}
+								className="admin-btn btn-red"
+							>
+								{__('Cancel', 'multivendorx')}
+							</div>
+							<button
+								type="button"
+								onClick={() =>
+									handleSubmit(formData.status || 'draft')
+								}
+								className="admin-btn btn-purple"
+								disabled={submitting}
+							>
+								{submitting
+									? __('Saving...', 'multivendorx')
+									: __('Save', 'multivendorx')}
+							</button>
+						</>
+					}
+				>
+					<div className="content">
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label htmlFor="title">
+									{__('Title', 'multivendorx')}
+								</label>
+								<BasicInput
+									type="text"
+									name="title"
+									value={formData.title}
+									onChange={handleChange}
+								/>
+								{validationErrors.title && (
+									<p className="invalid-massage">
+										{validationErrors.title}
+									</p>
+								)}
+							</div>
+							<div className="form-group">
+								<label htmlFor="content">
+									{__('Content', 'multivendorx')}
+								</label>
+								<TextArea
+									name="content"
+									inputClass="textarea-input"
+									value={formData.content}
+									onChange={handleChange}
+									usePlainText={false}
+									tinymceApiKey={
+										appLocalizer.settings_databases_value[
+											'marketplace'
+										]['tinymce_api_section'] ?? ''
+									}
+								/>
+								{validationErrors.content && (
+									<p className="invalid-massage">
+										{validationErrors.content}
+									</p>
+								)}
+							</div>
+							<div className="form-group">
+								<label htmlFor="status">
+									{__('Status', 'multivendorx')}
+								</label>
+								<ToggleSetting
+									value={formData.status}
+									options={[
+										{
+											label: __('Draft', 'multivendorx'),
+											value: 'draft',
+										},
+										{
+											label: __(
+												'Pending',
+												'multivendorx'
+											),
+											value: 'pending',
+										},
+										{
+											label: __(
+												'Publish',
+												'multivendorx'
+											),
+											value: 'publish',
+										},
+									]}
+									onChange={(value) =>
+										setFormData((prev) => ({
+											...prev,
+											status: value,
+										}))
+									}
+								/>
+							</div>
+						</div>
+					</div>
+				</CommonPopup>
+			)}
+			<div className="general-wrapper">
+				<div className="admin-table-wrapper">
+					<Table
+						data={data}
+						columns={
+							columns as ColumnDef<Record<string, any>, any>[]
+						}
+						rowSelection={rowSelection}
+						onRowSelectionChange={setRowSelection}
+						defaultRowsPerPage={10}
+						pageCount={pageCount}
+						pagination={pagination}
+						onPaginationChange={setPagination}
+						handlePagination={requestApiForData}
+						perPageOption={[10, 25, 50]}
+						typeCounts={announcementStatus as AnnouncementStatus[]}
+						bulkActionComp={() => <BulkAction />}
+						totalCounts={totalRows}
+						realtimeFilter={realtimeFilter}
+						searchFilter={searchFilter}
+					/>
+				</div>
+			</div>
+		</>
+	);
 };
 
 export default KnowledgeBase;

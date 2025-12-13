@@ -131,6 +131,10 @@ class Admin {
 						'name'   => __( 'Memberships', 'multivendorx' ),
 						'subtab' => 'payment-membership-message',
 					),
+                    'add-memberships'         => array(
+						'name'   => __( 'Add Memberships', 'multivendorx' ),
+						'subtab' => '',
+					),
 					'settings'            => array(
 						'name'   => __( 'Settings', 'multivendorx' ),
 						'subtab' => 'marketplace',
@@ -210,7 +214,7 @@ class Admin {
      * @return void
      */
     public function create_setting_page() {
-        echo '<div id="admin-main-wrapper" class="light"></div>';
+        echo '<div id="admin-main-wrapper" class="multivendorx-main-wrapper"></div>';
     }
 
     /**

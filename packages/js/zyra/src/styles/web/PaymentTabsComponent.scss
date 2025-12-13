@@ -2,6 +2,7 @@
 
 .payment-tabs-component {
     margin: 0;
+
     .payment-method-card {
         margin-bottom: 1rem;
         cursor: pointer;
@@ -142,18 +143,15 @@
                         &:hover {
                             span {
                                 display: block;
-
-                                // width: 100%;
                                 background-color: rgb(46 46 46);
                                 color: #fff;
                                 text-align: center;
                                 padding: 0.313rem;
                                 border-radius: 0.375rem;
                                 position: absolute;
-                                top: -2rem;
                                 z-index: 1;
                                 font-size: 0.8rem;
-                                inset: auto auto 0 0;
+                                inset: 0 auto auto 0;
                                 transform: translate(-2rem, -2.313rem);
                             }
                         }
@@ -211,12 +209,12 @@
                     font-size: 0.95rem;
                 }
 
-                .input-content:has(label) {
-                    width: 75%;
-                }
-
                 .input-content {
                     width: 100%;
+                }
+                
+                .input-content:has(label) {
+                    width: 75%;
                 }
 
                 textarea {
@@ -346,8 +344,6 @@
 
     .des {
         padding-top: 0.5rem;
-        font-size: 0.95rem;
-        color: #000000b8;
     }
 }
 
@@ -430,7 +426,6 @@
     }
 
     .des {
-        font-size: 0.95rem;
         text-align: center;
         padding: 0 3rem;
     }
