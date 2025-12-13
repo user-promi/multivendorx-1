@@ -4,87 +4,111 @@ export default {
 	id: 'franchise',
 	priority: 1,
 	name: __('Franchise', 'multivendorx'),
-	tabTitle: 'Order creation rules',
+	tabTitle: 'Order routing',
 	desc: __(
-		'Franchise mode lets you run multiple branch stores under one brand, with each outlet managing its own orders and local service areas.',
+		'Franchise mode lets you run multiple branch stores under one brand. Use these settings to control how customer orders are routed to franchise stores.',
 		'multivendorx'
 	),
 	icon: 'adminlib-single-product',
 	submitUrl: 'settings',
 	modal: [
 		{
-			key: 'singleproductmultistore_show_order',
+			key: 'store_assignment_method',
 			type: 'setting-toggle',
-			label: __('Location Restriction', 'multivendorx'),
+			label: __('Store assignment method', 'multivendorx'),
+			desc: __(
+				'Choose how customer orders should be assigned to franchise stores.',
+				'multivendorx'
+			),
 			options: [
 				{
-					key: 'min-price',
+					key: 'nearest_store',
+					label: __('Nearest store', 'multivendorx'),
+					value: 'nearest_store',
+					desc: __(
+						'Automatically assign orders to the closest eligible franchise store based on the customer’s delivery address. Best suited for physical or region-based fulfillment.',
+						'multivendorx'
+					),
+				},
+				{
+					key: 'manual_assignment',
+					label: __('Manual assignment', 'multivendorx'),
+					value: 'manual_assignment',
+					desc: __(
+						'Orders remain unassigned until an admin manually selects a franchise store.',
+						'multivendorx'
+					),
+				},
+			],
+		},
+		{
+			key: 'location_restriction',
+			type: 'setting-toggle',
+			label: __('Location restriction', 'multivendorx'),
+			desc: __(
+				'Define how store service areas are used when assigning orders to the nearest store.',
+				'multivendorx'
+			),
+			dependent: {
+				kkey: 'store_assignment_method',
+				set: true,
+				value: 'nearest_store',
+			},
+			options: [
+				{
+					key: 'city',
 					label: __('City', 'multivendorx'),
-					value: __('city', 'multivendorx'),
+					value: 'city',
 				},
 				{
-					key: 'max-price',
+					key: 'state',
 					label: __('State', 'multivendorx'),
-					value: __('max-price', 'multivendorx'),
+					value: 'state',
 				},
 				{
-					key: 'top-rated-store',
-					label: __('Postal Code', 'multivendorx'),
-					value: __('top-rated-store', 'multivendorx'),
+					key: 'postal_code',
+					label: __('Postal code', 'multivendorx'),
+					value: 'postal_code',
 				},
 			],
 		},
 		{
 			key: 'section',
 			type: 'section',
-			hint: __('Order Fulfillment', 'multivendorx'),
-			desc: __('Decide how customer orders should be routed to franchise stores', 'multivendorx'),
+			hint: __('Order creation', 'multivendorx'),
+			desc: __(
+				'Control whether franchise stores can create and manage orders on their own.',
+				'multivendorx'
+			),
 		},
 		{
-			key: 'automatic_store_assignment',
-			type: 'setting-toggle',
-			label: __('Automatic Store Assignment', 'multivendorx'),
-			options: [
-				{
-					key: 'min-price',
-					label: __('Nearest Store', 'multivendorx'),
-					value: __('min-price', 'multivendorx'),
-				},
-				{
-					key: 'max-price',
-					label: __('Manual Assignment', 'multivendorx'),
-					value: __('max-price', 'multivendorx'),
-				},
-			],
-		},
-		{
-			key: 'section',
-			type: 'section',
-			hint: __('Order Creation', 'multivendorx'),
-			desc: __('Control how franchise stores create and manage their own orders', 'multivendorx'),
-		},
-		{
-			key: 'taxable',
-			label: __('Store Order Creation', 'multivendorx'),
-			desc: __('Allow franchise stores to manually create orders for the products they manage. Useful for in-store purchases, phone orders, or wholesale requests.', 'multivendorx'),
+			key: 'store_order_creation',
+			label: __('Store order creation', 'multivendorx'),
+			desc: __(
+				'Allow franchise stores to manually create orders for their products. Useful for phone orders, walk-in customers, or offline sales.',
+				'multivendorx'
+			),
 			type: 'checkbox',
 			options: [
 				{
-					key: 'taxable',
-					value: 'taxable',
+					key: 'enabled',
+					value: 'enabled',
 				},
 			],
 			look: 'toggle',
 		},
 		{
-			key: 'taxable',
-			label: __('Admin Product Ordering', 'multivendorx'),
-			desc: __('Allow franchise stores to place orders for products from the admin catalog. This lets stores restock or sell admin-owned products directly.', 'multivendorx'),
+			key: 'admin_product_ordering',
+			label: __('Admin product ordering', 'multivendorx'),
+			desc: __(
+				'Allow franchise stores to order products from the admin catalog for selling or restocking.',
+				'multivendorx'
+			),
 			type: 'checkbox',
 			options: [
 				{
-					key: 'taxable',
-					value: 'taxable',
+					key: 'enabled',
+					value: 'enabled',
 				},
 			],
 			look: 'toggle',
@@ -92,18 +116,28 @@ export default {
 		{
 			key: 'section',
 			type: 'section',
-			hint: __('Admin Product Pricing', 'multivendorx'),
-			desc: __('Configure how store pricing works when selling admin-owned products', 'multivendorx'),
+			hint: __('Admin product pricing', 'multivendorx'),
+			desc: __(
+				'Control how pricing works when franchise stores sell admin-owned products.',
+				'multivendorx'
+			),
 		},
 		{
-			key: 'taxable',
-			label: __('Store Price Override', 'multivendorx'),
-			desc: __('Let franchise stores adjust the selling price of admin products based on local demand or regional pricing requirements.', 'multivendorx'),
+			key: 'store_price_override',
+			label: __('Store price override', 'multivendorx'),
+			desc: __(
+				'Allow franchise stores to adjust the selling price of admin products to match local market conditions.',
+				'multivendorx'
+			),
 			type: 'checkbox',
+			dependency: {
+				key: 'admin_product_ordering',
+				value: 'enabled',
+			},
 			options: [
 				{
-					key: 'taxable',
-					value: 'taxable',
+					key: 'enabled',
+					value: 'enabled',
 				},
 			],
 			look: 'toggle',
