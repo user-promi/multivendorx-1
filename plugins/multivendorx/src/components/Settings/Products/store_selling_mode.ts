@@ -15,7 +15,7 @@ export default {
 			key: 'store_selling_mode',
 			type: 'setting-toggle',
 			label: __('Store selling mode', 'multivendorx'),
-			desc: __('Decide how stores are allowed to sell products in your marketplace:<ul><li><strong>Single product multiple vendors</strong> - Vendors can copy existing products and sell them alongside new products they create.</li><li><strong>Franchise</strong> - Franchise stores can sell only their own products and products created by the admin.</li><li><strong>Default</strong> - Stores can sell only their own products, following standard marketplace rules.</li></ul>','multivendorx'),
+			desc: __('Decide how stores are allowed to sell products in your marketplace:<ul><li><strong>Shared product listing</strong> - Stores can copy existing products and sell them alongside new products they create.</li><li><strong>Franchise</strong> - Franchise stores can sell only their own products and products created by the admin.</li><li><strong>Default</strong> - Stores can sell only their own products, following standard marketplace rules.</li></ul>','multivendorx'),
 options: [
 				{
 					key: 'single_product_multiple_vendor',
@@ -215,12 +215,7 @@ options: [
 			desc: __(
 				'Specifies order creation and management rules for franchise stores.',
 				'multivendorx'
-			),			
-			dependent: {
-				key: 'store_selling_mode',
-				set: true,
-				value: 'franchise',
-			},
+			),		
 		},
 		{
 			key: 'products_available_for_franchise_orders',
