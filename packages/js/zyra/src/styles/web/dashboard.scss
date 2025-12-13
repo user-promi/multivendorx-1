@@ -71,7 +71,11 @@
         .right {
             display: flex;
             gap: 0.5rem;
-
+            .field-wrapper{
+                .des{
+                    padding-top: 0.5rem;
+                }
+            }
             span {
                 font-size: 0.875rem;
                 color: #0000009e;
@@ -538,7 +542,9 @@
         }
     }
 }
-
+.star-icon{
+     color: #ffc800;;
+}
 // review end
 
 // no permission section start
