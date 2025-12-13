@@ -649,8 +649,7 @@ export const Announcements: React.FC = () => {
 			),
 		},
 	];
-	console.log('storeoption', storeOptions);
-	console.log('formData', formData);
+
 	return (
 		<>
 			<AdminBreadcrumbs
