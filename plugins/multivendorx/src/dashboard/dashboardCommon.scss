@@ -1,14 +1,14 @@
 .dark {
     --textColor: #fff;
-    --subTextColor: #fff;
+    --subTextColor: #b6c6e3;
 
     --colorWhite: #000;
 
     --backgroundColor: #121212;
-    --backgroundWhite: #121212;
+    --backgroundWhite: #101924;
     --backgroundPrimary: #313131;
 
-    --borderColor: #dbdbdb;
+    --borderColor: #203247;
 }
 
 .orchid-bloom {
@@ -189,12 +189,12 @@ $accent-color: #e35047;
 //     }
 // }
 
-:root {
-    --colorPrimary: unset;
-    --colorSecondary: unset;
-    --colorAccent: unset;
-    --colorSupport: unset;
-}
+// :root {
+//     --colorPrimary: unset;
+//     --colorSecondary: unset;
+//     --colorAccent: unset;
+//     --colorSupport: unset;
+// }
 
 body {
     margin: 0;
@@ -203,6 +203,15 @@ body {
 a:focus {
     color: #181819;
 }
+
+body:has(.dark){
+    background: #0d141d !important;
+
+    .analytics-item{
+        background: $background-white;
+    }
+}
+
 
 // zyra color overwrite start
 // .btn-purple-bg,
@@ -745,6 +754,7 @@ a:focus {
 .checklist-wrapper {
     .checklist-title {
         font-size: 1.25rem;
+        color: $text-color;
         font-weight: 600;
     }
 
@@ -763,7 +773,7 @@ a:focus {
                 width: 0.95rem;
                 height: 0.95rem;
                 display: inline-block;
-                background: #b5b3b777;
+                background: $background-color;
                 border-radius: 50%;
                 position: relative;
                 font-family: adminlibrary, sans-serif;

@@ -101,6 +101,26 @@ const MessageAndMail = ({ id }: { id: string }) => {
 							<div className="left">
 								<div className="title">Basic Plan Details</div>
 							</div>
+							<div className="right">
+								<ToggleSetting
+									wrapperClass="setting-form-input"
+									descClass="settings-metabox-description"
+									options={[
+										{
+											key: 'draft',
+											value: 'draft',
+											label: __('Draft', 'multivendorx'),
+										},
+										{
+											key: 'published',
+											value: 'Published',
+											label: __('Published', 'multivendorx'),
+										},
+									]}
+								// value={formData.status}
+								// onChange={handleToggleChange}
+								/>
+							</div>
 						</div>
 						<div className="card-body">
 							<div className="form-group-wrapper">
