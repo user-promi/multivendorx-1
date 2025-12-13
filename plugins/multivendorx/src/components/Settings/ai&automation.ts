@@ -12,61 +12,19 @@ export default {
 	submitUrl: 'settings',
 	modal: [
 		{
-			key: 'store_compliance_management',
-			type: 'payment-tabs',
-			label: 'Choose Your AI Power Sources',
-
-			modal: [
-				{
-					id: 'google-gemini-api',
-					icon: 'adminlib-gemini',
-					label: 'Google Gemini API',
-					connected: true,
-					// disableBtn: true,
-					enableOption: true,
-					openForm: true,
-					desc: 'Your all-in-one AI solution. Generate compelling product descriptions, titles, and stunning images all from one powerful API. Perfect for versatile content creation.',
-					formFields: [
-						{
-							key: 'terms_conditions',
-							type: 'text',
-							label: 'API Key'
-						},
-					],
-				},
-				{
-					id: 'openAI-API',
-					icon: 'adminlib-chatgpt',
-					label: 'OpenAI API (ChatGPT)',
-					connected: true,
-					// disableBtn: true,
-					enableOption: true,
-					desc: 'Harness the power of GPT-4 for premium product content. Create engaging, human-like descriptions and titles that convert browsers into buyers.',
-					formFields: [
-						{
-							key: 'terms',
-							type: 'text',
-							label: 'API Key'
-						},
-					],
-				},
-				{
-					id: 'open-router',
-					icon: 'adminlib-openrouter',
-					label: 'OpenRouter API',
-					connected: true,
-					// disableBtn: true,
-					enableOption: true,
-					desc: 'Access a marketplace of AI models including free and open-source options. Choose from multiple providers for both text generation and image creation at competitive prices.',
-					formFields: [
-						{
-							key: 'api_key',
-							type: 'text',
-							label: 'API Key'
-						},
-					],
-				},
-			],
+			key: 'tinymce_api_section',
+			type: 'text',
+			label: __('API key', 'multivendorx'),
+		},
+		{
+			key: 'tinymce_api_section',
+			type: 'text',
+			label: __('API key', 'multivendorx'),
+		},
+		{
+			key: 'tinymce_api_section',
+			type: 'text',
+			label: __('API key', 'multivendorx'),
 		},
 		// --- AI Provider Choice ---
 		{
