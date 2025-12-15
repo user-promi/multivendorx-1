@@ -8,7 +8,7 @@ import './hooksFilters';
 const Dashboard = () => {
 	const [menu, setMenu] = useState({});
 	const [openSubmenus, setOpenSubmenus] = useState({});
-	const [storeData, setStoreData] = useState({});
+	const [storeData, setStoreData] = useState(null);
 	const [currentTab, setCurrentTab] = useState('');
 	const [showUserDropdown, setShowUserDropdown] = useState(false);
 	const [showNotifications, setShowNotifications] = useState(false);
@@ -48,7 +48,7 @@ const Dashboard = () => {
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 		}).then((res: any) => {
 			const data = res.data || {};
-			setStoreData(data);
+			setStoreData(data || null);
 		});
 	}, [appLocalizer.store_id]);
 
@@ -266,7 +266,7 @@ const Dashboard = () => {
 					)}
 				</div>
 
-				{storeData.status == 'active' && (
+				{storeData?.status == 'active' && (
 					<div className="dashboard-tabs">
 						<ul>
 							{Object.entries(menu).map(([key, item]) => {
@@ -597,7 +597,7 @@ const Dashboard = () => {
 
 				{/* <div className="content-wrapper">{loadComponent(currentTab)}</div> */}
 				<div className="content-wrapper">
-					{storeData.length > 0 && storeData.status !== 'active' ? (
+					{storeData && storeData.status !== 'active' ? (
 						<div className="permission-wrapper">
 							<i className="adminlib-info red"></i>
 							<div className="title">
