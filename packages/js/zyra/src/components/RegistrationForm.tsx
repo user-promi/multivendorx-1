@@ -68,7 +68,7 @@ export interface FormField {
     parentId?: any;
     isStore?: boolean;
     // new for grouped/compound fields like address
-    fields?: Array<{
+    fields?: Array< {
         id: string | number;
         key: string;
         label: string;
@@ -76,8 +76,8 @@ export interface FormField {
         placeholder?: string;
         options?: string[];
         required?: boolean;
-    }>;
-    value?: Record<string, any>;
+    } >;
+    value?: Record< string, any >;
 }
 
 interface ButtonSetting {
@@ -88,11 +88,14 @@ interface ButtonSetting {
 }
 
 interface CustomFormProps {
-    onChange: (data: { formfieldlist: FormField[]; butttonsetting: ButtonSetting }) => void;
+    onChange: ( data: {
+        formfieldlist: FormField[];
+        butttonsetting: ButtonSetting;
+    } ) => void;
     name: string;
     proSettingChange: () => boolean;
     formTitlePlaceholder?: string;
-    setting: Record<string, any>;
+    setting: Record< string, any >;
 }
 
 // Default values for input options
@@ -102,16 +105,22 @@ const DEFAULT_OPTIONS: Option[] = [
     { id: '3', label: 'Authorized Agent', value: 'authorized_agent' },
 ];
 
-const DEFAULT_PLACEHOLDER = (type: string): string => `${type}`;
+const DEFAULT_PLACEHOLDER = ( type: string ): string => `${ type }`;
 // before: const DEFAULT_LABEL_SIMPLE = (type: string): string => `Enter your ${type}`;
 // const DEFAULT_LABEL_SIMPLE = (type: string, isStore: boolean = false): string => {
 //     const cleanType = String(type || '').trim();
 //     return isStore ? `Enter your store ${cleanType}` : `Enter your ${cleanType}`;
 // };
-const DEFAULT_LABEL_SIMPLE = (type: string, isStore: boolean = false,name:string=''): string => {
-    const cleanType = String(type || '').trim().toLowerCase();
-    if (isStore) {
-        const storeLabelMap: Record<string, string> = {
+const DEFAULT_LABEL_SIMPLE = (
+    type: string,
+    isStore: boolean = false,
+    name: string = ''
+): string => {
+    const cleanType = String( type || '' )
+        .trim()
+        .toLowerCase();
+    if ( isStore ) {
+        const storeLabelMap: Record< string, string > = {
             name: 'Enter your store name',
             description: 'Enter your store description',
             phone: 'Enter your store phone',
@@ -119,10 +128,10 @@ const DEFAULT_LABEL_SIMPLE = (type: string, isStore: boolean = false,name:string
             address: 'Enter your store address',
         };
         // return mapped label or fallback generic
-        return storeLabelMap[name] ;
+        return storeLabelMap[ name ];
     }
 
-    return `Enter your ${cleanType}`;
+    return `Enter your ${ cleanType }`;
 };
 
 const DEFAULT_LABEL_SELECT = 'Nature of Business';
@@ -132,56 +141,135 @@ const DEFAULT_FORM_TITLE = 'Demo Form';
 const selectOptions: SelectOption[] = [
     // { icon: 'adminlib-module icon-form-textbox', value: 'block-layout', label: 'Block Layout' },
     // { icon: 'adminlib-gallery icon-form-gallery', value: 'image-gallery', label: 'Image Gallery' },
-    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Textbox' },
+    {
+        icon: 'adminlib-t-letter-bold icon-form-textbox',
+        value: 'text',
+        label: 'Textbox',
+    },
     { icon: 'adminlib-unread icon-form-email', value: 'email', label: 'Email' },
-    { icon: 'adminlib-text icon-form-textarea', value: 'textarea', label: 'Textarea' },
-    { icon: 'adminlib-checkbox icon-form-checkboxes', value: 'checkboxes', label: 'Checkboxes' },
-    { icon: 'adminlib-multi-select icon-form-multi-select', value: 'multiselect', label: 'Multi Select' },
+    {
+        icon: 'adminlib-text icon-form-textarea',
+        value: 'textarea',
+        label: 'Textarea',
+    },
+    {
+        icon: 'adminlib-checkbox icon-form-checkboxes',
+        value: 'checkboxes',
+        label: 'Checkboxes',
+    },
+    {
+        icon: 'adminlib-multi-select icon-form-multi-select',
+        value: 'multiselect',
+        label: 'Multi Select',
+    },
     { icon: 'adminlib-radio icon-form-radio', value: 'radio', label: 'Radio' },
-    { icon: 'adminlib-dropdown-checklist icon-form-dropdown', value: 'dropdown', label: 'Dropdown' },
-    { icon: 'adminlib-captcha-automatic-code icon-form-recaptcha', value: 'recaptcha', label: 'reCaptcha v3' },
-    { icon: 'adminlib-submission-message icon-form-attachment', value: 'attachment', label: 'Attachment' },
-    { icon: 'adminlib-form-section icon-form-section', value: 'section', label: 'Section' },
-    { icon: 'adminlib-calendar icon-form-store-description', value: 'datepicker', label: 'Date Picker' },
-    { icon: 'adminlib-alarm icon-form-address', value: 'TimePicker', label: 'Time Picker' },
-    { icon: 'adminlib-divider icon-form-address', value: 'divider', label: 'Divider' },
+    {
+        icon: 'adminlib-dropdown-checklist icon-form-dropdown',
+        value: 'dropdown',
+        label: 'Dropdown',
+    },
+    {
+        icon: 'adminlib-captcha-automatic-code icon-form-recaptcha',
+        value: 'recaptcha',
+        label: 'reCaptcha v3',
+    },
+    {
+        icon: 'adminlib-submission-message icon-form-attachment',
+        value: 'attachment',
+        label: 'Attachment',
+    },
+    {
+        icon: 'adminlib-form-section icon-form-section',
+        value: 'section',
+        label: 'Section',
+    },
+    {
+        icon: 'adminlib-calendar icon-form-store-description',
+        value: 'datepicker',
+        label: 'Date Picker',
+    },
+    {
+        icon: 'adminlib-alarm icon-form-address',
+        value: 'TimePicker',
+        label: 'Time Picker',
+    },
+    {
+        icon: 'adminlib-divider icon-form-address',
+        value: 'divider',
+        label: 'Divider',
+    },
 ];
 
 const selectOptionsStore: SelectOption[] = [
-    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Store Name', name: 'name' },
-    { icon: 'adminlib-text icon-form-textarea', value: 'textarea', label: 'Store Desc', name: 'description' },
-    { icon: 'adminlib-t-letter-bold icon-form-textbox', value: 'text', label: 'Store Phone', name: 'phone' },
-    { icon: 'adminlib-unread icon-form-email', value: 'email', label: 'Store Paypal Email', name: 'paypal_email' },
-    { icon: 'adminlib-divider icon-form-address', value: 'address', label: 'Store Address',name: 'address' },
+    {
+        icon: 'adminlib-t-letter-bold icon-form-textbox',
+        value: 'text',
+        label: 'Store Name',
+        name: 'name',
+    },
+    {
+        icon: 'adminlib-text icon-form-textarea',
+        value: 'textarea',
+        label: 'Store Desc',
+        name: 'description',
+    },
+    {
+        icon: 'adminlib-t-letter-bold icon-form-textbox',
+        value: 'text',
+        label: 'Store Phone',
+        name: 'phone',
+    },
+    {
+        icon: 'adminlib-unread icon-form-email',
+        value: 'email',
+        label: 'Store Paypal Email',
+        name: 'paypal_email',
+    },
+    {
+        icon: 'adminlib-divider icon-form-address',
+        value: 'address',
+        label: 'Store Address',
+        name: 'address',
+    },
 ];
 
 // Component
-const CustomForm: React.FC<CustomFormProps> = ({
+const CustomForm: React.FC< CustomFormProps > = ( {
     onChange,
     name,
     proSettingChange,
     setting,
     formTitlePlaceholder,
-}) => {
-    const formSetting = setting[name] || {};
-    const settingHasChanged = useRef(false);
-    const firstTimeRender = useRef(true);
+} ) => {
+    const formSetting = setting[ name ] || {};
+    const settingHasChanged = useRef( false );
+    const firstTimeRender = useRef( true );
 
-    const [formFieldList, setFormFieldList] = useState<FormField[]>(() => {
+    const [ formFieldList, setFormFieldList ] = useState< FormField[] >( () => {
         const inputList = formSetting.formfieldlist || [];
-        if (!Array.isArray(inputList) || inputList.length <= 0) {
-            return [{ id: 1, type: 'title', label: DEFAULT_FORM_TITLE, required: true }];
+        if ( ! Array.isArray( inputList ) || inputList.length <= 0 ) {
+            return [
+                {
+                    id: 1,
+                    type: 'title',
+                    label: DEFAULT_FORM_TITLE,
+                    required: true,
+                },
+            ];
         }
         return inputList;
-    });
+    } );
 
-    const [buttonSetting, setButtonSetting] = useState<ButtonSetting>(formSetting.butttonsetting || {});
-    const [opendInput, setOpendInput] = useState<FormField | null>(null);
-    const [randMaxId, setRendMaxId] = useState<number>(0);
+    const [ buttonSetting, setButtonSetting ] = useState< ButtonSetting >(
+        formSetting.butttonsetting || {}
+    );
+    const [ opendInput, setOpendInput ] = useState< FormField | null >( null );
+    const [ randMaxId, setRendMaxId ] = useState< number >( 0 );
 
     // State for image gallery
-    const [showImageGallery, setShowImageGallery] = useState(false);
-    const [selectedFieldForGallery, setSelectedFieldForGallery] = useState<FormField | null>(null);
+    const [ showImageGallery, setShowImageGallery ] = useState( false );
+    const [ selectedFieldForGallery, setSelectedFieldForGallery ] =
+        useState< FormField | null >( null );
 
     // Close meta modal if clicked outside
     // useEffect(() => {
@@ -193,82 +281,167 @@ const CustomForm: React.FC<CustomFormProps> = ({
     //     return () => document.body.removeEventListener('click', closePopup);
     // }, []);
 
-    useEffect(() => {
-        setRendMaxId(formFieldList.reduce((maxId, field) => Math.max(maxId, field.id), 0) + 1);
-    }, [formFieldList]);
+    useEffect( () => {
+        setRendMaxId(
+            formFieldList.reduce(
+                ( maxId, field ) => Math.max( maxId, field.id ),
+                0
+            ) + 1
+        );
+    }, [ formFieldList ] );
 
-    useEffect(() => {
-        if (settingHasChanged.current) {
+    useEffect( () => {
+        if ( settingHasChanged.current ) {
             settingHasChanged.current = false;
-            onChange({ formfieldlist: formFieldList, butttonsetting: buttonSetting });
+            onChange( {
+                formfieldlist: formFieldList,
+                butttonsetting: buttonSetting,
+            } );
         }
-    }, [buttonSetting, formFieldList]);
+    }, [ buttonSetting, formFieldList ] );
 
-    const getUniqueName = () => Date.now().toString(36);
+    const getUniqueName = () => Date.now().toString( 36 );
 
-    const getNewFormField = (type = 'text', fixedName?: string, isStore: boolean = false): FormField => {
+    const getNewFormField = (
+        type = 'text',
+        fixedName?: string,
+        isStore: boolean = false
+    ): FormField => {
         const newFormField: FormField = {
             id: randMaxId ?? 0,
             type,
             label: '',
             required: false,
-            name: fixedName ?? `${type}-${getUniqueName()}`,
+            name: fixedName ?? `${ type }-${ getUniqueName() }`,
         };
 
-        if (['multiselect', 'radio', 'dropdown', 'checkboxes'].includes(type)) {
+        if (
+            [ 'multiselect', 'radio', 'dropdown', 'checkboxes' ].includes(
+                type
+            )
+        ) {
             newFormField.label = DEFAULT_LABEL_SELECT;
             newFormField.options = DEFAULT_OPTIONS;
-        } else if (type === 'title') {
+        } else if ( type === 'title' ) {
             newFormField.label = DEFAULT_FORM_TITLE;
-        } else if (type === 'image-gallery') {
+        } else if ( type === 'image-gallery' ) {
             newFormField.label = 'Image Gallery';
             newFormField.images = [];
-        } else if (type === 'block-layout') {
+        } else if ( type === 'block-layout' ) {
             newFormField.label = 'Content Block';
             newFormField.layout = { blocks: [] };
-        } else if (type === 'address') {
+        } else if ( type === 'address' ) {
             newFormField.label = 'Address';
             newFormField.fields = [
-                { id: randMaxId + 1, key: 'address_1', label: 'Address Line 1', type: 'text', placeholder: 'Address Line 1', required: true },
-                { id: randMaxId + 2, key: 'address_2', label: 'Address Line 2', type: 'text', placeholder: 'Address Line 2' },
-                { id: randMaxId + 3, key: 'city', label: 'City', type: 'text', placeholder: 'City', required: true },
-                { id: randMaxId + 4, key: 'state', label: 'State', type: 'select', options: ['Karnataka', 'Maharashtra', 'Delhi', 'Tamil Nadu'] },
-                { id: randMaxId + 5, key: 'country', label: 'Country', type: 'select', options: ['India', 'USA', 'UK', 'Canada'] },
-                { id: randMaxId + 6, key: 'postcode', label: 'Postal Code', type: 'text', placeholder: 'Postal Code', required: true },
+                {
+                    id: randMaxId + 1,
+                    key: 'address_1',
+                    label: 'Address Line 1',
+                    type: 'text',
+                    placeholder: 'Address Line 1',
+                    required: true,
+                },
+                {
+                    id: randMaxId + 2,
+                    key: 'address_2',
+                    label: 'Address Line 2',
+                    type: 'text',
+                    placeholder: 'Address Line 2',
+                },
+                {
+                    id: randMaxId + 3,
+                    key: 'city',
+                    label: 'City',
+                    type: 'text',
+                    placeholder: 'City',
+                    required: true,
+                },
+                {
+                    id: randMaxId + 4,
+                    key: 'state',
+                    label: 'State',
+                    type: 'select',
+                    options: [
+                        'Karnataka',
+                        'Maharashtra',
+                        'Delhi',
+                        'Tamil Nadu',
+                    ],
+                },
+                {
+                    id: randMaxId + 5,
+                    key: 'country',
+                    label: 'Country',
+                    type: 'select',
+                    options: [ 'India', 'USA', 'UK', 'Canada' ],
+                },
+                {
+                    id: randMaxId + 6,
+                    key: 'postcode',
+                    label: 'Postal Code',
+                    type: 'text',
+                    placeholder: 'Postal Code',
+                    required: true,
+                },
             ];
             newFormField.value = {}; // optional, to hold user-entered values later
         } else {
-            newFormField.label = DEFAULT_LABEL_SIMPLE(type, isStore, fixedName);
-            newFormField.placeholder = DEFAULT_PLACEHOLDER(type);
+            newFormField.label = DEFAULT_LABEL_SIMPLE(
+                type,
+                isStore,
+                fixedName
+            );
+            newFormField.placeholder = DEFAULT_PLACEHOLDER( type );
         }
 
-        setRendMaxId(prev => (prev ?? 0) + 1);
+        setRendMaxId( ( prev ) => ( prev ?? 0 ) + 1 );
         return newFormField;
     };
 
-    const appendNewFormField = (index: number, type = 'text', fixedName?: string, readonly = false, isStore = false) => {
-        if (proSettingChange()) return;
-        const newField: FormField = getNewFormField(type, fixedName, isStore);
-        if (readonly) newField.readonly = true;
+    const appendNewFormField = (
+        index: number,
+        type = 'text',
+        fixedName?: string,
+        readonly = false,
+        isStore = false
+    ) => {
+        if ( proSettingChange() ) {
+            return;
+        }
+        const newField: FormField = getNewFormField( type, fixedName, isStore );
+        if ( readonly ) {
+            newField.readonly = true;
+        }
         // const newFormFieldList = [...formFieldList.slice(0, index + 1), newField, ...formFieldList.slice(index + 1)];
 
-        const currentIndex = opendInput ? formFieldList.findIndex((field) => field.id === opendInput.id) : -1;
-        const insertIndex = currentIndex !== -1 ? currentIndex + 1 : formFieldList.length;
-        const newFormFieldList = [...formFieldList.slice(0, insertIndex), newField, ...formFieldList.slice(insertIndex)];
+        const currentIndex = opendInput
+            ? formFieldList.findIndex( ( field ) => field.id === opendInput.id )
+            : -1;
+        const insertIndex =
+            currentIndex !== -1 ? currentIndex + 1 : formFieldList.length;
+        const newFormFieldList = [
+            ...formFieldList.slice( 0, insertIndex ),
+            newField,
+            ...formFieldList.slice( insertIndex ),
+        ];
 
         settingHasChanged.current = true;
-        setFormFieldList(newFormFieldList);
-        setOpendInput(newField);
+        setFormFieldList( newFormFieldList );
+        setOpendInput( newField );
         return newField;
     };
 
-    const deleteParticularFormField = (index: number) => {
-        if (proSettingChange()) return;
-        const newFormFieldList = formFieldList.filter((_, i) => i !== index);
+    const deleteParticularFormField = ( index: number ) => {
+        if ( proSettingChange() ) {
+            return;
+        }
+        const newFormFieldList = formFieldList.filter(
+            ( _, i ) => i !== index
+        );
         settingHasChanged.current = true;
-        setFormFieldList(newFormFieldList);
-        if (opendInput?.id === formFieldList[index].id) {
-            setOpendInput(null);
+        setFormFieldList( newFormFieldList );
+        if ( opendInput?.id === formFieldList[ index ].id ) {
+            setOpendInput( null );
         }
     };
 
@@ -291,33 +464,39 @@ const CustomForm: React.FC<CustomFormProps> = ({
         value: any,
         parentId?: number
     ) => {
-        if (proSettingChange()) return;
+        if ( proSettingChange() ) {
+            return;
+        }
 
-        const newFormFieldList = [...formFieldList];
+        const newFormFieldList = [ ...formFieldList ];
 
-        if (parentId !== undefined) {
+        if ( parentId !== undefined ) {
             // Handle subfield
-            const parentIndex = newFormFieldList.findIndex(f => f.id === parentId);
-            if (parentIndex >= 0) {
-                const parentField = { ...newFormFieldList[parentIndex] };
-                parentField.fields = parentField.fields?.map(f =>
-                    f.id === index ? { ...f, [key]: value } : f
+            const parentIndex = newFormFieldList.findIndex(
+                ( f ) => f.id === parentId
+            );
+            if ( parentIndex >= 0 ) {
+                const parentField = { ...newFormFieldList[ parentIndex ] };
+                parentField.fields = parentField.fields?.map( ( f ) =>
+                    f.id === index ? { ...f, [ key ]: value } : f
                 );
 
                 // Update parent value object
                 parentField.value = parentField.value || {};
-                const changedSubField = parentField.fields?.find(f => f.id === index);
-                if (changedSubField?.key) {
-                    parentField.value[changedSubField.key] = value;
+                const changedSubField = parentField.fields?.find(
+                    ( f ) => f.id === index
+                );
+                if ( changedSubField?.key ) {
+                    parentField.value[ changedSubField.key ] = value;
                 }
 
-                newFormFieldList[parentIndex] = parentField;
-                setFormFieldList(newFormFieldList);
+                newFormFieldList[ parentIndex ] = parentField;
+                setFormFieldList( newFormFieldList );
                 settingHasChanged.current = true;
 
                 // Update opened input if it's the same subfield
-                if (opendInput?.id === index) {
-                    setOpendInput({ ...opendInput, [key]: value });
+                if ( opendInput?.id === index ) {
+                    setOpendInput( { ...opendInput, [ key ]: value } );
                 }
 
                 return;
@@ -325,95 +504,111 @@ const CustomForm: React.FC<CustomFormProps> = ({
         }
 
         // Top-level field
-        newFormFieldList[index] = { ...newFormFieldList[index], [key]: value };
-        setFormFieldList(newFormFieldList);
+        newFormFieldList[ index ] = {
+            ...newFormFieldList[ index ],
+            [ key ]: value,
+        };
+        setFormFieldList( newFormFieldList );
         settingHasChanged.current = true;
 
         // Update opened input if it's the same field
-        if (opendInput?.id === newFormFieldList[index].id) {
-            setOpendInput(newFormFieldList[index]);
+        if ( opendInput?.id === newFormFieldList[ index ].id ) {
+            setOpendInput( newFormFieldList[ index ] );
         }
     };
 
-    const handleFormFieldTypeChange = (index: number, newType: string) => {
-        if (proSettingChange()) return;
-        const selectedFormField = formFieldList[index];
-        if (selectedFormField.type === newType) return;
+    const handleFormFieldTypeChange = ( index: number, newType: string ) => {
+        if ( proSettingChange() ) {
+            return;
+        }
+        const selectedFormField = formFieldList[ index ];
+        if ( selectedFormField.type === newType ) {
+            return;
+        }
 
-        const newFormField = getNewFormField(newType);
+        const newFormField = getNewFormField( newType );
         newFormField.id = selectedFormField.id;
 
         // Preserve some properties if needed
-        if (selectedFormField.readonly) {
+        if ( selectedFormField.readonly ) {
             newFormField.readonly = true;
         }
 
-        const newFormFieldList = [...formFieldList];
-        newFormFieldList[index] = newFormField;
+        const newFormFieldList = [ ...formFieldList ];
+        newFormFieldList[ index ] = newFormField;
         settingHasChanged.current = true;
-        setFormFieldList(newFormFieldList);
-        setOpendInput(newFormField);
+        setFormFieldList( newFormFieldList );
+        setOpendInput( newFormField );
     };
 
-    const handleImageSelect = (images: ImageItem[]) => {
-        if (!selectedFieldForGallery) return;
-
-        const index = formFieldList.findIndex(f => f.id === selectedFieldForGallery.id);
-        if (index >= 0) {
-            handleFormFieldChange(index, 'images', images);
+    const handleImageSelect = ( images: ImageItem[] ) => {
+        if ( ! selectedFieldForGallery ) {
+            return;
         }
 
-        setShowImageGallery(false);
-        setSelectedFieldForGallery(null);
+        const index = formFieldList.findIndex(
+            ( f ) => f.id === selectedFieldForGallery.id
+        );
+        if ( index >= 0 ) {
+            handleFormFieldChange( index, 'images', images );
+        }
+
+        setShowImageGallery( false );
+        setSelectedFieldForGallery( null );
     };
 
-    const applyTemplate = (template: any) => {
-        if (proSettingChange()) return;
+    const applyTemplate = ( template: any ) => {
+        if ( proSettingChange() ) {
+            return;
+        }
         settingHasChanged.current = true;
-        setFormFieldList(template.fields);
-        setButtonSetting(template.buttonSetting);
-        setOpendInput(null);
+        setFormFieldList( template.fields );
+        setButtonSetting( template.buttonSetting );
+        setOpendInput( null );
     };
 
     // Image Gallery Field Component
-    const ImageGalleryField: React.FC<{ formField: FormField; onChange: (key: string, value: any) => void }> = ({
-        formField,
-        onChange
-    }) => {
+    const ImageGalleryField: React.FC< {
+        formField: FormField;
+        onChange: ( key: string, value: any ) => void;
+    } > = ( { formField, onChange } ) => {
         return (
             <div className="image-gallery-field">
-                <label>{formField.label}</label>
+                <label>{ formField.label }</label>
                 <div className="gallery-preview">
-                    {formField.images && formField.images.length > 0 ? (
+                    { formField.images && formField.images.length > 0 ? (
                         <div className="selected-images">
-                            {formField.images.map((image, index) => (
-                                <div key={index} className="image-thumbnail">
-                                    <img src={image.url} alt={image.alt} />
+                            { formField.images.map( ( image, index ) => (
+                                <div key={ index } className="image-thumbnail">
+                                    <img src={ image.url } alt={ image.alt } />
                                     <button
                                         className="remove-image"
-                                        onClick={() => {
-                                            const newImages = formField.images?.filter((_, i) => i !== index) || [];
-                                            onChange('images', newImages);
-                                        }}
+                                        onClick={ () => {
+                                            const newImages =
+                                                formField.images?.filter(
+                                                    ( _, i ) => i !== index
+                                                ) || [];
+                                            onChange( 'images', newImages );
+                                        } }
                                     >
                                         <i className="admin-font adminlib-delete"></i>
                                     </button>
                                 </div>
-                            ))}
+                            ) ) }
                         </div>
                     ) : (
                         <div className="empty-gallery">
                             <i className="admin-font adminlib-image"></i>
                             <p>No images selected</p>
                         </div>
-                    )}
+                    ) }
                 </div>
                 <button
                     className="admin-btn btn-purple"
-                    onClick={() => {
-                        setSelectedFieldForGallery(formField);
-                        setShowImageGallery(true);
-                    }}
+                    onClick={ () => {
+                        setSelectedFieldForGallery( formField );
+                        setShowImageGallery( true );
+                    } }
                 >
                     <i className="admin-font adminlib-plus-circle"></i>
                     Select Images
@@ -423,14 +618,14 @@ const CustomForm: React.FC<CustomFormProps> = ({
     };
 
     // Tabs configuration
-    const [activeTab, setActiveTab] = useState("blocks");
+    const [ activeTab, setActiveTab ] = useState( 'blocks' );
     const tabs = [
         {
-            id: "blocks",
-            label: "Blocks",
+            id: 'blocks',
+            label: 'Blocks',
             content: (
                 <>
-                    {/* <Elements
+                    { /* <Elements
                         label="Layout"
                         selectOptions={selectOptions.filter(opt => 
                             ['block-layout', 'image-gallery', 'section', 'divider'].includes(opt.value)
@@ -441,41 +636,52 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                 setOpendInput(newInput);
                             }
                         }}
-                    /> */}
+                    /> */ }
                     <Elements
                         label="General"
-                        // selectOptions={selectOptions.filter(opt => 
+                        // selectOptions={selectOptions.filter(opt =>
                         //     !['block-layout', 'image-gallery', 'section', 'divider'].includes(opt.value)
                         // )}
-                        selectOptions={selectOptions}
-                        onClick={(type) => {
-                            const newInput = appendNewFormField(formFieldList.length - 1, type);
-                            if (newInput) {
-                                setOpendInput(newInput);
+                        selectOptions={ selectOptions }
+                        onClick={ ( type ) => {
+                            const newInput = appendNewFormField(
+                                formFieldList.length - 1,
+                                type
+                            );
+                            if ( newInput ) {
+                                setOpendInput( newInput );
                             }
-                        }}
+                        } }
                     />
                     <Elements
                         label="Let’s get your store ready!"
-                        selectOptions={selectOptionsStore}
-                        onClick={(type) => {
-                            const option = selectOptionsStore.find(o => o.value === type);
+                        selectOptions={ selectOptionsStore }
+                        onClick={ ( type ) => {
+                            const option = selectOptionsStore.find(
+                                ( o ) => o.value === type
+                            );
                             const fixedName = option?.name;
-                            appendNewFormField(formFieldList.length - 1, type, fixedName, true, true);
-                            setOpendInput(null);
-                        }}
+                            appendNewFormField(
+                                formFieldList.length - 1,
+                                type,
+                                fixedName,
+                                true,
+                                true
+                            );
+                            setOpendInput( null );
+                        } }
                     />
                 </>
             ),
         },
-        // { 
-        //     id: "templates", 
-        //     label: "Templates", 
+        // {
+        //     id: "templates",
+        //     label: "Templates",
         //     content: <FormTemplates onTemplateSelect={applyTemplate} />
         // },
-        // { 
-        //     id: "analytics", 
-        //     label: "Analytics", 
+        // {
+        //     id: "analytics",
+        //     label: "Analytics",
         //     content: <FormAnalytics formFields={formFieldList} />
         // },
     ];
@@ -483,7 +689,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
     return (
         <div className="registration-from-wrapper">
             <div className="elements-wrapper">
-                {/* <div className="tab-titles">
+                { /* <div className="tab-titles">
                     {tabs.map(tab => (
                         <div
                             key={tab.id}
@@ -493,14 +699,21 @@ const CustomForm: React.FC<CustomFormProps> = ({
                             <p>{tab.label}</p>
                         </div>
                     ))}
-                </div> */}
+                </div> */ }
                 <div className="tab-contend">
-                    {tabs.map(tab => activeTab === tab.id && <div key={tab.id} className="tab-panel">{tab.content}</div>)}
+                    { tabs.map(
+                        ( tab ) =>
+                            activeTab === tab.id && (
+                                <div key={ tab.id } className="tab-panel">
+                                    { tab.content }
+                                </div>
+                            )
+                    ) }
                 </div>
             </div>
 
             <div className="registration-form-main-section">
-                {/* <div className="form-heading">
+                { /* <div className="form-heading">
                     <input
                         type="text"
                         className="basic-input"
@@ -509,121 +722,224 @@ const CustomForm: React.FC<CustomFormProps> = ({
                         onChange={(e) => handleFormFieldChange(0, 'label', e.target.value)}
                     />
                     <i className="adminlib-eye"></i>
-                </div> */}
-                {/* Form Title */}
-                <div className={`form-heading ${formFieldList[0]?.disabled ? 'disable' : ''}`}>
-                    {/* Show only when not disabled */}
-                    {/* {!formFieldList[0]?.disabled && ( */}
+                </div> */ }
+                { /* Form Title */ }
+                <div
+                    className={ `form-heading ${
+                        formFieldList[ 0 ]?.disabled ? 'disable' : ''
+                    }` }
+                >
+                    { /* Show only when not disabled */ }
+                    { /* {!formFieldList[0]?.disabled && ( */ }
                     <input
                         type="text"
                         className="basic-input"
-                        placeholder={formTitlePlaceholder}
-                        value={formFieldList[0]?.label}
-                        onChange={(e) => {
-                            if (!formFieldList[0]?.disabled) {
-                                handleFormFieldChange(0, 'label', e.target.value);
+                        placeholder={ formTitlePlaceholder }
+                        value={ formFieldList[ 0 ]?.label }
+                        onChange={ ( e ) => {
+                            if ( ! formFieldList[ 0 ]?.disabled ) {
+                                handleFormFieldChange(
+                                    0,
+                                    'label',
+                                    e.target.value
+                                );
                             }
-                        }}
+                        } }
                     />
-                    {/* )} */}
+                    { /* )} */ }
 
-                    {/* Eye / Eye-slash icon */}
+                    { /* Eye / Eye-slash icon */ }
                     <i
-                        className={`adminlib-${formFieldList[0]?.disabled ? 'eye-blocked' : 'eye'}`}
-                        title={formFieldList[0]?.disabled ? 'Show Title' : 'Hide Title'}
-                        onClick={() => {
-                            const newDisabled = !formFieldList[0]?.disabled;
-                            handleFormFieldChange(0, 'disabled', newDisabled);
-                        }}
+                        className={ `adminlib-${
+                            formFieldList[ 0 ]?.disabled ? 'eye-blocked' : 'eye'
+                        }` }
+                        title={
+                            formFieldList[ 0 ]?.disabled
+                                ? 'Show Title'
+                                : 'Hide Title'
+                        }
+                        onClick={ () => {
+                            const newDisabled = ! formFieldList[ 0 ]?.disabled;
+                            handleFormFieldChange( 0, 'disabled', newDisabled );
+                        } }
                     ></i>
                 </div>
 
-                {/* Form Fields */}
+                { /* Form Fields */ }
                 <ReactSortable
-                    list={formFieldList}
-                    setList={(newList) => {
-                        if (firstTimeRender.current) {
+                    list={ formFieldList }
+                    setList={ ( newList ) => {
+                        if ( firstTimeRender.current ) {
                             firstTimeRender.current = false;
                             return;
                         }
-                        if (proSettingChange()) return;
+                        if ( proSettingChange() ) {
+                            return;
+                        }
                         settingHasChanged.current = true;
-                        setFormFieldList(newList);
-                    }}
+                        setFormFieldList( newList );
+                    } }
                     handle=".drag-handle"
                 >
-                    {formFieldList.map((formField, index) => {
-                        if (index === 0) return <div key={index} style={{ display: 'none' }}></div>;
+                    { formFieldList.map( ( formField, index ) => {
+                        if ( index === 0 ) {
+                            return (
+                                <div
+                                    key={ index }
+                                    style={ { display: 'none' } }
+                                ></div>
+                            );
+                        }
                         return (
                             <main
-                                key={formField.id}
-                                className={`form-field 
-                                                ${opendInput?.id === formField.id
-                                        ? 'active drag-handle'
-                                        : ''
-                                    }`}
-                                onClick={(e) => {
+                                key={ formField.id }
+                                className={ `form-field 
+                                                ${
+                                                    opendInput?.id ===
+                                                    formField.id
+                                                        ? 'active drag-handle'
+                                                        : ''
+                                                }` }
+                                onClick={ ( e ) => {
                                     e.stopPropagation();
-                                    setOpendInput(formField);
-                                }}
+                                    setOpendInput( formField );
+                                } }
                             >
-                                {opendInput?.id === formField.id && (
+                                { opendInput?.id === formField.id && (
                                     <section className="meta-menu">
                                         <span
-                                            onClick={() => {
-                                                const index = formFieldList.findIndex(f => f.id === opendInput.id);
-                                                if (index >= 0) deleteParticularFormField(index);
-                                                setOpendInput(null);
-                                            }}
+                                            onClick={ () => {
+                                                const index =
+                                                    formFieldList.findIndex(
+                                                        ( f ) =>
+                                                            f.id ===
+                                                            opendInput.id
+                                                    );
+                                                if ( index >= 0 ) {
+                                                    deleteParticularFormField(
+                                                        index
+                                                    );
+                                                }
+                                                setOpendInput( null );
+                                            } }
                                             className="admin-badge red"
                                         >
                                             <i className="admin-font adminlib-delete"></i>
                                         </span>
                                     </section>
-                                )}
-                                <section className={`form-field-container-wrapper`}>
-                                    {['text', 'email', 'number'].includes(formField.type) && (
+                                ) }
+                                <section
+                                    className={ `form-field-container-wrapper` }
+                                >
+                                    { [ 'text', 'email', 'number' ].includes(
+                                        formField.type
+                                    ) && (
                                         <SimpleInput
-                                            formField={formField}
-                                            onChange={(key, value) => handleFormFieldChange(index, key, value)}
+                                            formField={ formField }
+                                            onChange={ ( key, value ) =>
+                                                handleFormFieldChange(
+                                                    index,
+                                                    key,
+                                                    value
+                                                )
+                                            }
                                         />
-                                    )}
-                                    {['radio', 'dropdown', 'multiselect', 'checkboxes'].includes(formField.type) && (
+                                    ) }
+                                    { [
+                                        'radio',
+                                        'dropdown',
+                                        'multiselect',
+                                        'checkboxes',
+                                    ].includes( formField.type ) && (
                                         <MultipleOptions
-                                            formField={formField}
-                                            onChange={(key, value) => handleFormFieldChange(index, key, value)}
-                                            type={formField.type as any}
-                                            selected={false}
+                                            formField={ formField }
+                                            onChange={ ( key, value ) =>
+                                                handleFormFieldChange(
+                                                    index,
+                                                    key,
+                                                    value
+                                                )
+                                            }
+                                            type={ formField.type as any }
+                                            selected={ false }
                                         />
-                                    )}
-                                    {formField.type === 'datepicker' && (
-                                        <Datepicker formField={formField} onChange={(key, value) => handleFormFieldChange(index, key, value)} />
-                                    )}
-                                    {formField.type === 'TimePicker' && (
-                                        <TimePicker formField={formField} onChange={(key, value) => handleFormFieldChange(index, key, value)} />
-                                    )}
-                                    {formField.type === 'attachment' && (
-                                        <Attachment formField={formField} onChange={(key, value) => handleFormFieldChange(index, key, value)} />
-                                    )}
-                                    {formField.type === 'section' && (
-                                        <TemplateSection formField={formField} onChange={(key, value) => handleFormFieldChange(index, key, value)} />
-                                    )}
-                                    {formField.type === 'block-layout' && (
+                                    ) }
+                                    { formField.type === 'datepicker' && (
+                                        <Datepicker
+                                            formField={ formField }
+                                            onChange={ ( key, value ) =>
+                                                handleFormFieldChange(
+                                                    index,
+                                                    key,
+                                                    value
+                                                )
+                                            }
+                                        />
+                                    ) }
+                                    { formField.type === 'TimePicker' && (
+                                        <TimePicker
+                                            formField={ formField }
+                                            onChange={ ( key, value ) =>
+                                                handleFormFieldChange(
+                                                    index,
+                                                    key,
+                                                    value
+                                                )
+                                            }
+                                        />
+                                    ) }
+                                    { formField.type === 'attachment' && (
+                                        <Attachment
+                                            formField={ formField }
+                                            onChange={ ( key, value ) =>
+                                                handleFormFieldChange(
+                                                    index,
+                                                    key,
+                                                    value
+                                                )
+                                            }
+                                        />
+                                    ) }
+                                    { formField.type === 'section' && (
+                                        <TemplateSection
+                                            formField={ formField }
+                                            onChange={ ( key, value ) =>
+                                                handleFormFieldChange(
+                                                    index,
+                                                    key,
+                                                    value
+                                                )
+                                            }
+                                        />
+                                    ) }
+                                    { formField.type === 'block-layout' && (
                                         <BlockLayout
-                                            formField={formField}
-                                            onChange={(key, value) => handleFormFieldChange(index, key, value)}
+                                            formField={ formField }
+                                            onChange={ ( key, value ) =>
+                                                handleFormFieldChange(
+                                                    index,
+                                                    key,
+                                                    value
+                                                )
+                                            }
                                         />
-                                    )}
-                                    {formField.type === 'image-gallery' && (
+                                    ) }
+                                    { formField.type === 'image-gallery' && (
                                         <ImageGalleryField
-                                            formField={formField}
-                                            onChange={(key, value) => handleFormFieldChange(index, key, value)}
+                                            formField={ formField }
+                                            onChange={ ( key, value ) =>
+                                                handleFormFieldChange(
+                                                    index,
+                                                    key,
+                                                    value
+                                                )
+                                            }
                                         />
-                                    )}
-                                    {formField.type === 'textarea' && (
+                                    ) }
+                                    { formField.type === 'textarea' && (
                                         <TemplateTextArea
-                                            formField={formField}
-                                            onChange={(key, value) =>
+                                            formField={ formField }
+                                            onChange={ ( key, value ) =>
                                                 handleFormFieldChange(
                                                     index,
                                                     key,
@@ -631,11 +947,11 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                                 )
                                             }
                                         />
-                                    )}
-                                    {formField.type === 'recaptcha' && (
+                                    ) }
+                                    { formField.type === 'recaptcha' && (
                                         <Recaptcha
-                                            formField={formField}
-                                            onChange={(key, value) =>
+                                            formField={ formField }
+                                            onChange={ ( key, value ) =>
                                                 handleFormFieldChange(
                                                     index,
                                                     key,
@@ -643,66 +959,70 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                                 )
                                             }
                                         />
-                                    )}
-                                    {formField.type === 'address' && (
+                                    ) }
+                                    { formField.type === 'address' && (
                                         <AddressField
-                                            formField={formField}
-                                            onChange={(key, value) => handleFormFieldChange(index, key, value)}
-                                            opendInput={opendInput} // pass current opened input
-                                            setOpendInput={setOpendInput} // allow subfields to set it
+                                            formField={ formField }
+                                            onChange={ ( key, value ) =>
+                                                handleFormFieldChange(
+                                                    index,
+                                                    key,
+                                                    value
+                                                )
+                                            }
+                                            opendInput={ opendInput } // pass current opened input
+                                            setOpendInput={ setOpendInput } // allow subfields to set it
                                         />
-                                    )}
-                                    {formField.type === 'divider' && (
+                                    ) }
+                                    { formField.type === 'divider' && (
                                         <div className="divider-field">
                                             <hr />
-                                            <span>{formField.label}</span>
+                                            <span>{ formField.label }</span>
                                         </div>
-                                    )}
+                                    ) }
                                 </section>
                             </main>
                         );
-                    })}
+                    } ) }
                 </ReactSortable>
 
                 <ButtonCustomizer
                     text={
-                        (buttonSetting.button_text &&
-                            buttonSetting.button_text) ||
+                        ( buttonSetting.button_text &&
+                            buttonSetting.button_text ) ||
                         'Submit'
                     }
-                    setting={buttonSetting}
-                    onChange={(
-                        key,
-                        value,
-                        isRestoreDefaults = false
-                    ) => {
-                        if (proSettingChange()) return;
+                    setting={ buttonSetting }
+                    onChange={ ( key, value, isRestoreDefaults = false ) => {
+                        if ( proSettingChange() ) {
+                            return;
+                        }
                         settingHasChanged.current = true;
                         const previousSetting = buttonSetting || {};
-                        if (isRestoreDefaults) {
-                            setButtonSetting(value);
+                        if ( isRestoreDefaults ) {
+                            setButtonSetting( value );
                         } else {
-                            setButtonSetting({
+                            setButtonSetting( {
                                 ...previousSetting,
-                                [key]: value,
-                            });
+                                [ key ]: value,
+                            } );
                         }
-                    }}
+                    } }
                 />
             </div>
 
-            {/* Meta Setting Modal outside registration-form-main-section */}
+            { /* Meta Setting Modal outside registration-form-main-section */ }
             <div className="registration-edit-form-wrapper">
-                {opendInput && (
+                { opendInput && (
                     <>
                         <div className="registration-edit-form">
-                            {opendInput.readonly ? (
+                            { opendInput.readonly ? (
                                 // MultivendorX Free field: allow only label & placeholder
                                 <SettingMetaBox
-                                    formField={opendInput}
-                                    opened={{ click: true }}
+                                    formField={ opendInput }
+                                    opened={ { click: true } }
                                     metaType="setting-meta"
-                                    inputTypeList={[]} // hide type dropdown
+                                    inputTypeList={ [] } // hide type dropdown
                                     // onChange={(key, value) => {
                                     //     if (key !== 'label' && key !== 'placeholder') return; // only allow label & placeholder
                                     //     const index = formFieldList.findIndex(f => f.id === opendInput.id);
@@ -711,74 +1031,114 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                     //         setOpendInput({ ...formFieldList[index], [key]: value });
                                     //     }
                                     // }}
-                                    onChange={(key, value) => {
-                                        if (key !== 'label' && key !== 'placeholder' && key !== 'disabled') return; // only allow label & placeholder
+                                    onChange={ ( key, value ) => {
+                                        if (
+                                            key !== 'label' &&
+                                            key !== 'placeholder' &&
+                                            key !== 'disabled'
+                                        ) {
+                                            return;
+                                        } // only allow label & placeholder
 
-                                        if (opendInput?.parentId) {
+                                        if ( opendInput?.parentId ) {
                                             // Subfield case
-                                            handleFormFieldChange(opendInput.id, key, value, opendInput.parentId);
+                                            handleFormFieldChange(
+                                                opendInput.id,
+                                                key,
+                                                value,
+                                                opendInput.parentId
+                                            );
                                         } else {
                                             // Top-level field case
-                                            const index = formFieldList.findIndex(f => f.id === opendInput.id);
-                                            if (index >= 0) {
-                                                handleFormFieldChange(index, key, value);
-                                                setOpendInput({ ...formFieldList[index], [key]: value });
+                                            const index =
+                                                formFieldList.findIndex(
+                                                    ( f ) =>
+                                                        f.id === opendInput.id
+                                                );
+                                            if ( index >= 0 ) {
+                                                handleFormFieldChange(
+                                                    index,
+                                                    key,
+                                                    value
+                                                );
+                                                setOpendInput( {
+                                                    ...formFieldList[ index ],
+                                                    [ key ]: value,
+                                                } );
                                             }
                                         }
-                                    }}
-
+                                    } }
                                 />
                             ) : (
                                 // Normal fields: full edit box
                                 <SettingMetaBox
-                                    formField={opendInput}
-                                    opened={{ click: true }}
-                                    onChange={(key, value) => {
-                                        const index = formFieldList.findIndex(f => f.id === opendInput.id);
-                                        if (index >= 0) {
-                                            handleFormFieldChange(index, key, value);
-                                            setOpendInput({ ...formFieldList[index], [key]: value });
+                                    formField={ opendInput }
+                                    opened={ { click: true } }
+                                    onChange={ ( key, value ) => {
+                                        const index = formFieldList.findIndex(
+                                            ( f ) => f.id === opendInput.id
+                                        );
+                                        if ( index >= 0 ) {
+                                            handleFormFieldChange(
+                                                index,
+                                                key,
+                                                value
+                                            );
+                                            setOpendInput( {
+                                                ...formFieldList[ index ],
+                                                [ key ]: value,
+                                            } );
                                         }
-                                    }}
-                                    onTypeChange={(newType) => {
-                                        const index = formFieldList.findIndex(f => f.id === opendInput.id);
-                                        if (index >= 0) {
-                                            handleFormFieldTypeChange(index, newType);
-                                            setOpendInput({ ...formFieldList[index], type: newType });
+                                    } }
+                                    onTypeChange={ ( newType ) => {
+                                        const index = formFieldList.findIndex(
+                                            ( f ) => f.id === opendInput.id
+                                        );
+                                        if ( index >= 0 ) {
+                                            handleFormFieldTypeChange(
+                                                index,
+                                                newType
+                                            );
+                                            setOpendInput( {
+                                                ...formFieldList[ index ],
+                                                type: newType,
+                                            } );
                                         }
-                                    }}
-                                    inputTypeList={selectOptions}
+                                    } }
+                                    inputTypeList={ selectOptions }
                                 />
-                            )}
+                            ) }
                         </div>
                     </>
-                )}
+                ) }
             </div>
 
-            {/* Image Gallery Modal */}
-            {showImageGallery && (
+            { /* Image Gallery Modal */ }
+            { showImageGallery && (
                 <div className="modal-overlay">
                     <div className="modal-content large">
                         <div className="modal-header">
                             <h3>Select Images</h3>
                             <button
                                 className="close-btn"
-                                onClick={() => {
-                                    setShowImageGallery(false);
-                                    setSelectedFieldForGallery(null);
-                                }}
+                                onClick={ () => {
+                                    setShowImageGallery( false );
+                                    setSelectedFieldForGallery( null );
+                                } }
                             >
                                 <i className="admin-font adminlib-close"></i>
                             </button>
                         </div>
                         <ImageGallery
-                            onImageSelect={handleImageSelect}
-                            multiple={true}
-                            selectedImages={selectedFieldForGallery?.images || []}
+                            onImageSelect={ handleImageSelect }
+                            multiple={ true }
+                            selectedImages={
+                                selectedFieldForGallery?.images || []
+                            }
                         />
                     </div>
                 </div>
-            )}
+            ) }
         </div>
     );
 };

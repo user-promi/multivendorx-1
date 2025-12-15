@@ -1,20 +1,21 @@
 import React, { createContext, useReducer, useContext } from 'react';
 
 // theme context object.
-const ThemeContext = createContext< any | undefined >(
-    undefined
-);
+const ThemeContext = createContext< any | undefined >( undefined );
 
 /**
  * dispatch function for theme related operation.
- * @param {*} state  state variable 
+ * @param {*} state  state variable
  * @param {*} action name of action for state variable.
- * @returns 
+ * @returns
  */
 const themeReducer = ( state: any, action: any ) => {
     switch ( action.type ) {
         case 'TOGGLE_THEME':
-            return { ...state, theme: state.theme === 'light' ? 'dark' : 'light' };
+            return {
+                ...state,
+                theme: state.theme === 'light' ? 'dark' : 'light',
+            };
         default:
             return state;
     }
@@ -22,11 +23,11 @@ const themeReducer = ( state: any, action: any ) => {
 
 /**
  * context provider component
- * @param {*} props 
- * @returns 
+ * @param {*} props
+ * @returns
  */
 const ThemeProvider = ( props: any ) => {
-    const [state, dispatch] = useReducer( themeReducer, { theme: 'light' } );
+    const [ state, dispatch ] = useReducer( themeReducer, { theme: 'light' } );
 
     /**
      * toggle the theme if dark then toogle to light. vice versa.
@@ -36,7 +37,7 @@ const ThemeProvider = ( props: any ) => {
     };
 
     return (
-        <ThemeContext.Provider value={{ ...state, toggleTheme }}>
+        <ThemeContext.Provider value={ { ...state, toggleTheme } }>
             { props.children }
         </ThemeContext.Provider>
     );
@@ -49,7 +50,7 @@ const ThemeProvider = ( props: any ) => {
 const useTheme = () => {
     const context = useContext( ThemeContext );
     if ( ! context ) {
-        throw new Error('useTheme must be used within a ThemeProvider');
+        throw new Error( 'useTheme must be used within a ThemeProvider' );
     }
     return context;
 };

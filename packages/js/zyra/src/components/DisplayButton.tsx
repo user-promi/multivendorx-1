@@ -47,12 +47,9 @@ const DisplayButton: React.FC< DisplayButtonProp > = ( {
     };
 
     const hoverStyle = {
-        border: `1px solid ${
-            customStyle?.button_border_color_onhover ?? ''
-        }`,
+        border: `1px solid ${ customStyle?.button_border_color_onhover ?? '' }`,
         color: customStyle?.button_text_color_onhover ?? '',
-        backgroundColor:
-            customStyle?.button_background_color_onhover ?? '',
+        backgroundColor: customStyle?.button_background_color_onhover ?? '',
     };
 
     const [ hovered, setHovered ] = useState( false );
@@ -64,7 +61,7 @@ const DisplayButton: React.FC< DisplayButtonProp > = ( {
     }
     return (
         <button
-            type={btnType}
+            type={ btnType }
             className={ wraperClass ?? '' }
             onMouseEnter={ () => setHovered( true ) }
             onMouseLeave={ () => setHovered( false ) }

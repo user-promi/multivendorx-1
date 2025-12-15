@@ -66,7 +66,6 @@ const Log: React.FC< LogProps > = ( {
                 document.body.removeChild( link );
             } )
             .catch( ( error ) =>
-                // eslint-disable-next-line no-console
                 console.error( 'Error downloading file:', error )
             );
     };
@@ -105,7 +104,7 @@ const Log: React.FC< LogProps > = ( {
             .then( () => setCopied( true ) )
             .catch( ( error ) => {
                 setCopied( false );
-                // eslint-disable-next-line no-console
+
                 console.error( 'Error copying logs to clipboard:', error );
             } );
 
@@ -125,7 +124,7 @@ const Log: React.FC< LogProps > = ( {
                 <button
                     className="admin-btn btn-red delete-btn"
                     onClick={ handleClearLog }
-                >   
+                >
                     <i className="adminlib-delete"></i>
                     <span className="text">Clear</span>
                 </button>

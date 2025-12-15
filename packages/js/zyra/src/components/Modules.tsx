@@ -37,287 +37,413 @@ type ModuleItem = Module | Separator;
 
 interface ModuleProps {
     modulesArray?: { category: boolean; modules: ModuleItem[] };
-    appLocalizer: Record<string, any>;
+    appLocalizer: Record< string, any >;
     apiLink: string;
-    proPopupContent?: React.FC<any>;
+    proPopupContent?: React.FC< any >;
     pluginName: string;
     brandImg: string;
 }
 
-const Modules: React.FC<ModuleProps> = ({
+const Modules: React.FC< ModuleProps > = ( {
     modulesArray = { category: false, modules: [] },
     appLocalizer,
     apiLink,
     proPopupContent: ProPopupComponent,
     brandImg,
     pluginName,
-}) => {
-    const [modelOpen, setModelOpen] = useState<boolean>(false);
-    const [successMsg, setSuccessMsg] = useState<string>('');
-    const [selectedCategory, setSelectedCategory] = useState<string>('All');
-    const [selectedFilter, setSelectedFilter] = useState<string>('Total');
-    const [searchQuery, setSearchQuery] = useState<string>('');
+} ) => {
+    const [ modelOpen, setModelOpen ] = useState< boolean >( false );
+    const [ successMsg, setSuccessMsg ] = useState< string >( '' );
+    const [ selectedCategory, setSelectedCategory ] =
+        useState< string >( 'All' );
+    const [ selectedFilter, setSelectedFilter ] = useState< string >( 'Total' );
+    const [ searchQuery, setSearchQuery ] = useState< string >( '' );
 
     const { modules, insertModule, removeModule } = useModules();
 
-    const formatCategory = (category: string | undefined): string => {
-        if (!category) return '';
+    const formatCategory = ( category: string | undefined ): string => {
+        if ( ! category ) {
+            return '';
+        }
         return category
-            .split('_')
-            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(' ');
+            .split( '_' )
+            .map( ( word ) => word.charAt( 0 ).toUpperCase() + word.slice( 1 ) )
+            .join( ' ' );
     };
-    const getCategories = (category?: string | string[]): string[] => {
-        if (!category) return [];
-        return Array.isArray(category) ? category : [category];
+    const getCategories = ( category?: string | string[] ): string[] => {
+        if ( ! category ) {
+            return [];
+        }
+        return Array.isArray( category ) ? category : [ category ];
     };
     // Get unique categories from separators, if any
     const categories = [
         { id: 'All', label: 'All' },
         ...modulesArray.modules
-            .filter((item): item is Separator => 'type' in item && item.type === 'separator')
-            .map(item => ({ id: item.id, label: item.label }))
+            .filter(
+                ( item ): item is Separator =>
+                    'type' in item && item.type === 'separator'
+            )
+            .map( ( item ) => ( { id: item.id, label: item.label } ) ),
     ];
 
     // Calculate module counts
-    const totalModules = modulesArray.modules.filter(item => !('type' in item)).length;
+    const totalModules = modulesArray.modules.filter(
+        ( item ) => ! ( 'type' in item )
+    ).length;
     const activeModules = modules.length;
     const inactiveModules = totalModules - activeModules;
 
     // Filter modules and separators based on selected category, filter, and search query
-    const filteredModules = modulesArray.modules.filter(item => {
-        if ('type' in item && item.type === 'separator') {
+    const filteredModules = modulesArray.modules.filter( ( item ) => {
+        if ( 'type' in item && item.type === 'separator' ) {
             // Only show separator if there are modules in its category that pass the status and search filters
             const separatorCategory = item.id;
-            const hasModulesInCategory = modulesArray.modules.some(module => {
-                if ('type' in module) return false;
-                const mod = module as Module;
-                if (!mod.category?.includes(separatorCategory)) return false;
-                if (selectedFilter === 'Active' && !modules.includes(mod.id)) return false;
-                if (selectedFilter === 'Inactive' && modules.includes(mod.id)) return false;
-                if (searchQuery && !mod.name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
-                return true;
-            });
-            return (selectedCategory === 'All' || item.id === selectedCategory) && hasModulesInCategory;
+            const hasModulesInCategory = modulesArray.modules.some(
+                ( module ) => {
+                    if ( 'type' in module ) {
+                        return false;
+                    }
+                    const mod = module as Module;
+                    if ( ! mod.category?.includes( separatorCategory ) ) {
+                        return false;
+                    }
+                    if (
+                        selectedFilter === 'Active' &&
+                        ! modules.includes( mod.id )
+                    ) {
+                        return false;
+                    }
+                    if (
+                        selectedFilter === 'Inactive' &&
+                        modules.includes( mod.id )
+                    ) {
+                        return false;
+                    }
+                    if (
+                        searchQuery &&
+                        ! mod.name
+                            .toLowerCase()
+                            .includes( searchQuery.toLowerCase() )
+                    ) {
+                        return false;
+                    }
+                    return true;
+                }
+            );
+            return (
+                ( selectedCategory === 'All' ||
+                    item.id === selectedCategory ) &&
+                hasModulesInCategory
+            );
         }
         const module = item as Module;
 
         // If no category, include only if 'All' is selected
-        if (!module.category && selectedCategory !== 'All') return false;
+        if ( ! module.category && selectedCategory !== 'All' ) {
+            return false;
+        }
         // Apply category filter
-        if (selectedCategory !== 'All' && !getCategories(module.category).includes(selectedCategory)) {
+        if (
+            selectedCategory !== 'All' &&
+            ! getCategories( module.category ).includes( selectedCategory )
+        ) {
             return false;
         }
         // Apply status filter
-        if (selectedFilter === 'Active' && !modules.includes(module.id)) {
+        if ( selectedFilter === 'Active' && ! modules.includes( module.id ) ) {
             return false;
         }
-        if (selectedFilter === 'Inactive' && modules.includes(module.id)) {
+        if ( selectedFilter === 'Inactive' && modules.includes( module.id ) ) {
             return false;
         }
         // Apply search filter
-        if (searchQuery && !module.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+        if (
+            searchQuery &&
+            ! module.name.toLowerCase().includes( searchQuery.toLowerCase() )
+        ) {
             return false;
         }
         return true; // 'Total' shows all modules that pass category and search filters
-    });
+    } );
 
-    const isModuleAvailable = (moduleId: string): boolean => {
+    const isModuleAvailable = ( moduleId: string ): boolean => {
         const module = modulesArray.modules.find(
-            (moduleData) => 'id' in moduleData && moduleData.id === moduleId
+            ( moduleData ) => 'id' in moduleData && moduleData.id === moduleId
         ) as Module;
         return module?.pro_module ? appLocalizer.khali_dabba ?? false : true;
     };
 
     const handleOnChange = async (
-        event: React.ChangeEvent<HTMLInputElement>,
+        event: React.ChangeEvent< HTMLInputElement >,
         moduleId: string
     ) => {
-        if (!isModuleAvailable(moduleId)) {
-            setModelOpen(true);
+        if ( ! isModuleAvailable( moduleId ) ) {
+            setModelOpen( true );
             return;
         }
 
         const action = event.target.checked ? 'activate' : 'deactivate';
         try {
-            if (action === 'activate') {
-                insertModule?.(moduleId);
+            if ( action === 'activate' ) {
+                insertModule?.( moduleId );
             } else {
-                removeModule?.(moduleId);
+                removeModule?.( moduleId );
             }
-            localStorage.setItem(`force_${pluginName}_context_reload`, 'true');
-            await sendApiResponse(appLocalizer, getApiLink(appLocalizer, apiLink), {
-                id: moduleId,
-                action,
-            });
-            setSuccessMsg(`Module ${action}d`);
-            setTimeout(() => setSuccessMsg(''), 2000);
-        } catch (error) {
-            setSuccessMsg(`Error: Failed to ${action} module`);
-            setTimeout(() => setSuccessMsg(''), 2000);
+            localStorage.setItem(
+                `force_${ pluginName }_context_reload`,
+                'true'
+            );
+            await sendApiResponse(
+                appLocalizer,
+                getApiLink( appLocalizer, apiLink ),
+                {
+                    id: moduleId,
+                    action,
+                }
+            );
+            setSuccessMsg( `Module ${ action }d` );
+            setTimeout( () => setSuccessMsg( '' ), 2000 );
+        } catch ( error ) {
+            setSuccessMsg( `Error: Failed to ${ action } module` );
+            setTimeout( () => setSuccessMsg( '' ), 2000 );
         }
     };
-    useEffect(() => {
+    useEffect( () => {
         let highlightedElement: HTMLElement | null = null;
 
         const scrollToTargetSection = () => {
             const hash = window.location.hash;
-            const params = new URLSearchParams(hash.replace('#&', ''));
-            const targetId = params.get('module');
+            const params = new URLSearchParams( hash.replace( '#&', '' ) );
+            const targetId = params.get( 'module' );
 
-            if (targetId) {
-                setTimeout(() => {
-                    const targetElement = document.getElementById(targetId);
-                    if (targetElement) {
-                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        targetElement.classList.add('highlight');
+            if ( targetId ) {
+                setTimeout( () => {
+                    const targetElement = document.getElementById( targetId );
+                    if ( targetElement ) {
+                        targetElement.scrollIntoView( {
+                            behavior: 'smooth',
+                            block: 'start',
+                        } );
+                        targetElement.classList.add( 'highlight' );
                         highlightedElement = targetElement;
                     }
-                }, 500);
+                }, 500 );
             }
         };
 
         // Remove highlight when clicking anywhere
         const handleClickAnywhere = () => {
-            if (highlightedElement) {
-                highlightedElement.classList.remove('highlight');
+            if ( highlightedElement ) {
+                highlightedElement.classList.remove( 'highlight' );
                 highlightedElement = null;
             }
         };
 
         scrollToTargetSection();
 
-        window.addEventListener('hashchange', scrollToTargetSection);
-        document.addEventListener('click', handleClickAnywhere);
+        window.addEventListener( 'hashchange', scrollToTargetSection );
+        document.addEventListener( 'click', handleClickAnywhere );
 
         return () => {
-            window.removeEventListener('hashchange', scrollToTargetSection);
-            document.removeEventListener('click', handleClickAnywhere);
+            window.removeEventListener( 'hashchange', scrollToTargetSection );
+            document.removeEventListener( 'click', handleClickAnywhere );
         };
-    }, [filteredModules]);
-
-
+    }, [ filteredModules ] );
 
     return (
         <>
             <AdminBreadcrumbs
                 activeTabIcon="adminlib-module"
                 tabTitle="Modules"
-                description={'Manage marketplace features by enabling or disabling modules. Turning a module on activates its settings and workflows, while turning it off hides them from admin and vendors.'}
-
+                description={
+                    'Manage marketplace features by enabling or disabling modules. Turning a module on activates its settings and workflows, while turning it off hides them from admin and vendors.'
+                }
             />
 
             <div className="module-container general-wrapper">
                 <Dialog
                     className="admin-module-popup"
-                    open={modelOpen}
-                    onClose={() => setModelOpen(false)}
+                    open={ modelOpen }
+                    onClose={ () => setModelOpen( false ) }
                 >
                     <button
                         className="admin-font adminlib-cross"
-                        onClick={() => setModelOpen(false)}
+                        onClick={ () => setModelOpen( false ) }
                         aria-label="Close dialog"
                     ></button>
-                    {ProPopupComponent && <ProPopupComponent />}
+                    { ProPopupComponent && <ProPopupComponent /> }
                 </Dialog>
 
-                {successMsg && (
+                { successMsg && (
                     <div className="admin-notice-wrapper">
                         <i className="admin-font adminlib-icon-yes"></i>
                         <div className="notice-details">
                             <div className="title">Success!</div>
-                            <div className="desc">{successMsg}</div>
+                            <div className="desc">{ successMsg }</div>
                         </div>
                     </div>
-                )}
+                ) }
 
                 <div className="category-filter">
-                    {modulesArray.category && categories.length > 1 && (
+                    { modulesArray.category && categories.length > 1 && (
                         <>
-                            {categories.map((category) => (
+                            { categories.map( ( category ) => (
                                 <span
-                                    key={category.id}
-                                    id={category.id}
-                                    className={`category-item ${selectedCategory === category.id ? 'active' : ''}`}
-                                    onClick={() => setSelectedCategory(category.id)}
+                                    key={ category.id }
+                                    id={ category.id }
+                                    className={ `category-item ${
+                                        selectedCategory === category.id
+                                            ? 'active'
+                                            : ''
+                                    }` }
+                                    onClick={ () =>
+                                        setSelectedCategory( category.id )
+                                    }
                                 >
-                                    {category.label}
+                                    { category.label }
                                 </span>
-                            ))}
+                            ) ) }
                         </>
-                    )}
+                    ) }
                 </div>
 
                 <div className="module-option-row">
-                    {filteredModules.map((item, index) => {
-                        if ('type' in item && item.type === 'separator') {
+                    { filteredModules.map( ( item, index ) => {
+                        if ( 'type' in item && item.type === 'separator' ) {
                             return null;
                         }
 
                         const module = item as Module;
-                        const requiredPlugins = module.req_plugin || (module as any).req_pluging || [];
+                        const requiredPlugins =
+                            module.req_plugin ||
+                            ( module as any ).req_pluging ||
+                            [];
                         return (
-                            <div className="module-list-item" key={module.id} id={module.id}>
+                            <div
+                                className="module-list-item"
+                                key={ module.id }
+                                id={ module.id }
+                            >
                                 <div className="module-body">
                                     <div className="module-header">
                                         <div className="icon">
-                                            <i className={`font ${module.icon}`}></i>
+                                            <i
+                                                className={ `font ${ module.icon }` }
+                                            ></i>
                                         </div>
                                         <div className="pro-tag">
-                                            {module.pro_module && !appLocalizer.khali_dabba && (
-                                                <i className="adminlib-pro-tag"></i>
-                                            )}
+                                            { module.pro_module &&
+                                                ! appLocalizer.khali_dabba && (
+                                                    <i className="adminlib-pro-tag"></i>
+                                                ) }
                                         </div>
                                     </div>
                                     <div className="module-details">
-
-                                        <div className="meta-name">{module.name}</div>
+                                        <div className="meta-name">
+                                            { module.name }
+                                        </div>
                                         <div className="tag-wrapper">
-                                            {getCategories(module.category).map((cat, idx) => (
-                                                <span key={idx} className="admin-badge blue">
-                                                    {formatCategory(cat)}
+                                            { getCategories(
+                                                module.category
+                                            ).map( ( cat, idx ) => (
+                                                <span
+                                                    key={ idx }
+                                                    className="admin-badge blue"
+                                                >
+                                                    { formatCategory( cat ) }
                                                 </span>
-                                            ))}
+                                            ) ) }
                                         </div>
                                         <p
                                             className="meta-description"
-                                            dangerouslySetInnerHTML={{ __html: module.desc }}
+                                            dangerouslySetInnerHTML={ {
+                                                __html: module.desc,
+                                            } }
                                         ></p>
                                     </div>
                                 </div>
                                 <div className="footer-wrapper">
-                                    {requiredPlugins.length > 0 && (
+                                    { requiredPlugins.length > 0 && (
                                         <div className="requires">
-                                            <div className="requires-title">Requires:</div>
-                                            {requiredPlugins.map((plugin: { name: string; link: string }, idx: number) => (
-                                                <span key={idx}>
-                                                    <a href={plugin.link} className="link-item" target="_blank" rel="noopener noreferrer">
-                                                        {plugin.name}
-                                                    </a>
-                                                    {idx < requiredPlugins.length - 1 ? ', ' : ''}
-                                                </span>
-                                            ))}
+                                            <div className="requires-title">
+                                                Requires:
+                                            </div>
+                                            { requiredPlugins.map(
+                                                (
+                                                    plugin: {
+                                                        name: string;
+                                                        link: string;
+                                                    },
+                                                    idx: number
+                                                ) => (
+                                                    <span key={ idx }>
+                                                        <a
+                                                            href={ plugin.link }
+                                                            className="link-item"
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                        >
+                                                            { plugin.name }
+                                                        </a>
+                                                        { idx <
+                                                        requiredPlugins.length -
+                                                            1
+                                                            ? ', '
+                                                            : '' }
+                                                    </span>
+                                                )
+                                            ) }
                                         </div>
-                                    )}
+                                    ) }
                                     <div className="module-footer">
                                         <div className="buttons">
-                                            {module.doc_link && (<a href={module.doc_link} target="_blank"><i className="adminlib-book"></i></a>)}
-                                            {module.video_link && (<a href={module.video_link} target="_blank"><i className="adminlib-button-appearance"></i></a>)}
-                                            {module.settings_link && (<a href={module.settings_link} ><i className="adminlib-setting"></i></a>)}
+                                            { module.doc_link && (
+                                                <a
+                                                    href={ module.doc_link }
+                                                    target="_blank"
+                                                >
+                                                    <i className="adminlib-book"></i>
+                                                </a>
+                                            ) }
+                                            { module.video_link && (
+                                                <a
+                                                    href={ module.video_link }
+                                                    target="_blank"
+                                                >
+                                                    <i className="adminlib-button-appearance"></i>
+                                                </a>
+                                            ) }
+                                            { module.settings_link && (
+                                                <a
+                                                    href={
+                                                        module.settings_link
+                                                    }
+                                                >
+                                                    <i className="adminlib-setting"></i>
+                                                </a>
+                                            ) }
                                         </div>
                                         <div
                                             className="toggle-checkbox"
-                                            data-tour={`${module.id}-showcase-tour`}
+                                            data-tour={ `${ module.id }-showcase-tour` }
                                         >
                                             <input
                                                 type="checkbox"
                                                 className="woo-toggle-checkbox"
-                                                id={`toggle-switch-${module.id}`}
-                                                checked={modules.includes(module.id)}
-                                                onChange={(e) => handleOnChange(e, module.id)}
+                                                id={ `toggle-switch-${ module.id }` }
+                                                checked={ modules.includes(
+                                                    module.id
+                                                ) }
+                                                onChange={ ( e ) =>
+                                                    handleOnChange(
+                                                        e,
+                                                        module.id
+                                                    )
+                                                }
                                             />
                                             <label
-                                                htmlFor={`toggle-switch-${module.id}`}
+                                                htmlFor={ `toggle-switch-${ module.id }` }
                                                 className="toggle-switch-is_hide_cart_checkout"
                                             ></label>
                                         </div>
@@ -325,7 +451,7 @@ const Modules: React.FC<ModuleProps> = ({
                                 </div>
                             </div>
                         );
-                    })}
+                    } ) }
                 </div>
             </div>
         </>

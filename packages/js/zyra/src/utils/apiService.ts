@@ -20,7 +20,6 @@ export const getApiResponse = async < T >(
         const result = await axios.get< T >( url, headers );
         return result.data;
     } catch ( error ) {
-        // eslint-disable-next-line no-console
         console.error( `❌ Error fetching data from ${ url }`, error );
         return null;
     }
@@ -53,7 +52,6 @@ export const sendApiResponse = async < T >(
         const result = await axios.post< T >( url, data, config );
         return result.data;
     } catch ( error ) {
-        // eslint-disable-next-line no-console
         console.error( `❌ Error sending data to ${ url }`, error );
         return null;
     }

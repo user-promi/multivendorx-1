@@ -42,51 +42,72 @@ export interface PopupProps {
     // wooPageUrl?:string;
 }
 
-const ProPopup: React.FC<PopupProps> = (props) => {
+const ProPopup: React.FC< PopupProps > = ( props ) => {
     const { btnLink = [], proUrl = '#' } = props;
 
-    const [selectedBtn, setSelectedBtn] = useState<BtnLink>(
-        btnLink.length ? btnLink[0] : { site: '', price: '', link: proUrl }
+    const [ selectedBtn, setSelectedBtn ] = useState< BtnLink >(
+        btnLink.length ? btnLink[ 0 ] : { site: '', price: '', link: proUrl }
     );
-    useEffect(() => {
-        setSelectedBtn(btnLink.length ? btnLink[0] : { site: '', price: '', link: proUrl });
-    }, [btnLink, proUrl]);
-    console.log(props);
+    useEffect( () => {
+        setSelectedBtn(
+            btnLink.length
+                ? btnLink[ 0 ]
+                : { site: '', price: '', link: proUrl }
+        );
+    }, [ btnLink, proUrl ] );
+    console.log( props );
 
     return (
-        <DialogContent className={`popup-container ${props.messages ? "pro-popup-content" : "module-popup-content"}`}>
-            <DialogContentText sx={{ fontFamily: "Figtree, sans-serif" }}>
+        <DialogContent
+            className={ `popup-container ${
+                props.messages ? 'pro-popup-content' : 'module-popup-content'
+            }` }
+        >
+            <DialogContentText sx={ { fontFamily: 'Figtree, sans-serif' } }>
                 <div className="popup-wrapper">
-                    {props.messages && (
+                    { props.messages && (
                         <>
                             <div className="top-section">
-                                <div className="heading">{props.title}</div>
-                                <div className="description">{props.moreText}</div>
-                                <div className="price">{selectedBtn.price}</div>
+                                <div className="heading">{ props.title }</div>
+                                <div className="description">
+                                    { props.moreText }
+                                </div>
+                                <div className="price">
+                                    { selectedBtn.price }
+                                </div>
                                 <div className="select-wrapper">
                                     For website with
                                     <select
-                                        value={selectedBtn.link}
-                                        onChange={(e) => {
-                                            const found = btnLink.find((b) => b.link === e.target.value);
-                                            if (found) setSelectedBtn(found);
-                                        }}
+                                        value={ selectedBtn.link }
+                                        onChange={ ( e ) => {
+                                            const found = btnLink.find(
+                                                ( b ) =>
+                                                    b.link === e.target.value
+                                            );
+                                            if ( found ) {
+                                                setSelectedBtn( found );
+                                            }
+                                        } }
                                     >
-                                        {btnLink.map((b, idx) => (
-                                            <option key={idx} value={b.link}>
-                                                {b.site}
+                                        { btnLink.map( ( b, idx ) => (
+                                            <option
+                                                key={ idx }
+                                                value={ b.link }
+                                            >
+                                                { b.site }
                                             </option>
-                                        ))}
+                                        ) ) }
                                     </select>
                                     site license
                                 </div>
                                 <a
                                     className="admin-btn"
-                                    href={selectedBtn.link}
+                                    href={ selectedBtn.link }
                                     target="_blank"
                                     rel="noreferrer"
                                 >
-                                    {props.upgradeBtnText} <i className="adminlib-arrow-right arrow-icon"></i>
+                                    { props.upgradeBtnText }{ ' ' }
+                                    <i className="adminlib-arrow-right arrow-icon"></i>
                                 </a>
                             </div>
                             <div className="popup-content">
@@ -95,17 +116,26 @@ const ProPopup: React.FC<PopupProps> = (props) => {
                                 </div>
 
                                 <ul>
-                                    {props.messages?.map(
-                                        (message, index) => (
+                                    { props.messages?.map(
+                                        ( message, index ) => (
                                             <li>
-                                                <div className="title"><i className={message.icon}></i> {message.text}</div>
-                                                <div className="sub-text">{message.des}</div>
+                                                <div className="title">
+                                                    <i
+                                                        className={
+                                                            message.icon
+                                                        }
+                                                    ></i>{ ' ' }
+                                                    { message.text }
+                                                </div>
+                                                <div className="sub-text">
+                                                    { message.des }
+                                                </div>
                                             </li>
                                         )
-                                    )}
+                                    ) }
                                 </ul>
                             </div>
-                            {/* <div className="right-section">
+                            { /* <div className="right-section">
                                 <h4>
                                     Unlock <span className="pro-tag">Pro</span>
                                     <i className="popup-icon-popup-star"></i>
@@ -138,40 +168,49 @@ const ProPopup: React.FC<PopupProps> = (props) => {
                                         Get Pro. Sell More.
                                     </a>
                                 </div>
-                            </div> */}
+                            </div> */ }
                         </>
-                    )}
-                    {props.moduleName && (
+                    ) }
+                    { props.moduleName && (
                         <>
                             <div className="popup-header">
-                                <i className={`adminlib-${props.moduleName}`}></i>
+                                <i
+                                    className={ `adminlib-${ props.moduleName }` }
+                                ></i>
                             </div>
                             <div className="popup-body">
-                                <h2>Activate {String(props.moduleName)
-                                    .split('-')
-                                    .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
-                                    .join(' ')}
+                                <h2>
+                                    Activate{ ' ' }
+                                    { String( props.moduleName )
+                                        .split( '-' )
+                                        .map(
+                                            ( word: string ) =>
+                                                word.charAt( 0 ).toUpperCase() +
+                                                word.slice( 1 )
+                                        )
+                                        .join( ' ' ) }
                                 </h2>
-                                <p>{props.message}</p>
+                                <p>{ props.message }</p>
 
                                 <div className="buttons-wrapper center">
                                     <a
                                         className="admin-btn btn-purple"
-                                        href={props.modulePageUrl}
+                                        href={ props.modulePageUrl }
                                     >
-                                        <i className="adminlib-preview"></i> {props.moduleButton}
+                                        <i className="adminlib-preview"></i>{ ' ' }
+                                        { props.moduleButton }
                                     </a>
                                 </div>
                             </div>
                         </>
-                    )}
-                    {props.settings && (
+                    ) }
+                    { props.settings && (
                         <>
-                            <h2>{props.message}</h2>
-                            <p>{props.SettingDescription}</p>
+                            <h2>{ props.message }</h2>
+                            <p>{ props.SettingDescription }</p>
                         </>
-                    )}
-                    {/* {props.wooSetting && (
+                    ) }
+                    { /* {props.wooSetting && (
                         <>
                             <div className="popup-header">
                                 <i className="adminlib-settings"></i>
@@ -197,10 +236,10 @@ const ProPopup: React.FC<PopupProps> = (props) => {
                                 </div>
                             </div>
                         </>
-                    )} */}
+                    )} */ }
                 </div>
             </DialogContentText>
-        </DialogContent >
+        </DialogContent>
     );
 };
 

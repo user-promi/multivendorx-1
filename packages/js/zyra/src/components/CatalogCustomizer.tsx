@@ -85,7 +85,11 @@ const CatalogCustomizer: React.FC< CatalogCustomizerProps > = ( {
                     } }
                     className="button-visibility"
                 >
-                    <i className={`adminlib-eye${hideProductPrice ? "-blocked" : ""}`}></i>
+                    <i
+                        className={ `adminlib-eye${
+                            hideProductPrice ? '-blocked' : ''
+                        }` }
+                    ></i>
                 </div>
                 <p
                     className="product-price"
@@ -114,7 +118,11 @@ const CatalogCustomizer: React.FC< CatalogCustomizerProps > = ( {
                     } }
                     className="button-visibility"
                 >
-                    <i className={`adminlib-eye${hideProductDesc ? "-blocked" : ""}`}></i>
+                    <i
+                        className={ `adminlib-eye${
+                            hideProductDesc ? '-blocked' : ''
+                        }` }
+                    ></i>
                 </div>
                 <p
                     className="product-description"
@@ -225,7 +233,9 @@ const CatalogCustomizer: React.FC< CatalogCustomizerProps > = ( {
         startIndex: number,
         endIndex: number
     ): T[] => {
-        if ( startIndex === endIndex ) return list; // No need to reorder if indices are the same
+        if ( startIndex === endIndex ) {
+            return list;
+        } // No need to reorder if indices are the same
 
         const result = [ ...list ]; // Creates a shallow copy of the array
         const [ removed ] = result.splice( startIndex, 1 );
@@ -249,7 +259,9 @@ const CatalogCustomizer: React.FC< CatalogCustomizerProps > = ( {
      * Updates draggable items based on the previously set sequence.
      */
     useEffect( () => {
-        if ( ! shopPagePossitionSetting ) return;
+        if ( ! shopPagePossitionSetting ) {
+            return;
+        }
 
         const positionSetting: Record< string, string > =
             shopPagePossitionSetting || {};
@@ -527,14 +539,18 @@ const CatalogCustomizer: React.FC< CatalogCustomizerProps > = ( {
         name: string;
         icon: string;
     } ): void => {
-        if ( currentTab.id === newTab.id ) return;
+        if ( currentTab.id === newTab.id ) {
+            return;
+        }
 
         setCurrentTab( { ...newTab } );
 
         const mainWrapper = document.getElementById(
             'catelog-customizer-main-wrapper'
         );
-        if ( ! mainWrapper ) return;
+        if ( ! mainWrapper ) {
+            return;
+        }
 
         window.scrollTo( 0, 0 );
 

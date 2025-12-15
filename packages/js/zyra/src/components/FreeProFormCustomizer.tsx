@@ -56,7 +56,9 @@ const FreeProFormCustomizer: React.FC< FreeProFormCustomizerProps > = ( {
         fieldKey: string,
         activeStatus: boolean
     ) => {
-        if ( moduleEnabledChange() ) return;
+        if ( moduleEnabledChange() ) {
+            return;
+        }
         settingChange.current = true;
 
         setFormFieldsData( ( prevData ) => {
@@ -78,7 +80,9 @@ const FreeProFormCustomizer: React.FC< FreeProFormCustomizerProps > = ( {
     };
 
     const updateFieldLabel = ( fieldKey: string, labelValue: string ) => {
-        if ( moduleEnabledChange() ) return;
+        if ( moduleEnabledChange() ) {
+            return;
+        }
         settingChange.current = true;
 
         setFormFieldsData( ( prevData ) => {
@@ -144,7 +148,9 @@ const FreeProFormCustomizer: React.FC< FreeProFormCustomizerProps > = ( {
                     <div className="form-field">
                         <div className="edit-form-wrapper free-form">
                             <h3 className="form-label">{ 'Field Name' }</h3>
-                            <h3 className="set-name">{ 'Set new field name' }</h3>
+                            <h3 className="set-name">
+                                { 'Set new field name' }
+                            </h3>
                         </div>
                         { formFields.map( ( fields, index ) => (
                             <div
@@ -172,8 +178,7 @@ const FreeProFormCustomizer: React.FC< FreeProFormCustomizerProps > = ( {
                                             )
                                         }
                                         value={
-                                            getFields( fields.key )
-                                                ?.label || ''
+                                            getFields( fields.key )?.label || ''
                                         }
                                         readOnly={ readonlyFields[ index ] }
                                         style={ {

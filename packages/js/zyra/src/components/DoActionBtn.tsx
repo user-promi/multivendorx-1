@@ -124,11 +124,15 @@ const DoActionBtn: React.FC< DoActionBtnProps > = ( {
             if ( currentTask.cache === 'course_id' ) {
                 const course = response?.courses?.[ 1 ];
                 status = course ? 'success' : 'failed';
-                if ( course ) additionalData.current.course_id = course.id;
+                if ( course ) {
+                    additionalData.current.course_id = course.id;
+                }
             } else if ( currentTask.cache === 'user_id' ) {
                 const user = response?.data?.users?.[ 0 ];
                 status = user ? 'success' : 'failed';
-                if ( user ) additionalData.current.user_id = user.id;
+                if ( user ) {
+                    additionalData.current.user_id = user.id;
+                }
             } else if ( ! response?.success ) {
                 status = 'failed';
             }
@@ -153,7 +157,9 @@ const DoActionBtn: React.FC< DoActionBtnProps > = ( {
     }, [ tasks, interval, appLocalizer, apilink, parameter ] );
 
     const startConnectionTask = useCallback( () => {
-        if ( connectTaskStarted.current ) return;
+        if ( connectTaskStarted.current ) {
+            return;
+        }
         connectTaskStarted.current = true;
         setLoading( true );
         setTaskSequence( [] );
@@ -184,7 +190,9 @@ const DoActionBtn: React.FC< DoActionBtnProps > = ( {
 
     const handleSync = async ( e: React.MouseEvent< HTMLButtonElement > ) => {
         e.preventDefault();
-        if ( proSettingChanged() ) return;
+        if ( proSettingChanged() ) {
+            return;
+        }
 
         if ( parameter === 'connection_test' ) {
             startConnectionTask();
@@ -223,7 +231,11 @@ const DoActionBtn: React.FC< DoActionBtnProps > = ( {
                         <div className="three-body-dot" />
                     </div>
                 ) }
-                { proSetting && <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span> }
+                { proSetting && (
+                    <span className="admin-pro-tag">
+                        <i className="adminlib-pro-tag"></i>Pro
+                    </span>
+                ) }
             </div>
 
             { syncStarted && (

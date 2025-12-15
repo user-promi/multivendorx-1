@@ -11,23 +11,29 @@ interface SectionProps {
     description?: string;
 }
 
-const Section: React.FC<SectionProps> = ({ wrapperClass, hint, value, description }) => {
+const Section: React.FC< SectionProps > = ( {
+    wrapperClass,
+    hint,
+    value,
+    description,
+} ) => {
     return (
         <>
-            <div className={wrapperClass}>
+            <div className={ wrapperClass }>
                 <div className="divider-section">
-                    {hint && (
+                    { hint && (
                         <p
                             className="title"
-                            dangerouslySetInnerHTML={{ __html: hint }}
+                            dangerouslySetInnerHTML={ { __html: hint } }
                         ></p>
-                    )}
-                    {description && (
-                        <div className="desc"
-                            dangerouslySetInnerHTML={{ __html: description }}
+                    ) }
+                    { description && (
+                        <div
+                            className="desc"
+                            dangerouslySetInnerHTML={ { __html: description } }
                         ></div>
-                    )}
-                    {value && <span>{value}</span>}
+                    ) }
+                    { value && <span>{ value }</span> }
                 </div>
             </div>
         </>

@@ -26,41 +26,43 @@ type Setting = {
  *                             May include folders with nested settings.
  * @return {Setting[]}           The sorted array of settings by priority in ascending order.
  */
-const getSettingsByPriority = (settings: Setting[]): Setting[] => {
-	if (!Array.isArray(settings)) return [];
-   
-	// settings.sort((a, b) => {
-	// 	const aIsFolder = a.type === 'folder';
-	// 	const bIsFolder = b.type === 'folder';
+const getSettingsByPriority = ( settings: Setting[] ): Setting[] => {
+    if ( ! Array.isArray( settings ) ) {
+        return [];
+    }
 
-	// 	// Step 1: Files first
-	// 	if (!aIsFolder && bIsFolder) return -1;
-	// 	if (aIsFolder && !bIsFolder) return 1;
+    // settings.sort((a, b) => {
+    // 	const aIsFolder = a.type === 'folder';
+    // 	const bIsFolder = b.type === 'folder';
 
-	// 	// Step 2: Priority comparison
-	// 	let aPriority = 0;
-	// 	let bPriority = 0;
+    // 	// Step 1: Files first
+    // 	if (!aIsFolder && bIsFolder) return -1;
+    // 	if (aIsFolder && !bIsFolder) return 1;
 
-	// 	if (aIsFolder) {
-	// 		a.content = getSettingsByPriority(a.content as Setting[]);
-	// 		const aFirstChild = (a.content as Setting[])[0];
-	// 		aPriority = (aFirstChild?.content as SettingContent)?.priority ?? 0;
-	// 	} else {
-	// 		aPriority = (a.content as SettingContent)?.priority ?? 0;
-	// 	}
+    // 	// Step 2: Priority comparison
+    // 	let aPriority = 0;
+    // 	let bPriority = 0;
 
-	// 	if (bIsFolder) {
-	// 		b.content = getSettingsByPriority(b.content as Setting[]);
-	// 		const bFirstChild = (b.content as Setting[])[0];
-	// 		bPriority = (bFirstChild?.content as SettingContent)?.priority ?? 0;
-	// 	} else {
-	// 		bPriority = (b.content as SettingContent)?.priority ?? 0;
-	// 	}
+    // 	if (aIsFolder) {
+    // 		a.content = getSettingsByPriority(a.content as Setting[]);
+    // 		const aFirstChild = (a.content as Setting[])[0];
+    // 		aPriority = (aFirstChild?.content as SettingContent)?.priority ?? 0;
+    // 	} else {
+    // 		aPriority = (a.content as SettingContent)?.priority ?? 0;
+    // 	}
 
-	// 	return aPriority - bPriority;
-	// });
+    // 	if (bIsFolder) {
+    // 		b.content = getSettingsByPriority(b.content as Setting[]);
+    // 		const bFirstChild = (b.content as Setting[])[0];
+    // 		bPriority = (bFirstChild?.content as SettingContent)?.priority ?? 0;
+    // 	} else {
+    // 		bPriority = (b.content as SettingContent)?.priority ?? 0;
+    // 	}
 
-	return settings;
+    // 	return aPriority - bPriority;
+    // });
+
+    return settings;
 };
 /**
  * Filters a list of settings by a given array of setting IDs.
@@ -221,10 +223,16 @@ const isActiveSetting = (
     proActive: boolean,
     ids: string[]
 ): boolean => {
-    if ( ! setting.module_dependent ) return true;
+    if ( ! setting.module_dependent ) {
+        return true;
+    }
     if ( ids.includes( setting.id ) ) {
-        if ( ! setting.pro_dependent ) return true;
-        if ( proActive ) return true;
+        if ( ! setting.pro_dependent ) {
+            return true;
+        }
+        if ( proActive ) {
+            return true;
+        }
     }
     return false;
 };
