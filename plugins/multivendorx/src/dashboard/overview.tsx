@@ -115,7 +115,7 @@ const Overview: React.FC<OverviewProps> = ({}) => {
 						id: 'commission_refunded',
 						label: 'Commission Refunded',
 						count: formatCurrency(data.commission_refunded),
-						icon: 'adminlib-marketplace-refund,
+						icon: 'adminlib-marketplace-refund',
 					},
 				];
 
