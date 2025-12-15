@@ -361,7 +361,7 @@ const StoreTable: React.FC = () => {
 													return;
 												}
 												window.open(
-													`${appLocalizer.site_url}/store/${row.original.store_slug}/`,
+													`${appLocalizer.store_page_url}${row.original.store_slug}`,
 													'_blank'
 												);
 											},

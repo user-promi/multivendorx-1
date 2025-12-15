@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'notification-configuration',
 	priority: 5,
-	name: __('Notification Configuration', 'multivendorx'),
+	name: __('Notification Delivery', 'multivendorx'),
 	desc: __(
 		'Define what each store role can access and manage within the marketplace. All notifications dispatched by the site can be tracked and reviewed from <b><a href="#&tab=settings&subtab=notifications">Notification Settings</a></b>',
 		'multivendorx'

@@ -23,7 +23,7 @@ defined( 'ABSPATH' ) || exit;
  * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
-class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
+class StoreRest extends \WP_REST_Controller {
 
 	/**
 	 * Route base.
@@ -75,54 +75,6 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
         register_rest_route(
             MultiVendorX()->rest_namespace,
-            '/' . $this->rest_base . '/social-profiles',
-            array(
-				array(
-					'methods'             => \WP_REST_Server::READABLE,
-					'callback'            => array( $this, 'get_social_profiles' ),
-					'permission_callback' => array( $this, 'get_items_permissions_check' ),
-				),
-			)
-        );
-
-        register_rest_route(
-            MultiVendorX()->rest_namespace,
-            '/' . $this->rest_base . '/connect-social',
-            array(
-				array(
-					'methods'             => \WP_REST_Server::CREATABLE,
-					'callback'            => array( $this, 'connect_social_profile' ),
-					'permission_callback' => array( $this, 'get_items_permissions_check' ),
-				),
-			)
-        );
-
-        register_rest_route(
-            MultiVendorX()->rest_namespace,
-            '/' . $this->rest_base . '/disconnect-social',
-            array(
-				array(
-					'methods'             => \WP_REST_Server::CREATABLE,
-					'callback'            => array( $this, 'disconnect_social_profile' ),
-					'permission_callback' => array( $this, 'get_items_permissions_check' ),
-				),
-			)
-        );
-
-        register_rest_route(
-            MultiVendorX()->rest_namespace,
-            '/' . $this->rest_base . '/social-callback',
-            array(
-				array(
-					'methods'             => \WP_REST_Server::CREATABLE,
-					'callback'            => array( $this, 'handle_social_callback' ),
-					'permission_callback' => array( $this, 'get_items_permissions_check' ),
-				),
-			)
-        );
-
-        register_rest_route(
-            MultiVendorX()->rest_namespace,
             '/states/(?P<country>[A-Z]{2})',
             array(
 				'methods'             => \WP_REST_Server::READABLE,
@@ -130,146 +82,6 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 				'permission_callback' => array( $this, 'get_items_permissions_check' ),
 			)
         );
-    }
-
-    /**
-     * Handle social verification callback
-     *
-     * @param object $request Request data.
-     */
-    public function handle_social_callback( $request ) {
-        try {
-            $params   = $request->get_params();
-            $provider = sanitize_text_field( $params['provider'] ?? '' );
-            $code     = sanitize_text_field( $params['code'] ?? '' );
-            $state    = sanitize_text_field( $params['state'] ?? '' );
-
-            if ( empty( $provider ) || empty( $code ) ) {
-                return new \WP_Error( 'invalid_params', __( 'Missing required parameters', 'multivendorx' ), array( 'status' => 400 ) );
-            }
-
-            $user_id = get_current_user_id();
-            if ( ! $user_id ) {
-                return new \WP_Error( 'unauthorized', __( 'You must be logged in', 'multivendorx' ), array( 'status' => 401 ) );
-            }
-
-            $social_verification = $this->get_social_verification();
-            $user_data           = $social_verification->process_oauth_callback( $provider, $code, $params );
-
-            if ( $user_data ) {
-                $social_verification->save_social_connection( $user_id, $provider, $user_data );
-
-                return rest_ensure_response(
-                    array(
-						'success' => true,
-						'message' => ucfirst( $provider ) . ' account connected successfully!',
-						'data'    => $user_data,
-                    )
-                );
-            } else {
-                return new \WP_Error( 'verification_failed', __( 'Failed to verify social account', 'multivendorx' ), array( 'status' => 400 ) );
-            }
-        } catch ( \Exception $e ) {
-            return new \WP_Error( 'server_error', __( 'Failed to process social verification', 'multivendorx' ), array( 'status' => 500 ) );
-        }
-    }
-
-    /**
-     * Get social verification instance
-     */
-    function get_social_verification() {
-        static $instance = null;
-
-        return $instance;
-    }
-
-    /**
-     * Get social profiles
-     *
-     * @param object $request Request data.
-     */
-    public function get_social_profiles( $request ) {
-        try {
-            $user_id             = get_current_user_id();
-            $social_verification = $this->get_social_verification();
-            $profiles            = $social_verification->get_social_profiles( $user_id );
-
-            return rest_ensure_response(
-                array(
-					'success' => true,
-					'data'    => $profiles,
-                )
-            );
-        } catch ( \Exception $e ) {
-            return new \WP_Error( 'server_error', __( 'Failed to fetch social profiles', 'multivendorx' ), array( 'status' => 500 ) );
-        }
-    }
-
-    /**
-     * Connect social profile
-     *
-     * @param object $request Request data.
-     */
-    public function connect_social_profile( $request ) {
-        try {
-            $params   = $request->get_json_params();
-            $provider = sanitize_text_field( $params['provider'] ?? '' );
-
-            if ( empty( $provider ) ) {
-                return new \WP_Error( 'missing_provider', __( 'Provider is required', 'multivendorx' ), array( 'status' => 400 ) );
-            }
-
-            $social_verification = $this->get_social_verification();
-            $auth_url            = $social_verification->get_auth_url( $provider );
-
-            if ( ! $auth_url ) {
-                return new \WP_Error( 'invalid_provider', __( 'Invalid provider or provider not configured', 'multivendorx' ), array( 'status' => 400 ) );
-            }
-
-            return rest_ensure_response(
-                array(
-					'success' => true,
-					'data'    => array(
-						'redirect_url' => $auth_url,
-					),
-                )
-            );
-        } catch ( \Exception $e ) {
-            return new \WP_Error( 'server_error', __( 'Failed to connect social profile', 'multivendorx' ), array( 'status' => 500 ) );
-        }
-    }
-
-    /**
-     * Disconnect social profile
-     *
-     * @param object $request Request data.
-     */
-    public function disconnect_social_profile( $request ) {
-        try {
-            $params   = $request->get_json_params();
-            $provider = sanitize_text_field( $params['provider'] ?? '' );
-
-            if ( empty( $provider ) ) {
-                return new \WP_Error( 'missing_provider', __( 'Provider is required', 'multivendorx' ), array( 'status' => 400 ) );
-            }
-
-            $user_id             = get_current_user_id();
-            $social_verification = $this->get_social_verification();
-            $success             = $social_verification->disconnect_social_profile( $user_id, $provider );
-
-            if ( $success ) {
-                return rest_ensure_response(
-                    array(
-						'success' => true,
-						'message' => __( 'Social profile disconnected successfully', 'multivendorx' ),
-                    )
-                );
-            } else {
-                return new \WP_Error( 'disconnect_failed', __( 'Failed to disconnect social profile', 'multivendorx' ), array( 'status' => 400 ) );
-            }
-        } catch ( \Exception $e ) {
-            return new \WP_Error( 'server_error', __( 'Failed to disconnect social profile', 'multivendorx' ), array( 'status' => 500 ) );
-        }
     }
 
     /**
@@ -305,24 +117,22 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
      * @param object $request Request data.
      */
     public function get_items( $request ) {
-        global $wpdb;
+        // Nonce verification
         $nonce = $request->get_header( 'X-WP-Nonce' );
-
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
-
-            // Log the error.
-            if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log( $error );
-            }
-
+            $error = new \WP_Error(
+                'invalid_nonce',
+                __( 'Invalid nonce', 'multivendorx' ),
+                array( 'status' => 403 )
+            );
+            MultiVendorX()->util->log( $error );
             return $error;
         }
 
         try {
-            $store_registration = $request->get_param( 'store_registration' );
+            // Store registration (rejected stores)
+            if ( $request->get_param( 'store_registration' ) ) {
 
-            if ( $store_registration ) {
                 $rejected_stores = StoreUtil::get_store_by_primary_owner( 'rejected' );
 
                 $all_stores = array();
@@ -330,224 +140,206 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
                 $store_data = array();
 
                 foreach ( $rejected_stores as $store ) {
-                    $store_object = new \MultiVendorX\Store\Store( $store['ID'] );
+                    $store_id     = (int) $store['ID'];
+                    $store_object = new \MultiVendorX\Store\Store( $store_id );
+
                     $all_stores[] = array(
-                        'key'   => $store['ID'],
-                        'value' => $store['ID'],
+                        'key'   => $store_id,
+                        'value' => $store_id,
                         'label' => $store['name'],
                     );
 
-                    $from_data     = StoreUtil::get_store_registration_form( $store['ID'] );
-                    $response[]    = $from_data['all_registration_data'];
-                    $store_data [] = array(
-                        'id'   => $store['ID'],
-                        'note' => unserialize( $store_object->get_meta( Utill::STORE_SETTINGS_KEYS['store_reject_note'] ) ),
+                    $form_data  = StoreUtil::get_store_registration_form( $store_id );
+                    $response[] = $form_data['all_registration_data'] ?? array();
+
+                    $store_data[] = array(
+                        'id'   => $store_id,
+                        'note' => maybe_unserialize(
+                            $store_object->get_meta(
+                                Utill::STORE_SETTINGS_KEYS['store_reject_note']
+                            )
+                        ),
                     );
                 }
 
-                // $response = StoreUtil::get_store_registration_form( reset($rejected_stores)['ID'] );
                 return rest_ensure_response(
-                    array(
-						'all_stores' => $all_stores,
-						'response'   => $response,
-						'store_data' => $store_data,
-                    )
+                    compact( 'all_stores', 'response', 'store_data' )
                 );
             }
 
+            // Slug existence check
             $slug = $request->get_param( 'slug' );
-            if ( ! empty( $slug ) ) {
-                $id     = $request->get_param( 'id' );
-                $exists = Store::store_slug_exists( $slug, $id ?? 0 );
-                return rest_ensure_response( array( 'exists' => $exists > 0 ) );
+                if ( ! empty( $slug ) ) {
+                    $id     = (int) $request->get_param( 'id' );
+                    $exists = Store::store_slug_exists( $slug, $id );
+                    return rest_ensure_response( array( 'exists' => $exists > 0 ) );
+                }
+
+            // Early-return flags
+            $flag_map = array(
+                'pending_withdraw' => 'get_stores_with_pending_withdraw',
+                'deactivate'       => 'get_stores_with_deactivate_requests',
+                'options'          => 'get_stores_dropdown',
+                'status'           => 'get_pending_stores',
+                'follower'         => 'get_store_follower',
+            );
+
+            foreach ( $flag_map as $param => $method ) {
+                if ( $request->get_param( $param ) ) {
+                    return rest_ensure_response( $this->$method( $request ) );
+                }
             }
 
-            if ( $request->get_param( 'pending_withdraw' ) ) {
-                return rest_ensure_response( $this->get_stores_with_pending_withdraw( $request ) );
-            }
-
-            if ( $request->get_param( 'deactivate' ) ) {
-                return rest_ensure_response( $this->get_stores_with_deactivate_requests( $request ) );
-            }
-
-            $options = $request->get_param( 'options' );
-            if ( $options ) {
-                return $this->get_stores_dropdown( $request );
-            }
-
-            $status = $request->get_param( 'status' );
-            if ( $status ) {
-                return $this->get_pending_stores( $request );
-            }
-
-            $follower = $request->get_param( 'follower' );
-            if ( $follower ) {
-                return $this->get_store_follower( $request );
-            }
-
-            $count = $request->get_param( 'count' );
-
-            if ( $count ) {
+            // Count only
+            if ( $request->get_param( 'count' ) ) {
                 return StoreUtil::get_store_information( array( 'count' => true ) );
             }
 
-            $limit          = max( intval( $request->get_param( 'row' ) ), 10 );
-            $page           = max( intval( $request->get_param( 'page' ) ), 1 );
-            $offset         = ( $page - 1 ) * $limit;
-            $filter_status  = $request->get_param( 'filter_status' );
-            $searchField    = sanitize_text_field( $request->get_param( 'searchField' ) );
-            $start_date_raw = sanitize_text_field( $request->get_param( 'startDate' ) );
-            $end_date_raw   = sanitize_text_field( $request->get_param( 'endDate' ) );
-
-            // Convert to proper timestamps.
-            $start_timestamp = ! empty( $start_date_raw ) ? strtotime( str_replace( 'T', ' ', preg_replace( '/\.\d+Z?$/', '', $start_date_raw ) ) ) : false;
-            $end_timestamp   = ! empty( $end_date_raw ) ? strtotime( str_replace( 'T', ' ', preg_replace( '/\.\d+Z?$/', '', $end_date_raw ) ) ) : false;
-
-            $start_date = $start_timestamp ? gmdate( 'Y-m-d 00:00:00', $start_timestamp ) : '';
-            $end_date   = $end_timestamp ? gmdate( 'Y-m-d 23:59:59', $end_timestamp ) : '';
-            $orderBy    = sanitize_text_field( $request->get_param( 'orderBy' ) );
-            $order      = sanitize_text_field( $request->get_param( 'order' ) );
+            // Pagination & filters
+            $limit  = max( (int) $request->get_param( 'row' ), 10 );
+            $page   = max( (int) $request->get_param( 'page' ), 1 );
+            $offset = ( $page - 1 ) * $limit;
 
             $args = array(
                 'limit'  => $limit,
                 'offset' => $offset,
             );
 
-            // Pass search to StoreUtil.
-            if ( $searchField ) {
-                $args['searchField'] = $searchField;
-            } elseif ( $start_date && $end_date ) {
-                // Only apply date filter if no search.
-                $args['start_date'] = $start_date;
-                $args['end_date']   = $end_date;
+            if ( $search = sanitize_text_field( $request->get_param( 'searchField' ) ) ) {
+                $args['searchField'] = $search;
+            } else {
+                $start = sanitize_text_field( $request->get_param( 'startDate' ) );
+                $end   = sanitize_text_field( $request->get_param( 'endDate' ) );
+
+                if ( $start && $end ) {
+                    $args['start_date'] = gmdate(
+                        'Y-m-d 00:00:00',
+                        strtotime( preg_replace( '/\.\d+Z?$/', '', str_replace( 'T', ' ', $start ) ) )
+                    );
+                    $args['end_date'] = gmdate(
+                        'Y-m-d 23:59:59',
+                        strtotime( preg_replace( '/\.\d+Z?$/', '', str_replace( 'T', ' ', $end ) ) )
+                    );
+                }
             }
 
-            if ( ! empty( $filter_status ) ) {
-                $args['status'] = $filter_status;
-            }
-            if ( ! empty( $orderBy ) && ! empty( $order ) ) {
-                $args['orderBy'] = $orderBy;
-                $args['order']   = $order;
+            if ( $status = $request->get_param( 'filter_status' ) ) {
+                $args['status'] = $status;
             }
 
+            if ( $orderBy = $request->get_param( 'orderBy' ) ) {
+                $args['orderBy'] = sanitize_text_field( $orderBy );
+                $args['order']   = sanitize_text_field( $request->get_param( 'order' ) );
+            }
+
+            // Advanced filters
             $filters = $request->get_param( 'filters' );
-
             if ( ! empty( $filters ) ) {
-                $args['orderBy'] = $filters['sort'];
+
+                $args['orderBy'] = $filters['sort'] ?? $args['orderBy'] ?? '';
 
                 if ( ! empty( $filters['category'] ) ) {
-                    $product_args = array(
-                        'return'      => 'ids',
-                        'numberposts' => -1,
-                        'tax_query'   => array(
-                            array(
-                                'taxonomy' => 'product_cat',
-                                'field'    => 'term_id',
-                                'terms'    => $filters['category'],
+
+                    $product_ids = wc_get_products(
+                        array(
+                            'return'      => 'ids',
+                            'numberposts' => -1,
+                            'tax_query'   => array(
+                                array(
+                                    'taxonomy' => 'product_cat',
+                                    'field'    => 'term_id',
+                                    'terms'    => $filters['category'],
+                                ),
                             ),
-                        ),
+                        )
                     );
 
-                    $product_ids = wc_get_products( $product_args );
-                    $store_ids   = array();
+                    $store_ids = array_unique(
+                        array_filter(
+                            array_map(
+                                fn( $pid ) => get_post_meta(
+                                    $pid,
+                                    Utill::POST_META_SETTINGS['store_id'],
+                                    true
+                                ),
+                                $product_ids
+                            )
+                        )
+                    );
 
-                    foreach ( $product_ids as $product_id ) {
-                        $store_id = get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true );
-
-                        if ( ! empty( $store_id ) ) {
-							$store_ids[] = $store_id;
-                        }
-                    }
-
-                    $store_ids  = array_unique( array_filter( $store_ids ) );
                     $args['ID'] = $store_ids;
                 }
 
                 if ( ! empty( $filters['product'] ) ) {
-                    $store_id   = get_post_meta( $filters['product'], Utill::POST_META_SETTINGS['store_id'], true );
-                    $args['ID'] = $store_id;
+                    $args['ID'] = get_post_meta(
+                        $filters['product'],
+                        Utill::POST_META_SETTINGS['store_id'],
+                        true
+                    );
                 }
             }
+
+            // Fetch & format stores
             $stores = StoreUtil::get_store_information( $args );
-
             $formatted_stores = array();
-            foreach ( $stores as $store ) {
-                $store_meta = Store::get_store_by_id( (int) $store['ID'] );
-                $commission = CommissionUtil::get_commission_summary_for_store( (int) $store['ID'] );
-                // Get primary owner information using Store object.
-                $primary_owner_id = StoreUtil::get_primary_owner( $store['ID'] );
-                $primary_owner    = get_userdata( $primary_owner_id );
 
-                // Get store image and banner from meta.
-                $store_image  = $store_meta->meta_data['image'] ?? '';
-                $store_banner = $store_meta->meta_data['banner'] ?? '';
+            foreach ( $stores as $store ) {
+                $store_id   = (int) $store['ID'];
+                $store_meta = Store::get_store_by_id( $store_id );
+
+                $owner_id = StoreUtil::get_primary_owner( $store_id );
+                $owner    = get_userdata( $owner_id );
 
                 $formatted_stores[] = apply_filters(
                     'multivendorx_stores',
                     array(
-                        'id'                  => (int) $store['ID'],
+                        'id'                  => $store_id,
                         'store_name'          => $store['name'],
                         'store_slug'          => $store['slug'],
                         'status'              => $store['status'],
                         'email'               => $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['primary_email'] ] ?? '',
                         'phone'               => $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['phone'] ] ?? '',
-                        'primary_owner'       => $primary_owner,
-                        'primary_owner_image' => get_avatar( $primary_owner->ID, 48 ),
+                        'primary_owner'       => $owner,
+                        'primary_owner_image' => get_avatar( $owner_id, 48 ),
                         'applied_on'          => $store['create_time'],
-                        'store_image'         => $store_image, // Add store image.
-                        'store_banner'        => $store_banner, // Add store banner.
+                        'store_image'         => $store_meta->meta_data['image'] ?? '',
+                        'store_banner'        => $store_meta->meta_data['banner'] ?? '',
                         'address_1'           => $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['address_1'] ] ?? '',
-                        'image'               => ! empty( $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['image'] ] ) ? $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['image'] ] : null,
-                        'commission'          => $commission,
+                        'commission'          => CommissionUtil::get_commission_summary_for_store( $store_id ),
                     )
                 );
             }
-            $all          = StoreUtil::get_store_information( array( 'count' => true ) );
-            $active       = StoreUtil::get_store_information(
-                array(
-					'status' => 'active',
-					'count'  => true,
-				)
-            );
-            $pending      = StoreUtil::get_store_information(
-                array(
-					'status' => 'pending',
-					'count'  => true,
-				)
-            );
-            $under_review = StoreUtil::get_store_information(
-                array(
-					'status' => 'under_review',
-					'count'  => true,
-				)
-            );
-            $suspended    = StoreUtil::get_store_information(
-                array(
-					'status' => 'suspended',
-					'count'  => true,
-				)
-            );
-            $deactivated  = StoreUtil::get_store_information(
-                array(
-					'status' => 'deactivated',
-					'count'  => true,
-				)
+
+            // Status counters
+            $counts = array(
+                'all'          => array(),
+                'active'       => array( 'status' => 'active' ),
+                'pending'      => array( 'status' => 'pending' ),
+                'under_review' => array( 'status' => 'under_review' ),
+                'suspended'    => array( 'status' => 'suspended' ),
+                'deactivated'  => array( 'status' => 'deactivated' ),
             );
 
-            $response = array(
-                'stores'       => $formatted_stores,
-                'all'          => $all,
-                'active'       => $active,
-                'pending'      => $pending,
-                'under_review' => $under_review,
-                'suspended'    => $suspended,
-                'deactivated'  => $deactivated,
+            foreach ( $counts as $key => $filter ) {
+                $counts[ $key ] = StoreUtil::get_store_information(
+                    array_merge( $filter, array( 'count' => true ) )
+                );
+            }
+
+            return rest_ensure_response(
+                array_merge(
+                    array( 'stores' => $formatted_stores ),
+                    $counts
+                )
             );
-            return rest_ensure_response( $response );
+
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log( $e );
-
-            return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
+            return new \WP_Error(
+                'server_error',
+                __( 'Unexpected server error', 'multivendorx' ),
+                array( 'status' => 500 )
+            );
         }
     }
 
@@ -558,65 +350,49 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
      * @return WP_REST_Response
      */
     public function get_pending_stores( $request ) {
-        global $wpdb;
 
-        $limit  = max( intval( $request->get_param( 'row' ) ), 10 );
-        $page   = max( intval( $request->get_param( 'page' ) ), 1 );
+        $limit  = max( (int) $request->get_param( 'row' ), 10 );
+        $page   = max( (int) $request->get_param( 'page' ), 1 );
         $offset = ( $page - 1 ) * $limit;
-        $count  = $request->get_param( 'count' );
 
-        $start_date = $request->get_param( 'start_date' ); // ISO8601 string.
-        $end_date   = $request->get_param( 'end_date' );   // ISO8601 string.
-
-        $table_name = "{$wpdb->prefix}" . Utill::TABLES['store'];
-
+        $count = $request->get_param( 'count' );
         if ( $count ) {
-            // Get total count with optional date filter.
-            $sql    = "SELECT COUNT(*) FROM $table_name WHERE status = 'pending'";
-            $params = array();
-
-            if ( $start_date && $end_date ) {
-                $sql     .= ' AND create_time BETWEEN %s AND %s';
-                $params[] = $start_date;
-                $params[] = $end_date;
-            }
-
-            $total_count = $params ? $wpdb->get_var( $wpdb->prepare( $sql, ...$params ) ) : $wpdb->get_var( $sql );
-            return rest_ensure_response( (int) $total_count );
+            $args['count'] = true;
+            return rest_ensure_response(
+                (int) StoreUtil::get_store_information( $args )
+            );
         }
+        
+        $start_date = $request->get_param( 'start_date' );
+        $end_date   = $request->get_param( 'end_date' );
 
-        // Get pending stores.
-        $sql    = "SELECT * FROM $table_name WHERE status = 'pending'";
-        $params = array();
+        $args = array(
+            'status'  => 'pending',
+        );
 
         if ( $start_date && $end_date ) {
-            $sql     .= ' AND create_time BETWEEN %s AND %s';
-            $params[] = $start_date;
-            $params[] = $end_date;
+            $args['start_date'] = $start_date;
+            $args['end_date']   = $end_date;
         }
 
-        $sql     .= ' ORDER BY create_time DESC LIMIT %d OFFSET %d';
-        $params[] = $limit;
-        $params[] = $offset;
+        $args['limit']  = $limit;
+        $args['offset'] = $offset;
+        $args['orderBy'] = 'create_time';
+        $args['order']   = 'desc';
 
-        $stores = $params ? $wpdb->get_results( $wpdb->prepare( $sql, ...$params ), ARRAY_A ) : $wpdb->get_results( $sql, ARRAY_A );
+        $stores = StoreUtil::get_store_information( $args );
 
         $formatted_stores = array();
-        foreach ( $stores as $store ) {
-            $store_id   = (int) $store['ID'];
-            $store_name = $store['name'];
-            $store_slug = $store['slug'];
-            $status     = $store['status'];
-            $applied_on = $store['create_time'];
 
+        foreach ( $stores as $store ) {
             $formatted_stores[] = apply_filters(
                 'multivendorx_stores',
                 array(
-                    'id'         => $store_id,
-                    'store_name' => $store_name,
-                    'store_slug' => $store_slug,
-                    'status'     => $status,
-                    'applied_on' => $applied_on,
+                    'id'         => (int) $store['ID'],
+                    'store_name' => $store['name'],
+                    'store_slug' => $store['slug'],
+                    'status'     => $store['status'],
+                    'applied_on' => $store['create_time'],
                 )
             );
         }
@@ -626,10 +402,8 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
 
     /**
      * Get stores dropdown.
-     *
-     * @param object $request Full data about the request.
      */
-    public function get_stores_dropdown( $request ) {
+    public function get_stores_dropdown() {
         $stores = StoreUtil::get_store();
 
         $formatted_stores = array();
@@ -827,7 +601,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             $action = $request->get_param( 'action' );
 
             if ( $id && 'switch' === $action ) {
-                update_user_meta( get_current_user_id(), Utill::POST_META_SETTINGS['active_store'], $id );
+                update_user_meta( get_current_user_id(), Utill::USER_SETTINGS_KEYS['active_store'], $id );
 
                 $dashboard_page_id = (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' );
                 if ( $dashboard_page_id ) {
@@ -1080,7 +854,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             unset( $data['total_reviews'] );
 
             if ( 'deactivated' === $data['status'] ) {
-                delete_metadata( 'user', 0, Utill::POST_META_SETTINGS['active_store'], '', true );
+                delete_metadata( 'user', 0, Utill::USER_SETTINGS_KEYS['active_store'], '', true );
             }
             // Update basic store info.
             $store->set( Utill::STORE_SETTINGS_KEYS['name'], $data['name'] ?? $store->get( Utill::STORE_SETTINGS_KEYS['name'] ) );

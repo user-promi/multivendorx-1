@@ -23,6 +23,17 @@ interface ApiResponse {
         users?: { id: number }[];
     };
 }
+
+interface AppLocalizer {
+    nonce: string;
+    [ key: string ]: string | number | boolean;
+}
+
+interface AdditionalData {
+    course_id?: number;
+    user_id?: number;
+}
+
 interface DoActionBtnProps {
     buttonKey: string;
     interval: number;
@@ -33,7 +44,7 @@ interface DoActionBtnProps {
     apilink: string;
     parameter: string;
     tasks: Task[];
-    appLocalizer: Record< string, any >;
+    appLocalizer: AppLocalizer;
 }
 type TaskStatus = 'running' | 'success' | 'failed';
 
@@ -57,9 +68,11 @@ const DoActionBtn: React.FC< DoActionBtnProps > = ( {
     const [ testStatus, setTestStatus ] = useState( '' );
 
     const fetchStatus = useRef< string >( '' );
-    const fetchStatusRef = useRef< NodeJS.Timeout | null >( null );
+    const fetchStatusRef = useRef< ReturnType< typeof setInterval > | null >(
+        null
+    );
     const connectTaskStarted = useRef( false );
-    const additionalData = useRef< Record< string, any > >( {} );
+    const additionalData = useRef< AdditionalData >( {} );
     const taskIndex = useRef( 0 );
 
     const sleep = ( ms: number ) =>

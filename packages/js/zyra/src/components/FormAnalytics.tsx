@@ -1,7 +1,13 @@
 import React from 'react';
 
+interface FormField {
+    type: string;
+    required?: boolean;
+    [ key: string ]: unknown;
+}
+
 interface FormAnalyticsProps {
-    formFields: any[];
+    formFields: FormField[];
 }
 
 interface FieldTypeCount {
@@ -10,7 +16,7 @@ interface FieldTypeCount {
 
 const FormAnalytics: React.FC< FormAnalyticsProps > = ( { formFields } ) => {
     const fieldStats = {
-        totalFields: formFields.length - 1, // Exclude title
+        totalFields: formFields.length - 1,
         requiredFields: formFields.filter(
             ( field ) => field.required && field.type !== 'title'
         ).length,
@@ -22,11 +28,10 @@ const FormAnalytics: React.FC< FormAnalyticsProps > = ( { formFields } ) => {
         }, {} as FieldTypeCount ),
     };
 
-    // Safe way to handle Object.entries with proper typing
     const fieldTypeEntries = Object.entries( fieldStats.fieldTypes ).map(
         ( [ type, count ] ) => ( {
             type,
-            count: count as number,
+            count,
         } )
     );
 

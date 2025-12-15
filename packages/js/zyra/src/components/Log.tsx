@@ -10,11 +10,17 @@ import axios from 'axios';
 import { getApiLink } from '../utils/apiService';
 import '../styles/web/Log.scss';
 
+interface AppLocalizer {
+    nonce: string;
+    tab_name: string;
+    [ key: string ]: string | number | boolean; // for any other unknown keys
+}
+
 // Types
 interface LogProps {
     apiLink: string;
     downloadFileName: string;
-    appLocalizer: Record< string, any >; // Allows any structure
+    appLocalizer: AppLocalizer;
 }
 
 const Log: React.FC< LogProps > = ( {

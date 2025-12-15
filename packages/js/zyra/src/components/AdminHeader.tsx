@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, ReactNode } from 'react';
 
 // Accepts searchIndex-style items directly
 type SearchItem = {
-    icon?: any;
+    icon?: string;
     name?: string;
     desc?: string;
     link: string;
@@ -26,13 +26,13 @@ interface NotificationItem {
     time: string;
     icon?: string;
     color?: string;
-    link?: string; // optional for individual notification
+    link?: string;
 }
 
 type AdminHeaderProps = {
     brandImg: string;
     query: string;
-    results?: any[];
+    results?: SearchItem[];
     onSearchChange: ( value: string ) => void;
     onResultClick: ( res: SearchItem ) => void;
     onSelectChange: ( value: string ) => void;
@@ -67,7 +67,6 @@ const AdminHeader: React.FC< AdminHeaderProps > = ( {
     pro,
     showDropdown,
     dropdownOptions,
-    notificationsLink,
     notifications,
     messagesLink,
     messages,
@@ -75,7 +74,6 @@ const AdminHeader: React.FC< AdminHeaderProps > = ( {
     showNotifications,
     showProfile,
     chatUrl,
-    managePlanUrl,
     profileItems,
 } ) => {
     const [ dropdownOpen, setDropdownOpen ] = useState( false );
@@ -384,7 +382,7 @@ const AdminHeader: React.FC< AdminHeaderProps > = ( {
             >
                 <i
                     className="adminlib-close"
-                    onClick={ ( e ) => {
+                    onClick={ () => {
                         setContactSupportPopup( false );
                     } }
                 ></i>
@@ -403,7 +401,7 @@ const AdminHeader: React.FC< AdminHeaderProps > = ( {
             </div>
             { isMinimized && (
                 <div
-                    onClick={ ( e ) => {
+                    onClick={ () => {
                         setContactSupportPopup( true );
                         setIsMinimized( false );
                     } }

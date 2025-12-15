@@ -13,12 +13,14 @@ import '../styles/web/ToggleSetting.scss';
 // Types
 type FieldType = 'text' | 'number' | 'file' | 'select';
 
+type RowValue = Record< string, string | number | File | RowValue[] | null >;
+
 interface FieldConfig {
     key: string;
     label?: string;
     type: FieldType;
     placeholder?: string;
-    options?: { label: string; value: string; children?: any[] }[];
+    options?: { label: string; value: string; children?: RowValue[] }[];
     width?: string;
 }
 
@@ -32,19 +34,16 @@ interface DynamicRowSettingProps {
     descClass?: string;
     keyName: string;
     template: RowConfig;
-    value: any[];
-    onChange: ( rows: any[] ) => void;
+    value: RowValue[];
+    onChange: ( rows: RowValue[] ) => void;
     addLabel?: string;
-
-    /** NEW: render nested UI inside each row */
-    childrenRenderer?: ( row: any, rowIndex: number ) => React.ReactNode;
+    childrenRenderer?: ( row: RowValue, rowIndex: number ) => React.ReactNode;
 }
 
 const DynamicRowSetting: React.FC< DynamicRowSettingProps > = ( {
     description = '',
     wrapperClass = '',
     descClass = '',
-    keyName,
     template,
     value,
     onChange,
@@ -52,7 +51,7 @@ const DynamicRowSetting: React.FC< DynamicRowSettingProps > = ( {
     childrenRenderer = undefined,
 } ) => {
     const handleAdd = () => {
-        const emptyRow: any = {};
+        const emptyRow: RowValue = {};
         template.fields.forEach( ( field ) => {
             emptyRow[ field.key ] = field.type === 'file' ? null : '';
         } );
@@ -62,7 +61,7 @@ const DynamicRowSetting: React.FC< DynamicRowSettingProps > = ( {
     const handleChange = (
         rowIndex: number,
         fieldKey: string,
-        newVal: any
+        newVal: string | number | File | RowValue[] | null
     ) => {
         const updatedRows = [ ...value ];
         updatedRows[ rowIndex ] = {
@@ -76,7 +75,11 @@ const DynamicRowSetting: React.FC< DynamicRowSettingProps > = ( {
         onChange( value.filter( ( _, i ) => i !== rowIndex ) );
     };
 
-    const renderField = ( row: any, field: FieldConfig, rowIndex: number ) => {
+    const renderField = (
+        row: RowValue,
+        field: FieldConfig,
+        rowIndex: number
+    ) => {
         const val = row[ field.key ];
 
         switch ( field.type ) {
@@ -99,7 +102,9 @@ const DynamicRowSetting: React.FC< DynamicRowSettingProps > = ( {
                     <input
                         type="file"
                         className="basic-input"
-                        onChange={ ( e: any ) => {
+                        onChange={ (
+                            e: React.ChangeEvent< HTMLInputElement >
+                        ) => {
                             const file = e.target.files?.[ 0 ] || null;
                             handleChange( rowIndex, field.key, file );
                         } }
@@ -118,7 +123,7 @@ const DynamicRowSetting: React.FC< DynamicRowSettingProps > = ( {
                                 ) || null
                             }
                             options={ field.options || [] }
-                            onChange={ ( selected: any ) => {
+                            onChange={ ( selected ) => {
                                 handleChange(
                                     rowIndex,
                                     field.key,

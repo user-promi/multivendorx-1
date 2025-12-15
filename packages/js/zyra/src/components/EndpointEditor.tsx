@@ -16,13 +16,17 @@ interface Endpoint {
     icon: string;
     visible?: boolean; // show/hide
 }
+interface AppLocalizer {
+    nonce: string;
+    [ key: string ]: string | number | boolean;
+}
 
 interface EndpointEditorProps {
     name: string;
     proSetting?: boolean;
     proSettingChanged?: () => boolean;
     apilink: string;
-    appLocalizer: Record< string, any >;
+    appLocalizer: AppLocalizer;
     onChange: ( data: Record< string, Endpoint > ) => void;
 }
 
@@ -116,7 +120,7 @@ const EndpointManager: React.FC< EndpointEditorProps > = ( {
         };
 
         return (
-            <div key={ key } className="menu-item">
+            <div key={ key } data-index={ index } className="menu-item">
                 { editKey === key ? (
                     <div className="edit-menu" ref={ editRef }>
                         <div className="name-wrapper">
@@ -195,7 +199,7 @@ const EndpointManager: React.FC< EndpointEditorProps > = ( {
                                                     ( [ k ] ) => k !== editKey
                                                 )
                                                 .map(
-                                                    ( [ _, item ] ) => item.slug
+                                                    ( [ , item ] ) => item.slug
                                                 );
 
                                             // Generate unique slug

@@ -2,9 +2,11 @@
  * External dependencies
  */
 import React, { useState } from 'react';
-import DatePicker from 'react-multi-date-picker';
+import DatePicker, { DateObject } from 'react-multi-date-picker';
 
 // Types
+type CalendarValue = DateObject | DateObject[] | [ DateObject, DateObject ][];
+
 interface CalendarInputProps {
     wrapperClass?: string;
     inputClass?: string;
@@ -12,35 +14,53 @@ interface CalendarInputProps {
     multiple?: boolean;
     range?: boolean;
     value: string;
-    onChange?: ( date: any ) => void;
+    onChange?: ( date: CalendarValue ) => void;
     proSetting?: boolean;
 }
 
 const CalendarInput: React.FC< CalendarInputProps > = ( props ) => {
-    let formattedDate: any;
+    let formattedDate: CalendarValue | null = null;
     const dates = props.value.split( ',' );
 
     if ( dates.length === 1 && ! dates[ 0 ].includes( ' - ' ) ) {
-        formattedDate = new Date( dates[ 0 ].trim() );
+        formattedDate = new DateObject( {
+            date: dates[ 0 ].trim(),
+            format: props.format || 'YYYY-MM-DD',
+        } );
     } else {
         formattedDate = dates.map( ( date ) => {
             if ( date.includes( ' - ' ) ) {
-                const rangeDates = date.split( ' - ' );
-                const startDate = new Date( rangeDates[ 0 ].trim() );
-                const endDate = new Date( rangeDates[ 1 ].trim() );
-                return [ startDate, endDate ];
+                const [ start, end ] = date.split( ' - ' );
+                return [
+                    new DateObject( {
+                        date: start.trim(),
+                        format: props.format || 'YYYY-MM-DD',
+                    } ),
+                    new DateObject( {
+                        date: end.trim(),
+                        format: props.format || 'YYYY-MM-DD',
+                    } ),
+                ];
             }
-            return new Date( date.trim() );
-        } );
+            return new DateObject( {
+                date: date.trim(),
+                format: props.format || 'YYYY-MM-DD',
+            } );
+        } ) as CalendarValue;
     }
 
-    const [ selectedDate, setSelectedDate ] = useState< any >(
-        formattedDate || ''
+    const [ selectedDate, setSelectedDate ] = useState< CalendarValue | null >(
+        formattedDate
     );
 
-    const handleDateChange = ( e: any ) => {
-        setSelectedDate( e );
-        props.onChange?.( e );
+    const handleDateChange = (
+        date: DateObject | DateObject[] | DateObject[][] | null
+    ) => {
+        if ( ! date ) {
+            return;
+        }
+        setSelectedDate( date as CalendarValue );
+        props.onChange?.( date as CalendarValue );
     };
 
     return (
@@ -51,7 +71,7 @@ const CalendarInput: React.FC< CalendarInputProps > = ( props ) => {
                 multiple={ props.multiple }
                 range={ props.range }
                 value={ selectedDate }
-                placeholder={ 'YYYY-MM-DD' }
+                placeholder="YYYY-MM-DD"
                 onChange={ handleDateChange }
             />
             { props.proSetting && <span className="admin-pro-tag">Pro</span> }

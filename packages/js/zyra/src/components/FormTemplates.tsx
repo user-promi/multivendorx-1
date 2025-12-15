@@ -1,13 +1,31 @@
-// FormTemplates.tsx
 import React from 'react';
+
+interface FormFieldOption {
+    id: string;
+    label: string;
+    value: string;
+}
+
+interface FormField {
+    id: number | string;
+    type: string;
+    label: string;
+    required?: boolean;
+    placeholder?: string;
+    options?: FormFieldOption[];
+}
+
+interface ButtonSetting {
+    button_text: string;
+}
 
 interface FormTemplate {
     id: string;
     name: string;
     description: string;
     thumbnail: string;
-    fields: any[];
-    buttonSetting: any;
+    fields: FormField[];
+    buttonSetting: ButtonSetting;
 }
 
 interface FormTemplatesProps {
