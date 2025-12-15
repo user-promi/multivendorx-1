@@ -1,3 +1,4 @@
+import { capitalize } from '@mui/material';
 import { __ } from '@wordpress/i18n';
 
 const columns = appLocalizer?.custom_roles
@@ -8,7 +9,6 @@ const columns = appLocalizer?.custom_roles
 			moduleEnabled: key != 'store_owner' && 'staff-manager',
 		}))
 	: [];
-
 export default {
 	id: 'user-capability',
 	priority: 3,

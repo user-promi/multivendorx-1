@@ -1,721 +1,862 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import { BasicInput, TextArea, FileInput, getApiLink, SuccessNotice, SelectInput, useModules, EmailsInput, GoogleMap, Mapbox } from 'zyra';
-import { useLocation } from "react-router-dom";
+import {
+	BasicInput,
+	TextArea,
+	FileInput,
+	getApiLink,
+	SuccessNotice,
+	SelectInput,
+	useModules,
+	EmailsInput,
+	GoogleMap,
+	Mapbox,
+} from 'zyra';
+import { useLocation } from 'react-router-dom';
 import { __ } from '@wordpress/i18n';
 
 interface FormData {
-    [key: string]: string;
+	[key: string]: string;
 }
 
 interface EmailBadge {
-    id: number;
-    email: string;
-    isValid: boolean;
+	id: number;
+	email: string;
+	isValid: boolean;
 }
 
-const StoreSettings = ({ id, data, onUpdate }: { id: string | null; data: any; onUpdate: any }) => {
-    const [formData, setFormData] = useState<FormData>({});
-    const [emailBadges, setEmailBadges] = useState<EmailBadge[]>([]);
-    const [newEmailValue, setNewEmailValue] = useState('');
-    const statusOptions = [
-        { label: "Under Review", value: "under_review" },
-        { label: "Suspended", value: "suspended" },
-        { label: "Active", value: "active" },
-        { label: "Permanently Deactivated", value: "deactivated" },
-    ];
-
-    const [imagePreviews, setImagePreviews] = useState<{ [key: string]: string }>({});
-    const [stateOptions, setStateOptions] = useState<{ label: string; value: string }[]>([]);
-    const [successMsg, setSuccessMsg] = useState<string | null>(null);
-    const [errorMsg, setErrorMsg] = useState<{ [key: string]: string }>({})
-
-    // Map states
-    const [mapProvider, setMapProvider] = useState('');
-    const [apiKey, setApiKey] = useState('');
-    const appLocalizer = (window as any).appLocalizer;
-    const { modules } = useModules();
-    // === ADD THESE STATES (replace old ones) ===
-    const [emails, setEmails] = useState<string[]>([]);           // All emails
-    const [primaryEmail, setPrimaryEmail] = useState<string>('');  // Which one is starred
-    const [inputValue, setInputValue] = useState('');
-
-    // === LOAD EMAILS FROM BACKEND ===
-    useEffect(() => {
-
-        let parsedEmails = [];
-
-        try {
-            parsedEmails = data.emails ? JSON.parse(data.emails) : [];
-        } catch (e) {
-            console.error("Invalid email JSON", e);
-            parsedEmails = [];
-        }
-
-        if (Array.isArray(parsedEmails)) {
-            setEmails(parsedEmails);
-            setPrimaryEmail(data.primary_email || parsedEmails[0] || '');
-        }
-
-    }, [data]);
-
-
-    // === HANDLE INPUT & AUTO-CONVERT TO CHIP ===
-    const handleInputKeyDown = (e: React.KeyboardEvent) => {
-        if (['Enter', ' ', ','].includes(e.key)) {
-            e.preventDefault();
-            const email = inputValue.trim();
-            if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && !emails.includes(email)) {
-                const newEmails = [...emails, email];
-                setEmails(newEmails);
-                setInputValue('');
-                saveEmails(newEmails, primaryEmail || email);
-            }
-        } else if (e.key === 'Backspace' && !inputValue && emails.length > 0) {
-            // Remove last email on backspace
-            const newEmails = emails.slice(0, -1);
-            setEmails(newEmails);
-            const newPrimary = primaryEmail === emails[emails.length - 1] ? (newEmails[0] || '') : primaryEmail;
-            setPrimaryEmail(newPrimary);
-            saveEmails(newEmails, newPrimary);
-        }
-    };
-
-    // === TOGGLE PRIMARY EMAIL ===
-    const togglePrimary = (email: string) => {
-        if (email === primaryEmail) return;
-        setPrimaryEmail(email);
-        saveEmails(emails, email);
-    };
-
-    // === REMOVE EMAIL ===
-    const removeEmail = (emailToRemove: string) => {
-        const newEmails = emails.filter(e => e !== emailToRemove);
-        setEmails(newEmails);
-        if (primaryEmail === emailToRemove) {
-            setPrimaryEmail(newEmails[0] || '');
-        }
-        saveEmails(newEmails, newEmails[0] || '');
-    };
-
-    // === SAVE FUNCTION ===
-    const saveEmails = (emailList: string[], primary: string) => {
-        const updated = {
-            ...formData,
-            primary_email: primary,
-            emails: emailList,
-        };
-        setFormData(updated);
-        autoSave(updated);
-    };
-
-    const [addressData, setAddressData] = useState({
-        location_address: '',
-        location_lat: '',
-        location_lng: '',
-        address: '',
-        city: '',
-        state: '',
-        country: '',
-        zip: '',
-        timezone: ''
-    });
-
-    useEffect(() => {
-        if (appLocalizer) {
-            setMapProvider(appLocalizer.map_providor);
-            if (appLocalizer.map_providor === 'google_map_set') {
-                setApiKey(appLocalizer.google_api_key);
-            } else {
-                setApiKey(appLocalizer.mapbox_api_key);
-            }
-        }
-    }, []);
-
-    // Initialize email badges from form data
-    useEffect(() => {
-        if (formData.email) {
-            // Parse existing emails - handle both comma-separated and newline-separated
-            const emailString = formData.email;
-            const emails = emailString.split(/[,\n]/)
-                .map(email => email.trim())
-                .filter(email => email !== '');
-
-            const badges = emails.map((email, index) => ({
-                id: index + 1,
-                email: email,
-                isValid: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-            }));
-
-            setEmailBadges(badges);
-        } else {
-            setEmailBadges([]);
-        }
-    }, [formData.email]);
-
-    // Load store data
-    useEffect(() => {
-        if (!id || !appLocalizer) {
-            console.error('Missing store ID or appLocalizer');
-            return;
-        }
-
-        // Set all form data
-        setFormData((prev) => ({ ...prev, ...data }));
-
-        // Set address-specific data
-        setAddressData({
-            location_address: data.location_address || data.address || '',
-            location_lat: data.location_lat || '',
-            location_lng: data.location_lng || '',
-            address: data.address || data.location_address || '',
-            city: data.city || '',
-            state: data.state || '',
-            country: data.country || '',
-            zip: data.zip || '',
-            timezone: data.timezone || ''
-        });
-
-        setImagePreviews({
-            image: data.image || '',
-            banner: data.banner || '',
-        });
-    }, [data]);
-
-    // Add email function
-    const addEmail = () => {
-        if (!newEmailValue.trim()) return;
-
-        const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmailValue.trim());
-
-        if (!isValidEmail) {
-            setErrorMsg(prev => ({
-                ...prev,
-                email: __('Invalid email format', 'multivendorx'),
-            }));
-
-            return;
-        }
-
-        const newBadge: EmailBadge = {
-            id: Math.max(...emailBadges.map(b => b.id), 0) + 1,
-            email: newEmailValue.trim(),
-            isValid: true
-        };
-
-        const updatedBadges = [...emailBadges, newBadge];
-        setEmailBadges(updatedBadges);
-
-        // Update form data with newline-separated emails
-        const emailString = updatedBadges.map(badge => badge.email).join('\n');
-        const updatedFormData = { ...formData, email: emailString };
-        setFormData(updatedFormData);
-
-        setNewEmailValue('');
-        setErrorMsg(prev => ({
-            ...prev,
-            email: "",
-        }));
-
-        autoSave(updatedFormData);
-    };
-
-
-    // Handle Enter key in email input
-    const handleEmailKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            addEmail();
-        }
-    };
-
-    // Email Badge Component
-    const EmailBadge: React.FC<{ badge: EmailBadge; onRemove: (id: number) => void, isFirst: boolean; }> = ({ badge, onRemove, isFirst }) => {
-        return (
-            <div className={`admin-badge ${badge.isValid ? 'yellow' : 'red'}`}>
-                {isFirst && (
-                    <i className="adminlib-star primary-email"></i>
-                )}
-                <i className="adminlib-mail"></i>
-                <span>{badge.email}</span>
-                <i
-                    className="adminlib-delete delete-btn"
-                    onClick={() => onRemove(badge.id)}
-                ></i>
-            </div>
-        );
-    };
-
-    useEffect(() => {
-        if (successMsg) {
-            const timer = setTimeout(() => setSuccessMsg(null), 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [successMsg]);
-
-    useEffect(() => {
-        if (formData.country) {
-            fetchStatesByCountry(formData.country);
-        }
-    }, [formData.country]);
-
-    const location = useLocation();
-
-    useEffect(() => {
-        const highlightId = location.state?.highlightTarget;
-        if (highlightId) {
-            const target = document.getElementById(highlightId);
-
-            if (target) {
-                target.scrollIntoView({ behavior: "smooth", block: "center" });
-                target.classList.add("highlight");
-                const handleClick = () => {
-                    target.classList.remove("highlight");
-                    document.removeEventListener("click", handleClick);
-                };
-                setTimeout(() => {
-                    document.addEventListener("click", handleClick);
-                }, 100);
-            }
-
-        }
-    }, [location.state]);
-
-    const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-
-        const newAddressData = {
-            ...addressData,
-            [name]: value
-        };
-
-        setAddressData(newAddressData);
-
-        // Also update formData to maintain consistency
-        const updatedFormData = {
-            ...formData,
-            [name]: value
-        };
-
-        setFormData(updatedFormData);
-        autoSave(updatedFormData);
-    };
-
-    const handleLocationUpdate = (locationData: any) => {
-        const newAddressData = {
-            ...addressData,
-            ...locationData
-        };
-
-        if (mapProvider === 'mapbox_api_set') {
-            const foundState = stateOptions.find(
-                (item) => item.label === newAddressData.state || item.value === newAddressData.state
-            );
-            if (foundState) {
-                newAddressData.state = foundState.value;
-            }
-        }
-        setAddressData(newAddressData);
-
-        const updatedFormData = {
-            ...formData,
-            ...locationData
-        };
-
-        setFormData(updatedFormData);
-        autoSave(updatedFormData);
-    };
-
-    // Handle country select change (from old code)
-    const handleCountryChange = (newValue: any) => {
-        if (!newValue || Array.isArray(newValue)) return;
-
-        const updated = {
-            ...formData,
-            country: newValue.value,
-            state: '' // reset state when country changes
-        };
-
-        setFormData(updated);
-        setAddressData(prev => ({ ...prev, country: newValue.label }));
-
-        autoSave(updated);
-        fetchStatesByCountry(newValue.value);
-    };
-
-    // Handle state select change (from old code)
-    const handleStateChange = (newValue: any) => {
-        if (!newValue || Array.isArray(newValue)) return;
-
-        const updated = {
-            ...formData,
-            state: newValue.value
-        };
-
-        setFormData(updated);
-        setAddressData(prev => ({ ...prev, state: newValue.label }));
-
-        autoSave(updated);
-    };
-
-    const fetchStatesByCountry = (countryCode: string) => {
-        axios({
-            method: 'GET',
-            url: getApiLink(appLocalizer, `states/${countryCode}`),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        }).then((res) => {
-            setStateOptions(res.data || []);
-        })
-    };
-
-    const checkSlugExists = async (slug: string) => {
-        try {
-            const response = await axios.get(
-                getApiLink(appLocalizer, 'store'),
-                {
-                    params: {
-                        slug,
-                        id: id
-                    },
-                    headers: { 'X-WP-Nonce': appLocalizer.nonce },
-                }
-            );
-            return response.data.exists;
-        } catch (err) {
-            return false;
-        }
-    };
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        const updated = { ...formData, [name]: value };
-        setFormData(updated);
-
-        if (name === "slug") {
-            const cleanValue = value
-                .toLowerCase()
-                .replace(/[^a-z0-9-]/g, "");
-
-            const updated = { ...formData, slug: cleanValue };
-            setFormData(updated);
-
-            if (cleanValue !== value.toLowerCase()) {
-                setErrorMsg(prev => ({
-                    ...prev,
-                    slug: __("Special characters are not allowed.", "multivendorx"),
-                }));
-                return;
-            }
-
-            (async () => {
-                const trimmedValue = cleanValue.trim();
-                if (!trimmedValue) {
-                    setErrorMsg(prev => ({
-                        ...prev,
-                        slug: __("Slug cannot be blank", "multivendorx"),
-                    }));
-                    return;
-                }
-                const exists = await checkSlugExists(trimmedValue);
-
-                if (exists) {
-                    setErrorMsg(prev => ({
-                        ...prev,
-                        slug: `Slug "${trimmedValue}" already exists.`,
-                    }));
-                    return;
-                }
-                setErrorMsg(prev => ({ ...prev, slug: "" }));
-                autoSave(updated);
-                onUpdate({ slug: trimmedValue });
-            })();
-
-            return;
-        } else if (name === "phone") {
-            const isValidPhone = /^\+?[0-9\s\-]{7,15}$/.test(value);
-            if (isValidPhone || value == '') {
-                autoSave(updated);
-                setErrorMsg(prev => ({ ...prev, phone: "" }));
-            } else {
-                setErrorMsg(prev => ({
-                    ...prev,
-                    phone: __("Invalid phone number", "multivendorx"),
-                }));
-            }
-        } else if (name !== "email") {
-            autoSave(updated);
-        }
-    };
-
-
-
-    // Then update your autoSave function:
-    const autoSave = (updatedData: any) => {
-        if (!id) return;
-        // Format email data for backend
-        const formattedData = { ...updatedData };
-
-        axios({
-            method: 'PUT',
-            url: getApiLink(appLocalizer, `store/${id}`),
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            data: formattedData,
-        }).then((res) => {
-            if (res.data.success) {
-                setSuccessMsg('Store saved successfully!');
-            }
-        }).catch((error) => {
-            console.error('Save error:', error);
-        });
-    };
-    const isValidEmail = (email: string): boolean => {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
-    };
-
-    const renderMapComponent = () => {
-        if (!modules.includes('geo-location') || !apiKey) return null;
-
-        const commonProps = {
-            apiKey,
-            locationAddress: addressData.location_address,
-            locationLat: addressData.location_lat,
-            locationLng: addressData.location_lng,
-            onLocationUpdate: handleLocationUpdate,
-            labelSearch: __('Search for a location'),
-            labelMap: __('Drag or click on the map to choose a location'),
-            instructionText: __('Enter a search term or drag/drop a pin on the map.'),
-            placeholderSearch: __('Search for a location...'),
-        };
-
-        if (mapProvider === 'google_map_set') {
-            return <GoogleMap {...commonProps} />;
-        } else if (mapProvider === 'mapbox_api_set') {
-            return <Mapbox {...commonProps} />;
-        }
-
-        return null;
-    };
-
-    return (
-        <>
-            <SuccessNotice message={successMsg} />
-            <div className="container-wrapper ">
-                <div className="card-wrapper column w-65">
-                    {/* Contact Information */}
-                    <div className="card-content">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">{__('Contact information')}</div>
-                            </div>
-                        </div>
-
-                        <div className="card-body">
-                            <div className="form-group-wrapper">
-                                <div className="form-group">
-                                    <label>{__('Store email(s)')}</label>
-                                    <EmailsInput
-                                        value={emails}
-                                        primary={primaryEmail}
-                                        enablePrimary={true}
-                                        onChange={(list, primary) => saveEmails(list, primary)}
-                                    />
-                                    <div className="settings-metabox-description">
-                                        <b>{__('Tip:')}</b> {__('You can add multiple email addresses. All added emails will receive notifications.')} <br />
-                                        <b>{__('Primary email:')}</b> {__('Click the star icon to set an email as primary. This email will appear on your storefront, and all other email IDs will be hidden from display.')}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="form-group-wrapper">
-                                <div className="form-group">
-                                    <label htmlFor="phone">{__('Phone')}</label>
-                                    <BasicInput
-                                        name="phone"
-                                        value={formData.phone}
-                                        wrapperClass="setting-form-input"
-                                        descClass="settings-metabox-description"
-                                        onChange={handleChange}
-                                    />
-                                    {errorMsg.phone && <p className="invalid-massage">{errorMsg.phone}</p>}
-                                </div>
-                            </div>
-                        </div>
-                        {/* Hidden coordinates */}
-                        <input type="hidden" name="location_lat" value={addressData.location_lat} />
-                        <input type="hidden" name="location_lng" value={addressData.location_lng} />
-                    </div>
-                    {/* Communication Address */}
-                    <div className="card-content">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">{__('Communication address')}</div>
-                            </div>
-                        </div>
-
-                        <div className="card-body">
-                            <div className="form-group-wrapper">
-                                <div className="form-group">
-                                    <label htmlFor="location_address">{__('Address *')}</label>
-                                    <BasicInput
-                                        name="location_address"
-                                        value={addressData.location_address}
-                                        wrapperClass="setting-form-input"
-                                        descClass="settings-metabox-description"
-                                        onChange={handleAddressChange}
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="form-group-wrapper">
-                                <div className="form-group">
-                                    <label htmlFor="city">{__('City')}</label>
-                                    <BasicInput
-                                        name="city"
-                                        value={addressData.city}
-                                        wrapperClass="setting-form-input"
-                                        descClass="settings-metabox-description"
-                                        onChange={handleAddressChange}
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="zip">{__('Zip code')}</label>
-                                    <BasicInput
-                                        name="zip"
-                                        value={addressData.zip}
-                                        wrapperClass="setting-form-input"
-                                        descClass="settings-metabox-description"
-                                        onChange={handleAddressChange}
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Country and State */}
-                            <div className="form-group-wrapper">
-                                <div className="form-group">
-                                    <label htmlFor="country">{__('Country')}</label>
-                                    <SelectInput
-                                        name="country"
-                                        value={formData.country}
-                                        options={appLocalizer.country_list || []}
-                                        type="single-select"
-                                        onChange={handleCountryChange}
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="state">{__('State')}</label>
-                                    <SelectInput
-                                        name="state"
-                                        value={formData.state}
-                                        options={stateOptions}
-                                        type="single-select"
-                                        onChange={handleStateChange}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        {/* Map Component */}
-                        {renderMapComponent()}
-                        
-                        {/* Hidden coordinates */}
-                        <input type="hidden" name="location_lat" value={addressData.location_lat} />
-                        <input type="hidden" name="location_lng" value={addressData.location_lng} />
-                    </div>
-                </div>
-                <div className="card-wrapper column w-35">
-                    {/* Manage Store Status */}
-                    <div id="store-status" className="card-content">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">{__('Manage store status', 'multivendorx')}</div>
-                            </div>
-                        </div>
-                        <div className="card-body   form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="store-status">{__('Current status', 'multivendorx')}</label>
-                                <SelectInput
-                                    name="status"
-                                    value={formData.status}
-                                    options={statusOptions}
-                                    type="single-select"
-                                    onChange={(newValue: any) => {
-                                        if (!newValue || Array.isArray(newValue)) return;
-                                        const updated = { ...formData, status: newValue.value };
-                                        onUpdate({ status: newValue.value });
-                                        setFormData(updated);
-                                        autoSave(updated);
-                                    }}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    {/* Manage Storefront Link */}
-                    <div id="store-slug" className="card-content">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">{__('Manage storefront link', 'multivendorx')}</div>
-                            </div>
-                        </div>
-                        <div className="card-body form-group-wrapper">
-                            <div className="form-group">
-                                <label htmlFor="slug">{__('Current storefront link', 'multivendorx')}</label>
-                                <BasicInput
-                                    name="slug"
-                                    wrapperClass="setting-form-input"
-                                    descClass="settings-metabox-description"
-                                    value={formData.slug}
-                                    onChange={handleChange}
-                                />
-                                <div className="settings-metabox-description slug">
-                                    {__('Store URL', 'multivendorx')} :{' '}
-                                    <a
-                                        className="link-item"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        href={`${appLocalizer.store_page_url}/${formData.slug}`}
-                                    >
-                                        {`${appLocalizer.store_page_url}/${formData.slug}`} <i className="adminlib-external"></i>
-                                    </a>
-                                </div>
-                                {errorMsg.slug && <p className="invalid-massage">{errorMsg.slug}</p>}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Social Information */}
-                    <div className="card-content">
-                        <div className="card-header">
-                            <div className="left">
-                                <div className="title">{__('Social information', 'multivendorx')}</div>
-                            </div>
-                        </div>
-                        <div className="card-body">
-                            {['facebook', 'twitter', 'linkedin', 'youtube', 'instagram'].map((network) => {
-                                const iconClass = `adminlib-${network} ${network}`;
-                                const defaultUrl = `https://${network === 'twitter' ? 'twitter.com' : network}.com/`;
-
-                                return (
-                                    <div className="form-group-wrapper" key={network}>
-                                        <div className="form-group">
-                                            <label htmlFor={network}>
-                                                <i className={iconClass}></i> {network === 'twitter' ? 'X' : network.charAt(0).toUpperCase() + network.slice(1)}
-                                            </label>
-                                            <BasicInput
-                                                name={network}
-                                                wrapperClass="setting-form-input"
-                                                descClass="settings-metabox-description"
-                                                value={formData[network]?.trim() || defaultUrl}
-                                                onChange={handleChange}
-                                            />
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </>
-    );
+const StoreSettings = ({
+	id,
+	data,
+	onUpdate,
+}: {
+	id: string | null;
+	data: any;
+	onUpdate: any;
+}) => {
+	const [formData, setFormData] = useState<FormData>({});
+	const [emailBadges, setEmailBadges] = useState<EmailBadge[]>([]);
+	const [newEmailValue, setNewEmailValue] = useState('');
+	const statusOptions = [
+		{ label: 'Under Review', value: 'under_review' },
+		{ label: 'Suspended', value: 'suspended' },
+		{ label: 'Active', value: 'active' },
+		{ label: 'Permanently Deactivated', value: 'deactivated' },
+	];
+
+	const [imagePreviews, setImagePreviews] = useState<{
+		[key: string]: string;
+	}>({});
+	const [stateOptions, setStateOptions] = useState<
+		{ label: string; value: string }[]
+	>([]);
+	const [successMsg, setSuccessMsg] = useState<string | null>(null);
+	const [errorMsg, setErrorMsg] = useState<{ [key: string]: string }>({});
+
+	// Map states
+	const [mapProvider, setMapProvider] = useState('');
+	const [apiKey, setApiKey] = useState('');
+	const appLocalizer = (window as any).appLocalizer;
+	const { modules } = useModules();
+	// === ADD THESE STATES (replace old ones) ===
+	const [emails, setEmails] = useState<string[]>([]); // All emails
+	const [primaryEmail, setPrimaryEmail] = useState<string>(''); // Which one is starred
+	const [inputValue, setInputValue] = useState('');
+
+	// === LOAD EMAILS FROM BACKEND ===
+	useEffect(() => {
+		let parsedEmails = [];
+
+		try {
+			parsedEmails = data.emails ? JSON.parse(data.emails) : [];
+		} catch (e) {
+			console.error('Invalid email JSON', e);
+			parsedEmails = [];
+		}
+
+		if (Array.isArray(parsedEmails)) {
+			setEmails(parsedEmails);
+			setPrimaryEmail(data.primary_email || parsedEmails[0] || '');
+		}
+	}, [data]);
+
+	// === HANDLE INPUT & AUTO-CONVERT TO CHIP ===
+	const handleInputKeyDown = (e: React.KeyboardEvent) => {
+		if (['Enter', ' ', ','].includes(e.key)) {
+			e.preventDefault();
+			const email = inputValue.trim();
+			if (
+				email &&
+				/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) &&
+				!emails.includes(email)
+			) {
+				const newEmails = [...emails, email];
+				setEmails(newEmails);
+				setInputValue('');
+				saveEmails(newEmails, primaryEmail || email);
+			}
+		} else if (e.key === 'Backspace' && !inputValue && emails.length > 0) {
+			// Remove last email on backspace
+			const newEmails = emails.slice(0, -1);
+			setEmails(newEmails);
+			const newPrimary =
+				primaryEmail === emails[emails.length - 1]
+					? newEmails[0] || ''
+					: primaryEmail;
+			setPrimaryEmail(newPrimary);
+			saveEmails(newEmails, newPrimary);
+		}
+	};
+
+	// === TOGGLE PRIMARY EMAIL ===
+	const togglePrimary = (email: string) => {
+		if (email === primaryEmail) {
+			return;
+		}
+		setPrimaryEmail(email);
+		saveEmails(emails, email);
+	};
+
+	// === REMOVE EMAIL ===
+	const removeEmail = (emailToRemove: string) => {
+		const newEmails = emails.filter((e) => e !== emailToRemove);
+		setEmails(newEmails);
+		if (primaryEmail === emailToRemove) {
+			setPrimaryEmail(newEmails[0] || '');
+		}
+		saveEmails(newEmails, newEmails[0] || '');
+	};
+
+	// === SAVE FUNCTION ===
+	const saveEmails = (emailList: string[], primary: string) => {
+		const updated = {
+			...formData,
+			primary_email: primary,
+			emails: emailList,
+		};
+		setFormData(updated);
+		autoSave(updated);
+	};
+
+	const [addressData, setAddressData] = useState({
+		location_address: '',
+		location_lat: '',
+		location_lng: '',
+		address: '',
+		city: '',
+		state: '',
+		country: '',
+		zip: '',
+		timezone: '',
+	});
+
+	useEffect(() => {
+		if (appLocalizer) {
+			setMapProvider(appLocalizer.map_providor);
+			if (appLocalizer.map_providor === 'google_map_set') {
+				setApiKey(appLocalizer.google_api_key);
+			} else {
+				setApiKey(appLocalizer.mapbox_api_key);
+			}
+		}
+	}, []);
+
+	// Initialize email badges from form data
+	useEffect(() => {
+		if (formData.email) {
+			// Parse existing emails - handle both comma-separated and newline-separated
+			const emailString = formData.email;
+			const emails = emailString
+				.split(/[,\n]/)
+				.map((email) => email.trim())
+				.filter((email) => email !== '');
+
+			const badges = emails.map((email, index) => ({
+				id: index + 1,
+				email: email,
+				isValid: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
+			}));
+
+			setEmailBadges(badges);
+		} else {
+			setEmailBadges([]);
+		}
+	}, [formData.email]);
+
+	// Load store data
+	useEffect(() => {
+		if (!id || !appLocalizer) {
+			console.error('Missing store ID or appLocalizer');
+			return;
+		}
+
+		// Set all form data
+		setFormData((prev) => ({ ...prev, ...data }));
+
+		// Set address-specific data
+		setAddressData({
+			location_address: data.location_address || data.address || '',
+			location_lat: data.location_lat || '',
+			location_lng: data.location_lng || '',
+			address: data.address || data.location_address || '',
+			city: data.city || '',
+			state: data.state || '',
+			country: data.country || '',
+			zip: data.zip || '',
+			timezone: data.timezone || '',
+		});
+
+		setImagePreviews({
+			image: data.image || '',
+			banner: data.banner || '',
+		});
+	}, [data]);
+
+	// Add email function
+	const addEmail = () => {
+		if (!newEmailValue.trim()) {
+			return;
+		}
+
+		const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+			newEmailValue.trim()
+		);
+
+		if (!isValidEmail) {
+			setErrorMsg((prev) => ({
+				...prev,
+				email: __('Invalid email format', 'multivendorx'),
+			}));
+
+			return;
+		}
+
+		const newBadge: EmailBadge = {
+			id: Math.max(...emailBadges.map((b) => b.id), 0) + 1,
+			email: newEmailValue.trim(),
+			isValid: true,
+		};
+
+		const updatedBadges = [...emailBadges, newBadge];
+		setEmailBadges(updatedBadges);
+
+		// Update form data with newline-separated emails
+		const emailString = updatedBadges
+			.map((badge) => badge.email)
+			.join('\n');
+		const updatedFormData = { ...formData, email: emailString };
+		setFormData(updatedFormData);
+
+		setNewEmailValue('');
+		setErrorMsg((prev) => ({
+			...prev,
+			email: '',
+		}));
+
+		autoSave(updatedFormData);
+	};
+
+	// Handle Enter key in email input
+	const handleEmailKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === 'Enter') {
+			e.preventDefault();
+			addEmail();
+		}
+	};
+
+	// Email Badge Component
+	const EmailBadge: React.FC<{
+		badge: EmailBadge;
+		onRemove: (id: number) => void;
+		isFirst: boolean;
+	}> = ({ badge, onRemove, isFirst }) => {
+		return (
+			<div className={`admin-badge ${badge.isValid ? 'yellow' : 'red'}`}>
+				{isFirst && <i className="adminlib-star primary-email"></i>}
+				<i className="adminlib-mail"></i>
+				<span>{badge.email}</span>
+				<i
+					className="adminlib-delete delete-btn"
+					onClick={() => onRemove(badge.id)}
+				></i>
+			</div>
+		);
+	};
+
+	useEffect(() => {
+		if (successMsg) {
+			const timer = setTimeout(() => setSuccessMsg(null), 3000);
+			return () => clearTimeout(timer);
+		}
+	}, [successMsg]);
+
+	useEffect(() => {
+		if (formData.country) {
+			fetchStatesByCountry(formData.country);
+		}
+	}, [formData.country]);
+
+	const location = useLocation();
+
+	useEffect(() => {
+		const highlightId = location.state?.highlightTarget;
+		if (highlightId) {
+			const target = document.getElementById(highlightId);
+
+			if (target) {
+				target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				target.classList.add('highlight');
+				const handleClick = () => {
+					target.classList.remove('highlight');
+					document.removeEventListener('click', handleClick);
+				};
+				setTimeout(() => {
+					document.addEventListener('click', handleClick);
+				}, 100);
+			}
+		}
+	}, [location.state]);
+
+	const handleAddressChange = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => {
+		const { name, value } = e.target;
+
+		const newAddressData = {
+			...addressData,
+			[name]: value,
+		};
+
+		setAddressData(newAddressData);
+
+		// Also update formData to maintain consistency
+		const updatedFormData = {
+			...formData,
+			[name]: value,
+		};
+
+		setFormData(updatedFormData);
+		autoSave(updatedFormData);
+	};
+
+	const handleLocationUpdate = (locationData: any) => {
+		const newAddressData = {
+			...addressData,
+			...locationData,
+		};
+
+		if (mapProvider === 'mapbox_api_set') {
+			const foundState = stateOptions.find(
+				(item) =>
+					item.label === newAddressData.state ||
+					item.value === newAddressData.state
+			);
+			if (foundState) {
+				newAddressData.state = foundState.value;
+			}
+		}
+		setAddressData(newAddressData);
+
+		const updatedFormData = {
+			...formData,
+			...locationData,
+		};
+
+		setFormData(updatedFormData);
+		autoSave(updatedFormData);
+	};
+
+	// Handle country select change (from old code)
+	const handleCountryChange = (newValue: any) => {
+		if (!newValue || Array.isArray(newValue)) {
+			return;
+		}
+
+		const updated = {
+			...formData,
+			country: newValue.value,
+			state: '', // reset state when country changes
+		};
+
+		setFormData(updated);
+		setAddressData((prev) => ({ ...prev, country: newValue.label }));
+
+		autoSave(updated);
+		fetchStatesByCountry(newValue.value);
+	};
+
+	// Handle state select change (from old code)
+	const handleStateChange = (newValue: any) => {
+		if (!newValue || Array.isArray(newValue)) {
+			return;
+		}
+
+		const updated = {
+			...formData,
+			state: newValue.value,
+		};
+
+		setFormData(updated);
+		setAddressData((prev) => ({ ...prev, state: newValue.label }));
+
+		autoSave(updated);
+	};
+
+	const fetchStatesByCountry = (countryCode: string) => {
+		axios({
+			method: 'GET',
+			url: getApiLink(appLocalizer, `states/${countryCode}`),
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+		}).then((res) => {
+			setStateOptions(res.data || []);
+		});
+	};
+
+	const checkSlugExists = async (slug: string) => {
+		try {
+			const response = await axios.get(
+				getApiLink(appLocalizer, 'store'),
+				{
+					params: {
+						slug,
+						id: id,
+					},
+					headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				}
+			);
+			return response.data.exists;
+		} catch (err) {
+			return false;
+		}
+	};
+
+	const handleChange = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => {
+		const { name, value } = e.target;
+		const updated = { ...formData, [name]: value };
+		setFormData(updated);
+
+		if (name === 'slug') {
+			const cleanValue = value.toLowerCase().replace(/[^a-z0-9-]/g, '');
+
+			const updated = { ...formData, slug: cleanValue };
+			setFormData(updated);
+
+			if (cleanValue !== value.toLowerCase()) {
+				setErrorMsg((prev) => ({
+					...prev,
+					slug: __(
+						'Special characters are not allowed.',
+						'multivendorx'
+					),
+				}));
+				return;
+			}
+
+			(async () => {
+				const trimmedValue = cleanValue.trim();
+				if (!trimmedValue) {
+					setErrorMsg((prev) => ({
+						...prev,
+						slug: __('Slug cannot be blank', 'multivendorx'),
+					}));
+					return;
+				}
+				const exists = await checkSlugExists(trimmedValue);
+
+				if (exists) {
+					setErrorMsg((prev) => ({
+						...prev,
+						slug: `Slug "${trimmedValue}" already exists.`,
+					}));
+					return;
+				}
+				setErrorMsg((prev) => ({ ...prev, slug: '' }));
+				autoSave(updated);
+				onUpdate({ slug: trimmedValue });
+			})();
+
+			return;
+		} else if (name === 'phone') {
+			const isValidPhone = /^\+?[0-9\s\-]{7,15}$/.test(value);
+			if (isValidPhone || value == '') {
+				autoSave(updated);
+				setErrorMsg((prev) => ({ ...prev, phone: '' }));
+			} else {
+				setErrorMsg((prev) => ({
+					...prev,
+					phone: __('Invalid phone number', 'multivendorx'),
+				}));
+			}
+		} else if (name !== 'email') {
+			autoSave(updated);
+		}
+	};
+
+	// Then update your autoSave function:
+	const autoSave = (updatedData: any) => {
+		if (!id) {
+			return;
+		}
+		// Format email data for backend
+		const formattedData = { ...updatedData };
+
+		axios({
+			method: 'PUT',
+			url: getApiLink(appLocalizer, `store/${id}`),
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			data: formattedData,
+		})
+			.then((res) => {
+				if (res.data.success) {
+					setSuccessMsg('Store saved successfully!');
+				}
+			})
+			.catch((error) => {
+				console.error('Save error:', error);
+			});
+	};
+	const isValidEmail = (email: string): boolean => {
+		return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+	};
+
+	const renderMapComponent = () => {
+		if (!modules.includes('geo-location') || !apiKey) {
+			return null;
+		}
+
+		const commonProps = {
+			apiKey,
+			locationAddress: addressData.location_address,
+			locationLat: addressData.location_lat,
+			locationLng: addressData.location_lng,
+			onLocationUpdate: handleLocationUpdate,
+			labelSearch: __('Search for a location'),
+			labelMap: __('Drag or click on the map to choose a location'),
+			instructionText: __(
+				'Enter a search term or drag/drop a pin on the map.'
+			),
+			placeholderSearch: __('Search for a location...'),
+		};
+
+		if (mapProvider === 'google_map_set') {
+			return <GoogleMap {...commonProps} />;
+		} else if (mapProvider === 'mapbox_api_set') {
+			return <Mapbox {...commonProps} />;
+		}
+
+		return null;
+	};
+
+	return (
+		<>
+			<SuccessNotice message={successMsg} />
+			<div className="container-wrapper ">
+				<div className="card-wrapper column w-65">
+					{/* Contact Information */}
+					<div className="card-content">
+						<div className="card-header">
+							<div className="left">
+								<div className="title">
+									{__('Contact information')}
+								</div>
+							</div>
+						</div>
+
+						<div className="card-body">
+							<div className="form-group-wrapper">
+								<div className="form-group">
+									<label>{__('Store email(s)')}</label>
+									<EmailsInput
+										value={emails}
+										primary={primaryEmail}
+										enablePrimary={true}
+										onChange={(list, primary) =>
+											saveEmails(list, primary)
+										}
+									/>
+									<div className="settings-metabox-description">
+										<b>{__('Tip:')}</b>{' '}
+										{__(
+											'You can add multiple email addresses. All added emails will receive notifications.'
+										)}{' '}
+										<br />
+										<b>{__('Primary email:')}</b>{' '}
+										{__(
+											'Click the star icon to set an email as primary. This email will appear on your storefront, and all other email IDs will be hidden from display.'
+										)}
+									</div>
+								</div>
+							</div>
+
+							<div className="form-group-wrapper">
+								<div className="form-group">
+									<label htmlFor="phone">{__('Phone')}</label>
+									<BasicInput
+										name="phone"
+										value={formData.phone}
+										wrapperClass="setting-form-input"
+										descClass="settings-metabox-description"
+										onChange={handleChange}
+									/>
+									{errorMsg.phone && (
+										<p className="invalid-massage">
+											{errorMsg.phone}
+										</p>
+									)}
+								</div>
+							</div>
+						</div>
+						{/* Hidden coordinates */}
+						<input
+							type="hidden"
+							name="location_lat"
+							value={addressData.location_lat}
+						/>
+						<input
+							type="hidden"
+							name="location_lng"
+							value={addressData.location_lng}
+						/>
+					</div>
+					{/* Communication Address */}
+					<div className="card-content">
+						<div className="card-header">
+							<div className="left">
+								<div className="title">
+									{__('Communication address')}
+								</div>
+							</div>
+						</div>
+
+						<div className="card-body">
+							<div className="form-group-wrapper">
+								<div className="form-group">
+									<label htmlFor="location_address">
+										{__('Address *')}
+									</label>
+									<BasicInput
+										name="location_address"
+										value={addressData.location_address}
+										wrapperClass="setting-form-input"
+										descClass="settings-metabox-description"
+										onChange={handleAddressChange}
+									/>
+								</div>
+							</div>
+
+							<div className="form-group-wrapper">
+								<div className="form-group">
+									<label htmlFor="city">{__('City')}</label>
+									<BasicInput
+										name="city"
+										value={addressData.city}
+										wrapperClass="setting-form-input"
+										descClass="settings-metabox-description"
+										onChange={handleAddressChange}
+									/>
+								</div>
+								<div className="form-group">
+									<label htmlFor="zip">
+										{__('Zip code')}
+									</label>
+									<BasicInput
+										name="zip"
+										value={addressData.zip}
+										wrapperClass="setting-form-input"
+										descClass="settings-metabox-description"
+										onChange={handleAddressChange}
+									/>
+								</div>
+							</div>
+
+							{/* Country and State */}
+							<div className="form-group-wrapper">
+								<div className="form-group">
+									<label htmlFor="country">
+										{__('Country')}
+									</label>
+									<SelectInput
+										name="country"
+										value={formData.country}
+										options={
+											appLocalizer.country_list || []
+										}
+										type="single-select"
+										onChange={handleCountryChange}
+									/>
+								</div>
+								<div className="form-group">
+									<label htmlFor="state">{__('State')}</label>
+									<SelectInput
+										name="state"
+										value={formData.state}
+										options={stateOptions}
+										type="single-select"
+										onChange={handleStateChange}
+									/>
+								</div>
+							</div>
+						</div>
+						{/* Map Component */}
+						{renderMapComponent()}
+
+						{/* Hidden coordinates */}
+						<input
+							type="hidden"
+							name="location_lat"
+							value={addressData.location_lat}
+						/>
+						<input
+							type="hidden"
+							name="location_lng"
+							value={addressData.location_lng}
+						/>
+					</div>
+				</div>
+				<div className="card-wrapper column w-35">
+					{/* Manage Store Status */}
+					<div id="store-status" className="card-content">
+						<div className="card-header">
+							<div className="left">
+								<div className="title">
+									{__('Manage store status', 'multivendorx')}
+								</div>
+							</div>
+						</div>
+						<div className="card-body   form-group-wrapper">
+							<div className="form-group">
+								<label htmlFor="store-status">
+									{__('Current status', 'multivendorx')}
+								</label>
+								<SelectInput
+									name="status"
+									value={formData.status}
+									options={statusOptions}
+									type="single-select"
+									onChange={(newValue: any) => {
+										if (
+											!newValue ||
+											Array.isArray(newValue)
+										) {
+											return;
+										}
+										const updated = {
+											...formData,
+											status: newValue.value,
+										};
+										onUpdate({ status: newValue.value });
+										setFormData(updated);
+										autoSave(updated);
+									}}
+								/>
+							</div>
+						</div>
+					</div>
+					{/* Manage Storefront Link */}
+					<div id="store-slug" className="card-content">
+						<div className="card-header">
+							<div className="left">
+								<div className="title">
+									{__(
+										'Manage storefront link',
+										'multivendorx'
+									)}
+								</div>
+							</div>
+						</div>
+						<div className="card-body form-group-wrapper">
+							<div className="form-group">
+								<label htmlFor="slug">
+									{__(
+										'Current storefront link',
+										'multivendorx'
+									)}
+								</label>
+								<BasicInput
+									name="slug"
+									wrapperClass="setting-form-input"
+									descClass="settings-metabox-description"
+									value={formData.slug}
+									onChange={handleChange}
+								/>
+								<div className="settings-metabox-description slug">
+									{__('Store URL', 'multivendorx')} :{' '}
+									<a
+										className="link-item"
+										target="_blank"
+										rel="noopener noreferrer"
+										href={`${appLocalizer.store_page_url}/${formData.slug}`}
+									>
+										{`${appLocalizer.store_page_url}/${formData.slug}`}{' '}
+										<i className="adminlib-external"></i>
+									</a>
+								</div>
+								{errorMsg.slug && (
+									<p className="invalid-massage">
+										{errorMsg.slug}
+									</p>
+								)}
+							</div>
+						</div>
+					</div>
+
+					{/* Social Information */}
+					<div className="card-content">
+						<div className="card-header">
+							<div className="left">
+								<div className="title">
+									{__('Social information', 'multivendorx')}
+								</div>
+							</div>
+						</div>
+						<div className="card-body">
+							{[
+								'facebook',
+								'twitter',
+								'linkedin',
+								'youtube',
+								'instagram',
+							].map((network) => {
+								const iconClass = `adminlib-${network} ${network}`;
+								const defaultUrl = `https://${network === 'twitter' ? 'twitter.com' : network}.com/`;
+
+								return (
+									<div
+										className="form-group-wrapper"
+										key={network}
+									>
+										<div className="form-group">
+											<label htmlFor={network}>
+												<i className={iconClass}></i>{' '}
+												{network === 'twitter'
+													? 'X'
+													: network
+															.charAt(0)
+															.toUpperCase() +
+														network.slice(1)}
+											</label>
+											<BasicInput
+												name={network}
+												wrapperClass="setting-form-input"
+												descClass="settings-metabox-description"
+												value={
+													formData[network]?.trim() ||
+													defaultUrl
+												}
+												onChange={handleChange}
+											/>
+										</div>
+									</div>
+								);
+							})}
+						</div>
+					</div>
+				</div>
+			</div>
+		</>
+	);
 };
 
 export default StoreSettings;

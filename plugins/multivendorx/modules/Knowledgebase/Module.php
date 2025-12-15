@@ -7,8 +7,6 @@
 
 namespace MultiVendorX\Knowledgebase;
 
-use MultiVendorX\Utill;
-
 /**
  * MultiVendorX Store Policy Module class
  *
@@ -46,7 +44,7 @@ class Module {
      */
     public function init_classes() {
         $this->container['frontend'] = new Frontend();
-        $this->container['rest']     = new MultiVendorX_REST_Knowledge_Controller();
+        $this->container['rest']     = new Rest();
     }
 
     /**
