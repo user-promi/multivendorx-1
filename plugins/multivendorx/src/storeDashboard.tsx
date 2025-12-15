@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import axios from 'axios';
 import { getApiLink } from 'zyra';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -15,6 +15,7 @@ const Dashboard = () => {
 	const [noPermission, setNoPermission] = useState(false);
 	const [showStoreList, setShowStoreList] = useState(false);
 	const [isDarkMode, setIsDarkMode] = useState(false);
+	const userDropdownRef = useRef(null);
 
 	const location = useLocation();
 	const navigate = useNavigate();
@@ -226,8 +227,23 @@ const Dashboard = () => {
 	};
 
 	// Toggle user dropdown
-	const toggleUserDropdown = (e) => {
-		e.stopPropagation();
+	useEffect(() => {
+		const handleClickOutside = (e) => {
+			if (
+				userDropdownRef.current &&
+				!userDropdownRef.current.contains(e.target)
+			) {
+				setShowUserDropdown(false);
+				setShowStoreList(false);
+				setShowNotifications(false);
+			}
+		};
+
+		document.addEventListener('mousedown', handleClickOutside);
+		return () =>
+			document.removeEventListener('mousedown', handleClickOutside);
+	}, []);
+	const toggleUserDropdown = () => {
 		setShowUserDropdown((prev) => !prev);
 		setShowNotifications(false);
 	};
@@ -238,17 +254,6 @@ const Dashboard = () => {
 		setShowNotifications((prev) => !prev);
 		setShowUserDropdown(false);
 	};
-
-	// Close all dropdowns when clicking outside
-	useEffect(() => {
-		const handleClickOutside = () => {
-			setShowUserDropdown(false);
-			setShowNotifications(false);
-		};
-
-		document.addEventListener('click', handleClickOutside);
-		return () => document.removeEventListener('click', handleClickOutside);
-	}, []);
 
 	return (
 		<div
@@ -282,9 +287,8 @@ const Dashboard = () => {
 								return (
 									<li
 										key={key}
-										className={`tab-name ${
-											isParentActive ? 'active' : ''
-										}`}
+										className={`tab-name ${isParentActive ? 'active' : ''
+											}`}
 									>
 										<a
 											className="tab"
@@ -310,18 +314,16 @@ const Dashboard = () => {
 
 											{hasSubmenu && (
 												<i
-													className={`admin-arrow adminlib-pagination-right-arrow ${
-														isOpen ? 'rotate' : ''
-													}`}
+													className={`admin-arrow adminlib-pagination-right-arrow ${isOpen ? 'rotate' : ''
+														}`}
 												></i>
 											)}
 										</a>
 
 										{hasSubmenu && (
 											<ul
-												className={`subtabs ${
-													isOpen ? 'open' : ''
-												}`}
+												className={`subtabs ${isOpen ? 'open' : ''
+													}`}
 											>
 												{item.submenu.map((sub) => {
 													const subActive =
@@ -381,11 +383,10 @@ const Dashboard = () => {
 									}
 								>
 									<div
-										className={`adminlib-icon ${
-											isDarkMode
-												? 'adminlib-recycle'
-												: 'adminlib-resources'
-										}`}
+										className={`adminlib-icon ${isDarkMode
+											? 'adminlib-recycle'
+											: 'adminlib-resources'
+											}`}
 									></div>
 								</li>
 
@@ -410,7 +411,7 @@ const Dashboard = () => {
 									<div className="adminlib-icon adminlib-crop-free"></div>
 								</li>
 
-								<li className="dropdown login-user">
+								<li className="dropdown login-user" ref={userDropdownRef}>
 									<div
 										className="avatar-wrapper"
 										onClick={toggleUserDropdown}
@@ -475,104 +476,105 @@ const Dashboard = () => {
 													</li>
 													{availableStores.length >
 														0 && (
-														<li className="switch-store-wrapper">
-															<a
-																href="#"
-																onClick={(
-																	e
-																) => {
-																	e.preventDefault();
-																	setShowStoreList(
-																		(
-																			prev
-																		) =>
-																			!prev
-																	);
-																}}
-															>
-																<i className="adminlib-switch-store"></i>
-																Switch stores
-																{firstTwoStores.length >
-																	0 && (
-																	<span className="switch-store-preview">
-																		{!showStoreList && (
-																			<>
-																				{firstTwoStores.map(
-																					(
-																						store
-																					) => (
-																						<span
-																							className="store-icon"
-																							key={
+															<li className="switch-store-wrapper">
+																<a
+																	href="#"
+																	onClick={(
+																		e
+																	) => {
+																		e.preventDefault();
+																		setShowStoreList(
+																			(
+																				prev
+																			) =>
+																				!prev
+																		);
+																	}}
+																>
+																	<i className="adminlib-switch-store"></i>
+																	Switch stores
+																	{firstTwoStores.length >
+																		0 && (
+																			<span className="switch-store-preview">
+																				{!showStoreList && (
+																					<>
+																						{firstTwoStores.map(
+																							(
+																								store
+																							) => (
+																								<span
+																									className="store-icon"
+																									key={
+																										store.id
+																									}
+																								>
+																									{store.name
+																										.charAt(
+																											0
+																										)
+																										.toUpperCase()}
+																								</span>
+																							)
+																						)}
+
+																						{availableStores.length >
+																							2 && (
+																								<span className="store-icon number">
+																									+
+																									{availableStores.length -
+																										2}
+																								</span>
+																							)}
+																					</>
+																				)}
+																				<span className="adminlib-keyboard-arrow-down arrow-icon"></span>
+																			</span>
+																		)}
+																</a>
+
+																{showStoreList && (
+																	<div className="switch-store-list">
+																		{availableStores.map(
+																			(
+																				store
+																			) => (
+																				<div
+																					className="store"
+																					key={
+																						store.id
+																					}
+																				>
+																					<a
+																						href="#"
+																						className="switch-store"
+																						onClick={(
+																							e
+																						) => {
+																							e.preventDefault();
+																							switchStore(
 																								store.id
-																							}
-																						>
+																							);
+																						}}
+																					>
+																						<span className="store-icon">
 																							{store.name
 																								.charAt(
 																									0
 																								)
 																								.toUpperCase()}
 																						</span>
-																					)
-																				)}
-
-																				{availableStores.length >
-																					2 && (
-																					<span className="store-icon number">
-																						+
-																						{availableStores.length -
-																							2}
-																					</span>
-																				)}
-																			</>
+																						<div className="details-wrapper">
+																							<div className="store-name">{store.name}</div>
+																							<div className="des">store@gmail.com</div>
+																						</div>
+																					</a>
+																				</div>
+																			)
 																		)}
-																		<span className="adminlib-keyboard-arrow-down arrow-icon"></span>
-																	</span>
+																	</div>
 																)}
-															</a>
-
-															{showStoreList && (
-																<div className="switch-store-list">
-																	{availableStores.map(
-																		(
-																			store
-																		) => (
-																			<div
-																				className="store"
-																				key={
-																					store.id
-																				}
-																			>
-																				<a
-																					href="#"
-																					className="switch-store"
-																					onClick={(
-																						e
-																					) => {
-																						e.preventDefault();
-																						switchStore(
-																							store.id
-																						);
-																					}}
-																				>
-																					<span className="store-icon">
-																						{store.name
-																							.charAt(
-																								0
-																							)
-																							.toUpperCase()}
-																					</span>
-																					{
-																						store.name
-																					}
-																				</a>
-																			</div>
-																		)
-																	)}
-																</div>
-															)}
-														</li>
-													)}
+															</li>
+														)}
 												</ul>
 											</div>
 
@@ -595,7 +597,6 @@ const Dashboard = () => {
 					</div>
 				</div>
 
-				{/* <div className="content-wrapper">{loadComponent(currentTab)}</div> */}
 				<div className="content-wrapper">
 					{storeData && storeData.status !== 'active' ? (
 						<div className="permission-wrapper">

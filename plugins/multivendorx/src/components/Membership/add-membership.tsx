@@ -7,7 +7,6 @@ import Settings from './settings';
 import Subscribers from './subscribers';
 import Notifications from './notifications';
 
-
 const Memberships = () => {
 	const location = useLocation();
 	const hash = location.hash.replace(/^#/, '');
@@ -15,7 +14,8 @@ const Memberships = () => {
 	const hashParams = new URLSearchParams(hash);
 	const currentTab = hashParams.get('subtab') || 'payment-membership-message';
 
-	const prepareUrl = (tabId: string) => `?page=multivendorx#&tab=memberships&subtab=${tabId}`;
+	const prepareUrl = (tabId: string) =>
+		`?page=multivendorx#&tab=memberships&subtab=${tabId}`;
 
 	const tabData = [
 		{
@@ -25,7 +25,6 @@ const Memberships = () => {
 				name: 'Settings',
 				desc: 'Site errors and events are logged for easy troubleshooting.',
 				icon: 'adminlib-credit-card',
-
 			},
 		},
 		{

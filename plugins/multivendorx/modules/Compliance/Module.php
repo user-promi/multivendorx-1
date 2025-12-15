@@ -46,7 +46,7 @@ class Module {
         $this->container['frontend'] = new Frontend();
         $this->container['ajax']     = new Ajax();
         $this->container['util']     = new Util();
-        $this->container['rest']     = new MultiVendorX_REST_Compliance_Controller();
+        $this->container['rest']     = new Rest();
     }
 
     /**
