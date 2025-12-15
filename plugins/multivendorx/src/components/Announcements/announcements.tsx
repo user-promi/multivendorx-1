@@ -784,14 +784,12 @@ export const Announcements: React.FC = () => {
 
 									let nextStores = selectedIds;
 
-									// Case 1: User JUST selected 0
 									if (
 										!prevStores.includes(0) &&
 										selectedIds.includes(0)
 									) {
 										nextStores = [0];
 									}
-									// Case 2: User selected other stores while 0 was active
 									else if (
 										prevStores.includes(0) &&
 										selectedIds.length > 1
@@ -801,7 +799,6 @@ export const Announcements: React.FC = () => {
 										);
 									}
 
-									// Clear validation error
 									setValidationErrors((prev) => {
 										const updated = { ...prev };
 										delete updated.stores;
