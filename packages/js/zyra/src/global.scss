@@ -3,18 +3,25 @@
     --colorSecondary: unset;
     --colorAccent: unset;
     --colorSupport: unset;
+
     --textColor: #000000c7;
     --subTextColor: #424242d0;
+
+    --color-black: #181819;
     --colorWhite: #fff;
+
     --backgroundColor: #e6e2e2f3;
     --backgroundWhite: #fff;
     --backgroundPrimary: #ece2f9f1;
+
     --borderColor: #dbdbdb;
+
+    --box-shadow: #dfdee16e;
   }
 
   $theme-color: var(--colorPrimary);
   $color-white: var(--colorWhite);
-  $color-black: #181819;
+  $color-black: var(--color-black);
   $color-active: var(--colorPrimary);
   $text-color: var(--textColor);
   $sub-text-color: var(--subTextColor);
@@ -28,8 +35,19 @@
   $border-theme-medium: 0.115rem solid var(--colorPrimary);
   $border-radius-small: 0.25rem;
   $accent-color: #e35047;
-  
+  $box-shadow: 0 0.125rem 0.5rem 0 var(--box-shadow);
+  $box-shadow-theme: 0 0.125rem 0.5rem 0 #65438fae;
+
   $color-palette: (
+    primary:(light-color: color-mix(in srgb, var(--colorPrimary) 15%, white),
+      color: var(--colorPrimary)),
+    secondary:(light-color: color-mix(in srgb, var(--colorSecondary) 15%, white),
+      color: var(--colorSecondary)),
+    accent:(light-color: color-mix(in srgb, var(--colorAccent) 15%, white),
+      color: var(--colorAccent)),
+    support:(light-color: color-mix(in srgb, var(--colorSupport) 15%, white),
+      color: var(--colorSupport)),
+
     red: (light-color: #fff3f1,
       color: #f7a79a),
     green: (light-color: #e8fbea,
@@ -61,7 +79,7 @@
     )
   );
   $btn-color-palette: (
-    purple:(light-color: #ece2f9f1,
+    purple:(light-color: color-mix(in srgb, var(--colorPrimary) 10%, white),
       color: var(--colorPrimary),
     ),
     red: (light-color: #fde8e4,

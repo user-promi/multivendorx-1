@@ -50,7 +50,7 @@ const Notifications = () => {
 								<li key={idx}>
 									<div className="item">
 										<div
-											className={`icon admin-badge green`}
+											className={`icon admin-badge admin-color${idx + 5}`}
 										>
 											<i
 												className={

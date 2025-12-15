@@ -259,62 +259,6 @@ a {
     }
 }
 
-// analytics-container start  remove this 
-.analytics-container {
-    .analytics-item {
-        .theme-color1 {
-            background: var(--colorPrimary);
-        }
-
-        .theme-color2 {
-            background: var(--colorSecondary);
-        }
-
-        .theme-color3 {
-            background: var(--colorAccent);
-        }
-
-        .theme-color4 {
-            background: var(--colorSupport);
-        }
-
-        &:has(.theme-color1) {
-            background: color-mix(in srgb, var(--colorPrimary) 15%, transparent);
-
-            .report span {
-                color: var(--colorPrimary);
-            }
-        }
-
-        &:has(.theme-color2) {
-            background: color-mix(in srgb, var(--colorSecondary) 15%, transparent);
-
-            .report span {
-                color: var(--colorSecondary);
-            }
-        }
-
-        &:has(.theme-color3) {
-            background: color-mix(in srgb, var(--colorAccent) 15%, transparent);
-
-            .report span {
-                color: var(--colorAccent);
-            }
-        }
-
-        &:has(.theme-color4) {
-            background: color-mix(in srgb, var(--colorSupport) 15%, transparent);
-
-            .report span {
-                color: var(--colorSupport);
-            }
-        }
-    }
-}
-
-// analytics-container end
-
-
 // table style
 #store-dashboard {
     display: flex;
@@ -774,6 +718,9 @@ a {
 }
 
 .table-wrapper {
+    border: none !important;
+    /* overwrite zyra style*/
+
     table {
         width: 100%;
         border-collapse: collapse;
@@ -785,8 +732,16 @@ a {
             gap: 0.313rem;
         }
 
-        &.header {
-            color: #0000006b;
+        thead {
+            td {
+                color: $text-color;
+            }
+        }
+
+        tbody {
+            td {
+                color: $sub-text-color;
+            }
         }
     }
 }
@@ -809,46 +764,6 @@ a {
             left: 0;
             top: 0;
             width: 56%;
-        }
-    }
-
-    &.theme-color1 {
-        div {
-            background: color-mix(in srgb, var(--colorPrimary) 15%, transparent);
-
-            span {
-                background: var(--colorPrimary);
-            }
-        }
-    }
-
-    &.theme-color2 {
-        div {
-            background: color-mix(in srgb, var(--colorSecondary) 15%, transparent);
-
-            span {
-                background: var(--colorSecondary);
-            }
-        }
-    }
-
-    &.theme-color3 {
-        div {
-            background: color-mix(in srgb, var(--colorAccent) 15%, transparent);
-
-            span {
-                background: var(--colorAccent);
-            }
-        }
-    }
-
-    &.theme-color4 {
-        div {
-            background: color-mix(in srgb, var(--colorSupport) 15%, transparent);
-
-            span {
-                background: var(--colorSupport);
-            }
         }
     }
 }
@@ -1010,18 +925,21 @@ a {
         .store {
             border-bottom: $border-light-small;
 
-            .store-name{
+            .store-name {
                 color: $text-color;
             }
-            .des{
+
+            .des {
                 font-size: 0.813rem;
             }
         }
     }
 }
-.switch-store-wrapper:has(.switch-store-list){
+
+.switch-store-wrapper:has(.switch-store-list) {
     background: $background-color;
 }
+
 .store-icon {
     background: var(--colorPrimary);
     color: #fff;
