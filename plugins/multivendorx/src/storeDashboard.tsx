@@ -565,7 +565,6 @@ const Dashboard = () => {
 																						</span>
 																						<div className="details-wrapper">
 																							<div className="store-name">{store.name}</div>
-																							<div className="des">store@gmail.com</div>
 																						</div>
 																					</a>
 																				</div>

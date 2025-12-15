@@ -827,7 +827,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             $action = $request->get_param( 'action' );
 
             if ( $id && 'switch' === $action ) {
-                update_user_meta( get_current_user_id(), Utill::POST_META_SETTINGS['active_store'], $id );
+                update_user_meta( get_current_user_id(), Utill::USER_SETTINGS_KEYS['active_store'], $id );
 
                 $dashboard_page_id = (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' );
                 if ( $dashboard_page_id ) {
@@ -1080,7 +1080,7 @@ class MultiVendorX_REST_Store_Controller extends \WP_REST_Controller {
             unset( $data['total_reviews'] );
 
             if ( 'deactivated' === $data['status'] ) {
-                delete_metadata( 'user', 0, Utill::POST_META_SETTINGS['active_store'], '', true );
+                delete_metadata( 'user', 0, Utill::USER_SETTINGS_KEYS['active_store'], '', true );
             }
             // Update basic store info.
             $store->set( Utill::STORE_SETTINGS_KEYS['name'], $data['name'] ?? $store->get( Utill::STORE_SETTINGS_KEYS['name'] ) );
