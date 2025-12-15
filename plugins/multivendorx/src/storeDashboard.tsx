@@ -8,7 +8,7 @@ import './hooksFilters';
 const Dashboard = () => {
 	const [menu, setMenu] = useState({});
 	const [openSubmenus, setOpenSubmenus] = useState({});
-	const [storeData, setStoreData] = useState({});
+	const [storeData, setStoreData] = useState(null);
 	const [currentTab, setCurrentTab] = useState('');
 	const [showUserDropdown, setShowUserDropdown] = useState(false);
 	const [showNotifications, setShowNotifications] = useState(false);
@@ -49,7 +49,7 @@ const Dashboard = () => {
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 		}).then((res: any) => {
 			const data = res.data || {};
-			setStoreData(data);
+			setStoreData(data || null);
 		});
 	}, [appLocalizer.store_id]);
 
@@ -243,6 +243,7 @@ const Dashboard = () => {
 		return () =>
 			document.removeEventListener('mousedown', handleClickOutside);
 	}, []);
+
 	const toggleUserDropdown = () => {
 		setShowUserDropdown((prev) => !prev);
 		setShowNotifications(false);
@@ -254,6 +255,37 @@ const Dashboard = () => {
 		setShowNotifications((prev) => !prev);
 		setShowUserDropdown(false);
 	};
+
+	const filteredMenu = useMemo(() => {
+		const result: any = {};
+
+		Object.entries(menu).forEach(([key, item]: any) => {
+
+			if (!hasCapability(item.capability)) {
+				return;
+			}
+
+			let filteredSubmenu = undefined;
+
+			if (item.submenu?.length) {
+				filteredSubmenu = item.submenu.filter((sub) =>
+					hasCapability(sub.capability)
+				);
+
+				if (filteredSubmenu.length === 0) {
+					return;
+				}
+			}
+
+			result[key] = {
+				...item,
+				submenu: filteredSubmenu,
+			};
+		});
+
+		return result;
+	}, [menu]);
+
 
 	return (
 		<div
@@ -271,10 +303,10 @@ const Dashboard = () => {
 					)}
 				</div>
 
-				{storeData.status == 'active' && (
+				{storeData?.status == 'active' && (
 					<div className="dashboard-tabs">
 						<ul>
-							{Object.entries(menu).map(([key, item]) => {
+							{Object.entries(filteredMenu).map(([key, item]) => {
 								if (!item.name) {
 									return null;
 								}
@@ -565,7 +597,6 @@ const Dashboard = () => {
 																						</span>
 																						<div className="details-wrapper">
 																							<div className="store-name">{store.name}</div>
-																							<div className="des">store@gmail.com</div>
 																						</div>
 																					</a>
 																				</div>
@@ -598,7 +629,7 @@ const Dashboard = () => {
 				</div>
 
 				<div className="content-wrapper">
-					{storeData.length > 0 && storeData.status !== 'active' ? (
+					{storeData && storeData.status !== 'active' ? (
 						<div className="permission-wrapper">
 							<i className="adminlib-info red"></i>
 							<div className="title">

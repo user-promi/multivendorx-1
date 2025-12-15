@@ -5,7 +5,6 @@ import axios from 'axios';
 
 const RegistrationForm = () => {
 	const [loading, setLoading] = useState(false);
-	const [toast, setToast] = useState(false);
 	const [responseMessage, setResponseMessage] = useState('');
 	const [responseData, setResponseData] = useState<any[]>([]);
 	const [stores, setStores] = useState<any[]>([]);
@@ -14,46 +13,6 @@ const RegistrationForm = () => {
 	const [allStoreData, setAllStoreData] = useState<any[]>([]);
 	const [storeData, setStoreData] = useState<any>(null);
 	const formData = registrationForm;
-	// useEffect(() => {
-
-	//     axios({
-	//         method: 'GET',
-	//         url: getApiLink(appLocalizer, `store`),
-	//         headers: { 'X-WP-Nonce': appLocalizer.nonce },
-	//         params: { "store_registration": true },
-
-	//     }).then((res) => {
-	//         const data = res.data || {};
-	//         const storeList = data.all_stores || [];
-	//         const regData = data.response || [];
-	//         setStores(storeList);
-	//         setResponseData(regData);
-
-	//         if (storeList.length > 0 && regData.length > 0) {
-	//             // const firstStore = storeList[0];
-	//             // setSelectedStore(firstStore);
-	//             // const match = regData.find(
-	//             //     (item) => String(item.id) === String(firstStore.value)
-	//             //     );
-	//             // if (match) setInputs(match);
-
-	//             const match = storeList.find((store) =>
-	//                 regData.some((item) => String(item.id) === String(store.value))
-	//             );
-
-	//             if (match) {
-	//                 setSelectedStore(match);
-
-	//                 // Find the corresponding registration data
-	//                 const matchData = regData.find(
-	//                     (item) => String(item.id) === String(match.value)
-	//                 );
-
-	//                 if (matchData) setInputs(matchData);
-	//             }
-	//         }
-	//     });
-	// }, []);
 
 	useEffect(() => {
 		axios({
@@ -127,48 +86,6 @@ const RegistrationForm = () => {
 		setStoreData(dataMatch || {});
 	};
 
-	// const onSubmit = (submittedFormData: Record<string, any>) => {
-	//     setLoading(true);
-
-	//     // Map form field keys to backend expected keys
-	//     const mappedData: Record<string, any> = {};
-
-	//     // Core fields
-	//     if (submittedFormData['name']) mappedData['name'] = submittedFormData['name'];
-	//     if (submittedFormData['description'] || submittedFormData['description'])
-	//         mappedData['description'] = submittedFormData['description'] || submittedFormData['description'];
-
-	//     // Optional: slug, who_created (if coming from form)
-	//     if (submittedFormData['slug']) mappedData['slug'] = submittedFormData['slug'];
-
-	//     // Other fields as meta
-	//     Object.keys(submittedFormData).forEach((key) => {
-	//         if (!['name', 'description', 'slug'].includes(key)) {
-	//             mappedData[key] = submittedFormData[key];
-	//         }
-	//     });
-
-	//     // Send to API
-	//     axios({
-	//         method: 'POST',
-	//         url: getApiLink(registrationForm, 'store'),
-	//         headers: { 'X-WP-Nonce': registrationForm.nonce, "registrations": 'registrations' },
-	//         data: {
-	//             formData: mappedData,
-	//         },
-	//     })
-	//         .then((response) => {
-	//             console.log('Store created:', response.data);
-	//             if (response.data.redirect !== '') {
-	//                 window.location.href = response.data.redirect;
-	//             }
-	//             setLoading(false);
-	//         })
-	//         .catch((error) => {
-	//             console.error('Error creating store:', error);
-	//             setLoading(false);
-	//         });
-	// };
 	const onSubmit = useCallback((submittedFormData: Record<string, any>) => {
 		setLoading(true);
 
@@ -199,18 +116,18 @@ const RegistrationForm = () => {
 			},
 			data: { formData: mappedData },
 		})
-			.then((response) => {
-				console.log('Store created:', response.data);
-				if (response.data.redirect !== '') {
-					window.location.href = response.data.redirect;
-				}
-				setLoading(false);
-			})
-			.catch((error) => {
-				console.error('Error creating store:', error);
-				setLoading(false);
-			});
-	}, []); //empty dependencies = stable function
+		.then((response) => {
+			setResponseMessage('Store created successfully');
+			setLoading(false);
+			if (response.data.redirect !== '') {
+				window.open(response.data.redirect, '_self');
+			}
+		})
+		.catch(() => {
+			setResponseMessage('Error creating store');
+			setLoading(false);
+		});
+	}, []);
 
 	const memoizedCountryList = useMemo(() => appLocalizer.country_list, []);
 	const memoizedStateList = useMemo(() => appLocalizer.state_list, []);
@@ -258,10 +175,10 @@ const RegistrationForm = () => {
 				stateList={memoizedStateList}
 			/>
 			<div>{registrationForm.content_after_form}</div>
-			{toast && (
+			{responseMessage && (
 				<div className="admin-notice-display-title">
 					<i className="admin-font adminlib-icon-yes"></i>
-					{responseMessage}
+					<p>{responseMessage}</p>
 				</div>
 			)}
 		</>

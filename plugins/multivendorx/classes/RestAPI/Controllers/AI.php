@@ -9,7 +9,7 @@ namespace MultiVendorX\RestAPI\Controllers;
 
 defined( 'ABSPATH' ) || exit;
 
-class MultiVendorX_REST_AI_Controller extends \WP_REST_Controller {
+class AI extends \WP_REST_Controller {
 
     /**
      * Route Base.

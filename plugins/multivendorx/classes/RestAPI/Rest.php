@@ -7,18 +7,18 @@
 
 namespace MultiVendorX\RestAPI;
 
-use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Settings_Controller;
-use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Dashboard_Controller;
-use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Store_Controller;
-use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Commission_Controller;
-use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Status_Controller;
-use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Notifications_Controller;
-use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Payouts_Controller;
-use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Transaction_Controller;
-use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Reports_Controller;
-use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Tour_Controller;
-use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_Logs_Controller;
-use MultiVendorX\RestAPI\Controllers\MultiVendorX_REST_AI_Controller;
+use MultiVendorX\RestAPI\Controllers\Settings;
+use MultiVendorX\RestAPI\Controllers\Dashboard;
+use MultiVendorX\RestAPI\Controllers\StoreRest;
+use MultiVendorX\RestAPI\Controllers\Commission;
+use MultiVendorX\RestAPI\Controllers\Status;
+use MultiVendorX\RestAPI\Controllers\Notifications;
+use MultiVendorX\RestAPI\Controllers\Payouts;
+use MultiVendorX\RestAPI\Controllers\TransactionRest;
+use MultiVendorX\RestAPI\Controllers\Reports;
+use MultiVendorX\RestAPI\Controllers\Tour;
+use MultiVendorX\RestAPI\Controllers\Logs;
+use MultiVendorX\RestAPI\Controllers\AI;
 
 use MultiVendorX\Store\Store;
 use MultiVendorX\Commission\CommissionUtil;
@@ -179,8 +179,6 @@ class Rest {
 
         return $args;
     }
-
-
 
     /**
      * Filter WooCommerce products by meta key existence.
@@ -433,25 +431,23 @@ class Rest {
         return $coupon;
     }
 
-
-
     /**
      * Initialize all REST API controller classes.
      */
     public function init_classes() {
         $this->container = array(
-            'settings'      => new MultiVendorX_REST_Settings_Controller(),
-            'dashboard'     => new MultiVendorX_REST_Dashboard_Controller(),
-            'store'         => new MultiVendorX_REST_Store_Controller(),
-            'commission'    => new MultiVendorX_REST_Commission_Controller(),
-            'status'        => new MultiVendorX_REST_Status_Controller(),
-            'payouts'       => new MultiVendorX_REST_Payouts_Controller(),
-            'transaction'   => new MultiVendorX_REST_Transaction_Controller(),
-            'report'        => new MultiVendorX_REST_Reports_Controller(),
-            'notifications' => new MultiVendorX_REST_Notifications_Controller(),
-            'tour'          => new MultiVendorX_REST_Tour_Controller(),
-            'logs'          => new MultiVendorX_REST_Logs_Controller(),
-            'ai_assistant'  => new MultiVendorX_REST_AI_Controller(),
+            'settings'      => new Settings(),
+            'dashboard'     => new Dashboard(),
+            'store'         => new StoreRest(),
+            'commission'    => new Commission(),
+            'status'        => new Status(),
+            'payouts'       => new Payouts(),
+            'transaction'   => new TransactionRest(),
+            'report'        => new Reports(),
+            'notifications' => new Notifications(),
+            'tour'          => new Tour(),
+            'logs'          => new Logs(),
+            'ai_assistant'  => new AI(),
         );
     }
 
