@@ -243,6 +243,7 @@ const Dashboard = () => {
 		return () =>
 			document.removeEventListener('mousedown', handleClickOutside);
 	}, []);
+
 	const toggleUserDropdown = () => {
 		setShowUserDropdown((prev) => !prev);
 		setShowNotifications(false);
@@ -254,6 +255,37 @@ const Dashboard = () => {
 		setShowNotifications((prev) => !prev);
 		setShowUserDropdown(false);
 	};
+
+	const filteredMenu = useMemo(() => {
+		const result: any = {};
+
+		Object.entries(menu).forEach(([key, item]: any) => {
+
+			if (!hasCapability(item.capability)) {
+				return;
+			}
+
+			let filteredSubmenu = undefined;
+
+			if (item.submenu?.length) {
+				filteredSubmenu = item.submenu.filter((sub) =>
+					hasCapability(sub.capability)
+				);
+
+				if (filteredSubmenu.length === 0) {
+					return;
+				}
+			}
+
+			result[key] = {
+				...item,
+				submenu: filteredSubmenu,
+			};
+		});
+
+		return result;
+	}, [menu]);
+
 
 	return (
 		<div
@@ -274,7 +306,7 @@ const Dashboard = () => {
 				{storeData?.status == 'active' && (
 					<div className="dashboard-tabs">
 						<ul>
-							{Object.entries(menu).map(([key, item]) => {
+							{Object.entries(filteredMenu).map(([key, item]) => {
 								if (!item.name) {
 									return null;
 								}

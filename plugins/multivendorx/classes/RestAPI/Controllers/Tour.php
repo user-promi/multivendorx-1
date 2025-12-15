@@ -1,34 +1,33 @@
 <?php
 /**
- * MultiVendorX REST API Status Controller.
+ * Modules REST API tour controller
  *
  * @package MultiVendorX
  */
 
 namespace MultiVendorX\RestAPI\Controllers;
 
-use MultiVendorX\Install;
-
+use MultiVendorX\Utill;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * MultiVendorX REST API Status Controller.
+ * MultiVendorX REST API tour controller.
  *
  * @class       Module class
  * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
-class MultiVendorX_REST_Status_Controller extends \WP_REST_Controller {
+class Tour extends \WP_REST_Controller {
 
 	/**
 	 * Route base.
 	 *
 	 * @var string
 	 */
-	protected $rest_base = 'status';
+	protected $rest_base = 'tour';
 
     /**
-     * Register the routes for the objects of the controller.
+     * Register the routes for tour.
      */
     public function register_routes() {
         register_rest_route(
@@ -45,6 +44,11 @@ class MultiVendorX_REST_Status_Controller extends \WP_REST_Controller {
 					'callback'            => array( $this, 'create_item' ),
 					'permission_callback' => array( $this, 'create_item_permissions_check' ),
 				),
+				array(
+					'methods'             => \WP_REST_Server::EDITABLE,
+					'callback'            => array( $this, 'update_item' ),
+					'permission_callback' => array( $this, 'update_item_permissions_check' ),
+				),
 			)
         );
 
@@ -56,41 +60,43 @@ class MultiVendorX_REST_Status_Controller extends \WP_REST_Controller {
 					'methods'             => \WP_REST_Server::READABLE,
 					'callback'            => array( $this, 'get_item' ),
 					'permission_callback' => array( $this, 'get_items_permissions_check' ),
-					'args'                => array(
-						'id' => array( 'required' => true ),
-					),
 				),
 				array(
 					'methods'             => \WP_REST_Server::EDITABLE,
 					'callback'            => array( $this, 'update_item' ),
 					'permission_callback' => array( $this, 'update_item_permissions_check' ),
 				),
+				array(
+					'methods'             => \WP_REST_Server::DELETABLE,
+					'callback'            => array( $this, 'delete_item' ),
+					'permission_callback' => array( $this, 'update_item_permissions_check' ), // Only admins can delete.
+				),
 			)
         );
     }
 
     /**
-     * Get a single item from the collection
+     * Get tour status
      *
-     * @param object $request Full details about the request.
+     * @param mixed $request Request data.
      */
     public function get_items_permissions_check( $request ) {
-        return current_user_can( 'read' );
+        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
     /**
-     * Get a single item from the collection
+     * Create tour status
      *
-     * @param object $request Full details about the request.
+     * @param mixed $request Request data.
      */
     public function create_item_permissions_check( $request ) {
         return current_user_can( 'manage_options' );
     }
 
     /**
-     * Get a single item from the collection
+     * Update tour status
      *
-     * @param object $request Full details about the request.
+     * @param mixed $request Request data.
      */
     public function update_item_permissions_check( $request ) {
         return current_user_can( 'manage_options' );
@@ -98,9 +104,9 @@ class MultiVendorX_REST_Status_Controller extends \WP_REST_Controller {
 
 
     /**
-     * Get all system info data.
+     * Get tour status
      *
-     * @param  object $request Request data.
+     * @param mixed $request Request data.
      */
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
@@ -115,14 +121,42 @@ class MultiVendorX_REST_Status_Controller extends \WP_REST_Controller {
             return $error;
         }
         try {
-            $key = $request->get_param( 'key' );
-            if ( 'default_pages' === $key ) {
-                $install = new Install();
-                $install->plugin_create_pages();
-                return rest_ensure_response( true );
+            // Directly fetch stored value.
+            $status = get_option( Utill::MULTIVENDORX_OTHER_SETTINGS['tour_active'], false );
+
+            // Force boolean.
+            $status = filter_var( $status, FILTER_VALIDATE_BOOLEAN );
+
+            return array(
+                'active' => $status,
+            );
+        } catch ( \Exception $e ) {
+            MultiVendorX()->util->log( $e );
+
+            return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
+        }
+    }
+
+    /**
+     * Set tour status
+     *
+     * @param mixed $request Request data.
+     */
+    public function create_item( $request ) {
+        $nonce = $request->get_header( 'X-WP-Nonce' );
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
+
+            // Log the error.
+            if ( is_wp_error( $error ) ) {
+                MultiVendorX()->util->log( $error );
             }
-            $system_info = MultiVendorX()->status->get_system_info();
-            return rest_ensure_response( $system_info );
+
+            return $error;
+        }
+        try {
+            update_option( Utill::MULTIVENDORX_OTHER_SETTINGS['tour_active'], $request->get_param( 'active' ) );
+            return array( 'success' => true );
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log( $e );
 
