@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 interface InputWithSuggestionsProps {
-    suggestions: string[]; // list of suggestion strings
-    value?: string[]; // current added items
-    onChange?: ( list: string[] ) => void; // callback when list changes
-    placeholder?: string; // input placeholder
-    addButtonLabel?: string; // text for Add button
+    suggestions: string[];
+    value?: string[];
+    onChange?: ( list: string[] ) => void;
+    placeholder?: string;
+    addButtonLabel?: string;
 }
 
 const InputWithSuggestions: React.FC< InputWithSuggestionsProps > = ( {
@@ -65,14 +65,18 @@ const InputWithSuggestions: React.FC< InputWithSuggestionsProps > = ( {
         setItems( newList );
         setInputValue( '' );
         setFilteredSuggestions( [] );
-        onChange && onChange( newList );
+        if ( onChange ) {
+            onChange( newList );
+        }
     };
 
     const handleSelectSuggestion = ( s: string ) => {
         if ( ! items.includes( s ) ) {
             const newList = [ ...items, s ];
             setItems( newList );
-            onChange && onChange( newList );
+            if ( onChange ) {
+                onChange( newList );
+            }
         }
         setInputValue( '' );
         setFilteredSuggestions( [] );
@@ -81,7 +85,9 @@ const InputWithSuggestions: React.FC< InputWithSuggestionsProps > = ( {
     const handleRemove = ( item: string ) => {
         const newList = items.filter( ( i ) => i !== item );
         setItems( newList );
-        onChange && onChange( newList );
+        if ( onChange ) {
+            onChange( newList );
+        }
     };
 
     return (

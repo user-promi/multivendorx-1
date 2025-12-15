@@ -1,4 +1,4 @@
-import { ReactNode, forwardRef } from 'react';
+import React, { ReactNode, forwardRef } from 'react';
 import { Dialog, DialogContent, DialogActions, Slide } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import '../styles/web/CommonPopup.scss';

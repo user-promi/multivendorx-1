@@ -19,12 +19,14 @@ interface FormField {
     desc?: string;
 }
 
+type FormValue = string | number | boolean | FormField[] | undefined;
+
 interface FreeProFormCustomizerProps {
     setting: { freefromsetting?: FormField[] };
-    proSetting: any;
+    proSetting: boolean;
     proSettingChange: () => boolean;
     moduleEnabledChange: () => boolean;
-    onChange: ( key: string, value: any ) => void;
+    onChange: ( key: string, value: FormValue ) => void;
 }
 
 // FormCustomizer Component

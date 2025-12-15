@@ -26,8 +26,15 @@ interface FormField {
     placeholder?: string;
     options?: Option[];
 }
+
+interface MultipleOptionsFormField {
+    label: string;
+    type?: string;
+    options?: Option[];
+}
+
 interface MultipleOptionsProps {
-    formField: FormField;
+    formField: MultipleOptionsFormField;
     onChange: ( key: string, value: any ) => void;
     type: 'radio' | 'checkboxes' | 'dropdown' | 'multiselect';
     selected: boolean;

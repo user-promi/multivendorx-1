@@ -39,7 +39,7 @@ interface ColorSettingProps {
     predefinedOptions: PaletteOption[];
     images: ImagePaletteOption[];
     value?: { selectedPalette: string; colors: Partial< CustomColors > }; // object from DB
-    onChange?: ( e: { target: { name: string; value: any } } ) => void;
+    onChange?: ( e: { target: { name: string; value: unknown } } ) => void;
     idPrefix?: string;
     showPreview?: boolean;
 }

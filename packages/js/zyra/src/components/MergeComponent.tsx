@@ -29,7 +29,6 @@ const MergeComponent: React.FC< MergeComponentProps > = ( {
     description,
     onChange,
     value,
-    proSetting = false,
     fields = [],
 } ) => {
     const firstRender = useRef( true );
