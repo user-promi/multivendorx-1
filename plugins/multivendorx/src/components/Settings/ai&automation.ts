@@ -5,28 +5,66 @@ export default {
 	priority: 10,
 	name: 'AI & Automation',
 	desc: __(
-		'Enable and configure third-party AI services to assist with product detail generation and other automation tasks.',
+		'AI services can be enabled to assist with creating product details and enhancing images automatically. These settings can be configured to control which AI services are used.',
 		'multivendorx'
 	),
 	icon: 'adminlib-ai',
 	submitUrl: 'settings',
 	modal: [
+		// --- Gemini API Key Section ---
 		{
-			key: 'tinymce_api_section',
+			key: 'gemini_api_key',
 			type: 'text',
-			label: __('API key', 'multivendorx'),
+			label: __('Gemini API Key', 'multivendorx'),
+			settingDescription: __(
+				'The Gemini AI service can be used for product suggestions and image enhancement once the API key is provided.',
+				'multivendorx'
+			),
+			desc: __(
+				'<a href="https://ai.google.dev/gemini-api/docs/api-key" target="_blank">Click here to generate your Gemini API key.</a>',
+				'multivendorx'
+			),
 		},
+		// --- OpenAI API Key Section ---
 		{
-			key: 'tinymce_api_section',
+			key: 'openai_api_key',
 			type: 'text',
-			label: __('API key', 'multivendorx'),
-		},
+			label: __('OpenAI API Key (for ChatGPT)', 'multivendorx'),
+			settingDescription: __(
+				'OpenAI AI service can be used for generating product details once the API key is provided.',
+				'multivendorx'
+			),
+			desc: __(
+				'<a href="https://platform.openai.com/api-keys" target="_blank">Click here to generate your OpenAI API key.</a>',
+				'multivendorx'
+			),
+		},	
 		{
-			key: 'tinymce_api_section',
+			key: 'openrouter_api_image_enhancement_key',
 			type: 'text',
-			label: __('API key', 'multivendorx'),
+			label: __(
+				'OpenRouter API Key for Image Enhancement',
+				'multivendorx'
+			),
+			settingDescription: __(
+				'The Gemini AI service can be used for product suggestions and image enhancement once the API key is provided.',
+				'multivendorx'
+			),
+			desc: __(
+				'<a href="https://openrouter.ai/settings/keys" target="_blank">Generate an OpenRouter Key</a>',
+				'multivendorx'
+			),
 		},
 		// --- AI Provider Choice ---
+		{
+			key: 'section',
+			type: 'section',
+			hint: __('Product AI', 'multivendorx'),
+			desc: __(
+				'AI can be used to suggest product titles, descriptions, and other details automatically. The AI provider and model can be selected here.',
+				'multivendorx'
+			),
+		},
 		{
 			key: 'choose_ai_provider',
 			type: 'setting-toggle',
@@ -61,55 +99,14 @@ export default {
 				},
 			],
 		},
-		// --- Gemini API Key Section ---
-		// {
-		// 	key: 'gemini_api_key',
-		// 	type: 'text',
-		// 	label: __('Gemini API Key', 'multivendorx'),
-		// 	desc: __(
-		// 		'<a href="https://ai.google.dev/gemini-api/docs/api-key" target="_blank">Click here to generate your Gemini API key.</a>',
-		// 		'multivendorx'
-		// 	),
-		// 	dependent: {
-		// 		key: 'choose_ai_provider',
-		// 		set: true,
-		// 		value: 'gemini_api',
-		// 	},
-		// },
-		// --- OpenAI API Key Section ---
-		{
-			key: 'openai_api_key',
-			type: 'text',
-			label: __('OpenAI API Key (for ChatGPT)', 'multivendorx'),
-			desc: __(
-				'<a href="https://platform.openai.com/api-keys" target="_blank">Click here to generate your OpenAI API key.</a>',
-				'multivendorx'
-			),
-			dependent: {
-				key: 'choose_ai_provider',
-				set: true,
-				value: 'openai_api',
-			},
-		},
+		
+		
 		// --- OpenRouter API Key Section ---
-		{
-			key: 'openrouter_api_key',
-			type: 'text',
-			label: __('OpenRouter API Key', 'multivendorx'),
-			desc: __(
-				'<a href="https://openrouter.ai/settings/keys" target="_blank">Generate an OpenRouter Key</a>',
-				'multivendorx'
-			),
-			dependent: {
-				key: 'choose_ai_provider',
-				set: true,
-				value: 'openrouter_api',
-			},
-		},
+		
 		{
 			key: 'openrouter_api_model',
 			type: 'select',
-			label: __('OpenRouter Model', 'multivendorx'),
+			label: __('Open Router Model', 'multivendorx'),
 			desc: __(
 				'Choose your preferred AI model from OpenRouter.',
 				'multivendorx'
@@ -140,6 +137,15 @@ export default {
 		},
 		// --- Image Enhancement Provider ---
 		{
+			key: 'section',
+			type: 'section',
+			hint: __('Image AI', 'multivendorx'),
+			desc: __(
+				'Product images can be enhanced automatically to look professional, improving visual appeal and customer engagement.',
+				'multivendorx'
+			),
+		},
+		{
 			key: 'image_enhancement_provider',
 			type: 'setting-toggle',
 			label: __('Image Enhancement Provider', 'multivendorx'),
@@ -147,6 +153,7 @@ export default {
 				'Choose which AI provider to use for image enhancement.',
 				'multivendorx'
 			),
+			
 			options: [
 				{
 					key: 'gemini_api_image_enhancement',
@@ -179,27 +186,11 @@ export default {
 		// 	},
 		// },
 		// --- OpenRouter Image Enhancement Settings ---
-		{
-			key: 'openrouter_api_image_enhancement_key',
-			type: 'text',
-			label: __(
-				'OpenRouter API Key for Image Enhancement',
-				'multivendorx'
-			),
-			desc: __(
-				'<a href="https://openrouter.ai/settings/keys" target="_blank">Generate an OpenRouter Key</a>',
-				'multivendorx'
-			),
-			dependent: {
-				key: 'image_enhancement_provider',
-				set: true,
-				value: 'openrouter_api',
-			},
-		},
+		
 		{
 			key: 'openrouter_api_image_model',
 			type: 'select',
-			label: __('OpenRouter Image Model', 'multivendorx'),
+			label: __('Gemini Model', 'multivendorx'),
 			desc: __(
 				'Choose your preferred AI model for image enhancement from OpenRouter.',
 				'multivendorx'
@@ -207,7 +198,7 @@ export default {
 			dependent: {
 				key: 'image_enhancement_provider',
 				set: true,
-				value: 'openrouter_api',
+				value: 'gemini_api',
 			},
 			className: 'select-class',
 			options: [

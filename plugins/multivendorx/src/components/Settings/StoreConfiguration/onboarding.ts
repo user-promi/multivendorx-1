@@ -386,7 +386,6 @@ export default {
 				'Decide what franchise stores can do and how it affects marketplace operations:<ul><li><strong>Store Order Creation</strong> – Franchise stores can create orders manually (phone sales, walk-ins, offline transactions). These orders follow marketplace commission rules.</li><li><strong>Admin Product Access</strong> – Franchise stores can order products from the admin catalog for resale or restocking. </li></ul>',
 				'multivendorx'
 			),
-			
 			dependent: {
 				key: 'store_selling_mode',
 				set: true,
