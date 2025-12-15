@@ -4,10 +4,7 @@ export default {
 	id: 'single-product-multiple-store',
 	priority: 3,
 	name: __('Store selling mode', 'multivendorx'),
-	desc: __(
-		'',
-		'multivendorx'
-	),
+	desc: __('', 'multivendorx'),
 	icon: 'adminlib-spmv',
 	submitUrl: 'settings',
 	modal: [
@@ -15,25 +12,37 @@ export default {
 			key: 'store_selling_mode',
 			type: 'setting-toggle',
 			label: __('Store Selling Mode', 'multivendorx'),
-			desc: __('Decide how stores are allowed to sell products in your marketplace:<ul><li><strong>Shared product listing</strong> - Stores can copy existing products and sell them alongside new products they create.</li><li><strong>Franchise</strong> - Franchise stores can sell only their own products and products created by the admin.</li><li><strong>Default</strong> - Stores can sell only their own products, following standard marketplace rules.</li></ul>','multivendorx'),
-options: [
+			desc: __(
+				'Decide how stores are allowed to sell products in your marketplace:<ul><li><strong>Shared product listing</strong> - Stores can copy existing products and sell them alongside new products they create.</li><li><strong>Franchise</strong> - Franchise stores can sell only their own products and products created by the admin.</li><li><strong>Default</strong> - Stores can sell only their own products, following standard marketplace rules.</li></ul>',
+				'multivendorx'
+			),
+			options: [
 				{
 					key: 'single_product_multiple_vendor',
 					label: __('Shared product listing', 'multivendorx'),
 					value: 'single_product_multiple_vendor',
-					desc: __('Stores can copy existing products and sell them alongside new products they create.', 'multivendorx'),
+					desc: __(
+						'Stores can copy existing products and sell them alongside new products they create.',
+						'multivendorx'
+					),
 				},
 				{
 					key: 'franchise',
 					label: __('Franchise', 'multivendorx'),
 					value: 'franchise',
-					desc: __('Franchise stores can sell only their own products and admin products.', 'multivendorx'),
+					desc: __(
+						'Franchise stores can sell only their own products and admin products.',
+						'multivendorx'
+					),
 				},
 				{
 					key: 'default',
 					label: __('Default', 'multivendorx'),
 					value: 'default',
-					desc: __('Stores can sell only their own products unless other modes are enabled.', 'multivendorx'),
+					desc: __(
+						'Stores can sell only their own products unless other modes are enabled.',
+						'multivendorx'
+					),
 				},
 			],
 		},
@@ -213,12 +222,15 @@ options: [
 			desc: __(
 				'Specifies order creation and management rules for franchise stores.',
 				'multivendorx'
-			),		
+			),
 		},
 		{
 			key: 'products_available_for_franchise_orders',
 			type: 'setting-toggle',
-			label: __('Products available for franchise orders', 'multivendorx'),
+			label: __(
+				'Products available for franchise orders',
+				'multivendorx'
+			),
 			desc: __(
 				'Choose how customer orders should be assigned to franchise stores.',
 				'multivendorx'

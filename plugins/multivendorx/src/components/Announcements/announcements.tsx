@@ -249,7 +249,7 @@ export const Announcements: React.FC = () => {
 					title: response.data.title || '',
 					url: response.data.url || '',
 					content: response.data.content || '',
-					stores: response.data.stores ??  [],
+					stores: response.data.stores ?? [],
 					status: response.data.status || 'draft',
 				});
 
@@ -750,7 +750,7 @@ export const Announcements: React.FC = () => {
 								usePlainText={false}
 								tinymceApiKey={
 									appLocalizer.settings_databases_value[
-									'marketplace'
+										'marketplace'
 									]['tinymce_api_section'] ?? ''
 								}
 							/>
@@ -771,51 +771,46 @@ export const Announcements: React.FC = () => {
 								name="stores"
 								type="multi-select"
 								options={storeOptions}
-								value={formData.stores.map((id) =>
-									id
-								)}
+								value={formData.stores.map((id) => id)}
 								onChange={(newValue: StoreOption[]) => {
 									if (!Array.isArray(newValue)) {
-										setFormData((prev) => ({
-											...prev,
-											stores: [],
-										}));
 										return;
 									}
 
 									const selectedIds = newValue.map((opt) =>
 										Number(opt.value)
 									);
+									const prevStores = formData.stores;
 
-									const hadAllStores =
-										formData.stores.includes(0);
-									const hasAllStoresNow =
-										selectedIds.includes(0);
+									let nextStores = selectedIds;
 
-									if (!hadAllStores && hasAllStoresNow) {
-										setFormData((prev) => ({
-											...prev,
-											stores: [0],
-										}));
-										return;
-									}
-
+									// Case 1: User JUST selected 0
 									if (
-										hadAllStores &&
+										!prevStores.includes(0) &&
+										selectedIds.includes(0)
+									) {
+										nextStores = [0];
+									}
+									// Case 2: User selected other stores while 0 was active
+									else if (
+										prevStores.includes(0) &&
 										selectedIds.length > 1
 									) {
-										setFormData((prev) => ({
-											...prev,
-											stores: selectedIds.filter(
-												(id) => id !== 0
-											),
-										}));
-										return;
+										nextStores = selectedIds.filter(
+											(id) => id !== 0
+										);
 									}
+
+									// Clear validation error
+									setValidationErrors((prev) => {
+										const updated = { ...prev };
+										delete updated.stores;
+										return updated;
+									});
 
 									setFormData((prev) => ({
 										...prev,
-										stores: selectedIds,
+										stores: nextStores,
 									}));
 								}}
 							/>

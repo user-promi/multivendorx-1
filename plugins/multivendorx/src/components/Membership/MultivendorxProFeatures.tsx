@@ -47,14 +47,12 @@ const MultivendorxProFeatures: React.FC = () => {
 		{
 			key: 'simple',
 			label: 'Simple Product',
-			description:
-				'Allows vendors to create and manage simple products.',
+			description: 'Allows vendors to create and manage simple products.',
 		},
 		{
 			key: 'variable',
 			label: 'Variable Product',
-			description:
-				'Allows vendors to manage products with variations.',
+			description: 'Allows vendors to manage products with variations.',
 		},
 		{
 			key: 'grouped',
@@ -104,7 +102,6 @@ const MultivendorxProFeatures: React.FC = () => {
 				proChanged={handleProChanged}
 				khali_dabba={true}
 			/>
-
 		</>
 	);
 };

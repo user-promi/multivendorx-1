@@ -1188,7 +1188,8 @@ const AddProduct = () => {
 						</div>
 					</div>
 
-					{modules.includes('min-max') && product?.type == 'simple' &&
+					{modules.includes('min-max') &&
+						product?.type == 'simple' &&
 						applyFilters(
 							'product_min_max',
 							null,
