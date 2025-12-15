@@ -1044,7 +1044,7 @@ const EditStore = () => {
 			<CommonPopup
 				open={deleteModal}
 				onClose={() => setDeleteModal(false)}
-				width="600px"
+				width="37.5rem"
 				height="50%"
 				header={
 					<>

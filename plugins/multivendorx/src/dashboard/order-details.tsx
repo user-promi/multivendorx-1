@@ -1198,12 +1198,12 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 									</div>
 								) : (
 									<div className="notification-wrapper">
-										<div className="empty">
+										<p>
 											{__(
 												'No order notes found.',
 												'multivendorx'
 											)}
-										</div>
+										</p>
 									</div>
 								)}
 							</div>

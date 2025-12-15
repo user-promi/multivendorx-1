@@ -1042,7 +1042,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 
 			<CommonPopup
 				open={requestWithdrawal}
-				width="450px"
+				width="28.125rem"
 				height="75%"
 				header={
 					<>

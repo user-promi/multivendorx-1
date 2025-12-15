@@ -33,7 +33,7 @@ body:has(.admin-main-wrapper) {
 }
 
 .multivendorx-main-wrapper,
-#multivendorx-setup-wizard{
+#multivendorx-setup-wizard {
   font-family: Figtree, sans-serif;
 
   p,
@@ -185,14 +185,36 @@ body:has(.admin-main-wrapper) {
   font-size: 1.313rem;
 }
 
+// all colors loop
+$index: 1;
 @each $name, $style in $color-palette {
-  .#{$name} {
-    background: map-get($style, light-color);
+
+  // color name with background (.red & .admin-color1)
+  .#{$name},
+  .admin-color#{$index} {
+    background: map-get($style, light-color) !important;
     color: map-get($style, color);
   }
+
+  // only background color
+  .#{$name}-bg,
+  .admin-bg-color#{$index} {
+    background: map-get($style, color);
+  }
+
+  // only color
+  .#{$name}-color,
+  .admin-color#{$index} {
+    color: map-get($style, color);
+  }
+  
+  $index: $index + 1;
 }
 
+
+// button colors loop
 @each $name, $style in $btn-color-palette {
+
   // light background color btn
   .btn-#{$name} {
     background: map-get($style, light-color);
@@ -658,6 +680,7 @@ body:has(.admin-main-wrapper) {
     }
 
     @keyframes wobble1 {
+
       0%,
       100% {
         transform: translateY(0%) scale(1);
@@ -671,6 +694,7 @@ body:has(.admin-main-wrapper) {
     }
 
     @keyframes wobble2 {
+
       0%,
       100% {
         transform: translateY(0%) scale(1);
@@ -704,7 +728,7 @@ body:has(.admin-main-wrapper) {
   right: -0.756rem;
   top: -0.945rem;
   background: $color-white;
-  box-shadow: 0 0.25rem 0.5rem rgba($color: #000, $alpha: 12.5%);
+  box-shadow: $box-shadow;
   border-radius: 50%;
   width: 1.688rem;
   height: 1.72rem;
@@ -726,7 +750,7 @@ body:has(.admin-main-wrapper) {
   position: fixed;
   z-index: 99999;
   background: $background-white;
-  box-shadow: 0 1rem 3rem #8887872e;
+  box-shadow: $box-shadow;
   right: 1.85rem;
   top: 7rem;
   animation: noticeslide 7s ease-in-out forwards;
@@ -963,7 +987,7 @@ body:has(.admin-main-wrapper) {
   right: 1rem;
   bottom: 1rem;
   border-radius: 0.313rem;
-  box-shadow: 0 0.125rem 0.5rem 0 rgb(47 43 61 / 12%);
+  box-shadow: $box-shadow;
   transform: translateX(110%);
   transition: all 0.4s ease;
   background: #fff;
@@ -1369,7 +1393,7 @@ body:has(.admin-main-wrapper) {
       text-align: center;
       padding: 0.313rem;
       border-radius: 0.375rem;
-      position: absolute;      
+      position: absolute;
       z-index: 1;
       font-size: 0.8rem;
       inset: 0 auto auto 0;
@@ -1700,6 +1724,7 @@ body:has(.admin-main-wrapper) {
     }
 
     .view-des {
+      color: $text-color;
       font-size: 1.125rem;
       line-height: 1.25;
     }

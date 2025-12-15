@@ -54,8 +54,8 @@
             background: #f8f8f8;
             width: 17.64rem;
             padding: 1rem;
-            border: 0.125rem solid rgba($color: #000, $alpha: 12.5%);
-            box-shadow: 0 0.25rem 0.5rem rgba($color: #000, $alpha: 12.5%);
+            border: $border-light-medium;
+            box-shadow: $box-shadow;
             border-radius: $border-radius-small;
 
             .section-wrapper {

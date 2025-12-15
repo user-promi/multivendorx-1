@@ -562,7 +562,7 @@ const Qna: React.FC = () => {
 				<CommonPopup
 					open={selectedQna}
 					onClose={() => setSelectedQna(null)}
-					width="600px"
+					width="37.5rem"
 					height="70%"
 					header={
 						<>

@@ -205,7 +205,7 @@ const Dashboard: React.FC = () => {
 			.then((response) => {
 				setAnnouncement(response.data.items || []);
 			})
-			.catch(() => {});
+			.catch(() => { });
 
 		axios({
 			method: 'GET',
@@ -274,7 +274,7 @@ const Dashboard: React.FC = () => {
 
 				setRecentOrders(orders);
 			})
-			.catch(() => {});
+			.catch(() => { });
 
 		axios({
 			method: 'GET',
@@ -319,7 +319,7 @@ const Dashboard: React.FC = () => {
 					parseInt(response.headers['x-wp-total']) || 0;
 				setTotalOrder(totalOrders);
 			})
-			.catch(() => {});
+			.catch(() => { });
 
 		axios({
 			method: 'GET',
@@ -343,24 +343,28 @@ const Dashboard: React.FC = () => {
 
 	const analyticsData = [
 		{
-			icon: 'adminlib-dollar theme-color1',
+			icon: 'adminlib-dollar',
 			number: formatCurrency(store?.commission?.total_order_amount || 0),
 			text: 'Total Revenue',
+			color: 'primary'
 		},
 		{
-			icon: 'adminlib-order theme-color2',
+			icon: 'adminlib-order',
 			number: totalOrder,
 			text: 'Total Orders',
+			color: 'secondary'
 		},
 		{
-			icon: 'adminlib-store-seo theme-color3',
+			icon: 'adminlib-store-seo',
 			number: formatCurrency(store?.commission?.commission_total || 0),
 			text: 'Store Views',
+			color: 'accent'
 		},
 		{
-			icon: 'adminlib-commission theme-color4',
+			icon: 'adminlib-commission',
 			number: formatCurrency(store?.commission?.commission_total || 0),
 			text: 'Commission Earned',
+			color: 'support'
 		},
 	];
 
@@ -583,7 +587,7 @@ const Dashboard: React.FC = () => {
 					<div className="card-content transparent">
 						<div className="analytics-container dashboard">
 							{analyticsData.map((item, idx) => (
-								<div key={idx} className="analytics-item">
+								<div key={idx} className={`analytics-item ${item.color}`}>
 									<div className="details">
 										<div className="text">
 											{__(item.text, 'multivendorx')}
@@ -598,7 +602,7 @@ const Dashboard: React.FC = () => {
 													'Last 30 days:',
 													'multivendorx'
 												)}{' '}
-												<span>$189</span>
+												<span className={`${item.color}-color`}>$189</span>
 											</div>
 
 											<div>
@@ -606,13 +610,13 @@ const Dashboard: React.FC = () => {
 													'Previous 30 days:',
 													'multivendorx'
 												)}{' '}
-												<span>$690</span>
+												<span className={`${item.color}-color`}>$690</span>
 											</div>
 										</div>
 									</div>
 
 									<div className="analytics-icon">
-										<i className={item.icon}></i>
+										<i className={`${item.icon} ${item.color}-bg`}></i>
 									</div>
 								</div>
 							))}
@@ -712,8 +716,8 @@ const Dashboard: React.FC = () => {
 						<div className="top-customer-wrapper">
 							{lastWithdraws && lastWithdraws.length > 0 ? (
 								lastWithdraws.map((item) => (
-									<div key={item.id} className="customer">
-										<div className="left-section">
+									<div key={item.id} className="info-item">
+										<div className="details-wrapper">
 											<div className="details">
 												<div className="name">
 													{item.payment_method ===
@@ -735,15 +739,15 @@ const Dashboard: React.FC = () => {
 															'multivendorx'
 														)}
 													{item.payment_method ===
-													'bank-transfer'
+														'bank-transfer'
 														? __(
-																'Bank Transfer',
-																'multivendorx'
-															)
+															'Bank Transfer',
+															'multivendorx'
+														)
 														: ''}
 												</div>
 
-												<div className="order-number">
+												<div className="des">
 													{formatWcShortDate(
 														item.date
 													)}
@@ -751,8 +755,10 @@ const Dashboard: React.FC = () => {
 											</div>
 										</div>
 
-										<div className="price-section">
-											{formatCurrency(item.amount)}
+										<div className="right-details">
+											<div className="price">
+												{formatCurrency(item.amount)}
+											</div>
 										</div>
 									</div>
 								))
@@ -803,85 +809,87 @@ const Dashboard: React.FC = () => {
 							<div className="card-body">
 								<div className="table-wrapper">
 									{recentOrder && recentOrder.length > 0 ? (
-										<table className="order-table">
-											<tr className="header">
-												<td>
-													{__(
-														'Order Id',
-														'multivendorx'
-													)}
-												</td>
-												<td>
-													{__(
-														'Order Date',
-														'multivendorx'
-													)}
-												</td>
-												<td>
-													{__(
-														'Product Name(P)',
-														'multivendorx'
-													)}
-												</td>
-												<td>
-													{__(
-														'Total Amount',
-														'multivendorx'
-													)}
-												</td>
-												<td>
-													{__(
-														'Order Status',
-														'multivendorx'
-													)}
-												</td>
-												<td>
-													{__(
-														'Status (P)',
-														'multivendorx'
-													)}
-												</td>
-											</tr>
-
+										<table>
+											<thead>
+												<tr className="header">
+													<td>
+														{__(
+															'Order Id',
+															'multivendorx'
+														)}
+													</td>
+													<td>
+														{__(
+															'Order Date',
+															'multivendorx'
+														)}
+													</td>
+													<td>
+														{__(
+															'Product Name(P)',
+															'multivendorx'
+														)}
+													</td>
+													<td>
+														{__(
+															'Total Amount',
+															'multivendorx'
+														)}
+													</td>
+													<td>
+														{__(
+															'Order Status',
+															'multivendorx'
+														)}
+													</td>
+													<td>
+														{__(
+															'Status (P)',
+															'multivendorx'
+														)}
+													</td>
+												</tr>
+											</thead>
 											{recentOrder.map((item, index) => {
-												const color = `theme-color${
-													(index % 4) + 1
-												}`;
+												const color = `theme-color${(index % 4) + 1
+													}`;
 												const id = item.id;
 												const orderUrl = `/dashboard/sales/orders/#view/${id}`;
 												return (
-													<tr key={item.id}>
-														<td>
-															<a
-																href={orderUrl}
-																target="_blank"
-																rel="noopener noreferrer"
-															>
-																#{id}{' '}
-																{__(
-																	'Customer',
-																	'multivendorx'
-																)}
-															</a>
-														</td>
-														<td>{item.date}</td>
-														<td>{item.name}</td>
-														<td>{item.amount}</td>
-														<td>
-															<div
-																className={`admin-status ${color}`}
-															>
-																{item.status}
-															</div>
-														</td>
-														<td>
-															<div
-																className={`admin-badge ${color}`}
-															>
-																{item.status}
-															</div>
-														</td>
-													</tr>
+													<tbody>
+														<tr key={item.id}>
+															<td>
+																<a
+																	href={orderUrl}
+																	target="_blank"
+																	rel="noopener noreferrer"
+																>
+																	#{id}{' '}
+																	{__(
+																		'Customer',
+																		'multivendorx'
+																	)}
+																</a>
+															</td>
+															<td>{item.date}</td>
+															<td>{item.name}</td>
+															<td>{item.amount}</td>
+															<td>
+																<div
+																	className={`admin-status ${color}`}
+																>
+																	{item.status}
+																</div>
+															</td>
+															<td>
+																<div
+																	className={`admin-badge ${color}`}
+																>
+																	{item.status}
+																</div>
+															</td>
+														</tr>
+													</tbody>
 												);
 											})}
 										</table>
@@ -920,53 +928,54 @@ const Dashboard: React.FC = () => {
 							<div className="table-wrapper top-products">
 								{topProducts && topProducts.length > 0 ? (
 									<table>
-										<tr className="header">
-											<td>#</td>
-											<td>
-												{__('Name', 'multivendorx')}
-											</td>
-											<td>
-												{__(
-													'Popularity',
-													'multivendorx'
-												)}
-											</td>
-											<td>
-												{__('Sales', 'multivendorx')}
-											</td>
-										</tr>
-
+										<thead>
+											<tr className="header">
+												<td>#</td>
+												<td>
+													{__('Name', 'multivendorx')}
+												</td>
+												<td>
+													{__(
+														'Popularity',
+														'multivendorx'
+													)}
+												</td>
+												<td>
+													{__('Sales', 'multivendorx')}
+												</td>
+											</tr>
+										</thead>
 										{topProducts.map((item, index) => {
-											const color = `theme-color${
-												(index % 4) + 1
-											}`;
 											return (
-												<tr key={item.id}>
-													<td>
-														{String(
-															index + 1
-														).padStart(2, '0')}
-													</td>
-													<td>{item.name}</td>
-													<td
-														className={`progress-bar ${color}`}
-													>
-														<div>
-															<span
-																style={{
-																	width: `${item.popularity}%`,
-																}}
-															></span>
-														</div>
-													</td>
-													<td>
-														<div
-															className={`admin-badge ${color}`}
+												<tbody>
+													<tr key={item.id}>
+														<td>
+															{String(
+																index + 1
+															).padStart(2, '0')}
+														</td>
+														<td>{item.name}</td>
+														<td
+															className={`progress-bar`}
 														>
-															{item.popularity}%
-														</div>
-													</td>
-												</tr>
+															<div className={`progress-bar admin-bg-color${index + 1}`}>
+																<span
+																	className={`progress-bar admin-color${index + 1}`}
+																	style={{
+																		width: `${item.popularity}%`,
+																	}}
+																></span>
+															</div>
+														</td>
+														<td>
+															<div
+																className={`admin-badge admin-color${index + 1}`}
+															>
+																{item.popularity}%
+															</div>
+														</td>
+													</tr>
+												</tbody>
 											);
 										})}
 									</table>
@@ -1079,7 +1088,7 @@ const Dashboard: React.FC = () => {
 								<div className="card-body">
 									<div className="notification-wrapper">
 										{announcement &&
-										announcement.length > 0 ? (
+											announcement.length > 0 ? (
 											<ul>
 												{announcement.map((item) => (
 													<li key={item.id}>
@@ -1131,8 +1140,8 @@ const Dashboard: React.FC = () => {
 									<div
 										className="right"
 										onClick={() =>
-											(window.location.href =
-												'/dashboard/sales/orders/#refund-requested')
+										(window.location.href =
+											'/dashboard/sales/orders/#refund-requested')
 										}
 										style={{ cursor: 'pointer' }}
 									>
@@ -1143,7 +1152,7 @@ const Dashboard: React.FC = () => {
 								<div className="card-body">
 									<div className="top-customer-wrapper">
 										{pendingRefund &&
-										pendingRefund.length > 0 ? (
+											pendingRefund.length > 0 ? (
 											pendingRefund.map((customer) => (
 												<div
 													key={customer.id}
@@ -1192,40 +1201,38 @@ const Dashboard: React.FC = () => {
 							</div>
 
 							<div className="card-body">
-								<div className="top-customer-wrapper">
-									{customers.map((customer) => (
-										<div
-											key={customer.id}
-											className="customer"
-										>
-											<div className="left-section">
-												<div className="profile">
-													<i
-														className={
-															customer.icon
-														}
-													></i>
-												</div>
-												<div className="details">
-													<div className="name">
-														{customer.name}
-													</div>
-													<div className="order-number">
-														{customer.orders}{' '}
-														{__(
-															'orders',
-															'multivendorx'
-														)}
-													</div>
-												</div>
+								{customers.map((customer) => (
+									<div
+										key={customer.id}
+										className="info-item"
+									>
+										<div className="details-wrapper">
+											<div className="avatar">
+												<i
+													className={
+														customer.icon
+													}
+												></i>
 											</div>
-
-											<div className="price-section">
-												{customer.total}
+											<div className="details">
+												<div className="name">
+													{customer.name}
+												</div>
+												<div className="des">
+													{customer.orders}
+													{__(
+														'orders',
+														'multivendorx'
+													)}
+												</div>
 											</div>
 										</div>
-									))}
-								</div>
+
+										<div className="right-details">											
+											<div className="price">{customer.total}</div>
+										</div>
+									</div>
+								))}
 							</div>
 						</div>
 					</div>
@@ -1320,14 +1327,13 @@ const Dashboard: React.FC = () => {
 																		key={
 																			index
 																		}
-																		className={`adminlib-star ${
-																			index <
+																		className={`adminlib-star ${index <
 																			Math.round(
 																				reviewItem.overall_rating
 																			)
-																				? 'active'
-																				: ''
-																		}`}
+																			? 'active'
+																			: ''
+																			}`}
 																	></i>
 																)
 															)}
