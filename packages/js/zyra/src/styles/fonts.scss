@@ -21,17 +21,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.adminlib-chatgpt:before {
-  content: "\e902";
-}
-.adminlib-gemini:before {
+.adminlib-moon:before {
   content: "\e900";
 }
-.adminlib-openrouter:before {
-  content: "\e901";
+.adminlib-moon-fill:before {
+  content: "\e949";
 }
-.adminlib-ai:before {
-  content: "\e904";
+.adminlib-light:before {
+  content: "\e901";
 }
 .adminlib-cart:before {
   content: "\8907";
@@ -105,206 +102,218 @@
 .adminlib-plus-circle:before {
   content: "\e8f7";
 }
-.adminlib-plus:before {
+.adminlib-gemini:before {
+  content: "\e902";
+}
+.adminlib-openrouter:before {
+  content: "\e903";
+}
+.adminlib-openai-1:before {
+  content: "\e904";
+}
+.adminlib-ai:before {
   content: "\e905";
 }
-.adminlib-thumb-up:before {
+.adminlib-plus:before {
   content: "\e906";
 }
-.adminlib-coding:before {
+.adminlib-thumb-up:before {
   content: "\e907";
 }
-.adminlib-twitter:before {
+.adminlib-coding:before {
   content: "\e908";
 }
-.adminlib-instagram:before {
+.adminlib-twitter:before {
   content: "\e909";
 }
-.adminlib-wallet-open:before {
+.adminlib-instagram:before {
   content: "\e90a";
 }
-.adminlib-wallet-in:before {
+.adminlib-wallet-open:before {
   content: "\e90b";
 }
-.adminlib-wallet:before {
+.adminlib-wallet-in:before {
   content: "\e90c";
 }
-.adminlib-mapbox:before {
+.adminlib-wallet:before {
   content: "\e90d";
 }
-.adminlib-google:before {
+.adminlib-mapbox:before {
   content: "\e90e";
 }
-.adminlib-close-delete:before {
+.adminlib-google:before {
   content: "\e90f";
 }
-.adminlib-under-review:before {
+.adminlib-close-delete:before {
   content: "\e910";
 }
-.adminlib-rejected:before {
+.adminlib-under-review:before {
   content: "\e911";
 }
-.adminlib-rejecte:before {
+.adminlib-rejected:before {
   content: "\e912";
 }
-.adminlib-active:before {
+.adminlib-rejecte:before {
   content: "\e913";
 }
-.adminlib-recycle:before {
+.adminlib-active:before {
   content: "\e914";
 }
-.adminlib-resources:before {
+.adminlib-recycle:before {
   content: "\e915";
 }
-.adminlib-coupon:before {
+.adminlib-resources:before {
   content: "\e916";
 }
-.adminlib-wallet1:before {
+.adminlib-coupon:before {
   content: "\e917";
 }
-.adminlib-sales:before {
+.adminlib-wallet1:before {
   content: "\e918";
 }
-.adminlib-question:before {
+.adminlib-sales:before {
   content: "\e919";
 }
-.adminlib-facilitator:before {
+.adminlib-question:before {
   content: "\e91a";
 }
-.adminlib-edit:before {
+.adminlib-facilitator:before {
   content: "\e91b";
 }
-.adminlib-direct-transaction:before {
+.adminlib-edit:before {
   content: "\e91c";
 }
-.adminlib-geo-location:before {
+.adminlib-direct-transaction:before {
   content: "\e91d";
 }
-.adminlib-product-addon:before {
+.adminlib-geo-location:before {
   content: "\e91e";
 }
-.adminlib-advertise-product:before {
+.adminlib-product-addon:before {
   content: "\e91f";
 }
-.adminlib-marketplace-gateway:before {
+.adminlib-advertise-product:before {
   content: "\e920";
 }
-.adminlib-marketplace-fee:before {
+.adminlib-marketplace-gateway:before {
   content: "\e921";
 }
-.adminlib-compliance:before {
+.adminlib-marketplace-fee:before {
   content: "\e922";
 }
-.adminlib-lock:before {
+.adminlib-compliance:before {
   content: "\e923";
 }
-.adminlib-pros-and-cons:before {
+.adminlib-lock:before {
   content: "\e924";
 }
-.adminlib-like:before {
+.adminlib-pros-and-cons:before {
   content: "\e925";
 }
-.adminlib-home:before {
+.adminlib-like:before {
   content: "\e926";
 }
-.adminlib-dollar:before {
+.adminlib-home:before {
   content: "\e927";
 }
-.adminlib-bank:before {
+.adminlib-dollar:before {
   content: "\e928";
 }
-.adminlib-question-answer:before {
+.adminlib-bank:before {
   content: "\e929";
 }
-.adminlib-zone-wise-shipping:before {
+.adminlib-question-answer:before {
   content: "\e92a";
 }
-.adminlib-approval:before {
+.adminlib-zone-wise-shipping:before {
   content: "\e92b";
 }
-.adminlib-cash:before {
+.adminlib-approval:before {
   content: "\e92c";
 }
-.adminlib-view-files:before {
+.adminlib-cash:before {
   content: "\e92d";
 }
-.adminlib-automation:before {
+.adminlib-view-files:before {
   content: "\e92e";
 }
-.adminlib-shipping:before {
+.adminlib-automation:before {
   content: "\e92f";
 }
-.adminlib-delivery-person:before {
+.adminlib-shipping:before {
   content: "\e930";
 }
-.adminlib-delivery:before {
+.adminlib-delivery-person:before {
   content: "\e931";
 }
-.adminlib-tax-compliance:before {
+.adminlib-delivery:before {
   content: "\e932";
 }
-.adminlib-legal-compliance:before {
+.adminlib-tax-compliance:before {
   content: "\e933";
 }
-.adminlib-seller-verification:before {
+.adminlib-legal-compliance:before {
   content: "\e934";
 }
-.adminlib-new:before {
+.adminlib-seller-verification:before {
   content: "\e935";
 }
-.adminlib-feature:before {
+.adminlib-new:before {
   content: "\e936";
 }
-.adminlib-franchises-module:before {
+.adminlib-feature:before {
   content: "\e937";
 }
-.adminlib-pending:before {
+.adminlib-franchises-module:before {
   content: "\e938";
 }
-.adminlib-version-control:before {
+.adminlib-pending:before {
   content: "\e939";
 }
-.adminlib-setup:before {
+.adminlib-version-control:before {
   content: "\e93a";
 }
-.adminlib-out-of-stock:before {
+.adminlib-setup:before {
   content: "\e93b";
 }
-.adminlib-migration:before {
+.adminlib-out-of-stock:before {
   content: "\e93c";
 }
-.adminlib-document:before {
+.adminlib-migration:before {
   content: "\e93d";
 }
-.adminlib-database:before {
+.adminlib-document:before {
   content: "\e93e";
 }
-.adminlib-store-reject:before {
+.adminlib-database:before {
   content: "\e93f";
 }
-.adminlib-store-reactivated:before {
+.adminlib-store-reject:before {
   content: "\e940";
 }
-.adminlib-refund:before {
+.adminlib-store-reactivated:before {
   content: "\e941";
 }
-.adminlib-order-shipped:before {
+.adminlib-refund:before {
   content: "\e942";
 }
-.adminlib-order-completed:before {
+.adminlib-order-shipped:before {
   content: "\e943";
 }
-.adminlib-wordpress:before {
+.adminlib-order-completed:before {
   content: "\e944";
 }
-.adminlib-profile:before {
+.adminlib-wordpress:before {
   content: "\e945";
 }
-.adminlib-forum:before {
+.adminlib-profile:before {
   content: "\e946";
 }
-.adminlib-faq:before {
+.adminlib-forum:before {
   content: "\e947";
+}
+.adminlib-faq:before {
+  content: "\e948";
 }
 .adminlib-accommodation:before {
   content: "\ef35";

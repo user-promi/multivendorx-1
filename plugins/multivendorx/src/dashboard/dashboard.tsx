@@ -633,7 +633,7 @@ const Dashboard: React.FC = () => {
 								</div>
 							</div>
 							<div className="right">
-								<i className="adminlib-external"></i>
+								<i className="adminlib-external icon"></i>
 							</div>
 						</div>
 						<div className="card-body">
@@ -802,7 +802,7 @@ const Dashboard: React.FC = () => {
 									</div>
 								</div>
 								<div className="right">
-									<i className="adminlib-external"></i>
+									<i className="adminlib-external icon"></i>
 								</div>
 							</div>
 
@@ -851,8 +851,6 @@ const Dashboard: React.FC = () => {
 												</tr>
 											</thead>
 											{recentOrder.map((item, index) => {
-												const color = `theme-color${(index % 4) + 1
-													}`;
 												const id = item.id;
 												const orderUrl = `/dashboard/sales/orders/#view/${id}`;
 												return (
@@ -864,7 +862,7 @@ const Dashboard: React.FC = () => {
 																	target="_blank"
 																	rel="noopener noreferrer"
 																>
-																	#{id}{' '}
+																	#{id}
 																	{__(
 																		'Customer',
 																		'multivendorx'
@@ -876,14 +874,14 @@ const Dashboard: React.FC = () => {
 															<td>{item.amount}</td>
 															<td>
 																<div
-																	className={`admin-status ${color}`}
+																	className={`admin-status`}
 																>
 																	{item.status}
 																</div>
 															</td>
 															<td>
 																<div
-																	className={`admin-badge ${color}`}
+																	className={`admin-badge`}
 																>
 																	{item.status}
 																</div>
@@ -920,7 +918,7 @@ const Dashboard: React.FC = () => {
 								</div>
 							</div>
 							<div className="right">
-								<i className="adminlib-external"></i>
+								<i className="adminlib-external icon"></i>
 							</div>
 						</div>
 
@@ -958,9 +956,9 @@ const Dashboard: React.FC = () => {
 														<td
 															className={`progress-bar`}
 														>
-															<div className={`progress-bar admin-bg-color${index + 1}`}>
+															<div className={`progress-bar admin-color${index + 1}`}>
 																<span
-																	className={`progress-bar admin-color${index + 1}`}
+																	className={`progress-bar admin-bg-color${index + 1}`}
 																	style={{
 																		width: `${item.popularity}%`,
 																	}}
@@ -1010,7 +1008,7 @@ const Dashboard: React.FC = () => {
 											'/dashboard/reports/overview/';
 									}}
 								>
-									<i className="adminlib-external"></i>
+									<i className="adminlib-external icon"></i>
 								</div>
 							</div>
 
@@ -1081,7 +1079,7 @@ const Dashboard: React.FC = () => {
 										</div>
 									</div>
 									<div className="right">
-										<i className="adminlib-external"></i>
+										<i className="adminlib-external icon"></i>
 									</div>
 								</div>
 
@@ -1090,10 +1088,10 @@ const Dashboard: React.FC = () => {
 										{announcement &&
 											announcement.length > 0 ? (
 											<ul>
-												{announcement.map((item) => (
+												{announcement.map((item, index) => (
 													<li key={item.id}>
 														<div className="icon-wrapper">
-															<i className="adminlib-form-paypal-email admin-badge theme-color1"></i>
+															<i className={`adminlib-form-paypal-email admin-badge admin-color${index + 2}`}></i>
 														</div>
 														<div className="details">
 															<div className="notification-title">
@@ -1127,240 +1125,232 @@ const Dashboard: React.FC = () => {
 
 					{modules.includes('marketplace-refund') && (
 						<div className="card-content">
-							<div className="card">
-								<div className="card-header">
-									<div className="left">
-										<div className="title">
-											{__(
-												'Pending Refunds',
-												'multivendorx'
-											)}
-										</div>
-									</div>
-									<div
-										className="right"
-										onClick={() =>
-										(window.location.href =
-											'/dashboard/sales/orders/#refund-requested')
-										}
-										style={{ cursor: 'pointer' }}
-									>
-										<i className="adminlib-external"></i>
+							<div className="card-header">
+								<div className="left">
+									<div className="title">
+										{__(
+											'Pending Refunds',
+											'multivendorx'
+										)}
 									</div>
 								</div>
+								<div
+									className="right"
+									onClick={() =>
+									(window.location.href =
+										'/dashboard/sales/orders/#refund-requested')
+									}
+									style={{ cursor: 'pointer' }}
+								>
+									<i className="adminlib-external icon"></i>
+								</div>
+							</div>
 
-								<div className="card-body">
-									<div className="top-customer-wrapper">
-										{pendingRefund &&
-											pendingRefund.length > 0 ? (
-											pendingRefund.map((customer) => (
-												<div
-													key={customer.id}
-													className="customer"
-												>
-													<div className="left-section">
-														<div className="details">
-															<div className="name">
-																{customer.name}
-															</div>
-															<div className="order-number">
-																{
-																	customer.reason
-																}{' '}
-																|{' '}
-																{formatWcShortDate(
-																	customer.time
-																)}
-															</div>
+							<div className="card-body">
+								<div className="top-customer-wrapper">
+									{pendingRefund &&
+										pendingRefund.length > 0 ? (
+										pendingRefund.map((customer) => (
+											<div
+												key={customer.id}
+												className="customer"
+											>
+												<div className="left-section">
+													<div className="details">
+														<div className="name">
+															{customer.name}
+														</div>
+														<div className="order-number">
+															{
+																customer.reason
+															}{' '}
+															|{' '}
+															{formatWcShortDate(
+																customer.time
+															)}
 														</div>
 													</div>
 												</div>
-											))
-										) : (
-											<div className="no-data">
-												{__(
-													'No pending refunds found.',
-													'multivendorx'
-												)}
 											</div>
-										)}
-									</div>
+										))
+									) : (
+										<div className="no-data">
+											{__(
+												'No pending refunds found.',
+												'multivendorx'
+											)}
+										</div>
+									)}
 								</div>
 							</div>
 						</div>
 					)}
 
 					<div className="card-content">
-						<div className="card">
-							<div className="card-header">
-								<div className="left">
-									<div className="title">
-										{__('Top customer (P)', 'multivendorx')}
-									</div>
+						<div className="card-header">
+							<div className="left">
+								<div className="title">
+									{__('Top customer (P)', 'multivendorx')}
 								</div>
 							</div>
+						</div>
 
-							<div className="card-body">
-								{customers.map((customer) => (
-									<div
-										key={customer.id}
-										className="info-item"
-									>
-										<div className="details-wrapper">
-											<div className="avatar">
-												<i
-													className={
-														customer.icon
-													}
-												></i>
-											</div>
-											<div className="details">
-												<div className="name">
-													{customer.name}
-												</div>
-												<div className="des">
-													{customer.orders}
-													{__(
-														'orders',
-														'multivendorx'
-													)}
-												</div>
-											</div>
+						<div className="card-body">
+							{customers.map((customer) => (
+								<div
+									key={customer.id}
+									className="info-item"
+								>
+									<div className="details-wrapper">
+										<div className="avatar">
+											<i
+												className={
+													customer.icon
+												}
+											></i>
 										</div>
-
-										<div className="right-details">											
-											<div className="price">{customer.total}</div>
+										<div className="details">
+											<div className="name">
+												{customer.name}
+											</div>
+											<div className="des">
+												{customer.orders}
+												{__(
+													'orders',
+													'multivendorx'
+												)}
+											</div>
 										</div>
 									</div>
-								))}
-							</div>
+
+									<div className="right-details">
+										<div className="price">{customer.total}</div>
+									</div>
+								</div>
+							))}
 						</div>
 					</div>
 				</div>
 
 				<div className="card-wrapper">
 					<div className="card-content w-65">
-						<div className="card">
-							<div className="card-header">
-								<div className="left">
-									<div className="title">
-										{__(
-											'Store Activity (P)',
-											'multivendorx'
-										)}
-									</div>
+						<div className="card-header">
+							<div className="left">
+								<div className="title">
+									{__(
+										'Store Activity (P)',
+										'multivendorx'
+									)}
 								</div>
 							</div>
+						</div>
 
-							<div className="card-body">
-								<div className="activity-log">
-									{activities.map((a, i) => (
-										<div key={i} className="activity">
-											<div className="title">
-												{a.text}
-											</div>
-											<div className="des">
-												{__(
-													'Your order has been placed successfully',
-													'multivendorx'
-												)}
-											</div>
-											<span>
-												{__(
-													'2 minutes ago',
-													'multivendorx'
-												)}
-											</span>
+						<div className="card-body">
+							<div className="activity-log">
+								{activities.map((a, i) => (
+									<div key={i} className="activity">
+										<div className="title">
+											{a.text}
 										</div>
-									))}
-								</div>
+										<div className="des">
+											{__(
+												'Your order has been placed successfully',
+												'multivendorx'
+											)}
+										</div>
+										<span>
+											{__(
+												'2 minutes ago',
+												'multivendorx'
+											)}
+										</span>
+									</div>
+								))}
 							</div>
 						</div>
 					</div>
 
 					{modules.includes('store-review') && (
 						<div className="card-content w-35">
-							<div className="card">
-								<div className="card-header">
-									<div className="left">
-										<div className="title">
-											{__(
-												'Latest Reviews',
-												'multivendorx'
-											)}
-										</div>
-									</div>
-
-									<div
-										className="right"
-										onClick={() => {
-											window.location.href =
-												'/dashboard/store-support/store-review/';
-										}}
-									>
-										<i className="adminlib-external"></i>
+							<div className="card-header">
+								<div className="left">
+									<div className="title">
+										{__(
+											'Latest Reviews',
+											'multivendorx'
+										)}
 									</div>
 								</div>
 
-								<div className="card-body">
-									<div className="review-wrapper">
-										{review && review.length > 0 ? (
-											review.map((reviewItem) => (
-												<div
-													className="review"
-													key={reviewItem.review_id}
-												>
-													<div className="details">
-														<div className="title">
-															<div className="avatar">
-																<i className="adminlib-person"></i>
-															</div>
-															{
-																reviewItem.review_title
-															}
-														</div>
+								<div
+									className="right"
+									onClick={() => {
+										window.location.href =
+											'/dashboard/store-support/store-review/';
+									}}
+								>
+									<i className="adminlib-external icon"></i>
+								</div>
+							</div>
 
-														<div className="star-wrapper">
-															{[...Array(5)].map(
-																(_, index) => (
-																	<i
-																		key={
-																			index
-																		}
-																		className={`adminlib-star ${index <
-																			Math.round(
-																				reviewItem.overall_rating
-																			)
-																			? 'active'
-																			: ''
-																			}`}
-																	></i>
-																)
+							<div className="card-body">
+								<div className="review-wrapper">
+									{review && review.length > 0 ? (
+										review.map((reviewItem) => (
+											<div
+												className="review"
+												key={reviewItem.review_id}
+											>
+												<div className="details">
+													<div className="title">
+														<div className="avatar">
+															<i className="adminlib-person"></i>
+														</div>
+														{
+															reviewItem.review_title
+														}
+													</div>
+
+													<div className="star-wrapper">
+														{[...Array(5)].map(
+															(_, index) => (
+																<i
+																	key={
+																		index
+																	}
+																	className={`adminlib-star ${index <
+																		Math.round(
+																			reviewItem.overall_rating
+																		)
+																		? 'active'
+																		: ''
+																		}`}
+																></i>
+															)
+														)}
+														<span>
+															{formatWcShortDate(
+																reviewItem.date_created
 															)}
-															<span>
-																{formatWcShortDate(
-																	reviewItem.date_created
-																)}
-															</span>
-														</div>
+														</span>
+													</div>
 
-														<div className="des">
-															{
-																reviewItem.review_content
-															}
-														</div>
+													<div className="des">
+														{
+															reviewItem.review_content
+														}
 													</div>
 												</div>
-											))
-										) : (
-											<div className="no-data">
-												{__(
-													'No reviews found.',
-													'multivendorx'
-												)}
 											</div>
-										)}
-									</div>
+										))
+									) : (
+										<div className="no-data">
+											{__(
+												'No reviews found.',
+												'multivendorx'
+											)}
+										</div>
+									)}
 								</div>
 							</div>
 						</div>

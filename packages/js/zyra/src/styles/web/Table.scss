@@ -78,8 +78,6 @@
                 color: #fff;
                 padding: 0.125rem 0.813rem;
                 border-right: 0.063rem solid #fff;
-
-                // height: 95%;
                 display: flex;
                 align-items: center;
 
@@ -121,7 +119,9 @@
                 background: $theme-color;
             }
         }
-
+        .date-picker-section-wrapper{
+            background: transparent;
+        }
         .reset-btn {
             cursor: pointer;
             display: flex;
@@ -759,23 +759,15 @@
                 }
             }
             
-            &:not(.hover) {
-                display: none;
-            }
+            // &:not(.hover) {
+            //     display: none;
+            // }
 
-            &.hover {
+            // &.hover {
                 li {
                     display: block;
                 }
-            }
-
-            &.icon-red {
-                color: $accent-color;
-            }
-
-            &.icon-green {
-                color: green;
-            }
+            // }
         }
     }
 }

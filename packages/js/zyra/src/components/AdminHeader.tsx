@@ -225,8 +225,6 @@ const AdminHeader: React.FC< AdminHeaderProps > = ( {
                                     setMessageOpen( false );
                                 } }
                             ></i>
-                            { /* <span className="count">{notifications.length}</span> */ }
-
                             { notifOpen && notifications }
                         </div>
                     ) }

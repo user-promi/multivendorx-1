@@ -5,6 +5,7 @@
         padding: 1.313rem;
         border-bottom: $border-light-small;
         position: relative;
+        background: $background-white;
 
         .title {
             font-size: 1.313rem;
@@ -46,6 +47,7 @@
         justify-content: end;
         gap: 0.5rem;
         border-top: $border-light-small;
+        background: $background-white;
     }
 
     .admin-table-header{
@@ -64,9 +66,7 @@
 
 .MuiDialog-container {
     .content {
-        padding: 1rem 2rem;
         max-height: 70vh;
-
 
         .form-group-wrapper {
             display: flex;
@@ -227,4 +227,8 @@
             width: 100%;
         }
     }
+}
+
+.MuiDialogContent-root:has(.content){
+    background: $background-white;
 }
