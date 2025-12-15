@@ -189,7 +189,7 @@ export default {
 						'multivendorx'
 					),
 				},
-				
+
 			],
 		},
 		// {
@@ -210,10 +210,10 @@ export default {
 				'multivendorx'
 			),
 			dependent: {
-						key: 'store_selling_mode',
-						set: true,
-						value: 'single_product_multiple_vendor',
-					},
+				key: 'store_selling_mode',
+				set: true,
+				value: 'single_product_multiple_vendor',
+			},
 			desc: __(
 				'Choose which version of shared product will be shown as the main listing on the shop page (e.g., top-rated store, min / max priced product).',
 				'multivendorx'
@@ -290,7 +290,7 @@ export default {
 			desc: __(
 				'Define how customer orders are assigned to franchise stores after checkout:<ul><li><strong>Nearest store</strong> - Orders are automatically assigned to the closest eligible franchise store based on the customer’s delivery address and the store’s configured "location restrictions".</li><li><strong>Manual assignment</strong> - Orders are created without a store assignment and must be manually assigned by the admin from the backend.</li></ul>',
 				'multivendorx'
-			),		
+			),
 			dependent: {
 				key: 'store_selling_mode',
 				set: true,
@@ -314,13 +314,14 @@ export default {
 						'Orders remain unassigned until an admin manually selects a franchise store.',
 						'multivendorx'
 					),
+
+					dependent: {
+						key: 'store_selling_mode',
+						set: true,
+						value: 'franchise',
+					},
 				},
 			],
-			dependent: {
-				key: 'store_selling_mode',
-				set: true,
-				value: 'franchise',
-			},
 		},
 		{
 			key: 'location_restriction',
@@ -329,7 +330,7 @@ export default {
 			desc: __(
 				'Define how franchise operations are limited to specific service areas:<ul><li><strong>City</strong> – Orders are handled inside the assigned city limits.</li><li><strong>State</strong> – Customer locations are matched at the state level.</li><li><strong>Postal code</strong> – Eligibility is determined by selected postal codes.</li></ul>',
 				'multivendorx'
-			),					
+			),
 			dependent: {
 				key: 'store_selling_mode',
 				set: true,
@@ -352,7 +353,7 @@ export default {
 					value: 'postal_code',
 				},
 			],
-		},		
+		},
 		{
 			key: 'products_available_for_franchise_orders',
 			type: 'setting-toggle',
