@@ -949,7 +949,7 @@ const EditStore = () => {
 											{data.status == 'active' && (
 												<li>
 													<a
-														href={`${appLocalizer.store_page_url}/${data.slug}`}
+														href={`${appLocalizer.store_page_url}${data.slug}`}
 														target="_blank"
 														rel="noopener noreferrer"
 														className="item"
@@ -1044,7 +1044,7 @@ const EditStore = () => {
 			<CommonPopup
 				open={deleteModal}
 				onClose={() => setDeleteModal(false)}
-				width="600px"
+				width="37.5rem"
 				height="50%"
 				header={
 					<>

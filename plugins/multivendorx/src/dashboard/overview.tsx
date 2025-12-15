@@ -73,49 +73,49 @@ const Overview: React.FC<OverviewProps> = ({}) => {
 						id: 'total_order_amount',
 						label: 'Total Order Amount',
 						count: formatCurrency(data.total_order_amount),
-						icon: 'adminlib-order theme-color1',
+						icon: 'adminlib-order',
 					},
 					{
 						id: 'facilitator_fee',
 						label: 'Facilitator Fee',
 						count: formatCurrency(data.facilitator_fee),
-						icon: 'adminlib-facilitator theme-color2',
+						icon: 'adminlib-facilitator',
 					},
 					{
 						id: 'gateway_fee',
 						label: 'Gateway Fee',
 						count: formatCurrency(data.gateway_fee),
-						icon: 'adminlib-credit-card theme-color3',
+						icon: 'adminlib-credit-card',
 					},
 					{
 						id: 'shipping_amount',
 						label: 'Shipping Amount',
 						count: formatCurrency(data.shipping_amount),
-						icon: 'adminlib-shipping theme-color4',
+						icon: 'adminlib-shipping',
 					},
 					{
 						id: 'tax_amount',
 						label: 'Tax Amount',
 						count: formatCurrency(data.tax_amount),
-						icon: 'adminlib-tax-compliance theme-color4',
+						icon: 'adminlib-tax-compliance',
 					},
 					{
 						id: 'shipping_tax_amount',
 						label: 'Shipping Tax Amount',
 						count: formatCurrency(data.shipping_tax_amount),
-						icon: 'adminlib-per-product-shipping theme-color3',
+						icon: 'adminlib-per-product-shipping',
 					},
 					{
 						id: 'commission_total',
 						label: 'Commission Total',
 						count: formatCurrency(data.commission_total),
-						icon: 'adminlib-commission theme-color2',
+						icon: 'adminlib-commission',
 					},
 					{
 						id: 'commission_refunded',
 						label: 'Commission Refunded',
 						count: formatCurrency(data.commission_refunded),
-						icon: 'adminlib-marketplace-refund theme-color1',
+						icon: 'adminlib-marketplace-refund',
 					},
 				];
 
@@ -284,7 +284,7 @@ const Overview: React.FC<OverviewProps> = ({}) => {
 							{commissionDetails.map((item, idx) => (
 								<div key={idx} className="analytics-item">
 									<div className="analytics-icon">
-										<i className={item.icon}></i>
+										<i className={`${item.icon} admin-color${idx + 1}`}></i>
 									</div>
 									<div className="details">
 										<div className="number">

@@ -471,7 +471,7 @@ class FrontendScripts {
 							'payout_payment_options'   => $payment_admin_settings,
 							'plugin_url'               => admin_url( 'admin.php?page=multivendorx#&tab=' ),
 							'setup_wizard_url'         => admin_url( 'index.php?page=multivendorx-setup' ),
-							'store_page_url'           => trailingslashit( site_url() ) . untrailingslashit( MultiVendorX()->setting->get_setting( 'store_url', 'store' ) ),
+							'store_page_url'           => get_option( Utill::WORDPRESS_SETTINGS['permalink'] ) ? trailingslashit( site_url() ) . untrailingslashit( MultiVendorX()->setting->get_setting( 'store_url', 'store' ) ) . '/' : site_url( '/?' . MultiVendorX()->setting->get_setting( 'store_url', 'store' ) . '=' ),
 							'map_providor'             => MultiVendorX()->setting->get_setting( 'choose_map_api' ),
 							'google_api_key'           => MultiVendorX()->setting->get_setting( 'google_api_key' ),
 							'mapbox_api_key'           => MultiVendorX()->setting->get_setting( 'mapbox_api_key' ),

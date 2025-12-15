@@ -12,11 +12,11 @@ use MultiVendorX\Utill;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Class MultiVendorX_REST_Logs_Controller
+ * Class Logs
  *
  * @package MultiVendorX\RestAPI\Controllers
  */
-class MultiVendorX_REST_Logs_Controller extends \WP_REST_Controller {
+class Logs extends \WP_REST_Controller {
 
 	/**
 	 * Route base.

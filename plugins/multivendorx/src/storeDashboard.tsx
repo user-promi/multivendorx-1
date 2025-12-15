@@ -8,7 +8,7 @@ import './hooksFilters';
 const Dashboard = () => {
 	const [menu, setMenu] = useState({});
 	const [openSubmenus, setOpenSubmenus] = useState({});
-	const [storeData, setStoreData] = useState({});
+	const [storeData, setStoreData] = useState(null);
 	const [currentTab, setCurrentTab] = useState('');
 	const [showUserDropdown, setShowUserDropdown] = useState(false);
 	const [showNotifications, setShowNotifications] = useState(false);
@@ -49,7 +49,7 @@ const Dashboard = () => {
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 		}).then((res: any) => {
 			const data = res.data || {};
-			setStoreData(data);
+			setStoreData(data || null);
 		});
 	}, [appLocalizer.store_id]);
 
@@ -125,6 +125,8 @@ const Dashboard = () => {
 		return sitePath.replace(/\/$/, '');
 	};
 
+	const DEFAULT_TAB = 'dashboard';
+
 	const getCurrentTabFromURL = () => {
 		const slug = appLocalizer.dashboard_slug;
 		const base = getBasePath();
@@ -135,18 +137,49 @@ const Dashboard = () => {
 				.replace(`/${slug}/`, '')
 				.replace(/^\/+|\/+$/g, '');
 
+			if (!path) {
+				return DEFAULT_TAB;
+			}
+
 			const parts = path.split('/');
-			return parts[0] || '';
+			return parts[0] || DEFAULT_TAB;
 		}
 
 		const query = new URLSearchParams(location.search);
-		return query.get('segment') || '';
+		const segment = query.get('segment');
+
+		if (!segment || segment === DEFAULT_TAB) {
+			return DEFAULT_TAB;
+		}
+
+		return segment;
 	};
 
 	useEffect(() => {
-		const tab = getCurrentTabFromURL() || endpoints[0]?.tab || '';
+		const tab = getCurrentTabFromURL() || endpoints[0]?.tab || DEFAULT_TAB;
 		setCurrentTab(tab);
 	}, [location.pathname, location.search, endpoints]);
+
+	useEffect(() => {
+		if (currentTab !== DEFAULT_TAB) {
+			return;
+		}
+
+		if (appLocalizer.permalink_structure) {
+			const cleanUrl = `/${appLocalizer.dashboard_slug}`;
+
+			if (location.pathname !== cleanUrl) {
+				window.history.replaceState({}, '', cleanUrl);
+			}
+			return;
+		}
+
+		const cleanUrl = `/?page_id=${appLocalizer.dashboard_page_id}`;
+
+		if (location.search !== `?page_id=${appLocalizer.dashboard_page_id}`) {
+			window.history.replaceState({}, '', cleanUrl);
+		}
+	}, [currentTab]);
 
 	// Handle Tab Navigation
 	const handleTabClick = (tab) => {
@@ -243,6 +276,7 @@ const Dashboard = () => {
 		return () =>
 			document.removeEventListener('mousedown', handleClickOutside);
 	}, []);
+
 	const toggleUserDropdown = () => {
 		setShowUserDropdown((prev) => !prev);
 		setShowNotifications(false);
@@ -254,6 +288,35 @@ const Dashboard = () => {
 		setShowNotifications((prev) => !prev);
 		setShowUserDropdown(false);
 	};
+
+	const filteredMenu = useMemo(() => {
+		const result: any = {};
+
+		Object.entries(menu).forEach(([key, item]: any) => {
+			if (!hasCapability(item.capability)) {
+				return;
+			}
+
+			let filteredSubmenu = undefined;
+
+			if (item.submenu?.length) {
+				filteredSubmenu = item.submenu.filter((sub) =>
+					hasCapability(sub.capability)
+				);
+
+				if (filteredSubmenu.length === 0) {
+					return;
+				}
+			}
+
+			result[key] = {
+				...item,
+				submenu: filteredSubmenu,
+			};
+		});
+
+		return result;
+	}, [menu]);
 
 	return (
 		<div
@@ -271,10 +334,10 @@ const Dashboard = () => {
 					)}
 				</div>
 
-				{storeData.status == 'active' && (
+				{storeData?.status == 'active' && (
 					<div className="dashboard-tabs">
 						<ul>
-							{Object.entries(menu).map(([key, item]) => {
+							{Object.entries(filteredMenu).map(([key, item]) => {
 								if (!item.name) {
 									return null;
 								}
@@ -287,8 +350,9 @@ const Dashboard = () => {
 								return (
 									<li
 										key={key}
-										className={`tab-name ${isParentActive ? 'active' : ''
-											}`}
+										className={`tab-name ${
+											isParentActive ? 'active' : ''
+										}`}
 									>
 										<a
 											className="tab"
@@ -314,16 +378,18 @@ const Dashboard = () => {
 
 											{hasSubmenu && (
 												<i
-													className={`admin-arrow adminlib-pagination-right-arrow ${isOpen ? 'rotate' : ''
-														}`}
+													className={`admin-arrow adminlib-pagination-right-arrow ${
+														isOpen ? 'rotate' : ''
+													}`}
 												></i>
 											)}
 										</a>
 
 										{hasSubmenu && (
 											<ul
-												className={`subtabs ${isOpen ? 'open' : ''
-													}`}
+												className={`subtabs ${
+													isOpen ? 'open' : ''
+												}`}
 											>
 												{item.submenu.map((sub) => {
 													const subActive =
@@ -383,10 +449,11 @@ const Dashboard = () => {
 									}
 								>
 									<div
-										className={`adminlib-icon ${isDarkMode
-											? 'adminlib-recycle'
-											: 'adminlib-resources'
-											}`}
+										className={`adminlib-icon ${
+											isDarkMode
+												? 'adminlib-recycle'
+												: 'adminlib-resources'
+										}`}
 									></div>
 								</li>
 
@@ -411,7 +478,10 @@ const Dashboard = () => {
 									<div className="adminlib-icon adminlib-crop-free"></div>
 								</li>
 
-								<li className="dropdown login-user" ref={userDropdownRef}>
+								<li
+									className="dropdown login-user"
+									ref={userDropdownRef}
+								>
 									<div
 										className="avatar-wrapper"
 										onClick={toggleUserDropdown}
@@ -476,105 +546,108 @@ const Dashboard = () => {
 													</li>
 													{availableStores.length >
 														0 && (
-															<li className="switch-store-wrapper">
-																<a
-																	href="#"
-																	onClick={(
-																		e
-																	) => {
-																		e.preventDefault();
-																		setShowStoreList(
-																			(
-																				prev
-																			) =>
-																				!prev
-																		);
-																	}}
-																>
-																	<i className="adminlib-switch-store"></i>
-																	Switch stores
-																	{firstTwoStores.length >
-																		0 && (
-																			<span className="switch-store-preview">
-																				{!showStoreList && (
-																					<>
-																						{firstTwoStores.map(
-																							(
-																								store
-																							) => (
-																								<span
-																									className="store-icon"
-																									key={
-																										store.id
-																									}
-																								>
-																									{store.name
-																										.charAt(
-																											0
-																										)
-																										.toUpperCase()}
-																								</span>
-																							)
-																						)}
-
-																						{availableStores.length >
-																							2 && (
-																								<span className="store-icon number">
-																									+
-																									{availableStores.length -
-																										2}
-																								</span>
-																							)}
-																					</>
-																				)}
-																				<span className="adminlib-keyboard-arrow-down arrow-icon"></span>
-																			</span>
-																		)}
-																</a>
-
-																{showStoreList && (
-																	<div className="switch-store-list">
-																		{availableStores.map(
-																			(
-																				store
-																			) => (
-																				<div
-																					className="store"
-																					key={
-																						store.id
-																					}
-																				>
-																					<a
-																						href="#"
-																						className="switch-store"
-																						onClick={(
-																							e
-																						) => {
-																							e.preventDefault();
-																							switchStore(
+														<li className="switch-store-wrapper">
+															<a
+																href="#"
+																onClick={(
+																	e
+																) => {
+																	e.preventDefault();
+																	setShowStoreList(
+																		(
+																			prev
+																		) =>
+																			!prev
+																	);
+																}}
+															>
+																<i className="adminlib-switch-store"></i>
+																Switch stores
+																{firstTwoStores.length >
+																	0 && (
+																	<span className="switch-store-preview">
+																		{!showStoreList && (
+																			<>
+																				{firstTwoStores.map(
+																					(
+																						store
+																					) => (
+																						<span
+																							className="store-icon"
+																							key={
 																								store.id
-																							);
-																						}}
-																					>
-																						<span className="store-icon">
+																							}
+																						>
 																							{store.name
 																								.charAt(
 																									0
 																								)
 																								.toUpperCase()}
 																						</span>
-																						<div className="details-wrapper">
-																							<div className="store-name">{store.name}</div>
-																							<div className="des">store@gmail.com</div>
-																						</div>
-																					</a>
-																				</div>
-																			)
+																					)
+																				)}
+
+																				{availableStores.length >
+																					2 && (
+																					<span className="store-icon number">
+																						+
+																						{availableStores.length -
+																							2}
+																					</span>
+																				)}
+																			</>
 																		)}
-																	</div>
+																		<span className="adminlib-keyboard-arrow-down arrow-icon"></span>
+																	</span>
 																)}
-															</li>
-														)}
+															</a>
+
+															{showStoreList && (
+																<div className="switch-store-list">
+																	{availableStores.map(
+																		(
+																			store
+																		) => (
+																			<div
+																				className="store"
+																				key={
+																					store.id
+																				}
+																			>
+																				<a
+																					href="#"
+																					className="switch-store"
+																					onClick={(
+																						e
+																					) => {
+																						e.preventDefault();
+																						switchStore(
+																							store.id
+																						);
+																					}}
+																				>
+																					<span className="store-icon">
+																						{store.name
+																							.charAt(
+																								0
+																							)
+																							.toUpperCase()}
+																					</span>
+																					<div className="details-wrapper">
+																						<div className="store-name">
+																							{
+																								store.name
+																							}
+																						</div>
+																					</div>
+																				</a>
+																			</div>
+																		)
+																	)}
+																</div>
+															)}
+														</li>
+													)}
 												</ul>
 											</div>
 
@@ -598,7 +671,7 @@ const Dashboard = () => {
 				</div>
 
 				<div className="content-wrapper">
-					{storeData.length > 0 && storeData.status !== 'active' ? (
+					{storeData && storeData.status !== 'active' ? (
 						<div className="permission-wrapper">
 							<i className="adminlib-info red"></i>
 							<div className="title">

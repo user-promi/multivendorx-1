@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
  * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
-class MultiVendorX_REST_Commission_Controller extends \WP_REST_Controller {
+class Commission extends \WP_REST_Controller {
 
 	/**
 	 * Route base.

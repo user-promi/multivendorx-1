@@ -81,7 +81,7 @@ const EditQna: React.FC<EditQnaProps> = ({
 		<CommonPopup
 			open={open}
 			onClose={onClose}
-			width="800px"
+			width="50rem"
 			height="100%"
 			header={
 				<>

@@ -50,6 +50,7 @@
             transition: all 0.4s ease;
             cursor: pointer;
             margin-top: -0.313rem;
+            color: $color-black;
 
             &:hover {
                 background: #5a59591a;
@@ -92,13 +93,13 @@
 
     .card-content {
         border-radius: 0.313rem;
-        box-shadow: 0 0.125rem 0.5rem 0 #dfdee16e;
+        box-shadow: $box-shadow;
         background: $background-white;
         width: 100%;
         box-sizing: border-box;
 
         .table-wrapper {
-            border: 0.063rem solid #f5f5f5;
+            border: $border-light-small;
         }
 
         .card-header {
@@ -144,6 +145,7 @@
         padding: 1rem;
         width: 100%;
         border-radius: 0.313rem;
+        box-shadow: $box-shadow;
 
         .analytics-icon {
             i {
@@ -408,8 +410,14 @@
 .info-item {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 0.45rem;
+    padding: 0.45rem 0;
 
+    &:first-child{
+        padding-top: 0;
+    }
+    &:last-child{
+        padding-bottom: 0;
+    }
     &.owner {
         flex-direction: column;
     }
@@ -451,9 +459,9 @@
             gap: 0.25rem;
 
             .name {
-                font-size: 1.063rem;
+                font-size: 1.125rem;
                 line-height: 1rem;
-                color: #000000ed;
+                color: $text-color;
                 font-weight: 500;
                 position: relative;
                 padding-right: 0.625rem;
@@ -461,10 +469,12 @@
                 align-items: end;
                 gap: 0.625rem;
             }
-
+            .des{
+                font-size: 0.813rem;
+            }
             .small-text {
                 font-size: 0.875rem;
-                color: #00000060;
+                color: $sub-text-color;
             }
         }
     }
@@ -477,6 +487,7 @@
             font-weight: 600;
             line-height: 1.5rem;
             padding-bottom: 0.125rem;
+            color: $text-color;
         }
     }
 

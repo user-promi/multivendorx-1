@@ -4,25 +4,21 @@ export default {
 	id: 'min-max',
 	priority: 6,
 	name: __('Min/Max', 'multivendorx'),
+	tabTitle: 'Per-Product purchase limits',
 	desc: __(
-		'Set purchase limits to control inventory and bulk ordering.',
+		'Set purchase limits for individual products to prevent bulk buying or ensure minimum order quantities.',
 		'multivendorx'
 	),
 	icon: 'adminlib-min-max',
 	submitUrl: 'settings',
 	modal: [
 		{
-			key: 'section',
-			type: 'section',
-			hint: __('Product Min/Max', 'multivendorx'),
-		},
-		{
 			key: 'product_quantity_rules',
 			type: 'nested',
-			label: __('Global quantity rules', 'multivendorx'),
+			label: __('Purchase quantity limits', 'multivendorx'),
 			single: true,
 			settingDescription: __(
-				'Control the minimum and maximum number of units a customer is allowed to purchase for each product.',
+				'Set purchase limits for individual products to prevent bulk buying or ensure minimum order quantities.',
 				'multivendorx'
 			),
 			moduleEnabled: 'min-max',
@@ -42,10 +38,10 @@ export default {
 		{
 			key: 'product_amount_rules',
 			type: 'nested',
-			label: __('Amount rules', 'multivendorx'),
+			label: __('Product purchase amount', 'multivendorx'),
 			single: true,
 			settingDescription: __(
-				'Control the minimum and maximum number of units a customer is allowed to purchase for each product.',
+				'Control how much a customer can spend on an individual product by defining minimum and maximum purchase values.',
 				'multivendorx'
 			),
 			moduleEnabled: 'min-max',
@@ -53,11 +49,13 @@ export default {
 				{
 					key: 'product_min_amount',
 					preInsideText: __('Min', 'multivendorx'),
+					postInsideText: __('$', 'multivendorx'),
 					type: 'number',
 				},
 				{
 					key: 'product_max_amount',
 					preInsideText: __('Max', 'multivendorx'),
+					postInsideText: __('$', 'multivendorx'),
 					type: 'number',
 				},
 			],
@@ -65,15 +63,19 @@ export default {
 		{
 			key: 'section',
 			type: 'section',
-			hint: __('Order Min/Max', 'multivendorx'),
+			hint: __('Order purchase limits', 'multivendorx'),
+			desc: __(
+				'Set limits on the total quantity or total value of an order to control bulk purchases or enforce minimum order requirements.',
+				'multivendorx'
+			),
 		},
 		{
 			key: 'order_quantity_rules',
 			type: 'nested',
-			label: __('Global quantity rules', 'multivendorx'),
+			label: __('Total Items', 'multivendorx'),
 			single: true,
 			settingDescription: __(
-				'Control the minimum and maximum number of units a customer is allowed to purchase for each product.',
+				'Set the minimum and maximum number of items a customer can include in their cart.',
 				'multivendorx'
 			),
 			moduleEnabled: 'min-max',
@@ -93,10 +95,10 @@ export default {
 		{
 			key: 'order_amount_rules',
 			type: 'nested',
-			label: __('Amount rules', 'multivendorx'),
+			label: __('Order Value', 'multivendorx'),
 			single: true,
 			settingDescription: __(
-				'Control the minimum and maximum number of units a customer is allowed to purchase for each product.',
+				'Set the minimum and maximum total spend allowed for an order.',
 				'multivendorx'
 			),
 			moduleEnabled: 'min-max',
@@ -104,11 +106,13 @@ export default {
 				{
 					key: 'order_min_amount',
 					preInsideText: __('Min', 'multivendorx'),
+					postInsideText: __('$', 'multivendorx'),
 					type: 'number',
 				},
 				{
 					key: 'order_max_amount',
 					preInsideText: __('Max', 'multivendorx'),
+					postInsideText: __('$', 'multivendorx'),
 					type: 'number',
 				},
 			],
