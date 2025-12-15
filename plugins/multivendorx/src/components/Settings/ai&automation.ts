@@ -4,6 +4,7 @@ export default {
 	id: 'ai-automation',
 	priority: 10,
 	name: 'AI & Automation',
+	tabTitle: 'API Keys',
 	desc: __(
 		'AI services can be enabled to assist with creating product details and enhancing images automatically. These settings can be configured to control which AI services are used.',
 		'multivendorx'
@@ -15,9 +16,9 @@ export default {
 		{
 			key: 'gemini_api_key',
 			type: 'text',
-			label: __('Gemini API Key', 'multivendorx'),
+			label: __('Gemini', 'multivendorx'),
 			settingDescription: __(
-				'The Gemini AI service can be used for product suggestions and image enhancement once the API key is provided.',
+				'Google’s AI can be enabled to assist with product content and image improvements.',
 				'multivendorx'
 			),
 			desc: __(
@@ -29,9 +30,9 @@ export default {
 		{
 			key: 'openai_api_key',
 			type: 'text',
-			label: __('OpenAI API Key (for ChatGPT)', 'multivendorx'),
+			label: __('OpenAI (for ChatGPT)', 'multivendorx'),
 			settingDescription: __(
-				'OpenAI AI service can be used for generating product details once the API key is provided.',
+				'ChatGPT-powered AI can be enabled for intelligent product content creation.',
 				'multivendorx'
 			),
 			desc: __(
@@ -43,11 +44,11 @@ export default {
 			key: 'openrouter_api_image_enhancement_key',
 			type: 'text',
 			label: __(
-				'OpenRouter API Key for Image Enhancement',
+				'OpenRouter',
 				'multivendorx'
 			),
 			settingDescription: __(
-				'The Gemini AI service can be used for product suggestions and image enhancement once the API key is provided.',
+				'Free and open AI models can be enabled for product content and image enhancement.',
 				'multivendorx'
 			),
 			desc: __(
@@ -120,17 +121,17 @@ export default {
 			options: [
 				{
 					key: 'openai/gpt-4o-mini',
-					label: 'OpenAI GPT-4o Mini — Performance: Quick Output • Price: Budget-Friendly',
+					label: 'OpenAI GPT-4o Mini - Performance: Quick Output • Price: Budget-Friendly',
 					value: 'openai/gpt-4o-mini',
 				},
 				{
 					key: 'openai/gpt-5-mini',
-					label: 'OpenAI GPT-5 Mini — Performance: Best-in-Class • Price: Premium',
+					label: 'OpenAI GPT-5 Mini - Performance: Best-in-Class • Price: Premium',
 					value: 'openai/gpt-5-mini',
 				},
 				{
 					key: 'google/gemini-2.0-flash-exp:free',
-					label: 'Google Gemini 2.0 Flash — Performance: Lightning Speed • Price: Low-Cost',
+					label: 'Google Gemini 2.0 Flash - Performance: Lightning Speed • Price: Low-Cost',
 					value: 'google/gemini-2.0-flash-exp:free',
 				},
 			],
@@ -163,7 +164,7 @@ export default {
 				},
 				{
 					key: 'openrouter_api_image_enhancement',
-					label: __('OpenRouter (Multiple Models)', 'multivendorx'),
+					label: __('OpenRouter (Free/Open Models)', 'multivendorx'),
 					value: 'openrouter_api',
 					icon: 'adminlib-openrouter',
 				},

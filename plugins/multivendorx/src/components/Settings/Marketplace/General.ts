@@ -4,7 +4,7 @@ export default {
 	id: 'marketplace',
 	priority: 1,
 	name: __('Overview', 'multivendorx'),
-	tabTitle: 'Marketplace pages configuration',
+	tabTitle: 'Marketplace Pages Configuration',
 	desc: __(
 		'Configure the essential system pages required for your marketplace - including store registration, store dashboard.',
 		'multivendorx'
@@ -64,7 +64,7 @@ export default {
 		{
 			key: 'section',
 			type: 'section',
-			hint: __('Enable content styling tools for stores', 'multivendorx'),
+			hint: __('Enable Content Styling Tools For stores', 'multivendorx'),
 		},
 		{
 			key: 'tinymce_api_section',
@@ -78,7 +78,7 @@ export default {
 		{
 			key: 'section',
 			type: 'section',
-			hint: __('Shortcode library', 'multivendorx'),
+			hint: __('Shortcode Library', 'multivendorx'),
 		},
 		{
 			key: 'available_shortcodes',
