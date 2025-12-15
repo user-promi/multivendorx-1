@@ -4,7 +4,7 @@ export default {
 	id: 'min-max',
 	priority: 6,
 	name: __('Min/Max', 'multivendorx'),
-	tabTitle: 'Product Min/Max',
+	tabTitle: 'Product purchase limits',
 	desc: __(
 		'Set purchase limits for individual products to prevent bulk buying or ensure minimum order quantities.',
 		'multivendorx'
@@ -15,7 +15,7 @@ export default {
 		{
 			key: 'product_quantity_rules',
 			type: 'nested',
-			label: __('Global quantity rules', 'multivendorx'),
+			label: __('Quantity Ranges', 'multivendorx'),
 			single: true,
 			settingDescription: __(
 				'Set purchase limits for individual products to prevent bulk buying or ensure minimum order quantities.',
@@ -38,7 +38,7 @@ export default {
 		{
 			key: 'product_amount_rules',
 			type: 'nested',
-			label: __('Amount rules', 'multivendorx'),
+			label: __('Spend Range', 'multivendorx'),
 			single: true,
 			settingDescription: __(
 				'Control how much a customer can spend on an individual product by defining minimum and maximum purchase values.',
@@ -63,7 +63,7 @@ export default {
 		{
 			key: 'section',
 			type: 'section',
-			hint: __('Order Min/Max', 'multivendorx'),
+			hint: __('Order purchase limits', 'multivendorx'),
 			desc: __(
 				'Set limits on the total quantity or total value of an order to control bulk purchases or enforce minimum order requirements.',
 				'multivendorx'
@@ -72,7 +72,7 @@ export default {
 		{
 			key: 'order_quantity_rules',
 			type: 'nested',
-			label: __('Global quantity rules', 'multivendorx'),
+			label: __('Total Items', 'multivendorx'),
 			single: true,
 			settingDescription: __(
 				'Define the minimum and maximum total number of items a customer can add to their cart.',
@@ -83,13 +83,11 @@ export default {
 				{
 					key: 'order_min_quantity',
 					preInsideText: __('Min', 'multivendorx'),
-					postInsideText: __('$', 'multivendorx'),
 					type: 'number',
 				},
 				{
 					key: 'order_max_quantity',
 					preInsideText: __('Max', 'multivendorx'),
-					postInsideText: __('$', 'multivendorx'),
 					type: 'number',
 				},
 			],
@@ -97,7 +95,7 @@ export default {
 		{
 			key: 'order_amount_rules',
 			type: 'nested',
-			label: __('Amount rules', 'multivendorx'),
+			label: __('Order Value', 'multivendorx'),
 			single: true,
 			settingDescription: __(
 				'Set the minimum and maximum total order value to ensure orders meet your business rules.',
