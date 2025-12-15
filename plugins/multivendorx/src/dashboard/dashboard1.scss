@@ -311,6 +311,7 @@ a {
         }
     }
 }
+
 // analytics-container end
 
 
@@ -459,7 +460,7 @@ a {
     position: absolute;
     top: 2rem;
     overflow: hidden;
-    border: 0.063rem solid #e5e9f2;
+    border: $border-light-small;
     max-width: 16rem;
     min-width: 16rem;
     right: 0;
@@ -512,12 +513,13 @@ a {
                 .user-name {
                     font-size: 1rem;
                     font-weight: 700;
-                    color: #364a63;
+                    color: $text-color;
                 }
 
                 .user-email {
-                    font-size: 0.75rem;
+                    font-size: 0.813rem;
                     font-weight: 400;
+                    color: $sub-text-color;
                 }
             }
         }
@@ -647,6 +649,8 @@ a {
         }
     }
 }
+
+
 
 // dropdown style common end
 
@@ -978,6 +982,7 @@ a {
         }
     }
 }
+
 // column details start
 
 
@@ -995,13 +1000,28 @@ a {
             font-size: 1.25rem;
         }
     }
-    .switch-store-list{
-        background: #bdbcbc28;
+
+    .switch-store-list {
         border-radius: 0.313rem;
         margin-top: 0.45rem;
+        height: 9.5rem;
+        overflow: auto;
+
+        .store {
+            border-bottom: $border-light-small;
+
+            .store-name{
+                color: $text-color;
+            }
+            .des{
+                font-size: 0.813rem;
+            }
+        }
     }
 }
-
+.switch-store-wrapper:has(.switch-store-list){
+    background: $background-color;
+}
 .store-icon {
     background: var(--colorPrimary);
     color: #fff;
