@@ -10,20 +10,21 @@ interface BlockTextProps {
     title?: string;
 }
 
-const BlockText: React.FC<BlockTextProps> = ({ blockTextClass, value, title }) => {
+const BlockText: React.FC< BlockTextProps > = ( {
+    blockTextClass,
+    value,
+    title,
+} ) => {
     return (
         <>
-
-            <div className={blockTextClass}>
+            <div className={ blockTextClass }>
                 <div className="metabox-note-wrapper">
-                <i className="adminlib-info"></i>
+                    <i className="adminlib-info"></i>
 
-                <div className="details">
-                    <div className="title">{title}</div>
-                    <p
-                        dangerouslySetInnerHTML={{ __html: value }}
-                    ></p>
-                </div>
+                    <div className="details">
+                        <div className="title">{ title }</div>
+                        <p dangerouslySetInnerHTML={ { __html: value } }></p>
+                    </div>
                 </div>
             </div>
         </>

@@ -48,10 +48,11 @@ const MultipleOptions: React.FC< MultipleOptionsProps > = ( {
             : [];
     } );
 
-    useEffect(() => {
-        setOptions(Array.isArray(formField.options) ? formField.options : []);
-    }, [formField.options]);
-
+    useEffect( () => {
+        setOptions(
+            Array.isArray( formField.options ) ? formField.options : []
+        );
+    }, [ formField.options ] );
 
     const renderInputFields = ( fieldType: string ) => {
         switch ( fieldType ) {
@@ -119,7 +120,9 @@ const MultipleOptions: React.FC< MultipleOptionsProps > = ( {
     };
 
     const handleDeleteOption = ( index: number ) => {
-        if ( options.length <= 1 ) return;
+        if ( options.length <= 1 ) {
+            return;
+        }
         const newOptions = options.filter( ( _, i ) => i !== index );
         setOptions( newOptions );
         onChange( 'options', newOptions );
@@ -219,8 +222,11 @@ const MultipleOptions: React.FC< MultipleOptionsProps > = ( {
                                                 | null = null;
                                             options.forEach(
                                                 ( eachOption, idx ) => {
-                                                    if ( eachOption.isdefault )
+                                                    if (
+                                                        eachOption.isdefault
+                                                    ) {
                                                         defaultValueIndex = idx;
+                                                    }
                                                 }
                                             );
                                             if ( defaultValueIndex !== null ) {
