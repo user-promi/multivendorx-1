@@ -23,10 +23,7 @@ interface CustomizerProps {
     setHoverOn: ( hover: boolean ) => void;
 }
 
-const Customizer: React.FC< CustomizerProps > = ( {
-    onChange,
-    setting,
-} ) => {
+const Customizer: React.FC< CustomizerProps > = ( { onChange, setting } ) => {
     const [ select, setSelect ] = useState< string >( '' );
     const [ buttonLink, setButtonLink ] = useState< string >(
         setting.button_link || ''
@@ -534,7 +531,9 @@ const Customizer: React.FC< CustomizerProps > = ( {
                     { select === 'setting' && (
                         <div className="section-wrapper settings">
                             <div className="section">
-                                <p className="system-setting">{ 'System settings' }</p>
+                                <p className="system-setting">
+                                    { 'System settings' }
+                                </p>
                                 <div className="property-section">
                                     <button
                                         className="admin-btn btn-purple"
@@ -585,9 +584,7 @@ const ButtonCustomizer: React.FC< ButtonCustomizerProps > = ( {
             : '',
         fontSize: setting.button_font_size,
         fontWeight: setting.button_font_width,
-        padding: setting.button_padding
-            ? `${ setting.button_padding }px`
-            : '',
+        padding: setting.button_padding ? `${ setting.button_padding }px` : '',
         margin: setting.button_margin ? `${ setting.button_margin }px` : '',
     };
 

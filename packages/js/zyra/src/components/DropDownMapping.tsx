@@ -110,7 +110,6 @@ const DropDownMapping: React.FC< DropDownMappingProps > = ( {
             );
             settingChanged.current = true;
         } else {
-            // eslint-disable-next-line no-console
             console.log( 'Unable to add sync fields' );
         }
     };

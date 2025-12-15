@@ -20,46 +20,59 @@ interface AddressFormField {
     type: string;
     label: string;
     fields?: SubField[];
-    value?: Record<string, any>;
-    readonly?:boolean;
+    value?: Record< string, any >;
+    readonly?: boolean;
 }
 
 interface AddressFieldProps {
     formField: AddressFormField;
-    onChange: (key: string, value: any) => void;
+    onChange: ( key: string, value: any ) => void;
     opendInput: FormField | null;
-    setOpendInput: React.Dispatch<React.SetStateAction<FormField | null>>;
+    setOpendInput: React.Dispatch< React.SetStateAction< FormField | null > >;
 }
 
-const AddressField: React.FC<AddressFieldProps> = ({ formField, onChange, opendInput, setOpendInput }) => {
-    const [subFields, setSubFields] = useState<SubField[]>(formField.fields || []);
+const AddressField: React.FC< AddressFieldProps > = ( {
+    formField,
+    onChange,
+    opendInput,
+    setOpendInput,
+} ) => {
+    const [ subFields, setSubFields ] = useState< SubField[] >(
+        formField.fields || []
+    );
 
-    useEffect(() => {
-        setSubFields(formField.fields || []);
-    }, [formField.fields]);
+    useEffect( () => {
+        setSubFields( formField.fields || [] );
+    }, [ formField.fields ] );
 
     // Update parent
-    const updateParent = (updated: SubField[]) => {
-        setSubFields(updated);
-        onChange('fields', updated);
+    const updateParent = ( updated: SubField[] ) => {
+        setSubFields( updated );
+        onChange( 'fields', updated );
     };
 
     return (
         <div className="address-field-wrapper">
             <ReactSortable
-                list={subFields}
-                setList={updateParent}
+                list={ subFields }
+                setList={ updateParent }
                 handle=".drag-handle"
-                animation={150}
+                animation={ 150 }
             >
-                {subFields.map(f => (
+                { subFields.map( ( f ) => (
                     <div
-                        key={f.id}
-                        className={`form-field ${opendInput?.id === f.id ? 'active' : ''}`}
-                        onClick={(e) => {
+                        key={ f.id }
+                        className={ `form-field ${
+                            opendInput?.id === f.id ? 'active' : ''
+                        }` }
+                        onClick={ ( e ) => {
                             e.stopPropagation();
-                            setOpendInput({ ...f, readonly:formField.readonly, parentId: formField.id } as unknown as FormField);
-                        }}
+                            setOpendInput( {
+                                ...f,
+                                readonly: formField.readonly,
+                                parentId: formField.id,
+                            } as unknown as FormField );
+                        } }
                     >
                         <div className="meta-menu">
                             <span className="admin-badge blue drag-handle">
@@ -67,25 +80,33 @@ const AddressField: React.FC<AddressFieldProps> = ({ formField, onChange, opendI
                             </span>
                         </div>
 
-                        {f.type === 'text' && (
+                        { f.type === 'text' && (
                             <SimpleInput
-                                formField={{ label: f.label, placeholder: f.placeholder }}
+                                formField={ {
+                                    label: f.label,
+                                    placeholder: f.placeholder,
+                                } }
                             />
-                        )}
+                        ) }
 
-                        {f.type === 'select' && (
+                        { f.type === 'select' && (
                             <MultipleOptions
-                                formField={{
+                                formField={ {
                                     label: f.label,
                                     type: 'dropdown',
-                                    options: f.options?.map(opt => ({ id: opt, value: opt, label: opt })) || [],
-                                }}
+                                    options:
+                                        f.options?.map( ( opt ) => ( {
+                                            id: opt,
+                                            value: opt,
+                                            label: opt,
+                                        } ) ) || [],
+                                } }
                                 type="dropdown"
-                                selected={false}
+                                selected={ false }
                             />
-                        )}
+                        ) }
                     </div>
-                ))}
+                ) ) }
             </ReactSortable>
         </div>
     );

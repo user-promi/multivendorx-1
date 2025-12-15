@@ -24,7 +24,7 @@ interface ToggleSettingProps {
     wrapperClass?: string;
     descClass?: string;
     value: string | string[];
-    onChange: (value: string | string[]) => void;
+    onChange: ( value: string | string[] ) => void;
     proChanged?: () => void;
     proSetting?: boolean;
     khali_dabba?: boolean;
@@ -35,7 +35,7 @@ interface ToggleSettingProps {
     multiSelect?: boolean;
 }
 
-const ToggleSetting: React.FC<ToggleSettingProps> = ({
+const ToggleSetting: React.FC< ToggleSettingProps > = ( {
     description,
     options,
     descClass = '',
@@ -49,87 +49,94 @@ const ToggleSetting: React.FC<ToggleSettingProps> = ({
     postText,
     preText,
     multiSelect = false,
-}) => {
-
-    const handleChange = (optionValue: string, isPro: boolean) => {
-        if (isPro && !khali_dabba) {
+} ) => {
+    const handleChange = ( optionValue: string, isPro: boolean ) => {
+        if ( isPro && ! khali_dabba ) {
             proChanged?.();
             return;
         }
 
-        if (multiSelect) {
-            const current = Array.isArray(value) ? value : [];
+        if ( multiSelect ) {
+            const current = Array.isArray( value ) ? value : [];
             let newValues: string[];
-            if (current.includes(optionValue)) {
-                newValues = current.filter((v) => v !== optionValue);
+            if ( current.includes( optionValue ) ) {
+                newValues = current.filter( ( v ) => v !== optionValue );
             } else {
-                newValues = [...current, optionValue];
+                newValues = [ ...current, optionValue ];
             }
-            onChange(newValues);
+            onChange( newValues );
         } else {
-            onChange(optionValue);
+            onChange( optionValue );
         }
     };
 
     return (
         <>
             <div className="toggle-setting-container">
-                {preText && <span className="before">{preText}</span>}
+                { preText && <span className="before">{ preText }</span> }
 
                 <div className="toggle-setting-wrapper">
-                    {options.map((option) => {
+                    { options.map( ( option ) => {
                         const isChecked = multiSelect
-                            ? Array.isArray(value) && value.includes(option.value)
+                            ? Array.isArray( value ) &&
+                              value.includes( option.value )
                             : value === option.value;
 
                         return (
                             <div
                                 role="button"
-                                tabIndex={0}
-                                key={option.key}
-                                onClick={() => handleChange(option.value, !!option.proSetting)}
+                                tabIndex={ 0 }
+                                key={ option.key }
+                                onClick={ () =>
+                                    handleChange(
+                                        option.value,
+                                        !! option.proSetting
+                                    )
+                                }
                             >
                                 <input
                                     className="toggle-setting-form-input"
-                                    type={multiSelect ? 'checkbox' : 'radio'}
-                                    id={option.key}
-                                    name={key}
-                                    value={option.value}
-                                    checked={isChecked}
+                                    type={ multiSelect ? 'checkbox' : 'radio' }
+                                    id={ option.key }
+                                    name={ key }
+                                    value={ option.value }
+                                    checked={ isChecked }
                                     readOnly
                                 />
-                                <label htmlFor={option.key}>
-                                    {iconEnable ? (
-                                        <i className={option.value}></i>
+                                <label htmlFor={ option.key }>
+                                    { iconEnable ? (
+                                        <i className={ option.value }></i>
                                     ) : option.img ? (
                                         <>
-                                            <img src={option.img} />
-                                            {option.label}
+                                            <img src={ option.img } />
+                                            { option.label }
                                         </>
                                     ) : option.icon ? (
                                         <>
-                                            <i className={option.icon} ></i>
-                                            {option.label}
+                                            <i className={ option.icon }></i>
+                                            { option.label }
                                         </>
                                     ) : (
                                         option.label
-                                    )}
+                                    ) }
                                 </label>
-                                {option.proSetting && !khali_dabba && (
-                                    <span className="admin-pro-tag"><i className="adminlib-pro-tag"></i>Pro</span>
-                                )}
+                                { option.proSetting && ! khali_dabba && (
+                                    <span className="admin-pro-tag">
+                                        <i className="adminlib-pro-tag"></i>Pro
+                                    </span>
+                                ) }
                             </div>
                         );
-                    })}
+                    } ) }
                 </div>
-                {postText && <span className="after">{postText}</span>}
+                { postText && <span className="after">{ postText }</span> }
             </div>
-            {description && (
+            { description && (
                 <p
-                    className={descClass}
-                    dangerouslySetInnerHTML={{ __html: description }}
+                    className={ descClass }
+                    dangerouslySetInnerHTML={ { __html: description } }
                 ></p>
-            )}
+            ) }
         </>
     );
 };

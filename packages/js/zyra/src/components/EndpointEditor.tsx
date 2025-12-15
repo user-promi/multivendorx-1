@@ -22,142 +22,148 @@ interface EndpointEditorProps {
     proSetting?: boolean;
     proSettingChanged?: () => boolean;
     apilink: string;
-    appLocalizer: Record<string, any>;
-    onChange: (data: Record<string, Endpoint>) => void;
+    appLocalizer: Record< string, any >;
+    onChange: ( data: Record< string, Endpoint > ) => void;
 }
 
-const EndpointManager: React.FC<EndpointEditorProps> = ({
+const EndpointManager: React.FC< EndpointEditorProps > = ( {
     apilink,
     appLocalizer,
     onChange,
-}) => {
-    const [endpoints, setEndpoints] = useState<[string, Endpoint][]>([]);
-    const [editKey, setEditKey] = useState<string | null>(null);
-    const [editSlug, setEditSlug] = useState<string>('');
-    const [editName, setEditName] = useState<string>('');
-    const editRef = useRef<HTMLDivElement>(null);
+} ) => {
+    const [ endpoints, setEndpoints ] = useState< [ string, Endpoint ][] >(
+        []
+    );
+    const [ editKey, setEditKey ] = useState< string | null >( null );
+    const [ editSlug, setEditSlug ] = useState< string >( '' );
+    const [ editName, setEditName ] = useState< string >( '' );
+    const editRef = useRef< HTMLDivElement >( null );
 
     // Close edit on outside click
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
+    useEffect( () => {
+        const handleClickOutside = ( event: MouseEvent ) => {
             if (
                 editRef.current &&
-                !editRef.current.contains(event.target as Node)
+                ! editRef.current.contains( event.target as Node )
             ) {
-                setEditKey(null);
+                setEditKey( null );
             }
         };
 
-        if (editKey) {
-            document.addEventListener('mousedown', handleClickOutside);
+        if ( editKey ) {
+            document.addEventListener( 'mousedown', handleClickOutside );
         } else {
-            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener( 'mousedown', handleClickOutside );
         }
 
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener( 'mousedown', handleClickOutside );
         };
-    }, [editKey]);
+    }, [ editKey ] );
 
     // Load data
-    useEffect(() => {
-        axios({
-            url: getApiLink(appLocalizer, apilink),
+    useEffect( () => {
+        axios( {
+            url: getApiLink( appLocalizer, apilink ),
             method: 'GET',
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            params: {menuOnly: true}
-        }).then((res) => {
-            const typedData = res.data as Record<string, Endpoint>;
-            const data = Object.entries(typedData).map(([k, v]) => [
+            params: { menuOnly: true },
+        } ).then( ( res ) => {
+            const typedData = res.data as Record< string, Endpoint >;
+            const data = Object.entries( typedData ).map( ( [ k, v ] ) => [
                 k,
                 { ...v, visible: v.visible !== false }, // default true
-            ]) as [string, Endpoint][];
-            setEndpoints(data);
-        });
-    }, []);
+            ] ) as [ string, Endpoint ][];
+            setEndpoints( data );
+        } );
+    }, [] );
 
-    const autoSave = (updated: [string, Endpoint][]) => {
-        setEndpoints(updated);
-        onChange(Object.fromEntries(updated) as Record<string, Endpoint>);
+    const autoSave = ( updated: [ string, Endpoint ][] ) => {
+        setEndpoints( updated );
+        onChange( Object.fromEntries( updated ) as Record< string, Endpoint > );
     };
 
     // Main menu drag
-    const onDragEnd = (fromIndex: number, toIndex: number) => {
-        const updated = [...endpoints];
-        const item = updated.splice(fromIndex, 1)[0];
-        updated.splice(toIndex, 0, item);
-        autoSave(updated);
+    const onDragEnd = ( fromIndex: number, toIndex: number ) => {
+        const updated = [ ...endpoints ];
+        const item = updated.splice( fromIndex, 1 )[ 0 ];
+        updated.splice( toIndex, 0, item );
+        autoSave( updated );
     };
 
-    const startEdit = (key: string, endpoint: Endpoint) => {
-        setEditKey(key);
-        setEditName(endpoint.name);
-        setEditSlug(endpoint.slug);
+    const startEdit = ( key: string, endpoint: Endpoint ) => {
+        setEditKey( key );
+        setEditName( endpoint.name );
+        setEditSlug( endpoint.slug );
     };
 
-    const renderRow = ([key, endpoint]: [string, Endpoint], index: number) => {
+    const renderRow = (
+        [ key, endpoint ]: [ string, Endpoint ],
+        index: number
+    ) => {
         // Submenu drag
-        const onSubmenuDragEnd = (fromIndex: number, toIndex: number) => {
-            const updated = endpoints.map(([k, item]) => {
-                if (k === key) {
-                    const submenuUpdated = [...item.submenu];
-                    const moved = submenuUpdated.splice(fromIndex, 1)[0];
-                    submenuUpdated.splice(toIndex, 0, moved);
-                    return [k, { ...item, submenu: submenuUpdated }];
+        const onSubmenuDragEnd = ( fromIndex: number, toIndex: number ) => {
+            const updated = endpoints.map( ( [ k, item ] ) => {
+                if ( k === key ) {
+                    const submenuUpdated = [ ...item.submenu ];
+                    const moved = submenuUpdated.splice( fromIndex, 1 )[ 0 ];
+                    submenuUpdated.splice( toIndex, 0, moved );
+                    return [ k, { ...item, submenu: submenuUpdated } ];
                 }
-                return [k, item];
-            }) as [string, Endpoint][];
-            autoSave(updated);
+                return [ k, item ];
+            } ) as [ string, Endpoint ][];
+            autoSave( updated );
         };
 
         return (
-            <div key={key} className="menu-item">
-                {editKey === key ? (
-                    <div className="edit-menu" ref={editRef}>
+            <div key={ key } className="menu-item">
+                { editKey === key ? (
+                    <div className="edit-menu" ref={ editRef }>
                         <div className="name-wrapper">
                             <i className="adminlib-drag"></i>
                             <label
-                                htmlFor={`menu-name-${key}`}
+                                htmlFor={ `menu-name-${ key }` }
                                 className="input-label"
                             >
-                                Menu name:{' '}
+                                Menu name:{ ' ' }
                             </label>
                             <input
-                                id={`menu-name-${key}`}
-                                value={editName}
-                                onChange={(e) => {
+                                id={ `menu-name-${ key }` }
+                                value={ editName }
+                                onChange={ ( e ) => {
                                     const newName = e.target.value;
-                                    setEditName(newName);
-                                    const updated = endpoints.map(([k, item]) =>
-                                        k === editKey
-                                            ? [
-                                                  k,
-                                                  {
-                                                      ...item,
-                                                      name: newName,
-                                                      slug: editSlug,
-                                                      visible: item.visible,
-                                                  },
-                                              ]
-                                            : [k, item]
-                                    ) as [string, Endpoint][];
-                                    autoSave(updated);
-                                }}
+                                    setEditName( newName );
+                                    const updated = endpoints.map(
+                                        ( [ k, item ] ) =>
+                                            k === editKey
+                                                ? [
+                                                      k,
+                                                      {
+                                                          ...item,
+                                                          name: newName,
+                                                          slug: editSlug,
+                                                          visible: item.visible,
+                                                      },
+                                                  ]
+                                                : [ k, item ]
+                                    ) as [ string, Endpoint ][];
+                                    autoSave( updated );
+                                } }
                                 placeholder="Enter menu name"
                                 className="basic-input"
                             />
-                            {key !== 'dashboard' && (
+                            { key !== 'dashboard' && (
                                 <>
                                     <label
-                                        htmlFor={`slug-${key}`}
+                                        htmlFor={ `slug-${ key }` }
                                         className="input-label"
                                     >
-                                        Slug:{' '}
+                                        Slug:{ ' ' }
                                     </label>
                                     <input
-                                        id={`slug-${key}`}
-                                        value={editSlug}
-                                        onChange={(e) => {
+                                        id={ `slug-${ key }` }
+                                        value={ editSlug }
+                                        onChange={ ( e ) => {
                                             // const newSlug = e.target.value;
                                             // setEditSlug(newSlug);
                                             // const updated = endpoints.map(([k, item]) =>
@@ -168,8 +174,8 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
                                             // autoSave(updated);
                                             let newSlug = e.target.value
                                                 .toLowerCase()
-                                                .replace(/[^a-z0-9-]/g, '');
-                                            setEditSlug(newSlug);
+                                                .replace( /[^a-z0-9-]/g, '' );
+                                            setEditSlug( newSlug );
 
                                             if (
                                                 newSlug !==
@@ -179,14 +185,18 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
                                             }
 
                                             const trimmedValue = newSlug.trim();
-                                            if (!trimmedValue) {
+                                            if ( ! trimmedValue ) {
                                                 return;
                                             }
 
                                             // Collect all existing slugs (except the one being edited)
                                             const existingSlugs = endpoints
-                                                .filter(([k]) => k !== editKey)
-                                                .map(([_, item]) => item.slug);
+                                                .filter(
+                                                    ( [ k ] ) => k !== editKey
+                                                )
+                                                .map(
+                                                    ( [ _, item ] ) => item.slug
+                                                );
 
                                             // Generate unique slug
                                             let finalSlug = trimmedValue;
@@ -197,7 +207,7 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
                                                     finalSlug
                                                 )
                                             ) {
-                                                finalSlug = `${trimmedValue}${counter}`;
+                                                finalSlug = `${ trimmedValue }${ counter }`;
                                                 counter++;
                                             }
 
@@ -208,7 +218,7 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
 
                                             // Update endpoints
                                             const updated = endpoints.map(
-                                                ([k, item]) =>
+                                                ( [ k, item ] ) =>
                                                     k === editKey
                                                         ? [
                                                               k,
@@ -220,58 +230,58 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
                                                                       item.visible,
                                                               },
                                                           ]
-                                                        : [k, item]
-                                            ) as [string, Endpoint][];
+                                                        : [ k, item ]
+                                            ) as [ string, Endpoint ][];
 
-                                            autoSave(updated);
-                                        }}
+                                            autoSave( updated );
+                                        } }
                                         placeholder="Slug"
                                         className="basic-input"
                                     />
                                 </>
-                            )}
+                            ) }
                         </div>
                     </div>
                 ) : (
                     <div
-                        style={{
+                        style={ {
                             opacity: endpoint.visible === false ? 0.5 : 1,
-                        }}
+                        } }
                         className="main-menu"
                     >
                         <div className="name-wrapper">
-                            {key !== 'dashboard' && (
+                            { key !== 'dashboard' && (
                                 <i className="adminlib-drag"></i>
-                            )}
-                            <i className={endpoint.icon}></i>
+                            ) }
+                            <i className={ endpoint.icon }></i>
                             <div className="name">
-                                {endpoint.name}
-                                {key !== 'dashboard' && (
+                                { endpoint.name }
+                                { key !== 'dashboard' && (
                                     <>
-                                        {' '}
-                                        <code>{endpoint.slug}</code>
+                                        { ' ' }
+                                        <code>{ endpoint.slug }</code>
                                     </>
-                                )}
+                                ) }
                             </div>
                         </div>
 
                         <div className="edit-icon">
-                            {endpoint.visible !== false && (
+                            { endpoint.visible !== false && (
                                 <i
-                                    onClick={() => startEdit(key, endpoint)}
+                                    onClick={ () => startEdit( key, endpoint ) }
                                     className="adminlib-edit"
                                 ></i>
-                            )}
+                            ) }
                             <div>
                                 <i
-                                    className={`adminlib-eye${
+                                    className={ `adminlib-eye${
                                         endpoint.visible === false
                                             ? '-blocked'
                                             : ''
-                                    }`}
-                                    onClick={() => {
+                                    }` }
+                                    onClick={ () => {
                                         const updated = endpoints.map(
-                                            ([k, item]) =>
+                                            ( [ k, item ] ) =>
                                                 k === key
                                                     ? [
                                                           k,
@@ -284,50 +294,50 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
                                                                       : false,
                                                           },
                                                       ]
-                                                    : [k, item]
-                                        ) as [string, Endpoint][];
-                                        autoSave(updated);
-                                    }}
+                                                    : [ k, item ]
+                                        ) as [ string, Endpoint ][];
+                                        autoSave( updated );
+                                    } }
                                 ></i>
                             </div>
                         </div>
                     </div>
-                )}
+                ) }
 
-                {/* Submenu drag list */}
-                {endpoint.submenu?.length > 0 && (
+                { /* Submenu drag list */ }
+                { endpoint.submenu?.length > 0 && (
                     <DragListView
                         nodeSelector=".sub-menu"
                         handleSelector="" // whole row draggable
-                        onDragEnd={onSubmenuDragEnd}
+                        onDragEnd={ onSubmenuDragEnd }
                     >
                         <ul>
-                            {endpoint.submenu.map((sub, i) => {
-                                const subKey = `${key}-sub-${i}`;
+                            { endpoint.submenu.map( ( sub, i ) => {
+                                const subKey = `${ key }-sub-${ i }`;
                                 return (
                                     <li
-                                        key={i}
+                                        key={ i }
                                         className="sub-menu"
-                                        style={{
+                                        style={ {
                                             opacity:
                                                 endpoint.visible === false
                                                     ? 0.5
                                                     : 1,
-                                        }}
+                                        } }
                                     >
-                                        {editKey === subKey ? (
+                                        { editKey === subKey ? (
                                             <>
                                                 <label
-                                                    htmlFor={`submenu-name-${key}-${i}`}
+                                                    htmlFor={ `submenu-name-${ key }-${ i }` }
                                                     className="input-label"
                                                 >
-                                                    Submenu Name:{' '}
+                                                    Submenu Name:{ ' ' }
                                                 </label>
-                                                <span ref={editRef}>
+                                                <span ref={ editRef }>
                                                     <input
-                                                        id={`submenu-name-${key}-${i}`}
-                                                        value={editName}
-                                                        onChange={(e) => {
+                                                        id={ `submenu-name-${ key }-${ i }` }
+                                                        value={ editName }
+                                                        onChange={ ( e ) => {
                                                             const newName =
                                                                 e.target.value;
                                                             setEditName(
@@ -335,10 +345,10 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
                                                             );
                                                             const updated =
                                                                 endpoints.map(
-                                                                    ([
+                                                                    ( [
                                                                         k,
                                                                         item,
-                                                                    ]) => {
+                                                                    ] ) => {
                                                                         if (
                                                                             k ===
                                                                             key
@@ -372,10 +382,10 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
                                                                     }
                                                                 ) as [
                                                                     string,
-                                                                    Endpoint
+                                                                    Endpoint,
                                                                 ][];
-                                                            autoSave(updated);
-                                                        }}
+                                                            autoSave( updated );
+                                                        } }
                                                         placeholder="Submenu name"
                                                         className="basic-input"
                                                     />
@@ -384,23 +394,23 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
                                         ) : (
                                             <>
                                                 <i className="adminlib-drag"></i>
-                                                {sub.name}
+                                                { sub.name }
                                                 <i
                                                     className="adminlib-edit"
-                                                    onClick={() => {
-                                                        setEditKey(subKey);
-                                                        setEditName(sub.name);
-                                                        setEditSlug(sub.slug);
-                                                    }}
+                                                    onClick={ () => {
+                                                        setEditKey( subKey );
+                                                        setEditName( sub.name );
+                                                        setEditSlug( sub.slug );
+                                                    } }
                                                 ></i>
                                             </>
-                                        )}
+                                        ) }
                                     </li>
                                 );
-                            })}
+                            } ) }
                         </ul>
                     </DragListView>
-                )}
+                ) }
             </div>
         );
     };
@@ -410,22 +420,22 @@ const EndpointManager: React.FC<EndpointEditorProps> = ({
             <DragListView
                 nodeSelector=".drag-row"
                 handleSelector=".drag-handle"
-                onDragEnd={onDragEnd}
+                onDragEnd={ onDragEnd }
             >
                 <div>
-                    {endpoints.map(([key, endpoint], index) => (
-                        <div key={key} className="endpoint drag-row">
-                            {key === 'dashboard' ? (
+                    { endpoints.map( ( [ key, endpoint ], index ) => (
+                        <div key={ key } className="endpoint drag-row">
+                            { key === 'dashboard' ? (
                                 <div className="dashboard">
-                                    {renderRow([key, endpoint], index)}
+                                    { renderRow( [ key, endpoint ], index ) }
                                 </div>
                             ) : (
                                 <div className="drag-handle menu-wrapper">
-                                    {renderRow([key, endpoint], index)}
+                                    { renderRow( [ key, endpoint ], index ) }
                                 </div>
-                            )}
+                            ) }
                         </div>
-                    ))}
+                    ) ) }
                 </div>
             </DragListView>
         </div>
