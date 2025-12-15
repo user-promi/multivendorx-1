@@ -16,6 +16,15 @@ interface SelectOption {
     label: string;
 }
 
+interface Setting {
+    [ key: string ]: string | SelectOption[] | boolean | number | undefined;
+}
+
+interface AppLocalizer {
+    nonce: string;
+    [ key: string ]: string | number | boolean;
+}
+
 interface InputMailchimpListProps {
     mailchimpKey: string;
     optionKey: string;
@@ -25,9 +34,12 @@ interface InputMailchimpListProps {
     onChange: ( event: { target: { value: string } }, key: string ) => void;
     selectKey: string;
     value?: string;
-    setting: Record< string, any >;
-    updateSetting: any;
-    appLocalizer: Record< string, any >; // Allows any structure
+    setting: Setting;
+    updateSetting: (
+        key: string,
+        value: string | SelectOption[] | boolean | number
+    ) => void;
+    appLocalizer: AppLocalizer;
 }
 
 const InputMailchimpList: React.FC< InputMailchimpListProps > = ( {
@@ -41,7 +53,6 @@ const InputMailchimpList: React.FC< InputMailchimpListProps > = ( {
     proSettingChanged,
     onChange,
     selectKey,
-    value,
 } ) => {
     // State variables
     // const { setting, updateSetting } = useSetting();

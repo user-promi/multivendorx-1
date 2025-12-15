@@ -7,6 +7,11 @@ import {
 } from 'react';
 import DisplayButton from './DisplayButton';
 
+interface InputFeedback {
+    type: string;
+    message: string;
+}
+
 interface BasicInputProps {
     wrapperClass?: string;
     inputLabel?: string;
@@ -37,8 +42,8 @@ interface BasicInputProps {
     postInsideText?: string;
     generate?: string;
     clickBtnName?: string;
-    msg?: any;
-    onclickCallback?: ( e: React.MouseEvent< HTMLButtonElement > ) => void;
+    feedback?: InputFeedback;
+    onclickCallback?: ( e: MouseEvent< HTMLButtonElement > ) => void;
     proSetting?: boolean;
     description?: string;
     descClass?: string;
@@ -78,8 +83,7 @@ const BasicInput = forwardRef< HTMLInputElement, BasicInputProps >(
             generate,
             clickBtnName,
             onclickCallback,
-            msg,
-            proSetting,
+            feedback,
             description,
             descClass,
             rangeUnit,
@@ -162,7 +166,9 @@ const BasicInput = forwardRef< HTMLInputElement, BasicInputProps >(
                                 }
 
                                 if ( onClick ) {
-                                    onClick( e as any );
+                                    onClick(
+                                        e as MouseEvent< HTMLInputElement >
+                                    );
                                 }
                             } }
                         >
@@ -314,7 +320,9 @@ const BasicInput = forwardRef< HTMLInputElement, BasicInputProps >(
                         dangerouslySetInnerHTML={ { __html: description } }
                     />
                 ) }
-                { msg && <div className={ msg.type }>{ msg.message }</div> }
+                { feedback && (
+                    <div className={ feedback.type }>{ feedback.message }</div>
+                ) }
             </>
         );
     }

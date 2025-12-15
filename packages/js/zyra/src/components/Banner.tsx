@@ -27,17 +27,7 @@ interface BannerProps {
     btnBgCode: string;
 }
 
-const Banner: React.FC< BannerProps > = ( {
-    isPro,
-    products,
-    proUrl,
-    tag,
-    buttonText,
-    bgCode,
-    textCode,
-    btnCode,
-    btnBgCode,
-} ) => {
+const Banner: React.FC< BannerProps > = ( { isPro, products, proUrl } ) => {
     // Ensure localStorage is initialized correctly
     if ( localStorage.getItem( 'banner' ) !== 'false' ) {
         localStorage.setItem( 'banner', 'true' );
@@ -57,24 +47,20 @@ const Banner: React.FC< BannerProps > = ( {
         setModal( false );
     };
 
-    const handleOpen = (): void => {
-        setModal( true );
-    };
-
     useEffect( () => {
         if ( ! banner ) {
             return;
         }
 
-        const carouselItems: NodeListOf< Element > =
-            document.querySelectorAll( '.carousel-item' );
+        const carouselItems =
+            document.querySelectorAll< HTMLElement >( '.carousel-item' );
         const totalItems: number = carouselItems.length;
         if ( ! totalItems ) {
             return;
         }
 
         let currentIndex: number = 0;
-        let interval: NodeJS.Timeout;
+        let interval: ReturnType< typeof setInterval >;
 
         // Function to show the current slide and hide others
         const showSlide = ( index: number ): void => {

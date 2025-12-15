@@ -49,7 +49,6 @@ const Modules: React.FC< ModuleProps > = ( {
     appLocalizer,
     apiLink,
     proPopupContent: ProPopupComponent,
-    brandImg,
     pluginName,
 } ) => {
     const [ modelOpen, setModelOpen ] = useState< boolean >( false );

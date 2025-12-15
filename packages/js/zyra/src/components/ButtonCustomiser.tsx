@@ -8,22 +8,49 @@ import React, { useState, useEffect, useRef } from 'react';
  */
 import '../styles/web/ButtonCustomizer.scss';
 
-// Types
+interface ButtonSettings {
+    button_link?: string;
+    button_background_color?: string;
+    button_background_color_onhover?: string;
+    button_text_color?: string;
+    button_text_color_onhover?: string;
+    button_border_color?: string;
+    button_border_color_onhover?: string;
+    button_border_size?: number;
+    button_border_radious?: number;
+    button_font_size?: number;
+    button_font_width?: number;
+    button_padding?: number;
+    button_margin?: number;
+    button_text?: string;
+}
+
 interface ButtonCustomizerProps {
-    onChange: ( key: string, value: any, isRestoreDefaults?: boolean ) => void;
-    setting?: Record< string, any >;
+    onChange: (
+        key: string,
+        value: unknown,
+        isRestoreDefaults?: boolean
+    ) => void;
+    setting?: ButtonSettings;
     className?: string;
     text: string;
-    proSetting?: any;
+    proSetting?: boolean;
 }
 
 interface CustomizerProps {
-    onChange: ( key: string, value: any, isRestoreDefaults?: boolean ) => void;
-    setting: Record< string, any >;
+    onChange: (
+        key: string,
+        value: unknown,
+        isRestoreDefaults?: boolean
+    ) => void;
+    setting?: ButtonSettings;
     setHoverOn: ( hover: boolean ) => void;
 }
 
-const Customizer: React.FC< CustomizerProps > = ( { onChange, setting } ) => {
+const Customizer: React.FC< CustomizerProps > = ( {
+    onChange,
+    setting = {},
+} ) => {
     const [ select, setSelect ] = useState< string >( '' );
     const [ buttonLink, setButtonLink ] = useState< string >(
         setting.button_link || ''

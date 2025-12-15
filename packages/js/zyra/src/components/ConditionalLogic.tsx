@@ -18,9 +18,17 @@ interface ConditionalLogic {
     rules: ConditionalRule[];
 }
 
+interface FormField {
+    id: string;
+    name: string;
+    label: string;
+    type: string;
+    conditionalLogic?: ConditionalLogic;
+}
+
 interface ConditionalLogicProps {
-    formField: any;
-    allFields: any[];
+    formField: FormField;
+    allFields: FormField[];
     onSave: ( logic: ConditionalLogic ) => void;
     onClose: () => void;
 }
@@ -107,10 +115,14 @@ const ConditionalLogicModal: React.FC< ConditionalLogicProps > = ( {
                                 <label>Action</label>
                                 <select
                                     value={ logic.action }
-                                    onChange={ ( e ) =>
+                                    onChange={ (
+                                        e: React.ChangeEvent< HTMLSelectElement >
+                                    ) =>
                                         setLogic( ( prev ) => ( {
                                             ...prev,
-                                            action: e.target.value as any,
+                                            action: e.target.value as
+                                                | 'show'
+                                                | 'hide',
                                         } ) )
                                     }
                                     className="basic-select"
@@ -167,10 +179,12 @@ const ConditionalLogicModal: React.FC< ConditionalLogicProps > = ( {
 
                                         <select
                                             value={ rule.operator }
-                                            onChange={ ( e ) =>
+                                            onChange={ (
+                                                e: React.ChangeEvent< HTMLSelectElement >
+                                            ) =>
                                                 updateRule( index, {
                                                     operator: e.target
-                                                        .value as any,
+                                                        .value as ConditionalRule[ 'operator' ],
                                                 } )
                                             }
                                             className="basic-select"

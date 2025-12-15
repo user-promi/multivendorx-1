@@ -2,11 +2,16 @@
 import React, { useState } from 'react';
 import ImageGallery from './ImageGallery';
 
+interface GalleryImage {
+    url: string;
+    alt: string;
+}
+
 interface LayoutBlock {
     id: string;
     type: 'text' | 'image' | 'heading' | 'spacer';
     content: string;
-    image?: any;
+    image?: GalleryImage;
     settings: {
         alignment: 'left' | 'center' | 'right';
         padding: number;
@@ -14,15 +19,7 @@ interface LayoutBlock {
     };
 }
 
-interface BlockLayoutProps {
-    formField?: any;
-    onChange?: ( key: string, value: any ) => void;
-}
-
-const BlockLayout: React.FC< BlockLayoutProps > = ( {
-    formField,
-    onChange,
-} ) => {
+const BlockLayout: React.FC = () => {
     const [ blocks, setBlocks ] = useState< LayoutBlock[] >( [] );
     const [ showImageGallery, setShowImageGallery ] = useState( false );
     const [ selectedBlock, setSelectedBlock ] = useState< string | null >(
@@ -64,20 +61,24 @@ const BlockLayout: React.FC< BlockLayoutProps > = ( {
         }
     };
 
-    const handleImageSelect = ( image: any ) => {
-        if ( selectedBlock ) {
-            updateBlock( selectedBlock, {
-                type: 'image',
-                image,
-                content: image.alt,
-            } );
+    const handleImageSelect = ( images: GalleryImage[] ) => {
+        const image = images[ 0 ];
+
+        if ( ! image || ! selectedBlock ) {
+            setShowImageGallery( false );
+            return;
         }
+
+        updateBlock( selectedBlock, {
+            type: 'image',
+            image,
+            content: image.alt,
+        } );
+
         setShowImageGallery( false );
     };
 
     const renderBlock = ( block: LayoutBlock ) => {
-        const isSelected = selectedBlock === block.id;
-
         switch ( block.type ) {
             case 'heading':
                 return (
@@ -295,7 +296,10 @@ const BlockSettings: React.FC< BlockSettingsProps > = ( {
                         onUpdate( {
                             settings: {
                                 ...block.settings,
-                                alignment: e.target.value as any,
+                                alignment: e.target.value as
+                                    | 'left'
+                                    | 'center'
+                                    | 'right',
                             },
                         } )
                     }

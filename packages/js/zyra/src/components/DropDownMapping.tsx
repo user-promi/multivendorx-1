@@ -24,7 +24,6 @@ interface DropDownMappingProps {
 const DropDownMapping: React.FC< DropDownMappingProps > = ( {
     value = [],
     onChange,
-    proSetting,
     proSettingChanged,
     description,
     syncFieldsMap,

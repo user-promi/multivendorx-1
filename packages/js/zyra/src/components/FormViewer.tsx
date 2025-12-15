@@ -30,6 +30,7 @@ interface Option {
 }
 
 interface Field {
+    id: string;
     type: string;
     name?: string;
     label?: string;
@@ -42,20 +43,27 @@ interface Field {
     options?: Option[];
     sitekey?: string;
     key?: string;
-    fields?: any;
+    fields?: Field[];
+}
+
+interface ButtonSetting {
+    button_text?: string;
+    [ key: string ]: string | number | boolean | undefined;
 }
 
 interface FormFields {
     formfieldlist: Field[];
-    butttonsetting?: any;
+    butttonsetting?: ButtonSetting;
 }
 
 interface FormViewerProps {
     formFields: FormFields;
-    response?: any;
-    onSubmit: ( data: Record< string, any > ) => void;
-    countryList?: any;
-    stateList?: any;
+    response?: Record< string, string | number | File | undefined >; // previously `any`
+    onSubmit: (
+        data: Record< string, string | number | File | undefined >
+    ) => void;
+    countryList?: Option[];
+    stateList?: Record< string, Option[] | Record< string, string > >;
 }
 
 const Checkboxes: React.FC< {
@@ -99,7 +107,6 @@ const Checkboxes: React.FC< {
                     />
                     { option.label }
                 </label>
-                // </div>
             ) ) }
         </div>
     );
@@ -168,8 +175,7 @@ const Radio: React.FC< RadioProps > = ( { options, onChange } ) => {
         <div className="multiselect-container items-wrapper">
             { options.map( ( option, index ) => {
                 return (
-                    // <div key={index} className="select-items">
-                    <label htmlFor={ option.value }>
+                    <label data-index={ index } htmlFor={ option.value }>
                         <input
                             type="radio"
                             id={ option.value }
@@ -179,7 +185,6 @@ const Radio: React.FC< RadioProps > = ( { options, onChange } ) => {
                         />
                         { option.label }
                     </label>
-                    // </div>
                 );
             } ) }
         </div>
@@ -570,7 +575,6 @@ const FormViewer: React.FC< FormViewerProps > = ( {
                                     { field.label }
                                 </label>
                                 <div className="attachment-section">
-                                    { /* eslint-disable-next-line jsx-a11y/label-has-associated-control */ }
                                     <label
                                         htmlFor="dropzone-file"
                                         className="attachment-label"
@@ -675,60 +679,7 @@ const FormViewer: React.FC< FormViewerProps > = ( {
                         );
                     case 'divider':
                         return <p className="section-divider-container"></p>;
-                    // case 'address':
-                    //     return (
-                    //         <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide" key={field.id}>
-                    //             <label className="address-label">{field.label}</label>
-                    //             <div className="address-field-group">
-                    //                 {field.fields?.map((subField:any) => {
-                    //                     if (subField.disabled) return null;
-                    //                     // Compute field name as "address-mhk75lu8_city", etc.
-                    //                     const inputName = `${subField.key}`;
-                    //                     const value = inputs[inputName] || '';
 
-                    //                     switch (subField.type) {
-                    //                         case 'text':
-                    //                             return (
-                    //                                 <div className="address-input-wrapper" key={subField.id}>
-                    //                                     <label htmlFor={inputName}>{subField.label}</label>
-                    //                                     <input
-                    //                                         type="text"
-                    //                                         id={inputName}
-                    //                                         name={inputName}
-                    //                                         placeholder={subField.placeholder}
-                    //                                         value={value}
-                    //                                         required={field.required || subField.required}
-                    //                                         onChange={(e) =>
-                    //                                             handleChange(inputName, e.target.value)
-                    //                                         }
-                    //                                     />
-                    //                                 </div>
-                    //                             );
-
-                    //                         case 'select':
-                    //                             return (
-                    //                                 <div className="multiselect-container" key={subField.id}>
-                    //                                     <label htmlFor={inputName}>{subField.label}</label>
-                    //                                     <Multiselect
-                    //                                         options={subField.options ?? []}
-                    //                                         onChange={(data) =>
-                    //                                             handleChange(
-                    //                                                 field.name ?? '',
-                    //                                                 data
-                    //                                             )
-                    //                                         }
-                    //                                     />
-                    //                                 </div>
-                    //                             );
-
-                    //                         default:
-                    //                             return null;
-                    //                     }
-                    //                 })}
-                    //             </div>
-                    //         </p>
-                    //     );
-                    // --- inside your FormViewer component, inside case 'address' ---
                     case 'address':
                         return (
                             <fieldset key={ field.id }>

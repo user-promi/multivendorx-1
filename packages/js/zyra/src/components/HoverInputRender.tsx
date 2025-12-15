@@ -22,9 +22,7 @@ interface HoverInputRenderProps {
 const HoverInputRender: React.FC< HoverInputRenderProps > = ( {
     label,
     placeholder,
-    onLabelChange,
     renderStaticContent,
-    renderEditableContent,
 } ) => {
     const [ showTextBox, setShowTextBox ] = useState( false );
     const [ isClicked, setIsClicked ] = useState( false );
@@ -71,22 +69,6 @@ const HoverInputRender: React.FC< HoverInputRenderProps > = ( {
             >
                 { renderStaticContent( { label, placeholder } ) }
             </div>
-            { /* ) } */ }
-            { /* { showTextBox && (
-                <div
-                    className="main-input-wrapper"
-                    role="button"
-                    tabIndex={ 0 }
-                    onClick={ () => setIsClicked( true ) }
-                    onMouseLeave={ handleMouseLeave }
-                >
-                    { renderEditableContent( {
-                        label,
-                        onLabelChange,
-                        placeholder,
-                    } ) }
-                </div>
-            ) } */ }
         </>
     );
 };

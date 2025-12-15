@@ -20,13 +20,13 @@ interface AddressFormField {
     type: string;
     label: string;
     fields?: SubField[];
-    value?: Record< string, any >;
+    value?: Record< string, string | undefined >;
     readonly?: boolean;
 }
 
 interface AddressFieldProps {
     formField: AddressFormField;
-    onChange: ( key: string, value: any ) => void;
+    onChange: ( key: 'fields', value: SubField[] ) => void;
     opendInput: FormField | null;
     setOpendInput: React.Dispatch< React.SetStateAction< FormField | null > >;
 }
@@ -103,6 +103,7 @@ const AddressField: React.FC< AddressFieldProps > = ( {
                                 } }
                                 type="dropdown"
                                 selected={ false }
+                                onChange={ () => {} }
                             />
                         ) }
                     </div>

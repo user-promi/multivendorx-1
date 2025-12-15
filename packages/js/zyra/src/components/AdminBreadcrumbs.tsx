@@ -16,8 +16,8 @@ interface AdminBreadcrumbsProps {
     hideTitle?: boolean;
     hideBreadcrumb?: boolean;
     renderBreadcrumb?: () => React.ReactNode;
-    renderMenuItems?: ( items: any[] ) => React.ReactNode;
-    tabData?: any[];
+    renderMenuItems?: ( items: unknown[] ) => React.ReactNode;
+    tabData?: unknown[];
     buttons?: React.ReactNode[];
     premium?: boolean;
     goPremium?: boolean;
