@@ -643,29 +643,29 @@ By signing and submitting, the Seller accepts all terms above.
         );
         update_option( Utill::MULTIVENDORX_SETTINGS['product-preferencess'], $product_settings );
 
-        $registration_form = [ 
-            [
-                'id'      => 1,
-                'type'    => 'title',
-                'label'   => 'Registration Form',
-            ],
-            [
-                'id' => 2,
-                'type' => 'text',
-                'label' => 'Enter your store name',
-                'required' => false,
-                'name' => 'name',
+        $registration_form = array(
+            array(
+                'id'    => 1,
+                'type'  => 'title',
+                'label' => 'Registration Form',
+            ),
+            array(
+                'id'          => 2,
+                'type'        => 'text',
+                'label'       => 'Enter your store name',
+                'required'    => false,
+                'name'        => 'name',
                 'placeholder' => 'text',
-                'readonly' => true,
-            ],
-        ];
+                'readonly'    => true,
+            ),
+        );
 
-        $registration_from_settings = [
-            'store_registration_from'    => [
+        $registration_from_settings = array(
+            'store_registration_from' => array(
                 'formfieldlist'  => $registration_form,
-                'butttonsetting' => [],
-            ],         
-        ];
+                'butttonsetting' => array(),
+            ),
+        );
 
         update_option( Utill::MULTIVENDORX_SETTINGS['store-registration-form'], $registration_from_settings );
 

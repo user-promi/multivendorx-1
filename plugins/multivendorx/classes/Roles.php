@@ -7,7 +7,6 @@
 
 namespace MultiVendorX;
 
-
 defined( 'ABSPATH' ) || exit;
 
 /**
