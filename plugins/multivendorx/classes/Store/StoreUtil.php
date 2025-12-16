@@ -496,7 +496,10 @@ class StoreUtil
         foreach ($submitted_data as $field_name => $field_value) {
             $label = $name_label_map[$field_name] ?? $field_name;
             $value = is_array($field_value)
-                ? implode(', ', array_values(array_intersect_key($option_label_map, array_flip($field_value))))
+                ? implode(', ', array_map(
+                    fn($val) => $option_label_map[$val] ?? $val,
+                    $field_value
+                ))
                 : ($option_label_map[$field_value] ?? $field_value);
 
             $response['all_registration_data'][$field_name] = $field_value;
