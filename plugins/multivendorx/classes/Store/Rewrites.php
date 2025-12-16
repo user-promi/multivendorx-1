@@ -75,7 +75,7 @@ class Rewrites {
         // Add store filter.
         $meta_query   = $query->get( 'meta_query', array() );
         $meta_query[] = array(
-            'key'     => Utill::POST_META_SETTINGS['multivendorx_store_id'],
+            'key'     => Utill::POST_META_SETTINGS['store_id'],
             'value'   => $store_id,
             'compare' => '=',
         );
@@ -129,8 +129,6 @@ class Rewrites {
     public function register_query_var( $vars ) {
         $vars[] = $this->custom_store_url;
         $vars[] = 'segment';
-        // $vars[] = 'element';
-        // $vars[] = 'context_id';
 
         return apply_filters( 'multivendorx_query_vars', $vars, $this );
     }
