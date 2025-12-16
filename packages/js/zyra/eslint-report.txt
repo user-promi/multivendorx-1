@@ -1,0 +1,78 @@
+
+/opt/dockerfolder/multivendorx-pro/multivendorx/packages/js/zyra/src/components/AdminForm.tsx
+    52:19  error  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+    89:16  error  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+   188:19  error  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+   192:21  error  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+   301:14  error  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+   302:20  error  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+   303:14  error  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+   304:23  error  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+   305:35  error  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+   322:31  error  'NodeJS' is not defined                                       no-undef
+   330:22  error  'insertModule' is assigned a value but never used             @typescript-eslint/no-unused-vars
+   330:36  error  'removeModule' is assigned a value but never used             @typescript-eslint/no-unused-vars
+   356:41  error  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+   507:16  error  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+   516:21  error  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+   571:11  error  'handleMultiNumberChange' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   594:48  error  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+   618:22  error  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+   742:26  error  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+  1175:21  error  Unexpected lexical declaration in case block                  no-case-declarations
+  1176:21  error  Unexpected lexical declaration in case block                  no-case-declarations
+  1448:21  error  Unexpected lexical declaration in case block                  no-case-declarations
+  2102:47  error  Unexpected any. Specify a different type                      @typescript-eslint/no-explicit-any
+
+/opt/dockerfolder/multivendorx-pro/multivendorx/packages/js/zyra/src/components/CatalogCustomizer.tsx
+   16:37  error  Unexpected any. Specify a different type                                        @typescript-eslint/no-explicit-any
+   18:30  error  Unexpected any. Specify a different type                                        @typescript-eslint/no-explicit-any
+   52:46  error  Unexpected any. Specify a different type                                        @typescript-eslint/no-explicit-any
+  231:23  error  Constraining the generic type `T` to `unknown` does nothing and is unnecessary  @typescript-eslint/no-unnecessary-type-constraint
+  255:9   error  Definition for rule 'react-hooks/exhaustive-deps' was not found                 react-hooks/exhaustive-deps
+
+/opt/dockerfolder/multivendorx-pro/multivendorx/packages/js/zyra/src/components/FormViewer.tsx
+  217:61  error  Unexpected any. Specify a different type                                   @typescript-eslint/no-explicit-any
+  257:49  error  Unexpected any. Specify a different type                                   @typescript-eslint/no-explicit-any
+  339:25  error  Do not access Object.prototype method 'hasOwnProperty' from target object  no-prototype-builtins
+  687:66  error  Unexpected any. Specify a different type                                   @typescript-eslint/no-explicit-any
+
+/opt/dockerfolder/multivendorx-pro/multivendorx/packages/js/zyra/src/components/GoogleMap.tsx
+    5:17  error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+   38:5   error  'instructionText' is defined but never used  @typescript-eslint/no-unused-vars
+   41:39  error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+   42:45  error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+  111:56  error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+  137:19  error  'error' is defined but never used            @typescript-eslint/no-unused-vars
+  137:27  error  Empty block statement                        no-empty
+  140:40  error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+  171:24  error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+  179:47  error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+  180:27  error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+  185:60  error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+
+/opt/dockerfolder/multivendorx-pro/multivendorx/packages/js/zyra/src/components/HoverInputRender.tsx
+  27:13  error  'showTextBox' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  29:34  error  'NodeJS' is not defined                           no-undef
+
+/opt/dockerfolder/multivendorx-pro/multivendorx/packages/js/zyra/src/components/Mapbox.tsx
+  108:26  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  278:47  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  279:27  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  286:49  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/opt/dockerfolder/multivendorx-pro/multivendorx/packages/js/zyra/src/components/PaymentTabsComponent.tsx
+   30:20  error  Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+   38:15  error  Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+   53:13  error  Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+   54:14  error  Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+   81:36  error  Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+   83:28  error  Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+   84:39  error  Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  309:17  error  Unexpected lexical declaration in case block  no-case-declarations
+  356:41  error  Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  508:45  error  Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  642:43  error  Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+
+✖ 61 problems (61 errors, 0 warnings)
+

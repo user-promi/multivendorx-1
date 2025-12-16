@@ -6,6 +6,9 @@ import { ReactSortable } from 'react-sortablejs';
 
 import '../styles/web/SettingMetaBox.scss';
 
+type FormFieldValue = string | number | boolean | Option[] | undefined;
+type SettingFieldKey = keyof FormField | 'value';
+
 // Types
 interface Option {
     id: string;
@@ -38,7 +41,7 @@ interface InputType {
 interface SettingMetaBoxProps {
     formField?: FormField;
     inputTypeList?: InputType[];
-    onChange: ( field: string, value: any ) => void;
+    onChange: ( field: SettingFieldKey, value: FormFieldValue ) => void;
     onTypeChange?: ( value: string ) => void;
     opened: { click: boolean };
     metaType?: string;
@@ -55,7 +58,7 @@ interface FieldWrapperProps {
 interface InputFieldProps {
     label: string;
     type?: string;
-    value: any;
+    value: string | number;
     onChange: ( value: string ) => void;
     className?: string;
     readonly?: boolean;
@@ -351,102 +354,6 @@ const SettingMetaBox: React.FC< SettingMetaBoxProps > = ( {
             onClick={ () => setHasOpened( ( prev ) => ! prev ) }
         >
             { hasOpened && (
-                // <main className="meta-setting-modal-content">
-                //     <div className="settings-title">
-                //         {formField?.type
-                //             ? `${formField.type.charAt(0).toUpperCase() + formField.type.slice(1)} Field Settings`
-                //             : 'Input Field Settings'}
-                //     </div>
-
-                //     <InputField
-                //         label="Field Label"
-                //         value={formField?.label || ''}
-                //         onChange={(value) => onChange('label', value)}
-                //     />
-
-                //     {metaType === 'setting-meta' ? (
-                //         <FormFieldSelect
-                //             inputTypeList={inputTypeList}
-                //             formField={formField as FormField}
-                //             onTypeChange={(type) => onTypeChange?.(type)}
-                //         />
-                //     ) : (
-                //         <InputField
-                //             label="Value"
-                //             value={option?.value || ''}
-                //             onChange={(value) => onChange('value', value)}
-                //         />
-                //     )}
-
-                //     <InputField
-                //         label={metaType === 'setting-meta' ? 'Name' : 'Label'}
-                //         value={metaType === 'setting-meta' ? formField?.name || '' : option?.label || ''}
-                //         readonly={metaType === 'setting-meta' && formField?.readonly}
-                //         onChange={(value) => {
-                //             if (metaType === 'setting-meta') {
-                //                 onChange('name', value);
-                //             } else {
-                //                 onChange('label', value);
-                //             }
-                //         }}
-                //     />
-
-                //     {metaType === 'setting-meta' && renderConditionalFields()}
-
-                //     {metaType === 'setting-meta' && (
-                //         <FieldWrapper label="Visibility">
-                //             <div className="toggle-setting-container">
-                //                 <div className="toggle-setting-wrapper">
-                //                     <div>
-                //                         <input
-                //                             checked={
-                //                                 formField?.type === 'recaptcha' ? !isSiteKeyEmpty : !formField?.disabled
-                //                             }
-                //                             onChange={(e) => onChange('disabled', !e.target.checked)}
-                //                             type="radio"
-                //                             id="visible"
-                //                             name="tabs"
-                //                             className="toggle-setting-form-input"
-                //                         />
-                //                         <label htmlFor="visible">
-                //                             Visible
-                //                         </label>
-                //                     </div>
-
-                //                     <div>
-                //                         <input
-                //                             checked={formField?.type === 'recaptcha' ? isSiteKeyEmpty : formField?.disabled}
-                //                             onChange={(e) => onChange('disabled', e.target.checked)}
-                //                             type="radio"
-                //                             id="hidden"
-                //                             name="tabs"
-                //                             className="toggle-setting-form-input"
-                //                         />
-                //                         <label htmlFor="hidden">
-                //                             Hidden
-                //                         </label>
-                //                     </div>
-                //                 </div>
-                //             </div>
-                //         </FieldWrapper>
-                //     )}
-
-                //     <FieldWrapper label={metaType === 'setting-meta' ? 'Required' : 'Set default'}>
-                //         <div className="input-wrapper">
-                //             <input
-                //                 type="checkbox"
-                //                 checked={metaType === 'setting-meta' ? formField?.required : option?.isdefault}
-                //                 onChange={(e) => {
-                //                     if (metaType === 'setting-meta') {
-                //                         onChange('required', e.target.checked);
-                //                     } else if (setDefaultValue) {
-                //                         setDefaultValue();
-                //                     }
-                //                 }}
-                //             />
-                //         </div>
-                //     </FieldWrapper>
-                // </main>
                 <main className="meta-setting-modal-content">
                     <div className="settings-title">
                         { formField?.type

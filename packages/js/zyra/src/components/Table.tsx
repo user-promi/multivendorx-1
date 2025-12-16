@@ -3,16 +3,25 @@
  */
 import React, { useState, useEffect, useRef, ReactNode } from 'react';
 import type { SortingState, Updater } from '@tanstack/react-table';
+import type { Row, Cell } from '@tanstack/react-table';
 import {
     useReactTable,
     flexRender,
-    /* eslint-disable import/named */
     getCoreRowModel,
     getPaginationRowModel,
     getSortedRowModel,
     getFilteredRowModel,
-    /* eslint-enable import/named */
 } from '@tanstack/react-table';
+
+type TableRow = Record< string, unknown >;
+
+interface ProductWithVariations extends TableRow {
+    id: string | number;
+    variation?: Record< string, TableRow >;
+    isVariation?: boolean;
+    parentId?: string | number;
+    type?: string;
+}
 
 import type {
     ColumnDef,
@@ -31,6 +40,9 @@ import { Skeleton } from '@mui/material';
 const PENALTY = 28;
 const COOLDOWN = 1;
 
+type UnknownRecord = Record< string, unknown >;
+type FilterUpdater = ( key: string, value: unknown ) => void;
+
 // Types
 type Status = {
     key: string;
@@ -43,39 +55,30 @@ interface TableCellProps {
     fieldValue?: string | boolean;
     children?: ReactNode;
     type?: string;
-    header?: any;
-    rowId?: any;
-    isExpanded?: any;
-    onToggleRow?: (e: any) => void;
-    onToggleActive?: (e: any) => void;
+    header?: UnknownRecord;
+    rowId?: string | number;
+    isExpanded?: boolean;
+    onToggleRow?: ( e: string | number ) => void;
+    onToggleActive?: ( e: boolean ) => void;
+    rowData?: UnknownRecord;
     onChange?: (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
     ) => void;
     showDropdown?: number | null;
-    rowData?: any;
     status?: string;
 }
 
 interface RealtimeFilter {
     name: string;
-    render: (
-        updateFilter: (key: string, value: any) => void,
-        filterValue: any
-    ) => ReactNode;
+    render: ( updateFilter: FilterUpdater, filterValue: unknown ) => ReactNode;
 }
 interface SearchFilter {
     name: string;
-    render: (
-        updateFilter: (key: string, value: any) => void,
-        filterValue: any
-    ) => ReactNode;
+    render: ( updateFilter: FilterUpdater, filterValue: unknown ) => ReactNode;
 }
 interface actionButton {
     name: string;
-    render: (
-        updateFilter: (key: string, value: any) => void,
-        filterValue: any
-    ) => ReactNode;
+    render: ( updateFilter: FilterUpdater, filterValue: unknown ) => ReactNode;
 }
 export const TableCell: React.FC<TableCellProps> = ({
     title,
@@ -88,35 +91,48 @@ export const TableCell: React.FC<TableCellProps> = ({
     rowId,
     onToggleRow = () => { },
     rowData = {},
-}) => {
-    const [cellData, setCellData] = useState(fieldValue);
-    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-    const [showDropdown, setShowDropdown] = useState<number | null>(null);
-    const toggleDropdown = (id: number) => {
-        setShowDropdown((prev) => (prev === id ? null : id));
+} ) => {
+    const [ cellData, setCellData ] = useState( fieldValue );
+    const timeoutRef = useRef< ReturnType< typeof setTimeout > | null >( null );
+    const [ showDropdown, setShowDropdown ] = useState< number | null >( null );
+    const toggleDropdown = ( id: number ) => {
+        setShowDropdown( ( prev ) => ( prev === id ? null : id ) );
     };
     const statusGroups = {
-        green: ['completed', 'active', 'approved', 'paid', 'public', 'publish'],
-        yellow: ['pending', 'on-hold', 'partially_refunded'],
-        blue: ['under_review', 'private', 'Upcoming', 'draft'],
-        red: ['rejected', 'unpaid', 'cancelled', 'failed', 'Expired'],
-        teal: ['suspended'],
-        orange: ['refunded', 'Processed', 'processing'],
-        purple: ['locked'],
-        indigo: ['deactivated'],
-        pink: ['permanently_rejected', 'inactive'],
-    };
-    const getStatusColor = (status: string = '') => {
+        green: [
+            'completed',
+            'active',
+            'approved',
+            'paid',
+            'public',
+            'publish',
+        ],
+        yellow: [ 'pending', 'on-hold', 'partially_refunded' ],
+        blue: [ 'under_review', 'private', 'upcoming', 'draft' ],
+        red: [ 'rejected', 'unpaid', 'cancelled', 'failed', 'expired' ],
+        teal: [ 'suspended' ],
+        orange: [ 'refunded', 'processed', 'processing' ],
+        purple: [ 'locked' ],
+        indigo: [ 'deactivated' ],
+        pink: [ 'permanently_rejected', 'inactive' ],
+    } as const;
+
+    const getStatusColor = ( status: string = '' ) => {
         const key = status.toLowerCase();
-        for (const color in statusGroups) {
-            if (statusGroups[color].includes(key)) {
+
+        for ( const color of Object.keys( statusGroups ) as Array<
+            keyof typeof statusGroups
+        > ) {
+            if ( statusGroups[ color ].includes( key ) ) {
                 return color;
             }
         }
+
         return 'gray';
     };
-    useEffect(() => {
-        const handleClickOutside = (e: MouseEvent) => {
+
+    useEffect( () => {
+        const handleClickOutside = ( e: MouseEvent ) => {
             // if click is not on dropdown toggle or inside dropdown → close it
             if (
                 !(e.target as HTMLElement).closest('.action-dropdown') &&
@@ -188,10 +204,13 @@ export const TableCell: React.FC<TableCellProps> = ({
                 <div
                     onClick={(e) => {
                         e.stopPropagation();
-                        rowId && onToggleRow?.(rowId);
-                    }}
-                    className={`table-data-container ${header.dependent ? '' : 'disable'
-                        } ${header.class || ''}`}
+                        if ( rowId !== undefined ) {
+                            onToggleRow?.( rowId );
+                        }
+                    } }
+                    className={ `table-data-container ${
+                        header.dependent ? '' : 'disable'
+                    } ${ header.class || '' }` }
                 >
                     <button
                         className="setting-btn"
@@ -234,14 +253,15 @@ export const TableCell: React.FC<TableCellProps> = ({
                 </div>
             );
             break;
-        case 'dropdown':
-            const optionsVal = Object.entries(header.options).map(
-                ([key, val]) => ({
-                    key,
-                    value: key,
-                    label: String(val),
-                })
-            );
+        case 'dropdown': {
+            const optionsVal = Object.entries(
+                header?.options as UnknownRecord
+            ).map( ( [ key, val ] ) => ( {
+                key,
+                value: key,
+                label: String( val ),
+            } ) );
+
             content = (
                 <select
                     className={`${header.class} dropdown-select ${fieldValue}`}
@@ -263,6 +283,8 @@ export const TableCell: React.FC<TableCellProps> = ({
                 </select>
             );
             break;
+        }
+
         case 'action-dropdown':
             content = (
                 <div className="action-section">
@@ -315,8 +337,10 @@ export const TableCell: React.FC<TableCellProps> = ({
                                             action.onClick(rowData);
                                         }}
                                     >
-                                        <i className={action.icon}></i>
-                                        <span className="tooltip-name">{action.label}</span>
+                                        <i className={ action.icon }></i>
+                                        <span className="tooltip-name">
+                                            { action.label }
+                                        </span>
                                     </div>
                                 ))}
                             </div>
@@ -325,12 +349,7 @@ export const TableCell: React.FC<TableCellProps> = ({
                 </div>
             );
             break;
-        case 'status':
-
-            if (!status || !status.trim()) {
-                content = '-';
-                break;
-            }
+        case 'status': {
             const displayStatus =
                 status
                     ?.replace(/_/g, ' ')
@@ -345,6 +364,7 @@ export const TableCell: React.FC<TableCellProps> = ({
                 </span>
             );
             break;
+        }
         default:
             content = (
                 <div
@@ -378,14 +398,20 @@ const LoadingTable: React.FC = () => (
 );
 
 interface TableProps {
-    data: Record<string, any>[] | null;
-    columns: ColumnDef<Record<string, any>, any>[];
-    rowSelection?: Record<string, boolean>;
-    onRowSelectionChange?: OnChangeFn<RowSelectionState>;
+    rowSelection?: Record< string, boolean >;
+    onRowSelectionChange?: OnChangeFn< RowSelectionState >;
     defaultRowsPerPage?: number;
     realtimeFilter?: RealtimeFilter[];
     searchFilter?: SearchFilter[];
     actionButton?: actionButton[];
+    data: TableRow[] | null;
+    columns: ColumnDef< TableRow, unknown >[];
+    handlePagination?: (
+        rowsPerPage: number,
+        pageIndex: number,
+        filterData: Record< string, unknown >
+    ) => void;
+    onRowClick?: ( rowData: TableRow ) => void;
     bulkActionComp?: () => React.ReactNode;
     pageCount: number;
     pagination: PaginationState;
@@ -393,16 +419,10 @@ interface TableProps {
     categoryFilter: Status[];
     defaultCounts?: string;
     autoLoading?: boolean;
-    handlePagination?: (
-        rowsPerPage: number,
-        pageIndex: number,
-        filterData: Record<string, any>
-    ) => void;
     perPageOption: number[];
     successMsg?: string;
-    expandElement?: Record<string, boolean>;
-    expandedRows?: Record<string, boolean>;
-    onRowClick?: (rowData: Record<string, any>) => void;
+    expandElement?: Record< string, boolean >;
+    expandedRows?: Record< string, boolean >;
     totalCounts?: number;
 }
 
@@ -429,15 +449,14 @@ const Table: React.FC<TableProps> = ({
     onRowClick,
     totalCounts = 0,
     defaultCounts = 'all',
-}) => {
-    const [sorting, setSorting] = useState<any[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [filterData, setFilterData] = useState<Record<string, any>>(
-        {}
-    );
+} ) => {
+    const [ sorting, setSorting ] = useState< SortingState >( [] );
+    const [ loading, setLoading ] = useState< boolean >( false );
+    const [ filterData, setFilterData ] = useState< UnknownRecord >( {} );
+
     // Counter variable for cooldown effect
-    const counter = useRef(0);
-    const counterId = useRef<NodeJS.Timeout | null>(null);
+    const counter = useRef( 0 );
+    const counterId = useRef< ReturnType< typeof setInterval > | null >( null );
 
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -453,13 +472,13 @@ const Table: React.FC<TableProps> = ({
     // Assume first column is 'select', keep that always
     const visibleColumns = isSmallScreen ? columns.slice(0, 3) : columns;
 
-    const getHiddenColumns = (row: any) => {
+    const getHiddenColumns = ( row: Row< TableRow > ) => {
         return row
             .getVisibleCells()
             .filter(
-                (cell: any) =>
-                    !visibleColumns.find(
-                        (col) =>
+                ( cell: Cell< TableRow, unknown > ) =>
+                    ! visibleColumns.find(
+                        ( col ) =>
                             col.id === cell.column.id ||
                             col.header === cell.column.id
                     )
@@ -467,8 +486,8 @@ const Table: React.FC<TableProps> = ({
     };
 
     // Function that handles filter changes.
-    const handleFilterChange = (key: any, value: any) => {
-        setFilterData((prevData) => ({
+    const handleFilterChange = ( key: string, value: unknown ) => {
+        setFilterData( ( prevData ) => ( {
             ...prevData,
             [key]: value,
         }));
@@ -496,33 +515,40 @@ const Table: React.FC<TableProps> = ({
                     setLoading(true);
                 }
                 // Call filter function
-                handlePagination?.(defaultRowsPerPage, 1, filterData);
-                clearInterval(intervalId);
+                if ( handlePagination ) {
+                    handlePagination( defaultRowsPerPage, 1, filterData );
+                }
+                clearInterval( intervalId );
                 counterId.current = null;
             }
         }, 50);
         // Store the interval id.
-        counterId.current = intervalId as NodeJS.Timeout;
-    }, [filterData, autoLoading, defaultRowsPerPage]);
+        counterId.current = intervalId;
+    }, [ filterData, autoLoading, defaultRowsPerPage ] );
 
     useEffect(() => {
         setLoading(data === null);
     }, [data]);
 
-    const flattenedData: Record<string, any>[] = [];
+    const flattenedData: TableRow[] = [];
 
-    (data || []).forEach((product) => {
-        flattenedData.push(product); // Push main product
-        if (product.variation && typeof product.variation === 'object') {
-            Object.values(product.variation).forEach((variation: any) => {
-                flattenedData.push({
-                    ...variation,
-                    isVariation: true,
-                    parentId: product.id,
-                });
-            });
+    ( ( data as ProductWithVariations[] | null ) || [] ).forEach(
+        ( product ) => {
+            flattenedData.push( product );
+
+            if ( product.variation && typeof product.variation === 'object' ) {
+                Object.values( product.variation ).forEach(
+                    ( variation: TableRow ) => {
+                        flattenedData.push( {
+                            ...variation,
+                            isVariation: true,
+                            parentId: product.id,
+                        } );
+                    }
+                );
+            }
         }
-    });
+    );
 
     const table = useReactTable({
         data: flattenedData,
@@ -567,11 +593,6 @@ const Table: React.FC<TableProps> = ({
     });
 
     const typeCountActive = filterData.typeCount || defaultCounts;
-    const { pageIndex, pageSize } = table.getState().pagination;
-    const totalRows = flattenedData.length;
-    const start = totalRows === 0 ? 0 : pageIndex * pageSize + 1;
-    const end =
-        totalRows === 0 ? 0 : Math.min(start + pageSize - 1, totalRows);
     return (
         <>
             {(categoryFilter?.length > 0 || searchFilter) && (
@@ -835,7 +856,10 @@ const Table: React.FC<TableProps> = ({
                                                                     row
                                                                 ).map(
                                                                     (
-                                                                        cell: any
+                                                                        cell: Cell<
+                                                                            TableRow,
+                                                                            unknown
+                                                                        >
                                                                     ) => (
                                                                         <li
                                                                             key={
@@ -1088,12 +1112,14 @@ const Table: React.FC<TableProps> = ({
                                                     onRowSelectionChange?.(
                                                         {}
                                                     ); // clear row selection if any
-                                                    handlePagination?.(
-                                                        defaultRowsPerPage,
-                                                        1,
-                                                        {}
-                                                    ); // reload data
-                                                }}
+                                                    if ( handlePagination ) {
+                                                        handlePagination(
+                                                            defaultRowsPerPage,
+                                                            1,
+                                                            {}
+                                                        );
+                                                    }
+                                                } }
                                                 className="admin-badge red"
                                             >
                                                 <i className="adminlib-refresh"></i>{' '}

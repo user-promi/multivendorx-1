@@ -65,9 +65,6 @@ const MultiInput: React.FC< MultiInputProps > = ( props ) => {
         itemClass,
         iconOptions = [],
         onStringChange,
-        onFocus,
-        onBlur,
-        id,
         name,
         proSetting,
         moduleEnabled,
@@ -77,7 +74,6 @@ const MultiInput: React.FC< MultiInputProps > = ( props ) => {
         description,
         descClass,
         maxItems,
-        allowDuplicates = false,
     } = props;
 
     const [ inputValue, setInputValue ] = useState( '' );

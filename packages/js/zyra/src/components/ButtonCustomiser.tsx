@@ -8,7 +8,7 @@ import React, { useState, useEffect, useRef } from 'react';
  */
 import '../styles/web/ButtonCustomizer.scss';
 
-interface ButtonSettings {
+export interface ButtonSettings {
     button_link?: string;
     button_background_color?: string;
     button_background_color_onhover?: string;

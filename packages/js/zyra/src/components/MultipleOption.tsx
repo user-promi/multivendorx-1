@@ -17,25 +17,17 @@ interface Option {
     value: string;
     isdefault?: boolean;
 }
-interface FormField {
-    id: number;
-    type: string;
-    label: string;
-    required: boolean;
-    name: string;
-    placeholder?: string;
-    options?: Option[];
-}
 
 interface MultipleOptionsFormField {
     label: string;
     type?: string;
     options?: Option[];
 }
+type MultipleOptionsValue = string | boolean | Option[];
 
 interface MultipleOptionsProps {
     formField: MultipleOptionsFormField;
-    onChange: ( key: string, value: any ) => void;
+    onChange: ( key: string, value: MultipleOptionsValue ) => void;
     type: 'radio' | 'checkboxes' | 'dropdown' | 'multiselect';
     selected: boolean;
 }
@@ -109,7 +101,7 @@ const MultipleOptions: React.FC< MultipleOptionsProps > = ( {
     const handleOptionFieldChange = (
         index: number,
         key: keyof Option,
-        value: string | boolean
+        value: string | number | boolean | Option[] | undefined
     ) => {
         const newOptions = [ ...options ];
         newOptions[ index ] = { ...newOptions[ index ], [ key ]: value };
@@ -219,7 +211,7 @@ const MultipleOptions: React.FC< MultipleOptionsProps > = ( {
                                             handleOptionFieldChange(
                                                 index,
                                                 key as keyof Option,
-                                                value
+                                                value ?? ''
                                             );
                                         } }
                                         metaType=""

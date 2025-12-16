@@ -1,4 +1,4 @@
-import { useState, useEffect, ReactNode, JSX } from 'react';
+import React, { useState, useEffect, ReactNode, JSX } from 'react';
 import { LinkProps } from 'react-router-dom';
 import '../styles/web/Tabs.scss';
 import AdminBreadcrumbs from './AdminBreadcrumbs';
@@ -24,6 +24,19 @@ type TabData = {
 
 type BreadcrumbItem = { name: string; id: string; type: string };
 
+type SupportItem = {
+    id: string;
+    title: string;
+    description?: string;
+    link?: string;
+};
+
+type AppLocalizer = {
+    khali_dabba?: boolean;
+    shop_url?: string;
+    [ key: string ]: unknown;
+};
+
 type TabsProps = {
     tabData: TabData[];
     currentTab: string;
@@ -31,12 +44,12 @@ type TabsProps = {
     prepareUrl: ( tabId: string ) => string;
     HeaderSection?: () => JSX.Element;
     BannerSection?: () => JSX.Element;
-    supprot: any[];
+    supprot: SupportItem[];
     Link: React.ElementType< LinkProps >;
     settingName?: string;
     onNavigate?: ( url: string ) => void;
     tabTitleSection?: React.ReactNode;
-    appLocalizer?: any;
+    appLocalizer: AppLocalizer;
     submenuRender?: boolean;
     menuIcon?: boolean;
     desc?: boolean;
@@ -65,24 +78,6 @@ const findFirstFile = ( items: TabData[] ): TabContent | null => {
         }
         if ( isFolder( item ) ) {
             const found = findFirstFile( item.content );
-            if ( found ) {
-                return found;
-            }
-        }
-    }
-    return null;
-};
-
-const findTabInItems = (
-    items: TabData[],
-    targetId: string
-): TabContent | null => {
-    for ( const item of items ) {
-        if ( isFile( item ) && item.content.id === targetId ) {
-            return item.content;
-        }
-        if ( isFolder( item ) ) {
-            const found = findTabInItems( item.content, targetId );
             if ( found ) {
                 return found;
             }
@@ -209,8 +204,6 @@ const Tabs: React.FC< TabsProps > = ( {
     getForm,
     prepareUrl,
     HeaderSection,
-    BannerSection,
-    supprot,
     Link,
     settingName = '',
     onNavigate,

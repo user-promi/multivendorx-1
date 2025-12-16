@@ -1,7 +1,23 @@
 import React, { createContext, useReducer, useContext } from 'react';
 
+type Theme = 'light' | 'dark';
+
+type ThemeState = {
+    theme: Theme;
+};
+
+type ThemeAction = {
+    type: 'TOGGLE_THEME';
+};
+
+type ThemeContextValue = ThemeState & {
+    toggleTheme: () => void;
+};
+
 // theme context object.
-const ThemeContext = createContext< any | undefined >( undefined );
+const ThemeContext = createContext< ThemeContextValue | undefined >(
+    undefined
+);
 
 /**
  * dispatch function for theme related operation.
@@ -9,13 +25,13 @@ const ThemeContext = createContext< any | undefined >( undefined );
  * @param {*} action name of action for state variable.
  * @returns
  */
-const themeReducer = ( state: any, action: any ) => {
+const themeReducer = ( state: ThemeState, action: ThemeAction ) => {
     switch ( action.type ) {
         case 'TOGGLE_THEME':
             return {
                 ...state,
                 theme: state.theme === 'light' ? 'dark' : 'light',
-            };
+            } as ThemeState;
         default:
             return state;
     }
@@ -26,7 +42,8 @@ const themeReducer = ( state: any, action: any ) => {
  * @param {*} props
  * @returns
  */
-const ThemeProvider = ( props: any ) => {
+
+const ThemeProvider: React.FC< React.PropsWithChildren > = ( { children } ) => {
     const [ state, dispatch ] = useReducer( themeReducer, { theme: 'light' } );
 
     /**
@@ -38,7 +55,7 @@ const ThemeProvider = ( props: any ) => {
 
     return (
         <ThemeContext.Provider value={ { ...state, toggleTheme } }>
-            { props.children }
+            { children }
         </ThemeContext.Provider>
     );
 };

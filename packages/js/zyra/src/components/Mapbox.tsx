@@ -1,9 +1,68 @@
 import { useEffect, useRef, useState } from 'react';
+// Add these interfaces after the imports
+interface MapboxMap {
+    setCenter: ( center: [ number, number ] ) => void;
+    setZoom: ( zoom: number ) => void;
+    remove: () => void;
+    addControl: ( control: unknown, position?: string ) => void;
+    on: (
+        event: string,
+        callback: ( event: MapboxClickEvent ) => void
+    ) => void;
+    _removed?: boolean;
+}
+
+interface MapboxMarker {
+    setLngLat: ( lngLat: [ number, number ] ) => MapboxMarker;
+    getLngLat: () => { lng: number; lat: number };
+    on: ( event: string, callback: () => void ) => void;
+}
+
+interface MapboxClickEvent {
+    lngLat: { lat: number; lng: number };
+}
+
+interface MapboxGeocoderResult {
+    center: [ number, number ];
+    place_name: string;
+    properties?: { address?: string };
+    context?: Array< {
+        id: string;
+        text: string;
+        short_code?: string;
+    } >;
+}
 
 declare global {
     interface Window {
-        mapboxgl: any;
-        MapboxGeocoder: any;
+        mapboxgl: {
+            Map: new ( options: {
+                container: HTMLDivElement;
+                style: string;
+                center: [ number, number ];
+                zoom: number;
+                attributionControl: boolean;
+            } ) => MapboxMap;
+            Marker: new ( options?: {
+                draggable: boolean;
+                color: string;
+            } ) => MapboxMarker;
+            NavigationControl: new () => unknown;
+            accessToken: string;
+        };
+        MapboxGeocoder: new ( options: {
+            accessToken: string;
+            mapboxgl: Window[ 'mapboxgl' ];
+            marker: boolean;
+            placeholder: string;
+            proximity: [ number, number ];
+        } ) => {
+            onAdd: ( map: MapboxMap ) => HTMLElement;
+            on: (
+                event: string,
+                callback: ( event: { result: MapboxGeocoderResult } ) => void
+            ) => void;
+        };
     }
 }
 
@@ -30,7 +89,6 @@ interface MapboxComponentProps {
 
 const Mapbox = ( {
     apiKey,
-    locationAddress,
     locationLat,
     locationLng,
     onLocationUpdate,
@@ -39,15 +97,15 @@ const Mapbox = ( {
     instructionText,
     placeholderSearch,
 }: MapboxComponentProps ) => {
-    const [ map, setMap ] = useState< any >( null );
-    const [ marker, setMarker ] = useState< any >( null );
+    const [ map, setMap ] = useState< MapboxMap | null >( null );
+    const [ marker, setMarker ] = useState< MapboxMarker | null >( null );
     const [ mapboxLoaded, setMapboxLoaded ] = useState< boolean >( false );
     const mapContainerRef = useRef< HTMLDivElement >( null );
     const geocoderContainerRef = useRef< HTMLDivElement >( null );
 
     // Load Mapbox script
     useEffect( () => {
-        if ( ( window as any ).mapboxgl ) {
+        if ( window.mapboxgl ) {
             setMapboxLoaded( true );
             return;
         }
@@ -146,7 +204,7 @@ const Mapbox = ( {
             reverseGeocode( lngLat.lat, lngLat.lng );
         } );
 
-        mapInstance.on( 'click', ( event: any ) => {
+        mapInstance.on( 'click', ( event: MapboxClickEvent ) => {
             reverseGeocode( event.lngLat.lat, event.lngLat.lng );
         } );
 
@@ -159,7 +217,7 @@ const Mapbox = ( {
             proximity: [ initialLng, initialLat ],
         } );
 
-        geocoder.on( 'result', ( e: any ) => {
+        geocoder.on( 'result', ( e: { result: MapboxGeocoderResult } ) => {
             handlePlaceSelect( e.result );
         } );
 
@@ -179,7 +237,7 @@ const Mapbox = ( {
         };
     }, [ mapboxLoaded, locationLat, locationLng, apiKey ] );
 
-    const handlePlaceSelect = ( place: any ) => {
+    const handlePlaceSelect = ( place: MapboxGeocoderResult ) => {
         const lng = place.center[ 0 ];
         const lat = place.center[ 1 ];
         const formatted_address = place.place_name;
@@ -210,22 +268,28 @@ const Mapbox = ( {
             `https://api.mapbox.com/geocoding/v5/mapbox.places/${ lng },${ lat }.json?access_token=${ apiKey }`
         )
             .then( ( response ) => response.json() )
-            .then( ( data ) => {
+            .then( ( data: { features: MapboxGeocoderResult[] } ) => {
                 if ( data.features && data.features.length > 0 ) {
                     handlePlaceSelect( data.features[ 0 ] );
                 }
             } );
     };
 
-    const extractAddressComponents = ( place: any ) => {
-        const components: any = {};
+    const extractAddressComponents = ( place: MapboxGeocoderResult ) => {
+        const components: {
+            address?: string;
+            city?: string;
+            state?: string;
+            country?: string;
+            zip?: string;
+        } = {};
 
         if ( place.properties ) {
             components.address = place.properties.address || '';
         }
 
         if ( place.context ) {
-            place.context.forEach( ( component: any ) => {
+            place.context.forEach( ( component: { id: string; text: string; short_code?: string } ) => {
                 const idParts = component.id.split( '.' );
                 const type = idParts[ 0 ];
 

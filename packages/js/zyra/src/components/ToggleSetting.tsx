@@ -43,7 +43,6 @@ const ToggleSetting: React.FC< ToggleSettingProps > = ( {
     key,
     onChange,
     proChanged,
-    proSetting = false,
     khali_dabba,
     iconEnable = false,
     postText,

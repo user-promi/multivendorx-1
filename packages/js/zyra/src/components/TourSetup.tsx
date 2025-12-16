@@ -12,7 +12,7 @@ export interface AppLocalizer {
     settings_page_url?: string;
     customization_settings_url?: string;
     apiUrl?: string;
-    nonce?: any;
+    nonce?: string;
 }
 
 // Props for TourSetup

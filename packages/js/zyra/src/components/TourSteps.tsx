@@ -1,9 +1,9 @@
 /**
  * External dependencies
  */
-import React, { useState, useEffect, JSX, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
-import { useTour } from '@reactour/tour';
+import { StepType, useTour } from '@reactour/tour';
 import { getApiLink } from '../utils/apiService';
 
 // Types
@@ -12,20 +12,15 @@ interface AppLocalizer {
     module_page_url?: string;
     settings_page_url?: string;
     customization_settings_url?: string;
-    apiUrl?: string;
-    nonce?: any;
-    site_url?: any;
-}
-
-interface TourStep {
-    selector: any;
-    placement?: 'top' | 'bottom' | 'left' | 'right' | 'auto';
-    content: ( utils: any ) => JSX.Element;
+    site_url?: string;
+    restUrl: string;
+    apiUrl: string;
+    nonce: string;
 }
 
 interface TourProps {
     appLocalizer: AppLocalizer;
-    steps: any[];
+    steps: StepType[];
 }
 
 const Tour: React.FC< TourProps > = ( { appLocalizer, steps } ) => {
@@ -82,7 +77,7 @@ const Tour: React.FC< TourProps > = ( { appLocalizer, steps } ) => {
     };
 
     const processedSteps = useMemo( () => {
-        return steps.map( ( step: any ) => ( {
+        return steps.map( ( step ) => ( {
             ...step,
             content: () =>
                 step.content( {

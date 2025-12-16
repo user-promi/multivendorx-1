@@ -28,7 +28,7 @@ export interface PopupProps {
     moduleName?: string;
     settings?: string;
     plugin?: string;
-    message?: any;
+    message?: string;
     moduleButton?: string;
     pluginDescription?: string;
     pluginButton?: string;
@@ -37,9 +37,6 @@ export interface PopupProps {
     modulePageUrl?: string;
     btnLink?: BtnLink[];
     upgradeBtnText?: string;
-    // wooSetting?: string;
-    // wooLink?: string;
-    // wooPageUrl?:string;
 }
 
 const ProPopup: React.FC< PopupProps > = ( props ) => {
@@ -118,7 +115,7 @@ const ProPopup: React.FC< PopupProps > = ( props ) => {
                                 <ul>
                                     { props.messages?.map(
                                         ( message, index ) => (
-                                            <li>
+                                            <li key={ index }>
                                                 <div className="title">
                                                     <i
                                                         className={
@@ -135,40 +132,6 @@ const ProPopup: React.FC< PopupProps > = ( props ) => {
                                     ) }
                                 </ul>
                             </div>
-                            { /* <div className="right-section">
-                                <h4>
-                                    Unlock <span className="pro-tag">Pro</span>
-                                    <i className="popup-icon-popup-star"></i>
-                                </h4>
-                                <ul className="features-list">
-                                    {props.messages?.map(
-                                        (message, index) => (
-                                            <li
-                                                className="feature-item"
-                                                key={index}
-                                            >
-                                                <i
-                                                    className={message.icon}
-                                                ></i>
-                                                <p>{message.text}</p>
-                                            </li>
-                                        )
-                                    )}
-                                </ul>
-                                <span className="more-text">
-                                    {props.moreText}
-                                </span>
-                                <div className="footer-button">
-                                    <a
-                                        className="admin-btn btn-purple"
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        href={props.proUrl}
-                                    >
-                                        Get Pro. Sell More.
-                                    </a>
-                                </div>
-                            </div> */ }
                         </>
                     ) }
                     { props.moduleName && (
@@ -210,33 +173,6 @@ const ProPopup: React.FC< PopupProps > = ( props ) => {
                             <p>{ props.SettingDescription }</p>
                         </>
                     ) }
-                    { /* {props.wooSetting && (
-                        <>
-                            <div className="popup-header">
-                                <i className="adminlib-settings"></i>
-                            </div>
-
-                            <div className="popup-body">
-                                <h2>Update WooCommerce Settings</h2>
-
-                                <p>
-                                    {props.message ??
-                                        `To enable this feature, please update your WooCommerce settings.`}
-                                </p>
-
-                                <div className="buttons-wrapper center">
-                                    <a
-                                        className="admin-btn btn-purple"
-                                        href={props.wooPageUrl}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                    >
-                                        <i className="adminlib-preview"></i> Update Settings
-                                    </a>
-                                </div>
-                            </div>
-                        </>
-                    )} */ }
                 </div>
             </DialogContentText>
         </DialogContent>

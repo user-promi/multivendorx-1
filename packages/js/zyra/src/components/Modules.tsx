@@ -35,13 +35,21 @@ interface Separator {
 
 type ModuleItem = Module | Separator;
 
+interface AppLocalizer {
+    khali_dabba?: boolean;
+    nonce: string;
+    apiUrl: string;
+    restUrl: string;
+    [ key: string ]: unknown; // Allow other properties
+}
+
 interface ModuleProps {
     modulesArray?: { category: boolean; modules: ModuleItem[] };
-    appLocalizer: Record< string, any >;
     apiLink: string;
-    proPopupContent?: React.FC< any >;
     pluginName: string;
     brandImg: string;
+    appLocalizer: AppLocalizer;
+    proPopupContent?: React.FC< unknown >;
 }
 
 const Modules: React.FC< ModuleProps > = ( {
@@ -55,8 +63,8 @@ const Modules: React.FC< ModuleProps > = ( {
     const [ successMsg, setSuccessMsg ] = useState< string >( '' );
     const [ selectedCategory, setSelectedCategory ] =
         useState< string >( 'All' );
-    const [ selectedFilter, setSelectedFilter ] = useState< string >( 'Total' );
-    const [ searchQuery, setSearchQuery ] = useState< string >( '' );
+    const [ selectedFilter ] = useState< string >( 'Total' );
+    const [ searchQuery ] = useState< string >( '' );
 
     const { modules, insertModule, removeModule } = useModules();
 
@@ -85,13 +93,6 @@ const Modules: React.FC< ModuleProps > = ( {
             )
             .map( ( item ) => ( { id: item.id, label: item.label } ) ),
     ];
-
-    // Calculate module counts
-    const totalModules = modulesArray.modules.filter(
-        ( item ) => ! ( 'type' in item )
-    ).length;
-    const activeModules = modules.length;
-    const inactiveModules = totalModules - activeModules;
 
     // Filter modules and separators based on selected category, filter, and search query
     const filteredModules = modulesArray.modules.filter( ( item ) => {
@@ -204,7 +205,7 @@ const Modules: React.FC< ModuleProps > = ( {
             setSuccessMsg( `Module ${ action }d` );
             setTimeout( () => setSuccessMsg( '' ), 2000 );
         } catch ( error ) {
-            setSuccessMsg( `Error: Failed to ${ action } module` );
+            setSuccessMsg( `Error: Failed to ${ action } module ${ error }` );
             setTimeout( () => setSuccessMsg( '' ), 2000 );
         }
     };
@@ -316,10 +317,18 @@ const Modules: React.FC< ModuleProps > = ( {
                         const module = item as Module;
                         const requiredPlugins =
                             module.req_plugin ||
-                            ( module as any ).req_pluging ||
+                            (
+                                module as {
+                                    req_pluging?: {
+                                        name: string;
+                                        link: string;
+                                    }[];
+                                }
+                             ).req_pluging ||
                             [];
                         return (
                             <div
+                                data-inedx={ index }
                                 className="module-list-item"
                                 key={ module.id }
                                 id={ module.id }

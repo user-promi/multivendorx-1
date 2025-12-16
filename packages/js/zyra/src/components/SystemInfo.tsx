@@ -11,10 +11,17 @@ import '../styles/web/SystemInfoAccordion.scss';
  */
 import { getApiLink } from '../utils/apiService';
 
+interface AppLocalizer {
+    nonce: string;
+    apiUrl: string;
+    restUrl: string;
+    [ key: string ]: unknown;
+}
+
 // Types
 interface SystemInfoProps {
     apiLink: string;
-    appLocalizer: Record< string, any >;
+    appLocalizer: AppLocalizer;
     copyButtonLabel?: string;
     copiedLabel?: string;
 }
@@ -35,12 +42,11 @@ type ApiResponse = Record< string, InfoSection >;
 const SystemInfo: React.FC< SystemInfoProps > = ( {
     apiLink,
     appLocalizer,
-    copyButtonLabel = 'Copy System Info', // dynamic label
-    copiedLabel = 'Copied!', // dynamic label
+    copyButtonLabel = 'Copy System Info',
+    copiedLabel = 'Copied!',
 } ) => {
     const [ data, setData ] = useState< ApiResponse | null >( null );
     const [ openKeys, setOpenKeys ] = useState< string[] >( [] );
-    const [ loading, setLoading ] = useState( true );
     const [ copied, setCopied ] = useState( false );
 
     // Fetch everything at once
@@ -49,14 +55,9 @@ const SystemInfo: React.FC< SystemInfoProps > = ( {
             url: getApiLink( appLocalizer, apiLink ),
             method: 'GET',
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        } )
-            .then( ( response ) => {
-                setData( response.data );
-            } )
-            .catch( ( err ) => {
-                // handle error silently
-            } )
-            .finally( () => setLoading( false ) );
+        } ).then( ( response ) => {
+            setData( response.data );
+        } );
     }, [ apiLink, appLocalizer ] );
 
     const toggleSection = ( key: string ) => {
@@ -83,11 +84,9 @@ const SystemInfo: React.FC< SystemInfoProps > = ( {
         const formatted = formatSystemInfo( data );
         navigator.clipboard.writeText( formatted ).then( () => {
             setCopied( true );
-            // setTimeout(() => setCopied(false), 2000);
         } );
     };
 
-    // if (loading) return <p>Loading</p>;
     if ( ! data ) {
         return null;
     }

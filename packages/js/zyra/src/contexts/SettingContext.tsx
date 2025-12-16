@@ -1,24 +1,37 @@
 import React, { createContext, useReducer, useContext, ReactNode } from 'react';
 
+type SettingValue =
+    | string
+    | number
+    | boolean
+    | null
+    | Record< string, string | number | boolean | null >;
+
 // Define types for the state
 type SettingState = {
     settingName: string;
-    setting: Record< string, any >;
+    setting: Record< string, SettingValue >;
 };
 
 // Define types for actions
 type SettingAction =
     | {
           type: 'SET_SETTINGS';
-          payload: { settingName: string; setting: Record< string, any > };
+          payload: {
+              settingName: string;
+              setting: Record< string, SettingValue >;
+          };
       }
-    | { type: 'UPDATE_SETTINGS'; payload: { key: string; value: any } }
+    | { type: 'UPDATE_SETTINGS'; payload: { key: string; value: SettingValue } }
     | { type: 'CLEAR_SETTINGS' };
 
 // Define context type
 export type SettingContextType = SettingState & {
-    setSetting: ( name: string, setting: Record< string, any > ) => void;
-    updateSetting: ( key: string, value: any ) => void;
+    setSetting: (
+        name: string,
+        setting: Record< string, SettingValue >
+    ) => void;
+    updateSetting: ( key: string, value: SettingValue ) => void;
     clearSetting: () => void;
 };
 
@@ -41,12 +54,16 @@ const settingReducer = (
     switch ( action.type ) {
         case 'SET_SETTINGS':
             return { ...action.payload };
-        case 'UPDATE_SETTINGS':
+
+        case 'UPDATE_SETTINGS': {
             const { key, value } = action.payload;
             const setting = { ...state.setting, [ key ]: value };
             return { ...state, setting };
+        }
+
         case 'CLEAR_SETTINGS':
             return { settingName: '', setting: {} };
+
         default:
             return state;
     }
@@ -63,12 +80,12 @@ const SettingProvider: React.FC< SettingProviderProps > = ( { children } ) => {
 
     const setSetting = (
         settingName: string,
-        setting: Record< string, any >
+        setting: Record< string, SettingValue >
     ) => {
         dispatch( { type: 'SET_SETTINGS', payload: { settingName, setting } } );
     };
 
-    const updateSetting = ( key: string, value: any ) => {
+    const updateSetting = ( key: string, value: SettingValue ) => {
         dispatch( { type: 'UPDATE_SETTINGS', payload: { key, value } } );
     };
 

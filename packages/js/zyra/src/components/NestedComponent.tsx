@@ -6,6 +6,13 @@ import SelectInput from './SelectInput';
 import MultiCheckBox from './MultiCheckbox';
 import TextArea from './TextArea';
 
+type RowType = Record< string, string | number | boolean | string[] >;
+
+type SelectOption = {
+    value: string;
+    label: string;
+};
+
 interface NestedFieldOption {
     key?: string;
     value: string;
@@ -15,9 +22,9 @@ interface NestedFieldOption {
 }
 
 interface NestedField {
+    lock: string | undefined;
     treeData: never[];
     multiple: boolean;
-    look?: string;
     key: string;
     type:
         | 'number'
@@ -55,7 +62,7 @@ interface NestedField {
     // for checkbox fields
     selectDeselect?: boolean;
     tour?: string;
-    rightContent?: React.ReactNode;
+    rightContent?: boolean | undefined;
     moduleEnabled?: string;
     dependentSetting?: string;
     dependentPlugin?: string;
@@ -65,22 +72,21 @@ interface NestedField {
 }
 
 declare const appLocalizer: { khali_dabba?: boolean };
-declare function isProSetting( value: boolean ): boolean;
 declare function setModelOpen( value: boolean ): void;
 
 interface NestedComponentProps {
     id: string;
     label?: string;
     fields: NestedField[];
-    value: Record< string, any >[];
+    value: RowType[];
     addButtonLabel?: string;
     deleteButtonLabel?: string;
-    onChange: ( value: Record< string, any >[] ) => void;
+    onChange: ( value: RowType[] ) => void;
     single?: boolean;
     description?: string;
     wrapperClass?: string;
     khali_dabba?: boolean;
-    modules?: any;
+    modules?: string[];
 }
 
 const NestedComponent: React.FC< NestedComponentProps > = ( {
@@ -118,7 +124,7 @@ const NestedComponent: React.FC< NestedComponentProps > = ( {
         return true; // access allowed
     }
 
-    const [ rows, setRows ] = useState< Record< string, any >[] >( [] );
+    const [ rows, setRows ] = useState< RowType[] >( [] );
 
     // sync value → state
     useEffect( () => {
@@ -133,12 +139,16 @@ const NestedComponent: React.FC< NestedComponentProps > = ( {
         );
     }, [ value, single ] );
 
-    function updateAndSave( updated: Record< string, any >[] ) {
+    function updateAndSave( updated: RowType[] ) {
         setRows( updated );
         onChange( updated );
     }
 
-    function handleChange( rowIndex: number, key: string, value: any ) {
+    function handleChange(
+        rowIndex: number,
+        key: string,
+        value: string | number | boolean | string[]
+    ) {
         updateAndSave(
             rows.map( ( row, i ) =>
                 i === rowIndex ? { ...row, [ key ]: value } : row
@@ -202,11 +212,7 @@ const NestedComponent: React.FC< NestedComponentProps > = ( {
         }
     }
 
-    function renderField(
-        field: NestedField,
-        row: Record< string, any >,
-        rowIndex: number
-    ) {
+    function renderField( field: NestedField, row: RowType, rowIndex: number ) {
         if ( rowIndex === 0 && field.skipFirstRow ) {
             return null;
         }
@@ -240,7 +246,11 @@ const NestedComponent: React.FC< NestedComponentProps > = ( {
                         <ToggleSetting
                             key={ field.key }
                             options={ field.options || [] }
-                            value={ val }
+                            value={
+                                typeof val === 'string' || Array.isArray( val )
+                                    ? val
+                                    : ''
+                            }
                             onChange={ ( newVal ) => {
                                 if ( ! hasFieldAccess( field ) ) {
                                     return;
@@ -266,7 +276,12 @@ const NestedComponent: React.FC< NestedComponentProps > = ( {
                             descClass="settings-metabox-description"
                             id={ `${ field.key }-${ rowIndex }` }
                             name={ field.key }
-                            value={ val }
+                            value={
+                                typeof val === 'string' ||
+                                typeof val === 'number'
+                                    ? val
+                                    : undefined
+                            }
                             preInsideText={ field.preInsideText }
                             postInsideText={ field.postInsideText }
                             preText={
@@ -306,7 +321,7 @@ const NestedComponent: React.FC< NestedComponentProps > = ( {
                         <TextArea
                             id={ `${ field.key }-${ rowIndex }` }
                             name={ field.key }
-                            value={ val }
+                            value={ typeof val === 'string' ? val : '' }
                             placeholder={ field.placeholder }
                             rowNumber={ 4 }
                             colNumber={ 50 }
@@ -349,10 +364,13 @@ const NestedComponent: React.FC< NestedComponentProps > = ( {
                                     : []
                             }
                             value={ typeof val === 'object' ? val.value : val }
-                            onChange={ ( newVal: any ) => {
+                            onChange={ (
+                                newVal: SelectOption | SelectOption[] | null
+                            ) => {
                                 if ( ! hasFieldAccess( field ) ) {
                                     return;
                                 }
+
                                 if ( ! newVal ) {
                                     handleChange( rowIndex, field.key, '' );
                                 } else if ( Array.isArray( newVal ) ) {
@@ -374,7 +392,7 @@ const NestedComponent: React.FC< NestedComponentProps > = ( {
                 );
 
             case 'checkbox': {
-                const look = ( field.look || ( field as any ).lock ) ?? '';
+                const look = ( field.look || field.lock ) ?? '';
                 let normalizedValue: string[] = [];
 
                 if ( Array.isArray( val ) ) {
@@ -411,14 +429,14 @@ const NestedComponent: React.FC< NestedComponentProps > = ( {
                                     : 'default-checkbox'
                             }
                             inputClass={ look }
-                            tour={ ( field as any ).tour }
+                            tour={ field.tour }
                             hintOuterClass="settings-metabox-description"
                             hintInnerClass="hover-tooltip"
                             idPrefix={ `${ field.key }-${ rowIndex }` }
                             selectDeselect={ field.selectDeselect }
                             selectDeselectValue="Select / Deselect All"
                             rightContentClass="settings-metabox-description"
-                            rightContent={ ( field as any ).rightContent }
+                            rightContent={ field.rightContent }
                             options={
                                 Array.isArray( field.options )
                                     ? field.options.map( ( opt ) => ( {
@@ -487,18 +505,6 @@ const NestedComponent: React.FC< NestedComponentProps > = ( {
                     <>
                         <div className="wizard-step">
                             <div className="step-info">
-                                { /* {!field.hideCheckbox && (
-                  <div className="default-checkbox">
-                    <input
-                      type="checkbox"
-                      checked={!!fieldValue}
-                      onChange={(e) =>
-                        handleInputChange(methodId, field.key, e.target.checked)
-                      }
-                    />
-                    <label htmlFor={`step-checkbox-${methodId}-${field.key}`}></label>
-                  </div>
-                )} */ }
                                 <div className="step-text">
                                     <span className="step-title">
                                         { field.label }

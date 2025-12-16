@@ -6,17 +6,30 @@ import React, { useEffect, useRef, useState } from 'react';
 /**
  * Internal dependencies
  */
-import ButtonCustomizer from './ButtonCustomiser';
+import ButtonCustomizer, { ButtonSettings } from './ButtonCustomiser';
 import '../styles/web/NotifimaFormCustomizer.scss';
 import BasicInput from './BasicInput';
+interface ButtonSetting {
+    text?: string;
+    color?: string;
+    [ key: string ]: string | number | boolean | undefined;
+}
 
-// Types
+interface SettingType {
+    alert_text?: string;
+    email_placeholder_text?: string;
+    customize_btn?: ButtonSetting;
+}
+
 interface FormCustomizerProps {
-    value?: string;
     buttonText?: string;
-    setting: Record< string, any >;
-    proSetting?: any;
-    onChange: ( key: string, value: any, isRestoreDefaults?: boolean ) => void;
+    setting: SettingType;
+    proSetting?: boolean;
+    onChange: (
+        key: keyof SettingType | string,
+        value: string | ButtonSetting,
+        isRestoreDefaults?: boolean
+    ) => void;
 }
 
 const NotifimaFormCustomizer: React.FC< FormCustomizerProps > = ( {
@@ -136,7 +149,7 @@ const NotifimaFormCustomizer: React.FC< FormCustomizerProps > = ( {
                     <ButtonCustomizer
                         text={ buttonText }
                         proSetting={ proSetting }
-                        setting={ setting?.customize_btn }
+                        setting={ setting?.customize_btn as ButtonSettings }
                         onChange={ (
                             key,
                             value,
@@ -144,12 +157,22 @@ const NotifimaFormCustomizer: React.FC< FormCustomizerProps > = ( {
                         ) => {
                             const previousSetting =
                                 setting?.customize_btn || {};
+
                             if ( isRestoreDefaults ) {
-                                onChange( 'customize_btn', value );
+                                // cast value to ButtonSetting
+                                onChange(
+                                    'customize_btn',
+                                    value as ButtonSetting
+                                );
                             } else {
+                                // cast value to string | number | boolean | undefined
                                 onChange( 'customize_btn', {
                                     ...previousSetting,
-                                    [ key ]: value,
+                                    [ key ]: value as
+                                        | string
+                                        | number
+                                        | boolean
+                                        | undefined,
                                 } );
                             }
                         } }
