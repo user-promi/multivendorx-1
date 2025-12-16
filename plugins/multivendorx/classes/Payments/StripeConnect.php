@@ -341,20 +341,19 @@ class StripeConnect {
      */
     private function get_redirect_url( $type, $value ) {
         $dashboard_page_id = (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' );
-        if (get_option( Utill::WORDPRESS_SETTINGS['permalink'] )) {
+        if ( get_option( Utill::WORDPRESS_SETTINGS['permalink'] ) ) {
             $dashboard_slug = $dashboard_page_id
                 ? get_post_field( 'post_name', $dashboard_page_id )
                 : 'dashboard';
 
             $base_url = site_url( '/' . $dashboard_slug ) . 'settings#subtab=payout';
-
         } else {
             $base_url = site_url(
                 add_query_arg(
-                    [
+                    array(
                         'page_id' => $dashboard_page_id,
                         'segment' => 'settings',
-                    ],
+                    ),
                     ''
                 )
             ) . '#subtab=payout';

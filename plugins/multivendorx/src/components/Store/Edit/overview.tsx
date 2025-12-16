@@ -201,9 +201,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 									<i
 										className="adminlib-external"
 										onClick={() => {
-											navigate(
-												`?page=multivendorx#&tab=transaction-history&store_id=${id}`
-											);
+											window.open(`${appLocalizer.admin_url}edit.php?post_type=product`, "_self")
 										}}
 									></i>
 								</div>

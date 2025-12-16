@@ -52,7 +52,7 @@ class Frontend {
      */
     public function woocommerce_my_account_my_orders_columns( $columns ) {
         $suborder_column['multivendorx_suborder'] = __( 'Suborders', 'multivendorx' );
-        $columns                         = array_slice( $columns, 0, 1, true ) + $suborder_column + array_slice( $columns, 1, count( $columns ) - 1, true );
+        $columns                                  = array_slice( $columns, 0, 1, true ) + $suborder_column + array_slice( $columns, 1, count( $columns ) - 1, true );
         return $columns;
     }
 
@@ -68,7 +68,7 @@ class Frontend {
         if ( $multivendorx_suborders ) {
             echo '<ul class="mvx-order-vendor" style="margin:0;list-style:none;">';
             foreach ( $multivendorx_suborders as $suborder ) {
-                $store    = Store::get_store_by_id( $suborder->get_meta( Utill::POST_META_SETTINGS['store_id'], true ) );
+                $store     = Store::get_store_by_id( $suborder->get_meta( Utill::POST_META_SETTINGS['store_id'], true ) );
                 $order_uri = esc_url( $suborder->get_view_order_url() );
 
                 printf(

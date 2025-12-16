@@ -117,7 +117,7 @@ class Stores extends \WP_REST_Controller {
      * @param object $request Request data.
      */
     public function get_items( $request ) {
-        // Nonce verification
+        // Nonce verification.
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             $error = new \WP_Error(
@@ -130,9 +130,8 @@ class Stores extends \WP_REST_Controller {
         }
 
         try {
-            // Store registration (rejected stores)
+            // Store registration (rejected stores).
             if ( $request->get_param( 'store_registration' ) ) {
-
                 $rejected_stores = StoreUtil::get_store_by_primary_owner( 'rejected' );
 
                 $all_stores = array();
@@ -167,15 +166,15 @@ class Stores extends \WP_REST_Controller {
                 );
             }
 
-            // Slug existence check
+            // Slug existence check.
             $slug = $request->get_param( 'slug' );
-                if ( ! empty( $slug ) ) {
-                    $id     = (int) $request->get_param( 'id' );
-                    $exists = Store::store_slug_exists( $slug, $id );
-                    return rest_ensure_response( array( 'exists' => $exists > 0 ) );
-                }
+			if ( ! empty( $slug ) ) {
+				$id     = (int) $request->get_param( 'id' );
+				$exists = Store::store_slug_exists( $slug, $id );
+				return rest_ensure_response( array( 'exists' => $exists > 0 ) );
+			}
 
-            // Early-return flags
+            // Early-return flags.
             $flag_map = array(
                 'pending_withdraw' => 'get_stores_with_pending_withdraw',
                 'deactivate'       => 'get_stores_with_deactivate_requests',
@@ -190,12 +189,12 @@ class Stores extends \WP_REST_Controller {
                 }
             }
 
-            // Count only
+            // Count only.
             if ( $request->get_param( 'count' ) ) {
                 return StoreUtil::get_store_information( array( 'count' => true ) );
             }
 
-            // Pagination & filters
+            // Pagination & filters.
             $limit  = max( (int) $request->get_param( 'row' ), 10 );
             $page   = max( (int) $request->get_param( 'page' ), 1 );
             $offset = ( $page - 1 ) * $limit;
@@ -205,7 +204,8 @@ class Stores extends \WP_REST_Controller {
                 'offset' => $offset,
             );
 
-            if ( $search = sanitize_text_field( $request->get_param( 'searchField' ) ) ) {
+            $search = sanitize_text_field( $request->get_param( 'searchField' ) );
+            if ( ! empty( $search ) ) {
                 $args['searchField'] = $search;
             } else {
                 $start = sanitize_text_field( $request->get_param( 'startDate' ) );
@@ -216,30 +216,30 @@ class Stores extends \WP_REST_Controller {
                         'Y-m-d 00:00:00',
                         strtotime( preg_replace( '/\.\d+Z?$/', '', str_replace( 'T', ' ', $start ) ) )
                     );
-                    $args['end_date'] = gmdate(
+                    $args['end_date']   = gmdate(
                         'Y-m-d 23:59:59',
                         strtotime( preg_replace( '/\.\d+Z?$/', '', str_replace( 'T', ' ', $end ) ) )
                     );
                 }
             }
 
-            if ( $status = $request->get_param( 'filter_status' ) ) {
+            $status = $request->get_param( 'filter_status' );
+            if ( ! empty( $status ) ) {
                 $args['status'] = $status;
             }
 
-            if ( $orderBy = $request->get_param( 'orderBy' ) ) {
-                $args['orderBy'] = sanitize_text_field( $orderBy );
+            $order_by = $request->get_param( 'orderBy' );
+            if ( ! empty( $order_by ) ) {
+                $args['orderBy'] = sanitize_text_field( $order_by );
                 $args['order']   = sanitize_text_field( $request->get_param( 'order' ) );
             }
 
-            // Advanced filters
+            // Advanced filters.
             $filters = $request->get_param( 'filters' );
             if ( ! empty( $filters ) ) {
-
                 $args['orderBy'] = $filters['sort'] ?? $args['orderBy'] ?? '';
 
                 if ( ! empty( $filters['category'] ) ) {
-
                     $product_ids = wc_get_products(
                         array(
                             'return'      => 'ids',
@@ -279,8 +279,8 @@ class Stores extends \WP_REST_Controller {
                 }
             }
 
-            // Fetch & format stores
-            $stores = StoreUtil::get_store_information( $args );
+            // Fetch & format stores.
+            $stores           = StoreUtil::get_store_information( $args );
             $formatted_stores = array();
 
             foreach ( $stores as $store ) {
@@ -310,7 +310,7 @@ class Stores extends \WP_REST_Controller {
                 );
             }
 
-            // Status counters
+            // Status counters.
             $counts = array(
                 'all'          => array(),
                 'active'       => array( 'status' => 'active' ),
@@ -332,7 +332,6 @@ class Stores extends \WP_REST_Controller {
                     $counts
                 )
             );
-
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log( $e );
             return new \WP_Error(
@@ -362,12 +361,12 @@ class Stores extends \WP_REST_Controller {
                 (int) StoreUtil::get_store_information( $args )
             );
         }
-        
+
         $start_date = $request->get_param( 'start_date' );
         $end_date   = $request->get_param( 'end_date' );
 
         $args = array(
-            'status'  => 'pending',
+            'status' => 'pending',
         );
 
         if ( $start_date && $end_date ) {
@@ -375,8 +374,8 @@ class Stores extends \WP_REST_Controller {
             $args['end_date']   = $end_date;
         }
 
-        $args['limit']  = $limit;
-        $args['offset'] = $offset;
+        $args['limit']   = $limit;
+        $args['offset']  = $offset;
         $args['orderBy'] = 'create_time';
         $args['order']   = 'desc';
 
@@ -453,14 +452,11 @@ class Stores extends \WP_REST_Controller {
             $store_data['status']      = 'active';
 
             if ( ! empty( $store_data['id'] ) ) {
-
                 $store = new \MultiVendorX\Store\Store( (int) $store_data['id'] );
                 unset( $store_data['id'], $store_data['status'] );
 
                 $store_data['status'] = 'pending';
-
             } else {
-
                 $store = new \MultiVendorX\Store\Store();
 
                 if (
@@ -496,7 +492,6 @@ class Stores extends \WP_REST_Controller {
             $non_core_fields = array();
 
             foreach ( $store_data as $key => $value ) {
-
                 if ( in_array( $key, $core_fields, true ) || 'store_owners' === $key ) {
                     continue;
                 }
@@ -521,7 +516,6 @@ class Stores extends \WP_REST_Controller {
             }
 
             if ( $registrations ) {
-
                 if ( 'automatically' === MultiVendorX()->setting->get_setting( 'approve_store' ) ) {
                     $current_user->set_role( 'store_owner' );
                 } elseif ( ! in_array( 'store_owner', (array) $current_user->roles, true ) ) {
@@ -539,7 +533,6 @@ class Stores extends \WP_REST_Controller {
             }
 
             if ( ! empty( $store_data['store_owners'] ) ) {
-
                 StoreUtil::set_primary_owner( $store_data['store_owners'], $store_id );
 
                 StoreUtil::add_store_users(
@@ -577,9 +570,7 @@ class Stores extends \WP_REST_Controller {
                         : null,
                 )
             );
-
         } catch ( \Exception $e ) {
-
             MultiVendorX()->util->log( $e );
 
             return new \WP_Error(
@@ -599,7 +590,6 @@ class Stores extends \WP_REST_Controller {
 
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-
             $error = new \WP_Error(
                 'invalid_nonce',
                 __( 'Invalid nonce', 'multivendorx' ),
@@ -611,7 +601,6 @@ class Stores extends \WP_REST_Controller {
         }
 
         try {
-
             $id            = absint( $request->get_param( 'id' ) );
             $action        = $request->get_param( 'action' );
             $store_flag    = $request->get_param( 'store' );
@@ -619,7 +608,6 @@ class Stores extends \WP_REST_Controller {
             $registrations = (bool) $request->get_header( 'registrations' );
 
             if ( $id && 'switch' === $action ) {
-
                 update_user_meta(
                     get_current_user_id(),
                     Utill::USER_SETTINGS_KEYS['active_store'],
@@ -642,7 +630,6 @@ class Stores extends \WP_REST_Controller {
             }
 
             if ( $fetch_user ) {
-
                 $users = StoreUtil::get_store_users( $id );
 
                 return rest_ensure_response(
@@ -696,9 +683,7 @@ class Stores extends \WP_REST_Controller {
             }
 
             return rest_ensure_response( $response );
-
         } catch ( \Exception $e ) {
-
             MultiVendorX()->util->log( $e );
 
             return new \WP_Error(
@@ -716,10 +701,9 @@ class Stores extends \WP_REST_Controller {
      */
     public function update_item( $request ) {
 
-        // Verify nonce
+        // Verify nonce.
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-
             $error = new \WP_Error(
                 'invalid_nonce',
                 __( 'Invalid nonce', 'multivendorx' ),
@@ -731,15 +715,13 @@ class Stores extends \WP_REST_Controller {
         }
 
         try {
-
             $id   = absint( $request->get_param( 'id' ) );
             $data = (array) $request->get_json_params();
 
             $store = new \MultiVendorX\Store\Store( $id );
 
-            // Deactivation handling
+            // Deactivation handling.
             if ( ! empty( $data['deactivate'] ) ) {
-
                 $action = $data['action'] ?? '';
 
                 if ( 'approve' === $action ) {
@@ -757,13 +739,11 @@ class Stores extends \WP_REST_Controller {
                 return rest_ensure_response( array( 'success' => true ) );
             }
 
-            // Delete store handling
+            // Delete store handling.
             if ( ! empty( $data['delete'] ) ) {
-
                 $delete_option = $data['deleteOption'] ?? '';
 
                 switch ( $delete_option ) {
-
                     case 'direct':
                     case 'permanent_delete':
                         return rest_ensure_response(
@@ -773,7 +753,6 @@ class Stores extends \WP_REST_Controller {
                         );
 
                     case 'product_assign_admin':
-
                         $admin_user_id = get_users(
                             array(
                                 'role'   => 'administrator',
@@ -808,7 +787,6 @@ class Stores extends \WP_REST_Controller {
                         );
 
                     case 'set_store_owner':
-
                         if ( empty( $data['new_owner_id'] ) ) {
                             return rest_ensure_response(
                                 array(
@@ -832,11 +810,9 @@ class Stores extends \WP_REST_Controller {
                 }
             }
 
-            // Registration approval / rejection
+            // Registration approval / rejection.
             if ( ! empty( $data['registration_data'] ) || ! empty( $data['core_data'] ) ) {
-
                 if ( 'approve' === ( $data['status'] ?? '' ) ) {
-
                     $users = StoreUtil::get_store_users( $id );
                     $user  = get_userdata(
                         empty( $users['users'] )
@@ -857,7 +833,6 @@ class Stores extends \WP_REST_Controller {
                 }
 
                 if ( 'rejected' === ( $data['status'] ?? '' ) ) {
-
                     $status = ! empty( $data['store_permanent_reject'] )
                         ? 'permanently_rejected'
                         : 'rejected';
@@ -875,7 +850,6 @@ class Stores extends \WP_REST_Controller {
                     }
 
                     if ( ! empty( $data['store_application_note'] ) ) {
-
                         $old_notes = maybe_unserialize(
                             $store->get_meta( Utill::STORE_SETTINGS_KEYS['store_reject_note'] )
                         );
@@ -899,9 +873,8 @@ class Stores extends \WP_REST_Controller {
                 return;
             }
 
-            // Store owners update
+            // Store owners update.
             if ( ! empty( $data['store_owners'] ) || ! empty( $data['primary_owner'] ) ) {
-
                 StoreUtil::add_store_users(
                     array(
                         'store_id' => $id,
@@ -933,7 +906,7 @@ class Stores extends \WP_REST_Controller {
                 );
             }
 
-            // Core fields update
+            // Core fields update.
             $core_fields = array(
                 Utill::STORE_SETTINGS_KEYS['name'],
                 Utill::STORE_SETTINGS_KEYS['slug'],
@@ -952,7 +925,6 @@ class Stores extends \WP_REST_Controller {
             $store->set( Utill::STORE_SETTINGS_KEYS['who_created'], 'admin' );
 
             foreach ( $data as $key => $value ) {
-
                 if ( Utill::STORE_SETTINGS_KEYS['id'] === $key ) {
                     continue;
                 }
@@ -979,9 +951,7 @@ class Stores extends \WP_REST_Controller {
                     'id'      => $store->get_id(),
                 )
             );
-
         } catch ( \Exception $e ) {
-
             MultiVendorX()->util->log( $e );
 
             return new \WP_Error(
@@ -1107,7 +1077,7 @@ class Stores extends \WP_REST_Controller {
 
         // Handle old format (plain array of user IDs).
         // Convert to new format with id + empty date.
-        if ( !empty( $followers[0] ) && is_int( $followers[0] ) ) {
+        if ( ! empty( $followers[0] ) && is_int( $followers[0] ) ) {
             $followers = array_map(
                 fn( $uid ) => array(
 					'id'   => $uid,

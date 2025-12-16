@@ -36,8 +36,8 @@ class Admin {
             $zone_name = $zone['zone_name'] ?? '';
 
             // Get shipping methods for this zone.
-            $wc_zone                = new \WC_Shipping_Zone( $zone_id );
-            $methods                = $wc_zone->get_shipping_methods();
+            $wc_zone                         = new \WC_Shipping_Zone( $zone_id );
+            $methods                         = $wc_zone->get_shipping_methods();
             $has_multivendorx_store_shipping = false;
 
             foreach ( $methods as $method ) {

@@ -43,7 +43,7 @@ class Module {
      * @return void
      */
     public function init_classes() {
-        $this->container['admin'] = new Admin();
+        $this->container['admin']    = new Admin();
         $this->container['frontend'] = new Frontend();
     }
 

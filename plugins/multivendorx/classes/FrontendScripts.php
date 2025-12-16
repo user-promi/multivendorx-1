@@ -340,8 +340,8 @@ class FrontendScripts {
                 }
             }
 
-            $shortcode              = '[multivendorx_store_dashboard]';
-            $matched_pages          = array_filter(
+            $shortcode             = '[multivendorx_store_dashboard]';
+            $matched_pages         = array_filter(
                 $pages,
                 function ( $page ) use ( $shortcode ) {
 					return strpos( $page->post_content, $shortcode ) !== false;
