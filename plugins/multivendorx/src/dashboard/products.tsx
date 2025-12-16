@@ -422,7 +422,7 @@ const AllProduct: React.FC = () => {
 							},
 							{
 								label: __('View', 'multivendorx'),
-								icon: 'adminlib-preview',
+								icon: 'adminlib-eye',
 								onClick: () => {
 									window.location.assign(
 										`${row.original.permalink}`
@@ -441,7 +441,7 @@ const AllProduct: React.FC = () => {
 							},
 							{
 								label: __('Delete', 'multivendorx'),
-								icon: 'adminlib-vendor-form-delete',
+								icon: 'adminlib-delete delete',
 								onClick: (rowData) => {
 									handleDelete(rowData.id);
 								},
@@ -760,7 +760,7 @@ const AllProduct: React.FC = () => {
 									}
 								}}
 							>
-								<i className="adminlib-plus-circle"></i> Add New
+								<i className="adminlib-plus"></i> Add New
 							</div>
 						</div>
 					</div>

@@ -74,39 +74,37 @@
             font-size: 1rem;
             padding: 0.5rem;
 
-            .count {
-                color: #fff;
-                padding: 0.125rem 0.813rem;
-                border-right: 0.063rem solid #fff;
+            .action-item{
+                padding: 0.45rem;
+                transition: all 0.3s ease;
+                border-radius: 0.313rem;
                 display: flex;
-                align-items: center;
 
-                &.row {
-                    border: 0.063rem solid #727272;
-                    border-radius: 0.313rem;
+                .admin-btn{
+                    background: transparent;
+                    font-size: 0.95rem;
+                    color: #fff;
+                    padding: 0;
                 }
-            }
-
-            .select {
-                cursor: pointer;
-                border-radius: 0;
-
-                &:hover {
-                    background: #d9f5f0;
-                    color: #06be9f;
+                .adminlib-form{
+                    font-size: 1.125rem;
+                }
+                &:hover{
+                    background: #fff2;
+                }
+                &.count{
+                    border: 0.063rem solid #fff2;
+                }
+                &.delete{
+                    .admin-btn{
+                        color:  $accent-color;
+                    }
                 }
             }
 
             select {
                 color: #fff;
-                font-size: 1rem;
-                background: url("data:image/svg+xml,%3Csvg%20width='20'%20height='20'%20xmlns='http://www.w3.org/2000/svg'%3E%3Cpath%20d='M5%206l5%205%205-5%202%201-7%207-7-7%202-1z'%20fill='%23fff'/%3E%3C/svg%3E") no-repeat right 5px top 55%;
-                ;
-
-                &:hover {
-                    color: $theme-color;
-                    background: #fff url("data:image/svg+xml,%3Csvg%20width='20'%20height='20'%20xmlns='http://www.w3.org/2000/svg'%3E%3Cpath%20d='M5%206l5%205%205-5%202%201-7%207-7-7%202-1z'%20fill='%235007aa'/%3E%3C/svg%3E") no-repeat right 5px top 55%;
-                }
+                font-size: 0.95rem;
 
                 option {
                     background: #fff;
@@ -536,34 +534,8 @@
                 .answer {
                     line-height: 1.125rem;
                     padding: 0.45rem 0;
-                    color: #0000008a;
+                    color: $sub-text-color;
                 }
-            }
-        }
-
-        .rating-details {
-            flex-grow: 0;
-            min-width: 25rem;
-
-            .rating-details-wrapper {
-                .title-wrapper {
-                    flex-direction: column;
-                    padding: 0;
-
-                    .rating-wrapper {
-                        padding-bottom: 0.45rem;
-                    }
-
-                    .title {
-                        font-size: 1rem;
-                        font-weight: 500;
-                    }
-                }
-            }
-
-            .review {
-                padding-top: 0.313rem;
-                color: #00000085;
             }
         }
     }

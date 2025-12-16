@@ -419,7 +419,7 @@ const SupportTickets: React.FC = () => {
 												(_, i) => (
 													<i
 														key={`filled-${i}`}
-														className="adminlib-star"
+														className="star-icon adminlib-star"
 													></i>
 												)
 											)}
@@ -430,7 +430,7 @@ const SupportTickets: React.FC = () => {
 											].map((_, i) => (
 												<i
 													key={`empty-${i}`}
-													className="adminlib-star-o"
+													className="star-icon adminlib-star-o"
 												></i>
 											))}
 										</>
@@ -496,7 +496,7 @@ const SupportTickets: React.FC = () => {
 							},
 							{
 								label: __('Delete', 'multivendorx'),
-								icon: 'adminlib-delete',
+								icon: 'adminlib-delete delete',
 								onClick: async () => {
 									if (
 										confirm(
@@ -625,7 +625,7 @@ const SupportTickets: React.FC = () => {
 												{[...Array(5)].map((_, i) => (
 													<i
 														key={i}
-														className={`adminlib-star ${
+														className={`star-icon adminlib-star ${
 															i <
 															Math.round(
 																selectedReview.overall_rating
