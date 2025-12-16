@@ -218,6 +218,10 @@
                     color: #fff;
                     margin-top: 0.625rem;
                 }
+                .text{
+                    color: $sub-text-color;
+                    padding-top: 0.313rem;
+                }
             }
 
             .details {
@@ -446,7 +450,6 @@
             span {
                 padding: 0.5rem;
                 border-radius: 50%;
-                background: $theme-color;
                 width: 1.5rem;
                 height: 1.5rem;
                 display: flex;
@@ -510,7 +513,6 @@
 .review-wrapper {
     display: flex;
     gap: 1.5rem;
-    margin-top: 1.5rem;
 
     // remove
     .review-box {
@@ -638,7 +640,7 @@
 
 // no permission section start
 .permission-wrapper {
-    height: 10rem;
+    height: 18rem;
     width: 100%;
     background: $background-white;
     display: flex;

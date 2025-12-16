@@ -42,7 +42,7 @@
 
   &.bg-wrapper {
     padding: 1.5rem;
-    background: #fff;
+    background: $background-white;
   }
 
   &.template-1 {
@@ -51,7 +51,7 @@
     }
 
     .divider-wrapper {
-      background: #fff;
+      background: $background-white;
 
       .divider-section {
         margin: 0 1rem;
@@ -707,7 +707,7 @@ z
 
   .general-wrapper {
     width: 80%;
-    background: #fff;
+    background: $background-white;
     border: $border-light-small;
     margin: 0 1rem 1rem;
     border-radius: 0.313rem;

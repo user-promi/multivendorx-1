@@ -331,18 +331,19 @@ const Dashboard = () => {
 	`}
 		>
 
-			<div className="dashboard-tabs-wrapper" onMouseEnter={() => {
-				setisMenuMinmize(false);
-			}}
+			<div className="dashboard-tabs-wrapper"
+				onMouseEnter={() => {
+					setisMenuMinmize(false);
+				}}
 				onMouseOut={() => {
 					setisMenuMinmize(true);
-				}}>
+				}}
+			>
 				<div className="logo-wrapper">
 					{store_dashboard_logo ? (
 						<img src={store_dashboard_logo} alt="Site Logo" />
 					) : (
 						<span className="site-name">
-							{/* {appLocalizer.site_name} */}
 							{isMenuCollapsed && isMenuMinmize
 								? appLocalizer.site_name.charAt(0).toUpperCase()
 								: appLocalizer.site_name}
@@ -359,16 +360,14 @@ const Dashboard = () => {
 								}
 
 								const hasSubmenu = item.submenu?.length > 0;
-
 								const isParentActive = currentTab === key;
 								const isOpen = openSubmenus[key] || false;
 
 								return (
 									<li
 										key={key}
-										className={`tab-name ${
-											isParentActive ? 'active' : ''
-										}`}
+										className={`tab-name ${isParentActive ? 'active' : ''
+											}`}
 									>
 										<a
 											className="tab"
@@ -394,18 +393,16 @@ const Dashboard = () => {
 
 											{hasSubmenu && (
 												<i
-													className={`admin-arrow adminlib-pagination-right-arrow ${
-														isOpen ? 'rotate' : ''
-													}`}
+													className={`admin-arrow adminlib-pagination-right-arrow ${isOpen ? 'rotate' : ''
+														}`}
 												></i>
 											)}
 										</a>
 
 										{hasSubmenu && (
 											<ul
-												className={`subtabs ${
-													isOpen ? 'open' : ''
-												}`}
+												className={`subtabs ${isOpen ? 'open' : ''
+													}`}
 											>
 												{item.submenu.map((sub) => {
 													const subActive =
@@ -576,108 +573,108 @@ const Dashboard = () => {
 													</li>
 													{availableStores.length >
 														0 && (
-														<li className="switch-store-wrapper">
-															<a
-																href="#"
-																onClick={(
-																	e
-																) => {
-																	e.preventDefault();
-																	setShowStoreList(
-																		(
-																			prev
-																		) =>
-																			!prev
-																	);
-																}}
-															>
-																<i className="adminlib-switch-store"></i>
-																Switch stores
-																{firstTwoStores.length >
-																	0 && (
-																	<span className="switch-store-preview">
-																		{!showStoreList && (
-																			<>
-																				{firstTwoStores.map(
-																					(
-																						store
-																					) => (
-																						<span
-																							className="store-icon"
-																							key={
+															<li className="switch-store-wrapper">
+																<a
+																	href="#"
+																	onClick={(
+																		e
+																	) => {
+																		e.preventDefault();
+																		setShowStoreList(
+																			(
+																				prev
+																			) =>
+																				!prev
+																		);
+																	}}
+																>
+																	<i className="adminlib-switch-store"></i>
+																	Switch stores
+																	{firstTwoStores.length >
+																		0 && (
+																			<span className="switch-store-preview">
+																				{!showStoreList && (
+																					<>
+																						{firstTwoStores.map(
+																							(
+																								store, index
+																							) => (
+																								<span
+																									className={`store-icon admin-color${index + 2}`}
+																									key={
+																										store.id
+																									}
+																								>
+																									{store.name
+																										.charAt(
+																											0
+																										)
+																										.toUpperCase()}
+																								</span>
+																							)
+																						)}
+
+																						{availableStores.length >
+																							2 && (
+																								<span className="store-icon number">
+																									+
+																									{availableStores.length -
+																										2}
+																								</span>
+																							)}
+																					</>
+																				)}
+																				<span className="adminlib-keyboard-arrow-down arrow-icon"></span>
+																			</span>
+																		)}
+																</a>
+
+																{showStoreList && (
+																	<div className="switch-store-list">
+																		{availableStores.map(
+																			(
+																				store, index
+																			) => (
+																				<div
+																					className="store"
+																					key={
+																						store.id
+																					}
+																				>
+																					<a
+																						href="#"
+																						className="switch-store"
+																						onClick={(
+																							e
+																						) => {
+																							e.preventDefault();
+																							switchStore(
 																								store.id
-																							}
-																						>
+																							);
+																						}}
+																					>
+																						<span className={`store-icon admin-color${index + 2}`}>
 																							{store.name
 																								.charAt(
 																									0
 																								)
 																								.toUpperCase()}
 																						</span>
-																					)
-																				)}
-
-																				{availableStores.length >
-																					2 && (
-																					<span className="store-icon number">
-																						+
-																						{availableStores.length -
-																							2}
-																					</span>
-																				)}
-																			</>
-																		)}
-																		<span className="adminlib-keyboard-arrow-down arrow-icon"></span>
-																	</span>
-																)}
-															</a>
-
-															{showStoreList && (
-																<div className="switch-store-list">
-																	{availableStores.map(
-																		(
-																			store
-																		) => (
-																			<div
-																				className="store"
-																				key={
-																					store.id
-																				}
-																			>
-																				<a
-																					href="#"
-																					className="switch-store"
-																					onClick={(
-																						e
-																					) => {
-																						e.preventDefault();
-																						switchStore(
-																							store.id
-																						);
-																					}}
-																				>
-																					<span className="store-icon">
-																						{store.name
-																							.charAt(
-																								0
-																							)
-																							.toUpperCase()}
-																					</span>
-																					<div className="details-wrapper">
-																						<div className="store-name">
-																							{
-																								store.name
-																							}
+																						<div className="details-wrapper">
+																							<div className="store-name">
+																								{
+																									store.name
+																								}
+																							</div>
 																						</div>
-																					</div>
-																				</a>
-																			</div>
-																		)
-																	)}
-																</div>
-															)}
-														</li>
-													)}
+																					</a>
+																				</div>
+																			)
+																		)}
+																	</div>
+																)}
+															</li>
+														)}
 												</ul>
 											</div>
 

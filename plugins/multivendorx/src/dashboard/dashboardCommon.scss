@@ -81,7 +81,9 @@
 
     --backgroundColor: #52648414;
     --backgroundWhite: #fff;
-    --backgroundPrimary: #ece2f9f1;
+    --backgroundPrimary: color-mix(in srgb,
+            var(--colorPrimary) 15%,
+            transparent);
 
     --borderColor: #dbdbdb;
 }
@@ -99,7 +101,11 @@
 
     --backgroundColor: #121212;
     --backgroundWhite: #000;
-    --backgroundPrimary: #313131;
+    --backgroundPrimary: color-mix(
+        in srgb,
+        var(--colorPrimary) 30%,
+        black
+    );
 
     --borderColor: #dbdbdb;
 }
@@ -135,11 +141,12 @@ a:focus {
     color: #181819;
 }
 
-body:has(.dark){
+body:has(.dark) {
     background: #0d141d !important;
 
-    .analytics-item{
-        background: $background-white !important; /*overwrite zyra style*/
+    .analytics-item {
+        background: $background-white !important;
+        /*overwrite zyra style*/
     }
 }
 
@@ -211,7 +218,7 @@ body:has(.dark){
                 cursor: pointer;
 
                 &:hover {
-                    background: var(--colorPrimary);
+                    background: $theme-color;
                     color: #fff;
                 }
             }
@@ -241,7 +248,7 @@ body:has(.dark){
 
     span {
         cursor: pointer;
-        color: var(--colorPrimary);
+        color: $theme-color;
     }
 }
 
@@ -300,7 +307,7 @@ body:has(.dark){
     flex-wrap: wrap;
 
     .delete-icon {
-        color: rgb(247, 35, 35);
+        color: $accent-color;
     }
 }
 
@@ -515,7 +522,7 @@ body:has(.dark){
 
         .document-icon {
             align-items: center;
-            background: rgba(82, 44, 129, .071);
+            background: $theme-background-color;
             border-radius: .4rem;
             display: flex;
             height: 2.5rem;
@@ -524,7 +531,7 @@ body:has(.dark){
             width: 2.5rem;
 
             i {
-                color: var(--colorPrimary);
+                color: $theme-color;
                 font-size: 1.313rem;
             }
         }
@@ -533,7 +540,7 @@ body:has(.dark){
             font-size: 1.063rem;
             font-weight: 500;
             line-height: 2rem;
-            color: #000;
+            color: $text-color;
             margin-bottom: 0.125rem;
         }
 
@@ -543,7 +550,7 @@ body:has(.dark){
 
             .read-more {
                 font-weight: 500;
-                color: var(--colorPrimary);
+                color: $theme-color;
                 cursor: pointer;
             }
         }
@@ -618,7 +625,7 @@ body:has(.dark){
 
             &.checked {
                 span {
-                    background: var(--colorPrimary);
+                    background: $theme-color;
 
 
                     &::before {
@@ -644,9 +651,9 @@ body:has(.dark){
 
     .box {
         padding: 1rem;
-        border: 0.063rem solid var(--colorPrimary);
+        border: 0.063rem solid $theme-color;
         margin: 1rem 0;
-        background: color-mix(in srgb, var(--colorPrimary) 5%, #fff);
+        background: color-mix(in srgb, $theme-color 5%, #fff);
         border-radius: 0.5rem;
 
         span {
@@ -870,10 +877,9 @@ body:has(.dark){
             .product-icon {
                 font-size: 1.813rem;
                 padding: 0.625rem;
-                background: #fff;
-                color: var(--colorPrimary);
+                color: $theme-color;
                 width: fit-content;
-                background-color: color-mix(in srgb, var(--colorPrimary) 7%, transparent);
+                background: color-mix(in srgb, $theme-color 7%, transparent);
                 margin-bottom: 0.625rem;
             }
 

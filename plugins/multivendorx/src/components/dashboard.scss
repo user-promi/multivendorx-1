@@ -13,7 +13,7 @@
         font-size: 0.95rem;
         line-height: 1rem;
         padding-bottom: 0.625rem;
-        color: #00000071;
+        color: $sub-text-color;
     }
 
     .price {
@@ -24,6 +24,7 @@
         display: flex;
         align-items: start;
         gap: 0.5rem;
+        color: $text-color;
     }
 
     .des {
@@ -32,6 +33,7 @@
 
     .small-text {
         line-height: 1.25rem;
+        color: $text-color
     }
 
     .admin-btn {
