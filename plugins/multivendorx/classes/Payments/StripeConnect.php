@@ -340,8 +340,25 @@ class StripeConnect {
      * @return string
      */
     private function get_redirect_url( $type, $value ) {
-        // Dynamically build the correct dashboard settings payout URL.
-        $base_url = StoreUtil::get_endpoint_url( 'settings' ) . '#subtab=payout';
+        $dashboard_page_id = (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' );
+        if ( get_option( Utill::WORDPRESS_SETTINGS['permalink'] ) ) {
+            $dashboard_slug = $dashboard_page_id
+                ? get_post_field( 'post_name', $dashboard_page_id )
+                : 'dashboard';
+
+            $base_url = site_url( '/' . $dashboard_slug ) . 'settings#subtab=payout';
+        } else {
+            $base_url = site_url(
+                add_query_arg(
+                    array(
+                        'page_id' => $dashboard_page_id,
+                        'segment' => 'settings',
+                    ),
+                    ''
+                )
+            ) . '#subtab=payout';
+        }
+
         if ( 'connected' === $type ) {
             return add_query_arg( 'connected', $value, $base_url );
         } elseif ( 'error' === $type ) {

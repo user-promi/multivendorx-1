@@ -252,9 +252,9 @@ class Country_Shipping extends \WC_Shipping_Method {
                 // Country/State rates logic
                 // -------------------------
                 $multivendorx_shipping_rates = isset( $meta[ Utill::STORE_SETTINGS_KEYS['shipping_rates'] ] ) ? json_decode( $meta[ Utill::STORE_SETTINGS_KEYS['shipping_rates'] ], true ) : array();
-                $state_rate         = 0;
-                $country_rate       = null;
-                $everywhere_rate    = null;
+                $state_rate                  = 0;
+                $country_rate                = null;
+                $everywhere_rate             = null;
 
                 foreach ( $multivendorx_shipping_rates as $rate ) {
                     if ( $rate['country'] === $destination_country ) {

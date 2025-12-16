@@ -122,7 +122,7 @@ class OrderManager {
     public function create_store_orders( $order ) {
         $suborders = MultiVendorX()->order->get_suborders( $order->get_id() ) ?? array();
         $item_info = self::group_item_store_based( $order );
-    
+
         $existing_orders = array();
         foreach ( $suborders as $order ) {
             if ( $order instanceof WC_Order ) {
@@ -134,7 +134,7 @@ class OrderManager {
                 }
             }
         }
-    
+
         foreach ( $item_info as $store_id => $items ) {
             if ( in_array( $store_id, $existing_orders, true ) ) {
                 $suborder_id = array_keys( $existing_orders, $store_id, true );
@@ -145,7 +145,7 @@ class OrderManager {
                 $store_order = self::create_sub_order( $order, $store_id, $items );
                 do_action( 'mvx_checkout_vendor_order_processed', $store_order, $order );
             }
-    
+
             $store_order->save();
         }
     }

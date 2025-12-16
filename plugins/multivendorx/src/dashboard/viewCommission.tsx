@@ -59,7 +59,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 			open={open}
 			onClose={onClose}
 			width="31.25rem"
-			height="100%"
+			height="70%"
 			header={
 				<>
 					<div className="title">
@@ -79,7 +79,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 			{loading && <p>{__('Loading...', 'multivendorx')}</p>}
 
 			{!loading && details && (
-				<>
+				<div className="content">
 					<div className="heading">
 						{__('Order Overview', 'multivendorx')}
 					</div>
@@ -103,19 +103,18 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							</div>
 							<div className="value">
 								<span
-									className={`admin-badge ${
-										details.status === 'paid'
+									className={`admin-badge ${details.status === 'paid'
 											? 'green'
 											: 'red'
-									}`}
+										}`}
 								>
 									{details.status
 										? details.status
-												.replace(/^wc-/, '') // remove prefix like 'wc-'
-												.replace(/_/g, ' ') // replace underscores with spaces
-												.replace(/\b\w/g, (c) =>
-													c.toUpperCase()
-												) // capitalize words
+											.replace(/^wc-/, '') // remove prefix like 'wc-'
+											.replace(/_/g, ' ') // replace underscores with spaces
+											.replace(/\b\w/g, (c) =>
+												c.toUpperCase()
+											) // capitalize words
 										: ''}
 								</span>
 							</div>
@@ -177,7 +176,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							</div>
 						</div>
 					</div>
-				</>
+				</div>
 			)}
 		</CommonPopup>
 	);

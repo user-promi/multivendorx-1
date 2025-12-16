@@ -9,7 +9,7 @@ namespace MultiVendorX\Store;
 
 use MultiVendorX\Utill;
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
 /**
  * MultiVendorX Store Util Class.
@@ -18,60 +18,63 @@ defined( 'ABSPATH' ) || exit;
  * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
-class StoreUtil {
+class StoreUtil
+{
 
     /**
      * Constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
 
-        add_action( 'multivendorx_after_store_active', array( $this, 'create_store_shipping_class' ) );
+        add_action('multivendorx_after_store_active', [$this, 'create_store_shipping_class']);
     }
     /**
      * Create a WooCommerce shipping class when store becomes active.
      *
      * @param int $store_id Store ID.
      */
-    public function create_store_shipping_class( $store_id ) {
+    public function create_store_shipping_class($store_id)
+    {
         // Load store object.
-        $store = new \MultiVendorX\Store\Store( $store_id );
+        $store = new \MultiVendorX\Store\Store($store_id);
 
         // Check if class already exists for this store.
-        $existing_class_id = $store->get_meta( Utill::STORE_SETTINGS_KEYS['shipping_class_id'] );
-        if ( $existing_class_id ) {
+        $existing_class_id = $store->get_meta(Utill::STORE_SETTINGS_KEYS['shipping_class_id']);
+        if ($existing_class_id) {
             return; // Skip creation.
         }
 
         // Prepare unique shipping class slug.
-        $store_name = sanitize_title( $store->get( 'name' ) );
+        $store_name = sanitize_title($store->get('name'));
         $slug       = $store_name . '-' . $store_id;
 
         // Check if the shipping class already exists.
-        $shipping_term = get_term_by( 'slug', $slug, Utill::WORDPRESS_SETTINGS['product_shipping_class'], ARRAY_A );
+        $shipping_term = get_term_by('slug', $slug, Utill::WORDPRESS_SETTINGS['product_shipping_class'], ARRAY_A);
 
         // Create a new shipping class if missing.
-        if ( ! $shipping_term ) {
+        if (! $shipping_term) {
             $shipping_term = wp_insert_term(
-                $store->get( 'name' ) . ' Shipping', // Shipping class name.
+                $store->get('name') . ' Shipping', // Shipping class name.
                 Utill::WORDPRESS_SETTINGS['product_shipping_class'],
-                array(
+                [
                     'slug' => $slug,
-                )
+                ]
             );
         }
 
         // Validate creation.
-        if ( ! is_wp_error( $shipping_term ) ) {
+        if (! is_wp_error($shipping_term)) {
             $class_id = $shipping_term['term_id'];
 
             // Save class ID in store meta.
-            $store->update_meta( Utill::STORE_SETTINGS_KEYS['shipping_class_id'], $class_id );
+            $store->update_meta(Utill::STORE_SETTINGS_KEYS['shipping_class_id'], $class_id);
 
             // Save MultiVendorX store reference in term meta.
-            update_term_meta( $class_id, Utill::POST_META_SETTINGS['store_id'], $store_id );
+            update_term_meta($class_id, Utill::POST_META_SETTINGS['store_id'], $store_id);
 
             // Optional: add origin help.
-            update_term_meta( $class_id, Utill::WORDPRESS_SETTINGS['shipping_origin_country'], get_option( Utill::WOO_SETTINGS['default_country'] ) );
+            update_term_meta($class_id, Utill::WORDPRESS_SETTINGS['shipping_origin_country'], get_option(Utill::WOO_SETTINGS['default_country']));
         }
     }
 
@@ -80,25 +83,26 @@ class StoreUtil {
      *
      * @param array $args Array of arguments.
      */
-    public static function add_store_users( $args ) {
+    public static function add_store_users($args)
+    {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['store_users'];
 
         $store_id = $args['store_id'] ?? 0;
         $role_id  = $args['role_id'] ?? '';
-        $owners   = $args['users'] ?? array();
+        $owners   = $args['users'] ?? [];
 
         // Remove old users not in list.
         $wpdb->query(
             $wpdb->prepare(
-                "DELETE FROM {$table} WHERE store_id = %d AND role_id = %s AND user_id NOT IN (" . implode( ',', array_map( 'intval', $owners ) ) . ')',
+                "DELETE FROM {$table} WHERE store_id = %d AND role_id = %s AND user_id NOT IN (" . implode(',', array_map('intval', $owners)) . ')',
                 $store_id,
                 $role_id
             )
         );
 
         // Insert new users.
-        foreach ( $owners as $user_id ) {
+        foreach ($owners as $user_id) {
             $exists = $wpdb->get_var(
                 $wpdb->prepare(
                     "SELECT ID FROM {$table} WHERE store_id = %d AND role_id = %s AND user_id = %d",
@@ -108,21 +112,21 @@ class StoreUtil {
                 )
             );
 
-            if ( ! $exists ) {
+            if (! $exists) {
                 $wpdb->insert(
                     $table,
-                    array(
+                    [
                         'store_id' => $store_id,
                         'user_id'  => $user_id,
                         'role_id'  => $role_id,
-                    ),
-                    array( '%d', '%d', '%s' )
+                    ],
+                    ['%d', '%d', '%s']
                 );
             }
         }
 
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+        if (! empty($wpdb->last_error) && MultivendorX()->show_advanced_log) {
+            MultiVendorX()->util->log('Database operation failed', 'ERROR');
         }
     }
 
@@ -132,22 +136,23 @@ class StoreUtil {
      * @param int $store_id Store ID.
      * @return array
      */
-    public static function get_store_users( $store_id ) {
+    public static function get_store_users($store_id)
+    {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['store_users'];
 
-        $primary_owner_id = self::get_primary_owner( $store_id );
-        $users            = $wpdb->get_results( $wpdb->prepare( "SELECT user_id FROM $table WHERE store_id = %d", $store_id ), ARRAY_A );
-        $user_ids         = wp_parse_id_list( wp_list_pluck( $users, 'user_id' ) );
+        $primary_owner_id = self::get_primary_owner($store_id);
+        $users            = $wpdb->get_results($wpdb->prepare("SELECT user_id FROM $table WHERE store_id = %d", $store_id), ARRAY_A);
+        $user_ids         = wp_parse_id_list(wp_list_pluck($users, 'user_id'));
 
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+        if (! empty($wpdb->last_error) && MultivendorX()->show_advanced_log) {
+            MultiVendorX()->util->log('Database operation failed', 'ERROR');
         }
 
-        return array(
+        return [
             'users'         => $user_ids,
             'primary_owner' => $primary_owner_id,
-        );
+        ];
     }
 
     /**
@@ -156,18 +161,19 @@ class StoreUtil {
      * @param int $user_id User ID.
      * @return array
      */
-    public static function get_stores_from_user_id( $user_id ) {
+    public static function get_stores_from_user_id($user_id)
+    {
         global $wpdb;
 
         $store_users = "{$wpdb->prefix}" . Utill::TABLES['store_users'];
         $stores      = "{$wpdb->prefix}" . Utill::TABLES['store'];
 
-        $excluded_statuses = array( 'permanently_rejected', 'deactivated' );
-        $placeholders      = implode( ', ', array_fill( 0, count( $excluded_statuses ), '%s' ) );
-        $params            = array_merge( array( $user_id ), $excluded_statuses );
+        $excluded_statuses = ['permanently_rejected', 'deactivated'];
+        $placeholders      = implode(', ', array_fill(0, count($excluded_statuses), '%s'));
+        $params            = array_merge([$user_id], $excluded_statuses);
 
-        $sql    = "
-            SELECT 
+        $sql = "
+            SELECT
                 su.store_id AS id,
                 s.name AS name
             FROM {$store_users} su
@@ -175,10 +181,10 @@ class StoreUtil {
             WHERE su.user_id = %d
             AND s.status NOT IN ($placeholders)
         ";
-        $result = $wpdb->get_results( $wpdb->prepare( $sql, $params ), ARRAY_A );
+        $result = $wpdb->get_results($wpdb->prepare($sql, $params), ARRAY_A);
 
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+        if (! empty($wpdb->last_error) && MultivendorX()->show_advanced_log) {
+            MultiVendorX()->util->log('Database operation failed', 'ERROR');
         }
 
         return $result;
@@ -189,17 +195,18 @@ class StoreUtil {
      *
      * @return array
      */
-    public static function get_store() {
+    public static function get_store()
+    {
         global $wpdb;
 
         $table = "{$wpdb->prefix}" . Utill::TABLES['store'];
-        $store = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table}" ), ARRAY_A );
+        $store = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$table}"), ARRAY_A);
 
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+        if (! empty($wpdb->last_error) && MultivendorX()->show_advanced_log) {
+            MultiVendorX()->util->log('Database operation failed', 'ERROR');
         }
 
-        return $store ? $store : array();
+        return $store ? $store : [];
     }
 
     /**
@@ -208,17 +215,18 @@ class StoreUtil {
      * @param string $status Store status.
      * @return array
      */
-    public static function get_store_by_primary_owner( $status = 'active' ) {
+    public static function get_store_by_primary_owner($status = 'active')
+    {
         global $wpdb;
 
         $table  = "{$wpdb->prefix}" . Utill::TABLES['store'];
-        $stores = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table WHERE who_created = %d AND status = %s", get_current_user_id(), $status ), ARRAY_A );
+        $stores = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table WHERE who_created = %d AND status = %s", get_current_user_id(), $status), ARRAY_A);
 
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+        if (! empty($wpdb->last_error) && MultivendorX()->show_advanced_log) {
+            MultiVendorX()->util->log('Database operation failed', 'ERROR');
         }
 
-        return $stores ? $stores : array();
+        return $stores ? $stores : [];
     }
 
     /**
@@ -227,16 +235,17 @@ class StoreUtil {
      * @param int $store_id Store ID.
      * @return array
      */
-    public function get_store_tabs( $store_id ) {
+    public function get_store_tabs($store_id)
+    {
 
-        $tabs = array(
-            'products' => array(
-                'title' => __( 'Products', 'multivendorx' ),
-                'url'   => $this->get_store_url( $store_id ),
-            ),
-        );
+        $tabs = [
+            'products' => [
+                'title' => __('Products', 'multivendorx'),
+                'url'   => $this->get_store_url($store_id),
+            ],
+        ];
 
-        return apply_filters( 'multivendorx_store_tabs', $tabs, $store_id );
+        return apply_filters('multivendorx_store_tabs', $tabs, $store_id);
     }
 
     /**
@@ -246,23 +255,24 @@ class StoreUtil {
      * @param string $tab Optional tab.
      * @return string
      */
-    public function get_store_url( $store_id, $tab = '' ) {
-        if ( ! $store_id ) {
+    public function get_store_url($store_id, $tab = '')
+    {
+        if (! $store_id) {
             return '';
         }
 
-        $store_data       = new Store( $store_id );
-        $store_slug       = $store_data ? $store_data->get( 'slug' ) : '';
-        $custom_store_url = MultiVendorX()->setting->get_setting( 'store_url', 'store' );
+        $store_data       = new Store($store_id);
+        $store_slug       = $store_data ? $store_data->get('slug') : '';
+        $custom_store_url = MultiVendorX()->setting->get_setting('store_url', 'store');
 
         $path = '/' . $custom_store_url . '/' . $store_slug . '/';
-        if ( $tab ) {
-            $tab   = untrailingslashit( trim( $tab, " \n\r\t\v\0/\\" ) );
+        if ($tab) {
+            $tab = untrailingslashit(trim($tab, " \n\r\t\v\0/\\"));
             $path .= $tab;
-            $path  = trailingslashit( $path );
+            $path = trailingslashit($path);
         }
 
-        return apply_filters( 'multivendorx_get_store_url', home_url( $path ), $custom_store_url, $store_id, $tab );
+        return apply_filters('multivendorx_get_store_url', home_url($path), $custom_store_url, $store_id, $tab);
     }
 
     /**
@@ -270,76 +280,107 @@ class StoreUtil {
      *
      * @return array
      */
-    public static function get_store_capability() {
-        $capabilities = array(
-            'products'   => array(
+    public static function get_store_capability()
+    {
+        $capabilities = [
+            'products'      => [
                 'label'      => 'Manage products',
                 'desc'       => 'Allow stores to create, edit, and control their product listings, including uploading media and publishing items for sale.',
-                'capability' =>
-                array(
-                    // 'manage_users' => 'Manage Users',
+                'capability' => [
                     'manage_products'  => 'Manage products',
                     'read_products'    => 'View products',
                     'edit_products'    => 'Edit products',
                     'delete_products'  => 'Delete products',
                     'publish_products' => 'Publish products',
                     'upload_files'     => 'Upload files',
-                ),
-            ),
-            'orders'     => array(
+                ],
+            ],
+            'orders'        => [
                 'label'      => 'Manage orders',
                 'desc'       => 'Define how stores interact with customer orders, from viewing and updating details to adding order notes or processing cancellations.',
-                'capability' =>
-                array(
-                    'read_shop_orders'     => 'View orders',
-                    'view_shop_orders'     => 'Manage orders',
+                'capability' => [
+                    'view_shop_orders'     => 'View orders',
                     'edit_shop_orders'     => 'Edit orders',
                     'delete_shop_orders'   => 'Delete orders',
                     'add_shop_orders_note' => 'Add order notes',
-                ),
-            ),
-            'coupons'    => array(
+                ],
+            ],
+            'coupons'       => [
                 'label'      => 'Coupon management',
                 'desc'       => 'Enable stores to create and manage discount codes, adjust coupon settings, and track active promotions.',
-                'capability' =>
-                array(
+                'capability' => [
                     'manage_shop_coupons' => 'Manage coupons',
                     'read_shop_coupons'   => 'View coupons',
                     'edit_shop_coupons'   => 'Edit coupons',
                     'delete_shop_coupons' => 'Delete coupons',
                     'publish_coupons'     => 'Publish coupons',
-                ),
-            ),
-            'analytics'  => array(
+                ],
+            ],
+            'analytics'     => [
                 'label'      => 'Analytics & report',
                 'desc'       => 'Give stores access to performance insights, sales data editing, and export options for business tracking and analysis.',
-                'capability' =>
-                array(
+                'capability' => [
                     'read_shop_report'   => 'View reports',
                     'export_shop_report' => 'Export data',
-                ),
-            ),
-            'inventory'  => array(
+                ],
+            ],
+            'inventory'     => [
                 'label'      => 'Inventory management',
                 'desc'       => 'Let stores monitor stock levels, update quantities, and set alerts to prevent overselling or stockouts.',
-                'capability' =>
-                array(
+                'capability' => [
                     'read_shop_report'  => 'Manage inventory',
                     'edit_shop_report'  => 'Track stock',
                     'edit_stock_alerts' => 'Set stock alerts',
-                ),
-            ),
-            'commission' => array(
+                ],
+            ],
+            'commission'    => [
                 'label'      => 'Commission & earning',
                 'desc'       => 'Provide stores with tools to review their earnings, track commission history, and request withdrawals when eligible.',
-                'capability' =>
-                array(
+                'capability' => [
                     'read_shop_earning'       => 'View earning',
                     'edit_withdrawl_request'  => 'Request withdrawl',
                     'view_commission_history' => 'Commission history',
-                ),
-            ),
-        );
+                    'view_transactions'       => 'View Transactions',
+                ],
+            ],
+            'store_support' => [
+                'label'      => 'Store support & engagement',
+                'desc'       => 'Manage customer communication, questions, followers, and store feedback.',
+                'capability' => [
+                    'view_support_tickets'     => 'View support tickets',
+                    'reply_support_tickets'    => 'Reply to support tickets',
+                    'view_customer_questions'  => 'View customer questions',
+                    'reply_customer_questions' => 'Reply to customer questions',
+                    'view_store_followers'     => 'View store followers',
+                    'view_store_reviews'       => 'View store reviews',
+                    'reply_store_reviews'      => 'Reply to store reviews',
+                ],
+            ],
+            'reports'       => [
+                'label'      => 'Reports & analytics',
+                'desc'       => 'Access store performance metrics, sales reports, and insights.',
+                'capability' => [
+                    'view_store_reports'   => 'View reports',
+                    'export_store_reports' => 'Export reports',
+                ],
+            ],
+            'resources'     => [
+                'label'      => 'Learning & tools',
+                'desc'       => 'Access documentation, guides, and helpful tools for store growth.',
+                'capability' => [
+                    'view_documentation' => 'View documentation',
+                    'access_tools'       => 'Access tools',
+                ],
+            ],
+            'settings'      => [
+                'label'      => 'Store settings',
+                'desc'       => 'Control store configuration, preferences, and operational settings.',
+                'capability' => [
+                    'manage_store_settings' => 'Manage store settings',
+                ],
+            ],
+
+        ];
 
         return $capabilities;
     }
@@ -351,13 +392,14 @@ class StoreUtil {
      *
      * @return object|false
      */
-    public static function get_products_store( $product_id ) {
+    public static function get_products_store($product_id)
+    {
         $store_data = false;
-        if ( $product_id > 0 ) {
-            $store     = get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true );
-            $store_obj = Store::get_store_by_id( $store );
+        if ($product_id > 0) {
+            $store     = get_post_meta($product_id, Utill::POST_META_SETTINGS['store_id'], true);
+            $store_obj = Store::get_store_by_id($store);
 
-            if ( $store_obj ) {
+            if ($store_obj) {
                 $store_data = $store_obj;
             }
         }
@@ -371,34 +413,35 @@ class StoreUtil {
      *
      * @return array
      */
-    public static function get_store_registration_form( $store_id ) {
-        $store = Store::get_store_by_id( $store_id );
+    public static function get_store_registration_form($store_id)
+    {
+        $store = Store::get_store_by_id($store_id);
 
         // Get core fields from store object.
-        $core_fields = array(
+        $core_fields = [
             'name'        => 'Store Name',
             'description' => 'Store Description',
             'status'      => 'status',
-        );
+        ];
 
-        $core_data             = array();
-        $all_registration_data = array();
-        foreach ( $core_fields as $field_key => $field_label ) {
-            $core_data[ $field_label ]           = $store->get( $field_key );
-            $all_registration_data[ $field_key ] = $store->get( $field_key );
+        $core_data             = [];
+        $all_registration_data = [];
+        foreach ($core_fields as $field_key => $field_label) {
+            $core_data[$field_label]           = $store->get($field_key);
+            $all_registration_data[$field_key] = $store->get($field_key);
         }
 
         $all_registration_data['id'] = $store_id;
 
         // Get registration form data (serialized meta).
-        $store_meta     = $store->get_meta( Utill::STORE_SETTINGS_KEYS['registration_data'] );
-        $submitted_data = array();
-        if ( ! empty( $store_meta ) && is_serialized( $store_meta ) ) {
-            $submitted_data = unserialize( $store_meta );
+        $store_meta     = $store->get_meta(Utill::STORE_SETTINGS_KEYS['registration_data']);
+        $submitted_data = [];
+        if (! empty($store_meta) && is_serialized($store_meta)) {
+            $submitted_data = unserialize($store_meta);
         }
 
-		$meta_keys = array(
-			Utill::STORE_SETTINGS_KEYS['phone'],
+        $meta_keys = [
+            Utill::STORE_SETTINGS_KEYS['phone'],
             Utill::STORE_SETTINGS_KEYS['paypal_email'],
             Utill::STORE_SETTINGS_KEYS['address_1'],
             Utill::STORE_SETTINGS_KEYS['address_2'],
@@ -406,61 +449,61 @@ class StoreUtil {
             Utill::STORE_SETTINGS_KEYS['state'],
             Utill::STORE_SETTINGS_KEYS['country'],
             Utill::STORE_SETTINGS_KEYS['postcode'],
-		);
+        ];
 
-        foreach ( $meta_keys as $key ) {
-            $meta_value = $store->get_meta( $key );
-            if ( ! empty( $meta_value ) ) {
-                $submitted_data[ $key ] = $meta_value;
+        foreach ($meta_keys as $key) {
+            $meta_value = $store->get_meta($key);
+            if (! empty($meta_value)) {
+                $submitted_data[$key] = $meta_value;
             }
         }
 
         // Fetch form settings.
         $form_settings = MultivendorX()->setting->get_option(
             'multivendorx_store_registration_form_settings',
-            array()
+            []
         );
 
         // Build map: field_name => field_label.
-        $name_label_map   = array();
-        $option_label_map = array();
-        if ( isset( $form_settings['store_registration_from']['formfieldlist'] ) ) {
-            foreach ( $form_settings['store_registration_from']['formfieldlist'] as $field ) {
-                if ( ! empty( $field['name'] ) && ! empty( $field['label'] ) ) {
-                    $name_label_map[ $field['name'] ] = $field['label'];
+        $name_label_map   = [];
+        $option_label_map = [];
+        if (isset($form_settings['store_registration_from']['formfieldlist'])) {
+            foreach ($form_settings['store_registration_from']['formfieldlist'] as $field) {
+                if (! empty($field['name']) && ! empty($field['label'])) {
+                    $name_label_map[$field['name']] = $field['label'];
                 }
-                if ( ! empty( $field['options'] ) ) {
-                    foreach ( $field['options'] as $key => $options ) {
-                        $option_label_map[ $options['value'] ] = $options['label'];
+                if (! empty($field['options'])) {
+                    foreach ($field['options'] as $key => $options) {
+                        $option_label_map[$options['value']] = $options['label'];
                     }
                 }
             }
         }
 
-        $primary_owner_id   = self::get_primary_owner( $store_id );
-        $primary_owner_info = get_userdata( $primary_owner_id );
+        $primary_owner_id   = self::get_primary_owner($store_id);
+        $primary_owner_info = get_userdata($primary_owner_id);
 
         // Prepare structured response.
-        $response = array(
+        $response = [
             'core_data'              => $core_data,
-            'registration_data'      => array(),
+            'registration_data'      => [],
             'all_registration_data'  => $all_registration_data,
             'primary_owner_info'     => $primary_owner_info,
-            'store_application_note' => unserialize( $store->get_meta( 'store_reject_note' ) ),
-            'store_permanent_reject' => $store->get( Utill::STORE_SETTINGS_KEYS['status'] ) === 'permanently_rejected',
-        );
+            'store_application_note' => unserialize($store->get_meta('store_reject_note')),
+            'store_permanent_reject' => $store->get(Utill::STORE_SETTINGS_KEYS['status']) === 'permanently_rejected',
+        ];
 
-        foreach ( $submitted_data as $field_name => $field_value ) {
-            $label = $name_label_map[ $field_name ] ?? $field_name;
-            $value = is_array( $field_value )
-                    ? implode( ', ', array_values( array_intersect_key( $option_label_map, array_flip( $field_value ) ) ) )
-                    : ( $option_label_map[ $field_value ] ?? $field_value );
+        foreach ($submitted_data as $field_name => $field_value) {
+            $label = $name_label_map[$field_name] ?? $field_name;
+            $value = is_array($field_value)
+                ? implode(', ', array_values(array_intersect_key($option_label_map, array_flip($field_value))))
+                : ($option_label_map[$field_value] ?? $field_value);
 
-            $response['all_registration_data'][ $field_name ] = $field_value;
-            if ( in_array( $field_name, $meta_keys, true ) ) {
-                $response['core_data'][ $label ] = $field_value;
+            $response['all_registration_data'][$field_name] = $field_value;
+            if (in_array($field_name, $meta_keys, true)) {
+                $response['core_data'][$label] = $field_value;
             } else {
-                $response['registration_data'][ $label ] = $value;
+                $response['registration_data'][$label] = $value;
             }
         }
 
@@ -474,7 +517,8 @@ class StoreUtil {
      *
      * @return array Stores.
      */
-    public static function get_stores_by_status( $status ) {
+    public static function get_stores_by_status($status)
+    {
         global $wpdb;
 
         $table  = "{$wpdb->prefix}" . Utill::TABLES['store'];
@@ -486,11 +530,11 @@ class StoreUtil {
             ARRAY_A
         );
 
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+        if (! empty($wpdb->last_error) && MultivendorX()->show_advanced_log) {
+            MultiVendorX()->util->log('Database operation failed', 'ERROR');
         }
 
-        return $stores ? $stores : array();
+        return $stores ? $stores : [];
     }
 
     /**
@@ -500,7 +544,8 @@ class StoreUtil {
      *
      * @return int User ID.
      */
-    public static function get_primary_owner( $store_id ) {
+    public static function get_primary_owner($store_id)
+    {
         global $wpdb;
         $table_name    = $wpdb->prefix . Utill::TABLES['store_users'];
         $primary_owner = $wpdb->get_var(
@@ -510,8 +555,8 @@ class StoreUtil {
             )
         );
 
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+        if (! empty($wpdb->last_error) && MultivendorX()->show_advanced_log) {
+            MultiVendorX()->util->log('Database operation failed', 'ERROR');
         }
 
         return $primary_owner;
@@ -525,7 +570,8 @@ class StoreUtil {
      *
      * @return void
      */
-    public static function set_primary_owner( $user_id, $store_id ) {
+    public static function set_primary_owner($user_id, $store_id)
+    {
         global $wpdb;
 
         $table_name = $wpdb->prefix . Utill::TABLES['store_users'];
@@ -538,31 +584,31 @@ class StoreUtil {
             )
         );
 
-        if ( $exists ) {
+        if ($exists) {
             // Update.
             $wpdb->update(
                 $table_name,
-                array( 'primary_owner' => $user_id ),
-                array( 'store_id' => $store_id ),
-                array( '%d' ),
-                array( '%d' )
+                ['primary_owner' => $user_id],
+                ['store_id' => $store_id],
+                ['%d'],
+                ['%d']
             );
         } else {
             // Insert.
             $wpdb->insert(
                 $table_name,
-                array(
+                [
                     'store_id'      => $store_id,
                     'user_id'       => $user_id,
                     'role_id'       => 'store_owner',
                     'primary_owner' => $user_id,
-                ),
-                array( '%d', '%d', '%s', '%d' )
+                ],
+                ['%d', '%d', '%s', '%d']
             );
         }
 
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+        if (! empty($wpdb->last_error) && MultivendorX()->show_advanced_log) {
+            MultiVendorX()->util->log('Database operation failed', 'ERROR');
         }
     }
 
@@ -573,52 +619,53 @@ class StoreUtil {
      *
      * @return array
      */
-    public static function get_store_product_policies( $product_id = 0 ) {
-        $product  = wc_get_product( $product_id );
-        $policies = array();
-        if ( $product ) {
-            $shipping_policy     = get_post_meta( $product_id, Utill::POST_META_SETTINGS['shipping_policy'], true );
-            $refund_policy       = get_post_meta( $product_id, Utill::POST_META_SETTINGS['refund_policy'], true );
-            $cancellation_policy = get_post_meta( $product_id, Utill::POST_META_SETTINGS['cancellation_policy'], true );
+    public static function get_store_product_policies($product_id = 0)
+    {
+        $product  = wc_get_product($product_id);
+        $policies = [];
+        if ($product) {
+            $shipping_policy     = get_post_meta($product_id, Utill::POST_META_SETTINGS['shipping_policy'], true);
+            $refund_policy       = get_post_meta($product_id, Utill::POST_META_SETTINGS['refund_policy'], true);
+            $cancellation_policy = get_post_meta($product_id, Utill::POST_META_SETTINGS['cancellation_policy'], true);
 
-            $store_policy = MultiVendorX()->setting->get_setting( 'store_policy', array() );
-            if ( ! empty( $shipping_policy ) ) {
-                $shipping_policy = MultiVendorX()->setting->get_setting( 'shipping_policy', array() );
+            $store_policy = MultiVendorX()->setting->get_setting('store_policy', []);
+            if (! empty($shipping_policy)) {
+                $shipping_policy = MultiVendorX()->setting->get_setting('shipping_policy', []);
             }
-            if ( ! empty( $refund_policy ) ) {
-                $refund_policy = MultiVendorX()->setting->get_setting( 'refund_policy', array() );
+            if (! empty($refund_policy)) {
+                $refund_policy = MultiVendorX()->setting->get_setting('refund_policy', []);
             }
-            if ( ! empty( $cancellation_policy ) ) {
-                $cancellation_policy = MultiVendorX()->setting->get_setting( 'cancellation_policy', array() );
-            }
-
-            $store_id                  = get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true );
-            $store                     = new Store( $store_id );
-            $privacy_override_settings = MultiVendorX()->setting->get_setting( 'store_policy_override', array() );
-
-            if ( in_array( 'store', $privacy_override_settings, true ) ) {
-                $store_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['store_policy'] );
-            }
-            if ( in_array( 'shipping', $privacy_override_settings, true ) ) {
-                $shipping_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['shipping_policy'] );
-            }
-            if ( in_array( 'refund_return', $privacy_override_settings, true ) ) {
-                $refund_policy       = $store->get_meta( Utill::STORE_SETTINGS_KEYS['return_policy'] );
-                $cancellation_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['exchange_policy'] );
+            if (! empty($cancellation_policy)) {
+                $cancellation_policy = MultiVendorX()->setting->get_setting('cancellation_policy', []);
             }
 
-            if ( ! empty( $store_policy ) ) {
+            $store_id                  = get_post_meta($product_id, Utill::POST_META_SETTINGS['store_id'], true);
+            $store                     = new Store($store_id);
+            $privacy_override_settings = MultiVendorX()->setting->get_setting('store_policy_override', []);
+
+            if (in_array('store', $privacy_override_settings, true)) {
+                $store_policy = $store->get_meta(Utill::STORE_SETTINGS_KEYS['store_policy']);
+            }
+            if (in_array('shipping', $privacy_override_settings, true)) {
+                $shipping_policy = $store->get_meta(Utill::STORE_SETTINGS_KEYS['shipping_policy']);
+            }
+            if (in_array('refund_return', $privacy_override_settings, true)) {
+                $refund_policy       = $store->get_meta(Utill::STORE_SETTINGS_KEYS['return_policy']);
+                $cancellation_policy = $store->get_meta(Utill::STORE_SETTINGS_KEYS['exchange_policy']);
+            }
+
+            if (! empty($store_policy)) {
                 $policies['store_policy'] = $store_policy;
             }
 
-            if ( ! empty( $shipping_policy ) ) {
+            if (! empty($shipping_policy)) {
                 $policies['shipping_policy'] = $shipping_policy;
             }
 
-            if ( ! empty( $refund_policy ) ) {
+            if (! empty($refund_policy)) {
                 $policies['refund_policy'] = $refund_policy;
             }
-            if ( ! empty( $cancellation_policy ) ) {
+            if (! empty($cancellation_policy)) {
                 $policies['cancellation_policy'] = $cancellation_policy;
             }
         }
@@ -631,93 +678,47 @@ class StoreUtil {
      * @param int $store_id Store ID.
      * @return array
      */
-    public static function get_store_policies( $store_id = 0 ) {
-        $policies                = array();
-            $store_policy        = MultiVendorX()->setting->get_setting( 'store_policy', array() );
-            $shipping_policy     = MultiVendorX()->setting->get_setting( 'shipping_policy', array() );
-            $refund_policy       = MultiVendorX()->setting->get_setting( 'refund_policy', array() );
-            $cancellation_policy = MultiVendorX()->setting->get_setting( 'cancellation_policy', array() );
+    public static function get_store_policies($store_id = 0)
+    {
+        $policies            = [];
+        $store_policy        = MultiVendorX()->setting->get_setting('store_policy', []);
+        $shipping_policy     = MultiVendorX()->setting->get_setting('shipping_policy', []);
+        $refund_policy       = MultiVendorX()->setting->get_setting('refund_policy', []);
+        $cancellation_policy = MultiVendorX()->setting->get_setting('cancellation_policy', []);
 
-		if ( $store_id ) {
-			$store                     = new Store( $store_id );
-			$privacy_override_settings = MultiVendorX()->setting->get_setting( 'store_policy_override', array() );
+        if ($store_id) {
+            $store                     = new Store($store_id);
+            $privacy_override_settings = MultiVendorX()->setting->get_setting('store_policy_override', []);
 
-			if ( in_array( 'store', $privacy_override_settings, true ) ) {
-				$store_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['store_policy'] );
-			}
-			if ( in_array( 'shipping', $privacy_override_settings, true ) ) {
-				$shipping_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['shipping_policy'] );
-			}
-			if ( in_array( 'refund_return', $privacy_override_settings, true ) ) {
-				$refund_policy       = $store->get_meta( Utill::STORE_SETTINGS_KEYS['refund_policy'] );
-				$cancellation_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['exchange_policy'] );
-			}
-		}
+            if (in_array('store', $privacy_override_settings, true)) {
+                $store_policy = $store->get_meta(Utill::STORE_SETTINGS_KEYS['store_policy']);
+            }
+            if (in_array('shipping', $privacy_override_settings, true)) {
+                $shipping_policy = $store->get_meta(Utill::STORE_SETTINGS_KEYS['shipping_policy']);
+            }
+            if (in_array('refund_return', $privacy_override_settings, true)) {
+                $refund_policy       = $store->get_meta(Utill::STORE_SETTINGS_KEYS['refund_policy']);
+                $cancellation_policy = $store->get_meta(Utill::STORE_SETTINGS_KEYS['exchange_policy']);
+            }
+        }
 
-		if ( ! empty( $store_policy ) ) {
-			$policies['store_policy'] = $store_policy;
-		}
+        if (! empty($store_policy)) {
+            $policies['store_policy'] = $store_policy;
+        }
 
-		if ( ! empty( $shipping_policy ) ) {
-			$policies['shipping_policy'] = $shipping_policy;
-		}
+        if (! empty($shipping_policy)) {
+            $policies['shipping_policy'] = $shipping_policy;
+        }
 
-		if ( ! empty( $refund_policy ) ) {
-			$policies['refund_policy'] = $refund_policy;
-		}
-		if ( ! empty( $cancellation_policy ) ) {
-			$policies['cancellation_policy'] = $cancellation_policy;
-		}
+        if (! empty($refund_policy)) {
+            $policies['refund_policy'] = $refund_policy;
+        }
+        if (! empty($cancellation_policy)) {
+            $policies['cancellation_policy'] = $cancellation_policy;
+        }
 
         return $policies;
     }
-
-    /**
-     * Get the store dashboard endpoint URL.
-     *
-     * @param string $tab   The tab name.
-     * @param string $sub   The sub-tab name.
-     * @param string $value The value for the sub-tab.
-     * @return string The endpoint URL.
-     */
-    public static function get_endpoint_url( $tab = '', $sub = '', $value = '' ) {
-
-        // Set your Dashboard Page ID.
-        $page_id = MultiVendorX()->setting->get_setting( 'store_dashboard_page' );
-
-        // Pretty permalinks.
-        if ( get_option( Utill::WORDPRESS_SETTINGS['permalink'] ) ) {
-            $url = home_url( '/dashboard' );
-
-            if ( $tab ) {
-                $url .= '/' . sanitize_title( $tab );
-            }
-            if ( $sub ) {
-                $url .= '/' . sanitize_title( $sub );
-            }
-            if ( $value ) {
-                $url .= '/' . sanitize_title( $value );
-            }
-
-            return esc_url( trailingslashit( $url ) );
-        }
-
-        $url = add_query_arg( array( 'page_id' => $page_id ), home_url( '/' ) );
-
-        if ( $tab ) {
-            $url = add_query_arg( 'segment', sanitize_text_field( $tab ), $url );
-        }
-        if ( $sub ) {
-            $url = add_query_arg( 'element', sanitize_text_field( $sub ), $url );
-        }
-        if ( $value ) {
-            $url = add_query_arg( 'value', sanitize_text_field( $value ), $url );
-        }
-
-        return esc_url( $url );
-    }
-
-
 
     /**
      * Get store records from the database based on given filters.
@@ -725,79 +726,80 @@ class StoreUtil {
      * @param array $args Filter options like 'ID', 'status', 'name', 'slug', 'description', 'who_created', 'create_time', 'limit', 'offset', 'count'.
      * @return array|int List of stores (array) or count (int) if 'count' is set.
      */
-    public static function get_store_information( $args = array() ) {
+    public static function get_store_information($args = [])
+    {
         global $wpdb;
 
-        $where = array();
+        $where = [];
 
-        if ( isset( $args['ID'] ) ) {
-            $ids     = is_array( $args['ID'] ) ? $args['ID'] : array( $args['ID'] );
-            $ids     = implode( ',', array_map( 'intval', $ids ) );
+        if (isset($args['ID'])) {
+            $ids     = is_array($args['ID']) ? $args['ID'] : [$args['ID']];
+            $ids     = implode(',', array_map('intval', $ids));
             $where[] = "ID IN ($ids)";
         }
 
-        if ( isset( $args['status'] ) ) {
-            $where[] = "status = '" . esc_sql( $args['status'] ) . "'";
+        if (isset($args['status'])) {
+            $where[] = "status = '" . esc_sql($args['status']) . "'";
         }
 
-        if ( isset( $args['name'] ) ) {
-            $where[] = "name LIKE '%" . esc_sql( $args['name'] ) . "%'";
+        if (isset($args['name'])) {
+            $where[] = "name LIKE '%" . esc_sql($args['name']) . "%'";
         }
 
-        if ( isset( $args['slug'] ) ) {
-            $where[] = "slug = '" . esc_sql( $args['slug'] ) . "'";
+        if (isset($args['slug'])) {
+            $where[] = "slug = '" . esc_sql($args['slug']) . "'";
         }
 
-        if ( isset( $args['searchField'] ) ) {
-            $search  = esc_sql( $args['searchField'] );
+        if (isset($args['searchField'])) {
+            $search  = esc_sql($args['searchField']);
             $where[] = "(name LIKE '%$search%')";
         }
 
-        if ( isset( $args['start_date'] ) && isset( $args['end_date'] ) ) {
-            $where[] = "create_time BETWEEN '" . esc_sql( $args['start_date'] ) . "' AND '" . esc_sql( $args['end_date'] ) . "'";
+        if (isset($args['start_date']) && isset($args['end_date'])) {
+            $where[] = "create_time BETWEEN '" . esc_sql($args['start_date']) . "' AND '" . esc_sql($args['end_date']) . "'";
         }
 
         $table = $wpdb->prefix . Utill::TABLES['store'];
 
-        if ( isset( $args['count'] ) ) {
+        if (isset($args['count'])) {
             $query = "SELECT COUNT(*) FROM {$table}";
         } else {
             $query = "SELECT * FROM {$table}";
         }
 
-        if ( ! empty( $where ) ) {
+        if (! empty($where)) {
             $condition = $args['condition'] ?? ' AND ';
-            $query    .= ' WHERE ' . implode( $condition, $where );
+            $query .= ' WHERE ' . implode($condition, $where);
         }
 
         // ADD SORTING SUPPORT HERE.
-        if ( ! empty( $args['orderBy'] ) ) {
+        if (! empty($args['orderBy'])) {
             // Only allow safe columns to sort by (avoid SQL injection).
-            $allowed_columns = array( 'ID', 'name', 'status', 'slug', 'create_time' );
-            $orderBy         = in_array( $args['orderBy'], $allowed_columns, true ) ? $args['orderBy'] : 'ID';
-            $order           = ( isset( $args['order'] ) && strtolower( $args['order'] ) === 'desc' ) ? 'DESC' : 'ASC';
-            $query          .= " ORDER BY {$orderBy} {$order}";
+            $allowed_columns = ['ID', 'name', 'status', 'slug', 'create_time'];
+            $orderBy         = in_array($args['orderBy'], $allowed_columns, true) ? $args['orderBy'] : 'ID';
+            $order           = (isset($args['order']) && strtolower($args['order']) === 'desc') ? 'DESC' : 'ASC';
+            $query .= " ORDER BY {$orderBy} {$order}";
         }
 
         // Keep your pagination logic.
-        if ( isset( $args['limit'] ) && isset( $args['offset'] ) && empty( $args['count'] ) ) {
-            $limit  = intval( $args['limit'] );
-            $offset = intval( $args['offset'] );
+        if (isset($args['limit']) && isset($args['offset']) && empty($args['count'])) {
+            $limit  = intval($args['limit']);
+            $offset = intval($args['offset']);
             $query .= " LIMIT $limit OFFSET $offset";
         }
 
-        if ( isset( $args['count'] ) ) {
-            $results = $wpdb->get_var( $query );
+        if (isset($args['count'])) {
+            $results = $wpdb->get_var($query);
         } else {
-            $results = $wpdb->get_results( $query, ARRAY_A );
+            $results = $wpdb->get_results($query, ARRAY_A);
         }
 
         /** Centralized error logging (only once) */
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+        if (! empty($wpdb->last_error) && MultivendorX()->show_advanced_log) {
+            MultiVendorX()->util->log('Database operation failed', 'ERROR');
         }
 
-        return $results ?? ( isset( $args['count'] ) ? 0 : array() );
+        return $results ?? (isset($args['count']) ? 0 : []);
     }
 
     /**
@@ -808,33 +810,34 @@ class StoreUtil {
      * @param bool $check_payouts Whether to check for payouts.
      * @return boolean
      */
-    public static function get_excluded_products( $product_id = '', $store_id = '', $check_payouts = false ) {
+    public static function get_excluded_products($product_id = '', $store_id = '', $check_payouts = false)
+    {
 
-        $store_id = ! empty( $store_id ) ? $store_id : get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true );
+        $store_id = ! empty($store_id) ? $store_id : get_post_meta($product_id, Utill::POST_META_SETTINGS['store_id'], true);
 
-        if ( ! $store_id ) {
+        if (! $store_id) {
             return false;
         }
-        $store = Store::get_store_by_id( $store_id );
+        $store = Store::get_store_by_id($store_id);
 
-        $status           = $store->get( 'status' );
-        $review_settings  = MultiVendorX()->setting->get_setting( 'restriction_for_under_review', array() );
-        $suspend_settings = MultiVendorX()->setting->get_setting( 'restriction_for_sunspended', array() );
+        $status           = $store->get('status');
+        $review_settings  = MultiVendorX()->setting->get_setting('restriction_for_under_review', []);
+        $suspend_settings = MultiVendorX()->setting->get_setting('restriction_for_sunspended', []);
 
-        if ( $check_payouts ) {
-            if ( 'under_review' === $status && in_array( 'hold_payments_release', $review_settings, true ) ) {
+        if ($check_payouts) {
+            if ('under_review' === $status && in_array('hold_payments_release', $review_settings, true)) {
                 return true;
             }
 
-            if ( 'suspended' === $status && in_array( 'freeze_all_payments', $suspend_settings, true ) ) {
+            if ('suspended' === $status && in_array('freeze_all_payments', $suspend_settings, true)) {
                 return true;
             }
         } else {
-            if ( 'under_review' === $status && in_array( 'pause_selling_products', $review_settings, true ) ) {
+            if ('under_review' === $status && in_array('pause_selling_products', $review_settings, true)) {
                 return true;
             }
 
-            if ( 'suspended' === $status && in_array( 'store_visible_in_checkout', $suspend_settings, true ) ) {
+            if ('suspended' === $status && in_array('store_visible_in_checkout', $suspend_settings, true)) {
                 return true;
             }
         }

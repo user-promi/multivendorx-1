@@ -140,7 +140,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								</div>
 								<div className="right">
 									<i
-										className="adminlib-external"
+										className="adminlib-external icon"
 										onClick={() => {
 											navigate(
 												`?page=multivendorx#&tab=transaction-history&store_id=${id}`
@@ -199,11 +199,9 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								</div>
 								<div className="right">
 									<i
-										className="adminlib-external"
+										className="adminlib-external icon"
 										onClick={() => {
-											navigate(
-												`?page=multivendorx#&tab=transaction-history&store_id=${id}`
-											);
+											window.open(`${appLocalizer.admin_url}edit.php?post_type=product`, "_self")
 										}}
 									></i>
 								</div>
@@ -296,7 +294,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								</div>
 								<div className="right">
 									<i
-										className="adminlib-external"
+										className="adminlib-external icon"
 										onClick={() => {
 											navigate(
 												`?page=multivendorx#&tab=customer-support&subtab=review`
@@ -321,7 +319,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								</div>
 								<div className="right">
 									<i
-										className="adminlib-external"
+										className="adminlib-external icon"
 										onClick={() => {
 											navigate(
 												`?page=multivendorx#&tab=customer-support&subtab=refund-requests`
@@ -388,7 +386,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 							</div>
 							<div className="right">
 								<i
-									className="adminlib-external"
+									className="adminlib-external icon"
 									onClick={() => {
 										navigate(
 											`?page=multivendorx#&tab=stores&edit/${id}/&subtab=store`
@@ -476,7 +474,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 							</div>
 							<div className="right">
 								<i
-									className="adminlib-external"
+									className="adminlib-external icon"
 									onClick={() => {
 										navigate(
 											`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`

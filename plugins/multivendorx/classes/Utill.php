@@ -24,19 +24,19 @@ class Utill {
      * @var array
      */
     const TABLES = array(
-        'commission'              => 'multivendorx_commissions',
-        'store'                   => 'multivendorx_store',
-        'store_users'             => 'multivendorx_store_users',
-        'store_meta'              => 'multivendorx_store_meta',
-        'transaction'             => 'multivendorx_transactions',
-        'real_time_transaction'   => 'multivendorx_real_time_transactions',
-        'product_qna'             => 'multivendorx_questions_and_answers',
-        'report_abuse'            => 'multivendorx_report_abuse',
-        'review'                  => 'multivendorx_store_reviews',
-        'rating'                  => 'multivendorx_store_review_ratings',
-        'products_map'            => 'multivendorx_products_map',
-        'notifications'           => 'multivendorx_store_activity_notifications',
-        'system_events'           => 'multivendorx_system_events',
+        'commission'            => 'multivendorx_commissions',
+        'store'                 => 'multivendorx_store',
+        'store_users'           => 'multivendorx_store_users',
+        'store_meta'            => 'multivendorx_store_meta',
+        'transaction'           => 'multivendorx_transactions',
+        'real_time_transaction' => 'multivendorx_real_time_transactions',
+        'product_qna'           => 'multivendorx_questions_and_answers',
+        'report_abuse'          => 'multivendorx_report_abuse',
+        'review'                => 'multivendorx_store_reviews',
+        'rating'                => 'multivendorx_store_review_ratings',
+        'products_map'          => 'multivendorx_products_map',
+        'notifications'         => 'multivendorx_store_activity_notifications',
+        'system_events'         => 'multivendorx_system_events',
     );
 
     const MULTIVENDORX_SETTINGS = array(

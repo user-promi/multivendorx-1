@@ -99,14 +99,7 @@ export const TableCell: React.FC< TableCellProps > = ( {
         setShowDropdown( ( prev ) => ( prev === id ? null : id ) );
     };
     const statusGroups = {
-        green: [
-            'completed',
-            'active',
-            'approved',
-            'paid',
-            'public',
-            'publish',
-        ],
+        green: ['completed', 'active','approved','paid','public','publish'],
         yellow: [ 'pending', 'on-hold', 'partially_refunded' ],
         blue: [ 'under_review', 'private', 'upcoming', 'draft' ],
         red: [ 'rejected', 'unpaid', 'cancelled', 'failed', 'expired' ],
@@ -333,7 +326,7 @@ export const TableCell: React.FC< TableCellProps > = ( {
                                 { header.actions?.map( ( action ) => (
                                     <div
                                         key={ action.label }
-                                        className={ `inline-action-btn ${
+                                        className={ `inline-action-btn tooltip-wrapper ${
                                             action.className || ''
                                         }` }
                                         onClick={ ( e ) => {
@@ -342,7 +335,7 @@ export const TableCell: React.FC< TableCellProps > = ( {
                                         } }
                                     >
                                         <i className={ action.icon }></i>
-                                        <span>{ action.label }</span>
+                                        <span className="tooltip-name">{ action.label }</span>
                                     </div>
                                 ) ) }
                             </div>

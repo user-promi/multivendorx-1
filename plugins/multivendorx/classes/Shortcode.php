@@ -103,8 +103,6 @@ class Shortcode {
         if ( is_user_logged_in() ) {
             ?>
             <div id="multivendorx-registration-form" class="woocommerce">
-                <?php
-                ?>
             </div>
             <?php
         } else {

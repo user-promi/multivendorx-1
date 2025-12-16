@@ -9,12 +9,12 @@ namespace MultiVendorX\RestAPI;
 
 use MultiVendorX\RestAPI\Controllers\Settings;
 use MultiVendorX\RestAPI\Controllers\Dashboard;
-use MultiVendorX\RestAPI\Controllers\StoreRest;
-use MultiVendorX\RestAPI\Controllers\Commission;
+use MultiVendorX\RestAPI\Controllers\Stores;
+use MultiVendorX\RestAPI\Controllers\Commissions;
 use MultiVendorX\RestAPI\Controllers\Status;
 use MultiVendorX\RestAPI\Controllers\Notifications;
 use MultiVendorX\RestAPI\Controllers\Payouts;
-use MultiVendorX\RestAPI\Controllers\TransactionRest;
+use MultiVendorX\RestAPI\Controllers\Transactions;
 use MultiVendorX\RestAPI\Controllers\Reports;
 use MultiVendorX\RestAPI\Controllers\Tour;
 use MultiVendorX\RestAPI\Controllers\Logs;
@@ -57,7 +57,6 @@ class Rest {
         add_filter( 'woocommerce_rest_prepare_shop_coupon_object', array( $this, 'prepare_shop_coupon_filter_meta' ), 10, 3 );
         add_filter( 'woocommerce_rest_pre_insert_shop_coupon_object', array( $this, 'pre_insert_shop_coupon_fix_status' ), 10, 3 );
         add_filter( 'woocommerce_analytics_products_query_args', array( $this, 'analytics_products_filter_low_stock_meta' ), 10, 1 );
-
     }
 
     /**
@@ -386,7 +385,7 @@ class Rest {
      * @return array
      */
     public function prepare_shop_coupon_filter_meta( $response, $object, $request ) {
-        $store_id = $object->get_meta( Utill::POST_META_SETTINGS['multivendorx_store_id'] );
+        $store_id = $object->get_meta( Utill::POST_META_SETTINGS['store_id'] );
         if ( $store_id ) {
             // Get store information.
             $store      = new Store( $store_id );
@@ -438,11 +437,11 @@ class Rest {
         $this->container = array(
             'settings'      => new Settings(),
             'dashboard'     => new Dashboard(),
-            'store'         => new StoreRest(),
-            'commission'    => new Commission(),
+            'store'         => new Stores(),
+            'commission'    => new Commissions(),
             'status'        => new Status(),
             'payouts'       => new Payouts(),
-            'transaction'   => new TransactionRest(),
+            'transaction'   => new Transactions(),
             'report'        => new Reports(),
             'notifications' => new Notifications(),
             'tour'          => new Tour(),

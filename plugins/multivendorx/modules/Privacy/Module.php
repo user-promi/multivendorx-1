@@ -7,7 +7,6 @@
 
 namespace MultiVendorX\Privacy;
 
-
 /**
  * MultiVendorX Questions and answers Module class
  *

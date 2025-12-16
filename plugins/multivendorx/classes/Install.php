@@ -643,6 +643,32 @@ By signing and submitting, the Seller accepts all terms above.
         );
         update_option( Utill::MULTIVENDORX_SETTINGS['product-preferencess'], $product_settings );
 
+        $registration_form = array(
+            array(
+                'id'    => 1,
+                'type'  => 'title',
+                'label' => 'Registration Form',
+            ),
+            array(
+                'id'          => 2,
+                'type'        => 'text',
+                'label'       => 'Enter your store name',
+                'required'    => false,
+                'name'        => 'name',
+                'placeholder' => 'text',
+                'readonly'    => true,
+            ),
+        );
+
+        $registration_from_settings = array(
+            'store_registration_from' => array(
+                'formfieldlist'  => $registration_form,
+                'butttonsetting' => array(),
+            ),
+        );
+
+        update_option( Utill::MULTIVENDORX_SETTINGS['store-registration-form'], $registration_from_settings );
+
         // 6. Save back to DB
         update_option( Utill::MULTIVENDORX_SETTINGS['identity-verification'], $settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['order-actions-refunds'], $order_settings );

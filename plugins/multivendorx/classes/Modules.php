@@ -156,7 +156,7 @@ class Modules {
                         'module_file'  => MultiVendorX()->plugin_path . 'modules/GatewayFee/Module.php',
                         'module_class' => 'MultiVendorX\GatewayFee\Module',
                     ),
-                    'min-max'    => array(
+                    'min-max'                => array(
                         'id'           => 'min-max',
                         'module_file'  => MultiVendorX()->plugin_path . 'modules/MinMax/Module.php',
                         'module_class' => 'MultiVendorX\MinMax\Module',

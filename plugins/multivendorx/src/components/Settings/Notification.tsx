@@ -478,9 +478,9 @@ const Notification: React.FC = () => {
 										<div className="action-section">
 											<div className="action-icons">
 												<div className="inline-actions">
-													<div className="inline-action-btn">
+													<div className="inline-action-btn tooltip-wrapper">
 														<i className="adminlib-edit"></i>
-														<span>Edit</span>
+														<span className="tooltip-name">Edit</span>
 													</div>
 												</div>
 											</div>

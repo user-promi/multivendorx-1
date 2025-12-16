@@ -145,7 +145,7 @@ class Hooks {
         foreach ( $items as $key => $value ) {
             if ( $order || ( function_exists( 'wcs_is_subscription' ) && wcs_is_subscription( $order ) ) ) {
                 $general_cap = apply_filters( 'mvx_sold_by_text', __( 'Sold By', 'multivendorx' ) );
-                $store      = StoreUtil::get_products_store( $value['product_id'] );
+                $store       = StoreUtil::get_products_store( $value['product_id'] );
                 if ( $store ) {
                     if ( ! wc_get_order_item_meta( $key, Utill::POST_META_SETTINGS['store_id'] ) ) {
                         wc_add_order_item_meta( $key, Utill::POST_META_SETTINGS['store_id'], $store->get_id() );

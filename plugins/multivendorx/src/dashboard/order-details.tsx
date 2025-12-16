@@ -278,7 +278,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 
 										<tbody className="admin-table-body">
 											{orderData?.line_items?.length >
-											0 ? (
+												0 ? (
 												orderData.line_items.map(
 													(item) => (
 														<tr
@@ -380,16 +380,16 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 																]
 																	?.refunded_line_total !==
 																	0 && (
-																	<div>
-																		{
-																			refundMap[
-																				item
-																					.id
-																			]
-																				.refunded_line_total
-																		}
-																	</div>
-																)}
+																		<div>
+																			{
+																				refundMap[
+																					item
+																						.id
+																				]
+																					.refunded_line_total
+																			}
+																		</div>
+																	)}
 																{isRefund && (
 																	<input
 																		type="number"
@@ -432,16 +432,16 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 																]
 																	?.refunded_tax !==
 																	0 && (
-																	<div>
-																		{
-																			refundMap[
-																				item
-																					.id
-																			]
-																				.refunded_tax
-																		}
-																	</div>
-																)}
+																		<div>
+																			{
+																				refundMap[
+																					item
+																						.id
+																				]
+																					.refunded_tax
+																			}
+																		</div>
+																	)}
 																{isRefund && (
 																	<input
 																		type="number"
@@ -544,16 +544,16 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 																]
 																	?.refunded_shipping !==
 																	0 && (
-																	<div>
-																		{
-																			refundMap[
-																				item
-																					.id
-																			]
-																				.refunded_shipping
-																		}
-																	</div>
-																)}
+																		<div>
+																			{
+																				refundMap[
+																					item
+																						.id
+																				]
+																					.refunded_shipping
+																			}
+																		</div>
+																	)}
 															</td>
 															<td className="admin-column">
 																{isRefund ? (
@@ -589,16 +589,16 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 																]
 																	?.refunded_shipping_tax !==
 																	0 && (
-																	<div>
-																		{
-																			refundMap[
-																				item
-																					.id
-																			]
-																				.refunded_shipping_tax
-																		}
-																	</div>
-																)}
+																		<div>
+																			{
+																				refundMap[
+																					item
+																						.id
+																				]
+																					.refunded_shipping_tax
+																			}
+																		</div>
+																	)}
 															</td>
 														</tr>
 													)
@@ -723,7 +723,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 														<td>
 															{formatCurrency(
 																orderData.commission_total -
-																	totalRefunded
+																totalRefunded
 															)}
 														</td>
 													</tr>
@@ -861,14 +861,13 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 										<div className="avater">
 											<img
 												src={customerData?.avatar_url}
-												alt={`${
-													orderData?.billing
+												alt={`${orderData?.billing
 														?.first_name ||
 													__(
 														'Customer',
 														'multivendorx'
 													)
-												} avatar`}
+													} avatar`}
 											/>
 										</div>
 
@@ -876,20 +875,18 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 											<div className="name">
 												{orderData?.billing
 													?.first_name ||
-												orderData?.billing?.last_name
-													? `${
-															orderData?.billing
-																?.first_name ??
-															''
-														} ${
-															orderData?.billing
-																?.last_name ??
-															''
-														}`
+													orderData?.billing?.last_name
+													? `${orderData?.billing
+														?.first_name ??
+													''
+													} ${orderData?.billing
+														?.last_name ??
+													''
+													}`
 													: __(
-															'Guest Customer',
-															'multivendorx'
-														)}
+														'Guest Customer',
+														'multivendorx'
+													)}
 											</div>
 											<div className="des">
 												{__(
@@ -898,7 +895,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 												)}
 												: #
 												{orderData?.customer_id &&
-												orderData.customer_id !== 0
+													orderData.customer_id !== 0
 													? orderData.customer_id
 													: '—'}
 											</div>
@@ -940,14 +937,14 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 										</div>
 										<div className="details">
 											{orderData?.billing?.address_1 ||
-											orderData?.billing?.city ||
-											orderData?.billing?.postcode ||
-											orderData?.billing?.country ? (
+												orderData?.billing?.city ||
+												orderData?.billing?.postcode ||
+												orderData?.billing?.country ? (
 												<div className="address">
 													{orderData.billing
 														.first_name ||
-													orderData.billing
-														.last_name ? (
+														orderData.billing
+															.last_name ? (
 														<>
 															{
 																orderData
@@ -963,40 +960,40 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 													) : null}
 													{orderData.billing
 														.company && (
-														<>
-															{' '}
-															,{' '}
-															{
-																orderData
-																	.billing
-																	.company
-															}{' '}
-														</>
-													)}
+															<>
+																{' '}
+																,{' '}
+																{
+																	orderData
+																		.billing
+																		.company
+																}{' '}
+															</>
+														)}
 													{orderData.billing
 														.address_1 && (
-														<>
-															{' '}
-															,{' '}
-															{
-																orderData
-																	.billing
-																	.address_1
-															}{' '}
-														</>
-													)}
+															<>
+																{' '}
+																,{' '}
+																{
+																	orderData
+																		.billing
+																		.address_1
+																}{' '}
+															</>
+														)}
 													{orderData.billing
 														.address_2 && (
-														<>
-															{' '}
-															,{' '}
-															{
-																orderData
-																	.billing
-																	.address_2
-															}{' '}
-														</>
-													)}
+															<>
+																{' '}
+																,{' '}
+																{
+																	orderData
+																		.billing
+																		.address_2
+																}{' '}
+															</>
+														)}
 													{orderData.billing.city && (
 														<>
 															{
@@ -1012,27 +1009,27 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 													)}
 													{orderData.billing
 														.postcode && (
-														<>
-															,{' '}
-															{
-																orderData
-																	.billing
-																	.postcode
-															}{' '}
-														</>
-													)}
+															<>
+																,{' '}
+																{
+																	orderData
+																		.billing
+																		.postcode
+																}{' '}
+															</>
+														)}
 													{orderData.billing
 														.country && (
-														<>
-															{' '}
-															,{' '}
-															{
-																orderData
-																	.billing
-																	.country
-															}
-														</>
-													)}
+															<>
+																{' '}
+																,{' '}
+																{
+																	orderData
+																		.billing
+																		.country
+																}
+															</>
+														)}
 												</div>
 											) : (
 												<div className="address">
@@ -1152,7 +1149,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 								</div>
 
 								{orderData?.order_notes &&
-								orderData.order_notes.length > 0 ? (
+									orderData.order_notes.length > 0 ? (
 									<div className="notification-wrapper">
 										<ul>
 											{orderData.order_notes.map(
@@ -1197,14 +1194,12 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 										</ul>
 									</div>
 								) : (
-									<div className="notification-wrapper">
-										<p>
-											{__(
-												'No order notes found.',
-												'multivendorx'
-											)}
-										</p>
-									</div>
+									<p>
+										{__(
+											'No order notes found.',
+											'multivendorx'
+										)}
+									</p>
 								)}
 							</div>
 						</div>

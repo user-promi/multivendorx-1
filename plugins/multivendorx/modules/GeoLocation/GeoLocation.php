@@ -7,7 +7,6 @@
 
 namespace MultiVendorX\Geolocation;
 
-
 /**
  * MultiVendorX Geolocation Module
  *

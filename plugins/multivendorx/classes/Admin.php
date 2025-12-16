@@ -131,7 +131,7 @@ class Admin {
 						'name'   => __( 'Memberships', 'multivendorx' ),
 						'subtab' => 'payment-membership-message',
 					),
-                    'add-memberships'         => array(
+                    'add-memberships'     => array(
 						'name'   => __( 'Add Memberships', 'multivendorx' ),
 						'subtab' => '',
 					),
