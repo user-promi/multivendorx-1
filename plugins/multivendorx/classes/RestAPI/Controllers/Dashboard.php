@@ -195,7 +195,7 @@ class Dashboard extends \WP_REST_Controller
                         'capability' => ['view_store_reviews', 'reply_store_reviews'],
                     ],
                 ],
-                'capability' => ['manage_users'],
+                'capability' => ['view_support_tickets'],
             ],
             'reports'       => [
                 'name'       => 'Stats / Report',
@@ -229,7 +229,7 @@ class Dashboard extends \WP_REST_Controller
                         'capability' => ['access_tools'],
                     ],
                 ],
-                'capability' => ['manage_users'],
+                'capability' => ['capability'],
             ],
             'settings'      => [
                 'name'       => 'Settings',
