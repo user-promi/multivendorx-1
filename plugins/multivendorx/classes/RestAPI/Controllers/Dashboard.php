@@ -64,7 +64,7 @@ class Dashboard extends \WP_REST_Controller {
     public function get_items( $request ) {
         $menu_only = $request->get_param( 'menuOnly' );
 
-        $endpoints = $this->all_endpoints();
+        $endpoints = $this->all_endpoints($menu_only);
 
         $other_endpoints = apply_filters(
             'dashboard_other_endpoints',
@@ -91,7 +91,7 @@ class Dashboard extends \WP_REST_Controller {
      *
      * @return array
      */
-    public function all_endpoints() {
+    public function all_endpoints($menu_only = false) {
         // Default endpoints.
         $all_endpoints = array(
             'dashboard'     => array(
@@ -242,10 +242,14 @@ class Dashboard extends \WP_REST_Controller {
 
         $saved_endpoints = MultiVendorX()->setting->get_setting( 'menu_manager' );
 
-        if ( ! empty( $saved_endpoints ) && is_array( $saved_endpoints ) ) {
+        if ( $menu_only && ! empty( $saved_endpoints ) ) {
+            return $saved_endpoints;
+        }
+
+        if ( is_array( $saved_endpoints ) ) {
             $visible_endpoints = array();
             foreach ( $saved_endpoints as $key => $endpoint ) {
-                if ( isset( $endpoint['visible'] ) && $endpoint['visible'] ) {
+                if ( !empty( $endpoint['visible'] && $endpoint['visible'] ) ) {
                     $visible_endpoints[ $key ] = array_merge(
                         $all_endpoints[ $key ] ?? array(),
                         $endpoint
