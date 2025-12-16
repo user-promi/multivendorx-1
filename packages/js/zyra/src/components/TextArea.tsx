@@ -32,7 +32,6 @@ const TextArea: React.FC< TextAreaProps > = ( {
     value,
     rowNumber = 4,
     colNumber = 50,
-    proSetting,
     readOnly,
     description,
     descClass,

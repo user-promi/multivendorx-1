@@ -8,7 +8,7 @@ interface ButtonConfig {
     tooltip?: string;
 }
 
-interface AdminBreadcrumbsProps {
+interface AdminBreadcrumbsProps< T > {
     activeTabIcon?: string;
     tabTitle?: string;
     submenuRender?: boolean;
@@ -16,8 +16,8 @@ interface AdminBreadcrumbsProps {
     hideTitle?: boolean;
     hideBreadcrumb?: boolean;
     renderBreadcrumb?: () => React.ReactNode;
-    renderMenuItems?: ( items: unknown[] ) => React.ReactNode;
-    tabData?: unknown[];
+    renderMenuItems?: ( items: T[] ) => React.ReactNode;
+    tabData?: T[];
     buttons?: React.ReactNode[];
     premium?: boolean;
     goPremium?: boolean;
@@ -27,7 +27,7 @@ interface AdminBreadcrumbsProps {
     action?: React.ReactNode;
 }
 
-const AdminBreadcrumbs: React.FC< AdminBreadcrumbsProps > = ( {
+const AdminBreadcrumbs = < T, >( {
     activeTabIcon = '',
     tabTitle = '',
     submenuRender = false,
@@ -44,7 +44,7 @@ const AdminBreadcrumbs: React.FC< AdminBreadcrumbsProps > = ( {
     hideBreadcrumb = false,
     hideTitle = false,
     action,
-} ) => {
+}: AdminBreadcrumbsProps< T > ) => {
     const [ notices, setNotices ] = useState< string[] >( [] );
 
     useEffect( () => {

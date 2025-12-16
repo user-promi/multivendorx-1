@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 /**
  * Type definitions
  */
@@ -6,7 +8,7 @@ type SettingContent = {
     priority: number;
     pro_dependent?: boolean;
     module_dependent?: boolean;
-    modal: any;
+    modal: ReactNode;
     submitUrl: string;
 };
 
@@ -181,7 +183,7 @@ const getAvailableSettings = (
 const getSettingById = (
     settings: Setting[],
     settingId: string
-): SettingContent | {} => {
+): SettingContent | null => {
     if ( Array.isArray( settings ) ) {
         for ( const setting of settings ) {
             if ( setting.type === 'folder' ) {
@@ -189,18 +191,19 @@ const getSettingById = (
                     setting.content as Setting[],
                     settingId
                 );
-                if ( Object.keys( found ).length > 0 ) {
+                if ( found ) {
                     return found;
                 }
                 continue;
             }
 
-            if ( ( setting.content as SettingContent ).id === settingId ) {
-                return setting.content;
+            const content = setting.content as SettingContent;
+            if ( content.id === settingId ) {
+                return content;
             }
         }
     }
-    return {};
+    return null;
 };
 
 /**

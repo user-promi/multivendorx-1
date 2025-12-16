@@ -6,7 +6,10 @@ import React from 'react';
 // Types
 interface RecaptchaProps {
     formField: { sitekey?: string };
-    onChange?: ( field: string, value: any ) => void;
+    onChange?: (
+        field: string,
+        value: string | boolean | number | null
+    ) => void;
 }
 
 const Recaptcha: React.FC< RecaptchaProps > = ( { formField } ) => {

@@ -20,7 +20,6 @@ interface SubTabSectionProps {
     menuitem: MenuItem[];
     currentTab: MenuItem;
     setCurrentTab: ( tab: MenuItem ) => void;
-    setting?: any;
 }
 
 const SubTabSection: React.FC< SubTabSectionProps > = ( {

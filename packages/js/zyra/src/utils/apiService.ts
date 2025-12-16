@@ -4,6 +4,12 @@
 import axios from 'axios';
 import type { AxiosRequestConfig } from 'axios';
 
+type AppLocalizer = {
+    nonce: string;
+    apiUrl: string;
+    restUrl: string;
+};
+
 /**
  * Get response from REST API.
  *
@@ -36,9 +42,9 @@ export const getApiResponse = async < T >(
  * @return API response data or null in case of an error
  */
 export const sendApiResponse = async < T >(
-    appLocalizer: Record< string, any >,
+    appLocalizer: AppLocalizer,
     url: string,
-    data: any,
+    data: unknown,
     headers: AxiosRequestConfig = {}
 ): Promise< T | null > => {
     try {
@@ -68,7 +74,7 @@ export const sendApiResponse = async < T >(
  * @return Complete API URL
  */
 export const getApiLink = (
-    appLocalizer: Record< string, any >,
+    appLocalizer: AppLocalizer,
     endpoint: string,
     namespace?: string,
     rootUrl?: string

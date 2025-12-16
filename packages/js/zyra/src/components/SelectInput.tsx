@@ -3,7 +3,12 @@
  */
 import React from 'react';
 import Select from 'react-select';
-import type { MultiValue, SingleValue, ActionMeta } from 'react-select';
+import type {
+    MultiValue,
+    SingleValue,
+    ActionMeta,
+    StylesConfig,
+} from 'react-select';
 
 // Types
 export interface SelectOptions {
@@ -50,15 +55,14 @@ const SelectInput: React.FC< SelectInputProps > = ( {
     inputClass,
     type = 'single-select',
     onChange,
-    proSetting,
     description,
     descClass,
     preText,
     postText,
     size,
 } ) => {
-    const customStyles = {
-        control: ( provided: any, state: any ) => ( {
+    const customStyles: StylesConfig< SelectOptions, boolean > = {
+        control: ( provided, state ) => ( {
             ...provided,
             borderColor: state.isFocused ? '#5007aa' : '#e0e4e9',
             boxShadow: state.isFocused ? '0 0 0 3px #5007aa1c' : '',
@@ -69,13 +73,13 @@ const SelectInput: React.FC< SelectInputProps > = ( {
             paddingBottom: 0,
             margin: 0,
         } ),
-        valueContainer: ( provided: any ) => ( {
+        valueContainer: ( provided ) => ( {
             ...provided,
             margin: 0,
             paddingTop: 0,
             paddingBottom: 0,
         } ),
-        option: ( provided: any, state: any ) => ( {
+        option: ( provided, state ) => ( {
             ...provided,
             backgroundColor: state.isSelected
                 ? '#ece2f9f1'
@@ -85,12 +89,12 @@ const SelectInput: React.FC< SelectInputProps > = ( {
             color: state.isSelected ? 'black' : 'black',
             cursor: 'pointer',
         } ),
-        menu: ( provided: any ) => ( {
+        menu: ( provided ) => ( {
             ...provided,
             borderRadius: 4,
             marginTop: 0,
         } ),
-        multiValue: ( provided: any ) => ( {
+        multiValue: ( provided ) => ( {
             ...provided,
             backgroundColor: '#ece2f9f1',
             marginTop: 0,
@@ -98,7 +102,7 @@ const SelectInput: React.FC< SelectInputProps > = ( {
             paddingTop: 0,
             paddingBottom: 0,
         } ),
-        multiValueLabel: ( provided: any ) => ( {
+        multiValueLabel: ( provided ) => ( {
             ...provided,
             color: '#5007aa',
             marginTop: 0,

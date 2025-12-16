@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import '../styles/web/PaymentTabsComponent.scss';
 import TextArea from './TextArea';
 import ToggleSetting from './ToggleSetting';
@@ -104,36 +104,31 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
     modules,
 } ) => {
     const [ activeTabs, setActiveTabs ] = useState< string[] >( [] );
-    const [ openMenu, setOpenMenu ] = useState< string | null >( null );
     const menuRef = useRef< HTMLDivElement >( null );
-    const [ modelOpen, setModelOpen ] = useState( false );
     const [ wizardIndex, setWizardIndex ] = useState( 0 );
-    const [ copied, setCopied ] = useState( false );
 
     const canEdit = () => {
         // You cannot edit if Pro is enabled (locked) OR if module is disabled
         return ! proSetting && moduleEnabled;
     };
 
-    const handleCopy = ( text: any ) => {
-        navigator.clipboard.writeText( text ).then( () => {
-            setCopied( true );
-            setTimeout( () => setCopied( false ), 1500 );
-        } );
+    const handleCopy = ( text: string ) => {
+        navigator.clipboard.writeText( text );
     };
 
     const handleInputChange = (
         methodKey: string,
         fieldKey: string,
-        fieldValue: any
+        fieldValue: string | string[] | number | boolean | undefined
     ) => {
         if ( ! canEdit() ) {
             return;
         }
+
         const updated = {
             ...value,
             [ methodKey ]: {
-                ...value[ methodKey ],
+                ...( value[ methodKey ] as Record< string, unknown > ),
                 [ fieldKey ]: fieldValue,
             },
         };
@@ -141,11 +136,7 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
         onChange( updated );
     };
 
-    const toggleEnable = (
-        methodId: string,
-        enable: boolean,
-        icon?: string
-    ) => {
+    const toggleEnable = ( methodId: string, enable: boolean ) => {
         if ( ! canEdit() ) {
             return;
         }
@@ -168,20 +159,6 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                     : [ ...prev, methodId ] // open
         );
     };
-
-    useEffect( () => {
-        const handleClickOutside = ( e: MouseEvent ) => {
-            if (
-                menuRef.current &&
-                ! menuRef.current.contains( e.target as Node )
-            ) {
-                setOpenMenu( null );
-            }
-        };
-        document.addEventListener( 'mousedown', handleClickOutside );
-        return () =>
-            document.removeEventListener( 'mousedown', handleClickOutside );
-    }, [] );
 
     const isProSetting = ( val: boolean ) => val;
 
@@ -433,11 +410,9 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                             handleInputChange( methodId, field.key, e );
                         } }
                         proSetting={ isProSetting( field.proSetting ?? false ) }
-                        onMultiSelectDeselectChange={ ( e: any ) => {
-                            console.log( 'trigger' );
+                        onMultiSelectDeselectChange={ () => {
                             handleMultiSelectDeselect( methodId, field );
                         } }
-                        proChanged={ () => setModelOpen( true ) }
                     />
                 );
             case 'description':
@@ -877,8 +852,7 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                                                             } else {
                                                                 toggleEnable(
                                                                     method.id,
-                                                                    false,
-                                                                    method.icon
+                                                                    false
                                                                 );
                                                             }
                                                         } }
@@ -909,8 +883,7 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                                                         } else {
                                                             toggleEnable(
                                                                 method.id,
-                                                                true,
-                                                                method.icon
+                                                                true
                                                             );
                                                         }
                                                     } }
