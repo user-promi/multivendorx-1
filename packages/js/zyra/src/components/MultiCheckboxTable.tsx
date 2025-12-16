@@ -158,11 +158,6 @@ const SearchOptionDisplay: React.FC< SearchOptionDisplayProps > = ( {
     );
 };
 
-interface Option {
-    value: string | number;
-    label: string;
-}
-
 interface SelectProps {
     values?: Option[];
     onChange: ( selected: Option[] ) => void;
@@ -369,8 +364,8 @@ interface MultiCheckboxTableProps {
     rows: Row[];
     columns: Column[];
     description?: string;
-    onChange: ( key: string, value: any ) => void;
-    setting: Record< string, any >;
+    onChange: ( key: string, value: string[] | Option[] ) => void;
+    setting: Record< string, string[] | Option[] >;
     proSetting?: boolean;
     modules: string[];
     storeTabSetting: Record< string, string[] >;
@@ -444,7 +439,8 @@ const MultiCheckboxTable: React.FC< MultiCheckboxTableProps > = ( {
                                       }
 
                                       const key = `${ column.key }_${ row.key }`;
-                                      const value = setting[ key ] || [];
+                                      const value =
+                                          ( setting[ key ] as Option[] ) || [];
 
                                       return (
                                           <td
@@ -473,9 +469,11 @@ const MultiCheckboxTable: React.FC< MultiCheckboxTableProps > = ( {
                                                                   column.key
                                                               ]
                                                           ) &&
-                                                          setting[
-                                                              column.key
-                                                          ].includes( row.key )
+                                                          (
+                                                              setting[
+                                                                  column.key
+                                                              ] as string[]
+                                                           ).includes( row.key )
                                                       }
                                                       onChange={ ( e ) => {
                                                           if (
@@ -504,10 +502,10 @@ const MultiCheckboxTable: React.FC< MultiCheckboxTableProps > = ( {
                                                                       column.key
                                                                   ]
                                                               )
-                                                                  ? setting[
+                                                                  ? ( setting[
                                                                         column
                                                                             .key
-                                                                    ]
+                                                                    ] as string[] )
                                                                   : [];
 
                                                           const updatedSelection =
@@ -518,7 +516,7 @@ const MultiCheckboxTable: React.FC< MultiCheckboxTableProps > = ( {
                                                                     ]
                                                                   : selectedKeys.filter(
                                                                         (
-                                                                            keyVal: any
+                                                                            keyVal: string
                                                                         ) =>
                                                                             keyVal !==
                                                                             row.key
@@ -526,7 +524,7 @@ const MultiCheckboxTable: React.FC< MultiCheckboxTableProps > = ( {
 
                                                           onChange(
                                                               column.key,
-                                                              updatedSelection
+                                                              updatedSelection as string[]
                                                           );
                                                       } }
                                                   />
@@ -600,10 +598,12 @@ const MultiCheckboxTable: React.FC< MultiCheckboxTableProps > = ( {
                                                                                               .key
                                                                                       ]
                                                                                   ) &&
-                                                                                  setting[
-                                                                                      column
-                                                                                          .key
-                                                                                  ].includes(
+                                                                                  (
+                                                                                      setting[
+                                                                                          column
+                                                                                              .key
+                                                                                      ] as string[]
+                                                                                   ).includes(
                                                                                       capKey
                                                                                   )
                                                                               }
@@ -639,10 +639,10 @@ const MultiCheckboxTable: React.FC< MultiCheckboxTableProps > = ( {
                                                                                                   .key
                                                                                           ]
                                                                                       )
-                                                                                          ? setting[
+                                                                                          ? ( setting[
                                                                                                 column
                                                                                                     .key
-                                                                                            ]
+                                                                                            ] as string[] )
                                                                                           : [];
 
                                                                                   const updatedSelection =
@@ -655,7 +655,7 @@ const MultiCheckboxTable: React.FC< MultiCheckboxTableProps > = ( {
                                                                                             ]
                                                                                           : selectedKeys.filter(
                                                                                                 (
-                                                                                                    keyVal: any
+                                                                                                    keyVal: string
                                                                                                 ) =>
                                                                                                     keyVal !==
                                                                                                     capKey
@@ -663,7 +663,7 @@ const MultiCheckboxTable: React.FC< MultiCheckboxTableProps > = ( {
 
                                                                                   onChange(
                                                                                       column.key,
-                                                                                      updatedSelection
+                                                                                      updatedSelection as string[]
                                                                                   );
                                                                               } }
                                                                           />

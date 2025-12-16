@@ -56,59 +56,10 @@
   29:34  error  'NodeJS' is not defined                           no-undef
 
 /opt/dockerfolder/multivendorx-pro/multivendorx/packages/js/zyra/src/components/Mapbox.tsx
-    5:19  error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
-    6:25  error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
-   33:5   error  'locationAddress' is defined but never used  @typescript-eslint/no-unused-vars
-   42:39  error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
-   43:45  error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
-   50:26  error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
-  149:43  error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
-  162:37  error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
-  182:40  error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
-  220:47  error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
-  221:27  error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
-  228:49  error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
-
-/opt/dockerfolder/multivendorx-pro/multivendorx/packages/js/zyra/src/components/Modules.tsx
-   40:35  error  Unexpected any. Specify a different type                @typescript-eslint/no-explicit-any
-   42:33  error  Unexpected any. Specify a different type                @typescript-eslint/no-explicit-any
-   58:29  error  'setSelectedFilter' is assigned a value but never used  @typescript-eslint/no-unused-vars
-   59:26  error  'setSearchQuery' is assigned a value but never used     @typescript-eslint/no-unused-vars
-   94:11  error  'inactiveModules' is assigned a value but never used    @typescript-eslint/no-unused-vars
-  206:19  error  'error' is defined but never used                       @typescript-eslint/no-unused-vars
-  311:52  error  'index' is defined but never used                       @typescript-eslint/no-unused-vars
-  319:41  error  Unexpected any. Specify a different type                @typescript-eslint/no-explicit-any
-
-/opt/dockerfolder/multivendorx-pro/multivendorx/packages/js/zyra/src/components/MultiCheckboxTable.tsx
-  161:11   error  'Option' is already defined               no-redeclare
-  372:37   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  373:30   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  521:85   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  658:109  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-
-/opt/dockerfolder/multivendorx-pro/multivendorx/packages/js/zyra/src/components/MultiInput.tsx
-  68:9  error  'onFocus' is assigned a value but never used          @typescript-eslint/no-unused-vars
-  69:9  error  'onBlur' is assigned a value but never used           @typescript-eslint/no-unused-vars
-  70:9  error  'id' is assigned a value but never used               @typescript-eslint/no-unused-vars
-  80:9  error  'allowDuplicates' is assigned a value but never used  @typescript-eslint/no-unused-vars
-
-/opt/dockerfolder/multivendorx-pro/multivendorx/packages/js/zyra/src/components/MultipleOption.tsx
-  20:11  error  'FormField' is defined but never used     @typescript-eslint/no-unused-vars
-  38:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-
-/opt/dockerfolder/multivendorx-pro/multivendorx/packages/js/zyra/src/components/NestedComponent.tsx
-   68:18  error  'isProSetting' is defined but never used  @typescript-eslint/no-unused-vars
-   75:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-   78:40  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-   83:15  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  121:57  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  136:54  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  141:66  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  207:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  352:50  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  377:57  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  414:47  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  421:55  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  108:26  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  278:47  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  279:27  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  286:49  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
 
 /opt/dockerfolder/multivendorx-pro/multivendorx/packages/js/zyra/src/components/PaymentTabsComponent.tsx
    30:20  error  Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
@@ -123,5 +74,5 @@
   508:45  error  Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
   642:43  error  Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
 
-✖ 100 problems (100 errors, 0 warnings)
+✖ 61 problems (61 errors, 0 warnings)
 
