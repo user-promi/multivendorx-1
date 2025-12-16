@@ -52,8 +52,7 @@ class Dashboard extends \WP_REST_Controller {
      * @param object $request Full details about the request.
      */
     public function get_items_permissions_check( $request ) {
-        // return current_user_can('read');
-        return true;
+        return current_user_can( 'create_stores' );
     }
 
     /**
@@ -64,7 +63,7 @@ class Dashboard extends \WP_REST_Controller {
     public function get_items( $request ) {
         $menu_only = $request->get_param( 'menuOnly' );
 
-        $endpoints = $this->all_endpoints($menu_only);
+        $endpoints = $this->all_endpoints( $menu_only );
 
         $other_endpoints = apply_filters(
             'dashboard_other_endpoints',
@@ -89,9 +88,10 @@ class Dashboard extends \WP_REST_Controller {
     /**
      * Get all endpoints.
      *
+     * @param bool $menu_only Whether the function is called from the admin settings or the dashboard.
      * @return array
      */
-    public function all_endpoints($menu_only = false) {
+    public function all_endpoints( $menu_only = false ) {
         // Default endpoints.
         $all_endpoints = array(
             'dashboard'     => array(
@@ -148,15 +148,15 @@ class Dashboard extends \WP_REST_Controller {
                 'slug'       => 'wallet',
                 'submenu'    => array(
                     array(
-                        'key'  => 'transactions',
-                        'name' => 'Transactions',
-                        'slug' => 'transactions',
+                        'key'        => 'transactions',
+                        'name'       => 'Transactions',
+                        'slug'       => 'transactions',
                         'capability' => array( 'read_shop_earning', 'view_commission_history', 'edit_withdrawl_request' ),
                     ),
                     array(
-                        'key'  => 'withdrawls',
-                        'name' => 'Withdrawls',
-                        'slug' => 'withdrawls',
+                        'key'        => 'withdrawls',
+                        'name'       => 'Withdrawls',
+                        'slug'       => 'withdrawls',
                         'capability' => array( 'read_shop_earning', 'view_commission_history', 'edit_withdrawl_request' ),
                     ),
                 ),
@@ -249,7 +249,7 @@ class Dashboard extends \WP_REST_Controller {
         if ( is_array( $saved_endpoints ) ) {
             $visible_endpoints = array();
             foreach ( $saved_endpoints as $key => $endpoint ) {
-                if ( !empty( $endpoint['visible'] && $endpoint['visible'] ) ) {
+                if ( ! empty( $endpoint['visible'] && $endpoint['visible'] ) ) {
                     $visible_endpoints[ $key ] = array_merge(
                         $all_endpoints[ $key ] ?? array(),
                         $endpoint
@@ -261,5 +261,4 @@ class Dashboard extends \WP_REST_Controller {
 
         return $all_endpoints;
     }
-
 }
