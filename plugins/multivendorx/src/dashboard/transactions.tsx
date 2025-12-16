@@ -317,7 +317,7 @@ const Transactions: React.FC = () => {
 				updateFilter: (key: string, value: string) => void,
 				filterValue: string | undefined
 			) => (
-				<div className="   group-field">
+				<div className="group-field">
 					<select
 						name="transactionStatus"
 						onChange={(e) =>
