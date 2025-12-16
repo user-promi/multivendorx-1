@@ -23,7 +23,7 @@ defined( 'ABSPATH' ) || exit;
  * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
-class StoreRest extends \WP_REST_Controller {
+class Stores extends \WP_REST_Controller {
 
 	/**
 	 * Route base.
