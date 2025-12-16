@@ -420,7 +420,7 @@
 
 // support start
 .support-wrapper {
-    .support {
+    .support-item {
         display: flex;
         gap: 1rem;
         padding: 0.313rem;
@@ -437,7 +437,7 @@
         .details {
             .name {
                 font-size: 1.063rem;
-                color: #000;
+                color: $text-color;
                 padding-bottom: 0.313rem;
             }
         }
@@ -450,7 +450,7 @@
     .title {
         font-size: 1.45rem;
         line-height: 1.313rem;
-        color: #000;
+        color: $text-color;
         font-weight: 600;
         margin-top: 0.5rem;
     }
@@ -548,50 +548,6 @@
 
 // free vs pro tabel end
 
-// pricing section start
-// .pricing-wrapper {
-//     width: 40%;
-//     padding: 1.313rem;
-//     margin-top: 2rem;
-//     background: #ece2f9f1;
-
-//     .heading {
-//         font-size: 1.5rem;
-//         color: #000;
-//         font-weight: 500;
-//         line-height: 2rem;
-//     }
-
-//     .description {
-//         font-size: 1rem;
-//         padding: 0.5rem 0;
-//     }
-
-//     .price {
-//         font-size: 2.313rem;
-//         line-height: 3rem;
-//         padding: 0.813rem 0;
-//         font-weight: 600;
-//         color: $theme-color;
-//     }
-
-//     .select-wrapper {
-//         font-size: 1.125rem;
-//         margin-bottom: 1.5rem;
-
-//         select,
-//         select:focus {
-//             border: none;
-//             background-image: #ece2f9f1 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'><path fill='%23fff' d='M5 7l5 5 5-5z'/></svg>");
-//         }
-//     }
-
-//     .admin-btn {
-//         background: #fff;
-//     }
-// }
-// pricing section end
-
 // features section start
 .features-wrapper {
     margin: 0;
@@ -619,24 +575,6 @@
         }
 
     }
-
-    // .feature:nth-child(1) i,
-    // .feature:nth-child(5) i {
-    //     background: #fff0e1;
-    //     color: #ff9f43;
-    // }
-
-    // .feature:nth-child(2) i,
-    // .feature:nth-child(4) i {
-    //     background: #bfdeed6e;
-    //     color: #003d66de;
-    // }
-
-    // .feature:nth-child(3) i,
-    // .feature:nth-child(6) i {
-    //     background: #d9f5f0;
-    //     color: #06be9f;
-    // }
 }
 
 // mini module start

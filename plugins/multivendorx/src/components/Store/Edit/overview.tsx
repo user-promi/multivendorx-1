@@ -208,7 +208,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 							</div>
 							<div className="card-body">
 								{recentProducts.length > 0 ? (
-									recentProducts.map((product) => {
+									recentProducts.map((product, idx) => {
 										const productImage =
 											product.images &&
 											product.images.length > 0
@@ -238,7 +238,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 																}
 															/>
 														) : (
-															<i className="item-icon adminlib-single-product"></i>
+															<i className={`item-icon adminlib-single-product admin-color${idx + 2}`}></i>
 														)}
 													</div>
 
@@ -456,7 +456,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 									</div>
 									<div className="des">
 										{__(
-											'Renews on Dec 15, 2024',
+											'Renews on Dec 15, 2024 (p)',
 											'multivendorx'
 										)}
 									</div>
@@ -487,7 +487,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 							<div className="info-item">
 								<div className="details-wrapper">
 									<div className="avatar">
-										<i className="item-icon adminlib-person"></i>
+										<i className="item-icon adminlib-person secondary"></i>
 									</div>
 									<div className="details">
 										<div className="name">
@@ -506,7 +506,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 											</div>
 											<span className="admin-badge blue">
 												<i
-													className="adminlib-edit"
+													className="adminlib-edit "
 													onClick={() => {
 														navigate(
 															`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`,

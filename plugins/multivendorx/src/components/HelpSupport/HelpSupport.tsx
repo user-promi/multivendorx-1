@@ -45,7 +45,7 @@ const HelpSupport: React.FC = () => {
 							</div>
 							<div className="card-body">
 								<div className="support-wrapper">
-									<div className="support">
+									<div className="support-item">
 										<div className="image">
 											<i className="adminlib-facebook-fill"></i>
 										</div>
@@ -71,7 +71,7 @@ const HelpSupport: React.FC = () => {
 										</div>
 									</div>
 
-									<div className="support">
+									<div className="support-item">
 										<div className="image">
 											<i className="adminlib-wordpress"></i>
 										</div>
@@ -97,7 +97,7 @@ const HelpSupport: React.FC = () => {
 										</div>
 									</div>
 
-									<div className="support">
+									<div className="support-item">
 										<div className="image">
 											<i className="adminlib-forum"></i>
 										</div>
@@ -123,7 +123,7 @@ const HelpSupport: React.FC = () => {
 										</div>
 									</div>
 
-									<div className="support">
+									<div className="support-item">
 										<div className="image">
 											<i className="adminlib-live-chat"></i>
 										</div>
@@ -165,7 +165,7 @@ const HelpSupport: React.FC = () => {
 							</div>
 							<div className="card-body">
 								<div className="support-wrapper">
-									<div className="support">
+									<div className="support-item">
 										<div className="image">
 											<i className="adminlib-document"></i>
 										</div>
@@ -191,7 +191,7 @@ const HelpSupport: React.FC = () => {
 										</div>
 									</div>
 
-									<div className="support">
+									<div className="support-item">
 										<div className="image">
 											<i className="adminlib-youtube"></i>
 										</div>
@@ -217,7 +217,7 @@ const HelpSupport: React.FC = () => {
 										</div>
 									</div>
 
-									<div className="support">
+									<div className="support-item">
 										<div className="image">
 											<i className="adminlib-faq"></i>
 										</div>
@@ -240,7 +240,7 @@ const HelpSupport: React.FC = () => {
 										</div>
 									</div>
 
-									<div className="support">
+									<div className="support-item">
 										<div className="image">
 											<i className="adminlib-coding"></i>
 										</div>
