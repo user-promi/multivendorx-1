@@ -256,8 +256,8 @@ class Rest extends \WP_REST_Controller {
     public function update_item( $request ) {
         $refund_info = $request->get_param( 'payload' );
 
-        $order_id      = $refund_info['orderId'] ? absint( $refund_info['orderId'] ) : 0;
-        $refund_amount = wc_format_decimal( $refund_info['refundAmount'], wc_get_price_decimals() );
+        $order_id               = $refund_info['orderId'] ? absint( $refund_info['orderId'] ) : 0;
+        $refund_amount          = wc_format_decimal( $refund_info['refundAmount'], wc_get_price_decimals() );
         $items                  = $refund_info['items'] ?? array();
         $refund_reason          = sanitize_text_field( $refund_info['reason'] );
         $restock_refunded_items = 'true' === $refund_info['restock'];
@@ -271,7 +271,7 @@ class Rest extends \WP_REST_Controller {
             $parent_order     = wc_get_order( $parent_order_id );
             $parent_items_ids = array_keys( $parent_order->get_items( array( 'line_item', 'fee', 'shipping' ) ) );
 
-            $max_refund  = wc_format_decimal( $order->get_total() - $order->get_total_refunded(), wc_get_price_decimals() );
+            $max_refund = wc_format_decimal( $order->get_total() - $order->get_total_refunded(), wc_get_price_decimals() );
 
             if ( ! $refund_amount || $max_refund < $refund_amount || $refund_amount < 0 ) {
                 return new \WP_Error( 'invalid_amount', __( 'Invalid refund amount.', 'multivendorx' ), array( 'status' => 400 ) );

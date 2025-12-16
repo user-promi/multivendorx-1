@@ -177,5 +177,4 @@ class Util {
             'settings'  => $args['settings'],
         );
     }
-
 }

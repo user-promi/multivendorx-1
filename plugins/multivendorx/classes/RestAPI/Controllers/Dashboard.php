@@ -49,10 +49,8 @@ class Dashboard extends \WP_REST_Controller
      *
      * @param object $request Full details about the request.
      */
-    public function get_items_permissions_check($request)
-    {
-        // return current_user_can('read');
-        return true;
+    public function get_items_permissions_check( $request ) {
+        return current_user_can( 'create_stores' );
     }
 
     /**
@@ -64,7 +62,7 @@ class Dashboard extends \WP_REST_Controller
     {
         $menu_only = $request->get_param('menuOnly');
 
-        $endpoints = $this->all_endpoints();
+        $endpoints = $this->all_endpoints( $menu_only );
 
         $other_endpoints = apply_filters(
             'dashboard_other_endpoints',
@@ -89,10 +87,10 @@ class Dashboard extends \WP_REST_Controller
     /**
      * Get all endpoints.
      *
+     * @param bool $menu_only Whether the function is called from the admin settings or the dashboard.
      * @return array
      */
-    public function all_endpoints()
-    {
+    public function all_endpoints( $menu_only = false ) {
         // Default endpoints.
         $all_endpoints = [
             'dashboard'     => [
@@ -243,12 +241,16 @@ class Dashboard extends \WP_REST_Controller
 
         $saved_endpoints = MultiVendorX()->setting->get_setting('menu_manager');
 
-        if (! empty($saved_endpoints) && is_array($saved_endpoints)) {
-            $visible_endpoints = [];
-            foreach ($saved_endpoints as $key => $endpoint) {
-                if (isset($endpoint['visible']) && $endpoint['visible']) {
-                    $visible_endpoints[$key] = array_merge(
-                        $all_endpoints[$key] ?? [],
+        if ( $menu_only && ! empty( $saved_endpoints ) ) {
+            return $saved_endpoints;
+        }
+
+        if ( is_array( $saved_endpoints ) ) {
+            $visible_endpoints = array();
+            foreach ( $saved_endpoints as $key => $endpoint ) {
+                if ( ! empty( $endpoint['visible'] && $endpoint['visible'] ) ) {
+                    $visible_endpoints[ $key ] = array_merge(
+                        $all_endpoints[ $key ] ?? array(),
                         $endpoint
                     );
                 }
@@ -258,5 +260,4 @@ class Dashboard extends \WP_REST_Controller
 
         return $all_endpoints;
     }
-
 }

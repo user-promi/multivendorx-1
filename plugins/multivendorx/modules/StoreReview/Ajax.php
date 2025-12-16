@@ -7,7 +7,6 @@
 
 namespace MultiVendorX\StoreReview;
 
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }

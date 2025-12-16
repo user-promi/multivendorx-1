@@ -7,7 +7,6 @@
 
 namespace MultiVendorX\StoreReview;
 
-
 /**
  * MultiVendorX Store Review Module class
  *
