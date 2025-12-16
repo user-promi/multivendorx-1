@@ -277,7 +277,6 @@ class StoreUtil {
                 'desc'       => 'Allow stores to create, edit, and control their product listings, including uploading media and publishing items for sale.',
                 'capability' =>
                 array(
-                    // 'manage_users' => 'Manage Users',
                     'manage_products'  => 'Manage products',
                     'read_products'    => 'View products',
                     'edit_products'    => 'Edit products',
