@@ -83,7 +83,7 @@ const StoreCommission: React.FC = () => {
 				setTotalRows(response.data || 0);
 				setPageCount(Math.ceil(response.data / pagination.pageSize));
 			})
-			.catch(() => {});
+			.catch(() => { });
 	}, []);
 
 	useEffect(() => {
@@ -247,9 +247,8 @@ const StoreCommission: React.FC = () => {
 				return (
 					<TableCell>
 						<ul
-							className={`details ${
-								isExpanded ? '' : 'overflow'
-							}`}
+							className={`details ${isExpanded ? '' : 'overflow'
+								}`}
 						>
 							{row.original?.commissionAmount ? (
 								<li>
@@ -267,86 +266,86 @@ const StoreCommission: React.FC = () => {
 							) : null}
 							{(row.original?.shippingAmount ||
 								row.original?.taxAmount) && (
-								<li>
-									{row.original?.shippingAmount && (
-										<div className="item">
-											<div className="des">Shipping</div>
-											<div className="title">
-												+{' '}
-												{formatCurrency(
-													row.original.shippingAmount
-												)}
+									<li>
+										{row.original?.shippingAmount && (
+											<div className="item">
+												<div className="des">Shipping</div>
+												<div className="title">
+													+{' '}
+													{formatCurrency(
+														row.original.shippingAmount
+													)}
+												</div>
 											</div>
-										</div>
-									)}
+										)}
 
-									{row.original?.taxAmount && (
-										<div className="item">
-											<div className="des">Tax</div>
-											<div className="title">
-												+{' '}
-												{formatCurrency(
-													row.original.taxAmount
-												)}
+										{row.original?.taxAmount && (
+											<div className="item">
+												<div className="des">Tax</div>
+												<div className="title">
+													+{' '}
+													{formatCurrency(
+														row.original.taxAmount
+													)}
+												</div>
 											</div>
-										</div>
-									)}
-								</li>
-							)}
+										)}
+									</li>
+								)}
 							{((modules.includes('marketplace-gateway') &&
 								row.original?.gatewayFee) ||
 								(modules.includes('facilitator') &&
 									row.original?.facilitatorFee) ||
 								(modules.includes('marketplace-fee') &&
 									row.original?.platformFee)) && (
-								<li>
-									{modules.includes('marketplace-gateway') &&
-										row.original?.gatewayFee && (
-											<div className="item">
-												<div className="des">
-													Gateway Fee
+									<li>
+										{modules.includes('marketplace-gateway') &&
+											row.original?.gatewayFee && (
+												<div className="item">
+													<div className="des">
+														Gateway Fee
+													</div>
+													<div className="title">
+														-{' '}
+														{formatCurrency(
+															row.original.gatewayFee
+														)}
+													</div>
 												</div>
-												<div className="title">
-													-{' '}
-													{formatCurrency(
-														row.original.gatewayFee
-													)}
-												</div>
-											</div>
-										)}
+											)}
 
-									{modules.includes('facilitator') &&
-										row.original?.facilitatorFee && (
-											<div className="item">
-												<div className="des">
-													Facilitator Fee
+										{modules.includes('facilitator') &&
+											row.original?.facilitatorFee && (
+												<div className="item">
+													<div className="des">
+														Facilitator Fee
+													</div>
+													<div className="title">
+														-{' '}
+														{formatCurrency(
+															row.original
+																.facilitatorFee
+														)}
+													</div>
 												</div>
-												<div className="title">
-													-{' '}
-													{formatCurrency(
-														row.original
-															.facilitatorFee
-													)}
-												</div>
-											</div>
-										)}
+											)}
 
-									{modules.includes('marketplace-fee') &&
-										row.original?.platformFee && (
-											<div className="item">
-												<div className="des">
-													Marketplace Fee
+										{modules.includes('marketplace-fee') &&
+											row.original?.platformFee && (
+												<div className="item">
+													<div className="des">
+														Marketplace Fee
+													</div>
+													<div className="title">
+														-{' '}
+														{formatCurrency(
+															row.original.platformFee
+														)}
+													</div>
 												</div>
-												<div className="title">
-													-{' '}
-													{formatCurrency(
-														row.original.platformFee
-													)}
-												</div>
-											</div>
-										)}
-								</li>
-							)}
+											)}
+									</li>
+								)}
 
 							<span
 								className="more-btn"
@@ -424,18 +423,11 @@ const StoreCommission: React.FC = () => {
 			},
 		},
 		{
+			id: 'status',
 			header: __('Status', 'multivendorx'),
-			cell: ({ row }) => (
-				<TableCell>
-					<span
-						className={`admin-badge ${
-							row.original.status === 'paid' ? 'green' : 'red'
-						}`}
-					>
-						{row.original.status === 'paid' ? 'Paid' : 'Unpaid'}
-					</span>
-				</TableCell>
-			),
+			cell: ({ row }) => {
+				return <TableCell type="status" status={row.original.status} />;
+			},
 		},
 		{
 			id: 'action',
@@ -450,18 +442,18 @@ const StoreCommission: React.FC = () => {
 						header={{
 							actions: isPaid
 								? [
-										{
-											label: __(
-												'View Commission',
-												'multivendorx'
-											),
-											icon: 'adminlib-preview',
-											onClick: (rowData) => {
-												setModalCommission(rowData);
-											},
-											hover: true,
+									{
+										label: __(
+											'View Commission',
+											'multivendorx'
+										),
+										icon: 'adminlib-preview',
+										onClick: (rowData) => {
+											setModalCommission(rowData);
 										},
-									]
+										hover: true,
+									},
+								]
 								: [],
 						}}
 					/>
@@ -617,13 +609,13 @@ const StoreCommission: React.FC = () => {
 				format: 'csv',
 				startDate: currentFilterData?.date?.start_date
 					? currentFilterData.date.start_date
-							.toISOString()
-							.split('T')[0]
+						.toISOString()
+						.split('T')[0]
 					: '',
 				endDate: currentFilterData?.date?.end_date
 					? currentFilterData.date.end_date
-							.toISOString()
-							.split('T')[0]
+						.toISOString()
+						.split('T')[0]
 					: '',
 			};
 

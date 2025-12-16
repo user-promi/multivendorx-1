@@ -72,11 +72,13 @@
         .right {
             display: flex;
             gap: 0.5rem;
-            .field-wrapper{
-                .des{
+
+            .field-wrapper {
+                .des {
                     padding-top: 0.5rem;
                 }
             }
+
             span {
                 font-size: 0.875rem;
                 color: #0000009e;
@@ -412,12 +414,14 @@
     justify-content: space-between;
     padding: 0.45rem 0;
 
-    &:first-child{
+    &:first-child {
         padding-top: 0;
     }
-    &:last-child{
+
+    &:last-child {
         padding-bottom: 0;
     }
+
     &.owner {
         flex-direction: column;
     }
@@ -469,9 +473,11 @@
                 align-items: end;
                 gap: 0.625rem;
             }
-            .des{
+
+            .des {
                 font-size: 0.813rem;
             }
+
             .small-text {
                 font-size: 0.875rem;
                 color: $sub-text-color;
@@ -506,6 +512,7 @@
     gap: 1.5rem;
     margin-top: 1.5rem;
 
+    // remove
     .review-box {
         padding: 1rem;
         border: $border-light-small;
@@ -552,10 +559,55 @@
             }
         }
     }
+
+    .review {
+        padding: 1rem;
+        border: $border-light-small;
+        border-radius: 0.313rem;
+
+        .details {
+            .title {
+                font-size: 1.25rem;
+                font-weight: 500;
+                line-height: 1rem;
+                margin-bottom: 0.625rem;
+                display: flex;
+                gap: 0.5rem;
+                align-items: center;
+            }
+
+            .avatar {
+                padding: 0.313rem;
+                background: var(--colorPrimary);
+                border-radius: 50%;
+
+                i {
+                    font-size: 1.125rem;
+                    color: #fff;
+                }
+            }
+
+            .des {
+                padding-top: 0.5rem;
+                line-height: 1.25rem;
+            }
+
+            .star-wrapper {
+                span {
+                    color: #0000004a;
+                    font-size: 0.813rem;
+                    font-weight: 500;
+                    padding-left: 0.5rem;
+                }
+            }
+        }
+    }
 }
-.star-icon{
-     color: #ffc800;;
+
+.star-icon {
+    color: #ffc800;
 }
+
 // review end
 
 // no permission section start

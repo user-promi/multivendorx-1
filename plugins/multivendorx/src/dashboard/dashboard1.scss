@@ -737,55 +737,6 @@ a {
     display: flex;
     gap: 1rem;
     flex-direction: column;
-
-    // .review {
-    //     padding: 1rem;
-    //     border: $border-light-small;
-    //     border-radius: 0.313rem;
-
-    //     .details {
-    //         .title {
-    //             font-size: 1.25rem;
-    //             font-weight: 500;
-    //             line-height: 1rem;
-    //             margin-bottom: 0.625rem;
-    //             display: flex;
-    //             gap: 0.5rem;
-    //             align-items: center;
-    //         }
-
-    //         .avatar {
-    //             padding: 0.313rem;
-    //             background: var(--colorPrimary);
-    //             border-radius: 50%;
-
-    //             i {
-    //                 font-size: 1.125rem;
-    //                 color: #fff;
-    //             }
-    //         }
-
-    //         .des {
-    //             font-size: 0.95rem;
-    //             color: #0000008a;
-    //             padding-top: 0.5rem;
-    //             line-height: 1.25rem;
-    //         }
-
-    //         .star-wrapper {
-    //             i {
-    //                 color: rgb(212, 156, 0);
-    //             }
-
-    //             span {
-    //                 color: #0000004a;
-    //                 font-size: 0.813rem;
-    //                 font-weight: 500;
-    //                 padding-left: 0.5rem;
-    //             }
-    //         }
-    //     }
-    // }
 }
 
 .table-wrapper {
@@ -990,13 +941,16 @@ a {
     .switch-store-list {
         border-radius: 0.313rem;
         margin-top: 0.45rem;
-        height: 8rem;
+        max-height: 8rem;
         overflow: auto;
         border: $border-light-small;
 
         .store {
             border-bottom: $border-light-small;
 
+            &:last-child{
+                border: none;
+            }
             .store-name {
                 color: $text-color;
             }

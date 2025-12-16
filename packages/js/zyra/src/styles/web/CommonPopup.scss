@@ -185,13 +185,13 @@
                 .text {
                     font-size: 0.9rem;
                     font-weight: 500;
-                    color: #585858;
+                    color: $sub-text-color;
                     width: 60%;
                 }
 
                 .value {
                     font-size: 1rem;
-                    color: #000;
+                    color: $text-color;
                     font-weight: 500;
                     width: 40%;
                     display: flex;
@@ -202,13 +202,14 @@
         &.multi {
             padding: 0;
             display: flex;
+            gap: 1.5rem;
 
             .section {
-                padding: 1rem 2rem;
 
                 &.left {
                     width: 70%;
                     border-right: $border-light-small;
+                    padding-right: 1.5rem;
                 }
 
                 &.right {

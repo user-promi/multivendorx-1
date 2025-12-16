@@ -353,7 +353,7 @@ const Dashboard = () => {
 				{storeData?.status == 'active' && (
 					<div className="dashboard-tabs">
 						<ul>
-							{Object.entries(filteredMenu).map(([key, item]) => {
+							{Object.entries(menu).map(([key, item]) => {
 								if (!item.name) {
 									return null;
 								}

@@ -1318,7 +1318,7 @@ const Dashboard: React.FC = () => {
 																	key={
 																		index
 																	}
-																	className={`adminlib-star ${index <
+																	className={`star-icon adminlib-star ${index <
 																		Math.round(
 																			reviewItem.overall_rating
 																		)
