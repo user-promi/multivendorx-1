@@ -659,7 +659,7 @@ const StoreSettings = ({
 								'instagram',
 							].map((network) => {
 								const iconClass = `adminlib-${network} ${network}`;
-								const defaultUrl = `https://${network === 'twitter' ? 'twitter.com' : network}.com/`;
+								const defaultUrl = `https://${network === 'twitter' ? 'x' : network}.com/`;
 
 								return (
 									<div
