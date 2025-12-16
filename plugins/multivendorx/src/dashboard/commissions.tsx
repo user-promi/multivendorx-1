@@ -447,7 +447,7 @@ const StoreCommission: React.FC = () => {
 											'View Commission',
 											'multivendorx'
 										),
-										icon: 'adminlib-preview',
+										icon: 'adminlib-eye',
 										onClick: (rowData) => {
 											setModalCommission(rowData);
 										},
@@ -573,15 +573,18 @@ const StoreCommission: React.FC = () => {
 		);
 
 		return (
-			<button
-				onClick={handleDownload}
-				disabled={
-					isDownloading || isLoading || (!hasSelectedRows && !data)
-				}
-				className="button"
-			>
-				Download CSV
-			</button>
+			<div className="action-item">
+				<button
+					onClick={handleDownload}
+					disabled={
+						isDownloading || isLoading || (!hasSelectedRows && !data)
+					}
+					className="admin-btn"
+				>
+					<i className="adminlib-import"></i>
+					Download CSV
+				</button>
+			</div>
 		);
 	};
 

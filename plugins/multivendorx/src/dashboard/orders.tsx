@@ -330,51 +330,51 @@ const Orders: React.FC = () => {
 		};
 
 		return (
-			<div
-				className="bulk-action"
-				style={{ display: 'flex', gap: '10px', alignItems: 'center' }}
-			>
-				<select
-					name="action"
-					className="basic-select"
-					ref={bulkSelectRef}
-					onChange={(e) => handleBulkActionChange(e.target.value)}
-				>
-					<option value="">
-						{__('Bulk Actions', 'multivendorx')}
-					</option>
-					<option value="completed">
-						{__('Completed', 'multivendorx')}
-					</option>
-					<option value="processing">
-						{__('Processing', 'multivendorx')}
-					</option>
-					<option value="pending">
-						{__('Pending', 'multivendorx')}
-					</option>
-					<option value="on-hold">
-						{__('On Hold', 'multivendorx')}
-					</option>
-					<option value="cancelled">
-						{__('Cancelled', 'multivendorx')}
-					</option>
-					<option value="refunded">
-						{__('Refunded', 'multivendorx')}
-					</option>
-					<option value="failed">
-						{__('Failed', 'multivendorx')}
-					</option>
-				</select>
-
-				<button
-					type="button"
-					className="admin-btn btn-purple-bg"
-					onClick={downloadSelectedCSV}
-				>
-					<i className="adminlib-export"></i>{' '}
-					{__('Download CSV', 'multivendorx')}
-				</button>
-			</div>
+			<>
+				<div className="action-item">
+					<i className="adminlib-form"></i>
+					<select
+						name="action"
+						ref={bulkSelectRef}
+						onChange={(e) => handleBulkActionChange(e.target.value)}
+					>
+						<option value="">
+							{__('Bulk Actions', 'multivendorx')}
+						</option>
+						<option value="completed">
+							{__('Completed', 'multivendorx')}
+						</option>
+						<option value="processing">
+							{__('Processing', 'multivendorx')}
+						</option>
+						<option value="pending">
+							{__('Pending', 'multivendorx')}
+						</option>
+						<option value="on-hold">
+							{__('On Hold', 'multivendorx')}
+						</option>
+						<option value="cancelled">
+							{__('Cancelled', 'multivendorx')}
+						</option>
+						<option value="refunded">
+							{__('Refunded', 'multivendorx')}
+						</option>
+						<option value="failed">
+							{__('Failed', 'multivendorx')}
+						</option>
+					</select>
+				</div>
+				<div className="action-item">
+					<button
+						type="button"
+						className="admin-btn"
+						onClick={downloadSelectedCSV}
+					>
+						<i className="adminlib-import"></i>
+						{__('Download CSV', 'multivendorx')}
+					</button>
+				</div>
+			</>
 		);
 	};
 
@@ -496,7 +496,7 @@ const Orders: React.FC = () => {
 								? [
 									{
 										label: __('View', 'multivendorx'),
-										icon: 'adminlib-preview',
+										icon: 'adminlib-eye',
 										onClick: (rowData) => {
 											setSelectedOrder(rowData);
 											// window.location.href = `view/${rowData.id}`;
@@ -529,14 +529,14 @@ const Orders: React.FC = () => {
 							},
 							{
 								label: __('Shipping', 'multivendorx'),
-								icon: 'adminlib-vendor-form-copy',
+								icon: 'adminlib-shipping',
 								onClick: (rowData) => {
 									window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
 								},
 							},
 							{
 								label: __('PDF', 'multivendorx'),
-								icon: 'adminlib-vendor-form-delete',
+								icon: 'adminlib-pdf',
 								onClick: (rowData) => {
 									window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
 								},
@@ -575,7 +575,6 @@ const Orders: React.FC = () => {
 			render: (updateFilter, filterValue) => (
 				<div className="search-action">
 					<select
-						className="basic-select"
 						value={filterValue || ''}
 						onChange={(e) => {
 							updateFilter('searchAction', e.target.value || '');
@@ -611,7 +610,7 @@ const Orders: React.FC = () => {
 								updateFilter(e.target.name, e.target.value);
 							}}
 							value={filterValue || ''}
-							className="basic-select"
+							className="basic-input"
 						/>
 						<i className="adminlib-search"></i>
 					</div>
@@ -715,7 +714,7 @@ const Orders: React.FC = () => {
 						<div className="buttons-wrapper">
 							<div
 								className="admin-btn btn-purple-bg"
-								onClick={exportAllOrders} // <-- fixed here
+								onClick={exportAllOrders}
 							>
 								<i className="adminlib-export"></i>
 								{__('Export', 'multivendorx')}
@@ -726,7 +725,7 @@ const Orders: React.FC = () => {
 									window.location.hash = `add`;
 								}}
 							>
-								<i className="adminlib-plus-circle-o"></i>
+								<i className="adminlib-plus"></i>
 								{__('Add New', 'multivendorx')}
 							</div>
 						</div>

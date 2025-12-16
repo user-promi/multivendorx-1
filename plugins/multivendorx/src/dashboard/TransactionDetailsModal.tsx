@@ -30,7 +30,7 @@ const TransactionDetailsModal: React.FC<Props> = ({ transaction, onClose }) => {
 				header={
 					<>
 						<div className="title">
-							<i className="adminlib-cart"></i>
+							<i className="adminlib-wallet-in"></i>
 							{__('Transaction Details', 'multivendorx')}
 						</div>
 						<p>
@@ -47,86 +47,93 @@ const TransactionDetailsModal: React.FC<Props> = ({ transaction, onClose }) => {
 				}
 			>
 				<>
-					<div className="heading">
-						{__('Order Overview', 'multivendorx')}
-					</div>
+					<div className="content">
+						<div className="heading">
+							{__('Order Overview', 'multivendorx')}
+						</div>
 
-					<div className="commission-details">
-						<div className="items">
-							<div className="text">
-								{__('Date', 'multivendorx')}
+						<div className="commission-details">
+							<div className="items">
+								<div className="text">
+									{__('Date', 'multivendorx')}
+								</div>
+								<div className="value">
+									{new Date(transaction.date.replace(' ', 'T')).toLocaleDateString('en-US', {
+										month: 'short',
+										day: '2-digit',
+										year: 'numeric',
+									})}
+								</div>
 							</div>
-							<div className="value">{transaction.date}</div>
-						</div>
-						<div className="items">
-							<div className="text">
-								{__('Order Details', 'multivendorx')}
+							<div className="items">
+								<div className="text">
+									{__('Order Details', 'multivendorx')}
+								</div>
+								<div className="value">
+									{transaction.order_details}
+								</div>
 							</div>
-							<div className="value">
-								{transaction.order_details}
+							<div className="items">
+								<div className="text">
+									{__('Transaction Type', 'multivendorx')}
+								</div>
+								<div className="value">
+									{transaction.transaction_type}
+								</div>
 							</div>
-						</div>
-						<div className="items">
-							<div className="text">
-								{__('Transaction Type', 'multivendorx')}
+							<div className="items">
+								<div className="text">
+									{__('Payment Mode', 'multivendorx')}
+								</div>
+								<div className="value">
+									{transaction.payment_mode}
+								</div>
 							</div>
-							<div className="value">
-								{transaction.transaction_type}
+							<div className="items">
+								<div className="text">
+									{__('Credit', 'multivendorx')}
+								</div>
+								<div className="value">
+									{Number(transaction.credit || 0).toFixed(2)}
+								</div>
 							</div>
-						</div>
-						<div className="items">
-							<div className="text">
-								{__('Payment Mode', 'multivendorx')}
+							<div className="items">
+								<div className="text">
+									{__('Debit', 'multivendorx')}
+								</div>
+								<div className="value">
+									{Number(transaction.debit || 0).toFixed(2)}
+								</div>
 							</div>
-							<div className="value">
-								{transaction.payment_mode}
+							<div className="items">
+								<div className="text">
+									{__('Balance', 'multivendorx')}
+								</div>
+								<div className="value">
+									{Number(transaction.balance || 0).toFixed(2)}
+								</div>
 							</div>
-						</div>
-						<div className="items">
-							<div className="text">
-								{__('Credit', 'multivendorx')}
-							</div>
-							<div className="value">
-								{Number(transaction.credit || 0).toFixed(2)}
-							</div>
-						</div>
-						<div className="items">
-							<div className="text">
-								{__('Debit', 'multivendorx')}
-							</div>
-							<div className="value">
-								{Number(transaction.debit || 0).toFixed(2)}
-							</div>
-						</div>
-						<div className="items">
-							<div className="text">
-								{__('Balance', 'multivendorx')}
-							</div>
-							<div className="value">
-								{Number(transaction.balance || 0).toFixed(2)}
-							</div>
-						</div>
-						<div className="items">
-							<div className="text">
-								{__('Status', 'multivendorx')}
-							</div>
-							<div className="value">
-								<span
-									className={`admin-badge ${
-										transaction.status === 'paid'
+							<div className="items">
+								<div className="text">
+									{__('Status', 'multivendorx')}
+								</div>
+								<div className="value">
+									<span
+										className={`admin-badge ${transaction.status === 'Completed'
 											? 'green'
 											: 'red'
-									}`}
-								>
-									{transaction.status
-										? transaction.status
+											}`}
+									>
+										{transaction.status
+											? transaction.status
 												.replace(/^wc-/, '') // remove prefix
 												.replace(/_/g, ' ') // underscores → spaces
 												.replace(/\b\w/g, (c) =>
 													c.toUpperCase()
 												) // capitalize
-										: ''}
-								</span>
+											: ''}
+									</span>
+								</div>
 							</div>
 						</div>
 					</div>

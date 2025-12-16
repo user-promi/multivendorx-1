@@ -199,7 +199,7 @@ const Withdrawls: React.FC = () => {
 									(window.location.href = `${appLocalizer.site_url}/dashboard/wallet/transactions/`)
 								}
 							>
-								<i className="adminlib-preview"></i>
+								<i className="adminlib-eye"></i>
 								{__('View transaction history', 'multivendorx')}
 							</div>
 						</div>
