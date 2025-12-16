@@ -89,56 +89,56 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
 						label: 'Total Order Amount',
 						count: Number(data.total_order_amount),
 						formatted: formatCurrency(data.total_order_amount),
-						icon: 'adminlib-order green',
+						icon: 'adminlib-order',
 					},
 					{
 						id: 'facilitator_fee',
 						label: 'Facilitator Fee',
 						count: Number(data.facilitator_fee),
 						formatted: formatCurrency(data.facilitator_fee),
-						icon: 'adminlib-facilitator blue',
+						icon: 'adminlib-facilitator',
 					},
 					{
 						id: 'gateway_fee',
 						label: 'Gateway Fee',
 						count: Number(data.gateway_fee),
 						formatted: formatCurrency(data.gateway_fee),
-						icon: 'adminlib-credit-card red',
+						icon: 'adminlib-credit-card',
 					},
 					{
 						id: 'shipping_amount',
 						label: 'Shipping Amount',
 						count: Number(data.shipping_amount),
 						formatted: formatCurrency(data.shipping_amount),
-						icon: 'adminlib-shipping green',
+						icon: 'adminlib-shipping',
 					},
 					{
 						id: 'tax_amount',
 						label: 'Tax Amount',
 						count: Number(data.tax_amount),
 						formatted: formatCurrency(data.tax_amount),
-						icon: 'adminlib-tax-compliance blue',
+						icon: 'adminlib-tax-compliance',
 					},
 					{
 						id: 'shipping_tax_amount',
 						label: 'Shipping Tax Amount',
 						count: Number(data.shipping_tax_amount),
 						formatted: formatCurrency(data.shipping_tax_amount),
-						icon: 'adminlib-per-product-shipping purple',
+						icon: 'adminlib-per-product-shipping',
 					},
 					{
 						id: 'commission_total',
 						label: 'Commission Total',
 						count: Number(data.commission_total),
 						formatted: formatCurrency(data.commission_total),
-						icon: 'adminlib-commission yellow',
+						icon: 'adminlib-commission',
 					},
 					{
 						id: 'commission_refunded',
 						label: 'Commission Refunded',
 						count: Number(data.commission_refunded),
 						formatted: formatCurrency(data.commission_refunded),
-						icon: 'adminlib-marketplace-refund red',
+						icon: 'adminlib-marketplace-refund',
 					},
 				];
 
@@ -291,7 +291,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
 							{commissionDetails.map((item, idx) => (
 								<div key={idx} className="analytics-item">
 									<div className="analytics-icon">
-										<i className={item.icon}></i>
+										<i className={`${item.icon} admin-color${idx + 2}`}></i>
 									</div>
 									<div className="details">
 										<div className="number">
@@ -414,7 +414,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
 						</div>
 						<div className="card-body">
 							{topCoupons.length > 0 ? (
-								topCoupons.map((coupon: any) => (
+								topCoupons.map((coupon: any, index: Number) => (
 									<div
 										className="info-item"
 										key={`coupon-${coupon.id}`}
@@ -426,7 +426,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
 													target="_blank"
 													rel="noopener noreferrer"
 												>
-													<i className="adminlib-coupon"></i>
+													<i className={`adminlib-coupon admin-color${index + 1}`}></i>
 												</a>
 											</div>
 
@@ -503,7 +503,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
 						</div>
 						<div className="card-body">
 							{topCustomers.length > 0 ? (
-								topCustomers.map((customer: any) => (
+								topCustomers.map((customer: any, index: number) => (
 									<div
 										className="info-item"
 										key={`customer-${customer.user_id}`}
@@ -516,7 +516,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
 													rel="noopener noreferrer"
 												>
 													<div className="avatar">
-														<span>
+														<span className={`admin-color${index + 1}`}>
 															{(
 																(
 																	customer.name?.trim() ||
@@ -545,13 +545,13 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
 														'Orders',
 														'multivendorx'
 													)}
-													:{' '}
+													:
 													{customer.orders_count || 0}
 												</div>
 												<div className="des">
 													{customer.email ||
 														__(
-															'No email',
+															'',
 															'multivendorx'
 														)}
 												</div>
@@ -590,7 +590,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
 						</div>
 						<div className="card-body">
 							{topStores.length > 0 ? (
-								topStores.map((store: any) => (
+								topStores.map((store: any, index: number) => (
 									<div
 										className="info-item"
 										key={`store-${store.store_id}`}
@@ -602,9 +602,8 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
 													target="_blank"
 													rel="noopener noreferrer"
 												>
-													<div></div>
 													<div className="avatar">
-														<span>
+														<span className={`admin-color${index + 1}`}>
 															{(
 																store.store_name
 																	?.trim()

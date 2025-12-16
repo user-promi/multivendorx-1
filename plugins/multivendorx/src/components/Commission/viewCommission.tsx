@@ -97,7 +97,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							// store refund map
 							setRefundMap(refundMap);
 						})
-						.catch(() => {});
+						.catch(() => { });
 
 					axios({
 						method: 'GET',
@@ -142,8 +142,8 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 										const discount =
 											subtotal > total
 												? `-${formatCurrency(
-														subtotal - total
-													)}`
+													subtotal - total
+												)}`
 												: undefined;
 
 										let imageUrl = null;
@@ -353,7 +353,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 		<CommonPopup
 			open={open}
 			onClose={onClose}
-			width="62.5rem"
+			width="70%"
 			height="100%"
 			header={
 				<>
@@ -382,9 +382,8 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 									href={`${appLocalizer.site_url.replace(
 										/\/$/,
 										''
-									)}/wp-admin/admin.php?page=multivendorx#&tab=stores&view&id=${
-										storeData.id
-									}`}
+									)}/wp-admin/admin.php?page=multivendorx#&tab=stores&view&id=${storeData.id
+										}`}
 									target="_blank"
 									rel="noopener noreferrer"
 									className="store-link"
@@ -421,19 +420,21 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 						}
 					/>
 
-					<div className="heading">
-						{__('Shipping', 'multivendorx')}
-					</div>
+					{Array.isArray(shippingItems) && shippingItems.length > 0 && (
+						<>
+							<div className="heading">
+								{__('Shipping', 'multivendorx')}
+							</div>
 
-					<Table
-						data={shippingItems}
-						columns={
-							shippingColumns as ColumnDef<
-								Record<string, any>,
-								any
-							>[]
-						}
-					/>
+							<Table
+								data={shippingItems}
+								columns={
+									shippingColumns as ColumnDef<Record<string, any>, any>[]
+								}
+							/>
+						</>
+					)}
+
 				</div>
 
 				<div className="section right">
@@ -451,9 +452,8 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 										href={`${appLocalizer.site_url.replace(
 											/\/$/,
 											''
-										)}/wp-admin/post.php?post=${
-											commissionData.order_id
-										}&action=edit`}
+										)}/wp-admin/post.php?post=${commissionData.order_id
+											}&action=edit`}
 										target="_blank"
 										rel="noopener noreferrer"
 										className="link-item"
@@ -470,14 +470,14 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 								{__('Order Status', 'multivendorx')}
 							</div>
 							<div className="value">
-								<span className="admin-badge yellow">
+								<span className="admin-badge blue">
 									{orderData?.status
 										? orderData.status
-												.replace(/^wc-/, '') // remove 'wc-' prefix if exists
-												.replace(/_/g, ' ') // replace underscores with spaces
-												.replace(/\b\w/g, (c) =>
-													c.toUpperCase()
-												) // capitalize first letter of each word
+											.replace(/^wc-/, '') // remove 'wc-' prefix if exists
+											.replace(/_/g, ' ') // replace underscores with spaces
+											.replace(/\b\w/g, (c) =>
+												c.toUpperCase()
+											) // capitalize first letter of each word
 										: ''}
 								</span>
 							</div>
@@ -496,19 +496,18 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							</div>
 							<div className="value">
 								<span
-									className={`admin-badge ${
-										commissionData?.status === 'paid'
+									className={`admin-badge ${commissionData?.status === 'paid'
 											? 'green'
 											: 'red'
-									}`}
+										}`}
 								>
 									{commissionData?.status
 										? commissionData.status
-												.replace(/^wc-/, '') // remove any prefix like 'wc-'
-												.replace(/_/g, ' ') // replace underscores with spaces
-												.replace(/\b\w/g, (c) =>
-													c.toUpperCase()
-												) // capitalize each word
+											.replace(/^wc-/, '') // remove any prefix like 'wc-'
+											.replace(/_/g, ' ') // replace underscores with spaces
+											.replace(/\b\w/g, (c) =>
+												c.toUpperCase()
+											) // capitalize each word
 										: ''}
 								</span>
 							</div>
@@ -520,10 +519,10 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							<div className="value">
 								{formatCurrency(
 									parseFloat(commissionData?.amount ?? 0) +
-										parseFloat(
-											commissionData?.commission_refunded ??
-												0
-										)
+									parseFloat(
+										commissionData?.commission_refunded ??
+										0
+									)
 								)}
 							</div>
 						</div>
@@ -542,10 +541,10 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							<div className="value">
 								{formatCurrency(
 									Number(commissionData?.tax || 0) +
-										Number(
-											commissionData?.shipping_tax_amount ||
-												0
-										)
+									Number(
+										commissionData?.shipping_tax_amount ||
+										0
+									)
 								)}
 							</div>
 						</div>

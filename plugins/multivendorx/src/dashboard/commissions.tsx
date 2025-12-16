@@ -582,7 +582,7 @@ const StoreCommission: React.FC = () => {
 					className="admin-btn"
 				>
 					<i className="adminlib-import"></i>
-					Download CSV
+					{__('Download CSV', 'multivendorx')}
 				</button>
 			</div>
 		);

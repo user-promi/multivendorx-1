@@ -194,7 +194,7 @@ $index: 1;
   .#{$name},
   .admin-color#{$index} {
     background: map-get($style, light-color) !important;
-    color: map-get($style, color);
+    color: map-get($style, color) !important;
   }
 
   // only background color

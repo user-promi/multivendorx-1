@@ -145,7 +145,6 @@ const OrderReport: React.FC = () => {
 				setData(orders);
 			})
 			.catch((error) => {
-				console.error('❌ Order fetch failed:', error);
 				setError(__('Failed to load order data', 'multivendorx'));
 				setData([]);
 			});
@@ -303,40 +302,11 @@ const OrderReport: React.FC = () => {
 			header: __('Date', 'multivendorx'),
 			cell: ({ row }) => <TableCell>{row.original.date}</TableCell>,
 		},
-
 		{
+			id: 'status',
 			header: __('Status', 'multivendorx'),
 			cell: ({ row }) => {
-				const rawStatus = row.original.status || '';
-				const status = rawStatus.toLowerCase();
-
-				// Define color mapping for known statuses
-				const statusColorMap: Record<string, string> = {
-					completed: 'green',
-					processing: 'blue',
-					refunded: 'red',
-					'on-hold': 'yellow',
-					cancelled: 'gray',
-					pending: 'orange',
-					failed: 'dark-red',
-					'refund-requested': 'purple',
-				};
-
-				const badgeClass = statusColorMap[status] || 'gray';
-
-				// Format status for display (refund-requested → Refund Requested)
-				const displayStatus =
-					status
-						?.replace(/-/g, ' ')
-						?.replace(/\b\w/g, (c) => c.toUpperCase()) || '-';
-
-				return (
-					<TableCell title={displayStatus}>
-						<span className={`admin-badge ${badgeClass}`}>
-							{displayStatus}
-						</span>
-					</TableCell>
-				);
+				return <TableCell type="status" status={row.original.status} />;
 			},
 		},
 	];
