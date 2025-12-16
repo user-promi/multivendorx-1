@@ -300,8 +300,6 @@ const CustomerQuestions: React.FC = () => {
 								{store_id ? (
 									<>
 										<span
-											// href={storeLink}
-											// target="_blank"
 											className="des"
 										>
 											By {store_name || '-'}
@@ -388,17 +386,16 @@ const CustomerQuestions: React.FC = () => {
 						actions: [
 							{
 								label: __('Answer', 'multivendorx'),
-								icon: 'adminlib-preview', // you can change the icon
+								icon: 'adminlib-eye', 
 								onClick: (rowData: any) => {
 									setSelectedQna(rowData);
 									setQna(rowData.question_text);
 									setAnswer(rowData.answer_text || '');
 								},
-								hover: true,
 							},
 							{
 								label: __('Delete', 'multivendorx'),
-								icon: 'adminlib-delete',
+								icon: 'adminlib-delete delete',
 								onClick: (rowData) => {
 									if (
 										confirm(
@@ -437,7 +434,6 @@ const CustomerQuestions: React.FC = () => {
 											);
 									}
 								},
-								hover: true,
 							},
 						],
 					}}
@@ -464,11 +460,6 @@ const CustomerQuestions: React.FC = () => {
 					>
 						<option value="">Public</option>
 						<option value="">Private</option>
-						{/* {store?.map((s: any) => (
-                            <option key={s.id} value={s.id}>
-                                {s.store_name.charAt(0).toUpperCase() + s.store_name.slice(1)}
-                            </option>
-                        ))} */}
 					</select>
 				</div>
 			),
@@ -529,7 +520,6 @@ const CustomerQuestions: React.FC = () => {
 					</div>
 				</div>
 			</div>
-			{/* <div className="admin-table-wrapper"> */}
 			<Table
 				data={data}
 				columns={columns as ColumnDef<Record<string, any>, any>[]}
@@ -673,8 +663,6 @@ const CustomerQuestions: React.FC = () => {
 							</div>
 						</div>
 					</div>
-
-					{error && <p className="error-text">{error}</p>}
 				</CommonPopup>
 			)}
 		</>

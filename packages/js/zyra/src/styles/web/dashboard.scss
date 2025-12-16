@@ -549,7 +549,7 @@
             .details {
                 .name {
                     font-size: 1.125rem;
-                    color: #000;
+                    color: $text-color;
                     margin-bottom: 0.313rem;
                 }
 
@@ -578,7 +578,7 @@
 
             .avatar {
                 padding: 0.313rem;
-                background: var(--colorPrimary);
+                background: $theme-color;
                 border-radius: 50%;
 
                 i {
@@ -601,6 +601,32 @@
                 }
             }
         }
+    }
+}
+
+.rating-details {
+    flex-grow: 0;
+    min-width: 25rem;
+
+    .rating-details-wrapper {
+        .title-wrapper {
+            flex-direction: column;
+            padding: 0;
+
+            .rating-wrapper {
+                padding-bottom: 0.45rem;
+            }
+
+            .title {
+                font-size: 1rem;
+                font-weight: 500;
+            }
+        }
+    }
+
+    .review {
+        padding-top: 0.313rem;
+        color: #00000085;
     }
 }
 

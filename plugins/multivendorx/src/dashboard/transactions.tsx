@@ -192,10 +192,7 @@ const Transactions: React.FC = () => {
 			header: __('Transaction Type', 'multivendorx'),
 			cell: ({ row }) => (
 				<TableCell>
-					<div className="link-item">
-						{' '}
-						{row.original.transaction_type}
-					</div>
+					{row.original.transaction_type}
 				</TableCell>
 			),
 		},
@@ -260,11 +257,10 @@ const Transactions: React.FC = () => {
 						actions: [
 							{
 								label: __('View', 'multivendorx'),
-								icon: 'adminlib-preview',
+								icon: 'adminlib-eye',
 								onClick: (rowData) => {
 									setModalTransaction(rowData);
 								},
-								hover: true,
 							},
 						],
 					}}
@@ -384,7 +380,7 @@ const Transactions: React.FC = () => {
 					data={data}
 					columns={columns as ColumnDef<Record<string, any>, any>[]}
 					rowSelection={{}}
-					onRowSelectionChange={() => {}}
+					onRowSelectionChange={() => { }}
 					defaultRowsPerPage={10}
 					pageCount={pageCount}
 					pagination={pagination}

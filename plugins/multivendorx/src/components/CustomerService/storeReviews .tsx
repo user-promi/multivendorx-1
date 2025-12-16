@@ -429,7 +429,7 @@ const StoreReviews: React.FC = () => {
 												(_, i) => (
 													<i
 														key={`filled-${i}`}
-														className="adminlib-star"
+														className="star-icon adminlib-star"
 													></i>
 												)
 											)}
@@ -440,7 +440,7 @@ const StoreReviews: React.FC = () => {
 											].map((_, i) => (
 												<i
 													key={`empty-${i}`}
-													className="adminlib-star-o"
+													className="star-icon adminlib-star-o"
 												></i>
 											))}
 										</>
@@ -635,7 +635,7 @@ const StoreReviews: React.FC = () => {
 												{[...Array(5)].map((_, i) => (
 													<i
 														key={i}
-														className={`adminlib-star ${
+														className={`star-icon adminlib-star ${
 															i <
 															Math.round(
 																selectedReview.overall_rating

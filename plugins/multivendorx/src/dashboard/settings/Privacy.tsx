@@ -78,140 +78,133 @@ const Privacy = () => {
 		<>
 			<SuccessNotice message={successMsg} />
 
-			<div className="card-wrapper">
-				<div className="card-content">
-					<div className="form-group-wrapper">
-						<div className="form-group">
-							<label htmlFor="shipping_policy">
-								{__('Shipping Policy', 'multivendorx')}
-							</label>
-							<TextArea
-								name="shipping_policy"
-								inputClass="textarea-input"
-								value={formData.shipping_policy || ''}
-								onChange={handleChange}
-							/>
-						</div>
-					</div>
+			<div className="form-group-wrapper">
+				<div className="form-group">
+					<label htmlFor="shipping_policy">
+						{__('Shipping Policy', 'multivendorx')}
+					</label>
+					<TextArea
+						name="shipping_policy"
+						inputClass="textarea-input"
+						value={formData.shipping_policy || ''}
+						onChange={handleChange}
+					/>
+				</div>
+			</div>
 
-					<div className="form-group-wrapper">
-						<div className="form-group">
-							<label htmlFor="refund_policy">
-								{__('Refund Policy', 'multivendorx')}
-							</label>
-							<TextArea
-								name="refund_policy"
-								inputClass="textarea-input"
-								value={formData.refund_policy || ''}
-								onChange={handleChange}
-							/>
-						</div>
-					</div>
+			<div className="form-group-wrapper">
+				<div className="form-group">
+					<label htmlFor="refund_policy">
+						{__('Refund Policy', 'multivendorx')}
+					</label>
+					<TextArea
+						name="refund_policy"
+						inputClass="textarea-input"
+						value={formData.refund_policy || ''}
+						onChange={handleChange}
+					/>
+				</div>
+			</div>
 
-					<div className="form-group-wrapper">
-						<div className="form-group">
-							<label htmlFor="exchange_policy">
-								{__(
-									'Cancellation/Return/Exchange Policy',
-									'multivendorx'
-								)}
-							</label>
-							<TextArea
-								name="exchange_policy"
-								inputClass="textarea-input"
-								value={formData.exchange_policy || ''}
-								onChange={handleChange}
-							/>
-						</div>
-					</div>
+			<div className="form-group-wrapper">
+				<div className="form-group">
+					<label htmlFor="exchange_policy">
+						{__(
+							'Cancellation/Return/Exchange Policy',
+							'multivendorx'
+						)}
+					</label>
+					<TextArea
+						name="exchange_policy"
+						inputClass="textarea-input"
+						value={formData.exchange_policy || ''}
+						onChange={handleChange}
+					/>
 				</div>
 			</div>
 
 			<Section key="section" hint="Deactivation" />
 
-			<div className="card-wrapper">
-				<div className="card-content">
+
+			{formData.deactivation_reason ? (
+				<div>
+					{__(
+						"When you delete a channel, all messages from this channel will be removed from Slack immediately. This can't be undone. Keep in mind: Any files uploaded to this channel won't be removed. You can archive a channel instead without removing its messages.",
+						'multivendorx'
+					)}
+				</div>
+			) : (
+				<>
 					<div className="form-group-wrapper">
-						{formData.deactivation_reason ? (
-							<div>
+						<div className="form-group">
+							<label htmlFor="store-description">
 								{__(
-									"When you delete a channel, all messages from this channel will be removed from Slack immediately. This can't be undone. Keep in mind: Any files uploaded to this channel won't be removed. You can archive a channel instead without removing its messages.",
+									'Enable Deactivation',
 									'multivendorx'
 								)}
-							</div>
-						) : (
-							<>
+							</label>
+							<MultiCheckBox
+								wrapperClass="toggle-btn"
+								descClass="settings-metabox-description"
+								description=""
+								inputWrapperClass="toggle-checkbox-header"
+								inputInnerWrapperClass="toggle-checkbox"
+								idPrefix="toggle-switch"
+								key="enable_deactivation"
+								options={[
+									{
+										key: 'enable_deactivation',
+										value: 'enable_deactivation',
+									},
+								]}
+								value={
+									formData.enable_deactivation || []
+								}
+								onChange={(selected) => {
+									setFormData((prev) => ({
+										...prev,
+										enable_deactivation:
+											selected.target.value,
+									}));
+									autoSave({
+										...formData,
+										enable_deactivation:
+											selected.target.value,
+									});
+								}}
+							/>
+						</div>
+					</div>
+					{formData.enable_deactivation && (
+						<>
+							<div className="form-group-wrapper">
 								<div className="form-group">
 									<label htmlFor="store-description">
 										{__(
-											'Enable Deactivation',
+											'Deactivation Reason',
 											'multivendorx'
 										)}
 									</label>
-									<MultiCheckBox
-										wrapperClass="toggle-btn"
-										descClass="settings-metabox-description"
-										description=""
-										inputWrapperClass="toggle-checkbox-header"
-										inputInnerWrapperClass="toggle-checkbox"
-										idPrefix="toggle-switch"
-										key="enable_deactivation"
-										options={[
-											{
-												key: 'enable_deactivation',
-												value: 'enable_deactivation',
-											},
-										]}
+									<TextArea
+										name="deactivation_reason"
+										inputClass="textarea-input"
 										value={
-											formData.enable_deactivation || []
+											updateData.deactivation_reason ||
+											''
 										}
-										onChange={(selected) => {
-											setFormData((prev) => ({
-												...prev,
-												enable_deactivation:
-													selected.target.value,
-											}));
-											autoSave({
-												...formData,
-												enable_deactivation:
-													selected.target.value,
-											});
-										}}
+										onChange={handleChange}
 									/>
 								</div>
-
-								{formData.enable_deactivation && (
-									<>
-										<div className="form-group">
-											<label htmlFor="store-description">
-												{__(
-													'Deactivation Reason',
-													'multivendorx'
-												)}
-											</label>
-											<TextArea
-												name="deactivation_reason"
-												inputClass="textarea-input"
-												value={
-													updateData.deactivation_reason ||
-													''
-												}
-												onChange={handleChange}
-											/>
-										</div>
-
-										<div className="form-group">
-											<button>
-												{__('Submit', 'multivendorx')}
-											</button>
-										</div>
-									</>
-								)}
-							</>
-						)}
-					</div>
-				</div>
-			</div>
+							</div>
+							<div className="buttons-wrapper">
+								<button className="admin-btn btn-purple">
+									{__('Submit', 'multivendorx')}
+								</button>
+							</div>
+						</>
+					)}
+				</>
+			)}
 		</>
 	);
 };
