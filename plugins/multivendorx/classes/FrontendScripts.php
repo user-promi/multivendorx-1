@@ -569,7 +569,6 @@ class FrontendScripts {
                         'decimals'                 => wc_get_price_decimals(),
                         'edit_order_capability'    => current_user_can( 'edit_shop_orders' ),
                         'permalink_structure'      => get_option( Utill::WORDPRESS_SETTINGS['permalink'] ) ? true : false,
-                        'view_notifications_link'  => StoreUtil::get_endpoint_url( 'view-notifications' ),
                         'all_zones'                => apply_filters( 'multivendorx_get_all_store_zones', array() ),
                         'all_verification_methods' => MultiVendorX()->setting->get_setting( 'all_verification_methods' ),
                         'shipping_methods'         => apply_filters( 'multivendorx_store_shipping_options', array() ),

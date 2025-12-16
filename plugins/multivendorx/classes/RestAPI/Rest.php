@@ -386,7 +386,7 @@ class Rest {
      * @return array
      */
     public function prepare_shop_coupon_filter_meta( $response, $object, $request ) {
-        $store_id = $object->get_meta( Utill::POST_META_SETTINGS['multivendorx_store_id'] );
+        $store_id = $object->get_meta( Utill::POST_META_SETTINGS['store_id'] );
         if ( $store_id ) {
             // Get store information.
             $store      = new Store( $store_id );
