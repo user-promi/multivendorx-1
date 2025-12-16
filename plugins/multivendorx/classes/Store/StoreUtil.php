@@ -277,7 +277,6 @@ class StoreUtil {
                 'desc'       => 'Allow stores to create, edit, and control their product listings, including uploading media and publishing items for sale.',
                 'capability' =>
                 array(
-                    // 'manage_users' => 'Manage Users',
                     'manage_products'  => 'Manage products',
                     'read_products'    => 'View products',
                     'edit_products'    => 'Edit products',
@@ -671,53 +670,6 @@ class StoreUtil {
 
         return $policies;
     }
-
-    /**
-     * Get the store dashboard endpoint URL.
-     *
-     * @param string $tab   The tab name.
-     * @param string $sub   The sub-tab name.
-     * @param string $value The value for the sub-tab.
-     * @return string The endpoint URL.
-     */
-    public static function get_endpoint_url( $tab = '', $sub = '', $value = '' ) {
-
-        // Set your Dashboard Page ID.
-        $page_id = MultiVendorX()->setting->get_setting( 'store_dashboard_page' );
-
-        // Pretty permalinks.
-        if ( get_option( Utill::WORDPRESS_SETTINGS['permalink'] ) ) {
-            $url = home_url( '/dashboard' );
-
-            if ( $tab ) {
-                $url .= '/' . sanitize_title( $tab );
-            }
-            if ( $sub ) {
-                $url .= '/' . sanitize_title( $sub );
-            }
-            if ( $value ) {
-                $url .= '/' . sanitize_title( $value );
-            }
-
-            return esc_url( trailingslashit( $url ) );
-        }
-
-        $url = add_query_arg( array( 'page_id' => $page_id ), home_url( '/' ) );
-
-        if ( $tab ) {
-            $url = add_query_arg( 'segment', sanitize_text_field( $tab ), $url );
-        }
-        if ( $sub ) {
-            $url = add_query_arg( 'element', sanitize_text_field( $sub ), $url );
-        }
-        if ( $value ) {
-            $url = add_query_arg( 'value', sanitize_text_field( $value ), $url );
-        }
-
-        return esc_url( $url );
-    }
-
-
 
     /**
      * Get store records from the database based on given filters.

@@ -9,12 +9,12 @@ namespace MultiVendorX\RestAPI;
 
 use MultiVendorX\RestAPI\Controllers\Settings;
 use MultiVendorX\RestAPI\Controllers\Dashboard;
-use MultiVendorX\RestAPI\Controllers\StoreRest;
-use MultiVendorX\RestAPI\Controllers\Commission;
+use MultiVendorX\RestAPI\Controllers\Stores;
+use MultiVendorX\RestAPI\Controllers\Commissions;
 use MultiVendorX\RestAPI\Controllers\Status;
 use MultiVendorX\RestAPI\Controllers\Notifications;
 use MultiVendorX\RestAPI\Controllers\Payouts;
-use MultiVendorX\RestAPI\Controllers\TransactionRest;
+use MultiVendorX\RestAPI\Controllers\Transactions;
 use MultiVendorX\RestAPI\Controllers\Reports;
 use MultiVendorX\RestAPI\Controllers\Tour;
 use MultiVendorX\RestAPI\Controllers\Logs;
@@ -386,7 +386,7 @@ class Rest {
      * @return array
      */
     public function prepare_shop_coupon_filter_meta( $response, $object, $request ) {
-        $store_id = $object->get_meta( Utill::POST_META_SETTINGS['multivendorx_store_id'] );
+        $store_id = $object->get_meta( Utill::POST_META_SETTINGS['store_id'] );
         if ( $store_id ) {
             // Get store information.
             $store      = new Store( $store_id );
@@ -438,11 +438,11 @@ class Rest {
         $this->container = array(
             'settings'      => new Settings(),
             'dashboard'     => new Dashboard(),
-            'store'         => new StoreRest(),
-            'commission'    => new Commission(),
+            'store'         => new Stores(),
+            'commission'    => new Commissions(),
             'status'        => new Status(),
             'payouts'       => new Payouts(),
-            'transaction'   => new TransactionRest(),
+            'transaction'   => new Transactions(),
             'report'        => new Reports(),
             'notifications' => new Notifications(),
             'tour'          => new Tour(),

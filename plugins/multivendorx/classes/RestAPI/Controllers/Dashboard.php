@@ -99,7 +99,7 @@ class Dashboard extends \WP_REST_Controller {
                 'icon'       => 'adminlib-module',
                 'slug'       => '',
                 'submenu'    => array(),
-                'capability' => array( 'edit_products' ),
+                'capability' => array( 'create_stores' ),
             ),
             'products'      => array(
                 'name'       => 'Products',
@@ -129,14 +129,14 @@ class Dashboard extends \WP_REST_Controller {
                         'key'        => 'refund',
                         'name'       => 'Refund',
                         'slug'       => 'refund',
-                        'capability' => array( 'read_shop_coupons', 'edit_shop_coupons' ),
+                        'capability' => array( 'read_shop_orders', 'edit_shop_orders' ),
                         'module'     => 'marketplace-refund',
                     ),
                     array(
                         'key'        => 'commissions',
                         'name'       => 'Commissions',
                         'slug'       => 'commissions',
-                        'capability' => array( 'read_shop_coupons', 'edit_shop_coupons' ),
+                        'capability' => array( 'read_shop_earning', 'view_commission_history' ),
                     ),
                 ),
                 'capability' => array( 'read_shop_orders' ),
@@ -151,11 +151,13 @@ class Dashboard extends \WP_REST_Controller {
                         'key'  => 'transactions',
                         'name' => 'Transactions',
                         'slug' => 'transactions',
+                        'capability' => array( 'read_shop_earning', 'view_commission_history', 'edit_withdrawl_request' ),
                     ),
                     array(
                         'key'  => 'withdrawls',
                         'name' => 'Withdrawls',
                         'slug' => 'withdrawls',
+                        'capability' => array( 'read_shop_earning', 'view_commission_history', 'edit_withdrawl_request' ),
                     ),
                 ),
                 'capability' => array( 'manage_payment' ),
@@ -234,7 +236,7 @@ class Dashboard extends \WP_REST_Controller {
                 'name'       => 'Settings',
                 'slug'       => 'settings',
                 'icon'       => 'adminlib-setting',
-                'capability' => array( 'read_products' ),
+                'capability' => array( 'create_stores' ),
             ),
         );
 
