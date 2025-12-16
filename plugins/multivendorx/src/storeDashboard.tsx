@@ -16,6 +16,9 @@ const Dashboard = () => {
 	const [showStoreList, setShowStoreList] = useState(false);
 	const [isDarkMode, setIsDarkMode] = useState(false);
 	const userDropdownRef = useRef(null);
+	const [isMenuCollapsed, setIsMenuCollapsed] = useState(false);
+	const [isMenuMinmize, setisMenuMinmize] = useState(false);
+
 
 	const location = useLocation();
 	const navigate = useNavigate();
@@ -321,15 +324,28 @@ const Dashboard = () => {
 	return (
 		<div
 			id="store-dashboard"
-			className={`${isDarkMode ? 'dark' : 'light'}`}
+			className={`
+		${isDarkMode ? 'dark' : 'light'}
+		${isMenuCollapsed ? 'collapsed' : ''}
+		${isMenuMinmize ? 'minimize' : ''}
+	`}
 		>
-			<div className="dashboard-tabs-wrapper">
+
+			<div className="dashboard-tabs-wrapper" onMouseEnter={() => {
+				setisMenuMinmize(false);
+			}}
+				onMouseOut={() => {
+					setisMenuMinmize(true);
+				}}>
 				<div className="logo-wrapper">
 					{store_dashboard_logo ? (
 						<img src={store_dashboard_logo} alt="Site Logo" />
 					) : (
 						<span className="site-name">
-							{appLocalizer.site_name}
+							{/* {appLocalizer.site_name} */}
+							{isMenuCollapsed && isMenuMinmize
+								? appLocalizer.site_name.charAt(0).toUpperCase()
+								: appLocalizer.site_name}
 						</span>
 					)}
 				</div>
@@ -337,7 +353,7 @@ const Dashboard = () => {
 				{storeData?.status == 'active' && (
 					<div className="dashboard-tabs">
 						<ul>
-							{Object.entries(filteredMenu).map(([key, item]) => {
+							{Object.entries(menu).map(([key, item]) => {
 								if (!item.name) {
 									return null;
 								}
@@ -439,7 +455,17 @@ const Dashboard = () => {
 				<div className="top-navbar-wrapper">
 					<div className="top-navbar">
 						<div className="navbar-leftside">
-							<i className="adminlib-menu toggle-menu-icon"></i>
+							<i
+								className="adminlib-menu toggle-menu-icon"
+								onClick={() => {
+									setIsMenuCollapsed(prev => {
+										const next = !prev;
+										setisMenuMinmize(next);
+										return next;
+									});
+								}}
+
+							></i>
 						</div>
 						<div className="navbar-rightside">
 							<ul className="navbar-right">
@@ -449,33 +475,37 @@ const Dashboard = () => {
 									}
 								>
 									<div
-										className={`adminlib-icon ${
-											isDarkMode
-												? 'adminlib-recycle'
-												: 'adminlib-resources'
-										}`}
+										className={`adminlib-icon dark-icon ${isDarkMode
+											? 'adminlib-moon'
+											: 'adminlib-light'
+											}`}
 									></div>
 								</li>
 
-								<li>
-									<div className="adminlib-icon adminlib-vendor-form-add"></div>
+								<li className="tooltip-wrapper bottom">
+									<i className="adminlib-icon adminlib-product-addon"></i>
+									<span className="tooltip-name">Add product</span>
 								</li>
-								<li>
-									<div className="adminlib-icon adminlib-storefront"></div>
+								<li className="tooltip-wrapper bottom">
+									<i className="adminlib-icon adminlib-storefront"></i>
+									<span className="tooltip-name">Add Store</span>
 								</li>
-								<li>
-									<div
+								<li className="tooltip-wrapper bottom">
+									<i
 										className="adminlib-icon notification adminlib-notification"
 										onClick={toggleNotifications}
-									></div>
+									></i>
+									<span className="tooltip-name">Notification</span>
 
 									{showNotifications && <Notifications />}
 								</li>
 								<li
 									id="fullscreenToggle"
 									onClick={toggleFullscreen}
+									className="tooltip-wrapper bottom"
 								>
-									<div className="adminlib-icon adminlib-crop-free"></div>
+									<i className="adminlib-icon adminlib-crop-free"></i>
+									<span className="tooltip-name">Full Screen</span>
 								</li>
 
 								<li

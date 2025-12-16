@@ -191,7 +191,6 @@ const StoreTable: React.FC = () => {
 			enableSorting: true,
 			header: __('Store', 'multivendorx'),
 			cell: ({ row }) => {
-				const status = row.original.status || '';
 				const rawDate = row.original.applied_on;
 				let formattedDate = '-';
 				if (rawDate) {
@@ -325,7 +324,6 @@ const StoreTable: React.FC = () => {
 				return <TableCell type="status" status={row.original.status} />;
 			},
 		},
-
 		{
 			id: 'action',
 			header: __('Action', 'multivendorx'),

@@ -283,23 +283,23 @@ const AllProduct: React.FC = () => {
 	}, []);
 
 	const columns: ColumnDef<ProductRow>[] = [
-		{
-			id: 'select',
-			header: ({ table }) => (
-				<input
-					type="checkbox"
-					checked={table.getIsAllRowsSelected()}
-					onChange={table.getToggleAllRowsSelectedHandler()}
-				/>
-			),
-			cell: ({ row }) => (
-				<input
-					type="checkbox"
-					checked={row.getIsSelected()}
-					onChange={row.getToggleSelectedHandler()}
-				/>
-			),
-		},
+		// {
+		// 	id: 'select',
+		// 	header: ({ table }) => (
+		// 		<input
+		// 			type="checkbox"
+		// 			checked={table.getIsAllRowsSelected()}
+		// 			onChange={table.getToggleAllRowsSelectedHandler()}
+		// 		/>
+		// 	),
+		// 	cell: ({ row }) => (
+		// 		<input
+		// 			type="checkbox"
+		// 			checked={row.getIsSelected()}
+		// 			onChange={row.getToggleSelectedHandler()}
+		// 		/>
+		// 	),
+		// },
 		{
 			header: __('Product Name', 'multivendorx'),
 			cell: ({ row }) => (
@@ -308,19 +308,29 @@ const AllProduct: React.FC = () => {
 						href={row.original.permalink}
 						target="_blank"
 						rel="noopener noreferrer"
-						className=""
+						className="product-wrapper"
 					>
-						{row.original.name}
+						{row.original.image ? (
+							// <img
+							// 	src={row.original.image}
+							// 	alt={row.original.name}
+							// />
+							<></>
+						) : (
+							<i className="item-icon adminlib-multi-product"></i>
+						)}
+
+						<div className="details">
+							<span className="title">
+								{row.original.name}
+							</span>
+							<span className="des">
+								SKU: {row.original.sku}
+							</span>
+						</div>						
 					</a>
 				</TableCell>
 			),
-		},
-		{
-			id: 'sku',
-			accessorKey: 'sku',
-			enableSorting: true,
-			header: __('SKU', 'multivendorx'),
-			cell: ({ row }) => <TableCell>{row.original.sku || '-'}</TableCell>,
 		},
 		{
 			id: 'price',
@@ -341,15 +351,15 @@ const AllProduct: React.FC = () => {
 			cell: ({ row }) => (
 				<TableCell>
 					{row.original.stock_status === 'instock' && (
-						<span className="admin-badge in-stock">In Stock</span>
+						<span className="admin-badge green-color">In Stock</span>
 					)}
 					{row.original.stock_status === 'outofstock' && (
-						<span className="admin-badge out-of-stock">
+						<span className="admin-badge red-color">
 							Out of Stock
 						</span>
 					)}
 					{row.original.stock_status === 'onbackorder' && (
-						<span className="admin-badge onbackorder">
+						<span className="admin-badge yellow-color">
 							On Backorder
 						</span>
 					)}
@@ -426,7 +436,7 @@ const AllProduct: React.FC = () => {
 									const url = row.original.permalink;
 									navigator.clipboard
 										.writeText(url)
-										.catch(() => {});
+										.catch(() => { });
 								},
 							},
 							{
