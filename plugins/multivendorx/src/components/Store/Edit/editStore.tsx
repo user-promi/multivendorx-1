@@ -5,7 +5,6 @@ import {
 	getApiLink,
 	SelectInput,
 	Tabs,
-	RadioInput,
 	CommonPopup,
 	useModules,
 } from 'zyra';
@@ -816,47 +815,49 @@ const EditStore = () => {
 												</span>
 											</div>
 
-											<div className="reviews-wrapper">
-												{[...Array(5)].map((_, i) => (
-													<i
-														key={i}
-														className={`review adminlib-star${
-															data.total_reviews >
-																0 &&
-															i <
-																Math.round(
-																	data.overall_reviews
-																)
-																? ''
-																: '-o'
-														}`}
-													></i>
-												))}
+											{modules.includes('store-review') && (
+												<div className="reviews-wrapper">
+													{[...Array(5)].map((_, i) => (
+														<i
+															key={i}
+															className={`review adminlib-star${
+																data.total_reviews >
+																	0 &&
+																i <
+																	Math.round(
+																		data.overall_reviews
+																	)
+																	? ''
+																	: '-o'
+															}`}
+														></i>
+													))}
 
-												<span>
-													{data.total_reviews > 0
-														? `${
-																data.overall_reviews
-															} (${
-																data.total_reviews
-															} ${
-																data.total_reviews ===
-																1
-																	? __(
-																			'Review',
-																			'multivendorx'
-																		)
-																	: __(
-																			'Reviews',
-																			'multivendorx'
-																		)
-															})`
-														: `(${__(
-																'0 Review',
-																'multivendorx'
-															)})`}
-												</span>
-											</div>
+													<span>
+														{data.total_reviews > 0
+															? `${
+																	data.overall_reviews
+																} (${
+																	data.total_reviews
+																} ${
+																	data.total_reviews ===
+																	1
+																		? __(
+																				'Review',
+																				'multivendorx'
+																			)
+																		: __(
+																				'Reviews',
+																				'multivendorx'
+																			)
+																})`
+															: `(${__(
+																	'0 Review',
+																	'multivendorx'
+																)})`}
+													</span>
+												</div>
+											)}
 
 											<div className="des">
 												<b>
@@ -865,8 +866,7 @@ const EditStore = () => {
 														'multivendorx'
 													)}{' '}
 												</b>
-												{appLocalizer.store_page_url +
-													'/'}
+												{appLocalizer.store_page_url}
 												{data?.slug ? (
 													<>
 														{data.slug}{' '}
@@ -1010,7 +1010,7 @@ const EditStore = () => {
 											<li
 												onClick={() => {
 													navigate(
-														`?page=multivendorx#&tab=reports`
+														`?page=multivendorx#&tab=reports&subtab=store-orders`
 													);
 												}}
 											>

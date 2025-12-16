@@ -520,7 +520,7 @@ class Stores extends \WP_REST_Controller {
                     $current_user->set_role( 'store_owner' );
                 } elseif ( ! in_array( 'store_owner', (array) $current_user->roles, true ) ) {
                     $current_user->set_role(
-                        get_option( Utill::OTHER_SETTINGS['default_role'] )
+                        get_option( Utill::MULTIVENDORX_OTHER_SETTINGS['default_role'] )
                     );
                 }
 
