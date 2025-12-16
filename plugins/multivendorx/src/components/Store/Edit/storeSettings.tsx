@@ -2,8 +2,6 @@ import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import {
 	BasicInput,
-	TextArea,
-	FileInput,
 	getApiLink,
 	SuccessNotice,
 	SelectInput,
@@ -19,12 +17,6 @@ interface FormData {
 	[key: string]: string;
 }
 
-interface EmailBadge {
-	id: number;
-	email: string;
-	isValid: boolean;
-}
-
 const StoreSettings = ({
 	id,
 	data,
@@ -35,8 +27,6 @@ const StoreSettings = ({
 	onUpdate: any;
 }) => {
 	const [formData, setFormData] = useState<FormData>({});
-	const [emailBadges, setEmailBadges] = useState<EmailBadge[]>([]);
-	const [newEmailValue, setNewEmailValue] = useState('');
 	const statusOptions = [
 		{ label: 'Under Review', value: 'under_review' },
 		{ label: 'Suspended', value: 'suspended' },
@@ -44,9 +34,6 @@ const StoreSettings = ({
 		{ label: 'Permanently Deactivated', value: 'deactivated' },
 	];
 
-	const [imagePreviews, setImagePreviews] = useState<{
-		[key: string]: string;
-	}>({});
 	const [stateOptions, setStateOptions] = useState<
 		{ label: string; value: string }[]
 	>([]);
@@ -61,8 +48,7 @@ const StoreSettings = ({
 	// === ADD THESE STATES (replace old ones) ===
 	const [emails, setEmails] = useState<string[]>([]); // All emails
 	const [primaryEmail, setPrimaryEmail] = useState<string>(''); // Which one is starred
-	const [inputValue, setInputValue] = useState('');
-
+	
 	// === LOAD EMAILS FROM BACKEND ===
 	useEffect(() => {
 		let parsedEmails = [];
@@ -79,53 +65,6 @@ const StoreSettings = ({
 			setPrimaryEmail(data.primary_email || parsedEmails[0] || '');
 		}
 	}, [data]);
-
-	// === HANDLE INPUT & AUTO-CONVERT TO CHIP ===
-	const handleInputKeyDown = (e: React.KeyboardEvent) => {
-		if (['Enter', ' ', ','].includes(e.key)) {
-			e.preventDefault();
-			const email = inputValue.trim();
-			if (
-				email &&
-				/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) &&
-				!emails.includes(email)
-			) {
-				const newEmails = [...emails, email];
-				setEmails(newEmails);
-				setInputValue('');
-				saveEmails(newEmails, primaryEmail || email);
-			}
-		} else if (e.key === 'Backspace' && !inputValue && emails.length > 0) {
-			// Remove last email on backspace
-			const newEmails = emails.slice(0, -1);
-			setEmails(newEmails);
-			const newPrimary =
-				primaryEmail === emails[emails.length - 1]
-					? newEmails[0] || ''
-					: primaryEmail;
-			setPrimaryEmail(newPrimary);
-			saveEmails(newEmails, newPrimary);
-		}
-	};
-
-	// === TOGGLE PRIMARY EMAIL ===
-	const togglePrimary = (email: string) => {
-		if (email === primaryEmail) {
-			return;
-		}
-		setPrimaryEmail(email);
-		saveEmails(emails, email);
-	};
-
-	// === REMOVE EMAIL ===
-	const removeEmail = (emailToRemove: string) => {
-		const newEmails = emails.filter((e) => e !== emailToRemove);
-		setEmails(newEmails);
-		if (primaryEmail === emailToRemove) {
-			setPrimaryEmail(newEmails[0] || '');
-		}
-		saveEmails(newEmails, newEmails[0] || '');
-	};
 
 	// === SAVE FUNCTION ===
 	const saveEmails = (emailList: string[], primary: string) => {
@@ -161,28 +100,6 @@ const StoreSettings = ({
 		}
 	}, []);
 
-	// Initialize email badges from form data
-	useEffect(() => {
-		if (formData.email) {
-			// Parse existing emails - handle both comma-separated and newline-separated
-			const emailString = formData.email;
-			const emails = emailString
-				.split(/[,\n]/)
-				.map((email) => email.trim())
-				.filter((email) => email !== '');
-
-			const badges = emails.map((email, index) => ({
-				id: index + 1,
-				email: email,
-				isValid: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
-			}));
-
-			setEmailBadges(badges);
-		} else {
-			setEmailBadges([]);
-		}
-	}, [formData.email]);
-
 	// Load store data
 	useEffect(() => {
 		if (!id || !appLocalizer) {
@@ -206,82 +123,7 @@ const StoreSettings = ({
 			timezone: data.timezone || '',
 		});
 
-		setImagePreviews({
-			image: data.image || '',
-			banner: data.banner || '',
-		});
 	}, [data]);
-
-	// Add email function
-	const addEmail = () => {
-		if (!newEmailValue.trim()) {
-			return;
-		}
-
-		const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-			newEmailValue.trim()
-		);
-
-		if (!isValidEmail) {
-			setErrorMsg((prev) => ({
-				...prev,
-				email: __('Invalid email format', 'multivendorx'),
-			}));
-
-			return;
-		}
-
-		const newBadge: EmailBadge = {
-			id: Math.max(...emailBadges.map((b) => b.id), 0) + 1,
-			email: newEmailValue.trim(),
-			isValid: true,
-		};
-
-		const updatedBadges = [...emailBadges, newBadge];
-		setEmailBadges(updatedBadges);
-
-		// Update form data with newline-separated emails
-		const emailString = updatedBadges
-			.map((badge) => badge.email)
-			.join('\n');
-		const updatedFormData = { ...formData, email: emailString };
-		setFormData(updatedFormData);
-
-		setNewEmailValue('');
-		setErrorMsg((prev) => ({
-			...prev,
-			email: '',
-		}));
-
-		autoSave(updatedFormData);
-	};
-
-	// Handle Enter key in email input
-	const handleEmailKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === 'Enter') {
-			e.preventDefault();
-			addEmail();
-		}
-	};
-
-	// Email Badge Component
-	const EmailBadge: React.FC<{
-		badge: EmailBadge;
-		onRemove: (id: number) => void;
-		isFirst: boolean;
-	}> = ({ badge, onRemove, isFirst }) => {
-		return (
-			<div className={`admin-badge ${badge.isValid ? 'yellow' : 'red'}`}>
-				{isFirst && <i className="adminlib-star primary-email"></i>}
-				<i className="adminlib-mail"></i>
-				<span>{badge.email}</span>
-				<i
-					className="adminlib-delete delete-btn"
-					onClick={() => onRemove(badge.id)}
-				></i>
-			</div>
-		);
-	};
 
 	useEffect(() => {
 		if (successMsg) {
@@ -516,9 +358,6 @@ const StoreSettings = ({
 			.catch((error) => {
 				console.error('Save error:', error);
 			});
-	};
-	const isValidEmail = (email: string): boolean => {
-		return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 	};
 
 	const renderMapComponent = () => {
@@ -787,9 +626,9 @@ const StoreSettings = ({
 										className="link-item"
 										target="_blank"
 										rel="noopener noreferrer"
-										href={`${appLocalizer.store_page_url}/${formData.slug}`}
+										href={`${appLocalizer.store_page_url}${formData.slug}`}
 									>
-										{`${appLocalizer.store_page_url}/${formData.slug}`}{' '}
+										{`${appLocalizer.store_page_url}${formData.slug}`}{' '}
 										<i className="adminlib-external"></i>
 									</a>
 								</div>

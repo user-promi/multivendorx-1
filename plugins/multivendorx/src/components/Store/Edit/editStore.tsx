@@ -5,7 +5,6 @@ import {
 	getApiLink,
 	SelectInput,
 	Tabs,
-	RadioInput,
 	CommonPopup,
 	useModules,
 } from 'zyra';
@@ -865,8 +864,7 @@ const EditStore = () => {
 														'multivendorx'
 													)}{' '}
 												</b>
-												{appLocalizer.store_page_url +
-													'/'}
+												{appLocalizer.store_page_url}
 												{data?.slug ? (
 													<>
 														{data.slug}{' '}
@@ -1010,7 +1008,7 @@ const EditStore = () => {
 											<li
 												onClick={() => {
 													navigate(
-														`?page=multivendorx#&tab=reports`
+														`?page=multivendorx#&tab=reports&subtab=store-orders`
 													);
 												}}
 											>

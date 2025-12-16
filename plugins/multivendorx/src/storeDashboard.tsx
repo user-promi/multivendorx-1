@@ -168,8 +168,10 @@ const Dashboard = () => {
 			return;
 		}
 
+		const base = getBasePath();
+
 		if (appLocalizer.permalink_structure) {
-			const cleanUrl = `/${appLocalizer.dashboard_slug}`;
+			const cleanUrl = `${base}/${appLocalizer.dashboard_slug}`;
 
 			if (location.pathname !== cleanUrl) {
 				window.history.replaceState({}, '', cleanUrl);
@@ -177,7 +179,7 @@ const Dashboard = () => {
 			return;
 		}
 
-		const cleanUrl = `/?page_id=${appLocalizer.dashboard_page_id}`;
+		const cleanUrl = `${base}/?page_id=${appLocalizer.dashboard_page_id}`;
 
 		if (location.search !== `?page_id=${appLocalizer.dashboard_page_id}`) {
 			window.history.replaceState({}, '', cleanUrl);
