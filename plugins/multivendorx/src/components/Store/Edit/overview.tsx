@@ -6,7 +6,7 @@ import { getApiLink, useModules } from 'zyra';
 import { Skeleton } from '@mui/material';
 import { formatCurrency } from '../../../services/commonFunction';
 import LatestReview from './latestReview';
-import LatestRefundRequest from './latestLefundRequest';
+import LatestRefundRequest from './latestRefundRequest';
 
 interface OverviewProps {
 	id: string | null;
@@ -71,6 +71,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 				console.error('Failed to fetch recent products:', error);
 			});
 	}, []);
+
 	useEffect(() => {
 		const highlightId = location.state?.highlightTarget;
 		if (highlightId) {
@@ -92,6 +93,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 			}
 		}
 	}, [location.state]);
+
 	const overviewData = [
 		{
 			icon: 'adminlib-wallet red',

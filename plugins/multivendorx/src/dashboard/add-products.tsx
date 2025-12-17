@@ -66,8 +66,8 @@ const AddProduct = () => {
 	const [selectedCats, setSelectedCats] = useState([]);
 
 	const isPyramidEnabled =
-		appLocalizer.settings_databases_value['category-pyramid-guide']
-			?.category_pyramid_guide === 'yes';
+		appLocalizer.settings_databases_value['product-preferencess']
+			?.category_selection_method === 'yes';
 
 	const wrapperRef = useRef(null);
 
@@ -422,8 +422,8 @@ const AddProduct = () => {
 		});
 
 		const finalCategories =
-			appLocalizer.settings_databases_value['category-pyramid-guide']
-				?.category_pyramid_guide == 'yes'
+			appLocalizer.settings_databases_value['product-preferencess']
+				?.category_selection_method == 'yes'
 				? [
 					{
 						id: Number(
@@ -1706,8 +1706,8 @@ const AddProduct = () => {
 						</div>
 						<div className="card-body">
 							{appLocalizer.settings_databases_value[
-								'category-pyramid-guide'
-							]?.category_pyramid_guide == 'yes' ? (
+								'product-preferencess'
+							]?.category_selection_method == 'yes' ? (
 								<>
 									<div className="category-breadcrumb-wrapper">
 										<div className="category-breadcrumb">
