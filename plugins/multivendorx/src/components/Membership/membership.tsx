@@ -29,8 +29,8 @@ const Memberships = () => {
 			type: 'file',
 			content: {
 				id: 'multivendorx-pro-features',
-				name: 'MultivendorX Pro Features',
-				desc: 'PayPal Payout makes it easy for you to pay multiple sellers at the sametime.',
+				name: 'MultivendorX Pro features',
+				desc: 'Enable advanced marketplace capabilities for this membership plan.',
 				icon: 'adminlib-credit-card',
 			},
 		},
