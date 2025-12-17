@@ -7,6 +7,7 @@ import {
 	Tabs,
 	CommonPopup,
 	useModules,
+	SuccessNotice
 } from 'zyra';
 import { Skeleton } from '@mui/material';
 
@@ -21,13 +22,6 @@ import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import Overview from './overview';
 import '../viewStore.scss';
-
-const statusOptions = [
-	{ label: 'Active', value: 'active' },
-	{ label: 'Pending', value: 'pending' },
-	{ label: 'Rejected', value: 'rejected' },
-	{ label: 'Suspended', value: 'suspended' },
-];
 
 const EditStore = () => {
 	const [data, setData] = useState<any>({});
@@ -351,6 +345,7 @@ const EditStore = () => {
 	);
 	return (
 		<>
+			<SuccessNotice message={successMsg} />
 			<Tabs
 				tabData={visibleTabs}
 				currentTab={currentTab}

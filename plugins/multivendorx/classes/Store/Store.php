@@ -137,9 +137,14 @@ class Store {
 
         $table = esc_sql( $wpdb->prefix . Utill::TABLES['store'] );
 
+        $raw_slug = $this->data['slug']
+            ?? sanitize_title( $this->data['name'] ?? '' );
+
+        $slug = self::generate_unique_store_slug( $raw_slug );
+
         $data = array(
             Utill::STORE_SETTINGS_KEYS['name']        => $this->data['name'] ?? '',
-            Utill::STORE_SETTINGS_KEYS['slug']        => $this->data['slug'] ?? sanitize_title( $this->data['name'] ?? '' ),
+            Utill::STORE_SETTINGS_KEYS['slug']        => $slug ?? '' ,
             Utill::STORE_SETTINGS_KEYS['description'] => $this->data['description'] ?? '',
             Utill::STORE_SETTINGS_KEYS['who_created'] => $this->data['who_created'] ?? 'admin',
             Utill::STORE_SETTINGS_KEYS['status']      => $this->data['status'] ?? 'active',
@@ -177,8 +182,6 @@ class Store {
         $table = esc_sql( $wpdb->prefix . Utill::TABLES['store_meta'] );
 
         if ( $single ) {
-            $table = $wpdb->prefix . Utill::TABLES['store'];
-
             $sql = $wpdb->prepare(
                 'SELECT meta_value FROM `' . esc_sql( $table ) . '` WHERE store_id = %d AND meta_key = %s LIMIT 1',
                 $this->id,
@@ -188,8 +191,6 @@ class Store {
             // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
             $value = $wpdb->get_var( $sql );
         } else {
-            $table = $wpdb->prefix . Utill::TABLES['store'];
-
             $sql = $wpdb->prepare(
                 'SELECT meta_value FROM `' . esc_sql( $table ) . '` WHERE store_id = %d AND meta_key = %s',
                 $this->id,
@@ -373,6 +374,31 @@ class Store {
         }
 
         return $exists > 0;
+    }
+
+    /**
+     * Genearte unique slug.
+     *
+     * @param string $slug       Store slug.
+     * @param int    $exclude_id Optional. Store ID to exclude from check.
+     *
+     * @return string
+     */
+    public static function generate_unique_store_slug( $slug, $exclude_id = 0 ) {
+        $slug = sanitize_title( $slug );
+
+        if ( ! self::store_slug_exists( $slug, $exclude_id ) ) {
+            return $slug;
+        }
+
+        $base = $slug;
+        $count = 1;
+
+        while ( self::store_slug_exists( $base . '-' . $count, $exclude_id ) ) {
+            $count++;
+        }
+
+        return $base . '-' . $count;
     }
 
     /**
