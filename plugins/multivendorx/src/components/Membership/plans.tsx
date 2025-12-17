@@ -1,8 +1,10 @@
 import { AdminBreadcrumbs } from 'zyra';
 import '../Settings/Notifications.scss';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Plans = () => {
+	const navigate = useNavigate();
 	const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
 	const demoPlans = [
 		{
@@ -132,7 +134,13 @@ const Plans = () => {
 								</div>
 							))}
 						</div>
-						<div className="admin-btn btn-purple-bg">
+						<div className="admin-btn btn-purple-bg"
+							onClick={() => {
+								navigate(
+									`?page=multivendorx#&tab=memberships&subtab=payment-membership-plans&add/`
+								);
+							}}
+						>
 							<i className="adminlib-plus"></i>
 							Add New Plan
 						</div>

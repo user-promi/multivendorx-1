@@ -6,10 +6,13 @@ import Plans from './plans';
 import Settings from './settings';
 import Subscribers from './subscribers';
 import Notifications from './notifications';
+import Membership from './membership';
 
 const Memberships = () => {
 	const location = useLocation();
+
 	const hash = location.hash.replace(/^#/, '');
+	const isAddMem = hash.includes('add');
 
 	const hashParams = new URLSearchParams(hash);
 	const currentTab = hashParams.get('subtab') || 'payment-membership-plans';
@@ -65,15 +68,19 @@ const Memberships = () => {
 
 	return (
 		<>
-			<Tabs
-				tabData={tabData}
-				currentTab={currentTab}
-				getForm={getForm}
-				prepareUrl={prepareUrl}
-				appLocalizer={appLocalizer}
-				Link={Link}
-				settingName={'Memberships'}
-			/>
+		{isAddMem && <Membership />}
+
+			{!isAddMem && (
+				<Tabs
+					tabData={tabData}
+					currentTab={currentTab}
+					getForm={getForm}
+					prepareUrl={prepareUrl}
+					appLocalizer={appLocalizer}
+					Link={Link}
+					settingName={'Memberships'}
+				/>
+			)}
 		</>
 	);
 };

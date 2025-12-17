@@ -90,8 +90,8 @@ const Route = () => {
 	return (
 		<>
 			{tab === 'settings' && <Settings id="settings" />}
-			{tab === 'memberships' && <Memberships />}
-			{tab === 'add-memberships' && <AddMemberships />}
+			{/* {tab === 'memberships' && <Memberships />} */}
+			{tab === 'memberships' && <AddMemberships />}
 			{tab === 'status-tools' && <StatusAndTools id="status-tools" />}
 			{tab === 'modules' && <Modules />}
 			{tab === 'stores' && <Store />}

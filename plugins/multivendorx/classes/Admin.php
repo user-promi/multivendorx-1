@@ -129,12 +129,12 @@ class Admin {
 					),
 					'memberships'         => array(
 						'name'   => __( 'Memberships', 'multivendorx' ),
-						'subtab' => 'payment-membership-message',
+						'subtab' => 'payment-membership-plans',
 					),
-                    'add-memberships'     => array(
-						'name'   => __( 'Add Memberships', 'multivendorx' ),
-						'subtab' => '',
-					),
+                    // 'add-memberships'     => array(
+					// 	'name'   => __( 'Add Memberships', 'multivendorx' ),
+					// 	'subtab' => '',
+					// ),
 					'settings'            => array(
 						'name'   => __( 'Settings', 'multivendorx' ),
 						'subtab' => 'marketplace',
