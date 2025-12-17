@@ -209,55 +209,57 @@ const Modules: React.FC< ModuleProps > = ( {
             setTimeout( () => setSuccessMsg( '' ), 2000 );
         }
     };
-    useEffect(() => {
-    let highlightedElement: HTMLElement | null = null;
-    let hasHighlightedOnce = false;
+    useEffect( () => {
+        let highlightedElement: HTMLElement | null = null;
+        let hasHighlightedOnce = false;
 
-    const scrollToTargetSection = () => {
-        if (hasHighlightedOnce) return;
-
-        const hash = window.location.hash;
-        const params = new URLSearchParams(hash.replace('#&', ''));
-        const targetId = params.get('module');
-
-        if (!targetId) return;
-
-        setTimeout(() => {
-            const targetElement = document.getElementById(targetId);
-            if (targetElement) {
-                targetElement.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start',
-                });
-
-                targetElement.classList.add('highlight');
-                highlightedElement = targetElement;
-                hasHighlightedOnce = true;
+        const scrollToTargetSection = () => {
+            if ( hasHighlightedOnce ) {
+                return;
             }
-        }, 500);
-    };
 
-      // Remove highlight class
-    const handleClickAnywhere = (e: Event) => {
-        if (
-            highlightedElement &&
-            !highlightedElement.contains(e.target as Node)
-        ) {
-            highlightedElement.classList.remove('highlight');
-            highlightedElement = null;
-        }
-    };
+            const hash = window.location.hash;
+            const params = new URLSearchParams( hash.replace( '#&', '' ) );
+            const targetId = params.get( 'module' );
 
-    scrollToTargetSection();
+            if ( ! targetId ) {
+                return;
+            }
 
-    document.addEventListener('pointerdown', handleClickAnywhere);
+            setTimeout( () => {
+                const targetElement = document.getElementById( targetId );
+                if ( targetElement ) {
+                    targetElement.scrollIntoView( {
+                        behavior: 'smooth',
+                        block: 'start',
+                    } );
 
-    return () => {
-        document.removeEventListener('pointerdown', handleClickAnywhere);
-    };
-}, []);
+                    targetElement.classList.add( 'highlight' );
+                    highlightedElement = targetElement;
+                    hasHighlightedOnce = true;
+                }
+            }, 500 );
+        };
 
+        // Remove highlight class
+        const handleClickAnywhere = ( e: Event ) => {
+            if (
+                highlightedElement &&
+                ! highlightedElement.contains( e.target as Node )
+            ) {
+                highlightedElement.classList.remove( 'highlight' );
+                highlightedElement = null;
+            }
+        };
 
+        scrollToTargetSection();
+
+        document.addEventListener( 'pointerdown', handleClickAnywhere );
+
+        return () => {
+            document.removeEventListener( 'pointerdown', handleClickAnywhere );
+        };
+    }, [] );
 
     return (
         <>

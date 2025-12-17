@@ -21,7 +21,7 @@ import TimePicker from './TimePicker';
 import TemplateSection from './TemplateSection';
 import BlockLayout from './BlockLayout';
 import ImageGallery from './ImageGallery';
-import AddressField from './AddressField';
+import AddressField, { AddressFormField } from './AddressField';
 
 // Types
 type FieldTypes =
@@ -39,6 +39,7 @@ type FieldValue =
     | boolean
     | Record< string, unknown >
     | Array< unknown >
+    | undefined
     | null;
 
 export interface Option {
@@ -100,6 +101,11 @@ interface ButtonSetting {
     button_background?: string;
 }
 
+interface FormSetting {
+    formfieldlist?: FormField[];
+    butttonsetting?: ButtonSetting;
+}
+
 interface CustomFormProps {
     onChange: ( data: {
         formfieldlist: FormField[];
@@ -108,9 +114,8 @@ interface CustomFormProps {
     name: string;
     proSettingChange: () => boolean;
     formTitlePlaceholder?: string;
-    setting: Record< string, unknown >;
+    setting: Record< string, FormSetting >;
 }
-
 // Default values for input options
 const DEFAULT_OPTIONS: Option[] = [
     { id: '1', label: 'Manufacture', value: 'manufacture' },
@@ -261,6 +266,7 @@ const CustomForm: React.FC< CustomFormProps > = ( {
                     type: 'title',
                     label: DEFAULT_FORM_TITLE,
                     required: true,
+                    name: 'FORM_TITLE',
                 },
             ];
         }
@@ -783,7 +789,7 @@ const CustomForm: React.FC< CustomFormProps > = ( {
                                                 )
                                             }
                                             type={
-                                                formField.type as FieldTypes
+                                                formField.type as 'radio' | 'checkboxes' | 'dropdown' | 'multiselect'
                                             }
                                             selected={ false }
                                         />
@@ -813,16 +819,7 @@ const CustomForm: React.FC< CustomFormProps > = ( {
                                         />
                                     ) }
                                     { formField.type === 'attachment' && (
-                                        <Attachment
-                                            formField={ formField }
-                                            onChange={ ( key, value ) =>
-                                                handleFormFieldChange(
-                                                    index,
-                                                    key,
-                                                    value
-                                                )
-                                            }
-                                        />
+                                        <Attachment/>
                                     ) }
                                     { formField.type === 'section' && (
                                         <TemplateSection
@@ -837,16 +834,7 @@ const CustomForm: React.FC< CustomFormProps > = ( {
                                         />
                                     ) }
                                     { formField.type === 'block-layout' && (
-                                        <BlockLayout
-                                            formField={ formField }
-                                            onChange={ ( key, value ) =>
-                                                handleFormFieldChange(
-                                                    index,
-                                                    key,
-                                                    value
-                                                )
-                                            }
-                                        />
+                                        <BlockLayout/>
                                     ) }
                                     { formField.type === 'image-gallery' && (
                                         <ImageGalleryField
@@ -886,7 +874,7 @@ const CustomForm: React.FC< CustomFormProps > = ( {
                                     ) }
                                     { formField.type === 'address' && (
                                         <AddressField
-                                            formField={ formField }
+                                            formField={ formField as AddressFormField}
                                             onChange={ ( key, value ) =>
                                                 handleFormFieldChange(
                                                     index,
@@ -924,7 +912,7 @@ const CustomForm: React.FC< CustomFormProps > = ( {
                         settingHasChanged.current = true;
                         const previousSetting = buttonSetting || {};
                         if ( isRestoreDefaults ) {
-                            setButtonSetting( value );
+                            setButtonSetting( value as ButtonSetting);
                         } else {
                             setButtonSetting( {
                                 ...previousSetting,

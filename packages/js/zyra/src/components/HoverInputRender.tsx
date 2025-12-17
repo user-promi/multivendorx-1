@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import React, { JSX, useState, useEffect, useRef } from 'react';
+import React, { JSX, useEffect, useRef } from 'react';
 
 // Types
 interface HoverInputRenderProps {
@@ -24,9 +24,7 @@ const HoverInputRender: React.FC< HoverInputRenderProps > = ( {
     placeholder,
     renderStaticContent,
 } ) => {
-    const [ showTextBox, setShowTextBox ] = useState( false );
-    const [ isClicked, setIsClicked ] = useState( false );
-    const hoverTimeout = useRef< NodeJS.Timeout | null >( null );
+    const hoverTimeout = useRef< number | null >( null );
 
     useEffect( () => {
         const closePopup = ( event: MouseEvent ) => {
@@ -37,8 +35,6 @@ const HoverInputRender: React.FC< HoverInputRenderProps > = ( {
             ) {
                 return;
             }
-            setIsClicked( false );
-            setShowTextBox( false );
         };
         document.body.addEventListener( 'click', closePopup );
         return () => {
@@ -46,16 +42,9 @@ const HoverInputRender: React.FC< HoverInputRenderProps > = ( {
         };
     }, [] );
 
-    const handleMouseEnter = () => {
-        hoverTimeout.current = setTimeout( () => setShowTextBox( true ), 300 );
-    };
-
     const handleMouseLeave = () => {
         if ( hoverTimeout.current ) {
             clearTimeout( hoverTimeout.current );
-        }
-        if ( ! isClicked ) {
-            setShowTextBox( false );
         }
     };
 
@@ -63,7 +52,6 @@ const HoverInputRender: React.FC< HoverInputRenderProps > = ( {
         <>
             { /* { ! showTextBox && ( */ }
             <div
-                onMouseEnter={ handleMouseEnter }
                 onMouseLeave={ handleMouseLeave }
                 style={ { cursor: 'pointer' } }
             >

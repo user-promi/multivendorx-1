@@ -5,6 +5,31 @@ import ToggleSetting from './ToggleSetting';
 import MultiCheckBox from './MultiCheckbox';
 import NestedComponent from './NestedComponent';
 
+interface ClickableItem {
+    name: string;
+    url?: string;
+}
+
+interface ButtonItem {
+    label: string;
+    url?: string;
+}
+
+interface AppLocalizer {
+    khali_dabba?: boolean;
+    site_url?: string;
+}
+
+interface FieldOption {
+    value: string | number;
+    label: string;
+    desc?: string;
+    check?: boolean;
+    action?: string;
+    btnClass?: string;
+    url?: string;
+}
+
 interface PaymentFormField {
     key: string;
     type:
@@ -27,7 +52,7 @@ interface PaymentFormField {
 
     label: string;
     placeholder?: string;
-    nestedFields?: any[];
+    nestedFields?: PaymentFormField[];
     des?: string;
     addButtonLabel?: string;
     deleteButtonLabel?: string;
@@ -35,7 +60,7 @@ interface PaymentFormField {
     desc?: string;
     rowNumber?: number;
     colNumber?: number;
-    options?: any;
+    options?: FieldOption[];
     modal?: PaymentMethod[];
     look?: string;
     selectDeselect?: boolean;
@@ -50,8 +75,8 @@ interface PaymentFormField {
     check?: boolean;
     hideCheckbox?: boolean;
     btnClass?: string;
-    items?: any;
-    button?: any;
+    items?: ClickableItem[];
+    button?: ButtonItem;
 }
 
 interface PaymentMethod {
@@ -78,10 +103,10 @@ interface PaymentTabsComponentProps {
     proSetting?: boolean;
     proSettingChanged?: () => void;
     apilink?: string;
-    appLocalizer?: Record< string, any >;
+    appLocalizer?: AppLocalizer;
     methods: PaymentMethod[];
-    value: Record< string, any >;
-    onChange: ( data: Record< string, any > ) => void;
+    value: Record< string, Record< string, unknown > >;
+    onChange: ( data: Record< string, Record< string, unknown > > ) => void;
     buttonEnable?: boolean;
     isWizardMode?: boolean;
     setWizardIndex?: ( index: number ) => void;
@@ -305,7 +330,7 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                         proSetting={ false }
                     />
                 );
-            case 'multi-checkbox':
+            case 'multi-checkbox': {
                 let normalizedValue: string[] = [];
 
                 if ( Array.isArray( fieldValue ) ) {
@@ -415,6 +440,7 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                         } }
                     />
                 );
+            }
             case 'description':
                 return (
                     <>
@@ -505,7 +531,7 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                         <ul className="check-list">
                             { Array.isArray( field.options ) &&
                                 field.options.map(
-                                    ( item: any, index: number ) => (
+                                    ( item: FieldOption, index: number ) => (
                                         <li key={ index }>
                                             { item.check ? (
                                                 <i className="check adminlib-icon-yes"></i>

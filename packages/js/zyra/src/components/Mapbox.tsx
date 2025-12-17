@@ -289,20 +289,26 @@ const Mapbox = ( {
         }
 
         if ( place.context ) {
-            place.context.forEach( ( component: { id: string; text: string; short_code?: string } ) => {
-                const idParts = component.id.split( '.' );
-                const type = idParts[ 0 ];
+            place.context.forEach(
+                ( component: {
+                    id: string;
+                    text: string;
+                    short_code?: string;
+                } ) => {
+                    const idParts = component.id.split( '.' );
+                    const type = idParts[ 0 ];
 
-                if ( type === 'postcode' ) {
-                    components.zip = component.text;
-                } else if ( type === 'place' ) {
-                    components.city = component.text;
-                } else if ( type === 'region' ) {
-                    components.state = component.text.split( ' ' )[ 0 ];
-                } else if ( type === 'country' ) {
-                    components.country = component.short_code.toUpperCase();
+                    if ( type === 'postcode' ) {
+                        components.zip = component.text;
+                    } else if ( type === 'place' ) {
+                        components.city = component.text;
+                    } else if ( type === 'region' ) {
+                        components.state = component.text.split( ' ' )[ 0 ];
+                    } else if ( type === 'country' ) {
+                        components.country = component.short_code.toUpperCase();
+                    }
                 }
-            } );
+            );
         }
 
         return components;
