@@ -392,6 +392,12 @@ const AddProduct = () => {
 		{ label: 'Simple Product', value: 'simple' },
 		{ label: 'Variable Product', value: 'variable' },
 	];
+	const Visibility = [
+		{ label: 'Shop and search results', value: '' },
+		{ label: 'Shop only', value: 'simple' },
+		{ label: 'Search results only', value: 'variable' },
+		{ label: 'Hidden', value: 'variable' },
+	];
 
 	const stockStatusOptions = [
 		{ value: '', label: 'Stock Status' },
@@ -1525,8 +1531,15 @@ const AddProduct = () => {
 									<label htmlFor="visibility">
 										Catalog Visibility
 									</label>
-
-									<RadioInput
+									<SelectInput
+										name="type"
+										options={Visibility}
+										value={product.type}
+										onChange={(selected) =>
+											handleChange('type', selected.value)
+										}
+									/>
+									{/* <RadioInput
 										name="catalog_visibility"
 										idPrefix="catalog_visibility"
 										type="radio"
@@ -1569,7 +1582,7 @@ const AddProduct = () => {
 												e.target.value
 											)
 										}
-									/>
+									/> */}
 								</div>
 							</div>
 
@@ -1599,10 +1612,6 @@ const AddProduct = () => {
 									<ToggleSetting
 										wrapperClass="setting-form-input"
 										descClass="settings-metabox-description"
-										description={__(
-											'Select the status of the announcement.',
-											'multivendorx'
-										)}
 										options={[
 											{
 												key: 'draft',
@@ -1620,15 +1629,15 @@ const AddProduct = () => {
 												label: __('Publish', 'multivendorx'),
 											},
 										]}
-										// value={formData.status}
-										// onChange={handleToggleChange}
+									// value={formData.status}
+									// onChange={handleToggleChange}
 									/>
 								</div>
 							</div>
 							<div className="form-group-wrapper">
 								<div className="form-group">
 									<label htmlFor="product-name">
-										Published on
+										Published on Dec 12 08:38
 									</label>
 
 									<div className="date-field-wrapper">
@@ -1900,23 +1909,7 @@ const AddProduct = () => {
 									</div>
 								</div>
 							)}
-						</div>
-					</div>
-					<div className="card-content" id="card-product-tags">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">Product Tags</div>
-							</div>
-							<div className="right">
-								<i
-									className="adminlib-pagination-right-arrow  arrow-icon"
-									onClick={() =>
-										toggleCard('card-product-tags')
-									}
-								></i>
-							</div>
-						</div>
-						<div className="card-body">
+
 							<div className="form-group-wrapper">
 								<div className="form-group">
 									<div className="tag-list">
