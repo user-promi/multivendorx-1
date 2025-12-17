@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import StoreTable from './storeTable';
 import EditStore from './Edit/editStore';
 import {
@@ -30,7 +30,6 @@ const Store = () => {
 
 	const isTabActive = hash.includes('tab=stores');
 	const isAddStore = hash.includes('create');
-	// const isViewStore = hash.includes('view');
 	const iseditStore = hash.includes('edit');
 
 	const generateSlug = (text: string) => {
