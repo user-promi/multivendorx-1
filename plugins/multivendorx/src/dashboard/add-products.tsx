@@ -1695,7 +1695,7 @@ const AddProduct = () => {
 						</div>
 					</div>
 
-					<div className="card-content">
+					<div className="card-content" id="card-product-tags">
 						<div className="card-header">
 							<div className="left">
 								<div className="title">Category</div>
