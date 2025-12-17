@@ -22,7 +22,7 @@ const SimpleInput: React.FC< SimpleInputProps > = ( {
         <HoverInputRender
             label={ formField.label }
             placeholder={ formField.placeholder }
-            onLabelChange={ ( newLabel ) => onChange( 'label', newLabel ) }
+            onLabelChange={ ( newLabel ) => onChange?.( 'label', newLabel ) }
             renderStaticContent={ ( { label, placeholder } ) => (
                 <div className="edit-form-wrapper">
                     <p>{ label }</p>

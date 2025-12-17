@@ -80,6 +80,7 @@ const Tour: React.FC< TourProps > = ( { appLocalizer, steps } ) => {
         return steps.map( ( step ) => ( {
             ...step,
             content: () =>
+                // @ts-ignore
                 step.content( {
                     navigateTo,
                     finishTour,

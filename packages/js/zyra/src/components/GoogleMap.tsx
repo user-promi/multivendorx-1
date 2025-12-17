@@ -1,10 +1,6 @@
+/* global google */
+/// <reference types="google.maps" />
 import { useEffect, useRef, useState } from 'react';
-
-declare global {
-    interface Window {
-        google: any;
-    }
-}
 
 interface GoogleMapComponentProps {
     apiKey: string;
@@ -23,8 +19,15 @@ interface GoogleMapComponentProps {
     } ) => void;
     labelSearch: string;
     labelMap: string;
-    instructionText: string;
     placeholderSearch: string;
+}
+
+interface ExtractedAddress {
+    address?: string;
+    city?: string;
+    state?: string;
+    country?: string;
+    zip?: string;
 }
 
 const GoogleMap = ( {
@@ -35,12 +38,12 @@ const GoogleMap = ( {
     onLocationUpdate,
     labelSearch,
     labelMap,
-    instructionText,
     placeholderSearch,
 }: GoogleMapComponentProps ) => {
-    const [ map, setMap ] = useState< any >( null );
-    const [ marker, setMarker ] = useState< any >( null );
+    const [ map, setMap ] = useState< google.maps.Map | null >( null );
+    const [ marker, setMarker ] = useState< google.maps.Marker | null >( null );
     const [ googleLoaded, setGoogleLoaded ] = useState< boolean >( false );
+
     const autocompleteInputRef = useRef< HTMLInputElement >( null );
     const mapContainerRef = useRef< HTMLDivElement >( null );
 
@@ -64,7 +67,7 @@ const GoogleMap = ( {
         };
 
         document.head.appendChild( script );
-    }, [ googleLoaded ] );
+    }, [ apiKey ] );
 
     // Initialize map when Google Maps is loaded
     useEffect( () => {
@@ -105,12 +108,22 @@ const GoogleMap = ( {
 
             markerInstance.addListener( 'dragend', () => {
                 const position = markerInstance.getPosition();
-                reverseGeocode( position.lat(), position.lng() );
+                if ( position ) {
+                    reverseGeocode( position.lat(), position.lng() );
+                }
             } );
 
-            mapInstance.addListener( 'click', ( event: any ) => {
-                reverseGeocode( event.latLng.lat(), event.latLng.lng() );
-            } );
+            mapInstance.addListener(
+                'click',
+                ( event: google.maps.MapMouseEvent ) => {
+                    if ( event.latLng ) {
+                        reverseGeocode(
+                            event.latLng.lat(),
+                            event.latLng.lng()
+                        );
+                    }
+                }
+            );
 
             const autocomplete = new window.google.maps.places.Autocomplete(
                 autocompleteInputRef.current,
@@ -126,7 +139,9 @@ const GoogleMap = ( {
             );
 
             autocomplete.addListener( 'place_changed', () => {
-                const place = autocomplete.getPlace();
+                const place =
+                    autocomplete.getPlace() as google.maps.places.PlaceResult;
+
                 if ( place.geometry ) {
                     handlePlaceSelect( place );
                 }
@@ -134,14 +149,25 @@ const GoogleMap = ( {
 
             setMap( mapInstance );
             setMarker( markerInstance );
-        } catch ( error ) {}
+        } catch ( err ) {
+            console.error( err );
+        }
     }, [ googleLoaded, locationLat, locationLng ] );
 
-    const handlePlaceSelect = ( place: any ) => {
+    const handlePlaceSelect = ( place: google.maps.places.PlaceResult ) => {
+        if ( ! place.geometry ) {
+            return;
+        }
+
         const location = place.geometry.location;
+        if ( ! location ) {
+            return;
+        }
+
         const lat = location.lat();
         const lng = location.lng();
-        const formatted_address = place.formatted_address;
+        const formatted_address = place.formatted_address ?? '';
+
         const addressComponents = extractAddressComponents( place );
 
         if ( map && marker ) {
@@ -166,39 +192,52 @@ const GoogleMap = ( {
 
     const reverseGeocode = ( lat: number, lng: number ) => {
         const geocoder = new window.google.maps.Geocoder();
+
         geocoder.geocode(
             { location: { lat, lng } },
-            ( results: any[], status: string ) => {
-                if ( status === 'OK' && results[ 0 ] ) {
-                    handlePlaceSelect( results[ 0 ] );
+            (
+                results: google.maps.GeocoderResult[] | null,
+                status: google.maps.GeocoderStatus
+            ) => {
+                if ( status === 'OK' && results && results[ 0 ] ) {
+                    handlePlaceSelect(
+                        results[ 0 ] as google.maps.places.PlaceResult
+                    );
                 }
             }
         );
     };
 
-    const extractAddressComponents = ( place: any ) => {
-        const components: any = {};
+    const extractAddressComponents = (
+        place: google.maps.places.PlaceResult
+    ): ExtractedAddress => {
+        const components: ExtractedAddress = {};
         let streetNumber = '';
         let route = '';
         let streetAddress = '';
-        if ( place.address_components ) {
-            place.address_components.forEach( ( component: any ) => {
-                const types = component.types;
 
-                if ( types.includes( 'street_number' ) ) {
-                    streetNumber = component.long_name;
-                } else if ( types.includes( 'route' ) ) {
-                    route = component.long_name;
-                } else if ( types.includes( 'locality' ) ) {
-                    components.city = component.long_name;
-                } else if ( types.includes( 'administrative_area_level_1' ) ) {
-                    components.state = component.short_name;
-                } else if ( types.includes( 'country' ) ) {
-                    components.country = component.short_name;
-                } else if ( types.includes( 'postal_code' ) ) {
-                    components.zip = component.long_name;
+        if ( place.address_components ) {
+            place.address_components.forEach(
+                ( component: google.maps.GeocoderAddressComponent ) => {
+                    const types = component.types;
+
+                    if ( types.includes( 'street_number' ) ) {
+                        streetNumber = component.long_name;
+                    } else if ( types.includes( 'route' ) ) {
+                        route = component.long_name;
+                    } else if ( types.includes( 'locality' ) ) {
+                        components.city = component.long_name;
+                    } else if (
+                        types.includes( 'administrative_area_level_1' )
+                    ) {
+                        components.state = component.short_name;
+                    } else if ( types.includes( 'country' ) ) {
+                        components.country = component.short_name;
+                    } else if ( types.includes( 'postal_code' ) ) {
+                        components.zip = component.long_name;
+                    }
                 }
-            } );
+            );
 
             if ( streetNumber && route ) {
                 streetAddress = `${ streetNumber } ${ route }`;
@@ -221,6 +260,7 @@ const GoogleMap = ( {
                     <label htmlFor="store-location-autocomplete">
                         { labelSearch }
                     </label>
+
                     <div id="store-location-autocomplete-container">
                         <input
                             ref={ autocompleteInputRef }
@@ -233,9 +273,11 @@ const GoogleMap = ( {
                     </div>
                 </div>
             </div>
+
             <div className="form-group-wrapper">
                 <div className="form-group">
                     <label>{ labelMap }</label>
+
                     <div
                         ref={ mapContainerRef }
                         id="location-map"
@@ -245,7 +287,7 @@ const GoogleMap = ( {
                             borderRadius: '8px',
                             overflow: 'hidden',
                         } }
-                    ></div>
+                    />
                 </div>
             </div>
         </>

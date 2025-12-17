@@ -12,10 +12,17 @@ import ButtonCustomizer from './ButtonCustomiser';
 import '../styles/web/CatalogCustomizer.scss';
 
 // Types
+type SettingValue =
+    | string
+    | number
+    | boolean
+    | string[]
+    | Record< string, unknown >;
+
 interface CatalogCustomizerProps {
-    onChange: ( key: string, value: any ) => void;
+    onChange: ( key: string, value: SettingValue ) => void;
     proSetting?: boolean;
-    setting: Record< string, any >;
+    setting: Record< string, SettingValue >;
     SampleProduct: string;
     proUrl: string;
 }
@@ -49,7 +56,7 @@ const CatalogCustomizer: React.FC< CatalogCustomizerProps > = ( {
 } ) => {
     const [ localSetting, _setLocalSetting ] = useState( setting );
 
-    const setSetting = ( key: string, value: any ) => {
+    const setSetting = ( key: string, value: SettingValue ): void => {
         _setLocalSetting( { ...localSetting, [ key ]: value } );
         onChange( key, value );
     };
@@ -228,7 +235,7 @@ const CatalogCustomizer: React.FC< CatalogCustomizerProps > = ( {
      *
      * @return A new array with the reordered elements.
      */
-    const reorder = < T extends unknown >(
+    const reorder = < T, >(
         list: T[],
         startIndex: number,
         endIndex: number
@@ -246,15 +253,10 @@ const CatalogCustomizer: React.FC< CatalogCustomizerProps > = ( {
 
         return result;
     };
-
     // Check in catalogx for infinite loop
-    const initialItems = useMemo(
-        () => {
-            return [ ...dragableItems ]; // replace with real source
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        []
-    );
+    const initialItems = useMemo( () => {
+        return [ ...dragableItems ];
+    }, [] );
     /**
      * Updates draggable items based on the previously set sequence.
      */
