@@ -145,7 +145,7 @@ a {
             a {
                 display: flex;
                 position: relative;
-                align-items: center;
+                align-items: end;
                 transition: all 0.3s ease;
                 font-size: 0.975rem;
                 letter-spacing: .01em;
@@ -157,6 +157,12 @@ a {
                 text-decoration: none;
                 font-weight: 500;
 
+                i{
+                    font-size: 1.25rem;
+                }
+                span{
+                    line-height: 1;
+                }
                 .tab-name {
                     display: flex;
                     gap: 0.875rem;

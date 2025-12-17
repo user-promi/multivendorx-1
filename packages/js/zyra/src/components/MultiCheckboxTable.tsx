@@ -535,9 +535,10 @@ const MultiCheckboxTable: React.FC< MultiCheckboxTableProps > = ( {
                               </tr>
                           ) )
                         : Object.entries( rows as Rows ).map(
+
                               ( [ groupKey, group ] ) => {
                                   const isOpen = openGroup === groupKey;
-
+                                    console.log(rows);
                                   return (
                                       <React.Fragment key={ groupKey }>
                                           <div

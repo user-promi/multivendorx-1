@@ -12,7 +12,7 @@ const Memberships = () => {
 	const hash = location.hash.replace(/^#/, '');
 
 	const hashParams = new URLSearchParams(hash);
-	const currentTab = hashParams.get('subtab') || 'payment-membership-message';
+	const currentTab = hashParams.get('subtab') || 'payment-membership-plans';
 
 	const prepareUrl = (tabId: string) =>
 		`?page=multivendorx#&tab=memberships&subtab=${tabId}`;
