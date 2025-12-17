@@ -116,6 +116,10 @@
             .settings-metabox-note {
                 padding: 0 0 1rem;
             }
+
+            &.hide-body{
+                display: none; /*for hide toggle hide body */
+            }
         }
 
         &.transparent {
@@ -126,6 +130,11 @@
 
         &.transaction {
             margin-bottom: 1rem;
+        }
+        &:has(.hide-body){
+            .card-content{
+                border: none;
+            }
         }
     }
 
@@ -451,7 +460,6 @@
                 align-items: center;
                 font-size: 1.625rem;
                 color: #fff;
-                font-weight: 600;
             }
         }
 

@@ -45,15 +45,6 @@ const Memberships = () => {
 				icon: 'adminlib-credit-card',
 			},
 		},
-		{
-			type: 'file',
-			content: {
-				id: 'notifications',
-				name: 'Notifications',
-				desc: 'PayPal Payout makes it easy for you to pay multiple sellers at the sametime.',
-				icon: 'adminlib-credit-card',
-			},
-		},
 	];
 
 	const getForm = (tabId: string) => {

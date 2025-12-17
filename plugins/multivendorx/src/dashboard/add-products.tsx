@@ -425,12 +425,12 @@ const AddProduct = () => {
 			appLocalizer.settings_databases_value['category-pyramid-guide']
 				?.category_pyramid_guide == 'yes'
 				? [
-						{
-							id: Number(
-								selectedChild || selectedSub || selectedCat
-							),
-						},
-					]
+					{
+						id: Number(
+							selectedChild || selectedSub || selectedCat
+						),
+					},
+				]
 				: selectedCats.map((id) => ({ id }));
 
 		try {
@@ -645,8 +645,8 @@ const AddProduct = () => {
 			console.error('Image enhancement error:', err);
 			setEnhancementError(
 				err.response?.data?.message ||
-					err.response?.data?.error?.message ||
-					'Network error occurred. Please try again.'
+				err.response?.data?.error?.message ||
+				'Network error occurred. Please try again.'
 			);
 		} finally {
 			setIsEnhancing(false);
@@ -1261,9 +1261,8 @@ const AddProduct = () => {
 										{__('Cancel', 'multivendorx')}
 									</div>
 									<div
-										className={`admin-btn btn-purple-bg ${
-											isEnhancing ? 'disabled' : ''
-										}`}
+										className={`admin-btn btn-purple-bg ${isEnhancing ? 'disabled' : ''
+											}`}
 										onClick={
 											!isEnhancing
 												? handleImageEnhancement
@@ -1272,13 +1271,13 @@ const AddProduct = () => {
 									>
 										{isEnhancing
 											? __(
-													'Generating Image...',
-													'multivendorx'
-												)
+												'Generating Image...',
+												'multivendorx'
+											)
 											: __(
-													'Generate Enhanced Image',
-													'multivendorx'
-												)}
+												'Generate Enhanced Image',
+												'multivendorx'
+											)}
 									</div>
 								</>
 							}
@@ -1717,13 +1716,13 @@ const AddProduct = () => {
 										{(selectedCat ||
 											selectedSub ||
 											selectedChild) && (
-											<button
-												onClick={resetSelection}
-												className="admin-btn btn-red"
-											>
-												Reset
-											</button>
-										)}
+												<button
+													onClick={resetSelection}
+													className="admin-btn btn-red"
+												>
+													Reset
+												</button>
+											)}
 									</div>
 									<div className="form-group-wrapper">
 										<div className="form-group">
@@ -1738,17 +1737,16 @@ const AddProduct = () => {
 														>
 															{/* CATEGORY */}
 															<li
-																className={`category ${
-																	selectedCat ===
+																className={`category ${selectedCat ===
 																	cat.id
-																		? 'radio-select-active'
-																		: ''
-																}`}
+																	? 'radio-select-active'
+																	: ''
+																	}`}
 																style={{
 																	display:
 																		selectedCat ===
 																			null ||
-																		selectedCat ===
+																			selectedCat ===
 																			cat.id
 																			? 'block'
 																			: 'none',
@@ -1769,7 +1767,7 @@ const AddProduct = () => {
 																cat.id &&
 																cat.children
 																	?.length >
-																	0 && (
+																0 && (
 																	<ul className="settings-form-group-radio">
 																		{cat.children.map(
 																			(
@@ -1782,16 +1780,15 @@ const AddProduct = () => {
 																				>
 																					{/* SUB CATEGORY */}
 																					<li
-																						className={`sub-category ${
-																							selectedSub ===
+																						className={`sub-category ${selectedSub ===
 																							sub.id
-																								? 'radio-select-active'
-																								: ''
-																						}`}
+																							? 'radio-select-active'
+																							: ''
+																							}`}
 																						style={{
 																							display:
 																								!selectedSub ||
-																								selectedSub ===
+																									selectedSub ===
 																									sub.id
 																									? 'block'
 																									: 'none',
@@ -1815,7 +1812,7 @@ const AddProduct = () => {
 																						sub
 																							.children
 																							?.length >
-																							0 && (
+																						0 && (
 																							<ul className="settings-form-group-radio">
 																								{sub.children.map(
 																									(
@@ -1825,16 +1822,15 @@ const AddProduct = () => {
 																											key={
 																												child.id
 																											}
-																											className={`sub-category ${
-																												selectedChild ===
+																											className={`sub-category ${selectedChild ===
 																												child.id
-																													? 'radio-select-active'
-																													: ''
-																											}`}
+																												? 'radio-select-active'
+																												: ''
+																												}`}
 																											style={{
 																												display:
 																													!selectedChild ||
-																													selectedChild ===
+																														selectedChild ===
 																														child.id
 																														? 'block'
 																														: 'none',
@@ -1878,11 +1874,25 @@ const AddProduct = () => {
 									</div>
 								</div>
 							)}
-
+						</div>
+					</div>
+					<div className="card-content" id="card-product-tags">
+						<div className="card-header">
+							<div className="left">
+								<div className="title">Product Tags</div>
+							</div>
+							<div className="right">
+								<i
+									className="adminlib-pagination-right-arrow  arrow-icon"
+									onClick={() =>
+										toggleCard('card-product-tags')
+									}
+								></i>
+							</div>
+						</div>
+						<div className="card-body">
 							<div className="form-group-wrapper">
 								<div className="form-group">
-									<label>Product Tags</label>
-
 									<div className="tag-list">
 										{product.tags?.map((tag) => (
 											<span
