@@ -78,6 +78,15 @@ const AddProduct = () => {
 	const [selectedSub, setSelectedSub] = useState(null);
 	const [selectedChild, setSelectedChild] = useState(null);
 
+	const [isEditingVisibility, setIsEditingVisibility] = useState(false);
+
+	const VISIBILITY_LABELS: Record<string, string> = {
+		visible: 'Shop and search results',
+		catalog: 'Shop only',
+		search: 'Search results only',
+		hidden: 'Hidden',
+	};
+
 	// Close on click outside
 	useEffect(() => {
 		if (!isPyramidEnabled) {
@@ -392,13 +401,6 @@ const AddProduct = () => {
 		{ label: 'Simple Product', value: 'simple' },
 		{ label: 'Variable Product', value: 'variable' },
 	];
-	const Visibility = [
-		{ label: 'Shop and search results', value: '' },
-		{ label: 'Shop only', value: 'simple' },
-		{ label: 'Search results only', value: 'variable' },
-		{ label: 'Hidden', value: 'variable' },
-	];
-
 	const stockStatusOptions = [
 		{ value: '', label: 'Stock Status' },
 		{ value: 'instock', label: 'In Stock' },
@@ -1527,87 +1529,91 @@ const AddProduct = () => {
 							</div>
 
 							<div className="form-group-wrapper">
+								<div className="catalog-visibility">
+									Catalog Visibility:
+									<span className="catalog-visibility-value">
+										<b>{VISIBILITY_LABELS[product.catalog_visibility]} </b>
+									</span>
+
+									<span
+										className="admin-badge blue"
+										onClick={() => setIsEditingVisibility(true)}
+									>
+										<i className="adminlib-edit"></i>
+									</span>
+								</div>
+							</div>
+							<div className="form-group-wrapper">
 								<div className="form-group">
-									<label htmlFor="visibility">
-										Catalog Visibility
-									</label>
-									<SelectInput
-										name="type"
-										options={Visibility}
-										value={product.type}
-										onChange={(selected) =>
-											handleChange('type', selected.value)
-										}
-									/>
-									{/* <RadioInput
-										name="catalog_visibility"
-										idPrefix="catalog_visibility"
-										type="radio"
-										wrapperClass="settings-form-group-radio"
-										inputWrapperClass="radio-basic-input-wrap"
-										inputClass="setting-form-input"
-										descClass="settings-metabox-description"
-										activeClass="radio-select-active"
-										radiSelectLabelClass="radio-label"
-										options={[
-											{
-												key: 'vs1',
-												value: 'visible',
-												label: 'Shop and search results',
-												name: 'visibility',
-											},
-											{
-												key: 'vs2',
-												value: 'catalog',
-												label: 'Shop only',
-												name: 'visibility',
-											},
-											{
-												key: 'vs3',
-												value: 'search',
-												label: 'Search results only',
-												name: 'visibility',
-											},
-											{
-												key: 'vs4',
-												value: 'hidden',
-												label: 'Hidden',
-												name: 'visibility',
-											},
-										]}
-										value={product.catalog_visibility}
-										onChange={(e) =>
-											handleChange(
-												'catalog_visibility',
-												e.target.value
-											)
-										}
-									/> */}
+									{isEditingVisibility && (
+										<>
+											<div className="form-group">
+												<RadioInput
+													name="catalog_visibility"
+													idPrefix="catalog_visibility"
+													type="radio"
+													wrapperClass="settings-form-group-radio"
+													inputWrapperClass="radio-basic-input-wrap"
+													inputClass="setting-form-input"
+													descClass="settings-metabox-description"
+													activeClass="radio-select-active"
+													radiSelectLabelClass="radio-label"
+													options={[
+														{
+															key: 'vs1',
+															value: 'visible',
+															label: 'Shop and search results',
+														},
+														{
+															key: 'vs2',
+															value: 'catalog',
+															label: 'Shop only',
+														},
+														{
+															key: 'vs3',
+															value: 'search',
+															label: 'Search results only',
+														},
+														{
+															key: 'vs4',
+															value: 'hidden',
+															label: 'Hidden',
+														},
+													]}
+													value={product.catalog_visibility}
+													onChange={(e) => {
+														handleChange('catalog_visibility', e.target.value);
+														setIsEditingVisibility(false); // auto-hide after change
+													}}
+												/>
+											</div>
+											<div className="form-group">
+												<label
+													onClick={() => setstarFill((prev) => !prev)}
+													style={{ cursor: 'pointer' }}
+												>
+													<i className={`star-icon ${starFill ? 'adminlib-star' : 'adminlib-star-o'}`}></i>
+													{/* <input
+											type="checkbox"
+											checked={product.featured}
+											onChange={(e) =>
+												handleChange(
+													'featured',
+													e.target.value
+												)
+											}
+										/> */}
+													This is a featured product
+												</label>
+											</div>
+										</>
+									)}
 								</div>
 							</div>
 
 							<div className="form-group-wrapper">
 								<div className="form-group">
 									<label>Status</label>
-
-									{/* <select
-										className="basic-select"
-										value={product.status}
-										onChange={(e) =>
-											handleChange(
-												'status',
-												e.target.value
-											)
-										}
-									>
-										<option value="publish">
-											Published
-										</option>
-										<option value="draft">Draft</option>
-										<option value="pending">
-											Pending Review
-										</option>
-									</select> */}
 
 									<ToggleSetting
 										wrapperClass="setting-form-input"
@@ -1619,107 +1625,93 @@ const AddProduct = () => {
 												label: __('Draft', 'multivendorx'),
 											},
 											{
-												key: 'published',
-												value: 'published',
+												key: 'publish',
+												value: 'publish',
 												label: __('Published', 'multivendorx'),
 											},
 											{
-												key: 'publish',
-												value: 'publish',
-												label: __('Publish', 'multivendorx'),
+												key: 'pending',
+												value: 'pending',
+												label: __('Pending Review', 'multivendorx'),
 											},
 										]}
-									// value={formData.status}
-									// onChange={handleToggleChange}
+										value={product.status}
+										onChange={(value) => handleChange('status', value)}
 									/>
+
 								</div>
 							</div>
 							<div className="form-group-wrapper">
 								<div className="form-group">
-									<label htmlFor="product-name">
-										Published on Dec 12 08:38
-									</label>
+									{product.status === 'publish' && (
+										<label htmlFor="product-name">
+											{__(
+												`Published on Dec 16, 2025`,
+												'multivendorx'
+											)}
+										</label>
+									)}
 
-									<div className="date-field-wrapper">
-										{product.date_created && (
-											<>
-												<CalendarInput
-													wrapperClass="calendar-wrapper"
-													inputClass="calendar-input"
-													value={
-														product.date_created?.split(
-															'T'
-														)[0] || ''
-													}
-													onChange={(date: any) => {
-														const dateStr =
-															date?.toString();
+									{product.status === 'pending' && (
+										<>
+											<label htmlFor="product-name">
+												{__(
+													`Published on`,
+													'multivendorx'
+												)}
+											</label>
+											<div className="date-field-wrapper">
+												{product.date_created && (
+													<>
+														<CalendarInput
+															wrapperClass="calendar-wrapper"
+															inputClass="calendar-input"
+															value={product.date_created?.split('T')[0] || ''}
+															onChange={(date: any) => {
+																const dateStr = date?.toString();
 
-														setProduct((prev) => {
-															const oldTime =
-																prev.date_created?.split(
-																	'T'
-																)[1] ||
-																'00:00:00';
-															return {
-																...prev,
-																date_created: `${dateStr}T${oldTime}`,
-															};
-														});
-													}}
-													format="YYYY-MM-DD"
-												/>
-												<BasicInput
-													wrapperClass="form-group-wrapper"
-													type="time"
-													id="published-time"
-													name="published_time"
-													value={
-														product.date_created
-															?.split('T')[1]
-															?.slice(0, 5) || ''
-													}
-													onChange={(e: any) => {
-														const newTime =
-															e.target.value; // "10:35"
+																setProduct((prev) => {
+																	const oldTime =
+																		prev.date_created?.split('T')[1] ||
+																		'00:00:00';
+																	return {
+																		...prev,
+																		date_created: `${dateStr}T${oldTime}`,
+																	};
+																});
+															}}
+															format="YYYY-MM-DD"
+														/>
 
-														setProduct((prev) => {
-															const oldDate =
-																prev.date_created?.split(
-																	'T'
-																)[0] || '';
-															return {
-																...prev,
-																date_created: `${oldDate}T${newTime}:00`,
-															};
-														});
-													}}
-												/>
-											</>
-										)}
-									</div>
-								</div>
-							</div>
+														<BasicInput
+															wrapperClass="form-group-wrapper"
+															type="time"
+															id="published-time"
+															name="published_time"
+															value={
+																product.date_created
+																	?.split('T')[1]
+																	?.slice(0, 5) || ''
+															}
+															onChange={(e: any) => {
+																const newTime = e.target.value;
 
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<label
-										onClick={() => setstarFill((prev) => !prev)}
-										style={{ cursor: 'pointer' }}
-									>
-										<i className={`star-icon ${starFill ? 'adminlib-star' : 'adminlib-star-o'}`}></i>
-										{/* <input
-											type="checkbox"
-											checked={product.featured}
-											onChange={(e) =>
-												handleChange(
-													'featured',
-													e.target.value
-												)
-											}
-										/> */}
-										This is a featured product
-									</label>
+																setProduct((prev) => {
+																	const oldDate =
+																		prev.date_created?.split('T')[0] || '';
+																	return {
+																		...prev,
+																		date_created: `${oldDate}T${newTime}:00`,
+																	};
+																});
+															}}
+														/>
+													</>
+												)}
+											</div>
+										</>
+									)}
+
 								</div>
 							</div>
 						</div>
@@ -1909,7 +1901,25 @@ const AddProduct = () => {
 									</div>
 								</div>
 							)}
+						</div>
+					</div>
 
+
+					<div className="card-content" id="card-product-category">
+						<div className="card-header">
+							<div className="left">
+								<div className="title">Product tag</div>
+							</div>
+							<div className="right">
+								<i
+									className="adminlib-pagination-right-arrow  arrow-icon"
+									onClick={() =>
+										toggleCard('card-product-category')
+									}
+								></i>
+							</div>
+						</div>
+						<div className="card-body">
 							<div className="form-group-wrapper">
 								<div className="form-group">
 									<div className="tag-list">
