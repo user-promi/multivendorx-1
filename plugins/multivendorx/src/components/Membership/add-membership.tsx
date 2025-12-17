@@ -23,7 +23,7 @@ const Memberships = () => {
 			content: {
 				id: 'payment-membership-plans',
 				name: 'Plans',
-				desc: 'PayPal Payout makes it easy for you to pay multiple sellers at the sametime.',
+				desc: 'Design pricing tiers that drive conversions and maximize revenue.',
 				icon: 'adminlib-credit-card',
 			},
 		},
@@ -32,7 +32,7 @@ const Memberships = () => {
 			content: {
 				id: 'payment-membership-design',
 				name: 'Subscribers',
-				desc: 'PayPal Payout makes it easy for you to pay multiple sellers at the sametime.',
+				desc: 'Track every subscription at a glance—identify expiring plans, monitor revenue.',
 				icon: 'adminlib-credit-card',
 			},
 		},
@@ -40,8 +40,8 @@ const Memberships = () => {
 			type: 'file',
 			content: {
 				id: 'payment-membership-message',
-				name: 'Settings',
-				desc: 'Site errors and events are logged for easy troubleshooting.',
+				name: 'General',
+				desc: 'Manage membership pages, reminders, renewals, and payment connections.',
 				icon: 'adminlib-credit-card',
 			},
 		},
