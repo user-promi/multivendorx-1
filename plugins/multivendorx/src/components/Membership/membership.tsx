@@ -28,7 +28,7 @@ const Memberships = () => {
 		{
 			type: 'file',
 			content: {
-				id: 'payment-membership-design',
+				id: 'multivendorx-pro-features',
 				name: 'MultivendorX Pro Features',
 				desc: 'PayPal Payout makes it easy for you to pay multiple sellers at the sametime.',
 				icon: 'adminlib-credit-card',
@@ -40,7 +40,7 @@ const Memberships = () => {
 		switch (tabId) {
 			case 'payment-membership-message':
 				return <MessageAndMail id="" />;
-			case 'payment-membership-design':
+			case 'multivendorx-pro-features':
 				return <MultivendorxProFeatures />;
 			default:
 				return <div></div>;

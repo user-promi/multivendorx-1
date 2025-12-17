@@ -21,9 +21,9 @@ const Memberships = () => {
 		{
 			type: 'file',
 			content: {
-				id: 'payment-membership-message',
-				name: 'Settings',
-				desc: 'Site errors and events are logged for easy troubleshooting.',
+				id: 'payment-membership-plans',
+				name: 'Plans',
+				desc: 'PayPal Payout makes it easy for you to pay multiple sellers at the sametime.',
 				icon: 'adminlib-credit-card',
 			},
 		},
@@ -39,9 +39,9 @@ const Memberships = () => {
 		{
 			type: 'file',
 			content: {
-				id: 'payment-membership-plans',
-				name: 'Plans',
-				desc: 'PayPal Payout makes it easy for you to pay multiple sellers at the sametime.',
+				id: 'payment-membership-message',
+				name: 'Settings',
+				desc: 'Site errors and events are logged for easy troubleshooting.',
 				icon: 'adminlib-credit-card',
 			},
 		},
@@ -58,14 +58,12 @@ const Memberships = () => {
 
 	const getForm = (tabId: string) => {
 		switch (tabId) {
-			case 'payment-membership-message':
-				return <Settings />;
-			case 'payment-membership-design':
-				return <Subscribers />;
 			case 'payment-membership-plans':
 				return <Plans />;
-			case 'notifications':
-				return <Notifications />;
+			case 'payment-membership-design':
+				return <Subscribers />;
+			case 'payment-membership-message':
+				return <Settings />;
 			default:
 				return <div></div>;
 		}
