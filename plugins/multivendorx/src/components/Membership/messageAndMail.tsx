@@ -345,6 +345,7 @@ const MessageAndMail = ({ id }: { id: string }) => {
 										descClass="settings-metabox-description"
 										value={formData.name}
 										onChange={handleChange}
+										size="15rem"
 									/>
 								</div>
 							</div>
@@ -400,6 +401,7 @@ const MessageAndMail = ({ id }: { id: string }) => {
 										descClass="settings-metabox-description"
 										value={formData.name}
 										onChange={handleChange}
+										size="15rem"
 									/>
 								</div>
 							</div>
