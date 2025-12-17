@@ -209,47 +209,55 @@ const Modules: React.FC< ModuleProps > = ( {
             setTimeout( () => setSuccessMsg( '' ), 2000 );
         }
     };
-    useEffect( () => {
-        let highlightedElement: HTMLElement | null = null;
+    useEffect(() => {
+    let highlightedElement: HTMLElement | null = null;
+    let hasHighlightedOnce = false;
 
-        const scrollToTargetSection = () => {
-            const hash = window.location.hash;
-            const params = new URLSearchParams( hash.replace( '#&', '' ) );
-            const targetId = params.get( 'module' );
+    const scrollToTargetSection = () => {
+        if (hasHighlightedOnce) return;
 
-            if ( targetId ) {
-                setTimeout( () => {
-                    const targetElement = document.getElementById( targetId );
-                    if ( targetElement ) {
-                        targetElement.scrollIntoView( {
-                            behavior: 'smooth',
-                            block: 'start',
-                        } );
-                        targetElement.classList.add( 'highlight' );
-                        highlightedElement = targetElement;
-                    }
-                }, 500 );
+        const hash = window.location.hash;
+        const params = new URLSearchParams(hash.replace('#&', ''));
+        const targetId = params.get('module');
+
+        if (!targetId) return;
+
+        setTimeout(() => {
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start',
+                });
+
+                targetElement.classList.add('highlight');
+                highlightedElement = targetElement;
+                hasHighlightedOnce = true;
             }
-        };
+        }, 500);
+    };
 
-        // Remove highlight when clicking anywhere
-        const handleClickAnywhere = () => {
-            if ( highlightedElement ) {
-                highlightedElement.classList.remove( 'highlight' );
-                highlightedElement = null;
-            }
-        };
+      // Remove highlight class
+    const handleClickAnywhere = (e: Event) => {
+        if (
+            highlightedElement &&
+            !highlightedElement.contains(e.target as Node)
+        ) {
+            highlightedElement.classList.remove('highlight');
+            highlightedElement = null;
+        }
+    };
 
-        scrollToTargetSection();
+    scrollToTargetSection();
 
-        window.addEventListener( 'hashchange', scrollToTargetSection );
-        document.addEventListener( 'click', handleClickAnywhere );
+    document.addEventListener('pointerdown', handleClickAnywhere);
 
-        return () => {
-            window.removeEventListener( 'hashchange', scrollToTargetSection );
-            document.removeEventListener( 'click', handleClickAnywhere );
-        };
-    }, [ filteredModules ] );
+    return () => {
+        document.removeEventListener('pointerdown', handleClickAnywhere);
+    };
+}, []);
+
+
 
     return (
         <>

@@ -10,7 +10,7 @@ input[type="checkbox"]:checked {
 }
 
 input[type="checkbox"]:checked::before {
-    background: var(--colorPrimary) !important;
+    background: $theme-color !important;
     padding: 0.063rem !important;
 }
 
@@ -64,19 +64,6 @@ body:has(#store-dashboard) {
                         }
                     }
                 }
-
-                // &:hover {
-                //     width: 16rem;
-
-                //     .dashboard-tabs {
-                //         .tab-name {
-                //             .admin-arrow,
-                //             span {
-                //                 display: block;
-                //             }
-                //         }
-                //     }
-                // }
             }
 
             .tab-wrapper,
@@ -119,7 +106,7 @@ a {
         .site-name {
             font-size: 1.5rem;
             font-weight: 600;
-            color: var(--colorPrimary);
+            color: $theme-color;
         }
 
         i {
@@ -207,18 +194,18 @@ a {
             width: 100%;
             box-sizing: border-box;
             bottom: 0;
-            color: var(--colorPrimary);
+            color: $theme-color;
 
             &.active {
                 a {
-                    color: var(--colorPrimary);
+                    color: $theme-color;
 
                 }
             }
 
             a,
             a:hover {
-                color: var(--colorPrimary);
+                color: $theme-color;
                 background: transparent;
             }
         }
@@ -285,7 +272,7 @@ a {
                         position: relative;
 
                         .avatar-wrapper {
-                            background: var(--colorPrimary);
+                            background: $theme-color;
                             border-radius: 50%;
                             width: 2rem;
                             height: 2rem;
@@ -441,11 +428,11 @@ a {
         }
 
         &.active {
-            color: var(--colorPrimary);
-            border-bottom: 0.126rem solid var(--colorPrimary);
+            color: $theme-color;
+            border-bottom: 0.126rem solid $theme-color;
 
             p {
-                color: var(--colorPrimary);
+                color: $theme-color;
             }
         }
     }
@@ -705,7 +692,7 @@ a {
             .profile {
                 i {
                     padding: 0.5rem;
-                    background: var(--colorPrimary);
+                    background: $theme-color;
                     font-size: 1.25rem;
                     color: #fff;
                     border-radius: 50%;
@@ -858,7 +845,7 @@ a {
 .avater {
     padding: 0.5rem;
     border-radius: 50%;
-    background: var(--colorPrimary);
+    background: $theme-color;
     width: 1.5rem;
     height: 1.5rem;
     display: flex;
@@ -956,7 +943,7 @@ a {
 }
 
 .store-icon {
-    background: var(--colorPrimary);
+    background: $theme-color;
     color: #fff;
     padding: 0.313rem;
     border-radius: 50%;
@@ -967,7 +954,7 @@ a {
     align-items: center;
 
     &.number {
-        background: var(--colorPrimary);
+        background: $theme-color;
         color: #fff;
     }
 }

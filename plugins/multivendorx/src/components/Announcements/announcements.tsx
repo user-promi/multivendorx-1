@@ -554,7 +554,7 @@ export const Announcements: React.FC = () => {
 							},
 							{
 								label: __('Delete', 'multivendorx'),
-								icon: 'adminlib-delete',
+								icon: 'adminlib-delete delete',
 								onClick: async (rowData: AnnouncementRow) => {
 									if (!rowData.id) {
 										return;
@@ -611,10 +611,10 @@ export const Announcements: React.FC = () => {
 	];
 
 	const BulkAction: React.FC = () => (
-		<div className=" bulk-action">
+		<div className="action">
+			<i className="adminlib-form"></i>
 			<select
 				name="action"
-				className="basic-select"
 				ref={bulkSelectRef}
 				onChange={handleBulkAction}
 			>
@@ -672,6 +672,7 @@ export const Announcements: React.FC = () => {
 				open={addAnnouncements}
 				onClose={handleCloseForm}
 				width="31.25rem"
+				height="70%"
 				header={
 					<>
 						<div className="title">
@@ -736,7 +737,8 @@ export const Announcements: React.FC = () => {
 								</div>
 							)}
 						</div>
-
+					</div>
+					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label htmlFor="content">
 								{__('Announcement message', 'multivendorx')}
@@ -750,7 +752,7 @@ export const Announcements: React.FC = () => {
 								usePlainText={false}
 								tinymceApiKey={
 									appLocalizer.settings_databases_value[
-										'marketplace'
+									'marketplace'
 									]['tinymce_api_section'] ?? ''
 								}
 							/>
@@ -761,7 +763,8 @@ export const Announcements: React.FC = () => {
 								</div>
 							)}
 						</div>
-
+					</div>
+					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label htmlFor="stores">
 								{__('Stores', 'multivendorx')}
@@ -818,7 +821,8 @@ export const Announcements: React.FC = () => {
 								</div>
 							)}
 						</div>
-
+					</div>
+					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label htmlFor="status">
 								{__('Status', 'multivendorx')}
@@ -852,8 +856,6 @@ export const Announcements: React.FC = () => {
 								onChange={handleToggleChange}
 							/>
 						</div>
-
-						<span className="space"></span>
 					</div>
 				</div>
 

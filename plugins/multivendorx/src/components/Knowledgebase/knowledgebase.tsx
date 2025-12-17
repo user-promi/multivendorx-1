@@ -421,7 +421,7 @@ export const KnowledgeBase: React.FC = () => {
 							},
 							{
 								label: __('Delete', 'multivendorx'),
-								icon: 'adminlib-delete',
+								icon: 'adminlib-delete delete',
 								onClick: async (rowData) => {
 									if (!rowData.id) {
 										return;
@@ -495,10 +495,10 @@ export const KnowledgeBase: React.FC = () => {
 	];
 
 	const BulkAction: React.FC = () => (
-		<div className=" bulk-action">
+		<div className="action">
+			<i className="adminlib-form"></i>
 			<select
 				name="action"
-				className="basic-select"
 				ref={bulkSelectRef}
 				onChange={handleBulkAction}
 			>
@@ -600,6 +600,8 @@ export const KnowledgeBase: React.FC = () => {
 									</p>
 								)}
 							</div>
+						</div>
+						<div className="form-group-wrapper">
 							<div className="form-group">
 								<label htmlFor="content">
 									{__('Content', 'multivendorx')}
@@ -612,7 +614,7 @@ export const KnowledgeBase: React.FC = () => {
 									usePlainText={false}
 									tinymceApiKey={
 										appLocalizer.settings_databases_value[
-											'marketplace'
+										'marketplace'
 										]['tinymce_api_section'] ?? ''
 									}
 								/>
@@ -622,6 +624,8 @@ export const KnowledgeBase: React.FC = () => {
 									</p>
 								)}
 							</div>
+						</div>
+						<div className="form-group-wrapper">
 							<div className="form-group">
 								<label htmlFor="status">
 									{__('Status', 'multivendorx')}

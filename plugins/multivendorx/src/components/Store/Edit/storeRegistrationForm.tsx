@@ -120,7 +120,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 			<SuccessNotice message={successMsg} />
 
 			<div className="container-wrapper">
-				<div className="card-wrapper column w-65">
+				<div className="card-wrapper column">
 					{(formData.core_data?.status == 'pending' ||
 						formData.core_data?.status == 'rejected') && (
 						<>

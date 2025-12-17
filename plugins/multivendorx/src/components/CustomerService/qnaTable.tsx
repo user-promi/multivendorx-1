@@ -388,7 +388,7 @@ const Qna: React.FC = () => {
 						actions: [
 							{
 								label: __('Answer', 'multivendorx'),
-								icon: 'adminlib-preview', // you can change the icon
+								icon: 'adminlib-eye', 
 								onClick: (rowData: any) => {
 									setSelectedQna(rowData);
 									setQna(rowData.question_text);
@@ -398,7 +398,7 @@ const Qna: React.FC = () => {
 							},
 							{
 								label: __('Delete', 'multivendorx'),
-								icon: 'adminlib-delete',
+								icon: 'adminlib-delete delete',
 								onClick: (rowData) => {
 									if (
 										confirm(

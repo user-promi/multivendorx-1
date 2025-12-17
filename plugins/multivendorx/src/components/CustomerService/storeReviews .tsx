@@ -321,10 +321,10 @@ const StoreReviews: React.FC = () => {
 				prev.map((r) =>
 					r.review_id === selectedReview.review_id
 						? {
-								...r,
-								reply: replyText,
-								status: selectedReview.status,
-							}
+							...r,
+							reply: replyText,
+							status: selectedReview.status,
+						}
 						: r
 				)
 			);
@@ -476,10 +476,10 @@ const StoreReviews: React.FC = () => {
 				const rawDate = row.original.date_created;
 				const formattedDate = rawDate
 					? new Intl.DateTimeFormat('en-US', {
-							month: 'short',
-							day: 'numeric',
-							year: 'numeric',
-						}).format(new Date(rawDate))
+						month: 'short',
+						day: 'numeric',
+						year: 'numeric',
+					}).format(new Date(rawDate))
 					: '-';
 				return (
 					<TableCell title={formattedDate}>{formattedDate}</TableCell>
@@ -506,7 +506,7 @@ const StoreReviews: React.FC = () => {
 							},
 							{
 								label: __('Delete', 'multivendorx'),
-								icon: 'adminlib-delete',
+								icon: 'adminlib-delete delete',
 								onClick: async () => {
 									if (
 										confirm(
@@ -569,7 +569,6 @@ const StoreReviews: React.FC = () => {
 				perPageOption={[10, 25, 50]}
 				totalCounts={totalRows}
 				typeCounts={status as Status[]}
-				// searchFilter={searchFilter}
 				realtimeFilter={realtimeFilter}
 			/>
 			{selectedReview && (
@@ -610,64 +609,59 @@ const StoreReviews: React.FC = () => {
 					}
 				>
 					<div className="content">
-						<div className="form-group-wrapper">
-							<div className="review-popup-wrapper">
-								<div className="customer-wrapper">
-									<div className="avater">
-										<i className="item-icon adminlib-person"></i>
-									</div>
-									{selectedReview && (
-										<div className="name-wrapper">
-											<span className="customer-name">
-												{selectedReview.customer_name
-													.charAt(0)
-													.toUpperCase()}
-											</span>
+						<div className="review-popup-wrapper">
+							<div className="customer-wrapper">
+								<div className="avater">
+									<i className="item-icon adminlib-person"></i>
+								</div>
+								{selectedReview && (
+									<div className="name-wrapper">
+										{selectedReview.customer_name
+											.charAt(0)
+											.toUpperCase()}
+										<div
+											className="name"
+											dangerouslySetInnerHTML={{
+												__html: selectedReview.review_title,
+											}}
+										></div>
 
-											<div
-												className="name"
-												dangerouslySetInnerHTML={{
-													__html: selectedReview.review_title,
-												}}
-											></div>
-
-											<div className="rating-wrapper">
-												{[...Array(5)].map((_, i) => (
-													<i
-														key={i}
-														className={`star-icon adminlib-star ${
-															i <
-															Math.round(
-																selectedReview.overall_rating
-															)
-																? 'filled'
-																: ''
+										<div className="rating-wrapper">
+											{[...Array(5)].map((_, i) => (
+												<i
+													key={i}
+													className={`star-icon adminlib-star ${i <
+														Math.round(
+															selectedReview.overall_rating
+														)
+														? 'filled'
+														: ''
 														}`}
-													></i>
-												))}
+												></i>
+											))}
 
-												<div className="date">
-													{new Date(
-														selectedReview.date_created
-													).toLocaleDateString(
-														'en-GB',
-														{
-															day: '2-digit',
-															month: 'short',
-															year: 'numeric',
-														}
-													)}
-												</div>
+											<div className="date">
+												{new Date(
+													selectedReview.date_created
+												).toLocaleDateString(
+													'en-GB',
+													{
+														day: '2-digit',
+														month: 'short',
+														year: 'numeric',
+													}
+												)}
 											</div>
 										</div>
-									)}
-								</div>
-
-								<div className="review">
-									{selectedReview.review_content}
-								</div>
+									</div>
+								)}
 							</div>
 
+							<div className="review">
+								{selectedReview.review_content}
+							</div>
+						</div>
+						<div className="form-group-wrapper">
 							<div className="form-group">
 								<label htmlFor="reply">
 									{__('Respond to customer', 'multivendorx')}
@@ -682,7 +676,8 @@ const StoreReviews: React.FC = () => {
 									className="textarea-input"
 								/>
 							</div>
-
+						</div>
+						<div className="form-group-wrapper">
 							{/* Status Toggle */}
 							<div className="form-group">
 								<label htmlFor="status">

@@ -255,25 +255,25 @@ const ProductReport: React.FC = () => {
 			id: 'sales',
 			label: 'Total Products',
 			count: totalRows,
-			icon: 'adminlib-single-product red',
+			icon: 'adminlib-single-product',
 		},
 		{
 			id: 'earnings',
 			label: 'In Stock',
 			count: inStockCount,
-			icon: 'adminlib-per-product-shipping green',
+			icon: 'adminlib-per-product-shipping',
 		},
 		{
 			id: 'Vendors',
 			label: 'On backorder',
 			count: onBackorderCount,
-			icon: 'adminlib-multi-product yellow',
+			icon: 'adminlib-multi-product',
 		},
 		{
 			id: 'free',
 			label: 'Out of Stock',
 			count: outOfStockCount,
-			icon: 'adminlib-out-of-stock blue',
+			icon: 'adminlib-out-of-stock',
 		},
 	];
 
@@ -559,7 +559,7 @@ const ProductReport: React.FC = () => {
 							{overview.map((item, idx) => (
 								<div key={idx} className="analytics-item">
 									<div className="analytics-icon">
-										<i className={item.icon}></i>
+										<i className={`admin-color${idx + 2} ${item.icon}`}></i>
 									</div>
 									<div className="details">
 										<div className="number">
@@ -783,7 +783,7 @@ const ProductReport: React.FC = () => {
 						</div>
 						<div className="card-body">
 							{toSellingProduct.length > 0 ? (
-								toSellingProduct.map((product: any) => (
+								toSellingProduct.map((product: any, index: number) => (
 									<div
 										className="info-item"
 										key={`selling-${product.id}`}
@@ -799,7 +799,7 @@ const ProductReport: React.FC = () => {
 														alt={product.name}
 													/>
 												) : (
-													<span>
+													<span className={`admin-color${index + 1}`}>
 														{product.name?.charAt(
 															0
 														) || '?'}

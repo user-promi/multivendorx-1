@@ -1196,7 +1196,7 @@ const Dashboard: React.FC = () => {
 						</div>
 
 						<div className="card-body">
-							{customers.map((customer) => (
+							{customers.map((customer, index) => (
 								<div
 									key={customer.id}
 									className="info-item"
@@ -1204,9 +1204,7 @@ const Dashboard: React.FC = () => {
 									<div className="details-wrapper">
 										<div className="avatar">
 											<i
-												className={
-													customer.icon
-												}
+												className={`${customer.icon} admin-bg-color${index + 1}`}
 											></i>
 										</div>
 										<div className="details">
