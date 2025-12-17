@@ -434,6 +434,7 @@ const StoreSettings = ({
 									<label htmlFor="phone">{__('Phone')}</label>
 									<BasicInput
 										name="phone"
+										type="number"
 										value={formData.phone}
 										wrapperClass="setting-form-input"
 										descClass="settings-metabox-description"

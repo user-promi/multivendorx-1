@@ -305,8 +305,10 @@ const StoreTable: React.FC = () => {
 								)}
 								<div className="details">
 									<div className="title">
-										{primaryOwner.data?.display_name ||
-											primaryOwner.data?.user_email}
+										{primaryOwner.data?.display_name}
+									</div>
+									<div className="des">
+										{primaryOwner.data?.user_email}
 									</div>
 								</div>
 							</a>
@@ -341,9 +343,6 @@ const StoreTable: React.FC = () => {
 										`?page=multivendorx#&tab=stores&edit/${row.original.id}`
 									);
 								},
-								// onClick: () => {
-								//     window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`;
-								// },
 								hover: true,
 							},
 							...(row.original.status === 'active'
