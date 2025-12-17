@@ -376,33 +376,6 @@
 
 
 // radio input start
-.settings-form-group-radio {
-    display: flex;
-    flex-direction: column;
-    gap: 0.625rem;
-    margin-top: 0.5rem;
 
-    .radio-basic-input-wrap {
-        display: flex;
-        gap: 0.5rem;
-
-        &.radio-select-active {
-            input {
-                border-color: $theme-color;
-                position: relative;
-
-                &::after {
-                    position: absolute;
-                    content: "";
-                    border-radius: 50%;
-                    width: 0.5rem;
-                    height: 0.5rem;
-                    background: $theme-color;
-                    left: 0.125rem;
-                }
-            }
-        }
-    }
-}
 
 // radio input end

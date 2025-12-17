@@ -12,6 +12,7 @@ import {
 	TextArea,
 	getApiLink,
 	useModules,
+	ToggleSetting,
 } from 'zyra';
 import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
@@ -40,6 +41,8 @@ const AddProduct = () => {
 	const [selectedImageForEnhancement, setSelectedImageForEnhancement] =
 		useState(null);
 	const [generatedImage, setGeneratedImage] = useState(null);
+
+	const [starFill, setstarFill] = useState(false);
 
 	useEffect(() => {
 		if (!productId) {
@@ -1451,13 +1454,21 @@ const AddProduct = () => {
 
 				{/* right column */}
 				<div className="card-wrapper column w-35">
-					<div className="card-content">
+					{/* ai assist */}
+					{applyFilters('product_ai_assist', null, product)}
+
+					<div className="card-content" id="card-visibility">
 						<div className="card-header">
 							<div className="left">
 								<div className="title">Visibility</div>
 							</div>
 							<div className="right">
-								<i className="adminlib-pagination-right-arrow  arrow-icon"></i>
+								<i
+									className="adminlib-pagination-right-arrow  arrow-icon"
+									onClick={() =>
+										toggleCard('card-visibility')
+									}
+								></i>
 							</div>
 						</div>
 						<div className="card-body">
@@ -1508,22 +1519,7 @@ const AddProduct = () => {
 									</div>
 								</div>
 							</div>
-						</div>
-					</div>
 
-					{/* ai assist */}
-					{applyFilters('product_ai_assist', null, product)}
-
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">Visibility</div>
-							</div>
-							<div className="right">
-								<i className="adminlib-pagination-right-arrow  arrow-icon"></i>
-							</div>
-						</div>
-						<div className="card-body">
 							<div className="form-group-wrapper">
 								<div className="form-group">
 									<label htmlFor="visibility">
@@ -1579,15 +1575,9 @@ const AddProduct = () => {
 
 							<div className="form-group-wrapper">
 								<div className="form-group">
-									{/* <label htmlFor="product-name">Status</label>
-                                    <div className="admin-badge green">
-                                        Publish
-                                    </div> */}
-
-									{/* <div className="form-group"> */}
 									<label>Status</label>
 
-									<select
+									{/* <select
 										className="basic-select"
 										value={product.status}
 										onChange={(e) =>
@@ -1604,8 +1594,35 @@ const AddProduct = () => {
 										<option value="pending">
 											Pending Review
 										</option>
-									</select>
-									{/* </div> */}
+									</select> */}
+
+									<ToggleSetting
+										wrapperClass="setting-form-input"
+										descClass="settings-metabox-description"
+										description={__(
+											'Select the status of the announcement.',
+											'multivendorx'
+										)}
+										options={[
+											{
+												key: 'draft',
+												value: 'draft',
+												label: __('Draft', 'multivendorx'),
+											},
+											{
+												key: 'published',
+												value: 'published',
+												label: __('Published', 'multivendorx'),
+											},
+											{
+												key: 'publish',
+												value: 'publish',
+												label: __('Publish', 'multivendorx'),
+											},
+										]}
+										// value={formData.status}
+										// onChange={handleToggleChange}
+									/>
 								</div>
 							</div>
 							<div className="form-group-wrapper">
@@ -1677,8 +1694,12 @@ const AddProduct = () => {
 
 							<div className="form-group-wrapper">
 								<div className="form-group">
-									<label>
-										<input
+									<label
+										onClick={() => setstarFill((prev) => !prev)}
+										style={{ cursor: 'pointer' }}
+									>
+										<i className={`star-icon ${starFill ? 'adminlib-star' : 'adminlib-star-o'}`}></i>
+										{/* <input
 											type="checkbox"
 											checked={product.featured}
 											onChange={(e) =>
@@ -1687,7 +1708,7 @@ const AddProduct = () => {
 													e.target.value
 												)
 											}
-										/>
+										/> */}
 										This is a featured product
 									</label>
 								</div>
@@ -1695,13 +1716,18 @@ const AddProduct = () => {
 						</div>
 					</div>
 
-					<div className="card-content" id="card-product-tags">
+					<div className="card-content" id="card-product-category">
 						<div className="card-header">
 							<div className="left">
 								<div className="title">Category</div>
 							</div>
 							<div className="right">
-								<i className="adminlib-pagination-right-arrow  arrow-icon"></i>
+								<i
+									className="adminlib-pagination-right-arrow  arrow-icon"
+									onClick={() =>
+										toggleCard('card-product-category')
+									}
+								></i>
 							</div>
 						</div>
 						<div className="card-body">
