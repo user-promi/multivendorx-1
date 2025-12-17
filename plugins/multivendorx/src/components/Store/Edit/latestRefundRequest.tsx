@@ -40,7 +40,7 @@ const LatestRefundRequest: React.FC<LatestRefundRequestProps> = ({
 			accessorKey: 'order_id',
 			enableSorting: true,
 			header: __('Order', 'multivendorx'),
-			cell: ({ row }: any) => {
+			cell: ({ row }) => {
 				const orderId = row.original.order_id;
 				const url = orderId
 					? `${appLocalizer.site_url.replace(
@@ -69,7 +69,7 @@ const LatestRefundRequest: React.FC<LatestRefundRequestProps> = ({
 		},
 		{
 			header: __('Customer', 'multivendorx'),
-			cell: ({ row }: any) => {
+			cell: ({ row }) => {
 				const name = row.original.customer_name?.trim();
 				const link = row.original.customer_edit_link;
 
@@ -97,7 +97,7 @@ const LatestRefundRequest: React.FC<LatestRefundRequestProps> = ({
 		},
 		{
 			header: __('Refund Amount', 'multivendorx'),
-			cell: ({ row }: any) => (
+			cell: ({ row }) => (
 				<TableCell title={row.original.amount || ''}>
 					{formatCurrency(row.original.amount)}
 				</TableCell>
@@ -105,7 +105,7 @@ const LatestRefundRequest: React.FC<LatestRefundRequestProps> = ({
 		},
 		{
 			header: __('Refund Reason', 'multivendorx'),
-			cell: ({ row }: any) => (
+			cell: ({ row }) => (
 				<TableCell title={row.original.reason || ''}>
 					{row.original.reason || '-'}
 				</TableCell>
@@ -120,7 +120,7 @@ const LatestRefundRequest: React.FC<LatestRefundRequestProps> = ({
 		},
 		{
 			header: __('Date', 'multivendorx'),
-			cell: ({ row }: any) => {
+			cell: ({ row }) => {
 				const date = row.original.date;
 				if (!date) {
 					return <TableCell>-</TableCell>;
@@ -174,7 +174,7 @@ const LatestRefundRequest: React.FC<LatestRefundRequestProps> = ({
 			});
 	}
 
-	return <Table data={data} columns={columns as any} />;
+	return <Table data={data} columns={columns} />;
 };
 
 export default LatestRefundRequest;

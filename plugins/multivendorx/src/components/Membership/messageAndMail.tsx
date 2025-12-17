@@ -121,7 +121,7 @@ const MessageAndMail = ({ id }: { id: string }) => {
 					<div className="card-content">
 						<div className="card-header">
 							<div className="left">
-								<div className="title">Basic Plan Details</div>
+								<div className="title">Plan details</div>
 							</div>
 							<div className="right">
 								<div className="field-wrapper">
@@ -151,7 +151,7 @@ const MessageAndMail = ({ id }: { id: string }) => {
 									/>
 									<div className="des">
 										<i className="adminlib-star star-icon"></i>{' '}
-										Mark as Recommended Plan
+										Mark as recommended plan
 									</div>
 								</div>
 							</div>
@@ -160,7 +160,7 @@ const MessageAndMail = ({ id }: { id: string }) => {
 							<div className="form-group-wrapper">
 								<div className="form-group">
 									<label htmlFor="product-name">
-										Plan Name
+										Name
 									</label>
 									<BasicInput
 										name="name"
@@ -175,7 +175,7 @@ const MessageAndMail = ({ id }: { id: string }) => {
 							<div className="form-group-wrapper">
 								<div className="form-group">
 									<label htmlFor="product-name">
-										Plan Description
+										Description
 									</label>
 									<TextArea
 										name="short_description"
@@ -198,7 +198,7 @@ const MessageAndMail = ({ id }: { id: string }) => {
 							<div className="form-group-wrapper">
 								<div className="form-group">
 									<label htmlFor="product-name">
-										Total Products
+										Total products
 									</label>
 									<BasicInput
 										name="name"
@@ -210,7 +210,7 @@ const MessageAndMail = ({ id }: { id: string }) => {
 								</div>
 								<div className="form-group">
 									<label htmlFor="product-name">
-										Gallery Images per Product
+										Gallery images per product
 									</label>
 									<BasicInput
 										name="slug"
@@ -225,7 +225,7 @@ const MessageAndMail = ({ id }: { id: string }) => {
 							<div className="form-group-wrapper">
 								<div className="form-group">
 									<label htmlFor="product-name">
-										Featured Products
+										Featured products
 									</label>
 									<MultiCheckBox
 										wrapperClass="toggle-btn"
@@ -270,7 +270,7 @@ const MessageAndMail = ({ id }: { id: string }) => {
 							<div className="form-group-wrapper">
 								<div className="form-group">
 									<label htmlFor="product-name">
-										Plan Validity
+										Plan pricing type
 									</label>
 									<ToggleSetting
 										wrapperClass="setting-form-input"
@@ -317,7 +317,7 @@ const MessageAndMail = ({ id }: { id: string }) => {
 							<div className="form-group-wrapper">
 								<div className="form-group">
 									<label htmlFor="product-name">
-										Billing Cycle
+										Billing cycle
 									</label>
 									<SelectInput
 										name="stock_status"
@@ -336,7 +336,7 @@ const MessageAndMail = ({ id }: { id: string }) => {
 							<div className="form-group-wrapper">
 								<div className="form-group">
 									<label htmlFor="product-name">
-										Validity Duration
+										Validity duration
 									</label>
 									<BasicInput
 										name="name"
@@ -345,6 +345,7 @@ const MessageAndMail = ({ id }: { id: string }) => {
 										descClass="settings-metabox-description"
 										value={formData.name}
 										onChange={handleChange}
+										size="15rem"
 									/>
 								</div>
 							</div>
@@ -353,22 +354,18 @@ const MessageAndMail = ({ id }: { id: string }) => {
 					<div className="card-content">
 						<div className="card-header">
 							<div className="left">
-								<div className="title">Commission Rules</div>
+								<div className="title">Commission rules</div>
 							</div>
 						</div>
 						<div className="card-body">
 							<div className="form-group-wrapper">
 								<div className="form-group">
 									<label htmlFor="product-name">
-										Commission Type
+										Commission type
 									</label>
 									<ToggleSetting
 										wrapperClass="setting-form-input"
 										descClass="settings-metabox-description"
-										description={__(
-											'Select the status of the announcement.',
-											'multivendorx'
-										)}
 										options={[
 											{
 												key: 'percentage',
@@ -395,7 +392,7 @@ const MessageAndMail = ({ id }: { id: string }) => {
 							<div className="form-group-wrapper">
 								<div className="form-group">
 									<label htmlFor="product-name">
-										Admin Commission Value
+										Marketplace fees
 									</label>
 									<BasicInput
 										name="name"
@@ -404,6 +401,7 @@ const MessageAndMail = ({ id }: { id: string }) => {
 										descClass="settings-metabox-description"
 										value={formData.name}
 										onChange={handleChange}
+										size="15rem"
 									/>
 								</div>
 							</div>

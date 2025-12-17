@@ -443,3 +443,12 @@
         cursor: default;
     }
 }
+
+
+.buttons-wrapper.view-toggle{
+    width: 100%;
+
+    .tabs-wrapper{
+        padding: 0 !important;
+    }
+}

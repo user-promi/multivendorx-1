@@ -88,6 +88,8 @@ body:has(.admin-main-wrapper) {
     margin: -0.063rem .3rem 0 0 !important;
     border-radius: 0.25rem;
     font-size: 0.95rem;
+    height: 1.125rem;
+    width: 1.125rem;
   }
 
   input[type="checkbox"]:checked::before {

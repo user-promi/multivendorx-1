@@ -146,14 +146,14 @@ export default {
 			),
 			options: [
 				{
-					key: 'guided',
+					key: 'yes',
 					label: __('Guided selection', 'multivendorx'),
-					value: 'guided',
+					value: 'yes',
 				},
 				{
-					key: 'free',
+					key: 'no',
 					label: __('Free selection', 'multivendorx'),
-					value: 'free',
+					value: 'no',
 				},
 			],
 		},
