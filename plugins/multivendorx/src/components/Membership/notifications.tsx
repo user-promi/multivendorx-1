@@ -1,10 +1,10 @@
-import { BasicInput } from 'zyra';
+import { BasicInput, TextArea } from 'zyra';
 
 const Notifications = ({ id }: { id: string }) => {
 	return (
 		<>
 			<div className="container-wrapper">
-				<div className="card-wrapper column w-65">
+				<div className="card-wrapper">
 					<div className="card-content">
 						<div className="card-header">
 							<div className="left">
@@ -31,20 +31,36 @@ const Notifications = ({ id }: { id: string }) => {
 									<label htmlFor="product-name">
 										Payment Due
 									</label>
-									<BasicInput
-										name="name"
-										wrapperClass="setting-form-input"
+									<TextArea
+										name="short_description"
+										wrapperClass="setting-from-textarea"
+										inputClass="textarea-input"
 										descClass="settings-metabox-description"
+									// value={product.short_description}
+									// onChange={(e) =>
+									//     handleChange(
+									//         'short_description',
+									//         e.target.value
+									//     )
+									// }
 									/>
 								</div>
 								<div className="form-group">
 									<label htmlFor="product-name">
 										Renewal Reminder
 									</label>
-									<BasicInput
-										name="name"
-										wrapperClass="setting-form-input"
+									<TextArea
+										name="short_description"
+										wrapperClass="setting-from-textarea"
+										inputClass="textarea-input"
 										descClass="settings-metabox-description"
+									// value={product.short_description}
+									// onChange={(e) =>
+									//     handleChange(
+									//         'short_description',
+									//         e.target.value
+									//     )
+									// }
 									/>
 								</div>
 							</div>
@@ -53,20 +69,36 @@ const Notifications = ({ id }: { id: string }) => {
 									<label htmlFor="product-name">
 										Grace Period
 									</label>
-									<BasicInput
-										name="name"
-										wrapperClass="setting-form-input"
+									<TextArea
+										name="short_description"
+										wrapperClass="setting-from-textarea"
+										inputClass="textarea-input"
 										descClass="settings-metabox-description"
+									// value={product.short_description}
+									// onChange={(e) =>
+									//     handleChange(
+									//         'short_description',
+									//         e.target.value
+									//     )
+									// }
 									/>
 								</div>
 								<div className="form-group">
 									<label htmlFor="product-name">
 										Expiration Notice
 									</label>
-									<BasicInput
-										name="name"
-										wrapperClass="setting-form-input"
+									<TextArea
+										name="short_description"
+										wrapperClass="setting-from-textarea"
+										inputClass="textarea-input"
 										descClass="settings-metabox-description"
+									// value={product.short_description}
+									// onChange={(e) =>
+									//     handleChange(
+									//         'short_description',
+									//         e.target.value
+									//     )
+									// }
 									/>
 								</div>
 							</div>

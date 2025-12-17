@@ -1,109 +1,152 @@
-import React, { useState } from 'react';
-import { MultiCheckboxTable } from 'zyra';
+// /* global appLocalizer */
+import React, { useEffect, useState, JSX } from 'react';
+import { useLocation, Link } from 'react-router-dom';
+import { SettingProvider, useSetting } from '../../contexts/SettingContext';
+import { getTemplateData } from '../../services/templateService';
+import {
+    getAvailableSettings,
+    getSettingById,
+    AdminForm,
+    Tabs,
+    useModules,
+} from 'zyra';
+
+// Types
+type SettingItem = Record<string, any>;
 
 const MultivendorxProFeatures: React.FC = () => {
-	/**
-	 * Each checkbox column must exist in `setting`
-	 * and store an array of row keys
-	 */
-	const [setting, setSetting] = useState<Record<string, string[]>>({
-		product_create: [],
-		product_edit: [],
-		product_delete: [],
-	});
+    const location = new URLSearchParams(useLocation().hash.substring(1));
+    const initialTab = location.get('tabId') || 'product-types';
 
-	/**
-	 * Columns definition
-	 * - First column = description (text only)
-	 * - Rest = checkbox columns
-	 */
-	const columns = [
-		{
-			key: 'description',
-			label: 'Description',
-			type: 'description',
-		},
-		{
-			key: 'product_create',
-			label: 'Create',
-		},
-		{
-			key: 'product_edit',
-			label: 'Edit',
-		},
-		{
-			key: 'product_delete',
-			label: 'Delete',
-		},
-	];
+    const settingsArray: SettingItem[] = getAvailableSettings(
+        getTemplateData('membership'),
+        []
+    );
 
-	/**
-	 * Rows definition
-	 * - key = row identifier
-	 * - label = first column (name)
-	 * - description = description column
-	 */
-	const rows = [
-		{
-			key: 'simple',
-			label: 'Simple Product',
-			description: 'Allows vendors to create and manage simple products.',
-		},
-		{
-			key: 'variable',
-			label: 'Variable Product',
-			description: 'Allows vendors to manage products with variations.',
-		},
-		{
-			key: 'grouped',
-			label: 'Grouped Product',
-			description:
-				'Allows vendors to sell multiple related products together.',
-		},
-	];
+    const tabData = [
+        {
+            type: 'file',
+            content: {
+                id: 'product-types',
+                name: 'Product Types',
+                desc: 'The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
+                // hideTabHeader: true,
+                icon: 'pending',
+            },
+        },
+        {
+            type: 'file',
+            content: {
+                id: 'store-management-tools',
+                name: 'Store Management Tools',
+                desc: 'The store application has been rejected. Sellers can view the rejection reason and resubmit their application after addressing the issues.',
+                // hideTabHeader: true,
+                icon: 'rejecte',
+            },
+        },
+        {
+            type: 'file',
+            content: {
+                id: 'sales-marketing',
+                name: 'Sales & Marketing',
+                desc: 'The store application has been permanently rejected. Sellers can view their dashboard in read-only mode but cannot make changes or reapply without admin intervention.',
+                // hideTabHeader: true,
+                icon: 'rejected',
+            },
+        },
+        {
+            type: 'file',
+            content: {
+                id: 'payment-gateways',
+                name: 'Payment Gateways',
+                desc: 'The store is active and fully operational. Stores have complete access to manage products, process orders, receive payouts, and configure all store settings.',
+                // hideTabHeader: true,
+                icon: 'active',
+            },
+        },
+        {
+            type: 'file',
+            content: {
+                id: 'communication-documents',
+                name: 'Communication & Documents',
+                desc: 'The store is under review due to compliance concerns. Selling is paused, payouts are held, and new product uploads are restricted until the review is complete.',
+                // hideTabHeader: true,
+                icon: 'under-review',
+            },
+        },
+        {
+            type: 'file',
+            content: {
+                id: 'third-party-integrations',
+                name: 'Third-Party Integrations',
+                desc: 'The store has been suspended due to policy violations. Products are hidden, payouts are frozen, and selling is disabled. Sellers can appeal through support.',
+                // hideTabHeader: true,
+                icon: 'error',
+            },
+        },
+    ];
 
-	/**
-	 * Required props for MultiCheckboxTable
-	 */
-	const storeTabSetting = {
-		products: ['simple', 'variable', 'grouped'],
-	};
+    const GetForm = (currentTab: string | null): JSX.Element | null => {
+        const { setting, settingName, setSetting, updateSetting } =
+            useSetting();
+        const { modules } = useModules();
+        const [storeTabSetting, setStoreTabSetting] = useState<any>(null);
 
-	const modules = ['products'];
+        if (!currentTab) {
+            return null;
+        }
 
-	const handleChange = (key: string, value: string[]) => {
-		setSetting((prev) => ({
-			...prev,
-			[key]: value,
-		}));
-	};
+        const settingModal = getSettingById(settingsArray as any, currentTab);
 
-	const handleModuleChange = (module: string) => {
-		console.log('Enable module:', module);
-	};
+        // Initialize settings for current tab
+        if (settingName !== currentTab) {
+            setSetting(
+                currentTab,
+                appLocalizer.settings_databases_value[currentTab] || {}
+            );
+        }
 
-	const handleProChanged = () => {
-		alert('This is a Pro feature');
-	};
+        useEffect(() => {
+            if (settingName === currentTab) {
+                appLocalizer.settings_databases_value[settingName] = setting;
+            }
+        }, [setting, settingName, currentTab]);
 
-	return (
-		<>
-			<h2>MultiVendorX – Product Permission Matrix</h2>
+        return settingName === currentTab ? (
+            <AdminForm
+                settings={settingModal as any}
+                proSetting={appLocalizer.pro_settings_list}
+                setting={setting}
+                updateSetting={updateSetting}
+                appLocalizer={appLocalizer}
+                modules={modules}
+                storeTabSetting={storeTabSetting}
+            />
+        ) : (
+            <>Loading...</>
+        );
+    };
 
-			<MultiCheckboxTable
-				rows={rows}
-				columns={columns}
-				setting={setting}
-				onChange={handleChange}
-				storeTabSetting={storeTabSetting}
-				modules={modules}
-				moduleChange={handleModuleChange}
-				proSetting={false}
-				proChanged={handleProChanged}
-				khali_dabba={true}
-			/>
-		</>
-	);
+    return (
+        <SettingProvider>
+            <div className="horizontal-tabs">
+                <Tabs
+                    tabData={tabData as any}
+                    currentTab={initialTab}
+                    getForm={GetForm}
+                    prepareUrl={(tabid: string) =>
+                        `?page=multivendorx#&tab=memberships&subtab=multivendorx-pro-features&tabId=${tabid}`
+                    }
+                    appLocalizer={appLocalizer}
+                    settingName="Settings"
+                    supprot={[]}
+                    Link={Link}
+                    submenuRender={true}
+                    menuIcon={true}
+                />
+            </div>
+        </SettingProvider>
+    );
 };
 
 export default MultivendorxProFeatures;
