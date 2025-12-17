@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { Table, TableCell, getApiLink } from 'zyra';
-import { ColumnDef, PaginationState } from '@tanstack/react-table';
+import { ColumnDef } from '@tanstack/react-table';
 
 type Review = {
 	review_id: number;
@@ -25,45 +25,24 @@ type Review = {
 	store_name?: string;
 };
 
-type FilterData = {
-	searchField: string;
-	typeCount?: any;
-	store?: string;
-	orderBy?: any;
-	order?: any;
-};
-
-export interface RealtimeFilter {
-	name: string;
-	render: (
-		updateFilter: (key: string, value: any) => void,
-		filterValue: any
-	) => React.ReactNode;
-}
-
 interface LatestReviewProps {
 	store_id?: number;
 }
 
 const LatestReview: React.FC<LatestReviewProps> = ({ store_id }) => {
 	const [data, setData] = useState<Review[]>([]);
-	const [totalRows, setTotalRows] = useState<number>(0);
-
-	const [pagination, setPagination] = useState<PaginationState>({
-		pageIndex: 0,
-		pageSize: 10,
-	});
 
 	useEffect(() => {
-		const currentPage = pagination.pageIndex + 1;
-		const rowsPerPage = pagination.pageSize;
-		requestData(rowsPerPage, currentPage);
-	}, [pagination]);
+		if (store_id) {
+			requestData(3, 1, store_id);
+		}
+	}, [store_id]);
 
 	// Fetch data from backend.
 	function requestData(
 		rowsPerPage = 3,
 		currentPage = 1,
+		store_id?: number,
 		orderBy = 'date_created',
 		order = 'desc'
 	) {
@@ -80,19 +59,16 @@ const LatestReview: React.FC<LatestReviewProps> = ({ store_id }) => {
 				order,
 			},
 		})
-			.then((response) => {
-				const items = response.data.items || [];
-				setData(items);
-				const total = items.length;
-				setTotalRows(total);
-			})
-			.catch(() => {
-				setData([]);
-				setTotalRows(0);
-			});
+		.then((response) => {
+			const items = response.data.items || [];
+			setData(items);
+		})
+		.catch(() => {
+			setData([]);
+		});
 	}
 
-	// 🔹 Table Columns
+	// Table Columns
 	const columns: ColumnDef<Review>[] = [
 		{
 			id: 'customer',

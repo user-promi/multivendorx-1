@@ -127,7 +127,7 @@ const EditStore = () => {
 			method: 'GET',
 			url: getApiLink(appLocalizer, `store/${editId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		}).then((res: any) => {
+		}).then((res) => {
 			const data = res.data || {};
 			setData(data);
 			const currentTab =
@@ -219,6 +219,16 @@ const EditStore = () => {
 				id: 'payment',
 				name: 'Payment',
 				desc: 'Payment Methods',
+				hideTabHeader: true,
+				icon: 'adminlib-credit-card',
+			},
+		},
+		{
+			type: 'file',
+			content: {
+				id: 'staff',
+				name: 'Staff',
+				desc: 'Store staff',
 				hideTabHeader: true,
 				icon: 'adminlib-credit-card',
 			},
@@ -978,6 +988,7 @@ const EditStore = () => {
 															}
 														);
 													}, 5000);
+													setActionMenu(false);
 												}}
 											>
 												<span className="item">
@@ -1017,7 +1028,10 @@ const EditStore = () => {
 													)}{' '}
 												</span>
 											</li>
-											<li onClick={handleStoreDelete}>
+											<li onClick={() => {
+													setActionMenu(false);
+													handleStoreDelete();
+												}}>
 												<span className="item">
 													{' '}
 													<i className="adminlib-delete"></i>{' '}
