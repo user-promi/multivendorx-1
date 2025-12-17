@@ -97,6 +97,7 @@ const Plans = () => {
 			<div className="general-wrapper">
 				<div className="container-wrapper column">
 					<div className="buttons-wrapper toggle-setting-wrapper view-toggle">
+						<div className="admin-btn btn-purple-bg">Add New</div>
 						<div className="tabs-wrapper">
 							{['list', 'grid'].map((mode) => (
 								<div

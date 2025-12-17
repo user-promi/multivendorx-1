@@ -25,6 +25,7 @@ const Memberships = () => {
 				name: 'Plans',
 				desc: 'Design pricing tiers that drive conversions and maximize revenue.',
 				icon: 'adminlib-credit-card',
+				hideTabHeader: true,
 			},
 		},
 		{
@@ -34,15 +35,17 @@ const Memberships = () => {
 				name: 'Subscribers',
 				desc: 'Track every subscription at a glance—identify expiring plans, monitor revenue.',
 				icon: 'adminlib-credit-card',
+				hideTabHeader: true,
 			},
 		},
 		{
 			type: 'file',
 			content: {
 				id: 'payment-membership-message',
-				name: 'General',
+				name: 'Settings',
 				desc: 'Manage membership pages, reminders, renewals, and payment connections.',
 				icon: 'adminlib-credit-card',
+				hideTabHeader: true,
 			},
 		},
 	];

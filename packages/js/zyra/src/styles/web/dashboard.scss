@@ -40,7 +40,6 @@
         justify-content: space-between;
         padding-bottom: 1rem;
         margin-bottom: 1.5rem;
-        border-bottom: $border-light-small;
         align-items: start;
 
         .icon {
@@ -112,9 +111,14 @@
         .card-body {
             padding: 1.5rem;
             transition: all 0.5s ease;
+            border-top: $border-light-small;
 
             .settings-metabox-note {
                 padding: 0 0 1rem;
+            }
+
+            &.hide-body{
+                display: none; /*for hide toggle hide body */
             }
         }
 
@@ -126,6 +130,11 @@
 
         &.transaction {
             margin-bottom: 1rem;
+        }
+        &:has(.hide-body){
+            .card-content{
+                border: none;
+            }
         }
     }
 
@@ -451,7 +460,6 @@
                 align-items: center;
                 font-size: 1.625rem;
                 color: #fff;
-                font-weight: 600;
             }
         }
 

@@ -12,6 +12,7 @@ import {
 	TextArea,
 	getApiLink,
 	useModules,
+	ToggleSetting,
 } from 'zyra';
 import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
@@ -40,6 +41,8 @@ const AddProduct = () => {
 	const [selectedImageForEnhancement, setSelectedImageForEnhancement] =
 		useState(null);
 	const [generatedImage, setGeneratedImage] = useState(null);
+
+	const [starFill, setstarFill] = useState(false);
 
 	useEffect(() => {
 		if (!productId) {
@@ -389,6 +392,12 @@ const AddProduct = () => {
 		{ label: 'Simple Product', value: 'simple' },
 		{ label: 'Variable Product', value: 'variable' },
 	];
+	const Visibility = [
+		{ label: 'Shop and search results', value: '' },
+		{ label: 'Shop only', value: 'simple' },
+		{ label: 'Search results only', value: 'variable' },
+		{ label: 'Hidden', value: 'variable' },
+	];
 
 	const stockStatusOptions = [
 		{ value: '', label: 'Stock Status' },
@@ -425,12 +434,12 @@ const AddProduct = () => {
 			appLocalizer.settings_databases_value['product-preferencess']
 				?.category_selection_method == 'yes'
 				? [
-						{
-							id: Number(
-								selectedChild || selectedSub || selectedCat
-							),
-						},
-					]
+					{
+						id: Number(
+							selectedChild || selectedSub || selectedCat
+						),
+					},
+				]
 				: selectedCats.map((id) => ({ id }));
 
 		try {
@@ -645,8 +654,8 @@ const AddProduct = () => {
 			console.error('Image enhancement error:', err);
 			setEnhancementError(
 				err.response?.data?.message ||
-					err.response?.data?.error?.message ||
-					'Network error occurred. Please try again.'
+				err.response?.data?.error?.message ||
+				'Network error occurred. Please try again.'
 			);
 		} finally {
 			setIsEnhancing(false);
@@ -1261,9 +1270,8 @@ const AddProduct = () => {
 										{__('Cancel', 'multivendorx')}
 									</div>
 									<div
-										className={`admin-btn btn-purple-bg ${
-											isEnhancing ? 'disabled' : ''
-										}`}
+										className={`admin-btn btn-purple-bg ${isEnhancing ? 'disabled' : ''
+											}`}
 										onClick={
 											!isEnhancing
 												? handleImageEnhancement
@@ -1272,13 +1280,13 @@ const AddProduct = () => {
 									>
 										{isEnhancing
 											? __(
-													'Generating Image...',
-													'multivendorx'
-												)
+												'Generating Image...',
+												'multivendorx'
+											)
 											: __(
-													'Generate Enhanced Image',
-													'multivendorx'
-												)}
+												'Generate Enhanced Image',
+												'multivendorx'
+											)}
 									</div>
 								</>
 							}
@@ -1452,13 +1460,21 @@ const AddProduct = () => {
 
 				{/* right column */}
 				<div className="card-wrapper column w-35">
-					<div className="card-content">
+					{/* ai assist */}
+					{applyFilters('product_ai_assist', null, product)}
+
+					<div className="card-content" id="card-visibility">
 						<div className="card-header">
 							<div className="left">
 								<div className="title">Visibility</div>
 							</div>
 							<div className="right">
-								<i className="adminlib-pagination-right-arrow  arrow-icon"></i>
+								<i
+									className="adminlib-pagination-right-arrow  arrow-icon"
+									onClick={() =>
+										toggleCard('card-visibility')
+									}
+								></i>
 							</div>
 						</div>
 						<div className="card-body">
@@ -1509,29 +1525,21 @@ const AddProduct = () => {
 									</div>
 								</div>
 							</div>
-						</div>
-					</div>
 
-					{/* ai assist */}
-					{applyFilters('product_ai_assist', null, product)}
-
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">Visibility</div>
-							</div>
-							<div className="right">
-								<i className="adminlib-pagination-right-arrow  arrow-icon"></i>
-							</div>
-						</div>
-						<div className="card-body">
 							<div className="form-group-wrapper">
 								<div className="form-group">
 									<label htmlFor="visibility">
 										Catalog Visibility
 									</label>
-
-									<RadioInput
+									<SelectInput
+										name="type"
+										options={Visibility}
+										value={product.type}
+										onChange={(selected) =>
+											handleChange('type', selected.value)
+										}
+									/>
+									{/* <RadioInput
 										name="catalog_visibility"
 										idPrefix="catalog_visibility"
 										type="radio"
@@ -1574,21 +1582,15 @@ const AddProduct = () => {
 												e.target.value
 											)
 										}
-									/>
+									/> */}
 								</div>
 							</div>
 
 							<div className="form-group-wrapper">
 								<div className="form-group">
-									{/* <label htmlFor="product-name">Status</label>
-                                    <div className="admin-badge green">
-                                        Publish
-                                    </div> */}
-
-									{/* <div className="form-group"> */}
 									<label>Status</label>
 
-									<select
+									{/* <select
 										className="basic-select"
 										value={product.status}
 										onChange={(e) =>
@@ -1605,14 +1607,37 @@ const AddProduct = () => {
 										<option value="pending">
 											Pending Review
 										</option>
-									</select>
-									{/* </div> */}
+									</select> */}
+
+									<ToggleSetting
+										wrapperClass="setting-form-input"
+										descClass="settings-metabox-description"
+										options={[
+											{
+												key: 'draft',
+												value: 'draft',
+												label: __('Draft', 'multivendorx'),
+											},
+											{
+												key: 'published',
+												value: 'published',
+												label: __('Published', 'multivendorx'),
+											},
+											{
+												key: 'publish',
+												value: 'publish',
+												label: __('Publish', 'multivendorx'),
+											},
+										]}
+									// value={formData.status}
+									// onChange={handleToggleChange}
+									/>
 								</div>
 							</div>
 							<div className="form-group-wrapper">
 								<div className="form-group">
 									<label htmlFor="product-name">
-										Published on
+										Published on Dec 12 08:38
 									</label>
 
 									<div className="date-field-wrapper">
@@ -1678,8 +1703,12 @@ const AddProduct = () => {
 
 							<div className="form-group-wrapper">
 								<div className="form-group">
-									<label>
-										<input
+									<label
+										onClick={() => setstarFill((prev) => !prev)}
+										style={{ cursor: 'pointer' }}
+									>
+										<i className={`star-icon ${starFill ? 'adminlib-star' : 'adminlib-star-o'}`}></i>
+										{/* <input
 											type="checkbox"
 											checked={product.featured}
 											onChange={(e) =>
@@ -1688,7 +1717,7 @@ const AddProduct = () => {
 													e.target.value
 												)
 											}
-										/>
+										/> */}
 										This is a featured product
 									</label>
 								</div>
@@ -1696,13 +1725,18 @@ const AddProduct = () => {
 						</div>
 					</div>
 
-					<div className="card-content">
+					<div className="card-content" id="card-product-category">
 						<div className="card-header">
 							<div className="left">
 								<div className="title">Category</div>
 							</div>
 							<div className="right">
-								<i className="adminlib-pagination-right-arrow  arrow-icon"></i>
+								<i
+									className="adminlib-pagination-right-arrow  arrow-icon"
+									onClick={() =>
+										toggleCard('card-product-category')
+									}
+								></i>
 							</div>
 						</div>
 						<div className="card-body">
@@ -1717,13 +1751,13 @@ const AddProduct = () => {
 										{(selectedCat ||
 											selectedSub ||
 											selectedChild) && (
-											<button
-												onClick={resetSelection}
-												className="admin-btn btn-red"
-											>
-												Reset
-											</button>
-										)}
+												<button
+													onClick={resetSelection}
+													className="admin-btn btn-red"
+												>
+													Reset
+												</button>
+											)}
 									</div>
 									<div className="form-group-wrapper">
 										<div className="form-group">
@@ -1738,17 +1772,16 @@ const AddProduct = () => {
 														>
 															{/* CATEGORY */}
 															<li
-																className={`category ${
-																	selectedCat ===
+																className={`category ${selectedCat ===
 																	cat.id
-																		? 'radio-select-active'
-																		: ''
-																}`}
+																	? 'radio-select-active'
+																	: ''
+																	}`}
 																style={{
 																	display:
 																		selectedCat ===
 																			null ||
-																		selectedCat ===
+																			selectedCat ===
 																			cat.id
 																			? 'block'
 																			: 'none',
@@ -1769,7 +1802,7 @@ const AddProduct = () => {
 																cat.id &&
 																cat.children
 																	?.length >
-																	0 && (
+																0 && (
 																	<ul className="settings-form-group-radio">
 																		{cat.children.map(
 																			(
@@ -1782,16 +1815,15 @@ const AddProduct = () => {
 																				>
 																					{/* SUB CATEGORY */}
 																					<li
-																						className={`sub-category ${
-																							selectedSub ===
+																						className={`sub-category ${selectedSub ===
 																							sub.id
-																								? 'radio-select-active'
-																								: ''
-																						}`}
+																							? 'radio-select-active'
+																							: ''
+																							}`}
 																						style={{
 																							display:
 																								!selectedSub ||
-																								selectedSub ===
+																									selectedSub ===
 																									sub.id
 																									? 'block'
 																									: 'none',
@@ -1815,7 +1847,7 @@ const AddProduct = () => {
 																						sub
 																							.children
 																							?.length >
-																							0 && (
+																						0 && (
 																							<ul className="settings-form-group-radio">
 																								{sub.children.map(
 																									(
@@ -1825,16 +1857,15 @@ const AddProduct = () => {
 																											key={
 																												child.id
 																											}
-																											className={`sub-category ${
-																												selectedChild ===
+																											className={`sub-category ${selectedChild ===
 																												child.id
-																													? 'radio-select-active'
-																													: ''
-																											}`}
+																												? 'radio-select-active'
+																												: ''
+																												}`}
 																											style={{
 																												display:
 																													!selectedChild ||
-																													selectedChild ===
+																														selectedChild ===
 																														child.id
 																														? 'block'
 																														: 'none',
@@ -1881,8 +1912,6 @@ const AddProduct = () => {
 
 							<div className="form-group-wrapper">
 								<div className="form-group">
-									<label>Product Tags</label>
-
 									<div className="tag-list">
 										{product.tags?.map((tag) => (
 											<span
