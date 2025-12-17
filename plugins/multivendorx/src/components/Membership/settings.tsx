@@ -117,16 +117,11 @@ const Settings = ({ id }: { id: string }) => {
 			<div className="container-wrapper">
 				<div className="card-wrapper column w-65">
 					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">Membership Settings</div>
-							</div>
-						</div>
 						<div className="card-body">
 							<div className="form-group-wrapper">
 								<div className="form-group">
 									<label htmlFor="product-name">
-										Vendor Membership List Page
+										Membership plans showcase page
 									</label>
 									<SelectInput
 										name="stock_status"
@@ -140,6 +135,11 @@ const Settings = ({ id }: { id: string }) => {
 									//     )
 									// }
 									/>
+									<div className="settings-metabox-description">
+										{__(
+											'This page shows all plan options to vendors when they sign up or upgrade their subscription.'
+										)}
+									</div>
 								</div>
 							</div>
 
