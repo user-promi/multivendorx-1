@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { TourProvider, ProviderProps, StepType } from '@reactour/tour';
 import Tour from './TourSteps';
 
@@ -11,8 +11,9 @@ export interface AppLocalizer {
     module_page_url?: string;
     settings_page_url?: string;
     customization_settings_url?: string;
-    apiUrl?: string;
-    nonce?: string;
+    apiUrl: string;
+    nonce: string;
+    restUrl: string;
 }
 
 // Props for TourSetup

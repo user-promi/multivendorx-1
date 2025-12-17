@@ -72,10 +72,11 @@
             display: flex;
             gap: 0.5rem;
 
-            .field-wrapper {
-                .des {
-                    padding-top: 0.5rem;
-                }
+            .field-wrapper,
+            .field-wrapper .des {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
             }
 
             span {

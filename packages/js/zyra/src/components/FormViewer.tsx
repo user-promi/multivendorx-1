@@ -5,6 +5,15 @@ import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import type { MultiValue, SingleValue } from 'react-select';
 
+type InputValue =
+    | string
+    | number
+    | boolean
+    | File
+    | string[]
+    | null
+    | undefined;
+
 /**
  * Internal dependencies
  */
@@ -214,7 +223,9 @@ const FormViewer: React.FC< FormViewerProps > = ( {
     countryList,
     stateList,
 } ) => {
-    const [ inputs, setInputs ] = useState< Record< string, any > >( {} );
+    const [ inputs, setInputs ] = useState< Record< string, InputValue > >(
+        {}
+    );
     const formList = formFields.formfieldlist || [];
     const buttonSetting = formFields.butttonsetting || {};
     const [ captchaToken, setCaptchaToken ] = useState< string | null >( null );
@@ -226,7 +237,9 @@ const FormViewer: React.FC< FormViewerProps > = ( {
     );
     const siteKey = recaptchaField?.sitekey || null;
     useEffect( () => {
-        setInputs( response );
+        if ( response ) {
+            setInputs( response );
+        }
     }, [ response ] );
     useEffect( () => {
         if ( ! siteKey ) {
@@ -254,7 +267,7 @@ const FormViewer: React.FC< FormViewerProps > = ( {
         }
     }, [ siteKey ] );
 
-    const handleChange = ( name: string, value: any ) => {
+    const handleChange = ( name: string, value: InputValue ) => {
         setInputs( ( prevData ) => ( { ...prevData, [ name ]: value } ) );
     };
 
@@ -299,7 +312,10 @@ const FormViewer: React.FC< FormViewerProps > = ( {
                 case 'textarea':
                 case 'datepicker':
                 case 'timepicker':
-                    if ( ! value || value.trim() === '' ) {
+                    if (
+                        ! value ||
+                        ( typeof value === 'string' && value.trim() === '' )
+                    ) {
                         error[ field.name ] = `${ field.label } is required.`;
                     }
                     break;
@@ -336,12 +352,33 @@ const FormViewer: React.FC< FormViewerProps > = ( {
         const data = new FormData();
 
         for ( const key in inputs ) {
-            if ( inputs.hasOwnProperty( key ) ) {
-                data.append( key, inputs[ key ] );
+            if ( Object.prototype.hasOwnProperty.call( inputs, key ) ) {
+                const value = inputs[ key ];
+                if ( value !== undefined && value !== null ) {
+                    if (
+                        typeof value === 'number' ||
+                        typeof value === 'boolean'
+                    ) {
+                        data.append( key, value.toString() );
+                    } else if ( Array.isArray( value ) ) {
+                        data.append( key, JSON.stringify( value ) );
+                    } else {
+                        data.append( key, value as string | Blob );
+                    }
+                }
             }
         }
 
-        onSubmit( inputs );
+        const submitData: Record< string, string | number | File | undefined > =
+            {};
+        for ( const key in inputs ) {
+            const value = inputs[ key ];
+            if ( value !== undefined && value !== null ) {
+                // Exclude null values
+                submitData[ key ] = value as string | number | File | undefined;
+            }
+        }
+        onSubmit( submitData );
     };
 
     const defaultDate: string = new Date().getFullYear() + '-01-01';
@@ -366,7 +403,7 @@ const FormViewer: React.FC< FormViewerProps > = ( {
                                     name={ field.name }
                                     className="input-text"
                                     value={
-                                        field.name === 'name'
+                                        ( field.name === 'name'
                                             ? ( typeof enquiryFormData !==
                                                   'undefined' &&
                                                   enquiryFormData
@@ -382,8 +419,12 @@ const FormViewer: React.FC< FormViewerProps > = ( {
                                                   enquiryCartTable
                                                       ?.default_placeholder
                                                       ?.name ) ||
-                                              inputs[ field.name ]
-                                            : inputs[ field.name ?? '' ]
+                                              ( inputs[
+                                                  field.name ?? ''
+                                              ] as string )
+                                            : ( inputs[
+                                                  field.name ?? ''
+                                              ] as string ) ) || ''
                                     }
                                     placeholder={ field.placeholder }
                                     onChange={ ( e ) =>
@@ -427,7 +468,10 @@ const FormViewer: React.FC< FormViewerProps > = ( {
                                             enquiryCartTable
                                                 ?.default_placeholder
                                                 ?.email ) ||
-                                        inputs[ field.name ?? '' ]
+                                        ( inputs[
+                                            field.name ?? ''
+                                        ] as string ) ||
+                                        ''
                                     }
                                     placeholder={ field.placeholder }
                                     onChange={ ( e ) =>
@@ -449,7 +493,11 @@ const FormViewer: React.FC< FormViewerProps > = ( {
                                 </label>
                                 <textarea
                                     name={ field.name }
-                                    value={ inputs[ field.name ?? '' ] }
+                                    value={
+                                        ( inputs[
+                                            field.name ?? ''
+                                        ] as string ) || ''
+                                    }
                                     placeholder={ field.placeholder }
                                     onChange={ ( e ) =>
                                         handleChange(
@@ -628,8 +676,9 @@ const FormViewer: React.FC< FormViewerProps > = ( {
                                     <input
                                         type="date"
                                         value={
-                                            inputs[ field.name ?? '' ] ||
-                                            defaultDate
+                                            ( inputs[
+                                                field.name ?? ''
+                                            ] as string ) || defaultDate
                                         }
                                         onChange={ ( e ) => {
                                             handleChange(
@@ -655,7 +704,11 @@ const FormViewer: React.FC< FormViewerProps > = ( {
                                 </label>
                                 <input
                                     type="time"
-                                    value={ inputs[ field.name ?? '' ] }
+                                    value={
+                                        ( inputs[
+                                            field.name ?? ''
+                                        ] as string ) || ''
+                                    }
                                     className="input-text"
                                     onChange={ ( e ) => {
                                         handleChange(
@@ -684,7 +737,7 @@ const FormViewer: React.FC< FormViewerProps > = ( {
                         return (
                             <fieldset key={ field.id }>
                                 <legend>{ field.label }</legend>
-                                { field.fields?.map( ( subField: any ) => {
+                                { field.fields?.map( ( subField: Field ) => {
                                     if ( subField.disabled ) {
                                         return null;
                                     }
@@ -764,7 +817,9 @@ const FormViewer: React.FC< FormViewerProps > = ( {
                                             inputs[ 'country' ];
                                         const availableStates =
                                             buildStateOptions(
-                                                selectedCountryValue
+                                                selectedCountryValue as
+                                                    | string
+                                                    | undefined
                                             );
 
                                         return (
@@ -807,7 +862,10 @@ const FormViewer: React.FC< FormViewerProps > = ( {
                                                     placeholder={
                                                         subField.placeholder
                                                     }
-                                                    value={ value }
+                                                    value={
+                                                        ( value as string ) ||
+                                                        ''
+                                                    }
                                                     required={
                                                         field.required ||
                                                         subField.required

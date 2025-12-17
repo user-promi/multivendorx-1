@@ -15,8 +15,8 @@ interface SubField {
     readonly?: boolean;
 }
 
-interface AddressFormField {
-    id: number;
+export interface AddressFormField {
+    id: number ;
     type: string;
     label: string;
     fields?: SubField[];
