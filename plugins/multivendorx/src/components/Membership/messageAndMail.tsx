@@ -9,11 +9,15 @@ import {
 	SuccessNotice,
 	MultiCheckBox,
 	ToggleSetting,
+	MultiCheckboxTable,
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
 const MessageAndMail = ({ id }: { id: string }) => {
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
+	const [pricingType, setPricingType] = useState<'free' | 'paid'>('free');
+	const [commissionType, setcommissionType] = useState<'prcentage' | 'fixed'>('prcentage');
+	const [starFill, setstarFill] = useState(false);
 
 	const [imagePreviews, setImagePreviews] = useState<{
 		[key: string]: string;
@@ -112,6 +116,45 @@ const MessageAndMail = ({ id }: { id: string }) => {
 			}
 		});
 	};
+	const [setting, setSetting] = useState<Record<string, string[]>>({
+		product_create: [],
+		product_edit: [],
+		product_delete: [],
+	});
+	const storeTabSetting = {
+		products: ['simple', 'variable', 'grouped'],
+	};
+	const columns = [
+		{
+			key: 'description',
+			label: 'Description',
+			type: 'description',
+		},
+		{
+			key: 'product_create',
+			label: 'Status',
+		},
+	];
+	const rows = [
+		{
+			key: 'simple',
+			label: 'Simple Product',
+			description:
+				'Allows vendors to create and manage simple products.',
+		},
+		{
+			key: 'variable',
+			label: 'Variable Product',
+			description:
+				'Allows vendors to manage products with variations.',
+		},
+		{
+			key: 'grouped',
+			label: 'Grouped Product',
+			description:
+				'Allows vendors to sell multiple related products together.',
+		},
+	];
 
 	return (
 		<>
@@ -146,11 +189,15 @@ const MessageAndMail = ({ id }: { id: string }) => {
 												),
 											},
 										]}
-										// value={formData.status}
-										// onChange={handleToggleChange}
+									// value={formData.status}
+									// onChange={handleToggleChange}
 									/>
-									<div className="des">
-										<i className="adminlib-star star-icon"></i>{' '}
+									<div
+										className="des"
+										onClick={() => setstarFill((prev) => !prev)}
+										style={{ cursor: 'pointer' }}
+									>
+										<i className={`star-icon ${starFill ? 'adminlib-star' : 'adminlib-star-o'}`}></i>
 										Mark as recommended plan
 									</div>
 								</div>
@@ -257,6 +304,28 @@ const MessageAndMail = ({ id }: { id: string }) => {
 							</div>
 						</div>
 					</div>
+
+					<div className="card-content">
+						<div className="card-header">
+							<div className="left">
+								<div className="title">Product Types</div>
+							</div>
+						</div>
+						<div className="card-body">
+							<MultiCheckboxTable
+								rows={rows}
+								columns={columns}
+								setting={setting}
+								// onChange={handleChange}
+								storeTabSetting={storeTabSetting}
+								// modules={modules}
+								// moduleChange={handleModuleChange}
+								// proSetting={false}
+								// proChanged={handleProChanged}
+								// khali_dabba={true}
+							/>
+						</div>
+					</div>
 				</div>
 
 				<div className="card-wrapper column w-35">
@@ -282,9 +351,9 @@ const MessageAndMail = ({ id }: { id: string }) => {
 										options={[
 											{
 												key: 'free',
-												value: 'free',
+												value: 'ree',
 												label: __(
-													'free',
+													'Free',
 													'multivendorx'
 												),
 											},
@@ -292,62 +361,64 @@ const MessageAndMail = ({ id }: { id: string }) => {
 												key: 'paid',
 												value: 'paid',
 												label: __(
-													'paid',
+													'Paid',
 													'multivendorx'
 												),
 											},
 										]}
-										// value={formData.status}
-										// onChange={handleToggleChange}
+										value={pricingType}
+										onChange={(value: string) => setPricingType(value as 'free' | 'paid')}
 									/>
 								</div>
+								{pricingType === 'paid' && (
+									<div className="form-group">
+										<label htmlFor="product-name">Price</label>
+										<BasicInput
+											name="name"
+											wrapperClass="setting-form-input"
+											descClass="settings-metabox-description"
+											value={formData.name}
+											onChange={handleChange}
+										/>
+									</div>
+								)}
 							</div>
 							<div className="form-group-wrapper">
-								<div className="form-group">
-									<label htmlFor="product-name">Price</label>
-									<BasicInput
-										name="name"
-										wrapperClass="setting-form-input"
-										descClass="settings-metabox-description"
-										value={formData.name}
-										onChange={handleChange}
-									/>
-								</div>
-							</div>
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<label htmlFor="product-name">
-										Billing cycle
-									</label>
-									<SelectInput
-										name="stock_status"
-										options={billingCycle}
-										type="single-select"
-										// value={product.stock_status}
-										// onChange={(selected) =>
-										//     handleChange(
-										//         'stock_status',
-										//         selected.value
-										//     )
-										// }
-									/>
-								</div>
-							</div>
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<label htmlFor="product-name">
-										Validity duration
-									</label>
-									<BasicInput
-										name="name"
-										postInsideText="Days"
-										wrapperClass="setting-form-input"
-										descClass="settings-metabox-description"
-										value={formData.name}
-										onChange={handleChange}
-										size="15rem"
-									/>
-								</div>
+								{pricingType === 'paid' && (
+									<>
+										<div className="form-group">
+											<label htmlFor="product-name">
+												Billing cycle
+											</label>
+											<SelectInput
+												name="stock_status"
+												options={billingCycle}
+												type="single-select"
+											// value={product.stock_status}
+											// onChange={(selected) =>
+											//     handleChange(
+											//         'stock_status',
+											//         selected.value
+											//     )
+											// }
+											/>
+										</div>
+										<div className="form-group">
+											<label htmlFor="product-name">
+												Validity duration
+											</label>
+											<BasicInput
+												name="name"
+												postInsideText="Days"
+												wrapperClass="setting-form-input"
+												descClass="settings-metabox-description"
+												value={formData.name}
+												onChange={handleChange}
+												size="15rem"
+											/>
+										</div>
+									</>
+								)}
 							</div>
 						</div>
 					</div>
@@ -369,7 +440,7 @@ const MessageAndMail = ({ id }: { id: string }) => {
 										options={[
 											{
 												key: 'percentage',
-												value: 'Percentage',
+												value: 'percentage',
 												label: __(
 													'Percentage',
 													'multivendorx'
@@ -377,33 +448,49 @@ const MessageAndMail = ({ id }: { id: string }) => {
 											},
 											{
 												key: 'fixed',
-												value: 'Fixed',
+												value: 'fixed',
 												label: __(
 													'Fixed',
 													'multivendorx'
 												),
 											},
 										]}
-										// value={formData.status}
-										// onChange={handleToggleChange}
+										value={commissionType}
+										onChange={(value: string) => setcommissionType(value as 'percentage' | 'fixed')}
 									/>
 								</div>
-							</div>
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<label htmlFor="product-name">
-										Marketplace fees
-									</label>
-									<BasicInput
-										name="name"
-										postInsideText="%"
-										wrapperClass="setting-form-input"
-										descClass="settings-metabox-description"
-										value={formData.name}
-										onChange={handleChange}
-										size="15rem"
-									/>
-								</div>
+								{commissionType === 'percentage' && (
+									<div className="form-group">
+										<label htmlFor="product-name">
+											Marketplace fees
+										</label>
+										<BasicInput
+											name="name"
+											postInsideText="%"
+											wrapperClass="setting-form-input"
+											descClass="settings-metabox-description"
+											value={formData.name}
+											onChange={handleChange}
+											size="15rem"
+										/>
+									</div>
+								)}
+								{commissionType === 'fixed' && (
+									<div className="form-group">
+										<label htmlFor="product-name">
+											Marketplace fees
+										</label>
+										<BasicInput
+											name="name"
+											postInsideText="fixed"
+											wrapperClass="setting-form-input"
+											descClass="settings-metabox-description"
+											value={formData.name}
+											onChange={handleChange}
+											size="15rem"
+										/>
+									</div>
+								)}
 							</div>
 						</div>
 					</div>
