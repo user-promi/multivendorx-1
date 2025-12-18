@@ -48,7 +48,7 @@ const StoreSettings = ({
 	// === ADD THESE STATES (replace old ones) ===
 	const [emails, setEmails] = useState<string[]>([]); // All emails
 	const [primaryEmail, setPrimaryEmail] = useState<string>(''); // Which one is starred
-	
+	const settings = appLocalizer.settings_databases_value;
 	// === LOAD EMAILS FROM BACKEND ===
 	useEffect(() => {
 		let parsedEmails = [];
@@ -90,15 +90,18 @@ const StoreSettings = ({
 	});
 
 	useEffect(() => {
-		if (appLocalizer) {
-			setMapProvider(appLocalizer.map_providor);
-			if (appLocalizer.map_providor === 'google_map_set') {
-				setApiKey(appLocalizer.google_api_key);
-			} else {
-				setApiKey(appLocalizer.mapbox_api_key);
-			}
+		if (!settings?.geolocation) return;
+	
+		const provider = settings.geolocation.choose_map_api;
+	
+		setMapProvider(provider);
+	
+		if (provider === 'google_map_set') {
+			setApiKey(settings.geolocation.google_api_key || '');
+		} else if (provider === 'mapbox_api_set') {
+			setApiKey(settings.geolocation.mapbox_api_key || '');
 		}
-	}, []);
+	}, [settings]);
 
 	// Load store data
 	useEffect(() => {
@@ -364,7 +367,7 @@ const StoreSettings = ({
 		if (!modules.includes('geo-location') || !apiKey) {
 			return null;
 		}
-
+	
 		const commonProps = {
 			apiKey,
 			locationAddress: addressData.location_address,
@@ -373,19 +376,20 @@ const StoreSettings = ({
 			onLocationUpdate: handleLocationUpdate,
 			labelSearch: __('Search for a location'),
 			labelMap: __('Drag or click on the map to choose a location'),
-			instructionText: __(
-				'Enter a search term or drag/drop a pin on the map.'
-			),
+			instructionText: __('Enter a search term or drag/drop a pin on the map.'),
 			placeholderSearch: __('Search for a location...'),
 		};
-
-		if (mapProvider === 'google_map_set') {
-			return <GoogleMap {...commonProps} />;
-		} else if (mapProvider === 'mapbox_api_set') {
-			return <Mapbox {...commonProps} />;
+	
+		switch (settings.geolocation.choose_map_api) {
+			case 'google_map_set':
+				return <GoogleMap {...commonProps} />;
+	
+			case 'mapbox_api_set':
+				return <Mapbox {...commonProps} />;
+	
+			default:
+				return null;
 		}
-
-		return null;
 	};
 
 	return (
