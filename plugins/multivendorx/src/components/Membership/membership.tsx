@@ -11,6 +11,7 @@ import {
 	ToggleSetting,
 	MultiCheckboxTable,
 	AdminBreadcrumbs,
+	NestedComponent,
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
@@ -19,6 +20,8 @@ const Membership = ({ id }: { id: string }) => {
 	const [pricingType, setPricingType] = useState<'free' | 'paid'>('free');
 	const [commissionType, setcommissionType] = useState<'prcentage' | 'fixed'>('prcentage');
 	const [starFill, setstarFill] = useState(false);
+	const [allowTrial, setAllowTrial] = useState(false);
+	const [features, setFeatures] = useState<string[]>(['']);
 
 	const [imagePreviews, setImagePreviews] = useState<{
 		[key: string]: string;
@@ -293,6 +296,21 @@ const Membership = ({ id }: { id: string }) => {
 		},
 	};
 
+	// add membership start
+	const addFeature = () => {
+		setFeatures((prev) => [...prev, '']);
+	};
+
+	const updateFeature = (index: number, value: string) => {
+		setFeatures((prev) =>
+			prev.map((f, i) => (i === index ? value : f))
+		);
+	};
+
+	const clearAll = () => {
+		setFeatures(['']);
+	};
+	// add membership end
 	return (
 		<>
 			<AdminBreadcrumbs
@@ -387,69 +405,7 @@ const Membership = ({ id }: { id: string }) => {
 								</div>
 							</div>
 							<div className="card-body">
-								<div className="form-group-wrapper">
-									<div className="form-group">
-										<label htmlFor="product-name">
-											Total products
-										</label>
-										<BasicInput
-											name="name"
-											wrapperClass="setting-form-input"
-											descClass="settings-metabox-description"
-											value={formData.name}
-											onChange={handleChange}
-										/>
-									</div>
-									<div className="form-group">
-										<label htmlFor="product-name">
-											Gallery images per product
-										</label>
-										<BasicInput
-											name="slug"
-											wrapperClass="setting-form-input"
-											descClass="settings-metabox-description"
-											value={formData.slug}
-											onChange={handleChange}
-										/>
-									</div>
-								</div>
 
-								<div className="form-group-wrapper">
-									<div className="form-group">
-
-									</div>
-									<div className="form-group">
-										<label htmlFor="product-name">
-											Featured products
-										</label>
-										<MultiCheckBox
-											wrapperClass="toggle-btn"
-											inputWrapperClass="toggle-checkbox-header"
-											inputInnerWrapperClass="toggle-checkbox"
-											idPrefix="toggle-switch-sold-individually"
-											type="checkbox"
-											// value={
-											// 	product.sold_individually
-											// 		? ['sold_individually']
-											// 		: []
-											// }
-											// onChange={(e) =>
-											// 	handleChange(
-											// 		'sold_individually',
-											// 		(
-											// 			e as React.ChangeEvent<HTMLInputElement>
-											// 		).target.checked
-											// 	)
-											// }
-											options={[
-												{
-													key: 'sold_individually',
-													value: 'sold_individually',
-												},
-											]}
-										/>
-									</div>
-								</div>
 							</div>
 						</div>
 
@@ -493,10 +449,6 @@ const Membership = ({ id }: { id: string }) => {
 										<ToggleSetting
 											wrapperClass="setting-form-input"
 											descClass="settings-metabox-description"
-											description={__(
-												'Select the status of the announcement.',
-												'multivendorx'
-											)}
 											options={[
 												{
 													key: 'free',
@@ -521,7 +473,7 @@ const Membership = ({ id }: { id: string }) => {
 									</div>
 									{pricingType === 'paid' && (
 										<div className="form-group">
-											<label htmlFor="product-name">Subscription price</label>
+											<label htmlFor="product-name">Sign up fee</label>
 											<BasicInput
 												name="name"
 												wrapperClass="setting-form-input"
@@ -532,9 +484,45 @@ const Membership = ({ id }: { id: string }) => {
 										</div>
 									)}
 								</div>
-								<div className="form-group-wrapper">
-									{pricingType === 'paid' && (
-										<>
+								{pricingType === 'paid' && (
+									<>
+										<div className="form-group-wrapper">
+											<div className="form-group">
+												<label htmlFor="product-name">Recurring price</label>
+												<BasicInput
+													name="name"
+													wrapperClass="setting-form-input"
+													descClass="settings-metabox-description"
+													value={formData.name}
+													size={"12rem"}
+													onChange={handleChange}
+													description={__(
+														'You must enable/active MVX Stripe Marketplace or MVX PayPal Marketplace to use recurring subscription',
+														'multivendorx'
+													)}
+												/>
+											</div>
+										</div>
+
+										<div className="form-group-wrapper">
+											<div className="form-group">
+												<label htmlFor="product-name">
+													Billing cycle stop
+												</label>
+												<SelectInput
+													name="stock_status"
+													options={billingCycleStop}
+													type="single-select"
+												// value={product.stock_status}
+												// onChange={(selected) =>
+												//     handleChange(
+												//         'stock_status',
+												//         selected.value
+												//     )
+												// }
+												/>
+											</div>
+
 											<div className="form-group">
 												<label htmlFor="product-name">
 													Billing cycle
@@ -568,26 +556,62 @@ const Membership = ({ id }: { id: string }) => {
 													/>
 												</div>
 											</div>
+										</div>
+										<div className="form-group-wrapper">
 											<div className="form-group">
-												<label htmlFor="product-name">
-													Billing cycle stop
+												<label>
+													<input
+														type="checkbox"
+														checked={allowTrial}
+														onChange={(e) => setAllowTrial(e.target.checked)}
+													/>
+													Please check this if you want to allow trial subscription.
 												</label>
-												<SelectInput
-													name="stock_status"
-													options={billingCycleStop}
-													type="single-select"
-												// value={product.stock_status}
-												// onChange={(selected) =>
-												//     handleChange(
-												//         'stock_status',
-												//         selected.value
-												//     )
-												// }
-												/>
 											</div>
-										</>
-									)}
-								</div>
+										</div>
+										<div className="form-group-wrapper">
+
+											<div className="form-group">
+												{allowTrial && (
+													<>
+														<label htmlFor="product-name">
+															Billing cycle
+														</label>
+
+														<div className="multi-field">
+															<SelectInput
+																name="stock_status"
+																options={billingCycleNumber}
+																type="single-select"
+																size={"4rem"}
+															// value={product.stock_status}
+															// onChange={(selected) =>
+															//     handleChange(
+															//         'stock_status',
+															//         selected.value
+															//     )
+															// }
+															/>
+															<SelectInput
+																name="stock_status"
+																options={billingCycle}
+																type="single-select"
+																size={"14rem"}
+															// value={product.stock_status}
+															// onChange={(selected) =>
+															//     handleChange(
+															//         'stock_status',
+															//         selected.value
+															//     )
+															// }
+															/>
+														</div>
+													</>
+												)}
+											</div>
+										</div>
+									</>
+								)}
 							</div>
 						</div>
 						<div className="card-content">
@@ -662,9 +686,125 @@ const Membership = ({ id }: { id: string }) => {
 								</div>
 							</div>
 						</div>
+						<div className="card-content">
+							<div className="card-header">
+								<div className="left">
+									<div className="title">Membership Features</div>
+								</div>
+							</div>
+							<div className="card-body">
+								<div className="membership-features">
+
+									<div className="buttons-wrapper">
+										<button
+											type="button"
+											className="admin-btn btn-red"
+											onClick={clearAll}
+										>
+											<i className="adminlib-delete"></i> Clear All
+										</button>
+										<button
+											type="button"
+											className="admin-btn btn-purple"
+											onClick={addFeature}
+										>
+										<i className="adminlib-plus"></i>	Add Feature
+										</button>
+									</div>
+
+									<div className="features-list">
+										{features.map((feature, index) => (
+											<div className="feature-row" key={index}>
+												<span className={`feature-number`}>
+													{index + 1}
+												</span>
+												<input
+													type="text"
+													className="basic-input"
+													placeholder="e.g., Unlimited access to premium content"
+													value={feature}
+													onChange={(e) =>
+														updateFeature(index, e.target.value)
+													}
+												/>
+											</div>
+										))}
+									</div>
+								</div>
+							</div>
+						</div>
+						<div className="card-content">
+							<div className="card-header">
+								<div className="left">
+									<div className="title">Product Limits</div>
+								</div>
+							</div>
+							<div className="card-body">
+								<div className="form-group-wrapper">
+									<div className="form-group">
+										<label htmlFor="product-name">
+											Total products
+										</label>
+										<BasicInput
+											name="name"
+											wrapperClass="setting-form-input"
+											descClass="settings-metabox-description"
+											value={formData.name}
+											onChange={handleChange}
+										/>
+									</div>
+									<div className="form-group">
+										<label htmlFor="product-name">
+											Gallery images per product
+										</label>
+										<BasicInput
+											name="slug"
+											wrapperClass="setting-form-input"
+											descClass="settings-metabox-description"
+											value={formData.slug}
+											onChange={handleChange}
+										/>
+									</div>
+								</div>
+
+								<div className="form-group-wrapper">
+									<div className="form-group">
+										<label htmlFor="product-name">
+											Featured products
+										</label>
+										<MultiCheckBox
+											wrapperClass="toggle-btn"
+											inputWrapperClass="toggle-checkbox-header"
+											inputInnerWrapperClass="toggle-checkbox"
+											idPrefix="toggle-switch-sold-individually"
+											type="checkbox"
+											// value={
+											// 	product.sold_individually
+											// 		? ['sold_individually']
+											// 		: []
+											// }
+											// onChange={(e) =>
+											// 	handleChange(
+											// 		'sold_individually',
+											// 		(
+											// 			e as React.ChangeEvent<HTMLInputElement>
+											// 		).target.checked
+											// 	)
+											// }
+											options={[
+												{
+													key: 'sold_individually',
+													value: 'sold_individually',
+												},
+											]}
+										/>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
-			</div>
+			</div >
 		</>
 	);
 };
