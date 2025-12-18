@@ -244,12 +244,10 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 										<div className="avatar">
 											{(
 												(
-													formData.primary_owner_info
-														?.data?.display_name?.trim() ||
+													formData.primary_owner_info?.data?.display_name?.trim() ||
 													formData.primary_owner_info
 														?.data?.user_login
-												)?.charAt(0) ||
-												''
+												)?.charAt(0) || ''
 											).toUpperCase()}
 										</div>
 										<div className="details">

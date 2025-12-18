@@ -239,7 +239,9 @@ const field = {
 const Membership = ({ id }: { id: string }) => {
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
 	const [pricingType, setPricingType] = useState<'free' | 'paid'>('free');
-	const [commissionType, setcommissionType] = useState<'prcentage' | 'fixed'>('prcentage');
+	const [commissionType, setcommissionType] = useState<'prcentage' | 'fixed'>(
+		'prcentage'
+	);
 	const [starFill, setstarFill] = useState(false);
 	const [allowTrial, setAllowTrial] = useState(false);
 	const [pleaseCheck, setpleaseCheck] = useState(false);
@@ -660,15 +662,19 @@ const Membership = ({ id }: { id: string }) => {
 													),
 												},
 											]}
-										// value={formData.status}
-										// onChange={handleToggleChange}
+											// value={formData.status}
+											// onChange={handleToggleChange}
 										/>
 										<div
 											className="des"
-											onClick={() => setstarFill((prev) => !prev)}
+											onClick={() =>
+												setstarFill((prev) => !prev)
+											}
 											style={{ cursor: 'pointer' }}
 										>
-											<i className={`star-icon ${starFill ? 'adminlib-star' : 'adminlib-star-o'}`}></i>
+											<i
+												className={`star-icon ${starFill ? 'adminlib-star' : 'adminlib-star-o'}`}
+											></i>
 											Mark as recommended plan
 										</div>
 									</div>
@@ -1163,7 +1169,9 @@ const Membership = ({ id }: { id: string }) => {
 						<div className="card-content">
 							<div className="card-header">
 								<div className="left">
-									<div className="title">Pricing &Billing</div>
+									<div className="title">
+										Pricing &Billing
+									</div>
 								</div>
 							</div>
 							<div className="card-body">
@@ -1194,7 +1202,11 @@ const Membership = ({ id }: { id: string }) => {
 												},
 											]}
 											value={pricingType}
-											onChange={(value: string) => setPricingType(value as 'free' | 'paid')}
+											onChange={(value: string) =>
+												setPricingType(
+													value as 'free' | 'paid'
+												)
+											}
 										/>
 									</div>
 								</div>

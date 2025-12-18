@@ -68,7 +68,7 @@ const Memberships = () => {
 
 	return (
 		<>
-		{isAddMem && <Membership />}
+			{isAddMem && <Membership />}
 
 			{!isAddMem && (
 				<Tabs

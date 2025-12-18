@@ -7,7 +7,7 @@ import {
 	Tabs,
 	CommonPopup,
 	useModules,
-	SuccessNotice
+	SuccessNotice,
 } from 'zyra';
 import { Skeleton } from '@mui/material';
 
@@ -820,23 +820,27 @@ const EditStore = () => {
 												</span>
 											</div>
 
-											{modules.includes('store-review') && (
+											{modules.includes(
+												'store-review'
+											) && (
 												<div className="reviews-wrapper">
-													{[...Array(5)].map((_, i) => (
-														<i
-															key={i}
-															className={`review adminlib-star${
-																data.total_reviews >
-																	0 &&
-																i <
-																	Math.round(
-																		data.overall_reviews
-																	)
-																	? ''
-																	: '-o'
-															}`}
-														></i>
-													))}
+													{[...Array(5)].map(
+														(_, i) => (
+															<i
+																key={i}
+																className={`review adminlib-star${
+																	data.total_reviews >
+																		0 &&
+																	i <
+																		Math.round(
+																			data.overall_reviews
+																		)
+																		? ''
+																		: '-o'
+																}`}
+															></i>
+														)
+													)}
 
 													<span>
 														{data.total_reviews > 0
@@ -1028,10 +1032,12 @@ const EditStore = () => {
 													)}{' '}
 												</span>
 											</li>
-											<li onClick={() => {
+											<li
+												onClick={() => {
 													setActionMenu(false);
 													handleStoreDelete();
-												}}>
+												}}
+											>
 												<span className="item">
 													{' '}
 													<i className="adminlib-delete"></i>{' '}

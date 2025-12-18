@@ -83,7 +83,7 @@ const StoreCommission: React.FC = () => {
 				setTotalRows(response.data || 0);
 				setPageCount(Math.ceil(response.data / pagination.pageSize));
 			})
-			.catch(() => { });
+			.catch(() => {});
 	}, []);
 
 	useEffect(() => {
@@ -247,8 +247,9 @@ const StoreCommission: React.FC = () => {
 				return (
 					<TableCell>
 						<ul
-							className={`details ${isExpanded ? '' : 'overflow'
-								}`}
+							className={`details ${
+								isExpanded ? '' : 'overflow'
+							}`}
 						>
 							{row.original?.commissionAmount ? (
 								<li>
@@ -266,86 +267,86 @@ const StoreCommission: React.FC = () => {
 							) : null}
 							{(row.original?.shippingAmount ||
 								row.original?.taxAmount) && (
-									<li>
-										{row.original?.shippingAmount && (
-											<div className="item">
-												<div className="des">Shipping</div>
-												<div className="title">
-													+{' '}
-													{formatCurrency(
-														row.original.shippingAmount
-													)}
-												</div>
+								<li>
+									{row.original?.shippingAmount && (
+										<div className="item">
+											<div className="des">Shipping</div>
+											<div className="title">
+												+{' '}
+												{formatCurrency(
+													row.original.shippingAmount
+												)}
 											</div>
-										)}
+										</div>
+									)}
 
-										{row.original?.taxAmount && (
-											<div className="item">
-												<div className="des">Tax</div>
-												<div className="title">
-													+{' '}
-													{formatCurrency(
-														row.original.taxAmount
-													)}
-												</div>
+									{row.original?.taxAmount && (
+										<div className="item">
+											<div className="des">Tax</div>
+											<div className="title">
+												+{' '}
+												{formatCurrency(
+													row.original.taxAmount
+												)}
 											</div>
-										)}
-									</li>
-								)}
+										</div>
+									)}
+								</li>
+							)}
 							{((modules.includes('marketplace-gateway') &&
 								row.original?.gatewayFee) ||
 								(modules.includes('facilitator') &&
 									row.original?.facilitatorFee) ||
 								(modules.includes('marketplace-fee') &&
 									row.original?.platformFee)) && (
-									<li>
-										{modules.includes('marketplace-gateway') &&
-											row.original?.gatewayFee && (
-												<div className="item">
-													<div className="des">
-														Gateway Fee
-													</div>
-													<div className="title">
-														-{' '}
-														{formatCurrency(
-															row.original.gatewayFee
-														)}
-													</div>
+								<li>
+									{modules.includes('marketplace-gateway') &&
+										row.original?.gatewayFee && (
+											<div className="item">
+												<div className="des">
+													Gateway Fee
 												</div>
-											)}
+												<div className="title">
+													-{' '}
+													{formatCurrency(
+														row.original.gatewayFee
+													)}
+												</div>
+											</div>
+										)}
 
-										{modules.includes('facilitator') &&
-											row.original?.facilitatorFee && (
-												<div className="item">
-													<div className="des">
-														Facilitator Fee
-													</div>
-													<div className="title">
-														-{' '}
-														{formatCurrency(
-															row.original
-																.facilitatorFee
-														)}
-													</div>
+									{modules.includes('facilitator') &&
+										row.original?.facilitatorFee && (
+											<div className="item">
+												<div className="des">
+													Facilitator Fee
 												</div>
-											)}
+												<div className="title">
+													-{' '}
+													{formatCurrency(
+														row.original
+															.facilitatorFee
+													)}
+												</div>
+											</div>
+										)}
 
-										{modules.includes('marketplace-fee') &&
-											row.original?.platformFee && (
-												<div className="item">
-													<div className="des">
-														Marketplace Fee
-													</div>
-													<div className="title">
-														-{' '}
-														{formatCurrency(
-															row.original.platformFee
-														)}
-													</div>
+									{modules.includes('marketplace-fee') &&
+										row.original?.platformFee && (
+											<div className="item">
+												<div className="des">
+													Marketplace Fee
 												</div>
-											)}
-									</li>
-								)}
+												<div className="title">
+													-{' '}
+													{formatCurrency(
+														row.original.platformFee
+													)}
+												</div>
+											</div>
+										)}
+								</li>
+							)}
 
 							<span
 								className="more-btn"
@@ -442,18 +443,18 @@ const StoreCommission: React.FC = () => {
 						header={{
 							actions: isPaid
 								? [
-									{
-										label: __(
-											'View Commission',
-											'multivendorx'
-										),
-										icon: 'adminlib-eye',
-										onClick: (rowData) => {
-											setModalCommission(rowData);
+										{
+											label: __(
+												'View Commission',
+												'multivendorx'
+											),
+											icon: 'adminlib-eye',
+											onClick: (rowData) => {
+												setModalCommission(rowData);
+											},
+											hover: true,
 										},
-										hover: true,
-									},
-								]
+									]
 								: [],
 						}}
 					/>
@@ -577,7 +578,9 @@ const StoreCommission: React.FC = () => {
 				<button
 					onClick={handleDownload}
 					disabled={
-						isDownloading || isLoading || (!hasSelectedRows && !data)
+						isDownloading ||
+						isLoading ||
+						(!hasSelectedRows && !data)
 					}
 					className="admin-btn"
 				>
@@ -612,13 +615,13 @@ const StoreCommission: React.FC = () => {
 				format: 'csv',
 				startDate: currentFilterData?.date?.start_date
 					? currentFilterData.date.start_date
-						.toISOString()
-						.split('T')[0]
+							.toISOString()
+							.split('T')[0]
 					: '',
 				endDate: currentFilterData?.date?.end_date
 					? currentFilterData.date.end_date
-						.toISOString()
-						.split('T')[0]
+							.toISOString()
+							.split('T')[0]
 					: '',
 			};
 

@@ -615,7 +615,7 @@ const Table: React.FC< TableProps > = ( {
         getFilteredRowModel: getFilteredRowModel(),
     } );
 
-    const typeCountActive = filterData.typeCount || defaultCounts;
+    const typeCountActive = filterData.categoryFilter || defaultCounts;
     return (
         <>
             { ( categoryFilter?.length > 0 || searchFilter ) && (
@@ -634,7 +634,7 @@ const Table: React.FC< TableProps > = ( {
                                                         tabIndex={ 0 }
                                                         onClick={ () =>
                                                             setFilterData( {
-                                                                typeCount:
+                                                                categoryFilter:
                                                                     countInfo.key,
                                                             } )
                                                         }

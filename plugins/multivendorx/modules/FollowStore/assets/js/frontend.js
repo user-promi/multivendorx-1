@@ -8,30 +8,28 @@ jQuery(document).ready(function ($) {
 		$.post(
 			followStoreFrontend.ajaxurl,
 			{
-				action: 'mvx_get_follow_data',
+				action: 'multivendorx_get_store_follow_status',
 				store_id: store_id,
 				nonce: followStoreFrontend.nonce,
 			},
 			function (res) {
-				if (res.success) {
-					btn.text(res.data.button_text).show();
-
-					if (res.data.button_text === 'Login to Follow') {
-						btn.off('click').on('click', function () {
-							window.location.href = res.data.login_url;
-						});
-					}
-
-					if (res.data.follower_count == 1) {
-						$('#followers-count-' + store_id).text(
-							res.data.follower_count + ' Follower'
-						);
-					} else {
-						$('#followers-count-' + store_id).text(
-							res.data.follower_count + ' Followers'
-						);
-					}
+				if (!res.success) {
+					return;
 				}
+
+				var isFollowing = res.data.follow;
+				var count = parseInt(res.data.follower_count, 10) || 0;
+
+				/**
+				 * Button text
+				 */
+				btn.text(isFollowing ? 'Unfollow' : 'Follow').show();
+
+				/**
+				 * Follower count text
+				 */
+				var label = count === 1 ? 'Follower' : 'Followers';
+				$('#followers-count-' + store_id).text(count + ' ' + label);
 			}
 		);
 	});
@@ -42,46 +40,60 @@ jQuery(document).ready(function ($) {
 		var store_id = btn.data('store-id');
 		var user_id = btn.data('user-id');
 
-		if (!user_id || btn.text().trim() === 'Login to Follow') {
+		if (!user_id) {
+			$('#multivendorx-login-modal').data('store-id', store_id).fadeIn();
 			return;
 		}
+
+		btn.prop('disabled', true);
 
 		$.post(
 			followStoreFrontend.ajaxurl,
 			{
-				action: 'mvx_follow_store',
+				action: 'multivendorx_follow_store_toggle',
 				store_id: store_id,
 				user_id: user_id,
 				nonce: followStoreFrontend.nonce,
 			},
 			function (res) {
-				if (res.success) {
-					btn.text(res.data.new_status);
-
-					// Update follower count
-					$.post(
-						followStoreFrontend.ajaxurl,
-						{
-							action: 'mvx_get_follow_data',
-							store_id: store_id,
-							nonce: followStoreFrontend.nonce,
-						},
-						function (resp) {
-							if (resp.success) {
-								if (resp.data.follower_count == 1) {
-									$('#followers-count-' + store_id).text(
-										resp.data.follower_count + ' Follower'
-									);
-								} else {
-									$('#followers-count-' + store_id).text(
-										resp.data.follower_count + ' Followers'
-									);
-								}
-							}
-						}
-					);
+				if (!res.success) {
+					btn.prop('disabled', false);
+					return;
 				}
+
+				var isFollowing = res.data.follow;
+				var count = parseInt(res.data.follower_count, 10) || 0;
+
+				/**
+				 * Button text
+				 */
+				btn.text(isFollowing ? 'Unfollow' : 'Follow');
+
+				/**
+				 * Follower count
+				 */
+				var label = count === 1 ? 'Follower' : 'Followers';
+				$('#followers-count-' + store_id).text(count + ' ' + label);
+
+				btn.prop('disabled', false);
 			}
 		);
+	});
+	$(document).on('click', '.multivendorx-close', function () {
+		$('#multivendorx-login-modal').fadeOut();
+	});
+
+	// Close when clicking outside the modal content
+	$(document).on('click', '#multivendorx-login-modal', function (e) {
+		if ($(e.target).is('#multivendorx-login-modal')) {
+			$(this).fadeOut();
+		}
+	});
+
+	// Optional: Close modal on ESC key
+	$(document).on('keydown', function (e) {
+		if (e.key === 'Escape') {
+			$('#multivendorx-login-modal').fadeOut();
+		}
 	});
 });

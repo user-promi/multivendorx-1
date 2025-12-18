@@ -1,11 +1,13 @@
+/*global  appLocalizer*/
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { getApiLink, Table, TableCell } from 'zyra';
 import { ColumnDef, PaginationState } from '@tanstack/react-table';
+import { formatTimeAgo } from '@/services/commonFunction';
 
 type FollowerRow = {
-	date: any;
+	date: string;
 	id: number;
 	name: string;
 	email: string;
@@ -41,7 +43,14 @@ const StoreFollower: React.FC = () => {
 			});
 	}, []);
 
-	const requestFollowers = (rowsPerPage = 10, currentPage = 1) => {
+	useEffect(() => {
+		const currentPage = pagination.pageIndex + 1;
+		const rowsPerPage = pagination.pageSize;
+		requestData(rowsPerPage, currentPage);
+		setPageCount(Math.ceil(totalRows / rowsPerPage));
+	}, []);
+
+	const requestData = (rowsPerPage = 10, currentPage = 1) => {
 		axios({
 			method: 'GET',
 			url: getApiLink(appLocalizer, 'store'),
@@ -57,28 +66,11 @@ const StoreFollower: React.FC = () => {
 		});
 	};
 
-	useEffect(() => {
-		requestFollowers(pagination.pageSize, pagination.pageIndex + 1);
-	}, [pagination]);
+	const requestApiForData = (rowsPerPage: number, currentPage: number) => {
+		requestData(rowsPerPage, currentPage);
+	};
 
 	const columns: ColumnDef<FollowerRow>[] = [
-		{
-			id: 'select',
-			header: ({ table }) => (
-				<input
-					type="checkbox"
-					checked={table.getIsAllRowsSelected()}
-					onChange={table.getToggleAllRowsSelectedHandler()}
-				/>
-			),
-			cell: ({ row }) => (
-				<input
-					type="checkbox"
-					checked={row.getIsSelected()}
-					onChange={row.getToggleSelectedHandler()}
-				/>
-			),
-		},
 		{
 			header: __('Name', 'multivendorx'),
 			cell: ({ row }) => <TableCell>{row.original.name}</TableCell>,
@@ -88,48 +80,12 @@ const StoreFollower: React.FC = () => {
 			cell: ({ row }) => <TableCell>{row.original.email}</TableCell>,
 		},
 		{
-			id: 'date',
-			accessorKey: 'date',
-			enableSorting: true,
 			header: __('Followed On', 'multivendorx'),
 			cell: ({ row }) => {
-				if (!row.original.date) {
-					return <TableCell>—</TableCell>;
-				}
-
-				const followed = new Date(row.original.date);
-
-				// Check if the date is valid
-				if (isNaN(followed.getTime())) {
-					return <TableCell>—</TableCell>;
-				}
-
-				const now = new Date();
-				const diff = Math.floor(
-					(now.getTime() - followed.getTime()) / 1000
-				);
-
-				let display = '';
-
-				if (diff < 60) {
-					display = `${diff} sec ago`;
-				} else if (diff < 3600) {
-					display = `${Math.floor(diff / 60)} min ago`;
-				} else if (diff < 86400) {
-					display = `${Math.floor(diff / 3600)} hr ago`;
-				} else if (diff < 2592000) {
-					const days = Math.floor(diff / 86400);
-					display = `${days} day${days > 1 ? 's' : ''} ago`;
-				} else if (diff < 31536000) {
-					const months = Math.floor(diff / 2592000);
-					display = `${months} month${months > 1 ? 's' : ''} ago`;
-				} else {
-					const years = Math.floor(diff / 31536000);
-					display = `${years} year${years > 1 ? 's' : ''} ago`;
-				}
-
 				return (
-					<TableCell title={followed.toString()}>{display}</TableCell>
+					<TableCell title={'date'}>
+						{formatTimeAgo(row.original.date)}
+					</TableCell>
 				);
 			},
 		},
@@ -154,14 +110,12 @@ const StoreFollower: React.FC = () => {
 			<div className="admin-table-wrapper">
 				<Table
 					data={data}
-					columns={columns as ColumnDef<Record<string, any>, any>[]}
-					rowSelection={{}}
-					onRowSelectionChange={() => {}}
+					columns={columns}
 					defaultRowsPerPage={10}
-					pageCount={Math.ceil(data.length / pagination.pageSize)}
+					pageCount={pageCount}
 					pagination={pagination}
 					onPaginationChange={setPagination}
-					handlePagination={requestFollowers}
+					handlePagination={requestApiForData}
 					perPageOption={[10, 25, 50]}
 					totalCounts={totalRows}
 				/>
