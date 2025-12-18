@@ -48,7 +48,7 @@ const StoreSettings = ({
 	// === ADD THESE STATES (replace old ones) ===
 	const [emails, setEmails] = useState<string[]>([]); // All emails
 	const [primaryEmail, setPrimaryEmail] = useState<string>(''); // Which one is starred
-	
+
 	// === LOAD EMAILS FROM BACKEND ===
 	useEffect(() => {
 		let parsedEmails = [];
@@ -122,7 +122,6 @@ const StoreSettings = ({
 			zip: data.zip || '',
 			timezone: data.timezone || '',
 		});
-
 	}, [data]);
 
 	useEffect(() => {

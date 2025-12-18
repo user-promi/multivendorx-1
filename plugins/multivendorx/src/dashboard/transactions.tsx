@@ -191,9 +191,7 @@ const Transactions: React.FC = () => {
 		{
 			header: __('Transaction Type', 'multivendorx'),
 			cell: ({ row }) => (
-				<TableCell>
-					{row.original.transaction_type}
-				</TableCell>
+				<TableCell>{row.original.transaction_type}</TableCell>
 			),
 		},
 		{
@@ -380,7 +378,7 @@ const Transactions: React.FC = () => {
 					data={data}
 					columns={columns as ColumnDef<Record<string, any>, any>[]}
 					rowSelection={{}}
-					onRowSelectionChange={() => { }}
+					onRowSelectionChange={() => {}}
 					defaultRowsPerPage={10}
 					pageCount={pageCount}
 					pagination={pagination}

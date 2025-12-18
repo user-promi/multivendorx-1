@@ -752,7 +752,7 @@ export const Announcements: React.FC = () => {
 								usePlainText={false}
 								tinymceApiKey={
 									appLocalizer.settings_databases_value[
-									'marketplace'
+										'marketplace'
 									]['tinymce_api_section'] ?? ''
 								}
 							/>
@@ -792,8 +792,7 @@ export const Announcements: React.FC = () => {
 										selectedIds.includes(0)
 									) {
 										nextStores = [0];
-									}
-									else if (
+									} else if (
 										prevStores.includes(0) &&
 										selectedIds.length > 1
 									) {

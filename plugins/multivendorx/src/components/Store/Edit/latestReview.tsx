@@ -59,13 +59,13 @@ const LatestReview: React.FC<LatestReviewProps> = ({ store_id }) => {
 				order,
 			},
 		})
-		.then((response) => {
-			const items = response.data.items || [];
-			setData(items);
-		})
-		.catch(() => {
-			setData([]);
-		});
+			.then((response) => {
+				const items = response.data.items || [];
+				setData(items);
+			})
+			.catch(() => {
+				setData([]);
+			});
 	}
 
 	// Table Columns

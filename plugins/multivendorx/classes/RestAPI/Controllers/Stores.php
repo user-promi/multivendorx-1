@@ -1091,6 +1091,15 @@ class Stores extends \WP_REST_Controller {
             return rest_ensure_response( count( $followers ) );
         }
 
+        usort(
+            $followers,
+            function ( $a, $b ) {
+				$date_a = ! empty( $a['date'] ) ? strtotime( $a['date'] ) : 0;
+				$date_b = ! empty( $b['date'] ) ? strtotime( $b['date'] ) : 0;
+				return $date_b <=> $date_a;
+			}
+        );
+
         // Pagination.
         $page   = max( intval( $request->get_param( 'page' ) ), 1 );
         $limit  = max( intval( $request->get_param( 'row' ) ), 10 );

@@ -205,7 +205,7 @@ const Dashboard: React.FC = () => {
 			.then((response) => {
 				setAnnouncement(response.data.items || []);
 			})
-			.catch(() => { });
+			.catch(() => {});
 
 		axios({
 			method: 'GET',
@@ -274,7 +274,7 @@ const Dashboard: React.FC = () => {
 
 				setRecentOrders(orders);
 			})
-			.catch(() => { });
+			.catch(() => {});
 
 		axios({
 			method: 'GET',
@@ -319,7 +319,7 @@ const Dashboard: React.FC = () => {
 					parseInt(response.headers['x-wp-total']) || 0;
 				setTotalOrder(totalOrders);
 			})
-			.catch(() => { });
+			.catch(() => {});
 
 		axios({
 			method: 'GET',
@@ -346,25 +346,25 @@ const Dashboard: React.FC = () => {
 			icon: 'adminlib-dollar',
 			number: formatCurrency(store?.commission?.total_order_amount || 0),
 			text: 'Total Revenue',
-			color: 'primary'
+			color: 'primary',
 		},
 		{
 			icon: 'adminlib-order',
 			number: totalOrder,
 			text: 'Total Orders',
-			color: 'secondary'
+			color: 'secondary',
 		},
 		{
 			icon: 'adminlib-store-seo',
 			number: formatCurrency(store?.commission?.commission_total || 0),
 			text: 'Store Views',
-			color: 'accent'
+			color: 'accent',
 		},
 		{
 			icon: 'adminlib-commission',
 			number: formatCurrency(store?.commission?.commission_total || 0),
 			text: 'Commission Earned',
-			color: 'support'
+			color: 'support',
 		},
 	];
 
@@ -587,7 +587,10 @@ const Dashboard: React.FC = () => {
 					<div className="card-content transparent">
 						<div className="analytics-container dashboard">
 							{analyticsData.map((item, idx) => (
-								<div key={idx} className={`analytics-item ${item.color}`}>
+								<div
+									key={idx}
+									className={`analytics-item ${item.color}`}
+								>
 									<div className="details">
 										<div className="text">
 											{__(item.text, 'multivendorx')}
@@ -602,7 +605,11 @@ const Dashboard: React.FC = () => {
 													'Last 30 days:',
 													'multivendorx'
 												)}{' '}
-												<span className={`${item.color}-color`}>$189</span>
+												<span
+													className={`${item.color}-color`}
+												>
+													$189
+												</span>
 											</div>
 
 											<div>
@@ -610,13 +617,19 @@ const Dashboard: React.FC = () => {
 													'Previous 30 days:',
 													'multivendorx'
 												)}{' '}
-												<span className={`${item.color}-color`}>$690</span>
+												<span
+													className={`${item.color}-color`}
+												>
+													$690
+												</span>
 											</div>
 										</div>
 									</div>
 
 									<div className="analytics-icon">
-										<i className={`${item.icon} ${item.color}-bg`}></i>
+										<i
+											className={`${item.icon} ${item.color}-bg`}
+										></i>
 									</div>
 								</div>
 							))}
@@ -739,11 +752,11 @@ const Dashboard: React.FC = () => {
 															'multivendorx'
 														)}
 													{item.payment_method ===
-														'bank-transfer'
+													'bank-transfer'
 														? __(
-															'Bank Transfer',
-															'multivendorx'
-														)
+																'Bank Transfer',
+																'multivendorx'
+															)
 														: ''}
 												</div>
 
@@ -858,7 +871,9 @@ const Dashboard: React.FC = () => {
 														<tr key={item.id}>
 															<td>
 																<a
-																	href={orderUrl}
+																	href={
+																		orderUrl
+																	}
 																	target="_blank"
 																	rel="noopener noreferrer"
 																>
@@ -871,19 +886,25 @@ const Dashboard: React.FC = () => {
 															</td>
 															<td>{item.date}</td>
 															<td>{item.name}</td>
-															<td>{item.amount}</td>
+															<td>
+																{item.amount}
+															</td>
 															<td>
 																<div
 																	className={`admin-status`}
 																>
-																	{item.status}
+																	{
+																		item.status
+																	}
 																</div>
 															</td>
 															<td>
 																<div
 																	className={`admin-badge`}
 																>
-																	{item.status}
+																	{
+																		item.status
+																	}
 																</div>
 															</td>
 														</tr>
@@ -939,7 +960,10 @@ const Dashboard: React.FC = () => {
 													)}
 												</td>
 												<td>
-													{__('Sales', 'multivendorx')}
+													{__(
+														'Sales',
+														'multivendorx'
+													)}
 												</td>
 											</tr>
 										</thead>
@@ -956,7 +980,9 @@ const Dashboard: React.FC = () => {
 														<td
 															className={`progress-bar`}
 														>
-															<div className={`progress-bar admin-color${index + 1}`}>
+															<div
+																className={`progress-bar admin-color${index + 1}`}
+															>
 																<span
 																	className={`progress-bar admin-bg-color${index + 1}`}
 																	style={{
@@ -969,7 +995,10 @@ const Dashboard: React.FC = () => {
 															<div
 																className={`admin-badge admin-color${index + 1}`}
 															>
-																{item.popularity}%
+																{
+																	item.popularity
+																}
+																%
 															</div>
 														</td>
 													</tr>
@@ -1086,28 +1115,34 @@ const Dashboard: React.FC = () => {
 								<div className="card-body">
 									<div className="notification-wrapper">
 										{announcement &&
-											announcement.length > 0 ? (
+										announcement.length > 0 ? (
 											<ul>
-												{announcement.map((item, index) => (
-													<li key={item.id}>
-														<div className="icon-wrapper">
-															<i className={`adminlib-form-paypal-email admin-badge admin-color${index + 2}`}></i>
-														</div>
-														<div className="details">
-															<div className="notification-title">
-																{item.title}
+												{announcement.map(
+													(item, index) => (
+														<li key={item.id}>
+															<div className="icon-wrapper">
+																<i
+																	className={`adminlib-form-paypal-email admin-badge admin-color${index + 2}`}
+																></i>
 															</div>
-															<div className="des">
-																{item.content}
+															<div className="details">
+																<div className="notification-title">
+																	{item.title}
+																</div>
+																<div className="des">
+																	{
+																		item.content
+																	}
+																</div>
+																<span>
+																	{formatTimeAgo(
+																		item.date
+																	)}
+																</span>
 															</div>
-															<span>
-																{formatTimeAgo(
-																	item.date
-																)}
-															</span>
-														</div>
-													</li>
-												))}
+														</li>
+													)
+												)}
 											</ul>
 										) : (
 											<div className="no-data">
@@ -1128,17 +1163,14 @@ const Dashboard: React.FC = () => {
 							<div className="card-header">
 								<div className="left">
 									<div className="title">
-										{__(
-											'Pending Refunds',
-											'multivendorx'
-										)}
+										{__('Pending Refunds', 'multivendorx')}
 									</div>
 								</div>
 								<div
 									className="right"
 									onClick={() =>
-									(window.location.href =
-										'/dashboard/sales/orders/#refund-requested')
+										(window.location.href =
+											'/dashboard/sales/orders/#refund-requested')
 									}
 									style={{ cursor: 'pointer' }}
 								>
@@ -1149,7 +1181,7 @@ const Dashboard: React.FC = () => {
 							<div className="card-body">
 								<div className="top-customer-wrapper">
 									{pendingRefund &&
-										pendingRefund.length > 0 ? (
+									pendingRefund.length > 0 ? (
 										pendingRefund.map((customer) => (
 											<div
 												key={customer.id}
@@ -1161,10 +1193,7 @@ const Dashboard: React.FC = () => {
 															{customer.name}
 														</div>
 														<div className="order-number">
-															{
-																customer.reason
-															}{' '}
-															|{' '}
+															{customer.reason} |{' '}
 															{formatWcShortDate(
 																customer.time
 															)}
@@ -1197,10 +1226,7 @@ const Dashboard: React.FC = () => {
 
 						<div className="card-body">
 							{customers.map((customer, index) => (
-								<div
-									key={customer.id}
-									className="info-item"
-								>
+								<div key={customer.id} className="info-item">
 									<div className="details-wrapper">
 										<div className="avatar">
 											<i
@@ -1213,16 +1239,15 @@ const Dashboard: React.FC = () => {
 											</div>
 											<div className="des">
 												{customer.orders}
-												{__(
-													'orders',
-													'multivendorx'
-												)}
+												{__('orders', 'multivendorx')}
 											</div>
 										</div>
 									</div>
 
 									<div className="right-details">
-										<div className="price">{customer.total}</div>
+										<div className="price">
+											{customer.total}
+										</div>
 									</div>
 								</div>
 							))}
@@ -1235,10 +1260,7 @@ const Dashboard: React.FC = () => {
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{__(
-										'Store Activity (P)',
-										'multivendorx'
-									)}
+									{__('Store Activity (P)', 'multivendorx')}
 								</div>
 							</div>
 						</div>
@@ -1247,9 +1269,7 @@ const Dashboard: React.FC = () => {
 							<div className="activity-log">
 								{activities.map((a, i) => (
 									<div key={i} className="activity">
-										<div className="title">
-											{a.text}
-										</div>
+										<div className="title">{a.text}</div>
 										<div className="des">
 											{__(
 												'Your order has been placed successfully',
@@ -1273,10 +1293,7 @@ const Dashboard: React.FC = () => {
 							<div className="card-header">
 								<div className="left">
 									<div className="title">
-										{__(
-											'Latest Reviews',
-											'multivendorx'
-										)}
+										{__('Latest Reviews', 'multivendorx')}
 									</div>
 								</div>
 
@@ -1313,16 +1330,15 @@ const Dashboard: React.FC = () => {
 														{[...Array(5)].map(
 															(_, index) => (
 																<i
-																	key={
-																		index
-																	}
-																	className={`star-icon adminlib-star ${index <
+																	key={index}
+																	className={`star-icon adminlib-star ${
+																		index <
 																		Math.round(
 																			reviewItem.overall_rating
 																		)
-																		? 'active'
-																		: ''
-																		}`}
+																			? 'active'
+																			: ''
+																	}`}
 																></i>
 															)
 														)}

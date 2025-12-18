@@ -134,13 +134,13 @@ const Settings = ({ id }: { id: string }) => {
 										name="stock_status"
 										options={stockStatusOptions}
 										type="single-select"
-									// value={product.stock_status}
-									// onChange={(selected) =>
-									//     handleChange(
-									//         'stock_status',
-									//         selected.value
-									//     )
-									// }
+										// value={product.stock_status}
+										// onChange={(selected) =>
+										//     handleChange(
+										//         'stock_status',
+										//         selected.value
+										//     )
+										// }
 									/>
 									<div className="settings-metabox-description">
 										{__(
@@ -160,13 +160,13 @@ const Settings = ({ id }: { id: string }) => {
 										wrapperClass="setting-from-textarea"
 										inputClass="textarea-input"
 										descClass="settings-metabox-description"
-									// value={product.short_description}
-									// onChange={(e) =>
-									//     handleChange(
-									//         'short_description',
-									//         e.target.value
-									//     )
-									// }
+										// value={product.short_description}
+										// onChange={(e) =>
+										//     handleChange(
+										//         'short_description',
+										//         e.target.value
+										//     )
+										// }
 									/>
 								</div>
 							</div>
@@ -180,13 +180,13 @@ const Settings = ({ id }: { id: string }) => {
 										wrapperClass="setting-from-textarea"
 										inputClass="textarea-input"
 										descClass="settings-metabox-description"
-									// value={product.short_description}
-									// onChange={(e) =>
-									//     handleChange(
-									//         'short_description',
-									//         e.target.value
-									//     )
-									// }
+										// value={product.short_description}
+										// onChange={(e) =>
+										//     handleChange(
+										//         'short_description',
+										//         e.target.value
+										//     )
+										// }
 									/>
 								</div>
 							</div>
@@ -200,13 +200,13 @@ const Settings = ({ id }: { id: string }) => {
 										wrapperClass="setting-from-textarea"
 										inputClass="textarea-input"
 										descClass="settings-metabox-description"
-									// value={product.short_description}
-									// onChange={(e) =>
-									//     handleChange(
-									//         'short_description',
-									//         e.target.value
-									//     )
-									// }
+										// value={product.short_description}
+										// onChange={(e) =>
+										//     handleChange(
+										//         'short_description',
+										//         e.target.value
+										//     )
+										// }
 									/>
 								</div>
 							</div>

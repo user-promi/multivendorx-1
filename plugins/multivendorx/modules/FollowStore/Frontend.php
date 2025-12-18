@@ -27,6 +27,7 @@ class Frontend {
 
         // Load scripts.
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
+        add_action( 'wp_footer', array( $this, 'render_login_modal' ) );
     }
 
     /**
@@ -47,22 +48,44 @@ class Frontend {
         if ( empty( $store_id ) ) {
             return;
         }
-    
+
         $current_user_id = get_current_user_id();
-    
-        // Generate HTML
+
         $html  = '<button class="follow-btn" 
                     data-store-id="' . esc_attr( $store_id ) . '" 
                     data-user-id="' . esc_attr( $current_user_id ) . '" 
                     style="display:none;">
                     Follow
                 </button>';
-        $html .= ' <div class="mvx-follower-count" id="followers-count-' . esc_attr( $store_id ) . '">0 Follower</div>';
-    
-        // Apply filter
-        $html = apply_filters( 'mvx_follow_button_html', $html, $store_id, $current_user_id );
-    
-        // Output
+        $html .= ' <div class="multivendorx-follower-count" id="followers-count-' . esc_attr( $store_id ) . '">0 Follower</div>';
+
+        $html = apply_filters( 'multivendorx_follow_button_html', $html, $store_id, $current_user_id );
+
         echo wp_kses_post( $html );
+    }
+
+    /**
+     * Outputs the login modal for non-logged-in users.
+     *
+     * Displays the WooCommerce "My Account" form inside a modal with a close button.
+     *
+     * @return void
+     */
+    public function render_login_modal() {
+        ?>
+        <div id="multivendorx-login-modal" class="multivendorx-modal">
+            <div class="multivendorx-modal-content">
+                <span class="multivendorx-close">&times;</span>
+                <div id="multivendorx-login-form-container">
+                    <?php echo do_shortcode( '[woocommerce_my_account]' ); ?>
+                </div>
+            </div>
+        </div>
+        <style>
+        .multivendorx-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; }
+        .multivendorx-modal-content { background:#fff; margin:10% auto; padding:20px; width:400px; border-radius:5px; position:relative; }
+        .multivendorx-close { position:absolute; top:10px; right:15px; cursor:pointer; font-size:20px; }
+        </style>
+        <?php
     }
 }

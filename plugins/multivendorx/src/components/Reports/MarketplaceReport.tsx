@@ -291,7 +291,9 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
 							{commissionDetails.map((item, idx) => (
 								<div key={idx} className="analytics-item">
 									<div className="analytics-icon">
-										<i className={`${item.icon} admin-color${idx + 2}`}></i>
+										<i
+											className={`${item.icon} admin-color${idx + 2}`}
+										></i>
 									</div>
 									<div className="details">
 										<div className="number">
@@ -414,7 +416,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
 						</div>
 						<div className="card-body">
 							{topCoupons.length > 0 ? (
-								topCoupons.map((coupon: any, index: Number) => (
+								topCoupons.map((coupon: any, index: number) => (
 									<div
 										className="info-item"
 										key={`coupon-${coupon.id}`}
@@ -426,7 +428,9 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
 													target="_blank"
 													rel="noopener noreferrer"
 												>
-													<i className={`adminlib-coupon admin-color${index + 1}`}></i>
+													<i
+														className={`adminlib-coupon admin-color${index + 1}`}
+													></i>
 												</a>
 											</div>
 
@@ -503,73 +507,79 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
 						</div>
 						<div className="card-body">
 							{topCustomers.length > 0 ? (
-								topCustomers.map((customer: any, index: number) => (
-									<div
-										className="info-item"
-										key={`customer-${customer.user_id}`}
-									>
-										<div className="details-wrapper">
-											<div className="avater">
-												<a
-													href={`${appLocalizer.site_url}/wp-admin/user-edit.php?user_id=${customer.user_id}&wp_http_referer=%2Fwp-admin%2Fusers.php`}
-													target="_blank"
-													rel="noopener noreferrer"
-												>
-													<div className="avatar">
-														<span className={`admin-color${index + 1}`}>
-															{(
-																(
-																	customer.name?.trim() ||
-																	customer.username
-																)?.charAt(0) ||
-																''
-															).toUpperCase()}
-														</span>
-													</div>
-												</a>
-											</div>
-
-											<div className="details">
-												<div className="name">
+								topCustomers.map(
+									(customer: any, index: number) => (
+										<div
+											className="info-item"
+											key={`customer-${customer.user_id}`}
+										>
+											<div className="details-wrapper">
+												<div className="avater">
 													<a
 														href={`${appLocalizer.site_url}/wp-admin/user-edit.php?user_id=${customer.user_id}&wp_http_referer=%2Fwp-admin%2Fusers.php`}
 														target="_blank"
 														rel="noopener noreferrer"
 													>
-														{customer.name?.trim() ||
-															customer.username}
+														<div className="avatar">
+															<span
+																className={`admin-color${index + 1}`}
+															>
+																{(
+																	(
+																		customer.name?.trim() ||
+																		customer.username
+																	)?.charAt(
+																		0
+																	) || ''
+																).toUpperCase()}
+															</span>
+														</div>
 													</a>
 												</div>
-												<div className="des">
-													{__(
-														'Orders',
-														'multivendorx'
-													)}
-													:
-													{customer.orders_count || 0}
-												</div>
-												<div className="des">
-													{customer.email ||
-														__(
-															'',
+
+												<div className="details">
+													<div className="name">
+														<a
+															href={`${appLocalizer.site_url}/wp-admin/user-edit.php?user_id=${customer.user_id}&wp_http_referer=%2Fwp-admin%2Fusers.php`}
+															target="_blank"
+															rel="noopener noreferrer"
+														>
+															{customer.name?.trim() ||
+																customer.username}
+														</a>
+													</div>
+													<div className="des">
+														{__(
+															'Orders',
 															'multivendorx'
 														)}
+														:
+														{customer.orders_count ||
+															0}
+													</div>
+													<div className="des">
+														{customer.email ||
+															__(
+																'',
+																'multivendorx'
+															)}
+													</div>
+												</div>
+											</div>
+
+											<div className="right-details">
+												<div className="price">
+													<span>
+														{formatCurrency(
+															customer.total_spend ||
+																0
+														)}
+													</span>
 												</div>
 											</div>
 										</div>
-
-										<div className="right-details">
-											<div className="price">
-												<span>
-													{formatCurrency(
-														customer.total_spend ||
-															0
-													)}
-												</span>
-											</div>
-										</div>
-									</div>
-								))
+									)
+								)
 							) : (
 								<p>
 									{__(
@@ -603,7 +613,9 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
 													rel="noopener noreferrer"
 												>
 													<div className="avatar">
-														<span className={`admin-color${index + 1}`}>
+														<span
+															className={`admin-color${index + 1}`}
+														>
 															{(
 																store.store_name
 																	?.trim()
