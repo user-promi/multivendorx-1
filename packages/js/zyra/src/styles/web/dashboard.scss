@@ -118,8 +118,9 @@
                 padding: 0 0 1rem;
             }
 
-            &.hide-body{
-                display: none; /*for hide toggle hide body */
+            &.hide-body {
+                display: none;
+                /*for hide toggle hide body */
             }
         }
 
@@ -132,8 +133,9 @@
         &.transaction {
             margin-bottom: 1rem;
         }
-        &:has(.hide-body){
-            .card-content{
+
+        &:has(.hide-body) {
+            .card-content {
                 border: none;
             }
         }
@@ -228,7 +230,8 @@
                     color: #fff;
                     margin-top: 0.625rem;
                 }
-                .text{
+
+                .text {
                     color: $sub-text-color;
                     padding-top: 0.313rem;
                 }
@@ -310,6 +313,11 @@
         .date-field-wrapper {
             display: flex;
             gap: 0.5rem;
+        }
+
+        .multi-field {
+            display: flex;
+            gap: 0.313rem;
         }
     }
 
