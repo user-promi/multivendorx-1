@@ -475,11 +475,10 @@ const Dashboard = () => {
 									}
 								>
 									<div
-										className={`adminlib-icon dark-icon ${
-											isDarkMode
-												? 'adminlib-moon'
-												: 'adminlib-light'
-										}`}
+										className={`adminlib-icon dark-icon ${isDarkMode
+											? 'adminlib-light'
+											: 'adminlib-moon'
+											}`}
 									></div>
 								</li>
 
@@ -491,9 +490,7 @@ const Dashboard = () => {
 								</li>
 								<li className="tooltip-wrapper bottom">
 									<i className="adminlib-icon adminlib-storefront"></i>
-									<span className="tooltip-name">
-										Add Store
-									</span>
+									<span className="tooltip-name">view storefront</span>
 								</li>
 								<li className="tooltip-wrapper bottom">
 									<i

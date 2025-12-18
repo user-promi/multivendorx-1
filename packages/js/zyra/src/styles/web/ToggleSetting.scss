@@ -123,7 +123,7 @@
 
         input:checked+label {
             color: $theme-color;
-            background: #ece2f9;
+            background: $theme-background-color;
             border: $border-theme-medium;
         }
 
