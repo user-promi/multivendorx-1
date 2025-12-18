@@ -321,13 +321,9 @@ const AllProduct: React.FC = () => {
 						)}
 
 						<div className="details">
-							<span className="title">
-								{row.original.name}
-							</span>
-							<span className="des">
-								SKU: {row.original.sku}
-							</span>
-						</div>						
+							<span className="title">{row.original.name}</span>
+							<span className="des">SKU: {row.original.sku}</span>
+						</div>
 					</a>
 				</TableCell>
 			),
@@ -351,7 +347,9 @@ const AllProduct: React.FC = () => {
 			cell: ({ row }) => (
 				<TableCell>
 					{row.original.stock_status === 'instock' && (
-						<span className="admin-badge green-color">In Stock</span>
+						<span className="admin-badge green-color">
+							In Stock
+						</span>
 					)}
 					{row.original.stock_status === 'outofstock' && (
 						<span className="admin-badge red-color">
@@ -436,7 +434,7 @@ const AllProduct: React.FC = () => {
 									const url = row.original.permalink;
 									navigator.clipboard
 										.writeText(url)
-										.catch(() => { });
+										.catch(() => {});
 								},
 							},
 							{

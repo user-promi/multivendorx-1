@@ -614,7 +614,7 @@ export const KnowledgeBase: React.FC = () => {
 									usePlainText={false}
 									tinymceApiKey={
 										appLocalizer.settings_databases_value[
-										'marketplace'
+											'marketplace'
 										]['tinymce_api_section'] ?? ''
 									}
 								/>

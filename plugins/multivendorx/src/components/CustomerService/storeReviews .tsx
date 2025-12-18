@@ -321,10 +321,10 @@ const StoreReviews: React.FC = () => {
 				prev.map((r) =>
 					r.review_id === selectedReview.review_id
 						? {
-							...r,
-							reply: replyText,
-							status: selectedReview.status,
-						}
+								...r,
+								reply: replyText,
+								status: selectedReview.status,
+							}
 						: r
 				)
 			);
@@ -476,10 +476,10 @@ const StoreReviews: React.FC = () => {
 				const rawDate = row.original.date_created;
 				const formattedDate = rawDate
 					? new Intl.DateTimeFormat('en-US', {
-						month: 'short',
-						day: 'numeric',
-						year: 'numeric',
-					}).format(new Date(rawDate))
+							month: 'short',
+							day: 'numeric',
+							year: 'numeric',
+						}).format(new Date(rawDate))
 					: '-';
 				return (
 					<TableCell title={formattedDate}>{formattedDate}</TableCell>
@@ -630,27 +630,25 @@ const StoreReviews: React.FC = () => {
 											{[...Array(5)].map((_, i) => (
 												<i
 													key={i}
-													className={`star-icon adminlib-star ${i <
+													className={`star-icon adminlib-star ${
+														i <
 														Math.round(
 															selectedReview.overall_rating
 														)
-														? 'filled'
-														: ''
-														}`}
+															? 'filled'
+															: ''
+													}`}
 												></i>
 											))}
 
 											<div className="date">
 												{new Date(
 													selectedReview.date_created
-												).toLocaleDateString(
-													'en-GB',
-													{
-														day: '2-digit',
-														month: 'short',
-														year: 'numeric',
-													}
-												)}
+												).toLocaleDateString('en-GB', {
+													day: '2-digit',
+													month: 'short',
+													year: 'numeric',
+												})}
 											</div>
 										</div>
 									</div>

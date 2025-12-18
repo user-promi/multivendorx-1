@@ -161,12 +161,14 @@ const DownloadCSVButton: React.FC<{
 		<div className="action-item">
 			<button
 				onClick={handleDownload}
-				disabled={isDownloading || isLoading || (!hasSelectedRows && !data)}
+				disabled={
+					isDownloading || isLoading || (!hasSelectedRows && !data)
+				}
 				className="admin-btn"
 			>
 				<i className="adminlib-import"></i>
 				{__('Download CSV', 'multivendorx')}
-			</button>	
+			</button>
 		</div>
 	);
 };
@@ -237,7 +239,7 @@ const Commission: React.FC = () => {
 				setTotalRows(response.data || 0);
 				setPageCount(Math.ceil(response.data / pagination.pageSize));
 			})
-			.catch(() => { });
+			.catch(() => {});
 	}, []);
 
 	useEffect(() => {
@@ -474,9 +476,9 @@ const Commission: React.FC = () => {
 				const orderId = row.original.orderId;
 				const url = orderId
 					? `${appLocalizer.site_url.replace(
-						/\/$/,
-						''
-					)}/wp-admin/post.php?post=${orderId}&action=edit`
+							/\/$/,
+							''
+						)}/wp-admin/post.php?post=${orderId}&action=edit`
 					: '#';
 
 				return (
@@ -524,8 +526,9 @@ const Commission: React.FC = () => {
 				return (
 					<TableCell title={'commission-summary'}>
 						<ul
-							className={`details ${isExpanded ? '' : 'overflow'
-								}`}
+							className={`details ${
+								isExpanded ? '' : 'overflow'
+							}`}
 						>
 							{row.original?.storeEarning ? (
 								<li>
@@ -597,54 +600,54 @@ const Commission: React.FC = () => {
 									row.original?.facilitatorFee) ||
 								(modules.includes('marketplace-fee') &&
 									row.original?.marketplaceFee)) && (
-									<li>
-										{modules.includes('marketplace-gateway') &&
-											row.original?.gatewayFee && (
-												<div className="item">
-													<div className="des">
-														Gateway Fee
-													</div>
-													<div className="title">
-														-{' '}
-														{formatCurrency(
-															row.original.gatewayFee
-														)}
-													</div>
+								<li>
+									{modules.includes('marketplace-gateway') &&
+										row.original?.gatewayFee && (
+											<div className="item">
+												<div className="des">
+													Gateway Fee
 												</div>
-											)}
+												<div className="title">
+													-{' '}
+													{formatCurrency(
+														row.original.gatewayFee
+													)}
+												</div>
+											</div>
+										)}
 
-										{modules.includes('facilitator') &&
-											row.original?.facilitatorFee && (
-												<div className="item">
-													<div className="des">
-														Facilitator Fee
-													</div>
-													<div className="title">
-														-{' '}
-														{formatCurrency(
-															row.original
-																.facilitatorFee
-														)}
-													</div>
+									{modules.includes('facilitator') &&
+										row.original?.facilitatorFee && (
+											<div className="item">
+												<div className="des">
+													Facilitator Fee
 												</div>
-											)}
+												<div className="title">
+													-{' '}
+													{formatCurrency(
+														row.original
+															.facilitatorFee
+													)}
+												</div>
+											</div>
+										)}
 
-										{modules.includes('marketplace-fee') &&
-											row.original?.platformFee && (
-												<div className="item">
-													<div className="des">
-														Platform Fee
-													</div>
-													<div className="title">
-														-{' '}
-														{formatCurrency(
-															row.original.platformFee
-														)}
-													</div>
+									{modules.includes('marketplace-fee') &&
+										row.original?.platformFee && (
+											<div className="item">
+												<div className="des">
+													Platform Fee
 												</div>
-											)}
-									</li>
-								)}
+												<div className="title">
+													-{' '}
+													{formatCurrency(
+														row.original.platformFee
+													)}
+												</div>
+											</div>
+										)}
+								</li>
+							)}
 
 							<span
 								className="more-btn"

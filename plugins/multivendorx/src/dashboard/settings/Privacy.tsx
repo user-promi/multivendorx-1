@@ -125,7 +125,6 @@ const Privacy = () => {
 
 			<Section key="section" hint="Deactivation" />
 
-
 			{formData.deactivation_reason ? (
 				<div>
 					{__(
@@ -138,10 +137,7 @@ const Privacy = () => {
 					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label htmlFor="store-description">
-								{__(
-									'Enable Deactivation',
-									'multivendorx'
-								)}
+								{__('Enable Deactivation', 'multivendorx')}
 							</label>
 							<MultiCheckBox
 								wrapperClass="toggle-btn"
@@ -157,9 +153,7 @@ const Privacy = () => {
 										value: 'enable_deactivation',
 									},
 								]}
-								value={
-									formData.enable_deactivation || []
-								}
+								value={formData.enable_deactivation || []}
 								onChange={(selected) => {
 									setFormData((prev) => ({
 										...prev,
@@ -189,8 +183,7 @@ const Privacy = () => {
 										name="deactivation_reason"
 										inputClass="textarea-input"
 										value={
-											updateData.deactivation_reason ||
-											''
+											updateData.deactivation_reason || ''
 										}
 										onChange={handleChange}
 									/>

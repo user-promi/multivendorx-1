@@ -16,7 +16,9 @@ import { __ } from '@wordpress/i18n';
 const MessageAndMail = ({ id }: { id: string }) => {
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
 	const [pricingType, setPricingType] = useState<'free' | 'paid'>('free');
-	const [commissionType, setcommissionType] = useState<'prcentage' | 'fixed'>('prcentage');
+	const [commissionType, setcommissionType] = useState<'prcentage' | 'fixed'>(
+		'prcentage'
+	);
 	const [starFill, setstarFill] = useState(false);
 
 	const [imagePreviews, setImagePreviews] = useState<{
@@ -139,14 +141,12 @@ const MessageAndMail = ({ id }: { id: string }) => {
 		{
 			key: 'simple',
 			label: 'Simple Product',
-			description:
-				'Allows vendors to create and manage simple products.',
+			description: 'Allows vendors to create and manage simple products.',
 		},
 		{
 			key: 'variable',
 			label: 'Variable Product',
-			description:
-				'Allows vendors to manage products with variations.',
+			description: 'Allows vendors to manage products with variations.',
 		},
 		{
 			key: 'grouped',
@@ -189,15 +189,19 @@ const MessageAndMail = ({ id }: { id: string }) => {
 												),
 											},
 										]}
-									// value={formData.status}
-									// onChange={handleToggleChange}
+										// value={formData.status}
+										// onChange={handleToggleChange}
 									/>
 									<div
 										className="des"
-										onClick={() => setstarFill((prev) => !prev)}
+										onClick={() =>
+											setstarFill((prev) => !prev)
+										}
 										style={{ cursor: 'pointer' }}
 									>
-										<i className={`star-icon ${starFill ? 'adminlib-star' : 'adminlib-star-o'}`}></i>
+										<i
+											className={`star-icon ${starFill ? 'adminlib-star' : 'adminlib-star-o'}`}
+										></i>
 										Mark as recommended plan
 									</div>
 								</div>
@@ -206,9 +210,7 @@ const MessageAndMail = ({ id }: { id: string }) => {
 						<div className="card-body">
 							<div className="form-group-wrapper">
 								<div className="form-group">
-									<label htmlFor="product-name">
-										Name
-									</label>
+									<label htmlFor="product-name">Name</label>
 									<BasicInput
 										name="name"
 										wrapperClass="setting-form-input"
@@ -367,12 +369,18 @@ const MessageAndMail = ({ id }: { id: string }) => {
 											},
 										]}
 										value={pricingType}
-										onChange={(value: string) => setPricingType(value as 'free' | 'paid')}
+										onChange={(value: string) =>
+											setPricingType(
+												value as 'free' | 'paid'
+											)
+										}
 									/>
 								</div>
 								{pricingType === 'paid' && (
 									<div className="form-group">
-										<label htmlFor="product-name">Price</label>
+										<label htmlFor="product-name">
+											Price
+										</label>
 										<BasicInput
 											name="name"
 											wrapperClass="setting-form-input"
@@ -394,13 +402,13 @@ const MessageAndMail = ({ id }: { id: string }) => {
 												name="stock_status"
 												options={billingCycle}
 												type="single-select"
-											// value={product.stock_status}
-											// onChange={(selected) =>
-											//     handleChange(
-											//         'stock_status',
-											//         selected.value
-											//     )
-											// }
+												// value={product.stock_status}
+												// onChange={(selected) =>
+												//     handleChange(
+												//         'stock_status',
+												//         selected.value
+												//     )
+												// }
 											/>
 										</div>
 										<div className="form-group">
@@ -456,7 +464,11 @@ const MessageAndMail = ({ id }: { id: string }) => {
 											},
 										]}
 										value={commissionType}
-										onChange={(value: string) => setcommissionType(value as 'percentage' | 'fixed')}
+										onChange={(value: string) =>
+											setcommissionType(
+												value as 'percentage' | 'fixed'
+											)
+										}
 									/>
 								</div>
 								{commissionType === 'percentage' && (

@@ -146,7 +146,6 @@ const StoreSettings = ({
 			zip: data.zip || '',
 			timezone: data.timezone || '',
 		});
-
 	}, [data]);
 
 	useEffect(() => {
