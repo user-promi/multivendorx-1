@@ -10,6 +10,7 @@ import {
 	MultiCheckBox,
 	ToggleSetting,
 	MultiCheckboxTable,
+	NestedComponent,
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
@@ -318,11 +319,11 @@ const MessageAndMail = ({ id }: { id: string }) => {
 								setting={setting}
 								// onChange={handleChange}
 								storeTabSetting={storeTabSetting}
-								// modules={modules}
-								// moduleChange={handleModuleChange}
-								// proSetting={false}
-								// proChanged={handleProChanged}
-								// khali_dabba={true}
+							// modules={modules}
+							// moduleChange={handleModuleChange}
+							// proSetting={false}
+							// proChanged={handleProChanged}
+							// khali_dabba={true}
 							/>
 						</div>
 					</div>
@@ -434,63 +435,16 @@ const MessageAndMail = ({ id }: { id: string }) => {
 									<label htmlFor="product-name">
 										Commission type
 									</label>
-									<ToggleSetting
-										wrapperClass="setting-form-input"
-										descClass="settings-metabox-description"
-										options={[
-											{
-												key: 'percentage',
-												value: 'percentage',
-												label: __(
-													'Percentage',
-													'multivendorx'
-												),
-											},
-											{
-												key: 'fixed',
-												value: 'fixed',
-												label: __(
-													'Fixed',
-													'multivendorx'
-												),
-											},
-										]}
-										value={commissionType}
-										onChange={(value: string) => setcommissionType(value as 'percentage' | 'fixed')}
+									<NestedComponent
+										id="role_rules"
+										fields={nestedFields}
+										value={rules}
+										addButtonLabel="Add Rule"
+										deleteButtonLabel="Remove"
+										onChange={(val) => setRules(val)}
 									/>
+
 								</div>
-								{commissionType === 'percentage' && (
-									<div className="form-group">
-										<label htmlFor="product-name">
-											Marketplace fees
-										</label>
-										<BasicInput
-											name="name"
-											postInsideText="%"
-											wrapperClass="setting-form-input"
-											descClass="settings-metabox-description"
-											value={formData.name}
-											onChange={handleChange}
-											size="15rem"
-										/>
-									</div>
-								)}
-								{commissionType === 'fixed' && (
-									<div className="form-group">
-										<label htmlFor="product-name">
-											Marketplace fees
-										</label>
-										<BasicInput
-											name="name"
-											postInsideText="fixed"
-											wrapperClass="setting-form-input"
-											descClass="settings-metabox-description"
-											value={formData.name}
-											onChange={handleChange}
-											size="15rem"
-										/>
-									</div>
-								)}
 							</div>
 						</div>
 					</div>

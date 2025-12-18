@@ -82,7 +82,7 @@
     --backgroundColor: #52648414;
     --backgroundWhite: #fff;
     --backgroundPrimary: color-mix(in srgb,
-            var(--colorPrimary) 15%,
+            var(--colorPrimary) 10%,
             transparent);
 
     --borderColor: #dbdbdb;
@@ -103,7 +103,7 @@
     --backgroundWhite: #000;
     --backgroundPrimary: color-mix(
         in srgb,
-        var(--colorPrimary) 30%,
+        var(--colorPrimary) 10%,       
         black
     );
 

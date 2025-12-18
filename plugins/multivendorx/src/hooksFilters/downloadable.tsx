@@ -16,6 +16,12 @@ const Downloadable = ({ product, setProduct, handleChange }) => {
 				label: 'File URL',
 				placeholder: 'File URL',
 			},
+			{
+				key: 'upload_btn',
+				type: 'button',
+				label: 'File URL',
+				placeholder: 'File URL',
+			},
 		],
 		create: () => ({
 			id: appLocalizer.random_string_generate,
