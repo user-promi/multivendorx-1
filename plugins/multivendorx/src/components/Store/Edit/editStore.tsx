@@ -17,11 +17,11 @@ import StoreSquad from './storeStaff';
 import PolicySettings from './policySettings';
 import ShippingSettings from './shippingSettings';
 import StoreRegistration from './storeRegistrationForm';
-import Facilitator from './facilitator';
 import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import Overview from './overview';
 import '../viewStore.scss';
+import { applyFilters } from '@wordpress/hooks';
 
 const EditStore = () => {
 	const [data, setData] = useState<any>({});
@@ -346,7 +346,15 @@ const EditStore = () => {
 				case 'application-details':
 					return <StoreRegistration id={editId} />;
 				case 'store-facilitator':
-					return <Facilitator id={editId} data={data} />;
+					// return <Facilitator id={editId} data={data} />;
+					const output = applyFilters(
+						'add_facilitator_content',
+						null,
+						editId,
+						data
+					);
+	
+					return output;
 				default:
 					return <div></div>;
 			}

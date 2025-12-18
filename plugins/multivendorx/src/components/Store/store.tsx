@@ -20,7 +20,6 @@ const Store = () => {
 	const [addStore, setaddStore] = useState(false);
 	const [formData, setFormData] = useState<Record<string, string>>({});
 	const [imagePreview, setImagePreview] = useState<string>('');
-	const [emails, setEmails] = useState<string[]>([]);
 	const [error, setError] = useState<{
 		[key: string]: { type: string; message: string };
 	}>({});
@@ -110,7 +109,6 @@ const Store = () => {
 	};
 
 	const handleSubmit = async () => {
-		// if (!formData || Object.keys(formData).length === 0) return;
 
 		const { name, slug, email, store_owners } = formData;
 
