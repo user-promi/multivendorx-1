@@ -2055,7 +2055,7 @@ const AddProduct = () => {
 									<label htmlFor="product-name">
 										Product gallery
 									</label>
-									<div className="gallery-wrapper">
+									<div className="uploaded-image">
 										{galleryImages.map((img, index) => (
 											<div key={img.id}>
 												<div>
