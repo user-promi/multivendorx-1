@@ -356,6 +356,7 @@ interface CapabilityGroup {
     label: string;
     desc: string;
     capability: Record< string, string >;
+    capabilityDesc?: Record<string, string>;
 }
 
 type Rows = Record< string, CapabilityGroup >;
@@ -589,6 +590,14 @@ const MultiCheckboxTable: React.FC< MultiCheckboxTableProps > = ( {
                                                                           className="grid-table-cell-class"
                                                                           key={ `${ column.key }_${ capKey }` }
                                                                       >
+                                                                        {column.type === 'description' && (
+                                                                            <span className="cap-desc-text">
+                                                                                {group.capabilityDesc?.[capKey] ?? '—'}
+                                                                            </span>
+                                                                        )}
+
+                                                                        {column.type !== 'description' && (
+
                                                                           <input
                                                                               placeholder="select"
                                                                               type="checkbox"
@@ -608,8 +617,8 @@ const MultiCheckboxTable: React.FC< MultiCheckboxTableProps > = ( {
                                                                                       capKey
                                                                                   )
                                                                               }
-                                                                              disabled={
-                                                                                  ! hasExists
+                                                                              disabled={ storeTabSetting ?
+                                                                                  ! hasExists : false
                                                                               }
                                                                               onChange={ (
                                                                                   e
@@ -668,6 +677,7 @@ const MultiCheckboxTable: React.FC< MultiCheckboxTableProps > = ( {
                                                                                   );
                                                                               } }
                                                                           />
+                                                                        )}
                                                                       </td>
                                                                   );
                                                               }

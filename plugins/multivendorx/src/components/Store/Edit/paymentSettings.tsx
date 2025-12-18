@@ -73,10 +73,10 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 		}
 	}, [successMsg]);
 
-	// ✨ --- NEW: Logic to handle Stripe dependencies --- ✨
+	// NEW: Logic to handle Stripe dependencies
 	useEffect(() => {
 		// Ensure this logic only runs for the stripe marketplace provider
-		if (formData.payment_method !== 'mvx_stripe_marketplace') {
+		if (formData.payment_method !== 'stripe-connect') {
 			return;
 		}
 
@@ -157,76 +157,6 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 				setSuccessMsg('Store saved successfully!');
 			}
 		});
-	};
-
-	const handleAccChange = (value: string, name?: string) => {
-		setFormData((prev) => {
-			const updated = {
-				...(prev || {}),
-				[name || '']: value,
-			};
-
-			autoSave(updated);
-			return updated;
-		});
-	};
-
-	// ✨ --- NEW: Helper functions to get disabled options --- ✨
-	const getDynamicOptions = (fieldKey: string) => {
-		const field = providerFields.find((f) => f.key === fieldKey);
-		if (
-			!field ||
-			!field.options ||
-			formData.payment_method !== 'mvx_stripe_marketplace'
-		) {
-			return field?.options || [];
-		}
-
-		const dashboardAccess = formData.dashboard_access;
-
-		switch (fieldKey) {
-			case 'onboarding_flow':
-				if (dashboardAccess === 'full') {
-					return field.options.map((opt) => ({
-						...opt,
-						disabled: opt.value !== 'hosted',
-					}));
-				}
-				if (dashboardAccess === 'none') {
-					return field.options.map((opt) => ({
-						...opt,
-						disabled: opt.value !== 'embedded',
-					}));
-				}
-				return field.options.map((opt) => ({
-					...opt,
-					disabled: false,
-				})); // Express supports both
-
-			case 'charge_type':
-				if (dashboardAccess === 'full') {
-					return field.options.map((opt) => ({
-						...opt,
-						disabled: opt.value !== 'direct',
-					}));
-				}
-				if (
-					dashboardAccess === 'express' ||
-					dashboardAccess === 'none'
-				) {
-					return field.options.map((opt) => ({
-						...opt,
-						disabled: opt.value === 'direct',
-					}));
-				}
-				return field.options.map((opt) => ({
-					...opt,
-					disabled: false,
-				}));
-
-			default:
-				return field.options;
-		}
 	};
 
 	return (

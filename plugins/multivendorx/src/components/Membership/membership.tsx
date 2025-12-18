@@ -136,26 +136,57 @@ const Membership = ({ id }: { id: string }) => {
 			label: 'Status',
 		},
 	];
-	const rows = [
-		{
-			key: 'simple',
+	// const rows = [
+		
+	// 	{
+	// 		key: 'simple',
+	// 		label: 'Simple Product',
+	// 		description:
+	// 			'Allows vendors to create and manage simple products.',
+	// 	},
+	// 	{
+	// 		key: 'variable',
+	// 		label: 'Variable Product',
+	// 		description:
+	// 			'Allows vendors to manage products with variations.',
+	// 	},
+	// 	{
+	// 		key: 'grouped',
+	// 		label: 'Grouped Product',
+	// 		description:
+	// 			'Allows vendors to sell multiple related products together.',
+	// 	},
+	// ];
+
+	const rows = {
+		simple: {
 			label: 'Simple Product',
-			description:
-				'Allows vendors to create and manage simple products.',
+			desc: 'Allows vendors to create and manage simple products.',
+			capability: {
+				create_simple_products: 'Create simple products',
+				publish_simple_products: 'Publish simple products',
+			},
+			capabilityDesc: {
+				create_simple_products: 'Allows vendors to create simple products',
+				publish_simple_products: 'Allows vendors to publish simple products',
+			},
 		},
-		{
-			key: 'variable',
+
+		variable: {
 			label: 'Variable Product',
-			description:
-				'Allows vendors to manage products with variations.',
+			desc: 'Allows vendors to manage products with variations.',
+			capability: {
+				create_variable_products: 'Create variable products',
+				publish_variable_products: 'Publish variable products',
+			},
+			capabilityDesc: {
+				create_variable_products:
+					'Allows vendors to create variable products',
+				publish_variable_products:
+					'Allows vendors to publish variable products',
+			},
 		},
-		{
-			key: 'grouped',
-			label: 'Grouped Product',
-			description:
-				'Allows vendors to sell multiple related products together.',
-		},
-	];
+	};
 
 	return (
 		<>
@@ -326,7 +357,7 @@ const Membership = ({ id }: { id: string }) => {
 									columns={columns}
 									setting={setting}
 									// onChange={handleChange}
-									storeTabSetting={storeTabSetting}
+									// storeTabSetting={storeTabSetting}
 								// modules={modules}
 								// moduleChange={handleModuleChange}
 								// proSetting={false}
