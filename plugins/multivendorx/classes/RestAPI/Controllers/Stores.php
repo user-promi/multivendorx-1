@@ -467,6 +467,13 @@ class Stores extends \WP_REST_Controller {
                 }
             }
 
+            if ($registrations) {
+                $raw_slug = $store_data['slug']
+               ?? sanitize_title( $store_data['name'] ?? '' );
+   
+               $store_data['slug'] = Store::generate_unique_store_slug( $raw_slug );
+            }
+            
             foreach ( $core_fields as $field ) {
                 if ( array_key_exists( $field, $store_data ) ) {
                     $store->set( $field, $store_data[ $field ] );
