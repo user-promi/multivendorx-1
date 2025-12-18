@@ -8,7 +8,6 @@
 namespace MultiVendorX\FollowStore;
 
 use MultiVendorX\FrontendScripts;
-use MultiVendorX\Utill;
 
 /**
  * MultiVendorX Follow Store Frontend class
@@ -28,9 +27,6 @@ class Frontend {
 
         // Load scripts.
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
-
-        // Register the reusable follow button filter.
-        $this->register_follow_button_filter();
     }
 
     /**
@@ -51,54 +47,22 @@ class Frontend {
         if ( empty( $store_id ) ) {
             return;
         }
-
+    
         $current_user_id = get_current_user_id();
-
-        // Generate HTML.
-        $html  = '<button class="mvx-follow-btn" 
+    
+        // Generate HTML
+        $html  = '<button class="follow-btn" 
                     data-store-id="' . esc_attr( $store_id ) . '" 
                     data-user-id="' . esc_attr( $current_user_id ) . '" 
                     style="display:none;">
+                    Follow
                 </button>';
-        $html .= ' <span class="mvx-follower-count" id="followers-count-' . esc_attr( $store_id ) . '">0 Follower</span>';
-
-        // Apply filter.
+        $html .= ' <div class="mvx-follower-count" id="followers-count-' . esc_attr( $store_id ) . '">0 Follower</div>';
+    
+        // Apply filter
         $html = apply_filters( 'mvx_follow_button_html', $html, $store_id, $current_user_id );
-
-        // Escape on output.
+    
+        // Output
         echo wp_kses_post( $html );
-    }
-
-    /**
-     * Register filter to allow using follow button HTML anywhere
-     */
-    public function register_follow_button_filter() {
-        add_filter(
-            'mvx_follow_button_html',
-            function ( $html, $store_id, $user_id ) {
-				if ( empty( $store_id ) ) {
-					return $html;
-				}
-
-				// Reuse same HTML pattern.
-				$html  = '<div class="buttons-wrapper">
-                        <div class="follow-wrapper"> 
-                        <button class="follow-btn" 
-                            data-store-id="' . esc_attr( $store_id ) . '" 
-                            data-user-id="' . esc_attr( $user_id ) . '" 
-                            ">
-                            Follow
-                        </button>
-                      ';
-				$html .= ' <span class="follower-count" id="followers-count-' . esc_attr( $store_id ) . '">0 Follower</span> </div> 
-                        <button>Live Chat</button>
-                        <button>Support</button>
-                        </div>';
-
-				return $html;
-			},
-            10,
-            3
-        );
     }
 }
