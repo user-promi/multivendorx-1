@@ -203,7 +203,10 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 									<i
 										className="adminlib-external icon"
 										onClick={() => {
-											window.open(`${appLocalizer.admin_url}edit.php?post_type=product`, "_self")
+											window.open(
+												`${appLocalizer.admin_url}edit.php?post_type=product`,
+												'_self'
+											);
 										}}
 									></i>
 								</div>
@@ -240,7 +243,9 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 																}
 															/>
 														) : (
-															<i className={`item-icon adminlib-single-product admin-color${idx + 2}`}></i>
+															<i
+																className={`item-icon adminlib-single-product admin-color${idx + 2}`}
+															></i>
 														)}
 													</div>
 

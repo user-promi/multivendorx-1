@@ -299,9 +299,7 @@ const CustomerQuestions: React.FC = () => {
 
 								{store_id ? (
 									<>
-										<span
-											className="des"
-										>
+										<span className="des">
 											By {store_name || '-'}
 										</span>
 									</>
@@ -386,7 +384,7 @@ const CustomerQuestions: React.FC = () => {
 						actions: [
 							{
 								label: __('Answer', 'multivendorx'),
-								icon: 'adminlib-eye', 
+								icon: 'adminlib-eye',
 								onClick: (rowData: any) => {
 									setSelectedQna(rowData);
 									setQna(rowData.question_text);

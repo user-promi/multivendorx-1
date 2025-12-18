@@ -578,9 +578,9 @@ By signing and submitting, the Seller accepts all terms above.
 
         $payment_settings = array(
             'payment_methods' => array(
-                'bank-transfer' => array( 
-                    'enable' => true,
-                    'bank_details' => array ( 'bank_name', 'account_number' )
+                'bank-transfer' => array(
+                    'enable'       => true,
+                    'bank_details' => array( 'bank_name', 'account_number' ),
                 ),
             ),
         );

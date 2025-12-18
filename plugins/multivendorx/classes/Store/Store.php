@@ -144,7 +144,7 @@ class Store {
 
         $data = array(
             Utill::STORE_SETTINGS_KEYS['name']        => $this->data['name'] ?? '',
-            Utill::STORE_SETTINGS_KEYS['slug']        => $slug ?? '' ,
+            Utill::STORE_SETTINGS_KEYS['slug']        => $slug ?? '',
             Utill::STORE_SETTINGS_KEYS['description'] => $this->data['description'] ?? '',
             Utill::STORE_SETTINGS_KEYS['who_created'] => $this->data['who_created'] ?? 'admin',
             Utill::STORE_SETTINGS_KEYS['status']      => $this->data['status'] ?? 'active',
@@ -391,11 +391,11 @@ class Store {
             return $slug;
         }
 
-        $base = $slug;
+        $base  = $slug;
         $count = 1;
 
         while ( self::store_slug_exists( $base . '-' . $count, $exclude_id ) ) {
-            $count++;
+            ++$count;
         }
 
         return $base . '-' . $count;

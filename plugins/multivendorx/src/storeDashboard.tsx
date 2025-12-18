@@ -19,7 +19,6 @@ const Dashboard = () => {
 	const [isMenuCollapsed, setIsMenuCollapsed] = useState(false);
 	const [isMenuMinmize, setisMenuMinmize] = useState(false);
 
-
 	const location = useLocation();
 	const navigate = useNavigate();
 
@@ -332,8 +331,8 @@ const Dashboard = () => {
 		${isMenuMinmize ? 'minimize' : ''}
 	`}
 		>
-
-			<div className="dashboard-tabs-wrapper"
+			<div
+				className="dashboard-tabs-wrapper"
 				onMouseEnter={() => {
 					setisMenuMinmize(false);
 				}}
@@ -368,8 +367,9 @@ const Dashboard = () => {
 								return (
 									<li
 										key={key}
-										className={`tab-name ${isParentActive ? 'active' : ''
-											}`}
+										className={`tab-name ${
+											isParentActive ? 'active' : ''
+										}`}
 									>
 										<a
 											className="tab"
@@ -395,16 +395,18 @@ const Dashboard = () => {
 
 											{hasSubmenu && (
 												<i
-													className={`admin-arrow adminlib-pagination-right-arrow ${isOpen ? 'rotate' : ''
-														}`}
+													className={`admin-arrow adminlib-pagination-right-arrow ${
+														isOpen ? 'rotate' : ''
+													}`}
 												></i>
 											)}
 										</a>
 
 										{hasSubmenu && (
 											<ul
-												className={`subtabs ${isOpen ? 'open' : ''
-													}`}
+												className={`subtabs ${
+													isOpen ? 'open' : ''
+												}`}
 											>
 												{item.submenu.map((sub) => {
 													const subActive =
@@ -457,13 +459,12 @@ const Dashboard = () => {
 							<i
 								className="adminlib-menu toggle-menu-icon"
 								onClick={() => {
-									setIsMenuCollapsed(prev => {
+									setIsMenuCollapsed((prev) => {
 										const next = !prev;
 										setisMenuMinmize(next);
 										return next;
 									});
 								}}
-
 							></i>
 						</div>
 						<div className="navbar-rightside">
@@ -474,27 +475,34 @@ const Dashboard = () => {
 									}
 								>
 									<div
-										className={`adminlib-icon dark-icon ${isDarkMode
-											? 'adminlib-moon'
-											: 'adminlib-light'
-											}`}
+										className={`adminlib-icon dark-icon ${
+											isDarkMode
+												? 'adminlib-moon'
+												: 'adminlib-light'
+										}`}
 									></div>
 								</li>
 
 								<li className="tooltip-wrapper bottom">
 									<i className="adminlib-icon adminlib-product-addon"></i>
-									<span className="tooltip-name">Add product</span>
+									<span className="tooltip-name">
+										Add product
+									</span>
 								</li>
 								<li className="tooltip-wrapper bottom">
 									<i className="adminlib-icon adminlib-storefront"></i>
-									<span className="tooltip-name">Add Store</span>
+									<span className="tooltip-name">
+										Add Store
+									</span>
 								</li>
 								<li className="tooltip-wrapper bottom">
 									<i
 										className="adminlib-icon notification adminlib-notification"
 										onClick={toggleNotifications}
 									></i>
-									<span className="tooltip-name">Notification</span>
+									<span className="tooltip-name">
+										Notification
+									</span>
 
 									{showNotifications && <Notifications />}
 								</li>
@@ -504,7 +512,9 @@ const Dashboard = () => {
 									className="tooltip-wrapper bottom"
 								>
 									<i className="adminlib-icon adminlib-crop-free"></i>
-									<span className="tooltip-name">Full Screen</span>
+									<span className="tooltip-name">
+										Full Screen
+									</span>
 								</li>
 
 								<li
@@ -575,108 +585,112 @@ const Dashboard = () => {
 													</li>
 													{availableStores.length >
 														0 && (
-															<li className="switch-store-wrapper">
-																<a
-																	href="#"
-																	onClick={(
-																		e
-																	) => {
-																		e.preventDefault();
-																		setShowStoreList(
-																			(
-																				prev
-																			) =>
-																				!prev
-																		);
-																	}}
-																>
-																	<i className="adminlib-switch-store"></i>
-																	Switch stores
-																	{firstTwoStores.length >
-																		0 && (
-																			<span className="switch-store-preview">
-																				{!showStoreList && (
-																					<>
-																						{firstTwoStores.map(
-																							(
-																								store, index
-																							) => (
-																								<span
-																									className={`store-icon admin-color${index + 2}`}
-																									key={
-																										store.id
-																									}
-																								>
-																									{store.name
-																										.charAt(
-																											0
-																										)
-																										.toUpperCase()}
-																								</span>
-																							)
-																						)}
-
-																						{availableStores.length >
-																							2 && (
-																								<span className="store-icon number">
-																									+
-																									{availableStores.length -
-																										2}
-																								</span>
-																							)}
-																					</>
-																				)}
-																				<span className="adminlib-keyboard-arrow-down arrow-icon"></span>
-																			</span>
-																		)}
-																</a>
-
-																{showStoreList && (
-																	<div className="switch-store-list">
-																		{availableStores.map(
-																			(
-																				store, index
-																			) => (
-																				<div
-																					className="store"
-																					key={
-																						store.id
-																					}
-																				>
-																					<a
-																						href="#"
-																						className="switch-store"
-																						onClick={(
-																							e
-																						) => {
-																							e.preventDefault();
-																							switchStore(
+														<li className="switch-store-wrapper">
+															<a
+																href="#"
+																onClick={(
+																	e
+																) => {
+																	e.preventDefault();
+																	setShowStoreList(
+																		(
+																			prev
+																		) =>
+																			!prev
+																	);
+																}}
+															>
+																<i className="adminlib-switch-store"></i>
+																Switch stores
+																{firstTwoStores.length >
+																	0 && (
+																	<span className="switch-store-preview">
+																		{!showStoreList && (
+																			<>
+																				{firstTwoStores.map(
+																					(
+																						store,
+																						index
+																					) => (
+																						<span
+																							className={`store-icon admin-color${index + 2}`}
+																							key={
 																								store.id
-																							);
-																						}}
-																					>
-																						<span className={`store-icon admin-color${index + 2}`}>
+																							}
+																						>
 																							{store.name
 																								.charAt(
 																									0
 																								)
 																								.toUpperCase()}
 																						</span>
-																						<div className="details-wrapper">
-																							<div className="store-name">
-																								{
-																									store.name
-																								}
-																							</div>
-																						</div>
-																					</a>
-																				</div>
-																			)
+																					)
+																				)}
+
+																				{availableStores.length >
+																					2 && (
+																					<span className="store-icon number">
+																						+
+																						{availableStores.length -
+																							2}
+																					</span>
+																				)}
+																			</>
 																		)}
-																	</div>
+																		<span className="adminlib-keyboard-arrow-down arrow-icon"></span>
+																	</span>
 																)}
-															</li>
-														)}
+															</a>
+
+															{showStoreList && (
+																<div className="switch-store-list">
+																	{availableStores.map(
+																		(
+																			store,
+																			index
+																		) => (
+																			<div
+																				className="store"
+																				key={
+																					store.id
+																				}
+																			>
+																				<a
+																					href="#"
+																					className="switch-store"
+																					onClick={(
+																						e
+																					) => {
+																						e.preventDefault();
+																						switchStore(
+																							store.id
+																						);
+																					}}
+																				>
+																					<span
+																						className={`store-icon admin-color${index + 2}`}
+																					>
+																						{store.name
+																							.charAt(
+																								0
+																							)
+																							.toUpperCase()}
+																					</span>
+																					<div className="details-wrapper">
+																						<div className="store-name">
+																							{
+																								store.name
+																							}
+																						</div>
+																					</div>
+																				</a>
+																			</div>
+																		)
+																	)}
+																</div>
+															)}
+														</li>
+													)}
 												</ul>
 											</div>
 

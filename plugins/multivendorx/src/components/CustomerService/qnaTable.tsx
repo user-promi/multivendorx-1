@@ -388,7 +388,7 @@ const Qna: React.FC = () => {
 						actions: [
 							{
 								label: __('Answer', 'multivendorx'),
-								icon: 'adminlib-eye', 
+								icon: 'adminlib-eye',
 								onClick: (rowData: any) => {
 									setSelectedQna(rowData);
 									setQna(rowData.question_text);

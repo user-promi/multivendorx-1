@@ -39,14 +39,11 @@ export default {
 				'<a href="https://platform.openai.com/api-keys" target="_blank">Click here to generate your OpenAI API key.</a>',
 				'multivendorx'
 			),
-		},	
+		},
 		{
 			key: 'openrouter_api_image_enhancement_key',
 			type: 'text',
-			label: __(
-				'OpenRouter',
-				'multivendorx'
-			),
+			label: __('OpenRouter', 'multivendorx'),
 			settingDescription: __(
 				'Free and open AI models can be enabled for product content and image enhancement.',
 				'multivendorx'
@@ -100,10 +97,9 @@ export default {
 				},
 			],
 		},
-		
-		
+
 		// --- OpenRouter API Key Section ---
-		
+
 		{
 			key: 'openrouter_api_model',
 			type: 'select',
@@ -154,7 +150,7 @@ export default {
 				'Choose which AI provider to use for image enhancement.',
 				'multivendorx'
 			),
-			
+
 			options: [
 				{
 					key: 'gemini_api_image_enhancement',
@@ -187,7 +183,7 @@ export default {
 		// 	},
 		// },
 		// --- OpenRouter Image Enhancement Settings ---
-		
+
 		{
 			key: 'openrouter_api_image_model',
 			type: 'select',
