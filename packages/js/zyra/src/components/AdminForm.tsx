@@ -234,6 +234,7 @@ interface InputField {
         options?: { value: string | number; label: string }[];
     }[];
     columns?: { key: string; label: string; moduleEnabled?: string }[];
+    enable?: boolean;
     fields?: Field[];
     options?: MultiNumOption[];
     optionLabel?: string[];
@@ -1891,6 +1892,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                             khali_dabba={appLocalizer?.khali_dabba ?? false}
                             rows={inputField.rows ?? []} // row array
                             columns={inputField.columns ?? []} // columns array
+                            enable= {inputField.enable}
                             description={String(inputField.desc)}
                             setting={setting}
                             storeTabSetting={storeTabSetting}
