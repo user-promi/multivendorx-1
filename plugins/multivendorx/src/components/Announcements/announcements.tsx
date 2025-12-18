@@ -41,7 +41,7 @@ type AnnouncementStatus = {
 
 type FilterData = {
 	searchField: string;
-	typeCount?: string;
+	categoryFilter?: string;
 	date?: FilterDate;
 };
 
@@ -344,7 +344,7 @@ export const Announcements: React.FC = () => {
 	function requestData(
 		rowsPerPage = 10,
 		currentPage = 1,
-		typeCount = '',
+		categoryFilter = '',
 		searchField = '',
 		startDate = new Date(0),
 		endDate = new Date()
@@ -357,7 +357,7 @@ export const Announcements: React.FC = () => {
 			params: {
 				page: currentPage,
 				row: rowsPerPage,
-				status: typeCount === 'all' ? '' : typeCount,
+				status: categoryFilter === 'all' ? '' : categoryFilter,
 				startDate,
 				endDate,
 				searchField,
@@ -401,11 +401,17 @@ export const Announcements: React.FC = () => {
 		currentPage: number,
 		filterData: FilterData
 	) => {
+		const selectedStatus = announcementStatus?.find(
+			(status) => status.key === filterData?.categoryFilter
+		);
+	
+		setTotalRows(selectedStatus ? selectedStatus.count : announcementStatus?.find(s => s.key === 'all')?.count || 0);
+	
 		setData(null);
 		requestData(
 			rowsPerPage,
 			currentPage,
-			filterData?.typeCount,
+			filterData?.categoryFilter,
 			filterData?.searchField,
 			filterData?.date?.start_date,
 			filterData?.date?.end_date
@@ -752,7 +758,7 @@ export const Announcements: React.FC = () => {
 								usePlainText={false}
 								tinymceApiKey={
 									appLocalizer.settings_databases_value[
-									'marketplace'
+										'marketplace'
 									]['tinymce_api_section'] ?? ''
 								}
 							/>
@@ -792,8 +798,7 @@ export const Announcements: React.FC = () => {
 										selectedIds.includes(0)
 									) {
 										nextStores = [0];
-									}
-									else if (
+									} else if (
 										prevStores.includes(0) &&
 										selectedIds.length > 1
 									) {

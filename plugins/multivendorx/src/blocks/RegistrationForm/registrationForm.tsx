@@ -116,17 +116,17 @@ const RegistrationForm = () => {
 			},
 			data: { formData: mappedData },
 		})
-		.then((response) => {
-			setResponseMessage('Store created successfully');
-			setLoading(false);
-			if (response.data.redirect !== '') {
-				window.open(response.data.redirect, '_self');
-			}
-		})
-		.catch(() => {
-			setResponseMessage('Error creating store');
-			setLoading(false);
-		});
+			.then((response) => {
+				setResponseMessage('Store created successfully');
+				setLoading(false);
+				if (response.data.redirect !== '') {
+					window.open(response.data.redirect, '_self');
+				}
+			})
+			.catch(() => {
+				setResponseMessage('Error creating store');
+				setLoading(false);
+			});
 	}, []);
 
 	const memoizedCountryList = useMemo(() => appLocalizer.country_list, []);

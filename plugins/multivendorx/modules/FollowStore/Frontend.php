@@ -8,7 +8,6 @@
 namespace MultiVendorX\FollowStore;
 
 use MultiVendorX\FrontendScripts;
-use MultiVendorX\Utill;
 
 /**
  * MultiVendorX Follow Store Frontend class
@@ -28,9 +27,7 @@ class Frontend {
 
         // Load scripts.
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
-
-        // Register the reusable follow button filter.
-        $this->register_follow_button_filter();
+        add_action( 'wp_footer', array( $this, 'render_login_modal' ) );
     }
 
     /**
@@ -54,51 +51,41 @@ class Frontend {
 
         $current_user_id = get_current_user_id();
 
-        // Generate HTML.
-        $html  = '<button class="mvx-follow-btn" 
+        $html  = '<button class="follow-btn" 
                     data-store-id="' . esc_attr( $store_id ) . '" 
                     data-user-id="' . esc_attr( $current_user_id ) . '" 
                     style="display:none;">
+                    Follow
                 </button>';
-        $html .= ' <span class="mvx-follower-count" id="followers-count-' . esc_attr( $store_id ) . '">0 Follower</span>';
+        $html .= ' <div class="multivendorx-follower-count" id="followers-count-' . esc_attr( $store_id ) . '">0 Follower</div>';
 
-        // Apply filter.
-        $html = apply_filters( 'mvx_follow_button_html', $html, $store_id, $current_user_id );
+        $html = apply_filters( 'multivendorx_follow_button_html', $html, $store_id, $current_user_id );
 
-        // Escape on output.
         echo wp_kses_post( $html );
     }
 
     /**
-     * Register filter to allow using follow button HTML anywhere
+     * Outputs the login modal for non-logged-in users.
+     *
+     * Displays the WooCommerce "My Account" form inside a modal with a close button.
+     *
+     * @return void
      */
-    public function register_follow_button_filter() {
-        add_filter(
-            'mvx_follow_button_html',
-            function ( $html, $store_id, $user_id ) {
-				if ( empty( $store_id ) ) {
-					return $html;
-				}
-
-				// Reuse same HTML pattern.
-				$html  = '<div class="buttons-wrapper">
-                        <div class="follow-wrapper"> 
-                        <button class="follow-btn" 
-                            data-store-id="' . esc_attr( $store_id ) . '" 
-                            data-user-id="' . esc_attr( $user_id ) . '" 
-                            ">
-                            Follow
-                        </button>
-                      ';
-				$html .= ' <span class="follower-count" id="followers-count-' . esc_attr( $store_id ) . '">0 Follower</span> </div> 
-                        <button>Live Chat</button>
-                        <button>Support</button>
-                        </div>';
-
-				return $html;
-			},
-            10,
-            3
-        );
+    public function render_login_modal() {
+        ?>
+        <div id="multivendorx-login-modal" class="multivendorx-modal">
+            <div class="multivendorx-modal-content">
+                <span class="multivendorx-close">&times;</span>
+                <div id="multivendorx-login-form-container">
+                    <?php echo do_shortcode( '[woocommerce_my_account]' ); ?>
+                </div>
+            </div>
+        </div>
+        <style>
+        .multivendorx-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; }
+        .multivendorx-modal-content { background:#fff; margin:10% auto; padding:20px; width:400px; border-radius:5px; position:relative; }
+        .multivendorx-close { position:absolute; top:10px; right:15px; cursor:pointer; font-size:20px; }
+        </style>
+        <?php
     }
 }

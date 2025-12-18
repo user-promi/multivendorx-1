@@ -131,7 +131,7 @@ const Orders: React.FC = () => {
 							status === 'all'
 								? __('All', 'multivendorx')
 								: status.charAt(0).toUpperCase() +
-								status.slice(1),
+									status.slice(1),
 						count: total,
 					};
 				})
@@ -304,8 +304,9 @@ const Orders: React.FC = () => {
 
 			selectedOrders.forEach((order) => {
 				const customer = order.billing?.first_name
-					? `${order.billing.first_name} ${order.billing.last_name || ''
-					}`
+					? `${order.billing.first_name} ${
+							order.billing.last_name || ''
+						}`
 					: 'Guest';
 				const email = order.billing?.email || '';
 				const total = order.total || '';
@@ -323,8 +324,9 @@ const Orders: React.FC = () => {
 			});
 			const link = document.createElement('a');
 			link.href = URL.createObjectURL(blob);
-			link.download = `selected_orders_${appLocalizer.store_id
-				}_${new Date().toISOString()}.csv`;
+			link.download = `selected_orders_${
+				appLocalizer.store_id
+			}_${new Date().toISOString()}.csv`;
 			link.click();
 			URL.revokeObjectURL(link.href);
 		};
@@ -423,8 +425,9 @@ const Orders: React.FC = () => {
 				const { billing } = row.original;
 				const name =
 					billing?.first_name || billing?.last_name
-						? `${billing.first_name || ''} ${billing.last_name || ''
-						}`
+						? `${billing.first_name || ''} ${
+								billing.last_name || ''
+							}`
 						: billing?.email || __('Guest', 'multivendorx');
 				return <TableCell>{name}</TableCell>;
 			},
@@ -458,8 +461,9 @@ const Orders: React.FC = () => {
 				} else if (minutes > 0) {
 					timeAgo = `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
 				} else {
-					timeAgo = `${seconds} second${seconds !== 1 ? 's' : ''
-						} ago`;
+					timeAgo = `${seconds} second${
+						seconds !== 1 ? 's' : ''
+					} ago`;
 				}
 
 				return <TableCell>{timeAgo}</TableCell>;
@@ -494,22 +498,22 @@ const Orders: React.FC = () => {
 							// Conditionally include the "View" button
 							...(appLocalizer.edit_order_capability
 								? [
-									{
-										label: __('View', 'multivendorx'),
-										icon: 'adminlib-eye',
-										onClick: (rowData) => {
-											setSelectedOrder(rowData);
-											// window.location.href = `view/${rowData.id}`;
+										{
+											label: __('View', 'multivendorx'),
+											icon: 'adminlib-eye',
+											onClick: (rowData) => {
+												setSelectedOrder(rowData);
+												// window.location.href = `view/${rowData.id}`;
 
-											window.location.hash = `view/${rowData.id}`;
+												window.location.hash = `view/${rowData.id}`;
 
-											// const currentPath = window.location.pathname.replace(/\/$/, '');
-											// const newPath = `${currentPath}/view/${rowData.id}`;
-											// window.history.pushState({}, '', newPath);
+												// const currentPath = window.location.pathname.replace(/\/$/, '');
+												// const newPath = `${currentPath}/view/${rowData.id}`;
+												// window.history.pushState({}, '', newPath);
+											},
+											hover: true,
 										},
-										hover: true,
-									},
-								]
+									]
 								: []),
 							{
 								label: __('Download', 'multivendorx'),
@@ -662,8 +666,9 @@ const Orders: React.FC = () => {
 
 			allOrders.forEach((order) => {
 				const customer = order.billing?.first_name
-					? `${order.billing.first_name} ${order.billing.last_name || ''
-					}`
+					? `${order.billing.first_name} ${
+							order.billing.last_name || ''
+						}`
 					: 'Guest';
 				const email = order.billing?.email || '';
 				const total = order.total || '';
@@ -685,8 +690,9 @@ const Orders: React.FC = () => {
 			});
 			const link = document.createElement('a');
 			link.href = URL.createObjectURL(blob);
-			link.download = `orders_${appLocalizer.store_id
-				}_${new Date().toISOString()}.csv`;
+			link.download = `orders_${
+				appLocalizer.store_id
+			}_${new Date().toISOString()}.csv`;
 			link.click();
 			URL.revokeObjectURL(link.href);
 		} catch (err) {

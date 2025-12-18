@@ -132,8 +132,8 @@ class Admin {
 						'subtab' => 'payment-membership-plans',
 					),
                     // 'add-memberships'     => array(
-					// 	'name'   => __( 'Add Memberships', 'multivendorx' ),
-					// 	'subtab' => '',
+					// 'name'   => __( 'Add Memberships', 'multivendorx' ),
+					// 'subtab' => '',
 					// ),
 					'settings'            => array(
 						'name'   => __( 'Settings', 'multivendorx' ),

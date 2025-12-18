@@ -284,7 +284,9 @@ const Overview: React.FC<OverviewProps> = ({}) => {
 							{commissionDetails.map((item, idx) => (
 								<div key={idx} className="analytics-item">
 									<div className="analytics-icon">
-										<i className={`${item.icon} admin-color${idx + 1}`}></i>
+										<i
+											className={`${item.icon} admin-color${idx + 1}`}
+										></i>
 									</div>
 									<div className="details">
 										<div className="number">

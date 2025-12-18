@@ -60,13 +60,13 @@ export function formatTimeAgo(dateString: any) {
 	const diff = (Date.now() - date.getTime()) / 1000;
 
 	if (diff < 60) {
-		return 'just now';
+		return 'Just now';
 	}
 	if (diff < 3600) {
-		return Math.floor(diff / 60) + 'm ago';
+		return Math.floor(diff / 60) + 'min ago';
 	}
 	if (diff < 86400) {
-		return Math.floor(diff / 3600) + 'h ago';
+		return Math.floor(diff / 3600) + 'hour ago';
 	}
-	return Math.floor(diff / 86400) + 'd ago';
+	return Math.floor(diff / 86400) + 'day ago';
 }

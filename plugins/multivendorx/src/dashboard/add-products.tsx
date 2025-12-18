@@ -436,12 +436,12 @@ const AddProduct = () => {
 			appLocalizer.settings_databases_value['product-preferencess']
 				?.category_selection_method == 'yes'
 				? [
-					{
-						id: Number(
-							selectedChild || selectedSub || selectedCat
-						),
-					},
-				]
+						{
+							id: Number(
+								selectedChild || selectedSub || selectedCat
+							),
+						},
+					]
 				: selectedCats.map((id) => ({ id }));
 
 		try {
@@ -656,8 +656,8 @@ const AddProduct = () => {
 			console.error('Image enhancement error:', err);
 			setEnhancementError(
 				err.response?.data?.message ||
-				err.response?.data?.error?.message ||
-				'Network error occurred. Please try again.'
+					err.response?.data?.error?.message ||
+					'Network error occurred. Please try again.'
 			);
 		} finally {
 			setIsEnhancing(false);
@@ -1238,12 +1238,12 @@ const AddProduct = () => {
 						<CommonPopup
 							open={AddInhance}
 							onClick={() => setAddInhance(false)}
-							width="50%"
+							width="30%"
 							height="90%"
 							header={
 								<>
 									<div className="title">
-										<i className="adminlib-magic"></i>
+										<i className="adminlib-ai"></i>
 										{__(
 											'AI Image Enhancer',
 											'multivendorx'
@@ -1272,8 +1272,9 @@ const AddProduct = () => {
 										{__('Cancel', 'multivendorx')}
 									</div>
 									<div
-										className={`admin-btn btn-purple-bg ${isEnhancing ? 'disabled' : ''
-											}`}
+										className={`admin-btn btn-purple-bg ${
+											isEnhancing ? 'disabled' : ''
+										}`}
 										onClick={
 											!isEnhancing
 												? handleImageEnhancement
@@ -1282,13 +1283,13 @@ const AddProduct = () => {
 									>
 										{isEnhancing
 											? __(
-												'Generating Image...',
-												'multivendorx'
-											)
+													'Generating Image...',
+													'multivendorx'
+												)
 											: __(
-												'Generate Enhanced Image',
-												'multivendorx'
-											)}
+													'Generate Enhanced Image',
+													'multivendorx'
+												)}
 									</div>
 								</>
 							}
@@ -1297,13 +1298,6 @@ const AddProduct = () => {
 								{/* Original Image Preview */}
 								{selectedImageForEnhancement && (
 									<div className="image-preview-section">
-										<h4>
-											<i className="adminlib-image"></i>{' '}
-											{__(
-												'Original Image:',
-												'multivendorx'
-											)}
-										</h4>
 										<div>
 											<img
 												src={
@@ -1311,7 +1305,7 @@ const AddProduct = () => {
 												}
 												alt="Original Preview"
 											/>
-											<p>
+											<p className="settings-metabox-description">
 												{__(
 													'This is the original image that will be enhanced.',
 													'multivendorx'
@@ -1322,32 +1316,30 @@ const AddProduct = () => {
 								)}
 
 								{/* Prompt Input */}
-								<div className="form-group">
-									<label>
-										{__(
-											'Enhancement Instructions',
-											'multivendorx'
-										)}
-									</label>
-									<textarea
-										value={enhancementPrompt}
-										onChange={(e) =>
-											setEnhancementPrompt(e.target.value)
-										}
-										placeholder={__(
-											"E.g., 'Make the colors more vibrant and appealing', 'Add professional lighting and background', 'Remove all shadows and make it studio quality', 'Make it look more premium and luxurious', etc.",
-											'multivendorx'
-										)}
-										disabled={isEnhancing}
-									/>
-									<p>
-										{__(
-											'Describe exactly how you want the AI to enhance the image.',
-											'multivendorx'
-										)}
-									</p>
+								<div className="form-group-wrapper">
+									<div className="form-group">
+										<label>
+											{__(
+												'Enhancement Instructions',
+												'multivendorx'
+											)}
+										</label>
+										<textarea
+											value={enhancementPrompt}
+											className="textarea-input"
+											onChange={(e) =>
+												setEnhancementPrompt(e.target.value)
+											}
+											disabled={isEnhancing}
+										/>
+										<p className="settings-metabox-description">
+											{__(
+												'Describe exactly how you want the AI to enhance the image.',
+												'multivendorx'
+											)}
+										</p>
+									</div>
 								</div>
-
 								{/* Error Message */}
 								{enhancementError && (
 									<div className="error-message">
@@ -1532,12 +1524,19 @@ const AddProduct = () => {
 								<div className="catalog-visibility">
 									Catalog Visibility:
 									<span className="catalog-visibility-value">
-										<b>{VISIBILITY_LABELS[product.catalog_visibility]} </b>
+										<b>
+											{
+												VISIBILITY_LABELS[
+													product.catalog_visibility
+												]
+											}{' '}
+										</b>
 									</span>
-
 									<span
 										className="admin-badge blue"
-										onClick={() => setIsEditingVisibility(true)}
+										onClick={() =>
+											setIsEditingVisibility(true)
+										}
 									>
 										<i className="adminlib-edit"></i>
 									</span>
@@ -1580,19 +1579,34 @@ const AddProduct = () => {
 															label: 'Hidden',
 														},
 													]}
-													value={product.catalog_visibility}
+													value={
+														product.catalog_visibility
+													}
 													onChange={(e) => {
-														handleChange('catalog_visibility', e.target.value);
-														setIsEditingVisibility(false); // auto-hide after change
+														handleChange(
+															'catalog_visibility',
+															e.target.value
+														);
+														setIsEditingVisibility(
+															false
+														); // auto-hide after change
 													}}
 												/>
 											</div>
 											<div className="form-group">
 												<label
-													onClick={() => setstarFill((prev) => !prev)}
-													style={{ cursor: 'pointer' }}
+													onClick={() =>
+														setstarFill(
+															(prev) => !prev
+														)
+													}
+													style={{
+														cursor: 'pointer',
+													}}
 												>
-													<i className={`star-icon ${starFill ? 'adminlib-star' : 'adminlib-star-o'}`}></i>
+													<i
+														className={`star-icon ${starFill ? 'adminlib-star' : 'adminlib-star-o'}`}
+													></i>
 													{/* <input
 											type="checkbox"
 											checked={product.featured}
@@ -1622,23 +1636,33 @@ const AddProduct = () => {
 											{
 												key: 'draft',
 												value: 'draft',
-												label: __('Draft', 'multivendorx'),
+												label: __(
+													'Draft',
+													'multivendorx'
+												),
 											},
 											{
 												key: 'publish',
 												value: 'publish',
-												label: __('Published', 'multivendorx'),
+												label: __(
+													'Published',
+													'multivendorx'
+												),
 											},
 											{
 												key: 'pending',
 												value: 'pending',
-												label: __('Pending Review', 'multivendorx'),
+												label: __(
+													'Pending Review',
+													'multivendorx'
+												),
 											},
 										]}
 										value={product.status}
-										onChange={(value) => handleChange('status', value)}
+										onChange={(value) =>
+											handleChange('status', value)
+										}
 									/>
-
 								</div>
 							</div>
 							<div className="form-group-wrapper">
@@ -1666,19 +1690,30 @@ const AddProduct = () => {
 														<CalendarInput
 															wrapperClass="calendar-wrapper"
 															inputClass="calendar-input"
-															value={product.date_created?.split('T')[0] || ''}
-															onChange={(date: any) => {
-																const dateStr = date?.toString();
+															value={
+																product.date_created?.split(
+																	'T'
+																)[0] || ''
+															}
+															onChange={(
+																date: any
+															) => {
+																const dateStr =
+																	date?.toString();
 
-																setProduct((prev) => {
-																	const oldTime =
-																		prev.date_created?.split('T')[1] ||
-																		'00:00:00';
-																	return {
-																		...prev,
-																		date_created: `${dateStr}T${oldTime}`,
-																	};
-																});
+																setProduct(
+																	(prev) => {
+																		const oldTime =
+																			prev.date_created?.split(
+																				'T'
+																			)[1] ||
+																			'00:00:00';
+																		return {
+																			...prev,
+																			date_created: `${dateStr}T${oldTime}`,
+																		};
+																	}
+																);
 															}}
 															format="YYYY-MM-DD"
 														/>
@@ -1690,20 +1725,34 @@ const AddProduct = () => {
 															name="published_time"
 															value={
 																product.date_created
-																	?.split('T')[1]
-																	?.slice(0, 5) || ''
+																	?.split(
+																		'T'
+																	)[1]
+																	?.slice(
+																		0,
+																		5
+																	) || ''
 															}
-															onChange={(e: any) => {
-																const newTime = e.target.value;
+															onChange={(
+																e: any
+															) => {
+																const newTime =
+																	e.target
+																		.value;
 
-																setProduct((prev) => {
-																	const oldDate =
-																		prev.date_created?.split('T')[0] || '';
-																	return {
-																		...prev,
-																		date_created: `${oldDate}T${newTime}:00`,
-																	};
-																});
+																setProduct(
+																	(prev) => {
+																		const oldDate =
+																			prev.date_created?.split(
+																				'T'
+																			)[0] ||
+																			'';
+																		return {
+																			...prev,
+																			date_created: `${oldDate}T${newTime}:00`,
+																		};
+																	}
+																);
 															}}
 														/>
 													</>
@@ -1711,7 +1760,6 @@ const AddProduct = () => {
 											</div>
 										</>
 									)}
-
 								</div>
 							</div>
 						</div>
@@ -1743,13 +1791,13 @@ const AddProduct = () => {
 										{(selectedCat ||
 											selectedSub ||
 											selectedChild) && (
-												<button
-													onClick={resetSelection}
-													className="admin-btn btn-red"
-												>
-													Reset
-												</button>
-											)}
+											<button
+												onClick={resetSelection}
+												className="admin-btn btn-red"
+											>
+												Reset
+											</button>
+										)}
 									</div>
 									<div className="form-group-wrapper">
 										<div className="form-group">
@@ -1764,16 +1812,17 @@ const AddProduct = () => {
 														>
 															{/* CATEGORY */}
 															<li
-																className={`category ${selectedCat ===
+																className={`category ${
+																	selectedCat ===
 																	cat.id
-																	? 'radio-select-active'
-																	: ''
-																	}`}
+																		? 'radio-select-active'
+																		: ''
+																}`}
 																style={{
 																	display:
 																		selectedCat ===
 																			null ||
-																			selectedCat ===
+																		selectedCat ===
 																			cat.id
 																			? 'block'
 																			: 'none',
@@ -1794,7 +1843,7 @@ const AddProduct = () => {
 																cat.id &&
 																cat.children
 																	?.length >
-																0 && (
+																	0 && (
 																	<ul className="settings-form-group-radio">
 																		{cat.children.map(
 																			(
@@ -1807,15 +1856,16 @@ const AddProduct = () => {
 																				>
 																					{/* SUB CATEGORY */}
 																					<li
-																						className={`sub-category ${selectedSub ===
+																						className={`sub-category ${
+																							selectedSub ===
 																							sub.id
-																							? 'radio-select-active'
-																							: ''
-																							}`}
+																								? 'radio-select-active'
+																								: ''
+																						}`}
 																						style={{
 																							display:
 																								!selectedSub ||
-																									selectedSub ===
+																								selectedSub ===
 																									sub.id
 																									? 'block'
 																									: 'none',
@@ -1839,7 +1889,7 @@ const AddProduct = () => {
 																						sub
 																							.children
 																							?.length >
-																						0 && (
+																							0 && (
 																							<ul className="settings-form-group-radio">
 																								{sub.children.map(
 																									(
@@ -1849,15 +1899,16 @@ const AddProduct = () => {
 																											key={
 																												child.id
 																											}
-																											className={`sub-category ${selectedChild ===
+																											className={`sub-category ${
+																												selectedChild ===
 																												child.id
-																												? 'radio-select-active'
-																												: ''
-																												}`}
+																													? 'radio-select-active'
+																													: ''
+																											}`}
 																											style={{
 																												display:
 																													!selectedChild ||
-																														selectedChild ===
+																													selectedChild ===
 																														child.id
 																														? 'block'
 																														: 'none',
@@ -1903,7 +1954,6 @@ const AddProduct = () => {
 							)}
 						</div>
 					</div>
-
 
 					<div className="card-content" id="card-product-category">
 						<div className="card-header">
@@ -2036,17 +2086,19 @@ const AddProduct = () => {
 												onReplace={openFeaturedUploader}
 											/>
 										</div>
-										<button
-											className="admin-btn btn-blue"
-											onClick={() =>
-												openImageEnhancer(
-													featuredImage?.src
-												)
-											}
-										>
-											<i className="adminlib-magic"></i>{' '}
-											{__('Enhance', 'multivendorx')}
-										</button>
+										<div className="buttons-wrapper">
+											<button
+												className="admin-btn btn-blue"
+												onClick={() =>
+													openImageEnhancer(
+														featuredImage?.src
+													)
+												}
+											>
+												<i className="adminlib-magic"></i>{' '}
+												{__('Enhance', 'multivendorx')}
+											</button>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -2055,11 +2107,21 @@ const AddProduct = () => {
 									<label htmlFor="product-name">
 										Product gallery
 									</label>
-									<div className="gallery-wrapper">
+									<div>
+										<FileInput
+											type="hidden"
+											imageSrc={null}
+											openUploader="Add Gallery Image"
+											buttonClass="admin-btn btn-purple"
+											onButtonClick={
+												openGalleryUploader
+											}
+										/>
+									</div>
+									<div className="uploaded-image">
 										{galleryImages.map((img, index) => (
-											<div key={img.id}>
-												<div>
-													<FileInput
+											<div className="image" key={img.id}>
+												{/* <FileInput
 														type="hidden"
 														imageSrc={img.thumbnail}
 														openUploader="Replace Image"
@@ -2076,9 +2138,10 @@ const AddProduct = () => {
 														onReplace={() =>
 															openGalleryUploader()
 														}
-													/>
-												</div>
-												<button
+													/> */}
+												<img src="http://localhost:8889/wp-content/uploads/2025/12/hoodie-2.jpg" alt="" />
+												<i className="adminlib-delete"></i>
+												{/* <button
 													className="admin-btn btn-blue"
 													onClick={() =>
 														openImageEnhancer(
@@ -2091,22 +2154,9 @@ const AddProduct = () => {
 														'Enhance',
 														'multivendorx'
 													)}
-												</button>
+												</button> */}
 											</div>
 										))}
-										{/* Add more button */}
-										<div>
-											{/* Add more button */}
-											<FileInput
-												type="hidden"
-												imageSrc={null}
-												openUploader="Add Gallery Image"
-												buttonClass="admin-btn btn-purple"
-												onButtonClick={
-													openGalleryUploader
-												}
-											/>
-										</div>
 									</div>
 								</div>
 							</div>

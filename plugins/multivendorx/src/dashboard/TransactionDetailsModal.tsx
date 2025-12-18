@@ -58,7 +58,9 @@ const TransactionDetailsModal: React.FC<Props> = ({ transaction, onClose }) => {
 									{__('Date', 'multivendorx')}
 								</div>
 								<div className="value">
-									{new Date(transaction.date.replace(' ', 'T')).toLocaleDateString('en-US', {
+									{new Date(
+										transaction.date.replace(' ', 'T')
+									).toLocaleDateString('en-US', {
 										month: 'short',
 										day: '2-digit',
 										year: 'numeric',
@@ -110,7 +112,9 @@ const TransactionDetailsModal: React.FC<Props> = ({ transaction, onClose }) => {
 									{__('Balance', 'multivendorx')}
 								</div>
 								<div className="value">
-									{Number(transaction.balance || 0).toFixed(2)}
+									{Number(transaction.balance || 0).toFixed(
+										2
+									)}
 								</div>
 							</div>
 							<div className="items">
@@ -119,18 +123,19 @@ const TransactionDetailsModal: React.FC<Props> = ({ transaction, onClose }) => {
 								</div>
 								<div className="value">
 									<span
-										className={`admin-badge ${transaction.status === 'Completed'
-											? 'green'
-											: 'red'
-											}`}
+										className={`admin-badge ${
+											transaction.status === 'Completed'
+												? 'green'
+												: 'red'
+										}`}
 									>
 										{transaction.status
 											? transaction.status
-												.replace(/^wc-/, '') // remove prefix
-												.replace(/_/g, ' ') // underscores → spaces
-												.replace(/\b\w/g, (c) =>
-													c.toUpperCase()
-												) // capitalize
+													.replace(/^wc-/, '') // remove prefix
+													.replace(/_/g, ' ') // underscores → spaces
+													.replace(/\b\w/g, (c) =>
+														c.toUpperCase()
+													) // capitalize
 											: ''}
 									</span>
 								</div>

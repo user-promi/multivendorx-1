@@ -178,19 +178,19 @@ const DownloadTransactionCSVButton: React.FC<{
 
 	return (
 		<div className="action-item">
-		<button
-			onClick={handleDownload}
-			disabled={
-				isDownloading ||
-				isLoading ||
-				!storeId ||
-				(!hasSelectedRows && !data)
-			}
-			className="admin-btn"
-		>
-			<i className="adminlib-import"></i>
-			{__('Download CSV', 'multivendorx')}
-		</button>
+			<button
+				onClick={handleDownload}
+				disabled={
+					isDownloading ||
+					isLoading ||
+					!storeId ||
+					(!hasSelectedRows && !data)
+				}
+				className="admin-btn"
+			>
+				<i className="adminlib-import"></i>
+				{__('Download CSV', 'multivendorx')}
+			</button>
 		</div>
 	);
 };

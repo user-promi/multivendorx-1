@@ -157,6 +157,21 @@ const AICard = () => {
 			setError('');
 		}
 	}, [userPrompt]);
+	const groupedSuggestions = [];
+
+	const maxLength = Math.max(
+		aiSuggestions.productName.length,
+		aiSuggestions.shortDescription.length,
+		aiSuggestions.productDescription.length
+	);
+
+	for (let i = 0; i < maxLength; i++) {
+		groupedSuggestions.push({
+			title: aiSuggestions.productName[i],
+			shortDescription: aiSuggestions.shortDescription[i],
+			description: aiSuggestions.productDescription[i],
+		});
+	}
 
 	return (
 		<div className="card-content" id="card-ai-assist">
@@ -166,9 +181,8 @@ const AICard = () => {
 				</div>
 				<div className="right">
 					<i
-						className={`adminlib-pagination-right-arrow arrow-icon ${
-							isCardOpen ? 'rotate' : ''
-						}`}
+						className={`adminlib-pagination-right-arrow arrow-icon ${isCardOpen ? 'rotate' : ''
+							}`}
 						onClick={toggleCard}
 					></i>
 				</div>
@@ -185,7 +199,29 @@ const AICard = () => {
 								{error}
 							</div>
 						)}
+						{/* Show message when waiting for input */}
+						{!hasSuggestions &&
+							!isLoading &&
+							!error &&
+							userPrompt.trim() === '' && (
+								<div className="empty-state">
+									<div className="empty-icon">
+										<i className="adminlib-lightbulb"></i>
+									</div>
+									<p>
+										Enter a prompt above to generate AI
+										suggestions for your product.
+									</p>
+								</div>
+							)}
 
+						{/* Show loading state */}
+						{isLoading && (
+							<div className="loading-state">
+								<div className="loading-spinner"></div>
+								<p>Generating suggestions...</p>
+							</div>
+						)}
 						{/* Only show suggestions section if we have actual suggestions */}
 						{hasSuggestions && (
 							<div className="suggestions-wrapper">
@@ -195,7 +231,57 @@ const AICard = () => {
 										(Click any suggestion to apply it)
 									</small>
 								</div>
+								{groupedSuggestions.map((item, index) => (
 
+									<div className="box clickable-suggestion" key={`product-${index}`}>
+										<h4>Product {index + 1}</h4>
+
+										{item.title && (
+											<div
+												className="title"
+												onClick={() =>
+													handleSuggestionClick(
+														'productName',
+														item.title
+													)
+												}
+											>
+												<span>{item.title}</span>
+												<i className="adminlib-arrow-right"></i>
+											</div>
+										)}
+
+										{item.shortDescription && (
+											<div
+												className="title"
+												onClick={() =>
+													handleSuggestionClick(
+														'productName',
+														item.shortDescription
+													)
+												}
+											>
+												<span>{item.shortDescription}</span>
+												<i className="adminlib-arrow-right"></i>
+											</div>
+										)}
+
+										{item.description && (
+											<div
+												className="title"
+												onClick={() =>
+													handleSuggestionClick(
+														'productName',
+														item.description
+													)
+												}
+											>
+												<span>{item.description}</span>
+												<i className="adminlib-arrow-right"></i>
+											</div>
+										)}
+									</div>
+								))}
 								{/* Product Name Suggestions */}
 								{aiSuggestions.productName.length > 0 && (
 									<div className="suggestion-category">
@@ -262,33 +348,33 @@ const AICard = () => {
 								{/* Product Description Suggestions */}
 								{aiSuggestions.productDescription.length >
 									0 && (
-									<div className="suggestion-category">
-										<h4>Product Description Suggestions</h4>
-										{aiSuggestions.productDescription.map(
-											(suggestion, index) => (
-												<div
-													className="box clickable-suggestion"
-													key={`desc-sugg-${index}`}
-													onClick={() =>
-														handleSuggestionClick(
-															'productDescription',
-															suggestion
-														)
-													}
-												>
-													<span>{suggestion}</span>
-													<i
-														className="adminlib-arrow-right"
-														style={{
-															marginLeft: '8px',
-															fontSize: '12px',
-														}}
-													></i>
-												</div>
-											)
-										)}
-									</div>
-								)}
+										<div className="suggestion-category">
+											<h4>Product Description Suggestions</h4>
+											{aiSuggestions.productDescription.map(
+												(suggestion, index) => (
+													<div
+														className="box clickable-suggestion"
+														key={`desc-sugg-${index}`}
+														onClick={() =>
+															handleSuggestionClick(
+																'productDescription',
+																suggestion
+															)
+														}
+													>
+														<span>{suggestion}</span>
+														<i
+															className="adminlib-arrow-right"
+															style={{
+																marginLeft: '8px',
+																fontSize: '12px',
+															}}
+														></i>
+													</div>
+												)
+											)}
+										</div>
+									)}
 							</div>
 						)}
 
@@ -309,9 +395,8 @@ const AICard = () => {
 							<div className="icon-wrapper">
 								<i className="adminlib-mail"></i>
 								<i
-									className={`adminlib-send ${
-										isLoading ? 'loading' : ''
-									}`}
+									className={`adminlib-send ${isLoading ? 'loading' : ''
+										}`}
 									onClick={
 										!isLoading
 											? handleSendPrompt
@@ -325,30 +410,6 @@ const AICard = () => {
 								></i>
 							</div>
 						</div>
-
-						{/* Show message when waiting for input */}
-						{!hasSuggestions &&
-							!isLoading &&
-							!error &&
-							userPrompt.trim() === '' && (
-								<div className="empty-state">
-									<div className="empty-icon">
-										<i className="adminlib-lightbulb"></i>
-									</div>
-									<p>
-										Enter a prompt above to generate AI
-										suggestions for your product.
-									</p>
-								</div>
-							)}
-
-						{/* Show loading state */}
-						{isLoading && (
-							<div className="loading-state">
-								<div className="loading-spinner"></div>
-								<p>Generating suggestions...</p>
-							</div>
-						)}
 					</div>
 				</div>
 			)}

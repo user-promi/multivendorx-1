@@ -189,7 +189,6 @@ export default {
 						'multivendorx'
 					),
 				},
-
 			],
 		},
 		// {
@@ -200,7 +199,7 @@ export default {
 		// 		'Manage how multiple vendors (stores) can list and sell the same product in your marketplace.',
 		// 		'multivendorx'
 		// 	),
-		// 	
+		//
 		// },
 		{
 			key: 'singleproductmultistore_show_order',

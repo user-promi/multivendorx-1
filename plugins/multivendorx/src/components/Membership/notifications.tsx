@@ -36,13 +36,13 @@ const Notifications = ({ id }: { id: string }) => {
 										wrapperClass="setting-from-textarea"
 										inputClass="textarea-input"
 										descClass="settings-metabox-description"
-									// value={product.short_description}
-									// onChange={(e) =>
-									//     handleChange(
-									//         'short_description',
-									//         e.target.value
-									//     )
-									// }
+										// value={product.short_description}
+										// onChange={(e) =>
+										//     handleChange(
+										//         'short_description',
+										//         e.target.value
+										//     )
+										// }
 									/>
 								</div>
 								<div className="form-group">
@@ -54,13 +54,13 @@ const Notifications = ({ id }: { id: string }) => {
 										wrapperClass="setting-from-textarea"
 										inputClass="textarea-input"
 										descClass="settings-metabox-description"
-									// value={product.short_description}
-									// onChange={(e) =>
-									//     handleChange(
-									//         'short_description',
-									//         e.target.value
-									//     )
-									// }
+										// value={product.short_description}
+										// onChange={(e) =>
+										//     handleChange(
+										//         'short_description',
+										//         e.target.value
+										//     )
+										// }
 									/>
 								</div>
 							</div>
@@ -74,13 +74,13 @@ const Notifications = ({ id }: { id: string }) => {
 										wrapperClass="setting-from-textarea"
 										inputClass="textarea-input"
 										descClass="settings-metabox-description"
-									// value={product.short_description}
-									// onChange={(e) =>
-									//     handleChange(
-									//         'short_description',
-									//         e.target.value
-									//     )
-									// }
+										// value={product.short_description}
+										// onChange={(e) =>
+										//     handleChange(
+										//         'short_description',
+										//         e.target.value
+										//     )
+										// }
 									/>
 								</div>
 								<div className="form-group">
@@ -92,13 +92,13 @@ const Notifications = ({ id }: { id: string }) => {
 										wrapperClass="setting-from-textarea"
 										inputClass="textarea-input"
 										descClass="settings-metabox-description"
-									// value={product.short_description}
-									// onChange={(e) =>
-									//     handleChange(
-									//         'short_description',
-									//         e.target.value
-									//     )
-									// }
+										// value={product.short_description}
+										// onChange={(e) =>
+										//     handleChange(
+										//         'short_description',
+										//         e.target.value
+										//     )
+										// }
 									/>
 								</div>
 							</div>

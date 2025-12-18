@@ -10,13 +10,16 @@ import {
 	MultiCheckBox,
 	ToggleSetting,
 	MultiCheckboxTable,
+	NestedComponent,
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
 const MessageAndMail = ({ id }: { id: string }) => {
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
 	const [pricingType, setPricingType] = useState<'free' | 'paid'>('free');
-	const [commissionType, setcommissionType] = useState<'prcentage' | 'fixed'>('prcentage');
+	const [commissionType, setcommissionType] = useState<'prcentage' | 'fixed'>(
+		'prcentage'
+	);
 	const [starFill, setstarFill] = useState(false);
 
 	const [imagePreviews, setImagePreviews] = useState<{
@@ -139,14 +142,12 @@ const MessageAndMail = ({ id }: { id: string }) => {
 		{
 			key: 'simple',
 			label: 'Simple Product',
-			description:
-				'Allows vendors to create and manage simple products.',
+			description: 'Allows vendors to create and manage simple products.',
 		},
 		{
 			key: 'variable',
 			label: 'Variable Product',
-			description:
-				'Allows vendors to manage products with variations.',
+			description: 'Allows vendors to manage products with variations.',
 		},
 		{
 			key: 'grouped',
@@ -189,15 +190,19 @@ const MessageAndMail = ({ id }: { id: string }) => {
 												),
 											},
 										]}
-									// value={formData.status}
-									// onChange={handleToggleChange}
+										// value={formData.status}
+										// onChange={handleToggleChange}
 									/>
 									<div
 										className="des"
-										onClick={() => setstarFill((prev) => !prev)}
+										onClick={() =>
+											setstarFill((prev) => !prev)
+										}
 										style={{ cursor: 'pointer' }}
 									>
-										<i className={`star-icon ${starFill ? 'adminlib-star' : 'adminlib-star-o'}`}></i>
+										<i
+											className={`star-icon ${starFill ? 'adminlib-star' : 'adminlib-star-o'}`}
+										></i>
 										Mark as recommended plan
 									</div>
 								</div>
@@ -206,9 +211,7 @@ const MessageAndMail = ({ id }: { id: string }) => {
 						<div className="card-body">
 							<div className="form-group-wrapper">
 								<div className="form-group">
-									<label htmlFor="product-name">
-										Name
-									</label>
+									<label htmlFor="product-name">Name</label>
 									<BasicInput
 										name="name"
 										wrapperClass="setting-form-input"
@@ -318,11 +321,11 @@ const MessageAndMail = ({ id }: { id: string }) => {
 								setting={setting}
 								// onChange={handleChange}
 								storeTabSetting={storeTabSetting}
-								// modules={modules}
-								// moduleChange={handleModuleChange}
-								// proSetting={false}
-								// proChanged={handleProChanged}
-								// khali_dabba={true}
+							// modules={modules}
+							// moduleChange={handleModuleChange}
+							// proSetting={false}
+							// proChanged={handleProChanged}
+							// khali_dabba={true}
 							/>
 						</div>
 					</div>
@@ -367,12 +370,18 @@ const MessageAndMail = ({ id }: { id: string }) => {
 											},
 										]}
 										value={pricingType}
-										onChange={(value: string) => setPricingType(value as 'free' | 'paid')}
+										onChange={(value: string) =>
+											setPricingType(
+												value as 'free' | 'paid'
+											)
+										}
 									/>
 								</div>
 								{pricingType === 'paid' && (
 									<div className="form-group">
-										<label htmlFor="product-name">Price</label>
+										<label htmlFor="product-name">
+											Price
+										</label>
 										<BasicInput
 											name="name"
 											wrapperClass="setting-form-input"
@@ -394,13 +403,13 @@ const MessageAndMail = ({ id }: { id: string }) => {
 												name="stock_status"
 												options={billingCycle}
 												type="single-select"
-											// value={product.stock_status}
-											// onChange={(selected) =>
-											//     handleChange(
-											//         'stock_status',
-											//         selected.value
-											//     )
-											// }
+												// value={product.stock_status}
+												// onChange={(selected) =>
+												//     handleChange(
+												//         'stock_status',
+												//         selected.value
+												//     )
+												// }
 											/>
 										</div>
 										<div className="form-group">
@@ -434,63 +443,16 @@ const MessageAndMail = ({ id }: { id: string }) => {
 									<label htmlFor="product-name">
 										Commission type
 									</label>
-									<ToggleSetting
-										wrapperClass="setting-form-input"
-										descClass="settings-metabox-description"
-										options={[
-											{
-												key: 'percentage',
-												value: 'percentage',
-												label: __(
-													'Percentage',
-													'multivendorx'
-												),
-											},
-											{
-												key: 'fixed',
-												value: 'fixed',
-												label: __(
-													'Fixed',
-													'multivendorx'
-												),
-											},
-										]}
-										value={commissionType}
-										onChange={(value: string) => setcommissionType(value as 'percentage' | 'fixed')}
+									<NestedComponent
+										id="role_rules"
+										fields={nestedFields}
+										value={rules}
+										addButtonLabel="Add Rule"
+										deleteButtonLabel="Remove"
+										onChange={(val) => setRules(val)}
 									/>
+
 								</div>
-								{commissionType === 'percentage' && (
-									<div className="form-group">
-										<label htmlFor="product-name">
-											Marketplace fees
-										</label>
-										<BasicInput
-											name="name"
-											postInsideText="%"
-											wrapperClass="setting-form-input"
-											descClass="settings-metabox-description"
-											value={formData.name}
-											onChange={handleChange}
-											size="15rem"
-										/>
-									</div>
-								)}
-								{commissionType === 'fixed' && (
-									<div className="form-group">
-										<label htmlFor="product-name">
-											Marketplace fees
-										</label>
-										<BasicInput
-											name="name"
-											postInsideText="fixed"
-											wrapperClass="setting-form-input"
-											descClass="settings-metabox-description"
-											value={formData.name}
-											onChange={handleChange}
-											size="15rem"
-										/>
-									</div>
-								)}
 							</div>
 						</div>
 					</div>

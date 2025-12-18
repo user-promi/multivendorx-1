@@ -103,18 +103,19 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							</div>
 							<div className="value">
 								<span
-									className={`admin-badge ${details.status === 'paid'
+									className={`admin-badge ${
+										details.status === 'paid'
 											? 'green'
 											: 'red'
-										}`}
+									}`}
 								>
 									{details.status
 										? details.status
-											.replace(/^wc-/, '') // remove prefix like 'wc-'
-											.replace(/_/g, ' ') // replace underscores with spaces
-											.replace(/\b\w/g, (c) =>
-												c.toUpperCase()
-											) // capitalize words
+												.replace(/^wc-/, '') // remove prefix like 'wc-'
+												.replace(/_/g, ' ') // replace underscores with spaces
+												.replace(/\b\w/g, (c) =>
+													c.toUpperCase()
+												) // capitalize words
 										: ''}
 								</span>
 							</div>

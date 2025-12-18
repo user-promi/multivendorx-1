@@ -386,11 +386,11 @@ class Store {
             return $slug;
         }
 
-        $base = $slug;
+        $base  = $slug;
         $count = 1;
 
         while ( self::store_slug_exists( $base . '-' . $count, $exclude_id ) ) {
-            $count++;
+            ++$count;
         }
 
         return $base . '-' . $count;
