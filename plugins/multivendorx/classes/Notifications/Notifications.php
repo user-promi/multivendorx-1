@@ -60,71 +60,99 @@ class Notifications {
         global $wpdb;
 
         $this->events = array(
-            // ========== STORE ACTIVITY ==========
-            'new_store_approval'        =>
-            array(
-                'name'           => 'New store approval',
-                'desc'           => 'A new store is approved by the admin.',
-                'admin_enabled'  => true,
-                'store_enabled'  => true,
-                'email_subject'  => 'New store approval',
-                'email_body'     => 'Store approved successfully',
-                'sms_content'    => 'Store approved successfully',
-                'system_message' => 'New store approval [store_name]',
-                'tag'            => 'Store',
-                'category'       => 'activity',
-            ),
-            'new_store_reject'          =>
-            array(
-                'name'           => 'New store reject',
-                'desc'           => 'A store application is rejected by the admin.',
-                'admin_enabled'  => true,
-                'store_enabled'  => true,
-                'email_subject'  => 'New Store Rejected',
-                'email_body'     => 'Store Rejected successfully',
-                'sms_content'    => 'Store Rejected successfully',
-                'system_message' => 'New Store Rejected',
-                'tag'            => 'Store',
-                'category'       => 'activity',
-            ),
+            // ========== STORE STATUS & LIFECYCLE ==========
 
-            'store_suspended'           => array(
-                'name'           => 'Store suspended',
-                'desc'           => 'A store is suspended by the admin.',
-                'store_enabled'  => true,
-                'admin_enabled'  => true,
-                'email_subject'  => 'Store suspended',
-                'email_body'     => 'Your store [store_name] has been suspended by the admin.',
-                'sms_content'    => 'Store [store_name] has been suspended.',
-                'system_message' => 'Store suspended: [store_name].',
-                'tag'            => 'Store',
-                'category'       => 'activity',
-            ),
+'store_pending_approval' => array(
+    'name'           => 'Store pending approval',
+    'desc'           => 'A store is awaiting admin approval.',
+    'admin_enabled'  => true,
+    'store_enabled'  => true,
+    'email_subject'  => 'Store pending approval',
+    'email_body'     => 'Your store [store_name] is currently pending approval. You will be notified once it is reviewed.',
+    'sms_content'    => 'Store [store_name] is pending approval.',
+    'system_message' => 'Store pending approval: [store_name].',
+    'tag'            => 'Store',
+    'category'       => 'activity',
+),
 
-            'store_reactivated'         => array(
-                'name'           => 'Store reactivated',
-                'desc'           => 'A suspended store is reactivated by the admin.',
-                'store_enabled'  => true,
-                'admin_enabled'  => true,
-                'email_subject'  => 'Store reactivated',
-                'email_body'     => 'Your store [store_name] has been reactivated.',
-                'sms_content'    => 'Your store [store_name] is active again.',
-                'system_message' => 'Store [store_name] reactivated.',
-                'tag'            => 'Store',
-                'category'       => 'activity',
-            ),
+'store_rejected' => array(
+    'name'           => 'Store rejected',
+    'desc'           => 'A store application is rejected by the admin.',
+    'admin_enabled'  => true,
+    'store_enabled'  => true,
+    'email_subject'  => 'Store application rejected',
+    'email_body'     => 'Your store [store_name] has been rejected. Please review the feedback and resubmit your application.',
+    'sms_content'    => 'Store [store_name] application rejected.',
+    'system_message' => 'Store rejected: [store_name].',
+    'tag'            => 'Store',
+    'category'       => 'activity',
+),
 
-            'store_profile_updated'     => array(
-                'name'           => 'Store profile updated',
-                'desc'           => 'A store profile is updated by the store owner.',
-                'admin_enabled'  => true,
-                'email_subject'  => 'Store profile updated',
-                'email_body'     => 'Store [store_name] has updated its profile information.',
-                'sms_content'    => 'Store [store_name] updated profile.',
-                'system_message' => 'Store [store_name] updated profile.',
-                'tag'            => 'Store',
-                'category'       => 'activity',
-            ),
+'store_permanently_rejected' => array(
+    'name'           => 'Store permanently rejected',
+    'desc'           => 'A store application is permanently rejected by the admin.',
+    'admin_enabled'  => true,
+    'store_enabled'  => true,
+    'email_subject'  => 'Store application permanently rejected',
+    'email_body'     => 'Your store [store_name] has been permanently rejected. Please contact support for further assistance.',
+    'sms_content'    => 'Store [store_name] permanently rejected.',
+    'system_message' => 'Store permanently rejected: [store_name].',
+    'tag'            => 'Store',
+    'category'       => 'activity',
+),
+
+'store_activated' => array(
+    'name'           => 'Store activated',
+    'desc'           => 'A store becomes active and fully operational.',
+    'admin_enabled'  => true,
+    'store_enabled'  => true,
+    'email_subject'  => 'Store activated',
+    'email_body'     => 'Congratulations! Your store [store_name] is now active and ready to sell.',
+    'sms_content'    => 'Store [store_name] is now active.',
+    'system_message' => 'Store activated: [store_name].',
+    'tag'            => 'Store',
+    'category'       => 'activity',
+),
+
+'store_under_review' => array(
+    'name'           => 'Store under review',
+    'desc'           => 'A store is placed under review due to compliance concerns.',
+    'admin_enabled'  => true,
+    'store_enabled'  => true,
+    'email_subject'  => 'Store under review',
+    'email_body'     => 'Your store [store_name] is currently under review. Selling and payouts are temporarily paused.',
+    'sms_content'    => 'Store [store_name] is under review.',
+    'system_message' => 'Store under review: [store_name].',
+    'tag'            => 'Store',
+    'category'       => 'activity',
+),
+
+'store_suspended' => array(
+    'name'           => 'Store suspended',
+    'desc'           => 'A store is suspended due to policy violations.',
+    'admin_enabled'  => true,
+    'store_enabled'  => true,
+    'email_subject'  => 'Store suspended',
+    'email_body'     => 'Your store [store_name] has been suspended. Please contact support to appeal.',
+    'sms_content'    => 'Store [store_name] has been suspended.',
+    'system_message' => 'Store suspended: [store_name].',
+    'tag'            => 'Store',
+    'category'       => 'activity',
+),
+
+'store_permanently_deactivated' => array(
+    'name'           => 'Store permanently deactivated',
+    'desc'           => 'A store is permanently deactivated by the admin.',
+    'admin_enabled'  => true,
+    'store_enabled'  => true,
+    'email_subject'  => 'Store permanently deactivated',
+    'email_body'     => 'Your store [store_name] has been permanently deactivated. Your data remains available in read-only mode.',
+    'sms_content'    => 'Store [store_name] permanently deactivated.',
+    'system_message' => 'Store permanently deactivated: [store_name].',
+    'tag'            => 'Store',
+    'category'       => 'activity',
+),
+
 
             // ========== ORDER EVENTS ==========
             'new_order'                 => array(
@@ -150,19 +178,6 @@ class Notifications {
                 'email_body'       => 'Your order [order_id] is now being processed.',
                 'sms_content'      => 'Order [order_id] is now processing.',
                 'system_message'   => 'Order [order_id] status: Processing.',
-                'tag'              => 'Order',
-                'category'         => 'activity',
-            ),
-
-            'order_shipped'             => array(
-                'name'             => 'Order shipped',
-                'desc'             => 'An order is marked as shipped.',
-                'store_enabled'    => true,
-                'customer_enabled' => true,
-                'email_subject'    => 'Order shipped',
-                'email_body'       => 'Your order [order_id] has been shipped.',
-                'sms_content'      => 'Order [order_id] shipped successfully.',
-                'system_message'   => 'Order [order_id] is on its way.',
                 'tag'              => 'Order',
                 'category'         => 'activity',
             ),
@@ -356,23 +371,11 @@ class Notifications {
                 'store_enabled'    => true,
                 'customer_enabled' => true,
                 'email_subject'    => 'New product review received',
-                'email_body'       => '[rating]-star review received for “[product_name]” by [customer_name].',
-                'sms_content'      => 'New review received for “[product_name]”.',
-                'system_message'   => 'New review received for “[product_name]”.',
+                'email_body'       => '[rating]-star review received for “[store_name]” by [customer_name].',
+                'sms_content'      => 'New review received for “[store_name]”.',
+                'system_message'   => 'New review received for “[store_name]”.',
                 'tag'              => 'Review',
-                'category'         => 'activity',
-            ),
-
-            'review_flagged'            => array(
-                'name'           => 'Review flagged',
-                'desc'           => 'A product review is flagged by a customer.',
-                'admin_enabled'  => true,
-                'email_subject'  => 'Review flagged',
-                'email_body'     => 'A review for “[product_name]” has been flagged for moderation.',
-                'sms_content'    => 'Review flagged for “[product_name]”.',
-                'system_message' => 'Review flagged for “[product_name]”.',
-                'tag'            => 'Review',
-                'category'       => 'notification',
+                'category'         => 'notification',
             ),
 
             // ========== WITHDRAWALS ==========
@@ -455,20 +458,6 @@ class Notifications {
                 'category'         => 'notification',
             ),
 
-            'system_maintenance'        => array(
-                'name'             => 'System maintenance',
-                'desc'             => 'A scheduled maintenance is announced by the admin.',
-                'store_enabled'    => true,
-                'customer_enabled' => true,
-                'admin_enabled'    => true,
-                'email_subject'    => 'System maintenance scheduled',
-                'email_body'       => 'System maintenance is scheduled on [date_time].',
-                'sms_content'      => 'Maintenance scheduled on [date_time].',
-                'system_message'   => 'Scheduled maintenance on [date_time].',
-                'tag'              => 'System',
-                'category'         => 'notification',
-            ),
-
             'policy_update'             => array(
                 'name'             => 'Policy update',
                 'desc'             => 'Marketplace policies are updated by the admin.',
@@ -507,19 +496,6 @@ class Notifications {
                 'tag'            => 'Product',
                 'category'       => 'activity',
             ),
-            'order_completed_alt'       => array(
-                'name'             => 'Order Completed',
-                'desc'             => 'An order is completed successfully.',
-                'store_enabled'    => true,
-                'customer_enabled' => true,
-                'email_subject'    => 'Order Completed',
-                'email_body'       => 'Order #{order_id} successfully completed.',
-                'sms_content'      => 'Order #{order_id} is now completed.',
-                'system_message'   => 'Order #{order_id} completed successfully.',
-                'tag'              => 'Order',
-                'category'         => 'notification',
-            ),
-
             'commission_credit'         => array(
                 'name'           => 'Commission Credited',
                 'desc'           => 'A commission is credited for an order.',
@@ -531,30 +507,35 @@ class Notifications {
                 'tag'            => 'Commission',
                 'category'       => 'notification',
             ),
+            // ========== FOLLOWED STORE PRODUCT ACTIVITY ==========
 
-            'adjustment_credit'         => array(
-                'name'           => 'Adjustment Credit',
-                'desc'           => 'An adjustment credit is issued by the admin.',
-                'store_enabled'  => true,
-                'email_subject'  => 'Adjustment Credit',
-                'email_body'     => 'Admin adjustment credit of {amount} {currency}.',
-                'sms_content'    => 'Credit of {amount} {currency} applied.',
-                'system_message' => 'Adjustment credit: {amount} {currency}.',
-                'tag'            => 'Finance',
-                'category'       => 'notification',
-            ),
+'followed_store_new_product' => array(
+    'name'           => 'New product from followed store',
+    'desc'           => 'A new product is added by a store that the user follows.',
+    'admin_enabled'  => false,
+    'store_enabled'  => false,
+    'email_subject'  => 'New product from [store_name]',
+    'email_body'     => 'A new product "[product_name]" has been added by a store you follow: [store_name].',
+    'sms_content'    => 'New product from [store_name]: [product_name].',
+    'system_message' => 'New product added by followed store [store_name].',
+    'tag'            => 'Product',
+    'category'       => 'activity',
+),
+// ========== FOLLOWED STORE COUPON ACTIVITY ==========
 
-            'adjustment_debit'          => array(
-                'name'           => 'Adjustment Debit',
-                'desc'           => 'An adjustment debit is applied by the admin.',
-                'store_enabled'  => true,
-                'email_subject'  => 'Adjustment Debit',
-                'email_body'     => 'Admin adjustment debit of {amount} {currency}.',
-                'sms_content'    => 'Debit of {amount} {currency} applied.',
-                'system_message' => 'Adjustment debit: {amount} {currency}.',
-                'tag'            => 'Finance',
-                'category'       => 'notification',
-            ),
+'followed_store_new_coupon' => array(
+    'name'           => 'New coupon from followed store',
+    'desc'           => 'A new coupon is added by a store that the user follows.',
+    'admin_enabled'  => false,
+    'store_enabled'  => false,
+    'email_subject'  => 'New coupon from [store_name]',
+    'email_body'     => 'A new coupon "[coupon_code]" is now available from a store you follow: [store_name].',
+    'sms_content'    => 'New coupon from [store_name]: [coupon_code].',
+    'system_message' => 'New coupon added by followed store [store_name].',
+    'tag'            => 'Coupon',
+    'category'       => 'activity',
+),
+
 
             'order_new'                 => array(
                 'name'           => 'New Order Received',
@@ -581,7 +562,7 @@ class Notifications {
             ),
 
             'order_delivered_alt'       => array(
-                'name'             => 'Order Delivered',
+                'name'             => 'Order delivered',
                 'desc'             => 'An order is marked as delivered.',
                 'customer_enabled' => true,
                 'email_subject'    => 'Order Delivered',
@@ -958,18 +939,6 @@ class Notifications {
                 'category'       => 'notification',
             ),
 
-            'order_new'                 => array(
-                'name'           => 'New Order Received',
-                'desc'           => 'Notify stores when a new order is received.',
-                'store_enabled'  => true,
-                'email_subject'  => 'New Order Received',
-                'email_body'     => 'New order #{order_id} received.',
-                'sms_content'    => 'New order #{order_id} received.',
-                'system_message' => 'Order #{order_id} received.',
-                'tag'            => 'Order',
-                'category'       => 'notification',
-            ),
-
             'order_ready_to_ship'       => array(
                 'name'           => 'Order Ready to Ship',
                 'desc'           => 'Notify stores when an order is ready to ship.',
@@ -980,31 +949,6 @@ class Notifications {
                 'system_message' => 'Order #{order_id} ready to ship.',
                 'tag'            => 'Order',
                 'category'       => 'notification',
-            ),
-
-            'order_delivered'           => array(
-                'name'             => 'Order Delivered',
-                'desc'             => 'Notify customers when their order is delivered.',
-                'customer_enabled' => true,
-                'email_subject'    => 'Order Delivered',
-                'email_body'       => 'Order #{order_id} has been delivered.',
-                'sms_content'      => 'Order #{order_id} delivered.',
-                'system_message'   => 'Order #{order_id} delivered.',
-                'tag'              => 'Order',
-                'category'         => 'notification',
-            ),
-
-            'order_return_requested'    => array(
-                'name'             => 'Return Requested',
-                'desc'             => 'Notify stores and customers when a return is requested.',
-                'store_enabled'    => true,
-                'customer_enabled' => true,
-                'email_subject'    => 'Return Requested',
-                'email_body'       => 'Return request received for order #{order_id}.',
-                'sms_content'      => 'Return request for order #{order_id}.',
-                'system_message'   => 'Return request received for order #{order_id}.',
-                'tag'              => 'Refund',
-                'category'         => 'notification',
             ),
 
             'system_announcement'       => array(
