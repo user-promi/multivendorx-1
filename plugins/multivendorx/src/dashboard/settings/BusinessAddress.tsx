@@ -43,6 +43,50 @@ const BusinessAddress = (
 	});
 	const { modules } = useModules();
 
+	const [pendingLocation, setPendingLocation] = useState<any>(null);
+
+	useEffect(() => {
+		if (!pendingLocation) return;
+		if (!stateOptions.length) return;
+	
+		const foundState = stateOptions.find(
+			(item) =>
+				item.label.split(' ')[0] === pendingLocation.state ||
+				item.value === pendingLocation.state
+		);
+	
+		const resolvedLocation = {
+			...pendingLocation,
+			state: foundState ? foundState.value : pendingLocation.state,
+		};
+	
+		applyLocation(resolvedLocation);
+		setPendingLocation(null);
+	}, [stateOptions]);
+
+	const applyLocation = (locationData: any) => {
+		setAddressData((prev) => ({ ...prev, ...locationData }));
+	
+		const updatedFormData = { ...formData, ...locationData };
+		setFormData(updatedFormData);
+		autoSave(updatedFormData);
+	};	
+
+	const handleLocationUpdate = (locationData: any) => {
+		if (mapProvider === 'mapbox_api_set') {
+			setPendingLocation(locationData);
+	
+			// ensure states are loading
+			if (locationData.country) {
+				fetchStatesByCountry(locationData.country);
+
+
+			}
+			return;
+		}
+		applyLocation(locationData);
+	};
+
 	// Get REST API base URL
 	useEffect(() => {
 		if (!settings?.geolocation) return;
@@ -170,33 +214,6 @@ const BusinessAddress = (
 		const updatedFormData = {
 			...formData,
 			[name]: value,
-		};
-
-		setFormData(updatedFormData);
-		autoSave(updatedFormData);
-	};
-
-	const handleLocationUpdate = (locationData: any) => {
-		const newAddressData = {
-			...addressData,
-			...locationData,
-		};
-
-		if (mapProvider === 'mapbox_api_set') {
-			const foundState = stateOptions.find(
-				(item) =>
-					item.label === newAddressData.state ||
-					item.value === newAddressData.state
-			);
-			if (foundState) {
-				newAddressData.state = foundState.value;
-			}
-		}
-		setAddressData(newAddressData);
-
-		const updatedFormData = {
-			...formData,
-			...locationData,
 		};
 
 		setFormData(updatedFormData);
