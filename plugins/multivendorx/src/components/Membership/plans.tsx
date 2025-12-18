@@ -138,7 +138,7 @@ const Plans = () => {
 							className="admin-btn btn-purple-bg"
 							onClick={() => {
 								navigate(
-									`?page=multivendorx#&tab=memberships&subtab=payment-membership-plans&add/`
+									`?page=multivendorx#&tab=memberships&add/`
 								);
 							}}
 						>
