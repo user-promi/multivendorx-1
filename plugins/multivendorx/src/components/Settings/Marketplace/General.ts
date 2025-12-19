@@ -99,6 +99,41 @@ export default {
 					),
 					arguments:
 						'<ul> <li><b>store</b> - Store ID, slug, email, or username (optional)</li> <li><b>perpage</b> - Number of products to display (default: 12)</li> <li><b>columns</b> - Number of products per row (default: 4)</li> <li><b>filter</b> - Type of products to show: all, recent, featured, sale, top_rated, best_selling (default: all)</li> <li><b>sort</b> - Predefined sorting: latest, oldest, rating, popularity, title (optional)</li> <li><b>orderby</b> - Sort products by a specific field, used when sort is not set (default: title)</li> <li><b>order</b> - Display order: ASC or DESC (default: ASC)</li> <li><b>category</b> - Product category slugs, comma separated (optional)</li> <li><b>operator</b> - Category filter operator: IN, NOT IN, AND (default: IN)</li> </ul>',},
+				
+				{
+					key: 'marketplace_dashboard',
+					label: '[marketplace_dashboard]',
+					name: 'Marketplace dashboard',
+					desc: __(
+						'Displays the store dashboard where stores manage products, orders, earnings, and store settings.',
+						'multistorex'
+					),
+					arguments:
+						'<ul><li>No arguments required</li></ul>',
+				},
+				{
+					key: 'marketplace_registration',
+					label: '[marketplace_registration]',
+					name: 'Marketplace registration',
+					desc: __(
+						'Displays the store registration form. Use this to allow new users to sign up as stores.',
+						'multistorex'
+					),
+					arguments:
+						'<ul><li>No arguments required</li></ul>',
+				},
+
+				{
+					key: 'marketplace_stores',
+					label: '[marketplace_stores]',
+					name: 'Show store lists',
+					desc: __(
+						'Displays a list of all registered stores with ratings. Use this to help customers discover stores.',
+						'multistorex'
+					),
+					arguments:
+						'<ul><li><b>orderby</b> - Sort stores by name, category, or registration date (default: registered)</li><li><b>order</b> - Display order: ASC or DESC (default: ASC)</li></ul>',
+				},
 				{
 					key: 'store_coupons',
 					label: '[store_coupons]',
@@ -109,40 +144,6 @@ export default {
 					),
 					arguments:
 						'<ul><li>No arguments required</li></ul>',
-				},
-				{
-					key: 'store_dashboard',
-					label: '[store_dashboard]',
-					name: 'Store dashboard',
-					desc: __(
-						'Displays the store dashboard where stores manage products, orders, earnings, and store settings.',
-						'multistorex'
-					),
-					arguments:
-						'<ul><li>No arguments required</li></ul>',
-				},
-				{
-					key: 'store_registration',
-					label: '[store_registration]',
-					name: 'Store registration',
-					desc: __(
-						'Displays the store registration form. Use this to allow new users to sign up as stores.',
-						'multistorex'
-					),
-					arguments:
-						'<ul><li>No arguments required</li></ul>',
-				},
-
-				{
-					key: 'marketplace_storeslist',
-					label: '[marketplace_storeslist]',
-					name: 'Show store list',
-					desc: __(
-						'Displays a list of all registered stores with ratings. Use this to help customers discover stores.',
-						'multistorex'
-					),
-					arguments:
-						'<ul><li><b>orderby</b> - Sort stores by name, category, or registration date (default: registered)</li><li><b>order</b> - Display order: ASC or DESC (default: ASC)</li></ul>',
 				},
 			],
 		},
