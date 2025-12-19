@@ -17,7 +17,6 @@ declare global {
 		tab_name: string;
 		settings_databases_value: any;
 		pages_list: any;
-		store_dashboard_pages: any;
 		pro_url: string;
 		pro_settings_list: any;
 		country_list: any;
@@ -35,7 +34,6 @@ declare global {
 		freeVersion: any;
 		marketplace_site: any;
 		site_url: any;
-		woocommerce_currency: any;
 		color: any;
 		ajaxurl: string;
 		gateway_list: any;

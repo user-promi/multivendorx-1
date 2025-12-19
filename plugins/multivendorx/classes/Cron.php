@@ -7,7 +7,6 @@
 
 namespace MultiVendorX;
 
-use MultiVendorX\Utill;
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -132,7 +131,7 @@ class Cron {
             case 'monthly':
                 $raw = reset( MultiVendorX()->setting->get_setting( 'disbursement_monthly' ) ) ?? array();
                 return array(
-                    'day_of_month' => isset( $raw['payouts_every_month'] ) ? (int) $raw['payouts_every_month'] : 1,
+                    'day_of_month' => $raw['payouts_every_month'] ? (int) $raw['payouts_every_month'] : 1,
                     'time'         => $raw['monthly_payout_time'] ?? '09:00',
                 );
 
@@ -148,8 +147,8 @@ class Cron {
      * @param array  $settings Cron settings.
      */
     public function get_first_run( $schedule, $settings ) {
-        $hour   = isset( $settings['time'] ) ? (int) gmdate( 'H', strtotime( $settings['time'] ) ) : 9;
-        $minute = isset( $settings['time'] ) ? (int) gmdate( 'i', strtotime( $settings['time'] ) ) : 0;
+        $hour   = !empty( $settings['time'] ) ? (int) gmdate( 'H', strtotime( $settings['time'] ) ) : 9;
+        $minute = !empty( $settings['time'] ) ? (int) gmdate( 'i', strtotime( $settings['time'] ) ) : 0;
 
         switch ( $schedule ) {
             case 'daily':
