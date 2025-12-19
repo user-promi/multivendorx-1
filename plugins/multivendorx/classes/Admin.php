@@ -38,7 +38,7 @@ class Admin {
 
         // Add Store menu in woocommerce product page.
 		add_filter( 'woocommerce_product_data_tabs', array( $this, 'add_store_tab_in_product' ) );
-        add_action( 'woocommerce_product_data_panels', array( $this, 'add_additional_product_data_panels' ) );
+        add_action( 'woocommerce_product_data_panels', array( $this, 'add_store_tab_content_in_product' ) );
         add_action( 'woocommerce_process_product_meta', array( $this, 'save_store_in_product' ) );
         add_action( 'wp_ajax_search_stores', array( $this, 'multivendorx_get_stores' ) );
         // For Variation.
@@ -74,24 +74,6 @@ class Admin {
                 'data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIKCSB2aWV3Qm94PSIwIDAgMjU2IDI1NiIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMjU2IDI1NjsiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8c3R5bGUgdHlwZT0idGV4dC9jc3MiPgoJLnN0MHtmaWxsOiNmZmY7fQo8L3N0eWxlPgo8Zz4KCTxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik0yMTUuMDksNTYuNTlDOTcuMiw4Ni45MSw0OC4wMiwyNC45MywyMy4wOSw2Mi42NWMtMTMuNDcsMjEuNTYsMy4zNyw5Ny42OCwxNS40OSwxNjYuNAoJCWMyNS42LDE2Ljg0LDU2LjU5LDI2Ljk1LDg5LjYsMjYuOTVjMzQuMzYsMCw2Ni42OS0xMC43OCw5Mi45Ny0yOC45N0MyMzguNjcsMTU3LjY0LDI1MC4xMyw0Ny44MywyMTUuMDksNTYuNTl6IE0xNDYuMzYsMjA2LjgzCgkJbC0xNi45OC0yMS45OGwtMTYuOTgsMjEuOThINjcuNzRsMzkuNzktNDguNDdMNzAuMzMsMTEyLjdoNDQuODVsMTQuMjcsMTkuMTVsMTQuNTItMTkuMTVoNDQuNjZsLTM3LjAzLDQ1LjU1bDM5LjgsNDguNTdIMTQ2LjM2eiIKCQkvPgoJPHBhdGggY2xhc3M9InN0MCIgZD0iTTkyLjQ4LDM1LjcxYzAtMTYuMTcsMTMuNDctMjkuNjQsMjkuNjQtMjkuNjRoMTYuMTdjMTYuMTcsMCwyOS42NCwxMy40NywyOS42NCwyOS42NHYyMi4yMwoJCWMyLjAyLDAsNC4wNCwwLDYuMDYtMC42N1YzNS43MUMxNzQsMTYuMTcsMTU4LjUxLDAsMTM4LjI5LDBoLTE2LjE3Yy0xOS41NCwwLTM1LjcxLDE2LjE3LTM1LjcxLDM1LjcxdjE0LjgyCgkJYzIuMDIsMC42Nyw0LjA0LDAuNjcsNi4wNiwxLjM1VjM1LjcxeiIvPgo8L2c+Cjwvc3ZnPgo=',
                 50
             );
-
-            $pro_sticker = ! Utill::is_khali_dabba() ?
-            '<span 
-                class="multivendorx-pro-tag"
-                style="
-                font-size: 0.5rem;
-                background: #e35047;
-                padding: 0.125rem 0.5rem;
-                color: #F9F8FB;
-                font-weight: 700;
-                line-height: 1;
-                position: absolute;
-                margin-left: 0.25rem;
-                border-radius: 2rem 0;
-                top: 50%;
-                transform: translateY(-50%);
-                "
-            > Pro </span>' : '';
 
             $commission_count = CommissionUtil::get_commissions( array( 'status' => 'unpaid' ), true, true );
             // Array contain multivendorx submenu.
@@ -131,10 +113,6 @@ class Admin {
 						'name'   => __( 'Memberships', 'multivendorx' ),
 						'subtab' => 'payment-membership-plans',
 					),
-                    // 'add-memberships'     => array(
-					// 'name'   => __( 'Add Memberships', 'multivendorx' ),
-					// 'subtab' => '',
-					// ),
 					'settings'            => array(
 						'name'   => __( 'Settings', 'multivendorx' ),
 						'subtab' => 'marketplace',
@@ -168,7 +146,7 @@ class Admin {
 
                 $menu_name = $submenu['name'];
 
-                if ( isset( $submenu['count'] ) && $submenu['count'] > 0 ) {
+                if ( $submenu['count'] && $submenu['count'] > 0 ) {
                     $menu_name = $menu_name . " <span class='update-plugins count-" . intval( $submenu['count'] ) . "' style='margin-left:0.313rem'>
                                     <span class='plugin-count'>" . intval( $submenu['count'] ) . '</span>
                                  </span>';
@@ -313,7 +291,7 @@ class Admin {
      *
      * @return void
      */
-	public function add_additional_product_data_panels() {
+	public function add_store_tab_content_in_product() {
 		global $post;
 
         $linked_store                  = get_post_meta( $post->ID, Utill::POST_META_SETTINGS['store_id'], true );
@@ -440,12 +418,12 @@ class Admin {
         $fixed_commissions      = filter_input( INPUT_POST, 'variable_product_fixed_commission', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
         $percentage_commissions = filter_input( INPUT_POST, 'variable_product_percentage_commission', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 
-        if ( isset( $fixed_commissions[ $variation_id ] ) ) {
+        if ( $fixed_commissions[ $variation_id ] ) {
             $fixed_commission = wc_format_decimal( $fixed_commissions[ $variation_id ] );
             update_post_meta( $variation_id, Utill::POST_META_SETTINGS['variable_product_fixed'], $fixed_commission );
         }
 
-        if ( isset( $percentage_commissions[ $variation_id ] ) ) {
+        if ( $percentage_commissions[ $variation_id ] ) {
             $percentage_commission = wc_format_decimal( $percentage_commissions[ $variation_id ] );
             update_post_meta( $variation_id, Utill::POST_META_SETTINGS['variable_product_percentage'], $percentage_commission );
         }
@@ -532,7 +510,6 @@ class Admin {
         $coupon_data_tabs['store'] = array(
             'label'  => __( 'Store', 'multivendorx' ),
             'target' => 'store_coupon_data',
-            'class'  => 'store_coupon_data',
         );
         return $coupon_data_tabs;
     }
@@ -544,7 +521,6 @@ class Admin {
      */
     public function add_content_in_store_tab( $coupon_id ) {
 
-        $current_coupon = get_post( $coupon_id );
         $linked_store   = get_post_meta( $coupon_id, Utill::POST_META_SETTINGS['store_id'], true );
         ?>
         <div id="store_coupon_data" class="panel woocommerce_options_panel">

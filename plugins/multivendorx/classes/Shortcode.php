@@ -1,6 +1,6 @@
 <?php
 /**
- * Modules Shortcode
+ * Shortcode class file
  *
  * @package MultiVendorX
  */
@@ -39,20 +39,22 @@ class Shortcode {
         FrontendScripts::enqueue_script( 'multivendorx-dashboard-script' );
         FrontendScripts::localize_scripts( 'multivendorx-dashboard-script' );
         FrontendScripts::enqueue_style( 'multivendorx-dashboard-style' );
-        FrontendScripts::enqueue_style( 'multivendorx-store-product-style' );
 
-        wp_deregister_style( 'wc-blocks-style' );
+        if (Utill::is_store_dashboard()) {
+            wp_deregister_style('wc-blocks-style');
 
-        wp_enqueue_script( 'wp-element' );
-        wp_enqueue_media();
+            wp_enqueue_script('wp-element');
+            wp_enqueue_media();
 
-        $custom_css = MultiVendorX()->setting->get_setting( 'custom_css_product_page', '' );
+            FrontendScripts::enqueue_style( 'multivendorx-store-product-style' );
 
-        if ( ! empty( $custom_css ) ) {
-            wp_add_inline_style(
-                'multivendorx-dashboard-style',
-                wp_strip_all_tags( $custom_css )
-            );
+            $custom_css = MultiVendorX()->setting->get_setting( 'custom_css_product_page', '' );
+            if ( ! empty( $custom_css ) ) {
+                wp_add_inline_style(
+                    'multivendorx-dashboard-style',
+                    wp_strip_all_tags( $custom_css )
+                );
+            }
         }
 
         if ( Utill::is_store_registration_page() ) {
@@ -80,7 +82,6 @@ class Shortcode {
         ob_start();
         ?>
         <?php
-        $user = wp_get_current_user();
         if ( ! is_user_logged_in() ) {
             if ( ( 'no' === get_option( Utill::WOO_SETTINGS['generate_password'] ) && ! is_user_logged_in() ) ) {
                 wp_enqueue_script( 'wc-password-strength-meter' );

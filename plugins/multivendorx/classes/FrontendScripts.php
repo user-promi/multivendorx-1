@@ -39,7 +39,7 @@ class FrontendScripts {
      */
     public function __construct() {
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
-        add_action( 'admin_enqueue_scripts', array( $this, 'admin_load_scripts' ), 55 );
+        add_action( 'admin_enqueue_scripts', array( $this, 'admin_load_scripts' ) );
     }
 
     /**
@@ -339,22 +339,6 @@ class FrontendScripts {
                     );
                 }
             }
-
-            $shortcode             = '[multivendorx_store_dashboard]';
-            $matched_pages         = array_filter(
-                $pages,
-                function ( $page ) use ( $shortcode ) {
-					return strpos( $page->post_content, $shortcode ) !== false;
-				}
-            );
-            $store_dashboard_pages = array();
-            foreach ( $matched_pages as $page ) {
-                $store_dashboard_pages[] = array(
-                    'value' => $page->post_name,
-                    'label' => $page->post_title,
-                    'key'   => $page->ID,
-                );
-            }
         }
 
         $woo_countries = new \WC_Countries();
@@ -435,9 +419,7 @@ class FrontendScripts {
 							'tab_name'                 => __( 'MultiVendorX', 'multivendorx' ),
 							'settings_databases_value' => $settings_databases_value,
 							'pages_list'               => $pages_array,
-							'store_dashboard_pages'    => $store_dashboard_pages,
 							'pro_url'                  => esc_url( MULTIVENDORX_PRO_SHOP_URL ),
-							'open_uploader'            => 'Upload Image',
 							'module_page_url'          => admin_url( 'admin.php?page=multivendorx#&tab=modules' ),
 							'color'                    => MultiVendorX()->setting->get_setting( 'store_color_settings' ),
 							'tax'                      => MultiVendorX()->setting->get_setting( 'give_tax' ),
@@ -447,7 +429,6 @@ class FrontendScripts {
 							'store_owners'             => $owners_list,
 							'gateway_list'             => $gateway_list,
 							'tinymceApiKey'            => MultiVendorX()->setting->get_setting( 'tinymce_api_section' ),
-							'default_logo'             => MultiVendorX()->plugin_url . 'assets/images/WP-stdavatar.png',
 							'capabilities'             => StoreUtil::get_store_capability(),
 							'capability_pro'           => $capability_pro,
 							'custom_roles'             => Roles::multivendorx_get_roles(),
@@ -459,8 +440,6 @@ class FrontendScripts {
 							'marketplace_site'         => get_bloginfo(),
 							'site_url'                 => site_url(),
 							'admin_url'                => admin_url(),
-							'woocommerce_currency'     => get_woocommerce_currency(),
-							'user_id'                  => get_current_user_id(),
 							'currency'                 => get_woocommerce_currency(),       // E.g., USD.
 							'currency_symbol'          => get_woocommerce_currency_symbol(),
 							'price_format'             => get_woocommerce_price_format(),
@@ -476,12 +455,7 @@ class FrontendScripts {
 							'google_api_key'           => MultiVendorX()->setting->get_setting( 'google_api_key' ),
 							'mapbox_api_key'           => MultiVendorX()->setting->get_setting( 'mapbox_api_key' ),
 							'all_verification_methods' => MultiVendorX()->setting->get_setting( 'all_verification_methods' ),
-							'approve_store'            => MultiVendorX()->setting->get_setting( 'approve_store' ),
-							'enable_profile_deactivation_request' => MultiVendorX()->setting->get_setting( 'enable_profile_deactivation_request' ),
-							'can_publish_products'     => MultiVendorX()->setting->get_setting( 'products' ),
 							'shipping_methods'         => apply_filters( 'multivendorx_store_shipping_options', array() ),
-							'can_publish_coupons'      => MultiVendorX()->setting->get_setting( 'coupons' ),
-							'withdrawals'              => MultiVendorX()->setting->get_setting( 'withdrawals' ),
 							'pro_data'                 => apply_filters(
 								'multivendorx_update_pro_data',
 								array(

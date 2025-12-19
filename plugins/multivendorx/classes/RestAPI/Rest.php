@@ -57,6 +57,7 @@ class Rest {
         add_filter( 'woocommerce_rest_prepare_shop_coupon_object', array( $this, 'prepare_shop_coupon_filter_meta' ), 10, 3 );
         add_filter( 'woocommerce_rest_pre_insert_shop_coupon_object', array( $this, 'pre_insert_shop_coupon_fix_status' ), 10, 3 );
         add_filter( 'woocommerce_analytics_products_query_args', array( $this, 'analytics_products_filter_low_stock_meta' ), 10, 1 );
+        add_action( 'woocommerce_rest_insert_product_object', array( $this, 'generate_sku_data_in_product' ), 10, 3 );
     }
 
     /**
@@ -428,6 +429,149 @@ class Rest {
         }
 
         return $coupon;
+    }
+
+    /**
+     * Generate a product SKU based on its title
+     *
+     * @param object $product Product data.
+     */
+    protected function generate_product_sku( $product ) {
+        if ( $product ) {
+            switch ( MultiVendorX()->setting->get_setting( 'sku_generator', '' ) ) {
+                case 'slugs':
+                    $product_sku = $product->get_slug();
+                    break;
+
+                case 'ids':
+                    $product_sku = $product->get_id();
+                    break;
+
+                default:
+                    $product_sku = $product->get_sku();
+            }
+        }
+        return $product_sku;
+    }
+
+    /**
+     * Generate a variation SKU based on its attributes
+     *
+     * @param array $variation Variation data.
+     */
+    protected function generate_variation_sku( $variation = array() ) {
+        if ( $variation ) {
+            $variation_sku = '';
+            if ( 'slugs' === MultiVendorX()->setting->get_setting( 'sku_generator', '' ) ) {
+                switch ( MultiVendorX()->setting->get_setting( 'sku_generator_attribute_spaces', '' ) ) {
+                    case 'underscore':
+                        $variation['attributes'] = str_replace( ' ', '_', $variation['attributes'] );
+                        break;
+
+                    case 'dash':
+                        $variation['attributes'] = str_replace( ' ', '-', $variation['attributes'] );
+                        break;
+
+                    case 'none':
+                        $variation['attributes'] = str_replace( ' ', '', $variation['attributes'] );
+                        break;
+                }
+                $separator     = apply_filters( 'multivendorx_sku_generator_attribute_separator', $this->get_sku_separator() );
+                $variation_sku = implode( $separator, $variation['attributes'] );
+                $variation_sku = str_replace( 'attribute_', '', $variation_sku );
+            }
+            if ( 'ids' === MultiVendorX()->setting->get_setting( 'sku_generator', '' ) ) {
+                $variation_sku = $variation['variation_id'] ? $variation['variation_id'] : '';
+            }
+        }
+        return $variation_sku;
+    }
+
+    /**
+     * Get the separator used between parent / variation SKUs
+     *
+     * @return string
+     */
+    private function get_sku_separator() {
+        return apply_filters( 'multivendorx_sku_separator', '-' );
+    }
+
+    /**
+     * Save Variation SKU.
+     *
+     * @param int         $variation_id    Variation ID.
+     * @param WC_Product  $parent_product  Parent product.
+     * @param string|null $parent_sku      Optional parent SKU to use instead of the product's SKU.
+     */
+    protected function multivendorx_save_variation_sku( $variation_id, $parent_product, $parent_sku = null ) {
+        $variation  = wc_get_product( $variation_id );
+
+        if ( ! $variation || ! $variation->is_type( 'variation' ) ) {
+            return;
+        }
+
+        $parent_sku = $parent_sku ?? $parent_product->get_sku();
+
+        if ( ! empty( $parent_sku ) ) {
+            $variation_data = $parent_product->get_available_variation( $variation );
+            if ( ! empty( $variation_data ) ) {
+                $variation_sku = $this->generate_variation_sku( $variation_data );
+                $sku           = $parent_sku . $this->get_sku_separator() . $variation_sku;
+
+                try {
+                    $sku = wc_product_generate_unique_sku( $variation_id, $sku );
+                    $variation->set_sku( $sku );
+                    $variation->save();
+                } catch ( WC_Data_Exception $exception ) {
+                    wc_add_notice( __( 'Variation SKU is not generated!', 'multivendorx' ), 'error' );
+                }
+            }
+        }
+    }
+
+    /**
+     * Save generated SKU
+     *
+     * @param object $product WC_Product object.
+     */
+    public function multivendorx_save_generated_sku( $product ) {
+        if ( is_numeric( $product ) ) {
+            $product = wc_get_product( absint( $product ) );
+        }
+
+        if ( ! $product ) {
+            return;
+        }
+
+        if ( 'never' === MultiVendorX()->setting->get_setting( 'sku_generator', '' ) ) {
+            return;
+        }
+
+        $product_sku = $this->generate_product_sku( $product );
+        if ( $product->is_type( 'variable' ) ) {
+            foreach ( $product->get_children() as $variation_id ) {
+                $this->multivendorx_save_variation_sku(
+                    $variation_id,
+                    $product,
+                    $product_sku
+                );
+            }
+        }
+
+        try {
+            $product_sku = wc_product_generate_unique_sku( $product->get_id(), $product_sku );
+            $product->set_sku( $product_sku );
+            $product->save();
+        } catch ( \WC_Data_Exception $exception ) {
+            wc_add_notice( __( 'SKU is not generated!', 'multivendorx' ), 'error' );
+        }
+    }
+
+    public function generate_sku_data_in_product( $product, $request, $creating ) {
+        if ( $creating ) {
+			return;
+        }
+        $this->multivendorx_save_generated_sku( $product );
     }
 
     /**
