@@ -303,7 +303,7 @@ const Mapbox = ( {
                     } else if ( type === 'place' ) {
                         components.city = component.text;
                     } else if ( type === 'region' ) {
-                        components.state = component.text.split( ' ' )[ 0 ];
+                        components.state = component.text;
                     } else if ( type === 'country' ) {
                         components.country = component.short_code.toUpperCase();
                     }

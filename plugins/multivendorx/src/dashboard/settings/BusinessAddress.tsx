@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { BasicInput, getApiLink, GoogleMap, Mapbox, SelectInput, SuccessNotice, useModules } from 'zyra';
 import { __ } from '@wordpress/i18n';
-import { useLocation } from 'react-router-dom';
 
 declare global {
 	interface Window {
@@ -43,25 +42,25 @@ const BusinessAddress = (
 	});
 	const { modules } = useModules();
 
-	const [pendingLocation, setPendingLocation] = useState<any>(null);
+	const [newAddress, setNewAddress] = useState<any>(null);
 
 	useEffect(() => {
-		if (!pendingLocation) return;
+		if (!newAddress) return;
 		if (!stateOptions.length) return;
 	
 		const foundState = stateOptions.find(
 			(item) =>
-				item.label.split(' ')[0] === pendingLocation.state ||
-				item.value === pendingLocation.state
+				item.label.split(' ')[0] === newAddress.state.split(' ')[0] ||
+				item.value === newAddress.state
 		);
 	
 		const resolvedLocation = {
-			...pendingLocation,
-			state: foundState ? foundState.value : pendingLocation.state,
+			...newAddress,
+			state: foundState ? foundState.value : newAddress.state,
 		};
 	
 		applyLocation(resolvedLocation);
-		setPendingLocation(null);
+		setNewAddress(null);
 	}, [stateOptions]);
 
 	const applyLocation = (locationData: any) => {
@@ -73,18 +72,13 @@ const BusinessAddress = (
 	};	
 
 	const handleLocationUpdate = (locationData: any) => {
-		if (mapProvider === 'mapbox_api_set') {
-			setPendingLocation(locationData);
-	
-			// ensure states are loading
-			if (locationData.country) {
-				fetchStatesByCountry(locationData.country);
+		setNewAddress(locationData);
 
-
-			}
-			return;
+		// ensure states are loading
+		if (locationData.country) {
+			fetchStatesByCountry(locationData.country);
 		}
-		applyLocation(locationData);
+		return;
 	};
 
 	// Get REST API base URL
@@ -176,27 +170,6 @@ const BusinessAddress = (
 			fetchStatesByCountry(formData.country);
 		}
 	}, [formData.country]);
-
-	const location = useLocation();
-
-	useEffect(() => {
-		const highlightId = location.state?.highlightTarget;
-		if (highlightId) {
-			const target = document.getElementById(highlightId);
-
-			if (target) {
-				target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-				target.classList.add('highlight');
-				const handleClick = () => {
-					target.classList.remove('highlight');
-					document.removeEventListener('click', handleClick);
-				};
-				setTimeout(() => {
-					document.addEventListener('click', handleClick);
-				}, 100);
-			}
-		}
-	}, [location.state]);
 
 	const handleAddressChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

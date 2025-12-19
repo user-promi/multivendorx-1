@@ -41,7 +41,6 @@ const StoreSettings = ({
 	const [errorMsg, setErrorMsg] = useState<{ [key: string]: string }>({});
 
 	// Map states
-	const [mapProvider, setMapProvider] = useState('');
 	const [apiKey, setApiKey] = useState('');
 	const appLocalizer = (window as any).appLocalizer;
 	const { modules } = useModules();
@@ -49,25 +48,25 @@ const StoreSettings = ({
 	const [emails, setEmails] = useState<string[]>([]); // All emails
 	const [primaryEmail, setPrimaryEmail] = useState<string>(''); // Which one is starred
 	const settings = appLocalizer.settings_databases_value;
-	const [pendingLocation, setPendingLocation] = useState<any>(null);
+	const [newAddress, setNewAddress] = useState<any>(null);
 
 	useEffect(() => {
-		if (!pendingLocation) return;
+		if (!newAddress) return;
 		if (!stateOptions.length) return;
 	
 		const foundState = stateOptions.find(
 			(item) =>
-				item.label.split(' ')[0] === pendingLocation.state ||
-				item.value === pendingLocation.state
+				item.label.split(' ')[0] === newAddress.state.split(' ')[0] ||
+				item.value === newAddress.state
 		);
 	
 		const resolvedLocation = {
-			...pendingLocation,
-			state: foundState ? foundState.value : pendingLocation.state,
+			...newAddress,
+			state: foundState ? foundState.value : newAddress.state,
 		};
 	
 		applyLocation(resolvedLocation);
-		setPendingLocation(null);
+		setNewAddress(null);
 	}, [stateOptions]);
 
 	// === LOAD EMAILS FROM BACKEND ===
@@ -114,8 +113,6 @@ const StoreSettings = ({
 		if (!settings?.geolocation) return;
 	
 		const provider = settings.geolocation.choose_map_api;
-	
-		setMapProvider(provider);
 	
 		if (provider === 'google_map_set') {
 			setApiKey(settings.geolocation.google_api_key || '');
@@ -213,17 +210,13 @@ const StoreSettings = ({
 	};	
 
 	const handleLocationUpdate = (locationData: any) => {
-		if (mapProvider === 'mapbox_api_set') {
-			setPendingLocation(locationData);
-	
-			// ensure states are loading
-			if (locationData.country) {
-				fetchStatesByCountry(locationData.country);
-			}
-			return;
+		setNewAddress(locationData);
+
+		// ensure states are loading
+		if (locationData.country) {
+			fetchStatesByCountry(locationData.country);
 		}
-	
-		applyLocation(locationData);
+		return;
 	};
 	
 
