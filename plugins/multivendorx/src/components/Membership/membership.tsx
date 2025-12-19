@@ -722,7 +722,7 @@ const Membership = ({ id }: { id: string }) => {
 								<div className="form-group-wrapper">
 									<div className="form-group">
 										<label htmlFor="product-name">
-											Total Products Allowed
+											Maximum products upload allowed
 										</label>
 										<BasicInput
 											name="name"
@@ -734,7 +734,7 @@ const Membership = ({ id }: { id: string }) => {
 									</div>
 									<div className="form-group">
 										<label htmlFor="product-name">
-											Featured Products Allowed
+											Maximum featured Products Allowed
 										</label>
 										<BasicInput
 											name="name"
@@ -748,7 +748,7 @@ const Membership = ({ id }: { id: string }) => {
 								<div className="form-group-wrapper">
 									<div className="form-group">
 										<label htmlFor="product-name">
-											Images per Product
+											Images allowed per product
 										</label>
 										<BasicInput
 											name="name"
@@ -793,7 +793,7 @@ const Membership = ({ id }: { id: string }) => {
 								<div className="form-group-wrapper">
 									<div className="form-group">
 										<label htmlFor="product-name">
-											Allowed Product Types
+											Product types stores can sell
 										</label>
 										<MultiCheckBox
 											khali_dabba={true}
@@ -838,7 +838,7 @@ const Membership = ({ id }: { id: string }) => {
 								<div className="form-group-wrapper">
 									<div className="form-group">
 										<label htmlFor="product-name">
-											Allowed Product Categories
+											Categories stores can use
 										</label>
 										<MultiCheckBox
 											wrapperClass="checkbox-list-side-by-side"
@@ -882,7 +882,7 @@ const Membership = ({ id }: { id: string }) => {
 								<div className="form-group-wrapper">
 									<div className="form-group">
 										<label htmlFor="product-name">
-											Allowed Product Categories
+											Product permissions
 										</label>
 										<MultiCheckBox
 											wrapperClass="checkbox-list-side-by-side"
@@ -936,7 +936,7 @@ const Membership = ({ id }: { id: string }) => {
 								<div className="form-group-wrapper">
 									<div className="form-group">
 										<label htmlFor="product-name">
-											Order Management Permissions
+											What order information stores can access
 										</label>
 										<MultiCheckBox
 											wrapperClass="checkbox-list-side-by-side"
@@ -1223,7 +1223,7 @@ const Membership = ({ id }: { id: string }) => {
 													size={"12rem"}
 													onChange={handleChange}
 													description={__(
-														'You must enable/active MVX Stripe Marketplace or MVX PayPal Marketplace to use recurring subscription',
+														'Activate Stripe Marketplace or PayPal Marketplace module to use recurring subscriptions.',
 														'multivendorx'
 													)}
 												/>
