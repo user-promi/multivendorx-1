@@ -22,7 +22,7 @@ const productTypeField = {
 	class: 'basic-checkbox',
 	desc: 'Select the product types you want to enable',
 	options: [
-		{ key: 'simple', value: 'simple', label: 'Simple Product' },
+		{ key: 'simple', value: 'simple', label: 'Simple product' },
 		{ key: 'variable', value: 'variable', label: 'Variable Product' },
 		{ key: 'external', value: 'external', label: 'External / Affiliate Product' },
 		{ key: 'gift-card', value: 'gift-card', label: 'Gift Card' },

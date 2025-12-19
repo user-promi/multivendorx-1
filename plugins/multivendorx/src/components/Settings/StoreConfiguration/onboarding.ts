@@ -151,12 +151,12 @@ export default {
 		{
 			key: 'section',
 			type: 'section',
-			hint: __('Store Selling Mode', 'multivendorx'),
+			hint: __('Product Listing Model', 'multivendorx'),
 		},
 		{
 			key: 'store_selling_mode',
 			type: 'setting-toggle',
-			label: __('Store Selling Mode', 'multivendorx'),
+			label: __('Product listing model', 'multivendorx'),
 			desc: __(
 				'Decide how stores are allowed to sell products in your marketplace:<li><strong>Default</strong> - Stores can sell only their own products, following standard marketplace rules.</li></ul><ul><li><strong>Shared product listing</strong> - Stores can copy existing products and sell them alongside new products they create.</li><li><strong>Franchise</strong> - Franchise stores can sell only their own products and products created by the admin.</li>',
 				'multivendorx'
@@ -164,7 +164,7 @@ export default {
 			options: [
 				{
 					key: 'default',
-					label: __('Default', 'multivendorx'),
+					label: __('Independednt', 'multivendorx'),
 					value: 'default',
 					desc: __(
 						'Stores can sell only their own products unless other modes are enabled.',
@@ -173,7 +173,7 @@ export default {
 				},
 				{
 					key: 'single_product_multiple_vendor',
-					label: __('Shared product listing', 'multivendorx'),
+					label: __('Co-listing', 'multivendorx'),
 					value: 'single_product_multiple_vendor',
 					desc: __(
 						'Stores can copy existing products and sell them alongside new products they create.',
