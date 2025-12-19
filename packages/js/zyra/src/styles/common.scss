@@ -254,7 +254,7 @@ $index: 1;
   .tooltip {
     font-size: 0.625rem;
     position: absolute;
-    background: #65438f;
+    background: $theme-color;
     padding: 0.5rem 0.75rem;
     top: -2rem;
     border-radius: 0.25rem;
@@ -270,7 +270,7 @@ $index: 1;
       transform: translateX(-50%) rotate(45deg);
       width: 0.504rem;
       height: 0.504rem;
-      background: #65438f;
+      background: $theme-color;
       right: 8%;
     }
 
@@ -541,6 +541,7 @@ $index: 1;
         padding: 0 0 0.313rem 0.313rem;
         font-size: 0.9rem;
         position: relative;
+        display: inline;
         font-weight: 500;
 
         .label-des {
@@ -928,14 +929,13 @@ $index: 1;
 
   input:checked+label {
     color: $theme-color;
-    background: #ece2f9;
+    background: $theme-background-color;
     border: $border-theme-medium;
     padding-left: 2rem;
 
     &::before {
       position: absolute;
       content: "\e809";
-
     }
   }
 

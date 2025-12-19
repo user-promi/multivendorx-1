@@ -15,8 +15,7 @@ interface FormData {
 	[key: string]: string;
 }
 
-const BusinessAddress = (
-) => {
+const BusinessAddress = () => {
 	const id = (window as any).appLocalizer?.store_id;
 	const [formData, setFormData] = useState<FormData>({});
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);

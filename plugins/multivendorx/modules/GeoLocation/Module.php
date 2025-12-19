@@ -32,6 +32,8 @@ class Module {
      * Constructor.
      */
     public function __construct() {
+        $this->init_classes();
+        $this->init_hooks();
     }
 
     /**

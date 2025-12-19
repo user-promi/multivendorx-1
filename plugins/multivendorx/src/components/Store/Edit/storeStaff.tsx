@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { SuccessNotice, SelectInput, getApiLink, useModules } from 'zyra';
 import { __ } from '@wordpress/i18n';
+import { applyFilters } from '@wordpress/hooks';
 
 const StoreSquad = ({ id }: { id: string | null }) => {
 	const { modules } = useModules();
@@ -96,140 +97,24 @@ const StoreSquad = ({ id }: { id: string | null }) => {
 							</div>
 
 							{modules.includes('staff-manager') && (
-								<>
-									{[
-										{
-											label: __(
-												'Store managers',
-												'multivendorx'
-											),
-											name: 'store_managers',
-											options:
-												appLocalizer?.managers_list,
-										},
-										{
-											label: __(
-												'Product managers',
-												'multivendorx'
-											),
-											name: 'product_managers',
-											options:
-												appLocalizer?.product_managers_list,
-										},
-										{
-											label: __(
-												'Customer supports',
-												'multivendorx'
-											),
-											name: 'customer_supports',
-											options:
-												appLocalizer?.customer_support_list,
-										},
-										{
-											label: __(
-												'Order assistants',
-												'multivendorx'
-											),
-											name: 'order_assistants',
-											options:
-												appLocalizer?.assistants_list,
-										},
-									].map(({ label, name, options }) => (
-										<div
-											className="form-group-wrapper"
-											key={name}
-										>
-											<div className="form-group">
-												<label>{label}</label>
-												<SelectInput
-													name={name}
-													options={options || []}
-													type="multi-select"
-													value={(
-														formData[name] || []
-													).map((id: any) => {
-														const match = (
-															options || []
-														).find(
-															(opt: any) =>
-																String(
-																	opt.value
-																) === String(id)
-														);
-														return match
-															? match.value
-															: String(id);
-													})}
-													onChange={(
-														selected: any
-													) => {
-														const updatedValues =
-															(
-																selected as any[]
-															)?.map(
-																(option) =>
-																	option.value
-															) || [];
-														const updated = {
-															...formData,
-															[name]: updatedValues,
-															state: '',
-														};
-														setFormData(updated);
-														autoSave(updated);
-													}}
-												/>
-											</div>
-										</div>
-									))}
-								</>
-							)}
+								applyFilters(
+									'additional_staff_manager_fields',
+									null,
+									formData,
+									setFormData,
+									autoSave
+								))
+							}			
 
 							{modules.includes('facilitator') && (
-								<div className="form-group-wrapper">
-									<div className="form-group">
-										<label>
-											{__('Facilitators', 'multivendorx')}
-										</label>
-										<SelectInput
-											name="facilitators"
-											options={
-												appLocalizer?.facilitators_list ||
-												[]
-											}
-											type="multi-select"
-											value={(
-												formData.facilitators || []
-											).map((id: any) => {
-												const match = (
-													appLocalizer?.facilitators_list ||
-													[]
-												).find(
-													(opt: any) =>
-														String(opt.value) ===
-														String(id)
-												);
-												return match
-													? match.value
-													: String(id);
-											})}
-											onChange={(selected: any) => {
-												const facilitators =
-													(selected as any[])?.map(
-														(option) => option.value
-													) || [];
-												const updated = {
-													...formData,
-													facilitators,
-													state: '',
-												};
-												setFormData(updated);
-												autoSave(updated);
-											}}
-										/>
-									</div>
-								</div>
-							)}
+								applyFilters(
+									'additional_facilitator_fields',
+									null,
+									formData,
+									setFormData,
+									autoSave
+								))
+							}
 						</div>
 					</div>
 				</div>

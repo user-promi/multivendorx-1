@@ -199,7 +199,29 @@ const AICard = () => {
 								{error}
 							</div>
 						)}
+						{/* Show message when waiting for input */}
+						{!hasSuggestions &&
+							!isLoading &&
+							!error &&
+							userPrompt.trim() === '' && (
+								<div className="empty-state">
+									<div className="empty-icon">
+										<i className="adminlib-lightbulb"></i>
+									</div>
+									<p>
+										Enter a prompt above to generate AI
+										suggestions for your product.
+									</p>
+								</div>
+							)}
 
+						{/* Show loading state */}
+						{isLoading && (
+							<div className="loading-state">
+								<div className="loading-spinner"></div>
+								<p>Generating suggestions...</p>
+							</div>
+						)}
 						{/* Only show suggestions section if we have actual suggestions */}
 						{hasSuggestions && (
 							<div className="suggestions-wrapper">
@@ -388,30 +410,6 @@ const AICard = () => {
 								></i>
 							</div>
 						</div>
-
-						{/* Show message when waiting for input */}
-						{!hasSuggestions &&
-							!isLoading &&
-							!error &&
-							userPrompt.trim() === '' && (
-								<div className="empty-state">
-									<div className="empty-icon">
-										<i className="adminlib-lightbulb"></i>
-									</div>
-									<p>
-										Enter a prompt above to generate AI
-										suggestions for your product.
-									</p>
-								</div>
-							)}
-
-						{/* Show loading state */}
-						{isLoading && (
-							<div className="loading-state">
-								<div className="loading-spinner"></div>
-								<p>Generating suggestions...</p>
-							</div>
-						)}
 					</div>
 				</div>
 			)}

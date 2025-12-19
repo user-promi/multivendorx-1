@@ -1238,12 +1238,12 @@ const AddProduct = () => {
 						<CommonPopup
 							open={AddInhance}
 							onClick={() => setAddInhance(false)}
-							width="50%"
+							width="30%"
 							height="90%"
 							header={
 								<>
 									<div className="title">
-										<i className="adminlib-magic"></i>
+										<i className="adminlib-ai"></i>
 										{__(
 											'AI Image Enhancer',
 											'multivendorx'
@@ -1298,13 +1298,6 @@ const AddProduct = () => {
 								{/* Original Image Preview */}
 								{selectedImageForEnhancement && (
 									<div className="image-preview-section">
-										<h4>
-											<i className="adminlib-image"></i>{' '}
-											{__(
-												'Original Image:',
-												'multivendorx'
-											)}
-										</h4>
 										<div>
 											<img
 												src={
@@ -1312,7 +1305,7 @@ const AddProduct = () => {
 												}
 												alt="Original Preview"
 											/>
-											<p>
+											<p className="settings-metabox-description">
 												{__(
 													'This is the original image that will be enhanced.',
 													'multivendorx'
@@ -1323,32 +1316,30 @@ const AddProduct = () => {
 								)}
 
 								{/* Prompt Input */}
-								<div className="form-group">
-									<label>
-										{__(
-											'Enhancement Instructions',
-											'multivendorx'
-										)}
-									</label>
-									<textarea
-										value={enhancementPrompt}
-										onChange={(e) =>
-											setEnhancementPrompt(e.target.value)
-										}
-										placeholder={__(
-											"E.g., 'Make the colors more vibrant and appealing', 'Add professional lighting and background', 'Remove all shadows and make it studio quality', 'Make it look more premium and luxurious', etc.",
-											'multivendorx'
-										)}
-										disabled={isEnhancing}
-									/>
-									<p>
-										{__(
-											'Describe exactly how you want the AI to enhance the image.',
-											'multivendorx'
-										)}
-									</p>
+								<div className="form-group-wrapper">
+									<div className="form-group">
+										<label>
+											{__(
+												'Enhancement Instructions',
+												'multivendorx'
+											)}
+										</label>
+										<textarea
+											value={enhancementPrompt}
+											className="textarea-input"
+											onChange={(e) =>
+												setEnhancementPrompt(e.target.value)
+											}
+											disabled={isEnhancing}
+										/>
+										<p className="settings-metabox-description">
+											{__(
+												'Describe exactly how you want the AI to enhance the image.',
+												'multivendorx'
+											)}
+										</p>
+									</div>
 								</div>
-
 								{/* Error Message */}
 								{enhancementError && (
 									<div className="error-message">
@@ -2095,17 +2086,19 @@ const AddProduct = () => {
 												onReplace={openFeaturedUploader}
 											/>
 										</div>
-										<button
-											className="admin-btn btn-blue"
-											onClick={() =>
-												openImageEnhancer(
-													featuredImage?.src
-												)
-											}
-										>
-											<i className="adminlib-magic"></i>{' '}
-											{__('Enhance', 'multivendorx')}
-										</button>
+										<div className="buttons-wrapper">
+											<button
+												className="admin-btn btn-blue"
+												onClick={() =>
+													openImageEnhancer(
+														featuredImage?.src
+													)
+												}
+											>
+												<i className="adminlib-magic"></i>{' '}
+												{__('Enhance', 'multivendorx')}
+											</button>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -2114,11 +2107,21 @@ const AddProduct = () => {
 									<label htmlFor="product-name">
 										Product gallery
 									</label>
+									<div>
+										<FileInput
+											type="hidden"
+											imageSrc={null}
+											openUploader="Add Gallery Image"
+											buttonClass="admin-btn btn-purple"
+											onButtonClick={
+												openGalleryUploader
+											}
+										/>
+									</div>
 									<div className="uploaded-image">
 										{galleryImages.map((img, index) => (
-											<div key={img.id}>
-												<div>
-													<FileInput
+											<div className="image" key={img.id}>
+												{/* <FileInput
 														type="hidden"
 														imageSrc={img.thumbnail}
 														openUploader="Replace Image"
@@ -2135,9 +2138,10 @@ const AddProduct = () => {
 														onReplace={() =>
 															openGalleryUploader()
 														}
-													/>
-												</div>
-												<button
+													/> */}
+												<img src="http://localhost:8889/wp-content/uploads/2025/12/hoodie-2.jpg" alt="" />
+												<i className="adminlib-delete"></i>
+												{/* <button
 													className="admin-btn btn-blue"
 													onClick={() =>
 														openImageEnhancer(
@@ -2150,22 +2154,9 @@ const AddProduct = () => {
 														'Enhance',
 														'multivendorx'
 													)}
-												</button>
+												</button> */}
 											</div>
 										))}
-										{/* Add more button */}
-										<div>
-											{/* Add more button */}
-											<FileInput
-												type="hidden"
-												imageSrc={null}
-												openUploader="Add Gallery Image"
-												buttonClass="admin-btn btn-purple"
-												onButtonClick={
-													openGalleryUploader
-												}
-											/>
-										</div>
 									</div>
 								</div>
 							</div>
