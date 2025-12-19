@@ -1,5 +1,5 @@
 import Elements from '../src/components/Elements';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof Elements> = {
     title: 'Zyra/Components/Form/Elements',

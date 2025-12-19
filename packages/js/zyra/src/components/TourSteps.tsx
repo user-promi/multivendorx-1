@@ -21,9 +21,10 @@ interface AppLocalizer {
 interface TourProps {
     appLocalizer: AppLocalizer;
     steps: StepType[];
+    forceOpen: boolean;
 }
 
-const Tour: React.FC< TourProps > = ( { appLocalizer, steps } ) => {
+const Tour: React.FC< TourProps > = ( { appLocalizer, steps, forceOpen } ) => {
     const { setIsOpen, setSteps, setCurrentStep } = useTour();
     const [ isNavigating, setIsNavigating ] = useState( false );
 
@@ -90,6 +91,13 @@ const Tour: React.FC< TourProps > = ( { appLocalizer, steps } ) => {
     }, [ steps ] );
 
     useEffect( () => {
+        if ( forceOpen ) {
+            if ( setSteps && setIsOpen ) {
+                setSteps( processedSteps );
+                setIsOpen( true );
+            }
+            return;
+        }
         const fetchTourState = async () => {
             if ( window.location.href === appLocalizer.module_page_url ) {
                 try {

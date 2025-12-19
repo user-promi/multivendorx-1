@@ -5,7 +5,7 @@
 };
 
 import MapsInput from '../src/components/MapsInput';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof MapsInput> = {
     title: 'Zyra/Components/MapsInput',

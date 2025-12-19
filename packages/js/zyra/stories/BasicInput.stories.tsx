@@ -1,6 +1,6 @@
 import BasicInput from '../src/components/BasicInput';
 import { ChangeEvent, FocusEvent, MouseEvent } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof BasicInput> = {
     title: 'Zyra/Components/BasicInput',

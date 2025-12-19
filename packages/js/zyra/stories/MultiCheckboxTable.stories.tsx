@@ -1,5 +1,5 @@
 import MultiCheckboxTable from '../src/components/MultiCheckboxTable';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof MultiCheckboxTable> = {
     title: 'Zyra/Components/MultiCheckboxTable',

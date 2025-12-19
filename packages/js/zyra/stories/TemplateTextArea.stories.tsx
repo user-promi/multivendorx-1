@@ -7,37 +7,38 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 /**
  * Internal dependencies
  */
-import TemplateSection from '../src/components/TemplateSection';
+import TemplateTextArea from '../src/components/TemplateTextArea';
 
-const meta: Meta<typeof TemplateSection> = {
-    title: 'Zyra/Components/TemplateSection',
-    component: TemplateSection,
+const meta: Meta<typeof TemplateTextArea> = {
+    title: 'Zyra/Components/TemplateTextArea',
+    component: TemplateTextArea,
     tags: ['autodocs'],
 };
 
 export default meta;
 
-type Story = StoryObj<typeof TemplateSection>;
+type Story = StoryObj<typeof TemplateTextArea>;
 
 /**
- * Basic TemplateSection (controlled label)
+ * Basic TemplateTextArea (controlled)
  */
 export const Basic: Story = {
     render: () => {
         const [formField, setFormField] = useState({
-            label: 'Email Template',
+            label: 'Message',
+            placeholder: 'Enter your message',
         });
 
-        const handleChange = (key: string, value: string) => {
-            console.log('Changed:', key, value);
+        const handleChange = (field: string, value: string) => {
+            console.log('Changed:', field, value);
             setFormField((prev) => ({
                 ...prev,
-                [key]: value,
+                [field]: value,
             }));
         };
 
         return (
-            <TemplateSection
+            <TemplateTextArea
                 formField={formField}
                 onChange={handleChange}
             />

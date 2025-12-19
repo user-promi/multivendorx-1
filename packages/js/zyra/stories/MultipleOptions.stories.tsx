@@ -1,8 +1,8 @@
 import MultipleOptions from '../src/components/MultipleOption';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof MultipleOptions> = {
-    title: 'Zyra/Components/Form/MultipleOptions',
+    title: 'Zyra/Components/MultipleOptions',
     component: MultipleOptions,
     tags: ['autodocs'],
 };

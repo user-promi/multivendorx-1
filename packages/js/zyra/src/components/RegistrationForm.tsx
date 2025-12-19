@@ -24,15 +24,6 @@ import ImageGallery from './ImageGallery';
 import AddressField, { AddressFormField } from './AddressField';
 
 // Types
-type FieldTypes =
-    | 'text'
-    | 'email'
-    | 'number'
-    | 'radio'
-    | 'dropdown'
-    | 'multiselect'
-    | 'checkboxes';
-
 type FieldValue =
     | string
     | number
@@ -789,7 +780,11 @@ const CustomForm: React.FC< CustomFormProps > = ( {
                                                 )
                                             }
                                             type={
-                                                formField.type as 'radio' | 'checkboxes' | 'dropdown' | 'multiselect'
+                                                formField.type as
+                                                    | 'radio'
+                                                    | 'checkboxes'
+                                                    | 'dropdown'
+                                                    | 'multiselect'
                                             }
                                             selected={ false }
                                         />
@@ -819,7 +814,7 @@ const CustomForm: React.FC< CustomFormProps > = ( {
                                         />
                                     ) }
                                     { formField.type === 'attachment' && (
-                                        <Attachment/>
+                                        <Attachment />
                                     ) }
                                     { formField.type === 'section' && (
                                         <TemplateSection
@@ -834,7 +829,7 @@ const CustomForm: React.FC< CustomFormProps > = ( {
                                         />
                                     ) }
                                     { formField.type === 'block-layout' && (
-                                        <BlockLayout/>
+                                        <BlockLayout />
                                     ) }
                                     { formField.type === 'image-gallery' && (
                                         <ImageGalleryField
@@ -874,7 +869,9 @@ const CustomForm: React.FC< CustomFormProps > = ( {
                                     ) }
                                     { formField.type === 'address' && (
                                         <AddressField
-                                            formField={ formField as AddressFormField}
+                                            formField={
+                                                formField as AddressFormField
+                                            }
                                             onChange={ ( key, value ) =>
                                                 handleFormFieldChange(
                                                     index,
@@ -912,7 +909,7 @@ const CustomForm: React.FC< CustomFormProps > = ( {
                         settingHasChanged.current = true;
                         const previousSetting = buttonSetting || {};
                         if ( isRestoreDefaults ) {
-                            setButtonSetting( value as ButtonSetting);
+                            setButtonSetting( value as ButtonSetting );
                         } else {
                             setButtonSetting( {
                                 ...previousSetting,
