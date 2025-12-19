@@ -164,7 +164,7 @@ class Product {
      * Add the store dropdown to the bulk edit panel
      */
     public function add_product_store_bulk_edit() {
-        $stores = StoreUtil::get_store(); // Fetch stores.
+        $stores = StoreUtil::get_stores(); // Fetch stores.
         ?>
         <div class="inline-edit-group">
             <label class="alignleft">

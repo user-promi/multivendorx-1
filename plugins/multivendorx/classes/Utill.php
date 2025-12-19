@@ -64,7 +64,6 @@ class Utill {
         'order-actions-refunds'         => 'multivendorx_order_actions_refunds_settings',
         'advertising'                   => 'multivendorx_advertising_settings',
         'product-preferencess'          => 'multivendorx_product_preferencess_settings',
-        'category-pyramid-guide'        => 'multivendorx_category_pyramid_guide_settings',
         'geolocation'                   => 'multivendorx_geolocation_settings',
         'shipping'                      => 'multivendorx_shipping_settings',
         'legal-compliance'              => 'multivendorx_legal_compliance_settings',
@@ -323,7 +322,6 @@ class Utill {
      */
     public static function is_khali_dabba() {
         return apply_filters( 'kothay_dabba', false );
-        // return true;
     }
 
     /**
