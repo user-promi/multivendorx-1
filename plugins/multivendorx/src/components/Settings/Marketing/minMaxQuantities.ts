@@ -21,6 +21,10 @@ export default {
 				'Set purchase limits for individual products to prevent bulk buying or ensure minimum order quantities.',
 				'multivendorx'
 			),
+			desc: __(
+    '<strong>Example:</strong> You set <em>Min = 1</em> and <em>Max = 5</em> for a T-shirt.<br> If a customer tries to buy 6 units, it will be blocked.<br> Buying 3 units is allowed.',
+    'multivendorx'
+),
 			moduleEnabled: 'min-max',
 			nestedFields: [
 				{
@@ -44,6 +48,10 @@ export default {
 				'Control how much a customer can spend on an individual product by defining minimum and maximum purchase values.',
 				'multivendorx'
 			),
+			desc: __(
+    '<strong>Example:</strong> You set <em>Min = $20</em> and <em>Max = $100</em> for a Backpack.<br> If a customer tries to buy 1 backpack costing $10, it is blocked.<br> Buying 2 backpacks at $30 each (total $60) is allowed.',
+    'multivendorx'
+),
 			moduleEnabled: 'min-max',
 			nestedFields: [
 				{
@@ -78,6 +86,10 @@ export default {
 				'Set the minimum and maximum number of items a customer can include in their cart.',
 				'multivendorx'
 			),
+			desc: __(
+    '<strong>Example:</strong> You set <em>Min items = 2</em> and <em>Max items = 20</em> per order.<br> If a customer adds only 1 item, checkout is blocked.<br> Adding 5 items is allowed.',
+    'multivendorx'
+),
 			moduleEnabled: 'min-max',
 			nestedFields: [
 				{
@@ -101,6 +113,10 @@ export default {
 				'Set the minimum and maximum total spend allowed for an order.',
 				'multivendorx'
 			),
+			desc: __(
+    '<strong>Example:</strong> You set <em>Min order value = $50</em> and <em>Max order value = $500</em>.<br> If a customer tries to checkout with $30, it is blocked.<br> Checkout with $120 is allowed.',
+    'multivendorx'
+),
 			moduleEnabled: 'min-max',
 			nestedFields: [
 				{

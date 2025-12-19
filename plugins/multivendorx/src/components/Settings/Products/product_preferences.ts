@@ -130,12 +130,12 @@ export default {
 				'Control how stores select categories while adding products.',
 				'multivendorx'
 			),
-			hint: __('Category selection method', 'multivendorx'),
+			hint: __('Product category selection', 'multivendorx'),
 		},
 		{
 			key: 'category_selection_method',
 			type: 'setting-toggle',
-			label: __('Category specific product', 'multivendorx'),
+			label: __('Hierarchical selection', 'multivendorx'),
 			settingDescription: __(
 				'Choose whether stores follow a guided category selection flow or freely choose multiple categories.',
 				'multivendorx'
