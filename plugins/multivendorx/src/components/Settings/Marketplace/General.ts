@@ -3,11 +3,11 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'marketplace',
 	priority: 1,
-	name: __('Overview', 'multivendorx'),
+	name: __('Overview', 'multistorex'),
 	tabTitle: 'Marketplace Pages Configuration',
 	desc: __(
 		'Configure the essential system pages required for your marketplace - including store registration, store dashboard.',
-		'multivendorx'
+		'multistorex'
 	),
 	video: {
 		icon: 'adminlib-general-tab', // optional icon class
@@ -23,10 +23,10 @@ export default {
 		{
 			key: 'store_registration_page',
 			type: 'select',
-			label: __('Store registration page', 'multivendorx'),
+			label: __('Store registration page', 'multistorex'),
 			desc: __(
 				'Choose the page with [store_registration] shortcode, this is where stores sign up.',
-				'multivendorx'
+				'multistorex'
 			),
 			className: 'select-class',
 			options: appLocalizer.pages_list,
@@ -42,20 +42,20 @@ export default {
 		{
 			key: 'store_dashboard_page',
 			type: 'select',
-			label: __('Store dashboard page', 'multivendorx'),
+			label: __('Store dashboard page', 'multistorex'),
 			desc: __(
-				'The page with [mvx_store] shortcode will act as the store’s control center.',
-				'multivendorx'
+				'The page with [marketplace_store] shortcode will act as the store’s control center.',
+				'multistorex'
 			),
 			options: appLocalizer.pages_list,
 		},
 		{
 			key: 'store_url',
 			type: 'text',
-			label: __('Storefront base ', 'multivendorx'),
+			label: __('Storefront base ', 'multistorex'),
 			desc: __(
 				'Set a custom base for your store URL. For example, in the URL: https://yourdomain.com/store/sample-store/, the default word [store] can be replaced with any name you define here.',
-				'multivendorx'
+				'multistorex'
 			),
 			size: '8rem',
 			preText: appLocalizer.site_url + '/',
@@ -64,84 +64,86 @@ export default {
 		{
 			key: 'section',
 			type: 'section',
-			hint: __('Enable Content Styling Tools For stores', 'multivendorx'),
+			hint: __('Enable Content Styling Tools For stores', 'multistorex'),
 		},
 		{
 			key: 'tinymce_api_section',
 			type: 'text',
-			label: __('Tinymce API', 'multivendorx'),
+			label: __('Tinymce API', 'multistorex'),
 			desc: __(
 				'Get your <a href="https://www.tiny.cloud/blog/how-to-get-tinymce-cloud-up-in-less-than-5-minutes/" target="_blank">TinyMCE API key</a> and paste it here, to unlock visual editing tools across the marketplace. Admin and stores can easily format text, add links, lists, and other styling to their store descriptions, announcements, knowledge base posts, and product details-no coding needed.',
-				'multivendorx'
+				'multistorex'
 			),
 		},
 		{
 			key: 'section',
 			type: 'section',
-			hint: __('Shortcode Library', 'multivendorx'),
+			hint: __('Shortcode Library', 'multistorex'),
 		},
 		{
 			key: 'available_shortcodes',
 			type: 'shortcode-table',
-			label: __('Available shortcodes', 'multivendorx'),
-			desc: __('', 'multivendorx'),
+			label: __('Available shortcodes', 'multistorex'),
+			desc: __('', 'multistorex'),
 			optionLabel: ['Shortcodes', 'Description', 'Arguments'],
 			icon: 'adminlib-general-tab',
 			options: [
+				
 				{
-					key: '',
-					label: '[mvx_store]',
-					name: 'MVX Best Selling Products',
+					key: 'marketplace_products',
+					label: '[marketplace_products]',
+					name: 'Show store products',
 					desc: __(
-						'Enables you to create a store dashboard.',
-						'multivendorx'
+						'Displays all products added by a store. Use this to create store-specific product listing pages.',
+						'multistorex'
 					),
 					arguments:
-						'<ul><li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li> <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li>  <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li>  <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li></ul>',
+						'<ul> <li><b>store</b> - Store ID, slug, email, or username (optional)</li> <li><b>perpage</b> - Number of products to display (default: 12)</li> <li><b>columns</b> - Number of products per row (default: 4)</li> <li><b>filter</b> - Type of products to show: all, recent, featured, sale, top_rated, best_selling (default: all)</li> <li><b>sort</b> - Predefined sorting: latest, oldest, rating, popularity, title (optional)</li> <li><b>orderby</b> - Sort products by a specific field, used when sort is not set (default: title)</li> <li><b>order</b> - Display order: ASC or DESC (default: ASC)</li> <li><b>category</b> - Product category slugs, comma separated (optional)</li> <li><b>operator</b> - Category filter operator: IN, NOT IN, AND (default: IN)</li> </ul>',},
+				
+				{
+					key: 'marketplace_dashboard',
+					label: '[marketplace_dashboard]',
+					name: 'Marketplace dashboard',
+					desc: __(
+						'Displays the store dashboard where stores manage products, orders, earnings, and store settings.',
+						'multistorex'
+					),
+					arguments:
+						'<ul><li>No arguments required</li></ul>',
 				},
 				{
-					key: '',
-					label: '[mvx_store]',
-					name: 'MVX Best Selling Products',
+					key: 'marketplace_registration',
+					label: '[marketplace_registration]',
+					name: 'Marketplace registration',
 					desc: __(
-						'Enables you to create a store dashboard.',
-						'multivendorx'
+						'Displays the store registration form. Use this to allow new users to sign up as stores.',
+						'multistorex'
 					),
 					arguments:
-						'<ul><li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li> <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li>  <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li>  <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li></ul>',
+						'<ul><li>No arguments required</li></ul>',
+				},
+
+				{
+					key: 'marketplace_stores',
+					label: '[marketplace_stores]',
+					name: 'Show store lists',
+					desc: __(
+						'Displays a list of all registered stores with ratings. Use this to help customers discover stores.',
+						'multistorex'
+					),
+					arguments:
+						'<ul><li><b>orderby</b> - Sort stores by name, category, or registration date (default: registered)</li><li><b>order</b> - Display order: ASC or DESC (default: ASC)</li></ul>',
 				},
 				{
-					key: '',
-					label: '[mvx_store]',
-					name: 'MVX Best Selling Products',
+					key: 'store_coupons',
+					label: '[store_coupons]',
+					name: 'Show store coupons',
 					desc: __(
-						'Enables you to create a store dashboard.',
-						'multivendorx'
+						'Displays coupons created by a store along with their usage details. Useful for stores to track coupon performance.',
+						'multistorex'
 					),
 					arguments:
-						'<ul><li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li> <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li>  <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li>  <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li></ul>',
-				},
-				{
-					key: '',
-					label: '[mvx_store]',
-					name: 'MVX Best Selling Products',
-					desc: __(
-						'Enables you to create a store dashboard.',
-						'multivendorx'
-					),
-					arguments:
-						'<ul><li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li> <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li>  <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li>  <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li></ul>',
-				},
-				{
-					key: '',
-					label: '[mvx_store]',
-					name: 'MVX Best Selling Products',
-					desc: __(
-						'Enables you to create a store dashboard.',
-						'multivendorx'
-					),
-					arguments:
-						'<ul><li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li> <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li>  <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li>  <li><b>vendor</b> - Vendor ID, slug, email, or username (optional)</li></ul>',
+						'<ul><li>No arguments required</li></ul>',
 				},
 			],
 		},

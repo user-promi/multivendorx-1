@@ -41,13 +41,33 @@ const StoreSettings = ({
 	const [errorMsg, setErrorMsg] = useState<{ [key: string]: string }>({});
 
 	// Map states
-	const [mapProvider, setMapProvider] = useState('');
 	const [apiKey, setApiKey] = useState('');
 	const appLocalizer = (window as any).appLocalizer;
 	const { modules } = useModules();
 	// === ADD THESE STATES (replace old ones) ===
 	const [emails, setEmails] = useState<string[]>([]); // All emails
 	const [primaryEmail, setPrimaryEmail] = useState<string>(''); // Which one is starred
+	const settings = appLocalizer.settings_databases_value;
+	const [newAddress, setNewAddress] = useState<any>(null);
+
+	useEffect(() => {
+		if (!newAddress) return;
+		if (!stateOptions.length) return;
+	
+		const foundState = stateOptions.find(
+			(item) =>
+				item.label.split(' ')[0] === newAddress.state.split(' ')[0] ||
+				item.value === newAddress.state
+		);
+	
+		const resolvedLocation = {
+			...newAddress,
+			state: foundState ? foundState.value : newAddress.state,
+		};
+	
+		applyLocation(resolvedLocation);
+		setNewAddress(null);
+	}, [stateOptions]);
 
 	// === LOAD EMAILS FROM BACKEND ===
 	useEffect(() => {
@@ -90,15 +110,16 @@ const StoreSettings = ({
 	});
 
 	useEffect(() => {
-		if (appLocalizer) {
-			setMapProvider(appLocalizer.map_providor);
-			if (appLocalizer.map_providor === 'google_map_set') {
-				setApiKey(appLocalizer.google_api_key);
-			} else {
-				setApiKey(appLocalizer.mapbox_api_key);
-			}
+		if (!settings?.geolocation) return;
+	
+		const provider = settings.geolocation.choose_map_api;
+	
+		if (provider === 'google_map_set') {
+			setApiKey(settings.geolocation.google_api_key || '');
+		} else if (provider === 'mapbox_api_set') {
+			setApiKey(settings.geolocation.mapbox_api_key || '');
 		}
-	}, []);
+	}, [settings]);
 
 	// Load store data
 	useEffect(() => {
@@ -180,32 +201,24 @@ const StoreSettings = ({
 		autoSave(updatedFormData);
 	};
 
-	const handleLocationUpdate = (locationData: any) => {
-		const newAddressData = {
-			...addressData,
-			...locationData,
-		};
-
-		if (mapProvider === 'mapbox_api_set') {
-			const foundState = stateOptions.find(
-				(item) =>
-					item.label === newAddressData.state ||
-					item.value === newAddressData.state
-			);
-			if (foundState) {
-				newAddressData.state = foundState.value;
-			}
-		}
-		setAddressData(newAddressData);
-
-		const updatedFormData = {
-			...formData,
-			...locationData,
-		};
-
+	const applyLocation = (locationData: any) => {
+		setAddressData((prev) => ({ ...prev, ...locationData }));
+	
+		const updatedFormData = { ...formData, ...locationData };
 		setFormData(updatedFormData);
 		autoSave(updatedFormData);
+	};	
+
+	const handleLocationUpdate = (locationData: any) => {
+		setNewAddress(locationData);
+
+		// ensure states are loading
+		if (locationData.country) {
+			fetchStatesByCountry(locationData.country);
+		}
+		return;
 	};
+	
 
 	// Handle country select change (from old code)
 	const handleCountryChange = (newValue: any) => {
@@ -363,7 +376,7 @@ const StoreSettings = ({
 		if (!modules.includes('geo-location') || !apiKey) {
 			return null;
 		}
-
+	
 		const commonProps = {
 			apiKey,
 			locationAddress: addressData.location_address,
@@ -372,19 +385,20 @@ const StoreSettings = ({
 			onLocationUpdate: handleLocationUpdate,
 			labelSearch: __('Search for a location'),
 			labelMap: __('Drag or click on the map to choose a location'),
-			instructionText: __(
-				'Enter a search term or drag/drop a pin on the map.'
-			),
+			instructionText: __('Enter a search term or drag/drop a pin on the map.'),
 			placeholderSearch: __('Search for a location...'),
 		};
-
-		if (mapProvider === 'google_map_set') {
-			return <GoogleMap {...commonProps} />;
-		} else if (mapProvider === 'mapbox_api_set') {
-			return <Mapbox {...commonProps} />;
+	
+		switch (settings.geolocation.choose_map_api) {
+			case 'google_map_set':
+				return <GoogleMap {...commonProps} />;
+	
+			case 'mapbox_api_set':
+				return <Mapbox {...commonProps} />;
+	
+			default:
+				return null;
 		}
-
-		return null;
 	};
 
 	return (
