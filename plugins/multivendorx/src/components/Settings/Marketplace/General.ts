@@ -90,74 +90,6 @@ export default {
 			options: [
 				
 				{
-					key: 'marketplace_best_selling_products',
-					label: '[marketplace_best_selling_products]',
-					name: 'Show best selling products',
-					desc: __(
-						'Shows the products that sell the most for a store. Use this to highlight popular products and increase customer confidence.',
-						'multistorex'
-					),
-					arguments:
-						'<ul><li><b>store</b> - storeID, slug, email, or username (optional)</li><li><b>perpage </b> - Number of products to show (default: 12)</li><li><b>columns</b> - Number of products per row (default: 4)</li><li><b>orderby</b> - Sort products by parameter (default: title)</li><li><b>order</b> - Display order: ASC or DESC (default: ASC)</li></ul>',
-				},
-
-				{
-					key: 'marketplace_featured_products',
-					label: '[marketplace_featured_products]',
-					name: 'Show featured products',
-					desc: __(
-						'Displays products marked as featured by stores. Use this to promote highlighted or recommended products.',
-						'multistorex'
-					),
-					arguments:
-						'<ul><li><b>store</b> - storeID, slug, email, or username (optional)</li><li><b>perpage </b> - Number of products to show (default: 12)</li><li><b>columns</b> - Number of products per row (default: 4)</li><li><b>orderby</b> - Sort products by parameter (default: date)</li><li><b>order</b> - Display order: ASC or DESC (default: DESC)</li></ul>',
-				},
-
-				{
-					key: 'marketplace_product_category',
-					label: '[marketplace_product_category]',
-					name: 'Show product categories',
-					desc: __(
-						'Displays product categories created by stores. Use this to help customers browse products by category.',
-						'multistorex'
-					),
-					arguments:
-						'<ul><li><b>store</b> - StoreID, slug, email, or username (optional)</li><li><b>perpage </b> - Number of categories to show (default: 12)</li><li><b>columns</b> - Number of categories per row (default: 4)</li><li><b>orderby</b> - Sort categories by parameter (default: title)</li><li><b>order</b> - Display order: ASC or DESC (default: DESC)</li><li><b>category</b> - Category slugs, comma separated (optional)</li><li><b>operator</b> - Filter operator: IN, NOT IN, AND (default: IN)</li></ul>',
-				},
-				{
-					key: 'marketplace_sale_products',
-					label: '[marketplace_sale_products]',
-					name: 'Show sale products',
-					desc: __(
-						'Displays products that stores have put on sale. Use this to highlight discounts and special offers.',
-						'multistorex'
-					),
-					arguments:
-						'<ul><li><b>store</b> - storeID, slug, email, or username (optional)</li><li><b>perpage </b> - Number of products to show (default: 12)</li><li><b>columns</b> - Number of products per row (default: 4)</li><li><b>orderby</b> - Sort products by parameter (default: title)</li><li><b>order</b> - Display order: ASC or DESC (default: ASC)</li></ul>',
-				},
-				{
-					key: 'marketplace_recent_products',
-					label: '[marketplace_recent_products]',
-					name: 'Show recent products',
-					desc: __(
-						'Displays the most recently added products by stores. Use this to showcase new arrivals.',
-						'multistorex'
-					),
-					arguments:
-						'<ul><li><b>store</b> - storeID, slug, email, or username (optional)</li><li><b>perpage </b> - Number of products to show (default: 12)</li><li><b>columns</b> - Number of products per row (default: 4)</li><li><b>orderby</b> - Sort products by parameter (default: date)</li><li><b>order</b> - Display order: ASC or DESC (default: DESC)</li></ul>',
-				},
-				{
-					key: 'marketplace_top_rated_products',
-					label: '[marketplace_top_rated_products]',
-					name: 'Show top rated products',
-					desc: __(
-						'Displays the highest rated products of a store. Use this to build trust and showcase product quality.',
-						'multistorex'
-					),
-					arguments:
-						'<ul><li><b>store</b> - storeID, slug, email, or username (optional)</li><li><b>perpage </b> - Number of products to show (default: 12)</li><li><b>columns</b> - Number of products per row (default: 4)</li><li><b>orderby</b> - Sort products by parameter (default: title)</li><li><b>order</b> - Display order: ASC or DESC (default: ASC)</li></ul>',
-				},
-				{
 					key: 'marketplace_products',
 					label: '[marketplace_products]',
 					name: 'Show store products',
@@ -166,8 +98,7 @@ export default {
 						'multistorex'
 					),
 					arguments:
-						'<ul><li><b>store</b> - storeID, slug, email, or username (optional)</li><li><b>columns</b> - Number of products per row (default: 4)</li><li><b>orderby</b> - Sort products by parameter (default: title)</li><li><b>order</b> - Display order: ASC or DESC (default: ASC)</li></ul>',
-				},
+						'<ul> <li><b>store</b> - Store ID, slug, email, or username (optional)</li> <li><b>perpage</b> - Number of products to display (default: 12)</li> <li><b>columns</b> - Number of products per row (default: 4)</li> <li><b>filter</b> - Type of products to show: all, recent, featured, sale, top_rated, best_selling (default: all)</li> <li><b>sort</b> - Predefined sorting: latest, oldest, rating, popularity, title (optional)</li> <li><b>orderby</b> - Sort products by a specific field, used when sort is not set (default: title)</li> <li><b>order</b> - Display order: ASC or DESC (default: ASC)</li> <li><b>category</b> - Product category slugs, comma separated (optional)</li> <li><b>operator</b> - Category filter operator: IN, NOT IN, AND (default: IN)</li> </ul>',},
 				{
 					key: 'store_coupons',
 					label: '[store_coupons]',
@@ -180,8 +111,8 @@ export default {
 						'<ul><li>No arguments required</li></ul>',
 				},
 				{
-					key: 'marketplace_store',
-					label: '[marketplace_store]',
+					key: 'store_dashboard',
+					label: '[store_dashboard]',
 					name: 'Store dashboard',
 					desc: __(
 						'Displays the store dashboard where stores manage products, orders, earnings, and store settings.',
