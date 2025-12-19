@@ -1178,7 +1178,7 @@ const Membership = ({ id }: { id: string }) => {
 								<div className="form-group-wrapper">
 									<div className="form-group">
 										<label htmlFor="product-name">
-											Plan pricing type
+											Membership type
 										</label>
 										<ToggleSetting
 											wrapperClass="setting-form-input"
@@ -1245,7 +1245,7 @@ const Membership = ({ id }: { id: string }) => {
 										<div className="form-group-wrapper">
 											<div className="form-group">
 												<label htmlFor="product-name">
-													Billing cycle stop
+													Stop recurring subscription after
 												</label>
 												<SelectInput
 													name="stock_status"
@@ -1260,7 +1260,7 @@ const Membership = ({ id }: { id: string }) => {
 
 											<div className="form-group">
 												<label htmlFor="product-name">
-													Billing cycle
+													Recurring cycle interval
 												</label>
 
 												<div className="multi-field">
@@ -1295,14 +1295,14 @@ const Membership = ({ id }: { id: string }) => {
 														checked={pleaseCheck}
 														onChange={(e) => setpleaseCheck(e.target.checked)}
 													/>
-													Please check this if you want to allow trial subscription.
+													Enable trial period
 												</label>
 											</div>
 											<div className="form-group">
 												{pleaseCheck && (
 													<>
 														<label htmlFor="product-name">
-															Trial Period
+															Trial period duration
 														</label>
 
 														<div className="multi-field">
@@ -1346,7 +1346,7 @@ const Membership = ({ id }: { id: string }) => {
 								<div className="form-group-wrapper">
 									<div className="form-group">
 										<label htmlFor="product-name">
-											Grace Period Duration
+											Grace period duration
 										</label>
 										<BasicInput
 											name="name"
@@ -1359,7 +1359,7 @@ const Membership = ({ id }: { id: string }) => {
 									</div>
 									<div className="form-group">
 										<label htmlFor="product-name">
-											Product Status After Grace Period
+											Product status after grace period
 										</label>
 										<SelectInput
 											name="stock_status"
@@ -1376,7 +1376,7 @@ const Membership = ({ id }: { id: string }) => {
 								<div className="form-group-wrapper">
 									<div className="form-group">
 										<label htmlFor="product-name">
-											Vendor Role After Grace Period
+											Store role when grace period ends
 										</label>
 										<SelectInput
 											name="stock_status"
@@ -1396,7 +1396,7 @@ const Membership = ({ id }: { id: string }) => {
 												checked={allowTrial}
 												onChange={(e) => setAllowTrial(e.target.checked)}
 											/>
-											Allow Adding Products During Grace Period
+											Allow adding products during grace period
 										</label>
 									</div>
 								</div>
@@ -1430,7 +1430,7 @@ const Membership = ({ id }: { id: string }) => {
 						<div className="card-content">
 							<div className="card-header">
 								<div className="left">
-									<div className="title">Membership Features</div>
+									<div className="title">Membership Perks</div>
 								</div>
 							</div>
 							<div className="card-body">
