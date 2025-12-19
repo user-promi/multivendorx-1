@@ -18,6 +18,8 @@ interface Endpoint {
 }
 interface AppLocalizer {
     nonce: string;
+    apiUrl:string;
+    restUrl:string;
     [ key: string ]: string | number | boolean;
 }
 

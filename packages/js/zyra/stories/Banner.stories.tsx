@@ -1,5 +1,7 @@
-import Banner from '../src/components/Banner';
+// Banner.stories.tsx
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import Banner from '../src/components/Banner';
 
 const meta: Meta<typeof Banner> = {
     title: 'Zyra/Components/Banner',
@@ -8,105 +10,64 @@ const meta: Meta<typeof Banner> = {
 };
 
 export default meta;
-
 type Story = StoryObj<typeof Banner>;
 
-export const TestBannerInput: Story = {
-    args: {
-        isPro: false,
-        products: [
-            {
-                title: 'Pro Feature 1',
-                description: 'Description for Pro Feature 1',
-            },
-            {
-                title: 'Pro Feature 2',
-                description: 'Description for Pro Feature 2',
-            },
-            {
-                title: 'Pro Feature 3',
-                description: 'Description for Pro Feature 3',
-            },
-        ],
-        proUrl: '#',
+// Sample products
+const sampleProducts = [
+    {
+        title: 'Product 1',
+        description: 'Description for product 1',
     },
-    render: (args) => {
-        return <Banner {...args} />;
+    {
+        title: 'Product 2',
+        description: 'Description for product 2',
     },
+    {
+        title: 'Product 3',
+        description: 'Description for product 3',
+    },
+];
+
+export const DefaultBanner: Story = {
+    render: () => (
+        <Banner
+            tag="Top Banner"
+            buttonText="Upgrade Now"
+            bgCode="#f5f5f5"
+            textCode="#333333"
+            btnCode="#ffffff"
+            btnBgCode="#ff0000"
+            products={sampleProducts}
+            proUrl="https://example.com/pro"
+        />
+    ),
 };
 
-export const TestBannerInputWithTag: Story = {
-    args: {
-        isPro: false,
-        products: [
-            {
-                title: 'Pro Feature 1',
-                description: 'Description for Pro Feature 1',
-            },
-            {
-                title: 'Pro Feature 2',
-                description: 'Description for Pro Feature 2',
-            },
-            {
-                title: 'Pro Feature 3',
-                description: 'Description for Pro Feature 3',
-            },
-        ],
-        proUrl: '#',
-        tag: 'Why Premium',
-    },
-    render: (args) => {
-        return <Banner {...args} />;
-    },
+export const BannerWithPro: Story = {
+    render: () => (
+        <Banner
+            isPro={true}
+            tag="Top Banner"
+            buttonText="Upgrade Now"
+            bgCode="#f5f5f5"
+            textCode="#333333"
+            btnCode="#ffffff"
+            btnBgCode="#ff0000"
+            products={sampleProducts}
+            proUrl="https://example.com/pro"
+        />
+    ),
 };
 
-export const TestBannerInputWithButton: Story = {
-    args: {
-        isPro: false,
-        products: [
-            {
-                title: 'Pro Feature 1',
-                description: 'Description for Pro Feature 1',
-            },
-            {
-                title: 'Pro Feature 2',
-                description: 'Description for Pro Feature 2',
-            },
-            {
-                title: 'Pro Feature 3',
-                description: 'Description for Pro Feature 3',
-            },
-        ],
-        proUrl: '#',
-        buttonText: 'View Pricing',
-    },
-    render: (args) => {
-        return <Banner {...args} />;
-    },
-};
-
-export const TestBannerInputWithButtonAndTag: Story = {
-    args: {
-        isPro: false,
-        products: [
-            {
-                title: 'Pro Feature 1',
-                description: 'Description for Pro Feature 1',
-            },
-            {
-                title: 'Pro Feature 2',
-                description: 'Description for Pro Feature 2',
-            },
-            {
-                title: 'Pro Feature 3',
-                description: 'Description for Pro Feature 3',
-            },
-        ],
-        proUrl: '#',
-        tag: 'Why Premium',
-        buttonText: 'View Pricing',
-    },
-    render: (args) => {
-        return <Banner {...args} />;
-    },
+export const BannerWithoutProducts: Story = {
+    render: () => (
+        <Banner
+            tag="Top Banner"
+            buttonText="Upgrade Now"
+            bgCode="#f5f5f5"
+            textCode="#333333"
+            btnCode="#ffffff"
+            btnBgCode="#ff0000"
+        />
+    ),
 };

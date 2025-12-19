@@ -28,7 +28,7 @@ interface RowConfig {
     fields: FieldConfig[];
 }
 
-interface DynamicRowSettingProps {
+export interface DynamicRowSettingProps {
     description?: string;
     wrapperClass?: string;
     descClass?: string;
@@ -90,7 +90,7 @@ const DynamicRowSetting: React.FC< DynamicRowSettingProps > = ( {
                         type={ field.type }
                         placeholder={ field.placeholder }
                         className="basic-input"
-                        value={ val }
+                        value={ val as string | number}
                         onChange={ ( e ) =>
                             handleChange( rowIndex, field.key, e.target.value )
                         }
