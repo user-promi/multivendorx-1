@@ -34,21 +34,6 @@ class Module {
     public function __construct() {
     }
 
-
-    /**
-     * Initialize hooks.
-     */
-    public function init_hooks() {
-        add_action( 'plugins_loaded', array( $this, 'ensure_class_autoloading' ) );
-    }
-
-    /**
-     * Ensure class autoloading is working correctly.
-     */
-    public function ensure_class_autoloading() {
-        
-    }
-
     /**
      * Get a class instance from the container.
      *
