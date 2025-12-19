@@ -190,7 +190,7 @@ class StoreUtil {
      *
      * @return array
      */
-    public static function get_store() {
+    public static function get_stores() {
         global $wpdb;
 
         $table = "{$wpdb->prefix}" . Utill::TABLES['store'];

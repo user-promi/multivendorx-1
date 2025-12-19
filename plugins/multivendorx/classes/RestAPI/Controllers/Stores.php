@@ -403,7 +403,7 @@ class Stores extends \WP_REST_Controller {
      * Get stores dropdown.
      */
     public function get_stores_dropdown() {
-        $stores = StoreUtil::get_store();
+        $stores = StoreUtil::get_stores();
 
         $formatted_stores = array();
         foreach ( $stores as $store ) {
