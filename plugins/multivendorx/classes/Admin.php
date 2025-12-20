@@ -146,7 +146,7 @@ class Admin {
 
                 $menu_name = $submenu['name'];
 
-                if ( $submenu['count'] && $submenu['count'] > 0 ) {
+                if ( ( $submenu['count'] ?? 0 ) > 0 ) {
                     $menu_name = $menu_name . " <span class='update-plugins count-" . intval( $submenu['count'] ) . "' style='margin-left:0.313rem'>
                                     <span class='plugin-count'>" . intval( $submenu['count'] ) . '</span>
                                  </span>';
