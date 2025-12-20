@@ -21,8 +21,11 @@ class Roles {
      * Roles class construct function
      */
     public function __construct() {
+        // Add custom role.
         add_action( 'init', array( $this, 'multivendorx_add_custom_role' ) );
+        // Assign custom capability to logged in user.
         add_filter( 'user_has_cap', array( $this, 'assign_cap_authenticate_user' ) );
+        // Assign specific capability.
         add_filter( 'map_meta_cap', array( $this, 'specific_capability' ), 10, 4 );
     }
 

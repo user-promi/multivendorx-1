@@ -41,10 +41,10 @@ class Admin {
         add_action( 'woocommerce_product_data_panels', array( $this, 'add_store_tab_content_in_product' ) );
         add_action( 'woocommerce_process_product_meta', array( $this, 'save_store_in_product' ) );
         add_action( 'wp_ajax_search_stores', array( $this, 'multivendorx_get_stores' ) );
-        // For Variation.
+        // For Variation Product.
         add_action( 'woocommerce_product_after_variable_attributes', array( $this, 'add_variation_settings' ), 10, 3 );
         add_action( 'woocommerce_save_product_variation', array( $this, 'save_commission_field_variations' ), 10, 2 );
-        // For Category.
+        // For Category Page.
         add_action( 'product_cat_add_form_fields', array( $this, 'add_product_cat_commission_fields' ) );
         add_action( 'product_cat_edit_form_fields', array( $this, 'edit_product_cat_commission_fields' ), 10 );
         add_action( 'created_term', array( $this, 'save_product_cat_commission_fields' ), 10, 3 );

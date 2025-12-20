@@ -21,21 +21,28 @@ class Frontend {
      * Frontend class construct function
      */
     public function __construct() {
+        // Redirect store dashboard page.
         add_filter( 'template_include', array( $this, 'store_dashboard_template' ) );
 
+        // Add sold by in shop page.
         add_action( 'woocommerce_after_shop_loop_item', array( $this, 'add_sold_by_in_shop_and_single_product_page' ), 6 );
+        // Add sold by in single product page.
         add_action( 'woocommerce_product_meta_start', array( $this, 'add_sold_by_in_shop_and_single_product_page' ), 25 );
+        // Add sold by in cart page.
         add_action( 'woocommerce_get_item_data', array( $this, 'add_sold_by_in_cart' ), 30, 2 );
+        // Add store tab in single product page.
         add_filter( 'woocommerce_product_tabs', array( $this, 'add_store_tab_in_single_product' ) );
-
+        // Modify related products section in single product page.
         add_filter( 'woocommerce_related_products', array( $this, 'show_related_products' ), 99, 3 );
 
+        // Show message in cart page for multiple stores product.
         if ( ! empty( MultiVendorX()->setting->get_setting( 'store_order_display' ) ) ) {
             add_action( 'woocommerce_before_calculate_totals', array( $this, 'cart_items_sort_by_store' ), 10 );
             add_action( 'woocommerce_before_cart', array( $this, 'message_multiple_stores_cart' ), 10 );
             add_filter( 'render_block_woocommerce/cart-line-items-block', array( $this, 'message_multiple_stores_cart_block' ), 10 );
         }
 
+        // Restrict product visibility on shop, cart, and checkout pages.
         add_action( 'woocommerce_product_query', array( $this, 'restrict_store_products_from_shop' ) );
         add_action( 'woocommerce_cart_loaded_from_session', array( $this, 'restrict_products_already_in_cart' ) );
         add_filter( 'woocommerce_add_to_cart_validation', array( $this, 'restrict_products_from_cart' ), 10, 2 );
