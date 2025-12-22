@@ -301,15 +301,6 @@
             margin: 0;
         }
 
-        i {
-            font-size: 1.125rem;
-
-            &.remove-btn {
-                color: $accent-color;
-                cursor: pointer;
-            }
-        }
-
         .date-field-wrapper {
             display: flex;
             gap: 0.5rem;
