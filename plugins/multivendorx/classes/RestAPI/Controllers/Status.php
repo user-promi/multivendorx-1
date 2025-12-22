@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * MultiVendorX REST API Status Controller.
  *
- * @class       Module class
+ * @class       Status class
  * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
@@ -39,32 +39,7 @@ class Status extends \WP_REST_Controller {
 					'methods'             => \WP_REST_Server::READABLE,
 					'callback'            => array( $this, 'get_items' ),
 					'permission_callback' => array( $this, 'get_items_permissions_check' ),
-				),
-				array(
-					'methods'             => \WP_REST_Server::CREATABLE,
-					'callback'            => array( $this, 'create_item' ),
-					'permission_callback' => array( $this, 'create_item_permissions_check' ),
-				),
-			)
-        );
-
-        register_rest_route(
-            MultiVendorX()->rest_namespace,
-            '/' . $this->rest_base . '/(?P<id>[\d]+)',
-            array(
-				array(
-					'methods'             => \WP_REST_Server::READABLE,
-					'callback'            => array( $this, 'get_item' ),
-					'permission_callback' => array( $this, 'get_items_permissions_check' ),
-					'args'                => array(
-						'id' => array( 'required' => true ),
-					),
-				),
-				array(
-					'methods'             => \WP_REST_Server::EDITABLE,
-					'callback'            => array( $this, 'update_item' ),
-					'permission_callback' => array( $this, 'update_item_permissions_check' ),
-				),
+				)
 			)
         );
     }
@@ -77,25 +52,6 @@ class Status extends \WP_REST_Controller {
     public function get_items_permissions_check( $request ) {
         return current_user_can( 'read' );
     }
-
-    /**
-     * Get a single item from the collection
-     *
-     * @param object $request Full details about the request.
-     */
-    public function create_item_permissions_check( $request ) {
-        return current_user_can( 'manage_options' );
-    }
-
-    /**
-     * Get a single item from the collection
-     *
-     * @param object $request Full details about the request.
-     */
-    public function update_item_permissions_check( $request ) {
-        return current_user_can( 'manage_options' );
-    }
-
 
     /**
      * Get all system info data.

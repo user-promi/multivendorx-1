@@ -13,9 +13,7 @@ use MultiVendorX\RestAPI\Controllers\Stores;
 use MultiVendorX\RestAPI\Controllers\Commissions;
 use MultiVendorX\RestAPI\Controllers\Status;
 use MultiVendorX\RestAPI\Controllers\Notifications;
-use MultiVendorX\RestAPI\Controllers\Payouts;
 use MultiVendorX\RestAPI\Controllers\Transactions;
-use MultiVendorX\RestAPI\Controllers\Reports;
 use MultiVendorX\RestAPI\Controllers\Tour;
 use MultiVendorX\RestAPI\Controllers\Logs;
 use MultiVendorX\RestAPI\Controllers\AI;
@@ -572,9 +570,7 @@ class Rest {
             'store'         => new Stores(),
             'commission'    => new Commissions(),
             'status'        => new Status(),
-            'payouts'       => new Payouts(),
             'transaction'   => new Transactions(),
-            'report'        => new Reports(),
             'notifications' => new Notifications(),
             'tour'          => new Tour(),
             'logs'          => new Logs(),
