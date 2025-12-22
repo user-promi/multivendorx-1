@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'development-tools',
 	priority: 3,
-	name: __('Development tools', 'multivendorx'),
+	name: __('Developer Tools', 'multivendorx'),
 	desc: __(
 		'Site errors and events are logged for easy troubleshooting.',
 		'multivendorx'
@@ -15,9 +15,9 @@ export default {
 			key: 'transients',
 			type: 'button',
 			name: __('Clear transients', 'multivendorx'),
-			label: __('MultivendorX Vendors Transients', 'multivendorx'),
+			label: __('MultivendorX Stores Transients', 'multivendorx'),
 			desc: __(
-				'This button clears all vendor dashboards transient cache',
+				'Clear all store dashboards transient cache',
 				'multivendorx'
 			),
 		},
@@ -27,7 +27,7 @@ export default {
 			name: __('Reset database', 'multivendorx'),
 			label: __('Reset visitors Stats Table', 'multivendorx'),
 			desc: __(
-				'Use this tool to clear all the table data of MultivendorX visitors stats',
+				'Clear all the table data of MultivendorX visitors stats',
 				'multivendorx'
 			),
 		},
@@ -37,7 +37,7 @@ export default {
 			name: __('Order migrate', 'multivendorx'),
 			label: __('Regenerate suborders', 'multivendorx'),
 			desc: __(
-				'With this tool, you can create missing sub orders',
+				'With this tool, you can re-create missing sub orders',
 				'multivendorx'
 			),
 		},
@@ -53,34 +53,13 @@ export default {
 			apilink: 'status',
 		},
 		{
-			key: 'separator_content',
-			type: 'section',
-			wrapperClass: 'divider-wrapper color-red',
-			hint: __('Danger zone', 'multivendorx'),
-			desc: __('', 'multivendorx'),
-		},
-		{
-			key: 'clear_notifications',
-			type: 'number',
-			wrapperClass: 'red-text',
-			label: __('Clear notifications', 'multivendorx'),
-		},
-		{
-			key: 'separator_content',
-			type: 'section',
-			hint: __('version control', 'multivendorx'),
-			desc: __('', 'multivendorx'),
-		},
-		{
-			key: 'separator_content',
-			type: 'section',
-			hint: __('Advance log', 'multivendorx'),
-			desc: __('', 'multivendorx'),
-		},
-		{
 			key: 'multivendorx_adv_log',
 			type: 'checkbox',
-			label: __('Advance log', 'moowoodle'),
+			label: __('Developer log', 'moowoodle'),
+			desc: __(
+				'View system logs related to MultiVendorX to help identify errors, warnings, and debugging information.',
+				'multivendorx'
+			),
 			options: [
 				{
 					key: 'multivendorx_adv_log',
@@ -89,6 +68,12 @@ export default {
 			],
 			look: 'toggle',
 		},
+		{
+			key: 'separator_content',
+			type: 'section',
+			hint: __('Version Control', 'multivendorx'),
+			desc: __('', 'multivendorx'),
+		},		
 		{
 			key: 'separator_content',
 			type: 'section',
@@ -103,6 +88,19 @@ export default {
 				'multivendorx'
 			),
 			label: __('Addional CSS', 'multivendorx'),
+		},
+		{
+			key: 'separator_content',
+			type: 'section',
+			wrapperClass: 'divider-wrapper color-red',
+			hint: __('Danger Zone', 'multivendorx'),
+			desc: __('', 'multivendorx'),
+		},
+		{
+			key: 'clear_notifications',
+			type: 'number',
+			wrapperClass: 'red-text',
+			label: __('Clear notifications', 'multivendorx'),
 		},
 	],
 };

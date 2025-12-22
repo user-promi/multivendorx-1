@@ -101,7 +101,7 @@ class Frontend {
     public function product_policy_tab( $tabs ) {
         global $product;
         if ( $product ) {
-            $policies = StoreUtil::get_store_product_policies( $product->get_id() );
+            $policies = Util::get_store_policies( 0, $product->get_id() );
             if ( count( $policies ) > 0 ) {
                 $tabs['policies'] = array(
                     'title'    => __( 'Policies', 'multivendorx' ),

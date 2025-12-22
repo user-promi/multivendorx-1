@@ -7,7 +7,7 @@
 
 namespace MultiVendorX\Order;
 
-use MultiVendorX\Store\StoreUtil;
+use MultiVendorX\Store\Store;
 use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
@@ -51,7 +51,7 @@ class Hooks {
      */
     public function add_metadata_for_line_item( $item, $item_key, $values, $order ) {
         if ( $order && $order->get_parent_id() === 0 ) {
-            $store = StoreUtil::get_products_store( $item['product_id'] );
+            $store = Store::get_store( $item['product_id'], 'product' );
             if ( $store ) {
                 $item->add_meta_data( Utill::ORDER_META_SETTINGS['sold_by'], $store->get( 'name' ) );
             }
@@ -145,7 +145,7 @@ class Hooks {
         foreach ( $items as $key => $value ) {
             if ( $order || ( function_exists( 'wcs_is_subscription' ) && wcs_is_subscription( $order ) ) ) {
                 $general_cap = apply_filters( 'mvx_sold_by_text', __( 'Sold By', 'multivendorx' ) );
-                $store       = StoreUtil::get_products_store( $value['product_id'] );
+                $store       = Store::get_store( $value['product_id'], 'product' );
                 if ( $store ) {
                     if ( ! wc_get_order_item_meta( $key, Utill::POST_META_SETTINGS['store_id'] ) ) {
                         wc_add_order_item_meta( $key, Utill::POST_META_SETTINGS['store_id'], $store->get_id() );

@@ -27,12 +27,15 @@ class Product {
      * Constructor: Add hooks.
      */
     public function __construct() {
+        // Add and show store column in woocommerce product table.
         add_filter( 'manage_edit-product_columns', array( $this, 'add_store_column_to_product_list' ), 10 );
         add_action( 'manage_product_posts_custom_column', array( $this, 'display_store_column_content' ), 10, 2 );
 
+        // Add store filter in products table.
         add_action( 'restrict_manage_posts', array( $this, 'restrict_manage_posts' ) );
         add_action( 'parse_query', array( $this, 'filter_products_by_store_query' ) );
 
+        // Add store option in bulk action section.
         add_action( 'woocommerce_product_bulk_edit_end', array( $this, 'add_product_store_bulk_edit' ) );
         add_action( 'woocommerce_product_bulk_edit_save', array( $this, 'save_product_store_bulk_edit' ) );
     }
@@ -124,7 +127,7 @@ class Product {
         echo '<option value="">Filter by Store</option>';
 
         foreach ( $store_ids as $store_id ) {
-            $store = Store::get_store_by_id( $store_id );
+            $store = Store::get_store( $store_id );
             printf(
                 '<option value="%s" %s>%s</option>',
                 esc_attr( $store_id ),

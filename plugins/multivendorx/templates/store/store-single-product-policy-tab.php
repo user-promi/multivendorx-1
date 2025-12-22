@@ -9,10 +9,10 @@
  * @author      MultiVendorX
  */
 
-use MultiVendorX\Store\StoreUtil;
+use MultiVendorX\StorePolicy\Util;
 
 global $product;
-$policies = StoreUtil::get_store_product_policies( $product->get_id() );
+$policies = Util::get_store_policies( 0, $product->get_id() );
 ?>
 <div class="mvx-product-policies">
     <?php if ( ! empty( $policies['store_policy'] ) ) { ?>

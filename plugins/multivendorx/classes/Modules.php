@@ -8,6 +8,7 @@
 namespace MultiVendorX;
 
 use MultiVendorX\Utill;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
