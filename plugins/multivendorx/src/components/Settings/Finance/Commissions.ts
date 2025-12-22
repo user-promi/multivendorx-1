@@ -239,7 +239,7 @@ export default {
 			key: 'separator_content',
 			type: 'section',
 			hint: __(
-				'How Shipping And Tax Be Calculated With Store Earnings',
+				'How shipping and tax be calculated with store earnings',
 				'multivendorx'
 			),
 			desc: __(
@@ -312,7 +312,7 @@ export default {
 		{
 			key: 'separator_content',
 			type: 'section',
-			hint: __('Fees Deducted From Store Earnings', 'multivendorx'),
+			hint: __('Fees deducted from store earnings', 'multivendorx'),
 			desc: __(
 				'Determine which fees to deduct from the store earning.',
 				'multivendorx'
