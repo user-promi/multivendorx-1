@@ -22,7 +22,9 @@ class Cron {
      * Constructor
      */
     public function __construct() {
+        // Add custom cron schedules.
         add_filter( 'cron_schedules', array( $this, 'custom_cron_schedules' ) );
+        // Register cron settings.
         add_action( 'multivendorx_after_save_settings', array( $this, 'register_cron_based_on_settings' ) );
 
         if ( ! wp_next_scheduled( 'multivendorx_transaction_status_update' ) ) {

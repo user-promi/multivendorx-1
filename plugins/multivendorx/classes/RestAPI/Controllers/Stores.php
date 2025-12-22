@@ -132,7 +132,7 @@ class Stores extends \WP_REST_Controller {
         try {
             // Store registration (rejected stores).
             if ( $request->get_param( 'store_registration' ) ) {
-                $rejected_stores = StoreUtil::get_store_by_primary_owner( 'rejected' );
+                $rejected_stores = Store::get_store( 'rejected', 'primary_owner' );
 
                 $all_stores = array();
                 $response   = array();
@@ -285,7 +285,7 @@ class Stores extends \WP_REST_Controller {
 
             foreach ( $stores as $store ) {
                 $store_id   = (int) $store['ID'];
-                $store_meta = Store::get_store_by_id( $store_id );
+                $store_meta = Store::get_store( $store_id );
 
                 $owner_id = StoreUtil::get_primary_owner( $store_id );
                 $owner    = get_userdata( $owner_id );
@@ -353,6 +353,9 @@ class Stores extends \WP_REST_Controller {
         $limit  = max( (int) $request->get_param( 'row' ), 10 );
         $page   = max( (int) $request->get_param( 'page' ), 1 );
         $offset = ( $page - 1 ) * $limit;
+        $args = array(
+            'status' => 'pending',
+        );
 
         $count = $request->get_param( 'count' );
         if ( $count ) {
@@ -364,10 +367,6 @@ class Stores extends \WP_REST_Controller {
 
         $start_date = $request->get_param( 'start_date' );
         $end_date   = $request->get_param( 'end_date' );
-
-        $args = array(
-            'status' => 'pending',
-        );
 
         if ( $start_date && $end_date ) {
             $args['start_date'] = $start_date;
@@ -1155,7 +1154,7 @@ class Stores extends \WP_REST_Controller {
         $stores_with_withdraw = array();
 
         foreach ( $all_stores as $store ) {
-            $store_meta = Store::get_store_by_id( (int) $store['ID'] );
+            $store_meta = Store::get_store( (int) $store['ID'] );
 
             // Check if request_withdrawal_amount exists and is non-zero.
             if ( ! empty( $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['request_withdrawal_amount'] ] ) ) {
@@ -1195,7 +1194,7 @@ class Stores extends \WP_REST_Controller {
         $stores_deactivate_requests = array();
 
         foreach ( $all_stores as $store ) {
-            $store_meta = Store::get_store_by_id( (int) $store['ID'] );
+            $store_meta = Store::get_store( (int) $store['ID'] );
 
             if ( ! empty( $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['deactivation_reason'] ] ) ) {
                 $stores_deactivate_requests[] = array(

@@ -4,7 +4,7 @@ export default {
 	id: 'general',
 	priority: 1,
 	name: __('Onboarding', 'multivendorx'),
-	tabTitle: 'Approval process for new stores',
+	tabTitle: 'Approval Process For New Stores',
 	desc: __(
 		'Choose how new stores enter your marketplace, review them manually or allow instant access.',
 		'multivendorx'
@@ -36,7 +36,7 @@ export default {
 		{
 			key: 'section',
 			type: 'section',
-			hint: __('Setup wizard for stores', 'multivendorx'),
+			hint: __('Setup Wizard For Stores', 'multivendorx'),
 		},
 		{
 			key: 'disable_setup_wizard',
@@ -151,20 +151,20 @@ export default {
 		{
 			key: 'section',
 			type: 'section',
-			hint: __('Product Listing Model', 'multivendorx'),
+			hint: __('How Stores Sell Products', 'multivendorx'),
 		},
 		{
 			key: 'store_selling_mode',
 			type: 'setting-toggle',
 			label: __('Product listing model', 'multivendorx'),
 			desc: __(
-				'Decide how stores are allowed to sell products in your marketplace:<li><strong>Default</strong> - Stores can sell only their own products, following standard marketplace rules.</li></ul><ul><li><strong>Shared product listing</strong> - Stores can copy existing products and sell them alongside new products they create.</li><li><strong>Franchise</strong> - Franchise stores can sell only their own products and products created by the admin.</li>',
+				'Decide how stores are allowed to sell products in your marketplace:<li><strong>Independent</strong> - Stores can sell only their own products, following standard marketplace rules.</li></ul><ul><li><strong>Co-listed products</strong> - Stores can copy existing products and sell them alongside new products they create.</li><li><strong>Franchise</strong> - Franchise stores can sell only their own products and products created by the admin.</li>',
 				'multivendorx'
 			),
 			options: [
 				{
 					key: 'default',
-					label: __('Independednt', 'multivendorx'),
+					label: __('Independent', 'multivendorx'),
 					value: 'default',
 					desc: __(
 						'Stores can sell only their own products unless other modes are enabled.',
@@ -173,7 +173,7 @@ export default {
 				},
 				{
 					key: 'single_product_multiple_vendor',
-					label: __('Co-listing', 'multivendorx'),
+					label: __('Co-listed products', 'multivendorx'),
 					value: 'single_product_multiple_vendor',
 					desc: __(
 						'Stores can copy existing products and sell them alongside new products they create.',
@@ -205,7 +205,7 @@ export default {
 			key: 'singleproductmultistore_show_order',
 			type: 'setting-toggle',
 			label: __(
-				'Shared product listing  product priority',
+				'Co-listed product display priority',
 				'multivendorx'
 			),
 			dependent: {
@@ -214,7 +214,7 @@ export default {
 				value: 'single_product_multiple_vendor',
 			},
 			desc: __(
-				'Choose which version of shared product will be shown as the main listing on the shop page (e.g., top-rated store, min / max priced product).',
+				'Choose which version of co-listed products will be shown as the main listing on the shop page (e.g., top-rated store, min / max priced product).',
 				'multivendorx'
 			),
 			options: [
@@ -280,7 +280,7 @@ export default {
 		{
 			key: 'store_assignment_method',
 			type: 'setting-toggle',
-			label: __('Store assignment method', 'multivendorx'),
+			label: __('Franchise store assignment method', 'multivendorx'),
 			desc: __(
 				'Define how customer orders are assigned to franchise stores after checkout:<ul><li><strong>Nearest store</strong> - Orders are automatically assigned to the closest eligible franchise store based on the customer’s delivery address and the store’s configured "location restrictions".</li><li><strong>Manual assignment</strong> - Orders are created without a store assignment and must be manually assigned by the admin from the backend.</li></ul>',
 				'multivendorx'

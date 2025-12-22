@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'setup-widget',
 	priority: 4,
-	name: __('Setup widget', 'multivendorx'),
+	name: __('Setup Widget', 'multivendorx'),
 	desc: __(
 		'Data from your previous marketplace can be seamlessly transferred using this migration tool.',
 		'multivendorx'

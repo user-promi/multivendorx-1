@@ -68,7 +68,7 @@ class Frontend {
         if ( $multivendorx_suborders ) {
             echo '<ul class="mvx-order-vendor" style="margin:0;list-style:none;">';
             foreach ( $multivendorx_suborders as $suborder ) {
-                $store     = Store::get_store_by_id( $suborder->get_meta( Utill::POST_META_SETTINGS['store_id'], true ) );
+                $store     = Store::get_store( $suborder->get_meta( Utill::POST_META_SETTINGS['store_id'], true ) );
                 $order_uri = esc_url( $suborder->get_view_order_url() );
 
                 printf(
