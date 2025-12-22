@@ -133,7 +133,7 @@ class AI extends \WP_REST_Controller {
 
             MultiVendorX()->util->log( 'AI Raw Response: ' . $json_response );
 
-            $suggestions = json_decode( $json_response, true );
+            $suggestions = json_decode( $json_response, true );         
 
             if ( ! is_array( $suggestions ) ) {
                 return new \WP_REST_Response(
@@ -195,17 +195,17 @@ class AI extends \WP_REST_Controller {
             switch ( $provider ) {
                 case 'gemini_api':
                     $response = $this->call_gemini_image_generation_api(
-                        MultiVendorX()->setting->get_setting( 'gemini_api_image_enhancement_key' ),
+                        MultiVendorX()->setting->get_setting( 'gemini_api_key' ),
                         $user_prompt,
                         $image_url,
                         $image_data
                     );
-                    break;
+                    break;                
 
                 case 'openrouter_api':
                     $response = $this->call_openrouter_image_generation_api(
                         MultiVendorX()->setting->get_setting( 'openrouter_api_image_enhancement_key' ),
-                        MultiVendorX()->setting->get_setting( 'openrouter_api_image_model' ),
+                        MultiVendorX()->setting->get_setting( 'openrouter_api_key' ),
                         $user_prompt,
                         $image_url,
                         $image_data
@@ -348,16 +348,19 @@ class AI extends \WP_REST_Controller {
         }
 
         $body = array(
-            'model'       => $model,
-            'messages'    => array(
+            'model' => $model,
+            'messages' => array(
                 array(
-					'role'    => 'user',
-					'content' => $prompt,
-				),
+                    'role' => 'system',
+                    'content' => 'You must respond ONLY with valid JSON. No explanations.',
+                ),
+                array(
+                    'role' => 'user',
+                    'content' => $prompt,
+                ),
             ),
-            'temperature' => 0.7,
-            'max_tokens'  => 1024,
-        );
+            'response_format' => array( 'type' => 'json_object' ),
+        );        
 
         $response = wp_remote_post(
             $url,
@@ -383,7 +386,12 @@ class AI extends \WP_REST_Controller {
             return array( 'error' => $data['error']['message'] );
         }
 
-        return $data['choices'][0]['message']['content'] ?? array( 'error' => 'No content from OpenRouter' );
+        if ( empty( $data['choices'][0]['message']['content'] ) ) {
+            throw new \Exception( 'Empty content from OpenRouter' );
+        }
+        
+        return (string) $data['choices'][0]['message']['content'];
+        
     }
 
     /**
