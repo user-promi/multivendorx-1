@@ -43,12 +43,7 @@ class Commissions extends \WP_REST_Controller {
 					'methods'             => \WP_REST_Server::READABLE,
 					'callback'            => array( $this, 'get_items' ),
 					'permission_callback' => array( $this, 'get_items_permissions_check' ),
-				),
-				array(
-					'methods'             => \WP_REST_Server::CREATABLE,
-					'callback'            => array( $this, 'create_item' ),
-					'permission_callback' => array( $this, 'create_item_permissions_check' ),
-				),
+				)
 			)
         );
 
@@ -81,16 +76,6 @@ class Commissions extends \WP_REST_Controller {
      */
     public function get_items_permissions_check( $request ) {
         return current_user_can( 'read' ) || current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
-    }
-
-    /**
-     * POST permission check.
-     *
-     * @param object $request Request data.
-     * @return bool
-     */
-    public function create_item_permissions_check( $request ) {
-        return current_user_can( 'manage_options' ) || current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
     /**
@@ -147,7 +132,6 @@ class Commissions extends \WP_REST_Controller {
 
             $limit      = max( intval( $request->get_param( 'row' ) ), 10 );
             $page       = max( intval( $request->get_param( 'page' ) ), 1 );
-            $offset     = ( $page - 1 ) * $limit;
             $count      = $request->get_param( 'count' );
             $status     = $request->get_param( 'status' );
             $start_date = gmdate( 'Y-m-d 00:00:00', strtotime( sanitize_text_field( $request->get_param( 'startDate' ) ) ) );
@@ -185,25 +169,9 @@ class Commissions extends \WP_REST_Controller {
 
             // Handle count only.
             if ( $count ) {
-                global $wpdb;
-
-                $table_name = "{$wpdb->prefix}" . Utill::TABLES['commission'];
-
-                if ( ! empty( $store_id ) ) {
-                    // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-                    $sql = $wpdb->prepare(
-                        "SELECT COUNT(*) FROM `{$table_name}` WHERE store_id = %d",
-                        $store_id
-                    );
-                } else {
-                    // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-                    $sql = "SELECT COUNT(*) FROM `{$table_name}`";
-                }
-
-                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-                $total_count = (int) $wpdb->get_var( $sql );
-
-                return rest_ensure_response( $total_count );
+                return rest_ensure_response(
+                    CommissionUtil::get_commissions( $filter, true, true )
+                );
             }
 
             // Fetch commissions.
@@ -247,21 +215,38 @@ class Commissions extends \WP_REST_Controller {
 
             // Base filter for counts.
             $base_filter = array();
+
             if ( ! empty( $store_id ) && ! current_user_can( 'manage_options' ) ) {
-                $base_filter['store_id'] = intval( $store_id );
+                $base_filter['store_id'] = (int) $store_id;
             }
 
-            $response = array(
-                'commissions'        => $formatted_commissions,
-                'all'                => CommissionUtil::get_commissions( $base_filter, true, true ),
-                'paid'               => CommissionUtil::get_commissions( array_merge( $base_filter, array( 'status' => 'paid' ) ), true, true ),
-                'unpaid'             => CommissionUtil::get_commissions( array_merge( $base_filter, array( 'status' => 'unpaid' ) ), true, true ),
-                'refunded'           => CommissionUtil::get_commissions( array_merge( $base_filter, array( 'status' => 'refunded' ) ), true, true ),
-                'partially_refunded' => CommissionUtil::get_commissions( array_merge( $base_filter, array( 'status' => 'partially_refunded' ) ), true, true ),
-                'cancelled'          => CommissionUtil::get_commissions( array_merge( $base_filter, array( 'status' => 'cancelled' ) ), true, true ),
+            // Commission statuses to count.
+            $statuses = array(
+                'all'                => null,
+                'paid'               => 'paid',
+                'unpaid'             => 'unpaid',
+                'refunded'           => 'refunded',
+                'partially_refunded' => 'partially_refunded',
+                'cancelled'          => 'cancelled',
             );
 
+            // Build response.
+            $response = array(
+                'commissions' => $formatted_commissions,
+            );
+
+            foreach ( $statuses as $key => $status ) {
+                $filter = $base_filter;
+
+                if ( $status ) {
+                    $filter['status'] = $status;
+                }
+
+                $response[ $key ] = CommissionUtil::get_commissions( $filter, true, true );
+            }
+
             return rest_ensure_response( $response );
+
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log( $e );
 
@@ -276,19 +261,19 @@ class Commissions extends \WP_REST_Controller {
      */
     private function download_csv( $request ) {
 
-        $store_id   = $request->get_param( 'store_id' );
+        $store_id   = (int) $request->get_param( 'store_id' );
         $status     = $request->get_param( 'status' );
         $ids        = $request->get_param( 'ids' );
-        $start_date = sanitize_text_field( $request->get_param( 'startDate' ) );
-        $end_date   = sanitize_text_field( $request->get_param( 'endDate' ) );
-        $page       = $request->get_param( 'page' );
-        $per_page   = $request->get_param( 'row' );
+        $start_date = $request->get_param( 'startDate' );
+        $end_date   = $request->get_param( 'endDate' );
+        $page       = (int) $request->get_param( 'page' );
+        $per_page   = (int) $request->get_param( 'row' );
 
-        // Prepare filter (no pagination by default).
+        // Build filter
         $filter = array();
 
-        if ( ! empty( $store_id ) ) {
-            $filter['store_id'] = intval( $store_id );
+        if ( $store_id ) {
+            $filter['store_id'] = $store_id;
         }
 
         if ( ! empty( $status ) ) {
@@ -305,24 +290,25 @@ class Commissions extends \WP_REST_Controller {
             );
         }
 
-        // Specific IDs (bulk selected rows).
+        // Bulk selection OR pagination
         if ( ! empty( $ids ) ) {
             $filter['id__in'] = array_map( 'intval', explode( ',', $ids ) );
-
-			// Page-based export.
-        } elseif ( ! empty( $page ) && ! empty( $per_page ) ) {
-            $filter['perpage'] = intval( $per_page );
-            $filter['page']    = intval( $page );
+        } elseif ( $page && $per_page ) {
+            $filter['page']    = $page;
+            $filter['perpage'] = $per_page;
         }
 
-        // Fetch commissions.
-        $commissions = \MultiVendorX\Commission\CommissionUtil::get_commissions( $filter, false );
+        $commissions = CommissionUtil::get_commissions( $filter, false );
 
         if ( empty( $commissions ) ) {
-            return new \WP_Error( 'no_data', __( 'No commission data found.', 'multivendorx' ), array( 'status' => 404 ) );
+            return new \WP_Error(
+                'no_data',
+                __( 'No commission data found.', 'multivendorx' ),
+                array( 'status' => 404 )
+            );
         }
 
-        // CSV header row.
+        // CSV setup
         $headers = array(
             'ID',
             'Order ID',
@@ -340,12 +326,12 @@ class Commissions extends \WP_REST_Controller {
             'Currency',
         );
 
-        // Open CSV output.
-        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
-        $csv_output = fopen( 'php://output', 'w' );
         ob_start();
 
-        // BOM for UTF-8 (Excel support).
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
+        $csv_output = fopen( 'php://output', 'w' );
+
+        // UTF-8 BOM for Excel
         // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite
         fwrite( $csv_output, "\xEF\xBB\xBF" );
 
@@ -353,8 +339,12 @@ class Commissions extends \WP_REST_Controller {
         fputcsv( $csv_output, $headers, ',', '"', '\\' );
 
         foreach ( $commissions as $commission ) {
-            $store      = new \MultiVendorX\Store\Store( $commission->store_id );
-            $store_name = $store ? $store->get( Utill::STORE_SETTINGS_KEYS['name'] ) : '';
+            $store_name = '';
+
+            if ( ! empty( $commission->store_id ) ) {
+                $store      = new Store( (int) $commission->store_id );
+                $store_name = (string) $store->get( Utill::STORE_SETTINGS_KEYS['name'] );
+            }
 
             fputcsv(
                 $csv_output,
@@ -373,33 +363,29 @@ class Commissions extends \WP_REST_Controller {
                     $commission->created_at,
                     $commission->commission_refunded,
                     $commission->currency,
-                ),
-                ',',
-                '"',
-                '\\'
+                )
             );
         }
 
-        // Close handle.
         // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
         fclose( $csv_output );
 
         $csv = ob_get_clean();
 
-        // Filename generator.
+        // Filename
         $filename = 'commissions_';
 
         if ( ! empty( $ids ) ) {
             $filename .= 'selected_';
-        } elseif ( ! empty( $page ) ) {
-            $filename .= 'page_' . intval( $page ) . '_';
+        } elseif ( $page ) {
+            $filename .= 'page_' . $page . '_';
         } else {
             $filename .= 'all_';
         }
 
         $filename .= gmdate( 'Y-m-d' ) . '.csv';
 
-        // Output headers.
+        // Output
         header( 'Content-Type: text/csv; charset=UTF-8' );
         header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
         header( 'Pragma: no-cache' );
@@ -432,7 +418,7 @@ class Commissions extends \WP_REST_Controller {
             $id = absint( $request->get_param( 'id' ) );
 
             // Fetch raw commission data (stdClass).
-            $commission = \MultiVendorX\Commission\CommissionUtil::get_commission_db( $id );
+            $commission = CommissionUtil::get_commission_db( $id );
             if ( ! $commission || empty( $commission->ID ) ) {
                 return new \WP_Error(
                     'not_found',
@@ -482,25 +468,17 @@ class Commissions extends \WP_REST_Controller {
                 'order_id'               => $order_id,
                 'store_id'               => absint( $commission->store_id ),
                 'status'                 => $commission->status,
-
-                // Corrected variable mappings.
                 'amount'                 => wc_format_decimal( $commission->store_earning, 2 ),
                 'shipping'               => wc_format_decimal( $commission->store_shipping, 2 ),
                 'tax'                    => wc_format_decimal( $commission->store_tax, 2 ),
                 'shipping_tax_amount'    => wc_format_decimal( $commission->store_shipping_tax, 2 ),
-
-                // Total payable to vendor (your earlier 'commission_total' does not exist).
                 'total'                  => wc_format_decimal( $commission->store_payable, 2 ),
-
-                // Refund stored as store_refunded.
                 'commission_refunded'    => wc_format_decimal( $commission->store_refunded ?? 0, 2 ),
-
                 'marketplace_commission' => wc_format_decimal( $commission->marketplace_commission, 2 ),
                 'facilitator_fee'        => wc_format_decimal( $commission->facilitator_fee, 2 ),
                 'gateway_fee'            => wc_format_decimal( $commission->gateway_fee, 2 ),
                 'platform_fee'           => wc_format_decimal( $commission->platform_fee, 2 ),
                 'discount_applied'       => wc_format_decimal( $commission->discount_applied, 2 ),
-
                 'note'                   => $commission->commission_note,
                 'created'                => $commission->created_at,
                 'items'                  => $items,

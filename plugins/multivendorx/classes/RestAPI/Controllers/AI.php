@@ -318,10 +318,6 @@ class AI extends \WP_REST_Controller {
 
         $data = json_decode( wp_remote_retrieve_body( $response ), true );
 
-        if ( ! empty( $data['error'] ) ) {
-            return array( 'error' => $data['error']['message'] );
-        }
-
         $content = $data['output'][0]['content'][0]['text'] ?? '';
 
         $clean = trim( str_replace( array( '```json', '```' ), '', $content ) );
@@ -378,10 +374,6 @@ class AI extends \WP_REST_Controller {
         }
 
         $data = json_decode( wp_remote_retrieve_body( $response ), true );
-
-        if ( ! empty( $data['error'] ) ) {
-            return array( 'error' => $data['error']['message'] );
-        }
 
         return $data['choices'][0]['message']['content'] ?? array( 'error' => 'No content from OpenRouter' );
     }
