@@ -34,7 +34,6 @@ const SelectedOptionDisplay: React.FC<SelectedOptionDisplayProps> = ({
     const renderableSelectedValue = popupOpend
         ? selectedValues
         : selectedValues.slice(0, 1);
-
     return (
         <div className="selected-container">
             <div className="selected-items-container">
@@ -357,7 +356,6 @@ interface CapabilityGroup {
     label: string;
     desc: string;
     capability: Record<string, string>;
-    capabilityDesc?: Record<string, string>;
 }
 
 type Rows = Record<string, CapabilityGroup>;
@@ -374,7 +372,6 @@ interface MultiCheckboxTableProps {
     moduleChange: (module: string) => void;
     proChanged?: () => void;
     khali_dabba: boolean;
-    enable?: boolean;
 }
 
 const MultiCheckboxTable: React.FC<MultiCheckboxTableProps> = ({
@@ -388,30 +385,17 @@ const MultiCheckboxTable: React.FC<MultiCheckboxTableProps> = ({
     moduleChange,
     proChanged,
     khali_dabba,
-    enable,
 }) => {
-    const [isEnabled, setIsEnabled] = useState<boolean>(!!enable);
-
-    // const [openGroup, setOpenGroup] = useState<string | null>(() => {
-    //     if (
-    //         !Array.isArray(rows) &&
-    //         rows &&
-    //         Object.keys(rows).length > 0
-    //     ) {
-    //         return Object.keys(rows)[0]; // open the first group by default
-    //     }
-    //     return null; // no group open if rows is an array
-    // });
-    const [openGroups, setOpenGroups] = useState<string[]>([]);
-    useEffect(() => {
-        if (isEnabled && !Array.isArray(rows)) {
-            setOpenGroups(Object.keys(rows));
+    const [openGroup, setOpenGroup] = useState<string | null>(() => {
+        if (
+            !Array.isArray(rows) &&
+            rows &&
+            Object.keys(rows).length > 0
+        ) {
+            return Object.keys(rows)[0]; // open the first group by default
         }
-
-        if (!isEnabled) {
-            setOpenGroups([]);
-        }
-    }, [isEnabled, rows]);
+        return null; // no group open if rows is an array
+    });
 
     return (
         <>
@@ -460,6 +444,7 @@ const MultiCheckboxTable: React.FC<MultiCheckboxTableProps> = ({
 
                                     return (
                                         <td
+                                            id="grid-table-cell"
                                             className="grid-table-cell-class"
                                             key={`${column.key}_${row.key}`}
                                         >
@@ -552,164 +537,143 @@ const MultiCheckboxTable: React.FC<MultiCheckboxTableProps> = ({
                         : Object.entries(rows as Rows).map(
 
                             ([groupKey, group]) => {
-                                // const isOpen = openGroup === groupKey;
-                                const isOpen = openGroups.includes(groupKey);
+                                const isOpen = openGroup === groupKey;
+                                console.log(rows);
                                 return (
                                     <React.Fragment key={groupKey}>
                                         <div
                                             className="toggle-header"
-                                            // onClick={() =>
-                                            //     setOpenGroup(
-                                            //         isOpen ? null : groupKey
-                                            //     )
-                                            // }
-                                            onClick={() => {
-                                                // if (!isEnabled) return;
-                                                setOpenGroups((prev) =>
-                                                    prev.includes(groupKey)
-                                                        ? prev.filter((g) => g !== groupKey)
-                                                        : [...prev, groupKey]
-                                                );
-                                            }}
-
+                                            onClick={() =>
+                                                setOpenGroup(
+                                                    isOpen ? null : groupKey
+                                                )
+                                            }
                                         >
                                             <h1>
                                                 {group.label}
-                                            </h1>
-
-                                            <div className="right">
-                                                {enable ? (
-                                                    <div
-                                                        className="admin-btn btn-purple-bg"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            setIsEnabled((prev) => !prev);
-                                                        }}
-                                                    >
-                                                        <i
-                                                            className={`adminlib-${isEnabled ? 'eye-blocked' : 'eye'
-                                                                }`}
-                                                        ></i>
-                                                        {isEnabled ? 'Disable' : 'Enable'}
-                                                    </div>
-                                                ) : (
-                                                    <i
-                                                        className={`adminlib-${isOpen
+                                                <i
+                                                    className={`adminlib-${isOpen
                                                             ? 'keyboard-arrow-down'
                                                             : 'pagination-right-arrow'
-                                                            }`}
-                                                    ></i>
-                                                )}
-                                            </div>
+                                                        }`}
+                                                ></i>
+                                            </h1>
                                         </div>
 
-                                        {isOpen && (
-                                            <div
-                                                className={`group-children ${isEnabled ? 'enabled' : 'disabled'
-                                                    }`}
-                                            >
-                                                {isEnabled &&
-                                                    Object.entries(group.capability).map(
-                                                        ([capKey, capLabel]) => (
-                                                            <tr key={capKey}>
-                                                                <td>{capLabel}</td>
-
-                                                                {columns.map((column) => {
-                                                                    const hasExists =
-                                                                        storeTabSetting &&
-                                                                        Object.values(storeTabSetting).some(
-                                                                            (arr) =>
-                                                                                arr?.includes(capKey)
-                                                                        );
-
-                                                                    return (
-                                                                        <td
-                                                                            className="grid-table-cell-class"
-                                                                            key={`${column.key}_${capKey}`}
-                                                                        >
-                                                                            {column.type === 'description' && (
-                                                                                <span className="cap-desc-text">
-                                                                                    {group.capabilityDesc?.[capKey] ??
-                                                                                        '—'}
-                                                                                </span>
-                                                                            )}
-
-                                                                            {column.type !== 'description' && (
-                                                                                <input
-                                                                                    type="checkbox"
-                                                                                    checked={
-                                                                                        Array.isArray(
-                                                                                            setting[column.key]
-                                                                                        ) &&
-                                                                                        (
-                                                                                            setting[
-                                                                                            column.key
-                                                                                            ] as string[]
-                                                                                        ).includes(capKey)
-                                                                                    }
-                                                                                    disabled={
-                                                                                        storeTabSetting
-                                                                                            ? !hasExists
-                                                                                            : false
-                                                                                    }
-                                                                                    onChange={(e) => {
-                                                                                        if (
-                                                                                            column.proSetting &&
-                                                                                            !khali_dabba
-                                                                                        ) {
-                                                                                            proChanged?.();
-                                                                                            return;
-                                                                                        }
-
-                                                                                        if (
-                                                                                            column.moduleEnabled &&
-                                                                                            !modules.includes(
-                                                                                                column.moduleEnabled
-                                                                                            )
-                                                                                        ) {
-                                                                                            moduleChange(
-                                                                                                column.moduleEnabled
-                                                                                            );
-                                                                                            return;
-                                                                                        }
-
-                                                                                        const selectedKeys =
-                                                                                            Array.isArray(
-                                                                                                setting[column.key]
-                                                                                            )
-                                                                                                ? (setting[
-                                                                                                    column.key
-                                                                                                ] as string[])
-                                                                                                : [];
-
-                                                                                        const updatedSelection =
-                                                                                            e.target.checked
-                                                                                                ? [
-                                                                                                    ...selectedKeys,
-                                                                                                    capKey,
-                                                                                                ]
-                                                                                                : selectedKeys.filter(
-                                                                                                    (keyVal) =>
-                                                                                                        keyVal !==
-                                                                                                        capKey
-                                                                                                );
-
-                                                                                        onChange(
-                                                                                            column.key,
-                                                                                            updatedSelection
-                                                                                        );
-                                                                                    }}
-                                                                                />
-                                                                            )}
-                                                                        </td>
+                                        {isOpen &&
+                                            Object.entries(
+                                                group.capability
+                                            ).map(
+                                                ([capKey, capLabel]) => (
+                                                    <tr key={capKey}>
+                                                        <td>{capLabel}</td>
+                                                        {columns.map(
+                                                            (column) => {
+                                                                const hasExists =
+                                                                    storeTabSetting &&
+                                                                    Object.values(
+                                                                        storeTabSetting
+                                                                    ).some(
+                                                                        (
+                                                                            arr
+                                                                        ) =>
+                                                                            arr?.includes(
+                                                                                capKey
+                                                                            )
                                                                     );
-                                                                })}
-                                                            </tr>
-                                                        )
-                                                    )}
-                                            </div>
-                                        )}
 
+                                                                return (
+                                                                    <td
+                                                                        id="grid-table-cell"
+                                                                        className="grid-table-cell-class"
+                                                                        key={`${column.key}_${capKey}`}
+                                                                    >
+                                                                        <input
+                                                                            placeholder="select"
+                                                                            type="checkbox"
+                                                                            checked={
+                                                                                Array.isArray(
+                                                                                    setting[
+                                                                                    column
+                                                                                        .key
+                                                                                    ]
+                                                                                ) &&
+                                                                                (
+                                                                                    setting[
+                                                                                    column
+                                                                                        .key
+                                                                                    ] as string[]
+                                                                                ).includes(
+                                                                                    capKey
+                                                                                )
+                                                                            }
+                                                                            disabled={
+                                                                                !hasExists
+                                                                            }
+                                                                            onChange={(
+                                                                                e
+                                                                            ) => {
+                                                                                if (
+                                                                                    column.proSetting &&
+                                                                                    !khali_dabba
+                                                                                ) {
+                                                                                    proChanged?.();
+                                                                                    return;
+                                                                                }
+                                                                                if (
+                                                                                    column.moduleEnabled &&
+                                                                                    !modules.includes(
+                                                                                        column.moduleEnabled
+                                                                                    )
+                                                                                ) {
+                                                                                    moduleChange(
+                                                                                        column.moduleEnabled
+                                                                                    );
+                                                                                    return;
+                                                                                }
+
+                                                                                const selectedKeys =
+                                                                                    Array.isArray(
+                                                                                        setting[
+                                                                                        column
+                                                                                            .key
+                                                                                        ]
+                                                                                    )
+                                                                                        ? (setting[
+                                                                                            column
+                                                                                                .key
+                                                                                        ] as string[])
+                                                                                        : [];
+
+                                                                                const updatedSelection =
+                                                                                    e
+                                                                                        .target
+                                                                                        .checked
+                                                                                        ? [
+                                                                                            ...selectedKeys,
+                                                                                            capKey,
+                                                                                        ]
+                                                                                        : selectedKeys.filter(
+                                                                                            (
+                                                                                                keyVal: string
+                                                                                            ) =>
+                                                                                                keyVal !==
+                                                                                                capKey
+                                                                                        );
+
+                                                                                onChange(
+                                                                                    column.key,
+                                                                                    updatedSelection as string[]
+                                                                                );
+                                                                            }}
+                                                                        />
+                                                                    </td>
+                                                                );
+                                                            }
+                                                        )}
+                                                    </tr>
+                                                )
+                                            )}
                                     </React.Fragment>
                                 );
                             }
