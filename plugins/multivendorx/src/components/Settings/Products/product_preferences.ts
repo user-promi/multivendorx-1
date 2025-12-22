@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'product-preferencess',
 	priority: 2,
-	name: __('Product Preferences', 'multivendorx'),
+	name: __('Product preferences', 'multivendorx'),
 	desc: __(
 		'Decide which product types, fields, and features stores can access when creating or managing products in their store.',
 		'multivendorx'
@@ -130,12 +130,12 @@ export default {
 				'Control how stores select categories while adding products.',
 				'multivendorx'
 			),
-			hint: __('Product Category Selection', 'multivendorx'),
+			hint: __('How stores choose product categories', 'multivendorx'),
 		},
 		{
 			key: 'category_selection_method',
 			type: 'setting-toggle',
-			label: __('Hierarchical selection', 'multivendorx'),
+			label: __('Product category selection', 'multivendorx'),
 			settingDescription: __(
 				'Choose whether stores follow a guided category selection flow or freely choose multiple categories.',
 				'multivendorx'
@@ -147,7 +147,7 @@ export default {
 			options: [
 				{
 					key: 'yes',
-					label: __('Guided selection', 'multivendorx'),
+					label: __('Hierarchical selection', 'multivendorx'),
 					value: 'yes',
 				},
 				{
@@ -165,7 +165,7 @@ export default {
 				'Control how SKUs are handled for products.',
 				'multivendorx'
 			),
-			hint: __('SKU Generation', 'multivendorx'),
+			hint: __('SKU generation', 'multivendorx'),
 		},
 		{
 			key: 'sku_generator',
@@ -226,7 +226,7 @@ export default {
 				'Products similar in type, category, or stores are displayed as related items to guide customers toward additional purchases.',
 				'multivendorx'
 			),
-			hint: __('Related Products Source', 'multivendorx'),
+			hint: __('Related products source', 'multivendorx'),
 		},
 		{
 			key: 'recommendation_source',

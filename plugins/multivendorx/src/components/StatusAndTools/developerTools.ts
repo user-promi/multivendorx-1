@@ -15,9 +15,9 @@ export default {
 			key: 'transients',
 			type: 'button',
 			name: __('Clear transients', 'multivendorx'),
-			label: __('MultivendorX Stores Transients', 'multivendorx'),
+			label: __('MultivendorX stores transients', 'multivendorx'),
 			desc: __(
-				'Clear all store dashboards transient cache',
+				'Clear all store dashboards transient cache.',
 				'multivendorx'
 			),
 		},
@@ -25,9 +25,9 @@ export default {
 			key: 'visitor',
 			type: 'button',
 			name: __('Reset database', 'multivendorx'),
-			label: __('Reset visitors Stats Table', 'multivendorx'),
+			label: __('Reset visitors stats table', 'multivendorx'),
 			desc: __(
-				'Clear all the table data of MultivendorX visitors stats',
+				'Clear all the table data of MultivendorX visitors stats.',
 				'multivendorx'
 			),
 		},
@@ -37,7 +37,7 @@ export default {
 			name: __('Order migrate', 'multivendorx'),
 			label: __('Regenerate suborders', 'multivendorx'),
 			desc: __(
-				'With this tool, you can re-create missing sub orders',
+				'With this tool, you can re-create missing sub orders.',
 				'multivendorx'
 			),
 		},
@@ -47,7 +47,7 @@ export default {
 			name: __('Create default MultiVendorX Page', 'multivendorx'),
 			label: __('MultiVendorX page', 'multivendorx'),
 			desc: __(
-				'This tool will install all the missing MultiVendorX pages. Pages already defined and set up will not be replaced',
+				'This tool will install all the missing MultiVendorX pages. Pages already defined and set up will not be replaced.',
 				'multivendorx'
 			),
 			apilink: 'status',
