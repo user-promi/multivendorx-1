@@ -90,17 +90,6 @@ export default {
 			options: [
 				
 				{
-					key: 'marketplace_products',
-					label: '[marketplace_products]',
-					name: 'Show store products',
-					desc: __(
-						'Displays all products added by a store. Use this to create store-specific product listing pages.',
-						'multivendorx'
-					),
-					arguments:
-						'<ul> <li><b>store</b> - Store ID, slug, email, or username (optional)</li> <li><b>perpage</b> - Number of products to display (default: 12)</li> <li><b>columns</b> - Number of products per row (default: 4)</li> <li><b>filter</b> - Type of products to show: all, recent, featured, sale, top_rated, best_selling (default: all)</li> <li><b>sort</b> - Predefined sorting: latest, oldest, rating, popularity, title (optional)</li> <li><b>orderby</b> - Sort products by a specific field, used when sort is not set (default: title)</li> <li><b>order</b> - Display order: ASC or DESC (default: ASC)</li> <li><b>category</b> - Product category slugs, comma separated (optional)</li> <li><b>operator</b> - Category filter operator: IN, NOT IN, AND (default: IN)</li> </ul>',},
-				
-				{
 					key: 'marketplace_dashboard',
 					label: '[marketplace_dashboard]',
 					name: 'Marketplace dashboard',
@@ -122,6 +111,18 @@ export default {
 					arguments:
 						'<ul><li>No arguments required</li></ul>',
 				},
+				{
+					key: 'marketplace_products',
+					label: '[marketplace_products]',
+					name: 'Show store products',
+					desc: __(
+						'Displays all products added by a store. Use this to create store-specific product listing pages.',
+						'multivendorx'
+					),
+					arguments:
+						'<ul> <li><b>store</b> - Store ID, slug, email, or username (optional)</li> <li><b>perpage</b> - Number of products to display (default: 12)</li> <li><b>columns</b> - Number of products per row (default: 4)</li> <li><b>filter</b> - Type of products to show: all, recent, featured, sale, top_rated, best_selling (default: all)</li> <li><b>sort</b> - Predefined sorting: latest, oldest, rating, popularity, title (optional)</li> <li><b>orderby</b> - Sort products by a specific field, used when sort is not set (default: title)</li> <li><b>order</b> - Display order: ASC or DESC (default: ASC)</li> <li><b>category</b> - Product category slugs, comma separated (optional)</li> <li><b>operator</b> - Category filter operator: IN, NOT IN, AND (default: IN)</li> </ul>',
+					},			
+				
 
 				{
 					key: 'marketplace_stores',
