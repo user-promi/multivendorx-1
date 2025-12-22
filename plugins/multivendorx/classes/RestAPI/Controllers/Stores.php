@@ -353,6 +353,9 @@ class Stores extends \WP_REST_Controller {
         $limit  = max( (int) $request->get_param( 'row' ), 10 );
         $page   = max( (int) $request->get_param( 'page' ), 1 );
         $offset = ( $page - 1 ) * $limit;
+        $args = array(
+            'status' => 'pending',
+        );
 
         $count = $request->get_param( 'count' );
         if ( $count ) {
@@ -364,10 +367,6 @@ class Stores extends \WP_REST_Controller {
 
         $start_date = $request->get_param( 'start_date' );
         $end_date   = $request->get_param( 'end_date' );
-
-        $args = array(
-            'status' => 'pending',
-        );
 
         if ( $start_date && $end_date ) {
             $args['start_date'] = $start_date;

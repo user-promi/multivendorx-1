@@ -138,7 +138,7 @@ class CommissionUtil {
         }
 
         // Pagination.
-        if ( -1 !== ! $count && $page && $perpage && $perpage ) {
+        if ( -1 !== ! $count && $page && $perpage ) {
             $limit  = intval( $perpage );
             $offset = ( $page - 1 ) * $limit;
             $query .= " LIMIT {$limit} OFFSET {$offset}";

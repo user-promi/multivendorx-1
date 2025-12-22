@@ -782,7 +782,7 @@ const Commission: React.FC = () => {
 				updateFilter: (key: string, value: string) => void,
 				filterValue: string | undefined
 			) => (
-				<div className="   group-field">
+				<div className="group-field">
 					<select
 						name="store"
 						onChange={(e) =>

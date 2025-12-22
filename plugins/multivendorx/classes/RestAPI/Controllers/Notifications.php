@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * MultiVendorX REST API Notifications controller.
  *
- * @class       Module class
+ * @class       Notifications class
  * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
