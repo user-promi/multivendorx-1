@@ -18,8 +18,8 @@ interface Endpoint {
 }
 interface AppLocalizer {
     nonce: string;
-    apiUrl:string;
-    restUrl:string;
+    apiUrl: string;
+    restUrl: string;
     [ key: string ]: string | number | boolean;
 }
 
@@ -216,11 +216,6 @@ const EndpointManager: React.FC< EndpointEditorProps > = ( {
                                                 finalSlug = `${ trimmedValue }${ counter }`;
                                                 counter++;
                                             }
-
-                                            console.log(
-                                                'Unique slug generated:',
-                                                finalSlug
-                                            );
 
                                             // Update endpoints
                                             const updated = endpoints.map(

@@ -13,8 +13,8 @@ import '../styles/web/Log.scss';
 interface AppLocalizer {
     nonce: string;
     tab_name: string;
-    apiUrl:string;
-    restUrl:string;
+    apiUrl: string;
+    restUrl: string;
     [ key: string ]: string | number | boolean; // for any other unknown keys
 }
 

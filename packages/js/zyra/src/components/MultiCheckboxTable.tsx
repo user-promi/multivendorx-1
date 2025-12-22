@@ -392,16 +392,6 @@ const MultiCheckboxTable: React.FC< MultiCheckboxTableProps > = ( {
 } ) => {
     const [ isEnabled, setIsEnabled ] = useState< boolean >( !! enable );
 
-    // const [openGroup, setOpenGroup] = useState<string | null>(() => {
-    //     if (
-    //         !Array.isArray(rows) &&
-    //         rows &&
-    //         Object.keys(rows).length > 0
-    //     ) {
-    //         return Object.keys(rows)[0]; // open the first group by default
-    //     }
-    //     return null; // no group open if rows is an array
-    // });
     const [ openGroups, setOpenGroups ] = useState< string[] >( [] );
     useEffect( () => {
         if ( isEnabled && ! Array.isArray( rows ) ) {
@@ -551,20 +541,13 @@ const MultiCheckboxTable: React.FC< MultiCheckboxTableProps > = ( {
                           ) )
                         : Object.entries( rows as Rows ).map(
                               ( [ groupKey, group ] ) => {
-                                  // const isOpen = openGroup === groupKey;
                                   const isOpen =
                                       openGroups.includes( groupKey );
                                   return (
                                       <React.Fragment key={ groupKey }>
                                           <div
                                               className="toggle-header"
-                                              // onClick={() =>
-                                              //     setOpenGroup(
-                                              //         isOpen ? null : groupKey
-                                              //     )
-                                              // }
                                               onClick={ () => {
-                                                  // if (!isEnabled) return;
                                                   setOpenGroups( ( prev ) =>
                                                       prev.includes( groupKey )
                                                           ? prev.filter(

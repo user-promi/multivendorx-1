@@ -38,7 +38,7 @@ interface NestedField {
         | 'textarea'
         | 'checklist'
         | 'setup'
-        | 'devider';
+        | 'divider';
     label?: string;
     placeholder?: string;
     options?: NestedFieldOption[];
@@ -526,8 +526,8 @@ const NestedComponent: React.FC< NestedComponentProps > = ( {
                         </div>
                     </>
                 );
-            case 'devider':
-                return <span className="devider" key={ field.key }></span>;
+            case 'divider':
+                return <span className="divider" key={ field.key }></span>;
 
             default:
                 return null;

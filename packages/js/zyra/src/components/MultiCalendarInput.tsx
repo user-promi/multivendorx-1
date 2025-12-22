@@ -84,6 +84,8 @@ const MultiCalendarInput: React.FC< CalendarInputProps > = ( props ) => {
             startDate: newRange[ 0 ].startDate!,
             endDate: newRange[ 0 ].endDate!,
         } );
+
+        setOpenDatePicker(false);
     };
 
     const getLabel = () => {

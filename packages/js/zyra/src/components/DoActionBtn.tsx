@@ -26,8 +26,8 @@ interface ApiResponse {
 
 interface AppLocalizer {
     nonce: string;
-    apiUrl:string;
-    restUrl:string;
+    apiUrl: string;
+    restUrl: string;
     [ key: string ]: string | number | boolean;
 }
 

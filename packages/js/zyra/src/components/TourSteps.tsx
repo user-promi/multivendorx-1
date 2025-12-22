@@ -52,7 +52,7 @@ const Tour: React.FC< TourProps > = ( { appLocalizer, steps, forceOpen } ) => {
     ) => {
         setIsNavigating( true );
         setIsOpen( false );
-        window.location.href = url;
+        window.open( url, '_self' );
         if ( selector ) {
             await waitForElement( selector );
         }

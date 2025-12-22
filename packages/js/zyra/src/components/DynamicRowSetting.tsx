@@ -9,11 +9,12 @@ import '../styles/web/DynamicRowSetting.scss';
  * Internal dependencies
  */
 import '../styles/web/ToggleSetting.scss';
+import SelectInput from './SelectInput';
 
 // Types
-type FieldType = 'text' | 'number' | 'file' | 'select';
+type FieldType = 'text' | 'number' | 'file' | 'select' | 'button';
 
-type RowValue = Record< string, string | number | File | RowValue[] | null >;
+type RowValue = Record<string, string | number | File | RowValue[] | null>;
 
 interface FieldConfig {
     key: string;
@@ -22,6 +23,11 @@ interface FieldConfig {
     placeholder?: string;
     options?: { label: string; value: string; children?: RowValue[] }[];
     width?: string;
+    onClick?: (params: {
+        row: RowValue;
+        rowIndex: number;
+        updateRow: (patch: Partial<RowValue>) => void;
+    }) => void;
 }
 
 interface RowConfig {
@@ -35,12 +41,12 @@ export interface DynamicRowSettingProps {
     keyName: string;
     template: RowConfig;
     value: RowValue[];
-    onChange: ( rows: RowValue[] ) => void;
+    onChange: (rows: RowValue[]) => void;
     addLabel?: string;
-    childrenRenderer?: ( row: RowValue, rowIndex: number ) => React.ReactNode;
+    childrenRenderer?: (row: RowValue, rowIndex: number) => React.ReactNode;
 }
 
-const DynamicRowSetting: React.FC< DynamicRowSettingProps > = ( {
+const DynamicRowSetting: React.FC<DynamicRowSettingProps> = ({
     description = '',
     wrapperClass = '',
     descClass = '',
@@ -49,13 +55,13 @@ const DynamicRowSetting: React.FC< DynamicRowSettingProps > = ( {
     onChange,
     addLabel = 'Add New',
     childrenRenderer = undefined,
-} ) => {
+}) => {
     const handleAdd = () => {
         const emptyRow: RowValue = {};
-        template.fields.forEach( ( field ) => {
-            emptyRow[ field.key ] = field.type === 'file' ? null : '';
-        } );
-        onChange( [ ...value, emptyRow ] );
+        template.fields.forEach((field) => {
+            emptyRow[field.key] = field.type === 'file' ? null : '';
+        });
+        onChange([...value, emptyRow]);
     };
 
     const handleChange = (
@@ -63,16 +69,16 @@ const DynamicRowSetting: React.FC< DynamicRowSettingProps > = ( {
         fieldKey: string,
         newVal: string | number | File | RowValue[] | null
     ) => {
-        const updatedRows = [ ...value ];
-        updatedRows[ rowIndex ] = {
-            ...updatedRows[ rowIndex ],
-            [ fieldKey ]: newVal,
+        const updatedRows = [...value];
+        updatedRows[rowIndex] = {
+            ...updatedRows[rowIndex],
+            [fieldKey]: newVal,
         };
-        onChange( updatedRows );
+        onChange(updatedRows);
     };
 
-    const handleDelete = ( rowIndex: number ) => {
-        onChange( value.filter( ( _, i ) => i !== rowIndex ) );
+    const handleDelete = (rowIndex: number) => {
+        onChange(value.filter((_, i) => i !== rowIndex));
     };
 
     const renderField = (
@@ -80,19 +86,19 @@ const DynamicRowSetting: React.FC< DynamicRowSettingProps > = ( {
         field: FieldConfig,
         rowIndex: number
     ) => {
-        const val = row[ field.key ];
+        const val = row[field.key];
 
-        switch ( field.type ) {
+        switch (field.type) {
             case 'text':
             case 'number':
                 return (
                     <input
-                        type={ field.type }
-                        placeholder={ field.placeholder }
+                        type={field.type}
+                        placeholder={field.placeholder}
                         className="basic-input"
-                        value={ val as string | number}
-                        onChange={ ( e ) =>
-                            handleChange( rowIndex, field.key, e.target.value )
+                        value={val as string | number}
+                        onChange={(e) =>
+                            handleChange(rowIndex, field.key, e.target.value)
                         }
                     />
                 );
@@ -102,44 +108,81 @@ const DynamicRowSetting: React.FC< DynamicRowSettingProps > = ( {
                     <input
                         type="file"
                         className="basic-input"
-                        onChange={ (
-                            e: React.ChangeEvent< HTMLInputElement >
+                        onChange={(
+                            e: React.ChangeEvent<HTMLInputElement>
                         ) => {
-                            const file = e.target.files?.[ 0 ] || null;
-                            handleChange( rowIndex, field.key, file );
-                        } }
+                            const file = e.target.files?.[0] || null;
+                            handleChange(rowIndex, field.key, file);
+                        }}
                     />
                 );
 
+            // Inside renderField:
             case 'select':
+                const selectedOption = field.options?.find(
+                    (opt) => opt.value === val
+                ) || null;
+
+                // Transform options to SelectInput format
+                const selectOptions: SelectOptions[] = (field.options || []).map(
+                    (opt) => ({ value: opt.value, label: opt.label })
+                );
+
                 return (
                     <div className="select-wrapper">
-                        <Select
-                            placeholder={ field.placeholder }
-                            className={ `react-select` }
-                            value={
-                                field.options?.find(
-                                    ( opt ) => opt.value === val
-                                ) || null
-                            }
-                            options={ field.options || [] }
-                            onChange={ ( selected ) => {
+                        <SelectInput
+                            name={field.key}
+                            type="single-select"
+                            value={val as string}
+                            options={selectOptions}
+                            inputClass="react-select"
+                            onChange={(newValue) => {
+                                // react-select SingleValue type
+                                const selected = newValue as any;
                                 handleChange(
                                     rowIndex,
                                     field.key,
                                     selected?.value || ''
                                 );
 
-                                if ( selected?.children ) {
+                                const children = field.options?.find(
+                                    (opt) => opt.value === selected?.value
+                                )?.children;
+
+                                if (children) {
                                     handleChange(
                                         rowIndex,
                                         field.key + '_children',
-                                        selected.children
+                                        children
                                     );
                                 }
-                            } }
+                            }}
                         />
                     </div>
+                );
+
+            case 'button':
+                return (
+                    <button
+                        type="button"
+                        className="admin-btn btn-purple"
+                        onClick={() =>
+                            field.onClick?.({
+                                row,
+                                rowIndex,
+                                updateRow: (patch) => {
+                                    const updatedRows = [...value];
+                                    updatedRows[rowIndex] = {
+                                        ...updatedRows[rowIndex],
+                                        ...patch,
+                                    };
+                                    onChange(updatedRows);
+                                },
+                            })
+                        }
+                    >
+                        {field.label}
+                    </button>
                 );
 
             default:
@@ -149,50 +192,50 @@ const DynamicRowSetting: React.FC< DynamicRowSettingProps > = ( {
 
     return (
         <>
-            <div className={ `repeater-field-wrapper ${ wrapperClass }` }>
-                { value.map( ( row, rowIndex ) => (
+            <div className={`repeater-field-wrapper ${wrapperClass}`}>
+                {value.map((row, rowIndex) => (
                     <>
-                        <div key={ rowIndex } className="repeater-field">
+                        <div key={rowIndex} className="repeater-field">
                             <div className="field">
-                                { template.fields.map( ( field ) => (
-                                    <>{ renderField( row, field, rowIndex ) }</>
-                                ) ) }
+                                {template.fields.map((field) => (
+                                    <>{renderField(row, field, rowIndex)}</>
+                                ))}
 
                                 <span
                                     className="delete-icon adminlib-delete"
-                                    onClick={ () => handleDelete( rowIndex ) }
+                                    onClick={() => handleDelete(rowIndex)}
                                 ></span>
                             </div>
-                            { ( () => {
+                            {(() => {
                                 const nestedChildren = childrenRenderer?.(
                                     row,
                                     rowIndex
                                 );
                                 return nestedChildren ? (
                                     <div className="repeater-field-nested">
-                                        { nestedChildren }
+                                        {nestedChildren}
                                     </div>
                                 ) : null;
-                            } )() }
+                            })()}
                         </div>
                     </>
-                ) ) }
+                ))}
 
                 <button
                     type="button"
                     className="admin-btn btn-purple-bg"
-                    onClick={ handleAdd }
+                    onClick={handleAdd}
                 >
-                    <i className="adminlib-plus-circle"></i> { addLabel }
+                    <i className="adminlib-plus-circle"></i> {addLabel}
                 </button>
             </div>
 
-            { description && (
+            {description && (
                 <p
-                    className={ descClass }
-                    dangerouslySetInnerHTML={ { __html: description } }
+                    className={descClass}
+                    dangerouslySetInnerHTML={{ __html: description }}
                 ></p>
-            ) }
+            )}
         </>
     );
 };
