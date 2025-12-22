@@ -206,7 +206,7 @@ class Rest extends \WP_REST_Controller {
                 function ( $review ) {
                     $customer      = get_userdata( $review['customer_id'] );
                     $customer_name = $customer ? $customer->display_name : __( 'Guest', 'multivendorx' );
-                    $store_obj     = MultivendorX()->store->get_store_by_id( (int) $review['store_id'] );
+                    $store_obj     = MultivendorX()->store->get_store( (int) $review['store_id'] );
 
                     return array(
                         'review_id'      => (int) $review['review_id'],

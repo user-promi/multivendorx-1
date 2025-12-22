@@ -298,41 +298,106 @@ class Store {
     }
 
     /**
-     * Get store by ID.
+     * Get store by ID, slug, or name.
      *
-     * @param int $id Store ID to look up.
-     */
-    public static function get_store_by_id( $id ) {
-        return $id ? new self( $id ) : null;
-    }
-
-    /**
-     * Get store by slug.
+     * @param mixed  $value Store ID, slug, name, product_id, status or user_id.
+     * @param string $type  Lookup type: id|slug|name|product|primary_owner|user.
      *
-     * @param string $slug Slug to look up.
-     * @return self|null Store instance if found, null otherwise.
+     * @return self|array|null Store instance, array of stores, or null.
      */
-    public static function get_store_by_slug( $slug ) {
+    public static function get_store( $value, $type = 'id' ) {
         global $wpdb;
 
-        $table = esc_sql( $wpdb->prefix . Utill::TABLES['store'] );
-
-        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-        $query = $wpdb->prepare(
-            "SELECT ID FROM {$table} WHERE slug = %s LIMIT 1",
-            $slug
-        );
-
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-        $id = $wpdb->get_var( $query );
-
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+        if ( empty( $value ) ) {
+            return null;
         }
 
-        return $id ? new self( (int) $id ) : null;
-    }
+        if ( 'id' === $type ) {
+            return $value ? new self( (int) $value ) : null;
+        }
 
+        $table = esc_sql( $wpdb->prefix . Utill::TABLES['store'] );
+        $store_users = esc_sql( $wpdb->prefix . Utill::TABLES['store_users'] );
+
+        try {
+            switch ( $type ) {
+
+                case 'slug':
+                    $query = $wpdb->prepare(
+                        "SELECT ID FROM {$table} WHERE slug = %s LIMIT 1",
+                        $value
+                    );
+
+                    $id = $wpdb->get_var( $query );
+
+                    return $id ? new self( (int) $id ) : null;
+
+                case 'name':
+                    $like = '%' . $wpdb->esc_like( $value ) . '%';
+
+                    $results = $wpdb->get_col(
+                        $wpdb->prepare(
+                            "SELECT ID FROM {$table} WHERE name LIKE %s AND status = %s",
+                            $like,
+                            'active'
+                        )
+                    );
+
+                    if ( empty( $results ) ) {
+                        return [];
+                    }
+
+                    return array_map(
+                        fn( $id ) => new self( (int) $id ),
+                        $results
+                    );
+
+                case 'product':
+                    $product_id = (int) $value;
+                    $store_id = (int) get_post_meta(
+                        $product_id,
+                        Utill::POST_META_SETTINGS['store_id'],
+                        true
+                    );
+
+                    return $store_id ? new self( $store_id ) : null;
+
+                case 'primary_owner':
+                    $status  = sanitize_text_field( $value );
+                    $stores = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table WHERE who_created = %d AND status = %s", get_current_user_id(), $status ), ARRAY_A );
+                    return $stores ? $stores : [];
+
+                case 'user':
+                    $user_id = (int) $value;
+
+                    $excluded_statuses = array( 'permanently_rejected', 'deactivated' );
+                    $placeholders      = implode( ', ', array_fill( 0, count( $excluded_statuses ), '%s' ) );
+                    $params            = array_merge( array( $user_id ), $excluded_statuses );
+
+                    $sql    = "
+                        SELECT
+                            su.store_id AS id,
+                            s.name AS name
+                        FROM {$store_users} su
+                        INNER JOIN {$table} s ON s.ID = su.store_id
+                        WHERE su.user_id = %d
+                        AND s.status NOT IN ($placeholders)
+                    ";
+                    $result = $wpdb->get_results( $wpdb->prepare( $sql, $params ), ARRAY_A );
+
+                    return $result ? $result : [];
+
+                default:
+                    return null;
+            }
+        } catch ( \Exception $e ) {
+            if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+                MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+            }
+        }
+
+        return null;
+    }
 
     /**
      * Check whether a store with given slug exists in the database.
@@ -394,48 +459,6 @@ class Store {
         }
 
         return $base . '-' . $count;
-    }
-
-    /**
-     * Get stores by name.
-     *
-     * @param string $name Name of the store. Can be partial or full.
-     *
-     * @return array Array of store objects.
-     */
-    public static function get_store_by_name( $name ) {
-        global $wpdb;
-
-        if ( empty( $name ) ) {
-            return false;
-        }
-
-        $table = esc_sql( $wpdb->prefix . Utill::TABLES['store'] );
-        $like  = '%' . $wpdb->esc_like( $name ) . '%';
-
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-        $results = $wpdb->get_results(
-            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-            $wpdb->prepare(
-                "SELECT * FROM {$table} WHERE name LIKE %s AND status = %s",
-                $like,
-                'active'
-            ),
-            ARRAY_A
-        );
-
-        $stores = array();
-        if ( ! empty( $results ) ) {
-            foreach ( $results as $row ) {
-                $stores[] = new self( (int) $row['ID'] );
-            }
-        }
-
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
-        }
-
-        return $stores;
     }
 
     /**

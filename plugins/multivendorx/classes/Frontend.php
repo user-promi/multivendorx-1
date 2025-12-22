@@ -7,6 +7,7 @@
 
 namespace MultiVendorX;
 
+use MultiVendorX\Store\Store;
 use MultiVendorX\Store\StoreUtil;
 
 /**
@@ -135,7 +136,7 @@ class Frontend {
         $store_details = MultiVendorX()->setting->get_setting( 'store_branding_details', array() );
 
         if ( in_array( 'show_store_name', $store_details, true ) ) {
-            $store = StoreUtil::get_products_store( $product_id );
+            $store = Store::get_store( $product_id, 'product' );
             if ( ! $store ) {
 				return [];
             }
@@ -240,7 +241,7 @@ class Frontend {
     public function add_store_tab_in_single_product( $tabs ) {
         global $product;
         if ( $product ) {
-            $store = StoreUtil::get_products_store( $product->get_id() );
+            $store = Store::get_store( $product->get_id(), 'product' );
             if ( $store ) {
                 $title         = __( 'Store', 'multivendorx' );
                 $tabs['store'] = array(
@@ -287,7 +288,7 @@ class Frontend {
             return $query;
         }
 
-        $store = StoreUtil::get_products_store( $product_id );
+        $store = Store::get_store( $product_id, 'product' );
         if ( ! $store || ! $store->get_id() ) {
             return $query;
         }
@@ -347,7 +348,7 @@ class Frontend {
         $stores = [];
 
         foreach ( WC()->cart->get_cart() as $cart_item ) {
-            $store = StoreUtil::get_products_store( $cart_item['product_id'] ?? 0 );
+            $store = Store::get_store( $cart_item['product_id'] ?? 0, 'product' );
 
             if ( $store && $store->get_id() ) {
                 $stores[] = $store->get_id();
@@ -367,7 +368,7 @@ class Frontend {
         $admin_products = array();
 
         foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) {
-            $store = StoreUtil::get_products_store( $cart_item['product_id'] );
+            $store = Store::get_store( $cart_item['product_id'], 'product' );
 
             if ( $store ) {
                 $store_groups[ $store->get_id() ][ $cart_item_key ] = $cart_item;

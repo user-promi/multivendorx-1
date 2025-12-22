@@ -7,6 +7,7 @@
 
 namespace MultiVendorX;
 
+use MultiVendorX\Store\Store;
 use MultiVendorX\Store\StoreUtil;
 use MultiVendorX\Utill;
 
@@ -392,7 +393,7 @@ class FrontendScripts {
             ),
         );
 
-        $store_ids    = StoreUtil::get_stores_from_user_id( get_current_user_id() );
+        $store_ids    = Store::get_store( get_current_user_id(), 'user' );
         $active_store = get_user_meta( get_current_user_id(), Utill::USER_SETTINGS_KEYS['active_store'], true );
 
         if ( empty( $active_store ) && ! empty( $store_ids ) ) {

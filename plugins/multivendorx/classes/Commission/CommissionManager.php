@@ -57,7 +57,7 @@ class CommissionManager {
 
         if ( $order ) {
             $store_id            = $order->get_meta( Utill::POST_META_SETTINGS['store_id'] );
-            $store               = Store::get_store_by_id( $store_id );
+            $store               = Store::get_store( $store_id );
             $commission_type     = MultiVendorX()->setting->get_setting( 'commission_type' );
             $commission_amount   = 0;
             $shipping_amount     = 0;
@@ -398,7 +398,7 @@ class CommissionManager {
                 $coupon   = new \WC_Coupon( $coupon_code );
                 $store_id = (int) get_post_meta( $coupon->get_id(), Utill::POST_META_SETTINGS['store_id'], true );
 
-                if ( $store_id && Store::get_store_by_id( $store_id ) ) {
+                if ( $store_id && Store::get_store( $store_id ) ) {
                     $store_coupon = true;
                 }
             }
@@ -575,7 +575,7 @@ class CommissionManager {
         global $wpdb;
         $commission_id = $store_order->get_meta( Utill::ORDER_META_SETTINGS['commission_id'], true );
         $store_id      = $store_order->get_meta( Utill::POST_META_SETTINGS['store_id'], true );
-        $store         = Store::get_store_by_id( $store_id );
+        $store         = Store::get_store( $store_id );
 
         if ( $commission_id ) {
             $commission_amount   = 0;

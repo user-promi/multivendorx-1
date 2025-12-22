@@ -127,7 +127,7 @@ class Product {
         echo '<option value="">Filter by Store</option>';
 
         foreach ( $store_ids as $store_id ) {
-            $store = Store::get_store_by_id( $store_id );
+            $store = Store::get_store( $store_id );
             printf(
                 '<option value="%s" %s>%s</option>',
                 esc_attr( $store_id ),

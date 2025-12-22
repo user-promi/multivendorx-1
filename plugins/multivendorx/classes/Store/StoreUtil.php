@@ -20,62 +20,6 @@ defined( 'ABSPATH' ) || exit;
  */
 class StoreUtil {
 
-
-    /**
-     * Constructor
-     */
-    public function __construct() {
-
-        add_action( 'multivendorx_after_store_active', array( $this, 'create_store_shipping_class' ) );
-    }
-    /**
-     * Create a WooCommerce shipping class when store becomes active.
-     *
-     * @param int $store_id Store ID.
-     */
-    public function create_store_shipping_class( $store_id ) {
-        // Load store object.
-        $store = new \MultiVendorX\Store\Store( $store_id );
-
-        // Check if class already exists for this store.
-        $existing_class_id = $store->get_meta( Utill::STORE_SETTINGS_KEYS['shipping_class_id'] );
-        if ( $existing_class_id ) {
-            return; // Skip creation.
-        }
-
-        // Prepare unique shipping class slug.
-        $store_name = sanitize_title( $store->get( 'name' ) );
-        $slug       = $store_name . '-' . $store_id;
-
-        // Check if the shipping class already exists.
-        $shipping_term = get_term_by( 'slug', $slug, Utill::WORDPRESS_SETTINGS['product_shipping_class'], ARRAY_A );
-
-        // Create a new shipping class if missing.
-        if ( ! $shipping_term ) {
-            $shipping_term = wp_insert_term(
-                $store->get( 'name' ) . ' Shipping', // Shipping class name.
-                Utill::WORDPRESS_SETTINGS['product_shipping_class'],
-                array(
-                    'slug' => $slug,
-                )
-            );
-        }
-
-        // Validate creation.
-        if ( ! is_wp_error( $shipping_term ) ) {
-            $class_id = $shipping_term['term_id'];
-
-            // Save class ID in store meta.
-            $store->update_meta( Utill::STORE_SETTINGS_KEYS['shipping_class_id'], $class_id );
-
-            // Save MultiVendorX store reference in term meta.
-            update_term_meta( $class_id, Utill::POST_META_SETTINGS['store_id'], $store_id );
-
-            // Optional: add origin help.
-            update_term_meta( $class_id, Utill::WORDPRESS_SETTINGS['shipping_origin_country'], get_option( Utill::WOO_SETTINGS['default_country'] ) );
-        }
-    }
-
     /**
      * Add store users
      *
@@ -152,40 +96,6 @@ class StoreUtil {
     }
 
     /**
-     * Get stores from user id
-     *
-     * @param int $user_id User ID.
-     * @return array
-     */
-    public static function get_stores_from_user_id( $user_id ) {
-        global $wpdb;
-
-        $store_users = "{$wpdb->prefix}" . Utill::TABLES['store_users'];
-        $stores      = "{$wpdb->prefix}" . Utill::TABLES['store'];
-
-        $excluded_statuses = array( 'permanently_rejected', 'deactivated' );
-        $placeholders      = implode( ', ', array_fill( 0, count( $excluded_statuses ), '%s' ) );
-        $params            = array_merge( array( $user_id ), $excluded_statuses );
-
-        $sql    = "
-            SELECT
-                su.store_id AS id,
-                s.name AS name
-            FROM {$store_users} su
-            INNER JOIN {$stores} s ON s.ID = su.store_id
-            WHERE su.user_id = %d
-            AND s.status NOT IN ($placeholders)
-        ";
-        $result = $wpdb->get_results( $wpdb->prepare( $sql, $params ), ARRAY_A );
-
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
-        }
-
-        return $result;
-    }
-
-    /**
      * Get all stores
      *
      * @return array
@@ -201,25 +111,6 @@ class StoreUtil {
         }
 
         return $store ? $store : array();
-    }
-
-    /**
-     * Get store by primary owner
-     *
-     * @param string $status Store status.
-     * @return array
-     */
-    public static function get_store_by_primary_owner( $status = 'active' ) {
-        global $wpdb;
-
-        $table  = "{$wpdb->prefix}" . Utill::TABLES['store'];
-        $stores = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table WHERE who_created = %d AND status = %s", get_current_user_id(), $status ), ARRAY_A );
-
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
-        }
-
-        return $stores ? $stores : array();
     }
 
     /**
@@ -376,26 +267,6 @@ class StoreUtil {
     }
 
     /**
-     * Get store data for a product.
-     *
-     * @param int $product_id Product ID.
-     *
-     * @return object|false
-     */
-    public static function get_products_store( $product_id ) {
-        $store_data = false;
-        if ( $product_id > 0 ) {
-            $store     = get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true );
-            $store_obj = Store::get_store_by_id( $store );
-
-            if ( $store_obj ) {
-                $store_data = $store_obj;
-            }
-        }
-        return $store_data;
-    }
-
-    /**
      * Get store registration form data.
      *
      * @param int $store_id Store ID.
@@ -403,7 +274,7 @@ class StoreUtil {
      * @return array
      */
     public static function get_store_registration_form( $store_id ) {
-        $store = Store::get_store_by_id( $store_id );
+        $store = Store::get_store( $store_id );
 
         // Get core fields from store object.
         $core_fields = array(
@@ -505,32 +376,6 @@ class StoreUtil {
     }
 
     /**
-     * Get stores by status.
-     *
-     * @param string $status Store status.
-     *
-     * @return array Stores.
-     */
-    public static function get_stores_by_status( $status ) {
-        global $wpdb;
-
-        $table  = "{$wpdb->prefix}" . Utill::TABLES['store'];
-        $stores = $wpdb->get_results(
-            $wpdb->prepare(
-                "SELECT * FROM {$table} WHERE status = %s",
-                $status
-            ),
-            ARRAY_A
-        );
-
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
-        }
-
-        return $stores ? $stores : array();
-    }
-
-    /**
      * Get primary owner for a store.
      *
      * @param int $store_id Store ID.
@@ -601,112 +446,6 @@ class StoreUtil {
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
             MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
-    }
-
-    /**
-     * Get store product policies
-     *
-     * @param int $product_id Product ID.
-     *
-     * @return array
-     */
-    public static function get_store_product_policies( $product_id = 0 ) {
-        $product  = wc_get_product( $product_id );
-        $policies = array();
-        if ( $product ) {
-            $shipping_policy     = get_post_meta( $product_id, Utill::POST_META_SETTINGS['shipping_policy'], true );
-            $refund_policy       = get_post_meta( $product_id, Utill::POST_META_SETTINGS['refund_policy'], true );
-            $cancellation_policy = get_post_meta( $product_id, Utill::POST_META_SETTINGS['cancellation_policy'], true );
-
-            $store_policy = MultiVendorX()->setting->get_setting( 'store_policy', array() );
-            if ( ! empty( $shipping_policy ) ) {
-                $shipping_policy = MultiVendorX()->setting->get_setting( 'shipping_policy', array() );
-            }
-            if ( ! empty( $refund_policy ) ) {
-                $refund_policy = MultiVendorX()->setting->get_setting( 'refund_policy', array() );
-            }
-            if ( ! empty( $cancellation_policy ) ) {
-                $cancellation_policy = MultiVendorX()->setting->get_setting( 'cancellation_policy', array() );
-            }
-
-            $store_id                  = get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true );
-            $store                     = new Store( $store_id );
-            $privacy_override_settings = MultiVendorX()->setting->get_setting( 'store_policy_override', array() );
-
-            if ( in_array( 'store', $privacy_override_settings, true ) ) {
-                $store_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['store_policy'] );
-            }
-            if ( in_array( 'shipping', $privacy_override_settings, true ) ) {
-                $shipping_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['shipping_policy'] );
-            }
-            if ( in_array( 'refund_return', $privacy_override_settings, true ) ) {
-                $refund_policy       = $store->get_meta( Utill::STORE_SETTINGS_KEYS['return_policy'] );
-                $cancellation_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['exchange_policy'] );
-            }
-
-            if ( ! empty( $store_policy ) ) {
-                $policies['store_policy'] = $store_policy;
-            }
-
-            if ( ! empty( $shipping_policy ) ) {
-                $policies['shipping_policy'] = $shipping_policy;
-            }
-
-            if ( ! empty( $refund_policy ) ) {
-                $policies['refund_policy'] = $refund_policy;
-            }
-            if ( ! empty( $cancellation_policy ) ) {
-                $policies['cancellation_policy'] = $cancellation_policy;
-            }
-        }
-        return $policies;
-    }
-
-    /**
-     * Get store policies
-     *
-     * @param int $store_id Store ID.
-     * @return array
-     */
-    public static function get_store_policies( $store_id = 0 ) {
-        $policies            = array();
-        $store_policy        = MultiVendorX()->setting->get_setting( 'store_policy', array() );
-        $shipping_policy     = MultiVendorX()->setting->get_setting( 'shipping_policy', array() );
-        $refund_policy       = MultiVendorX()->setting->get_setting( 'refund_policy', array() );
-        $cancellation_policy = MultiVendorX()->setting->get_setting( 'cancellation_policy', array() );
-
-        if ( $store_id ) {
-            $store                     = new Store( $store_id );
-            $privacy_override_settings = MultiVendorX()->setting->get_setting( 'store_policy_override', array() );
-
-            if ( in_array( 'store', $privacy_override_settings, true ) ) {
-                $store_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['store_policy'] );
-            }
-            if ( in_array( 'shipping', $privacy_override_settings, true ) ) {
-                $shipping_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['shipping_policy'] );
-            }
-            if ( in_array( 'refund_return', $privacy_override_settings, true ) ) {
-                $refund_policy       = $store->get_meta( Utill::STORE_SETTINGS_KEYS['refund_policy'] );
-                $cancellation_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['exchange_policy'] );
-            }
-        }
-
-        if ( ! empty( $store_policy ) ) {
-            $policies['store_policy'] = $store_policy;
-        }
-
-        if ( ! empty( $shipping_policy ) ) {
-            $policies['shipping_policy'] = $shipping_policy;
-        }
-
-        if ( ! empty( $refund_policy ) ) {
-            $policies['refund_policy'] = $refund_policy;
-        }
-        if ( ! empty( $cancellation_policy ) ) {
-            $policies['cancellation_policy'] = $cancellation_policy;
-        }
-
-        return $policies;
     }
 
     /**
@@ -805,7 +544,7 @@ class StoreUtil {
         if ( ! $store_id ) {
             return false;
         }
-        $store = Store::get_store_by_id( $store_id );
+        $store = Store::get_store( $store_id );
 
         $status           = $store->get( 'status' );
         $review_settings  = MultiVendorX()->setting->get_setting( 'restriction_for_under_review', array() );
