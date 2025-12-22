@@ -9,7 +9,6 @@ namespace MultiVendorX;
 
 defined( 'ABSPATH' ) || exit;
 use Automattic\WooCommerce\Utilities\FeaturesUtil;
-use MultiVendorX\Notifications\Notifications;
 use MultiVendorX\Utill;
 
 /**
@@ -149,7 +148,7 @@ final class MultiVendorX {
         $this->container['product']         = new Product();
         $this->container['cron']            = new Cron();
         $this->container['block']           = new Block();
-        $this->container['notifications']   = new Notifications();
+        $this->container['notifications']   = new Notifications\Notifications();
 
         // Load all active modules.
         $this->container['modules']->load_active_modules();
@@ -219,33 +218,6 @@ final class MultiVendorX {
         } else {
             load_textdomain( 'multivendorx', WP_LANG_DIR . '/plugins/dc-woocommerce-multi-vendor-' . determine_locale() . '.mo' );
         }
-    }
-
-    /**
-     * Magic getter function to get the reference of class.
-     * Accept class name, If valid return reference, else Wp_Error.
-     *
-     * @param  mixed $class_name all classes.
-     */
-    public function __get( $class_name ) {
-     // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound
-        if ( array_key_exists( $class_name, $this->container ) ) {
-            return $this->container[ $class_name ];
-        }
-
-        return new \WP_Error( sprintf( 'Call to unknown class %s.', $class ) );
-    }
-
-    /**
-     * Magic setter function to store a reference of a class.
-     * Accepts a class name as the key and stores the instance in the container.
-     *
-     * @param string $class_name The class name or key to store the instance.
-     * @param object $value The instance of the class to store.
-     */
-    public function __set( $class_name, $value ) {
-     // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound
-        $this->container[ $class_name ] = $value;
     }
 
     /**
@@ -320,6 +292,49 @@ final class MultiVendorX {
         return $links;
     }
 
+     /**
+     * Get multivendorx log file name.
+     */
+    public function initialize_multivendorx_log() {
+        // The log file name is stored in the options table because it is generated with an arbitrary name.
+        $log_file_name = get_option( Utill::MULTIVENDORX_OTHER_SETTINGS['log_file'] );
+
+        if ( ! $log_file_name ) {
+            $log_file_name = uniqid( 'error' ) . '.txt';
+            update_option( Utill::MULTIVENDORX_OTHER_SETTINGS['log_file'], $log_file_name );
+        }
+
+        $this->container['log_file']          = MultivendorX()->multivendorx_logs_dir . '/' . $log_file_name;
+        $this->container['show_advanced_log'] = in_array( 'multivendorx_adv_log', MultivendorX()->setting->get_setting( 'multivendorx_adv_log', array() ), true );
+    }
+
+    /**
+     * Magic getter function to get the reference of class.
+     * Accept class name, If valid return reference, else Wp_Error.
+     *
+     * @param  mixed $class_name all classes.
+     */
+    public function __get( $class_name ) {
+     // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound
+        if ( array_key_exists( $class_name, $this->container ) ) {
+            return $this->container[ $class_name ];
+        }
+
+        return new \WP_Error( sprintf( 'Call to unknown class %s.', $class ) );
+    }
+
+    /**
+     * Magic setter function to store a reference of a class.
+     * Accepts a class name as the key and stores the instance in the container.
+     *
+     * @param string $class_name The class name or key to store the instance.
+     * @param object $value The instance of the class to store.
+     */
+    public function __set( $class_name, $value ) {
+     // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound
+        $this->container[ $class_name ] = $value;
+    }
+
     /**
      * Initializes the Multivendorx class.
      * Checks for an existing instance
@@ -336,21 +351,6 @@ final class MultiVendorX {
         return self::$instance;
     }
 
-    /**
-     * Get moowoodle log file name.
-     */
-    public function initialize_multivendorx_log() {
-        // The log file name is stored in the options table because it is generated with an arbitrary name.
-        $log_file_name = get_option( Utill::MULTIVENDORX_OTHER_SETTINGS['log_file'] );
-
-        if ( ! $log_file_name ) {
-            $log_file_name = uniqid( 'error' ) . '.txt';
-            update_option( Utill::MULTIVENDORX_OTHER_SETTINGS['log_file'], $log_file_name );
-        }
-
-        $this->container['log_file']          = MultivendorX()->multivendorx_logs_dir . '/' . $log_file_name;
-        $this->container['show_advanced_log'] = in_array( 'multivendorx_adv_log', MultivendorX()->setting->get_setting( 'multivendorx_adv_log', array() ), true );
-    }
 }
 
 

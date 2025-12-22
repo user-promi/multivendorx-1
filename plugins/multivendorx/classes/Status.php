@@ -1,6 +1,6 @@
 <?php
 /**
- * Modules Status
+ * Status class file
  *
  * @package MultiVendorX
  */
@@ -48,7 +48,7 @@ class Status {
                 ),
                 'plugin_plan'    => array(
                     'label' => esc_html__( 'Plugin subscription plan', 'multivendorx' ),
-                    'value' => apply_filters( 'mvx_current_subscription_plan', __( 'Free', 'multivendorx' ) ),
+                    'value' => apply_filters( 'multivendorx_current_subscription_plan', __( 'Free', 'multivendorx' ) ),
                 ),
                 'active_modules' => array(
                     'label' => esc_html__( 'Active modules', 'multivendorx' ),
@@ -82,6 +82,6 @@ class Status {
         // Prepend multivendorx data.
         $core_data = array( 'multivendorx' => $multivendorx ) + $core_data;
 
-        return apply_filters( 'mvx_system_info_response', $core_data );
+        return apply_filters( 'multivendorx_system_info_response', $core_data );
     }
 }

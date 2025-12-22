@@ -694,12 +694,7 @@ By signing and submitting, the Seller accepts all terms above.
                 'slug'      => 'store-registration',
                 'title'     => 'Store Registration',
                 'shortcode' => '[multivendorx_store_registration]',
-            ),
-            array(
-                'slug'      => 'vendor-orders',
-                'title'     => 'Vendor Orders',
-                'shortcode' => '[multivendorx_vendor_orders]',
-            ),
+            )
         );
 
         $this->plugin_create_pages_dynamic( $pages_to_create );
@@ -751,7 +746,7 @@ By signing and submitting, the Seller accepts all terms above.
                 'comment_status' => 'closed',
             );
 
-            $page_id = wp_insert_post( $page_data );
+            wp_insert_post( $page_data );
         }
     }
 }
