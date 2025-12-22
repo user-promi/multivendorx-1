@@ -239,7 +239,7 @@ class Reports extends \WP_REST_Controller {
             $transaction = Transaction::get_balances_for_store( $id );
 
             // --- Fetch Pending Withdraw Amount ---
-            $store_meta      = Store::get_store_by_id( $id );
+            $store_meta      = Store::get_store( $id );
             $withdraw_amount = 0;
             if ( ! empty( $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['request_withdrawal_amount'] ] ) ) {
                 $withdraw_amount = floatval( $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['request_withdrawal_amount'] ] );

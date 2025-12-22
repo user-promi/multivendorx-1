@@ -223,7 +223,7 @@ class Rest extends \WP_REST_Controller {
                     ? $first_name . ' ' . $last_name
                     : get_the_author_meta( 'display_name', $q['question_by'] );
 
-                    $store_obj = MultivendorX()->store->get_store_by_id( $q['store_id'] );
+                    $store_obj = MultivendorX()->store->get_store( $q['store_id'] );
 
                     // Get product image.
                     $product_image = '';

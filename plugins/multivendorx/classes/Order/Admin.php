@@ -71,7 +71,7 @@ class Admin {
                         if ( $suborder->get_type() === 'shop_order_refund' ) {
                             continue;
                         }
-                        $store            = Store::get_store_by_id( $suborder->get_meta( Utill::POST_META_SETTINGS['store_id'], true ) );
+                        $store            = Store::get_store( $suborder->get_meta( Utill::POST_META_SETTINGS['store_id'], true ) );
                         $store_page_title = ( $store ) ? $store->get( 'name' ) : esc_html__( 'Deleted store', 'multivendorx' );
 
                         $order_uri = apply_filters( 'mvx_admin_vendor_shop_order_edit_url', esc_url( 'admin.php?page=wc-orders&action=edit&id=' . $suborder->get_id() . '' ), $suborder->get_id() );

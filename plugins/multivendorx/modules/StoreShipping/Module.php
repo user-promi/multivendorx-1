@@ -7,6 +7,8 @@
 
 namespace MultiVendorX\StoreShipping;
 
+use MultiVendorX\Utill;
+
 /**
  * MultiVendorX Module class
  *
@@ -38,6 +40,8 @@ class Module {
         add_filter( 'woocommerce_cart_shipping_packages', array( 'MultiVendorX\StoreShipping\Shipping_Helper', 'split_cart_by_store' ) );
 
         add_filter( 'woocommerce_shipping_methods', array( $this, 'register_shipping_method' ) );
+
+        add_action( 'multivendorx_after_store_active', array( $this, 'create_store_shipping_class' ) );
     }
 
 
@@ -103,5 +107,53 @@ class Module {
         $methods['multivendorx_country_shipping']  = Country_Shipping::class;
         $methods['multivendorx_store_shipping']    = Zone_Shipping::class;
         return $methods;
+    }
+
+    /**
+     * Create a WooCommerce shipping class when store becomes active.
+     *
+     * @param int $store_id Store ID.
+     */
+    public function create_store_shipping_class( $store_id ) {
+        // Load store object.
+        $store = new \MultiVendorX\Store\Store( $store_id );
+
+        // Check if class already exists for this store.
+        $existing_class_id = $store->get_meta( Utill::STORE_SETTINGS_KEYS['shipping_class_id'] );
+        if ( $existing_class_id ) {
+            return; // Skip creation.
+        }
+
+        // Prepare unique shipping class slug.
+        $store_name = sanitize_title( $store->get( 'name' ) );
+        $slug       = $store_name . '-' . $store_id;
+
+        // Check if the shipping class already exists.
+        $shipping_term = get_term_by( 'slug', $slug, Utill::WORDPRESS_SETTINGS['product_shipping_class'], ARRAY_A );
+
+        // Create a new shipping class if missing.
+        if ( ! $shipping_term ) {
+            $shipping_term = wp_insert_term(
+                $store->get( 'name' ) . ' Shipping', // Shipping class name.
+                Utill::WORDPRESS_SETTINGS['product_shipping_class'],
+                array(
+                    'slug' => $slug,
+                )
+            );
+        }
+
+        // Validate creation.
+        if ( ! is_wp_error( $shipping_term ) ) {
+            $class_id = $shipping_term['term_id'];
+
+            // Save class ID in store meta.
+            $store->update_meta( Utill::STORE_SETTINGS_KEYS['shipping_class_id'], $class_id );
+
+            // Save MultiVendorX store reference in term meta.
+            update_term_meta( $class_id, Utill::POST_META_SETTINGS['store_id'], $store_id );
+
+            // Optional: add origin help.
+            update_term_meta( $class_id, Utill::WORDPRESS_SETTINGS['shipping_origin_country'], get_option( Utill::WOO_SETTINGS['default_country'] ) );
+        }
     }
 }

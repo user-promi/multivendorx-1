@@ -7,6 +7,7 @@
 
 namespace MultiVendorX;
 
+use MultiVendorX\Store\Store;
 use MultiVendorX\Store\StoreUtil;
 
 /**
@@ -21,21 +22,28 @@ class Frontend {
      * Frontend class construct function
      */
     public function __construct() {
+        // Redirect store dashboard page.
         add_filter( 'template_include', array( $this, 'store_dashboard_template' ) );
 
+        // Add sold by in shop page.
         add_action( 'woocommerce_after_shop_loop_item', array( $this, 'add_sold_by_in_shop_and_single_product_page' ), 6 );
+        // Add sold by in single product page.
         add_action( 'woocommerce_product_meta_start', array( $this, 'add_sold_by_in_shop_and_single_product_page' ), 25 );
+        // Add sold by in cart page.
         add_action( 'woocommerce_get_item_data', array( $this, 'add_sold_by_in_cart' ), 30, 2 );
+        // Add store tab in single product page.
         add_filter( 'woocommerce_product_tabs', array( $this, 'add_store_tab_in_single_product' ) );
-
+        // Modify related products section in single product page.
         add_filter( 'woocommerce_related_products', array( $this, 'show_related_products' ), 99, 3 );
 
+        // Show message in cart page for multiple stores product.
         if ( ! empty( MultiVendorX()->setting->get_setting( 'store_order_display' ) ) ) {
             add_action( 'woocommerce_before_calculate_totals', array( $this, 'cart_items_sort_by_store' ), 10 );
             add_action( 'woocommerce_before_cart', array( $this, 'message_multiple_stores_cart' ), 10 );
             add_filter( 'render_block_woocommerce/cart-line-items-block', array( $this, 'message_multiple_stores_cart_block' ), 10 );
         }
 
+        // Restrict product visibility on shop, cart, and checkout pages.
         add_action( 'woocommerce_product_query', array( $this, 'restrict_store_products_from_shop' ) );
         add_action( 'woocommerce_cart_loaded_from_session', array( $this, 'restrict_products_already_in_cart' ) );
         add_filter( 'woocommerce_add_to_cart_validation', array( $this, 'restrict_products_from_cart' ), 10, 2 );
@@ -128,7 +136,7 @@ class Frontend {
         $store_details = MultiVendorX()->setting->get_setting( 'store_branding_details', array() );
 
         if ( in_array( 'show_store_name', $store_details, true ) ) {
-            $store = StoreUtil::get_products_store( $product_id );
+            $store = Store::get_store( $product_id, 'product' );
             if ( ! $store ) {
 				return [];
             }
@@ -233,7 +241,7 @@ class Frontend {
     public function add_store_tab_in_single_product( $tabs ) {
         global $product;
         if ( $product ) {
-            $store = StoreUtil::get_products_store( $product->get_id() );
+            $store = Store::get_store( $product->get_id(), 'product' );
             if ( $store ) {
                 $title         = __( 'Store', 'multivendorx' );
                 $tabs['store'] = array(
@@ -280,7 +288,7 @@ class Frontend {
             return $query;
         }
 
-        $store = StoreUtil::get_products_store( $product_id );
+        $store = Store::get_store( $product_id, 'product' );
         if ( ! $store || ! $store->get_id() ) {
             return $query;
         }
@@ -340,7 +348,7 @@ class Frontend {
         $stores = [];
 
         foreach ( WC()->cart->get_cart() as $cart_item ) {
-            $store = StoreUtil::get_products_store( $cart_item['product_id'] ?? 0 );
+            $store = Store::get_store( $cart_item['product_id'] ?? 0, 'product' );
 
             if ( $store && $store->get_id() ) {
                 $stores[] = $store->get_id();
@@ -360,7 +368,7 @@ class Frontend {
         $admin_products = array();
 
         foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) {
-            $store = StoreUtil::get_products_store( $cart_item['product_id'] );
+            $store = Store::get_store( $cart_item['product_id'], 'product' );
 
             if ( $store ) {
                 $store_groups[ $store->get_id() ][ $cart_item_key ] = $cart_item;

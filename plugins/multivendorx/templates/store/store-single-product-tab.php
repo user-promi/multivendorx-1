@@ -9,12 +9,12 @@
  * @author      MultiVendorX
  */
 
-use MultiVendorX\Store\StoreUtil;
+use MultiVendorX\Store\Store;
 
 global $product;
 $html = '';
 
-$store = StoreUtil::get_products_store( $product->get_id() );
+$store = Store::get_store( $product->get_id(), 'product' );
 if ( $store ) {
     $html .= apply_filters( 'mvx_before_seller_info_tab', '' );
 
