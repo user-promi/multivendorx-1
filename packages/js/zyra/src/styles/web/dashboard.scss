@@ -48,7 +48,7 @@
             border-radius: 50%;
             transition: all 0.4s ease;
             cursor: pointer;
-            margin-top: -0.313rem;
+            margin-top: -0.5rem;
             color: $sub-text-color;
 
             &:hover {
@@ -90,6 +90,13 @@
                     font-size: 1rem;
                 }
             }
+        }
+
+        // add product page
+        .arrow-icon {
+            font-size: 1.313rem;
+            transform: rotate(-90deg);
+            padding: 0.125rem;
         }
     }
 
@@ -280,6 +287,8 @@
         flex-direction: column;
         width: 100%;
         margin-bottom: 1rem;
+        justify-content: end;
+        /* add product form style*/
 
         .button-wrapper {
             display: flex;
@@ -687,6 +696,13 @@
         margin-top: 1rem;
         padding-bottom: 0.75rem;
     }
+}
+
+.no-data {
+    padding: 3rem;
+    background: $background-white;
+    text-align: center;
+    color: $sub-text-color;
 }
 
 // no data found end

@@ -181,7 +181,7 @@ const AICard = () => {
 				</div>
 				<div className="right">
 					<i
-						className={`adminlib-pagination-right-arrow arrow-icon ${isCardOpen ? 'rotate' : ''
+						className={`adminlib-pagination-right-arrow icon ${isCardOpen ? 'rotate' : ''
 							}`}
 						onClick={toggleCard}
 					></i>
@@ -194,7 +194,6 @@ const AICard = () => {
 						{error && (
 							<div
 								className="error-message"
-								style={{ color: 'red', marginBottom: '10px' }}
 							>
 								{error}
 							</div>
@@ -203,21 +202,19 @@ const AICard = () => {
 						{!hasSuggestions &&
 							!isLoading &&
 							!error &&
-							userPrompt.trim() === '' && (
-								<div className="empty-state">
-									<div className="empty-icon">
-										<i className="adminlib-lightbulb"></i>
+							// userPrompt.trim() === '' &&
+							 (
+								<div className="assistant-welcome">
+									<div className="welcome-icon">
+										<i className="adminlib-ai"></i>
 									</div>
-									<p>
-										Enter a prompt above to generate AI
-										suggestions for your product.
-									</p>
+									<div className="welcome-title">How can I help?</div>
 								</div>
 							)}
 
 						{/* Show loading state */}
 						{isLoading && (
-							<div className="loading-state">
+							<div className="assistant-loading">
 								<div className="loading-spinner"></div>
 								<p>Generating suggestions...</p>
 							</div>
@@ -225,16 +222,15 @@ const AICard = () => {
 						{/* Only show suggestions section if we have actual suggestions */}
 						{hasSuggestions && (
 							<div className="suggestions-wrapper">
-								<div className="suggestions-title">
+								{/* <div className="suggestions-title">
 									Suggestions
 									<small className="click-hint">
 										(Click any suggestion to apply it)
 									</small>
-								</div>
+								</div> */}
 								{groupedSuggestions.map((item, index) => (
-
 									<div className="box clickable-suggestion" key={`product-${index}`}>
-										<h4>Product {index + 1}</h4>
+										<h4>Suggestions {index + 1}</h4>
 
 										{item.title && (
 											<div
@@ -245,7 +241,8 @@ const AICard = () => {
 														item.title
 													)
 												}
-											>
+											>	
+												Product Name: 
 												<span>{item.title}</span>
 												<i className="adminlib-arrow-right"></i>
 											</div>
@@ -261,6 +258,7 @@ const AICard = () => {
 													)
 												}
 											>
+												Short Description: 
 												<span>{item.shortDescription}</span>
 												<i className="adminlib-arrow-right"></i>
 											</div>
@@ -276,6 +274,7 @@ const AICard = () => {
 													)
 												}
 											>
+												Description:
 												<span>{item.description}</span>
 												<i className="adminlib-arrow-right"></i>
 											</div>
@@ -382,7 +381,7 @@ const AICard = () => {
 						<div className="sender-wrapper">
 							<input
 								type="text"
-								placeholder="Write the prompt, e.g., 'A durable leather hiking boot for all weather.'"
+								placeholder="Write the prompt...'"
 								value={userPrompt}
 								onChange={(e) => setUserPrompt(e.target.value)}
 								onKeyPress={(e) => {

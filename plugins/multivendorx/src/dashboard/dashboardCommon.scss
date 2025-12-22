@@ -7,7 +7,7 @@
 
     --backgroundColor: #121212;
     --backgroundWhite: #101924;
-    --backgroundPrimary: #313131;
+    // --backgroundPrimary: #313131;
 
     --borderColor: #203247;
 
@@ -101,11 +101,9 @@
 
     --backgroundColor: #121212;
     --backgroundWhite: #000;
-    --backgroundPrimary: color-mix(
-        in srgb,
-        var(--colorPrimary) 10%,       
-        black
-    );
+    // --backgroundPrimary: color-mix(in srgb,
+    //         var(--colorPrimary) 10%,
+    //         black);
 
     --borderColor: #dbdbdb;
 }
@@ -147,6 +145,18 @@ body:has(.dark) {
     .analytics-item {
         background: $background-white !important;
         /*overwrite zyra style*/
+    }
+
+    // table style
+    .table-wrapper {
+        .admin-table,
+        .table-pagination {
+            background: $background-color;
+        }
+    }
+
+    .site-name{
+        color: #fff;
     }
 }
 
@@ -209,7 +219,7 @@ body:has(.dark) {
         ul {
             margin: 0;
             list-style-type: none;
-            background: #e9e9e9;
+            background: $background-white;
             border-radius: 0.313rem;
 
             li {
@@ -305,9 +315,11 @@ body:has(.dark) {
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
+    margin-bottom: 0.5rem;
 
     .delete-icon {
         color: $accent-color;
+        cursor: pointer;
     }
 }
 
@@ -611,6 +623,7 @@ body:has(.dark) {
             font-weight: 500;
             display: flex;
             gap: 0.45rem;
+            color: $text-color;
 
             span {
                 width: 0.95rem;
@@ -644,28 +657,69 @@ body:has(.dark) {
 
 // ai assist start
 .ai-assist-wrapper {
-    .suggestions-title {
-        font-size: 1rem;
-        line-height: 1;
+    height: 20rem;
+    max-height: 20rem;
+    position: relative;
+    overflow: auto;
+
+    .assistant-welcome {
+        height: 80%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 1rem;
+
+        .welcome-icon {
+            i {
+                font-size: 3rem;
+                color: $theme-color;
+                // box-shadow: 0 0.125rem 0.5rem 0 #65438fae;
+            }
+        }
+
+        .welcome-title {
+            font-size: 1.45rem;
+            color: $text-color;
+            font-weight: 500;
+        }
     }
 
-    .box {
-        padding: 1rem;
-        border: 0.063rem solid $theme-color;
-        margin: 1rem 0;
-        background: color-mix(in srgb, $theme-color 5%, #fff);
-        border-radius: 0.5rem;
+    .assistant-loading {
+        height: 80%;
+    }
 
-        span {
-            font-size: 0.95rem;
-            line-height: 1.25rem;
+    .suggestions-wrapper {
+        padding-bottom: 2rem;
+
+        .suggestions-title {
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        .box {
+            padding: 1rem;
+            border: 0.063rem solid $theme-color;
+            margin: 1rem 0;
+            background: color-mix(in srgb, $theme-color 5%, #fff);
+            border-radius: 0.5rem;
+
+            span {
+                font-size: 0.95rem;
+                line-height: 1.25rem;
+            }
         }
     }
 
     .sender-wrapper {
         border: $border-light-small;
         padding: 0.5rem;
+        position: sticky;
+        width: 100%;
+        box-sizing: border-box;
+        bottom: 0;
         border-radius: 0.5rem;
+        background: $background-white;
 
         input,
         input:focus-visible,
@@ -676,6 +730,7 @@ body:has(.dark) {
             font-size: 0.95rem;
             margin-bottom: 0.5rem;
             outline: none;
+            background: transparent;
         }
 
         .icon-wrapper {
@@ -684,6 +739,8 @@ body:has(.dark) {
 
             i {
                 font-size: 1.063rem;
+                color: $text-color;
+                cursor: pointer;
             }
         }
     }
@@ -944,13 +1001,14 @@ body:has(.dark) {
     }
 }
 
-.catalog-visibility{
+.catalog-visibility {
     display: flex;
     align-items: end;
     gap: 0.313rem;
     margin-bottom: 0.625rem;
+    color: $text-color;
 
-    .admin-badge{
+    .admin-badge {
         font-size: 0.813rem;
         cursor: pointer;
     }

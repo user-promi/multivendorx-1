@@ -64,8 +64,9 @@ const SelectInput: React.FC< SelectInputProps > = ( {
     const customStyles: StylesConfig< SelectOptions, boolean > = {
         control: ( provided, state ) => ( {
             ...provided,
-            borderColor: state.isFocused ? '#5007aa' : '#e0e4e9',
+            borderColor: state.isFocused ? 'var(--colorPrimary)' : '#e0e4e9',
             boxShadow: state.isFocused ? '0 0 0 3px #5007aa1c' : '',
+            backgroundColor: 'transparent',
             minHeight: '2.213rem',
             height: '2.213rem',
             maxHeight: '2.213rem',
@@ -78,6 +79,7 @@ const SelectInput: React.FC< SelectInputProps > = ( {
             margin: 0,
             paddingTop: 0,
             paddingBottom: 0,
+            backgroundColor: 'transparent',
         } ),
         option: ( provided, state ) => ( {
             ...provided,

@@ -386,7 +386,7 @@ const AddProduct = () => {
 
 	const toggleCard = (cardId) => {
 		const body = document.querySelector(`#${cardId} .card-body`);
-		const arrow = document.querySelector(`#${cardId} .arrow-icon`);
+		const arrow = document.querySelector(`#${cardId} i.icon`);
 
 		if (!body || !arrow) {
 			return;
@@ -887,7 +887,7 @@ const AddProduct = () => {
 							</div>
 							<div className="right">
 								<i
-									className="adminlib-pagination-right-arrow arrow-icon"
+									className="adminlib-keyboard-arrow-down arrow-icon icon"
 									onClick={() => toggleCard('card-general')}
 								></i>
 							</div>
@@ -969,7 +969,7 @@ const AddProduct = () => {
 							</div>
 							<div className="right">
 								<i
-									className="adminlib-pagination-right-arrow arrow-icon"
+									className="adminlib-keyboard-arrow-down arrow-icon icon"
 									onClick={() => toggleCard('card-price')}
 								></i>
 							</div>
@@ -1298,7 +1298,7 @@ const AddProduct = () => {
 								{/* Original Image Preview */}
 								{selectedImageForEnhancement && (
 									<div className="image-preview-section">
-										<div>
+										<div className="">
 											<img
 												src={
 													selectedImageForEnhancement
@@ -1464,7 +1464,7 @@ const AddProduct = () => {
 							</div>
 							<div className="right">
 								<i
-									className="adminlib-pagination-right-arrow  arrow-icon"
+									className="adminlib-keyboard-arrow-down arrow-icon  icon"
 									onClick={() =>
 										toggleCard('card-visibility')
 									}
@@ -1772,7 +1772,7 @@ const AddProduct = () => {
 							</div>
 							<div className="right">
 								<i
-									className="adminlib-pagination-right-arrow  arrow-icon"
+									className="adminlib-keyboard-arrow-down arrow-icon  icon"
 									onClick={() =>
 										toggleCard('card-product-category')
 									}
@@ -1962,7 +1962,7 @@ const AddProduct = () => {
 							</div>
 							<div className="right">
 								<i
-									className="adminlib-pagination-right-arrow  arrow-icon"
+									className="adminlib-keyboard-arrow-down arrow-icon  icon"
 									onClick={() =>
 										toggleCard('card-product-category')
 									}
@@ -1991,7 +1991,7 @@ const AddProduct = () => {
 														}))
 													}
 												>
-													<i className="delete-icon adminlib-cross"></i>
+													<i className="delete-icon adminlib-delete"></i>
 												</span>
 											</span>
 										))}
@@ -2055,7 +2055,7 @@ const AddProduct = () => {
 							</div>
 							<div className="right">
 								<i
-									className="adminlib-pagination-right-arrow  arrow-icon"
+									className="adminlib-keyboard-arrow-down arrow-icon icon"
 									onClick={() =>
 										toggleCard('card-image-upload')
 									}
@@ -2088,14 +2088,13 @@ const AddProduct = () => {
 										</div>
 										<div className="buttons-wrapper">
 											<button
-												className="admin-btn btn-blue"
+												className="admin-btn btn-purple-bg"
 												onClick={() =>
 													openImageEnhancer(
 														featuredImage?.src
 													)
 												}
 											>
-												<i className="adminlib-magic"></i>{' '}
 												{__('Enhance', 'multivendorx')}
 											</button>
 										</div>
