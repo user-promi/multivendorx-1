@@ -87,8 +87,7 @@ export default {
 			desc: __('', 'multivendorx'),
 			optionLabel: ['Shortcodes', 'Description', 'Arguments'],
 			icon: 'adminlib-general-tab',
-			options: [
-				
+			options: [				
 				{
 					key: 'marketplace_dashboard',
 					label: '[marketplace_dashboard]',
