@@ -1,6 +1,6 @@
 <?php
 /**
- * MultiVendorX Rewrites.
+ * MultiVendorX Rewrites class file.
  *
  * @package MultiVendorX
  */
@@ -12,9 +12,9 @@ use MultiVendorX\Utill;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * MultiVendorX AJAX handlers.
+ * MultiVendorX Rewrites class.
  *
- * @class       Module class
+ * @class       Rewrites class
  * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
@@ -55,7 +55,7 @@ class Rewrites {
             return;
         }
 
-        $store_obj = Store::get_store_by_slug( $store_slug );
+        $store_obj = Store::get_store( $store_slug, 'slug' );
         if ( ! $store_obj ) {
             return;
         }
@@ -143,7 +143,7 @@ class Rewrites {
         $store_name = get_query_var( $this->custom_store_url );
 
         if ( ! empty( $store_name ) ) {
-            $store = Store::get_store_by_slug( $store_name );
+            $store = Store::get_store( $store_name, 'slug' );
 
             if ( $store ) {
                 MultiVendorX()->util->get_template( 'store/store.php', array( 'store_id' => $store->get_id() ) );

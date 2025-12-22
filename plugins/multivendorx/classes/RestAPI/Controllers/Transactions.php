@@ -457,7 +457,7 @@ class Transactions extends \WP_REST_Controller {
         $locking_day           = MultiVendorX()->setting->get_setting( 'commission_lock_period', 0 );
         $payment_schedules     = MultiVendorX()->setting->get_setting( 'payment_schedules', '' );
         $withdrawals_fees      = MultiVendorX()->setting->get_setting( 'withdrawals_fees', array() );
-        $store                 = Store::get_store_by_id( $store_id );
+        $store                 = Store::get_store( $store_id );
 
         return rest_ensure_response(
             array(

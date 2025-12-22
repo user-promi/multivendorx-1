@@ -8,7 +8,6 @@
 namespace MultiVendorX\Order;
 
 use MultiVendorX\Store\Store;
-use MultiVendorX\Store\StoreUtil;
 use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
@@ -128,7 +127,7 @@ class OrderManager {
             if ( $order instanceof WC_Order ) {
                 $order_id     = $order->get_id();
                 $store_id     = $order->get_meta( Utill::POST_META_SETTINGS['store_id'] );
-                $store_exists = Store::get_store_by_id( $store_id );
+                $store_exists = Store::get_store( $store_id );
                 if ( $store_exists ) {
                     $existing_orders[ $order_id ] = $store_id;
                 }
@@ -260,7 +259,7 @@ class OrderManager {
         $grouped_items = array();
         foreach ( $items as $item_id => $item ) {
             if ( isset( $item['product_id'] ) && 0 !== $item['product_id'] ) {
-                $store = StoreUtil::get_products_store( $item['product_id'] );
+                $store = Store::get_store( $item['product_id'], 'product' );
                 if ( $store ) {
                     $grouped_items[ $store->get_id() ][ $item_id ] = $item;
                 }

@@ -217,7 +217,7 @@ class Rest extends \WP_REST_Controller {
                 $store_names = array();
 
                 foreach ( $store_ids as $sid ) {
-                    $store_obj = MultivendorX()->store->get_store_by_id( $sid );
+                    $store_obj = MultivendorX()->store->get_store( $sid );
                     if ( $store_obj ) {
                         $store_names[] = $store_obj->get( 'name' );
                     }
