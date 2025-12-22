@@ -9,11 +9,18 @@ import React from 'react';
 import '../styles/web/ShortCodeTable.scss';
 
 // Types
+interface ArgumentRow {
+    attribute: string;
+    description: string;
+    accepted: string;
+    default: string;
+}
+
 interface Option {
     label?: string;
     name?: string;
     desc?: string;
-    arguments?: string;
+    arguments?: ArgumentRow[];
 }
 
 interface ShortCodeTableProps {
@@ -33,44 +40,63 @@ const ShortCodeTable: React.FC<ShortCodeTableProps> = (props) => {
 
     return (
         <>
-            {options && options.length > 0 ? (
-                options.map((option, index) => (
-                    <>
-                        <div className="shortcode-title-wrapper">
+            {options.map((option, index) => (
+                <div className="shortcode-wrapper" key={option.label || index}>
+                    <div className="shortcode-details">
+                        <div className="shortcode-title">
                             <code>{option.label}</code>
                             {icon && option.label && (
-                                <i className="adminlib-vendor-form-copy"></i>
+                                <i
+                                    className="adminlib-vendor-form-copy"
+                                    onClick={() =>
+                                        option.label && handleCopy(option.label)
+                                    }
+                                ></i>
                             )}
-                            {option.desc}
                         </div>
 
-                        <div className="shortcode-table">
-                            <table>
+                        <div className="des">{option.desc}</div>
+                    </div>
+
+
+                    <div className="shortcode-table">
+                        <table>
+                            {option.arguments && option.arguments.length > 0 && (
                                 <thead>
                                     <tr>
                                         <th>Attribute</th>
-                                        <th>Attribute</th>
-                                        <th>Attribute</th>
-                                        <th>Attribute</th>
+                                        <th>Description</th>
+                                        <th>Accepted values</th>
+                                        <th>Default</th>
                                     </tr>
                                 </thead>
-                                 <tbody>
+                            )}
+                            <tbody>
+                                {Array.isArray(option.arguments) &&
+                                    option.arguments.length > 0 ? (
+                                    option.arguments.map((arg, i) => (
+                                        <tr key={i}>
+                                            <td><b>{arg.attribute}</b></td>
+                                            <td>{arg.description}</td>
+                                            <td>{arg.accepted}</td>
+                                            <td>{arg.default}</td>
+                                        </tr>
+                                    ))
+                                ) : (
                                     <tr>
-                                        <td>store</td>
-                                        <td>Displays products from a specific store. Accepts Store ID, store slug, email, or username.</td>
-                                        <td>string</td>
-                                        <td>All stores</td>
+                                        <td colSpan={4} className="no-args">
+                                            No arguments required
+                                        </td>
                                     </tr>
-                                 </tbody>
-                            </table>
-                        </div>
-                    </>
-                ))
-            ) : (
-                <p></p>
-            )}
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            ))}
 
-            <table>
+
+            {/* <table>
                 <thead>
                     <tr>
                         {optionLabel && optionLabel.length > 0 ? (
@@ -115,7 +141,7 @@ const ShortCodeTable: React.FC<ShortCodeTableProps> = (props) => {
                         </tr>
                     )}
                 </tbody>
-            </table>
+            </table> */}
             {description && (
                 <p
                     className={descClass}

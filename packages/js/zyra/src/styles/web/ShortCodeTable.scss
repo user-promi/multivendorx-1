@@ -1,2 +1,89 @@
 @use '../../global.scss' as *;
 
+.shortcode-wrapper {
+    padding: 0.813rem;
+    margin-bottom: 1rem;
+    border: $border-light-small;
+    border-radius: 0.313rem;
+
+    .shortcode-details {
+        padding-bottom: 0.5rem;
+        margin-top: 0.313rem;
+
+        .shortcode-title {
+            padding-bottom: 0.625rem;
+
+            code {
+                margin-right: 0.625rem;
+                font-size: 1rem;
+            }
+
+            i {
+                font-size: 1.25rem;
+            }
+        }
+    }
+
+    code {
+        font-weight: 500;
+        color: $theme-color;
+        background: $theme-background-color;
+        padding: 0.313rem;
+    }
+
+    .shortcode-table {
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            text-align: left;
+            font-size: 0.95rem;
+            padding: 1rem;
+            vertical-align: top;
+
+            .name {
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        ul {
+            margin: 0;
+
+            li {
+                font-size: 0.95rem;
+            }
+        }
+
+        thead tr {
+            background: $theme-background-color;
+
+        }
+
+        tbody {
+            tr {
+                &:nth-child(odd) {
+                    background: #d8d8d840;
+                }
+
+                td:first-child {
+                    i {
+                        opacity: 0;
+                        transition: all 0.5s ease;
+                        margin-left: 0.5rem;
+                        cursor: pointer;
+                    }
+
+                    &:hover {
+                        i {
+                            opacity: 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
