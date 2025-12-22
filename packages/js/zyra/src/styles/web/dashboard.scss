@@ -119,7 +119,6 @@
         .card-body {
             padding: 1.5rem;
             transition: all 0.5s ease;
-            border-top: $border-light-small;
 
             .settings-metabox-note {
                 padding: 0 0 1rem;
@@ -144,6 +143,12 @@
         &:has(.hide-body) {
             .card-content {
                 border: none;
+            }
+        }
+
+        &:has(.card-header) {
+            .card-body {
+                border-top: $border-light-small;
             }
         }
     }
@@ -182,6 +187,11 @@
                 line-height: 0.9;
                 font-weight: 600;
                 color: $text-color;
+            }
+
+            .text {
+                color: $sub-text-color;
+                line-height: 1.713;
             }
         }
     }
@@ -640,7 +650,7 @@
 
     .review {
         padding-top: 0.313rem;
-        color: #00000085;
+        color: $sub-text-color;
     }
 }
 

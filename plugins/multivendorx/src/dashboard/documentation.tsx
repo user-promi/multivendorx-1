@@ -101,10 +101,7 @@ const Documentation: React.FC = () => {
 						{__('Documentation', 'multivendorx')}
 					</div>
 					<div className="des">
-						{__(
-							'Everything you need to know about store operations',
-							'multivendorx'
-						)}
+						{__('Everything you need to know about store operations', 'multivendorx' )}
 					</div>
 				</div>
 			</div>
@@ -148,7 +145,7 @@ const Documentation: React.FC = () => {
 								</div>
 								<div className="document-content">
 									<div className="title">{doc.title}</div>
-									<div className="description">
+									<div className="des">
 										{truncateText(doc.content || '', 10)}
 										{(doc.content || '').split(' ').length >
 											10 && (
@@ -176,6 +173,7 @@ const Documentation: React.FC = () => {
 				<>
 					<CommonPopup
 						open={popupOpen}
+						onClose={() => setPopupOpen(false)}
 						width="31.25rem"
 						header={
 							<>
@@ -212,14 +210,9 @@ const Documentation: React.FC = () => {
 							</div>
 						}
 					>
-						<div className="content">
-							<div
-								className="document-popup-wrapper"
-								id="printable-content"
-							>
-								<h2>{activeDocument.title}</h2>
-								<p>{activeDocument.content}</p>
-							</div>
+						<div className="document-popup-wrapper content">
+								<div className="heading">{activeDocument.title}</div>
+								<p className="des">{activeDocument.content}</p>
 						</div>
 					</CommonPopup>
 				</>

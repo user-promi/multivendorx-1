@@ -314,10 +314,10 @@ const Overview: React.FC<OverviewProps> = ({}) => {
 						<div className="card-body">
 							<div className="top-items">
 								{earningSummary.map((product) => (
-									<div className="items" key={product.id}>
-										<div className="left-side">
+									<div className="info-item" key={product.id}>
+										<div className="details-wrapper">
 											<div className="details">
-												<div className="item-title">
+												<div className="name">
 													{__(
 														product.title,
 														'multivendorx'
@@ -325,7 +325,7 @@ const Overview: React.FC<OverviewProps> = ({}) => {
 												</div>
 											</div>
 										</div>
-										<div className="right-side">
+										<div className="right-details">
 											<div className="price">
 												{product.price}
 											</div>

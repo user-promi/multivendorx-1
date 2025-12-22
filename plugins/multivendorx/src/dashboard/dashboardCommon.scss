@@ -101,9 +101,9 @@
 
     --backgroundColor: #121212;
     --backgroundWhite: #000;
-    // --backgroundPrimary: color-mix(in srgb,
-    //         var(--colorPrimary) 10%,
-    //         black);
+    --backgroundPrimary: color-mix(in srgb,
+            var(--colorPrimary) 10%,
+            black);
 
     --borderColor: #dbdbdb;
 }
@@ -531,6 +531,7 @@ body:has(.dark) {
         border: $border-light-small;
         border-radius: 0.313rem;
         width: 32.6%;
+        box-sizing: border-box;
 
         .document-icon {
             align-items: center;
@@ -556,10 +557,7 @@ body:has(.dark) {
             margin-bottom: 0.125rem;
         }
 
-        .description {
-            font-size: 0.95rem;
-            line-height: 1.313rem;
-
+        .des {
             .read-more {
                 font-weight: 500;
                 color: $theme-color;
@@ -570,8 +568,9 @@ body:has(.dark) {
 }
 
 .document-popup-wrapper {
-    line-height: 1.45rem;
-    font-size: 1.063rem;
+    .des{
+        line-height: 1.5rem;
+    }
 }
 
 // documentation end

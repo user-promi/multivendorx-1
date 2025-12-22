@@ -625,6 +625,11 @@ $index: 1;
   position: relative;
   width: fit-content;
 }
+.rdrDefinedRangesWrapper,
+.rdrCalendarWrapper,
+.rdrStaticRange{
+  background: $background-white;
+}
 
 // Commone loader style
 .loader-wrapper {
